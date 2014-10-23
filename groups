@@ -1,6 +1,8 @@
 # UUID                                  	Group Name
 #
 143448a87011dcdf0c0c3038b06d7c88db797d4a	v8-committers
+4d4288efd7d780ff5a35b8cc13fa6ff0f62c06cc	chrome-commit-bot
 898b5eed07ea276d2b27ff2c8ce4b0a31c152e14	v8-admins
 c22d97b24b960f38515a531d91a2e2c30fe89f26	v8-tag-committers
+e4a6753cb8e0a928d950ddfdb98015fc00ed8303	git-numbering-bot
 mdb:chrome-git-admins                   	mdb/chrome-git-admins
