@@ -6,6 +6,7 @@
   "enabled_refglobs": [
     "refs/heads/master",
     "refs/heads/candidates",
+    "refs/heads/*.*",
     "refs/branch-heads/*",
     "refs/internal/*"
   ]
