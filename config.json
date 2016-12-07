@@ -6,6 +6,7 @@
   "enabled_refglobs": [
     "refs/heads/master",
     "refs/heads/playground",
+    "refs/heads/gnumb-test/*",
     "refs/heads/*.*.*",
     "refs/branch-heads/*.*",
     "refs/internal/*"
