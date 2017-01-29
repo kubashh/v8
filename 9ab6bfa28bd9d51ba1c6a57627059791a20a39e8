@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37162ec1_2e61abc7",
+        "filename": "project.config",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-01-29T13:23:13Z",
+      "side": 0,
+      "message": "oh, wow, it\u0027s a dup. I wonder how it got added here. Maybe a result of 3-way merge on my revert on revert.",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 44,
+        "endChar": 38
+      },
+      "revId": "9ab6bfa28bd9d51ba1c6a57627059791a20a39e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d08c52_ea1d68e6",
+        "filename": "project.config",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-01-29T13:23:13Z",
+      "side": 0,
+      "message": "i suspect this has to be kept: it\u0027s not scary, and in fact might be necessary.",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 34
+      },
+      "revId": "9ab6bfa28bd9d51ba1c6a57627059791a20a39e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d9ab19_3bd8213b",
+        "filename": "project.config",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-01-29T13:23:13Z",
+      "side": 0,
+      "message": "can we keep this for a bit longer? I intend to cleanup this ref (ACLs, and actual ref) once 2 weeks pass since I\u0027ve landed git cl change to stop fetching this ref.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 34
+      },
+      "revId": "9ab6bfa28bd9d51ba1c6a57627059791a20a39e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
