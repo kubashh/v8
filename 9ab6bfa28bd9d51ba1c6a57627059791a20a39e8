@@ -65,6 +65,23 @@
     },
     {
       "key": {
+        "uuid": "d028be4e_40ef32a1",
+        "filename": "project.config",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-01-30T09:52:35Z",
+      "side": 0,
+      "message": "cq needs push, but not forge committer because it commits and pushes as \"commit-bot@chromium.org\" account.",
+      "revId": "9ab6bfa28bd9d51ba1c6a57627059791a20a39e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72d9ab19_3bd8213b",
         "filename": "project.config",
         "patchSetId": 1
