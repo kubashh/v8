@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "ece76512_37a9ef7d",
+        "filename": "project.config",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-01-30T09:47:24Z",
+      "side": 0,
+      "message": "I\u0027m actually a bit lost in what\u0027s necessary and what not. Doesn\u0027t CQ need forgeCommitter \u003d group chrome-commit-bot? And push in order to commit?",
+      "revId": "9ab6bfa28bd9d51ba1c6a57627059791a20a39e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72d9ab19_3bd8213b",
         "filename": "project.config",
         "patchSetId": 1
