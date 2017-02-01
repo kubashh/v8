@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b9a3336_be5b4f21",
+        "filename": "tools/foozzie/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-02-01T10:41:48Z",
+      "side": 1,
+      "message": "Unsure whether this is intended or a stray change. Either way is fine with me.",
+      "revId": "c4777f3e053d2ffc929e7e05082284e02f158977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
