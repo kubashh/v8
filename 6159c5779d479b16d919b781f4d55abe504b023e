@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf81aa40_27af0ed0",
+        "filename": "tools/testrunner/local/pool_unittest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-02-07T15:14:03Z",
+      "side": 1,
+      "message": "clearly better than before, but your assertion below is racy, unless imap_unordered guarantees that all exceptions will be after non-exceptional cases, and afair it\u0027s not the case.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 38
+      },
+      "revId": "6159c5779d479b16d919b781f4d55abe504b023e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
