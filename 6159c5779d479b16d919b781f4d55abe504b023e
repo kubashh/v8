@@ -22,6 +22,24 @@
       "revId": "6159c5779d479b16d919b781f4d55abe504b023e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf0cfc5_eb407418",
+        "filename": "tools/testrunner/local/pool_unittest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-02-07T15:22:57Z",
+      "side": 1,
+      "message": "nvm this, as this pool is a custom pool implementation precisely for the outline purpose :)",
+      "parentUuid": "bf81aa40_27af0ed0",
+      "revId": "6159c5779d479b16d919b781f4d55abe504b023e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
