@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "643da2f2_f61a3bbf",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-02-08T15:49:15Z",
+      "side": 1,
+      "message": "nit: Shouldn\u0027t the comment actually say \"[...] iff L \u003e\u003d K\" here???",
+      "range": {
+        "startLine": 1185,
+        "startChar": 48,
+        "endLine": 1185,
+        "endChar": 49
+      },
+      "revId": "b77777dbcb33ee1a0d1f5e6789b1c04d3bb06cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
