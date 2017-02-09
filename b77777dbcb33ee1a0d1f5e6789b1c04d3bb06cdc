@@ -22,6 +22,24 @@
       "revId": "b77777dbcb33ee1a0d1f5e6789b1c04d3bb06cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58f0a136_fd305c0b",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-02-09T11:47:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "643da2f2_f61a3bbf",
+      "revId": "b77777dbcb33ee1a0d1f5e6789b1c04d3bb06cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
