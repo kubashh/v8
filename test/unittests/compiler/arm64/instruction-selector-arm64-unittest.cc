@@ -3943,6 +3943,10 @@ TEST_F(InstructionSelectorTest, Word64AndWithImmediateWithWord64Shr) {
       m.Return(m.Word64And(m.Word64Shr(m.Parameter(0), m.Int64Constant(shift)),
                            m.Int64Constant(msk)));
       Stream s = m.Build();
+      if (lsb == 0) {
+        ASSERT_EQ(2U, s.size());
+        continue;
+      }
       ASSERT_EQ(1U, s.size());
       EXPECT_EQ(kArm64Ubfx, s[0]->arch_opcode());
       ASSERT_EQ(3U, s[0]->InputCount());
@@ -3960,6 +3964,10 @@ TEST_F(InstructionSelectorTest, Word64AndWithImmediateWithWord64Shr) {
           m.Word64And(m.Int64Constant(msk),
                       m.Word64Shr(m.Parameter(0), m.Int64Constant(shift))));
       Stream s = m.Build();
+      if (lsb == 0) {
+        ASSERT_EQ(2U, s.size());
+        continue;
+      }
       ASSERT_EQ(1U, s.size());
       EXPECT_EQ(kArm64Ubfx, s[0]->arch_opcode());
       ASSERT_EQ(3U, s[0]->InputCount());
