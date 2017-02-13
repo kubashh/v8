@@ -343,6 +343,7 @@ bool CompilerDispatcher::EnqueueAndStep(
 bool CompilerDispatcher::IsEnabled() const { return FLAG_compiler_dispatcher; }
 
 bool CompilerDispatcher::IsEnqueued(Handle<SharedFunctionInfo> function) const {
+  if (jobs_.empty()) return false;
   return GetJobFor(function) != jobs_.end();
 }
 
