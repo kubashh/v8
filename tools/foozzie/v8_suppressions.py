@@ -94,8 +94,8 @@ IGNORE_OUTPUT = {
   '': {
     'crbug.com/664068':
         re.compile(r'RangeError(?!: byte length)', re.S),
-    'crbug.com/667678':
-        re.compile(r'\[native code\]', re.S),
+    #'crbug.com/667678':
+    #    re.compile(r'\[native code\]', re.S),
     'crbug.com/681806':
         re.compile(r'WebAssembly\.Instance', re.S),
     'crbug.com/681088':
