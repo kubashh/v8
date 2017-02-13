@@ -389,13 +389,14 @@ bool UseAsmWasm(DeclarationScope* scope, Handle<SharedFunctionInfo> shared_info,
 
 bool UseCompilerDispatcher(Compiler::ConcurrencyMode inner_function_mode,
                            CompilerDispatcher* dispatcher,
-                           DeclarationScope* scope,
+                           FunctionLiteral* literal,
                            Handle<SharedFunctionInfo> shared_info,
                            bool is_debug, bool will_serialize) {
   return FLAG_compiler_dispatcher_eager_inner &&
          inner_function_mode == Compiler::CONCURRENT &&
          dispatcher->IsEnabled() && !is_debug && !will_serialize &&
-         !UseAsmWasm(scope, shared_info, is_debug);
+         literal->ast_node_count() >= FLAG_compiler_dispatcher_min_node_count &&
+         !UseAsmWasm(literal->scope(), shared_info, is_debug);
 }
 
 CompilationJob* GetUnoptimizedCompilationJob(CompilationInfo* info) {
@@ -536,8 +537,8 @@ bool CompileUnoptimizedInnerFunctions(
 
     // Try to enqueue the eager function on the compiler dispatcher.
     CompilerDispatcher* dispatcher = isolate->compiler_dispatcher();
-    if (UseCompilerDispatcher(inner_function_mode, dispatcher, literal->scope(),
-                              shared, is_debug, will_serialize) &&
+    if (UseCompilerDispatcher(inner_function_mode, dispatcher, literal, shared,
+                              is_debug, will_serialize) &&
         dispatcher->EnqueueAndStep(outer_info->script(), shared, literal,
                                    parse_zone,
                                    outer_info->parse_info()->deferred_handles(),

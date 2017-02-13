@@ -695,6 +695,9 @@ DEFINE_BOOL(cache_prototype_transitions, true, "cache prototype transitions")
 DEFINE_BOOL(compiler_dispatcher, false, "enable compiler dispatcher")
 DEFINE_BOOL(compiler_dispatcher_eager_inner, false,
             "enable background compilation of eager inner functions")
+DEFINE_INT(compiler_dispatcher_min_node_count, 100,
+           "the minimum number of ast-nodes which a function will be enqueued "
+           "on the compiler dispatcher")
 DEFINE_BOOL(trace_compiler_dispatcher, false,
             "trace compiler dispatcher activity")
 
