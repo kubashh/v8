@@ -6,6 +6,6 @@
 898b5eed07ea276d2b27ff2c8ce4b0a31c152e14	v8-admins
 c013d7a25b7bd04e66bc5d18ceca0ef7d661bfd0	v8-autoroll
 c22d97b24b960f38515a531d91a2e2c30fe89f26	v8-tag-committers
+cria:project-v8-tryjob-access           	cria/project-v8-tryjob-access
 global:Registered-Users                 	Registered Users
-ldap:eng                                	ldap/eng
 mdb:chrome-git-admins                   	mdb/chrome-git-admins
