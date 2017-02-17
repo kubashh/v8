@@ -281,11 +281,6 @@ void GCTracer::Stop(GarbageCollector collector) {
 
   heap_->UpdateTotalGCTime(duration);
 
-  if ((current_.type == Event::SCAVENGER ||
-       current_.type == Event::MINOR_MARK_COMPACTOR) &&
-      FLAG_trace_gc_ignore_scavenger)
-    return;
-
   if (FLAG_trace_gc_nvp) {
     PrintNVP();
   } else {

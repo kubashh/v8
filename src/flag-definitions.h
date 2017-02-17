@@ -762,15 +762,10 @@ DEFINE_BOOL(trace_gc, false,
 DEFINE_BOOL(trace_gc_nvp, false,
             "print one detailed trace line in name=value format "
             "after each garbage collection")
-DEFINE_BOOL(trace_gc_ignore_scavenger, false,
-            "do not print trace line after scavenger collection")
 DEFINE_BOOL(trace_idle_notification, false,
             "print one trace line following each idle notification")
 DEFINE_BOOL(trace_idle_notification_verbose, false,
             "prints the heap state used by the idle notification")
-DEFINE_BOOL(print_max_heap_committed, false,
-            "print statistics of the maximum memory committed for the heap "
-            "in name=value format on exit")
 DEFINE_BOOL(trace_gc_verbose, false,
             "print more details following each garbage collection")
 DEFINE_INT(trace_allocation_stack_interval, -1,
@@ -781,10 +776,6 @@ DEFINE_BOOL(trace_fragmentation_verbose, false,
 DEFINE_BOOL(trace_evacuation, false, "report evacuation statistics")
 DEFINE_BOOL(trace_mutator_utilization, false,
             "print mutator utilization, allocation speed, gc speed")
-DEFINE_BOOL(weak_embedded_maps_in_optimized_code, true,
-            "make maps embedded in optimized code weak")
-DEFINE_BOOL(weak_embedded_objects_in_optimized_code, true,
-            "make objects embedded in optimized code weak")
 DEFINE_BOOL(flush_code, true, "flush code that we expect not to use again")
 DEFINE_BOOL(trace_code_flushing, false, "trace code flushing progress")
 DEFINE_BOOL(age_code, true,
