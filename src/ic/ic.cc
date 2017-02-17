@@ -66,30 +66,7 @@ const char* GetTransitionMarkModifier(KeyedAccessStoreMode mode) {
   return "";
 }
 
-
-#ifdef DEBUG
-
-#define TRACE_GENERIC_IC(isolate, type, reason)                \
-  do {                                                         \
-    if (FLAG_trace_ic) {                                       \
-      PrintF("[%s patching generic stub in ", type);           \
-      JavaScriptFrame::PrintTop(isolate, stdout, false, true); \
-      PrintF(" (%s)]\n", reason);                              \
-    }                                                          \
-  } while (false)
-
-#else
-
-#define TRACE_GENERIC_IC(isolate, type, reason)      \
-  do {                                               \
-    if (FLAG_trace_ic) {                             \
-      PrintF("[%s patching generic stub in ", type); \
-      PrintF("(see below) (%s)]\n", reason);         \
-    }                                                \
-  } while (false)
-
-#endif  // DEBUG
-
+#define TRACE_GENERIC_IC(reason) set_slow_stub_reason(reason);
 
 void IC::TraceIC(const char* type, Handle<Object> name) {
   if (FLAG_ic_stats) {
@@ -100,46 +77,43 @@ void IC::TraceIC(const char* type, Handle<Object> name) {
   }
 }
 
+Address IC::GetAbstractPC(int* line, int* column) const {
+  JavaScriptFrameIterator it(isolate());
+
+  JavaScriptFrame* frame = it.frame();
+  DCHECK(!frame->is_builtin());
+  int position = frame->position();
+
+  Object* maybe_script = frame->function()->shared()->script();
+  if (maybe_script->IsScript()) {
+    Handle<Script> script(Script::cast(maybe_script), isolate());
+    Script::PositionInfo info;
+    Script::GetPositionInfo(script, position, &info, Script::WITH_OFFSET);
+    *line = info.line + 1;
+    *column = info.column + 1;
+  } else {
+    *line = position;
+    *column = -1;
+  }
+
+  if (frame->is_interpreted()) {
+    InterpretedFrame* iframe = static_cast<InterpretedFrame*>(frame);
+    Address bytecode_start =
+        reinterpret_cast<Address>(iframe->GetBytecodeArray()) - kHeapObjectTag +
+        BytecodeArray::kHeaderSize;
+    return bytecode_start + iframe->GetBytecodeOffset();
+  }
+
+  return frame->pc();
+}
 
 void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
                  State new_state) {
   if (V8_LIKELY(!FLAG_ic_stats)) return;
 
-  if (FLAG_ic_stats &
-      v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
-    ICStats::instance()->Begin();
-    ICInfo& ic_info = ICStats::instance()->Current();
-    ic_info.type = is_keyed() ? "Keyed" : "";
-    ic_info.type += type;
-  } else {
-    PrintF("[%s%s in ", is_keyed() ? "Keyed" : "", type);
-  }
-
-  // TODO(jkummerow): Add support for "apply". The logic is roughly:
-  // marker = [fp_ + kMarkerOffset];
-  // if marker is smi and marker.value == INTERNAL and
-  //     the frame's code == builtin(Builtins::kFunctionApply):
-  // then print "apply from" and advance one frame
-
-  Object* maybe_function =
-      Memory::Object_at(fp_ + JavaScriptFrameConstants::kFunctionOffset);
-  if (maybe_function->IsJSFunction()) {
-    JSFunction* function = JSFunction::cast(maybe_function);
-    int code_offset = 0;
-    if (function->IsInterpreted()) {
-      code_offset = InterpretedFrame::GetBytecodeOffset(fp());
-    } else {
-      code_offset =
-          static_cast<int>(pc() - function->code()->instruction_start());
-    }
-    if (FLAG_ic_stats &
-        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
-      JavaScriptFrame::CollectFunctionAndOffsetForICStats(
-          function, function->abstract_code(), code_offset);
-    } else {
-      JavaScriptFrame::PrintFunctionAndOffset(
-          function, function->abstract_code(), code_offset, stdout, true);
-    }
+  Map* map = nullptr;
+  if (!receiver_map().is_null()) {
+    map = *receiver_map();
   }
 
   const char* modifier = "";
@@ -148,49 +122,55 @@ void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
         casted_nexus<KeyedStoreICNexus>()->GetKeyedAccessStoreMode();
     modifier = GetTransitionMarkModifier(mode);
   }
-  Map* map = nullptr;
-  if (!receiver_map().is_null()) {
-    map = *receiver_map();
+
+  if (!(FLAG_ic_stats &
+        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+    int line;
+    int column;
+    Address pc = GetAbstractPC(&line, &column);
+    LOG(isolate(), ICEvent(type, is_keyed(), pc, line, column, map, *name,
+                           TransitionMarkFromState(old_state),
+                           TransitionMarkFromState(new_state), modifier,
+                           slow_stub_reason_));
+    return;
   }
-  if (FLAG_ic_stats &
-      v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
-    ICInfo& ic_info = ICStats::instance()->Current();
-    // Reverse enough space for IC transition state, the longest length is 17.
-    ic_info.state.reserve(17);
-    ic_info.state = "(";
-    ic_info.state += TransitionMarkFromState(old_state);
-    ic_info.state += "->";
-    ic_info.state += TransitionMarkFromState(new_state);
-    ic_info.state += modifier;
-    ic_info.state += ")";
-    ic_info.map = reinterpret_cast<void*>(map);
+
+  ICStats::instance()->Begin();
+  ICInfo& ic_info = ICStats::instance()->Current();
+  ic_info.type = is_keyed() ? "Keyed" : "";
+  ic_info.type += type;
+
+  Object* maybe_function =
+      Memory::Object_at(fp_ + JavaScriptFrameConstants::kFunctionOffset);
+  DCHECK(maybe_function->IsJSFunction());
+  JSFunction* function = JSFunction::cast(maybe_function);
+  int code_offset = 0;
+  if (function->IsInterpreted()) {
+    code_offset = InterpretedFrame::GetBytecodeOffset(fp());
   } else {
-    PrintF(" (%c->%c%s) map=(%p", TransitionMarkFromState(old_state),
-           TransitionMarkFromState(new_state), modifier,
-           reinterpret_cast<void*>(map));
+    code_offset =
+        static_cast<int>(pc() - function->code()->instruction_start());
   }
+  JavaScriptFrame::CollectFunctionAndOffsetForICStats(
+      function, function->abstract_code(), code_offset);
+
+  // Reverse enough space for IC transition state, the longest length is 17.
+  ic_info.state.reserve(17);
+  ic_info.state = "(";
+  ic_info.state += TransitionMarkFromState(old_state);
+  ic_info.state += "->";
+  ic_info.state += TransitionMarkFromState(new_state);
+  ic_info.state += modifier;
+  ic_info.state += ")";
+  ic_info.map = reinterpret_cast<void*>(map);
   if (map != nullptr) {
-    if (FLAG_ic_stats &
-        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
-      ICInfo& ic_info = ICStats::instance()->Current();
-      ic_info.is_dictionary_map = map->is_dictionary_map();
-      ic_info.number_of_own_descriptors = map->NumberOfOwnDescriptors();
-      ic_info.instance_type = std::to_string(map->instance_type());
-    } else {
-      PrintF(" dict=%u own=%u type=", map->is_dictionary_map(),
-             map->NumberOfOwnDescriptors());
-      std::cout << map->instance_type();
-    }
+    ICInfo& ic_info = ICStats::instance()->Current();
+    ic_info.is_dictionary_map = map->is_dictionary_map();
+    ic_info.number_of_own_descriptors = map->NumberOfOwnDescriptors();
+    ic_info.instance_type = std::to_string(map->instance_type());
   }
-  if (FLAG_ic_stats &
-      v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
-    // TODO(lpy) Add name as key field in ICStats.
-    ICStats::instance()->End();
-  } else {
-    PrintF(") ");
-    name->ShortPrint(stdout);
-    PrintF("]\n");
-  }
+  // TODO(lpy) Add name as key field in ICStats.
+  ICStats::instance()->End();
 }
 
 
@@ -201,6 +181,7 @@ IC::IC(FrameDepth depth, Isolate* isolate, FeedbackNexus* nexus)
       vector_set_(false),
       kind_(FeedbackSlotKind::kInvalid),
       target_maps_set_(false),
+      slow_stub_reason_(nullptr),
       nexus_(nexus) {
   // To improve the performance of the (much used) IC code, we unfold a few
   // levels of the stack frame iteration code. This yields a ~35% speedup when
@@ -1143,7 +1124,7 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
       return;
     } else if (lookup->state() == LookupIterator::ACCESSOR) {
       if (!IsCompatibleReceiver(lookup, receiver_map())) {
-        TRACE_GENERIC_IC(isolate(), "LoadIC", "incompatible receiver type");
+        TRACE_GENERIC_IC("incompatible receiver type");
         code = slow_stub();
       }
     } else if (lookup->state() == LookupIterator::INTERCEPTOR) {
@@ -1154,7 +1135,7 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
       LookupForRead(&it);
       if (it.state() == LookupIterator::ACCESSOR &&
           !IsCompatibleReceiver(&it, receiver_map())) {
-        TRACE_GENERIC_IC(isolate(), "LoadIC", "incompatible receiver type");
+        TRACE_GENERIC_IC("incompatible receiver type");
         code = slow_stub();
       }
     }
@@ -1601,11 +1582,11 @@ void KeyedLoadIC::UpdateLoadElement(Handle<HeapObject> receiver) {
     Handle<Map> map = target_receiver_maps.at(i);
     if (map.is_null()) continue;
     if (map->instance_type() == JS_VALUE_TYPE) {
-      TRACE_GENERIC_IC(isolate(), "KeyedLoadIC", "JSValue");
+      TRACE_GENERIC_IC("JSValue");
       return;
     }
     if (map->instance_type() == JS_PROXY_TYPE) {
-      TRACE_GENERIC_IC(isolate(), "KeyedLoadIC", "JSProxy");
+      TRACE_GENERIC_IC("JSProxy");
       return;
     }
   }
@@ -1633,14 +1614,14 @@ void KeyedLoadIC::UpdateLoadElement(Handle<HeapObject> receiver) {
   if (!AddOneReceiverMapIfMissing(&target_receiver_maps, receiver_map)) {
     // If the miss wasn't due to an unseen map, a polymorphic stub
     // won't help, use the generic stub.
-    TRACE_GENERIC_IC(isolate(), "KeyedLoadIC", "same map added twice");
+    TRACE_GENERIC_IC("same map added twice");
     return;
   }
 
   // If the maximum number of receiver maps has been exceeded, use the generic
   // version of the IC.
   if (target_receiver_maps.length() > kMaxKeyedPolymorphism) {
-    TRACE_GENERIC_IC(isolate(), "KeyedLoadIC", "max polymorph exceeded");
+    TRACE_GENERIC_IC("max polymorph exceeded");
     return;
   }
 
@@ -1687,7 +1668,6 @@ MaybeHandle<Object> KeyedLoadIC::Load(Handle<Object> object,
 
   if (!is_vector_set()) {
     ConfigureVectorState(MEGAMORPHIC, key);
-    TRACE_GENERIC_IC(isolate(), "KeyedLoadIC", "set generic");
     TRACE_IC("LoadIC", key);
   }
 
@@ -1853,12 +1833,13 @@ void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
     return;
   }
 
-  bool use_ic = LookupForWrite(lookup, value, store_mode);
-  if (!use_ic) {
-    TRACE_GENERIC_IC(isolate(), "StoreIC", "LookupForWrite said 'false'");
+  Handle<Object> handler;
+  if (LookupForWrite(lookup, value, store_mode)) {
+    handler = ComputeHandler(lookup, value);
+  } else {
+    TRACE_GENERIC_IC("LookupForWrite said 'false'");
+    handler = slow_stub();
   }
-  Handle<Object> handler = use_ic ? ComputeHandler(lookup, value)
-                                  : Handle<Object>::cast(slow_stub());
 
   PatchCache(lookup->name(), handler);
   TRACE_IC("StoreIC", lookup->name());
@@ -1956,7 +1937,7 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
       }
       // Currently not handled by CompileStoreTransition.
       if (!holder->HasFastProperties()) {
-        TRACE_GENERIC_IC(isolate(), "StoreIC", "transition from slow");
+        TRACE_GENERIC_IC("transition from slow");
         TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
         return slow_stub();
       }
@@ -1976,7 +1957,7 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
 
     case LookupIterator::ACCESSOR: {
       if (!holder->HasFastProperties()) {
-        TRACE_GENERIC_IC(isolate(), "StoreIC", "accessor on slow map");
+        TRACE_GENERIC_IC("accessor on slow map");
         TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
         return slow_stub();
       }
@@ -1984,20 +1965,19 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
       if (accessors->IsAccessorInfo()) {
         Handle<AccessorInfo> info = Handle<AccessorInfo>::cast(accessors);
         if (v8::ToCData<Address>(info->setter()) == nullptr) {
-          TRACE_GENERIC_IC(isolate(), "StoreIC", "setter == nullptr");
+          TRACE_GENERIC_IC("setter == nullptr");
           TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
           return slow_stub();
         }
         if (AccessorInfo::cast(*accessors)->is_special_data_property() &&
             !lookup->HolderIsReceiverOrHiddenPrototype()) {
-          TRACE_GENERIC_IC(isolate(), "StoreIC",
-                           "special data property in prototype chain");
+          TRACE_GENERIC_IC("special data property in prototype chain");
           TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
           return slow_stub();
         }
         if (!AccessorInfo::IsCompatibleReceiverMap(isolate(), info,
                                                    receiver_map())) {
-          TRACE_GENERIC_IC(isolate(), "StoreIC", "incompatible receiver type");
+          TRACE_GENERIC_IC("incompatible receiver type");
           TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
           return slow_stub();
         }
@@ -2010,7 +1990,7 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
         Handle<Object> setter(Handle<AccessorPair>::cast(accessors)->setter(),
                               isolate());
         if (!setter->IsJSFunction() && !setter->IsFunctionTemplateInfo()) {
-          TRACE_GENERIC_IC(isolate(), "StoreIC", "setter not a function");
+          TRACE_GENERIC_IC("setter not a function");
           TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
           return slow_stub();
         }
@@ -2019,7 +1999,7 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
           if (call_optimization.IsCompatibleReceiver(receiver, holder)) {
             break;  // Custom-compiled handler.
           }
-          TRACE_GENERIC_IC(isolate(), "StoreIC", "incompatible receiver");
+          TRACE_GENERIC_IC("incompatible receiver");
           TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
           return slow_stub();
         }
@@ -2052,7 +2032,7 @@ Handle<Object> StoreIC::GetMapIndependentHandler(LookupIterator* lookup) {
 
       // -------------- Constant properties --------------
       DCHECK_EQ(kDescriptor, lookup->property_details().location());
-      TRACE_GENERIC_IC(isolate(), "StoreIC", "constant property");
+      TRACE_GENERIC_IC("constant property");
       TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
       return slow_stub();
     }
@@ -2183,7 +2163,7 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
   for (int i = 0; i < target_receiver_maps.length(); i++) {
     if (!target_receiver_maps.at(i).is_null() &&
         target_receiver_maps.at(i)->instance_type() == JS_VALUE_TYPE) {
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "JSValue");
+      TRACE_GENERIC_IC("JSValue");
       return;
     }
   }
@@ -2244,7 +2224,7 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
   if (!map_added) {
     // If the miss wasn't due to an unseen map, a polymorphic stub
     // won't help, use the megamorphic stub which can handle everything.
-    TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "same map added twice");
+    TRACE_GENERIC_IC("same map added twice");
     return;
   }
 
@@ -2259,7 +2239,7 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
     if (store_mode == STANDARD_STORE) {
       store_mode = old_store_mode;
     } else if (store_mode != old_store_mode) {
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "store mode mismatch");
+      TRACE_GENERIC_IC("store mode mismatch");
       return;
     }
   }
@@ -2276,8 +2256,7 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
     }
     if (external_arrays != 0 &&
         external_arrays != target_receiver_maps.length()) {
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC",
-                       "unsupported combination of external and normal arrays");
+      TRACE_GENERIC_IC("unsupported combination of external and normal arrays");
       return;
     }
   }
@@ -2411,8 +2390,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
         Object);
     if (!is_vector_set()) {
       ConfigureVectorState(MEGAMORPHIC, key);
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC",
-                       "unhandled internalized string key");
+      TRACE_GENERIC_IC("unhandled internalized string key");
       TRACE_IC("StoreIC", key);
     }
     return store_handle;
@@ -2426,7 +2404,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
     // the runtime to enable optimization of element hole access.
     Handle<HeapObject> heap_object = Handle<HeapObject>::cast(object);
     if (heap_object->map()->IsMapInArrayPrototypeChain()) {
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "map in array prototype");
+      TRACE_GENERIC_IC("map in array prototype");
       use_ic = false;
     }
   }
@@ -2457,7 +2435,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
   if (use_ic) {
     if (!old_receiver_map.is_null()) {
       if (is_arguments) {
-        TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "arguments receiver");
+        TRACE_GENERIC_IC("arguments receiver");
       } else if (key_is_valid_index) {
         // We should go generic if receiver isn't a dictionary, but our
         // prototype chain does have dictionary elements. This ensures that
@@ -2466,20 +2444,19 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
         if (!old_receiver_map->DictionaryElementsInPrototypeChainOnly()) {
           UpdateStoreElement(old_receiver_map, store_mode);
         } else {
-          TRACE_GENERIC_IC(isolate(), "KeyedStoreIC",
-                           "dictionary or proxy prototype");
+          TRACE_GENERIC_IC("dictionary or proxy prototype");
         }
       } else {
-        TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "non-smi-like key");
+        TRACE_GENERIC_IC("non-smi-like key");
       }
     } else {
-      TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "non-JSObject receiver");
+      TRACE_GENERIC_IC("non-JSObject receiver");
     }
   }
 
   if (!is_vector_set()) {
     ConfigureVectorState(MEGAMORPHIC, key);
-    TRACE_GENERIC_IC(isolate(), "KeyedStoreIC", "set generic");
+    TRACE_GENERIC_IC("set generic");
   }
   TRACE_IC("StoreIC", key);
 
@@ -2798,15 +2775,13 @@ MaybeHandle<Object> BinaryOpIC::Transition(
     JavaScriptFrame::CollectTopFrameForICStats(isolate());
     ic_stats->End();
   } else if (FLAG_ic_stats) {
-    // if (FLAG_trace_ic) {
-    OFStream os(stdout);
-    os << "[BinaryOpIC" << old_state << " => " << state << " @ "
-       << static_cast<void*>(*new_target) << " <- ";
-    JavaScriptFrame::PrintTop(isolate(), stdout, false, true);
-    if (!allocation_site.is_null()) {
-      os << " using allocation site " << static_cast<void*>(*allocation_site);
-    }
-    os << "]" << std::endl;
+    int line;
+    int column;
+    Address pc = GetAbstractPC(&line, &column);
+    LOG(isolate(),
+        BinaryOpIC(pc, line, column, *new_target, old_state.ToString().c_str(),
+                   state.ToString().c_str(),
+                   allocation_site.is_null() ? nullptr : *allocation_site));
   }
 
   // Patch the inlined smi code as necessary.
@@ -2896,16 +2871,17 @@ Code* CompareIC::UpdateCaches(Handle<Object> x, Handle<Object> y) {
     ic_stats->End();
   } else if (FLAG_ic_stats) {
     // if (FLAG_trace_ic) {
-    PrintF("[CompareIC in ");
-    JavaScriptFrame::PrintTop(isolate(), stdout, false, true);
-    PrintF(" ((%s+%s=%s)->(%s+%s=%s))#%s @ %p]\n",
-           CompareICState::GetStateName(old_stub.left()),
-           CompareICState::GetStateName(old_stub.right()),
-           CompareICState::GetStateName(old_stub.state()),
-           CompareICState::GetStateName(new_left),
-           CompareICState::GetStateName(new_right),
-           CompareICState::GetStateName(state), Token::Name(op_),
-           static_cast<void*>(*stub.GetCode()));
+    int line;
+    int column;
+    Address pc = GetAbstractPC(&line, &column);
+    LOG(isolate(),
+        CompareIC(pc, line, column, *stub.GetCode(), Token::Name(op_),
+                  CompareICState::GetStateName(old_stub.left()),
+                  CompareICState::GetStateName(old_stub.right()),
+                  CompareICState::GetStateName(old_stub.state()),
+                  CompareICState::GetStateName(new_left),
+                  CompareICState::GetStateName(new_right),
+                  CompareICState::GetStateName(state)));
   }
 
   // Activate inlined smi code.
@@ -2935,9 +2911,36 @@ RUNTIME_FUNCTION(Runtime_Unreachable) {
 
 Handle<Object> ToBooleanIC::ToBoolean(Handle<Object> object) {
   ToBooleanICStub stub(isolate(), extra_ic_state());
+  ToBooleanHints old_hints = stub.hints();
   bool to_boolean_value = stub.UpdateStatus(object);
+  ToBooleanHints new_hints = stub.hints();
   Handle<Code> code = stub.GetCode();
   set_target(*code);
+
+  // Note: Although a no-op transition is semantically OK, it is hinting at a
+  // bug somewhere in our state transition machinery.
+  DCHECK_NE(old_hints, new_hints);
+  if (V8_UNLIKELY(FLAG_ic_stats)) {
+    if (FLAG_ic_stats &
+        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING) {
+      auto ic_stats = ICStats::instance();
+      ic_stats->Begin();
+      ICInfo& ic_info = ic_stats->Current();
+      ic_info.type = "ToBooleanIC";
+      ic_info.state = ToString(old_hints);
+      ic_info.state += "=>";
+      ic_info.state += ToString(new_hints);
+      ic_stats->End();
+    } else {
+      int line;
+      int column;
+      Address pc = GetAbstractPC(&line, &column);
+      LOG(isolate(),
+          ToBooleanIC(pc, line, column, *code, ToString(old_hints).c_str(),
+                      ToString(new_hints).c_str()));
+    }
+  }
+
   return isolate()->factory()->ToBoolean(to_boolean_value);
 }
 
