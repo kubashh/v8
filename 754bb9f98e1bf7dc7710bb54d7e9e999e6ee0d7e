@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d692d50_eb9fcaa7",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-02-17T13:47:23Z",
+      "side": 0,
+      "message": "I use this flag.",
+      "range": {
+        "startLine": 765,
+        "startChar": 12,
+        "endLine": 765,
+        "endChar": 37
+      },
+      "revId": "754bb9f98e1bf7dc7710bb54d7e9e999e6ee0d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
