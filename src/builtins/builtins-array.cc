@@ -1717,74 +1717,43 @@ void Builtins::Generate_ArrayIncludes(compiler::CodeAssemblerState* state) {
     assembler.GotoIfNot(assembler.TaggedIsSmi(len), &call_runtime);
 
     len_var.Bind(assembler.SmiToWord(len));
-    assembler.Branch(assembler.WordEqual(len_var.value(), intptr_zero),
-                     &return_false, &init_k);
+
+    assembler.GotoIf(assembler.IsUndefined(start_from), &init_k);
+
+    // Bailout to slow path if startIndex is not an Smi.
+    assembler.Branch(assembler.TaggedIsSmi(start_from), &init_k, &call_runtime);
   }
 
   assembler.Bind(&init_k);
   {
     Label done(&assembler), init_k_smi(&assembler), init_k_heap_num(&assembler),
         init_k_zero(&assembler), init_k_n(&assembler);
-    Node* tagged_n = assembler.ToInteger(context, start_from);
 
-    assembler.Branch(assembler.TaggedIsSmi(tagged_n), &init_k_smi,
-                     &init_k_heap_num);
+    CSA_ASSERT(&assembler, assembler.TaggedIsSmi(start_from));
+    start_from_var.Bind(assembler.SmiUntag(start_from));
 
-    assembler.Bind(&init_k_smi);
+    Label if_positive(&assembler), if_negative(&assembler);
+    assembler.Branch(
+        assembler.IntPtrLessThan(start_from_var.value(), intptr_zero),
+        &if_negative, &if_positive);
+
+    assembler.Bind(&if_positive);
     {
-      start_from_var.Bind(assembler.SmiUntag(tagged_n));
-      assembler.Goto(&init_k_n);
+      index_var.Bind(start_from_var.value());
+      assembler.Goto(&done);
     }
 
-    assembler.Bind(&init_k_heap_num);
+    assembler.Bind(&if_negative);
     {
-      Label do_return_false(&assembler);
-      // This round is lossless for all valid lengths.
-      Node* fp_len = assembler.RoundIntPtrToFloat64(len_var.value());
-      Node* fp_n = assembler.LoadHeapNumberValue(tagged_n);
-      assembler.GotoIf(assembler.Float64GreaterThanOrEqual(fp_n, fp_len),
-                       &do_return_false);
-      start_from_var.Bind(assembler.ChangeInt32ToIntPtr(
-          assembler.TruncateFloat64ToWord32(fp_n)));
-      assembler.Goto(&init_k_n);
-
-      assembler.Bind(&do_return_false);
-      {
-        index_var.Bind(intptr_zero);
-        assembler.Goto(&return_false);
-      }
+      Node* const index =
+          assembler.IntPtrAdd(len_var.value(), start_from_var.value());
+      index_var.Bind(assembler.SelectConstant(
+          assembler.IntPtrLessThan(index, intptr_zero), intptr_zero, index,
+          MachineType::PointerRepresentation()));
+      assembler.Goto(&done);
     }
 
-    assembler.Bind(&init_k_n);
-    {
-      Label if_positive(&assembler), if_negative(&assembler), done(&assembler);
-      assembler.Branch(
-          assembler.IntPtrLessThan(start_from_var.value(), intptr_zero),
-          &if_negative, &if_positive);
-
-      assembler.Bind(&if_positive);
-      {
-        index_var.Bind(start_from_var.value());
-        assembler.Goto(&done);
-      }
-
-      assembler.Bind(&if_negative);
-      {
-        index_var.Bind(
-            assembler.IntPtrAdd(len_var.value(), start_from_var.value()));
-        assembler.Branch(
-            assembler.IntPtrLessThan(index_var.value(), intptr_zero),
-            &init_k_zero, &done);
-      }
-
-      assembler.Bind(&init_k_zero);
-      {
-        index_var.Bind(intptr_zero);
-        assembler.Goto(&done);
-      }
-
-      assembler.Bind(&done);
-    }
+    assembler.Bind(&done);
   }
 
   static int32_t kElementsKind[] = {
