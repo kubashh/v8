@@ -625,6 +625,24 @@
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8917a6e8_53488a2f",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T13:19:00Z",
+      "side": 1,
+      "message": "the style guide says to either define copy ctor/operator\u003d or disable them.",
+      "parentUuid": "e86b9b40_f7ca199c",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
