@@ -471,6 +471,24 @@
     },
     {
       "key": {
+        "uuid": "5e223643_d3b6d72b",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T16:44:54Z",
+      "side": 1,
+      "message": "Hannes: Are you OK with dropping this CHECK?  I think it\u0027s better to rely on UMA or telemetry to check for latency issues rather than hard-crashing. WDYT?",
+      "parentUuid": "d000410a_9fcf69f7",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5de74e57_7b50da12",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -658,6 +676,24 @@
       "side": 1,
       "message": "the style guide says to either define copy ctor/operator\u003d or disable them.",
       "parentUuid": "e86b9b40_f7ca199c",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df06e94c_4825f2da",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T16:44:54Z",
+      "side": 1,
+      "message": "As discussed offline the style guide doesn\u0027t actually require them to be explicitly defined (only define both if any are non-default).",
+      "parentUuid": "8917a6e8_53488a2f",
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
