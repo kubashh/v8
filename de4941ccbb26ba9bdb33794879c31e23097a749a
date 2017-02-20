@@ -453,6 +453,24 @@
     },
     {
       "key": {
+        "uuid": "d000410a_9fcf69f7",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-02-20T15:05:23Z",
+      "side": 1,
+      "message": "I put it there because originally the GC team was worried that the map might grow too big, which would cause latency problems, since the array is scanned as roots.",
+      "parentUuid": "6ad38110_5a616304",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5de74e57_7b50da12",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
