@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49510590_dc384527",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. ++index",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f79cbb54_9111ff11",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. --size_",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9efc456e_45da5ce0",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "DCHECK_GT",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efaeae38_80080535",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. DCHECK_EQ",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "366ffab6_f659fbdf",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. ++index",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e128133b_648699ec",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit ++i",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac61a14f_90996cc2",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "hum, but why crash? Couldn\u0027t we just try to see whether we can say double the capacity instead?\n\nalso, now that we can delete keys, how does the map shrink again?",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5de74e57_7b50da12",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "++i",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d16befb_beb3662d",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "++i",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfcafa25_efa360f5",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "shouldn\u0027t that come before DeleteArray above?",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6fd607c_305687de",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. was it possible to change all ints to size_t without too much hassle? if not, it\u0027s also ok",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e2a7117_7b7eebab",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T09:14:27Z",
+      "side": 1,
+      "message": "nit. define copy ctor and operator\u003d",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
