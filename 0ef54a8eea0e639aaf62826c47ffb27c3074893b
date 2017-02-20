@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33874252_d07a283b",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-02-20T13:19:00Z",
+      "side": 1,
+      "message": "Any particular reason why we don\u0027t just double?",
+      "revId": "0ef54a8eea0e639aaf62826c47ffb27c3074893b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
