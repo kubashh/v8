@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "235aa893_ba055cf4",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Keeping these as i++ unless Jochen has feels strongly.",
+      "parentUuid": "4a0185e3_0ad38bbb",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f79cbb54_9111ff11",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2017-02-20T09:14:27Z",
       "side": 1,
       "message": "nit. --size_",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9f45066_058a2efb",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f79cbb54_9111ff11",
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -77,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "929f3f6b_0d071c45",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Oops, good catch, thanks!",
+      "parentUuid": "e6964f16_ceea0ed7",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 14
+      },
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9efc456e_45da5ce0",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -91,6 +151,24 @@
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89db10fa_6d1ac742",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9efc456e_45da5ce0",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "21fe6359_8606da85",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efaeae38_80080535",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fca2c8b2_32117eb7",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -122,6 +218,30 @@
       "writtenOn": "2017-02-20T11:05:12Z",
       "side": 1,
       "message": "I think this second scan is redundant if gc_counter_ \u003d\u003d heap_-\u003egc_count()",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 9
+      },
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff3190a8_4c5a63b5",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "fca2c8b2_32117eb7",
       "range": {
         "startLine": 106,
         "startChar": 4,
@@ -157,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "a6aac68f_64ca5be9",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "InsertKey does an implicit ScanKeysFor by returning the value if it\u0027s found: \n   if (keys_[index] \u003d\u003d address) return index;  // Found.",
+      "parentUuid": "3e218e94_d60ee3b9",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 28
+      },
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba8170a3_de44ceae",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -168,6 +312,30 @@
       "writtenOn": "2017-02-20T11:05:12Z",
       "side": 1,
       "message": "Doesn\u0027t appear to be used.",
+      "range": {
+        "startLine": 182,
+        "startChar": 4,
+        "endLine": 182,
+        "endChar": 19
+      },
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2982318_faac51de",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "This is use by the IdentityMap::iterator\u0027s ++ operator.",
+      "parentUuid": "ba8170a3_de44ceae",
       "range": {
         "startLine": 182,
         "startChar": 4,
@@ -197,6 +365,24 @@
     },
     {
       "key": {
+        "uuid": "ab531b31_af748e81",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "366ffab6_f659fbdf",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e128133b_648699ec",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -214,6 +400,24 @@
     },
     {
       "key": {
+        "uuid": "fe7de356_507b3281",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e128133b_648699ec",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac61a14f_90996cc2",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -225,6 +429,24 @@
       "writtenOn": "2017-02-20T09:14:27Z",
       "side": 1,
       "message": "hum, but why crash? Couldn\u0027t we just try to see whether we can say double the capacity instead?\n\nalso, now that we can delete keys, how does the map shrink again?",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad38110_5a616304",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "I\u0027ve removed the CHECK - Ben are you fine with this or was there a specific reason it was there? \n\nAdded support for shrinking the map if we delete.",
+      "parentUuid": "ac61a14f_90996cc2",
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -265,6 +487,24 @@
     },
     {
       "key": {
+        "uuid": "b923f5fd_3b350be6",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d16befb_beb3662d",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bfcafa25_efa360f5",
         "filename": "src/identity-map.cc",
         "patchSetId": 7
@@ -276,6 +516,24 @@
       "writtenOn": "2017-02-20T09:14:27Z",
       "side": 1,
       "message": "shouldn\u0027t that come before DeleteArray above?",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e8e081_7dbb58f8",
+        "filename": "src/identity-map.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Yes good point. Done.",
+      "parentUuid": "bfcafa25_efa360f5",
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -317,6 +575,24 @@
     },
     {
       "key": {
+        "uuid": "79fc055a_7612f428",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Ack, I\u0027ll do this in a separate CL if it\u0027s not too invasive.",
+      "parentUuid": "1d61e6c9_6976162b",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e2a7117_7b7eebab",
         "filename": "src/identity-map.h",
         "patchSetId": 7
@@ -328,6 +604,24 @@
       "writtenOn": "2017-02-20T09:14:27Z",
       "side": 1,
       "message": "nit. define copy ctor and operator\u003d",
+      "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e86b9b40_f7ca199c",
+        "filename": "src/identity-map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-02-20T13:03:21Z",
+      "side": 1,
+      "message": "Any reason you want these explicitly defined, the default ctors do what we want here don\u0027t they?",
+      "parentUuid": "3e2a7117_7b7eebab",
       "revId": "de4941ccbb26ba9bdb33794879c31e23097a749a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
