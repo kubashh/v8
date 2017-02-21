@@ -269,7 +269,7 @@ DEFINE_IMPLICATION(ignition_staging, compiler_dispatcher)
 DEFINE_IMPLICATION(ignition_staging, validate_asm)
 
 // Flags for experimental implementation features.
-DEFINE_BOOL(allocation_site_pretenuring, true,
+DEFINE_BOOL(allocation_site_pretenuring, false,
             "pretenure with allocation sites")
 DEFINE_BOOL(mark_shared_functions_for_tier_up, true,
             "mark shared functions for tier up")
@@ -693,7 +693,7 @@ DEFINE_BOOL(stress_compaction, false,
 DEFINE_BOOL(manual_evacuation_candidates_selection, false,
             "Test mode only flag. It allows an unit test to select evacuation "
             "candidates pages (requires --stress_compaction).")
-DEFINE_BOOL(fast_promotion_new_space, false,
+DEFINE_BOOL(fast_promotion_new_space, true,
             "fast promote new space on high survival rates")
 
 // assembler-ia32.cc / assembler-arm.cc / assembler-x64.cc
