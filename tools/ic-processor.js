@@ -56,20 +56,20 @@ function IcProcessor() {
       'KeyedStoreIC': {
         parsers : propertyICParser,
         processor: this.processPropertyIC.bind(this, "KeyedStoreIC") },
-      'CompareIC': {
-        parsers : [parseInt, parseInt, parseInt, parseInt, null, null, null,
-                   null, null, null, null],
-        processor: this.processCompareIC },
-      'BinaryOpIC': {
-        parsers : [parseInt, parseInt, parseInt, parseInt, null, null,
-                   parseInt],
-        processor: this.processBinaryOpIC },
-      'ToBooleanIC': {
-        parsers : [parseInt, parseInt, parseInt, parseInt, null, null],
-        processor: this.processToBooleanIC },
-      'PatchIC': {
-        parsers : [parseInt, parseInt, parseInt],
-        processor: this.processPatchIC },
+      // 'CompareIC': {
+      //   parsers : [parseInt, parseInt, parseInt, parseInt, null, null, null,
+      //              null, null, null, null],
+      //   processor: this.processCompareIC },
+      // 'BinaryOpIC': {
+      //   parsers : [parseInt, parseInt, parseInt, parseInt, null, null,
+      //              parseInt],
+      //   processor: this.processBinaryOpIC },
+      // 'ToBooleanIC': {
+      //   parsers : [parseInt, parseInt, parseInt, parseInt, null, null],
+      //   processor: this.processToBooleanIC },
+      // 'PatchIC': {
+      //   parsers : [parseInt, parseInt, parseInt],
+      //   processor: this.processPatchIC },
       });
   this.deserializedEntriesNames_ = [];
   this.profile_ = new Profile();
@@ -118,6 +118,9 @@ IcProcessor.prototype.processCodeCreation = function(
   if (maybe_func.length) {
     var funcAddr = parseInt(maybe_func[0]);
     var state = parseState(maybe_func[1]);
+    if (state == Profile.CodeState.OPTIMIZED) {
+      print("OPTIMIZED: " + name);
+    }
     this.profile_.addFuncCode(type, name, start, size, funcAddr, state);
   } else {
     this.profile_.addCode(type, name, start, size);
@@ -142,7 +145,7 @@ IcProcessor.prototype.processFunctionMove = function(from, to) {
 IcProcessor.prototype.formatName = function(entry) {
   if (!entry) return "<unknown>"
   var name = entry.func.getName();
-  var re = /(.*):[0-9]+:[0-9]+$/;
+  var re = /[^ ]* (.*):[0-9]+:[0-9]+$/;
   var array = re.exec(name);
   if (!array) return name;
   return array[1];
@@ -154,8 +157,7 @@ IcProcessor.prototype.processPropertyIC = function (
   this[type]++;
   var entry = this.profile_.findEntry(pc);
   print(type + " (" + old_state + "->" + new_state + modifier + ") at " +
-        this.formatName(entry) + ":" + line + ":" + column + " " + name +
-        " (map 0x" + map.toString(16) + ")");
+        this.formatName(entry) + ":" + line + " ");
 }
 
 IcProcessor.prototype.processCompareIC = function (
