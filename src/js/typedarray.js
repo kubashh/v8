@@ -185,7 +185,7 @@ function NAMEConstructByLength(obj, length) {
     var buffer = new GlobalArrayBuffer(byteLength);
     %_TypedArrayInitialize(obj, ARRAY_ID, buffer, 0, byteLength, true);
   } else {
-    %_TypedArrayInitialize(obj, ARRAY_ID, null, 0, byteLength, true);
+    %typed_array_initialize(obj, ARRAY_ID, null, 0, byteLength, true);
   }
 }
 
