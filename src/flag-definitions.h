@@ -693,8 +693,9 @@ DEFINE_BOOL(stress_compaction, false,
 DEFINE_BOOL(manual_evacuation_candidates_selection, false,
             "Test mode only flag. It allows an unit test to select evacuation "
             "candidates pages (requires --stress_compaction).")
-DEFINE_BOOL(fast_promotion_new_space, false,
+DEFINE_BOOL(fast_promotion_new_space, true,
             "fast promote new space on high survival rates")
+DEFINE_NEG_IMPLICATION(fast_promotion_new_space, allocation_site_pretenuring);
 
 // assembler-ia32.cc / assembler-arm.cc / assembler-x64.cc
 DEFINE_BOOL(debug_code, DEBUG_BOOL,
