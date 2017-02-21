@@ -219,6 +219,13 @@ MapUpdater::State MapUpdater::FindRootMap() {
   DCHECK_EQ(kInitialized, state_);
   // Check the state of the root map.
   root_map_ = handle(old_map_->FindRootMap(), isolate_);
+  if (root_map_->is_deprecated()) {
+    state_ = kEnd;
+    result_map_ = handle(
+        JSFunction::cast(root_map_->GetConstructor())->initial_map(), isolate_);
+    DCHECK(result_map_->is_dictionary_map());
+    return state_;
+  }
   int root_nof = root_map_->NumberOfOwnDescriptors();
   if (!old_map_->EquivalentToForTransition(*root_map_)) {
     return CopyGeneralizeAllFields("GenAll_NotEquivalent");
