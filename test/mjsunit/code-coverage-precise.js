@@ -8,20 +8,38 @@
 
 function GetCoverage(source) {
   for (var script of %DebugCollectCoverage()) {
-    if (script.script.source == source) return script;
+    if (script.script.source == source) return script.toplevel;
   }
   return undefined;
+}
+
+function ApplyCoverageToSource(source, range) {
+  var content = "";
+  var cursor = range.start;
+  if (range.inner) for (var inner of range.inner) {
+    content += source.substring(cursor, inner.start);
+    content += ApplyCoverageToSource(source, inner);
+    cursor = inner.end;
+  }
+  content += source.substring(cursor, range.end);
+  return `[${content}](${range.name}:${range.count})`;
 }
 
 function TestCoverage(name, source, expectation) {
   source = source.trim();
   eval(source);
-  %CollectGarbage("collect dead objects");
+  %CollectGarbage("remove dead objects");
   var coverage = GetCoverage(source);
-  var result = JSON.stringify(coverage);
-  print(result);
-  assertEquals(JSON.stringify(expectation), result, name + " failed");
+  if (expectation === undefined) {
+    assertEquals(undefined, coverage);
+  } else {
+    expectation = expectation.trim();
+    var result = ApplyCoverageToSource(source, coverage);
+    print(result);
+    assertEquals(expectation, result, name + " failed");
+  }
 }
+
 
 // Without precise coverage enabled, we lose coverage data to the GC.
 TestCoverage(
@@ -51,7 +69,9 @@ TestCoverage(
 `
 (function f() {})();
 `,
-[{"start":0,"end":20,"count":1},{"start":1,"end":16,"count":1}]
+`
+[([function f() {}](f:1))();](:1)
+`
 );
 
 TestCoverage(
@@ -62,7 +82,12 @@ for (var i = 0; i < 10; i++) {
   i += f();
 }
 `,
-[{"start":0,"end":63,"count":1},{"start":41,"end":48,"count":5}]
+`
+[for (var i = 0; i < 10; i++) {
+  let f = [() => 1](f:5);
+  i += f();
+}](:1)
+`
 );
 
 %DebugTogglePreciseCoverage(false);

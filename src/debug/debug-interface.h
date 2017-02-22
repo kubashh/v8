@@ -17,8 +17,7 @@
 namespace v8 {
 
 namespace internal {
-struct CoverageFunction;
-struct CoverageScript;
+struct CoverageRange;
 class Coverage;
 class Script;
 }
@@ -212,45 +211,33 @@ class GeneratorObject {
  */
 class V8_EXPORT_PRIVATE Coverage {
  public:
-  class ScriptData;  // Forward declaration.
-
-  class V8_EXPORT_PRIVATE FunctionData {
+  class V8_EXPORT_PRIVATE Range {
    public:
     // 0-based line and colum numbers.
     Location Start() { return start_; }
     Location End() { return end_; }
     uint32_t Count();
+    size_t NestedCount();
+    Range GetNested(size_t i);
     MaybeLocal<String> Name();
 
    private:
-    FunctionData(i::CoverageFunction* function, Local<debug::Script> script);
-    i::CoverageFunction* function_;
+    Range(i::CoverageRange* range, Local<debug::Script> script);
+    i::CoverageRange* range_;
     Location start_;
     Location end_;
+    Local<debug::Script> script_;
 
-    friend class v8::debug::Coverage::ScriptData;
+    friend class debug::Coverage;
   };
 
-  class V8_EXPORT_PRIVATE ScriptData {
-   public:
-    Local<debug::Script> GetScript();
-    size_t FunctionCount();
-    FunctionData GetFunctionData(size_t i);
-
-   private:
-    explicit ScriptData(i::CoverageScript* script) : script_(script) {}
-    i::CoverageScript* script_;
-
-    friend class v8::debug::Coverage;
-  };
-
-  static Coverage Collect(Isolate* isolate, bool reset_count);
+  static Coverage Collect(Isolate* isolate);
 
   static void TogglePrecise(Isolate* isolate, bool enable);
 
   size_t ScriptCount();
-  ScriptData GetScriptData(size_t i);
-  bool IsEmpty() { return coverage_ == nullptr; }
+  Local<debug::Script> GetScript(size_t i);
+  Range GetRange(size_t i);
 
   ~Coverage();
 
