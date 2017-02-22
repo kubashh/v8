@@ -9,6 +9,325 @@
 namespace v8 {
 namespace internal {
 
+class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
+ public:
+  explicit TypedArrayBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : CodeStubAssembler(state) {}
+
+ protected:
+  void GenerateTypedArrayPrototypeGetter(const char* method_name,
+                                         int object_offset);
+  template <IterationKind kIterationKind>
+  void GenerateTypedArrayPrototypeIterationMethod(const char* method_name);
+};
+
+TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
+  // Do the rest of the checks for length etc.
+  Node* holder = Parameter(1);
+  Node* length = Parameter(2);
+  Node* maybe_buffer = Parameter(3);
+  Node* byte_offset = Parameter(4);
+  Node* byte_length = Parameter(5);
+  Node* initialize = Parameter(6);
+  Node* context = Parameter(9);
+
+  static const int32_t fta_base_data_offset =
+      FixedTypedArrayBase::kDataOffset - kHeapObjectTag;
+
+  // Make sure length is a Smi. The caller guarantees this is the case.
+  length = ToInteger(context, length, CodeStubAssembler::kTruncateMinusZero);
+  CSA_ASSERT(this, TaggedIsSmi(length));
+
+  byte_offset =
+      ToInteger(context, byte_offset, CodeStubAssembler::kTruncateMinusZero);
+  CSA_ASSERT(this, TaggedIsSmi(byte_offset));
+
+  // byte_length can be -0, get rid of it.
+  byte_length =
+      ToInteger(context, byte_length, CodeStubAssembler::kTruncateMinusZero);
+
+  Label dispatch_on_kind(this);
+  GotoIfNot(IsNull(maybe_buffer), &dispatch_on_kind);
+  // If the buffer is null, then we need a Smi byte_length. The caller
+  // guarantees this is the case, because when byte_length >
+  // TypedArrayMaxSizeInHeap, a buffer is allocated and passed in here.
+  CSA_ASSERT(this, TaggedIsSmi(byte_length));
+  Goto(&dispatch_on_kind);
+
+  Label alloc_array_buffer(this);
+  Label unreachable(this);
+  Label aligned(this);
+  Label allocate_elements(this);
+  Label done(this);
+
+  Variable fixed_typed_map(this, MachineRepresentation::kTagged);
+  Variable element_size(this, MachineRepresentation::kTagged);
+  Variable total_size(this, MachineType::PointerRepresentation());
+
+  Label uint8_elements(this), uint8_clamped_elements(this), int8_elements(this),
+      uint16_elements(this), int16_elements(this), uint32_elements(this),
+      int32_elements(this), float32_elements(this), float64_elements(this);
+  Label* elements_kind_labels[] = {
+      &uint8_elements,  &uint8_clamped_elements, &int8_elements,
+      &uint16_elements, &int16_elements,         &uint32_elements,
+      &int32_elements,  &float32_elements,       &float64_elements};
+  int32_t elements_kinds[] = {
+      UINT8_ELEMENTS,  UINT8_CLAMPED_ELEMENTS, INT8_ELEMENTS,
+      UINT16_ELEMENTS, INT16_ELEMENTS,         UINT32_ELEMENTS,
+      INT32_ELEMENTS,  FLOAT32_ELEMENTS,       FLOAT64_ELEMENTS};
+  const size_t kTypedElementsKindCount = LAST_FIXED_TYPED_ARRAY_ELEMENTS_KIND -
+                                         FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND +
+                                         1;
+  DCHECK_EQ(kTypedElementsKindCount, arraysize(elements_kinds));
+  DCHECK_EQ(kTypedElementsKindCount, arraysize(elements_kind_labels));
+
+  Bind(&dispatch_on_kind);
+  {
+    // Get the map of the holder.
+    Node* holder_map = LoadMap(holder);
+    Node* elements_kind = LoadMapElementsKind(holder_map);
+    Switch(elements_kind, &unreachable, elements_kinds, elements_kind_labels,
+           kTypedElementsKindCount);
+  }
+
+  Bind(&uint8_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalUint8Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(1));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&uint8_clamped_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalUint8ClampedArray));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(1));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&int8_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalInt8Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(1));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&uint16_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalUint16Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(2));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&int16_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalInt16Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(2));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&uint32_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalUint32Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(4));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&int32_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalInt32Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(4));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&float32_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalFloat32Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(4));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&float64_elements);
+  {
+    Handle<Map> map(
+        isolate()->heap()->MapForFixedTypedArray(kExternalFloat64Array));
+    fixed_typed_map.Bind(HeapConstant(map));
+    element_size.Bind(SmiConstant(8));
+    Goto(&alloc_array_buffer);
+  }
+
+  Bind(&unreachable);
+  {
+    // TODO(petermarshall): Go to runtime?
+    Return(UndefinedConstant());
+  }
+
+  Label check_alignment(this);
+  Label buffer_not_null(this);
+
+  Bind(&alloc_array_buffer);
+  {
+    // Setup the holder (JSArrayBufferView).
+    //  - Set the length.
+    //  - Set the byte_offset.
+    //  - Set the byte_length.
+    //  - Set InternalFields to 0.
+    StoreObjectFieldNoWriteBarrier(holder, JSTypedArray::kLengthOffset, length);
+    StoreObjectFieldNoWriteBarrier(holder, JSArrayBufferView::kByteOffsetOffset,
+                                   byte_offset);
+    StoreObjectFieldNoWriteBarrier(holder, JSArrayBufferView::kByteLengthOffset,
+                                   byte_length);
+    for (int offset = JSTypedArray::kSize;
+         offset < JSTypedArray::kSizeWithInternalFields;
+         offset += kPointerSize) {
+      StoreObjectFieldNoWriteBarrier(holder, offset, SmiConstant(Smi::kZero));
+    }
+
+    GotoIfNot(IsNull(maybe_buffer), &buffer_not_null);
+
+    // Allocate a new ArrayBuffer and initialize it with empty properties and
+    // elements.
+    Node* const native_context = LoadNativeContext(context);
+    Node* const map =
+        LoadContextElement(native_context, Context::ARRAY_BUFFER_MAP_INDEX);
+    Node* empty_fixed_array = LoadRoot(Heap::kEmptyFixedArrayRootIndex);
+
+    Node* buffer = Allocate(JSArrayBuffer::kSizeWithInternalFields);
+    StoreMapNoWriteBarrier(buffer, map);
+    StoreObjectFieldNoWriteBarrier(buffer, JSArray::kPropertiesOffset,
+                                   empty_fixed_array);
+    StoreObjectFieldNoWriteBarrier(buffer, JSArray::kElementsOffset,
+                                   empty_fixed_array);
+
+    // Setup the ArrayBuffer.
+    // We need to:
+    //  - Set all internal fields to Smi(0).
+    //  - Set BitField to 0.
+    //  - Set IsExternal and IsNeuterable bits of BitFieldSlot.
+    //  - Set the byte_length field to byte_length.
+    //  - Set backing_store to null/Smi(0).
+    for (int i = 0; i < v8::ArrayBuffer::kInternalFieldCount; i++) {
+      int offset = JSArrayBuffer::kSize + i * kPointerSize;
+      StoreObjectFieldNoWriteBarrier(buffer, offset, SmiConstant(Smi::kZero));
+    }
+    StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBitFieldSlot,
+                                   SmiConstant(Smi::kZero));
+    int32_t bitfield_value = (1 << JSArrayBuffer::IsExternal::kShift) |
+                             (1 << JSArrayBuffer::IsNeuterable::kShift);
+    StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBitFieldOffset,
+                                   Int32Constant(bitfield_value),
+                                   MachineRepresentation::kWord32);
+
+    // TODO(petermarshall): Assert type is not Object.
+    StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kByteLengthOffset,
+                                   byte_length);
+    StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBackingStoreOffset,
+                                   SmiConstant(Smi::kZero));
+
+    StoreObjectFieldNoWriteBarrier(holder, JSArrayBufferView::kBufferOffset,
+                                   buffer);
+
+    Goto(&check_alignment);
+  }
+
+  Bind(&buffer_not_null);
+  {
+    StoreObjectFieldNoWriteBarrier(holder, JSArrayBufferView::kBufferOffset,
+                                   maybe_buffer);
+
+    Node* elements = Allocate(FixedTypedArrayBase::kHeaderSize);
+    StoreMapNoWriteBarrier(elements, fixed_typed_map.value());
+    StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset, length);
+    StoreObjectFieldNoWriteBarrier(
+        elements, FixedTypedArrayBase::kBasePointerOffset, SmiConstant(0));
+
+    Node* backing_store =
+        LoadObjectField(maybe_buffer, JSArrayBuffer::kBackingStoreOffset,
+                        MachineType::Pointer());
+    Node* external_pointer = IntPtrAdd(backing_store, SmiToWord(byte_offset));
+    StoreObjectFieldNoWriteBarrier(
+        elements, FixedTypedArrayBase::kExternalPointerOffset, external_pointer,
+        MachineType::PointerRepresentation());
+
+    StoreObjectFieldNoWriteBarrier(holder, JSObject::kElementsOffset, elements);
+
+    Goto(&done);
+  }
+
+  Bind(&check_alignment);
+  {
+    GotoIf(SmiEqual(SmiMod(element_size.value(), SmiConstant(kObjectAlignment)),
+                    SmiConstant(0)),
+           &aligned);
+
+    // Fix alignment if needed.
+    DCHECK((FixedTypedArrayBase::kHeaderSize & kObjectAlignmentMask) == 0);
+    Node* aligned_header_size =
+        IntPtrConstant(FixedTypedArrayBase::kHeaderSize + kObjectAlignmentMask);
+    Node* size = IntPtrAdd(SmiToWord(byte_length), aligned_header_size);
+    total_size.Bind(WordAnd(size, IntPtrConstant(~kObjectAlignmentMask)));
+    Goto(&allocate_elements);
+  }
+
+  Bind(&aligned);
+  {
+    Node* header_size = IntPtrConstant(FixedTypedArrayBase::kHeaderSize);
+    total_size.Bind(IntPtrAdd(SmiToWord(byte_length), header_size));
+    Goto(&allocate_elements);
+  }
+
+  Bind(&allocate_elements);
+  {
+    // Allocate a FixedTypedArray and set the length, base pointer and external
+    // pointer.
+    Node* elements = Allocate(total_size.value());
+    // TODO(petermarshall): Do we need elements->MakeDoubleAligned(); ?
+    StoreMapNoWriteBarrier(elements, fixed_typed_map.value());
+    StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset, length);
+    StoreObjectFieldNoWriteBarrier(
+        elements, FixedTypedArrayBase::kBasePointerOffset, elements);
+    StoreObjectFieldNoWriteBarrier(elements,
+                                   FixedTypedArrayBase::kExternalPointerOffset,
+                                   IntPtrConstant(fta_base_data_offset),
+                                   MachineType::PointerRepresentation());
+
+    // holder->set_elements(*elements);
+    StoreObjectFieldNoWriteBarrier(holder, JSObject::kElementsOffset, elements);
+
+    GotoIf(IsFalse(initialize), &done);
+    // Initialize the backing store by filling it with 0s.
+    Node* backing_store = IntPtrAdd(BitcastTaggedToWord(elements),
+                                    IntPtrConstant(fta_base_data_offset));
+
+    // TODO(petermarshall): Test if this is faster with a loop.
+    // Call out to memset to perform initialization.
+    Node* memset =
+        ExternalConstant(ExternalReference::libc_memset_function(isolate()));
+    CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                   MachineType::IntPtr(), MachineType::UintPtr(), memset,
+                   backing_store, IntPtrConstant(0), SmiToWord(byte_length));
+    Goto(&done);
+  }
+
+  Bind(&done);
+  { Return(UndefinedConstant()); }
+}
+
 // -----------------------------------------------------------------------------
 // ES6 section 22.2 TypedArray Objects
 
@@ -19,152 +338,118 @@ BUILTIN(TypedArrayPrototypeBuffer) {
   return *typed_array->GetBuffer();
 }
 
-namespace {
-
-void Generate_TypedArrayPrototypeGetter(compiler::CodeAssemblerState* state,
-                                        const char* method_name,
-                                        int object_offset) {
-  typedef CodeStubAssembler::Label Label;
-  typedef compiler::Node Node;
-  CodeStubAssembler assembler(state);
-
-  Node* receiver = assembler.Parameter(0);
-  Node* context = assembler.Parameter(3);
+void TypedArrayBuiltinsAssembler::GenerateTypedArrayPrototypeGetter(
+    const char* method_name, int object_offset) {
+  Node* receiver = Parameter(0);
+  Node* context = Parameter(3);
 
   // Check if the {receiver} is actually a JSTypedArray.
-  Label if_receiverisincompatible(&assembler, Label::kDeferred);
-  assembler.GotoIf(assembler.TaggedIsSmi(receiver), &if_receiverisincompatible);
-  Node* receiver_instance_type = assembler.LoadInstanceType(receiver);
-  assembler.GotoIfNot(
-      assembler.Word32Equal(receiver_instance_type,
-                            assembler.Int32Constant(JS_TYPED_ARRAY_TYPE)),
-      &if_receiverisincompatible);
+  Label receiver_is_incompatible(this, Label::kDeferred);
+  GotoIf(TaggedIsSmi(receiver), &receiver_is_incompatible);
+  GotoIfNot(HasInstanceType(receiver, JS_TYPED_ARRAY_TYPE),
+            &receiver_is_incompatible);
 
   // Check if the {receiver}'s JSArrayBuffer was neutered.
   Node* receiver_buffer =
-      assembler.LoadObjectField(receiver, JSTypedArray::kBufferOffset);
-  Label if_receiverisneutered(&assembler, Label::kDeferred);
-  assembler.GotoIf(assembler.IsDetachedBuffer(receiver_buffer),
-                   &if_receiverisneutered);
-  assembler.Return(assembler.LoadObjectField(receiver, object_offset));
+      LoadObjectField(receiver, JSTypedArray::kBufferOffset);
+  Label if_receiverisneutered(this, Label::kDeferred);
+  GotoIf(IsDetachedBuffer(receiver_buffer), &if_receiverisneutered);
+  Return(LoadObjectField(receiver, object_offset));
 
-  assembler.Bind(&if_receiverisneutered);
+  Bind(&if_receiverisneutered);
   {
     // The {receiver}s buffer was neutered, default to zero.
-    assembler.Return(assembler.SmiConstant(0));
+    Return(SmiConstant(0));
   }
 
-  assembler.Bind(&if_receiverisincompatible);
+  Bind(&receiver_is_incompatible);
   {
     // The {receiver} is not a valid JSTypedArray.
-    Node* result = assembler.CallRuntime(
-        Runtime::kThrowIncompatibleMethodReceiver, context,
-        assembler.HeapConstant(assembler.factory()->NewStringFromAsciiChecked(
-            method_name, TENURED)),
-        receiver);
-    assembler.Return(result);  // Never reached.
+    Node* result =
+        CallRuntime(Runtime::kThrowIncompatibleMethodReceiver, context,
+                    HeapConstant(factory()->NewStringFromAsciiChecked(
+                        method_name, TENURED)),
+                    receiver);
+    Return(result);  // Never reached.
   }
 }
 
-}  // namespace
-
 // ES6 section 22.2.3.2 get %TypedArray%.prototype.byteLength
-void Builtins::Generate_TypedArrayPrototypeByteLength(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeGetter(state,
-                                     "get TypedArray.prototype.byteLength",
-                                     JSTypedArray::kByteLengthOffset);
+TF_BUILTIN(TypedArrayPrototypeByteLength, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeGetter("get TypedArray.prototype.byteLength",
+                                    JSTypedArray::kByteLengthOffset);
 }
 
 // ES6 section 22.2.3.3 get %TypedArray%.prototype.byteOffset
-void Builtins::Generate_TypedArrayPrototypeByteOffset(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeGetter(state,
-                                     "get TypedArray.prototype.byteOffset",
-                                     JSTypedArray::kByteOffsetOffset);
+TF_BUILTIN(TypedArrayPrototypeByteOffset, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeGetter("get TypedArray.prototype.byteOffset",
+                                    JSTypedArray::kByteOffsetOffset);
 }
 
 // ES6 section 22.2.3.18 get %TypedArray%.prototype.length
-void Builtins::Generate_TypedArrayPrototypeLength(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeGetter(state, "get TypedArray.prototype.length",
-                                     JSTypedArray::kLengthOffset);
+TF_BUILTIN(TypedArrayPrototypeLength, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeGetter("get TypedArray.prototype.length",
+                                    JSTypedArray::kLengthOffset);
 }
 
-namespace {
-
 template <IterationKind kIterationKind>
-void Generate_TypedArrayPrototypeIterationMethod(
-    compiler::CodeAssemblerState* state, const char* method_name) {
-  typedef compiler::Node Node;
-  typedef CodeStubAssembler::Label Label;
-  typedef CodeStubAssembler::Variable Variable;
-  CodeStubAssembler assembler(state);
+void TypedArrayBuiltinsAssembler::GenerateTypedArrayPrototypeIterationMethod(
+    const char* method_name) {
+  Node* receiver = Parameter(0);
+  Node* context = Parameter(3);
 
-  Node* receiver = assembler.Parameter(0);
-  Node* context = assembler.Parameter(3);
+  Label throw_bad_receiver(this, Label::kDeferred);
+  Label throw_typeerror(this, Label::kDeferred);
 
-  Label throw_bad_receiver(&assembler, Label::kDeferred);
-  Label throw_typeerror(&assembler, Label::kDeferred);
+  GotoIf(TaggedIsSmi(receiver), &throw_bad_receiver);
 
-  assembler.GotoIf(assembler.TaggedIsSmi(receiver), &throw_bad_receiver);
-
-  Node* map = assembler.LoadMap(receiver);
-  Node* instance_type = assembler.LoadMapInstanceType(map);
-  assembler.GotoIf(
-      assembler.Word32NotEqual(instance_type,
-                               assembler.Int32Constant(JS_TYPED_ARRAY_TYPE)),
-      &throw_bad_receiver);
+  Node* map = LoadMap(receiver);
+  Node* instance_type = LoadMapInstanceType(map);
+  GotoIf(Word32NotEqual(instance_type, Int32Constant(JS_TYPED_ARRAY_TYPE)),
+         &throw_bad_receiver);
 
   // Check if the {receiver}'s JSArrayBuffer was neutered.
   Node* receiver_buffer =
-      assembler.LoadObjectField(receiver, JSTypedArray::kBufferOffset);
-  Label if_receiverisneutered(&assembler, Label::kDeferred);
-  assembler.GotoIf(assembler.IsDetachedBuffer(receiver_buffer),
-                   &if_receiverisneutered);
+      LoadObjectField(receiver, JSTypedArray::kBufferOffset);
+  Label if_receiverisneutered(this, Label::kDeferred);
+  GotoIf(IsDetachedBuffer(receiver_buffer), &if_receiverisneutered);
 
-  assembler.Return(assembler.CreateArrayIterator(receiver, map, instance_type,
-                                                 context, kIterationKind));
+  Return(CreateArrayIterator(receiver, map, instance_type, context,
+                             kIterationKind));
 
-  Variable var_message(&assembler, MachineRepresentation::kTagged);
-  assembler.Bind(&throw_bad_receiver);
+  Variable var_message(this, MachineRepresentation::kTagged);
+  Bind(&throw_bad_receiver);
+  var_message.Bind(SmiConstant(MessageTemplate::kNotTypedArray));
+  Goto(&throw_typeerror);
+
+  Bind(&if_receiverisneutered);
   var_message.Bind(
-      assembler.SmiConstant(Smi::FromInt(MessageTemplate::kNotTypedArray)));
-  assembler.Goto(&throw_typeerror);
+      SmiConstant(Smi::FromInt(MessageTemplate::kDetachedOperation)));
+  Goto(&throw_typeerror);
 
-  assembler.Bind(&if_receiverisneutered);
-  var_message.Bind(
-      assembler.SmiConstant(Smi::FromInt(MessageTemplate::kDetachedOperation)));
-  assembler.Goto(&throw_typeerror);
-
-  assembler.Bind(&throw_typeerror);
+  Bind(&throw_typeerror);
   {
-    Node* arg1 = assembler.HeapConstant(
-        assembler.isolate()->factory()->NewStringFromAsciiChecked(method_name,
-                                                                  TENURED));
-    Node* result = assembler.CallRuntime(Runtime::kThrowTypeError, context,
-                                         var_message.value(), arg1);
-    assembler.Return(result);
+    Node* method_arg = HeapConstant(
+        isolate()->factory()->NewStringFromAsciiChecked(method_name, TENURED));
+    Node* result = CallRuntime(Runtime::kThrowTypeError, context,
+                               var_message.value(), method_arg);
+    Return(result);
   }
 }
-}  // namespace
 
-void Builtins::Generate_TypedArrayPrototypeValues(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeIterationMethod<IterationKind::kValues>(
-      state, "%TypedArray%.prototype.values()");
+TF_BUILTIN(TypedArrayPrototypeValues, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeIterationMethod<IterationKind::kValues>(
+      "%TypedArray%.prototype.values()");
 }
 
-void Builtins::Generate_TypedArrayPrototypeEntries(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeIterationMethod<IterationKind::kEntries>(
-      state, "%TypedArray%.prototype.entries()");
+TF_BUILTIN(TypedArrayPrototypeEntries, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeIterationMethod<IterationKind::kEntries>(
+      "%TypedArray%.prototype.entries()");
 }
 
-void Builtins::Generate_TypedArrayPrototypeKeys(
-    compiler::CodeAssemblerState* state) {
-  Generate_TypedArrayPrototypeIterationMethod<IterationKind::kKeys>(
-      state, "%TypedArray%.prototype.keys()");
+TF_BUILTIN(TypedArrayPrototypeKeys, TypedArrayBuiltinsAssembler) {
+  GenerateTypedArrayPrototypeIterationMethod<IterationKind::kKeys>(
+      "%TypedArray%.prototype.keys()");
 }
 
 namespace {

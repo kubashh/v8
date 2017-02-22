@@ -169,7 +169,8 @@ function NAMEConstructByArrayBuffer(obj, buffer, byteOffset, length) {
       throw %make_range_error(kInvalidTypedArrayLength);
     }
   }
-  %_TypedArrayInitialize(obj, ARRAY_ID, buffer, offset, newByteLength, true);
+  var newLength = newByteLength / ELEMENT_SIZE;
+  %typed_array_initialize(obj, newLength, buffer, offset, newByteLength, true);
 }
 
 function NAMEConstructByLength(obj, length) {
@@ -183,9 +184,9 @@ function NAMEConstructByLength(obj, length) {
   var byteLength = l * ELEMENT_SIZE;
   if (byteLength > %_TypedArrayMaxSizeInHeap()) {
     var buffer = new GlobalArrayBuffer(byteLength);
-    %_TypedArrayInitialize(obj, ARRAY_ID, buffer, 0, byteLength, true);
+    %typed_array_initialize(obj, l, buffer, 0, byteLength, true);
   } else {
-    %_TypedArrayInitialize(obj, ARRAY_ID, null, 0, byteLength, true);
+    %typed_array_initialize(obj, l, null, 0, byteLength, true);
   }
 }
 
@@ -198,7 +199,7 @@ function NAMEConstructByArrayLike(obj, arrayLike, length) {
   var initialized = false;
   var byteLength = l * ELEMENT_SIZE;
   if (byteLength <= %_TypedArrayMaxSizeInHeap()) {
-    %_TypedArrayInitialize(obj, ARRAY_ID, null, 0, byteLength, false);
+    %typed_array_initialize(obj, l, null, 0, byteLength, false);
   } else {
     initialized =
         %TypedArrayInitializeFromArrayLike(obj, ARRAY_ID, arrayLike, l);
