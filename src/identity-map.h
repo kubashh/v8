@@ -38,7 +38,9 @@ class IdentityMapBase {
         mask_(0),
         keys_(nullptr),
         values_(nullptr),
-        is_iterable_(false) {}
+        is_iterable_(false),
+        pending_capacity_(0),
+        pending_rehash_(false) {}
   virtual ~IdentityMapBase();
 
   RawEntry GetEntry(Object* key);
@@ -75,6 +77,8 @@ class IdentityMapBase {
   Object** keys_;
   void** values_;
   bool is_iterable_;
+  int pending_capacity_;
+  int pending_rehash_;
 
   DISALLOW_COPY_AND_ASSIGN(IdentityMapBase);
 };
@@ -128,8 +132,7 @@ class IdentityMap : public IdentityMapBase {
 
     Iterator& DeleteAndIncrement() {
       map_->DeleteIndex(index_);
-      index_ = map_->NextIndex(index_);
-      return *this;
+      return ++(*this);
     }
 
     V* operator*() { return reinterpret_cast<V*>(map_->EntryAtIndex(index_)); }
