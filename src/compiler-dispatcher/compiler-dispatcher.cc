@@ -647,6 +647,7 @@ void CompilerDispatcher::DoIdleWork(double deadline_in_seconds) {
        idle_time_in_seconds =
            deadline_in_seconds - platform_->MonotonicallyIncreasingTime()) {
     CompilerDispatcherJob* job = **it;
+
     // Don't work on jobs that are being worked on by background tasks.
     // Similarly, remove jobs we work on from the set of available background
     // jobs.
@@ -661,7 +662,7 @@ void CompilerDispatcher::DoIdleWork(double deadline_in_seconds) {
     if (idle_time_in_seconds <
         (estimate_in_ms /
          static_cast<double>(base::Time::kMillisecondsPerSecond))) {
-      // If there's not enough time left, try to estFdeimate whether we would
+      // If there's not enough time left, try to estimate whether we would
       // have managed to finish the job in a large idle task to assess
       // whether we should ask for another idle callback.
       if (estimate_in_ms > kMaxIdleTimeToExpectInMs) ++too_long_jobs;

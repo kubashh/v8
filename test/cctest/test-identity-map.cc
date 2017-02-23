@@ -549,11 +549,12 @@ TEST(Iterator_smi_num) {
     t.map.Set(num_keys[i], reinterpret_cast<void*>(i + 5));
   }
 
-  // Check iterator sees all values.
+  // Check iterator sees all values once.
   std::set<intptr_t> seen;
   {
     IdentityMap<void*, ZoneAllocationPolicy>::IteratableScope it_scope(&t.map);
     for (auto it = it_scope.begin(); it != it_scope.end(); ++it) {
+      CHECK(seen.find(reinterpret_cast<intptr_t>(**it)) == seen.end());
       seen.insert(reinterpret_cast<intptr_t>(**it));
     }
   }
@@ -585,6 +586,7 @@ TEST(Iterator_smi_num_gc) {
   {
     IdentityMap<void*, ZoneAllocationPolicy>::IteratableScope it_scope(&t.map);
     for (auto it = it_scope.begin(); it != it_scope.end(); ++it) {
+      CHECK(seen.find(reinterpret_cast<intptr_t>(**it)) == seen.end());
       seen.insert(reinterpret_cast<intptr_t>(**it));
     }
   }
@@ -607,7 +609,8 @@ TEST(Iterator_smi_delete) {
   {
     int i = 0;
     IdentityMap<void*, ZoneAllocationPolicy>::IteratableScope it_scope(&t.map);
-    for (auto it = it_scope.begin(); it != it_scope.end();) {
+    for (auto it = it_scope.begin(); it != it_scope.end(); ++i) {
+      CHECK(deleted.find(reinterpret_cast<intptr_t>(**it)) == deleted.end());
       if (i % 2) {
         deleted.insert(reinterpret_cast<intptr_t>(**it));
         it.DeleteAndIncrement();
@@ -615,6 +618,7 @@ TEST(Iterator_smi_delete) {
         ++it;
       }
     }
+    CHECK_EQ(5, i);
   }
 
   // Check values in map are correct.
@@ -628,6 +632,62 @@ TEST(Iterator_smi_delete) {
     }
   }
 }
+
+void IterateCollisionTest(int stride) {
+  for (int load = 15; load <= 120; load = load * 2) {
+    IdentityMapTester t;
+
+    {  // Add entries to the map.
+      HandleScope scope(t.isolate());
+      int next = 1;
+      for (int i = 0; i < load; i++) {
+        t.map.Set(t.smi(next), reinterpret_cast<void*>(next));
+        t.CheckFind(t.smi(next), reinterpret_cast<void*>(next));
+        next = next + stride;
+      }
+    }
+    // Iterate through the map and delete a subset of the elements.
+    std::set<intptr_t> seen;
+    std::set<intptr_t> deleted;
+    {
+      IdentityMap<void*, ZoneAllocationPolicy>::IteratableScope it_scope(
+          &t.map);
+      int i = 0;
+      for (auto it = it_scope.begin(); it != it_scope.end(); ++i) {
+        CHECK(deleted.find(reinterpret_cast<intptr_t>(**it)) == deleted.end());
+        CHECK(seen.find(reinterpret_cast<intptr_t>(**it)) == seen.end());
+        seen.insert(reinterpret_cast<intptr_t>(**it));
+        if (i % stride) {
+          deleted.insert(reinterpret_cast<intptr_t>(**it));
+          it.DeleteAndIncrement();
+        } else {
+          ++it;
+        }
+      }
+    }
+    // Check get and find on map.
+    {
+      HandleScope scope(t.isolate());
+      int next = 1;
+      for (int i = 0; i < load; i++) {
+        CHECK(seen.find(next) != seen.end());
+        if (deleted.find(next) == deleted.end()) {
+          t.CheckFind(t.smi(next), reinterpret_cast<void*>(next));
+          t.CheckGet(t.smi(next), reinterpret_cast<void*>(next));
+        } else {
+          CHECK_NULL(t.map.Find(t.smi(next)));
+        }
+        next = next + stride;
+      }
+    }
+  }
+}
+
+TEST(IterateCollisions_1) { IterateCollisionTest(1); }
+TEST(IterateCollisions_2) { IterateCollisionTest(2); }
+TEST(IterateCollisions_3) { IterateCollisionTest(3); }
+TEST(IterateCollisions_5) { IterateCollisionTest(5); }
+TEST(IterateCollisions_7) { IterateCollisionTest(7); }
 
 void CollisionTest(int stride, bool rehash = false, bool resize = false) {
   for (int load = 15; load <= 120; load = load * 2) {
