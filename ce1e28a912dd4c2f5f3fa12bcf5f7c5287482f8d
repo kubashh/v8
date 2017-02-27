@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bfc868d_13f05663",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-02-27T07:30:36Z",
+      "side": 1,
+      "message": "We only take this path for small typed arrays. Calling out to memset probably has more overhead compared to a simple loop to do the initialization here.",
+      "range": {
+        "startLine": 288,
+        "startChar": 10,
+        "endLine": 288,
+        "endChar": 16
+      },
+      "revId": "ce1e28a912dd4c2f5f3fa12bcf5f7c5287482f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
