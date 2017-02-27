@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "34324abc_f19a3609",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-02-27T11:47:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bec1836d_94c501a1",
+      "revId": "ce1e28a912dd4c2f5f3fa12bcf5f7c5287482f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bfc868d_13f05663",
         "filename": "src/builtins/builtins-typedarray.cc",
         "patchSetId": 9
@@ -39,6 +57,30 @@
       "revId": "ce1e28a912dd4c2f5f3fa12bcf5f7c5287482f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1666837f_5f10fa07",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-02-27T11:47:13Z",
+      "side": 1,
+      "message": "I tried a few different strategies and compared the results. \n1. Memset\n2. Write from 0 -\u003e byte_length one byte at a time. Simple to write and understand, but lots of small writes.\n3. Write 4 bytes at a time, and peel off the last few bytes to be written individually.\n\nMeasurements are in overall micro-benchmark time:\nFor a 64 byte array (the maximum \u0027small\u0027 size), #1 wins by about 30% over #2, and by 12% over #3.\nFor a 16 byte array the differences are smaller, but memset is still faster at 4% faster than #3, 6% faster than #2.\n\nFor extremely small sizes they are the same speed (within noise).",
+      "parentUuid": "6bfc868d_13f05663",
+      "range": {
+        "startLine": 288,
+        "startChar": 10,
+        "endLine": 288,
+        "endChar": 16
+      },
+      "revId": "ce1e28a912dd4c2f5f3fa12bcf5f7c5287482f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
