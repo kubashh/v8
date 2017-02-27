@@ -2006,6 +2006,18 @@ Handle<JSSetIterator> Factory::NewJSSetIterator() {
                      JSSetIterator);
 }
 
+size_t Factory::GetExternalArrayElementSize(ExternalArrayType type) {
+  switch (type) {
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
+  case kExternal##Type##Array:                          \
+    return size;
+    TYPED_ARRAYS(TYPED_ARRAY_CASE)
+    default:
+      UNREACHABLE();
+      return 0;
+  }
+#undef TYPED_ARRAY_CASE
+}
 
 namespace {
 
@@ -2018,20 +2030,6 @@ ElementsKind GetExternalArrayElementsKind(ExternalArrayType type) {
   }
   UNREACHABLE();
   return FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND;
-#undef TYPED_ARRAY_CASE
-}
-
-
-size_t GetExternalArrayElementSize(ExternalArrayType type) {
-  switch (type) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
-  case kExternal##Type##Array:                          \
-    return size;
-    TYPED_ARRAYS(TYPED_ARRAY_CASE)
-    default:
-      UNREACHABLE();
-      return 0;
-  }
 #undef TYPED_ARRAY_CASE
 }
 
