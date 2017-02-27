@@ -2499,6 +2499,16 @@ class RewritableExpression final : public Expression {
 class Yield final : public Expression {
  public:
   enum OnException { kOnExceptionThrow, kOnExceptionRethrow };
+  enum YieldType {
+    kAsyncGenerator = 0x4,  // 0b100
+
+    kNormal = 0x0,  // 0b000
+    kAsyncGeneratorNormal = kAsyncGenerator | kNormal,
+    kAwait = 0x1,  // 0b001
+    kAsyncGeneratorAwait = kAsyncGenerator | kAwait,
+    kDelegate = 0x2,  // 0b010,
+    kAsyncGeneratorDelegate = kAsyncGenerator | kDelegate,
+  };
 
   Expression* generator_object() const { return generator_object_; }
   Expression* expression() const { return expression_; }
@@ -2509,21 +2519,32 @@ class Yield final : public Expression {
     return on_exception() == kOnExceptionRethrow;
   }
   int yield_id() const { return yield_id_; }
+  YieldType yield_type() const { return YieldTypeField::decode(bit_field_); }
+  bool is_yield() const { return (yield_type() & kNormal) == kNormal; }
+  bool is_await() const { return (yield_type() & kAwait) == kAwait; }
+  bool is_delegate() const { return (yield_type() & kDelegate) == kDelegate; }
+  bool is_async_generator() const {
+    return (yield_type() & kAsyncGenerator) == kAsyncGenerator;
+  }
 
   void set_generator_object(Expression* e) { generator_object_ = e; }
   void set_expression(Expression* e) { expression_ = e; }
   void set_yield_id(int yield_id) { yield_id_ = yield_id; }
+  void set_yield_type(YieldType type) {
+    bit_field_ = YieldTypeField::update(bit_field_, type);
+  }
 
  private:
   friend class AstNodeFactory;
 
   Yield(Expression* generator_object, Expression* expression, int pos,
-        OnException on_exception)
+        OnException on_exception, YieldType yield_type)
       : Expression(pos, kYield),
         yield_id_(-1),
         generator_object_(generator_object),
         expression_(expression) {
-    bit_field_ |= OnExceptionField::encode(on_exception);
+    bit_field_ |= OnExceptionField::encode(on_exception) |
+                  YieldTypeField::encode(yield_type);
   }
 
   int yield_id_;
@@ -2532,6 +2553,8 @@ class Yield final : public Expression {
 
   class OnExceptionField
       : public BitField<OnException, Expression::kNextBitFieldIndex, 1> {};
+  class YieldTypeField
+      : public BitField<YieldType, OnExceptionField::kNext, 3> {};
 };
 
 
@@ -3482,9 +3505,10 @@ class AstNodeFactory final BASE_EMBEDDED {
   }
 
   Yield* NewYield(Expression* generator_object, Expression* expression, int pos,
-                  Yield::OnException on_exception) {
+                  Yield::OnException on_exception, Yield::YieldType type) {
     if (!expression) expression = NewUndefinedLiteral(pos);
-    return new (zone_) Yield(generator_object, expression, pos, on_exception);
+    return new (zone_)
+        Yield(generator_object, expression, pos, on_exception, type);
   }
 
   Throw* NewThrow(Expression* exception, int pos) {

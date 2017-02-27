@@ -185,6 +185,7 @@ class ParserBase {
   typedef typename Types::FunctionLiteral FunctionLiteralT;
   typedef typename Types::ObjectLiteralProperty ObjectLiteralPropertyT;
   typedef typename Types::ClassLiteralProperty ClassLiteralPropertyT;
+  typedef typename Types::Yield YieldExpressionT;
   typedef typename Types::ExpressionList ExpressionListT;
   typedef typename Types::FormalParameters FormalParametersT;
   typedef typename Types::Statement StatementT;
@@ -393,6 +394,10 @@ class ParserBase {
 
     typename Types::Variable* promise_variable() const {
       return scope()->promise_var();
+    }
+
+    typename Types::Variable* async_generator_await_variable() const {
+      return scope()->async_generator_await_var();
     }
 
     const ZoneList<DestructuringAssignment>&
@@ -901,6 +906,9 @@ class ParserBase {
   bool is_async_function() const {
     return IsAsyncFunction(function_state_->kind());
   }
+  bool is_async_generator() const {
+    return IsAsyncGeneratorFunction(function_state_->kind());
+  }
   bool is_resumable() const {
     return IsResumableFunction(function_state_->kind());
   }
@@ -1311,6 +1319,38 @@ class ParserBase {
   //
   static void MarkLoopVariableAsAssigned(Scope* scope, Variable* var);
 
+  FunctionKind FunctionKindForImpl(bool is_method, bool is_generator,
+                                   bool is_async) {
+    static const FunctionKind kFunctionKinds[][2][2] = {
+        {
+            // is_method=false
+            {// is_generator=false
+             FunctionKind::kNormalFunction, FunctionKind::kAsyncFunction},
+            {// is_generator=true
+             FunctionKind::kGeneratorFunction,
+             FunctionKind::kAsyncGeneratorFunction},
+        },
+        {
+            // is_method=true
+            {// is_generator=false
+             FunctionKind::kConciseMethod, FunctionKind::kAsyncConciseMethod},
+            {// is_generator=true
+             FunctionKind::kConciseGeneratorMethod,
+             FunctionKind::kAsyncConciseGeneratorMethod},
+        }};
+    return kFunctionKinds[is_method][is_generator][is_async];
+  }
+
+  inline FunctionKind FunctionKindFor(bool is_generator, bool is_async) {
+    const bool kIsMethod = false;
+    return FunctionKindForImpl(kIsMethod, is_generator, is_async);
+  }
+
+  inline FunctionKind MethodKindFor(bool is_generator, bool is_async) {
+    const bool kIsMethod = true;
+    return FunctionKindForImpl(kIsMethod, is_generator, is_async);
+  }
+
   // Keep track of eval() calls since they disable all local variable
   // optimizations. This checks if expression is an eval call, and if yes,
   // forwards the information to scope.
@@ -1332,10 +1372,22 @@ class ParserBase {
   // Convenience method which determines the type of return statement to emit
   // depending on the current function type.
   inline StatementT BuildReturnStatement(ExpressionT expr, int pos) {
-    if (V8_UNLIKELY(is_async_function())) {
+    if (is_async_function()) {
       return factory()->NewAsyncReturnStatement(expr, pos);
     }
     return factory()->NewReturnStatement(expr, pos);
+  }
+
+  inline YieldExpressionT BuildYield(
+      ExpressionT generator, ExpressionT expr, int pos,
+      Yield::OnException on_exception,
+      Yield::YieldType yield_type = Yield::kNormal) {
+    DCHECK_EQ(0, yield_type & Yield::kAsyncGenerator);
+    if (V8_UNLIKELY(is_async_generator())) {
+      yield_type =
+          static_cast<Yield::YieldType>(yield_type | Yield::kAsyncGenerator);
+    }
+    return factory()->NewYield(generator, expr, pos, on_exception, yield_type);
   }
 
   // Validation per ES6 object literals.
@@ -2048,7 +2100,12 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParsePropertyName(
       !scanner()->HasAnyLineTerminatorAfterNext()) {
     Consume(Token::ASYNC);
     token = peek();
-    if (SetPropertyKindFromToken(token, kind)) {
+    if (token == Token::MUL && allow_harmony_async_iteration() &&
+        !scanner()->HasAnyLineTerminatorBeforeNext()) {
+      Consume(Token::MUL);
+      token = peek();
+      *is_generator = true;
+    } else if (SetPropertyKindFromToken(token, kind)) {
       *name = impl()->GetSymbol();  // TODO(bakkot) specialize on 'async'
       impl()->PushLiteralName(*name);
       return factory()->NewStringLiteral(*name, pos);
@@ -2234,6 +2291,10 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       // MethodDefinition
       //    PropertyName '(' StrictFormalParameters ')' '{' FunctionBody '}'
       //    '*' PropertyName '(' StrictFormalParameters ')' '{' FunctionBody '}'
+      //    async PropertyName '(' StrictFormalParameters ')'
+      //        '{' FunctionBody '}'
+      //    async '*' PropertyName '(' StrictFormalParameters ')'
+      //        '{' FunctionBody '}'
 
       if (!*is_computed_name) {
         checker->CheckClassMethodName(
@@ -2241,10 +2302,7 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
             *is_static, CHECK_OK_CUSTOM(EmptyClassLiteralProperty));
       }
 
-      FunctionKind kind = is_generator
-                              ? FunctionKind::kConciseGeneratorMethod
-                              : is_async ? FunctionKind::kAsyncConciseMethod
-                                         : FunctionKind::kConciseMethod;
+      FunctionKind kind = MethodKindFor(is_generator, is_async);
 
       if (!*is_static && impl()->IsConstructor(name)) {
         *has_seen_constructor = true;
@@ -2473,10 +2531,7 @@ ParserBase<Impl>::ParseObjectPropertyDefinition(ObjectLiteralChecker* checker,
           Scanner::Location(next_beg_pos, scanner()->location().end_pos),
           MessageTemplate::kInvalidDestructuringTarget);
 
-      FunctionKind kind = is_generator
-                              ? FunctionKind::kConciseGeneratorMethod
-                              : is_async ? FunctionKind::kAsyncConciseMethod
-                                         : FunctionKind::kConciseMethod;
+      FunctionKind kind = MethodKindFor(is_generator, is_async);
 
       ExpressionT value = impl()->ParseFunctionLiteral(
           name, scanner()->location(), kSkipFunctionNameCheck, kind,
@@ -2901,11 +2956,16 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseYieldExpression(
     return impl()->RewriteYieldStar(generator_object, expression, pos);
   }
 
-  expression = impl()->BuildIteratorResult(expression, false);
+  if (!is_async_generator()) {
+    // Async generator yield is rewritten in Ignition, and doesn't require
+    // producing an Iterator Result.
+    expression = impl()->BuildIteratorResult(expression, false);
+  }
+
   // Hackily disambiguate o from o.next and o [Symbol.iterator]().
   // TODO(verwaest): Come up with a better solution.
-  ExpressionT yield = factory()->NewYield(generator_object, expression, pos,
-                                          Yield::kOnExceptionThrow);
+  ExpressionT yield =
+      BuildYield(generator_object, expression, pos, Yield::kOnExceptionThrow);
   return yield;
 }
 
@@ -3789,9 +3849,14 @@ ParserBase<Impl>::ParseHoistableDeclaration(
   //
   // 'function' and '*' (if present) have been consumed by the caller.
 
-  const bool is_generator = flags & ParseFunctionFlags::kIsGenerator;
+  bool is_generator = flags & ParseFunctionFlags::kIsGenerator;
   const bool is_async = flags & ParseFunctionFlags::kIsAsync;
   DCHECK(!is_generator || !is_async);
+
+  if (allow_harmony_async_iteration() && is_async && Check(Token::MUL)) {
+    // Async generator
+    is_generator = true;
+  }
 
   IdentifierT name;
   FunctionNameValidity name_validity;
@@ -3810,12 +3875,12 @@ ParserBase<Impl>::ParseHoistableDeclaration(
 
   FuncNameInferrer::State fni_state(fni_);
   impl()->PushEnclosingName(name);
+
+  FunctionKind kind = FunctionKindFor(is_generator, is_async);
+
   FunctionLiteralT function = impl()->ParseFunctionLiteral(
-      name, scanner()->location(), name_validity,
-      is_generator ? FunctionKind::kGeneratorFunction
-                   : is_async ? FunctionKind::kAsyncFunction
-                              : FunctionKind::kNormalFunction,
-      pos, FunctionLiteral::kDeclaration, language_mode(),
+      name, scanner()->location(), name_validity, kind, pos,
+      FunctionLiteral::kDeclaration, language_mode(),
       CHECK_OK_CUSTOM(NullStatement));
 
   // In ES6, a function behaves as a lexical binding, except in
@@ -3987,7 +4052,7 @@ void ParserBase<Impl>::ParseFunctionBody(
     }
 
     // TODO(littledan): Merge the two rejection blocks into one
-    if (IsAsyncFunction(kind)) {
+    if (IsAsyncFunction(kind) && !IsAsyncGeneratorFunction(kind)) {
       init_block = impl()->BuildRejectPromiseOnException(init_block);
     }
 
@@ -4367,6 +4432,10 @@ ParserBase<Impl>::ParseAsyncFunctionLiteral(bool* ok) {
   IdentifierT name = impl()->EmptyIdentifier();
   FunctionLiteral::FunctionType type = FunctionLiteral::kAnonymousExpression;
 
+  bool is_generator = allow_harmony_async_iteration() && Check(Token::MUL);
+  const bool kIsAsync = true;
+  static const FunctionKind kind = FunctionKindFor(is_generator, kIsAsync);
+
   if (impl()->ParsingDynamicFunctionDeclaration()) {
     // We don't want dynamic functions to actually declare their name
     // "anonymous". We just want that name in the toString().
@@ -4374,14 +4443,14 @@ ParserBase<Impl>::ParseAsyncFunctionLiteral(bool* ok) {
     DCHECK(scanner()->UnescapedLiteralMatches("anonymous", 9));
   } else if (peek_any_identifier()) {
     type = FunctionLiteral::kNamedExpression;
-    name = ParseIdentifierOrStrictReservedWord(FunctionKind::kAsyncFunction,
-                                               &is_strict_reserved, CHECK_OK);
+    name = ParseIdentifierOrStrictReservedWord(kind, &is_strict_reserved,
+                                               CHECK_OK);
   }
   return impl()->ParseFunctionLiteral(
       name, scanner()->location(),
       is_strict_reserved ? kFunctionNameIsStrictReserved
                          : kFunctionNameValidityUnknown,
-      FunctionKind::kAsyncFunction, pos, type, language_mode(), CHECK_OK);
+      kind, pos, type, language_mode(), CHECK_OK);
 }
 
 template <typename Impl>
