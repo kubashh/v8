@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bec1836d_94c501a1",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-27T08:41:35Z",
+      "side": 1,
+      "message": "You could probably generate all these branches using the elements_kind_labels and GetExternalArrayElementSize, reduce code size, save some trees!",
+      "revId": "ce1e28a912dd4c2f5f3fa12bcf5f7c5287482f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bfc868d_13f05663",
         "filename": "src/builtins/builtins-typedarray.cc",
         "patchSetId": 9
