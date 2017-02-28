@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2ed97b93_01d06f44",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-02-28T09:38:40Z",
+      "side": 1,
+      "message": "Style nit:\n\nA more common way to write this would be:\n\nenum YieldType {\n  kNormal \u003d 0,\n  kAwait \u003d 1 \u003c\u003c 0,\n  kDelegate \u003d 1 \u003c\u003c 1,\n  kAsyncGenerator \u003d 1 \u003c\u003c 2,\n  kAsyncGeneratorAwait \u003d kAsyncGenerator |  kAwait,\n  ...\n};\n\n\n(Check e.g., the enums in include/v8.h)\n\nWhy do you add kAsyncGeneratorNormal which is the same as kAsyncGenerator?",
+      "range": {
+        "startLine": 2503,
+        "startChar": 4,
+        "endLine": 2503,
+        "endChar": 19
+      },
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c62a4bf_ea615311",
         "filename": "src/contexts.h",
         "patchSetId": 4
@@ -18,6 +41,29 @@
         "startChar": 4,
         "endLine": 82,
         "endChar": 32
+      },
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f69b0422_f0ca3e9c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-02-28T09:38:40Z",
+      "side": 1,
+      "message": "This indirection shouldn\u0027t be needed, why not just scope()-\u003easync_generator_await_variable() in the parser?",
+      "range": {
+        "startLine": 399,
+        "startChar": 30,
+        "endLine": 399,
+        "endChar": 60
       },
       "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
