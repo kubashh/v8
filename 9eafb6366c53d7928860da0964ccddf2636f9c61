@@ -266,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "153dae36_aec9c0e5",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3911,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T15:23:50Z",
+      "side": 1,
+      "message": "It\u0027s changed to\n\n```\nif (is_async_generator()) {\n  allocate and initialize arguments\n  NewCallRuntime\n  NewDoExpr\n  return BuildYield\n}\n\n// the non-generator version...\n```\n\nI didn\u0027t notice you still wanted the else-block to be an \"else block\" (this goes against webkit standards, where you don\u0027t use else blocks following an if block that ends with an unconditional return, which seems like a sensible rule to me). If you still prefer it, I\u0027ll add it before landing (whenever this is ready to land)",
+      "parentUuid": "b89cf6c5_b5397db4",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fe8d775_01b27df6",
         "filename": "src/runtime/runtime-generator.cc",
         "patchSetId": 4
