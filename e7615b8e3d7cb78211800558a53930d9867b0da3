@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a31f0f8_7f828083",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-28T10:30:34Z",
+      "side": 1,
+      "message": "Given that this doesn\u0027t have to be super fast you could just use GetArrayTypeFromElementsKind() and drop the additional array..",
+      "revId": "e7615b8e3d7cb78211800558a53930d9867b0da3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a67a88_04566398",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-28T10:30:34Z",
+      "side": 1,
+      "message": "Could you move this down? InternalFields technically come after the normal object fields, makes reading the code easier.",
+      "revId": "e7615b8e3d7cb78211800558a53930d9867b0da3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab52df65_c2d00635",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-28T10:30:34Z",
+      "side": 1,
+      "message": "check_alignment label / branch is not needed.",
+      "revId": "e7615b8e3d7cb78211800558a53930d9867b0da3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05b3d453_0c8e1b0b",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-28T10:30:34Z",
+      "side": 1,
+      "message": "I know we do this all over the place, but how about adding an AllocateInNewSpace and use IsRegularHeapObjectSize(size_in_bytes) to ensure that we can use StoreNoWriteBarrier?\n\nDefinitely add a CSA_ASSERT(IsRegularHeapObjectSize(total_size.value()) here",
+      "revId": "e7615b8e3d7cb78211800558a53930d9867b0da3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
