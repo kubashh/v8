@@ -1107,7 +1107,11 @@ enum FunctionKind : uint16_t {
   kClassConstructor =
       kBaseConstructor | kDerivedConstructor | kDefaultConstructor,
   kAsyncArrowFunction = kArrowFunction | kAsyncFunction,
-  kAsyncConciseMethod = kAsyncFunction | kConciseMethod
+  kAsyncConciseMethod = kAsyncFunction | kConciseMethod,
+
+  // https://tc39.github.io/proposal-async-iteration/
+  kAsyncConciseGeneratorMethod = kAsyncFunction | kConciseGeneratorMethod,
+  kAsyncGeneratorFunction = kAsyncFunction | kGeneratorFunction
 };
 
 inline bool IsValidFunctionKind(FunctionKind kind) {
@@ -1126,7 +1130,9 @@ inline bool IsValidFunctionKind(FunctionKind kind) {
          kind == FunctionKind::kDerivedConstructor ||
          kind == FunctionKind::kAsyncFunction ||
          kind == FunctionKind::kAsyncArrowFunction ||
-         kind == FunctionKind::kAsyncConciseMethod;
+         kind == FunctionKind::kAsyncConciseMethod ||
+         kind == FunctionKind::kAsyncConciseGeneratorMethod ||
+         kind == FunctionKind::kAsyncGeneratorFunction;
 }
 
 
@@ -1149,6 +1155,12 @@ inline bool IsModule(FunctionKind kind) {
 inline bool IsAsyncFunction(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
   return kind & FunctionKind::kAsyncFunction;
+}
+
+inline bool IsAsyncGeneratorFunction(FunctionKind kind) {
+  DCHECK(IsValidFunctionKind(kind));
+  const FunctionKind kMask = FunctionKind::kAsyncGeneratorFunction;
+  return (kind & kMask) == kMask;
 }
 
 inline bool IsResumableFunction(FunctionKind kind) {
