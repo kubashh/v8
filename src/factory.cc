@@ -2016,6 +2016,31 @@ Handle<JSSetIterator> Factory::NewJSSetIterator() {
                      JSSetIterator);
 }
 
+ExternalArrayType Factory::GetArrayTypeFromElementsKind(ElementsKind kind) {
+  switch (kind) {
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
+  case TYPE##_ELEMENTS:                                 \
+    return kExternal##Type##Array;
+    TYPED_ARRAYS(TYPED_ARRAY_CASE)
+    default:
+      UNREACHABLE();
+      return kExternalInt8Array;
+  }
+#undef TYPED_ARRAY_CASE
+}
+
+size_t Factory::GetExternalArrayElementSize(ExternalArrayType type) {
+  switch (type) {
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
+  case kExternal##Type##Array:                          \
+    return size;
+    TYPED_ARRAYS(TYPED_ARRAY_CASE)
+    default:
+      UNREACHABLE();
+      return 0;
+  }
+#undef TYPED_ARRAY_CASE
+}
 
 namespace {
 
@@ -2031,21 +2056,6 @@ ElementsKind GetExternalArrayElementsKind(ExternalArrayType type) {
 #undef TYPED_ARRAY_CASE
 }
 
-
-size_t GetExternalArrayElementSize(ExternalArrayType type) {
-  switch (type) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
-  case kExternal##Type##Array:                          \
-    return size;
-    TYPED_ARRAYS(TYPED_ARRAY_CASE)
-    default:
-      UNREACHABLE();
-      return 0;
-  }
-#undef TYPED_ARRAY_CASE
-}
-
-
 size_t GetFixedTypedArraysElementSize(ElementsKind kind) {
   switch (kind) {
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
@@ -2055,20 +2065,6 @@ size_t GetFixedTypedArraysElementSize(ElementsKind kind) {
     default:
       UNREACHABLE();
       return 0;
-  }
-#undef TYPED_ARRAY_CASE
-}
-
-
-ExternalArrayType GetArrayTypeFromElementsKind(ElementsKind kind) {
-  switch (kind) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
-  case TYPE##_ELEMENTS:                                 \
-    return kExternal##Type##Array;
-    TYPED_ARRAYS(TYPED_ARRAY_CASE)
-    default:
-      UNREACHABLE();
-      return kExternalInt8Array;
   }
 #undef TYPED_ARRAY_CASE
 }
