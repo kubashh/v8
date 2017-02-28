@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e1040ae7_fb3c1565",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "It\u0027s more convenient to write (if needed) a single qualified name rather than `Qualified::Bit1 | Qualified::Bit2`, and the fact that there is a single qualified name for that set of bits implies that it\u0027s an expected and correct set of bits.\n\nDone.",
+      "parentUuid": "2ed97b93_01d06f44",
+      "range": {
+        "startLine": 2503,
+        "startChar": 4,
+        "endLine": 2503,
+        "endChar": 19
+      },
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c62a4bf_ea615311",
         "filename": "src/contexts.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-28T09:30:21Z",
       "side": 1,
       "message": "_INDEX",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 32
+      },
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1543fe02_32a81aad",
+        "filename": "src/contexts.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "I\u0027d strongly prefer not to add `_INDEX` --- these are very long identifiers, and `_INDEX` doesn\u0027t communicate anything useful here. There are also other cases in contexts.h that don\u0027t have it.\n\nMy vote is to start moving towards getting rid of the _INDEX suffix, at least for intrinsics. (look above: OBJECT_CREATE, IS_ARRAYLIKE, GENERATOR_NEXT_INTERNAL, OBJECT_FREEZE, etc etc)",
+      "parentUuid": "0c62a4bf_ea615311",
       "range": {
         "startLine": 82,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "aa710936_bde52a97",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "same could be said about all of these methods  ¯\\_(ツ)_/¯\n\nDone, I guess",
+      "parentUuid": "f69b0422_f0ca3e9c",
+      "range": {
+        "startLine": 399,
+        "startChar": 30,
+        "endLine": 399,
+        "endChar": 60
+      },
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1bffa540_dc5e9f21",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 4
@@ -85,6 +157,24 @@
       "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71a9fcb_c3da39dd",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bffa540_dc5e9f21",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "75df1fa0_c5696cbf",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3866,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0210f8e_4a86569f",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad933e0f_2ae8622e",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 4
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "df4f6267_11ed6c20",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3911,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you\u0027re asking for.\n\n- Split out common parts (adding generator_object and temp_var to ZoneList)?\n- Do the full ZoneList allocation/initialization and CallRuntime in each branch?\n- Get rid of the `else` and just specialize for `is_async_generator()` (which would require removal of some DCHECKs)?\n- Something else?",
+      "parentUuid": "ad933e0f_2ae8622e",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fe8d775_01b27df6",
         "filename": "src/runtime/runtime-generator.cc",
         "patchSetId": 4
@@ -133,6 +259,24 @@
       "writtenOn": "2017-02-28T09:30:21Z",
       "side": 1,
       "message": "I wonder if C++ runtime calls won\u0027t be a performance problem.",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffc0e523_0606541a",
+        "filename": "src/runtime/runtime-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-02-28T14:26:51Z",
+      "side": 1,
+      "message": "worth a try, I guess. Still think optimized code should avoid calling into C++ for field accesses",
+      "parentUuid": "4fe8d775_01b27df6",
       "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
