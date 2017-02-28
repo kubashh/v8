@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c84ceb2_9921aa71",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-02-28T14:23:17Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ ... not really important though :)",
+      "revId": "ca1b053c9242fa769e5a69ed614967488d8fd46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
