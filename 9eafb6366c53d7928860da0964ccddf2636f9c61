@@ -248,6 +248,24 @@
     },
     {
       "key": {
+        "uuid": "b89cf6c5_b5397db4",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3911,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-02-28T14:40:43Z",
+      "side": 1,
+      "message": "I meant changing the structure from:\n\nif (is_async_gen) {\n  // block 1\n} else {\n  // block 2\n}\n\nNewCallRuntime\n\nif (is_async_gen) {\n  block 3\n} else {\n  block 4\n}\n\nto:\n\nif (is_async_gen) {\n  block 1\n  NewCallRuntime\n  block3\n} else {\n  block 2\n  NewCallRuntime\n  block 4\n}\n\nI\u0027m a bit worried in general that all the \u0027if (async_gen) else ...\u0027 conditionals popping up everywhere hurt readability.",
+      "parentUuid": "df4f6267_11ed6c20",
+      "revId": "9eafb6366c53d7928860da0964ccddf2636f9c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fe8d775_01b27df6",
         "filename": "src/runtime/runtime-generator.cc",
         "patchSetId": 4
