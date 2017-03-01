@@ -17,6 +17,9 @@ typedef compiler::Node Node;
 typedef CodeStubAssembler::ParameterMode ParameterMode;
 typedef compiler::CodeAssemblerState CodeAssemblerState;
 
+static Handle<Context> CreatePromiseResolvingFunctionsContext(
+    Isolate* isolate, Handle<Object> promise, bool debug_event);
+
 Node* PromiseBuiltinsAssembler::AllocateJSPromise(Node* context) {
   Node* const native_context = LoadNativeContext(context);
   Node* const promise_fun =
@@ -89,6 +92,23 @@ PromiseBuiltinsAssembler::CreatePromiseResolvingFunctions(
   Node* const reject =
       AllocateFunctionWithMapAndContext(map, reject_info, promise_context);
   return std::make_pair(resolve, reject);
+}
+
+void JSPromise::CreateResolvingFunctions(Isolate* isolate,
+                                         Handle<Object> promise,
+                                         bool debug_event,
+                                         Handle<JSFunction>* on_resolve,
+                                         Handle<JSFunction>* on_reject) {
+  Factory* const factory = isolate->factory();
+
+  Handle<Map> map = isolate->strict_function_without_prototype_map();
+  Handle<FixedArray> context =
+      CreatePromiseResolvingFunctionsContext(isolate, promise, debug_event);
+
+  *on_resolve = factory->NewFunctionFromSharedFunctionInfo(
+      map, isolate->promise_resolve_shared_fun(), context, NOT_TENURED);
+  *on_reject = factory->NewFunctionFromSharedFunctionInfo(
+      map, isolate->promise_reject_shared_fun(), context, NOT_TENURED);
 }
 
 Node* PromiseBuiltinsAssembler::NewPromiseCapability(Node* context,
@@ -215,6 +235,36 @@ Node* PromiseBuiltinsAssembler::CreatePromiseResolvingFunctionsContext(
                                     SmiConstant(0));
   StoreContextElementNoWriteBarrier(context, kPromiseSlot, promise);
   StoreContextElementNoWriteBarrier(context, kDebugEventSlot, debug_event);
+  return context;
+}
+
+Handle<Context> CreatePromiseResolvingFunctionsContext(Isolate* isolate,
+                                                       Handle<Object> promise,
+                                                       bool debug_event) {
+  Handle<FixedArray> array = isolate->factory()->NewFixedArray(
+      PromiseBuiltinsAssembler::kPromiseContextLength, NOT_TENURED);
+  array->set_map_no_write_barrier(isolate->heap()->function_context_map());
+
+  Handle<Context> context = Handle<Context>::cast(array);
+  Context* native_context = isolate->raw_native_context();
+  WriteBarrierMode mode = SKIP_WRITE_BARRIER;
+  Object* undefined = isolate->heap()->undefined_value();
+  Object* the_hole = isolate->heap()->the_hole_value();
+
+  context->set(Context::CLOSURE_INDEX, native_context->closure(),
+               SKIP_WRITE_BARRIER);
+  context->set(Context::PREVIOUS_INDEX, undefined, SKIP_WRITE_BARRIER);
+  context->set(Context::EXTENSION_INDEX, the_hole, SKIP_WRITE_BARRIER);
+  context->set(Context::NATIVE_CONTEXT_INDEX, native_context,
+               SKIP_WRITE_BARRIER);
+
+  context->set(PromiseBuiltinsAssembler::kAlreadyVisitedSlot, Smi::FromInt(0),
+               SKIP_WRITE_BARRIER);
+  context->set(PromiseBuiltinsAssembler::kPromiseSlot, *promise,
+               SKIP_WRITE_BARRIER);
+  context->set(PromiseBuiltinsAssembler::kDebugEventSlot,
+               isolate->heap()->ToBoolean(debug_event), SKIP_WRITE_BARRIER);
+
   return context;
 }
 

@@ -2871,5 +2871,34 @@ void Factory::SetClassFunctionInstanceDescriptor(Handle<Map> map) {
   }
 }
 
+Handle<PromiseReactionJobInfo> Factory::NewPromiseReactionJobInfo(
+    Handle<Object> value, Handle<Object> tasks, Handle<Object> deferred_promise,
+    Handle<Object> deferred_on_resolve, Handle<Object> deferred_on_reject) {
+  Handle<PromiseReactionJobInfo> result = Handle<PromiseReactionJobInfo>::cast(
+      NewStruct(PROMISE_REACTION_JOB_INFO_TYPE));
+
+  result->set_value(*value, SKIP_WRITE_BARRIER);
+  result->set_tasks(*tasks, SKIP_WRITE_BARRIER);
+  result->set_deferred_promise(*deferred_promise, SKIP_WRITE_BARRIER);
+  result->set_deferred_on_resolve(*deferred_on_resolve, SKIP_WRITE_BARRIER);
+  result->set_deferred_on_reject(*deferred_on_reject, SKIP_WRITE_BARRIER);
+  result->set_context(isolate()->context(), SKIP_WRITE_BARRIER);
+
+  return result;
+}
+
+Handle<PromiseResolveThenableJobInfo> Factory::NewPromiseResolveThenableJobInfo(
+    Handle<JSReceiver> thenable, Handle<JSReceiver> then,
+    Handle<JSFunction> on_resolve, Handle<JSFunction> on_reject) {
+  Handle<PromiseResolveThenableJobInfo> result =
+      Handle<PromiseResolveThenableJobInfo>::cast(
+          NewStruct(PROMISE_RESOLVE_THENABLE_JOB_INFO_TYPE));
+  result->set_thenable(*thenable);
+  result->set_then(*then);
+  result->set_resolve(*on_resolve);
+  result->set_reject(*on_reject);
+  result->set_context(isolate()->context());
+  return result;
+}
 }  // namespace internal
 }  // namespace v8

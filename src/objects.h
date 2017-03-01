@@ -8397,6 +8397,22 @@ class JSPromiseCapability : public JSObject {
 
 class JSPromise : public JSObject {
  public:
+  static Handle<JSPromise> New(Isolate* isolate);
+  static void PerformPromiseThen(Isolate* isolate, Handle<JSPromise> promise,
+                                 Handle<Object> on_fulfilled,
+                                 Handle<Object> on_rejected,
+                                 Handle<JSPromise> result,
+                                 Handle<Object> deferred_on_resolve,
+                                 Handle<Object> deferred_on_reject);
+
+  static void CreateResolvingFunctions(Isolate* isolate, Handle<Object> promise,
+                                       bool debug_event,
+                                       Handle<JSFunction>* on_resolve,
+                                       Handle<JSFunction>* on_reject);
+
+  void Resolve(Handle<Object> value);
+  void Reject(Handle<Object> value, bool debug_event = true);
+
   DECL_INT_ACCESSORS(status)
   DECL_ACCESSORS(result, Object)
 
@@ -8454,6 +8470,9 @@ class JSPromise : public JSObject {
   // Flags layout.
   static const int kHasHandlerBit = 0;
   static const int kHandledHintBit = 1;
+
+ private:
+  void PromiseFulfill(Handle<Object> result, int status);
 };
 
 // Regular expressions

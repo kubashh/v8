@@ -150,6 +150,7 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case JS_ARGUMENTS_TYPE:
     case JS_ERROR_TYPE:
     case JS_PROMISE_CAPABILITY_TYPE:
+    case JS_ASYNC_FROM_SYNC_ITERATOR_TYPE:
       JSObject::cast(this)->JSObjectPrint(os);
       break;
     case JS_PROMISE_TYPE:

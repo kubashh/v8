@@ -627,6 +627,7 @@ if (testFailed) {
 (function ExtractedAsyncFromSyncIteratorMethods() {
   // Async-from-Sync iterator methods can be extracted via function.caller.
   // TODO(caitp): test extracted `throw` method using yield* in async generator.
+
   let extractor = [0, 1, 2, 3, 4,5,6,7,8,9];
   let extractedNext;
   let extractedReturn;
@@ -660,6 +661,12 @@ if (testFailed) {
   f().catch(function() { %AbortJS("No error should have occurred"); });
   %RunMicrotasks();
 
+  // It is no longer possible to extract these methods since implementing them
+  // in C++.
+  assertEquals(f, extractedNext);
+  assertEquals(undefined, extractedReturn);
+
+  /*
   assertEquals(typeof extractedNext, "function");
   assertThrowsAsync(() => extractedNext.call(undefined), TypeError);
   assertThrowsAsync(() => extractedNext.call(1), TypeError);
@@ -667,4 +674,5 @@ if (testFailed) {
   assertEquals(typeof extractedReturn, "function");
   assertThrowsAsync(() => extractedReturn.call(undefined), TypeError);
   assertThrowsAsync(() => extractedReturn.call(1), TypeError);
+  */
 })();

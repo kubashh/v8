@@ -20180,5 +20180,286 @@ ElementsKind JSArrayIterator::ElementsKindForInstanceType(InstanceType type) {
   }
 }
 
+// static
+Handle<JSPromise> JSPromise::New(Isolate* isolate) {
+  Handle<Map> map(isolate->promise_function()->initial_map(), isolate);
+  Handle<JSPromise> promise =
+      Handle<JSPromise>::cast(isolate->factory()->NewJSObjectFromMap(map));
+
+  promise->set_status(v8::Promise::kPending);
+  promise->set_flags(0);
+
+  if (isolate->IsPromiseHookEnabledOrDebugActive()) {
+    isolate->RunPromiseHook(v8::PromiseHookType::kInit, promise,
+                            isolate->factory()->undefined_value());
+  }
+
+  return promise;
+}
+
+// static
+void JSPromise::PerformPromiseThen(Isolate* isolate, Handle<JSPromise> promise,
+                                   Handle<Object> on_resolve,
+                                   Handle<Object> on_reject,
+                                   Handle<JSPromise> result,
+                                   Handle<Object> deferred_on_resolve,
+                                   Handle<Object> deferred_on_reject) {
+  Factory* const factory = isolate->factory();
+
+  if (!on_resolve->IsCallable()) {
+    on_resolve = factory->promise_default_resolve_handler_symbol();
+  }
+
+  if (!on_reject->IsCallable()) {
+    on_reject = factory->promise_default_reject_handler_symbol();
+  }
+
+  if (promise->status() == v8::Promise::kFulfilled) {
+    Handle<Object> value(promise->result(), isolate);
+    Handle<Object> tasks(promise->fulfill_reactions(), isolate);
+    isolate->EnqueueMicrotask(factory->NewPromiseReactionJobInfo(
+        value, tasks, result, deferred_on_resolve, deferred_on_reject));
+    promise->set_has_handler(true);
+    return;
+  }
+
+  if (promise->status() == v8::Promise::kRejected) {
+    if (!promise->has_handler()) {
+      isolate->ReportPromiseReject(promise, Handle<Object>(),
+                                   v8::kPromiseHandlerAddedAfterReject);
+    }
+
+    Handle<Object> value(promise->result(), isolate);
+    Handle<Object> tasks(promise->reject_reactions(), isolate);
+    isolate->EnqueueMicrotask(factory->NewPromiseReactionJobInfo(
+        value, tasks, result, deferred_on_resolve, deferred_on_reject));
+    promise->set_has_handler(true);
+    return;
+  }
+
+  if (promise->deferred_promise()->IsUndefined(isolate)) {
+    promise->set_deferred_promise(*result);
+    promise->set_deferred_on_resolve(*deferred_on_resolve);
+    promise->set_deferred_on_reject(*deferred_on_reject);
+
+    promise->set_fulfill_reactions(*on_resolve);
+    promise->set_reject_reactions(*on_reject);
+    promise->set_has_handler(true);
+    return;
+  }
+
+  if (promise->deferred_promise()->IsJSReceiver()) {
+    // Single callback
+    Handle<FixedArray> new_promises = factory->NewFixedArray(2);
+    new_promises->set(0, promise->deferred_promise());
+    new_promises->set(1, *result);
+
+    Handle<FixedArray> new_on_resolve = factory->NewFixedArray(2);
+    new_on_resolve->set(0, promise->deferred_on_resolve());
+    new_on_resolve->set(1, *deferred_on_resolve);
+
+    Handle<FixedArray> new_on_reject = factory->NewFixedArray(2);
+    new_on_reject->set(0, promise->deferred_on_reject());
+    new_on_reject->set(1, *deferred_on_reject);
+
+    Handle<FixedArray> new_fulfill_reactions = factory->NewFixedArray(2);
+    new_fulfill_reactions->set(0, promise->fulfill_reactions());
+    new_fulfill_reactions->set(1, *on_resolve);
+
+    Handle<FixedArray> new_reject_reactions = factory->NewFixedArray(2);
+    new_reject_reactions->set(0, promise->reject_reactions());
+    new_reject_reactions->set(1, *on_reject);
+
+    promise->set_deferred_promise(*new_promises);
+    promise->set_deferred_on_resolve(*new_on_resolve);
+    promise->set_deferred_on_reject(*new_on_reject);
+    promise->set_fulfill_reactions(*new_fulfill_reactions);
+    promise->set_reject_reactions(*new_reject_reactions);
+    promise->set_has_handler(true);
+    return;
+  }
+
+  // Multiple callbacks
+  DCHECK(promise->deferred_promise()->IsFixedArray());
+
+  Handle<FixedArray> new_deferred_promises(
+      FixedArray::cast(promise->deferred_promise()));
+  int length = new_deferred_promises->length();
+
+  new_deferred_promises =
+      factory->CopyFixedArrayAndGrow(new_deferred_promises, 1);
+  new_deferred_promises->set(length, *result);
+
+  Handle<FixedArray> new_on_resolve(
+      FixedArray::cast(promise->deferred_on_resolve()));
+  new_on_resolve = factory->CopyFixedArrayAndGrow(new_on_resolve, 1);
+  new_on_resolve->set(length, *deferred_on_resolve);
+
+  Handle<FixedArray> new_on_reject(
+      FixedArray::cast(promise->deferred_on_reject()));
+  new_on_reject = factory->CopyFixedArrayAndGrow(new_on_resolve, 1);
+  new_on_reject->set(length, *deferred_on_reject);
+
+  Handle<FixedArray> new_fulfill_reactions(
+      FixedArray::cast(promise->fulfill_reactions()));
+  new_fulfill_reactions =
+      factory->CopyFixedArrayAndGrow(new_fulfill_reactions, 1);
+  new_fulfill_reactions->set(length, *on_resolve);
+
+  Handle<FixedArray> new_reject_reactions(
+      FixedArray::cast(promise->reject_reactions()));
+  new_reject_reactions =
+      factory->CopyFixedArrayAndGrow(new_reject_reactions, 1);
+  new_reject_reactions->set(length, *on_reject);
+
+  promise->set_deferred_promise(*new_deferred_promises);
+  promise->set_deferred_on_resolve(*new_on_resolve);
+  promise->set_deferred_on_reject(*new_on_reject);
+  promise->set_fulfill_reactions(*new_fulfill_reactions);
+  promise->set_reject_reactions(*new_reject_reactions);
+  promise->set_has_handler(true);
+}
+
+// https://tc39.github.io/ecma262/#sec-promise-resolve-functions
+// C++ implementation of InternalResolvePromise (builtins-promise.cc)
+void JSPromise::Resolve(Handle<Object> result) {
+  DCHECK(IsJSPromise());
+  DCHECK_EQ(status(), v8::Promise::kPending);
+
+  Handle<JSPromise> this_promise(this);
+
+  Isolate* const isolate = GetIsolate();
+  Factory* const factory = isolate->factory();
+
+  if (isolate->IsPromiseHookEnabledOrDebugActive()) {
+    isolate->RunPromiseHook(v8::PromiseHookType::kResolve, this_promise,
+                            factory->undefined_value());
+  }
+
+  if (V8_UNLIKELY(SameValue(*result))) {
+    return Reject(
+        factory->NewTypeError(MessageTemplate::kPromiseCyclic, result));
+  }
+
+  if (result->IsJSReceiver()) {
+    Handle<JSReceiver> thenable = Handle<JSReceiver>::cast(result);
+    Handle<Object> then_action;
+
+    Handle<Map> initial_map(isolate->promise_function()->initial_map());
+    Handle<Map> map(thenable->map());
+    if (*map == *initial_map &&
+        map->prototype() == *isolate->promise_prototype_map()) {
+      DCHECK(thenable->IsJSPromise());
+
+      Handle<JSPromise> native_promise = Handle<JSPromise>::cast(result);
+
+      if (native_promise->status() == v8::Promise::kFulfilled) {
+        PromiseFulfill(handle(native_promise->result(), isolate),
+                       v8::Promise::kFulfilled);
+        set_flags(native_promise->flags() | JSPromise::kHasHandlerBit);
+        return;
+      }
+
+      if (native_promise->status() == v8::Promise::kRejected) {
+        if (native_promise->flags() & JSPromise::kHasHandlerBit) {
+          // Revoke reject
+          isolate->ReportPromiseReject(native_promise, Handle<Object>(),
+                                       v8::kPromiseHandlerAddedAfterReject);
+        }
+        Reject(handle(native_promise->result(), isolate), false);
+        set_flags(native_promise->flags() | JSPromise::kHasHandlerBit);
+        return;
+      }
+
+      // Fast path: avoid slow lookup of "then" property
+      DCHECK_EQ(native_promise->status(), v8::Promise::kPending);
+      then_action = isolate->promise_then();
+    } else {
+      if (!JSReceiver::GetProperty(thenable, factory->then_string())
+               .ToHandle(&then_action)) {
+        DCHECK(isolate->has_pending_exception());
+        Reject(handle(isolate->heap()->exception(), isolate));
+        isolate->clear_pending_exception();
+        return;
+      }
+    }
+
+    DCHECK(!then_action.is_null());
+    if (!then_action->IsCallable()) {
+      return PromiseFulfill(result, v8::Promise::kFulfilled);
+    }
+
+    Handle<JSFunction> on_resolve, on_reject;
+    JSPromise::CreateResolvingFunctions(isolate, this_promise, true,
+                                        &on_resolve, &on_reject);
+    isolate->EnqueueMicrotask(factory->NewPromiseResolveThenableJobInfo(
+        thenable, Handle<JSReceiver>::cast(then_action), on_resolve,
+        on_reject));
+  }
+}
+
+// https://tc39.github.io/ecma262/#sec-promise-reject-functions
+// C++ implementation of InternalPromiseReject (builtins-promise.cc)
+void JSPromise::Reject(Handle<Object> reason, bool debug_event) {
+  DCHECK(IsJSPromise());
+  DCHECK_EQ(status(), v8::Promise::kPending);
+
+  Isolate* const isolate = GetIsolate();
+  Handle<JSPromise> this_promise(this);
+
+  if (debug_event && isolate->debug()->is_active()) {
+    isolate->debug()->OnPromiseReject(this_promise, reason);
+  }
+
+  if (isolate->IsPromiseHookEnabledOrDebugActive()) {
+    isolate->RunPromiseHook(PromiseHookType::kResolve, this_promise,
+                            isolate->factory()->undefined_value());
+  }
+
+  if (!has_handler()) {
+    isolate->ReportPromiseReject(this_promise, reason,
+                                 v8::kPromiseRejectWithNoHandler);
+  }
+
+  PromiseFulfill(reason, v8::Promise::kRejected);
+}
+
+void JSPromise::PromiseFulfill(Handle<Object> result, int status) {
+  DCHECK(IsJSPromise());
+  DCHECK_NE(status, v8::Promise::kPending);
+  DCHECK_EQ(this->status(), v8::Promise::kPending);
+
+  Isolate* const isolate = GetIsolate();
+  Factory* const factory = isolate->factory();
+
+  if (!deferred_promise()->IsUndefined(isolate)) {
+    Handle<Object> tasks(status == v8::Promise::kFulfilled ? fulfill_reactions()
+                                                           : reject_reactions(),
+                         isolate);
+    Handle<JSPromise> this_promise(this);
+    Handle<Object> on_resolve(deferred_on_resolve(), isolate);
+    Handle<Object> on_reject(deferred_on_reject(), isolate);
+
+    isolate->EnqueueMicrotask(factory->NewPromiseReactionJobInfo(
+        result, tasks, this_promise, on_resolve, on_reject));
+  }
+
+  if (isolate->debug()->is_active()) {
+    Handle<JSPromise> this_promise(this);
+    isolate->debug()->OnAsyncTaskEvent(
+        status == v8::Promise::kFulfilled ? debug::kDebugEnqueuePromiseResolve
+                                          : debug::kDebugEnqueuePromiseReject,
+        isolate->debug()->NextAsyncTaskId(this_promise), 0);
+  }
+
+  set_status(status);
+  set_result(*result);
+  set_deferred_promise(isolate->heap()->undefined_value());
+  set_deferred_on_resolve(isolate->heap()->undefined_value());
+  set_deferred_on_reject(isolate->heap()->undefined_value());
+  set_fulfill_reactions(isolate->heap()->undefined_value());
+  set_reject_reactions(isolate->heap()->undefined_value());
+}
+
 }  // namespace internal
 }  // namespace v8
