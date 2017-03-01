@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2833ec77_3decef66",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9234,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-01T09:21:17Z",
+      "side": 1,
+      "message": "Handle\u003cObject\u003e maybe_constructor(map-\u003eGetConstructor(), isolate);\nif (maybe_constructor-\u003eIsJSFunction()) ...",
+      "revId": "399cfa62dd1bba4b2ad24f0e022e03e14b3483f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
