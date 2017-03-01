@@ -801,6 +801,14 @@ class V8_EXPORT_PRIVATE Factory final {
   // Converts the given ToPrimitive hint to it's string representation.
   Handle<String> ToPrimitiveHintString(ToPrimitiveHint hint);
 
+  Handle<PromiseReactionJobInfo> NewPromiseReactionJobInfo(
+      Handle<Object> argument, Handle<Object> reaction,
+      Handle<Object> deferred_promise, Handle<Object> deferred_on_resolve,
+      Handle<Object> deferred_on_reject);
+  Handle<PromiseResolveThenableJobInfo> NewPromiseResolveThenableJobInfo(
+      Handle<JSReceiver> thenable, Handle<JSReceiver> then,
+      Handle<JSFunction> on_resolve, Handle<JSFunction> on_reject);
+
  private:
   Isolate* isolate() { return reinterpret_cast<Isolate*>(this); }
 

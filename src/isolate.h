@@ -1116,7 +1116,9 @@ class Isolate {
   void EnqueueMicrotask(Handle<Object> microtask);
   void RunMicrotasks();
   bool IsRunningMicrotasks() const { return is_running_microtasks_; }
-
+  bool IsPromiseHookEnabledOrDebugActive() {
+    return promise_hook_or_debug_is_active_;
+  }
   Handle<Symbol> SymbolFor(Heap::RootListIndex dictionary_index,
                            Handle<String> name, bool private_symbol);
 

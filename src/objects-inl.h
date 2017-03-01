@@ -2107,6 +2107,8 @@ int JSObject::GetHeaderSize(InstanceType type) {
       return JSStringIterator::kSize;
     case JS_MODULE_NAMESPACE_TYPE:
       return JSModuleNamespace::kHeaderSize;
+    case JS_ASYNC_FROM_SYNC_ITERATOR_TYPE:
+      return JSAsyncFromSyncIterator::kSize;
     default:
       if (type >= FIRST_ARRAY_ITERATOR_TYPE &&
           type <= LAST_ARRAY_ITERATOR_TYPE) {

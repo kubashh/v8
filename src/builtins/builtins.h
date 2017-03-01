@@ -841,9 +841,9 @@ class Isolate;
                                                                                \
   /* %AsyncFromSyncIteratorPrototype% */                                       \
   /* (proposal-async-iteration/#sec-%asyncfromsynciteratorprototype%-object)*/ \
-  TFJ(AsyncFromSyncIteratorPrototypeNext, 1)                                   \
-  TFJ(AsyncFromSyncIteratorPrototypeThrow, 1)                                  \
-  TFJ(AsyncFromSyncIteratorPrototypeReturn, 1)                                 \
+  CPP(AsyncFromSyncIteratorPrototypeNext)                                      \
+  CPP(AsyncFromSyncIteratorPrototypeThrow)                                     \
+  CPP(AsyncFromSyncIteratorPrototypeReturn)                                    \
                                                                                \
   /* proposal-async-iteration/#sec-async-iterator-value-unwrap-functions */    \
   TFJ(AsyncIteratorValueUnwrap, 1)
