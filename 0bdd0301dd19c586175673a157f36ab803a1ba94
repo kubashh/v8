@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1e9b374_193b9a67",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-03-01T16:22:45Z",
+      "side": 1,
+      "message": "Please also comment on endian-ness of this: does it matter what value we extract when size() \u003c sizeof(T)?",
+      "revId": "0bdd0301dd19c586175673a157f36ab803a1ba94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
