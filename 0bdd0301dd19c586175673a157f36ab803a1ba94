@@ -16,6 +16,24 @@
       "revId": "0bdd0301dd19c586175673a157f36ab803a1ba94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5723fa1b_0d906fcb",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-03-01T16:52:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1e9b374_193b9a67",
+      "revId": "0bdd0301dd19c586175673a157f36ab803a1ba94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
