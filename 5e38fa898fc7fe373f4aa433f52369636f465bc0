@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b73cbea_79f7a7a6",
+        "filename": "src/builtins/builtins-async-iterator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-01T20:22:14Z",
+      "side": 1,
+      "message": "Given https://chromium-review.googlesource.com/c/448321/2/test/mjsunit/harmony/async-from-sync-iterator.js#664, this is basically dead code. But it\u0027s not \"supposed\" to be dead code.\n\nI couldn\u0027t find a way to make the caller getter return a method implemented in C++, but admittedly I didn\u0027t spend a whole lot of time trying.",
+      "revId": "5e38fa898fc7fe373f4aa433f52369636f465bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
