@@ -16,6 +16,24 @@
       "revId": "ca1b053c9242fa769e5a69ed614967488d8fd46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956230ec_dc0ed2c8",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-01T11:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c84ceb2_9921aa71",
+      "revId": "ca1b053c9242fa769e5a69ed614967488d8fd46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
