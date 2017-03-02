@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "48e3446c_2d05d505",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-02T12:23:42Z",
+      "side": 1,
+      "message": "Why ZoneVector? This can consume the Zone memory unnecessarily (it\u0027ll maybe need a couple of backing stores and we won\u0027t be able to dealloc any of them).\n\nIs there a reason for not using e.g., std::map (with it, we wouldn\u0027t need a separate sort operation either)?",
+      "range": {
+        "startLine": 508,
+        "startChar": 2,
+        "endLine": 508,
+        "endChar": 12
+      },
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99dcd9c6_da090ca3",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 2
@@ -13,6 +36,29 @@
       "writtenOn": "2017-03-02T09:43:16Z",
       "side": 1,
       "message": "Looks like you got an extra ! there.",
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c87fbd83_02e73797",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-02T12:23:42Z",
+      "side": 1,
+      "message": "Now you have sloppy_block_function_map_ \u003d nullptr in both branches; you can move it up. (Now we no longer invalidate it, so, it\u0027s possible to just recreate it and keep allocating - but nullifying zone_ should guard against that sufficiently.)",
+      "range": {
+        "startLine": 1494,
+        "startChar": 4,
+        "endLine": 1494,
+        "endChar": 30
+      },
       "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
