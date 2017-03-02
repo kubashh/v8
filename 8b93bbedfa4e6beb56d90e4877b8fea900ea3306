@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d07c96c4_a0a719d8",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-02T09:07:51Z",
+      "side": 1,
+      "message": "(future work)... We should probably have a generic ThrowError runtime function where you pass in the error constructor",
+      "revId": "8b93bbedfa4e6beb56d90e4877b8fea900ea3306",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
