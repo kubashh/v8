@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "103a9d53_2fcb2cb4",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-02T20:38:12Z",
+      "side": 1,
+      "message": "After chatting with marja offline, I realized that I totally missed what she was asking about. The point is that using a ZoneVector means that, if there are a lot of functions, we\u0027ll allocate a bunch of \"wasted\" backing stores as the vector grows.\n\nReplaced with a ZoneMap.",
+      "parentUuid": "16991615_5cb93f81",
+      "range": {
+        "startLine": 508,
+        "startChar": 2,
+        "endLine": 508,
+        "endChar": 12
+      },
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99dcd9c6_da090ca3",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 2
