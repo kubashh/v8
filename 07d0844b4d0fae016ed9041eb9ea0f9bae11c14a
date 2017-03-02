@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99dcd9c6_da090ca3",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-03-02T09:43:16Z",
+      "side": 1,
+      "message": "Looks like you got an extra ! there.",
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
