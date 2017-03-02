@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "16991615_5cb93f81",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-02T19:48:56Z",
+      "side": 1,
+      "message": "As to why ZoneVector: it was my impression that we try not to do heap allocation/deallocation during parse, for performance reasons. Does that not match your understanding of why we avoid heap allocations in parsing?\n\nAs to std::map, that wouldn\u0027t work: we rely on the map being keyed by name. If I could use std::map, I could just use a vector.",
+      "parentUuid": "48e3446c_2d05d505",
+      "range": {
+        "startLine": 508,
+        "startChar": 2,
+        "endLine": 508,
+        "endChar": 12
+      },
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99dcd9c6_da090ca3",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6be7203_16a50f10",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-02T19:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99dcd9c6_da090ca3",
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32ea7cc3_08fdf4f3",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-02T19:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c87fbd83_02e73797",
+      "range": {
+        "startLine": 1494,
+        "startChar": 4,
+        "endLine": 1494,
+        "endChar": 30
+      },
+      "revId": "07d0844b4d0fae016ed9041eb9ea0f9bae11c14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
