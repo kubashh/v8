@@ -16,6 +16,24 @@
       "revId": "8b93bbedfa4e6beb56d90e4877b8fea900ea3306",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6090cf_50a69198",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-03T08:25:57Z",
+      "side": 1,
+      "message": "Yeah I tried to find a nicer way to do this. I tried a templated function that would take the class of error to construct, but it doesn\u0027t work because of all the macros mixed in.",
+      "parentUuid": "d07c96c4_a0a719d8",
+      "revId": "8b93bbedfa4e6beb56d90e4877b8fea900ea3306",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
