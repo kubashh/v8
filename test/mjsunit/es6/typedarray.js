@@ -831,3 +831,8 @@ for(i = 0; i < typedArrayConstructors.length; i++) {
     }
   }
 })();
+
+(function TestBufferLengthTooLong() {
+  var buf = new ArrayBuffer(2147483648);
+  assertThrows(function() { new Int8Array(buf); }, RangeError);
+})();
