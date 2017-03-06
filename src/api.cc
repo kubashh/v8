@@ -6364,9 +6364,7 @@ Local<Context> NewContext(
       isolate, extensions, global_template, global_object,
       context_snapshot_index, internal_fields_deserializer);
   if (env.is_null()) {
-    if (isolate->has_pending_exception()) {
-      isolate->OptionalRescheduleException(true);
-    }
+    CHECK(!isolate->has_pending_exception());
     return Local<Context>();
   }
   return Utils::ToLocal(scope.CloseAndEscape(env));
