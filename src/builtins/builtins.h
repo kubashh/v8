@@ -145,7 +145,6 @@ class Isolate;
   TFS(StringIndexOf, BUILTIN, kNoExtraICState, StringIndexOf, 1)               \
   TFS(StringLessThan, BUILTIN, kNoExtraICState, Compare, 1)                    \
   TFS(StringLessThanOrEqual, BUILTIN, kNoExtraICState, Compare, 1)             \
-  TFS(StringNotEqual, BUILTIN, kNoExtraICState, Compare, 1)                    \
                                                                                \
   /* Interpreter */                                                            \
   ASM(InterpreterEntryTrampoline)                                              \
@@ -602,7 +601,6 @@ class Isolate;
   TFS(GreaterThan, BUILTIN, kNoExtraICState, Compare, 1)                       \
   TFS(GreaterThanOrEqual, BUILTIN, kNoExtraICState, Compare, 1)                \
   TFS(Equal, BUILTIN, kNoExtraICState, Compare, 1)                             \
-  TFS(NotEqual, BUILTIN, kNoExtraICState, Compare, 1)                          \
   TFS(StrictEqual, BUILTIN, kNoExtraICState, Compare, 1)                       \
                                                                                \
   /* Object */                                                                 \
