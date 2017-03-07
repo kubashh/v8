@@ -827,6 +827,7 @@ class Isolate;
   CPP(TypedArrayPrototypeIncludes)                                             \
                                                                                \
   /* Wasm */                                                                   \
+  ASM(WasmCompileLazy)                                                         \
   TFS(WasmStackGuard, BUILTIN, kNoExtraICState, WasmRuntimeCall, 1)            \
   TFS(ThrowWasmTrapUnreachable, BUILTIN, kNoExtraICState, WasmRuntimeCall, 1)  \
   TFS(ThrowWasmTrapMemOutOfBounds, BUILTIN, kNoExtraICState, WasmRuntimeCall,  \

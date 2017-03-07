@@ -271,10 +271,23 @@ struct V8_EXPORT_PRIVATE ModuleWireBytes {
 // minimal information about the globals, functions, and function tables.
 struct V8_EXPORT_PRIVATE ModuleEnv {
   ModuleEnv(const WasmModule* module, WasmInstance* instance)
-      : module(module), instance(instance) {}
+      : module(module),
+        instance(instance),
+        function_tables(instance ? &instance->function_tables : nullptr),
+        signature_tables(instance ? &instance->signature_tables : nullptr) {}
+  ModuleEnv(const WasmModule* module,
+            std::vector<Handle<FixedArray>>* function_tables,
+            std::vector<Handle<FixedArray>>* signature_tables)
+      : module(module),
+        instance(nullptr),
+        function_tables(function_tables),
+        signature_tables(signature_tables) {}
 
   const WasmModule* module;
   WasmInstance* instance;
+
+  std::vector<Handle<FixedArray>>* function_tables;
+  std::vector<Handle<FixedArray>>* signature_tables;
 
   bool IsValidGlobal(uint32_t index) const {
     return module && index < module->globals.size();
@@ -442,6 +455,8 @@ V8_EXPORT_PRIVATE void AsyncInstantiate(Isolate* isolate,
 V8_EXPORT_PRIVATE void AsyncCompileAndInstantiate(
     Isolate* isolate, Handle<JSPromise> promise, const ModuleWireBytes& bytes,
     MaybeHandle<JSReceiver> imports);
+
+Handle<Code> CompileLazy(Isolate* isolate);
 
 namespace testing {
 void ValidateInstancesChain(Isolate* isolate,
