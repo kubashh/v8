@@ -295,6 +295,7 @@ class CodeFlusher {
   }
 
   void IteratePointersToFromSpace(ObjectVisitor* v);
+  void IteratePointersToToSpace(ObjectVisitor* v);
 
  private:
   void ProcessJSFunctionCandidates();
@@ -324,6 +325,7 @@ class CodeFlusher {
 // Defined in isolate.h.
 class ThreadLocalTop;
 
+template <MarkingMode mode>
 class MarkBitCellIterator BASE_EMBEDDED {
  public:
   explicit MarkBitCellIterator(MemoryChunk* chunk) : chunk_(chunk) {
@@ -332,7 +334,7 @@ class MarkBitCellIterator BASE_EMBEDDED {
     cell_base_ = chunk_->area_start();
     cell_index_ = Bitmap::IndexToCell(
         Bitmap::CellAlignIndex(chunk_->AddressToMarkbitIndex(cell_base_)));
-    cells_ = chunk_->markbits()->cells();
+    cells_ = chunk_->markbits<mode>()->cells();
   }
 
   inline bool Done() { return cell_index_ == last_cell_index_; }
@@ -392,7 +394,7 @@ enum LiveObjectIterationMode {
   kAllLiveObjects
 };
 
-template <LiveObjectIterationMode T>
+template <LiveObjectIterationMode T, MarkingMode M>
 class LiveObjectIterator BASE_EMBEDDED {
  public:
   explicit LiveObjectIterator(MemoryChunk* chunk)
@@ -408,7 +410,7 @@ class LiveObjectIterator BASE_EMBEDDED {
   inline Heap* heap() { return chunk_->heap(); }
 
   MemoryChunk* chunk_;
-  MarkBitCellIterator it_;
+  MarkBitCellIterator<M> it_;
   Address cell_base_;
   MarkBit::CellType current_cell_;
 };
@@ -419,6 +421,7 @@ enum PageEvacuationMode { NEW_TO_NEW, NEW_TO_OLD };
 // Mark-Compact collector
 class MarkCompactCollector {
  public:
+  template <MarkingMode mode>
   class Evacuator;
 
   class Sweeper {
@@ -517,6 +520,8 @@ class MarkCompactCollector {
 
   // Performs a global garbage collection.
   void CollectGarbage();
+  // Performs a garbage collection of the young generation.
+  void CollectGarbageInYoungGeneration();
 
   bool StartCompaction();
 
@@ -607,9 +612,11 @@ class MarkCompactCollector {
  private:
   template <PageEvacuationMode mode>
   class EvacuateNewSpacePageVisitor;
+  template <MarkingMode M>
   class EvacuateNewSpaceVisitor;
   class EvacuateOldSpaceVisitor;
   class EvacuateRecordOnlyVisitor;
+  template <MarkingMode M>
   class EvacuateVisitorBase;
   class HeapObjectVisitor;
   class ObjectStatsVisitor;
@@ -719,8 +726,10 @@ class MarkCompactCollector {
   // on various pages of the heap. Used by {RefillMarkingDeque} only.
   template <class T>
   void DiscoverGreyObjectsWithIterator(T* it);
+  template <MarkingMode mode>
   void DiscoverGreyObjectsOnPage(MemoryChunk* p);
   void DiscoverGreyObjectsInSpace(PagedSpace* space);
+  template <MarkingMode mode>
   void DiscoverGreyObjectsInNewSpace();
 
   // Callback function for telling whether the object *p is an unmarked
@@ -730,6 +739,7 @@ class MarkCompactCollector {
   // Clear non-live references in weak cells, transition and descriptor arrays,
   // and deoptimize dependent code of non-live maps.
   void ClearNonLiveReferences();
+  void ClearNonLiveReferencesInYoungGeneration();
   void MarkDependentCodeForDeoptimization(DependentCode* list);
   // Find non-live targets of simple transitions in the given list. Clear
   // transitions to non-live targets and if needed trim descriptors arrays.
@@ -768,23 +778,29 @@ class MarkCompactCollector {
   void StartSweepSpaces();
   void StartSweepSpace(PagedSpace* space);
 
+  template <MarkingMode mode>
   void EvacuatePrologue();
+  template <MarkingMode mode>
   void EvacuateEpilogue();
+  template <MarkingMode mode>
   void EvacuatePagesInParallel();
 
   // The number of parallel compaction tasks, including the main thread.
   int NumberOfParallelCompactionTasks(int pages, intptr_t live_bytes);
 
+  template <MarkingMode mode>
   void EvacuateNewSpaceAndCandidates();
 
+  template <MarkingMode mode>
   void UpdatePointersAfterEvacuation();
 
   // Iterates through all live objects on a page using marking information.
   // Returns whether all objects have successfully been visited.
-  template <class Visitor>
+  template <MarkingMode M, class Visitor>
   bool VisitLiveObjects(MemoryChunk* page, Visitor* visitor,
                         IterationMode mode);
 
+  template <MarkingMode mode = MarkingMode::FULL>
   void RecomputeLiveBytes(MemoryChunk* page);
 
   void ReleaseEvacuationCandidates();
@@ -841,6 +857,8 @@ class MarkCompactCollector {
   List<Page*> new_space_evacuation_pages_;
 
   Sweeper sweeper_;
+
+  List<Bitmap*> bitmap_pool_;
 
   friend class Heap;
   friend class StoreBuffer;

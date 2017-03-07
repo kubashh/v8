@@ -406,7 +406,6 @@ void Scavenger::ScavengeObjectSlow(HeapObject** p, HeapObject* object) {
   scavenger->scavenging_visitors_table_.GetVisitor(map)(map, p, object);
 }
 
-
 void Scavenger::SelectScavengingVisitorsTable() {
   bool logging_and_profiling =
       FLAG_verify_predictable || isolate()->logger()->is_logging() ||
