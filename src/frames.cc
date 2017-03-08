@@ -413,13 +413,12 @@ void StackFrame::IteratePc(ObjectVisitor* v, Address* pc_address,
   unsigned pc_offset = static_cast<unsigned>(pc - holder->instruction_start());
   Object* code = holder;
   v->VisitPointer(&code);
-  if (code != holder) {
-    holder = reinterpret_cast<Code*>(code);
-    pc = holder->instruction_start() + pc_offset;
-    *pc_address = pc;
-    if (FLAG_enable_embedded_constant_pool && constant_pool_address) {
-      *constant_pool_address = holder->constant_pool();
-    }
+  if (code == holder) return;
+  holder = reinterpret_cast<Code*>(code);
+  pc = holder->instruction_start() + pc_offset;
+  *pc_address = pc;
+  if (FLAG_enable_embedded_constant_pool && constant_pool_address) {
+    *constant_pool_address = holder->constant_pool();
   }
 }
 
@@ -869,15 +868,14 @@ void StandardFrame::IterateCompiledFrame(ObjectVisitor* v) const {
     parameters_base += kNumSafepointRegisters;
   }
 
+  // Visit the rest of the parameters if they are tagged.
+  if (code->has_tagged_params()) {
+    v->VisitPointers(parameters_base, parameters_limit);
+  }
+
   // We're done dealing with the register bits.
   uint8_t* safepoint_bits = safepoint_entry.bits();
   safepoint_bits += kNumSafepointRegisters >> kBitsPerByteLog2;
-
-  // Visit the rest of the parameters.
-  if (!is_js_to_wasm() && !is_wasm()) {
-    // Non-WASM frames have tagged values as parameters.
-    v->VisitPointers(parameters_base, parameters_limit);
-  }
 
   // Visit pointer spill slots and locals.
   for (unsigned index = 0; index < stack_slots; index++) {
@@ -2042,10 +2040,14 @@ void JavaScriptFrame::Iterate(ObjectVisitor* v) const {
 }
 
 void InternalFrame::Iterate(ObjectVisitor* v) const {
-  // Internal frames only have object pointers on the expression stack
-  // as they never have any arguments.
-  IterateExpressions(v);
-  IteratePc(v, pc_address(), constant_pool_address(), LookupCode());
+  Code* code = LookupCode();
+  IteratePc(v, pc_address(), constant_pool_address(), code);
+  // Internal frames typically do not receive any arguments.
+  // Hence we are misusing the has_tagged_params flag here to tell us whether
+  // the full stack frame contains tagged pointers or not.
+  // This is used for the WasmCompileLazy builtin, where we actually pass
+  // untagged parameters and also store untagged values on the stack.
+  if (code->has_tagged_params()) IterateExpressions(v);
 }
 
 
