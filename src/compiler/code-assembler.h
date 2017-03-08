@@ -297,6 +297,10 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   CODE_ASSEMBLER_UNARY_OP_LIST(DECLARE_CODE_ASSEMBLER_UNARY_OP)
 #undef DECLARE_CODE_ASSEMBLER_UNARY_OP
 
+  // Changes a double to an inptr_t for pointer arithmetic outside of Smi range.
+  // Assumes that the truncation will be sucessful.
+  Node* TruncateFloat64ToIntPtr(Node* value);
+
   // Changes an intptr_t to a double, e.g. for storing an element index
   // outside Smi range in a HeapNumber. Lossless on 32-bit,
   // rounds on 64-bit (which doesn't affect valid element indices).

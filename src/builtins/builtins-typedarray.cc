@@ -25,6 +25,8 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
 
   void LoadMapAndElementsSize(Node* array, Variable* typed_map, Variable* size);
 
+  void CalculateExternalPointer(Node* backing_store, Node* byte_offset,
+                                Variable* external_pointer);
   void DoInitialize(Node* holder, Node* length, Node* maybe_buffer,
                     Node* byte_offset, Node* byte_length, Node* initialize,
                     Node* context);
@@ -75,6 +77,34 @@ void TypedArrayBuiltinsAssembler::LoadMapAndElementsSize(Node* array,
   Bind(&done);
 }
 
+// The byte_offset can be higher than Smi range, in which case to perform the
+// pointer arithmetic necessary to calculate external_pointer, converting
+// byte_offset to an intptr is more difficult. The max byte_offset is 8 * MaxSmi
+// on the particular platform. 32 bit platforms are self-limiting, because we
+// can't allocate an array bigger than our 32-bit arithmetic range anyway. 64
+// bit platforms
+void TypedArrayBuiltinsAssembler::CalculateExternalPointer(
+    Node* backing_store, Node* byte_offset, Variable* external_pointer) {
+  Label offset_is_smi(this), offset_not_smi(this), done(this);
+  Branch(TaggedIsSmi(byte_offset), &offset_is_smi, &offset_not_smi);
+
+  Bind(&offset_is_smi);
+  {
+    external_pointer->Bind(IntPtrAdd(backing_store, SmiToWord(byte_offset)));
+    Goto(&done);
+  }
+
+  Bind(&offset_not_smi);
+  {
+    Node* heap_number = LoadHeapNumberValue(byte_offset);
+    Node* intrptr_value = TruncateFloat64ToIntPtr(heap_number);
+    external_pointer->Bind(IntPtrAdd(backing_store, intrptr_value));
+    Goto(&done);
+  }
+
+  Bind(&done);
+}
+
 void TypedArrayBuiltinsAssembler::DoInitialize(
     Node* holder, Node* length, Node* maybe_buffer, Node* byte_offset,
     Node* byte_length, Node* initialize, Node* context) {
@@ -90,10 +120,6 @@ void TypedArrayBuiltinsAssembler::DoInitialize(
   // Make sure length is a Smi. The caller guarantees this is the case.
   length = ToInteger(context, length, CodeStubAssembler::kTruncateMinusZero);
   CSA_ASSERT(this, TaggedIsSmi(length));
-
-  byte_offset =
-      ToInteger(context, byte_offset, CodeStubAssembler::kTruncateMinusZero);
-  CSA_ASSERT(this, TaggedIsSmi(byte_offset));
 
   // byte_length can be -0, get rid of it.
   byte_length =
@@ -228,16 +254,17 @@ void TypedArrayBuiltinsAssembler::DoInitialize(
     StoreObjectFieldNoWriteBarrier(
         elements, FixedTypedArrayBase::kBasePointerOffset, SmiConstant(0));
 
+    Variable external_pointer(this, MachineType::PointerRepresentation());
     Node* backing_store =
         LoadObjectField(maybe_buffer, JSArrayBuffer::kBackingStoreOffset,
                         MachineType::Pointer());
-    Node* external_pointer = IntPtrAdd(backing_store, SmiToWord(byte_offset));
+
+    CalculateExternalPointer(backing_store, byte_offset, &external_pointer);
     StoreObjectFieldNoWriteBarrier(
-        elements, FixedTypedArrayBase::kExternalPointerOffset, external_pointer,
-        MachineType::PointerRepresentation());
+        elements, FixedTypedArrayBase::kExternalPointerOffset,
+        external_pointer.value(), MachineType::PointerRepresentation());
 
     StoreObjectField(holder, JSObject::kElementsOffset, elements);
-
     Goto(&done);
   }
 
@@ -304,6 +331,126 @@ TF_BUILTIN(TypedArrayConstructByLength, TypedArrayBuiltinsAssembler) {
   {
     DoInitialize(holder, length, maybe_buffer.value(), byte_offset, byte_length,
                  initialize, context);
+  }
+
+  Bind(&invalid_length);
+  {
+    CallRuntime(Runtime::kThrowRangeError, context,
+                SmiConstant(MessageTemplate::kInvalidTypedArrayLength));
+    Unreachable();
+  }
+}
+
+// ES6 section 22.2.4.5 TypedArray ( buffer [ , byteOffset [ , length ] ] )
+TF_BUILTIN(TypedArrayConstructByArrayBuffer, TypedArrayBuiltinsAssembler) {
+  Node* holder = Parameter(1);
+  Node* buffer = Parameter(2);
+  Node* byte_offset = Parameter(3);
+  Node* length = Parameter(4);
+  Node* element_size = Parameter(5);
+  CSA_ASSERT(this, TaggedIsSmi(element_size));
+  Node* context = Parameter(8);
+  Node* initialize = BooleanConstant(true);  // ignored anyway
+
+  Variable new_byte_length(this, MachineRepresentation::kTagged,
+                           SmiConstant(0));
+
+  Label start_offset_error(this), byte_length_error(this),
+      invalid_offset_error(this);
+  Label call_init(this), invalid_length(this), length_undefined(this),
+      length_defined(this);
+
+  Callable add = CodeFactory::Add(isolate());
+  Callable div = CodeFactory::Divide(isolate());
+  Callable equal = CodeFactory::Equal(isolate());
+  Callable greater_than = CodeFactory::GreaterThan(isolate());
+  Callable less_than = CodeFactory::LessThan(isolate());
+  Callable mod = CodeFactory::Modulus(isolate());
+  Callable sub = CodeFactory::Subtract(isolate());
+
+  byte_offset =
+      ToInteger(context, byte_offset, CodeStubAssembler::kTruncateMinusZero);
+  GotoIf(IsTrue(CallStub(less_than, context, byte_offset, SmiConstant(0))),
+         &invalid_length);
+
+  Node* remainder = CallStub(mod, context, byte_offset, element_size);
+  // Remainder can be a heap number.
+  GotoIf(IsFalse(CallStub(equal, context, remainder, SmiConstant(0))),
+         &start_offset_error);
+
+  Branch(IsUndefined(length), &length_undefined, &length_defined);
+
+  Bind(&length_undefined);
+  {
+    Node* buffer_byte_length =
+        LoadObjectField(buffer, JSArrayBuffer::kByteLengthOffset);
+
+    Node* remainder = CallStub(mod, context, buffer_byte_length, element_size);
+    // Remainder can be a heap number.
+    GotoIf(IsFalse(CallStub(equal, context, remainder, SmiConstant(0))),
+           &byte_length_error);
+
+    new_byte_length.Bind(
+        CallStub(sub, context, buffer_byte_length, byte_offset));
+
+    Branch(IsTrue(CallStub(less_than, context, new_byte_length.value(),
+                           SmiConstant(0))),
+           &invalid_offset_error, &call_init);
+  }
+
+  Bind(&length_defined);
+  {
+    Node* new_length = ToSmiIndex(length, context, &invalid_length);
+    new_byte_length.Bind(SmiMul(new_length, element_size));
+    // Reading the byte length must come after the ToIndex operation, which
+    // could cause the buffer to become detached.
+    Node* buffer_byte_length =
+        LoadObjectField(buffer, JSArrayBuffer::kByteLengthOffset);
+
+    Node* end = CallStub(add, context, byte_offset, new_byte_length.value());
+
+    Branch(IsTrue(CallStub(greater_than, context, end, buffer_byte_length)),
+           &invalid_length, &call_init);
+  }
+
+  Bind(&call_init);
+  {
+    Node* new_length =
+        CallStub(div, context, new_byte_length.value(), element_size);
+    // Force the result into a Smi, or throw a range error if it doesn't fit.
+    new_length = ToSmiIndex(new_length, context, &invalid_length);
+
+    DoInitialize(holder, new_length, buffer, byte_offset,
+                 new_byte_length.value(), initialize, context);
+  }
+
+  Bind(&invalid_offset_error);
+  {
+    CallRuntime(Runtime::kThrowRangeError, context,
+                SmiConstant(MessageTemplate::kInvalidOffset), byte_offset);
+    Unreachable();
+  }
+
+  Bind(&start_offset_error);
+  {
+    Node* holder_map = LoadMap(holder);
+    Node* problem_string = HeapConstant(
+        factory()->NewStringFromAsciiChecked("start offset", TENURED));
+    CallRuntime(Runtime::kThrowInvalidTypedArrayAlignment, context, holder_map,
+                problem_string);
+
+    Unreachable();
+  }
+
+  Bind(&byte_length_error);
+  {
+    Node* holder_map = LoadMap(holder);
+    Node* problem_string = HeapConstant(
+        factory()->NewStringFromAsciiChecked("byte length", TENURED));
+    CallRuntime(Runtime::kThrowInvalidTypedArrayAlignment, context, holder_map,
+                problem_string);
+
+    Unreachable();
   }
 
   Bind(&invalid_length);
