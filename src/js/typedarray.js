@@ -234,7 +234,9 @@ function NAMEConstructByTypedArray(obj, typedArray) {
 function NAMEConstructor(arg1, arg2, arg3) {
   if (!IS_UNDEFINED(new.target)) {
     if (IS_ARRAYBUFFER(arg1) || IS_SHAREDARRAYBUFFER(arg1)) {
-      NAMEConstructByArrayBuffer(this, arg1, arg2, arg3);
+      // NAMEConstructByArrayBuffer(this, arg1, arg2, arg3);
+      %typed_array_construct_by_array_buffer(
+              this, arg1, arg2, arg3, ELEMENT_SIZE);
     } else if (IS_TYPEDARRAY(arg1)) {
       NAMEConstructByTypedArray(this, arg1);
     } else if (IS_RECEIVER(arg1)) {

@@ -335,6 +335,7 @@ class MachineRepresentationChecker {
           case IrOpcode::kFloat64ExtractLowWord32:
           case IrOpcode::kFloat64ExtractHighWord32:
           case IrOpcode::kBitcastFloat64ToInt64:
+          case IrOpcode::kTryTruncateFloat64ToInt64:
             CheckValueInputForFloat64Op(node, 0);
             break;
           case IrOpcode::kWord64Equal:
