@@ -5,10 +5,13 @@
 #include "src/wasm/wasm-objects.h"
 #include "src/utils.h"
 
+#include "src/assembler-inl.h"
 #include "src/base/iterator.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/debug/debug-interface.h"
 #include "src/objects-inl.h"
 #include "src/wasm/module-decoder.h"
+#include "src/wasm/wasm-code-specialization.h"
 #include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-text.h"
 
@@ -213,6 +216,222 @@ bool IsBreakablePosition(Handle<WasmCompiledModule> compiled_module,
   return false;
 }
 #endif  // DEBUG
+
+int AdvanceSourcePositionTableIterator(SourcePositionTableIterator& iterator,
+                                       int offset) {
+  DCHECK(!iterator.done());
+  int byte_pos;
+  do {
+    byte_pos = iterator.source_position().ScriptOffset();
+    iterator.Advance();
+  } while (!iterator.done() && iterator.code_offset() <= offset);
+  return byte_pos;
+}
+
+int ExtractDirectCallIndex(wasm::Decoder& decoder, const byte* pc) {
+  DCHECK_EQ(static_cast<int>(kExprCallFunction), static_cast<int>(*pc));
+  // Read the leb128 encoded u32 value (up to 5 bytes starting at pc + 1).
+  decoder.Reset(pc + 1, pc + 6);
+  uint32_t call_idx = decoder.consume_u32v("call index");
+  DCHECK(decoder.ok());
+  DCHECK_GE(kMaxInt, call_idx);
+  return static_cast<int>(call_idx);
+}
+
+static void RecordLazyCodeStats(Isolate* isolate, Code* code) {
+  isolate->counters()->asm_wasm_lazily_compiled_functions()->Increment();
+  isolate->counters()->wasm_generated_code_size()->Increment(code->body_size());
+  isolate->counters()->wasm_reloc_size()->Increment(
+      code->relocation_info()->length());
+}
+
+// This class orchestrates the lazy compilation of wasm functions. It is
+// triggered by the WasmCompileLazy builtin.
+// It contains the logic for compiling and specializing wasm functions, and
+// patching the calling wasm code.
+// Once we support concurrent lazy compilation, this class will contain the
+// logic to actually orchestrate parallel execution of wasm compilation jobs.
+// TODO(clemensh): Implement concurrent lazy compilation.
+class LazyCompilationOrchestrator {
+  bool CompileFunction(Isolate* isolate, Handle<WasmInstanceObject> instance,
+                       int func_index) WARN_UNUSED_RESULT {
+    Handle<WasmCompiledModule> compiled_module(instance->compiled_module(),
+                                               isolate);
+    if (Code::cast(compiled_module->code_table()->get(func_index))->kind() ==
+        Code::WASM_FUNCTION) {
+      return true;
+    }
+    size_t num_function_tables =
+        compiled_module->module()->function_tables.size();
+    // TODO(clemensh): For concurrent compilation, these will have to live in a
+    // DeferredHandleScope.
+    std::vector<Handle<FixedArray>> fun_tables(num_function_tables);
+    std::vector<Handle<FixedArray>> sig_tables(num_function_tables);
+    for (size_t i = 0; i < num_function_tables; ++i) {
+      Object* fun_table =
+          compiled_module->function_tables()->get(static_cast<int>(i));
+      fun_tables[i] = handle(FixedArray::cast(fun_table), isolate);
+      Object* sig_table =
+          compiled_module->signature_tables()->get(static_cast<int>(i));
+      sig_tables[i] = handle(FixedArray::cast(sig_table), isolate);
+    }
+    wasm::ModuleEnv module_env(compiled_module->module(), &fun_tables,
+                               &sig_tables);
+    uint8_t* module_start = compiled_module->module_bytes()->GetChars();
+    const WasmFunction* func = &module_env.module->functions[func_index];
+    wasm::FunctionBody body{func->sig, module_start,
+                            module_start + func->code_start_offset,
+                            module_start + func->code_end_offset};
+    wasm::WasmName name = Vector<const char>::cast(
+        compiled_module->GetRawFunctionName(func_index));
+    ErrorThrower thrower(isolate, "WasmLazyCompile");
+    compiler::WasmCompilationUnit unit(isolate, &module_env, body, name,
+                                       func_index);
+    unit.ExecuteCompilation();
+    Handle<Code> code = unit.FinishCompilation(&thrower);
+
+    Handle<FixedArray> deopt_data =
+        isolate->factory()->NewFixedArray(2, TENURED);
+    Handle<WeakCell> weak_instance = isolate->factory()->NewWeakCell(instance);
+    // TODO(wasm): Introduce constants for the indexes in wasm deopt data.
+    deopt_data->set(0, *weak_instance);
+    deopt_data->set(1, Smi::FromInt(func_index));
+    code->set_deoptimization_data(*deopt_data);
+
+    if (thrower.error()) {
+      if (!isolate->has_pending_exception()) isolate->Throw(*thrower.Reify());
+      return false;
+    }
+
+    DCHECK_EQ(Builtins::kWasmCompileLazy,
+              Code::cast(compiled_module->code_table()->get(func_index))
+                  ->builtin_index());
+    compiled_module->code_table()->set(func_index, *code);
+
+    // Now specialize the generated code for this instance.
+    Zone specialization_zone(isolate->allocator(), ZONE_NAME);
+    CodeSpecialization code_specialization(isolate, &specialization_zone);
+    if (module_env.module->globals_size) {
+      Address globals_start = reinterpret_cast<Address>(
+          instance->globals_buffer()->backing_store());
+      code_specialization.RelocateGlobals(nullptr, globals_start);
+    }
+    if (instance->has_memory_buffer()) {
+      Address mem_start =
+          reinterpret_cast<Address>(instance->memory_buffer()->backing_store());
+      int mem_size = instance->memory_buffer()->byte_length()->Number();
+      DCHECK_IMPLIES(mem_size == 0, mem_start == nullptr);
+      if (mem_size > 0) {
+        code_specialization.RelocateMemoryReferences(nullptr, 0, mem_start,
+                                                     mem_size);
+      }
+    }
+    code_specialization.RelocateDirectCalls(instance);
+    code_specialization.ApplyToWasmCode(*code, SKIP_ICACHE_FLUSH);
+    Assembler::FlushICache(isolate, code->instruction_start(),
+                           code->instruction_size());
+    RecordLazyCodeStats(isolate, *code);
+    return true;
+  }
+
+ public:
+  MaybeHandle<Code> CompileLazy(Isolate* isolate,
+                                Handle<WasmInstanceObject> instance,
+                                Handle<Code> caller, int call_offset,
+                                int exported_func_index, bool patch_caller) {
+    struct NonCompiledFunction {
+      int offset;
+      int func_index;
+    };
+    std::vector<NonCompiledFunction> non_compiled_functions;
+    int func_to_return_idx = exported_func_index;
+    wasm::Decoder decoder(nullptr, nullptr);
+    bool is_js_to_wasm = caller->kind() == Code::JS_TO_WASM_FUNCTION;
+    Handle<WasmCompiledModule> compiled_module(instance->compiled_module(),
+                                               isolate);
+
+    if (is_js_to_wasm) {
+      non_compiled_functions.push_back({0, exported_func_index});
+    } else if (patch_caller) {
+      DisallowHeapAllocation no_gc;
+      SeqOneByteString* module_bytes = compiled_module->module_bytes();
+      SourcePositionTableIterator source_pos_iterator(
+          caller->source_position_table());
+      DCHECK_EQ(2, caller->deoptimization_data()->length());
+      int caller_func_index =
+          Smi::cast(caller->deoptimization_data()->get(1))->value();
+      const byte* func_bytes =
+          module_bytes->GetChars() + compiled_module->module()
+                                         ->functions[caller_func_index]
+                                         .code_start_offset;
+      for (RelocIterator it(*caller, RelocInfo::kCodeTargetMask); !it.done();
+           it.next()) {
+        Code* callee =
+            Code::GetCodeFromTargetAddress(it.rinfo()->target_address());
+        if (callee->builtin_index() != Builtins::kWasmCompileLazy) continue;
+        // TODO(clemensh): Introduce safe_cast<T, bool> which (D)CHECKS
+        // (depending on the bool) against limits of T and then static_casts.
+        size_t offset_l = it.rinfo()->pc() - caller->instruction_start();
+        DCHECK_GE(kMaxInt, offset_l);
+        int offset = static_cast<int>(offset_l);
+        int byte_pos =
+            AdvanceSourcePositionTableIterator(source_pos_iterator, offset);
+        int called_func_index =
+            ExtractDirectCallIndex(decoder, func_bytes + byte_pos);
+        non_compiled_functions.push_back({offset, called_func_index});
+        // Call offset one instruction after the call. Remember the last called
+        // function before that offset.
+        if (offset < call_offset) func_to_return_idx = called_func_index;
+      }
+    }
+
+    // TODO(clemensh): compile all functions in non_compiled_functions in
+    // background, wait for func_to_return_idx.
+    if (!CompileFunction(isolate, instance, func_to_return_idx)) {
+      return {};
+    }
+
+    if (is_js_to_wasm || patch_caller) {
+      DisallowHeapAllocation no_gc;
+      // Now patch the code object with all functions which are now compiled.
+      int idx = 0;
+      for (RelocIterator it(*caller, RelocInfo::kCodeTargetMask); !it.done();
+           it.next()) {
+        Code* callee =
+            Code::GetCodeFromTargetAddress(it.rinfo()->target_address());
+        if (callee->builtin_index() != Builtins::kWasmCompileLazy) continue;
+        DCHECK_GT(non_compiled_functions.size(), idx);
+        int called_func_index = non_compiled_functions[idx].func_index;
+        // Check that the callee agrees with our assumed called_func_index.
+        DCHECK_IMPLIES(
+            callee->deoptimization_data()->length() > 0,
+            Smi::cast(callee->deoptimization_data()->get(1))->value() ==
+                called_func_index);
+        if (is_js_to_wasm) {
+          DCHECK_EQ(func_to_return_idx, called_func_index);
+        } else {
+          DCHECK_EQ(non_compiled_functions[idx].offset,
+                    it.rinfo()->pc() - caller->instruction_start());
+        }
+        ++idx;
+        Handle<Code> callee_compiled(
+            Code::cast(compiled_module->code_table()->get(called_func_index)));
+        if (callee_compiled->builtin_index() == Builtins::kWasmCompileLazy) {
+          DCHECK_NE(func_to_return_idx, called_func_index);
+          continue;
+        }
+        DCHECK_EQ(Code::WASM_FUNCTION, callee_compiled->kind());
+        it.rinfo()->set_target_address(callee_compiled->instruction_start());
+      }
+      DCHECK_EQ(non_compiled_functions.size(), idx);
+    }
+
+    Code* ret =
+        Code::cast(compiled_module->code_table()->get(func_to_return_idx));
+    DCHECK_EQ(Code::WASM_FUNCTION, ret->kind());
+    return handle(ret, isolate);
+  }
+};
 
 }  // namespace
 
@@ -547,6 +766,8 @@ DEFINE_OPTIONAL_ARR_ACCESSORS(WasmSharedModuleData, asm_js_offset_table,
                               kAsmJsOffsetTable, ByteArray);
 DEFINE_OPTIONAL_ARR_GETTER(WasmSharedModuleData, breakpoint_infos,
                            kBreakPointInfos, FixedArray);
+DEFINE_OPTIONAL_ARR_GETTER(WasmSharedModuleData, lazy_compilation_orchestrator,
+                           kLazyCompilationOrchestrator, Foreign);
 
 Handle<WasmSharedModuleData> WasmSharedModuleData::New(
     Isolate* isolate, Handle<Foreign> module_wrapper,
@@ -734,6 +955,16 @@ void WasmSharedModuleData::SetBreakpointsOnNewInstance(
     int offset_in_func = position - func.code_start_offset;
     WasmDebugInfo::SetBreakpoint(debug_info, func_index, offset_in_func);
   }
+}
+
+void WasmSharedModuleData::PrepareForLazyCompilation(
+    Handle<WasmSharedModuleData> shared) {
+  if (shared->has_lazy_compilation_orchestrator()) return;
+  Isolate* isolate = shared->GetIsolate();
+  LazyCompilationOrchestrator* orch = new LazyCompilationOrchestrator();
+  Handle<Managed<LazyCompilationOrchestrator>> orch_handle =
+      Managed<LazyCompilationOrchestrator>::New(isolate, orch);
+  shared->set(WasmSharedModuleData::kLazyCompilationOrchestrator, *orch_handle);
 }
 
 Handle<WasmCompiledModule> WasmCompiledModule::New(
@@ -1160,6 +1391,18 @@ MaybeHandle<FixedArray> WasmCompiledModule::CheckBreakPoints(int position) {
   Handle<Object> breakpoint_objects(breakpoint_info->break_point_objects(),
                                     isolate);
   return isolate->debug()->GetHitBreakPointObjects(breakpoint_objects);
+}
+
+MaybeHandle<Code> WasmCompiledModule::CompileLazy(
+    Isolate* isolate, Handle<WasmInstanceObject> instance, Handle<Code> caller,
+    int offset, int func_index, bool patch_caller) {
+  isolate->set_context(*instance->compiled_module()->native_context());
+  Object* orch_obj =
+      instance->compiled_module()->shared()->lazy_compilation_orchestrator();
+  LazyCompilationOrchestrator* orch =
+      Managed<LazyCompilationOrchestrator>::cast(orch_obj)->get();
+  return orch->CompileLazy(isolate, instance, caller, offset, func_index,
+                           patch_caller);
 }
 
 Handle<WasmInstanceWrapper> WasmInstanceWrapper::New(
