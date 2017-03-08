@@ -1682,6 +1682,7 @@ Handle<Code> Factory::NewCode(const CodeDesc& desc,
   code->set_raw_kind_specific_flags1(0);
   code->set_raw_kind_specific_flags2(0);
   code->set_is_crankshafted(crankshafted);
+  code->set_has_tagged_params(true);
   code->set_deoptimization_data(*empty_fixed_array(), SKIP_WRITE_BARRIER);
   code->set_raw_type_feedback_info(Smi::kZero);
   code->set_next_code_link(*undefined_value(), SKIP_WRITE_BARRIER);
@@ -1691,14 +1692,24 @@ Handle<Code> Factory::NewCode(const CodeDesc& desc,
   code->set_constant_pool_offset(desc.instr_size - desc.constant_pool_size);
   code->set_builtin_index(-1);
 
-  if (code->kind() == Code::OPTIMIZED_FUNCTION) {
-    code->set_marked_for_deoptimization(false);
+  switch (code->kind()) {
+    case Code::OPTIMIZED_FUNCTION:
+      code->set_marked_for_deoptimization(false);
+      break;
+    case Code::FUNCTION:
+      if (is_debug) {
+        code->set_has_debug_break_slots(true);
+      }
+      break;
+    case Code::JS_TO_WASM_FUNCTION:
+    case Code::WASM_FUNCTION:
+      code->set_has_tagged_params(false);
+      break;
+    default:
+      break;
   }
 
-  if (is_debug) {
-    DCHECK(code->kind() == Code::FUNCTION);
-    code->set_has_debug_break_slots(true);
-  }
+  DCHECK_IMPLIES(is_debug, code->has_debug_break_slots());
 
   // Allow self references to created code object by patching the handle to
   // point to the newly allocated Code object.
