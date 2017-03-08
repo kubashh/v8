@@ -782,6 +782,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     kTruncateMinusZero,
   };
 
+  // ES6 7.1.17 ToIndex ( value )
+  Node* ToSmiIndex(Node* input, Node* context, Label* range_error);
+
   // Convert any object to an Integer.
   Node* ToInteger(Node* context, Node* input,
                   ToIntegerTruncationMode mode = kNoTruncation);
