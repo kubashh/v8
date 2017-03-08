@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a0a628d_146600d6",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "In difference to the other platforms, I do the add below, after leaving the frame (similar to the GenerateTailCallToReturnedCode method). That code below has the corresponding comment.",
+      "parentUuid": "26be776c_21d6b937",
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a06853c_3c09675e",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd4b35f_afeba56e",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a06853c_3c09675e",
+      "range": {
+        "startLine": 217,
+        "startChar": 23,
+        "endLine": 217,
+        "endChar": 32
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "78a10ae4_6b1d1b0d",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c42ef596_6b1bd4df",
+      "range": {
+        "startLine": 218,
+        "startChar": 8,
+        "endLine": 218,
+        "endChar": 17
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da864343_07521e6b",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "8b7e4d25_0b2fa956",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da864343_07521e6b",
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c689257_9787ee84",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -93,6 +177,30 @@
       "writtenOn": "2017-03-07T18:57:26Z",
       "side": 1,
       "message": "module?",
+      "range": {
+        "startLine": 260,
+        "startChar": 20,
+        "endLine": 260,
+        "endChar": 28
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c6e49dd_1037be64",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Nope, function. The current implementation is quadratic in the number of exports for an individual function. And yes, unity exports the same function \u003e1000 times :(",
+      "parentUuid": "7c689257_9787ee84",
       "range": {
         "startLine": 260,
         "startChar": 20,
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "db2620e1_61d950e8",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "The length of deopt_data is always a multiple of two. Added comment and DCHECK above.",
+      "parentUuid": "407bf9f8_85aad735",
+      "range": {
+        "startLine": 267,
+        "startChar": 8,
+        "endLine": 267,
+        "endChar": 11
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5ef0914_de705afe",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -151,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "9d04f46a_710ee7aa",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5ef0914_de705afe",
+      "range": {
+        "startLine": 268,
+        "startChar": 10,
+        "endLine": 268,
+        "endChar": 13
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4878c257_8f902de1",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -162,6 +318,30 @@
       "writtenOn": "2017-03-07T18:57:26Z",
       "side": 1,
       "message": "should this be the func_index? In EnsureExportedLazy the 4th parameter is called func_index.",
+      "range": {
+        "startLine": 617,
+        "startChar": 68,
+        "endLine": 617,
+        "endChar": 77
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c84b63e3_468c9777",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "exp.index is the function index to be exported. I could assign this to a local variable called \"func_index_to_export\". Do you think that is needed?",
+      "parentUuid": "4878c257_8f902de1",
       "range": {
         "startLine": 617,
         "startChar": 68,
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "0ffd2fa3_b68fcf8d",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "I did not find anything specific to early exits in our style guides. I find such early exits (or continues) easier to read. They also reduce indentation and save a line of code :)\nI also would have written the original code as \"if (code-\u003ekind() !\u003d Code::WASM_FUNCTION) continue\" and then the rest of the body.",
+      "parentUuid": "34d0f136_c71167ce",
+      "range": {
+        "startLine": 1299,
+        "startChar": 8,
+        "endLine": 1299,
+        "endChar": 17
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "407f380d_724f164d",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -208,6 +412,30 @@
       "writtenOn": "2017-03-08T13:14:29Z",
       "side": 1,
       "message": "I don\u0027t think that WeakCell* is so long that justifies the use of auto* here. (I don\u0027t like auto, and I think it should only be used when the alternative is hard to read or error prone).",
+      "range": {
+        "startLine": 2856,
+        "startChar": 4,
+        "endLine": 2856,
+        "endChar": 8
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7ce49b_2579009f",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2856,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Oh, I thought it\u0027s also OK if the type is written immediately on the right.\nLike \"auto *vec \u003d new std::vector\u003cint\u003e()\".\nThe style guide sais: (Allowed) When the type is clear from local context (in the same expression or within a few lines).\nAllowed does not mean encouraged though, so it\u0027s probably still a matter of taste. I like it in this case. Mainly because \"WeakCell *weak_cell \u003d WeakCell::cast(...)\" is very redundant.",
+      "parentUuid": "407f380d_724f164d",
       "range": {
         "startLine": 2856,
         "startChar": 4,
@@ -243,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "6c0553eb_87f03c0a",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1bf3c3a_a468d5cd",
+      "range": {
+        "startLine": 2861,
+        "startChar": 30,
+        "endLine": 2861,
+        "endChar": 39
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9eb33fe_c6460d32",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -266,6 +518,30 @@
     },
     {
       "key": {
+        "uuid": "60998a71_d26291e4",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2891,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9eb33fe_c6460d32",
+      "range": {
+        "startLine": 2891,
+        "startChar": 13,
+        "endLine": 2891,
+        "endChar": 20
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5dc754a_6654aa20",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -277,6 +553,30 @@
       "writtenOn": "2017-03-08T13:14:29Z",
       "side": 1,
       "message": "I wonder if we could put the 5 (1+5 \u003d 6) here into a constant in the decoder to make the code here more obvious.",
+      "range": {
+        "startLine": 233,
+        "startChar": 26,
+        "endLine": 233,
+        "endChar": 30
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4601bcd7_33f8ddd3",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "I added a comment here. That should be sufficient.",
+      "parentUuid": "a5dc754a_6654aa20",
       "range": {
         "startLine": 233,
         "startChar": 26,
@@ -312,6 +612,30 @@
     },
     {
       "key": {
+        "uuid": "3d1f6e95_8405b3d6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done. It is mainly there as a preparation for concurrent lazy compilation.",
+      "parentUuid": "7316597c_92f32a64",
+      "range": {
+        "startLine": 247,
+        "startChar": 6,
+        "endLine": 247,
+        "endChar": 33
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4106794f_77716d53",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -323,6 +647,30 @@
       "writtenOn": "2017-03-08T13:14:29Z",
       "side": 1,
       "message": "Can you define constants for index 0 and 1?",
+      "range": {
+        "startLine": 288,
+        "startChar": 20,
+        "endLine": 288,
+        "endChar": 21
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f87e748_58c91f7f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Dropped a TODO (for refactoring friday ;) ). We do this all over the place, mainly in wasm-module.cc.",
+      "parentUuid": "4106794f_77716d53",
       "range": {
         "startLine": 288,
         "startChar": 20,
@@ -352,6 +700,24 @@
     },
     {
       "key": {
+        "uuid": "ea4a8106_3da1d9b3",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Other users of CodeSpecialization already have a Zone, so I am reusing it. There are also locations where we create a specialization_zone, but the reuse it for different CodeSpecialization instances.",
+      "parentUuid": "d945564a_9c29d129",
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd142c9d_53d551da",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -363,6 +729,30 @@
       "writtenOn": "2017-03-08T13:14:29Z",
       "side": 1,
       "message": "what does the _l stand for?",
+      "range": {
+        "startLine": 363,
+        "startChar": 21,
+        "endLine": 363,
+        "endChar": 23
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ada6e4_d6383cb4",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "\"long\". This variable is only there to avoid code duplication in the following two lines.\nMaybe we should have a safe_cast\u003cT\u003e, which DCHECKS against std::numeric_limits\u003cT\u003e::{min,max} and then static_casts.\nIt could even have a second boolean template argument to specify whether to CHECK or DCHECK.\nDropped another TODO for refactoring friday :)",
+      "parentUuid": "dd142c9d_53d551da",
       "range": {
         "startLine": 363,
         "startChar": 21,
@@ -398,6 +788,30 @@
     },
     {
       "key": {
+        "uuid": "4d903ed5_cf642dae",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31616806_aac097c1",
+      "range": {
+        "startLine": 394,
+        "startChar": 11,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dba7a3b5_121fe1d0",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 2
@@ -409,6 +823,30 @@
       "writtenOn": "2017-03-08T13:14:29Z",
       "side": 1,
       "message": "??",
+      "range": {
+        "startLine": 414,
+        "startChar": 52,
+        "endLine": 414,
+        "endChar": 57
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad9b585_d731221f",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Typo. Removed.",
+      "parentUuid": "dba7a3b5_121fe1d0",
       "range": {
         "startLine": 414,
         "startChar": 52,
@@ -464,6 +902,54 @@
       "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0368a23b_686057ba",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Nope, this function returns an empty handle.\nwasm::CompileLazy will return the Illegal code object if this function here returned an empty handle. This is because the runtime function always has to return something. The Illegal builtin will not actually be called, since the CEntry stub will trigger the pending exception before that.\nwasm::CompileLazy is the interface between the runtime function and WasmCompiledModule::CompileLazy.\n\nAdded a lengthy comment to wasm::CompileLazy to explain this.",
+      "parentUuid": "755f3996_6d97b239",
+      "range": {
+        "startLine": 416,
+        "startChar": 58,
+        "endLine": 416,
+        "endChar": 76
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a9939e_85bcf2d2",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-08T15:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4cefcb2_0aef07a0",
+      "range": {
+        "startLine": 416,
+        "startChar": 48,
+        "endLine": 416,
+        "endChar": 56
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
