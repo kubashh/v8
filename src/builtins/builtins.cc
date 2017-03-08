@@ -167,6 +167,10 @@ void Builtins::SetUp(Isolate* isolate, bool create_heap_objects) {
     for (int i = 0; i < builtin_count; i++) {
       Code::cast(builtins_[i])->set_builtin_index(i);
     }
+#define SET_CODE_NON_TAGGED(Name) \
+  Code::cast(builtins_[Builtins::k##Name])->set_has_tagged_stack(false);
+    BUILTINS_WITH_UNTAGGED_STACK(SET_CODE_NON_TAGGED)
+#undef SET_CODE_NON_TAGGED
   }
 
   // Mark as initialized.

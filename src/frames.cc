@@ -413,13 +413,12 @@ void StackFrame::IteratePc(ObjectVisitor* v, Address* pc_address,
   unsigned pc_offset = static_cast<unsigned>(pc - holder->instruction_start());
   Object* code = holder;
   v->VisitPointer(&code);
-  if (code != holder) {
-    holder = reinterpret_cast<Code*>(code);
-    pc = holder->instruction_start() + pc_offset;
-    *pc_address = pc;
-    if (FLAG_enable_embedded_constant_pool && constant_pool_address) {
-      *constant_pool_address = holder->constant_pool();
-    }
+  if (code == holder) return;
+  holder = reinterpret_cast<Code*>(code);
+  pc = holder->instruction_start() + pc_offset;
+  *pc_address = pc;
+  if (FLAG_enable_embedded_constant_pool && constant_pool_address) {
+    *constant_pool_address = holder->constant_pool();
   }
 }
 
@@ -873,11 +872,14 @@ void StandardFrame::IterateCompiledFrame(ObjectVisitor* v) const {
   uint8_t* safepoint_bits = safepoint_entry.bits();
   safepoint_bits += kNumSafepointRegisters >> kBitsPerByteLog2;
 
+  // Visit the return address.
+  IteratePc(v, pc_address(), constant_pool_address(), code);
+
+  // Skip the rest of the frame if it's not tagged.
+  if (!code->has_tagged_stack()) return;
+
   // Visit the rest of the parameters.
-  if (!is_js_to_wasm() && !is_wasm()) {
-    // Non-WASM frames have tagged values as parameters.
-    v->VisitPointers(parameters_base, parameters_limit);
-  }
+  v->VisitPointers(parameters_base, parameters_limit);
 
   // Visit pointer spill slots and locals.
   for (unsigned index = 0; index < stack_slots; index++) {
@@ -888,14 +890,10 @@ void StandardFrame::IterateCompiledFrame(ObjectVisitor* v) const {
     }
   }
 
-  // Visit the return address in the callee and incoming arguments.
-  IteratePc(v, pc_address(), constant_pool_address(), code);
-
-  if (!is_wasm() && !is_wasm_to_js()) {
-    // Visit the context in stub frame and JavaScript frame.
-    // Visit the function in JavaScript frame.
-    v->VisitPointers(frame_header_base, frame_header_limit);
-  }
+  // Visit incoming arguments.
+  // Visit the context in stub frame and JavaScript frame.
+  // Visit the function in JavaScript frame.
+  v->VisitPointers(frame_header_base, frame_header_limit);
 }
 
 
@@ -2042,10 +2040,13 @@ void JavaScriptFrame::Iterate(ObjectVisitor* v) const {
 }
 
 void InternalFrame::Iterate(ObjectVisitor* v) const {
-  // Internal frames only have object pointers on the expression stack
-  // as they never have any arguments.
+  Code* code = LookupCode();
+  IteratePc(v, pc_address(), constant_pool_address(), code);
+  // Skip stack content for internal frames whose stack is not tagged.
+  if (!code->has_tagged_stack()) return;
+  // Internal frames with tagged stack do not receive any arguments.
+  // Hence all values on the expression stack are object pointers.
   IterateExpressions(v);
-  IteratePc(v, pc_address(), constant_pool_address(), LookupCode());
 }
 
 
