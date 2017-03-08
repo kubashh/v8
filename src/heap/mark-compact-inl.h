@@ -107,9 +107,8 @@ void CodeFlusher::ClearNextCandidate(SharedFunctionInfo* candidate) {
   candidate->code()->set_gc_metadata(NULL, SKIP_WRITE_BARRIER);
 }
 
-
-template <LiveObjectIterationMode T>
-HeapObject* LiveObjectIterator<T>::Next() {
+template <LiveObjectIterationMode T, MarkingMode M>
+HeapObject* LiveObjectIterator<T, M>::Next() {
   while (!it_.Done()) {
     HeapObject* object = nullptr;
     while (current_cell_ != 0) {
