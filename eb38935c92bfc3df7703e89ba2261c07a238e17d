@@ -194,6 +194,276 @@
       "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "407f380d_724f164d",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2856,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "I don\u0027t think that WeakCell* is so long that justifies the use of auto* here. (I don\u0027t like auto, and I think it should only be used when the alternative is hard to read or error prone).",
+      "range": {
+        "startLine": 2856,
+        "startChar": 4,
+        "endLine": 2856,
+        "endChar": 8
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1bf3c3a_a468d5cd",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "or js-to-wasm wrapper",
+      "range": {
+        "startLine": 2861,
+        "startChar": 30,
+        "endLine": 2861,
+        "endChar": 39
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9eb33fe_c6460d32",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2891,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "Can you add a comment what idx \u003d 0 and idx \u003d 1 is?",
+      "range": {
+        "startLine": 2891,
+        "startChar": 13,
+        "endLine": 2891,
+        "endChar": 20
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5dc754a_6654aa20",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "I wonder if we could put the 5 (1+5 \u003d 6) here into a constant in the decoder to make the code here more obvious.",
+      "range": {
+        "startLine": 233,
+        "startChar": 26,
+        "endLine": 233,
+        "endChar": 30
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7316597c_92f32a64",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "Can you add a comment which describes the purpose of this class?",
+      "range": {
+        "startLine": 247,
+        "startChar": 6,
+        "endLine": 247,
+        "endChar": 33
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4106794f_77716d53",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "Can you define constants for index 0 and 1?",
+      "range": {
+        "startLine": 288,
+        "startChar": 20,
+        "endLine": 288,
+        "endChar": 21
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d945564a_9c29d129",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "Why don\u0027t you create the specialization zone within the CodeSpecialization?",
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd142c9d_53d551da",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "what does the _l stand for?",
+      "range": {
+        "startLine": 363,
+        "startChar": 21,
+        "endLine": 363,
+        "endChar": 23
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31616806_aac097c1",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "Can you say in a comment what this means?",
+      "range": {
+        "startLine": 394,
+        "startChar": 11,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba7a3b5_121fe1d0",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "??",
+      "range": {
+        "startLine": 414,
+        "startChar": 52,
+        "endLine": 414,
+        "endChar": 57
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4cefcb2_0aef07a0",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "call site",
+      "range": {
+        "startLine": 416,
+        "startChar": 48,
+        "endLine": 416,
+        "endChar": 56
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755f3996_6d97b239",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-08T13:14:29Z",
+      "side": 1,
+      "message": "It actually returns isolate-\u003ebuiltins()-\u003eIllegal() if an error occured, afaict",
+      "range": {
+        "startLine": 416,
+        "startChar": 58,
+        "endLine": 416,
+        "endChar": 76
+      },
+      "revId": "eb38935c92bfc3df7703e89ba2261c07a238e17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
