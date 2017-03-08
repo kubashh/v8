@@ -869,6 +869,8 @@ class Isolate;
   BUILTIN_LIST(IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, \
                IGNORE_BUILTIN, IGNORE_BUILTIN, V)
 
+#define BUILTINS_WITH_UNTAGGED_PARAMS(V) V(WasmCompileLazy)
+
 // Forward declarations.
 class ObjectVisitor;
 enum class InterpreterPushArgsMode : unsigned;
