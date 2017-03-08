@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "358f3261_b92df819",
+        "filename": "src/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-08T15:09:36Z",
+      "side": 1,
+      "message": "This return is too early; I think we just want to skip the visiting of parameters if the code does not have tagged stack.",
+      "range": {
+        "startLine": 879,
+        "startChar": 2,
+        "endLine": 879,
+        "endChar": 4
+      },
+      "revId": "8985a31f089011ecde6eb4ace2f296dcf9327a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d12699d1_9139c290",
+        "filename": "src/objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5003,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-08T15:09:36Z",
+      "side": 1,
+      "message": "I think this should be called \"has_tagged_params\" because that\u0027s what we want the bit to indicate.",
+      "range": {
+        "startLine": 5003,
+        "startChar": 6,
+        "endLine": 5003,
+        "endChar": 22
+      },
+      "revId": "8985a31f089011ecde6eb4ace2f296dcf9327a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
