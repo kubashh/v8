@@ -483,8 +483,8 @@ class MemoryChunk {
   void ReleaseTypedOldToOldSlots();
   void AllocateLocalTracker();
   void ReleaseLocalTracker();
-  void AllocateExternalBitmap();
-  void ReleaseExternalBitmap();
+  void AllocateExternalBitmap(Bitmap* bitmap);
+  Bitmap* ReleaseExternalBitmap();
 
   Address area_start() { return area_start_; }
   Address area_end() { return area_end_; }
@@ -528,6 +528,7 @@ class MemoryChunk {
     return this->address() + (index << kPointerSizeLog2);
   }
 
+  template <MarkingMode mode = MarkingMode::FULL>
   void ClearLiveness();
 
   void PrintMarkbits() { markbits()->Print(); }
@@ -879,6 +880,7 @@ class Space : public Malloced {
 
   // Identity used in error reporting.
   AllocationSpace identity() { return id_; }
+  AllocationSpace id() { return id_; }
 
   virtual void AddAllocationObserver(AllocationObserver* observer) {
     allocation_observers_->Add(observer);
@@ -1944,6 +1946,9 @@ class V8_EXPORT_PRIVATE PagedSpace : NON_EXPORTED_BASE(public Space) {
  public:
   typedef PageIterator iterator;
 
+  // Reuse a page for allocation only if it has at least {kPageReuseThreshold}
+  // memory available in its FreeList.
+  static const size_t kPageReuseThreshold = 4 * KB;
   static const intptr_t kCompactionMemoryWanted = 500 * KB;
 
   // Creates a space with an id.
@@ -2149,6 +2154,9 @@ class V8_EXPORT_PRIVATE PagedSpace : NON_EXPORTED_BASE(public Space) {
   void ShrinkImmortalImmovablePages();
 
   std::unique_ptr<ObjectIterator> GetObjectIterator() override;
+
+  Page* RemovePageSafe();
+  void AddPage(Page* page);
 
  protected:
   // PagedSpaces that should be included in snapshots have different, i.e.,
