@@ -771,6 +771,9 @@ void IncrementalMarking::UpdateMarkingDequeAfterScavenge() {
                (obj->IsFiller() && ObjectMarking::IsWhite(obj)));
       }
     } else if (obj->map() != filler_map) {
+      // ThinStrings could be black, when they were forwarded to an already
+      // marked String.
+      if (ObjectMarking::IsBlack(obj)) continue;
       // Skip one word filler objects that appear on the
       // stack when we perform in place array shift.
       array[new_top] = obj;
@@ -795,7 +798,9 @@ void IncrementalMarking::VisitObject(Map* map, HeapObject* obj, int size) {
 #if ENABLE_SLOW_DCHECKS
   MarkBit mark_bit = ObjectMarking::MarkBitFrom(obj);
   MemoryChunk* chunk = MemoryChunk::FromAddress(obj->address());
-  SLOW_DCHECK(Marking::IsGrey(mark_bit) ||
+  // ThinStrings could be black, when they were forwarded to an already
+  // marked String.
+  SLOW_DCHECK(Marking::IsBlackGrey(mark_bit) ||
               (obj->IsFiller() && Marking::IsWhite(mark_bit)) ||
               (chunk->IsFlagSet(MemoryChunk::HAS_PROGRESS_BAR) &&
                Marking::IsBlack(mark_bit)));
