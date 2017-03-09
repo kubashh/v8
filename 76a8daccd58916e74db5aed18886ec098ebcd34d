@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b3cb6c3_7bf29e2c",
+        "filename": "src/factory.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-09T09:35:10Z",
+      "side": 1,
+      "message": "I think I prefer the previous logic where we check {is_debug} and then DCHECK that the code type is Code::FUNCTION. Although this version might have a slight performance advantage because it checks the code kind only once, I think the previous logic was clearer.",
+      "revId": "76a8daccd58916e74db5aed18886ec098ebcd34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34bc54fc_2017a630",
+        "filename": "src/frames.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-09T09:35:10Z",
+      "side": 1,
+      "message": "Thanks for this comment.",
+      "revId": "76a8daccd58916e74db5aed18886ec098ebcd34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
