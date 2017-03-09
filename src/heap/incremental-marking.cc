@@ -771,6 +771,9 @@ void IncrementalMarking::UpdateMarkingDequeAfterScavenge() {
                (obj->IsFiller() && ObjectMarking::IsWhite(obj)));
       }
     } else if (obj->map() != filler_map) {
+      // ThinStrings could be black, when they were forwarded to an already
+      // marked String.
+      if (ObjectMarking::IsBlack(obj)) continue;
       // Skip one word filler objects that appear on the
       // stack when we perform in place array shift.
       array[new_top] = obj;
@@ -822,6 +825,10 @@ intptr_t IncrementalMarking::ProcessMarkingDeque(
   while (!marking_deque->IsEmpty() && (bytes_processed < bytes_to_process ||
                                        completion == FORCE_COMPLETION)) {
     HeapObject* obj = marking_deque->Pop();
+
+    // ThinStrings could be black, when they were forwarded to an already
+    // marked String.
+    if (ObjectMarking::IsBlack(obj)) continue;
 
     // Left trimming may result in white, grey, or black filler objects on the
     // marking deque. Ignore these objects.
