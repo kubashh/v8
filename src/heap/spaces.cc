@@ -541,6 +541,10 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   chunk->ResetLiveBytes();
   chunk->ClearLiveness();
   chunk->young_generation_bitmap_ = nullptr;
+  if (FLAG_minor_mc) {
+    chunk->AllocateYoungGenerationBitmap();
+    chunk->ClearLiveness<MarkingMode::YOUNG_GENERATION>();
+  }
   chunk->set_next_chunk(nullptr);
   chunk->set_prev_chunk(nullptr);
   chunk->local_tracker_ = nullptr;
@@ -1120,7 +1124,7 @@ void MemoryChunk::ReleaseAllocatedMemory() {
   if (typed_old_to_new_slots_.Value() != nullptr) ReleaseTypedOldToNewSlots();
   if (typed_old_to_old_slots_ != nullptr) ReleaseTypedOldToOldSlots();
   if (local_tracker_ != nullptr) ReleaseLocalTracker();
-  if (young_generation_bitmap_ != nullptr) ReleaseExternalBitmap();
+  if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
 }
 
 static SlotSet* AllocateSlotSet(size_t size, Address page_start) {
@@ -1186,22 +1190,25 @@ void MemoryChunk::ReleaseLocalTracker() {
   local_tracker_ = nullptr;
 }
 
-void MemoryChunk::AllocateExternalBitmap() {
+void MemoryChunk::AllocateYoungGenerationBitmap() {
   DCHECK_NULL(young_generation_bitmap_);
   young_generation_bitmap_ = static_cast<Bitmap*>(calloc(1, Bitmap::kSize));
-  young_generation_live_byte_count_ = 0;
 }
 
-void MemoryChunk::ReleaseExternalBitmap() {
+void MemoryChunk::ReleaseYoungGenerationBitmap() {
   DCHECK_NOT_NULL(young_generation_bitmap_);
   free(young_generation_bitmap_);
   young_generation_bitmap_ = nullptr;
 }
 
+template <MarkingMode mode>
 void MemoryChunk::ClearLiveness() {
-  markbits()->Clear();
-  ResetLiveBytes();
+  markbits<mode>()->Clear();
+  ResetLiveBytes<mode>();
 }
+
+template void MemoryChunk::ClearLiveness<MarkingMode::FULL>();
+template void MemoryChunk::ClearLiveness<MarkingMode::YOUNG_GENERATION>();
 
 // -----------------------------------------------------------------------------
 // PagedSpace implementation
@@ -1272,6 +1279,14 @@ void PagedSpace::RefillFreeList() {
         p->Unlink();
         p->set_owner(this);
         p->InsertAfter(anchor_.prev_page());
+      } else {
+        CHECK_EQ(this, p->owner());
+        // Regular refill on main thread.
+        if (p->available_in_free_list() < kPageReuseThreshold) {
+          // Relink categories with only little memory left previous to anchor.
+          p->Unlink();
+          p->InsertAfter(anchor()->prev_page());
+        }
       }
       added += RelinkFreeListCategories(p);
       added += p->wasted_memory();
@@ -1308,7 +1323,12 @@ void PagedSpace::MergeCompactionSpace(CompactionSpace* other) {
 
     p->Unlink();
     p->set_owner(this);
-    p->InsertAfter(anchor_.prev_page());
+    if (p->available_in_free_list() < kPageReuseThreshold) {
+      // Relink categories with only little memory left previous to anchor.
+      p->InsertAfter(anchor()->prev_page());
+    } else {
+      p->InsertAfter(anchor());
+    }
     RelinkFreeListCategories(p);
     DCHECK_EQ(p->AvailableInFreeList(), p->available_in_free_list());
   }
@@ -1331,6 +1351,30 @@ bool PagedSpace::ContainsSlow(Address addr) {
     if (page == p) return true;
   }
   return false;
+}
+
+Page* PagedSpace::RemovePageSafe() {
+  base::LockGuard<base::Mutex> guard(mutex());
+  if (anchor()->next_page() == anchor() ||
+      anchor()->next_page()->available_in_free_list() < kPageReuseThreshold)
+    return nullptr;
+
+  Page* page = anchor()->next_page();
+  AccountUncommitted(page->size());
+  accounting_stats_.DeallocateBytes(page->LiveBytesFromFreeList());
+  accounting_stats_.DecreaseCapacity(page->area_size());
+  page->Unlink();
+  UnlinkFreeListCategories(page);
+  return page;
+}
+
+void PagedSpace::AddPage(Page* page) {
+  AccountCommitted(page->size());
+  accounting_stats_.IncreaseCapacity(page->area_size());
+  accounting_stats_.AllocateBytes(page->LiveBytesFromFreeList());
+  page->set_owner(this);
+  RelinkFreeListCategories(page);
+  page->InsertAfter(anchor()->prev_page());
 }
 
 void PagedSpace::ShrinkImmortalImmovablePages() {
@@ -2881,6 +2925,16 @@ HeapObject* PagedSpace::SlowAllocateRaw(int size_in_bytes) {
     RefillFreeList();
     if (max_freed >= size_in_bytes) {
       object = free_list_.Allocate(static_cast<size_t>(size_in_bytes));
+      if (object != nullptr) return object;
+    }
+  } else if (is_local()) {
+    // Sweeping not in progress and we are on a {CompactionSpace}. This can
+    // only happen when we are evacuating for the young generation.
+    Page* page = heap()->old_space()->RemovePageSafe();
+    if (page != nullptr) {
+      AddPage(page);
+      HeapObject* object =
+          free_list_.Allocate(static_cast<size_t>(size_in_bytes));
       if (object != nullptr) return object;
     }
   }
