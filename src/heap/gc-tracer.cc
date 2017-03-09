@@ -447,7 +447,7 @@ void GCTracer::PrintNVP() const {
   switch (current_.type) {
     case Event::SCAVENGER:
       heap_->isolate()->PrintWithTimestamp(
-          "pause=%.1f "
+          "pause=%.2f "
           "mutator=%.1f "
           "gc=%s "
           "reduce_memory=%d "
@@ -515,17 +515,25 @@ void GCTracer::PrintNVP() const {
       break;
     case Event::MINOR_MARK_COMPACTOR:
       heap_->isolate()->PrintWithTimestamp(
-          "pause=%.1f "
+          "pause=%.2f "
           "mutator=%.1f "
           "gc=%s "
           "reduce_memory=%d "
           "mark=%.2f "
+          "mark.prepare=%.2f "
           "mark.roots=%.2f "
-          "mark.old_to_new=%.2f\n",
+          "mark.old_to_new=%.2f "
+          "evacuate=%.2f "
+          "evacuate.copy=%.2f "
+          "evacuate.update_pointers=%.2f\n",
           duration, spent_in_mutator, "mmc", current_.reduce_memory,
           current_.scopes[Scope::MINOR_MC_MARK],
+          current_.scopes[Scope::MINOR_MC_MARK_PREPARE],
           current_.scopes[Scope::MINOR_MC_MARK_ROOTS],
-          current_.scopes[Scope::MINOR_MC_MARK_OLD_TO_NEW_POINTERS]);
+          current_.scopes[Scope::MINOR_MC_MARK_OLD_TO_NEW_POINTERS],
+          current_.scopes[Scope::MC_EVACUATE],
+          current_.scopes[Scope::MC_EVACUATE_COPY],
+          current_.scopes[Scope::MC_EVACUATE_UPDATE_POINTERS]);
       break;
     case Event::MARK_COMPACTOR:
     case Event::INCREMENTAL_MARK_COMPACTOR:
