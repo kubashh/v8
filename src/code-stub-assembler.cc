@@ -4221,6 +4221,27 @@ Node* CodeStubAssembler::JSReceiverToPrimitive(Node* context, Node* input) {
   return result.value();
 }
 
+Node* CodeStubAssembler::ToSmiIndex(Node* const input, Node* const context,
+                                    Label* range_error) {
+  Variable result(this, MachineRepresentation::kTagged);
+  Label undefined(this), defined(this), done(this);
+  Branch(IsUndefined(input), &undefined, &defined);
+
+  Bind(&defined);
+  result.Bind(ToInteger(context, input, CodeStubAssembler::kTruncateMinusZero));
+  GotoIfNot(TaggedIsSmi(result.value()), range_error);
+  CSA_ASSERT(this, TaggedIsSmi(result.value()));
+  GotoIf(SmiLessThan(result.value(), SmiConstant(0)), range_error);
+  Goto(&done);
+
+  Bind(&undefined);
+  result.Bind(SmiConstant(0));
+  Goto(&done);
+
+  Bind(&done);
+  return result.value();
+}
+
 Node* CodeStubAssembler::ToInteger(Node* context, Node* input,
                                    ToIntegerTruncationMode mode) {
   // We might need to loop once for ToNumber conversion.
