@@ -107,9 +107,8 @@ void CodeFlusher::ClearNextCandidate(SharedFunctionInfo* candidate) {
   candidate->code()->set_gc_metadata(NULL, SKIP_WRITE_BARRIER);
 }
 
-
-template <LiveObjectIterationMode T>
-HeapObject* LiveObjectIterator<T>::Next() {
+template <LiveObjectIterationMode iteration_mode, MarkingMode marking_mode>
+HeapObject* LiveObjectIterator<iteration_mode, marking_mode>::Next() {
   while (!it_.Done()) {
     HeapObject* object = nullptr;
     while (current_cell_ != 0) {
@@ -171,10 +170,12 @@ HeapObject* LiveObjectIterator<T>::Next() {
           current_cell_ &= ~(end_index_mask + end_index_mask - 1);
         }
 
-        if (T == kBlackObjects || T == kAllLiveObjects) {
+        if (iteration_mode == kBlackObjects ||
+            iteration_mode == kAllLiveObjects) {
           object = black_object;
         }
-      } else if ((T == kGreyObjects || T == kAllLiveObjects)) {
+      } else if ((iteration_mode == kGreyObjects ||
+                  iteration_mode == kAllLiveObjects)) {
         map = base::NoBarrierAtomicValue<Map*>::FromAddress(addr)->Value();
         object = HeapObject::FromAddress(addr);
       }
