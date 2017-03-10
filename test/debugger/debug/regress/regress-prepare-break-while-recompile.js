@@ -45,12 +45,13 @@ function bar() {
   return x;
 }
 
+print("1");
 foo();
-%BaselineFunctionOnNextCall(foo);
-foo();
+print("2");
 // Mark and kick off recompilation.
 %OptimizeFunctionOnNextCall(foo, "concurrent");
 foo();
+print("3");
 
 // Set break points on an unrelated function. This clears both optimized
 // and (shared) unoptimized code on foo, and sets both to lazy-compile builtin.

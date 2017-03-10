@@ -8,7 +8,6 @@
   function foo(x, y) { return x << y; }
 
   foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
   foo(0.1, 1.1);
   %OptimizeFunctionOnNextCall(foo);
   foo(undefined, 1.1);
@@ -33,32 +32,6 @@
   function foo(x, y) { return x >> y; }
 
   foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
-  foo(0.1, 1.1);
-  %OptimizeFunctionOnNextCall(foo);
-  foo(undefined, 1.1);
-  assertOptimized(foo);
-  foo(1.1, undefined);
-  assertOptimized(foo);
-  foo(null, 1.1);
-  assertOptimized(foo);
-  foo(1.1, null);
-  assertOptimized(foo);
-  foo(true, 1.1);
-  assertOptimized(foo);
-  foo(1.1, true);
-  assertOptimized(foo);
-  foo(false, 1.1);
-  assertOptimized(foo);
-  foo(1.1, false);
-  assertOptimized(foo);
-})();
-
-(function() {
-  function foo(x, y) { return x >>> y; }
-
-  foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
   foo(0.1, 1.1);
   %OptimizeFunctionOnNextCall(foo);
   foo(undefined, 1.1);
@@ -83,32 +56,6 @@
   function foo(x, y) { return x ^ y; }
 
   foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
-  foo(0.1, 1.1);
-  %OptimizeFunctionOnNextCall(foo);
-  foo(undefined, 1.1);
-  assertOptimized(foo);
-  foo(1.1, undefined);
-  assertOptimized(foo);
-  foo(null, 1.1);
-  assertOptimized(foo);
-  foo(1.1, null);
-  assertOptimized(foo);
-  foo(true, 1.1);
-  assertOptimized(foo);
-  foo(1.1, true);
-  assertOptimized(foo);
-  foo(false, 1.1);
-  assertOptimized(foo);
-  foo(1.1, false);
-  assertOptimized(foo);
-})();
-
-(function() {
-  function foo(x, y) { return x | y; }
-
-  foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
   foo(0.1, 1.1);
   %OptimizeFunctionOnNextCall(foo);
   foo(undefined, 1.1);
@@ -133,7 +80,6 @@
   function foo(x, y) { return x & y; }
 
   foo(1.1, 0.1);
-  %BaselineFunctionOnNextCall(foo);
   foo(0.1, 1.1);
   %OptimizeFunctionOnNextCall(foo);
   foo(undefined, 1.1);
