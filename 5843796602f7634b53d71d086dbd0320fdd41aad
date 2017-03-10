@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "290cf8df_66155e6b",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-10T14:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86184ec7_e010d19c",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14ae7093_8d02a423",
         "filename": "src/builtins/builtins-typedarray.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c35d219_0d1747e9",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-10T14:39:56Z",
+      "side": 1,
+      "message": "We need it to stay because ToSmiIndex in length_defined is observable",
+      "parentUuid": "14ae7093_8d02a423",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "bd67b3ea_d3f8fdf7",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-10T14:39:56Z",
+      "side": 1,
+      "message": "length here can be a user JS value so we need the observable ToIndex call.",
+      "parentUuid": "5a616d36_81a2da66",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a928cc8_b4cf2f1b",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 8
@@ -67,6 +121,24 @@
       "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "215e36f6_2a1b6583",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4226,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-10T14:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a928cc8_b4cf2f1b",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
