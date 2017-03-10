@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fcf9431c_a46cccac",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-03-10T18:14:20Z",
+      "side": 1,
+      "message": "Maybe just remove ignition_turbofan and also below and in the status file?\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/cctest.status?q\u003dignition_turbo+file:%5Esrc/v8/test/+package:%5Echromium$\u0026l\u003d365",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 20
+      },
+      "revId": "2d970736e9e96d630bc6458fc5000f5784c49181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
