@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86184ec7_e010d19c",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-10T12:41:14Z",
+      "side": 1,
+      "message": "Could you add a TODO for the isDetachedBuffer(buffer) step?",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14ae7093_8d02a423",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-10T12:41:14Z",
+      "side": 1,
+      "message": "you can pull up the load of this, I\u0027d assume the ToSmiIndex in the length_defined branch is almost always true",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a616d36_81a2da66",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-10T12:41:14Z",
+      "side": 1,
+      "message": "To my understanding this call is not needed if length is properly normalized, aka. no HeapNumber representations of SMIs (unless you can arbitrary objects as length_.\nSo this would just be:\nif (!length-\u003eIsSmi()) throw RangeError.",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a928cc8_b4cf2f1b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4226,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-10T12:41:14Z",
+      "side": 1,
+      "message": "Please add the most common case first (see Object::ToIndex):\ninput-\u003eIsSmi() \u0026\u0026 input \u003e 0 \u003d\u003e return input",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
