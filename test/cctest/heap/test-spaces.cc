@@ -416,9 +416,14 @@ TEST(CompactionSpace) {
   CHECK(compaction_space != NULL);
   CHECK(compaction_space->SetUp());
 
-  OldSpace* old_space = new OldSpace(heap, OLD_SPACE, NOT_EXECUTABLE);
+  OldSpace* old_space = heap->old_space();
   CHECK(old_space != NULL);
-  CHECK(old_space->SetUp());
+
+  // Drop free lists from old space pages to avoid allocating in them.
+  for (Page* p : *old_space) {
+    old_space->UnlinkFreeListCategories(p);
+    p->ResetFreeListStatistics();
+  }
 
   // Cannot loop until "Available()" since we initially have 0 bytes available
   // and would thus neither grow, nor be able to allocate an object.
@@ -434,15 +439,12 @@ TEST(CompactionSpace) {
   int pages_in_old_space = old_space->CountTotalPages();
   int pages_in_compaction_space = compaction_space->CountTotalPages();
   CHECK_EQ(pages_in_compaction_space, kExpectedPages);
-  CHECK_LE(pages_in_old_space, 1);
 
   old_space->MergeCompactionSpace(compaction_space);
   CHECK_EQ(old_space->CountTotalPages(),
            pages_in_old_space + pages_in_compaction_space);
 
   delete compaction_space;
-  delete old_space;
-
   memory_allocator->TearDown();
   delete memory_allocator;
 }
