@@ -16,6 +16,24 @@
       "revId": "c4372329786a2eeea7e2a153d047ec484aa85c92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "444ceb61_24ff4ca8",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-13T09:06:32Z",
+      "side": 1,
+      "message": "Isn\u0027t that the wrong way? We need to go float --\u003e int, where we know that the result can be outside Smi range",
+      "parentUuid": "5d3c4c56_272cbd6e",
+      "revId": "c4372329786a2eeea7e2a153d047ec484aa85c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
