@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d3c4c56_272cbd6e",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-03-13T04:34:40Z",
+      "side": 1,
+      "message": "Not sure what the semantics are for this.  I think you should use RoundInt64ToFloat64 instead.",
+      "revId": "c4372329786a2eeea7e2a153d047ec484aa85c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
