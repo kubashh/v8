@@ -22,6 +22,30 @@
       "revId": "2d970736e9e96d630bc6458fc5000f5784c49181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5a1adc5_2d2db007",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-13T09:26:07Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "fcf9431c_a46cccac",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 20
+      },
+      "revId": "2d970736e9e96d630bc6458fc5000f5784c49181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
