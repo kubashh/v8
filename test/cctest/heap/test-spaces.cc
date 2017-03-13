@@ -419,6 +419,11 @@ TEST(CompactionSpace) {
   OldSpace* old_space = new OldSpace(heap, OLD_SPACE, NOT_EXECUTABLE);
   CHECK(old_space != NULL);
   CHECK(old_space->SetUp());
+  // Drop free lists from old space pages to avoid allocating in them.
+  for (Page* p : *old_space) {
+    old_space->UnlinkFreeListCategories(p);
+    p->ResetFreeListStatistics();
+  }
 
   // Cannot loop until "Available()" since we initially have 0 bytes available
   // and would thus neither grow, nor be able to allocate an object.
