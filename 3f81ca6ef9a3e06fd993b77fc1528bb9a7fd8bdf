@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa187e5_e8eaa673",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-03-13T12:36:08Z",
+      "side": 1,
+      "message": "This should be renamed to ChangeFloat64ToUintPtr.",
+      "revId": "3f81ca6ef9a3e06fd993b77fc1528bb9a7fd8bdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
