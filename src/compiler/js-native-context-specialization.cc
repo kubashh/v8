@@ -1365,11 +1365,10 @@ JSNativeContextSpecialization::BuildPropertyAccess(
 
         // Introduce the call to the getter function.
         if (access_info.constant()->IsJSFunction()) {
-          value = effect = graph()->NewNode(
+          value = effect = control = graph()->NewNode(
               javascript()->Call(2, 0.0f, VectorSlotPair(),
                                  ConvertReceiverMode::kNotNullOrUndefined),
               target, receiver, context, frame_state0, effect, control);
-          control = graph()->NewNode(common()->IfSuccess(), value);
         } else {
           DCHECK(access_info.constant()->IsFunctionTemplateInfo());
           Handle<FunctionTemplateInfo> function_template_info(
@@ -1402,11 +1401,10 @@ JSNativeContextSpecialization::BuildPropertyAccess(
 
         // Introduce the call to the setter function.
         if (access_info.constant()->IsJSFunction()) {
-          effect = graph()->NewNode(
+          effect = control = graph()->NewNode(
               javascript()->Call(3, 0.0f, VectorSlotPair(),
                                  ConvertReceiverMode::kNotNullOrUndefined),
               target, receiver, value, context, frame_state0, effect, control);
-          control = graph()->NewNode(common()->IfSuccess(), effect);
         } else {
           DCHECK(access_info.constant()->IsFunctionTemplateInfo());
           Handle<FunctionTemplateInfo> function_template_info(
@@ -1671,7 +1669,6 @@ JSNativeContextSpecialization::BuildPropertyAccess(
 
     value = effect = control =
         graph()->NewNode(common()->Call(desc), arraysize(inputs), inputs);
-    control = graph()->NewNode(common()->IfSuccess(), control);
   }
 
   return ValueEffectControl(value, effect, control);
@@ -2117,10 +2114,10 @@ JSNativeContextSpecialization::InlineApiCall(
     inputs[6] = value;
   }
 
+  Node* control0;
   Node* effect0;
-  Node* value0 = effect0 =
+  Node* value0 = effect0 = control0 =
       graph()->NewNode(common()->Call(call_descriptor), index, inputs);
-  Node* control0 = graph()->NewNode(common()->IfSuccess(), value0);
   return ValueEffectControl(value0, effect0, control0);
 }
 
