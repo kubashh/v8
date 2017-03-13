@@ -46,6 +46,30 @@
       "revId": "2d970736e9e96d630bc6458fc5000f5784c49181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c764fb60_bf35c89a",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-13T11:23:56Z",
+      "side": 1,
+      "message": "Done - also removed \"ignition\" since this is no longer different from turbofan.",
+      "parentUuid": "e5a1adc5_2d2db007",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 20
+      },
+      "revId": "2d970736e9e96d630bc6458fc5000f5784c49181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
