@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "097f0293_074b47ef",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-14T13:39:16Z",
+      "side": 1,
+      "message": "I need to study the other CL more to understand why we need all these yield types (explanation welcome).\n\nIn any case, can we remove AsyncGenerator and make this enum just have three values (avoiding bitwise operations)? Looking at a yield, we already know from the function kind whether we are inside an async generator or not. We wouldn\u0027t need BuildYield either.",
+      "range": {
+        "startLine": 2507,
+        "startChar": 3,
+        "endLine": 2507,
+        "endChar": 4
+      },
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb9020d_6d4d89dc",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2519,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-14T13:39:16Z",
+      "side": 1,
+      "message": "s/is_yield/is_normal/\nHaving a yield that is not a yield is too confusing.\nAlternatively, we could rename Yield to Suspend and then have SuspendType \u003d kYield, kYieldStar, kAwait.",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc846ab_0262366b",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-14T13:39:16Z",
+      "side": 1,
+      "message": "This needs an explaining comment.",
+      "range": {
+        "startLine": 744,
+        "startChar": 65,
+        "endLine": 744,
+        "endChar": 0
+      },
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22041320_1b1f7f8a",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1786,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-14T13:39:16Z",
+      "side": 1,
+      "message": "Please clarify this. I\u0027d suggest changing the AST in the comment to match the actual AST (i.e. do \"return undefined  // See note below\"), and then saying something like:\n\n\"The bytecode generator has special handling for return statements in async generator functions, taking care of resolving the right promise with a done iterator result.\"",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37d8ba6e_b1527927",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4759,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-14T13:39:16Z",
+      "side": 1,
+      "message": "I think this should be moved into BuildReturnStatement (which then only takes the value as argument).",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
