@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9549be4c_ca0346eb",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-14T09:27:34Z",
+      "side": 1,
+      "message": "We could also skip compilation above, but since this is a test-only flag, we might as well not bother with the extra logic that that would require.",
+      "revId": "03ab3c723e25a46a1dceb52d5309450b9be234d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
