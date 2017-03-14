@@ -16,6 +16,24 @@
       "revId": "03ab3c723e25a46a1dceb52d5309450b9be234d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dadb057f_b9632c42",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-14T09:59:07Z",
+      "side": 1,
+      "message": "Agreed. It\u0027s hard to see what could fail if the wasm code is not there. And the interpreter is pretty slow anyway, so it should not matter too much to just compile everything.",
+      "parentUuid": "9549be4c_ca0346eb",
+      "revId": "03ab3c723e25a46a1dceb52d5309450b9be234d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
