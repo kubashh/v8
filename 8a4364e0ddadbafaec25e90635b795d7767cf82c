@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "702fd185_461ec8ca",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "You also need LOG events here.",
+      "range": {
+        "startLine": 1484,
+        "startChar": 11,
+        "endLine": 1484,
+        "endChar": 27
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d805b39_74ed9582",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "How about adding a new GCState?",
+      "range": {
+        "startLine": 1485,
+        "startChar": 13,
+        "endLine": 1485,
+        "endChar": 21
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf9deed7_be49e7bf",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "Would it make sense to make that concurrent? Is that slow?",
+      "range": {
+        "startLine": 327,
+        "startChar": 20,
+        "endLine": 327,
+        "endChar": 21
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f59fa70f_1a889ce9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "This is the same method as IteratePointersToFromSpace, except for the predicate. Can we unify these methods?",
+      "range": {
+        "startLine": 1107,
+        "startChar": 14,
+        "endLine": 1107,
+        "endChar": 23
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78948a58_828146e0",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "Please explain the semantics of the modes here.",
+      "range": {
+        "startLine": 1504,
+        "startChar": 16,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcd5ce77_3be11b70",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1770,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "We are always going to call TransferColorIfNeeded. Let\u0027s hoist it out and place it right after the else branch. I think order should not matter here.",
+      "range": {
+        "startLine": 1770,
+        "startChar": 5,
+        "endLine": 1770,
+        "endChar": 0
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b52ab6a_d402c883",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "Fix the first sentence.",
+      "range": {
+        "startLine": 1842,
+        "startChar": 38,
+        "endLine": 1842,
+        "endChar": 39
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a175f05b_55db84a9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "There is a lot in this CL. This part could have been added afterwards, like cons strings.",
+      "range": {
+        "startLine": 1876,
+        "startChar": 14,
+        "endLine": 1876,
+        "endChar": 36
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f2d111_b7b026f5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "It reads a bit strange that we call here ProcessAll*. That does not really reflect the semantic.",
+      "range": {
+        "startLine": 2595,
+        "startChar": 12,
+        "endLine": 2595,
+        "endChar": 36
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76ae2d68_24438ccc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3132,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "How about if (mode \u003d\u003d MarkingMode::Full) {\n...\n}",
+      "range": {
+        "startLine": 3132,
+        "startChar": 45,
+        "endLine": 3132,
+        "endChar": 51
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cf50fd8_2e69d88d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 3144,
+        "startChar": 6,
+        "endLine": 3144,
+        "endChar": 10
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81b90d86_615e60ea",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3712,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "the map is marked by IterateBlackObject.",
+      "range": {
+        "startLine": 3712,
+        "startChar": 24,
+        "endLine": 3712,
+        "endChar": 32
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ec5bbba_395aae54",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3727,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-14T15:37:16Z",
+      "side": 1,
+      "message": "A general observation: There is actually no need to mark the objects fully black (and visit them). It would be good enough to push them on the marking deque (which will make them black in the future). With that we would remove quite some marking from the Scavenger which could easily be done incrementally (or concurrently). WDYT? Can you change that on ToT?",
+      "range": {
+        "startLine": 3727,
+        "startChar": 27,
+        "endLine": 3727,
+        "endChar": 51
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
