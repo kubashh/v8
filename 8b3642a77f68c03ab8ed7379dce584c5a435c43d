@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c26d740_f8c8ebaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "bug id",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6ee86d9_fb84bac4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "how did you decide what needs to be templatized and what becomes a separate method?",
+      "range": {
+        "startLine": 312,
+        "startChar": 2,
+        "endLine": 312,
+        "endChar": 34
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea61956_6f548f98",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "Here it seems it would be better to have a separate visitor for minor MC.",
+      "range": {
+        "startLine": 1559,
+        "startChar": 6,
+        "endLine": 1559,
+        "endChar": 31
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8148d794_d7382efd",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "This one will never be called for minor mc since code objects are always allocated in code space.",
+      "range": {
+        "startLine": 1750,
+        "startChar": 6,
+        "endLine": 1750,
+        "endChar": 27
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbb4ae65_2a43926d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "This method is an example where the template is not ideal.",
+      "range": {
+        "startLine": 3945,
+        "startChar": 27,
+        "endLine": 3945,
+        "endChar": 56
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a15e2d4_5aa950f5",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "Would the LiveObjectIterator be an instance where it would be cleaner if we would pass in the given mark bits?",
+      "range": {
+        "startLine": 379,
+        "startChar": 6,
+        "endLine": 379,
+        "endChar": 24
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8518ad4_ef23abe8",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 2934,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-15T20:58:54Z",
+      "side": 1,
+      "message": "So this can only be called on the compaction space to steal pages from the old space.\nIt is not ideal that we hard code old space here in a PagedSpace method. We have to factor that out somehow.",
+      "range": {
+        "startLine": 2934,
+        "startChar": 4,
+        "endLine": 2934,
+        "endChar": 8
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
