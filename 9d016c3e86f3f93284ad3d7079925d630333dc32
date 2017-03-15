@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9444b697_38498b63",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2895,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-15T20:59:52Z",
+      "side": 1,
+      "message": "This set of productions looks right to me, but it looks like this particular set will now be used in three places. I think adding a helper function to ParserBase would make sense, like AccumulateNonBindingPatternErrors().",
+      "revId": "9d016c3e86f3f93284ad3d7079925d630333dc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e568a1_21806a44",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7668,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-15T20:59:52Z",
+      "side": 1,
+      "message": "Rather than adding the individual cases below, could you instead add this as context data here? like:\n\n{\"m([\u0027a\u0027]) ? \", \" : rhs\"},\n{\"m([\u0027b\u0027]) ? lhs : \", \"\"}\n\nSeems like that\u0027d give you more coverage immediately.",
+      "revId": "9d016c3e86f3f93284ad3d7079925d630333dc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
