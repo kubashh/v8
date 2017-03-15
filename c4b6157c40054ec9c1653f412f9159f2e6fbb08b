@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be44aafc_e6a91420",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-15T19:08:15Z",
+      "side": 1,
+      "message": "Will we now count twice?\n\nIsn\u0027t the problem that you don\u0027t create parse tasks yet, so, those cannot do the use counts... and when you create the parse tasks, that problem will fix itself? Or do you plan to have the top level preparsing do the use counts and remove them from parser?",
+      "range": {
+        "startLine": 632,
+        "startChar": 57,
+        "endLine": 632,
+        "endChar": 68
+      },
+      "revId": "c4b6157c40054ec9c1653f412f9159f2e6fbb08b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
