@@ -1196,7 +1196,9 @@ class OneByteVectorResource : public v8::String::ExternalOneByteStringResource {
 };
 
 TEST(InternalizeExternal) {
-  FLAG_thin_strings = true;
+  // TODO(mlippautz): Remove once we add support for forwarding ThinStrings in
+  // minor MC.
+  if (FLAG_minor_mc) return;
   CcTest::InitializeVM();
   i::Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
