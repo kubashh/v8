@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "20103503_ddce2334",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-15T19:34:57Z",
+      "side": 1,
+      "message": "Simple explanation:\n\nAwaitExpression in AsyncGenerator should not modify \"function.sent\" / generator input the way Yield does --- If it does, this is actually observable in yield* (where the function.sent feature is implicitly used).\n\nSo, in order to avoid breaking `yield*` in async generators, SuspendGenerator needs to decide where to store the debug pos, and ResumeGeneratorTrampoline needs to know where to store the awaited or sent value, so as not to overwrite function.sent for Await in async generators.\n\nIt\u0027s true that it\u0027s statically known whether it\u0027s an async generator or not, but this is still encoded into the SuspendGenerator bytecode\u0027s flags operand, because interpreter.cc does not know, as far as I\u0027m aware, whether it\u0027s an async generator or not. Originally, suspending for Await had its own bytecode, but I was asked to just use SuspendGenerator, and figure out which field to store debug pos on via a flag operand.\n\nResumeGenerator, which is implemented at a lower level, unfortunately (is there any chance we could port this to CSA but still ensure that specific registers are used?) now has several variations, in order to make different assertions about the instance type of the generator, and to store the correct in-object field (again, this protects function.sent from being overwritten during yield*, which I believe can affect the outcome of the yield* algorithm).\n\n----\n\nAs far as only having 3 values, this is fine for BytecodeGenerator I think, but I think it\u0027s better to be explicit about what is supposed to happen.\n\nOne thing that is true is that this sort of duplicates stuff in src/globals.h, so it can probably be removed from the Yield AST node.",
+      "parentUuid": "097f0293_074b47ef",
+      "range": {
+        "startLine": 2507,
+        "startChar": 3,
+        "endLine": 2507,
+        "endChar": 4
+      },
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fb9020d_6d4d89dc",
         "filename": "src/ast/ast.h",
         "patchSetId": 12
@@ -36,6 +60,24 @@
       "writtenOn": "2017-03-14T13:39:16Z",
       "side": 1,
       "message": "s/is_yield/is_normal/\nHaving a yield that is not a yield is too confusing.\nAlternatively, we could rename Yield to Suspend and then have SuspendType \u003d kYield, kYieldStar, kAwait.",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35d6915_8b16f46d",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2519,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-15T19:34:57Z",
+      "side": 1,
+      "message": "I\u0027m fine with renaming the Yield node to Suspend",
+      "parentUuid": "6fb9020d_6d4d89dc",
       "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "8ea818e5_8c761aed",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-15T19:34:57Z",
+      "side": 1,
+      "message": "I\u0027ll add one to the code in the next patch-set, but in short \"this re-uses the promise_var rare-data slot, since promise_var is invalid in AsyncGenerator, but something like it is still needed\"",
+      "parentUuid": "0cc846ab_0262366b",
+      "range": {
+        "startLine": 744,
+        "startChar": 65,
+        "endLine": 744,
+        "endChar": 0
+      },
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "22041320_1b1f7f8a",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 12
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "fc55ea3d_aa2ed81f",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1786,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-15T19:34:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "22041320_1b1f7f8a",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37d8ba6e_b1527927",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 12
@@ -96,6 +180,24 @@
       "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ead490e8_da7f24ef",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4759,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-15T19:34:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37d8ba6e_b1527927",
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
