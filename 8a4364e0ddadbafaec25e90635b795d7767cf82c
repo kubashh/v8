@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "40e5f447_326f74a7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "702fd185_461ec8ca",
+      "range": {
+        "startLine": 1484,
+        "startChar": 11,
+        "endLine": 1484,
+        "endChar": 27
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d805b39_74ed9582",
         "filename": "src/heap/heap.cc",
         "patchSetId": 33
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c9767cfe_b7ff6e2b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d805b39_74ed9582",
+      "range": {
+        "startLine": 1485,
+        "startChar": 13,
+        "endLine": 1485,
+        "endChar": 21
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf9deed7_be49e7bf",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -59,6 +107,30 @@
       "writtenOn": "2017-03-14T15:37:16Z",
       "side": 1,
       "message": "Would it make sense to make that concurrent? Is that slow?",
+      "range": {
+        "startLine": 327,
+        "startChar": 20,
+        "endLine": 327,
+        "endChar": 21
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0d116b6_01d72d6a",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "During benchmarking i saw this as 0.01 to 0.02ms on the desktop machine. That\u0027s why it is simple for now. To track it I added a tracing scope.",
+      "parentUuid": "bf9deed7_be49e7bf",
       "range": {
         "startLine": 327,
         "startChar": 20,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b6c683a1_341e29e9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "I disabled the code flusher for now as I discovered a problem with it: We would need a first pass through the list for marking, and a second pass for fixing up pointers after evacuation.",
+      "parentUuid": "f59fa70f_1a889ce9",
+      "range": {
+        "startLine": 1107,
+        "startChar": 14,
+        "endLine": 1107,
+        "endChar": 23
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78948a58_828146e0",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7ae2cae0_06646c3f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78948a58_828146e0",
+      "range": {
+        "startLine": 1504,
+        "startChar": 16,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcd5ce77_3be11b70",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -128,6 +248,30 @@
       "writtenOn": "2017-03-14T15:37:16Z",
       "side": 1,
       "message": "We are always going to call TransferColorIfNeeded. Let\u0027s hoist it out and place it right after the else branch. I think order should not matter here.",
+      "range": {
+        "startLine": 1770,
+        "startChar": 5,
+        "endLine": 1770,
+        "endChar": 0
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccd45ba2_5632e592",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1770,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Order is important here. TransferColorIfNeeded calls into IncrementalMarking::TransferColor which needs a proper size as our ObjectMarking accessors also handle live bytes adjustment. It can also not be after slot recording as slot recording needs mark bit information to only record slots for live (black) objects. \n\nAs far as I can see there\u0027s exactly this one place where we have to transfer colors.",
+      "parentUuid": "fcd5ce77_3be11b70",
       "range": {
         "startLine": 1770,
         "startChar": 5,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "2eb6e6ed_614a209c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Removed the ThinString part for now.",
+      "parentUuid": "3b52ab6a_d402c883",
+      "range": {
+        "startLine": 1842,
+        "startChar": 38,
+        "endLine": 1842,
+        "endChar": 39
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a175f05b_55db84a9",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -174,6 +342,30 @@
       "writtenOn": "2017-03-14T15:37:16Z",
       "side": 1,
       "message": "There is a lot in this CL. This part could have been added afterwards, like cons strings.",
+      "range": {
+        "startLine": 1876,
+        "startChar": 14,
+        "endLine": 1876,
+        "endChar": 36
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e3bec6_9ecfb2cf",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Removed in this CL.",
+      "parentUuid": "a175f05b_55db84a9",
       "range": {
         "startLine": 1876,
         "startChar": 14,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "adf0eaa5_9627d2c4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Should\u0027ve been ProcessYoungWeakReferences, done.",
+      "parentUuid": "52f2d111_b7b026f5",
+      "range": {
+        "startLine": 2595,
+        "startChar": 12,
+        "endLine": 2595,
+        "endChar": 36
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76ae2d68_24438ccc",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -229,6 +445,30 @@
       "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adee7cfc_06499ad4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3132,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done (personally I\u0027d rather have early bailouts then nesting, but ok)",
+      "parentUuid": "76ae2d68_24438ccc",
+      "range": {
+        "startLine": 3132,
+        "startChar": 45,
+        "endLine": 3132,
+        "endChar": 51
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "11d55142_46455f09",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cf50fd8_2e69d88d",
+      "range": {
+        "startLine": 3144,
+        "startChar": 6,
+        "endLine": 3144,
+        "endChar": 10
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81b90d86_615e60ea",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "4c25832b_4826b937",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3712,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81b90d86_615e60ea",
+      "range": {
+        "startLine": 3712,
+        "startChar": 24,
+        "endLine": 3712,
+        "endChar": 32
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ec5bbba_395aae54",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 33
@@ -289,6 +577,30 @@
       "writtenOn": "2017-03-14T15:37:16Z",
       "side": 1,
       "message": "A general observation: There is actually no need to mark the objects fully black (and visit them). It would be good enough to push them on the marking deque (which will make them black in the future). With that we would remove quite some marking from the Scavenger which could easily be done incrementally (or concurrently). WDYT? Can you change that on ToT?",
+      "range": {
+        "startLine": 3727,
+        "startChar": 27,
+        "endLine": 3727,
+        "endChar": 51
+      },
+      "revId": "8a4364e0ddadbafaec25e90635b795d7767cf82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "245f36e6_80a0b7af",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3727,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-15T10:10:35Z",
+      "side": 1,
+      "message": "As discussed offline: The overhead is really low right now because we start black allocation pretty late. Let\u0027s try this in a followup.",
+      "parentUuid": "2ec5bbba_395aae54",
       "range": {
         "startLine": 3727,
         "startChar": 27,
