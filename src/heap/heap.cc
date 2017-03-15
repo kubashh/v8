@@ -1481,7 +1481,19 @@ void Heap::MarkCompact() {
   }
 }
 
-void Heap::MinorMarkCompact() { UNREACHABLE(); }
+void Heap::MinorMarkCompact() {
+  SetGCState(MINOR_MARK_COMPACT);
+  LOG(isolate_, ResourceEvent("MinorMarkCompact", "begin"));
+
+  TRACE_GC(tracer(), GCTracer::Scope::MC_MINOR_MC);
+  AlwaysAllocateScope always_allocate(isolate());
+  PauseAllocationObserversScope pause_observers(this);
+
+  mark_compact_collector()->CollectGarbageInYoungGeneration();
+
+  LOG(isolate_, ResourceEvent("MinorMarkCompact", "end"));
+  SetGCState(NOT_IN_GC);
+}
 
 void Heap::MarkCompactEpilogue() {
   TRACE_GC(tracer(), GCTracer::Scope::MC_EPILOGUE);
