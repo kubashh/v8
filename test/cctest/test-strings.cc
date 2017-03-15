@@ -1196,7 +1196,7 @@ class OneByteVectorResource : public v8::String::ExternalOneByteStringResource {
 };
 
 TEST(InternalizeExternal) {
-  FLAG_thin_strings = true;
+  if (!FLAG_thin_strings) return;
   CcTest::InitializeVM();
   i::Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
