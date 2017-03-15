@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f9785ef_cc94ef90",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-15T15:21:51Z",
+      "side": 1,
+      "message": "nit: Maybe mention in this TODO that it applies to all architectures.",
+      "range": {
+        "startLine": 657,
+        "startChar": 14,
+        "endLine": 657,
+        "endChar": 22
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d95a98f_001971b7",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-15T15:21:51Z",
+      "side": 1,
+      "message": "Nice catch!",
+      "range": {
+        "startLine": 195,
+        "startChar": 20,
+        "endLine": 195,
+        "endChar": 21
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed943c7_c6d76470",
+        "filename": "test/cctest/test-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-15T15:21:51Z",
+      "side": 1,
+      "message": "nit: I think the fifth run and the subsequent check can be dropped now.",
+      "range": {
+        "startLine": 642,
+        "startChar": 2,
+        "endLine": 642,
+        "endChar": 12
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
