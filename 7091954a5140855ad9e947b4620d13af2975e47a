@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6dc9c976_076e6a7a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-15T16:01:15Z",
+      "side": 1,
+      "message": "Added to all architectures.",
+      "parentUuid": "5f9785ef_cc94ef90",
+      "range": {
+        "startLine": 657,
+        "startChar": 14,
+        "endLine": 657,
+        "endChar": 22
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d95a98f_001971b7",
         "filename": "src/runtime/runtime-test.cc",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0292a7fd_f34741de",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-15T16:01:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d95a98f_001971b7",
+      "range": {
+        "startLine": 195,
+        "startChar": 20,
+        "endLine": 195,
+        "endChar": 21
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ed943c7_c6d76470",
         "filename": "test/cctest/test-compiler.cc",
         "patchSetId": 6
@@ -68,6 +116,30 @@
       "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ed5263c_12f743de",
+        "filename": "test/cctest/test-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-15T16:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ed943c7_c6d76470",
+      "range": {
+        "startLine": 642,
+        "startChar": 2,
+        "endLine": 642,
+        "endChar": 12
+      },
+      "revId": "7091954a5140855ad9e947b4620d13af2975e47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
