@@ -176,3 +176,31 @@ function checkStack(stack, expected_lines) {
     }
   }
 })();
+
+(function testGlobals() {
+  var builder = new WasmModuleBuilder();
+  builder.addGlobal(kWasmI32, true);
+  builder.addGlobal(kWasmF64, true);
+  builder.addFunction('get0', kSig_i_v)
+      .addBody([kExprGetGlobal, 0])
+      .exportFunc();
+  builder.addFunction('get1', kSig_d_v)
+      .addBody([kExprGetGlobal, 1])
+      .exportFunc();
+  builder.addFunction('set0', kSig_v_i)
+      .addBody([kExprGetLocal, 0, kExprSetGlobal, 0])
+      .exportFunc();
+  builder.addFunction('set1', kSig_v_d)
+      .addBody([kExprGetLocal, 0, kExprSetGlobal, 1])
+      .exportFunc();
+  var instance = builder.instantiate();
+  // Initially, both should be zero.
+  assertEquals(0, instance.exports.get0());
+  assertEquals(0, instance.exports.get1());
+  // Assign values to both.
+  instance.exports.set0(47);
+  instance.exports.set1(0.34);
+  // Now check the values.
+  assertEquals(47, instance.exports.get0());
+  assertEquals(0.34, instance.exports.get1());
+})();
