@@ -22,6 +22,30 @@
       "revId": "c4b6157c40054ec9c1653f412f9159f2e6fbb08b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc812c5_4d69a5e6",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-16T08:44:24Z",
+      "side": 1,
+      "message": "Nice catch :)\nIndeed I would count twice for eager functions - preparser already counts for lazy function even without the flag.\nPutting them just in the preparser seems nice if it can handle all the cases.",
+      "parentUuid": "be44aafc_e6a91420",
+      "range": {
+        "startLine": 632,
+        "startChar": 57,
+        "endLine": 632,
+        "endChar": 68
+      },
+      "revId": "c4b6157c40054ec9c1653f412f9159f2e6fbb08b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
