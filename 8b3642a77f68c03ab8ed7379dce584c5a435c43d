@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a9d1583_d9092394",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c26d740_f8c8ebaa",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6ee86d9_fb84bac4",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 36
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-15T20:58:54Z",
       "side": 1,
       "message": "how did you decide what needs to be templatized and what becomes a separate method?",
+      "range": {
+        "startLine": 312,
+        "startChar": 2,
+        "endLine": 312,
+        "endChar": 34
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05b080b5_44d4cb5d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Marking and clearning of non-live references tries to mimic the Scavenger and doesn\u0027t really have to do anything with the full MC, so they did get new methods. The evacuation part is the same as in the full MC % markbit hiccups so they were templatized.",
+      "parentUuid": "b6ee86d9_fb84bac4",
       "range": {
         "startLine": 312,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "538058c6_83e940c5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Why? If we create a separate visitor type for this one we cannot use stack allocation for them in the evacuator anymore without duplicating the code there.",
+      "parentUuid": "5ea61956_6f548f98",
+      "range": {
+        "startLine": 1559,
+        "startChar": 6,
+        "endLine": 1559,
+        "endChar": 31
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8148d794_d7382efd",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 36
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "70a841bd_8e49ab3c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Done (although this will be eliminated by dead-code elimination)",
+      "parentUuid": "8148d794_d7382efd",
+      "range": {
+        "startLine": 1750,
+        "startChar": 6,
+        "endLine": 1750,
+        "endChar": 27
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbb4ae65_2a43926d",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 36
@@ -105,6 +201,30 @@
       "writtenOn": "2017-03-15T20:58:54Z",
       "side": 1,
       "message": "This method is an example where the template is not ideal.",
+      "range": {
+        "startLine": 3945,
+        "startChar": 27,
+        "endLine": 3945,
+        "endChar": 56
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccd37d7f_54b16fc6",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Personal preference? We could also have templatized methods for anything that is a block here, e.g.,\n- UpdateNewToOld\n- UpdateOldToOld\n- UpdateWeak\n\nwhere UpdateOldToOld spezializes to a no-op for YOUNG_GENERATION.",
+      "parentUuid": "dbb4ae65_2a43926d",
       "range": {
         "startLine": 3945,
         "startChar": 27,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "02891569_299b0126",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Then you need to instantiate it with the markbits that are determined from some high-level call like VisitLiveObjects. So instead of threading through the mode, you are threading through the markbits. \n\nI don\u0027t think that this is easier or better to read; it\u0027s just trading what we pass down.",
+      "parentUuid": "9a15e2d4_5aa950f5",
+      "range": {
+        "startLine": 379,
+        "startChar": 6,
+        "endLine": 379,
+        "endChar": 24
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8518ad4_ef23abe8",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 36
@@ -151,6 +295,30 @@
       "writtenOn": "2017-03-15T20:58:54Z",
       "side": 1,
       "message": "So this can only be called on the compaction space to steal pages from the old space.\nIt is not ideal that we hard code old space here in a PagedSpace method. We have to factor that out somehow.",
+      "range": {
+        "startLine": 2934,
+        "startChar": 4,
+        "endLine": 2934,
+        "endChar": 8
+      },
+      "revId": "8b3642a77f68c03ab8ed7379dce584c5a435c43d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "278ab6de_3499e9bd",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 2934,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-16T12:12:43Z",
+      "side": 1,
+      "message": "Agreed. There\u0027s an easy fix: heap()-\u003epaged_space(identity()) will always return you the \"main\" space for that type.",
+      "parentUuid": "c8518ad4_ef23abe8",
       "range": {
         "startLine": 2934,
         "startChar": 4,
