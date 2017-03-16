@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f6ac4ae_491134aa",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "Can you add a TODO here that maybe we should just have a testing mode passed into the WasmGraphBuilder instead of trying to infer it?",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca85d8d6_510cb205",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3068,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "Can we pull this out into an inline helper (assertion) function?",
+      "range": {
+        "startLine": 3068,
+        "startChar": 5,
+        "endLine": 3068,
+        "endChar": 23
+      },
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c330d1cd_c7a31410",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "We could also count the number of times a function is exported so that we don\u0027t have to guess.",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2797c5c6_ea1df227",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "I think we need to move this code into wasm-module.cc, because it has to do with compilation and there is already most of the compilation logic there.",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "697f6346_4836b854",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we shouldn\u0027t just use a FixedArray of FixedArrays so that we don\u0027t have to marshall these back and forth each time.",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98aea465_f830f62a",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "Can you drop in a TODO that we should not need to get the raw function name unless some kind of debugging/tracing is enabled? Otherwise it is just overhead.",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48c485f2_af87ea85",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "Should we move this patching into wasm-code-specialization.cc?",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dab8c2f6_b164f37c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "s/termined/determined/",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c0b199_f6738105",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-03-16T17:35:20Z",
+      "side": 1,
+      "message": "Does the above just mean that all call sites in the caller which call the same function index will be patched?",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
