@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7cff7f22_c83a9e54",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f6ac4ae_491134aa",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca85d8d6_510cb205",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 5
@@ -30,6 +48,30 @@
       "writtenOn": "2017-03-16T17:35:20Z",
       "side": 1,
       "message": "Can we pull this out into an inline helper (assertion) function?",
+      "range": {
+        "startLine": 3068,
+        "startChar": 5,
+        "endLine": 3068,
+        "endChar": 23
+      },
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "601e5036_273f6df9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3068,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Not sure what you mean by inline helper function. Something like {IsWasmOrigin()} which does the three DCHECKS?",
+      "parentUuid": "ca85d8d6_510cb205",
       "range": {
         "startLine": 3068,
         "startChar": 5,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "ed3bc254_d9eeaba1",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Great! That indeed makes it much easier, and more efficient since we don\u0027t have to dynamically grow the FixedArray.\nDone.",
+      "parentUuid": "c330d1cd_c7a31410",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2797c5c6_ea1df227",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 5
@@ -73,6 +133,24 @@
       "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b93e5372_430de492",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2797c5c6_ea1df227",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "00d52bd3_a67869e1",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "For embedding heap constants into the code we unfortunately need Handles. They need to be created by the main thread, but can then also be used by concurrent (compilation) threads.",
+      "parentUuid": "697f6346_4836b854",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98aea465_f830f62a",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 5
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "f293ffec_74af6029",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98aea465_f830f62a",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48c485f2_af87ea85",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 5
@@ -121,6 +235,24 @@
       "writtenOn": "2017-03-16T17:35:20Z",
       "side": 1,
       "message": "Should we move this patching into wasm-code-specialization.cc?",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef922002_910f4461",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "I thought about that, but we could not reuse the non_compiled_functions vector then, hence we would need to iterate the source position table again. I wanted to avoid that.\nWe could of course create a function in wasm-code-specialization.cc which receives the non_compiled_functions vector, but it would only ever be used from here, so I thought it\u0027s better to just put the code here.",
+      "parentUuid": "48c485f2_af87ea85",
       "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "394995fd_8502b176",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab8c2f6_b164f37c",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34c0b199_f6738105",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 5
@@ -158,6 +308,24 @@
       "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c499f59_4158fe80",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T10:10:18Z",
+      "side": 1,
+      "message": "Updated:\n434   // If patch_caller is set, then all direct calls to functions which were       \n435   // already lazily compiled are patched (at least the given call site).",
+      "parentUuid": "34c0b199_f6738105",
+      "revId": "4eae6cb52f9eba6307f9cfc26f2671e81508ef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
