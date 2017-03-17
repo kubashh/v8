@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3933a2bf_9bc009a8",
+        "filename": "src/factory.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-17T09:13:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b3cb6c3_7bf29e2c",
+      "revId": "76a8daccd58916e74db5aed18886ec098ebcd34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34bc54fc_2017a630",
         "filename": "src/frames.cc",
         "patchSetId": 7
