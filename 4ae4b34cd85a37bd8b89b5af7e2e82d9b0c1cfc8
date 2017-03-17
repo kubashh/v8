@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86532e8c_bf46e739",
+        "filename": "test/mjsunit/wasm/interpreter.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-17T14:32:19Z",
+      "side": 1,
+      "message": "Could you also test kWasmF32 and kWasmI64, kWasmI64 with a reinterpret-cast to F64?",
+      "revId": "4ae4b34cd85a37bd8b89b5af7e2e82d9b0c1cfc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
