@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a894dee_e8df7986",
+        "filename": "tools/release/mergeinfo.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1123977
+      },
+      "writtenOn": "2017-03-17T15:03:45Z",
+      "side": 1,
+      "message": "FYI: This is not the version of the actual roll. It happens that a version is never rolled. Maybe add \"(might not be the rolled version)\" or something?",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 24
+      },
+      "revId": "ce97ec85c698a484854a74895bfdd8a14eea1a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
