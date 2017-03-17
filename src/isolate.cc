@@ -3431,9 +3431,7 @@ void Isolate::PromiseResolveThenableJob(
 }
 
 void Isolate::EnqueueMicrotask(Handle<Object> microtask) {
-  DCHECK(microtask->IsJSFunction() || microtask->IsCallHandlerInfo() ||
-         microtask->IsPromiseResolveThenableJobInfo() ||
-         microtask->IsPromiseReactionJobInfo());
+  DCHECK(microtask->IsJSFunction() || microtask->IsCallHandlerInfo());
   Handle<FixedArray> queue(heap()->microtask_queue(), this);
   int num_tasks = pending_microtask_count();
   DCHECK(num_tasks <= queue->length());

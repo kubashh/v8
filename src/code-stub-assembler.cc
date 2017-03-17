@@ -157,6 +157,11 @@ HEAP_CONSTANT_LIST(HEAP_CONSTANT_ACCESSOR);
 HEAP_CONSTANT_LIST(HEAP_CONSTANT_TEST);
 #undef HEAP_CONSTANT_TEST
 
+void CodeStubAssembler::SetMicrotaskQueue(Node* queue) {
+  CSA_ASSERT(this, WordEqual(LoadMap(queue), FixedArrayMapConstant()));
+  StoreRoot(Heap::kMicrotaskQueueRootIndex, queue);
+}
+
 Node* CodeStubAssembler::HashSeed() {
   return LoadAndUntagToWord32Root(Heap::kHashSeedRootIndex);
 }
@@ -8193,6 +8198,21 @@ Node* CodeStubAssembler::IsPromiseHookEnabledOrDebugIsActive() {
                ExternalReference::promise_hook_or_debug_is_active_address(
                    isolate())));
   return Word32NotEqual(promise_hook_or_debug_is_active, Int32Constant(0));
+}
+
+Node* CodeStubAssembler::PendingMicrotaskCount() {
+  return Load(
+      MachineType::IntPtr(),
+      ExternalConstant(
+          ExternalReference::pending_microtask_count_address(isolate())));
+}
+
+void CodeStubAssembler::SetPendingMicrotaskCount(Node* count) {
+  StoreNoWriteBarrier(
+      MachineType::PointerRepresentation(),
+      ExternalConstant(
+          ExternalReference::pending_microtask_count_address(isolate())),
+      count);
 }
 
 Node* CodeStubAssembler::AllocateFunctionWithMapAndContext(Node* map,

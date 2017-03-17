@@ -39,6 +39,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(NoClosuresCellMap, NoClosuresCellMap)             \
   V(OneClosureCellMap, OneClosureCellMap)             \
   V(ManyClosuresCellMap, ManyClosuresCellMap)         \
+  V(MicrotaskQueue, MicrotaskQueue)                   \
   V(MinusZeroValue, MinusZero)                        \
   V(NanValue, Nan)                                    \
   V(NullValue, Null)                                  \
@@ -142,6 +143,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 #define HEAP_CONSTANT_TEST(rootName, name) Node* Is##name(Node* value);
   HEAP_CONSTANT_LIST(HEAP_CONSTANT_TEST)
 #undef HEAP_CONSTANT_TEST
+
+  void SetMicrotaskQueue(Node* queue);
+  Node* PendingMicrotaskCount();
+  void SetPendingMicrotaskCount(Node* count);
 
   Node* HashSeed();
   Node* StaleRegisterConstant();

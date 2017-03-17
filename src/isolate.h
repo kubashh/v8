@@ -1136,6 +1136,10 @@ class Isolate {
     return reinterpret_cast<Address>(&promise_hook_or_debug_is_active_);
   }
 
+  Address pending_microtask_count_address() {
+    return reinterpret_cast<Address>(&pending_microtask_count_);
+  }
+
   void DebugStateUpdated();
 
   void SetPromiseHook(PromiseHook hook);

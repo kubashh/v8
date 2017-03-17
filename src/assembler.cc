@@ -1574,6 +1574,11 @@ ExternalReference ExternalReference::promise_hook_or_debug_is_active_address(
   return ExternalReference(isolate->promise_hook_or_debug_is_active_address());
 }
 
+ExternalReference ExternalReference::pending_microtask_count_address(
+    Isolate* isolate) {
+  return ExternalReference(isolate->pending_microtask_count_address());
+}
+
 ExternalReference ExternalReference::debug_is_active_address(
     Isolate* isolate) {
   return ExternalReference(isolate->debug()->is_active_address());

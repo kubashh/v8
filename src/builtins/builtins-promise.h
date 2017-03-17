@@ -135,8 +135,12 @@ class PromiseBuiltinsAssembler : public CodeStubAssembler {
   Node* CreateThrowerFunctionContext(Node* reason, Node* native_context);
   Node* CreateThrowerFunction(Node* reason, Node* native_context);
 
+  void EnqueuePromiseResolveThenableJob(Node* context, Node* info);
+  void EnqueuePromiseReactionJob(Node* context, Node* info);
+
  private:
   Node* AllocateJSPromise(Node* context);
+  void EnqueueMicrotask(Node* context, Node* info);
 };
 
 }  // namespace internal

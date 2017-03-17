@@ -260,6 +260,8 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
   Add(ExternalReference::promise_hook_or_debug_is_active_address(isolate)
           .address(),
       "Isolate::promise_hook_or_debug_is_active_address()");
+  Add(ExternalReference::pending_microtask_count_address(isolate).address(),
+      "Isolate::pending_microtask_count_address()");
 
   // Debug addresses
   Add(ExternalReference::debug_is_active_address(isolate).address(),

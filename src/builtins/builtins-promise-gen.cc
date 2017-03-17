@@ -567,8 +567,8 @@ Node* PromiseBuiltinsAssembler::InternalPerformPromiseThen(
       Node* info = AllocatePromiseReactionJobInfo(
           result, var_on_resolve.value(), deferred_promise, deferred_on_resolve,
           deferred_on_reject, context);
-      // TODO(gsathya): Move this to TF
-      CallRuntime(Runtime::kEnqueuePromiseReactionJob, context, info);
+
+      EnqueuePromiseReactionJob(context, info);
       Goto(&out);
 
       Bind(&reject);
@@ -586,8 +586,7 @@ Node* PromiseBuiltinsAssembler::InternalPerformPromiseThen(
           Node* info = AllocatePromiseReactionJobInfo(
               result, var_on_reject.value(), deferred_promise,
               deferred_on_resolve, deferred_on_reject, context);
-          // TODO(gsathya): Move this to TF
-          CallRuntime(Runtime::kEnqueuePromiseReactionJob, context, info);
+          EnqueuePromiseReactionJob(context, info);
           Goto(&out);
         }
       }
@@ -657,6 +656,77 @@ Node* PromiseBuiltinsAssembler::AllocatePromiseResolveThenableJobInfo(
   StoreObjectFieldNoWriteBarrier(
       info, PromiseResolveThenableJobInfo::kContextOffset, context);
   return info;
+}
+
+void PromiseBuiltinsAssembler::EnqueuePromiseReactionJob(Node* context,
+                                                         Node* info) {
+  CSA_ASSERT(this, HasInstanceType(info, PROMISE_REACTION_JOB_INFO_TYPE));
+  EnqueueMicrotask(context, info);
+}
+
+void PromiseBuiltinsAssembler::EnqueuePromiseResolveThenableJob(Node* context,
+                                                                Node* info) {
+  CSA_ASSERT(this,
+             HasInstanceType(info, PROMISE_RESOLVE_THENABLE_JOB_INFO_TYPE));
+  EnqueueMicrotask(context, info);
+}
+
+void PromiseBuiltinsAssembler::EnqueueMicrotask(Node* context, Node* task) {
+  Variable var_queue(this, MachineRepresentation::kTagged);
+  var_queue.Bind(MicrotaskQueueConstant());
+
+  Node* num_tasks = PendingMicrotaskCount();
+  Node* length = SmiUntag(LoadFixedArrayBaseLength(var_queue.value()));
+  CodeStubAssembler::ParameterMode mode = CodeStubAssembler::INTPTR_PARAMETERS;
+
+  CSA_ASSERT(this, UintPtrLessThanOrEqual(num_tasks, length));
+
+  const ElementsKind kind = FAST_ELEMENTS;
+  const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
+  const CodeStubAssembler::AllocationFlags flags =
+      CodeStubAssembler::kAllowLargeObjectAllocation;
+
+  Label if_newqueue(this), if_growqueue(this), append_task(this);
+  GotoIf(IntPtrEqual(IntPtrConstant(0), num_tasks), &if_newqueue);
+  GotoIf(IntPtrEqual(length, num_tasks), &if_growqueue);
+  Goto(&append_task);
+
+  Bind(&if_newqueue);
+  {
+    Node* const zero = IntPtrConstant(0);
+    Node* const new_capacity = IntPtrConstant(8);
+    Node* new_elements = AllocateFixedArray(kind, new_capacity, mode, flags);
+    // Fill in the elements with undefined.
+    FillFixedArrayWithValue(kind, new_elements, zero, new_capacity,
+                            Heap::kUndefinedValueRootIndex);
+    SetMicrotaskQueue(new_elements);
+    var_queue.Bind(new_elements);
+    Goto(&append_task);
+  }
+
+  Bind(&if_growqueue);
+  {
+    Node* new_capacity = IntPtrAdd(length, num_tasks);
+    Node* new_elements = AllocateFixedArray(kind, new_capacity, mode, flags);
+
+    CopyFixedArrayElements(kind, var_queue.value(), new_elements, length,
+                           barrier_mode, mode);
+    FillFixedArrayWithValue(kind, new_elements, length, new_capacity,
+                            Heap::kUndefinedValueRootIndex);
+    SetMicrotaskQueue(new_elements);
+    var_queue.Bind(new_elements);
+    Goto(&append_task);
+  }
+
+  Bind(&append_task);
+  CSA_ASSERT(this,
+             WordEqual(LoadFixedArrayElement(var_queue.value(), num_tasks),
+                       UndefinedConstant()));
+  StoreFixedArrayElement(var_queue.value(), num_tasks, task, barrier_mode);
+
+  Node* one = IntPtrConstant(1);
+  Node* new_num_tasks = IntPtrAdd(num_tasks, one);
+  SetPendingMicrotaskCount(new_num_tasks);
 }
 
 void PromiseBuiltinsAssembler::InternalResolvePromise(Node* context,
@@ -792,8 +862,7 @@ void PromiseBuiltinsAssembler::InternalResolvePromise(Node* context,
     // 12. Perform EnqueueJob("PromiseJobs",
     // PromiseResolveThenableJob, « promise, resolution, thenAction»).
     Bind(&enqueue);
-    // TODO(gsathya): Move this to TF
-    CallRuntime(Runtime::kEnqueuePromiseResolveThenableJob, context, info);
+    EnqueuePromiseResolveThenableJob(context, info);
     Goto(&out);
   }
 
@@ -852,7 +921,7 @@ void PromiseBuiltinsAssembler::PromiseFulfill(
       result, tasks, deferred_promise, deferred_on_resolve, deferred_on_reject,
       context);
 
-  CallRuntime(Runtime::kEnqueuePromiseReactionJob, context, info);
+  EnqueuePromiseReactionJob(context, info);
   Goto(&debug_async_event_enqueue_recurring);
 
   Bind(&debug_async_event_enqueue_recurring);

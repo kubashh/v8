@@ -447,8 +447,6 @@ namespace internal {
 
 #define FOR_EACH_INTRINSIC_PROMISE(F)       \
   F(EnqueueMicrotask, 1, 1)                 \
-  F(EnqueuePromiseReactionJob, 1, 1)        \
-  F(EnqueuePromiseResolveThenableJob, 1, 1) \
   F(PromiseHookInit, 2, 1)                  \
   F(PromiseHookResolve, 1, 1)               \
   F(PromiseHookBefore, 1, 1)                \
