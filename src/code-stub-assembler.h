@@ -41,7 +41,6 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(MinusZeroValue, MinusZero)                        \
   V(NanValue, Nan)                                    \
   V(NullValue, Null)                                  \
-  V(GlobalPropertyCellMap, PropertyCellMap)           \
   V(SymbolMap, SymbolMap)                             \
   V(TheHoleValue, TheHole)                            \
   V(TrueValue, True)                                  \
@@ -701,7 +700,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsDeprecatedMap(Node* map);
   Node* IsCallable(Node* object);
   Node* IsBoolean(Node* object);
-  Node* IsPropertyCell(Node* object);
   Node* IsHeapNumber(Node* object);
   Node* IsName(Node* object);
   Node* IsSymbol(Node* object);

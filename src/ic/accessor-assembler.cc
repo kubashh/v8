@@ -297,8 +297,7 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
   }
 
   Label constant(this), field(this), normal(this, Label::kDeferred),
-      interceptor(this, Label::kDeferred), nonexistent(this),
-      global(this, Label::kDeferred);
+      interceptor(this, Label::kDeferred), nonexistent(this);
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kField)), &field);
 
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kConstant)),
@@ -307,10 +306,7 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
   GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kNonExistent)),
          &nonexistent);
 
-  GotoIf(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kNormal)),
-         &normal);
-
-  Branch(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kGlobal)), &global,
+  Branch(WordEqual(handler_kind, IntPtrConstant(LoadHandler::kNormal)), &normal,
          &interceptor);
 
   Bind(&field);
@@ -371,19 +367,6 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
                                          p->context, p->receiver, miss);
       exit_point->Return(value);
     }
-  }
-
-  Bind(&global);
-  {
-    CSA_ASSERT(this, IsPropertyCell(holder));
-    // Ensure the property cell doesn't contain the hole.
-    Node* value = LoadObjectField(holder, PropertyCell::kValueOffset);
-    Node* details =
-        LoadAndUntagToWord32ObjectField(holder, PropertyCell::kDetailsOffset);
-    GotoIf(IsTheHole(value), miss);
-
-    exit_point->Return(
-        CallGetterIfAccessor(value, details, p->context, p->receiver, miss));
   }
 
   Bind(&interceptor);
@@ -1312,8 +1295,9 @@ void AccessorAssembler::CheckPrototype(Node* prototype_cell, Node* name,
   Label if_property_cell(this), if_dictionary_object(this);
 
   // |maybe_prototype| is either a PropertyCell or a slow-mode prototype.
-  Branch(IsPropertyCell(maybe_prototype), &if_property_cell,
-         &if_dictionary_object);
+  Branch(WordEqual(LoadMap(maybe_prototype),
+                   LoadRoot(Heap::kGlobalPropertyCellMapRootIndex)),
+         &if_property_cell, &if_dictionary_object);
 
   Bind(&if_dictionary_object);
   {
@@ -1326,7 +1310,7 @@ void AccessorAssembler::CheckPrototype(Node* prototype_cell, Node* name,
   {
     // Ensure the property cell still contains the hole.
     Node* value = LoadObjectField(maybe_prototype, PropertyCell::kValueOffset);
-    GotoIfNot(IsTheHole(value), miss);
+    GotoIf(WordNotEqual(value, LoadRoot(Heap::kTheHoleValueRootIndex)), miss);
     Goto(&done);
   }
 
@@ -1883,7 +1867,7 @@ void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
 
   // Load value or try handler case if the {weak_cell} is cleared.
   Node* property_cell = LoadWeakCellValue(weak_cell, try_handler);
-  CSA_ASSERT(this, IsPropertyCell(property_cell));
+  CSA_ASSERT(this, HasInstanceType(property_cell, PROPERTY_CELL_TYPE));
 
   Node* value = LoadObjectField(property_cell, PropertyCell::kValueOffset);
   GotoIf(WordEqual(value, TheHoleConstant()), miss);

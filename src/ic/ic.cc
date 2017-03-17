@@ -316,7 +316,8 @@ static void LookupForRead(LookupIterator* it) {
         break;
       }
       case LookupIterator::ACCESS_CHECK:
-        // ICs know how to perform access checks on global proxies.
+        // PropertyHandlerCompiler::CheckPrototypes() knows how to emit
+        // access checks for global proxies.
         if (it->GetHolder<JSObject>()->IsJSGlobalProxy() && it->HasAccess()) {
           break;
         }
@@ -961,20 +962,6 @@ int GetPrototypeCheckCount(Isolate* isolate, Handle<Map> receiver_map,
                                     Handle<FixedArray>(), 0);
 }
 
-Handle<WeakCell> HolderCell(Isolate* isolate, Handle<JSObject> holder,
-                            Handle<Name> name) {
-  if (holder->IsJSGlobalObject()) {
-    Handle<JSGlobalObject> global = Handle<JSGlobalObject>::cast(holder);
-    GlobalDictionary* dict = global->global_dictionary();
-    int number = dict->FindEntry(name);
-    DCHECK_NE(NameDictionary::kNotFound, number);
-    Handle<PropertyCell> cell(PropertyCell::cast(dict->ValueAt(number)),
-                              isolate);
-    return isolate->factory()->NewWeakCell(cell);
-  }
-  return Map::GetOrCreatePrototypeWeakCell(holder, isolate);
-}
-
 }  // namespace
 
 Handle<Object> LoadIC::LoadFromPrototype(Handle<Map> receiver_map,
@@ -1000,7 +987,8 @@ Handle<Object> LoadIC::LoadFromPrototype(Handle<Map> receiver_map,
       Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate());
   DCHECK(!validity_cell.is_null());
 
-  Handle<WeakCell> holder_cell = HolderCell(isolate(), holder, name);
+  Handle<WeakCell> holder_cell =
+      Map::GetOrCreatePrototypeWeakCell(holder, isolate());
 
   if (checks_count == 0) {
     return isolate()->factory()->NewTuple3(holder_cell, smi_handler,
@@ -1398,19 +1386,13 @@ Handle<Object> LoadIC::GetMapIndependentHandler(LookupIterator* lookup) {
       DCHECK_EQ(kData, lookup->property_details().kind());
       Handle<Smi> smi_handler;
       if (lookup->is_dictionary_holder()) {
-        smi_handler = LoadHandler::LoadNormal(isolate());
-        if (receiver_is_holder) {
-          DCHECK(!holder->IsJSGlobalObject());
-          TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalDH);
-          return smi_handler;
-        }
-
         if (holder->IsJSGlobalObject()) {
-          TRACE_HANDLER_STATS(isolate(), LoadIC_LoadGlobalFromPrototypeDH);
-          smi_handler = LoadHandler::LoadGlobal(isolate());
-        } else {
-          TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalFromPrototypeDH);
+          break;  // Custom-compiled handler.
         }
+        TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalDH);
+        smi_handler = LoadHandler::LoadNormal(isolate());
+        if (receiver_is_holder) return smi_handler;
+        TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalFromPrototypeDH);
 
       } else if (lookup->property_details().location() == kField) {
         FieldIndex field = lookup->GetFieldIndex();
@@ -1464,6 +1446,10 @@ Handle<Object> LoadIC::CompileHandler(LookupIterator* lookup,
 
   Handle<Map> map = receiver_map();
   switch (lookup->state()) {
+    case LookupIterator::INTERCEPTOR:
+      UNREACHABLE();
+      break;
+
     case LookupIterator::ACCESSOR: {
 #ifdef DEBUG
       int object_offset;
@@ -1499,8 +1485,17 @@ Handle<Object> LoadIC::CompileHandler(LookupIterator* lookup,
           lookup->name(), lookup->GetAccessorIndex(), expected_arguments);
     }
 
-    case LookupIterator::INTERCEPTOR:
-    case LookupIterator::DATA:
+    case LookupIterator::DATA: {
+      DCHECK(lookup->is_dictionary_holder());
+      DCHECK(holder->IsJSGlobalObject());
+      TRACE_HANDLER_STATS(isolate(), LoadIC_LoadGlobal);
+      NamedLoadHandlerCompiler compiler(isolate(), map, holder, cache_holder);
+      Handle<PropertyCell> cell = lookup->GetPropertyCell();
+      Handle<Code> code = compiler.CompileLoadGlobal(cell, lookup->name(),
+                                                     lookup->IsConfigurable());
+      return code;
+    }
+
     case LookupIterator::INTEGER_INDEXED_EXOTIC:
     case LookupIterator::ACCESS_CHECK:
     case LookupIterator::JSPROXY:
