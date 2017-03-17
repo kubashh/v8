@@ -13,6 +13,8 @@ namespace internal {
 
 class CallOptimization;
 
+enum ReturnHolder { RETURN_HOLDER, DONT_RETURN_ANYTHING };
+
 class PropertyHandlerCompiler : public PropertyAccessCompiler {
  public:
   static Handle<Code> Find(Handle<Name> name, Handle<Map> map, Code::Kind kind,
@@ -28,7 +30,7 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
   virtual ~PropertyHandlerCompiler() {}
 
   virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss) {
+                                  Label* miss, ReturnHolder return_what) {
     UNREACHABLE();
     return receiver();
   }
@@ -102,10 +104,13 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
   // holder_reg.
   Register CheckPrototypes(Register object_reg, Register holder_reg,
                            Register scratch1, Register scratch2,
-                           Handle<Name> name, Label* miss);
+                           Handle<Name> name, Label* miss,
+                           ReturnHolder return_what);
 
   Handle<Code> GetCode(Code::Kind kind, Handle<Name> name);
+  void set_holder(Handle<JSObject> holder) { holder_ = holder; }
   Handle<Map> map() const { return map_; }
+  void set_map(Handle<Map> map) { map_ = map; }
   Handle<JSObject> holder() const { return holder_; }
 
  private:
@@ -131,6 +136,9 @@ class NamedLoadHandlerCompiler : public PropertyHandlerCompiler {
   Handle<Code> CompileLoadViaGetter(Handle<Name> name, int accessor_index,
                                     int expected_arguments);
 
+  Handle<Code> CompileLoadGlobal(Handle<PropertyCell> cell, Handle<Name> name,
+                                 bool is_configurable);
+
   static void GenerateLoadViaGetter(MacroAssembler* masm, Handle<Map> map,
                                     Register receiver, Register holder,
                                     int accessor_index, int expected_arguments,
@@ -143,7 +151,7 @@ class NamedLoadHandlerCompiler : public PropertyHandlerCompiler {
 
  protected:
   virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss);
+                                  Label* miss, ReturnHolder return_what);
 
   virtual void FrontendFooter(Handle<Name> name, Label* miss);
 
@@ -194,7 +202,7 @@ class NamedStoreHandlerCompiler : public PropertyHandlerCompiler {
 
  protected:
   virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss);
+                                  Label* miss, ReturnHolder return_what);
 
   virtual void FrontendFooter(Handle<Name> name, Label* miss);
   void GenerateRestoreName(Label* label, Handle<Name> name);
