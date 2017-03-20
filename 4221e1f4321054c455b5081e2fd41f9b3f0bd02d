@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c8a709c_b982e4b2",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1152629
+      },
+      "writtenOn": "2017-03-20T12:27:43Z",
+      "side": 1,
+      "message": "Does it make sense to mark same labels as deferred? Non-smi offsets and length are probably unlikely.",
+      "revId": "4221e1f4321054c455b5081e2fd41f9b3f0bd02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3aa386f0_3d9f6972",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1152629
+      },
+      "writtenOn": "2017-03-20T12:27:43Z",
+      "side": 1,
+      "message": "instead of using the condition as the label names, is it more readable if we use something like \u0026use_actual_length and set_to_length? As I\u0027m writing this, I realize I can\u0027t come up with good names for the two branches, so it\u0027s probably OK as is.",
+      "revId": "4221e1f4321054c455b5081e2fd41f9b3f0bd02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
