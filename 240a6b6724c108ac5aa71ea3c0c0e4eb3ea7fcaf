@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7bbb5ad9_1d54fd32",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-03-20T12:18:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "56574d66_aa4a44be",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb08f13f_02954711",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 1
@@ -41,6 +65,53 @@
         "startChar": 17,
         "endLine": 526,
         "endChar": 27
+      },
+      "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb56d12d_31e1a290",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-03-20T12:18:30Z",
+      "side": 1,
+      "message": "I think duplicating is fine in this case.",
+      "parentUuid": "bb08f13f_02954711",
+      "range": {
+        "startLine": 526,
+        "startChar": 17,
+        "endLine": 526,
+        "endChar": 27
+      },
+      "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c3d3cd_6a1bfb50",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-03-20T12:18:30Z",
+      "side": 1,
+      "message": "Can we name this simply marking_deque_?",
+      "range": {
+        "startLine": 535,
+        "startChar": 15,
+        "endLine": 535,
+        "endChar": 46
       },
       "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
