@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56574d66_aa4a44be",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-20T12:04:41Z",
+      "side": 1,
+      "message": "To allow going forward incrementally, I kept the versions that just used the internal bitmap in Page.",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb08f13f_02954711",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-20T12:04:41Z",
+      "side": 1,
+      "message": "Methods below are duplicates from the full MC. If we wanted to we could add a base class (e.g. MarkCompactCollectorBase) and thread through a MarkingState and keep those general. Not sure it\u0027s worth it.",
+      "range": {
+        "startLine": 526,
+        "startChar": 17,
+        "endLine": 526,
+        "endChar": 27
+      },
+      "revId": "240a6b6724c108ac5aa71ea3c0c0e4eb3ea7fcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
