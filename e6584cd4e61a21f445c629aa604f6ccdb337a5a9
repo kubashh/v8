@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fca4458_2c53dc5f",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-20T15:39:24Z",
+      "side": 1,
+      "message": "alphabetic order",
+      "range": {
+        "startLine": 326,
+        "startChar": 6,
+        "endLine": 326,
+        "endChar": 31
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ede94bc5_c29ee136",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-20T15:39:24Z",
+      "side": 1,
+      "message": "Same here, all duplicates.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 55
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b6b2bb5_fff7deff",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-20T15:39:24Z",
+      "side": 1,
+      "message": "Will marking deque also be part of the marking state?",
+      "range": {
+        "startLine": 34,
+        "startChar": 20,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b1a4e5_625c5ba5",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-03-20T15:39:24Z",
+      "side": 1,
+      "message": "I am not a big fan of duplicating all these methods. Shouldn\u0027t we try to push the change through all sites to see how it will look (and if it works)?",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
