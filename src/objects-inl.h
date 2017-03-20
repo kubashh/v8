@@ -6125,7 +6125,6 @@ bool SharedFunctionInfo::is_compiled() const {
   Builtins* builtins = GetIsolate()->builtins();
   DCHECK(code() != builtins->builtin(Builtins::kCompileOptimizedConcurrent));
   DCHECK(code() != builtins->builtin(Builtins::kCompileOptimized));
-  DCHECK(code() != builtins->builtin(Builtins::kCompileBaseline));
   return code() != builtins->builtin(Builtins::kCompileLazy);
 }
 
@@ -6356,11 +6355,6 @@ bool JSFunction::IsInterpreted() {
   return code()->is_interpreter_trampoline_builtin();
 }
 
-bool JSFunction::IsMarkedForBaseline() {
-  return code() ==
-         GetIsolate()->builtins()->builtin(Builtins::kCompileBaseline);
-}
-
 bool JSFunction::IsMarkedForOptimization() {
   return code() == GetIsolate()->builtins()->builtin(
       Builtins::kCompileOptimized);
@@ -6544,7 +6538,6 @@ Object* JSFunction::prototype() {
 bool JSFunction::is_compiled() {
   Builtins* builtins = GetIsolate()->builtins();
   return code() != builtins->builtin(Builtins::kCompileLazy) &&
-         code() != builtins->builtin(Builtins::kCompileBaseline) &&
          code() != builtins->builtin(Builtins::kCompileOptimized) &&
          code() != builtins->builtin(Builtins::kCompileOptimizedConcurrent);
 }
