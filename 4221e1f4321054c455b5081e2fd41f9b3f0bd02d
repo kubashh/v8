@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9be1cffb_bf55dcec",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-20T12:54:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c8a709c_b982e4b2",
+      "revId": "4221e1f4321054c455b5081e2fd41f9b3f0bd02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aa386f0_3d9f6972",
         "filename": "src/builtins/builtins-typedarray-gen.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "4221e1f4321054c455b5081e2fd41f9b3f0bd02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7222f11e_cc253201",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-20T12:54:03Z",
+      "side": 1,
+      "message": "Yeah I like the idea but I can\u0027t think of a nice name for them, I guess because they both do weird and kind of different things.",
+      "parentUuid": "3aa386f0_3d9f6972",
+      "revId": "4221e1f4321054c455b5081e2fd41f9b3f0bd02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
