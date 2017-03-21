@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e74902ef_7ae23bfe",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3502,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T12:08:00Z",
+      "side": 1,
+      "message": "I will remove that in a follow up CL.",
+      "range": {
+        "startLine": 3502,
+        "startChar": 8,
+        "endLine": 3502,
+        "endChar": 15
+      },
+      "revId": "8329907957ff3b4553cfd38d7e52bddbe5e6d3c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aa2391b_c6e7916c",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T12:08:00Z",
+      "side": 1,
+      "message": "We could also move this as static method onto LiveObjectIterator.  I kept it separate as this visitation also recomputes markbits if necessary.",
+      "range": {
+        "startLine": 503,
+        "startChar": 7,
+        "endLine": 503,
+        "endChar": 24
+      },
+      "revId": "8329907957ff3b4553cfd38d7e52bddbe5e6d3c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
