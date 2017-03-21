@@ -93,6 +93,30 @@
       "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7a25ed_e0b2b249",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-03-21T14:58:03Z",
+      "side": 1,
+      "message": "The hope was that we\u0027d turn the OptimizeFunctionOnNextCall into noops and continue with pure ignition. Won\u0027t we get this? And if not, is there a way to get it?",
+      "parentUuid": "f538ebdf_cc432ce5",
+      "range": {
+        "startLine": 14,
+        "startChar": 43,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
