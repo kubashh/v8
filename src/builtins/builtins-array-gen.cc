@@ -25,17 +25,10 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
       CallResultProcessor;
 
   void GenerateIteratingArrayBuiltinBody(
-      const char* name, const BuiltinResultGenerator& generator,
+      const char* name, Node* context, Node* receiver, Node* callbackfn,
+      Node* this_arg, Node* new_target, const BuiltinResultGenerator& generator,
       const CallResultProcessor& processor,
       const Callable& slow_case_continuation) {
-    // TODO(ishell): use constants from Descriptor once the JSFunction linkage
-    // arguments are reordered.
-    Node* receiver = Parameter(IteratingArrayBuiltinDescriptor::kReceiver);
-    Node* callbackfn = Parameter(IteratingArrayBuiltinDescriptor::kCallback);
-    Node* this_arg = Parameter(IteratingArrayBuiltinDescriptor::kThisArg);
-    Node* context = Parameter(IteratingArrayBuiltinDescriptor::kContext);
-    Node* new_target = Parameter(IteratingArrayBuiltinDescriptor::kNewTarget);
-
     Variable k(this, MachineRepresentation::kTagged, SmiConstant(0));
     Label non_array(this), slow(this, &k), array_changes(this, &k);
 
@@ -115,25 +108,10 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
   }
 
   void GenerateIteratingArrayBuiltinLoopContinuation(
+      Node* context, Node* receiver, Node* callbackfn, Node* this_arg, Node* a,
+      Node* o, Node* initial_k, Node* len,
       const BuiltinResultIndexInitializer& index_initializer,
       const CallResultProcessor& processor) {
-    // TODO(ishell): use constants from Descriptor once the JSFunction linkage
-    // arguments are reordered.
-    Node* callbackfn =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kCallback);
-    Node* this_arg =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kThisArg);
-    Node* a =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kArray);
-    Node* o =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kObject);
-    Node* initial_k =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kInitialK);
-    Node* len =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kLength);
-    Node* context =
-        Parameter(IteratingArrayBuiltinLoopContinuationDescriptor::kContext);
-
     index_initializer(context, a);
 
     // 8. Repeat, while k < len
@@ -526,7 +504,17 @@ TF_BUILTIN(FastArrayPush, CodeStubAssembler) {
 }
 
 TF_BUILTIN(ArrayForEachLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+
   GenerateIteratingArrayBuiltinLoopContinuation(
+      context, receiver, callbackfn, this_arg, array, object, initial_k, len,
       [](Node* context, Node* a) {},
       [this](Node* context, Node* value, Node* a, Node* callback_result) {
         ForEachProcessor(context, value, a, callback_result);
@@ -534,31 +522,54 @@ TF_BUILTIN(ArrayForEachLoopContinuation, ArrayBuiltinCodeStubAssembler) {
 }
 
 TF_BUILTIN(ArrayFilter, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+
   GenerateIteratingArrayBuiltinBody(
-      "Array.prototype.filter",
+      "Array.prototype.filter", context, receiver, callbackfn, this_arg,
+      new_target,
       [=](Node* context, Node* o, Node* len) {
         return FilterResultGenerator(context, o, len);
       },
-      [this](Node* context, Node* value, Node* a, Node* callback_result) {
+      [=](Node* context, Node* value, Node* a, Node* callback_result) {
         FilterProcessor(context, value, a, callback_result);
       },
       CodeFactory::ArrayFilterLoopContinuation(isolate()));
 }
 
 TF_BUILTIN(ArrayFilterLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+
   GenerateIteratingArrayBuiltinLoopContinuation(
-      [this](Node* context, Node* a) {
+      context, receiver, callbackfn, this_arg, array, object, initial_k, len,
+      [=](Node* context, Node* a) {
         FilterResultIndexReinitializer(context, a);
       },
-      [this](Node* context, Node* value, Node* a, Node* callback_result) {
+      [=](Node* context, Node* value, Node* a, Node* callback_result) {
         FilterProcessor(context, value, a, callback_result);
       });
 }
 
 TF_BUILTIN(ArrayForEach, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+
   GenerateIteratingArrayBuiltinBody(
-      "Array.prototype.forEach",
-      [=](Node*, Node*, Node*) { return UndefinedConstant(); },
+      "Array.prototype.forEach", context, receiver, callbackfn, this_arg,
+      new_target, [=](Node*, Node*, Node*) { return UndefinedConstant(); },
       [this](Node* context, Node* value, Node* a, Node* callback_result) {
         ForEachProcessor(context, value, a, callback_result);
       },
@@ -566,25 +577,51 @@ TF_BUILTIN(ArrayForEach, ArrayBuiltinCodeStubAssembler) {
 }
 
 TF_BUILTIN(ArraySomeLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+
   GenerateIteratingArrayBuiltinLoopContinuation(
+      context, receiver, callbackfn, this_arg, array, object, initial_k, len,
       [](Node* context, Node* a) {},
-      [this](Node* context, Node* value, Node* a, Node* callback_result) {
+      [=](Node* context, Node* value, Node* a, Node* callback_result) {
         SomeProcessor(context, value, a, callback_result);
       });
 }
 
 TF_BUILTIN(ArraySome, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+
   GenerateIteratingArrayBuiltinBody(
-      "Array.prototype.some",
-      [=](Node*, Node*, Node*) { return FalseConstant(); },
-      [this](Node* context, Node* value, Node* a, Node* callback_result) {
+      "Array.prototype.some", context, receiver, callbackfn, this_arg,
+      new_target, [=](Node*, Node*, Node*) { return FalseConstant(); },
+      [=](Node* context, Node* value, Node* a, Node* callback_result) {
         SomeProcessor(context, value, a, callback_result);
       },
       CodeFactory::ArraySomeLoopContinuation(isolate()));
 }
 
 TF_BUILTIN(ArrayEveryLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+
   GenerateIteratingArrayBuiltinLoopContinuation(
+      context, receiver, callbackfn, this_arg, array, object, initial_k, len,
       [](Node* context, Node* a) {},
       [this](Node* context, Node* value, Node* a, Node* callback_result) {
         EveryProcessor(context, value, a, callback_result);
@@ -592,10 +629,16 @@ TF_BUILTIN(ArrayEveryLoopContinuation, ArrayBuiltinCodeStubAssembler) {
 }
 
 TF_BUILTIN(ArrayEvery, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+
   GenerateIteratingArrayBuiltinBody(
-      "Array.prototype.every",
-      [=](Node*, Node*, Node*) { return TrueConstant(); },
-      [this](Node* context, Node* value, Node* a, Node* callback_result) {
+      "Array.prototype.every", context, receiver, callbackfn, this_arg,
+      new_target, [=](Node*, Node*, Node*) { return TrueConstant(); },
+      [=](Node* context, Node* value, Node* a, Node* callback_result) {
         EveryProcessor(context, value, a, callback_result);
       },
       CodeFactory::ArrayEveryLoopContinuation(isolate()));
