@@ -211,6 +211,30 @@
       "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b7fafa2_ed06154e",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T10:03:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfda7210_ed833ac1",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
