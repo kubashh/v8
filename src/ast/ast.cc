@@ -1121,5 +1121,21 @@ const char* CallRuntime::debug_name() {
 #endif  // DEBUG
 }
 
+// static
+const char* Suspend::TypeString(Suspend::Flags type) {
+  switch (type & Suspend::kSuspendTypeMask) {
+    case Suspend::kYield:
+      return "yield";
+    case Suspend::kYieldStar:
+      return "yield*";
+    case Suspend::kAwait:
+      return "await";
+    default:
+      break;
+  }
+  UNREACHABLE();
+  return "";
+}
+
 }  // namespace internal
 }  // namespace v8

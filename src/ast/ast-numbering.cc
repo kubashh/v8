@@ -20,7 +20,7 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
       : zone_(zone),
         eager_literals_(eager_literals),
         next_id_(BailoutId::FirstUsable().ToInt()),
-        yield_count_(0),
+        suspend_count_(0),
         properties_(zone),
         language_mode_(SLOPPY),
         slot_cache_(zone),
@@ -102,7 +102,7 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
   Zone* zone_;
   Compiler::EagerInnerFunctionLiterals* eager_literals_;
   int next_id_;
-  int yield_count_;
+  int suspend_count_;
   AstProperties properties_;
   LanguageMode language_mode_;
   // The slot cache allows us to reuse certain feedback slots.
@@ -251,12 +251,11 @@ void AstNumberingVisitor::VisitReturnStatement(ReturnStatement* node) {
          properties_.flags() & AstProperties::kMustUseIgnitionTurbo);
 }
 
-
-void AstNumberingVisitor::VisitYield(Yield* node) {
-  node->set_yield_id(yield_count_);
-  yield_count_++;
+void AstNumberingVisitor::VisitSuspend(Suspend* node) {
+  node->set_suspend_id(suspend_count_);
+  suspend_count_++;
   IncrementNodeCount();
-  node->set_base_id(ReserveIdRange(Yield::num_ids()));
+  node->set_base_id(ReserveIdRange(Suspend::num_ids()));
   Visit(node->generator_object());
   Visit(node->expression());
 }
@@ -335,10 +334,17 @@ void AstNumberingVisitor::VisitCallRuntime(CallRuntime* node) {
   // has to stash it somewhere. Changing the runtime function into another
   // one in ast-numbering seemed like a simple and straightforward solution to
   // that problem.
-  if (node->is_jsruntime() &&
-      node->context_index() == Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX &&
-      catch_prediction_ == HandlerTable::ASYNC_AWAIT) {
-    node->set_context_index(Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX);
+  if (node->is_jsruntime() && catch_prediction_ == HandlerTable::ASYNC_AWAIT) {
+    switch (node->context_index()) {
+      case Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX:
+        node->set_context_index(Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX);
+        break;
+      case Context::ASYNC_GENERATOR_AWAIT_CAUGHT:
+        node->set_context_index(Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT);
+        break;
+      default:
+        break;
+    }
   }
 }
 
@@ -355,10 +361,10 @@ void AstNumberingVisitor::VisitDoWhileStatement(DoWhileStatement* node) {
   IncrementNodeCount();
   DisableSelfOptimization();
   node->set_base_id(ReserveIdRange(DoWhileStatement::num_ids()));
-  node->set_first_yield_id(yield_count_);
+  node->set_first_suspend_id(suspend_count_);
   Visit(node->body());
   Visit(node->cond());
-  node->set_yield_count(yield_count_ - node->first_yield_id());
+  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
 
 
@@ -366,10 +372,10 @@ void AstNumberingVisitor::VisitWhileStatement(WhileStatement* node) {
   IncrementNodeCount();
   DisableSelfOptimization();
   node->set_base_id(ReserveIdRange(WhileStatement::num_ids()));
-  node->set_first_yield_id(yield_count_);
+  node->set_first_suspend_id(suspend_count_);
   Visit(node->cond());
   Visit(node->body());
-  node->set_yield_count(yield_count_ - node->first_yield_id());
+  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
 
 
@@ -482,10 +488,10 @@ void AstNumberingVisitor::VisitForInStatement(ForInStatement* node) {
   DisableSelfOptimization();
   node->set_base_id(ReserveIdRange(ForInStatement::num_ids()));
   Visit(node->enumerable());  // Not part of loop.
-  node->set_first_yield_id(yield_count_);
+  node->set_first_suspend_id(suspend_count_);
   Visit(node->each());
   Visit(node->body());
-  node->set_yield_count(yield_count_ - node->first_yield_id());
+  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
   ReserveFeedbackSlots(node);
 }
 
@@ -495,12 +501,12 @@ void AstNumberingVisitor::VisitForOfStatement(ForOfStatement* node) {
   DisableFullCodegenAndCrankshaft(kForOfStatement);
   node->set_base_id(ReserveIdRange(ForOfStatement::num_ids()));
   Visit(node->assign_iterator());  // Not part of loop.
-  node->set_first_yield_id(yield_count_);
+  node->set_first_suspend_id(suspend_count_);
   Visit(node->next_result());
   Visit(node->result_done());
   Visit(node->assign_each());
   Visit(node->body());
-  node->set_yield_count(yield_count_ - node->first_yield_id());
+  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
 
 
@@ -549,11 +555,11 @@ void AstNumberingVisitor::VisitForStatement(ForStatement* node) {
   DisableSelfOptimization();
   node->set_base_id(ReserveIdRange(ForStatement::num_ids()));
   if (node->init() != NULL) Visit(node->init());  // Not part of loop.
-  node->set_first_yield_id(yield_count_);
+  node->set_first_suspend_id(suspend_count_);
   if (node->cond() != NULL) Visit(node->cond());
   if (node->next() != NULL) Visit(node->next());
   Visit(node->body());
-  node->set_yield_count(yield_count_ - node->first_yield_id());
+  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
 
 
@@ -711,7 +717,7 @@ bool AstNumberingVisitor::Renumber(FunctionLiteral* node) {
 
   node->set_ast_properties(&properties_);
   node->set_dont_optimize_reason(dont_optimize_reason());
-  node->set_yield_count(yield_count_);
+  node->set_suspend_count(suspend_count_);
 
   if (FLAG_trace_opt) {
     if (disable_crankshaft_reason_ != kNoReason) {
