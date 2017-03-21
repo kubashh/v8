@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "59f3071d_5ea82290",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-21T17:57:05Z",
+      "side": 1,
+      "message": "Thanks. Getting rid of the different types in ast.h would be great.",
+      "parentUuid": "c7e78bcd_fb4c5d6c",
+      "range": {
+        "startLine": 2507,
+        "startChar": 3,
+        "endLine": 2507,
+        "endChar": 4
+      },
+      "revId": "b367f35ebc94fdd22a7f6a39b86d6f3ded06c083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fb9020d_6d4d89dc",
         "filename": "src/ast/ast.h",
         "patchSetId": 12
