@@ -838,6 +838,7 @@ class Isolate;
                                                                                \
   /* TypedArray */                                                             \
   TFJ(TypedArrayConstructByArrayBuffer, 5)                                     \
+  TFJ(TypedArrayConstructByArrayLike, 4)                                       \
   TFJ(TypedArrayConstructByLength, 3)                                          \
   TFJ(TypedArrayInitialize, 6)                                                 \
   CPP(TypedArrayPrototypeBuffer)                                               \
