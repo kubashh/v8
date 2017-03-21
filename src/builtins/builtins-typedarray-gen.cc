@@ -276,7 +276,6 @@ void TypedArrayBuiltinsAssembler::DoInitialize(Node* const holder, Node* length,
   }
 
   Bind(&done);
-  Return(UndefinedConstant());
 }
 
 TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
@@ -290,6 +289,7 @@ TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
 
   DoInitialize(holder, length, maybe_buffer, byte_offset, byte_length,
                initialize, context);
+  Return(UndefinedConstant());
 }
 
 // ES6 section 22.2.4.2 TypedArray ( length )
@@ -335,6 +335,7 @@ TF_BUILTIN(TypedArrayConstructByLength, TypedArrayBuiltinsAssembler) {
   {
     DoInitialize(holder, length, maybe_buffer.value(), byte_offset, byte_length,
                  initialize, context);
+    Return(UndefinedConstant());
   }
 
   Bind(&invalid_length);
@@ -446,6 +447,7 @@ TF_BUILTIN(TypedArrayConstructByArrayBuffer, TypedArrayBuiltinsAssembler) {
 
     DoInitialize(holder, new_length, buffer, offset.value(),
                  new_byte_length.value(), initialize, context);
+    Return(UndefinedConstant());
   }
 
   Bind(&invalid_offset_error);
@@ -475,6 +477,61 @@ TF_BUILTIN(TypedArrayConstructByArrayBuffer, TypedArrayBuiltinsAssembler) {
                 problem_string);
 
     Unreachable();
+  }
+
+  Bind(&invalid_length);
+  {
+    CallRuntime(Runtime::kThrowRangeError, context,
+                SmiConstant(MessageTemplate::kInvalidTypedArrayLength));
+    Unreachable();
+  }
+}
+
+TF_BUILTIN(TypedArrayConstructByArrayLike, TypedArrayBuiltinsAssembler) {
+  Node* const holder = Parameter(1);
+  Node* const array_like = Parameter(2);
+  Node* length = Parameter(3);
+  Node* const element_size = Parameter(4);
+  CSA_ASSERT(this, TaggedIsSmi(element_size));
+  Node* const context = Parameter(7);
+
+  Label call_init(this), call_runtime(this), copy_elements(this),
+      invalid_length(this);
+
+  // The caller has looked up length on the holder, which is observable.
+  length = ToSmiLength(length, context, &invalid_length);
+
+  // For byte_length < typed_array_max_size_in_heap, we allocate the buffer on
+  // the heap. Otherwise we allocate it externally and attach it.
+  Node* byte_length = SmiMul(length, element_size);
+  GotoIf(TaggedIsNotSmi(byte_length), &call_runtime);
+  Branch(SmiLessThanOrEqual(byte_length,
+                            SmiConstant(FLAG_typed_array_max_size_in_heap)),
+         &call_init, &call_runtime);
+
+  Bind(&call_init);
+  {
+    DoInitialize(holder, length, NullConstant(), SmiConstant(0), byte_length,
+                 BooleanConstant(false), context);
+    Goto(&copy_elements);
+  }
+
+  Bind(&call_runtime);
+  {
+    // May or may not copy the elements.
+    Node* elements_copied =
+        CallRuntime(Runtime::kTypedArrayInitializeFromArrayLike, context,
+                    holder, array_like, length);
+    GotoIf(IsFalse(elements_copied), &copy_elements);
+    Return(UndefinedConstant());
+  }
+
+  // If the new array wasn't initialized, then call to runtime to fill it.
+  Bind(&copy_elements);
+  {
+    CallRuntime(Runtime::kTypedArrayCopyElements, context, holder, array_like,
+                length);
+    Return(UndefinedConstant());
   }
 
   Bind(&invalid_length);
