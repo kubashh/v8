@@ -117,6 +117,30 @@
       "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29c8454c_8b729352",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-21T15:03:06Z",
+      "side": 1,
+      "message": "I don\u0027t think turbo-filter will do that, it would just cause it to optimize in Crankshaft currently. I think the best way to get that would be to modify OptimizeFunctionOnNextCall so it only marks for optmization if --crankshaft (which should be renamed to --optimize eventually) is true.\n\nAny thoughts Michi?",
+      "parentUuid": "1d7a25ed_e0b2b249",
+      "range": {
+        "startLine": 14,
+        "startChar": 43,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
