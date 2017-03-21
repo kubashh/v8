@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "48cb7b68_25251b9a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T08:12:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fca4458_2c53dc5f",
+      "range": {
+        "startLine": 326,
+        "startChar": 6,
+        "endLine": 326,
+        "endChar": 31
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ede94bc5_c29ee136",
         "filename": "src/heap/mark-compact-inl.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-20T15:39:24Z",
       "side": 1,
       "message": "Same here, all duplicates.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 55
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "856769da_b2a80c18",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T08:12:51Z",
+      "side": 1,
+      "message": "As discussed offline, those will stay. I decided against a base class for the sake of 2 methods for now. If we have more shared state we can create one.",
+      "parentUuid": "ede94bc5_c29ee136",
       "range": {
         "startLine": 15,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5a021ca7_ee395cf2",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T08:12:51Z",
+      "side": 1,
+      "message": "Whoever needs it can put it there. For the minor MC we don\u0027t need it. However, I would assume that this is a different marking state then, because the marking deque is global whereas this marking state is page local.",
+      "parentUuid": "1b6b2bb5_fff7deff",
+      "range": {
+        "startLine": 34,
+        "startChar": 20,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48b1a4e5_625c5ba5",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2017-03-20T15:39:24Z",
       "side": 1,
       "message": "I am not a big fan of duplicating all these methods. Shouldn\u0027t we try to push the change through all sites to see how it will look (and if it works)?",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "e6584cd4e61a21f445c629aa604f6ccdb337a5a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80421aed_f0288087",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-03-21T08:12:51Z",
+      "side": 1,
+      "message": "I removed the 2nd template parameter. We can move to using the state in the full MC once we know that this is the design we want to stick with.",
+      "parentUuid": "48b1a4e5_625c5ba5",
       "range": {
         "startLine": 62,
         "startChar": 6,
