@@ -820,22 +820,6 @@ Node* WasmGraphBuilder::HeapConstant(Handle<HeapObject> value) {
   return jsgraph()->HeapConstant(value);
 }
 
-Node* WasmGraphBuilder::ZeroConstant(wasm::ValueType type) {
-  switch (type) {
-    case wasm::kWasmI32:
-      return Int32Constant(0);
-    case wasm::kWasmI64:
-      return Int64Constant(0);
-    case wasm::kWasmF32:
-      return Float32Constant(0);
-    case wasm::kWasmF64:
-      return Float64Constant(0);
-    default:
-      UNIMPLEMENTED();
-      return nullptr;
-  }
-}
-
 namespace {
 Node* Branch(JSGraph* jsgraph, Node* cond, Node** true_node, Node** false_node,
              Node* control, BranchHint hint) {
@@ -2659,15 +2643,8 @@ void WasmGraphBuilder::BuildWasmToJSWrapper(Handle<JSReceiver> target,
         jsgraph()->HeapConstant(jsgraph()->isolate()->native_context());
     BuildCallToRuntimeWithContext(Runtime::kWasmThrowTypeError, jsgraph(),
                                   context, nullptr, 0, effect_, *control_);
-    // TODO(wasm): Support multi-return.
-    if (sig->return_count() == 0) {
-      Return(Int32Constant(0));
-    } else if (Int64Lowering::IsI64AsTwoParameters(jsgraph()->machine(),
-                                                   sig->GetReturn())) {
-      Return(Int32Constant(0), Int32Constant(0));
-    } else {
-      Return(ZeroConstant(sig->GetReturn()));
-    }
+    // We don't need a return node here, as the runtime call will not return
+    // (the c entry stub will trigger stack unwinding).
     return;
   }
 
