@@ -20,10 +20,12 @@ namespace internal {
 
 class AccountingAllocator;
 class AstRawString;
+class AstStringConstants;
 class AstValueFactory;
 class DeclarationScope;
 class DeferredHandles;
 class FunctionLiteral;
+class RuntimeCallStats;
 class ScriptData;
 class SharedFunctionInfo;
 class UnicodeCache;
@@ -41,6 +43,8 @@ class V8_EXPORT_PRIVATE ParseInfo {
   ParseInfo(Handle<SharedFunctionInfo> shared, std::shared_ptr<Zone> zone);
 
   ~ParseInfo();
+
+  void InitFromIsolate(Isolate* isolate);
 
   static ParseInfo* AllocateWithoutScript(Handle<SharedFunctionInfo> shared);
 
@@ -185,6 +189,26 @@ class V8_EXPORT_PRIVATE ParseInfo {
     max_function_literal_id_ = max_function_literal_id;
   }
 
+  const AstStringConstants* ast_string_constants() const {
+    return ast_string_constants_;
+  }
+  void set_ast_string_constants(
+      const AstStringConstants* ast_string_constants) {
+    ast_string_constants_ = ast_string_constants;
+  }
+
+  RuntimeCallStats* runtime_call_stats() const { return runtime_call_stats_; }
+  void set_runtime_call_stats(RuntimeCallStats* runtime_call_stats) {
+    runtime_call_stats_ = runtime_call_stats;
+  }
+
+  bool is_tail_call_elimination_enabled() const {
+    return is_tail_call_elimination_enabled_;
+  }
+  void set_tail_call_elimination_enabled(bool enabled = true) {
+    is_tail_call_elimination_enabled_ = enabled;
+  }
+
   // Getters for individual compiler hints.
   bool is_declaration() const;
   FunctionKind function_kind() const;
@@ -199,7 +223,10 @@ class V8_EXPORT_PRIVATE ParseInfo {
     return maybe_outer_scope_info_;
   }
   void clear_script() { script_ = Handle<Script>::null(); }
-  void set_isolate(Isolate* isolate) { isolate_ = isolate; }
+  void set_isolate(Isolate* isolate) {
+    InitFromIsolate(isolate);
+    isolate_ = isolate;
+  }
   void set_shared_info(Handle<SharedFunctionInfo> shared) { shared_ = shared; }
   void set_outer_scope_info(Handle<ScopeInfo> outer_scope_info) {
     maybe_outer_scope_info_ = outer_scope_info;
@@ -272,6 +299,7 @@ class V8_EXPORT_PRIVATE ParseInfo {
   int parameters_end_pos_;
   int function_literal_id_;
   int max_function_literal_id_;
+  bool is_tail_call_elimination_enabled_;
 
   // TODO(titzer): Move handles and isolate out of ParseInfo.
   Isolate* isolate_;
@@ -283,7 +311,9 @@ class V8_EXPORT_PRIVATE ParseInfo {
   ScriptData** cached_data_;  // used if available, populated if requested.
   PreParsedScopeData preparsed_scope_data_;
   AstValueFactory* ast_value_factory_;  // used if available, otherwise new.
+  const class AstStringConstants* ast_string_constants_;
   const AstRawString* function_name_;
+  RuntimeCallStats* runtime_call_stats_;
 
   //----------- Output of parsing and scope analysis ------------------------
   FunctionLiteral* literal_;
