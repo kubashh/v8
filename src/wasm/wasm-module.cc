@@ -1412,8 +1412,10 @@ class InstantiationHelper {
     if (function_table_count > 0) LoadTableSegments(code_table, instance);
 
     // Patch all code with the relocations registered in code_specialization.
-    code_specialization.RelocateDirectCalls(instance);
-    code_specialization.ApplyToWholeInstance(*instance, SKIP_ICACHE_FLUSH);
+    if (!FLAG_wasm_interpret_all) {
+      code_specialization.RelocateDirectCalls(instance);
+      code_specialization.ApplyToWholeInstance(*instance, SKIP_ICACHE_FLUSH);
+    }
 
     FlushICache(isolate_, code_table);
 
