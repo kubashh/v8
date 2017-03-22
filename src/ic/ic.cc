@@ -1104,14 +1104,14 @@ Handle<Object> LoadIC::GetMapIndependentHandler(LookupIterator* lookup) {
 
       if (holder->GetNamedInterceptor()->non_masking()) {
         Handle<Object> holder_ref = isolate()->factory()->null_value();
-        if (!receiver_is_holder) {
+        if (!receiver_is_holder || IsLoadGlobalIC()) {
           holder_ref = Map::GetOrCreatePrototypeWeakCell(holder, isolate());
         }
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNonMaskingInterceptorDH);
         return LoadFullChain(map, holder_ref, lookup->name(), smi_handler);
       }
 
-      if (receiver_is_holder) {
+      if (receiver_is_holder && !IsLoadGlobalIC()) {
         DCHECK(map->has_named_interceptor());
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadInterceptorDH);
         return smi_handler;
