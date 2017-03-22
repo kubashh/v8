@@ -225,3 +225,59 @@ function checkStack(stack, expected_lines) {
     }
   }
 })();
+
+(function testIndirectImports() {
+  var builder = new WasmModuleBuilder();
+
+  var sig_i_ii = builder.addType(kSig_i_ii);
+  var sig_i_i = builder.addType(kSig_i_i);
+  var mul = builder.addImport('q', 'mul', sig_i_ii);
+  var add = builder.addFunction('add', sig_i_ii).addBody([
+    kExprGetLocal, 0, kExprGetLocal, 1, kExprI32Add
+  ]);
+  var mismatch =
+      builder.addFunction('sig_mismatch', sig_i_i).addBody([kExprGetLocal, 0]);
+  var main = builder.addFunction('main', kSig_i_iii)
+                 .addBody([
+                   // Call indirect #0 with args <#1, #2>.
+                   kExprGetLocal, 1, kExprGetLocal, 2, kExprGetLocal, 0,
+                   kExprCallIndirect, sig_i_ii, kTableZero
+                 ])
+                 .exportFunc();
+  builder.appendToTable([mul, add.index, mismatch.index, main.index]);
+
+  var mul = (a, b) => a * b;
+  var instance = builder.instantiate({q: {mul: mul}});
+
+  assertEquals(-6, instance.exports.main(0, -2, 3));
+  assertEquals(99, instance.exports.main(1, 22, 77));
+  assertTraps(kTrapFuncSigMismatch, () => instance.exports.main(2, 12, 33));
+  assertTraps(kTrapFuncSigMismatch, () => instance.exports.main(3, 12, 33));
+  assertTraps(kTrapFuncInvalid, () => instance.exports.main(4, 12, 33));
+})();
+
+(function testIllegalImports() {
+  var builder = new WasmModuleBuilder();
+
+  var sig_l_v = builder.addType(kSig_l_v);
+  var imp = builder.addImport('q', 'imp', sig_l_v);
+  var direct = builder.addFunction('direct', kSig_l_v)
+                   .addBody([kExprCallFunction, imp])
+                   .exportFunc();
+  var indirect = builder.addFunction('indirect', kSig_l_v).addBody([
+    kExprI32Const, 0, kExprCallIndirect, sig_l_v, kTableZero
+  ]);
+  var main =
+      builder.addFunction('main', kSig_v_i)
+          .addBody([
+            // Call indirect #0, drop result.
+            kExprGetLocal, 0, kExprCallIndirect, sig_l_v, kTableZero, kExprDrop
+          ])
+          .exportFunc();
+  builder.appendToTable([imp, direct.index, indirect.index]);
+
+  var instance = builder.instantiate({q: {imp: () => 1}});
+
+  assertThrows(() => instance.exports.main(1), TypeError);
+  assertThrows(() => instance.exports.main(2), TypeError);
+})();
