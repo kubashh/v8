@@ -1,0 +1,273 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e020973_fb8485e1",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Maybe call it UnwrapWasmToJSWrapper?",
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2959d2c9_d767d053",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "There should be an Oxford comma here.",
+      "range": {
+        "startLine": 860,
+        "startChar": 52,
+        "endLine": 860,
+        "endChar": 53
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77036375_6f5f7c3b",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "I think {Destroy} already does the {is_null} check internally. I think it is not necessary to check that the instance is null.",
+      "range": {
+        "startLine": 913,
+        "startChar": 21,
+        "endLine": 913,
+        "endChar": 28
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dbd44f5_1b74ff56",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 916,
+        "startChar": 21,
+        "endLine": 916,
+        "endChar": 28
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e38fb099_006c80b5",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Maybe call the function {InitializeInstanceObject}. Thereby you would make it clear that it should be called at most once.",
+      "range": {
+        "startLine": 928,
+        "startChar": 7,
+        "endLine": 928,
+        "endChar": 24
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "195c4bec_27df1488",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "I would surround this pointer with a DisallowHeapAllocation scope.",
+      "range": {
+        "startLine": 940,
+        "startChar": 4,
+        "endLine": 940,
+        "endChar": 15
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9402ff59_f587408a",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Can you add a comment about the 8 here?",
+      "range": {
+        "startLine": 1019,
+        "startChar": 46,
+        "endLine": 1019,
+        "endChar": 47
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6926bc_7f7b43bf",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Could you add a short comment?",
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c91180_0878e55d",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Could you add a comment that the function and signature check has already been done at instantiation time?",
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "365b55e8_61c4efdd",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Should we have a DisallowHeapAllocation here?",
+      "range": {
+        "startLine": 2103,
+        "startChar": 4,
+        "endLine": 2103,
+        "endChar": 14
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd2c4b8a_101ffb1f",
+        "filename": "test/mjsunit/wasm/interpreter.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "I\u0027m not sure if I really like that you reuse the import-index variable here to store the  the multiplication function.",
+      "range": {
+        "startLine": 249,
+        "startChar": 6,
+        "endLine": 249,
+        "endChar": 9
+      },
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7af077c_ed744821",
+        "filename": "test/mjsunit/wasm/interpreter.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Could you add a comment that this is the multiplication, and the next one is the addition?",
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d92352a_52c9d6f8",
+        "filename": "test/mjsunit/wasm/interpreter.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-22T16:58:08Z",
+      "side": 1,
+      "message": "Please add a comment that you expect a TypeError below because the JS API does not allow int64 return values from JavaScript.",
+      "revId": "81b228d1eb7047ca28f3d77ceb565238a41211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
