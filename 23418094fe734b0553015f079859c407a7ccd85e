@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "166fcc67_5e3a53f1",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T20:08:45Z",
+      "side": 1,
+      "message": "Style nit: this would need { }",
+      "range": {
+        "startLine": 1288,
+        "startChar": 0,
+        "endLine": 1288,
+        "endChar": 58
+      },
+      "revId": "23418094fe734b0553015f079859c407a7ccd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
