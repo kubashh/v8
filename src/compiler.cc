@@ -667,7 +667,7 @@ MUST_USE_RESULT MaybeHandle<Code> GetUnoptimizedCode(
 
   // Parse and update ParseInfo with the results.
   {
-    if (!parsing::ParseAny(info->parse_info(),
+    if (!parsing::ParseAny(info->parse_info(), info->isolate(),
                            inner_function_mode != Compiler::CONCURRENT)) {
       return MaybeHandle<Code>();
     }
@@ -1065,7 +1065,9 @@ MaybeHandle<Code> GetBaselineCode(Handle<JSFunction> function) {
   }
 
   // Parse and update CompilationInfo with the results.
-  if (!parsing::ParseFunction(info.parse_info())) return MaybeHandle<Code>();
+  if (!parsing::ParseFunction(info.parse_info(), info.isolate())) {
+    return MaybeHandle<Code>();
+  }
   Handle<SharedFunctionInfo> shared = info.shared_info();
   DCHECK_EQ(shared->language_mode(), info.literal()->language_mode());
 
@@ -1196,7 +1198,7 @@ Handle<SharedFunctionInfo> CompileToplevel(CompilationInfo* info) {
 
   { VMState<COMPILER> state(info->isolate());
     if (parse_info->literal() == nullptr) {
-      if (!parsing::ParseProgram(parse_info, false)) {
+      if (!parsing::ParseProgram(parse_info, info->isolate(), false)) {
         return Handle<SharedFunctionInfo>::null();
       }
 
@@ -1282,7 +1284,7 @@ bool Compiler::Analyze(CompilationInfo* info,
 }
 
 bool Compiler::ParseAndAnalyze(ParseInfo* info, Isolate* isolate) {
-  if (!parsing::ParseAny(info)) return false;
+  if (!parsing::ParseAny(info, isolate)) return false;
   if (info->is_toplevel()) {
     EnsureSharedFunctionInfosArrayOnScript(info, isolate);
   }
