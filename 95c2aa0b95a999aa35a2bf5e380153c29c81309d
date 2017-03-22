@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "857f0606_e32025b7",
+        "filename": "src/background-parsing-task.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T20:13:01Z",
+      "side": 1,
+      "message": "Great that this is gone!",
+      "range": {
+        "startLine": 60,
+        "startChar": 40,
+        "endLine": 60,
+        "endChar": 44
+      },
+      "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cae8f8c4_fc85d950",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T20:13:01Z",
+      "side": 1,
+      "message": "Pls update the comment :)",
+      "range": {
+        "startLine": 299,
+        "startChar": 36,
+        "endLine": 299,
+        "endChar": 43
+      },
+      "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
