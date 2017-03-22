@@ -141,6 +141,30 @@
       "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7b6a378_dc41851c",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-22T09:57:00Z",
+      "side": 1,
+      "message": "I would be fine with two interpretations of the \"nooptimization\" variant:\n\na) It means \"disable profile guided optimization\" (i.e. runtime-profiler.cc) which would mean OptimizeFunctionOnNextCall can still override it and tests can force optimization in this variant. This is what we had before adding the --turbo-filter flag to the variant.\n\nb) It means \"disable all optimizing compiler for realz\" (i.e. hard bailout) which is what the added --turbo-filter tries to achieve. Crankshaft will bailout and TurboFan will bailout with these flags AFAICT (i.e. unless a test explicitly passes --crankshaft in its individual flags line, this variant works I think). In that case the only way for tests to rely on optimization to happen is add even more flags to their individual flags line in order to override this variant.\n\nI would be very hesitant to make OptimizeFunctionOnNextCall to check the --crankshaft flag. This has been tried and lead down a road of pain. It would require adaptation to many tests I think and I and not yet convinced of the benefits.",
+      "parentUuid": "29c8454c_8b729352",
+      "range": {
+        "startLine": 14,
+        "startChar": 43,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "ad50d4a16140eae64c547b261f4d9bd6ba6197a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
