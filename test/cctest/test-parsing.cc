@@ -7823,20 +7823,21 @@ TEST(DestructuringAssignmentPositiveTests) {
 
   // CoverInitializedName ambiguity handling in various contexts
   const char* ambiguity_data[] = {
-      "var foo = { x = 10 } = {};",
-      "var foo = { q } = { x = 10 } = {};",
+      "var foo = { x = 10 } = {};", "var foo = { q } = { x = 10 } = {};",
       "var foo; foo = { x = 10 } = {};",
-      "var foo; foo = { q } = { x = 10 } = {};",
-      "var x; ({ x = 10 } = {});",
-      "var q, x; ({ q } = { x = 10 } = {});",
-      "var x; [{ x = 10 } = {}]",
+      "var foo; foo = { q } = { x = 10 } = {};", "var x; ({ x = 10 } = {});",
+      "var q, x; ({ q } = { x = 10 } = {});", "var x; [{ x = 10 } = {}]",
       "var x; (true ? { x = true } = {} : { x = false } = {})",
-      "var q, x; (q, { x = 10 } = {});",
-      "var { x = 10 } = { x = 20 } = {};",
+      "var q, x; (q, { x = 10 } = {});", "var { x = 10 } = { x = 20 } = {};",
       "var { __proto__: x, __proto__: y } = {}",
       "({ __proto__: x, __proto__: y } = {})",
       "var { x = 10 } = (o = { x = 20 } = {});",
       "var x; (({ x = 10 } = { x = 20 } = {}) => x)({})",
+
+      // Not ambiguous, but uses same context data
+      "((m) => { var a; m(['a']) ? [a] = [1] : [a] = [2]; return a; })(f => 0)",
+      "((m) => { var a; m(['a']) ? [a] = [1] : [a] = [2]; return a; })(f => 1)",
+
       NULL,
   };
   RunParserSyncTest(empty_context_data, ambiguity_data, kSuccess);

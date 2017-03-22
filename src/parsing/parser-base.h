@@ -2886,13 +2886,28 @@ ParserBase<Impl>::ParseConditionalExpression(bool accept_IN,
   BindingPatternUnexpectedToken();
   ArrowFormalParametersUnexpectedToken();
   Consume(Token::CONDITIONAL);
-  // In parsing the first assignment expression in conditional
-  // expressions we always accept the 'in' keyword; see ECMA-262,
-  // section 11.12, page 58.
-  ExpressionT left = ParseAssignmentExpression(true, CHECK_OK);
+
+  ExpressionT left;
+  {
+    ExpressionClassifier classifier(this);
+    // In parsing the first assignment expression in conditional
+    // expressions we always accept the 'in' keyword; see ECMA-262,
+    // section 11.12, page 58.
+    left = ParseAssignmentExpression(true, CHECK_OK);
+    impl()->Accumulate(ExpressionClassifier::AllProductions &
+                       ~(ExpressionClassifier::BindingPatternProduction |
+                         ExpressionClassifier::LetPatternProduction));
+  }
   impl()->RewriteNonPattern(CHECK_OK);
   Expect(Token::COLON, CHECK_OK);
-  ExpressionT right = ParseAssignmentExpression(accept_IN, CHECK_OK);
+  ExpressionT right;
+  {
+    ExpressionClassifier classifier(this);
+    right = ParseAssignmentExpression(accept_IN, CHECK_OK);
+    impl()->Accumulate(ExpressionClassifier::AllProductions &
+                       ~(ExpressionClassifier::BindingPatternProduction |
+                         ExpressionClassifier::LetPatternProduction));
+  }
   impl()->RewriteNonPattern(CHECK_OK);
   return factory()->NewConditional(expression, left, right, pos);
 }
