@@ -476,7 +476,7 @@ void SetSharedFunctionFlagsFromLiteral(FunctionLiteral* literal,
 
 bool Renumber(ParseInfo* parse_info,
               Compiler::EagerInnerFunctionLiterals* eager_literals) {
-  RuntimeCallTimerScope runtimeTimer(parse_info->isolate(),
+  RuntimeCallTimerScope runtimeTimer(parse_info->runtime_call_stats(),
                                      &RuntimeCallStats::CompileRenumber);
 
   // CollectTypeProfile uses its own feedback slots. If we have existing
@@ -492,10 +492,9 @@ bool Renumber(ParseInfo* parse_info,
         parse_info->shared_info()->feedback_metadata()->HasTypeProfileSlot();
   }
 
-  if (!AstNumbering::Renumber(
-          parse_info->isolate()->stack_guard()->real_climit(),
-          parse_info->zone(), parse_info->literal(), eager_literals,
-          collect_type_profile)) {
+  if (!AstNumbering::Renumber(parse_info->stack_limit(), parse_info->zone(),
+                              parse_info->literal(), eager_literals,
+                              collect_type_profile)) {
     return false;
   }
   if (!parse_info->shared_info().is_null()) {
@@ -1263,7 +1262,7 @@ Handle<SharedFunctionInfo> CompileToplevel(CompilationInfo* info) {
 bool Compiler::Analyze(ParseInfo* info,
                        EagerInnerFunctionLiterals* eager_literals) {
   DCHECK_NOT_NULL(info->literal());
-  RuntimeCallTimerScope runtimeTimer(info->isolate(),
+  RuntimeCallTimerScope runtimeTimer(info->runtime_call_stats(),
                                      &RuntimeCallStats::CompileAnalyse);
   if (!Rewriter::Rewrite(info)) return false;
   DeclarationScope::Analyze(info, AnalyzeMode::kRegular);
