@@ -987,183 +987,287 @@ void InterpreterGenerator::DoCompareOpWithFeedback(
   Node* slot_index = __ BytecodeOperandIdx(1);
   Node* feedback_vector = __ LoadFeedbackVector();
 
-  Variable var_type_feedback(assembler, MachineRepresentation::kTaggedSigned);
-  Label lhs_is_not_smi(assembler), lhs_is_not_number(assembler),
-      lhs_is_not_string(assembler), gather_rhs_type(assembler),
-      update_feedback(assembler), do_compare(assembler);
+  Variable var_type_feedback(assembler, MachineRepresentation::kTaggedSigned),
+      var_result(assembler, MachineRepresentation::kTagged),
+      var_fcmp_lhs(assembler, MachineRepresentation::kFloat64),
+      var_fcmp_rhs(assembler, MachineRepresentation::kFloat64);
+  Label lhs_is_not_smi(assembler), do_fcmp(assembler), return_true(assembler),
+      return_false(assembler),
+      collect_fb_and_call_compare(assembler, Label::kDeferred),
+      do_compare(assembler), do_compare_deferred(assembler, Label::kDeferred),
+      end(assembler);
 
-  __ GotoIfNot(__ TaggedIsSmi(lhs), &lhs_is_not_smi);
-
-  var_type_feedback.Bind(
-      __ SmiConstant(CompareOperationFeedback::kSignedSmall));
-  __ Goto(&gather_rhs_type);
-
-  __ Bind(&lhs_is_not_smi);
+  __ GotoIf(__ TaggedIsNotSmi(lhs), &lhs_is_not_smi);
   {
-    Node* lhs_map = __ LoadMap(lhs);
-    __ GotoIfNot(__ IsHeapNumberMap(lhs_map), &lhs_is_not_number);
-
-    var_type_feedback.Bind(__ SmiConstant(CompareOperationFeedback::kNumber));
-    __ Goto(&gather_rhs_type);
-
-    __ Bind(&lhs_is_not_number);
+    Label rhs_is_not_smi(assembler);
+    __ GotoIf(__ TaggedIsNotSmi(rhs), &rhs_is_not_smi);
     {
-      Node* lhs_instance_type = __ LoadInstanceType(lhs);
-      if (Token::IsOrderedRelationalCompareOp(compare_op)) {
-        Label lhs_is_not_oddball(assembler);
-        __ GotoIfNot(
-            __ Word32Equal(lhs_instance_type, __ Int32Constant(ODDBALL_TYPE)),
-            &lhs_is_not_oddball);
-
-        var_type_feedback.Bind(
-            __ SmiConstant(CompareOperationFeedback::kNumberOrOddball));
-        __ Goto(&gather_rhs_type);
-
-        __ Bind(&lhs_is_not_oddball);
+      __ Comment("Do smi comparison");
+      __ UpdateFeedback(__ SmiConstant(CompareOperationFeedback::kSignedSmall),
+                        feedback_vector, slot_index);
+      switch (compare_op) {
+        case Token::LT:
+          __ BranchIfSmiLessThan(lhs, rhs, &return_true, &return_false);
+          break;
+        case Token::LTE:
+          __ BranchIfSmiLessThanOrEqual(lhs, rhs, &return_true, &return_false);
+          break;
+        case Token::GT:
+          __ BranchIfSmiLessThan(rhs, lhs, &return_true, &return_false);
+          break;
+        case Token::GTE:
+          __ BranchIfSmiLessThanOrEqual(rhs, lhs, &return_true, &return_false);
+          break;
+        case Token::EQ:
+        case Token::EQ_STRICT:
+          __ Branch(__ WordEqual(lhs, rhs), &return_true, &return_false);
+          break;
+        default:
+          UNREACHABLE();
       }
-
-      Label lhs_is_not_string(assembler);
-      __ GotoIfNot(__ IsStringInstanceType(lhs_instance_type),
-                   &lhs_is_not_string);
-
-      if (Token::IsOrderedRelationalCompareOp(compare_op)) {
-        var_type_feedback.Bind(
-            __ SmiConstant(CompareOperationFeedback::kString));
-      } else {
-        var_type_feedback.Bind(__ SelectSmiConstant(
-            __ Word32Equal(
-                __ Word32And(lhs_instance_type,
-                             __ Int32Constant(kIsNotInternalizedMask)),
-                __ Int32Constant(kInternalizedTag)),
-            CompareOperationFeedback::kInternalizedString,
-            CompareOperationFeedback::kString));
-      }
-      __ Goto(&gather_rhs_type);
-
-      __ Bind(&lhs_is_not_string);
-      if (Token::IsEqualityOp(compare_op)) {
-        var_type_feedback.Bind(
-            __ SelectSmiConstant(__ IsJSReceiverInstanceType(lhs_instance_type),
-                                 CompareOperationFeedback::kReceiver,
-                                 CompareOperationFeedback::kAny));
-      } else {
-        var_type_feedback.Bind(__ SmiConstant(CompareOperationFeedback::kAny));
-      }
-      __ Goto(&gather_rhs_type);
     }
-  }
-
-  __ Bind(&gather_rhs_type);
-  {
-    Label rhs_is_not_smi(assembler), rhs_is_not_number(assembler);
-
-    __ GotoIfNot(__ TaggedIsSmi(rhs), &rhs_is_not_smi);
-
-    var_type_feedback.Bind(
-        __ SmiOr(var_type_feedback.value(),
-                 __ SmiConstant(CompareOperationFeedback::kSignedSmall)));
-    __ Goto(&update_feedback);
 
     __ Bind(&rhs_is_not_smi);
     {
       Node* rhs_map = __ LoadMap(rhs);
-      __ GotoIfNot(__ IsHeapNumberMap(rhs_map), &rhs_is_not_number);
+      __ GotoIfNot(__ IsHeapNumberMap(rhs_map), &collect_fb_and_call_compare);
 
-      var_type_feedback.Bind(
-          __ SmiOr(var_type_feedback.value(),
-                   __ SmiConstant(CompareOperationFeedback::kNumber)));
-      __ Goto(&update_feedback);
-
-      __ Bind(&rhs_is_not_number);
-      {
-        Node* rhs_instance_type = __ LoadInstanceType(rhs);
-        if (Token::IsOrderedRelationalCompareOp(compare_op)) {
-          Label rhs_is_not_oddball(assembler);
-          __ GotoIfNot(
-              __ Word32Equal(rhs_instance_type, __ Int32Constant(ODDBALL_TYPE)),
-              &rhs_is_not_oddball);
-
-          var_type_feedback.Bind(__ SmiOr(
-              var_type_feedback.value(),
-              __ SmiConstant(CompareOperationFeedback::kNumberOrOddball)));
-          __ Goto(&update_feedback);
-
-          __ Bind(&rhs_is_not_oddball);
-        }
-
-        Label rhs_is_not_string(assembler);
-        __ GotoIfNot(__ IsStringInstanceType(rhs_instance_type),
-                     &rhs_is_not_string);
-
-        if (Token::IsOrderedRelationalCompareOp(compare_op)) {
-          var_type_feedback.Bind(
-              __ SmiOr(var_type_feedback.value(),
-                       __ SmiConstant(CompareOperationFeedback::kString)));
-        } else {
-          var_type_feedback.Bind(__ SmiOr(
-              var_type_feedback.value(),
-              __ SelectSmiConstant(
-                  __ Word32Equal(
-                      __ Word32And(rhs_instance_type,
-                                   __ Int32Constant(kIsNotInternalizedMask)),
-                      __ Int32Constant(kInternalizedTag)),
-                  CompareOperationFeedback::kInternalizedString,
-                  CompareOperationFeedback::kString)));
-        }
-        __ Goto(&update_feedback);
-
-        __ Bind(&rhs_is_not_string);
-        if (Token::IsEqualityOp(compare_op)) {
-          var_type_feedback.Bind(
-              __ SmiOr(var_type_feedback.value(),
-                       __ SelectSmiConstant(
-                           __ IsJSReceiverInstanceType(rhs_instance_type),
-                           CompareOperationFeedback::kReceiver,
-                           CompareOperationFeedback::kAny)));
-        } else {
-          var_type_feedback.Bind(
-              __ SmiConstant(CompareOperationFeedback::kAny));
-        }
-        __ Goto(&update_feedback);
-      }
+      __ Comment("convert lhs to double and load rhs");
+      var_fcmp_lhs.Bind(__ SmiToFloat64(lhs));
+      var_fcmp_rhs.Bind(__ LoadHeapNumberValue(rhs));
+      __ Goto(&do_fcmp);
     }
   }
 
-  __ Bind(&update_feedback);
+  __ Bind(&lhs_is_not_smi);
   {
-    __ UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index);
-    __ Goto(&do_compare);
+    Label rhs_is_not_smi(assembler);
+    Node* lhs_map = __ LoadMap(lhs);
+    __ GotoIfNot(__ IsHeapNumberMap(lhs_map), &collect_fb_and_call_compare);
+
+    __ GotoIfNot(__ TaggedIsSmi(rhs), &rhs_is_not_smi);
+
+    __ Comment("convert rhs to double and load lhs");
+    var_fcmp_lhs.Bind(__ LoadHeapNumberValue(lhs));
+    var_fcmp_rhs.Bind(__ SmiToFloat64(rhs));
+    __ Goto(&do_fcmp);
+
+    __ Bind(&rhs_is_not_smi);
+    {
+      Node* rhs_map = __ LoadMap(rhs);
+      __ GotoIfNot(__ IsHeapNumberMap(rhs_map), &collect_fb_and_call_compare);
+
+      __ Comment("load lhs and rhs");
+      var_fcmp_lhs.Bind(__ LoadHeapNumberValue(lhs));
+      var_fcmp_rhs.Bind(__ LoadHeapNumberValue(rhs));
+      __ Goto(&do_fcmp);
+    }
   }
 
+  __ Bind(&do_fcmp);
+  {
+    __ Comment("Do number comparison");
+    Node* lhs_float = var_fcmp_lhs.value();
+    Node* rhs_float = var_fcmp_rhs.value();
+    __ UpdateFeedback(__ SmiConstant(CompareOperationFeedback::kNumber),
+                      feedback_vector, slot_index);
+
+    // Perform a fast floating point comparison.
+    switch (compare_op) {
+      case Token::LT:
+        __ Branch(__ Float64LessThan(lhs_float, rhs_float), &return_true,
+                  &return_false);
+        break;
+      case Token::LTE:
+        __ Branch(__ Float64LessThanOrEqual(lhs_float, rhs_float), &return_true,
+                  &return_false);
+        break;
+      case Token::GT:
+        __ Branch(__ Float64GreaterThan(lhs_float, rhs_float), &return_true,
+                  &return_false);
+        break;
+      case Token::GTE:
+        __ Branch(__ Float64GreaterThanOrEqual(lhs_float, rhs_float),
+                  &return_true, &return_false);
+        break;
+      case Token::EQ:
+      case Token::EQ_STRICT: {
+        Label check_nan(assembler);
+        __ Branch(__ Float64Equal(lhs_float, rhs_float), &check_nan,
+                  &return_false);
+        __ Bind(&check_nan);
+        __ BranchIfFloat64IsNaN(lhs_float, &return_false, &return_true);
+      } break;
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  __ Bind(&return_true);
+  {
+    var_result.Bind(__ BooleanConstant(true));
+    __ Goto(&end);
+  }
+
+  __ Bind(&return_false);
+  {
+    var_result.Bind(__ BooleanConstant(false));
+    __ Goto(&end);
+  }
+
+  __ Bind(&collect_fb_and_call_compare);
+  {
+    __ Comment("collect feedback for non number cases.");
+    Label rhs_is_not_string(assembler), check_for_oddball_fb(assembler),
+        call_with_any_fb(assembler);
+    Variable operand(assembler, MachineRepresentation::kTagged);
+
+    // If lhs is Smi, rhs cannnot be an Smi or number, so check if rhs is an
+    // oddball. We handle this here instead of as a seperate block because it
+    // generates better code when there are fewer exit points from non-deferred
+    // blocks.
+    operand.Bind(rhs);
+    __ GotoIf(__ TaggedIsSmi(lhs), &check_for_oddball_fb);
+
+    // If rhs is Smi, lhs cannot be an Smi or number.
+    operand.Bind(lhs);
+    __ GotoIf(__ TaggedIsSmi(rhs), &check_for_oddball_fb);
+
+    Node* rhs_map = __ LoadMap(rhs);
+    operand.Bind(lhs);
+    __ GotoIf(__ IsHeapNumberMap(rhs_map), &check_for_oddball_fb);
+
+    Node* rhs_instance_type = __ LoadInstanceType(rhs);
+    if (Token::IsOrderedRelationalCompareOp(compare_op)) {
+      operand.Bind(lhs);
+      __ GotoIf(
+          __ Word32Equal(rhs_instance_type, __ Int32Constant(ODDBALL_TYPE)),
+          &check_for_oddball_fb);
+    }
+
+    Node* lhs_instance_type = __ LoadInstanceType(lhs);
+    __ GotoIfNot(__ IsStringInstanceType(rhs_instance_type),
+                 &rhs_is_not_string);
+
+    if (Token::IsOrderedRelationalCompareOp(compare_op)) {
+      __ GotoIfNot(__ IsStringInstanceType(lhs_instance_type),
+                   &call_with_any_fb);
+
+      var_type_feedback.Bind(__ SmiConstant(CompareOperationFeedback::kString));
+    } else {
+      __ GotoIfNot(__ IsStringInstanceType(lhs_instance_type),
+                   &call_with_any_fb);
+
+      Node* rhs_fb = __ SelectSmiConstant(
+          __ Word32Equal(__ Word32And(rhs_instance_type,
+                                      __ Int32Constant(kIsNotInternalizedMask)),
+                         __ Int32Constant(kInternalizedTag)),
+          CompareOperationFeedback::kInternalizedString,
+          CompareOperationFeedback::kString);
+
+      Node* lhs_fb = __ SelectSmiConstant(
+          __ Word32Equal(__ Word32And(lhs_instance_type,
+                                      __ Int32Constant(kIsNotInternalizedMask)),
+                         __ Int32Constant(kInternalizedTag)),
+          CompareOperationFeedback::kInternalizedString,
+          CompareOperationFeedback::kString);
+
+      var_type_feedback.Bind(__ SmiOr(lhs_fb, rhs_fb));
+    }
+    __ Goto(&do_compare);
+
+    __ Bind(&rhs_is_not_string);
+    if (Token::IsEqualityOp(compare_op)) {
+      __ GotoIfNot(__ IsJSReceiverInstanceType(lhs_instance_type),
+                   &call_with_any_fb);
+
+      var_type_feedback.Bind(__ SelectSmiConstant(
+          __ IsJSReceiverInstanceType(rhs_instance_type),
+          CompareOperationFeedback::kReceiver, CompareOperationFeedback::kAny));
+      __ Goto(&do_compare);
+    } else {
+      __ Goto(&call_with_any_fb);
+    }
+
+    __ Bind(&check_for_oddball_fb);
+    {
+      if (Token::IsOrderedRelationalCompareOp(compare_op)) {
+        // We know one operand is a number / smi and the other operand is not
+        // a number / smi.
+        Node* instance_type = __ LoadInstanceType(operand.value());
+        __ GotoIfNot(
+            __ Word32Equal(instance_type, __ Int32Constant(ODDBALL_TYPE)),
+            &call_with_any_fb);
+
+        var_type_feedback.Bind(
+            __ SmiConstant(CompareOperationFeedback::kNumberOrOddball));
+        __ Goto(&do_compare);
+      } else {
+        __ Goto(&call_with_any_fb);
+      }
+    }
+
+    __ Bind(&call_with_any_fb);
+    {
+      var_type_feedback.Bind(__ SmiConstant(CompareOperationFeedback::kAny));
+      __ Goto(&do_compare);
+    }
+  }
+
+  // Marking a block with more than one predecessor causes register allocator
+  // to fail (crbug.com/5998). Add a dummy block as a workaround.
   __ Bind(&do_compare);
+  __ Goto(&do_compare_deferred);
+
+  __ Bind(&do_compare_deferred);
+  __ Comment("Do the full compare operation");
   Node* result;
   switch (compare_op) {
-    case Token::EQ:
-      result = assembler->Equal(lhs, rhs, context);
-      break;
-    case Token::EQ_STRICT:
-      result = assembler->StrictEqual(lhs, rhs);
-      break;
-    case Token::LT:
-      result = assembler->RelationalComparison(CodeStubAssembler::kLessThan,
-                                               lhs, rhs, context);
-      break;
-    case Token::GT:
-      result = assembler->RelationalComparison(CodeStubAssembler::kGreaterThan,
-                                               lhs, rhs, context);
-      break;
-    case Token::LTE:
-      result = assembler->RelationalComparison(
-          CodeStubAssembler::kLessThanOrEqual, lhs, rhs, context);
-      break;
-    case Token::GTE:
-      result = assembler->RelationalComparison(
-          CodeStubAssembler::kGreaterThanOrEqual, lhs, rhs, context);
-      break;
+    case Token::EQ: {
+      Callable callable = CodeFactory::Equal(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
+    case Token::EQ_STRICT: {
+      Callable callable = CodeFactory::StrictEqual(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
+    case Token::LT: {
+      Callable callable = CodeFactory::LessThan(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
+    case Token::GT: {
+      Callable callable = CodeFactory::GreaterThan(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
+    case Token::LTE: {
+      Callable callable = CodeFactory::LessThanOrEqual(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
+    case Token::GTE: {
+      Callable callable = CodeFactory::GreaterThanOrEqual(__ isolate());
+      Node* code_target = __ HeapConstant(callable.code());
+      result =
+          __ CallStub(callable.descriptor(), code_target, context, lhs, rhs);
+    } break;
     default:
       UNREACHABLE();
   }
-  __ SetAccumulator(result);
+  var_result.Bind(result);
+  __ UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index);
+  __ Goto(&end);
+
+  __ Bind(&end);
+  __ SetAccumulator(var_result.value());
   __ Dispatch();
 }
 
