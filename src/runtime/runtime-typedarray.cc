@@ -5,6 +5,7 @@
 #include "src/runtime/runtime-utils.h"
 
 #include "src/arguments.h"
+#include "src/elements.h"
 #include "src/factory.h"
 #include "src/messages.h"
 #include "src/objects-inl.h"
@@ -41,6 +42,32 @@ RUNTIME_FUNCTION(Runtime_ArrayBufferNeuter) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_TypedArrayCopyElements) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, holder, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, source, 1);
+  CONVERT_NUMBER_ARG_HANDLE_CHECKED(length_obj, 2);
+
+  size_t length;
+  CHECK(TryNumberToSize(*length_obj, &length));
+
+  ElementsAccessor* holder_accessor = holder->GetElementsAccessor();
+  for (uint32_t i = 0; i < length; i++) {
+    LookupIterator get_it(isolate, source, i);
+    Handle<Object> element;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, element,
+                                       Object::GetProperty(&get_it));
+    // Convert the incoming value to a number for storing into typed arrays.
+    if (!element->IsNumber() && !element->IsUndefined(isolate)) {
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, element,
+                                         Object::ToNumber(element));
+    }
+    holder_accessor->Set(holder, i, *element);
+  }
+
+  return isolate->heap()->undefined_value();
+}
 
 void Runtime::ArrayIdToTypeAndSize(int arrayId, ExternalArrayType* array_type,
                                    ElementsKind* fixed_elements_kind,
@@ -83,22 +110,16 @@ const char* Runtime::ElementsKindToType(ElementsKind fixed_elements_kind) {
 // Returns true if backing store was initialized or false otherwise.
 RUNTIME_FUNCTION(Runtime_TypedArrayInitializeFromArrayLike) {
   HandleScope scope(isolate);
-  DCHECK_EQ(4, args.length());
+  DCHECK_EQ(3, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, holder, 0);
-  CONVERT_SMI_ARG_CHECKED(arrayId, 1);
-  CONVERT_ARG_HANDLE_CHECKED(Object, source, 2);
-  CONVERT_NUMBER_ARG_HANDLE_CHECKED(length_obj, 3);
+  CONVERT_ARG_HANDLE_CHECKED(Object, source, 1);
+  CONVERT_NUMBER_ARG_HANDLE_CHECKED(length_obj, 2);
 
-  CHECK(arrayId >= Runtime::ARRAY_ID_FIRST &&
-        arrayId <= Runtime::ARRAY_ID_LAST);
-
-  ExternalArrayType array_type = kExternalInt8Array;  // Bogus initialization.
-  size_t element_size = 1;                            // Bogus initialization.
-  ElementsKind fixed_elements_kind = INT8_ELEMENTS;  // Bogus initialization.
-  Runtime::ArrayIdToTypeAndSize(arrayId, &array_type, &fixed_elements_kind,
-                                &element_size);
-
-  CHECK(holder->map()->elements_kind() == fixed_elements_kind);
+  ElementsKind fixed_elements_kind = holder->map()->elements_kind();
+  ExternalArrayType array_type =
+      isolate->factory()->GetArrayTypeFromElementsKind(fixed_elements_kind);
+  size_t element_size =
+      isolate->factory()->GetExternalArrayElementSize(array_type);
 
   Handle<JSArrayBuffer> buffer = isolate->factory()->NewJSArrayBuffer();
   size_t length = 0;
