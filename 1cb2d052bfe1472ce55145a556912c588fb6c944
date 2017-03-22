@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d3db067_520a9c57",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-22T10:54:20Z",
+      "side": 1,
+      "message": "Yes!",
+      "parentUuid": "8f9facec_cb7af352",
+      "range": {
+        "startLine": 780,
+        "startChar": 7,
+        "endLine": 780,
+        "endChar": 19
+      },
+      "revId": "1cb2d052bfe1472ce55145a556912c588fb6c944",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da383b43_ec3ab3a3",
         "filename": "src/runtime/runtime.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "1cb2d052bfe1472ce55145a556912c588fb6c944",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed39ab2_fa540f36",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-22T10:54:20Z",
+      "side": 1,
+      "message": "Sadly, no :(. There is still a caller in Runtime_TypedArrayInitializeFromArrayLike. But it is removed in https://chromium-review.googlesource.com/c/456707/ so I will remove it there.",
+      "parentUuid": "da383b43_ec3ab3a3",
+      "range": {
+        "startLine": 795,
+        "startChar": 14,
+        "endLine": 795,
+        "endChar": 34
+      },
+      "revId": "1cb2d052bfe1472ce55145a556912c588fb6c944",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
