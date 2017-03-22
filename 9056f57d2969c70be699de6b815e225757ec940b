@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ca9c898_746e85be",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-22T15:10:04Z",
+      "side": 1,
+      "message": "Updating the feedback here instead of along with dispatch reduces few jumps and reduces the overall size of the code.  The jumps happen because of the way the Phi nodes are merged.",
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
