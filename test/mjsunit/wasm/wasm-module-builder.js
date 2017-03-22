@@ -264,6 +264,9 @@ class WasmModuleBuilder {
   }
 
   appendToTable(array) {
+    for (let n of array) {
+      if (typeof n != 'number') throw new Error('invalid table: ' + array);
+    }
     return this.addFunctionTableInit(this.function_table.length, false, array);
   }
 
