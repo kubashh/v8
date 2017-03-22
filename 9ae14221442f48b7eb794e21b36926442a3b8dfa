@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a06f39c0_b324e267",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T20:11:04Z",
+      "side": 1,
+      "message": "Style: { }",
+      "range": {
+        "startLine": 1070,
+        "startChar": 23,
+        "endLine": 1070,
+        "endChar": 27
+      },
+      "revId": "9ae14221442f48b7eb794e21b36926442a3b8dfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
