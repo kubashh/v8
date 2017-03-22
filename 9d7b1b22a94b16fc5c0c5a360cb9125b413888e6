@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd6c47ba_3e6e9600",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-22T21:10:40Z",
+      "side": 1,
+      "message": "Nit: No need for \"constexpr\" here, this could just be old-fashioned \"static const\" (or just \"const\").",
+      "revId": "9d7b1b22a94b16fc5c0c5a360cb9125b413888e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "245fbbd5_13c68a19",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-22T21:10:40Z",
+      "side": 1,
+      "message": "Nit: no need to return here.",
+      "revId": "9d7b1b22a94b16fc5c0c5a360cb9125b413888e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
