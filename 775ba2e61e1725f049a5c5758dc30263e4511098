@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "162857bd_de5fea61",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T20:02:05Z",
+      "side": 1,
+      "message": "I guess this line will be deleted by some of your other CLs...",
+      "range": {
+        "startLine": 1267,
+        "startChar": 27,
+        "endLine": 1267,
+        "endChar": 34
+      },
+      "revId": "775ba2e61e1725f049a5c5758dc30263e4511098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
