@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "4e3465b0_a6a86a85",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2895,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-22T21:05:07Z",
+      "side": 1,
+      "message": "My feeling is that something like ValidateAndRewriteNonPattern might make sense",
+      "parentUuid": "3eabefb4_c306d61f",
+      "revId": "9d016c3e86f3f93284ad3d7079925d630333dc32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46e568a1_21806a44",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 1
