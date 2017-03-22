@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b879f1f_e3ace1ec",
+        "filename": "src/compilation-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-22T16:54:08Z",
+      "side": 1,
+      "message": "Instead of doing this, why not getting the Isolate from the JSFunction parameter?",
+      "range": {
+        "startLine": 56,
+        "startChar": 62,
+        "endLine": 56,
+        "endChar": 69
+      },
+      "revId": "240d953d759fd2d6620bb81ded226e04ca20fd3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
