@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f9facec_cb7af352",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-22T10:46:43Z",
+      "side": 1,
+      "message": "Can this enum be removed now?",
+      "range": {
+        "startLine": 780,
+        "startChar": 7,
+        "endLine": 780,
+        "endChar": 19
+      },
+      "revId": "1cb2d052bfe1472ce55145a556912c588fb6c944",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da383b43_ec3ab3a3",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-22T10:46:43Z",
+      "side": 1,
+      "message": "Can we remove this function as well now?",
+      "range": {
+        "startLine": 795,
+        "startChar": 14,
+        "endLine": 795,
+        "endChar": 34
+      },
+      "revId": "1cb2d052bfe1472ce55145a556912c588fb6c944",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
