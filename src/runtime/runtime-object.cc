@@ -698,17 +698,17 @@ RUNTIME_FUNCTION(Runtime_DefineDataPropertyInLiteral) {
   return *object;
 }
 
-RUNTIME_FUNCTION(Runtime_CollectTypeProfile) {
+RUNTIME_FUNCTION(Runtime_CollectParameterTypeProfile) {
   HandleScope scope(isolate);
   DCHECK_EQ(4, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(Smi, position, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Smi, parameter_index, 0);
   CONVERT_ARG_HANDLE_CHECKED(Object, value, 1);
   CONVERT_ARG_HANDLE_CHECKED(FeedbackVector, vector, 2);
   CONVERT_SMI_ARG_CHECKED(index, 3);
 
   DCHECK(FLAG_type_profile);
 
-  Handle<Name> type = Object::TypeOf(isolate, value);
+  Handle<String> type = Object::TypeOf(isolate, value);
   if (value->IsJSReceiver()) {
     Handle<JSReceiver> object = Handle<JSReceiver>::cast(value);
     type = JSReceiver::GetConstructorName(object);
@@ -716,7 +716,29 @@ RUNTIME_FUNCTION(Runtime_CollectTypeProfile) {
 
   DCHECK(!vector->ToSlot(index).IsInvalid());
   CollectTypeProfileNexus nexus(vector, vector->ToSlot(index));
-  nexus.Collect(type, position->value());
+  nexus.CollectParameterTypes(type, parameter_index->value());
+
+  return isolate->heap()->undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_CollectReturnTypeProfile) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(Object, value, 0);
+  CONVERT_ARG_HANDLE_CHECKED(FeedbackVector, vector, 1);
+  CONVERT_SMI_ARG_CHECKED(index, 2);
+
+  DCHECK(FLAG_type_profile);
+
+  Handle<String> type = Object::TypeOf(isolate, value);
+  if (value->IsJSReceiver()) {
+    Handle<JSReceiver> object = Handle<JSReceiver>::cast(value);
+    type = JSReceiver::GetConstructorName(object);
+  }
+
+  DCHECK(!vector->ToSlot(index).IsInvalid());
+  CollectTypeProfileNexus nexus(vector, vector->ToSlot(index));
+  nexus.CollectReturnTypes(type);
 
   return isolate->heap()->undefined_value();
 }

@@ -451,7 +451,8 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
   if (!FLAG_type_profile) {
     // Bytecode for CollectTypeProfile is only emitted when
     // Type Information for DevTools is turned on.
-    scorecard[Bytecodes::ToByte(Bytecode::kCollectTypeProfile)] = 1;
+    scorecard[Bytecodes::ToByte(Bytecode::kCollectReturnTypeProfile)] = 1;
+    scorecard[Bytecodes::ToByte(Bytecode::kCollectParameterTypeProfile)] = 1;
   }
 
   // Check return occurs at the end and only once in the BytecodeArray.
