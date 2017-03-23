@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8c89f8b7_4864432f",
+        "filename": "src/background-parsing-task.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-23T11:48:13Z",
+      "side": 1,
+      "message": "Yep!",
+      "parentUuid": "25141abb_3aa234e9",
+      "range": {
+        "startLine": 60,
+        "startChar": 40,
+        "endLine": 60,
+        "endChar": 44
+      },
+      "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cae8f8c4_fc85d950",
         "filename": "src/parsing/parse-info.h",
         "patchSetId": 2
