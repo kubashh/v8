@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9cdfb0b0_e5214231",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-23T09:24:03Z",
+      "side": 1,
+      "message": "Exactly - default value",
+      "parentUuid": "f23e4e12_7d480271",
+      "range": {
+        "startLine": 38,
+        "startChar": 28,
+        "endLine": 38,
+        "endChar": 35
+      },
+      "revId": "17b814322ea797107eadaf86d6a3b27a2a44f239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cae2d855_6ef56246",
         "filename": "src/parsing/parse-info.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-22T19:55:58Z",
       "side": 1,
       "message": "Can this ever happen? If yes, afaics, the fields below will be contain nonsensical values (like the 0 hash seed). Is that supposed to work? How?",
+      "range": {
+        "startLine": 163,
+        "startChar": 24,
+        "endLine": 163,
+        "endChar": 25
+      },
+      "revId": "17b814322ea797107eadaf86d6a3b27a2a44f239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ddcec5_b1921d1a",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-23T09:24:03Z",
+      "side": 1,
+      "message": "It\u0027s called in set_isolate and sometimes we set it to nullptr if we want to make sure nobody uses it.\nDoesn\u0027t really make sense after full refactor (isolate removed from ParseInfo).\nMight move the check to set_isolate for this commit",
+      "parentUuid": "cae2d855_6ef56246",
       "range": {
         "startLine": 163,
         "startChar": 24,
