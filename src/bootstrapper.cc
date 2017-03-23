@@ -2665,6 +2665,15 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     InstallWithIntrinsicDefaultProto(
         isolate, construct_by_buffer,
         Context::TYPED_ARRAY_CONSTRUCT_BY_ARRAY_BUFFER_INDEX);
+
+    // %typed_array_construct_by_array_like
+    Handle<JSFunction> construct_by_array_like = SimpleCreateFunction(
+        isolate,
+        factory->NewStringFromAsciiChecked("typedArrayConstructByArrayLike"),
+        Builtins::kTypedArrayConstructByArrayLike, 4, false);
+    InstallWithIntrinsicDefaultProto(
+        isolate, construct_by_array_like,
+        Context::TYPED_ARRAY_CONSTRUCT_BY_ARRAY_LIKE_INDEX);
   }
 
   {  // -- D a t a V i e w
