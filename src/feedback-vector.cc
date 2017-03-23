@@ -902,24 +902,66 @@ InlineCacheState CollectTypeProfileNexus::StateFromFeedback() const {
   return MONOMORPHIC;
 }
 
-void CollectTypeProfileNexus::Collect(Handle<Name> type, int position) {
+namespace {
+Handle<ArrayList> initList(Isolate* isolate) {
+  Handle<ArrayList> types = ArrayList::New(isolate, 3);
+  // Return types.
+  types->set(0, *StringSet::New(isolate));
+  // Variable types.
+  types->set(1, *ArrayList::New(isolate, 0));
+  // Parameter types.
+  types->set(2, *ArrayList::New(isolate, 0));
+  return types;
+}
+}  // namespace
+
+void CollectTypeProfileNexus::CollectReturnTypes(Handle<String> type) {
   Isolate* isolate = GetIsolate();
 
   Object* const feedback = GetFeedback();
   Handle<ArrayList> types;
 
   if (feedback == *FeedbackVector::UninitializedSentinel(isolate)) {
-    types = ArrayList::New(isolate, 1);
+    types = initList(isolate);
   } else {
     types = Handle<ArrayList>(ArrayList::cast(feedback), isolate);
   }
 
-  Handle<Tuple2> entry = isolate->factory()->NewTuple2(
-      type, Handle<Smi>(Smi::FromInt(position), isolate));
+  Handle<StringSet> return_types =
+      Handle<StringSet>(StringSet::cast(types->get(0)), isolate);
 
-  // TODO(franzih): Somehow sort this list. Either avoid duplicates
-  // or use the common base type.
-  SetFeedback(*ArrayList::Add(types, entry));
+  types->set(0, *StringSet::Add(return_types, type));
+  SetFeedback(*types);
+}
+
+void CollectTypeProfileNexus::CollectParameterTypes(Handle<String> type,
+                                                    int index) {
+  Isolate* isolate = GetIsolate();
+
+  Object* const feedback = GetFeedback();
+  Handle<ArrayList> types;
+
+  if (feedback == *FeedbackVector::UninitializedSentinel(isolate)) {
+    types = initList(isolate);
+  } else {
+    types = Handle<ArrayList>(ArrayList::cast(feedback), isolate);
+  }
+
+  Handle<ArrayList> parameters =
+      Handle<ArrayList>(ArrayList::cast(types->get(1)), isolate);
+
+  if (parameters->Length() <= index) {
+    for (int i = parameters->Length(); i <= index; i++) {
+      parameters = ArrayList::Add(parameters, StringSet::New(isolate));
+    }
+  }
+
+  Handle<StringSet> parameter_types =
+      Handle<StringSet>(StringSet::cast(parameters->Get(index)));
+  parameters->Set(index, *StringSet::Add(parameter_types, type));
+
+  types->set(1, *parameters);
+  SetFeedback(*types);
 }
 
 void CollectTypeProfileNexus::Print() const {
@@ -931,18 +973,57 @@ void CollectTypeProfileNexus::Print() const {
     return;
   }
 
-  Handle<ArrayList> list;
-  list = Handle<ArrayList>(ArrayList::cast(feedback), isolate);
+  Handle<ArrayList> types =
+      Handle<ArrayList>(ArrayList::cast(feedback), isolate);
 
-  for (int i = 0; i < list->Length(); i++) {
-    Handle<Object> maybe_entry = Handle<Object>(list->Get(i), isolate);
-    DCHECK(maybe_entry->IsTuple2());
-    Handle<Tuple2> entry = Handle<Tuple2>::cast(maybe_entry);
-    Handle<String> type =
-        Handle<String>(String::cast(entry->value1()), isolate);
-    int position = Smi::cast(entry->value2())->value();
-    PrintF("%d: %s\n", position, type->ToCString().get());
+  Handle<StringSet> return_types =
+      Handle<StringSet>(StringSet::cast(types->get(0)), isolate);
+  if (return_types->Size() != 0) {
+    PrintReturnTypes(return_types);
   }
+
+  Handle<ArrayList> variable_types =
+      Handle<ArrayList>(ArrayList::cast(types->get(1)), isolate);
+  if (variable_types->Length() != 0) {
+    PrintParameterTypes(variable_types);
+  }
+}
+
+namespace {
+
+void PrintStrings(Handle<StringSet> s) {
+  for (int i = 0; i < s->Capacity(); i++) {
+    Object* entry = s->get(i + StringSet::kPrefixStartIndex);
+    if (entry->IsString()) {
+      PrintF("%s\n", String::cast(entry)->ToCString().get());
+    }
+  }
+}
+}  // namespace
+
+void CollectTypeProfileNexus::PrintReturnTypes(Handle<StringSet> types) const {
+  PrintF("Return:\n");
+  for (int i = 0; i < types->Capacity(); i++) {
+    Object* entry = types->get(i + StringSet::kPrefixStartIndex);
+    if (entry->IsString()) {
+      PrintF("%s\n", String::cast(entry)->ToCString().get());
+    }
+  }
+  PrintF("\n");
+}
+
+void CollectTypeProfileNexus::PrintParameterTypes(
+    Handle<ArrayList> list) const {
+  PrintF("Parameters:\n");
+  Isolate* isolate = list->GetIsolate();
+  int num_parameters = list->Length();
+  for (int i = 0; i < num_parameters; i++) {
+    Handle<Object> parameter_types = Handle<Object>(list->Get(i), isolate);
+    DCHECK(parameter_types->IsStringSet());
+    PrintF("[%d]:\n", i);
+    PrintStrings(Handle<StringSet>::cast(parameter_types));
+  }
+  PrintF("\n");
 }
 
 }  // namespace internal
