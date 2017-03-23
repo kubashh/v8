@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd893e9_d24a61f2",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1152629
+      },
+      "writtenOn": "2017-03-23T10:08:30Z",
+      "side": 1,
+      "message": "Is there a ES6 section we can link to or should we add some explanation?",
+      "revId": "4558dd2370fb4b3b2c7301b405d67ff48e2befe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578046f9_2800d908",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1152629
+      },
+      "writtenOn": "2017-03-23T10:08:30Z",
+      "side": 1,
+      "message": "Can we extract the duplicate code between this and ToSmiIndex? Something like this? What should foo be called?\n\nfoo(result, range_error, to_integer, negative_check, done);\nBind(\u0026done)\nreturn;\n\nfoo() {\n  Label return_zero();\n  Bind(\u0026to_integer);\n  result.Bind(ToInteger(context, result.value(),\n                        CodeStubAssembler::kTruncateMinusZero));\n  GotoIfNot(TaggedIsSmi(result.value()), range_error);\n  CSA_ASSERT(this, TaggedIsSmi(result.value()));\n  Goto(\u0026negative_check);\n\n  Bind(\u0026negative_check);\n  Branch(SmiLessThan(result.value(), SmiConstant(0)), \u0026return_zero, \u0026done);\n\n  Bind(\u0026return_zero);\n  result.Bind(SmiConstant(0));\n  Goto(\u0026done);\n}",
+      "revId": "4558dd2370fb4b3b2c7301b405d67ff48e2befe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
