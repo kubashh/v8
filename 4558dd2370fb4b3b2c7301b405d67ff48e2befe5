@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5cec247b_0896f3c4",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-23T10:52:56Z",
+      "side": 1,
+      "message": "It doesn\u0027t correspond to a es6 section, it\u0027s just a helper I guess. It will become an internal helper in builtins-typedarray-gen once the callers in typedarray.js are converted too, so it will be removed from this list soon",
+      "parentUuid": "0bd893e9_d24a61f2",
+      "revId": "4558dd2370fb4b3b2c7301b405d67ff48e2befe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "578046f9_2800d908",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "4558dd2370fb4b3b2c7301b405d67ff48e2befe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a38693_65f31bc1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-23T10:52:56Z",
+      "side": 1,
+      "message": "As discussed, leaving them as-is because they are slightly different and factoring it out wouldn\u0027t be worth it in this case",
+      "parentUuid": "578046f9_2800d908",
+      "revId": "4558dd2370fb4b3b2c7301b405d67ff48e2befe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
