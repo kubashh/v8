@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "25141abb_3aa234e9",
+        "filename": "src/background-parsing-task.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-23T09:40:52Z",
+      "side": 1,
+      "message": "Was it worth it?\nI think it was! :)",
+      "parentUuid": "857f0606_e32025b7",
+      "range": {
+        "startLine": 60,
+        "startChar": 40,
+        "endLine": 60,
+        "endChar": 44
+      },
+      "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cae8f8c4_fc85d950",
         "filename": "src/parsing/parse-info.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43b46ed7_ce72981f",
+        "filename": "src/parsing/parse-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-23T09:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cae8f8c4_fc85d950",
+      "range": {
+        "startLine": 299,
+        "startChar": 36,
+        "endLine": 299,
+        "endChar": 43
+      },
+      "revId": "95c2aa0b95a999aa35a2bf5e380153c29c81309d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
