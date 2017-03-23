@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce50ca81_fcc5e02d",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-03-23T11:49:38Z",
+      "side": 1,
+      "message": "Given the code one line below, the reader probably already knows it\u0027s a convenience function.\n\n(I think this kind of comment is more useful in the header, since there it tells the reader that the two overloaded functions are largely identical. Here, the reader can see that on their own.)",
+      "range": {
+        "startLine": 656,
+        "startChar": 3,
+        "endLine": 656,
+        "endChar": 14
+      },
+      "revId": "a0f997973c1c9b2ad9fe0edec9e6ff7f4170419e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a58106b8_bb3950a6",
+        "filename": "src/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-03-23T11:49:38Z",
+      "side": 1,
+      "message": "I wonder if the \"convenience\" functions [here \u0026 below] should be the only functions. Not sure, though.",
+      "range": {
+        "startLine": 76,
+        "startChar": 14,
+        "endLine": 76,
+        "endChar": 29
+      },
+      "revId": "a0f997973c1c9b2ad9fe0edec9e6ff7f4170419e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
