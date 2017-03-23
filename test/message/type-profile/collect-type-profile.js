@@ -57,4 +57,13 @@ fall_off();
 
 testReturnOfNonVariable();
 
+
+function my_params(first_param, second_param) {
+  return 18;
+}
+my_params(23, {});
+my_params(new MyClass(), {});
+
+%PrintTypeProfile(my_params);
+
 throw "throw otherwise test fails with --stress-opt";

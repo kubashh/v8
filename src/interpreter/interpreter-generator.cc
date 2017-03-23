@@ -816,17 +816,30 @@ void InterpreterGenerator::DoStaDataPropertyInLiteral(
   __ Dispatch();
 }
 
-void InterpreterGenerator::DoCollectTypeProfile(
+void InterpreterGenerator::DoCollectReturnTypeProfile(
     InterpreterAssembler* assembler) {
-  Node* position = __ BytecodeOperandImmSmi(0);
+  Node* value = __ GetAccumulator();
+  Node* vector_index = __ SmiTag(__ BytecodeOperandIdx(0));
+
+  Node* feedback_vector = __ LoadFeedbackVector();
+  Node* context = __ GetContext();
+
+  __ CallRuntime(Runtime::kCollectReturnTypeProfile, context, value,
+                 feedback_vector, vector_index);
+  __ Dispatch();
+}
+
+void InterpreterGenerator::DoCollectParameterTypeProfile(
+    InterpreterAssembler* assembler) {
+  Node* parameter_index = __ BytecodeOperandImmSmi(0);
   Node* value = __ GetAccumulator();
   Node* vector_index = __ SmiTag(__ BytecodeOperandIdx(1));
 
   Node* feedback_vector = __ LoadFeedbackVector();
   Node* context = __ GetContext();
 
-  __ CallRuntime(Runtime::kCollectTypeProfile, context, position, value,
-                 feedback_vector, vector_index);
+  __ CallRuntime(Runtime::kCollectParameterTypeProfile, context,
+                 parameter_index, value, feedback_vector, vector_index);
   __ Dispatch();
 }
 
