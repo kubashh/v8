@@ -738,8 +738,9 @@ class CollectTypeProfileNexus : public FeedbackNexus {
     DCHECK_EQ(FeedbackSlotKind::kTypeProfile, vector->GetKind(slot));
   }
 
-  // Add a type to the list of types.
-  void Collect(Handle<Name> type, int position);
+  // Add a type to the list of return types.
+  void CollectReturnTypes(Handle<String> type);
+  void CollectParameterTypes(Handle<String> type, int position);
 
   // Dump the types to stdout.
   // TODO(franzih): pass this information to the debugger protocol instead of
@@ -747,6 +748,10 @@ class CollectTypeProfileNexus : public FeedbackNexus {
   void Print() const;
 
   InlineCacheState StateFromFeedback() const override;
+
+ private:
+  void PrintReturnTypes(Handle<StringSet> types) const;
+  void PrintVariableTypes(Handle<ArrayList> types) const;
 };
 
 inline BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback);
