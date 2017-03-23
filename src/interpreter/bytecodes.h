@@ -105,7 +105,8 @@ namespace interpreter {
     OperandType::kReg, OperandType::kIdx)                                      \
   V(StaDataPropertyInLiteral, AccumulatorUse::kRead, OperandType::kReg,        \
     OperandType::kReg, OperandType::kFlag8, OperandType::kIdx)                 \
-  V(CollectTypeProfile, AccumulatorUse::kRead, OperandType::kImm,              \
+  V(CollectReturnTypeProfile, AccumulatorUse::kRead, OperandType::kIdx)        \
+  V(CollectParameterTypeProfile, AccumulatorUse::kRead, OperandType::kImm,     \
     OperandType::kIdx)                                                         \
                                                                                \
   /* Binary Operators */                                                       \
@@ -411,8 +412,8 @@ enum class Bytecode : uint8_t {
   BYTECODE_LIST(DECLARE_BYTECODE)
 #undef DECLARE_BYTECODE
 #define COUNT_BYTECODE(x, ...) +1
-  // The COUNT_BYTECODE macro will turn this into kLast = -1 +1 +1... which will
-  // evaluate to the same value as the last real bytecode.
+  // The COUNT_BYTECODE macro will turn this into kLast = -1 +1 +1... which
+  // will evaluate to the same value as the last real bytecode.
   kLast = -1 BYTECODE_LIST(COUNT_BYTECODE)
 #undef COUNT_BYTECODE
 };
