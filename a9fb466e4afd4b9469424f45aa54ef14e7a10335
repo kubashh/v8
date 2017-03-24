@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8718b48_04e2b898",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-24T17:51:11Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to mark do_compare as deferred though, we only reach it via slow_path which is already deferred, so this shouldn\u0027t be necessary.",
+      "range": {
+        "startLine": 1217,
+        "startChar": 4,
+        "endLine": 1219,
+        "endChar": 34
+      },
+      "revId": "a9fb466e4afd4b9469424f45aa54ef14e7a10335",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
