@@ -1115,6 +1115,7 @@
         'objects-printer.cc',
         'objects.cc',
         'objects.h',
+        'objects/descriptor-array.h',
         'objects/literal-objects.cc',
         'objects/literal-objects.h',
         'objects/module-info.h',
