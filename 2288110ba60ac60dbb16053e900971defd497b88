@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98fb99bb_981c086b",
+        "filename": "src/zone/zone-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-03-24T12:59:21Z",
+      "side": 1,
+      "message": "nit: fix capitallisation -- and use case sensitive replacement in the future ;)",
+      "range": {
+        "startLine": 5,
+        "startChar": 8,
+        "endLine": 5,
+        "endChar": 32
+      },
+      "revId": "2288110ba60ac60dbb16053e900971defd497b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6b78a1_14f897b0",
+        "filename": "src/zone/zone-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-03-24T12:59:21Z",
+      "side": 1,
+      "message": "revert to \"pointer\" etc.? Or is this for consistency with the below class?",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 4
+      },
+      "revId": "2288110ba60ac60dbb16053e900971defd497b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7955b25f_9e63b073",
+        "filename": "src/zone/zone-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-03-24T12:59:21Z",
+      "side": 1,
+      "message": "I would add a comment here that we\u0027re horribly abusing this pointer by reusing it as a free block, and a DCHECK/static_assert that the size of T*n is big enough to fit a FreeBlock.",
+      "range": {
+        "startLine": 124,
+        "startChar": 51,
+        "endLine": 124,
+        "endChar": 61
+      },
+      "revId": "2288110ba60ac60dbb16053e900971defd497b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
