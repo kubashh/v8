@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d4f3b68_debf7cc1",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Yes, it is because of the bug. When there are multiple predecessors for a deferred block (even if all of them are deferred), we introduce a merge block. The phi nodes are not moved to the merge block though. So, we end up with a case where the number of inputs to a phi do not match the number of predecessors of the basic block. I moved these labels to the slow_path.",
+      "parentUuid": "290063d1_b03a5924",
+      "range": {
+        "startLine": 997,
+        "startChar": 6,
+        "endLine": 997,
+        "endChar": 16
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ca9c898_746e85be",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -83,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "0869718b_03dc7974",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f217ff24_e09057a2",
+      "range": {
+        "startLine": 1033,
+        "startChar": 49,
+        "endLine": 1033,
+        "endChar": 76
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40bb4153_9fe01bdc",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -103,6 +151,30 @@
       "revId": "9056f57d2969c70be699de6b815e225757ec940b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5558b50a_a994d500",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40bb4153_9fe01bdc",
+      "range": {
+        "startLine": 1035,
+        "startChar": 18,
+        "endLine": 1035,
+        "endChar": 19
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "aceaf747_8eef177f",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "055f767d_1b4c57bd",
+      "range": {
+        "startLine": 1060,
+        "startChar": 18,
+        "endLine": 1060,
+        "endChar": 34
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb6af603_611d416e",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -152,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "2c1323b5_29a1a81c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb6af603_611d416e",
+      "range": {
+        "startLine": 1069,
+        "startChar": 19,
+        "endLine": 1069,
+        "endChar": 25
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af93cef3_ca10ac8b",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -163,6 +283,30 @@
       "writtenOn": "2017-03-22T17:21:16Z",
       "side": 1,
       "message": "I don\u0027t think you need these extra labels, just bind the result to true / false at the appropriate place and Goto(\u0026end).",
+      "range": {
+        "startLine": 1105,
+        "startChar": 0,
+        "endLine": 1117,
+        "endChar": 0
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8fbff38_c19d0aba",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Binding them at the int / float comparison causes the code generation to fail because of mis matched number of inputs to phi and the number of predecessors. I will look at it again.",
+      "parentUuid": "af93cef3_ca10ac8b",
       "range": {
         "startLine": 1105,
         "startChar": 0,
@@ -198,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "92b83caa_e6350ed6",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33fdb440_cccdf064",
+      "range": {
+        "startLine": 1121,
+        "startChar": 58,
+        "endLine": 1121,
+        "endChar": 60
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e4fe8bd_129eaf13",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -218,6 +386,30 @@
       "revId": "9056f57d2969c70be699de6b815e225757ec940b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a519b516_13465763",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "This implementation has changed.",
+      "parentUuid": "6e4fe8bd_129eaf13",
+      "range": {
+        "startLine": 1123,
+        "startChar": 13,
+        "endLine": 1123,
+        "endChar": 20
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -244,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "7e8bdc57_869cdc2d",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cc34910_81909462",
+      "range": {
+        "startLine": 1125,
+        "startChar": 40,
+        "endLine": 1125,
+        "endChar": 43
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "676a61a0_07a7f6cc",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -264,6 +480,30 @@
       "revId": "9056f57d2969c70be699de6b815e225757ec940b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4da611a5_532f32e4",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "This comment is no longer there.",
+      "parentUuid": "676a61a0_07a7f6cc",
+      "range": {
+        "startLine": 1126,
+        "startChar": 16,
+        "endLine": 1128,
+        "endChar": 14
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -290,6 +530,30 @@
     },
     {
       "key": {
+        "uuid": "7e1ffd10_e3c049f9",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d293340_ca691a2c",
+      "range": {
+        "startLine": 1132,
+        "startChar": 52,
+        "endLine": 1132,
+        "endChar": 53
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dd33271_84cc7f9c",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -313,6 +577,30 @@
     },
     {
       "key": {
+        "uuid": "b54616eb_113d1f10",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "This has also changed considerably.",
+      "parentUuid": "9dd33271_84cc7f9c",
+      "range": {
+        "startLine": 1140,
+        "startChar": 3,
+        "endLine": 1140,
+        "endChar": 55
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05a92391_c932473a",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -324,6 +612,30 @@
       "writtenOn": "2017-03-22T17:21:16Z",
       "side": 1,
       "message": "Why is this only for OrderedRelationCompareOps? The old code looked like it checked this in either case",
+      "range": {
+        "startLine": 1142,
+        "startChar": 6,
+        "endLine": 1145,
+        "endChar": 33
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e7db1fe_83ac8b01",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "We don\u0027t check for Oddballs for equals/strict equals.",
+      "parentUuid": "05a92391_c932473a",
       "range": {
         "startLine": 1142,
         "startChar": 6,
@@ -359,6 +671,30 @@
     },
     {
       "key": {
+        "uuid": "10ed9d74_3359c80b",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b46fdcbb_50a5f004",
+      "range": {
+        "startLine": 1189,
+        "startChar": 15,
+        "endLine": 1189,
+        "endChar": 31
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e013978_5ac30e1e",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -379,6 +715,30 @@
       "revId": "9056f57d2969c70be699de6b815e225757ec940b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d6d4aa_c38baf54",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e013978_5ac30e1e",
+      "range": {
+        "startLine": 1192,
+        "startChar": 13,
+        "endLine": 1192,
+        "endChar": 33
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -405,6 +765,30 @@
     },
     {
       "key": {
+        "uuid": "fc253a80_56218bcf",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06b9e6ef_6f5daddb",
+      "range": {
+        "startLine": 1218,
+        "startChar": 14,
+        "endLine": 1218,
+        "endChar": 28
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f49f484_d1d97d50",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 1
@@ -416,6 +800,30 @@
       "writtenOn": "2017-03-22T17:21:16Z",
       "side": 1,
       "message": "call_compare_stub",
+      "range": {
+        "startLine": 1219,
+        "startChar": 11,
+        "endLine": 1219,
+        "endChar": 21
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fbead08_9cc5904c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "I left it as do_compare since we inline the comparison now. I will change it to call_compare_stub  in the later cl that actually calls the stub.",
+      "parentUuid": "7f49f484_d1d97d50",
       "range": {
         "startLine": 1219,
         "startChar": 11,
@@ -448,6 +856,30 @@
       "revId": "9056f57d2969c70be699de6b815e225757ec940b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1406e52_f8bea27b",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-24T15:26:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9878aad1_f13e702b",
+      "range": {
+        "startLine": 1230,
+        "startChar": 13,
+        "endLine": 1230,
+        "endChar": 21
+      },
+      "revId": "9056f57d2969c70be699de6b815e225757ec940b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
