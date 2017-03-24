@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4b8b264f_497eb476",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-24T11:42:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce50ca81_fcc5e02d",
+      "range": {
+        "startLine": 656,
+        "startChar": 3,
+        "endLine": 656,
+        "endChar": 14
+      },
+      "revId": "a0f997973c1c9b2ad9fe0edec9e6ff7f4170419e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a58106b8_bb3950a6",
         "filename": "src/compiler.h",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-23T11:49:38Z",
       "side": 1,
       "message": "I wonder if the \"convenience\" functions [here \u0026 below] should be the only functions. Not sure, though.",
+      "range": {
+        "startLine": 76,
+        "startChar": 14,
+        "endLine": 76,
+        "endChar": 29
+      },
+      "revId": "a0f997973c1c9b2ad9fe0edec9e6ff7f4170419e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "994b0bdd_a3032d4d",
+        "filename": "src/compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-03-24T11:42:18Z",
+      "side": 1,
+      "message": "I thought same, but we have 1 case in asm-wasm-builder and lots of them in tests where we don\u0027t really have appropriate CompilationInfo*.\nFor the tests it\u0027s just a little more work to adjust them.\nFor asm-wasm I don\u0027t know if we want to create it.",
+      "parentUuid": "a58106b8_bb3950a6",
       "range": {
         "startLine": 76,
         "startChar": 14,
