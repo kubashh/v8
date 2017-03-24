@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "09691de2_ca29d8b2",
+        "filename": "src/zone/zone-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-03-24T17:48:20Z",
+      "side": 1,
+      "message": "Cool.",
+      "parentUuid": "2c155ef5_6b164747",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 4
+      },
+      "revId": "2288110ba60ac60dbb16053e900971defd497b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7955b25f_9e63b073",
         "filename": "src/zone/zone-allocator.h",
         "patchSetId": 3
@@ -140,6 +164,30 @@
       "revId": "2288110ba60ac60dbb16053e900971defd497b88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1afcb096_0ebd189d",
+        "filename": "src/zone/zone-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-03-24T17:48:20Z",
+      "side": 1,
+      "message": "oh, yeah, I completely missed that :)",
+      "parentUuid": "72657172_4c4206e6",
+      "range": {
+        "startLine": 124,
+        "startChar": 51,
+        "endLine": 124,
+        "endChar": 61
+      },
+      "revId": "2288110ba60ac60dbb16053e900971defd497b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
