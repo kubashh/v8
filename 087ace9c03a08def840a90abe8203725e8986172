@@ -16,6 +16,24 @@
       "revId": "087ace9c03a08def840a90abe8203725e8986172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faa3a5fd_9dee6730",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-24T16:44:19Z",
+      "side": 1,
+      "message": "Yep that\u0027s right",
+      "parentUuid": "e59a77bc_d9cb241c",
+      "revId": "087ace9c03a08def840a90abe8203725e8986172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
