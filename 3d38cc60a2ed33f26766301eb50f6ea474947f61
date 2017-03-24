@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac84522_bf3d562d",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-24T15:14:47Z",
+      "side": 1,
+      "message": "You don\u0027t want to use this function. Use native_context()-\u003eset_construct_by_array_like(*..) instead.",
+      "revId": "3d38cc60a2ed33f26766301eb50f6ea474947f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

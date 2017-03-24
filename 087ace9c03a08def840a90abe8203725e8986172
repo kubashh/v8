@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e59a77bc_d9cb241c",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-24T15:14:47Z",
+      "side": 1,
+      "message": "This function is only valid for non-neuterable typed arrays right? Like arrays that were just allocated. Otherwise the above ToNumber could cause the target array to be neutered.",
+      "revId": "087ace9c03a08def840a90abe8203725e8986172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
