@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "33772265_42ba910e",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2017-03-25T01:32:43Z",
+      "side": 1,
+      "message": "Although I\u0027m not very confident about this, I tend to agree with Adam.  I believe that the problem is caused by the FunctionState in ParseArrowFunctionLiteral (line parser-base.h:4179) being set up too early, before the rewriting of the destructuring assignments (line 4276).  I tried moving the line \"impl()-\u003eRewriteDestructuringAssignments();\" from 4276 to 4179 (just before the FunctionState), but it\u0027s not so easy.  This problem seems to be fixed but some other tests break.",
+      "parentUuid": "1b91c640_cc9ed731",
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b360ba68_e040da6e",
         "filename": "test/mjsunit/regress/regress-704811.js",
         "patchSetId": 1
