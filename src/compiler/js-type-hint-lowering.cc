@@ -228,21 +228,51 @@ Reduction JSTypeHintLowering::ReduceBinaryOperation(const Operator* op,
   return Reduction();
 }
 
-Reduction JSTypeHintLowering::ReduceLoadNamedOperation(
-    Node* effect, Node* control, FeedbackSlot slot) const {
-  DCHECK(!slot.IsInvalid());
-  LoadICNexus nexus(feedback_vector(), slot);
+Reduction JSTypeHintLowering::ReduceLoadOperation(const Operator* op,
+                                                  Node* effect, Node* control,
+                                                  FeedbackSlot slot) const {
+  switch (op->opcode()) {
+    case IrOpcode::kJSLoadNamed: {
+      DCHECK(!slot.IsInvalid());
+      LoadICNexus nexus(feedback_vector(), slot);
+      if (Node* node = TryBuildSoftDeopt(
+              nexus, effect, control,
+              DeoptimizeReason::
+                  kInsufficientTypeFeedbackForGenericNamedAccess)) {
+        return Reduction(node);
+      }
+      break;
+    }
+    case IrOpcode::kJSLoadProperty: {
+      DCHECK(!slot.IsInvalid());
+      KeyedLoadICNexus nexus(feedback_vector(), slot);
+      if (Node* node = TryBuildSoftDeopt(
+              nexus, effect, control,
+              DeoptimizeReason::
+                  kInsufficientTypeFeedbackForGenericKeyedAccess)) {
+        return Reduction(node);
+      }
+      break;
+    }
+    default:
+      UNREACHABLE();
+      break;
+  }
+  return Reduction();
+}
+
+Node* JSTypeHintLowering::TryBuildSoftDeopt(FeedbackNexus& nexus, Node* effect,
+                                            Node* control,
+                                            DeoptimizeReason reason) const {
   if ((flags() & kBailoutOnUninitialized) && nexus.IsUninitialized()) {
     Node* deoptimize = jsgraph()->graph()->NewNode(
-        jsgraph()->common()->Deoptimize(
-            DeoptimizeKind::kSoft,
-            DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess),
+        jsgraph()->common()->Deoptimize(DeoptimizeKind::kSoft, reason),
         jsgraph()->Dead(), effect, control);
     Node* frame_state = NodeProperties::FindFrameStateBefore(deoptimize);
     deoptimize->ReplaceInput(0, frame_state);
-    return Reduction(deoptimize);
+    return deoptimize;
   }
-  return Reduction();
+  return nullptr;
 }
 
 }  // namespace compiler

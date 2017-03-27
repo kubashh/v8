@@ -1063,13 +1063,13 @@ void BytecodeGraphBuilder::VisitLdaNamedProperty() {
       Handle<Name>::cast(bytecode_iterator().GetConstantForIndexOperand(1));
   VectorSlotPair feedback =
       CreateVectorSlotPair(bytecode_iterator().GetIndexOperand(2));
+  const Operator* op = javascript()->LoadNamed(name, feedback);
 
   Node* node = nullptr;
-  if (Node* simplified = TryBuildSimplifiedLoadNamed(feedback.slot())) {
+  if (Node* simplified = TryBuildSimplifiedLoad(op, feedback.slot())) {
     if (environment() == nullptr) return;
     node = simplified;
   } else {
-    const Operator* op = javascript()->LoadNamed(name, feedback);
     node = NewNode(op, object);
   }
 
@@ -1083,9 +1083,16 @@ void BytecodeGraphBuilder::VisitLdaKeyedProperty() {
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
   VectorSlotPair feedback =
       CreateVectorSlotPair(bytecode_iterator().GetIndexOperand(1));
-
   const Operator* op = javascript()->LoadProperty(feedback);
-  Node* node = NewNode(op, object, key);
+
+  Node* node = nullptr;
+  if (Node* simplified = TryBuildSimplifiedLoad(op, feedback.slot())) {
+    if (environment() == nullptr) return;
+    node = simplified;
+  } else {
+    node = NewNode(op, object, key);
+  }
+
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
@@ -2408,7 +2415,8 @@ Node* BytecodeGraphBuilder::TryBuildSimplifiedBinaryOp(const Operator* op,
   return nullptr;
 }
 
-Node* BytecodeGraphBuilder::TryBuildSimplifiedLoadNamed(FeedbackSlot slot) {
+Node* BytecodeGraphBuilder::TryBuildSimplifiedLoad(const Operator* op,
+                                                   FeedbackSlot slot) {
   // TODO(mstarzinger,6112): This is a workaround for OSR loop entries being
   // pruned from the graph by a soft-deopt. It can happen that a LoadIC that
   // control-dominates the OSR entry is still in "uninitialized" state.
@@ -2416,7 +2424,7 @@ Node* BytecodeGraphBuilder::TryBuildSimplifiedLoadNamed(FeedbackSlot slot) {
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
   Reduction early_reduction =
-      type_hint_lowering().ReduceLoadNamedOperation(effect, control, slot);
+      type_hint_lowering().ReduceLoadOperation(op, effect, control, slot);
   if (early_reduction.Changed()) {
     Node* node = early_reduction.replacement();
     if (node->op()->EffectOutputCount() > 0) {

@@ -179,7 +179,7 @@ class BytecodeGraphBuilder {
   // any other invocation of {NewNode} would do.
   Node* TryBuildSimplifiedBinaryOp(const Operator* op, Node* left, Node* right,
                                    FeedbackSlot slot);
-  Node* TryBuildSimplifiedLoadNamed(FeedbackSlot slot);
+  Node* TryBuildSimplifiedLoad(const Operator* op, FeedbackSlot slot);
 
   // Check the context chain for extensions, for lookup fast paths.
   Environment* CheckContextExtensions(uint32_t depth);

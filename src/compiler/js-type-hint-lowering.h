@@ -7,12 +7,14 @@
 
 #include "src/base/flags.h"
 #include "src/compiler/graph-reducer.h"
+#include "src/deoptimize-reason.h"
 #include "src/handles.h"
 
 namespace v8 {
 namespace internal {
 
 // Forward declarations.
+class FeedbackNexus;
 class FeedbackSlot;
 
 namespace compiler {
@@ -46,12 +48,14 @@ class JSTypeHintLowering {
                                   Node* effect, Node* control,
                                   FeedbackSlot slot) const;
 
-  // Potential reduction of property access operations.
-  Reduction ReduceLoadNamedOperation(Node* effect, Node* control,
-                                     FeedbackSlot slot) const;
+  // Potential reduction of property (named or keyed) access operations.
+  Reduction ReduceLoadOperation(const Operator* op, Node* effect, Node* control,
+                                FeedbackSlot slot) const;
 
  private:
   friend class JSSpeculativeBinopBuilder;
+  Node* TryBuildSoftDeopt(FeedbackNexus& nexus, Node* effect, Node* control,
+                          DeoptimizeReason reson) const;
 
   JSGraph* jsgraph() const { return jsgraph_; }
   Flags flags() const { return flags_; }
