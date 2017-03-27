@@ -16,6 +16,24 @@
       "revId": "4fdcf6debdf46530dc76f508acbf7f58a2426951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57645252_1d3f8b5c",
+        "filename": "src/crankshaft/arm/lithium-codegen-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-27T13:54:09Z",
+      "side": 1,
+      "message": "Putting it before the BlockConstPoolScope was not be enough, I had to put it before the PredictableCodeSizeScope. It seems like the PredictableCodeSizeScope is only used for Crankshaft and FCG at the moment. Maybe we can remove the flag when these compilers got removed. PTAL",
+      "parentUuid": "a56e93cf_48fe8943",
+      "revId": "4fdcf6debdf46530dc76f508acbf7f58a2426951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
