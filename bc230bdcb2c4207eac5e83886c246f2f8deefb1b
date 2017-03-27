@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d10866a_87959c4e",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-03-27T20:53:20Z",
+      "side": 1,
+      "message": "Might want to force this and others below to be lazy by not enclosing them in parens/immediately invoking, so that we\u0027ll still have coverage if we change this form to be eager in the future.",
+      "revId": "bc230bdcb2c4207eac5e83886c246f2f8deefb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
