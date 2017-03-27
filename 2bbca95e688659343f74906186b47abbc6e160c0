@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "419f5894_dee8ed28",
+        "filename": "src/compiler/control-equivalence.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T11:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "623744e8_20f3620f",
+      "range": {
+        "startLine": 190,
+        "startChar": 9,
+        "endLine": 190,
+        "endChar": 16
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fcc5232_139d886e",
         "filename": "src/compiler/control-equivalence.h",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-27T08:12:51Z",
       "side": 1,
       "message": "While we are at the topic of size, would \"bool visited : 1;\" and \"bool on_stack : 1;\" change the footprint here?",
+      "range": {
+        "startLine": 91,
+        "startChar": 9,
+        "endLine": 91,
+        "endChar": 16
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c34ddad_3b6bac9c",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T11:43:22Z",
+      "side": 1,
+      "message": "Doesn\u0027t make any difference due to alignment padding, but worth it anyway in case we add any more. Done.",
+      "parentUuid": "6fcc5232_139d886e",
       "range": {
         "startLine": 91,
         "startChar": 9,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6a58d918_ee05544e",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T11:43:22Z",
+      "side": 1,
+      "message": "Having re-read the scheduling code I actually think this DCHECK was wrong. I didn\u0027t realize we re-ran control equivalence on a subgraph when fusing floating control. Given that this can happen after node some nodes are split, I guess we might go out-of-range for the initial node data size. I\u0027ve never seen this happening but I guess it\u0027s possible?  Added back the grow-on-demand code, let me know if you think this is necessary given above.",
+      "parentUuid": "b25316da_1af5ef5c",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 10
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f24ecd57_ef2d73db",
         "filename": "src/compiler/control-equivalence.h",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2017-03-27T08:12:51Z",
       "side": 1,
       "message": "nit: CHECK_LT, also any reason this is a release-check and the one in GetData is a debug-check?",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d963604_8769c747",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T11:43:22Z",
+      "side": 1,
+      "message": "Code removed (see above).",
+      "parentUuid": "f24ecd57_ef2d73db",
       "range": {
         "startLine": 142,
         "startChar": 4,
@@ -114,6 +210,30 @@
       "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "885dfa14_f655b87e",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T11:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d44cbc6_6ac47ec9",
+      "range": {
+        "startLine": 153,
+        "startChar": 9,
+        "endLine": 153,
+        "endChar": 21
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
