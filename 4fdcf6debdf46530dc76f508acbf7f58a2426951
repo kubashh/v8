@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a56e93cf_48fe8943",
+        "filename": "src/crankshaft/arm/lithium-codegen-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1119620
+      },
+      "writtenOn": "2017-03-27T13:37:06Z",
+      "side": 1,
+      "message": "What bothers me is that we\u0027re preventing the pool from being emitted when the MacroAssembler decided that it was time to do so. We could be pushing something out of range, or making some otherwise-broken code. (Bugs like this can lead to unintended code execution and as such can be a security risk.)\n\nCan we put the MaybeCheckConstPool before the BlockConstPoolScope in this function? (Ditto for other cases where we need to pass \"false\".)",
+      "revId": "4fdcf6debdf46530dc76f508acbf7f58a2426951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
