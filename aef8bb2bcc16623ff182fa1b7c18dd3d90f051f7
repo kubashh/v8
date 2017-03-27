@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "dbac1a70_13b14bce",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Adamk: I think that\u0027s because in your case, the \u003d { } is a default parameter for a function and the ParameterInitializerThing kicks in... but I need to investigate that a bit more - I ran out of time today.\n\nHowever, I think the \"two functionstates\" situation emulates the eager case pretty well - there we also parse the params in a different functionstate too.\n\nNikolaos: The \"problem\" is that the destructuring assignments are in two different functionstates. But that\u0027s the case for eager arrow functions too: the destructuring assignments from the params are in the parent functionstate and the destructuring assignments from the body are in the function\u0027s functionstate. So it\u0027s not enough to just move the RewriteDestructuringAssignments call around.\n\nHowever, when eager parsing arrow funcs, the destructuring assignments are also in two functionstates too. It works because we eventually call RewriteDestructuringAssignments for both.",
+      "parentUuid": "33772265_42ba910e",
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b360ba68_e040da6e",
         "filename": "test/mjsunit/regress/regress-704811.js",
         "patchSetId": 1
@@ -106,6 +124,54 @@
     },
     {
       "key": {
+        "uuid": "f20eb53a_49d85728",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b360ba68_e040da6e",
+      "range": {
+        "startLine": 13,
+        "startChar": 47,
+        "endLine": 13,
+        "endChar": 57
+      },
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32858bf3_52b87c82",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a07ec710_d26d950c",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fbbca44_2d6294d1",
         "filename": "test/mjsunit/regress/regress-704811.js",
         "patchSetId": 1
@@ -117,6 +183,24 @@
       "writtenOn": "2017-03-24T21:20:28Z",
       "side": 1,
       "message": "I can see how these would be useful during development, but do you think we need them in the test once it\u0027s checked in? I don\u0027t think we usually pair all asserts with an assert that they ran.",
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "393731fe_32721e05",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "I\u0027m just so skeptical towards tests and here it\u0027s easy to accidentally forget to call the function...",
+      "parentUuid": "8fbbca44_2d6294d1",
       "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -137,6 +221,24 @@
       "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9894b17_c4484723",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Ah, right, I had overlooked that. Nullified it in the global scope...",
+      "parentUuid": "5f52284e_ed4f48fe",
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +265,30 @@
     },
     {
       "key": {
+        "uuid": "9631d628_2b155f2e",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ee63700_f44ca274",
+      "range": {
+        "startLine": 36,
+        "startChar": 33,
+        "endLine": 36,
+        "endChar": 43
+      },
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43e82d8d_88416475",
         "filename": "test/mjsunit/regress/regress-704811.js",
         "patchSetId": 1
@@ -174,6 +300,30 @@
       "writtenOn": "2017-03-24T21:20:28Z",
       "side": 1,
       "message": "I\u0027d like to understand this, too. It looks to me from a few examples that we for some reason treat arrow functions that have a concise body (just an expression) the same way as other expressions (they get eager-compiled), but for some reason we\u0027re treating those with a full body (surrounded by braces) differently.",
+      "range": {
+        "startLine": 37,
+        "startChar": 13,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "aef8bb2bcc16623ff182fa1b7c18dd3d90f051f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d34e39_3e8d9716",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-27T14:49:40Z",
+      "side": 1,
+      "message": "Arrow functions with a concise body are never lazy. (Doesn\u0027t really make sense to parse one expression lazily.) But non-concise arrow functions can be lazy. The logic is in ParserBase::ParseArrowFunctionLiteral.\n\n\n(Not sure if I understood what you were asking...)",
+      "parentUuid": "43e82d8d_88416475",
       "range": {
         "startLine": 37,
         "startChar": 13,
