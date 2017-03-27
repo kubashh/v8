@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "623744e8_20f3620f",
+        "filename": "src/compiler/control-equivalence.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-27T08:12:51Z",
+      "side": 1,
+      "message": "nit: s/GetData/Participates/",
+      "range": {
+        "startLine": 190,
+        "startChar": 9,
+        "endLine": 190,
+        "endChar": 16
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fcc5232_139d886e",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-27T08:12:51Z",
+      "side": 1,
+      "message": "While we are at the topic of size, would \"bool visited : 1;\" and \"bool on_stack : 1;\" change the footprint here?",
+      "range": {
+        "startLine": 91,
+        "startChar": 9,
+        "endLine": 91,
+        "endChar": 16
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25316da_1af5ef5c",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-27T08:12:51Z",
+      "side": 1,
+      "message": "nit: DCHECK_LT",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 10
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f24ecd57_ef2d73db",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-27T08:12:51Z",
+      "side": 1,
+      "message": "nit: CHECK_LT, also any reason this is a release-check and the one in GetData is a debug-check?",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d44cbc6_6ac47ec9",
+        "filename": "src/compiler/control-equivalence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-27T08:12:51Z",
+      "side": 1,
+      "message": "I would vote to move the participation check into the {Run} as well as the {ClassOf} method above, and turn this into a DCHECK.",
+      "range": {
+        "startLine": 153,
+        "startChar": 9,
+        "endLine": 153,
+        "endChar": 21
+      },
+      "revId": "2bbca95e688659343f74906186b47abbc6e160c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
