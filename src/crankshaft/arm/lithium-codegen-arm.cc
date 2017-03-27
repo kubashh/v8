@@ -689,7 +689,7 @@ void LCodeGen::CallCodeGeneric(Handle<Code> code,
   // Block literal pool emission to ensure nop indicating no inlined smi code
   // is in the correct position.
   Assembler::BlockConstPoolScope block_const_pool(masm());
-  __ Call(code, mode, TypeFeedbackId::None(), al, storage_mode);
+  __ Call(code, mode, TypeFeedbackId::None(), al, storage_mode, false);
   RecordSafepointWithLazyDeopt(instr, safepoint_mode);
 
   // Signal that we don't inline smi code before these stubs in the
