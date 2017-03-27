@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af640b5a_43627506",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit - newline above.",
+      "range": {
+        "startLine": 1055,
+        "startChar": 4,
+        "endLine": 1055,
+        "endChar": 8
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb823b1_174f85ce",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "How about having a separate fast-path dispatch (jumped to for both the smi and float comparisons)? That would be faster than the slow-path dispatch below since there haven\u0027t been any calls so dispathc wouldn\u0027t have to reload bytecode array etc.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 4,
+        "endLine": 1131,
+        "endChar": 18
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbdebb8e_d5401389",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "operands",
+      "range": {
+        "startLine": 1142,
+        "startChar": 38,
+        "endLine": 1142,
+        "endChar": 45
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eba7c87_a1ac84a0",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "Smi or HeapNumber",
+      "range": {
+        "startLine": 1142,
+        "startChar": 55,
+        "endLine": 1142,
+        "endChar": 65
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b69b2cb6_7eb865db",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit newline",
+      "range": {
+        "startLine": 1151,
+        "startChar": 6,
+        "endLine": 1151,
+        "endChar": 8
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755bd77d_7ed8ac3e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "Since we already know the non_number_value is not a number, would it be faster just to check if that is an oddball here, and set the feedback based on what maybe_smi_value is, i.e. (note, I also tried to make the variable names more specific: \n  \n  // Check for NumberOrOddball feedback.\n  Node* non_number_instance_type \u003d __ LoadInstanceType(non_number_value.value());\n  __ GotoIf(__ Word32Equal(non_number_instance_type, __ Int32Constant(ODDBALL_TYPE)),\n                \u0026check_maybe_smi_for_oddball);\n  \n  // Check for String feedback.\n  __ GotoIfNot(__ IsStringInstanceType(non_number_instance_type), \u0026do_compare);\n  __ GotoIf(__ TaggedIsSmi(maybe_smi_value.value()), \u0026do_compare);\n  Node* maybe_smi_instance_type \u003d __ LoadInstanceType(non_number_value.value());\n  __ GotoIfNot(__ IsStringInstanceType(maybe_smi_instance_type), \u0026do_compare);\n  var_type_feedback.Bind(__ SmiConstant(CompareOperationFeedback::kString));\n      __ Goto(\u0026do_compare);\n\n  __ Bind(\u0026check_maybe_smi_for_oddball);\n  {\n     ... do checks... \n  }",
+      "range": {
+        "startLine": 1152,
+        "startChar": 6,
+        "endLine": 1152,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38e4f939_74baed67",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit - just bind to any at the top of the slow path and only override if we have more specific type feedback?",
+      "range": {
+        "startLine": 1163,
+        "startChar": 6,
+        "endLine": 1163,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e5ab9e6_e8e70122",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit - add a DCHECK here that it is an equality check (both for sanity and also code clarity documentation purposes).",
+      "range": {
+        "startLine": 1187,
+        "startChar": 3,
+        "endLine": 1187,
+        "endChar": 6
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c64a5e12_e67433ba",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "Equality comparisons do not need..",
+      "range": {
+        "startLine": 1190,
+        "startChar": 19,
+        "endLine": 1190,
+        "endChar": 25
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c75a6f_ac58919b",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "could you name this instance type somehow (maybe_smi_instance_type is a bit strange name, but maybe you could swap to checking non_number here instead and have this be non_number_instance_type.",
+      "range": {
+        "startLine": 1194,
+        "startChar": 12,
+        "endLine": 1194,
+        "endChar": 25
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "071274c5_111d3f49",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "unecessary, already done at the top of the else (and even before then if you take my suggestion in the comment above)",
+      "range": {
+        "startLine": 1197,
+        "startChar": 5,
+        "endLine": 1197,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "422c4231_114186cd",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit - could you do this as a branch so that you have a is_string label (with block indentation) to make the control flow more easy to follow.",
+      "range": {
+        "startLine": 1198,
+        "startChar": 6,
+        "endLine": 1200,
+        "endChar": 32
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6588b2ee_d2c44c32",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "You load the instance type for non_number_value three times (also below in JSReciever check). How about just doing it once at the top of this block since it is almost always needed anyway.",
+      "range": {
+        "startLine": 1211,
+        "startChar": 27,
+        "endLine": 1211,
+        "endChar": 72
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b68e98e2_a20486ef",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "indent as a block for labeled block",
+      "range": {
+        "startLine": 1220,
+        "startChar": 6,
+        "endLine": 1220,
+        "endChar": 27
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6782f97e_28d19844",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-27T15:08:33Z",
+      "side": 1,
+      "message": "nit - update_feedback_and_do_compare",
+      "range": {
+        "startLine": 1234,
+        "startChar": 13,
+        "endLine": 1234,
+        "endChar": 23
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
