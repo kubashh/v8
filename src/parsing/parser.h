@@ -234,9 +234,11 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   friend bool v8::internal::parsing::ParseProgram(ParseInfo*, bool);
   friend bool v8::internal::parsing::ParseFunction(ParseInfo*, bool);
 
-  bool AllowsLazyParsingWithoutUnresolvedVariables() const {
-    return scope()->AllowsLazyParsingWithoutUnresolvedVariables(
-        original_scope_);
+  bool AllowsLazyParsingWithoutUnresolvedVariables(Scope* s = nullptr) const {
+    if (s == nullptr) {
+      s = scope();
+    }
+    return s->AllowsLazyParsingWithoutUnresolvedVariables(original_scope_);
   }
 
   bool parse_lazily() const { return mode_ == PARSE_LAZILY; }

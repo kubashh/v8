@@ -882,6 +882,7 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
 
       // TODO(adamk): We should construct this scope from the ScopeInfo.
       DeclarationScope* scope = NewFunctionScope(kind);
+      FunctionState inner_function_state(&function_state_, &scope_, scope);
 
       // This bit only needs to be explicitly set because we're
       // not passing the ScopeInfo to the Scope constructor.

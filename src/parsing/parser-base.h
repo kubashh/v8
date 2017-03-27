@@ -2759,6 +2759,7 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     // we need to fix up the scope chain appropriately.
     scope_snapshot.Reparent(scope);
 
+    FunctionState function_state(&function_state_, &scope_, scope);
     FormalParametersT parameters(scope);
     if (!classifier()->is_simple_parameter_list()) {
       scope->SetHasNonSimpleParameters();
@@ -4172,87 +4173,84 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   // TODO(marja): consider lazy-parsing inner arrow functions too. is_this
   // handling in Scope::ResolveVariable needs to change.
   bool is_lazy_top_level_function =
-      can_preparse && impl()->AllowsLazyParsingWithoutUnresolvedVariables();
+      can_preparse && impl()->AllowsLazyParsingWithoutUnresolvedVariables(
+                          scope()->outer_scope());
   bool should_be_used_once_hint = false;
   bool has_braces = true;
-  {
-    FunctionState function_state(&function_state_, &scope_,
-                                 formal_parameters.scope);
 
-    Expect(Token::ARROW, CHECK_OK);
+  Expect(Token::ARROW, CHECK_OK);
 
-    if (peek() == Token::LBRACE) {
-      // Multiple statement body
-      DCHECK_EQ(scope(), formal_parameters.scope);
-      if (is_lazy_top_level_function) {
-        // FIXME(marja): Arrow function parameters will be parsed even if the
-        // body is preparsed; move relevant parts of parameter handling to
-        // simulate consistent parameter handling.
-        Scanner::BookmarkScope bookmark(scanner());
-        bookmark.Set();
-        // For arrow functions, we don't need to retrieve data about function
-        // parameters.
-        int dummy_num_parameters = -1;
-        int dummy_function_length = -1;
-        bool dummy_has_duplicate_parameters = false;
-        DCHECK((kind & FunctionKind::kArrowFunction) != 0);
-        LazyParsingResult result = impl()->SkipFunction(
-            kind, formal_parameters.scope, &dummy_num_parameters,
-            &dummy_function_length, &dummy_has_duplicate_parameters,
-            &expected_property_count, false, true, CHECK_OK);
-        formal_parameters.scope->ResetAfterPreparsing(
-            ast_value_factory_, result == kLazyParsingAborted);
+  if (peek() == Token::LBRACE) {
+    // Multiple statement body
+    DCHECK_EQ(scope(), formal_parameters.scope);
+    if (is_lazy_top_level_function) {
+      // FIXME(marja): Arrow function parameters will be parsed even if the
+      // body is preparsed; move relevant parts of parameter handling to
+      // simulate consistent parameter handling.
+      Scanner::BookmarkScope bookmark(scanner());
+      bookmark.Set();
+      // For arrow functions, we don't need to retrieve data about function
+      // parameters.
+      int dummy_num_parameters = -1;
+      int dummy_function_length = -1;
+      bool dummy_has_duplicate_parameters = false;
+      DCHECK((kind & FunctionKind::kArrowFunction) != 0);
+      LazyParsingResult result = impl()->SkipFunction(
+          kind, formal_parameters.scope, &dummy_num_parameters,
+          &dummy_function_length, &dummy_has_duplicate_parameters,
+          &expected_property_count, false, true, CHECK_OK);
+      formal_parameters.scope->ResetAfterPreparsing(
+          ast_value_factory_, result == kLazyParsingAborted);
 
-        if (result == kLazyParsingAborted) {
-          bookmark.Apply();
-          // Trigger eager (re-)parsing, just below this block.
-          is_lazy_top_level_function = false;
+      if (result == kLazyParsingAborted) {
+        bookmark.Apply();
+        // Trigger eager (re-)parsing, just below this block.
+        is_lazy_top_level_function = false;
 
-          // This is probably an initialization function. Inform the compiler it
-          // should also eager-compile this function, and that we expect it to
-          // be used once.
-          eager_compile_hint = FunctionLiteral::kShouldEagerCompile;
-          should_be_used_once_hint = true;
-        }
+        // This is probably an initialization function. Inform the compiler it
+        // should also eager-compile this function, and that we expect it to
+        // be used once.
+        eager_compile_hint = FunctionLiteral::kShouldEagerCompile;
+        should_be_used_once_hint = true;
       }
-      if (!is_lazy_top_level_function) {
-        Consume(Token::LBRACE);
-        body = impl()->NewStatementList(8);
-        impl()->ParseFunctionBody(body, impl()->EmptyIdentifier(),
-                                  kNoSourcePosition, formal_parameters, kind,
-                                  FunctionLiteral::kAnonymousExpression,
-                                  CHECK_OK);
-        expected_property_count = function_state.expected_property_count();
-      }
+    }
+    if (!is_lazy_top_level_function) {
+      Consume(Token::LBRACE);
+      body = impl()->NewStatementList(8);
+      impl()->ParseFunctionBody(
+          body, impl()->EmptyIdentifier(), kNoSourcePosition, formal_parameters,
+          kind, FunctionLiteral::kAnonymousExpression, CHECK_OK);
+      expected_property_count = function_state_->expected_property_count();
+    }
+  } else {
+    // Single-expression body
+    has_braces = false;
+    int pos = position();
+    DCHECK(ReturnExprContext::kInsideValidBlock ==
+           function_state_->return_expr_context());
+    ReturnExprScope allow_tail_calls(
+        function_state_, ReturnExprContext::kInsideValidReturnStatement);
+    body = impl()->NewStatementList(1);
+    impl()->AddParameterInitializationBlock(
+        formal_parameters, body, kind == kAsyncArrowFunction, CHECK_OK);
+    ExpressionClassifier classifier(this);
+    if (kind == kAsyncArrowFunction) {
+      ParseAsyncFunctionBody(scope(), body, kAsyncArrowFunction,
+                             FunctionBodyType::kSingleExpression, accept_IN,
+                             pos, CHECK_OK);
+      impl()->RewriteNonPattern(CHECK_OK);
     } else {
-      // Single-expression body
-      has_braces = false;
-      int pos = position();
-      DCHECK(ReturnExprContext::kInsideValidBlock ==
-             function_state_->return_expr_context());
-      ReturnExprScope allow_tail_calls(
-          function_state_, ReturnExprContext::kInsideValidReturnStatement);
-      body = impl()->NewStatementList(1);
-      impl()->AddParameterInitializationBlock(
-          formal_parameters, body, kind == kAsyncArrowFunction, CHECK_OK);
-      ExpressionClassifier classifier(this);
-      if (kind == kAsyncArrowFunction) {
-        ParseAsyncFunctionBody(scope(), body, kAsyncArrowFunction,
-                               FunctionBodyType::kSingleExpression, accept_IN,
-                               pos, CHECK_OK);
-        impl()->RewriteNonPattern(CHECK_OK);
-      } else {
-        ExpressionT expression = ParseAssignmentExpression(accept_IN, CHECK_OK);
-        impl()->RewriteNonPattern(CHECK_OK);
-        body->Add(BuildReturnStatement(expression, expression->position()),
-                  zone());
-        if (allow_tailcalls() && !is_sloppy(language_mode())) {
-          // ES6 14.6.1 Static Semantics: IsInTailPosition
-          impl()->MarkTailPosition(expression);
-        }
+      ExpressionT expression = ParseAssignmentExpression(accept_IN, CHECK_OK);
+      impl()->RewriteNonPattern(CHECK_OK);
+      body->Add(BuildReturnStatement(expression, expression->position()),
+                zone());
+      if (allow_tailcalls() && !is_sloppy(language_mode())) {
+        // ES6 14.6.1 Static Semantics: IsInTailPosition
+        impl()->MarkTailPosition(expression);
       }
-      expected_property_count = function_state.expected_property_count();
-      impl()->MarkCollectedTailCallExpressions();
+    }
+    expected_property_count = function_state_->expected_property_count();
+    impl()->MarkCollectedTailCallExpressions();
     }
 
     formal_parameters.scope->set_end_position(scanner()->location().end_pos);
@@ -4273,7 +4271,6 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
     impl()->CheckConflictingVarDeclarations(formal_parameters.scope, CHECK_OK);
 
     impl()->RewriteDestructuringAssignments();
-  }
 
   if (FLAG_trace_preparse) {
     Scope* scope = formal_parameters.scope;

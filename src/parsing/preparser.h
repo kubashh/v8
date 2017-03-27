@@ -933,7 +933,9 @@ class PreParser : public ParserBase<PreParser> {
 
   // Indicates that we won't switch from the preparser to the preparser; we'll
   // just stay where we are.
-  bool AllowsLazyParsingWithoutUnresolvedVariables() const { return false; }
+  bool AllowsLazyParsingWithoutUnresolvedVariables(Scope* s = nullptr) const {
+    return false;
+  }
   bool parse_lazily() const { return false; }
 
   V8_INLINE LazyParsingResult
