@@ -55,9 +55,6 @@ class Variable final : public ZoneObject {
   int initializer_position() { return initializer_position_; }
   void set_initializer_position(int pos) { initializer_position_ = pos; }
 
-  int parameter_position() { return parameter_position_; }
-  void set_parameter_position(int pos) { parameter_position_ = pos; }
-
   bool IsUnallocated() const {
     return location() == VariableLocation::UNALLOCATED;
   }
@@ -136,9 +133,6 @@ class Variable final : public ZoneObject {
   Variable* local_if_not_shadowed_;
   Variable* next_;
   int index_;
-
-  // Source position for parameters used by type profile.
-  int parameter_position_;
   int initializer_position_;
   uint16_t bit_field_;
 
