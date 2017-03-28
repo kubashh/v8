@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "732e3ed8_44d11317",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-28T13:25:02Z",
+      "side": 1,
+      "message": "There\u0027s a pink box after the dot. I guess a space? :)",
+      "revId": "344108c14b132d2e31efbdccac1fda98e682a63c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "705f0ce2_5b63b209",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-28T13:25:02Z",
+      "side": 1,
+      "message": "Interesting how the external-buffer is all of a sudden on-heap :)",
+      "revId": "344108c14b132d2e31efbdccac1fda98e682a63c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
