@@ -133,6 +133,8 @@ class Isolate;
   ASM(JSEntryTrampoline)                                                       \
   ASM(JSConstructEntryTrampoline)                                              \
   ASM(ResumeGeneratorTrampoline)                                               \
+  ASM(ResumeAsyncGeneratorTrampoline)                                          \
+  ASM(ResumeAwaitedAsyncGeneratorTrampoline)                                   \
                                                                                \
   /* Stack and interrupt check */                                              \
   ASM(InterruptCheck)                                                          \
@@ -935,6 +937,40 @@ class Isolate;
   TFS(ThrowWasmTrapFuncSigMismatch, BUILTIN, kNoExtraICState, WasmRuntimeCall, \
       1)                                                                       \
                                                                                \
+  /* AsyncGenerator */                                                         \
+                                                                               \
+  TFS(AsyncGeneratorResolve, BUILTIN, kNoExtraICState, AsyncGeneratorResolve,  \
+      3)                                                                       \
+  TFS(AsyncGeneratorReject, BUILTIN, kNoExtraICState, AsyncGeneratorReject, 2) \
+  TFS(AsyncGeneratorResumeNext, BUILTIN, kNoExtraICState,                      \
+      AsyncGeneratorResumeNext, 1)                                             \
+                                                                               \
+  /* AsyncGeneratorFunction( p1, p2, ... pn, body ) */                         \
+  /* proposal-async-iteration/#sec-asyncgeneratorfunction-constructor */       \
+  CPP(AsyncGeneratorFunctionConstructor)                                       \
+  /* AsyncGenerator.prototype.next ( value ) */                                \
+  /* proposal-async-iteration/#sec-asyncgenerator-prototype-next */            \
+  TFJ(AsyncGeneratorPrototypeNext, 1, kValue)                                  \
+  /* AsyncGenerator.prototype.return ( value ) */                              \
+  /* proposal-async-iteration/#sec-asyncgenerator-prototype-return */          \
+  TFJ(AsyncGeneratorPrototypeReturn, 1, kValue)                                \
+  /* AsyncGenerator.prototype.throw ( exception ) */                           \
+  /* proposal-async-iteration/#sec-asyncgenerator-prototype-throw */           \
+  TFJ(AsyncGeneratorPrototypeThrow, 1, kValue)                                 \
+                                                                               \
+  /* Await (proposal-async-iteration/#await), with resume behaviour */         \
+  /* specific to Async Generators. Internal / Not exposed to JS code. */       \
+  TFJ(AsyncGeneratorAwaitCaught, 2, kGenerator, kAwaited)                      \
+  TFJ(AsyncGeneratorAwaitUncaught, 2, kGenerator, kAwaited)                    \
+  TFJ(AsyncGeneratorAwaitResolveClosure, 1, kValue)                            \
+  TFJ(AsyncGeneratorAwaitRejectClosure, 1, kValue)                             \
+                                                                               \
+  /* GeneratorYield (proposal-async-iteration/#sec-generatoryield) with */     \
+  /* resume behaviour specific to Async Generators. Internal / not exposed */  \
+  /* to JS code. */                                                            \
+  TFJ(AsyncGeneratorYield, 1, kValue)                                          \
+  TFJ(AsyncGeneratorRawYield, 1, kValue)                                       \
+                                                                               \
   /* Async-from-Sync Iterator */                                               \
                                                                                \
   /* %AsyncFromSyncIteratorPrototype% */                                       \
@@ -967,6 +1003,9 @@ class Isolate;
   V(AsyncFromSyncIteratorPrototypeThrow)             \
   V(AsyncFunctionAwaitCaught)                        \
   V(AsyncFunctionAwaitUncaught)                      \
+  V(AsyncGeneratorResolve)                           \
+  V(AsyncGeneratorAwaitCaught)                       \
+  V(AsyncGeneratorAwaitUncaught)                     \
   V(PromiseConstructor)                              \
   V(PromiseHandle)                                   \
   V(PromiseResolve)                                  \
@@ -1081,6 +1120,14 @@ class Builtins {
 
   static void Generate_Adaptor(MacroAssembler* masm, Address builtin_address,
                                ExitFrameType exit_frame_type);
+
+  enum class ResumeGeneratorType {
+    kGenerator,
+    kAsyncGenerator,
+    kAwaitedAsyncGenerator
+  };
+  static void Generate_ResumeGenerator(MacroAssembler* masm,
+                                       ResumeGeneratorType type);
 
   static bool AllowDynamicFunction(Isolate* isolate, Handle<JSFunction> target,
                                    Handle<JSObject> target_global_proxy);

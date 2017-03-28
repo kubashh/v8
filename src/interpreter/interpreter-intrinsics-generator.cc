@@ -350,6 +350,30 @@ Node* IntrinsicsGenerator::CreateAsyncFromSyncIterator(Node* args_reg,
   return return_value.value();
 }
 
+Node* IntrinsicsGenerator::AsyncGeneratorGetAwaitInputOrDebugPos(
+    Node* args_reg, Node* arg_count, Node* context) {
+  Node* generator = __ LoadRegister(args_reg);
+  CSA_SLOW_ASSERT(assembler_, __ HasInstanceType(
+                                  generator, JS_ASYNC_GENERATOR_OBJECT_TYPE));
+
+  Node* const value = __ LoadObjectField(
+      generator, JSAsyncGeneratorObject::kAwaitInputOrDebugPosOffset);
+
+  return value;
+}
+
+Node* IntrinsicsGenerator::AsyncGeneratorReject(Node* input, Node* arg_count,
+                                                Node* context) {
+  return IntrinsicAsStubCall(input, context,
+                             CodeFactory::AsyncGeneratorReject(isolate()));
+}
+
+Node* IntrinsicsGenerator::AsyncGeneratorResolve(Node* input, Node* arg_count,
+                                                 Node* context) {
+  return IntrinsicAsStubCall(input, context,
+                             CodeFactory::AsyncGeneratorResolve(isolate()));
+}
+
 void IntrinsicsGenerator::AbortIfArgCountMismatch(int expected, Node* actual) {
   InterpreterAssembler::Label match(assembler_);
   Node* comparison = __ Word32Equal(actual, __ Int32Constant(expected));

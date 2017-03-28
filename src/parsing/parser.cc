@@ -3206,7 +3206,7 @@ Expression* Parser::BuildInitialYield(int pos, FunctionKind kind) {
   // caused by calling the .throw method on a generator suspended at the
   // initial yield (i.e. right after generator instantiation).
   return BuildSuspend(generator, assignment, scope()->start_position(),
-                      Suspend::kOnExceptionThrow, Suspend::kYield);
+                      Suspend::kOnExceptionThrow, SuspendFlags::kYield);
 }
 
 ZoneList<Statement*>* Parser::ParseFunction(
@@ -3983,7 +3983,7 @@ Expression* Parser::RewriteAwaitExpression(Expression* value, int await_pos) {
     Expression* do_expr = factory()->NewDoExpression(
         do_block, AsyncGeneratorAwaitVariable(), nopos);
     return BuildSuspend(generator_object, do_expr, nopos,
-                        Suspend::kOnExceptionRethrow, Suspend::kAwait);
+                        Suspend::kOnExceptionRethrow, SuspendFlags::kAwait);
   }
 
   // The parser emits calls to AsyncFunctionAwaitCaught or but the
@@ -4003,8 +4003,9 @@ Expression* Parser::RewriteAwaitExpression(Expression* value, int await_pos) {
   Expression* do_expr =
       factory()->NewDoExpression(do_block, PromiseVariable(), nopos);
 
-  return BuildSuspend(generator_object, do_expr, nopos,
-                      Suspend::kOnExceptionRethrow, Suspend::kAwait);
+  return factory()->NewSuspend(generator_object, do_expr, nopos,
+                               Suspend::kOnExceptionRethrow,
+                               SuspendFlags::kAwait);
 }
 
 class NonPatternRewriter : public AstExpressionRewriter {
@@ -4569,7 +4570,7 @@ Expression* Parser::RewriteYieldStar(Expression* generator,
     Expression* output_proxy = factory()->NewVariableProxy(var_output);
     Suspend* yield =
         BuildSuspend(generator, output_proxy, nopos, Suspend::kOnExceptionThrow,
-                     Suspend::kYieldStar);
+                     SuspendFlags::kYieldStar);
     yield_output = factory()->NewExpressionStatement(yield, nopos);
   }
 
