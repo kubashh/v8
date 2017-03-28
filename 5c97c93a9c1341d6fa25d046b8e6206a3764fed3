@@ -70,6 +70,24 @@
       "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de223fc_088b3e9f",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-28T14:30:18Z",
+      "side": 1,
+      "message": "Feel free to keep it as is then, I don\u0027t feel strongly about it.",
+      "parentUuid": "1582265b_0a385536",
+      "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
