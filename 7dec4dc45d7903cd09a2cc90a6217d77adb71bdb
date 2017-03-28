@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f9ddcfd_23bb1d4e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af640b5a_43627506",
+      "range": {
+        "startLine": 1055,
+        "startChar": 4,
+        "endLine": 1055,
+        "endChar": 8
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fb823b1_174f85ce",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfcc6177_2bb3a205",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "I haven\u0027t tested for performance, but I checked that it does not reload bytecode array and the code size increase is quite small (around 15 bytes). So I think having fast-path dispatch would be better. Done.",
+      "parentUuid": "1fb823b1_174f85ce",
+      "range": {
+        "startLine": 1130,
+        "startChar": 4,
+        "endLine": 1131,
+        "endChar": 18
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "c5d218b4_349f2c4f",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbdebb8e_d5401389",
+      "range": {
+        "startLine": 1142,
+        "startChar": 38,
+        "endLine": 1142,
+        "endChar": 45
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc4860d2_91eb43b5",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eba7c87_a1ac84a0",
+      "range": {
+        "startLine": 1142,
+        "startChar": 55,
+        "endLine": 1142,
+        "endChar": 65
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b69b2cb6_7eb865db",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b162dc_dd046393",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b69b2cb6_7eb865db",
+      "range": {
+        "startLine": 1151,
+        "startChar": 6,
+        "endLine": 1151,
+        "endChar": 8
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "576104db_871d9566",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "755bd77d_7ed8ac3e",
+      "range": {
+        "startLine": 1152,
+        "startChar": 6,
+        "endLine": 1152,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38e4f939_74baed67",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a94b57a7_d9e927fe",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38e4f939_74baed67",
+      "range": {
+        "startLine": 1163,
+        "startChar": 6,
+        "endLine": 1163,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "dc63d028_b07592b7",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e5ab9e6_e8e70122",
+      "range": {
+        "startLine": 1187,
+        "startChar": 3,
+        "endLine": 1187,
+        "endChar": 6
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c64a5e12_e67433ba",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -206,6 +398,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a98ce417_06f20299",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c64a5e12_e67433ba",
+      "range": {
+        "startLine": 1190,
+        "startChar": 19,
+        "endLine": 1190,
+        "endChar": 25
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "f019cfe1_3497aa44",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "I couldn\u0027t thing of a better name for maybe_smi_instance_type. I was thinking of changing maybe_smi_value to unchecked_value and use unchecked_value_instance_type, but I felt it is even wierd. Done.",
+      "parentUuid": "55c75a6f_ac58919b",
+      "range": {
+        "startLine": 1194,
+        "startChar": 12,
+        "endLine": 1194,
+        "endChar": 25
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "071274c5_111d3f49",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -252,6 +492,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bcd95e5_35d477e6",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "071274c5_111d3f49",
+      "range": {
+        "startLine": 1197,
+        "startChar": 5,
+        "endLine": 1197,
+        "endChar": 77
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "330b6010_e6c73404",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "422c4231_114186cd",
+      "range": {
+        "startLine": 1198,
+        "startChar": 6,
+        "endLine": 1200,
+        "endChar": 32
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6588b2ee_d2c44c32",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -298,6 +586,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aa464aa_2f2f8cb6",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Last time I tried, it increased the code size by around 30 bytes. Now, I verified that it is because in debug mode we add a check to see 32-bit numbers are zero exteded. Done",
+      "parentUuid": "6588b2ee_d2c44c32",
+      "range": {
+        "startLine": 1211,
+        "startChar": 27,
+        "endLine": 1211,
+        "endChar": 72
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "a9ccaf64_89f44f49",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b68e98e2_a20486ef",
+      "range": {
+        "startLine": 1220,
+        "startChar": 6,
+        "endLine": 1220,
+        "endChar": 27
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6782f97e_28d19844",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -344,6 +680,30 @@
       "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa95ced_ac35ef25",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-03-28T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6782f97e_28d19844",
+      "range": {
+        "startLine": 1234,
+        "startChar": 13,
+        "endLine": 1234,
+        "endChar": 23
+      },
+      "revId": "7dec4dc45d7903cd09a2cc90a6217d77adb71bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
