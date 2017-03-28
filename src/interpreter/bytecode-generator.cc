@@ -762,6 +762,20 @@ void BytecodeGenerator::GenerateBytecodeBody() {
   // Emit tracing call if requested to do so.
   if (FLAG_trace) builder()->CallRuntime(Runtime::kTraceEnter);
 
+  // Emit type profile call.
+  if (info()->literal()->feedback_vector_spec()->HasTypeProfileSlot()) {
+    int num_parameters = closure_scope()->num_parameters();
+    for (int i = 0; i < num_parameters; i++) {
+      // The parameter indices are shifted by 1 (receiver is variable
+      // index -1 but is parameter index 0 in BytecodeArrayBuilder).
+      Register parameter(builder()->Parameter(i + 1));
+
+      int position = 1 + i + info()->literal()->position();
+      builder()->LoadAccumulatorWithRegister(parameter).CollectTypeProfile(
+          position);
+    }
+  }
+
   // Visit declarations within the function scope.
   VisitDeclarations(closure_scope()->declarations());
 

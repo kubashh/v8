@@ -910,25 +910,51 @@ InlineCacheState CollectTypeProfileNexus::StateFromFeedback() const {
   return MONOMORPHIC;
 }
 
-void CollectTypeProfileNexus::Collect(Handle<Name> type, int position) {
+void CollectTypeProfileNexus::Collect(Handle<String> type, int position) {
+  if (position < 0) {
+    return;
+  }
   Isolate* isolate = GetIsolate();
 
   Object* const feedback = GetFeedback();
-  Handle<ArrayList> types;
+
+  // Map source position to collection of types
+  Handle<UnseededNumberDictionary> types;
 
   if (feedback == *FeedbackVector::UninitializedSentinel(isolate)) {
-    types = ArrayList::New(isolate, 1);
+    types = UnseededNumberDictionary::NewEmpty(isolate);
   } else {
-    types = Handle<ArrayList>(ArrayList::cast(feedback), isolate);
+    types = Handle<UnseededNumberDictionary>(
+        UnseededNumberDictionary::cast(feedback), isolate);
   }
 
-  Handle<Tuple2> entry = isolate->factory()->NewTuple2(
-      type, Handle<Smi>(Smi::FromInt(position), isolate));
+  Handle<ArrayList> types_for_position;
 
-  // TODO(franzih): Somehow sort this list. Either avoid duplicates
-  // or use the common base type.
-  SetFeedback(*ArrayList::Add(types, entry));
+  if (types->Has(position)) {
+    int entry = types->FindEntry(position);
+    DCHECK(types->ValueAt(entry)->IsArrayList());
+    types_for_position =
+        Handle<ArrayList>(ArrayList::cast(types->ValueAt(entry)));
+  } else {
+    types_for_position = ArrayList::New(isolate, 1);
+  }
+
+  types = UnseededNumberDictionary::Set(
+      types, position, ArrayList::Add(types_for_position, type));
+  SetFeedback(*types);
 }
+
+namespace {
+
+void PrintStrings(Handle<ArrayList> s) {
+  for (int i = 0; i < s->Length(); i++) {
+    Object* entry = s->Get(i);
+    if (entry->IsString()) {
+      PrintF("%s\n", String::cast(entry)->ToCString().get());
+    }
+  }
+}
+}  // namespace
 
 void CollectTypeProfileNexus::Print() const {
   Isolate* isolate = GetIsolate();
@@ -939,17 +965,26 @@ void CollectTypeProfileNexus::Print() const {
     return;
   }
 
-  Handle<ArrayList> list;
-  list = Handle<ArrayList>(ArrayList::cast(feedback), isolate);
+  Handle<UnseededNumberDictionary> types = Handle<UnseededNumberDictionary>(
+      UnseededNumberDictionary::cast(feedback), isolate);
 
-  for (int i = 0; i < list->Length(); i++) {
-    Handle<Object> maybe_entry = Handle<Object>(list->Get(i), isolate);
-    DCHECK(maybe_entry->IsTuple2());
-    Handle<Tuple2> entry = Handle<Tuple2>::cast(maybe_entry);
-    Handle<String> type =
-        Handle<String>(String::cast(entry->value1()), isolate);
-    int position = Smi::cast(entry->value2())->value();
-    PrintF("%d: %s\n", position, type->ToCString().get());
+  List<int> keys;
+  for (int index = UnseededNumberDictionary::kElementsStartIndex;
+       index < types->length(); index += UnseededNumberDictionary::kEntrySize) {
+    int key_index = index + UnseededNumberDictionary::kEntryKeyIndex;
+    Object* key = types->get(key_index);
+    if (key->IsSmi()) {
+      keys.Add(Smi::cast(key)->value());
+    }
+  }
+  keys.Sort();
+  for (auto iter = keys.begin(); iter != keys.end(); ++iter) {
+    int position = *iter;
+    PrintF("%d:\n", position);
+    int entry = types->FindEntry(position);
+    Handle<ArrayList> types_for_position =
+        Handle<ArrayList>(ArrayList::cast(types->ValueAt(entry)), isolate);
+    PrintStrings(types_for_position);
   }
 }
 
