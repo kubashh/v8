@@ -1111,7 +1111,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       scope->DeclareParameter(
           is_simple ? parameter->name : ast_value_factory()->empty_string(),
           is_simple ? VAR : TEMPORARY, is_optional, parameter->is_rest,
-          &is_duplicate, ast_value_factory());
+          &is_duplicate, ast_value_factory(),
+          parameter->initializer_end_position);
       if (is_duplicate &&
           classifier()->is_valid_formal_parameter_list_without_duplicates()) {
         classifier()->RecordDuplicateFormalParameterError(

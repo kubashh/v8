@@ -192,7 +192,7 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
       bool is_optional = false;
       Variable* constructor_args = function_scope->DeclareParameter(
           constructor_args_name, TEMPORARY, is_optional, is_rest, &is_duplicate,
-          ast_value_factory());
+          ast_value_factory(), pos);
 
       ZoneList<Expression*>* args =
           new (zone()) ZoneList<Expression*>(1, zone());
@@ -707,8 +707,9 @@ FunctionLiteral* Parser::DoParseProgram(ParseInfo* info) {
       bool is_duplicate;
       bool is_rest = false;
       bool is_optional = false;
-      auto var = scope->DeclareParameter(name, VAR, is_optional, is_rest,
-                                         &is_duplicate, ast_value_factory());
+      auto var =
+          scope->DeclareParameter(name, VAR, is_optional, is_rest,
+                                  &is_duplicate, ast_value_factory(), beg_pos);
       DCHECK(!is_duplicate);
       var->AllocateTo(VariableLocation::PARAMETER, 0);
 

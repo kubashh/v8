@@ -60,4 +60,11 @@ testReturnOfNonVariable();
 function never_call() {}
 %PrintTypeProfile(never_call);
 
+function check_param(a, bbb, ccccccccc, dddddddddddddddd) {
+  //nothing
+}
+check_param(2, 'foo', {}, new MyClass());
+%PrintTypeProfile(check_param);
+
+
 throw "throw otherwise test fails with --stress-opt";
