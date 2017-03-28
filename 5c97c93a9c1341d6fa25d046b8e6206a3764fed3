@@ -52,6 +52,24 @@
       "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1582265b_0a385536",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-28T14:21:27Z",
+      "side": 1,
+      "message": "I think in this form, it sort of serves to document the order of parameters passed to the stub, and other stubs have unordered patterns as well. I\u0027ll do it if it\u0027s what people prefer, but I\u0027m not sure it\u0027s valuable to sort them like that.",
+      "parentUuid": "ae4d210f_88facdb4",
+      "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
