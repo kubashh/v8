@@ -16,6 +16,24 @@
       "revId": "bc230bdcb2c4207eac5e83886c246f2f8deefb1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ae49388_d5108a2c",
+        "filename": "test/mjsunit/regress/regress-704811.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-03-28T08:21:10Z",
+      "side": 1,
+      "message": "I added a non-parenthesized case for this too. For others, I already had non-parenthesized versions below.",
+      "parentUuid": "5d10866a_87959c4e",
+      "revId": "bc230bdcb2c4207eac5e83886c246f2f8deefb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
