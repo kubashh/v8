@@ -1159,6 +1159,7 @@ class MacroAssembler: public Assembler {
 
   // Abort execution if argument is not a JSGeneratorObject,
   // enabled via --debug-code.
+  void AssertGeneratorObject(Register object, Register suspend_flags);
   void AssertGeneratorObject(Register object);
   void AssertAsyncGeneratorObject(Register object);
 

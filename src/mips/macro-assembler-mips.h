@@ -1538,6 +1538,7 @@ const Operand& rt = Operand(zero_reg), BranchDelaySlot bd = PROTECT
 
   // Abort execution if argument is not a JSGeneratorObject,
   // enabled via --debug-code.
+  void AssertGeneratorObject(Register object, Register flags);
   void AssertGeneratorObject(Register object);
   void AssertAsyncGeneratorObject(Register object);
 
