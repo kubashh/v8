@@ -728,6 +728,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsUnseededNumberDictionary(Node* object);
   Node* IsConstructorMap(Node* map);
   Node* IsJSFunction(Node* object);
+  Node* IsJSTypedArray(Node* object);
+  Node* IsFixedTypedArray(Node* object);
 
   // ElementsKind helpers:
   Node* IsFastElementsKind(Node* elements_kind);

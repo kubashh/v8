@@ -34,6 +34,11 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
   void DoInitialize(Node* const holder, Node* length, Node* const maybe_buffer,
                     Node* const byte_offset, Node* byte_length,
                     Node* const initialize, Node* const context);
+  void InitializeBasedOnLength(Node* const holder, Node* const length,
+                               Node* const element_size,
+                               Node* const byte_offset, Node* const initialize,
+                               Node* const context);
+  Node* LoadDataPtr(Node* typed_array);
 };
 
 void TypedArrayBuiltinsAssembler::LoadMapAndElementsSize(Node* const array,
@@ -294,6 +299,35 @@ TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
   Return(UndefinedConstant());
 }
 
+void TypedArrayBuiltinsAssembler::InitializeBasedOnLength(
+    Node* const holder, Node* const length, Node* const element_size,
+    Node* const byte_offset, Node* const initialize, Node* const context) {
+  Label external_buffer(this), on_heap(this);
+
+  Variable maybe_buffer(this, MachineRepresentation::kTagged, NullConstant());
+
+  Node* byte_length = SmiMul(length, element_size);
+  GotoIf(TaggedIsNotSmi(byte_length), &external_buffer);
+  Branch(SmiLessThanOrEqual(byte_length,
+                            SmiConstant(FLAG_typed_array_max_size_in_heap)),
+         &on_heap, &external_buffer);
+
+  Bind(&external_buffer);
+  {
+    Node* const buffer_constructor = LoadContextElement(
+        LoadNativeContext(context), Context::ARRAY_BUFFER_FUN_INDEX);
+    maybe_buffer.Bind(ConstructJS(CodeFactory::Construct(isolate()), context,
+                                  buffer_constructor, byte_length));
+    Goto(&on_heap);
+  }
+
+  Bind(&on_heap);
+  {
+    DoInitialize(holder, length, maybe_buffer.value(), byte_offset, byte_length,
+                 initialize, context);
+  }
+}
+
 // ES6 #sec-typedarray-length
 TF_BUILTIN(TypedArrayConstructByLength, TypedArrayBuiltinsAssembler) {
   // We know that holder cannot be an object if this builtin was called.
@@ -302,12 +336,10 @@ TF_BUILTIN(TypedArrayConstructByLength, TypedArrayBuiltinsAssembler) {
   Node* element_size = Parameter(Descriptor::kElementSize);
   Node* context = Parameter(Descriptor::kContext);
 
-  Variable maybe_buffer(this, MachineRepresentation::kTagged);
-  maybe_buffer.Bind(NullConstant());
   Node* byte_offset = SmiConstant(0);
   Node* initialize = BooleanConstant(true);
 
-  Label external_buffer(this), call_init(this), invalid_length(this);
+  Label invalid_length(this);
 
   length = ToInteger(context, length, CodeStubAssembler::kTruncateMinusZero);
   // The maximum length of a TypedArray is MaxSmi().
@@ -316,29 +348,9 @@ TF_BUILTIN(TypedArrayConstructByLength, TypedArrayBuiltinsAssembler) {
   GotoIf(TaggedIsNotSmi(length), &invalid_length);
   GotoIf(SmiLessThan(length, SmiConstant(0)), &invalid_length);
 
-  // For byte_length < typed_array_max_size_in_heap, we allocate the buffer on
-  // the heap. Otherwise we allocate it externally and attach it.
-  Node* byte_length = SmiMul(length, element_size);
-  GotoIf(TaggedIsNotSmi(byte_length), &external_buffer);
-  Branch(SmiLessThanOrEqual(byte_length,
-                            SmiConstant(FLAG_typed_array_max_size_in_heap)),
-         &call_init, &external_buffer);
-
-  Bind(&external_buffer);
-  {
-    Node* const buffer_constructor = LoadContextElement(
-        LoadNativeContext(context), Context::ARRAY_BUFFER_FUN_INDEX);
-    maybe_buffer.Bind(ConstructJS(CodeFactory::Construct(isolate()), context,
-                                  buffer_constructor, byte_length));
-    Goto(&call_init);
-  }
-
-  Bind(&call_init);
-  {
-    DoInitialize(holder, length, maybe_buffer.value(), byte_offset, byte_length,
-                 initialize, context);
-    Return(UndefinedConstant());
-  }
+  InitializeBasedOnLength(holder, length, element_size, byte_offset, initialize,
+                          context);
+  Return(UndefinedConstant());
 
   Bind(&invalid_length);
   {
@@ -489,6 +501,18 @@ TF_BUILTIN(TypedArrayConstructByArrayBuffer, TypedArrayBuiltinsAssembler) {
   }
 }
 
+compiler::Node* TypedArrayBuiltinsAssembler::LoadDataPtr(Node* typed_array) {
+  Print("typed_array", typed_array);
+  CSA_ASSERT(this, IsJSTypedArray(typed_array));
+  Node* elements = LoadElements(typed_array);
+  CSA_ASSERT(this, IsFixedTypedArray(elements));
+  Node* base_pointer = BitcastTaggedToWord(
+      LoadObjectField(elements, FixedTypedArrayBase::kBasePointerOffset));
+  Node* external_pointer = BitcastTaggedToWord(
+      LoadObjectField(elements, FixedTypedArrayBase::kExternalPointerOffset));
+  return IntPtrAdd(base_pointer, external_pointer);
+}
+
 TF_BUILTIN(TypedArrayConstructByArrayLike, TypedArrayBuiltinsAssembler) {
   Node* const holder = Parameter(Descriptor::kHolder);
   Node* const array_like = Parameter(Descriptor::kArrayLike);
@@ -497,31 +521,46 @@ TF_BUILTIN(TypedArrayConstructByArrayLike, TypedArrayBuiltinsAssembler) {
   CSA_ASSERT(this, TaggedIsSmi(element_size));
   Node* const context = Parameter(Descriptor::kContext);
 
-  Label call_init(this), call_runtime(this), invalid_length(this);
+  Node* byte_offset = SmiConstant(0);
+  Node* initialize = BooleanConstant(false);
+
+  Label invalid_length(this), fast_copy(this);
 
   // The caller has looked up length on array_like, which is observable.
   length = ToSmiLength(length, context, &invalid_length);
 
-  // For byte_length < typed_array_max_size_in_heap, we allocate the buffer on
-  // the heap. Otherwise we allocate it externally and attach it.
-  Node* byte_length = SmiMul(length, element_size);
-  GotoIf(TaggedIsNotSmi(byte_length), &call_runtime);
-  Branch(SmiLessThanOrEqual(byte_length,
-                            SmiConstant(FLAG_typed_array_max_size_in_heap)),
-         &call_init, &call_runtime);
+  InitializeBasedOnLength(holder, length, element_size, byte_offset, initialize,
+                          context);
 
-  Bind(&call_init);
-  {
-    DoInitialize(holder, length, NullConstant(), SmiConstant(0), byte_length,
-                 BooleanConstant(false), context);
-    Return(CallRuntime(Runtime::kTypedArrayCopyElements, context, holder,
-                       array_like, length));
-  }
+  Node* holder_kind = LoadMapElementsKind(LoadMap(holder));
+  Node* source_kind = LoadMapElementsKind(LoadMap(array_like));
+  GotoIf(Word32Equal(holder_kind, source_kind), &fast_copy);
 
-  Bind(&call_runtime);
+  // Call to JS to copy the contents of the array in. This is super-optimized
+  // already.
+  Callable callable = CodeFactory::Call(isolate());
+  Node* copy_array_contents = LoadContextElement(
+      LoadNativeContext(context), Context::TYPED_ARRAY_SET_FROM_ARRAY_LIKE);
+  CallJS(callable, context, copy_array_contents, UndefinedConstant(), holder,
+         array_like, length, SmiConstant(0));
+  Return(UndefinedConstant());
+
+  Bind(&fast_copy);
   {
-    Return(CallRuntime(Runtime::kTypedArrayInitializeFromArrayLike, context,
-                       holder, array_like, length));
+    Node* holder_data_ptr = LoadDataPtr(holder);
+    Node* source_data_ptr = LoadDataPtr(array_like);
+
+    // TODO(petermarshall): assert sizes.
+    // SmiMul returns a heap number if it overflows.
+    Node* byte_length = IntPtrMul(SmiUntag(length), SmiUntag(element_size));
+    // CSA_ASSERT(this, SmiLessThanOrEqual(length,
+    // SmiDiv(FixedTypedArrayBase::kMaxLength));
+    Node* memcpy =
+        ExternalConstant(ExternalReference::libc_memcpy_function(isolate()));
+    CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                   MachineType::Pointer(), MachineType::UintPtr(), memcpy,
+                   holder_data_ptr, source_data_ptr, byte_length);
+    Return(UndefinedConstant());
   }
 
   Bind(&invalid_length);

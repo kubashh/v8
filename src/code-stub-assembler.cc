@@ -3030,6 +3030,19 @@ Node* CodeStubAssembler::IsJSFunction(Node* object) {
   return HasInstanceType(object, JS_FUNCTION_TYPE);
 }
 
+Node* CodeStubAssembler::IsJSTypedArray(Node* object) {
+  return HasInstanceType(object, JS_TYPED_ARRAY_TYPE);
+}
+
+Node* CodeStubAssembler::IsFixedTypedArray(Node* object) {
+  Node* instance_type = LoadInstanceType(object);
+  return Word32And(
+      Int32GreaterThanOrEqual(instance_type,
+                              Int32Constant(FIRST_FIXED_TYPED_ARRAY_TYPE)),
+      Int32LessThanOrEqual(instance_type,
+                           Int32Constant(LAST_FIXED_TYPED_ARRAY_TYPE)));
+}
+
 Node* CodeStubAssembler::StringCharCodeAt(Node* string, Node* index,
                                           ParameterMode parameter_mode) {
   CSA_ASSERT(this, IsString(string));
