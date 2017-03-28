@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3098f5a9_1551398f",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-28T13:13:24Z",
+      "side": 1,
+      "message": "the code below should be fine too. Depends how strong you want to make it.",
+      "revId": "f4e67d0aad646765c9a10a46308d2467781cae81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45fc82f7_d8b035bc",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1689,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-28T13:13:24Z",
+      "side": 1,
+      "message": "typo",
+      "revId": "f4e67d0aad646765c9a10a46308d2467781cae81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
