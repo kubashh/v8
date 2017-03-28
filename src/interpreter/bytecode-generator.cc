@@ -770,7 +770,7 @@ void BytecodeGenerator::GenerateBytecodeBody() {
       // index -1 but is parameter index 0 in BytecodeArrayBuilder).
       Register parameter(builder()->Parameter(i + 1));
       builder()->LoadAccumulatorWithRegister(parameter).CollectTypeProfile(
-          closure_scope()->parameter(i)->parameter_position());
+          closure_scope()->parameter(i)->initializer_position());
     }
   }
 
