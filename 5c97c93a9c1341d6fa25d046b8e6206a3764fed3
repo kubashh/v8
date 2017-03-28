@@ -16,6 +16,24 @@
       "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "071e2b29_d7572b69",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-28T12:50:09Z",
+      "side": 1,
+      "message": "I guess you want resume mode in the alphabetically 3rd register rather than keeping it in rdx? Is that right?",
+      "parentUuid": "059153e4_15f36581",
+      "revId": "5c97c93a9c1341d6fa25d046b8e6206a3764fed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
