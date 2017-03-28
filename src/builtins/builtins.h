@@ -133,8 +133,6 @@ class Isolate;
   ASM(JSEntryTrampoline)                                                       \
   ASM(JSConstructEntryTrampoline)                                              \
   ASM(ResumeGeneratorTrampoline)                                               \
-  ASM(ResumeAsyncGeneratorTrampoline)                                          \
-  ASM(ResumeAwaitedAsyncGeneratorTrampoline)                                   \
                                                                                \
   /* Stack and interrupt check */                                              \
   ASM(InterruptCheck)                                                          \
@@ -1120,14 +1118,6 @@ class Builtins {
 
   static void Generate_Adaptor(MacroAssembler* masm, Address builtin_address,
                                ExitFrameType exit_frame_type);
-
-  enum class ResumeGeneratorType {
-    kGenerator,
-    kAsyncGenerator,
-    kAwaitedAsyncGenerator
-  };
-  static void Generate_ResumeGenerator(MacroAssembler* masm,
-                                       ResumeGeneratorType type);
 
   static bool AllowDynamicFunction(Isolate* isolate, Handle<JSFunction> target,
                                    Handle<JSObject> target_global_proxy);
