@@ -16,6 +16,24 @@
       "revId": "06c26f647a760dc5db3c73ebceab7fc1b113d9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1db93243_983271a0",
+        "filename": "test/mjsunit/regress/regress-319120.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-29T12:07:49Z",
+      "side": 0,
+      "message": "We have a test for the actual limit in mjsunit/es6/typedarray-construct-by-array-like.js - see TestLengthIsMaxSmi.\n\nIt doesn\u0027t really make sense to replicate that here, given that this test basically exercised an overflow check that no longer exists, because we moved the arithmetic elsewhere.",
+      "parentUuid": "19b780b7_17e4f57c",
+      "revId": "06c26f647a760dc5db3c73ebceab7fc1b113d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
