@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d53ee5e6_c06b1699",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-29T16:49:51Z",
+      "side": 1,
+      "message": "nit - how about adding an IsReciever() helper to Variable?",
+      "range": {
+        "startLine": 1927,
+        "startChar": 10,
+        "endLine": 1927,
+        "endChar": 33
+      },
+      "revId": "6a16a6fc20d1028115dfb5f324d280cc2d324e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba4509ca_38b94f24",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-29T16:49:51Z",
+      "side": 1,
+      "message": "nit - receiver",
+      "range": {
+        "startLine": 518,
+        "startChar": 11,
+        "endLine": 518,
+        "endChar": 17
+      },
+      "revId": "6a16a6fc20d1028115dfb5f324d280cc2d324e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2cf8b3a_01ffab2b",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-03-29T16:49:51Z",
+      "side": 1,
+      "message": "nit - param8",
+      "range": {
+        "startLine": 519,
+        "startChar": 11,
+        "endLine": 519,
+        "endChar": 17
+      },
+      "revId": "6a16a6fc20d1028115dfb5f324d280cc2d324e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
