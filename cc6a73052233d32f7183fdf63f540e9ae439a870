@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ff49f06_0714f2fc",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7709,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-29T10:47:38Z",
+      "side": 1,
+      "message": "I suppose the NONE case still needs to be supported too, since we get here before the above filter triggers.",
+      "revId": "cc6a73052233d32f7183fdf63f540e9ae439a870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
