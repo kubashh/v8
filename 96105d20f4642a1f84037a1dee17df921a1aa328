@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5d60c80_4c4a4367",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-29T09:06:32Z",
+      "side": 1,
+      "message": "Won\u0027t this create broken JSON files due to e.g. {PrintGraphPhase::Run} or {TraceSchedule} still appending to the JSON file?",
+      "range": {
+        "startLine": 522,
+        "startChar": 31,
+        "endLine": 522,
+        "endChar": 32
+      },
+      "revId": "96105d20f4642a1f84037a1dee17df921a1aa328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
