@@ -519,7 +519,7 @@ PipelineStatistics* CreatePipelineStatistics(CompilationInfo* info,
     pipeline_statistics->BeginPhaseKind("initializing");
   }
 
-  if (FLAG_trace_turbo) {
+  if (FLAG_trace_turbo && info->parse_info()) {
     TurboJsonFile json_of(info, std::ios_base::trunc);
     Handle<Script> script = info->script();
     std::unique_ptr<char[]> function_name = info->GetDebugName();
