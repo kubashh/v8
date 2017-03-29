@@ -99,6 +99,7 @@ class Variable final : public ZoneObject {
   }
 
   int index() const { return index_; }
+  bool IsReceiver() const { return index_ == -1; }
 
   bool IsExport() const {
     DCHECK_EQ(location(), VariableLocation::MODULE);
