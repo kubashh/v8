@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecf5708c_4896620f",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "You could have a std::vector of key-value pairs that you add in the same for-loop, and use a custom sort function to sort by key. That way you don\u0027t have to iterate the dictionary a second time.",
+      "range": {
+        "startLine": 969,
+        "startChar": 17,
+        "endLine": 969,
+        "endChar": 0
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d85639_c6fc7051",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "how about\nfor (const auto\u0026 key : keys) {...}",
+      "range": {
+        "startLine": 979,
+        "startChar": 7,
+        "endLine": 979,
+        "endChar": 11
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9cc2004_5d9a0440",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "I see we have this all over the place in the bytecode generator. Could we split this into BytecodeArrayBuilder::Parameter and BytecodeArrayBuilder::Receiver where the former does the +1 internally?",
+      "range": {
+        "startLine": 771,
+        "startChar": 36,
+        "endLine": 771,
+        "endChar": 45
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b109d26_423f906c",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "Are you sure this is the start position of the parameter?",
+      "range": {
+        "startLine": 1115,
+        "startChar": 21,
+        "endLine": 1115,
+        "endChar": 45
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a565b7b3_bc734ce6",
+        "filename": "test/message/type-profile/collect-type-profile.out",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "252 is actually the end position of the \"param\" parameter",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 3
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a13b9f7_3906bfec",
+        "filename": "test/message/type-profile/collect-type-profile.out",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "and this is the end of \"flag\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e13214fc_dcaca8bd",
+        "filename": "test/message/type-profile/collect-type-profile.out",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-29T05:46:03Z",
+      "side": 1,
+      "message": "Same here, this is the end position of \"a\".",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 4
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
