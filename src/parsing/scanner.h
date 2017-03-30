@@ -197,7 +197,7 @@ class Scanner {
 
   explicit Scanner(UnicodeCache* scanner_contants);
 
-  void Initialize(Utf16CharacterStream* source);
+  void Initialize(Utf16CharacterStream* source, bool is_module = false);
 
   // Returns the next token and advances input.
   Token::Value Next();
@@ -494,6 +494,7 @@ class Scanner {
     next_next_.invalid_template_escape_message = MessageTemplate::kNone;
     found_html_comment_ = false;
     scanner_error_ = MessageTemplate::kNone;
+    is_module_ = false;
   }
 
   void ReportScannerError(const Location& location,
@@ -690,6 +691,7 @@ class Scanner {
   void Scan();
 
   bool SkipWhiteSpace();
+  Token::Value SkipSingleHTMLComment();
   Token::Value SkipSingleLineComment();
   Token::Value SkipSourceURLComment();
   void TryToParseSourceURLComment();
@@ -716,6 +718,8 @@ class Scanner {
   // Helper for the above functions.
   template <bool capture_raw>
   uc32 ScanUnicodeEscape();
+
+  bool is_module_;
 
   Token::Value ScanTemplateSpan();
 

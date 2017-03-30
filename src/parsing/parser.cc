@@ -627,7 +627,7 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
       // FIXME(wiktorg) make it useful for something
       // TODO(wiktorg) make preparser work also with modules
       if (!info->is_module()) {
-        scanner_.Initialize(stream.get());
+        scanner_.Initialize(stream.get(), info->is_module());
         // NOTE: Some features will be double counted - once here and one more
         //  time while being fully parsed by a parse task.
         PreParser::PreParseResult result =
@@ -639,7 +639,7 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
         stream->Seek(0);
       }
     }
-    scanner_.Initialize(stream.get());
+    scanner_.Initialize(stream.get(), info->is_module());
     result = DoParseProgram(info);
   }
   if (result != NULL) {
@@ -837,7 +837,7 @@ static FunctionLiteral::FunctionType ComputeFunctionType(ParseInfo* info) {
 FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
                                          const AstRawString* raw_name,
                                          Utf16CharacterStream* source) {
-  scanner_.Initialize(source);
+  scanner_.Initialize(source, info->is_module());
   DCHECK_NULL(scope_);
   DCHECK_NULL(target_stack_);
 
@@ -3560,7 +3560,7 @@ void Parser::ParseOnBackground(ParseInfo* info) {
   // scopes) and set their end position after we know the script length.
   if (info->is_toplevel()) {
     fni_ = new (zone()) FuncNameInferrer(ast_value_factory(), zone());
-    scanner_.Initialize(stream_ptr);
+    scanner_.Initialize(stream_ptr, info->is_module());
     result = DoParseProgram(info);
   } else {
     result = DoParseFunction(info, info->function_name(), stream_ptr);
