@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1afe64b8_ea7fa699",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-03-30T08:57:46Z",
+      "side": 1,
+      "message": "nit: DCHECK_NE",
+      "revId": "f9215b8d5118898b63e2d75b750d1f63a3136956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
