@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "49cc3ec5_6426cfb1",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-03-30T09:00:49Z",
+      "side": 1,
+      "message": "By how much does this increase the zone usage?\n\nWhat about just creating a Parameter subclass of Variable that additionally has the position? That probably significantly reduces the increase in zone memory usage.",
+      "parentUuid": "c4a2d4d7_7c8147a9",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecf5708c_4896620f",
         "filename": "src/feedback-vector.cc",
         "patchSetId": 4
