@@ -1334,7 +1334,7 @@ void TestParserSyncWithFlags(i::Handle<i::String> source,
                            &pending_error_handler,
                            isolate->counters()->runtime_call_stats());
     SetParserFlags(&preparser, flags);
-    scanner.Initialize(stream.get());
+    scanner.Initialize(stream.get(), is_module);
     i::PreParser::PreParseResult result = preparser.PreParseProgram(is_module);
     CHECK_EQ(i::PreParser::kPreParseSuccess, result);
   }
