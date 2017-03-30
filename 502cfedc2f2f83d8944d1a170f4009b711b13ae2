@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d95aac70_85c13b5b",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-30T08:07:28Z",
+      "side": 1,
+      "message": "This only holds if the variable location is {PARAMETER}. Please add a DCHECK(IsParameter()) here. Alternatively we could include it as part of the predicate, but then I would vote to call it IsReceiverParameter instead. I prefer the former but would be OK with the latter.",
+      "range": {
+        "startLine": 102,
+        "startChar": 35,
+        "endLine": 102,
+        "endChar": 41
+      },
+      "revId": "502cfedc2f2f83d8944d1a170f4009b711b13ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
