@@ -1475,6 +1475,25 @@ class ThreadImpl {
     return true;
   }
 
+  // Check if our control stack (frames_) exceeds the limit. Trigger stack
+  // overflow if it does.
+  // Returns true if the current activation was fully unwound.
+  bool DoStackCheck(pc_t pc) {
+    // Sum up the size of all dynamically growing structures.
+    if (!(V8_UNLIKELY(frames_.size() > kV8MaxWasmInterpretedStackSize))) {
+      return false;
+    }
+    if (!codemap()->has_instance()) {
+      // For testing: Just abort.
+      FATAL("wasm interpreter: stack overflow");
+    }
+    CommitPc(pc);
+    Isolate* isolate = codemap()->instance()->GetIsolate();
+    HandleScope handle_scope(isolate);
+    isolate->StackOverflow();
+    return HandleException(isolate) == WasmInterpreter::Thread::UNWOUND;
+  }
+
   void Execute(InterpreterCode* code, pc_t pc, int max) {
     Decoder decoder(code->start, code->end);
     pc_t limit = code->end - code->start;
@@ -1657,6 +1676,7 @@ class ThreadImpl {
           break;
         }
         case kExprCallFunction: {
+          if (DoStackCheck(pc)) return;
           CallFunctionOperand operand(&decoder, code->at(pc));
           InterpreterCode* target = codemap()->GetCode(operand.index);
           if (target->function->imported) {
@@ -1689,6 +1709,7 @@ class ThreadImpl {
           continue;  // don't bump pc
         } break;
         case kExprCallIndirect: {
+          if (DoStackCheck(pc)) return;
           CallIndirectOperand operand(&decoder, code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
           // Assume only one table for now.
