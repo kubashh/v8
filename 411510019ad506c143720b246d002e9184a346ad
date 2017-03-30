@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb65455c_8480e01b",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-30T09:56:14Z",
+      "side": 1,
+      "message": "IsHeapNumber(byte_length)",
+      "revId": "411510019ad506c143720b246d002e9184a346ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df4fec9_56235493",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-30T09:56:14Z",
+      "side": 1,
+      "message": "not so sure about the \"super-optimized\" part :P, polymorphism and such...",
+      "revId": "411510019ad506c143720b246d002e9184a346ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b3d87d7_5cbcb12f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-03-30T09:56:14Z",
+      "side": 1,
+      "message": "IsHeapNumber(value)",
+      "revId": "411510019ad506c143720b246d002e9184a346ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
