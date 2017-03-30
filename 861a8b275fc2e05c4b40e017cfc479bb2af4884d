@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "039809e8_720ebc96",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-03-30T20:15:11Z",
+      "side": 1,
+      "message": "This has been fixed, so the TODO can be removed.",
+      "range": {
+        "startLine": 632,
+        "startChar": 25,
+        "endLine": 632,
+        "endChar": 26
+      },
+      "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc7cabcd_2d559755",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-03-30T20:15:11Z",
+      "side": 1,
+      "message": "I\u0027ve been told that realloc is an unsafe allocator, and the array_buffer_allocator should be used instead - does that fit the use cases of the interpreter as well? Leave as is if not.",
+      "range": {
+        "startLine": 644,
+        "startChar": 37,
+        "endLine": 644,
+        "endChar": 38
+      },
+      "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
