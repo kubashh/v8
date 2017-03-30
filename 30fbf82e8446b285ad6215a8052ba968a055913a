@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c4a2d4d7_7c8147a9",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-30T08:13:02Z",
+      "side": 1,
+      "message": "This increases the size of each {Variable} node. Toon, do you have an opinion about this part of the change.",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecf5708c_4896620f",
         "filename": "src/feedback-vector.cc",
         "patchSetId": 4
@@ -87,6 +110,29 @@
         "startChar": 21,
         "endLine": 1115,
         "endChar": 45
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49285690_008c6bfe",
+        "filename": "test/message/type-profile/collect-type-profile.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-03-30T08:13:02Z",
+      "side": 1,
+      "message": "How about just adding --no-stress-opt to the flags line of this test?",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 5
       },
       "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
