@@ -986,6 +986,7 @@ class ExternalReference BASE_EMBEDDED {
   static ExternalReference ieee754_tanh_function(Isolate* isolate);
 
   static ExternalReference libc_memchr_function(Isolate* isolate);
+  static ExternalReference libc_memcpy_function(Isolate* isolate);
   static ExternalReference libc_memset_function(Isolate* isolate);
 
   static ExternalReference page_flags(Page* page);
@@ -1082,7 +1083,6 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, ExternalReference);
 
 // -----------------------------------------------------------------------------
 // Utility functions
-void* libc_memchr(void* string, int character, size_t search_length);
 
 inline int NumberOfBitsSet(uint32_t x) {
   unsigned int num_bits_set;
