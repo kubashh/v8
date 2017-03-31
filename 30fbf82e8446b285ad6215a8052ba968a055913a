@@ -308,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "30717244_1a344fd5",
+        "filename": "test/message/type-profile/collect-type-profile.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-31T05:27:26Z",
+      "side": 1,
+      "message": "How about we change %PrintTypeProfile to return the data as a structured object instead of dumping out to stdout? We do the same thing in test/mjsunit/code-coverage-*.js",
+      "parentUuid": "24617d31_4da12f16",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "30fbf82e8446b285ad6215a8052ba968a055913a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a565b7b3_bc734ce6",
         "filename": "test/message/type-profile/collect-type-profile.out",
         "patchSetId": 4

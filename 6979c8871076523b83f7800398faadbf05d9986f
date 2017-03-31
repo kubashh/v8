@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77d57451_e57db4bd",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-03-31T05:27:26Z",
+      "side": 1,
+      "message": "Can we pass this map as pointer and not reference? See https://google.github.io/styleguide/cppguide.html#Reference_Arguments\n\nAlternatively you could simply inline that into CollectTypeProfileNexus::Print()",
+      "range": {
+        "startLine": 958,
+        "startChar": 47,
+        "endLine": 958,
+        "endChar": 48
+      },
+      "revId": "6979c8871076523b83f7800398faadbf05d9986f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
