@@ -112,6 +112,10 @@
   V(nan_string, "NaN")                                             \
   V(new_target_string, ".new.target")                              \
   V(next_string, "next")                                           \
+  V(nfc_string, "NFC")                                             \
+  V(nfd_string, "NFD")                                             \
+  V(nfkc_string, "NFKC")                                           \
+  V(nfkd_string, "NFKD")                                           \
   V(not_equal, "not-equal")                                        \
   V(null_string, "null")                                           \
   V(null_to_string, "[object Null]")                               \
