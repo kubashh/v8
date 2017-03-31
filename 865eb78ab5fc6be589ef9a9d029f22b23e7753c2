@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebdf3026_87a6bd66",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-03-31T07:58:23Z",
+      "side": 1,
+      "message": "Nit: Rather than creating a new instance each time, I think it\u0027s better to use a constant defined in src/heap-symbols.h INTERNALIZED_STRING_LIST, which you can then access like isolate-\u003efactory()-\u003enfkc_string(). The current form risks a performance regression on small strings, though it is valid.",
+      "revId": "865eb78ab5fc6be589ef9a9d029f22b23e7753c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
