@@ -16,6 +16,24 @@
       "revId": "2959a100315a5590b161fd233bd1ebc15e382595",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b17f053_d627ade3",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3056,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-03-31T10:36:14Z",
+      "side": 1,
+      "message": "Possibly but it is a fair bit of code - plus I think this is easier to understand",
+      "parentUuid": "c5018d9f_f9cfba1e",
+      "revId": "2959a100315a5590b161fd233bd1ebc15e382595",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
