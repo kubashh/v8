@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f101206_192ea22b",
+        "filename": "src/heap-symbols.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-03-31T19:59:56Z",
+      "side": 1,
+      "message": "For the sake of readability, maybe we should call these `NFC_string`, and similar for the other ones. The style rules are bent a bit in this file, eg the \"ownKeys_string\" for example",
+      "revId": "2d2a97f25dc4e2eb98d4369991b20f9348fadcff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
