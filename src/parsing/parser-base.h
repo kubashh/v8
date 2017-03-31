@@ -395,6 +395,10 @@ class ParserBase {
       return scope()->promise_var();
     }
 
+    void RewindDestructuringAssignments(int pos) {
+      destructuring_assignments_to_rewrite_.Rewind(pos);
+    }
+
     const ZoneList<DestructuringAssignment>&
         destructuring_assignments_to_rewrite() const {
       return destructuring_assignments_to_rewrite_;
@@ -741,6 +745,20 @@ class ParserBase {
            token == Token::STATIC || token == Token::YIELD;
   }
   bool peek_any_identifier() { return is_any_identifier(peek()); }
+
+  inline bool CanPreparse() const {
+    FunctionLiteral::EagerCompileHint eager_compile_hint =
+        default_eager_compile_hint_;
+    return impl()->parse_lazily() &&
+           eager_compile_hint == FunctionLiteral::kShouldLazyCompile;
+  }
+
+  inline bool IsLazyTopLevelFunction() const {
+    // TODO(marja): consider lazy-parsing inner arrow functions too. is_this
+    // handling in Scope::ResolveVariable needs to change.
+    return CanPreparse() &&
+           impl()->AllowsLazyParsingWithoutUnresolvedVariables();
+  }
 
   bool CheckContextualKeyword(Token::Value token) {
     if (PeekContextualKeyword(token)) {
@@ -2711,6 +2729,8 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
       this, classifier()->duplicate_finder());
 
   Scope::Snapshot scope_snapshot(scope());
+  int rewritable_length =
+      function_state_->destructuring_assignments_to_rewrite().length();
 
   bool is_async = peek() == Token::ASYNC &&
                   !scanner()->HasAnyLineTerminatorAfterNext() &&
@@ -2762,6 +2782,19 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     // Because the arrow's parameters were parsed in the outer scope,
     // we need to fix up the scope chain appropriately.
     scope_snapshot.Reparent(scope);
+    const auto& rewritable =
+        function_state_->destructuring_assignments_to_rewrite();
+
+    if (IsLazyTopLevelFunction()) {
+      // If parsing a lazy arrow function, remove these items from the queue
+      function_state_->RewindDestructuringAssignments(rewritable.length() -
+                                                      rewritable_length);
+    } else {
+      // Otherwise, fix the scope of these destructuring assignments
+      for (int i = rewritable_length; i < rewritable.length(); ++i) {
+        rewritable[i].scope = scope;
+      }
+    }
 
     FormalParametersT parameters(scope);
     if (!classifier()->is_simple_parameter_list()) {
