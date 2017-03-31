@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "a01314e8_2a4ff2c8",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-31T07:53:07Z",
+      "side": 1,
+      "message": "what does that mean?",
+      "range": {
+        "startLine": 142,
+        "startChar": 33,
+        "endLine": 142,
+        "endChar": 59
+      },
+      "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "795614ae_7781aa4e",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-31T07:53:07Z",
+      "side": 1,
+      "message": "Can this/Should this happen?",
+      "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "039809e8_720ebc96",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 2
@@ -45,6 +85,23 @@
       "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2fba1b5_f6b75592",
+        "filename": "test/mjsunit/wasm/interpreter-mixed.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-03-31T07:53:07Z",
+      "side": 1,
+      "message": "I think you should add the functions consistently and define a store_body as well, even when you don\u0027t use it more than once.",
+      "revId": "861a8b275fc2e05c4b40e017cfc479bb2af4884d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
