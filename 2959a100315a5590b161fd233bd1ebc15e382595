@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5018d9f_f9cfba1e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3056,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-03-31T08:27:49Z",
+      "side": 1,
+      "message": "Isn\u0027t it faster to just branch here?",
+      "revId": "2959a100315a5590b161fd233bd1ebc15e382595",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
