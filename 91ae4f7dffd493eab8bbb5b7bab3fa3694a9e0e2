@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4c40110_c975c41c",
+        "filename": "src/messages.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-31T01:10:18Z",
+      "side": 1,
+      "message": "nit: s/Modules/Module/",
+      "range": {
+        "startLine": 593,
+        "startChar": 4,
+        "endLine": 593,
+        "endChar": 24
+      },
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3ffdf7d_796515d0",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-03-31T01:10:18Z",
+      "side": 1,
+      "message": "I\u0027d prefer this to have no default value.",
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
