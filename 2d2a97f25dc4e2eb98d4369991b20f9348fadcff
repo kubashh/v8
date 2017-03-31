@@ -16,6 +16,24 @@
       "revId": "2d2a97f25dc4e2eb98d4369991b20f9348fadcff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "664d946e_cdd12424",
+        "filename": "src/heap-symbols.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1193261
+      },
+      "writtenOn": "2017-03-31T21:13:44Z",
+      "side": 1,
+      "message": "yeah, i guess matching case is more typical. i suppose i only looked at nan_string when i was deciding what to do.",
+      "parentUuid": "5f101206_192ea22b",
+      "revId": "2d2a97f25dc4e2eb98d4369991b20f9348fadcff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
