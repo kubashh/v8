@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1946a08e_af1a04f7",
+        "filename": "src/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2300,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-04-03T09:32:13Z",
+      "side": 1,
+      "message": "Nit: It took me a minute to understand that the 1 here comes from the \\n (is that right?), and I don\u0027t know where the -3 could\u0027ve come from. Would it be OK to document this in a comment, or even better, cons the \\n on, use the length of that as the parameters_end_pos?",
+      "revId": "578790ccb4edc1024e9510ef10fcf7b12eb58cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
