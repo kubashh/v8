@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1d7739b_aa67c17d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-04-03T20:59:45Z",
+      "side": 1,
+      "message": "This logic looks like it\u0027s already been copied once before, and this now copies it again. Can you update the other places we compute this to share the same logic?\n\nAlso, does it really make sense to make this part of ParserBase rather than implementing it in Parser and letting the PreParser simply return false?",
+      "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
