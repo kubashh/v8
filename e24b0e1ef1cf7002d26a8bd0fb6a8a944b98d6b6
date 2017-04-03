@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11bd2522_82febc0b",
+        "filename": "src/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2300,
+      "author": {
+        "id": 1193261
+      },
+      "writtenOn": "2017-04-03T17:35:33Z",
+      "side": 0,
+      "message": "The -3 is because the line above used to append to source_string, I believe, so the -3 was counting backward over the \") {\".\n\nthat being said, I think this formatting is actually wrong. There was a change in the spec that added a \"\\n\" after the \"{\", so I think this still needs to an update. I\u0027ll make a CL for it.",
+      "range": {
+        "startLine": 2300,
+        "startChar": 55,
+        "endLine": 2300,
+        "endChar": 0
+      },
+      "revId": "e24b0e1ef1cf7002d26a8bd0fb6a8a944b98d6b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
