@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a0cc706_9cc16d19",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-03T13:55:19Z",
+      "side": 1,
+      "message": "Why?\nSpecifically, why is this different for lazy top-level functions?\n\n(The comment explains what this does, and I think I understand it, but not why. Admittedly, I\u0027m not super familiar with this code, so not understanding things might be entirely my fault.)",
+      "range": {
+        "startLine": 2788,
+        "startChar": 4,
+        "endLine": 2791,
+        "endChar": 73
+      },
+      "revId": "ed2301aec507a0422d64cfca264d6829de31d857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
