@@ -202,7 +202,6 @@ DEFINE_IMPLICATION(es_staging, harmony)
   V(harmony_regexp_dotall, "harmony regexp dotall flag")                \
   V(harmony_regexp_property, "harmony unicode regexp property classes") \
   V(harmony_class_fields, "harmony public fields in class literals")    \
-  V(harmony_async_iteration, "harmony async iteration")                 \
   V(harmony_dynamic_import, "harmony dynamic import")                   \
   V(harmony_promise_finally, "harmony Promise.prototype.finally")
 
@@ -215,7 +214,8 @@ DEFINE_IMPLICATION(es_staging, harmony)
     "harmony restrictions on generator declarations")                    \
   V(harmony_object_rest_spread, "harmony object rest spread properties") \
   V(harmony_template_escapes,                                            \
-    "harmony invalid escapes in tagged template literals")
+    "harmony invalid escapes in tagged template literals")               \
+  V(harmony_async_iteration, "harmony async iteration")
 
 // Features that are shipping (turned on by default, but internal flag remains).
 #define HARMONY_SHIPPING_BASE(V) \
