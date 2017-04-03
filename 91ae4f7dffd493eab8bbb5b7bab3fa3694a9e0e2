@@ -39,6 +39,29 @@
       "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22058088_6f961743",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-03T12:42:42Z",
+      "side": 1,
+      "message": "Why is this in Initialize, and not in the constructor?",
+      "range": {
+        "startLine": 200,
+        "startChar": 38,
+        "endLine": 200,
+        "endChar": 39
+      },
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
