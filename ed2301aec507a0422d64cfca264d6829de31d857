@@ -22,6 +22,30 @@
       "revId": "ed2301aec507a0422d64cfca264d6829de31d857",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f629a7c4_37e1dfc1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-03T14:03:54Z",
+      "side": 1,
+      "message": "This is duplicating the \"lazy-top-level\" check from ParseArrowFunctionLiteral(), because in those lazy situations, the rewriting can\u0027t happen. The reason why it\u0027s duplicating the logic here, is that ParseArrowFunctionLiteral() doesn\u0027t know how many items to remove from the queue of things-to-be-rewritten.\n\nBut this doesn\u0027t seem to be a workable fix since it breaks the object rest/spread tests.",
+      "parentUuid": "5a0cc706_9cc16d19",
+      "range": {
+        "startLine": 2788,
+        "startChar": 4,
+        "endLine": 2791,
+        "endChar": 73
+      },
+      "revId": "ed2301aec507a0422d64cfca264d6829de31d857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
