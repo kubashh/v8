@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb83b6f3_52d5da29",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2778,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-04-04T19:01:30Z",
+      "side": 1,
+      "message": "I think it\u0027d be a little cleaner to put this logic in a new method of FunctionState, just as you have for RewindDestructuringAssignments().",
+      "revId": "4cc9fff4c2e905f358213c7324172e42be171b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
