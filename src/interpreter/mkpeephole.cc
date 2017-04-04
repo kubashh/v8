@@ -122,16 +122,6 @@ PeepholeActionAndData PeepholeActionTableWriter::LookupActionAndData(
   // TODO(rmcilroy): Add elide for consecutive mov to and from the same
   // register.
 
-  // Remove ToBoolean coercion from conditional jumps where possible.
-  if (Bytecodes::WritesBooleanToAccumulator(last)) {
-    if (Bytecodes::IsJumpIfToBoolean(current)) {
-      return {PeepholeAction::kChangeJumpBytecodeAction,
-              Bytecodes::GetJumpWithoutToBoolean(current)};
-    } else if (current == Bytecode::kToBooleanLogicalNot) {
-      return {PeepholeAction::kChangeBytecodeAction, Bytecode::kLogicalNot};
-    }
-  }
-
   // Fuse LdaSmi followed by binary op to produce binary op with a
   // immediate integer argument. This savaes on dispatches and size.
   if (last == Bytecode::kLdaSmi) {
