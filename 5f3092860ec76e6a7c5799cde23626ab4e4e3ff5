@@ -16,6 +16,70 @@
       "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24743e09_24ad3b1b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-04T07:21:13Z",
+      "side": 1,
+      "message": "I think this CL is OK from ParserBase vs. Parser point of view, since it doesn\u0027t change where the logic is. (See my comment below, where this code is copied from.) I think it makes sense to keep this bugfixing separate from refactoring that logic.\n\nHowever, the decision should be computed only once, and the code shouldn\u0027t be duplicated.",
+      "parentUuid": "f1d7739b_aa67c17d",
+      "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6581cfc_22259e1b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2811,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-04T07:21:13Z",
+      "side": 1,
+      "message": "I\u0027d actually pass the laziness decision here, so that we don\u0027t need to compute it twice (and potentially with differing results).",
+      "range": {
+        "startLine": 2811,
+        "startChar": 17,
+        "endLine": 2811,
+        "endChar": 42
+      },
+      "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a6a617f_12235c69",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4207,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-04T07:21:13Z",
+      "side": 1,
+      "message": "Now this logic is duplicated; this code should not recompute the laziness decision!",
+      "range": {
+        "startLine": 4207,
+        "startChar": 7,
+        "endLine": 4207,
+        "endChar": 19
+      },
+      "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
