@@ -2345,6 +2345,7 @@ void Isolate::Deinit() {
   debug()->Unload();
 
   FreeThreadResources();
+  ReleaseManagedObjects();
 
   if (concurrent_recompilation_enabled()) {
     optimizing_compile_dispatcher_->Stop();
@@ -2408,7 +2409,6 @@ void Isolate::Deinit() {
   root_index_map_ = NULL;
 
   ClearSerializerData();
-  ReleaseManagedObjects();
 }
 
 
