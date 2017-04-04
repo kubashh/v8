@@ -104,6 +104,23 @@
       "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17b369b_4c6f5bd0",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4245,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-04T12:31:28Z",
+      "side": 1,
+      "message": "If this block is reached, it seems that the pattern rewriting needs to happen after all.",
+      "revId": "5f3092860ec76e6a7c5799cde23626ab4e4e3ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
