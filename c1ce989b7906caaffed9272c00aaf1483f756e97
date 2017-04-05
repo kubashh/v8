@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a24722de_d3c6c421",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-05T09:02:33Z",
+      "side": 1,
+      "message": "I think this should be a static_cast. [Here \u0026 elsewhere.]\n\n(Admittedly: Both work, and we seem to mostly but not always use reinterpret_cast. Still...)",
+      "range": {
+        "startLine": 624,
+        "startChar": 50,
+        "endLine": 624,
+        "endChar": 66
+      },
+      "revId": "c1ce989b7906caaffed9272c00aaf1483f756e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
