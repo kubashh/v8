@@ -906,8 +906,8 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
 
   // Limit the number of times we try to optimize functions.
   const int kMaxOptCount =
-      FLAG_deopt_every_n_times == 0 ? FLAG_max_opt_count : 1000;
-  if (info->shared_info()->opt_count() > kMaxOptCount) {
+      FLAG_deopt_every_n_times == 0 ? FLAG_max_deopt_count : 1000;
+  if (info->shared_info()->deopt_count() > kMaxOptCount) {
     info->AbortOptimization(kDeoptimizedTooManyTimes);
     return MaybeHandle<Code>();
   }

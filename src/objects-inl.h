@@ -6293,7 +6293,6 @@ void SharedFunctionInfo::TryReenableOptimization() {
   // enough power of 2.
   if (tries >= 16 && (((tries - 1) & tries) == 0)) {
     set_optimization_disabled(false);
-    set_opt_count(0);
     set_deopt_count(0);
   }
 }

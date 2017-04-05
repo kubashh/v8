@@ -498,14 +498,12 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
   }
   DCHECK(from != nullptr);
   if (function != nullptr && function->IsOptimized()) {
-    function->shared()->increment_deopt_count();
     if (bailout_type_ == Deoptimizer::SOFT) {
-      isolate->counters()->soft_deopts_executed()->Increment();
-      // Soft deopts shouldn't count against the overall re-optimization count
+      // Soft deopts shouldn't count against the overall deoptimization count
       // that can eventually lead to disabling optimization for a function.
-      int opt_count = function->shared()->opt_count();
-      if (opt_count > 0) opt_count--;
-      function->shared()->set_opt_count(opt_count);
+      isolate->counters()->soft_deopts_executed()->Increment();
+    } else {
+      function->shared()->increment_deopt_count();
     }
   }
   compiled_code_ = FindOptimizedCode(function);
