@@ -3932,8 +3932,11 @@ WasmCompilationUnit::WasmCompilationUnit(Isolate* isolate,
       info_(GetDebugName(&compilation_zone_, name, index), isolate,
             &compilation_zone_, Code::ComputeFlags(Code::WASM_FUNCTION)),
       func_index_(index),
-      protected_instructions_(&compilation_zone_) {
-  // Create and cache this node in the main thread.
+      protected_instructions_(&compilation_zone_) {}
+
+void WasmCompilationUnit::InitializeHandles() {
+  // Create and cache this node in the main thread, which contains a handle to
+  // the code object of the c-entry stub.
   jsgraph_->CEntryStubConstant(1);
 }
 

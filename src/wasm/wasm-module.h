@@ -210,6 +210,7 @@ struct WasmInstance {
   std::vector<Handle<FixedArray>> function_tables;  // indirect function tables.
   std::vector<Handle<FixedArray>>
       signature_tables;                    // indirect signature tables.
+  // TODO(wasm): Remove this vector, since it is only used for testing.
   std::vector<Handle<Code>> function_code;  // code objects for each function.
   // -- raw memory ------------------------------------------------------------
   byte* mem_start = nullptr;  // start of linear memory.
@@ -222,6 +223,22 @@ struct WasmInstance {
         function_tables(m->function_tables.size()),
         signature_tables(m->function_tables.size()),
         function_code(m->functions.size()) {}
+
+  void ReopenHandles(Isolate* isolate) {
+    context = handle(*context, isolate);
+
+    for (size_t idx = 0; idx < function_tables.size(); ++idx) {
+      function_tables[idx] = handle(*function_tables[idx], isolate);
+    }
+
+    for (size_t idx = 0; idx < signature_tables.size(); ++idx) {
+      signature_tables[idx] = handle(*signature_tables[idx], isolate);
+    }
+
+    for (size_t idx = 0; idx < function_code.size(); ++idx) {
+      function_code[idx] = handle(*function_code[idx], isolate);
+    }
+  }
 };
 
 // Interface to the storage (wire bytes) of a wasm module.
