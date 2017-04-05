@@ -22,6 +22,30 @@
       "revId": "b55c71426bd34cacf3f06f7b9d3662bf12ceeec9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "693e50ee_f8147021",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-04-05T16:03:54Z",
+      "side": 1,
+      "message": "As discussed, tracking type hints whenever we change the accumulator wouldn\u0027t be feasible, but added a comment specifying that this hint is the type of the result of the expression visited.",
+      "parentUuid": "fb14bd14_b8c2868c",
+      "range": {
+        "startLine": 168,
+        "startChar": 2,
+        "endLine": 168,
+        "endChar": 10
+      },
+      "revId": "b55c71426bd34cacf3f06f7b9d3662bf12ceeec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
