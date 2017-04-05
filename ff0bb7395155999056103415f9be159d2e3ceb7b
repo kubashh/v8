@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5c881df_82d2c054",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-05T11:11:04Z",
+      "side": 1,
+      "message": "You could add \"DCHECK(!thrower.error());\" here.",
+      "revId": "ff0bb7395155999056103415f9be159d2e3ceb7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
