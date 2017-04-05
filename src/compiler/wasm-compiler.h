@@ -55,6 +55,7 @@ class WasmCompilationUnit final {
   Zone* graph_zone() { return graph_zone_.get(); }
   int func_index() const { return func_index_; }
 
+  void InitializeHandles();
   void ExecuteCompilation();
   Handle<Code> FinishCompilation(wasm::ErrorThrower* thrower);
 
