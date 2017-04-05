@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb14bd14_b8c2868c",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-05T11:21:53Z",
+      "side": 1,
+      "message": "Instead of returning a type hint from visits, would it make sense to make the type hint of the accumulator part of the BytecodeGenerator state? I guess it\u0027s kind of weird how the value/type of the accumulator escapes the ValueResultScope",
+      "range": {
+        "startLine": 168,
+        "startChar": 2,
+        "endLine": 168,
+        "endChar": 10
+      },
+      "revId": "b55c71426bd34cacf3f06f7b9d3662bf12ceeec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
