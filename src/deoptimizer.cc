@@ -235,6 +235,11 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
 
       // Unlink this function and evict from optimized code map.
       SharedFunctionInfo* shared = function->shared();
+      if (!code->deopted_once()) {
+        PrintF("incrementing deopt count in unlinker\n");
+        shared->increment_deopt_count();
+        code->set_deopted_once(true);
+      }
       function->set_code(shared->code());
 
       if (FLAG_trace_deopt) {
@@ -497,17 +502,6 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
     function = nullptr;
   }
   DCHECK(from != nullptr);
-  if (function != nullptr && function->IsOptimized()) {
-    function->shared()->increment_deopt_count();
-    if (bailout_type_ == Deoptimizer::SOFT) {
-      isolate->counters()->soft_deopts_executed()->Increment();
-      // Soft deopts shouldn't count against the overall re-optimization count
-      // that can eventually lead to disabling optimization for a function.
-      int opt_count = function->shared()->opt_count();
-      if (opt_count > 0) opt_count--;
-      function->shared()->set_opt_count(opt_count);
-    }
-  }
   compiled_code_ = FindOptimizedCode(function);
 #if DEBUG
   DCHECK(compiled_code_ != NULL);
@@ -526,7 +520,20 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
   CHECK(AllowHeapAllocation::IsAllowed());
   disallow_heap_allocation_ = new DisallowHeapAllocation();
 #endif  // DEBUG
+  if (function != nullptr && function->IsOptimized() &&
+      (compiled_code_->kind() != Code::OPTIMIZED_FUNCTION ||
+       !compiled_code_->deopted_once())) {
+    if (bailout_type_ == Deoptimizer::SOFT) {
+      // Soft deopts shouldn't count against the overall deoptimization count
+      // that can eventually lead to disabling optimization for a function.
+      isolate->counters()->soft_deopts_executed()->Increment();
+    } else {
+      PrintF("incrementing deopt count in constructor\n");
+      function->shared()->increment_deopt_count();
+    }
+  }
   if (compiled_code_->kind() == Code::OPTIMIZED_FUNCTION) {
+    compiled_code_->set_deopted_once(true);
     PROFILE(isolate_,
             CodeDeoptEvent(compiled_code_, DeoptKindOfBailoutType(type), from_,
                            fp_to_sp_delta_));
