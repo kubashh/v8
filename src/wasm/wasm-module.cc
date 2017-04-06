@@ -2870,7 +2870,7 @@ class AsyncCompileJob {
       // TODO(ahaas): Limit the number of outstanding compilation units to be
       // finished to reduce memory overhead.
     }
-    helper_->module_->pending_tasks.get()->Signal();
+    if (!FLAG_predictable) helper_->module_->pending_tasks.get()->Signal();
     return true;
   }
 
@@ -2910,12 +2910,15 @@ class AsyncCompileJob {
     DisallowHandleAllocation no_handle;
     DisallowHeapAllocation no_allocation;
     TRACE_COMPILE("(4b) Waiting for background tasks...\n");
-    for (size_t i = 0; i < num_background_tasks_; ++i) {
-      // If the task has not started yet, then we abort it. Otherwise we wait
-      // for it to finish.
-      if (isolate_->cancelable_task_manager()->TryAbort(task_ids_.get()[i]) !=
-          CancelableTaskManager::kTaskAborted) {
-        module_->pending_tasks.get()->Wait();
+    if (!FLAG_predictable) {
+      for (size_t i = 0; i < num_background_tasks_; ++i) {
+        // If the task has not started yet, then we abort it. Otherwise we wait
+        // for it to finish.
+
+        if (isolate_->cancelable_task_manager()->TryAbort(task_ids_.get()[i]) !=
+            CancelableTaskManager::kTaskAborted) {
+          module_->pending_tasks.get()->Wait();
+        }
       }
     }
     if (failed_) {
