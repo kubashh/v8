@@ -79,6 +79,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
 
   CompileJobStatus status() const { return status_; }
 
+  bool has_context() const { return !context_.is_null(); }
   Context* context() { return *context_; }
 
   Handle<SharedFunctionInfo> shared() const { return shared_; }
