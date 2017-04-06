@@ -60,6 +60,10 @@ bool DoNextStepOnMainThread(Isolate* isolate, CompilerDispatcherJob* job,
       job->FinalizeCompilingOnMainThread();
       break;
 
+    case CompileJobStatus::kInitialParse:
+      job->ParseInitial();
+      break;
+
     case CompileJobStatus::kFailed:
     case CompileJobStatus::kDone:
       break;
@@ -96,6 +100,10 @@ void DoNextStepOnBackgroundThread(CompilerDispatcherJob* job) {
 
     case CompileJobStatus::kReadyToCompile:
       job->Compile();
+      break;
+
+    case CompileJobStatus::kInitialParse:
+      job->ParseInitial();
       break;
 
     default:
