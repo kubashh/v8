@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87e9d3e3_dfefdad4",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-06T09:34:38Z",
+      "side": 1,
+      "message": "DCHECK(!handles_init);\n\nDoes not matter too much, but if someone calls this method twice this might indicate that he also does other work redundantly.",
+      "revId": "52dabc6dae1cd8750802355ade55807202480605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01350c2_bd3a37e9",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-06T09:34:38Z",
+      "side": 1,
+      "message": "handles_initialized? :P",
+      "range": {
+        "startLine": 84,
+        "startChar": 7,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "52dabc6dae1cd8750802355ade55807202480605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a0f6883_c0fda046",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-06T09:34:38Z",
+      "side": 1,
+      "message": "You can use the SaveContext defined in isolate.h:\nhttps://cs.chromium.org/chromium/src/v8/src/isolate.h?rcl\u003df09c7092ea07f753af48e5f80a86d7e762ad9d6c\u0026l\u003d1591",
+      "revId": "52dabc6dae1cd8750802355ade55807202480605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c2f30b_0a1bf61b",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-06T09:34:38Z",
+      "side": 1,
+      "message": "This can be written much shorter (three times):\nfor (auto \u0026e : function_tables) e \u003d handle(*e, isolate);",
+      "revId": "52dabc6dae1cd8750802355ade55807202480605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
