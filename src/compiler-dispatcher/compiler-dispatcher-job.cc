@@ -61,6 +61,47 @@ class TwoByteWrapper : public v8::String::ExternalStringResource {
 
 }  // namespace
 
+CompilerDispatcherJob::CompilerDispatcherJob(
+    CompilerDispatcherTracer* tracer, size_t max_stack_size,
+    Handle<String> source, int start_position, int end_position,
+    LanguageMode language_mode, int function_literal_id,
+    bool is_named_expression, uint32_t hash_seed,
+    AccountingAllocator* zone_allocator, int compiler_hints,
+    const AstStringConstants* ast_string_constants,
+    FinishCallback* finish_callback)
+    : status_(CompileJobStatus::kInitialParse),
+      isolate_(nullptr),
+      tracer_(tracer),
+      max_stack_size_(max_stack_size),
+      finish_callback_(finish_callback),
+      trace_compiler_dispatcher_jobs_(FLAG_trace_compiler_dispatcher_jobs) {
+  parse_info_.reset(new ParseInfo(zone_allocator));
+  DCHECK(source->IsExternalTwoByteString() ||
+         source->IsExternalOneByteString());
+  character_stream_.reset(
+      ScannerStream::For(source, start_position, end_position));
+  parse_info_->set_character_stream(character_stream_.get());
+  parse_info_->set_hash_seed(hash_seed);
+  parse_info_->set_is_named_expression(is_named_expression);
+  parse_info_->set_compiler_hints(compiler_hints);
+  parse_info_->set_start_position(start_position);
+  parse_info_->set_end_position(end_position);
+  unicode_cache_.reset(new UnicodeCache());
+  parse_info_->set_unicode_cache(unicode_cache_.get());
+  parse_info_->set_language_mode(language_mode);
+  parse_info_->set_function_literal_id(function_literal_id);
+  parse_info_->set_ast_string_constants(ast_string_constants);
+
+  parser_.reset(new Parser(parse_info_.get()));
+  parser_->DeserializeScopeChain(parse_info_.get(), MaybeHandle<ScopeInfo>());
+
+  if (trace_compiler_dispatcher_jobs_) {
+    PrintF(
+        "CompilerDispatcherJob[%p] created for at %d in initial parse state.\n",
+        static_cast<void*>(this), start_position);
+  }
+}
+
 CompilerDispatcherJob::CompilerDispatcherJob(Isolate* isolate,
                                              CompilerDispatcherTracer* tracer,
                                              Handle<SharedFunctionInfo> shared,
@@ -71,6 +112,7 @@ CompilerDispatcherJob::CompilerDispatcherJob(Isolate* isolate,
       context_(isolate_->global_handles()->Create(isolate->context())),
       shared_(isolate_->global_handles()->Create(*shared)),
       max_stack_size_(max_stack_size),
+      finish_callback_(nullptr),
       trace_compiler_dispatcher_jobs_(FLAG_trace_compiler_dispatcher_jobs) {
   DCHECK(!shared_->is_toplevel());
   HandleScope scope(isolate_);
@@ -95,6 +137,7 @@ CompilerDispatcherJob::CompilerDispatcherJob(
       context_(isolate_->global_handles()->Create(isolate->context())),
       shared_(isolate_->global_handles()->Create(*shared)),
       max_stack_size_(max_stack_size),
+      finish_callback_(nullptr),
       parse_info_(new ParseInfo(shared_)),
       parse_zone_(parse_zone),
       compile_info_(new CompilationInfo(parse_info_->zone(), parse_info_.get(),
@@ -113,11 +156,17 @@ CompilerDispatcherJob::CompilerDispatcherJob(
 }
 
 CompilerDispatcherJob::~CompilerDispatcherJob() {
-  DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
   DCHECK(status_ == CompileJobStatus::kInitial ||
+         status_ == CompileJobStatus::kInitialParse ||
          status_ == CompileJobStatus::kDone);
-  i::GlobalHandles::Destroy(Handle<Object>::cast(shared_).location());
-  i::GlobalHandles::Destroy(Handle<Object>::cast(context_).location());
+  if (!shared_.is_null()) {
+    DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
+    i::GlobalHandles::Destroy(Handle<Object>::cast(shared_).location());
+  }
+  if (!context_.is_null()) {
+    DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
+    i::GlobalHandles::Destroy(Handle<Object>::cast(context_).location());
+  }
 }
 
 bool CompilerDispatcherJob::IsAssociatedWith(
@@ -401,9 +450,33 @@ bool CompilerDispatcherJob::FinalizeCompilingOnMainThread() {
   return true;
 }
 
-void CompilerDispatcherJob::ResetOnMainThread() {
-  DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
+void CompilerDispatcherJob::ParseInitial() {
+  DCHECK(status() == CompileJobStatus::kInitialParse);
+  COMPILER_DISPATCHER_TRACE_SCOPE_WITH_NUM(
+      tracer_, kParse,
+      parse_info_->end_position() - parse_info_->start_position());
+  if (trace_compiler_dispatcher_jobs_) {
+    PrintF("CompilerDispatcherJob[%p]: Inital Parsing\n",
+           static_cast<void*>(this));
+  }
 
+  DisallowHeapAllocation no_allocation;
+  DisallowHandleAllocation no_handles;
+  DisallowHandleDereference no_deref;
+
+  uintptr_t stack_limit = GetCurrentStackPosition() - max_stack_size_ * KB;
+
+  parser_->set_stack_limit(stack_limit);
+  parser_->ParseOnBackground(parse_info_.get());
+
+  if (finish_callback_) {
+    finish_callback_->ParseInitialFinished(std::move(parse_info_));
+  }
+
+  status_ = CompileJobStatus::kDone;
+}
+
+void CompilerDispatcherJob::ResetOnMainThread() {
   if (trace_compiler_dispatcher_jobs_) {
     PrintF("CompilerDispatcherJob[%p]: Resetting\n", static_cast<void*>(this));
   }
@@ -415,12 +488,15 @@ void CompilerDispatcherJob::ResetOnMainThread() {
   unicode_cache_.reset();
   character_stream_.reset();
   parse_info_.reset();
+  finish_callback_ = nullptr;
 
   if (!source_.is_null()) {
+    DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
     i::GlobalHandles::Destroy(Handle<Object>::cast(source_).location());
     source_ = Handle<String>::null();
   }
   if (!wrapper_.is_null()) {
+    DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
     i::GlobalHandles::Destroy(Handle<Object>::cast(wrapper_).location());
     wrapper_ = Handle<String>::null();
   }
@@ -433,6 +509,7 @@ double CompilerDispatcherJob::EstimateRuntimeOfNextStepInMs() const {
     case CompileJobStatus::kInitial:
       return tracer_->EstimatePrepareToParseInMs();
 
+    case CompileJobStatus::kInitialParse:
     case CompileJobStatus::kReadyToParse:
       return tracer_->EstimateParseInMs(parse_info_->end_position() -
                                         parse_info_->start_position());
@@ -463,8 +540,17 @@ double CompilerDispatcherJob::EstimateRuntimeOfNextStepInMs() const {
 }
 
 void CompilerDispatcherJob::ShortPrint() {
-  DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
-  shared_->ShortPrint();
+  if (isolate_) {
+    DCHECK(ThreadId::Current().Equals(isolate_->thread_id()));
+    DCHECK(!shared_.is_null());
+    shared_->ShortPrint();
+  } else {
+    if (parse_info_) {
+      PrintF("function at %d", parse_info_->start_position());
+    } else {
+      PrintF("initialy parsed function");
+    }
+  }
 }
 
 }  // namespace internal

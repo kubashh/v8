@@ -17,6 +17,7 @@ namespace v8 {
 namespace internal {
 
 class AstValueFactory;
+class AstStringConstants;
 class CompilerDispatcherTracer;
 class CompilationInfo;
 class CompilationJob;
@@ -40,14 +41,32 @@ enum class CompileJobStatus {
   kCompiled,
   kFailed,
   kDone,
+  kInitialParse,
 };
 
 class V8_EXPORT_PRIVATE CompilerDispatcherJob {
  public:
+  class FinishCallback {
+   public:
+    virtual ~FinishCallback() {}
+    virtual void ParseInitialFinished(
+        std::unique_ptr<ParseInfo> parse_info) = 0;
+  };
+
   // Creates a CompilerDispatcherJob in the initial state.
   CompilerDispatcherJob(Isolate* isolate, CompilerDispatcherTracer* tracer,
                         Handle<SharedFunctionInfo> shared,
                         size_t max_stack_size);
+  // TODO(wiktorg) document it better once I know how it relates to whole stuff
+  // Creates a CompilerDispatcherJob in ready to parse top-level function state.
+  CompilerDispatcherJob(CompilerDispatcherTracer* tracer, size_t max_stack_size,
+                        Handle<String> source, int start_position,
+                        int end_position, LanguageMode language_mode,
+                        int function_literal_id, bool is_named_expression,
+                        uint32_t hash_seed, AccountingAllocator* zone_allocator,
+                        int compiler_hints,
+                        const AstStringConstants* ast_string_constants,
+                        FinishCallback* finish_callback);
   // Creates a CompilerDispatcherJob in the analyzed state.
   CompilerDispatcherJob(Isolate* isolate, CompilerDispatcherTracer* tracer,
                         Handle<Script> script,
@@ -94,6 +113,9 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
   // transitioning to kFailed. In that case, an exception is pending.
   bool FinalizeCompilingOnMainThread();
 
+  // Transiton from kInitialParse to kDone
+  void ParseInitial();
+
   // Transition from any state to kInitial and free all resources.
   void ResetOnMainThread();
 
@@ -116,6 +138,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
   Handle<String> wrapper_;       // Global handle.
   std::unique_ptr<v8::String::ExternalStringResourceBase> source_wrapper_;
   size_t max_stack_size_;
+  FinishCallback* finish_callback_;
 
   // Members required for parsing.
   std::unique_ptr<UnicodeCache> unicode_cache_;
