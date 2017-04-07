@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "e60d47e8_b5071450",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "super nitpick: if -\u003e If",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 51
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e4a15b_e9b23431",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "Declare where it\u0027s used?\n\nAlso, I find \u0027ok\u0027 only a good name if it\u0027s used very locally (where the reader can immediately see which thing is supposed to be \u0027ok\u0027 or not. If the name is valid across a larger chunk of code, it\u0027s not really very useful. (Kind of like how \u0027i\u0027 or \u0027iter\u0027 is a useful variable name for a loop induction variable, but a terribly name anywhere else.)",
+      "range": {
+        "startLine": 3541,
+        "startChar": 2,
+        "endLine": 3542,
+        "endChar": 0
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3adb5c89_66a299a3",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -72,6 +118,52 @@
     },
     {
       "key": {
+        "uuid": "f669b1a0_6f720a0d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3559,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "Initialize?\n\nDo we know whether ParseIdentifierOrStrictReservedWord will always initialize/modify *is_strict_reserved (if given)?",
+      "range": {
+        "startLine": 3559,
+        "startChar": 13,
+        "endLine": 3559,
+        "endChar": 31
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "065d539e_8721fb65",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3560,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "I\u0027m surprised this works, because this would probably advance the Scanner + stream, and hence DoParseFunction would suddenly start at a different offset than it\u0027s used to. Is there - somewhere else? - code to compensate for this?",
+      "range": {
+        "startLine": 3560,
+        "startChar": 24,
+        "endLine": 3560,
+        "endChar": 59
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfd601e7_e77dd616",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -88,6 +180,52 @@
         "startChar": 22,
         "endLine": 3562,
         "endChar": 27
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d76430b4_85d475dd",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "Why?\n\n(I thought treatment of \u0027future strict reserved\u0027 keywords would depend strict-vs-non-strict mode. Not sure if this is factored in already.)",
+      "range": {
+        "startLine": 3563,
+        "startChar": 8,
+        "endLine": 3563,
+        "endChar": 43
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf7debd5_d5c809a9",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3568,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-07T11:31:02Z",
+      "side": 1,
+      "message": "And... what if !ok ?",
+      "range": {
+        "startLine": 3568,
+        "startChar": 5,
+        "endLine": 3568,
+        "endChar": 0
       },
       "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
