@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1451968b_90c0fdd7",
+        "filename": "src/messages.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-04-07T08:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c40110_c975c41c",
+      "range": {
+        "startLine": 593,
+        "startChar": 4,
+        "endLine": 593,
+        "endChar": 24
+      },
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3ffdf7d_796515d0",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 4
@@ -53,6 +77,48 @@
       "writtenOn": "2017-04-03T12:42:42Z",
       "side": 1,
       "message": "Why is this in Initialize, and not in the constructor?",
+      "range": {
+        "startLine": 200,
+        "startChar": 38,
+        "endLine": 200,
+        "endChar": 39
+      },
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e034d9cf_0db62087",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-04-07T08:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ffdf7d_796515d0",
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0253dd44_ce6b8a92",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-04-07T08:03:38Z",
+      "side": 1,
+      "message": "Do we create a new scanner for every file we parse? I did this because I wasn\u0027t sure what happens when we import a module from a script. I\u0027m ok with moving it to the constructor.",
+      "parentUuid": "22058088_6f961743",
       "range": {
         "startLine": 200,
         "startChar": 38,
