@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "842749f6_0d782da3",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher-job.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-07T08:01:13Z",
+      "side": 0,
+      "message": "Hmm, why was this removed? This would mean that previously there was a guarantee that the CDJ is destroyed in the main thread, but after your CL, there\u0027s no such guarantee. That\u0027s surprising!",
+      "range": {
+        "startLine": 116,
+        "startChar": 2,
+        "endLine": 116,
+        "endChar": 8
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
