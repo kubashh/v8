@@ -92,8 +92,7 @@ enum ContextLookupFlags {
   V(ASYNC_GENERATOR_AWAIT_CAUGHT, JSFunction, async_generator_await_caught)   \
   V(ASYNC_GENERATOR_AWAIT_UNCAUGHT, JSFunction,                               \
     async_generator_await_uncaught)                                           \
-  V(ASYNC_GENERATOR_YIELD, JSFunction, async_generator_yield)                 \
-  V(ASYNC_GENERATOR_RAW_YIELD, JSFunction, async_generator_raw_yield)
+  V(ASYNC_GENERATOR_YIELD, JSFunction, async_generator_yield)
 
 #define NATIVE_CONTEXT_IMPORTED_FIELDS(V)                                     \
   V(ARRAY_CONCAT_INDEX, JSFunction, array_concat)                             \
