@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1fdc688f_6e9611fa",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3555,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-07T07:51:11Z",
+      "side": 1,
+      "message": "Ah,I just saw your other CL. info-\u003efunction_kind() is not correct here. It should be though.",
+      "parentUuid": "1d85c77a_ba763525",
+      "range": {
+        "startLine": 3555,
+        "startChar": 27,
+        "endLine": 3555,
+        "endChar": 33
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfd601e7_e77dd616",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
