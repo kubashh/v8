@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3adb5c89_66a299a3",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3552,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-07T07:47:39Z",
+      "side": 1,
+      "message": "Would it make sense to add a comment here explaining where we are in the stream? For normal functions the code looks like we\u0027re in \"(async)? function (*)? \u003cHERE\u003e foo() { ... }\"  and for arrow functions... where? Do generators (function * foo() { }) work correctly too?\n\nNow that I think of it, it would make sense to either augment the CompilerDispatcher unit tests to test with other function kinds too, not just normal (non-async non-generator non-arrow) *or* add a DCHECK (or maybe even CHECK) here that only normal functions end here. (But the tests don\u0027t need to be in this CL, they can be a follow up.)",
+      "range": {
+        "startLine": 3552,
+        "startChar": 4,
+        "endLine": 3552,
+        "endChar": 8
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d85c77a_ba763525",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3555,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-07T07:47:39Z",
+      "side": 1,
+      "message": "Can\u0027t this function be sometimes called for arrow functions?\n\nYou can check info-\u003efunction_kind(), and either assert that it\u0027s not an arrow function, or handle the arrow functions here too.\n\nBut for now, this code path is not used in production at all, right? Since only CompilerDispatcher unit tests and your feature create parse jobs for functions. So maybe DCHECK the kind?",
+      "range": {
+        "startLine": 3555,
+        "startChar": 27,
+        "endLine": 3555,
+        "endChar": 33
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfd601e7_e77dd616",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3562,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-07T07:47:39Z",
+      "side": 1,
+      "message": "Makes sense to resolve this FIXME before landing this...",
+      "range": {
+        "startLine": 3562,
+        "startChar": 22,
+        "endLine": 3562,
+        "endChar": 27
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
