@@ -1027,8 +1027,6 @@
         'interpreter/bytecode-array-random-iterator.h',
         'interpreter/bytecode-array-writer.cc',
         'interpreter/bytecode-array-writer.h',
-        'interpreter/bytecode-dead-code-optimizer.cc',
-        'interpreter/bytecode-dead-code-optimizer.h',
         'interpreter/bytecode-decoder.cc',
         'interpreter/bytecode-decoder.h',
         'interpreter/bytecode-flags.cc',
