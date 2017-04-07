@@ -22,6 +22,30 @@
       "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7998c40_006ad47b",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher-job.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T09:21:38Z",
+      "side": 0,
+      "message": "isolate_ is null in my use case.\nI could store thread_id of the thread CDJ was created on, but it doesn\u0027t mean it\u0027s the main thread and also might not hold in my use case.",
+      "parentUuid": "842749f6_0d782da3",
+      "range": {
+        "startLine": 116,
+        "startChar": 2,
+        "endLine": 116,
+        "endChar": 8
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
