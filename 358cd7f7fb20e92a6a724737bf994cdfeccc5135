@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "599c197f_baf2a835",
+        "filename": "test/unittests/interpreter/bytecode-dead-code-optimizer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-07T11:06:10Z",
+      "side": 0,
+      "message": "Is it worth moving across the remainder of these tests, since they seem quite thorough?",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "358cd7f7fb20e92a6a724737bf994cdfeccc5135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
