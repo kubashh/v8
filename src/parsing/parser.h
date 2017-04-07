@@ -1055,7 +1055,7 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
 
   V8_INLINE Statement* NewThrowStatement(Expression* exception, int pos) {
     return factory()->NewExpressionStatement(
-        factory()->NewThrow(exception, pos), pos);
+        factory()->NewThrow(exception, pos + 1), pos);
   }
 
   V8_INLINE void AddParameterInitializationBlock(
