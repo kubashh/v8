@@ -360,24 +360,6 @@ TF_BUILTIN(AsyncGeneratorPrototypeThrow, AsyncGeneratorBuiltinsAssembler) {
                         "[AsyncGenerator].prototype.throw");
 }
 
-TF_BUILTIN(AsyncGeneratorYield, AsyncGeneratorBuiltinsAssembler) {
-  Node* const generator = Parameter(Descriptor::kReceiver);
-  Node* const value = Parameter(Descriptor::kValue);
-  Node* const context = Parameter(Descriptor::kContext);
-
-  CSA_ASSERT_JS_ARGC_EQ(this, 1);
-  CSA_SLOW_ASSERT(this,
-                  HasInstanceType(generator, JS_ASYNC_GENERATOR_OBJECT_TYPE));
-  CSA_ASSERT(this, IsGeneratorNotSuspendedForAwait(generator));
-
-  CallBuiltin(Builtins::kAsyncGeneratorResolve, context, generator, value,
-              FalseConstant());
-
-  // Yield must have been reached via ResumeNext(), so don't recursively call
-  // it.
-  Return(UndefinedConstant());
-}
-
 TF_BUILTIN(AsyncGeneratorAwaitResolveClosure, AsyncGeneratorBuiltinsAssembler) {
   Node* value = Parameter(Descriptor::kValue);
   Node* context = Parameter(Descriptor::kContext);
@@ -493,6 +475,10 @@ TF_BUILTIN(AsyncGeneratorResolve, AsyncGeneratorBuiltinsAssembler) {
   Node* const done = Parameter(Descriptor::kDone);
   Node* const context = Parameter(Descriptor::kContext);
 
+  CSA_SLOW_ASSERT(this,
+                  HasInstanceType(generator, JS_ASYNC_GENERATOR_OBJECT_TYPE));
+  CSA_ASSERT(this, IsGeneratorNotSuspendedForAwait(generator));
+
   Node* const next = TakeFirstAsyncGeneratorRequestFromQueue(generator);
   Node* const promise = LoadPromiseFromAsyncGeneratorRequest(next);
 
@@ -502,10 +488,10 @@ TF_BUILTIN(AsyncGeneratorResolve, AsyncGeneratorBuiltinsAssembler) {
   Node* const on_fulfilled =
       CreateUnwrapClosure(LoadNativeContext(context), done);
 
-  // Per spec, AsyncGeneratorResolve() returns undefined. However, for the
-  // benefit of %TraceExit(), return the Promise.
-  Return(CallBuiltin(Builtins::kPerformNativePromiseThen, context, wrapper,
-                     on_fulfilled, UndefinedConstant(), promise));
+  CallBuiltin(Builtins::kPerformNativePromiseThen, context, wrapper,
+              on_fulfilled, UndefinedConstant(), promise);
+
+  Return(UndefinedConstant());
 }
 
 TF_BUILTIN(AsyncGeneratorReject, AsyncGeneratorBuiltinsAssembler) {
