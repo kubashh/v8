@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bf147efe_7ce668dc",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T11:55:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37e4a15b_e9b23431",
+      "range": {
+        "startLine": 3541,
+        "startChar": 2,
+        "endLine": 3542,
+        "endChar": 0
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3adb5c89_66a299a3",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -141,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "b2d643b0_a322aafe",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3559,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T11:55:14Z",
+      "side": 1,
+      "message": "It should, otherwise one cannot be sure if it will only set it when it\u0027s strict_reserved or reset if it\u0027s not.\nAnyway conservatively initializing it is probably a good idea.",
+      "parentUuid": "f669b1a0_6f720a0d",
+      "range": {
+        "startLine": 3559,
+        "startChar": 13,
+        "endLine": 3559,
+        "endChar": 31
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "065d539e_8721fb65",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -152,6 +200,30 @@
       "writtenOn": "2017-04-07T11:31:02Z",
       "side": 1,
       "message": "I\u0027m surprised this works, because this would probably advance the Scanner + stream, and hence DoParseFunction would suddenly start at a different offset than it\u0027s used to. Is there - somewhere else? - code to compensate for this?",
+      "range": {
+        "startLine": 3560,
+        "startChar": 24,
+        "endLine": 3560,
+        "endChar": 59
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3e096b2_2bc84bc5",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3560,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T11:55:14Z",
+      "side": 1,
+      "message": "It\u0027s only when function_name is nullptr in which case previous impl would just SIGSEGV.",
+      "parentUuid": "065d539e_8721fb65",
       "range": {
         "startLine": 3560,
         "startChar": 24,
@@ -210,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "308e3707_f1fd5d7b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T11:55:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d76430b4_85d475dd",
+      "range": {
+        "startLine": 3563,
+        "startChar": 8,
+        "endLine": 3563,
+        "endChar": 43
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf7debd5_d5c809a9",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -221,6 +317,30 @@
       "writtenOn": "2017-04-07T11:31:02Z",
       "side": 1,
       "message": "And... what if !ok ?",
+      "range": {
+        "startLine": 3568,
+        "startChar": 5,
+        "endLine": 3568,
+        "endChar": 0
+      },
+      "revId": "1c980f60782504ed6413a8b416b499ec66016d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "893ad31f_05f326d4",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3568,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-07T11:55:14Z",
+      "side": 1,
+      "message": "Do not parse, so result \u003d\u003d nullptr, which is what it should be in case of any error. (ParseIdentifierOrStrictReservedWord should set pending error me thinks)",
+      "parentUuid": "bf7debd5_d5c809a9",
       "range": {
         "startLine": 3568,
         "startChar": 5,
