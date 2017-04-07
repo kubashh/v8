@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "910adec0_89643564",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher-job.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-07T10:36:44Z",
+      "side": 1,
+      "message": "why do you need kInitialParse? you could use the presence of a callback as a signal that you should go from parsing to done",
+      "parentUuid": "289da13d_e5e5ccfa",
+      "revId": "97529c298a23c814ef5a615706e5ce5475ae7143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13e2f0dc_c8f03738",
         "filename": "src/compiler-dispatcher/compiler-dispatcher-job.h",
         "patchSetId": 5
