@@ -50,10 +50,6 @@ deps_os = {
     "v8/third_party/catapult":
       Var('chromium_url') + "/external/github.com/catapult-project/catapult.git" + "@" + "87e8335e7464200d1d500fc5f7ff6ab1f527714c",
   },
-  "win": {
-    "v8/third_party/cygwin":
-      Var("chromium_url") + "/chromium/deps/cygwin.git" + "@" + "c89e446b273697fadf3a10ff1007a97c0b7de6df",
-  }
 }
 
 recursedeps = [
