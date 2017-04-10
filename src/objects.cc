@@ -2364,6 +2364,7 @@ bool Object::IterationHasObservableEffects() {
   Isolate* isolate = spread_array->GetIsolate();
 
   // Check that we have the original ArrayPrototype.
+  if (!spread_array->map()->prototype()->IsJSObject()) return true;
   JSObject* array_proto = JSObject::cast(spread_array->map()->prototype());
   if (!isolate->is_initial_array_prototype(array_proto)) return true;
 
