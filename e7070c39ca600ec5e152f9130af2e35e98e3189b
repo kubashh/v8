@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60855462_4bbfe6eb",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-04-10T15:37:58Z",
+      "side": 1,
+      "message": "nit - this is not necessarily a jump bytecode. Just budget_after_bytecode ?",
+      "range": {
+        "startLine": 960,
+        "startChar": 8,
+        "endLine": 960,
+        "endChar": 34
+      },
+      "revId": "e7070c39ca600ec5e152f9130af2e35e98e3189b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
