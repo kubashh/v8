@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f9e531e8_f3c4c768",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-10T11:10:11Z",
+      "side": 1,
+      "message": "Comment done, deopt bit changed to \"deopt_already_counted\" just to make the use 100% clear.",
+      "parentUuid": "a5104a0f_ca8d5610",
+      "range": {
+        "startLine": 523,
+        "startChar": 5,
+        "endLine": 525,
+        "endChar": 40
+      },
+      "revId": "8d74918432505a3d45b95bdcdbdd4cfe9363aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabc6d74_9a3959aa",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f01cd0cd_f1fd0398",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-10T11:10:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabc6d74_9a3959aa",
+      "range": {
+        "startLine": 531,
+        "startChar": 6,
+        "endLine": 531,
+        "endChar": 58
+      },
+      "revId": "8d74918432505a3d45b95bdcdbdd4cfe9363aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e52325ba_33bb2cf3",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2017-04-10T08:06:38Z",
       "side": 1,
       "message": "I am still not sure the deopted_once is different enough from marked-for-deoptimization to deserve the bit in Code. At the moment, we always mark code for deoptimization when we deoptimize the first time. \nBut since this could change if we keep code around after soft deopt, I am ok with introducing the bit.",
+      "range": {
+        "startLine": 536,
+        "startChar": 20,
+        "endLine": 536,
+        "endChar": 36
+      },
+      "revId": "8d74918432505a3d45b95bdcdbdd4cfe9363aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990231d0_a266506a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-10T11:10:11Z",
+      "side": 1,
+      "message": "SGTM, I\u0027m not sure that it\u0027s necessary either -- I still think it is to avoid the increment for a soft deopt in a recursive call -- but if nothing else, separating it from marked_for_deoptimization made it easier to convince myself that this count is correct. If we need bits, we can reevaluate whether we can merge those two.",
+      "parentUuid": "e52325ba_33bb2cf3",
       "range": {
         "startLine": 536,
         "startChar": 20,
@@ -91,6 +163,30 @@
       "revId": "8d74918432505a3d45b95bdcdbdd4cfe9363aa68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23357c1c_fbba6040",
+        "filename": "test/mjsunit/deopt-recursive-eager-once.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-04-10T11:10:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca39fbc0_6f2e502a",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 71
+      },
+      "revId": "8d74918432505a3d45b95bdcdbdd4cfe9363aa68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
