@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "109a53db_5bcc1375",
+        "filename": "test/mjsunit/regress-6223.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-10T11:40:36Z",
+      "side": 1,
+      "message": "You can use assertArrayEquals, which works for comparing typed arrays with regular arrays value by value, and it does the length assertion first too.",
+      "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
