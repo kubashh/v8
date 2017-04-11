@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64e5cfbf_b070aeb9",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-04-11T08:44:04Z",
+      "side": 1,
+      "message": "Who\u0027s reading msvs_cygwin_shell?",
+      "range": {
+        "startLine": 869,
+        "startChar": 9,
+        "endLine": 869,
+        "endChar": 26
+      },
+      "revId": "0a20b0f13bc59ecf248d8e5f0b93e586138c7da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eb7b716_9a4fd074",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-04-11T08:44:04Z",
+      "side": 1,
+      "message": "No idea who reads this. Shouldn\u0027t it rather be removed, now that the deps is removed?",
+      "range": {
+        "startLine": 870,
+        "startChar": 9,
+        "endLine": 870,
+        "endChar": 25
+      },
+      "revId": "0a20b0f13bc59ecf248d8e5f0b93e586138c7da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
