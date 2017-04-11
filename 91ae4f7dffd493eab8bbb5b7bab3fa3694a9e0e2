@@ -152,6 +152,30 @@
       "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e203bd7_b7668f50",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-04-11T21:26:43Z",
+      "side": 1,
+      "message": "Thanks. I\u0027m happy to leave it as such, unless someone else objects.",
+      "parentUuid": "54c8d54a_c572cfa7",
+      "range": {
+        "startLine": 200,
+        "startChar": 38,
+        "endLine": 200,
+        "endChar": 39
+      },
+      "revId": "91ae4f7dffd493eab8bbb5b7bab3fa3694a9e0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
