@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "460a26a6_4655cacf",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-04-11T08:47:27Z",
+      "side": 1,
+      "message": "I have no idea as well, can\u0027t find anything from cs.chromium.org, but if I don\u0027t add this the build will fail in cryptic way.",
+      "parentUuid": "64e5cfbf_b070aeb9",
+      "range": {
+        "startLine": 869,
+        "startChar": 9,
+        "endLine": 869,
+        "endChar": 26
+      },
+      "revId": "0a20b0f13bc59ecf248d8e5f0b93e586138c7da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3eb7b716_9a4fd074",
         "filename": "gypfiles/standalone.gypi",
         "patchSetId": 3
