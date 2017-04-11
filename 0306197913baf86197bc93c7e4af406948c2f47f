@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "ae639707_425eb422",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:20:49Z",
+      "side": 1,
+      "message": "To use EnqueAndStep(CompilerDispatcherJob*), which also accounts for tasks that may finish in one step, consistently everywhere.",
+      "parentUuid": "16460235_684c97f6",
+      "range": {
+        "startLine": 418,
+        "startChar": 7,
+        "endLine": 418,
+        "endChar": 17
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e81ae11a_8fc0e301",
         "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
         "patchSetId": 3
@@ -99,6 +123,30 @@
       "writtenOn": "2017-04-11T08:20:08Z",
       "side": 1,
       "message": "+1",
+      "parentUuid": "ee34c94b_90f0791b",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a9daf4c_969a2346",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:20:49Z",
+      "side": 1,
+      "message": "Or FinishCallback could be not a inner class of CDJ and then be forward declared, but it would need a better name",
       "parentUuid": "ee34c94b_90f0791b",
       "range": {
         "startLine": 19,
@@ -186,6 +234,30 @@
     },
     {
       "key": {
+        "uuid": "f4510605_46287a66",
+        "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:20:49Z",
+      "side": 1,
+      "message": "As I moved over 2 functions (and 2 classes) from unnamed namespace in compiler-dispatcher-job-unittest.cc, I thought it\u0027s better to have another namespace as those functions are test-only.",
+      "parentUuid": "7729aca3_9691fefb",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 14
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48b0b1ba_caed1d41",
         "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
         "patchSetId": 3
@@ -220,6 +292,30 @@
       "writtenOn": "2017-04-11T08:20:08Z",
       "side": 1,
       "message": "heap objects themselves don\u0027t contain handles but raw heap pointers",
+      "parentUuid": "48b0b1ba_caed1d41",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d82cb07_c76f0cbc",
+        "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:20:49Z",
+      "side": 1,
+      "message": "idk :)\nI just copied the code from compiler-dispatcher-job-unittest.cc",
       "parentUuid": "48b0b1ba_caed1d41",
       "range": {
         "startLine": 55,
