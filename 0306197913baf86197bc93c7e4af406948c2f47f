@@ -177,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "027d300e_94232d35",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:27:42Z",
+      "side": 1,
+      "message": "I discussed this with vogelheim@ and he said as long as:\n DCHECK(source-\u003eIsExternalTwoByteString() || source-\u003eIsExternalOneByteString())\nholds, I\u0027m fine and can even use it from bg thread.",
+      "parentUuid": "bfc3ede3_b644ebda",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d0eeb81b_536c3bb5",
         "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
         "patchSetId": 3
@@ -188,6 +206,24 @@
       "writtenOn": "2017-04-11T08:20:08Z",
       "side": 1,
       "message": "does that make sense? Isn\u0027t the idea that we can always parse on background threads?",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f7e7377_cd5e7acc",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1187715
+      },
+      "writtenOn": "2017-04-11T08:27:42Z",
+      "side": 1,
+      "message": "True. This was added only for consistency.",
+      "parentUuid": "d0eeb81b_536c3bb5",
       "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
