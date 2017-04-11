@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16460235_684c97f6",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-11T08:04:04Z",
+      "side": 1,
+      "message": "Out of curiosity: why this change?",
+      "range": {
+        "startLine": 418,
+        "startChar": 7,
+        "endLine": 418,
+        "endChar": 17
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e81ae11a_8fc0e301",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-11T08:04:04Z",
+      "side": 1,
+      "message": "Nit: this statement can now be moved inside the if.",
+      "range": {
+        "startLine": 781,
+        "startChar": 7,
+        "endLine": 781,
+        "endChar": 13
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee34c94b_90f0791b",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-11T08:04:04Z",
+      "side": 1,
+      "message": "Nit: this is unfortunate from layering perspective, since the users for CompilerDispatcher shouldn\u0027t need to include CompilerDispatcherJob. It\u0027s because of the FinishCallback, right? Should the callback live in the CompilerDispatcher and not in CompilerDispatcherJob?",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7729aca3_9691fefb",
+        "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-11T08:04:04Z",
+      "side": 1,
+      "message": "Why this change? As this namespace is only used in compiler dispatcher tests, the name \"test\" is a bit generic...",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 14
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b0b1ba_caed1d41",
+        "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-11T08:04:04Z",
+      "side": 1,
+      "message": "Why is this correct? Won\u0027t the SFI handle now point to invalid Script handle?",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
