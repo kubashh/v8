@@ -69,6 +69,30 @@
       "revId": "0a20b0f13bc59ecf248d8e5f0b93e586138c7da2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51308268_afccfae3",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-04-11T08:54:56Z",
+      "side": 1,
+      "message": "IC, it\u0027s a gyp feature:\nhttps://cs.chromium.org/chromium/src/tools/gyp/pylib/gyp/msvs_emulation.py?type\u003dcs\u0026q\u003dmsvs_cygwin_shell\u0026l\u003d815",
+      "parentUuid": "3eb7b716_9a4fd074",
+      "range": {
+        "startLine": 870,
+        "startChar": 9,
+        "endLine": 870,
+        "endChar": 25
+      },
+      "revId": "0a20b0f13bc59ecf248d8e5f0b93e586138c7da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
