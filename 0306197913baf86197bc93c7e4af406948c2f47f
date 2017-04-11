@@ -195,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "41f2305d_4ed69548",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:32:19Z",
+      "side": 1,
+      "message": "that\u0027s not true. Handle\u003c\u003e never can be used on background threads. It always has to be stack allocated on a foreground thread.",
+      "parentUuid": "027d300e_94232d35",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d0eeb81b_536c3bb5",
         "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
         "patchSetId": 3
@@ -224,6 +242,24 @@
       "side": 1,
       "message": "True. This was added only for consistency.",
       "parentUuid": "d0eeb81b_536c3bb5",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "759455b2_2b776a58",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:32:19Z",
+      "side": 1,
+      "message": "I\u0027d leave it out then",
+      "parentUuid": "6f7e7377_cd5e7acc",
       "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
