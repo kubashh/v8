@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1bb17c85_eb757c5c",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "if we\u0027re not entering a context, we can\u0027t throw exceptions. Maybe assert we aren\u0027t expecting any?",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16460235_684c97f6",
         "filename": "src/compiler-dispatcher/compiler-dispatcher.cc",
         "patchSetId": 3
@@ -71,6 +88,81 @@
     },
     {
       "key": {
+        "uuid": "ea32504a_dbfbeb34",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "ee34c94b_90f0791b",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfc3ede3_b644ebda",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "with a Handle\u003c\u003e we can\u0027t use this from a background thread. Is that intended?",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0eeb81b_536c3bb5",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "does that make sense? Isn\u0027t the idea that we can always parse on background threads?",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "782441f7_7785d8e6",
+        "filename": "src/compiler-dispatcher/compiler-dispatcher.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "it\u0027s not clear from the function name what the return value is. Can you please add a comment?",
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7729aca3_9691fefb",
         "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
         "patchSetId": 3
@@ -105,6 +197,30 @@
       "writtenOn": "2017-04-11T08:04:04Z",
       "side": 1,
       "message": "Why is this correct? Won\u0027t the SFI handle now point to invalid Script handle?",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "0306197913baf86197bc93c7e4af406948c2f47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7c89e2_f36ea4a4",
+        "filename": "test/unittests/compiler-dispatcher/compiler-dispatcher-helper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-11T08:20:08Z",
+      "side": 1,
+      "message": "heap objects themselves don\u0027t contain handles but raw heap pointers",
+      "parentUuid": "48b0b1ba_caed1d41",
       "range": {
         "startLine": 55,
         "startChar": 15,
