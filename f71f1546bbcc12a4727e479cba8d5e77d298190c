@@ -16,6 +16,24 @@
       "revId": "f71f1546bbcc12a4727e479cba8d5e77d298190c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b52f484a_edc6a478",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4561,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-12T16:03:42Z",
+      "side": 1,
+      "message": "there are a number of these in test262 (and more coming, I believe), but I\u0027ve added another one for this.\n\nThis was a helpful pointer though, thanks!",
+      "parentUuid": "880cbfd1_fa64a83d",
+      "revId": "f71f1546bbcc12a4727e479cba8d5e77d298190c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
