@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "880cbfd1_fa64a83d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4561,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-04-12T14:31:29Z",
+      "side": 1,
+      "message": "Reading the \"value\" property has to happen outside the try-catch-finally block. Your change now sort of matches the first attempt of changing the spec, which was broken.\n\nAlso please make some tests for these code paths, in particular one where accessing \"value\" throws.",
+      "revId": "f71f1546bbcc12a4727e479cba8d5e77d298190c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
