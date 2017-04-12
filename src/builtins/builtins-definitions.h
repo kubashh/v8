@@ -947,7 +947,6 @@ namespace internal {
   /* resume behaviour specific to Async Generators. Internal / not exposed */  \
   /* to JS code. */                                                            \
   TFJ(AsyncGeneratorYield, 1, kValue)                                          \
-  TFJ(AsyncGeneratorRawYield, 1, kValue)                                       \
                                                                                \
   /* Async-from-Sync Iterator */                                               \
                                                                                \
