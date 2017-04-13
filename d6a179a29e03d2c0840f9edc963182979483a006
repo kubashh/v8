@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72ad7812_94600605",
+        "filename": "test/mjsunit/harmony/async-generators-basic.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-04-13T08:55:17Z",
+      "side": 1,
+      "message": "nit: remove this, it\u0027s not really used",
+      "revId": "d6a179a29e03d2c0840f9edc963182979483a006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf9b3ff0_4b3cac4b",
+        "filename": "test/mjsunit/harmony/async-generators-basic.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-04-13T08:55:17Z",
+      "side": 1,
+      "message": "nit: remove empty line or add elsewhere too",
+      "revId": "d6a179a29e03d2c0840f9edc963182979483a006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ef36614_b7c4207a",
+        "filename": "test/mjsunit/harmony/async-generators-basic.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-04-13T08:55:17Z",
+      "side": 1,
+      "message": "Nice test! Maybe you could add a \"return\" function as well, just for completeness.",
+      "revId": "d6a179a29e03d2c0840f9edc963182979483a006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
