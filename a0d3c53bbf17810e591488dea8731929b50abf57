@@ -22,6 +22,30 @@
       "revId": "a0d3c53bbf17810e591488dea8731929b50abf57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "096fd937_639ebdaf",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-13T13:56:29Z",
+      "side": 1,
+      "message": "Done (here and above).",
+      "parentUuid": "7ecb2cb7_6bda697e",
+      "range": {
+        "startLine": 3520,
+        "startChar": 11,
+        "endLine": 3520,
+        "endChar": 18
+      },
+      "revId": "a0d3c53bbf17810e591488dea8731929b50abf57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
