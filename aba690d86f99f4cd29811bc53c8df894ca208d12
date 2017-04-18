@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1910f32c_6f7d3c3f",
+        "filename": "test/mjsunit/harmony/global-accessors-strict.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-04-18T21:05:17Z",
+      "side": 1,
+      "message": "Nit: Why this old form of copyright statement with this old year?\n\nIs there anything that isn\u0027t tested by the test262 tests that you enabled in this patch?",
+      "revId": "aba690d86f99f4cd29811bc53c8df894ca208d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
