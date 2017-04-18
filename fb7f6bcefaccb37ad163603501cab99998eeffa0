@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc8957f4_df0bcf50",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-04-18T18:08:28Z",
+      "side": 1,
+      "message": "Ah you ended up doing this.",
+      "revId": "fb7f6bcefaccb37ad163603501cab99998eeffa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2df839d_3ba7fc68",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-04-18T18:08:28Z",
+      "side": 1,
+      "message": "DeleteCodeAfter ? optional",
+      "revId": "fb7f6bcefaccb37ad163603501cab99998eeffa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
