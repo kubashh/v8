@@ -16,6 +16,24 @@
       "revId": "aba690d86f99f4cd29811bc53c8df894ca208d12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f26ca83e_38101512",
+        "filename": "test/mjsunit/harmony/global-accessors-strict.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-04-18T21:10:30Z",
+      "side": 1,
+      "message": "To the copyright: this is a straight copy of an existing file.\n\nAs to the test question: I believe the changes are well-covered by test262.",
+      "parentUuid": "1910f32c_6f7d3c3f",
+      "revId": "aba690d86f99f4cd29811bc53c8df894ca208d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
