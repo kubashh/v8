@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "f1306542_a1301d4a",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-19T20:31:20Z",
+      "side": 1,
+      "message": "also, at this point, not necessarily in the correct Context/Isolate, so the allocations below do the wrong thing.\n\nHow could this be done better? Lazily allocating these would be nice, but would require re-parsing the parent closure on the first run.",
+      "parentUuid": "358bbe4b_6f119d6e",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa77787e_a20a8727",
         "filename": "test/debugger/debug/es6/debug-stepin-string-template.js",
         "patchSetId": 5
