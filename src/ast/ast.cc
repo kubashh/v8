@@ -156,6 +156,8 @@ void Expression::MarkTail() {
     AsConditional()->MarkTail();
   } else if (IsCall()) {
     AsCall()->MarkTail();
+  } else if (IsTaggedTemplate()) {
+    AsTaggedTemplate()->MarkTail();
   } else if (IsBinaryOperation()) {
     AsBinaryOperation()->MarkTail();
   }
@@ -1076,31 +1078,40 @@ void Call::AssignFeedbackSlots(FeedbackVectorSpec* spec,
   ic_slot_ = spec->AddCallICSlot();
 }
 
-Call::CallType Call::GetCallType() const {
-  VariableProxy* proxy = expression()->AsVariableProxy();
+inline Call::CallType GetCallTypeImpl(Expression* callee) {
+  using C = Call;
+  VariableProxy* proxy = callee->AsVariableProxy();
   if (proxy != NULL) {
     if (proxy->var()->IsUnallocated()) {
-      return GLOBAL_CALL;
+      return C::GLOBAL_CALL;
     } else if (proxy->var()->IsLookupSlot()) {
       // Calls going through 'with' always use DYNAMIC rather than DYNAMIC_LOCAL
       // or DYNAMIC_GLOBAL.
-      return proxy->var()->mode() == DYNAMIC ? WITH_CALL : OTHER_CALL;
+      return proxy->var()->mode() == DYNAMIC ? C::WITH_CALL : C::OTHER_CALL;
     }
   }
 
-  if (expression()->IsSuperCallReference()) return SUPER_CALL;
+  if (callee->IsSuperCallReference()) return C::SUPER_CALL;
 
-  Property* property = expression()->AsProperty();
+  Property* property = callee->AsProperty();
   if (property != nullptr) {
     bool is_super = property->IsSuperAccess();
     if (property->key()->IsPropertyName()) {
-      return is_super ? NAMED_SUPER_PROPERTY_CALL : NAMED_PROPERTY_CALL;
+      return is_super ? C::NAMED_SUPER_PROPERTY_CALL : C::NAMED_PROPERTY_CALL;
     } else {
-      return is_super ? KEYED_SUPER_PROPERTY_CALL : KEYED_PROPERTY_CALL;
+      return is_super ? C::KEYED_SUPER_PROPERTY_CALL : C::KEYED_PROPERTY_CALL;
     }
   }
 
-  return OTHER_CALL;
+  return C::OTHER_CALL;
+}
+
+Call::CallType Call::GetCallType() const {
+  return GetCallTypeImpl(expression());
+}
+
+Call::CallType TaggedTemplate::GetCallType() const {
+  return GetCallTypeImpl(tag());
 }
 
 CaseClause::CaseClause(Expression* label, ZoneList<Statement*>* statements,

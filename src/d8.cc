@@ -1048,7 +1048,9 @@ void Shell::RealmEval(const v8::FunctionCallbackInfo<v8::Value>& args) {
   int index = data->RealmIndexOrThrow(args, 0);
   if (index == -1) return;
   if (args.Length() < 2 || !args[1]->IsString()) {
-    Throw(args.GetIsolate(), "Invalid argument");
+    Throw(args.GetIsolate(), args.Length() < 2
+                                 ? "Invalid argument: Not enough arguments"
+                                 : "Invalid argument: not a String");
     return;
   }
   ScriptCompiler::Source script_source(
