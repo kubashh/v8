@@ -186,6 +186,7 @@ class ParserBase {
   typedef typename Types::ObjectLiteralProperty ObjectLiteralPropertyT;
   typedef typename Types::ClassLiteralProperty ClassLiteralPropertyT;
   typedef typename Types::Suspend SuspendExpressionT;
+  typedef typename Types::TaggedTemplate TaggedTemplateT;
   typedef typename Types::ExpressionList ExpressionListT;
   typedef typename Types::FormalParameters FormalParametersT;
   typedef typename Types::Statement StatementT;
@@ -414,6 +415,34 @@ class ParserBase {
       return destructuring_assignments_to_rewrite_;
     }
 
+    int tagged_templates_count() const {
+      if (!tagged_templates_) return 0;
+      return tagged_templates_->length();
+    }
+    void RewindTaggedTemplates(int count) {
+      if (tagged_templates_) {
+        tagged_templates_->Rewind(count);
+      }
+    }
+    ZoneList<TaggedTemplateT>* tagged_templates() { return tagged_templates_; }
+    const ZoneList<TaggedTemplateT>* tagged_templates() const {
+      return tagged_templates_;
+    }
+    void AddTaggedTemplate(TaggedTemplate* node) {
+      if (!tagged_templates_) {
+        tagged_templates_ =
+            new (scope()->zone()) ZoneList<TaggedTemplate*>(4, scope()->zone());
+      }
+      tagged_templates_->Add(node, scope()->zone());
+    }
+    void AddTaggedTemplates(ZoneList<TaggedTemplate*>* nodes) {
+      DCHECK_NOT_NULL(nodes);
+      if (!tagged_templates_) {
+        tagged_templates_ =
+            new (scope()->zone()) ZoneList<TaggedTemplate*>(4, scope()->zone());
+      }
+      tagged_templates_->AddAll(*nodes, scope()->zone());
+    }
     TailCallExpressionList& tail_call_expressions() {
       return tail_call_expressions_;
     }
@@ -474,6 +503,7 @@ class ParserBase {
     TailCallExpressionList tail_call_expressions_;
     ReturnExprContext return_expr_context_;
     ZoneList<ExpressionT> non_patterns_to_rewrite_;
+    ZoneList<TaggedTemplateT>* tagged_templates_;
 
     ZoneList<typename ExpressionClassifier::Error> reported_errors_;
 
@@ -1532,6 +1562,7 @@ ParserBase<Impl>::FunctionState::FunctionState(
       tail_call_expressions_(scope->zone()),
       return_expr_context_(ReturnExprContext::kInsideValidBlock),
       non_patterns_to_rewrite_(0, scope->zone()),
+      tagged_templates_(nullptr),
       reported_errors_(16, scope->zone()),
       next_function_is_likely_called_(false),
       previous_function_was_likely_called_(false) {
@@ -2391,6 +2422,7 @@ ParserBase<Impl>::ParseClassFieldForInitializer(bool has_initializer,
       FunctionLiteral::kNoDuplicateParameters,
       FunctionLiteral::kAnonymousExpression, default_eager_compile_hint_,
       initializer_scope->start_position(), true, GetNextFunctionLiteralId());
+  function_literal->set_tagged_templates(initializer_state.tagged_templates());
   return function_literal;
 }
 
@@ -4211,6 +4243,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
       can_preparse && impl()->AllowsLazyParsingWithoutUnresolvedVariables();
   bool should_be_used_once_hint = false;
   bool has_braces = true;
+  ZoneList<TaggedTemplateT>* tagged_templates = nullptr;
   {
     FunctionState function_state(&function_state_, &scope_,
                                  formal_parameters.scope);
@@ -4314,6 +4347,8 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
     }
 
     impl()->RewriteDestructuringAssignments();
+
+    tagged_templates = function_state.tagged_templates();
   }
 
   if (FLAG_trace_preparse) {
@@ -4337,6 +4372,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
     function_literal->set_should_be_used_once_hint();
   }
 
+  function_literal->set_tagged_templates(tagged_templates);
   impl()->AddFunctionForNameInference(function_literal);
 
   return function_literal;
@@ -4535,7 +4571,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseTemplateLiteral(
     int expr_pos = peek_position();
     ExpressionT expression = ParseExpressionCoverGrammar(true, CHECK_OK);
     impl()->RewriteNonPattern(CHECK_OK);
-    impl()->AddTemplateExpression(&ts, expression);
+    impl()->AddTemplateSubstitution(&ts, expression);
 
     if (peek() != Token::RBRACE) {
       impl()->ReportMessageAt(Scanner::Location(expr_pos, peek_position()),

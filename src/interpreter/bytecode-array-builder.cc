@@ -626,6 +626,11 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::LoadFalse() {
   return *this;
 }
 
+BytecodeArrayBuilder& BytecodeArrayBuilder::LoadTemplateObject(Register out) {
+  OutputLoadTemplateObject(out);
+  return *this;
+}
+
 BytecodeArrayBuilder& BytecodeArrayBuilder::LoadAccumulatorWithRegister(
     Register reg) {
   if (register_optimizer_) {
@@ -989,6 +994,11 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToName(
 BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToNumber(
     Register out, int feedback_slot) {
   OutputToNumber(out, feedback_slot);
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToString() {
+  OutputToString();
   return *this;
 }
 

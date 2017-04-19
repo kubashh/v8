@@ -335,6 +335,7 @@ class PreParserExpression {
   // More dummy implementations of things PreParser doesn't need to track:
   void SetShouldEagerCompile() {}
   void set_should_be_used_once_hint() {}
+  void set_tagged_templates(ZoneList<PreParserExpression>* tagged_templates) {}
 
   int position() const { return kNoSourcePosition; }
   void set_function_token_position(int position) {}
@@ -840,6 +841,7 @@ struct ParserTypes<PreParser> {
   typedef PreParserExpression ObjectLiteralProperty;
   typedef PreParserExpression ClassLiteralProperty;
   typedef PreParserExpression Suspend;
+  typedef PreParserExpression TaggedTemplate;
   typedef PreParserExpressionList ExpressionList;
   typedef PreParserExpressionList ObjectPropertyList;
   typedef PreParserExpressionList ClassPropertyList;
@@ -963,8 +965,8 @@ class PreParser : public ParserBase<PreParser> {
   V8_INLINE TemplateLiteralState OpenTemplateLiteral(int pos) {
     return TemplateLiteralState();
   }
-  V8_INLINE void AddTemplateExpression(TemplateLiteralState* state,
-                                       PreParserExpression expression) {}
+  V8_INLINE void AddTemplateSubstitution(TemplateLiteralState* state,
+                                         PreParserExpression substitution) {}
   V8_INLINE void AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
                                  bool tail) {}
   V8_INLINE PreParserExpression CloseTemplateLiteral(

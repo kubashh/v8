@@ -2307,7 +2307,6 @@
           'js/collection-iterator.js',
           'js/promise.js',
           'js/messages.js',
-          'js/templates.js',
           'js/spread.js',
           'js/proxy.js',
           'debug/mirrors.js',
