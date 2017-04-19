@@ -204,6 +204,55 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
 
   info()->SetBytecodeArray(bytecodes);
   info()->SetCode(info()->isolate()->builtins()->InterpreterEntryTrampoline());
+
+  auto tagged_templates = info()->literal()->tagged_templates();
+  if (tagged_templates != nullptr && tagged_templates->length() > 0 &&
+      info()->shared_info()->template_object_cache() ==
+          isolate()->heap()->empty_fixed_array()) {
+    // Create template callsite objects on initial unoptimized compilation
+    Handle<FixedArray> objects =
+        isolate()->factory()->NewFixedArray(tagged_templates->length());
+    for (auto tagged : *tagged_templates) {
+      auto& strings_list = tagged->literal()->strings();
+      auto& raw_strings_list = tagged->literal()->raw_strings();
+      int length = strings_list.length();
+      DCHECK_EQ(length, raw_strings_list.length());
+
+      Handle<JSArray> callsite = isolate()->factory()->NewJSArray(
+          DICTIONARY_ELEMENTS, 0, length, INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+
+      Handle<JSArray> raw_site = isolate()->factory()->NewJSArray(
+          DICTIONARY_ELEMENTS, 0, length, INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+
+      for (int i = 0; i < strings_list.length(); ++i) {
+        uint32_t index = static_cast<uint32_t>(i);
+        auto result = JSArray::SetOwnElementIgnoreAttributes(
+            callsite, index, strings_list.at(i)->value(), FROZEN);
+        USE(result);
+
+        result = JSArray::SetOwnElementIgnoreAttributes(
+            raw_site, index, raw_strings_list.at(i)->value(), FROZEN);
+        USE(result);
+      }
+
+      // Add "raw" property to callsite
+      auto result = JSArray::SetOwnPropertyIgnoreAttributes(
+          callsite, isolate()->factory()->raw_string(), raw_site,
+          static_cast<PropertyAttributes>(FROZEN | DONT_ENUM));
+      USE(result);
+
+      // Freeze the callsite and raw array
+      auto froze =
+          JSArray::SetIntegrityLevel(callsite, FROZEN, Object::DONT_THROW);
+      USE(froze);
+      froze = JSArray::SetIntegrityLevel(raw_site, FROZEN, Object::DONT_THROW);
+      USE(froze);
+
+      objects->set(tagged->template_id(), *callsite);
+    }
+    info()->shared_info()->set_template_object_cache(*objects);
+  }
+
   return SUCCEEDED;
 }
 

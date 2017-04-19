@@ -11248,6 +11248,14 @@ void HOptimizedGraphBuilder::VisitImportCallExpression(
   UNREACHABLE();
 }
 
+void HOptimizedGraphBuilder::VisitTemplateLiteral(TemplateLiteral* expr) {
+  UNREACHABLE();
+}
+
+void HOptimizedGraphBuilder::VisitTaggedTemplate(TaggedTemplate* expr) {
+  UNREACHABLE();
+}
+
 HValue* HOptimizedGraphBuilder::AddThisFunction() {
   return AddInstruction(BuildThisFunction());
 }

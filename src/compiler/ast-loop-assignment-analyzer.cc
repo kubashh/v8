@@ -205,6 +205,9 @@ void ALAA::VisitGetIterator(GetIterator* e) { UNREACHABLE(); }
 
 void ALAA::VisitImportCallExpression(ImportCallExpression* e) { UNREACHABLE(); }
 
+void ALAA::VisitTemplateLiteral(TemplateLiteral* e) { UNREACHABLE(); }
+void ALAA::VisitTaggedTemplate(TaggedTemplate* e) { UNREACHABLE(); }
+
 void ALAA::VisitCaseClause(CaseClause* cc) {
   if (!cc->is_default()) Visit(cc->label());
   VisitStatements(cc->statements());
