@@ -33,6 +33,24 @@
       "revId": "fb7f6bcefaccb37ad163603501cab99998eeffa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d75f6e71_91c826d2",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-19T08:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2df839d_3ba7fc68",
+      "revId": "fb7f6bcefaccb37ad163603501cab99998eeffa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
