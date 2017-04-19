@@ -133,6 +133,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildNewLocalCatchContext(Scope* scope);
   void BuildNewLocalWithContext(Scope* scope);
 
+  void BuildCall(Expression* expr, Expression* callee_expr,
+                 Call::CallType call_type);
+
   void VisitGeneratorPrologue();
 
   void VisitArgumentsObject(Variable* variable);
