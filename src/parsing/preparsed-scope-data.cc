@@ -84,7 +84,8 @@ void PreParsedScopeData::SaveData(Scope* scope) {
 
   SaveDataForInnerScopes(scope);
 
-  backing_store_[data_end_index] = backing_store_.size();
+  // FIXME(marja): see above.
+  backing_store_[data_end_index] = static_cast<int32_t>(backing_store_.size());
 }
 
 void PreParsedScopeData::AddFunction(
@@ -136,6 +137,8 @@ void PreParsedScopeData::RestoreData(Scope* scope, int* index_ptr) const {
     // This scope is a function scope representing a function we want to
     // skip. So just skip over its data.
     DCHECK(!scope->must_use_preparsed_scope_data());
+    // Check that we're moving forward (not backward) in the data.
+    DCHECK_GT(backing_store_[index + 2], index);
     index = backing_store_[index + 2];
     return;
   }

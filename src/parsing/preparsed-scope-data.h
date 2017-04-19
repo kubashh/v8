@@ -105,7 +105,7 @@ class PreParsedScopeData {
 
   // TODO(marja): Make the backing store more efficient once we know exactly
   // what data is needed.
-  std::vector<byte> backing_store_;
+  std::vector<int32_t> backing_store_;
 
   // Start pos -> FunctionData. Used for creating FunctionLiterals for skipped
   // functions (when they're actually skipped).
