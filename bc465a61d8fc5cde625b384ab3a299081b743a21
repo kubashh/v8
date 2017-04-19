@@ -22,6 +22,30 @@
       "revId": "bc465a61d8fc5cde625b384ab3a299081b743a21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80737aff_83b2789f",
+        "filename": "src/parsing/preparsed-scope-data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-19T12:51:41Z",
+      "side": 1,
+      "message": "Changed to uint32_t.\n\nSince the data is used for setting the index, I also changed it to be uint32_t* instead of int*.\n\nAlso there was 1 DCHECK comparing to signed (name length); added a cast there.",
+      "parentUuid": "b1b4d01e_1ed2fb9e",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 108,
+        "endChar": 21
+      },
+      "revId": "bc465a61d8fc5cde625b384ab3a299081b743a21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
