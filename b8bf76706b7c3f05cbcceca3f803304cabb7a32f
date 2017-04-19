@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22a81751_952c5507",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-19T20:04:59Z",
+      "side": 1,
+      "message": "Call printing could be a bit better, but it looks pretty good ¯\\_(ツ)_/¯",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "358bbe4b_6f119d6e",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-19T20:04:59Z",
+      "side": 1,
+      "message": "I agree this belongs somewhere else, I just haven\u0027t decided where yet. A new function in ast.cc?",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa77787e_a20a8727",
+        "filename": "test/debugger/debug/es6/debug-stepin-string-template.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-19T20:04:59Z",
+      "side": 1,
+      "message": "from my POV, this change is good, I don\u0027t think it made sense for the column position to be at 44 on the first step. I expect it\u0027s actually really hard to notice in the Chrome devtools, though.",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
