@@ -171,6 +171,7 @@ struct ParserTypes<Parser> {
   typedef ObjectLiteral::Property* ObjectLiteralProperty;
   typedef ClassLiteral::Property* ClassLiteralProperty;
   typedef v8::internal::Suspend* Suspend;
+  typedef v8::internal::TaggedTemplate* TaggedTemplate;
   typedef ZoneList<v8::internal::Expression*>* ExpressionList;
   typedef ZoneList<ObjectLiteral::Property*>* ObjectPropertyList;
   typedef ZoneList<ClassLiteral::Property*>* ClassPropertyList;
@@ -571,38 +572,10 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       FunctionLiteral::FunctionType function_type,
       DeclarationScope* function_scope, int* num_parameters,
       int* function_length, bool* has_duplicate_parameters,
-      int* expected_property_count, bool* ok);
+      int* expected_property_count,
+      ZoneList<TaggedTemplate*>** tagged_templates, bool* ok);
 
   void ThrowPendingError(Isolate* isolate, Handle<Script> script);
-
-  class TemplateLiteral : public ZoneObject {
-   public:
-    TemplateLiteral(Zone* zone, int pos)
-        : cooked_(8, zone), raw_(8, zone), expressions_(8, zone), pos_(pos) {}
-
-    const ZoneList<Expression*>* cooked() const { return &cooked_; }
-    const ZoneList<Expression*>* raw() const { return &raw_; }
-    const ZoneList<Expression*>* expressions() const { return &expressions_; }
-    int position() const { return pos_; }
-
-    void AddTemplateSpan(Literal* cooked, Literal* raw, int end, Zone* zone) {
-      DCHECK_NOT_NULL(cooked);
-      DCHECK_NOT_NULL(raw);
-      cooked_.Add(cooked, zone);
-      raw_.Add(raw, zone);
-    }
-
-    void AddExpression(Expression* expression, Zone* zone) {
-      DCHECK_NOT_NULL(expression);
-      expressions_.Add(expression, zone);
-    }
-
-   private:
-    ZoneList<Expression*> cooked_;
-    ZoneList<Expression*> raw_;
-    ZoneList<Expression*> expressions_;
-    int pos_;
-  };
 
   typedef TemplateLiteral* TemplateLiteralState;
 
@@ -616,8 +589,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   // "tail" indicates that this span is the last in the literal.
   void AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
                        bool tail);
-  void AddTemplateExpression(TemplateLiteralState* state,
-                             Expression* expression);
+  void AddTemplateSubstitution(TemplateLiteralState* state,
+                               Expression* substitution);
   Expression* CloseTemplateLiteral(TemplateLiteralState* state, int start,
                                    Expression* tag);
   uint32_t ComputeTemplateLiteralHash(const TemplateLiteral* lit);

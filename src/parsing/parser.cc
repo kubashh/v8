@@ -179,6 +179,7 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
   function_scope->set_start_position(pos);
   function_scope->set_end_position(pos);
   ZoneList<Statement*>* body = NULL;
+  ZoneList<TaggedTemplate*>* tagged_templates = nullptr;
 
   {
     FunctionState function_state(&function_state_, &scope_, function_scope);
@@ -206,6 +207,7 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
     }
 
     expected_property_count = function_state.expected_property_count();
+    tagged_templates = function_state.tagged_templates();
   }
 
   FunctionLiteral* function_literal = factory()->NewFunctionLiteral(
@@ -213,6 +215,7 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
       parameter_count, FunctionLiteral::kNoDuplicateParameters,
       FunctionLiteral::kAnonymousExpression, default_eager_compile_hint(), pos,
       true, GetNextFunctionLiteralId());
+  function_literal->set_tagged_templates(tagged_templates);
 
   return function_literal;
 }
@@ -765,6 +768,7 @@ FunctionLiteral* Parser::DoParseProgram(ParseInfo* info) {
       result = factory()->NewScriptOrEvalFunctionLiteral(
           scope, body, function_state.expected_property_count(),
           parameter_count);
+      result->set_tagged_templates(function_state.tagged_templates());
     }
   }
 
@@ -2657,6 +2661,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   int function_length = -1;
   bool has_duplicate_parameters = false;
   int function_literal_id = GetNextFunctionLiteralId();
+  ZoneList<TaggedTemplate*>* tagged_templates = nullptr;
 
   Zone* outer_zone = zone();
   DeclarationScope* scope;
@@ -2694,6 +2699,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
     // try to lazy parse in the first place, we'll have to parse eagerly.
     if (is_lazy_top_level_function || is_lazy_inner_function) {
       Scanner::BookmarkScope bookmark(scanner());
+      int tagged_count = function_state_->tagged_templates_count();
       bookmark.Set();
       LazyParsingResult result =
           SkipFunction(kind, scope, &num_parameters, is_lazy_inner_function,
@@ -2713,6 +2719,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
         scope->ResetAfterPreparsing(ast_value_factory(), true);
         zone_scope.Reset();
         use_temp_zone = false;
+        function_state_->RewindTaggedTemplates(tagged_count);
       }
     }
 
@@ -2720,7 +2727,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       body = ParseFunction(function_name, pos, kind, function_type, scope,
                            &num_parameters, &function_length,
                            &has_duplicate_parameters, &expected_property_count,
-                           CHECK_OK);
+                           &tagged_templates, CHECK_OK);
     }
 
     DCHECK(use_temp_zone || !is_lazy_top_level_function);
@@ -2779,6 +2786,9 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       function_name, scope, body, expected_property_count, num_parameters,
       function_length, duplicate_parameters, function_type, eager_compile_hint,
       pos, true, function_literal_id);
+  if (tagged_templates != nullptr) {
+    function_literal->set_tagged_templates(tagged_templates);
+  }
   function_literal->set_function_token_position(function_token_pos);
   if (should_be_used_once_hint)
     function_literal->set_should_be_used_once_hint();
@@ -3204,7 +3214,8 @@ ZoneList<Statement*>* Parser::ParseFunction(
     const AstRawString* function_name, int pos, FunctionKind kind,
     FunctionLiteral::FunctionType function_type,
     DeclarationScope* function_scope, int* num_parameters, int* function_length,
-    bool* has_duplicate_parameters, int* expected_property_count, bool* ok) {
+    bool* has_duplicate_parameters, int* expected_property_count,
+    ZoneList<TaggedTemplate*>** tagged_templates, bool* ok) {
   ParsingModeScope mode(this, allow_lazy_ ? PARSE_LAZILY : PARSE_EAGERLY);
 
   FunctionState function_state(&function_state_, &scope_, function_scope);
@@ -3269,6 +3280,7 @@ ZoneList<Statement*>* Parser::ParseFunction(
       !classifier()->is_valid_formal_parameter_list_without_duplicates();
 
   *expected_property_count = function_state.expected_property_count();
+  *tagged_templates = function_state.tagged_templates();
   return body;
 }
 
@@ -3583,94 +3595,51 @@ void Parser::ParseOnBackground(ParseInfo* info) {
 }
 
 Parser::TemplateLiteralState Parser::OpenTemplateLiteral(int pos) {
-  return new (zone()) TemplateLiteral(zone(), pos);
+  return factory()->NewTemplateLiteral(pos);
 }
 
 void Parser::AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
                              bool tail) {
+  TemplateLiteral* lit = *state;
   DCHECK(should_cook || allow_harmony_template_escapes());
   int pos = scanner()->location().beg_pos;
-  int end = scanner()->location().end_pos - (tail ? 1 : 2);
   const AstRawString* trv = scanner()->CurrentRawSymbol(ast_value_factory());
   Literal* raw = factory()->NewStringLiteral(trv, pos);
   if (should_cook) {
     const AstRawString* tv = scanner()->CurrentSymbol(ast_value_factory());
     Literal* cooked = factory()->NewStringLiteral(tv, pos);
-    (*state)->AddTemplateSpan(cooked, raw, end, zone());
+    lit->AddTemplateSpan(cooked, raw, zone());
   } else {
-    (*state)->AddTemplateSpan(GetLiteralUndefined(pos), raw, end, zone());
+    lit->AddTemplateSpan(GetLiteralUndefined(pos), raw, zone());
   }
 }
 
-
-void Parser::AddTemplateExpression(TemplateLiteralState* state,
-                                   Expression* expression) {
-  (*state)->AddExpression(expression, zone());
+void Parser::AddTemplateSubstitution(TemplateLiteralState* state,
+                                     Expression* substitution) {
+  TemplateLiteral* lit = *state;
+  lit->AddSubstitution(substitution, zone());
 }
 
 
 Expression* Parser::CloseTemplateLiteral(TemplateLiteralState* state, int start,
                                          Expression* tag) {
   TemplateLiteral* lit = *state;
-  int pos = lit->position();
-  const ZoneList<Expression*>* cooked_strings = lit->cooked();
-  const ZoneList<Expression*>* raw_strings = lit->raw();
-  const ZoneList<Expression*>* expressions = lit->expressions();
-  DCHECK_EQ(cooked_strings->length(), raw_strings->length());
-  DCHECK_EQ(cooked_strings->length(), expressions->length() + 1);
+  DCHECK_EQ(lit->strings().length(), lit->raw_strings().length());
+  DCHECK_EQ(lit->substitutions().length(), lit->strings().length() - 1);
 
-  if (!tag) {
-    // Build tree of BinaryOps to simplify code-generation
-    Expression* expr = cooked_strings->at(0);
-    int i = 0;
-    while (i < expressions->length()) {
-      Expression* sub = expressions->at(i++);
-      Expression* cooked_str = cooked_strings->at(i);
-
-      // Let middle be ToString(sub).
-      ZoneList<Expression*>* args =
-          new (zone()) ZoneList<Expression*>(1, zone());
-      args->Add(sub, zone());
-      Expression* middle = factory()->NewCallRuntime(Runtime::kInlineToString,
-                                                     args, sub->position());
-
-      expr = factory()->NewBinaryOperation(
-          Token::ADD, factory()->NewBinaryOperation(
-                          Token::ADD, expr, middle, expr->position()),
-          cooked_str, sub->position());
-    }
-    return expr;
-  } else {
-    uint32_t hash = ComputeTemplateLiteralHash(lit);
-
-    // $getTemplateCallSite
-    ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(4, zone());
-    args->Add(factory()->NewArrayLiteral(
-                  const_cast<ZoneList<Expression*>*>(cooked_strings), pos),
-              zone());
-    args->Add(factory()->NewArrayLiteral(
-                  const_cast<ZoneList<Expression*>*>(raw_strings), pos),
-              zone());
-
-    // Truncate hash to Smi-range.
-    Smi* hash_obj = Smi::cast(Internals::IntToSmi(static_cast<int>(hash)));
-    args->Add(factory()->NewNumberLiteral(hash_obj->value(), pos), zone());
-
-    Expression* call_site = factory()->NewCallRuntime(
-        Context::GET_TEMPLATE_CALL_SITE_INDEX, args, start);
-
-    // Call TagFn
-    ZoneList<Expression*>* call_args =
-        new (zone()) ZoneList<Expression*>(expressions->length() + 1, zone());
-    call_args->Add(call_site, zone());
-    call_args->AddAll(*expressions, zone());
-    return factory()->NewCall(tag, call_args, pos);
+  if (tag) {
+    TaggedTemplate* tagged =
+        factory()->NewTaggedTemplate(tag, lit, tag->position());
+    function_state_->AddTaggedTemplate(tagged);
+    return tagged;
   }
+
+  return lit;
 }
 
 
 uint32_t Parser::ComputeTemplateLiteralHash(const TemplateLiteral* lit) {
-  const ZoneList<Expression*>* raw_strings = lit->raw();
+  const ZoneList<Literal*>* raw_strings = &lit->raw_strings();
   int total = raw_strings->length();
   DCHECK(total);
 

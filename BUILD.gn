@@ -512,7 +512,6 @@ action("js2c") {
     "src/js/collection-iterator.js",
     "src/js/promise.js",
     "src/js/messages.js",
-    "src/js/templates.js",
     "src/js/spread.js",
     "src/js/proxy.js",
     "src/debug/mirrors.js",
