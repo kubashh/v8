@@ -719,6 +719,26 @@ void BytecodeGraphBuilder::VisitLdaFalse() {
   environment()->BindAccumulator(node);
 }
 
+void BytecodeGraphBuilder::VisitLoadTemplateObject() {
+  Node* closure = GetFunctionClosure();
+  Node* shared_info = NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSFunctionSharedFunctionInfo()),
+      closure);
+
+  Node* cache =
+      NewNode(simplified()->LoadField(
+                  AccessBuilder::ForSharedFunctionInfoTemplateObjectCache()),
+              shared_info);
+
+  Node* index = environment()->LookupAccumulator();
+  Node* object =
+      NewNode(simplified()->LoadElement(AccessBuilder::ForFixedArrayElement()),
+              cache, index);
+
+  environment()->BindRegister(bytecode_iterator().GetRegisterOperand(0),
+                              object);
+}
+
 void BytecodeGraphBuilder::VisitLdar() {
   Node* value =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
@@ -2114,6 +2134,19 @@ void BytecodeGraphBuilder::VisitToNumber() {
 
   environment()->BindRegister(bytecode_iterator().GetRegisterOperand(0), node,
                               Environment::kAttachFrameState);
+}
+
+void BytecodeGraphBuilder::VisitToString() {
+  PrepareEagerCheckpoint();
+  Node* object = environment()->LookupAccumulator();
+  Node* effect = environment()->GetEffectDependency();
+  Node* control = environment()->GetControlDependency();
+
+  Node* result = NewNode(javascript()->ToString(), object, effect, control);
+  environment()->UpdateEffectDependency(result);
+  environment()->UpdateControlDependency(result);
+
+  environment()->BindAccumulator(result, Environment::kAttachFrameState);
 }
 
 void BytecodeGraphBuilder::VisitJump() { BuildJump(); }

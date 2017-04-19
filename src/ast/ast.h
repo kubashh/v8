@@ -106,7 +106,9 @@ namespace internal {
   V(GetIterator)                \
   V(DoExpression)               \
   V(RewritableExpression)       \
-  V(ImportCallExpression)
+  V(ImportCallExpression)       \
+  V(TemplateLiteral)            \
+  V(TaggedTemplate)
 
 #define AST_NODE_LIST(V)                        \
   DECLARATION_NODE_LIST(V)                      \
@@ -2742,6 +2744,17 @@ class FunctionLiteral final : public Expression {
     function_literal_id_ = function_literal_id;
   }
 
+  ZoneList<TaggedTemplate*>* tagged_templates() const {
+    return tagged_templates_;
+  }
+  void set_tagged_templates(ZoneList<TaggedTemplate*>* templates) {
+    if (!templates || !templates->length()) {
+      tagged_templates_ = nullptr;
+      return;
+    }
+    tagged_templates_ = templates;
+  }
+
  private:
   friend class AstNodeFactory;
 
@@ -2765,7 +2778,8 @@ class FunctionLiteral final : public Expression {
         body_(body),
         raw_inferred_name_(ast_value_factory->empty_cons_string()),
         ast_properties_(zone),
-        function_literal_id_(function_literal_id) {
+        function_literal_id_(function_literal_id),
+        tagged_templates_(nullptr) {
     bit_field_ |= FunctionTypeBits::encode(function_type) |
                   Pretenure::encode(false) |
                   HasDuplicateParameters::encode(has_duplicate_parameters ==
@@ -2801,6 +2815,8 @@ class FunctionLiteral final : public Expression {
   AstProperties ast_properties_;
   int function_literal_id_;
   FeedbackSlot literal_feedback_slot_;
+
+  ZoneList<TaggedTemplate*>* tagged_templates_;
 };
 
 // Property is used for passing information
@@ -2988,6 +3004,88 @@ class ImportCallExpression final : public Expression {
       : Expression(pos, kImportCallExpression), argument_(argument) {}
 
   Expression* argument_;
+};
+
+class TemplateLiteral final : public Expression {
+ public:
+  const ZoneList<Literal*>& strings() const { return strings_; }
+  ZoneList<Literal*>& strings() { return strings_; }
+  const ZoneList<Literal*>& raw_strings() const { return raw_strings_; }
+  ZoneList<Literal*>& raw_strings() { return raw_strings_; }
+  const ZoneList<Expression*>& substitutions() const { return substitutions_; }
+  ZoneList<Expression*>& substitutions() { return substitutions_; }
+
+  void AddTemplateSpan(Literal* cooked, Literal* raw, Zone* zone) {
+    DCHECK(cooked->IsStringLiteral());
+    DCHECK(raw->IsStringLiteral());
+    strings_.Add(cooked, zone);
+    raw_strings_.Add(raw, zone);
+  }
+
+  void AddSubstitution(Expression* expression, Zone* zone) {
+    DCHECK_NOT_NULL(expression);
+    substitutions_.Add(expression, zone);
+  }
+
+  FeedbackSlot AppendFeedbackICSlot() const { return ic_slot_; }
+  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
+                           FeedbackSlotCache* cache) {
+    ic_slot_ = spec->AddInterpreterBinaryOpICSlot();
+  }
+
+ private:
+  friend class AstNodeFactory;
+
+  TemplateLiteral(Zone* zone, int position)
+      : Expression(position, kTemplateLiteral),
+        strings_(4, zone),
+        raw_strings_(4, zone),
+        substitutions_(3, zone) {}
+
+  FeedbackSlot ic_slot_;
+  ZoneList<Literal*> strings_;
+  ZoneList<Literal*> raw_strings_;
+  ZoneList<Expression*> substitutions_;
+};
+
+class TaggedTemplate final : public Expression {
+ public:
+  Expression* tag() const { return tag_; }
+  TemplateLiteral* literal() const { return literal_; }
+  int template_id() const { return template_id_; }
+  void set_template_id(int id) { template_id_ = id; }
+
+  FeedbackSlot CallFeedbackICSlot() const { return ic_slot_; }
+  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
+                           FeedbackSlotCache* cache) {
+    ic_slot_ = spec->AddCallICSlot();
+  }
+
+  // Helpers to determine how to handle the call.
+  Call::CallType GetCallType() const;
+
+  TailCallMode tail_call_mode() const {
+    return IsTailField::decode(bit_field_) ? TailCallMode::kAllow
+                                           : TailCallMode::kDisallow;
+  }
+  void MarkTail() { bit_field_ = IsTailField::update(bit_field_, true); }
+
+ private:
+  friend class AstNodeFactory;
+
+  TaggedTemplate(Expression* tag, TemplateLiteral* literal, int position)
+      : Expression(position, kTaggedTemplate),
+        template_id_(-1),
+        tag_(tag),
+        literal_(literal) {}
+
+  int template_id_;
+  Expression* tag_;
+  TemplateLiteral* literal_;
+  FeedbackSlot ic_slot_;
+
+  class IsTailField : public BitField<bool, Expression::kNextBitFieldIndex, 1> {
+  };
 };
 
 // This class is produced when parsing the () in arrow functions without any
@@ -3641,6 +3739,15 @@ class AstNodeFactory final BASE_EMBEDDED {
 
   ImportCallExpression* NewImportCallExpression(Expression* args, int pos) {
     return new (zone_) ImportCallExpression(args, pos);
+  }
+
+  TemplateLiteral* NewTemplateLiteral(int position) {
+    return new (zone_) TemplateLiteral(zone_, position);
+  }
+
+  TaggedTemplate* NewTaggedTemplate(Expression* tag, TemplateLiteral* literal,
+                                    int position) {
+    return new (zone_) TaggedTemplate(tag, literal, position);
   }
 
   Zone* zone() const { return zone_; }

@@ -2578,13 +2578,12 @@ void BytecodeGenerator::VisitArguments(ZoneList<Expression*>* args,
   }
 }
 
-void BytecodeGenerator::VisitCall(Call* expr) {
-  Expression* callee_expr = expr->expression();
-  Call::CallType call_type = expr->GetCallType();
+void BytecodeGenerator::BuildCall(Expression* expr, Expression* callee_expr,
+                                  Call::CallType call_type) {
+  DCHECK_NE(call_type, Call::SUPER_CALL);
 
-  if (call_type == Call::SUPER_CALL) {
-    return VisitCallSuper(expr);
-  }
+  Call* call = expr->AsCall();
+  TaggedTemplate* tagged = expr->AsTaggedTemplate();
 
   // Grow the args list as we visit receiver / arguments to avoid allocating all
   // the registers up-front. Otherwise these registers are unavailable during
@@ -2594,10 +2593,17 @@ void BytecodeGenerator::VisitCall(Call* expr) {
   RegisterList args = register_allocator()->NewGrowableRegisterList();
 
   bool implicit_undefined_receiver = false;
-  bool is_tail_call = (expr->tail_call_mode() == TailCallMode::kAllow);
-  // When a call contains a spread, a Call AST node is only created if there is
-  // exactly one spread, and it is the last argument.
-  bool is_spread_call = expr->only_last_arg_is_spread();
+  bool is_tail_call = false;
+  bool is_spread_call = false;
+  if (call != nullptr) {
+    is_tail_call = call->tail_call_mode() == TailCallMode::kAllow;
+
+    // When a call contains a spread, a Call AST node is only created if there
+    // is exactly one spread, and it is the last argument.
+    is_spread_call = call->only_last_arg_is_spread();
+  } else if (tagged != nullptr) {
+    is_tail_call = tagged->tail_call_mode() == TailCallMode::kAllow;
+  }
 
   // TODO(petermarshall): We have a lot of call bytecodes that are very similar,
   // see if we can reduce the number by adding a separate argument which
@@ -2684,14 +2690,32 @@ void BytecodeGenerator::VisitCall(Call* expr) {
 
   // Evaluate all arguments to the function call and store in sequential args
   // registers.
-  VisitArguments(expr->arguments(), &args);
   int reciever_arg_count = implicit_undefined_receiver ? 0 : 1;
-  CHECK_EQ(reciever_arg_count + expr->arguments()->length(),
-           args.register_count());
+
+  if (call != nullptr) {
+    VisitArguments(call->arguments(), &args);
+    CHECK_EQ(reciever_arg_count + call->arguments()->length(),
+             args.register_count());
+  } else if (tagged != nullptr) {
+    // Load template callsite object as first argument
+    Register callsite_reg = register_allocator()->GrowRegisterList(&args);
+    {
+      ValueResultScope register_scope(this);
+      DCHECK(Smi::IsValid(tagged->template_id()));
+      builder()->LoadLiteral(Smi::FromInt(tagged->template_id()));
+      builder()->LoadTemplateObject(callsite_reg);
+    }
+
+    // Load substitutions as remaining arguments
+    ZoneList<Expression*>* substitutions = &tagged->literal()->substitutions();
+    VisitArguments(substitutions, &args);
+    CHECK_EQ(reciever_arg_count + 1 + substitutions->length(),
+             args.register_count());
+  }
 
   // Resolve callee for a potential direct eval call. This block will mutate the
   // callee value.
-  if (expr->is_possibly_eval() && expr->arguments()->length() > 0) {
+  if (call && call->is_possibly_eval() && call->arguments()->length() > 0) {
     RegisterAllocationScope inner_register_scope(this);
     // Set up arguments for ResolvePossiblyDirectEval by copying callee, source
     // strings and function closure, and loading language and
@@ -2706,7 +2730,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
         .StoreAccumulatorInRegister(runtime_call_args[3])
         .LoadLiteral(Smi::FromInt(current_scope()->start_position()))
         .StoreAccumulatorInRegister(runtime_call_args[4])
-        .LoadLiteral(Smi::FromInt(expr->position()))
+        .LoadLiteral(Smi::FromInt(call->position()))
         .StoreAccumulatorInRegister(runtime_call_args[5]);
 
     // Call ResolvePossiblyDirectEval and modify the callee.
@@ -2717,7 +2741,14 @@ void BytecodeGenerator::VisitCall(Call* expr) {
 
   builder()->SetExpressionPosition(expr);
 
-  int const feedback_slot_index = feedback_index(expr->CallFeedbackICSlot());
+  FeedbackSlot feedback_slot;
+  if (call != nullptr) {
+    feedback_slot = call->CallFeedbackICSlot();
+  } else if (tagged != nullptr) {
+    feedback_slot = tagged->CallFeedbackICSlot();
+  }
+
+  int const feedback_slot_index = feedback_index(feedback_slot);
 
   if (is_spread_call) {
     DCHECK(!is_tail_call);
@@ -2735,6 +2766,17 @@ void BytecodeGenerator::VisitCall(Call* expr) {
   } else {
     builder()->CallAnyReceiver(callee, args, feedback_slot_index);
   }
+}
+
+void BytecodeGenerator::VisitCall(Call* expr) {
+  Expression* callee_expr = expr->expression();
+  Call::CallType call_type = expr->GetCallType();
+
+  if (call_type == Call::SUPER_CALL) {
+    return VisitCallSuper(expr);
+  }
+
+  BuildCall(expr, callee_expr, call_type);
 }
 
 void BytecodeGenerator::VisitCallSuper(Call* expr) {
@@ -3164,6 +3206,69 @@ void BytecodeGenerator::VisitImportCallExpression(ImportCallExpression* expr) {
   builder()
       ->MoveRegister(Register::function_closure(), args[0])
       .CallRuntime(Runtime::kDynamicImportCall, args);
+}
+
+void BytecodeGenerator::VisitTemplateLiteral(TemplateLiteral* expr) {
+  if (expr->substitutions().length() == 0) {
+    Visit(expr->strings().at(0));
+    return;
+  }
+
+  auto IsEmptyString = [=](Literal* literal) {
+    return literal->IsStringLiteral() &&
+           literal->raw_value()->AsString()->byte_length() == 0;
+  };
+
+  if (expr->substitutions().length() == 1 &&
+      IsEmptyString(expr->strings().at(0)) &&
+      IsEmptyString(expr->strings().at(1))) {
+    VisitForAccumulatorValue(expr->substitutions().at(0));
+    builder()->ConvertAccumulatorToString();
+    return;
+  }
+
+  RegisterAllocationScope register_scope(this);
+  Register result = register_allocator()->NewRegister();
+
+  int start = 0;
+  int feedback_slot_index = feedback_index(expr->AppendFeedbackICSlot());
+  if (!IsEmptyString(expr->strings().at(0))) {
+    VisitForRegisterValue(expr->strings().at(0), result);
+  } else {
+    VisitForAccumulatorValue(expr->substitutions().at(0));
+    builder()->ConvertAccumulatorToString();
+    builder()->StoreAccumulatorInRegister(result);
+
+    if (!IsEmptyString(expr->strings().at(1))) {
+      VisitForAccumulatorValue(expr->strings().at(1));
+      builder()->BinaryOperation(Token::ADD, result, feedback_slot_index);
+      builder()->StoreAccumulatorInRegister(result);
+    }
+
+    start = 1;
+  }
+
+  // TODO(caitp): roll additions into a loop if there are a lot of substitutions
+  for (int i = start; i < expr->substitutions().length(); ++i) {
+    Expression* substitution = expr->substitutions().at(i);
+    VisitForAccumulatorValue(substitution);
+    builder()->ConvertAccumulatorToString();
+    builder()->BinaryOperation(Token::ADD, result, feedback_slot_index);
+    builder()->StoreAccumulatorInRegister(result);
+
+    Literal* tail = expr->strings().at(i + 1);
+    if (!IsEmptyString(tail)) {
+      VisitForAccumulatorValue(tail);
+      builder()->BinaryOperation(Token::ADD, result, feedback_slot_index);
+      builder()->StoreAccumulatorInRegister(result);
+    }
+  }
+
+  builder()->LoadAccumulatorWithRegister(result);
+}
+
+void BytecodeGenerator::VisitTaggedTemplate(TaggedTemplate* expr) {
+  BuildCall(expr, expr->tag(), expr->GetCallType());
 }
 
 void BytecodeGenerator::VisitGetIterator(GetIterator* expr) {

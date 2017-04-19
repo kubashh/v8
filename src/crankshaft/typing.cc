@@ -760,6 +760,9 @@ void AstTyper::VisitImportCallExpression(ImportCallExpression* expr) {
   UNREACHABLE();
 }
 
+void AstTyper::VisitTemplateLiteral(TemplateLiteral* expr) { UNREACHABLE(); }
+void AstTyper::VisitTaggedTemplate(TaggedTemplate* expr) { UNREACHABLE(); }
+
 void AstTyper::VisitThisFunction(ThisFunction* expr) {}
 
 

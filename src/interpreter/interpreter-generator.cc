@@ -1469,6 +1469,19 @@ IGNITION_HANDLER(ToObject, InterpreterAssembler) {
   Dispatch();
 }
 
+// ToString
+//
+// Convert the object referenced by the accumulator to a String
+IGNITION_HANDLER(ToString, InterpreterAssembler) {
+  Callable callable(CodeFactory::ToString(isolate()));
+  Node* target = HeapConstant(callable.code());
+  Node* accumulator = GetAccumulator();
+  Node* context = GetContext();
+  Node* result = CallStub(callable.descriptor(), target, context, accumulator);
+  SetAccumulator(result);
+  Dispatch();
+}
+
 // Inc
 //
 // Increments value in the accumulator by one.
@@ -3112,6 +3125,30 @@ IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
     // TODO(klaasb) build a single dispatch once the call is inlined
     Dispatch();
   }
+}
+
+// LoadTemplateObject
+IGNITION_HANDLER(LoadTemplateObject, InterpreterAssembler) {
+  Node* index = GetAccumulator();
+  Node* closure = LoadRegister(Register::function_closure());
+
+  CSA_ASSERT(this, IsJSFunction(closure));
+  Node* shared =
+      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+
+  Node* cache =
+      LoadObjectField(shared, SharedFunctionInfo::kTemplateObjectCacheOffset);
+
+  CSA_ASSERT(this, HasInstanceType(cache, FIXED_ARRAY_TYPE));
+  CSA_ASSERT(
+      this, SmiBelow(index, LoadObjectField(cache, FixedArray::kLengthOffset)));
+
+  Node* object =
+      LoadFixedArrayElement(cache, index, 0, CodeStubAssembler::SMI_PARAMETERS);
+
+  CSA_ASSERT(this, IsJSArray(object));
+  StoreRegister(object, BytecodeOperandReg(0));
+  Dispatch();
 }
 
 // CreateClosure <index> <slot> <tenured>
