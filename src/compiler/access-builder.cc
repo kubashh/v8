@@ -143,6 +143,16 @@ FieldAccess AccessBuilder::ForJSFunctionSharedFunctionInfo() {
 }
 
 // static
+FieldAccess AccessBuilder::ForSharedFunctionInfoTemplateObjectCache() {
+  FieldAccess access = {
+      kTaggedBase,         SharedFunctionInfo::kTemplateObjectCacheOffset,
+      Handle<Name>(),      MaybeHandle<Map>(),
+      Type::Internal(),    MachineType::TaggedPointer(),
+      kPointerWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForJSFunctionFeedbackVector() {
   FieldAccess access = {kTaggedBase,         JSFunction::kFeedbackVectorOffset,
                         Handle<Name>(),      MaybeHandle<Map>(),

@@ -3887,7 +3887,8 @@ AllocationResult Heap::CopyFixedArrayAndGrow(FixedArray* src, int grow_by,
   return result;
 }
 
-AllocationResult Heap::CopyFixedArrayUpTo(FixedArray* src, int new_len,
+AllocationResult Heap::CopyFixedArrayUpTo(FixedArray* src, int copy_from,
+                                          int new_len,
                                           PretenureFlag pretenure) {
   if (new_len == 0) return empty_fixed_array();
 
@@ -3906,7 +3907,9 @@ AllocationResult Heap::CopyFixedArrayUpTo(FixedArray* src, int new_len,
   // Copy the content.
   DisallowHeapAllocation no_gc;
   WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
-  for (int i = 0; i < new_len; i++) result->set(i, src->get(i), mode);
+  for (int i = 0; i < new_len; i++) {
+    result->set(i, src->get(copy_from + i), mode);
+  }
   return result;
 }
 

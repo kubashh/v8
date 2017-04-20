@@ -981,6 +981,7 @@ void Verifier::Visitor::Check(Node* node) {
       CheckTypeIs(node, Type::Boolean());
       break;
 
+    case IrOpcode::kObjectIsArray:
     case IrOpcode::kObjectIsDetectableCallable:
     case IrOpcode::kObjectIsNaN:
     case IrOpcode::kObjectIsNonCallable:

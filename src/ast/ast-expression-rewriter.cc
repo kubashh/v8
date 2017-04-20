@@ -382,6 +382,16 @@ void AstExpressionRewriter::VisitImportCallExpression(
   AST_REWRITE_PROPERTY(Expression, node, argument);
 }
 
+void AstExpressionRewriter::VisitTemplateLiteral(TemplateLiteral* node) {
+  REWRITE_THIS(node);
+  VisitExpressions(&node->substitutions());
+}
+
+void AstExpressionRewriter::VisitTaggedTemplate(TaggedTemplate* node) {
+  REWRITE_THIS(node);
+  VisitExpressions(&node->literal()->substitutions());
+}
+
 void AstExpressionRewriter::VisitDoExpression(DoExpression* node) {
   REWRITE_THIS(node);
   AST_REWRITE_PROPERTY(Block, node, block);

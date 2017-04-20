@@ -133,6 +133,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildNewLocalCatchContext(Scope* scope);
   void BuildNewLocalWithContext(Scope* scope);
 
+  void BuildCall(Expression* expr, Expression* callee_expr,
+                 Call::CallType call_type);
+
   void VisitGeneratorPrologue();
 
   void VisitArgumentsObject(Variable* variable);
@@ -232,6 +235,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
       native_function_literals_;
   ZoneVector<std::pair<ObjectLiteral*, size_t>> object_literals_;
   ZoneVector<std::pair<ArrayLiteral*, size_t>> array_literals_;
+  ZoneVector<TaggedTemplate*> tagged_templates_;
 
   ControlScope* execution_control_;
   ContextScope* execution_context_;

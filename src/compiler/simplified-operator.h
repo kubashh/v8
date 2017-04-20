@@ -437,6 +437,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckTaggedHole();
   const Operator* ConvertTaggedHoleToUndefined();
 
+  const Operator* ObjectIsArray();
   const Operator* ObjectIsDetectableCallable();
   const Operator* ObjectIsNaN();
   const Operator* ObjectIsNonCallable();

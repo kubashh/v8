@@ -2046,6 +2046,14 @@ void AstGraphBuilder::VisitImportCallExpression(ImportCallExpression* expr) {
   UNREACHABLE();
 }
 
+void AstGraphBuilder::VisitTemplateLiteral(TemplateLiteral* expr) {
+  UNREACHABLE();
+}
+
+void AstGraphBuilder::VisitTaggedTemplate(TaggedTemplate* expr) {
+  UNREACHABLE();
+}
+
 void AstGraphBuilder::VisitThisFunction(ThisFunction* expr) {
   Node* value = GetFunctionClosure();
   ast_context()->ProduceValue(expr, value);

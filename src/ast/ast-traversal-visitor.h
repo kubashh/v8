@@ -484,6 +484,24 @@ void AstTraversalVisitor<Subclass>::VisitImportCallExpression(
 }
 
 template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitTemplateLiteral(
+    TemplateLiteral* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (Expression* s : expr->substitutions()) {
+    RECURSE_EXPRESSION(Visit(s));
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitTaggedTemplate(TaggedTemplate* expr) {
+  PROCESS_EXPRESSION(expr);
+  RECURSE_EXPRESSION(Visit(expr->tag()));
+  for (Expression* s : expr->literal()->substitutions()) {
+    RECURSE_EXPRESSION(Visit(s));
+  }
+}
+
+template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitSuperPropertyReference(
     SuperPropertyReference* expr) {
   PROCESS_EXPRESSION(expr);

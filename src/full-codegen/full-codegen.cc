@@ -1452,6 +1452,14 @@ void FullCodeGenerator::VisitImportCallExpression(ImportCallExpression* expr) {
   UNREACHABLE();
 }
 
+void FullCodeGenerator::VisitTemplateLiteral(TemplateLiteral* expr) {
+  UNREACHABLE();
+}
+
+void FullCodeGenerator::VisitTaggedTemplate(TaggedTemplate* expr) {
+  UNREACHABLE();
+}
+
 void FullCodeGenerator::VisitRewritableExpression(RewritableExpression* expr) {
   Visit(expr->expression());
 }

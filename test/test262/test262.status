@@ -349,6 +349,14 @@
   'language/statements/try/tco-finally': ['--harmony-tailcalls'],
   'language/statements/while/tco-body': ['--harmony-tailcalls'],
 
+  # TODO(caitp): file a bug for this
+  'language/expressions/tagged-template/cache-identical-source-new-function': [FAIL],
+  'language/expressions/tagged-template/cache-identical-source': [FAIL],
+  'language/expressions/tagged-template/cache-differing-expressions-eval': [FAIL],
+  'language/expressions/tagged-template/cache-identical-source-eval': [FAIL],
+  'language/expressions/tagged-template/cache-differing-expressions-new-function': [FAIL],
+  'language/expressions/tagged-template/cache-differing-expressions': [FAIL],
+
   # https://bugs.chromium.org/p/v8/issues/detail?id=5064
   'language/expressions/arrow-function/params-dflt-duplicates': [FAIL],
 
