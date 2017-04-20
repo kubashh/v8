@@ -71,6 +71,9 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
       .LoadFalse()
       .StoreAccumulatorInRegister(wide);
 
+  // Emit template object load
+  builder.LoadTemplateObject(reg);
+
   // Emit Ldar and Star taking care to foil the register optimizer.
   builder.StackCheck(0)
       .LoadAccumulatorWithRegister(other)
@@ -223,7 +226,8 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
   // Emit conversion operator invocations.
   builder.ConvertAccumulatorToNumber(reg, 1)
       .ConvertAccumulatorToObject(reg)
-      .ConvertAccumulatorToName(reg);
+      .ConvertAccumulatorToName(reg)
+      .ConvertAccumulatorToString();
 
   // Emit GetSuperConstructor.
   builder.GetSuperConstructor(reg);

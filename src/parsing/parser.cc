@@ -3583,94 +3583,48 @@ void Parser::ParseOnBackground(ParseInfo* info) {
 }
 
 Parser::TemplateLiteralState Parser::OpenTemplateLiteral(int pos) {
-  return new (zone()) TemplateLiteral(zone(), pos);
+  return factory()->NewTemplateLiteral(pos);
 }
 
 void Parser::AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
                              bool tail) {
+  TemplateLiteral* lit = *state;
   DCHECK(should_cook || allow_harmony_template_escapes());
   int pos = scanner()->location().beg_pos;
-  int end = scanner()->location().end_pos - (tail ? 1 : 2);
   const AstRawString* trv = scanner()->CurrentRawSymbol(ast_value_factory());
   Literal* raw = factory()->NewStringLiteral(trv, pos);
   if (should_cook) {
     const AstRawString* tv = scanner()->CurrentSymbol(ast_value_factory());
     Literal* cooked = factory()->NewStringLiteral(tv, pos);
-    (*state)->AddTemplateSpan(cooked, raw, end, zone());
+    lit->AddTemplateSpan(cooked, raw, zone());
   } else {
-    (*state)->AddTemplateSpan(GetLiteralUndefined(pos), raw, end, zone());
+    lit->AddTemplateSpan(GetLiteralUndefined(pos), raw, zone());
   }
 }
 
-
-void Parser::AddTemplateExpression(TemplateLiteralState* state,
-                                   Expression* expression) {
-  (*state)->AddExpression(expression, zone());
+void Parser::AddTemplateSubstitution(TemplateLiteralState* state,
+                                     Expression* substitution) {
+  TemplateLiteral* lit = *state;
+  lit->AddSubstitution(substitution, zone());
 }
 
 
 Expression* Parser::CloseTemplateLiteral(TemplateLiteralState* state, int start,
                                          Expression* tag) {
   TemplateLiteral* lit = *state;
-  int pos = lit->position();
-  const ZoneList<Expression*>* cooked_strings = lit->cooked();
-  const ZoneList<Expression*>* raw_strings = lit->raw();
-  const ZoneList<Expression*>* expressions = lit->expressions();
-  DCHECK_EQ(cooked_strings->length(), raw_strings->length());
-  DCHECK_EQ(cooked_strings->length(), expressions->length() + 1);
+  DCHECK_EQ(lit->strings().length(), lit->raw_strings().length());
+  DCHECK_EQ(lit->substitutions().length(), lit->strings().length() - 1);
 
-  if (!tag) {
-    // Build tree of BinaryOps to simplify code-generation
-    Expression* expr = cooked_strings->at(0);
-    int i = 0;
-    while (i < expressions->length()) {
-      Expression* sub = expressions->at(i++);
-      Expression* cooked_str = cooked_strings->at(i);
-
-      // Let middle be ToString(sub).
-      ZoneList<Expression*>* args =
-          new (zone()) ZoneList<Expression*>(1, zone());
-      args->Add(sub, zone());
-      Expression* middle = factory()->NewCallRuntime(Runtime::kInlineToString,
-                                                     args, sub->position());
-
-      expr = factory()->NewBinaryOperation(
-          Token::ADD, factory()->NewBinaryOperation(
-                          Token::ADD, expr, middle, expr->position()),
-          cooked_str, sub->position());
-    }
-    return expr;
-  } else {
-    uint32_t hash = ComputeTemplateLiteralHash(lit);
-
-    // $getTemplateCallSite
-    ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(4, zone());
-    args->Add(factory()->NewArrayLiteral(
-                  const_cast<ZoneList<Expression*>*>(cooked_strings), pos),
-              zone());
-    args->Add(factory()->NewArrayLiteral(
-                  const_cast<ZoneList<Expression*>*>(raw_strings), pos),
-              zone());
-
-    // Truncate hash to Smi-range.
-    Smi* hash_obj = Smi::cast(Internals::IntToSmi(static_cast<int>(hash)));
-    args->Add(factory()->NewNumberLiteral(hash_obj->value(), pos), zone());
-
-    Expression* call_site = factory()->NewCallRuntime(
-        Context::GET_TEMPLATE_CALL_SITE_INDEX, args, start);
-
-    // Call TagFn
-    ZoneList<Expression*>* call_args =
-        new (zone()) ZoneList<Expression*>(expressions->length() + 1, zone());
-    call_args->Add(call_site, zone());
-    call_args->AddAll(*expressions, zone());
-    return factory()->NewCall(tag, call_args, pos);
+  if (tag) {
+    return factory()->NewTaggedTemplate(tag, lit, tag->position());
   }
+
+  return lit;
 }
 
 
 uint32_t Parser::ComputeTemplateLiteralHash(const TemplateLiteral* lit) {
-  const ZoneList<Expression*>* raw_strings = lit->raw();
+  const ZoneList<Literal*>* raw_strings = &lit->raw_strings();
   int total = raw_strings->length();
   DCHECK(total);
 

@@ -390,6 +390,35 @@ void CallPrinter::VisitImportCallExpression(ImportCallExpression* node) {
   Print(")");
 }
 
+void CallPrinter::VisitTemplateLiteral(TemplateLiteral* node) {
+  Print("`");
+  PrintLiteral(node->strings().at(0)->value(), false);
+  if (found_) {
+    Print("...`");
+    return;
+  } else if (node->strings().length() < 2) {
+    Print("`");
+    return;
+  }
+
+  for (int i = 0; i < node->substitutions().length(); ++i) {
+    Print("${");
+    Find(node->substitutions().at(i), true);
+    Print("}");
+    if (found_) {
+      Print("...`");
+      return;
+    }
+
+    PrintLiteral(node->strings().at(i + 1)->value(), false);
+  }
+}
+
+void CallPrinter::VisitTaggedTemplate(TaggedTemplate* node) {
+  Find(node->tag(), true);
+  Find(node->literal(), true);
+}
+
 void CallPrinter::VisitThisFunction(ThisFunction* node) {}
 
 
@@ -1212,6 +1241,21 @@ void AstPrinter::VisitGetIterator(GetIterator* node) {
 void AstPrinter::VisitImportCallExpression(ImportCallExpression* node) {
   IndentedScope indent(this, "IMPORT-CALL", node->position());
   Visit(node->argument());
+}
+
+void AstPrinter::VisitTemplateLiteral(TemplateLiteral* node) {
+  IndentedScope indent(this, "TEMPLATE-LITERAL", node->position());
+  PrintLiteralIndented("SPAN", node->strings().at(0)->value(), true);
+  for (int i = 0; i < node->substitutions().length(); ++i) {
+    PrintIndentedVisit("SUBSTITUTION", node->substitutions().at(i));
+    PrintLiteralIndented("SPAN", node->strings().at(i + 1)->value(), true);
+  }
+}
+
+void AstPrinter::VisitTaggedTemplate(TaggedTemplate* node) {
+  IndentedScope indent(this, "TAGGED-TEMPLATE", node->position());
+  PrintIndentedVisit("TAG", node->tag());
+  PrintIndentedVisit("TEMPLATE", node->literal());
 }
 
 void AstPrinter::VisitThisFunction(ThisFunction* node) {
