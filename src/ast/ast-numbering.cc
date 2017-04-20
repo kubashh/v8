@@ -27,7 +27,8 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
         disable_crankshaft_reason_(kNoReason),
         dont_optimize_reason_(kNoReason),
         catch_prediction_(HandlerTable::UNCAUGHT),
-        collect_type_profile_(collect_type_profile) {
+        collect_type_profile_(collect_type_profile),
+        tagged_templates_count_(0) {
     InitializeAstVisitor(stack_limit);
   }
 
@@ -104,6 +105,8 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
   BailoutReason dont_optimize_reason_;
   HandlerTable::CatchPrediction catch_prediction_;
   bool collect_type_profile_;
+
+  int tagged_templates_count_;
 
   DEFINE_AST_VISITOR_SUBCLASS_MEMBERS();
   DISALLOW_COPY_AND_ASSIGN(AstNumberingVisitor);
@@ -477,6 +480,25 @@ void AstNumberingVisitor::VisitImportCallExpression(
   IncrementNodeCount();
   DisableFullCodegenAndCrankshaft(kDynamicImport);
   Visit(node->argument());
+}
+
+void AstNumberingVisitor::VisitTemplateLiteral(TemplateLiteral* node) {
+  IncrementNodeCount();
+  DisableFullCodegenAndCrankshaft(kTemplateLiteral);
+  for (auto span : node->strings()) Visit(span);
+  for (auto substitution : node->substitutions()) Visit(substitution);
+  ReserveFeedbackSlots(node);
+}
+
+void AstNumberingVisitor::VisitTaggedTemplate(TaggedTemplate* node) {
+  IncrementNodeCount();
+  DisableFullCodegenAndCrankshaft(kTemplateLiteral);
+  node->set_template_id(tagged_templates_count_++);
+  Visit(node->tag());
+  TemplateLiteral* lit = node->literal();
+
+  for (auto substitution : lit->substitutions()) Visit(substitution);
+  ReserveFeedbackSlots(node);
 }
 
 void AstNumberingVisitor::VisitForInStatement(ForInStatement* node) {

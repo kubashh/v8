@@ -64,6 +64,8 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to JSFunction::shared() field.
   static FieldAccess ForJSFunctionSharedFunctionInfo();
 
+  static FieldAccess ForSharedFunctionInfoTemplateObjectCache();
+
   // Provides access to JSFunction::feedback_vector() field.
   static FieldAccess ForJSFunctionFeedbackVector();
 

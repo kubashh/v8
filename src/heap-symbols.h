@@ -138,6 +138,7 @@
   V(RangeError_string, "RangeError")                               \
   V(ReferenceError_string, "ReferenceError")                       \
   V(RegExp_string, "RegExp")                                       \
+  V(raw_string, "raw")                                             \
   V(reject_string, "reject")                                       \
   V(resolve_string, "resolve")                                     \
   V(return_string, "return")                                       \

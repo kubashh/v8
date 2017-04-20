@@ -963,8 +963,8 @@ class PreParser : public ParserBase<PreParser> {
   V8_INLINE TemplateLiteralState OpenTemplateLiteral(int pos) {
     return TemplateLiteralState();
   }
-  V8_INLINE void AddTemplateExpression(TemplateLiteralState* state,
-                                       PreParserExpression expression) {}
+  V8_INLINE void AddTemplateSubstitution(TemplateLiteralState* state,
+                                         PreParserExpression substitution) {}
   V8_INLINE void AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
                                  bool tail) {}
   V8_INLINE PreParserExpression CloseTemplateLiteral(

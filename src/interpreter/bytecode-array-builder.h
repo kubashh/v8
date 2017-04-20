@@ -87,6 +87,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
   BytecodeArrayBuilder& LoadTheHole();
   BytecodeArrayBuilder& LoadTrue();
   BytecodeArrayBuilder& LoadFalse();
+  BytecodeArrayBuilder& LoadTemplateObject(v8::internal::Smi* id, Register out);
 
   // Global loads to the accumulator and stores from the accumulator.
   BytecodeArrayBuilder& LoadGlobal(const AstRawString* name, int feedback_slot,
@@ -355,6 +356,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
   BytecodeArrayBuilder& ConvertAccumulatorToName(Register out);
   BytecodeArrayBuilder& ConvertAccumulatorToNumber(Register out,
                                                    int feedback_slot);
+  BytecodeArrayBuilder& ConvertAccumulatorToString();
 
   // Flow Control.
   BytecodeArrayBuilder& Bind(BytecodeLabel* label);

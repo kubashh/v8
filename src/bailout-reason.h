@@ -186,6 +186,7 @@ namespace internal {
   V(kStackFrameTypesMustMatch, "Stack frame types must match")                 \
   V(kSuperReference, "Super reference")                                        \
   V(kTailCall, "Tail call")                                                    \
+  V(kTemplateLiteral, "Template literal")                                      \
   V(kTheCurrentStackPointerIsBelowCsp,                                         \
     "The current stack pointer is below csp")                                  \
   V(kTheStackWasCorruptedByMacroAssemblerCall,                                 \

@@ -1293,10 +1293,11 @@ Handle<FixedArray> Factory::CopyFixedArrayAndGrow(Handle<FixedArray> array,
 }
 
 Handle<FixedArray> Factory::CopyFixedArrayUpTo(Handle<FixedArray> array,
-                                               int new_len,
+                                               int copy_from, int new_len,
                                                PretenureFlag pretenure) {
-  CALL_HEAP_FUNCTION(isolate(), isolate()->heap()->CopyFixedArrayUpTo(
-                                    *array, new_len, pretenure),
+  CALL_HEAP_FUNCTION(isolate(),
+                     isolate()->heap()->CopyFixedArrayUpTo(*array, copy_from,
+                                                           new_len, pretenure),
                      FixedArray);
 }
 
@@ -2406,6 +2407,7 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
   if (IsGeneratorFunction(kind)) {
     shared->set_instance_class_name(isolate()->heap()->Generator_string());
   }
+  shared->set_template_object_cache(isolate()->heap()->empty_fixed_array());
   return shared;
 }
 
@@ -2415,6 +2417,7 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfoForLiteral(
   Handle<ScopeInfo> scope_info(ScopeInfo::Empty(isolate()));
   Handle<SharedFunctionInfo> result =
       NewSharedFunctionInfo(literal->name(), literal->kind(), code, scope_info);
+  result->set_template_object_cache(isolate()->heap()->empty_fixed_array());
   SharedFunctionInfo::InitFromFunctionLiteral(result, literal);
   SharedFunctionInfo::SetScript(result, script);
   return result;
@@ -2473,6 +2476,7 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
       FeedbackMetadata::New(isolate(), &empty_spec);
   share->set_feedback_metadata(*feedback_metadata, SKIP_WRITE_BARRIER);
   share->set_function_literal_id(FunctionLiteral::kIdTypeInvalid);
+  share->set_template_object_cache(isolate()->heap()->empty_fixed_array());
 #if TRACE_MAPS
   share->set_unique_id(isolate()->GetNextUniqueSharedFunctionInfoId());
 #endif

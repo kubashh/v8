@@ -5935,6 +5935,11 @@ class SharedFunctionInfo: public HeapObject {
   inline int function_literal_id() const;
   inline void set_function_literal_id(int value);
 
+  // [template_object_cache] - Template callsite objects associated with a
+  // Taggedtemplate expression, used to persist callsite objects for at least
+  // the lifetime of their closure or script.
+  DECL_ACCESSORS(template_object_cache, FixedArray)
+
 #if TRACE_MAPS
   // [unique_id] - For --trace-maps purposes, an identifier that's persistent
   // even if the GC moves this SharedFunctionInfo.
@@ -6276,13 +6281,15 @@ class SharedFunctionInfo: public HeapObject {
       kFunctionIdentifierOffset + kPointerSize;
   static const int kFunctionLiteralIdOffset =
       kFeedbackMetadataOffset + kPointerSize;
+  static const int kTemplateObjectCacheOffset =
+      kFunctionLiteralIdOffset + kPointerSize;
 #if TRACE_MAPS
-  static const int kUniqueIdOffset = kFunctionLiteralIdOffset + kPointerSize;
+  static const int kUniqueIdOffset = kTemplateObjectCacheOffset + kPointerSize;
   static const int kLastPointerFieldOffset = kUniqueIdOffset;
 #else
   // Just to not break the postmortrem support with conditional offsets
   static const int kUniqueIdOffset = kFunctionLiteralIdOffset;
-  static const int kLastPointerFieldOffset = kFunctionLiteralIdOffset;
+  static const int kLastPointerFieldOffset = kTemplateObjectCacheOffset;
 #endif
 
 #if V8_HOST_ARCH_32_BIT
