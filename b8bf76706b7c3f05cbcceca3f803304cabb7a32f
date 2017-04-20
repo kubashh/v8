@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5767c321_a7469990",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-20T19:08:10Z",
+      "side": 1,
+      "message": "I\u0027ve found that this isn\u0027t the problem with the test (though it\u0027s probably still a problem).\n\nWith the lazy allocation of these literals, there\u0027s still a problem in stress-runs, because the same SFI and cache can be used in multiple Contexts. So the cached items that have been constructed inherit from the incorrect Array.prototype.\n\nSo, I\u0027m at a loss to ensure that this situation can\u0027t happen",
+      "parentUuid": "f1306542_a1301d4a",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa77787e_a20a8727",
         "filename": "test/debugger/debug/es6/debug-stepin-string-template.js",
         "patchSetId": 5
