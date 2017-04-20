@@ -5957,7 +5957,7 @@ THREADED_TEST(ThrowValues) {
                   .FromJust());
   CHECK(result->Get(context.local(), v8::Integer::New(isolate, 3))
             .ToLocalChecked()
-            ->IsNull());
+            ->IsUndefined());
   CHECK(result->Get(context.local(), v8::Integer::New(isolate, 4))
             .ToLocalChecked()
             ->IsUndefined());

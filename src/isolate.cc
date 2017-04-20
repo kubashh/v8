@@ -1056,6 +1056,8 @@ void ReportBootstrappingException(Handle<Object> exception,
 Object* Isolate::Throw(Object* exception, MessageLocation* location) {
   DCHECK(!has_pending_exception());
 
+  if (exception->IsNull(this)) exception = heap()->undefined_value();
+
   HandleScope scope(this);
   Handle<Object> exception_handle(exception, this);
 

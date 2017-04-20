@@ -28,6 +28,11 @@
 [
 
 [ALWAYS, {
+  ####################### FOR DEMONSTRATION #########################
+
+  'language/statements/throw/S12.13_A2_T2': [FAIL],
+  'language/statements/try/S12.14_A18_T2': [FAIL],
+
   ###################### MISSING ES6 FEATURES #######################
 
   # https://code.google.com/p/v8/issues/detail?id=4248
