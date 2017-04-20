@@ -1469,6 +1469,19 @@ IGNITION_HANDLER(ToObject, InterpreterAssembler) {
   Dispatch();
 }
 
+// ToString
+//
+// Convert the object referenced by the accumulator to a String
+IGNITION_HANDLER(ToString, InterpreterAssembler) {
+  Callable callable(CodeFactory::ToString(isolate()));
+  Node* target = HeapConstant(callable.code());
+  Node* accumulator = GetAccumulator();
+  Node* context = GetContext();
+  Node* result = CallStub(callable.descriptor(), target, context, accumulator);
+  SetAccumulator(result);
+  Dispatch();
+}
+
 // Inc
 //
 // Increments value in the accumulator by one.
@@ -3112,6 +3125,44 @@ IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
     // TODO(klaasb) build a single dispatch once the call is inlined
     Dispatch();
   }
+}
+
+// LoadTemplateObject
+//
+// Load tagged template callsite object from SharedFunctionInfo. If the cached
+// object is not a JSArray, call the runtime to construct and cache a new
+// template callsite object (JSArray).
+IGNITION_HANDLER(LoadTemplateObject, InterpreterAssembler) {
+  Node* index = BytecodeOperandImmSmi(0);
+  Node* closure = LoadRegister(Register::function_closure());
+
+  CSA_ASSERT(this, IsJSFunction(closure));
+  Node* shared =
+      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+
+  Node* cache =
+      LoadObjectField(shared, SharedFunctionInfo::kTemplateObjectCacheOffset);
+
+  CSA_ASSERT(this, HasInstanceType(cache, FIXED_ARRAY_TYPE));
+  CSA_ASSERT(
+      this, SmiBelow(index, LoadObjectField(cache, FixedArray::kLengthOffset)));
+
+  Node* object =
+      LoadFixedArrayElement(cache, index, 0, CodeStubAssembler::SMI_PARAMETERS);
+
+  Label if_callruntime(this);
+
+  GotoIfNot(IsJSArray(object), &if_callruntime);
+  StoreRegister(object, BytecodeOperandReg(1));
+  Dispatch();
+
+  Bind(&if_callruntime);
+  // TemplateObject has not yet been created. Call runtime to create it.
+  Node* context = GetContext();
+  object = CallRuntime(Runtime::kCreateTemplateObject, context, closure, index,
+                       object);
+  StoreRegister(object, BytecodeOperandReg(1));
+  Dispatch();
 }
 
 // CreateClosure <index> <slot> <tenured>

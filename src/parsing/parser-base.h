@@ -4535,7 +4535,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseTemplateLiteral(
     int expr_pos = peek_position();
     ExpressionT expression = ParseExpressionCoverGrammar(true, CHECK_OK);
     impl()->RewriteNonPattern(CHECK_OK);
-    impl()->AddTemplateExpression(&ts, expression);
+    impl()->AddTemplateSubstitution(&ts, expression);
 
     if (peek() != Token::RBRACE) {
       impl()->ReportMessageAt(Scanner::Location(expr_pos, peek_position()),

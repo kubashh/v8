@@ -356,5 +356,47 @@ RUNTIME_FUNCTION(Runtime_CreateArrayLiteralStubBailout) {
                                       ArrayLiteral::kShallowElements));
 }
 
+RUNTIME_FUNCTION(Runtime_CreateTemplateObject) {
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, closure, 0);
+  CONVERT_SMI_ARG_CHECKED(index, 1);
+  CONVERT_ARG_HANDLE_CHECKED(FixedArray, elements, 2);
+
+  Handle<SharedFunctionInfo> shared(closure->shared(), isolate);
+  Handle<FixedArray> cache(shared->template_object_cache(), isolate);
+
+  Factory* const factory = isolate->factory();
+
+  int length = elements->length() / 2;
+  Handle<FixedArray> strings = factory->CopyFixedArrayUpTo(elements, length);
+  Handle<FixedArray> raw_strings =
+      factory->CopyFixedArrayUpTo(elements, length, elements->length());
+
+  Handle<JSArray> callsite =
+      factory->NewJSArrayWithElements(strings, FAST_ELEMENTS, length);
+  Handle<JSArray> raw_site =
+      factory->NewJSArrayWithElements(raw_strings, FAST_ELEMENTS, length);
+
+  // Add "raw" property to callsite
+  auto maybe_raw = JSArray::SetOwnPropertyIgnoreAttributes(
+      callsite, factory->raw_string(), raw_site,
+      static_cast<PropertyAttributes>(FROZEN | DONT_ENUM));
+  USE(maybe_raw);
+
+  auto maybe_result =
+      JSReceiver::SetIntegrityLevel(raw_site, FROZEN, Object::DONT_THROW);
+  DCHECK(maybe_result.FromJust());
+  USE(maybe_result);
+
+  maybe_result =
+      JSReceiver::SetIntegrityLevel(callsite, FROZEN, Object::DONT_THROW);
+  DCHECK(maybe_result.FromJust());
+  USE(maybe_result);
+
+  // Store array in cache and return
+  cache->set(index, *callsite);
+  return *callsite;
+}
+
 }  // namespace internal
 }  // namespace v8

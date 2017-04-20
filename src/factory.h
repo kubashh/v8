@@ -393,8 +393,13 @@ class V8_EXPORT_PRIVATE Factory final {
       Handle<FixedArray> array, int grow_by,
       PretenureFlag pretenure = NOT_TENURED);
 
-  Handle<FixedArray> CopyFixedArrayUpTo(Handle<FixedArray> array, int new_len,
+  Handle<FixedArray> CopyFixedArrayUpTo(Handle<FixedArray> array, int copy_from,
+                                        int new_len,
                                         PretenureFlag pretenure = NOT_TENURED);
+  Handle<FixedArray> CopyFixedArrayUpTo(Handle<FixedArray> array, int new_len,
+                                        PretenureFlag pretenure = NOT_TENURED) {
+    return CopyFixedArrayUpTo(array, 0, new_len, pretenure);
+  }
 
   Handle<FixedArray> CopyFixedArray(Handle<FixedArray> array);
 

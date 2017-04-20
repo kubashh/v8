@@ -719,6 +719,64 @@ void BytecodeGraphBuilder::VisitLdaFalse() {
   environment()->BindAccumulator(node);
 }
 
+void BytecodeGraphBuilder::VisitLoadTemplateObject() {
+  int index = bytecode_iterator().GetImmediateOperand(0);
+  Handle<SharedFunctionInfo> info = frame_state_function_info()->shared_info();
+  Handle<HeapObject> cached_object(
+      HeapObject::cast(info->template_object_cache()->get(index)));
+
+  if (V8_LIKELY(cached_object->IsJSArray())) {
+    // Template object already created -> reduce LoadTemplateObject to a
+    // HeapConstant
+    Node* object = jsgraph()->HeapConstant(cached_object);
+    environment()->BindRegister(bytecode_iterator().GetRegisterOperand(1),
+                                object);
+    return;
+  }
+
+  DCHECK(cached_object->IsFixedArray());
+  Node* closure = GetFunctionClosure();
+  Node* shared_info = NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSFunctionSharedFunctionInfo()),
+      closure);
+  Node* cache =
+      NewNode(simplified()->LoadField(
+                  AccessBuilder::ForSharedFunctionInfoTemplateObjectCache()),
+              shared_info);
+
+  Node* smi_index = jsgraph()->SmiConstant(index);
+  Node* object =
+      NewNode(simplified()->LoadElement(AccessBuilder::ForFixedArrayElement()),
+              cache, smi_index);
+
+  Node* check = NewNode(simplified()->ObjectIsArray(), object);
+  NewBranch(check, BranchHint::kTrue);
+  Environment* true_environment = environment()->Copy();
+  Environment* false_environment = environment()->Copy();
+
+  {
+    set_environment(false_environment);
+    NewIfFalse();
+    PrepareEagerCheckpoint();
+    const Operator* op =
+        javascript()->CallRuntime(Runtime::kCreateTemplateObject);
+    Node* new_object = NewNode(op, closure, smi_index, object);
+    environment()->BindRegister(bytecode_iterator().GetRegisterOperand(1),
+                                new_object, Environment::kAttachFrameState);
+    NewMerge();
+  }
+
+  {
+    Environment* merge_environment = environment();
+    set_environment(true_environment);
+    NewIfTrue();
+    environment()->BindRegister(bytecode_iterator().GetRegisterOperand(1),
+                                object, Environment::kDontAttachFrameState);
+    merge_environment->Merge(environment());
+    set_environment(merge_environment);
+  }
+}
+
 void BytecodeGraphBuilder::VisitLdar() {
   Node* value =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
@@ -2114,6 +2172,14 @@ void BytecodeGraphBuilder::VisitToNumber() {
 
   environment()->BindRegister(bytecode_iterator().GetRegisterOperand(0), node,
                               Environment::kAttachFrameState);
+}
+
+void BytecodeGraphBuilder::VisitToString() {
+  PrepareEagerCheckpoint();
+  Node* object = environment()->LookupAccumulator();
+  Node* result = NewNode(javascript()->ToString(), object);
+
+  environment()->BindAccumulator(result, Environment::kAttachFrameState);
 }
 
 void BytecodeGraphBuilder::VisitJump() { BuildJump(); }

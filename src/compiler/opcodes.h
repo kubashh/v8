@@ -334,6 +334,7 @@
   V(StoreBuffer)                    \
   V(StoreElement)                   \
   V(StoreTypedElement)              \
+  V(ObjectIsArray)                  \
   V(ObjectIsDetectableCallable)     \
   V(ObjectIsNaN)                    \
   V(ObjectIsNonCallable)            \

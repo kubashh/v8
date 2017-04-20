@@ -626,6 +626,14 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::LoadFalse() {
   return *this;
 }
 
+BytecodeArrayBuilder& BytecodeArrayBuilder::LoadTemplateObject(
+    v8::internal::Smi* id, Register out) {
+  int32_t raw_id = id->value();
+  DCHECK_GE(raw_id, 0);
+  OutputLoadTemplateObject(raw_id, out);
+  return *this;
+}
+
 BytecodeArrayBuilder& BytecodeArrayBuilder::LoadAccumulatorWithRegister(
     Register reg) {
   if (register_optimizer_) {
@@ -989,6 +997,11 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToName(
 BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToNumber(
     Register out, int feedback_slot) {
   OutputToNumber(out, feedback_slot);
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::ConvertAccumulatorToString() {
+  OutputToString();
   return *this;
 }
 

@@ -2061,8 +2061,14 @@ class Heap {
 
   // Make a copy of src, also grow the copy, and return the copy.
   MUST_USE_RESULT AllocationResult CopyFixedArrayUpTo(FixedArray* src,
+                                                      int copy_from,
                                                       int new_len,
                                                       PretenureFlag pretenure);
+  MUST_USE_RESULT AllocationResult CopyFixedArrayUpTo(FixedArray* src,
+                                                      int new_len,
+                                                      PretenureFlag pretenure) {
+    return CopyFixedArrayUpTo(src, 0, new_len, pretenure);
+  }
 
   // Make a copy of src, set the map, and return the copy.
   MUST_USE_RESULT AllocationResult
