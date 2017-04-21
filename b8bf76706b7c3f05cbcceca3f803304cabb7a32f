@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "ec861956_f72cbbae",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-04-21T15:44:32Z",
+      "side": 1,
+      "message": "Idea I have right now is like this:\n\nSFI has the \"template_object_cache\" field, which has a length 2x the number of tagged templates which occur in its body. Each 2 elements are treated as a pair:\n\nFirst in pair: either a JSArray (the built callsite object), or a FixedArray containing all the strings needed to create it.\n\nSecond in pair: a WeakCell pointing to the NativeContext at the time the JSArray is created. This is used to validate the cached entry, so that it can be re-created if CompilationCache results in the same SFI being used in a different context. The NativeContext is held in the WeakCell to ensure it\u0027s not retained.\n\nIn optimized code, I think most of the time, retrieving the template object can be reduced to a HeapConstant to the cached entry during compilation. Otherwise, it would be best to just make it a stub call.\n\n---\n\nI haven\u0027t come up with any better way to make this work with CompilationCache, other than turning off CompilationCache when tagged templates occur.\n\nDoes this seem like a good way to solve the problem, or are there better options?",
+      "parentUuid": "5767c321_a7469990",
+      "revId": "b8bf76706b7c3f05cbcceca3f803304cabb7a32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa77787e_a20a8727",
         "filename": "test/debugger/debug/es6/debug-stepin-string-template.js",
         "patchSetId": 5
