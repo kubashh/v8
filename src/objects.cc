@@ -18870,8 +18870,7 @@ bool OrderedHashTable<Derived, entrysize>::HasKey(Handle<Derived> table,
 Handle<OrderedHashSet> OrderedHashSet::Add(Handle<OrderedHashSet> table,
                                            Handle<Object> key) {
   int hash = Object::GetOrCreateHash(table->GetIsolate(), key)->value();
-  int previous_entry = table->HashToEntry(hash);
-  int entry = previous_entry;
+  int entry = table->HashToEntry(hash);
   // Walk the chain of the bucket and try finding the key.
   while (entry != kNotFound) {
     Object* candidate_key = table->KeyAt(entry);
@@ -18883,6 +18882,7 @@ Handle<OrderedHashSet> OrderedHashSet::Add(Handle<OrderedHashSet> table,
   table = OrderedHashSet::EnsureGrowable(table);
   // Read the existing bucket values.
   int bucket = table->HashToBucket(hash);
+  int previous_entry = table->HashToEntry(hash);
   int nof = table->NumberOfElements();
   // Insert a new entry at the end,
   int new_entry = nof + table->NumberOfDeletedElements();
