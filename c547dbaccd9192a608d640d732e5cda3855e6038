@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e900145_78ce1c80",
+        "filename": "test/js-perf-test/BytecodeHandlers/compare.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-04-24T13:57:59Z",
+      "side": 1,
+      "message": "How about adding some where they are comparing the same thing (e.g., same string, same smi, etc) ?",
+      "revId": "c547dbaccd9192a608d640d732e5cda3855e6038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93db9535_b6825dc2",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-04-24T13:57:59Z",
+      "side": 1,
+      "message": "Do you not need to set --no-crankshaft somewhere here?",
+      "range": {
+        "startLine": 402,
+        "startChar": 7,
+        "endLine": 402,
+        "endChar": 33
+      },
+      "revId": "c547dbaccd9192a608d640d732e5cda3855e6038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
