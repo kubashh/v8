@@ -38,6 +38,6 @@ Array.prototype.__proto__ = {3: __v_13};
 Array.prototype.__proto__.__proto__ = {7: __v_11};
 __v_9 = [0, 1, , , 4, 5, , , , 9]
 __v_12 = __v_9.splice(4, 1)
-__v_9.__defineGetter__(getRandomProperty(__v_9, 1689439720), function() {; return __f_1(); });
+__v_9.__defineGetter__(getRandomProperty(__v_9, 1689439720), function() { return {}; });
  __v_9[8]
 gc();
