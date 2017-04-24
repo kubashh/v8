@@ -16,6 +16,24 @@
       "revId": "6ff726ecccccb5f0a0c29d5a14b986a5463146b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98a0fdc1_cae53350",
+        "filename": "test/mjsunit/regress/wasm/regression-647649.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-24T12:38:39Z",
+      "side": 1,
+      "message": "Because this test actually throws with a correct validator. The \"new\" correct validator, only the \"old\" validator passes this regression test. Also the regression test fails when --validate-asm is omitted (and proper JavaScript semantics are tested). Frankly, the regression test is broken, it should have been reduced into a proper test instead of just dumping the output of ClusterFuzz. This is my attempt of \"fixing\" this test.",
+      "parentUuid": "45febbbd_1b166a8f",
+      "revId": "6ff726ecccccb5f0a0c29d5a14b986a5463146b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
