@@ -50,6 +50,22 @@ function TestConstructFromArrayWithSideEffectsHoley(constr) {
   assertEquals(4, ta[3]);
 }
 
+function TestConstructFromArrayHoleySmi(constr) {
+  var arr = [0, 1, , 3];
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, defaultValue(constr), 3], ta);
+}
+
+function TestConstructFromArrayHoleyDouble(constr) {
+  var arr = [0.0, 1.0, , 3.0];
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, defaultValue(constr), 3], ta);
+}
+
 function TestConstructFromArrayNoIteratorWithGetter(constr) {
   var arr = [1, 2, 3];
   arr[Symbol.iterator] = undefined;
@@ -203,6 +219,8 @@ Test(TestConstructSmallObject);
 Test(TestConstructLargeObject);
 Test(TestConstructFromArrayWithSideEffects);
 Test(TestConstructFromArrayWithSideEffectsHoley);
+Test(TestConstructFromArrayHoleySmi);
+Test(TestConstructFromArrayHoleyDouble);
 Test(TestConstructFromArrayNoIteratorWithGetter);
 Test(TestConstructFromArray);
 Test(TestConstructFromTypedArray);
