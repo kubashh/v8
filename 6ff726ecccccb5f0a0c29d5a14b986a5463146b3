@@ -34,6 +34,24 @@
       "revId": "6ff726ecccccb5f0a0c29d5a14b986a5463146b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3cc0508_8dda29ac",
+        "filename": "test/mjsunit/regress/wasm/regression-647649.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-24T12:49:05Z",
+      "side": 1,
+      "message": "Thanks for the explanation. We should remove the \"--validate-asm\" flag then. Also, \"--invoke-weak-callbacks\" is redundant.",
+      "parentUuid": "98a0fdc1_cae53350",
+      "revId": "6ff726ecccccb5f0a0c29d5a14b986a5463146b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
