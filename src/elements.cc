@@ -3184,6 +3184,9 @@ class TypedElementsAccessor
     ElementsKind kind = source->GetElementsKind();
     BackingStore* dest = BackingStore::cast(destination->elements());
 
+    Isolate* source_isolate = source->GetIsolate();
+    Object* undefined = destination->GetIsolate()->heap()->undefined_value();
+
     if (kind == FAST_SMI_ELEMENTS) {
       // Fastpath for packed Smi kind.
       FixedArray* source_store = FixedArray::cast(source->elements());
@@ -3193,6 +3196,20 @@ class TypedElementsAccessor
         DCHECK(elem->IsSmi());
         int int_value = Smi::cast(elem)->value();
         dest->set(i, dest->from(int_value));
+      }
+      return true;
+    } else if (kind == FAST_HOLEY_SMI_ELEMENTS) {
+      DCHECK(source_isolate->IsFastArrayConstructorPrototypeChainIntact());
+      FixedArray* source_store = FixedArray::cast(source->elements());
+      for (uint32_t i = 0; i < length; i++) {
+        if (source_store->is_the_hole(source_isolate, i)) {
+          dest->SetValue(i, undefined);
+        } else {
+          Object* elem = source_store->get(i);
+          DCHECK(elem->IsSmi());
+          int int_value = Smi::cast(elem)->value();
+          dest->set(i, dest->from(int_value));
+        }
       }
       return true;
     } else if (kind == FAST_DOUBLE_ELEMENTS) {
@@ -3206,6 +3223,18 @@ class TypedElementsAccessor
         // rather than relying on C++ to convert elem.
         double elem = source_store->get_scalar(i);
         dest->set(i, dest->from(elem));
+      }
+      return true;
+    } else if (kind == FAST_HOLEY_DOUBLE_ELEMENTS) {
+      FixedDoubleArray* source_store =
+          FixedDoubleArray::cast(source->elements());
+      for (uint32_t i = 0; i < length; i++) {
+        if (source_store->is_the_hole(i)) {
+          dest->SetValue(i, undefined);
+        } else {
+          double elem = source_store->get_scalar(i);
+          dest->set(i, dest->from(elem));
+        }
       }
       return true;
     }
