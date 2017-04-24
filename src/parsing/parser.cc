@@ -4567,9 +4567,16 @@ Expression* Parser::RewriteYieldStar(Expression* generator,
   // Yield(output);
   Statement* yield_output;
   {
-    Expression* output_proxy = factory()->NewVariableProxy(var_output);
+    Expression* output = factory()->NewVariableProxy(var_output);
+    if (is_async_generator()) {
+      // AsyncGeneratorYield does not yield the original iterator result,
+      // unlike sync generators.
+      Expression* literal = factory()->NewStringLiteral(
+          ast_value_factory()->value_string(), nopos);
+      output = factory()->NewProperty(output, literal, nopos);
+    }
     Suspend* yield =
-        BuildSuspend(generator, output_proxy, nopos, Suspend::kOnExceptionThrow,
+        BuildSuspend(generator, output, nopos, Suspend::kOnExceptionThrow,
                      SuspendFlags::kYieldStar);
     yield_output = factory()->NewExpressionStatement(yield, nopos);
   }
