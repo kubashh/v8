@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fd1b15c_2cbcdeb1",
+        "filename": "src/external-reference-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-04-24T13:26:36Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be \u003cvector\u003e?",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 10
+      },
+      "revId": "ad138bcc9d92b13a8dc77d844d5bf748e55da099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c4d5c4_f83423fd",
+        "filename": "src/external-reference-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-04-24T13:26:36Z",
+      "side": 1,
+      "message": "SYMBOLIZE_FUNCTION instead",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 12
+      },
+      "revId": "ad138bcc9d92b13a8dc77d844d5bf748e55da099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
