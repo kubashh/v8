@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45febbbd_1b166a8f",
+        "filename": "test/mjsunit/regress/wasm/regression-647649.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-24T12:33:08Z",
+      "side": 1,
+      "message": "Huh? Why is this change needed?",
+      "revId": "6ff726ecccccb5f0a0c29d5a14b986a5463146b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
