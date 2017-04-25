@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c34fba4d_ee9b4c60",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-25T11:46:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78750620_dabc7d23",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 65
+      },
+      "revId": "3d2d681e24a5cbfe95c78b07754ce004f7e783fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48048b32_656195e6",
         "filename": "src/parsing/preparsed-scope-data.h",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-04-25T11:10:08Z",
       "side": 1,
       "message": "function_index_, function_data-positions_ and skippable_functions_ are all structures indexed by the start position. I suspect it\u0027s more efficient (but arguably uglier) to merge them into one structure.\n\n(That might well be a premature optimization, though, so I\u0027m not very sure it\u0027s worth the effort.)",
+      "range": {
+        "startLine": 118,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 42
+      },
+      "revId": "3d2d681e24a5cbfe95c78b07754ce004f7e783fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aff64a17_51eadea7",
+        "filename": "src/parsing/preparsed-scope-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-04-25T11:46:50Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s like this so that I don\u0027t need to prematurely refactor the function data.\n\nWe\u0027ll need different types of data for non-skippable and skippable funcs, and this is just saving the same data for both plus differentiating between them with this extra set.\n\nIn the long term, there will be 3 types of functions:\n- Functions we cannot skip but have the variable data for\n- Functions we can skip + we also have the variable data for\n- Functions we can stkip + no variable data (leaf functions).\n\nSo i\u0027ll need to sort out the data structures once I figure out how to store the data separately for all 3 types...",
+      "parentUuid": "48048b32_656195e6",
       "range": {
         "startLine": 118,
         "startChar": 1,
