@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4651fc09_ed6c25c3",
+        "filename": "test/js-perf-test/BytecodeHandlers/compare.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-04-25T10:04:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e900145_78ce1c80",
+      "revId": "c547dbaccd9192a608d640d732e5cda3855e6038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93db9535_b6825dc2",
         "filename": "test/js-perf-test/JSTests.json",
         "patchSetId": 1
@@ -63,6 +81,30 @@
       "revId": "c547dbaccd9192a608d640d732e5cda3855e6038",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b70a5b_e2ae9be4",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-04-25T10:04:39Z",
+      "side": 1,
+      "message": "I missed it. Thanks, Done",
+      "parentUuid": "98d541c5_1d68e0df",
+      "range": {
+        "startLine": 402,
+        "startChar": 7,
+        "endLine": 402,
+        "endChar": 33
+      },
+      "revId": "c547dbaccd9192a608d640d732e5cda3855e6038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
