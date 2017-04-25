@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78750620_dabc7d23",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-25T11:10:08Z",
+      "side": 1,
+      "message": "maybe: AddFunction(start_position, function_data);\n\n(I find it easier to udnerstand if I know that AddSkippableFunction does the exact same as AddFunction, plus record that the functino is skillable in skippable_functions_.)",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 65
+      },
+      "revId": "3d2d681e24a5cbfe95c78b07754ce004f7e783fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48048b32_656195e6",
+        "filename": "src/parsing/preparsed-scope-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-25T11:10:08Z",
+      "side": 1,
+      "message": "function_index_, function_data-positions_ and skippable_functions_ are all structures indexed by the start position. I suspect it\u0027s more efficient (but arguably uglier) to merge them into one structure.\n\n(That might well be a premature optimization, though, so I\u0027m not very sure it\u0027s worth the effort.)",
+      "range": {
+        "startLine": 118,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 42
+      },
+      "revId": "3d2d681e24a5cbfe95c78b07754ce004f7e783fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
