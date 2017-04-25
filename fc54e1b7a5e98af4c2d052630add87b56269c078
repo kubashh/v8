@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eab7feee_b0a13517",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3198,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T13:42:56Z",
+      "side": 1,
+      "message": "nit: I tihnk this just takes Object*, hence you don\u0027t have to do the IsJSObject() check above.",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "679954fb_0dc35406",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T13:42:56Z",
+      "side": 1,
+      "message": "nit: maybe just put the check in the check in the else branch of if (IsFastHoleyElementsKind(kind))",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e8395c_7c1560c9",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like-prototype-element-added.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T13:42:56Z",
+      "side": 1,
+      "message": "Let\u0027s add all the other tests with the invalid array protector, can\u0027t harm.\n\n(function testTypedArrayLikeCosntructByArrayLikeInvalidArrayProtector() {\n  load(\"test/mjsunit/es6/typedarray-construct-by-array-like.js\");\n})();",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8724ea0d_a7a30cb3",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T13:42:56Z",
+      "side": 1,
+      "message": "nit: forEach(...) you probably don\u0027t really need the result do you?",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
