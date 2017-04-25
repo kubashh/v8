@@ -371,8 +371,8 @@ void AsmJsParser::ValidateModule() {
         global_import.import_name,
         static_cast<int>(global_import.import_name_size),
         global_import.value_type);
-    start->EmitWithVarInt(kExprGetGlobal, import_index);
-    start->EmitWithVarInt(kExprSetGlobal, VarIndex(global_import.var_info));
+    start->EmitWithI32V(kExprGetGlobal, import_index);
+    start->EmitWithI32V(kExprSetGlobal, VarIndex(global_import.var_info));
   }
   start->Emit(kExprEnd);
   FunctionSig::Builder b(zone(), 0, 0);
@@ -894,8 +894,7 @@ void AsmJsParser::ValidateFunctionLocals(
           info->type = AsmType::Double();
           info->index = static_cast<uint32_t>(param_count + locals->size());
           locals->push_back(kWasmF64);
-          byte code[] = {WASM_F64(-dvalue)};
-          current_function_builder_->EmitCode(code, sizeof(code));
+          current_function_builder_->EmitF64Const(-dvalue);
           current_function_builder_->EmitSetLocal(info->index);
         } else if (CheckForUnsigned(&uvalue)) {
           if (uvalue > 0x7fffffff) {
@@ -929,7 +928,7 @@ void AsmJsParser::ValidateFunctionLocals(
           } else {
             FAIL("Bad local variable definition");
           }
-          current_function_builder_->EmitWithVarInt(kExprGetGlobal,
+          current_function_builder_->EmitWithI32V(kExprGetGlobal,
                                                     VarIndex(sinfo));
           current_function_builder_->EmitSetLocal(info->index);
         } else if (sinfo->type->IsA(stdlib_fround_)) {
@@ -947,8 +946,7 @@ void AsmJsParser::ValidateFunctionLocals(
             if (negate) {
               dvalue = -dvalue;
             }
-            byte code[] = {WASM_F32(dvalue)};
-            current_function_builder_->EmitCode(code, sizeof(code));
+            current_function_builder_->EmitF32Const(dvalue);
             current_function_builder_->EmitSetLocal(info->index);
           } else if (CheckForUnsigned(&uvalue)) {
             if (uvalue > 0x7fffffff) {
@@ -962,9 +960,8 @@ void AsmJsParser::ValidateFunctionLocals(
             if (negate) {
               value = -value;
             }
-            double fvalue = static_cast<double>(value);
-            byte code[] = {WASM_F32(fvalue)};
-            current_function_builder_->EmitCode(code, sizeof(code));
+            float fvalue = static_cast<float>(value);
+            current_function_builder_->EmitF32Const(fvalue);
             current_function_builder_->EmitSetLocal(info->index);
           } else {
             FAIL("Expected variable initial value");
@@ -978,8 +975,7 @@ void AsmJsParser::ValidateFunctionLocals(
         info->type = AsmType::Double();
         info->index = static_cast<uint32_t>(param_count + locals->size());
         locals->push_back(kWasmF64);
-        byte code[] = {WASM_F64(dvalue)};
-        current_function_builder_->EmitCode(code, sizeof(code));
+        current_function_builder_->EmitF64Const(dvalue);
         current_function_builder_->EmitSetLocal(info->index);
       } else if (CheckForUnsigned(&uvalue)) {
         info->kind = VarKind::kLocal;
@@ -1233,7 +1229,7 @@ void AsmJsParser::BreakStatement() {
     FAIL("Illegal break");
   }
   current_function_builder_->Emit(kExprBr);
-  current_function_builder_->EmitVarInt(depth);
+  current_function_builder_->EmitI32V(depth);
   SkipSemicolon();
 }
 
@@ -1249,8 +1245,7 @@ void AsmJsParser::ContinueStatement() {
   if (depth < 0) {
     FAIL("Illegal continue");
   }
-  current_function_builder_->Emit(kExprBr);
-  current_function_builder_->EmitVarInt(depth);
+  current_function_builder_->EmitWithI32V(kExprBr, depth);
   SkipSemicolon();
 }
 
@@ -1295,9 +1290,9 @@ void AsmJsParser::SwitchStatement() {
     current_function_builder_->EmitGetLocal(tmp);
     current_function_builder_->EmitI32Const(c);
     current_function_builder_->Emit(kExprI32Eq);
-    current_function_builder_->EmitWithVarInt(kExprBrIf, table_pos++);
+    current_function_builder_->EmitWithI32V(kExprBrIf, table_pos++);
   }
-  current_function_builder_->EmitWithVarInt(kExprBr, table_pos++);
+  current_function_builder_->EmitWithI32V(kExprBr, table_pos++);
   while (!failed_ && Peek(TOK(case))) {
     current_function_builder_->Emit(kExprEnd);
     BareEnd();
@@ -1382,8 +1377,7 @@ AsmType* AsmJsParser::NumericLiteral() {
   double dvalue = 0.0;
   uint64_t uvalue = 0;
   if (CheckForDouble(&dvalue)) {
-    byte code[] = {WASM_F64(dvalue)};
-    current_function_builder_->EmitCode(code, sizeof(code));
+    current_function_builder_->EmitF64Const(dvalue);
     return AsmType::Double();
   } else if (CheckForUnsigned(&uvalue)) {
     if (uvalue <= 0x7fffffff) {
@@ -1415,7 +1409,7 @@ AsmType* AsmJsParser::Identifier() {
     if (info->kind != VarKind::kGlobal) {
       FAILn("Undefined global variable");
     }
-    current_function_builder_->EmitWithVarInt(kExprGetGlobal, VarIndex(info));
+    current_function_builder_->EmitWithI32V(kExprGetGlobal, VarIndex(info));
     return info->type;
   }
   UNREACHABLE();
@@ -1520,10 +1514,8 @@ AsmType* AsmJsParser::AssignmentExpression() {
         if (!info->mutable_variable) {
           FAILn("Expected mutable variable in assignment");
         }
-        current_function_builder_->EmitWithVarUint(kExprSetGlobal,
-                                                   VarIndex(info));
-        current_function_builder_->EmitWithVarUint(kExprGetGlobal,
-                                                   VarIndex(info));
+        current_function_builder_->EmitWithU32V(kExprSetGlobal, VarIndex(info));
+        current_function_builder_->EmitWithU32V(kExprGetGlobal, VarIndex(info));
       } else {
         UNREACHABLE();
       }
@@ -2176,8 +2168,7 @@ AsmType* AsmJsParser::ValidateCall() {
       function_info->import->cache[sig] = index;
     }
     current_function_builder_->AddAsmWasmOffset(call_pos, to_number_pos);
-    current_function_builder_->Emit(kExprCallFunction);
-    current_function_builder_->EmitVarUint(index);
+    current_function_builder_->EmitWithU32V(kExprCallFunction, index);
   } else if (function_info->kind > VarKind::kImportedFunction) {
     AsmCallableType* callable = function_info->type->AsCallableType();
     if (!callable) {
@@ -2311,8 +2302,8 @@ AsmType* AsmJsParser::ValidateCall() {
       current_function_builder_->EmitGetLocal(tmp.get()->get());
       current_function_builder_->AddAsmWasmOffset(call_pos, to_number_pos);
       current_function_builder_->Emit(kExprCallIndirect);
-      current_function_builder_->EmitVarUint(signature_index);
-      current_function_builder_->EmitVarUint(0);  // table index
+      current_function_builder_->EmitU32V(signature_index);
+      current_function_builder_->EmitU32V(0);  // table index
     } else {
       current_function_builder_->AddAsmWasmOffset(call_pos, to_number_pos);
       current_function_builder_->Emit(kExprCallFunction);
