@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cf0924f_217b0974",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-04-25T10:16:15Z",
+      "side": 1,
+      "message": "Cool, we have a new flag now? Is it the same as --nocrankshaft before?",
+      "range": {
+        "startLine": 406,
+        "startChar": 17,
+        "endLine": 406,
+        "endChar": 27
+      },
+      "revId": "a98d2f9eda61ec2df26ec1875aaaf5febe132390",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
