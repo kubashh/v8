@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "773340b2_f9c739d7",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-25T12:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e28462bc_c4e7e9ff",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a88f5d6e_847284de",
         "filename": "src/elements.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab51c1a_a3950a06",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3187,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-25T12:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a88f5d6e_847284de",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1696426f_715b9e1f",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3188,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-25T12:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc02bb06_99a6ac93",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec3a0039_8c43de47",
         "filename": "src/elements.cc",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "7b635f2a_631a5db9",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-25T12:06:28Z",
+      "side": 1,
+      "message": "Yes I realized that it isn\u0027t a precondition of this function that those things are true. They were true in almost all cases because we went through Runtime_IterableToListCanBeElided before getting here, but there were some edge cases that were not covered.\n\nAnyway, that\u0027s not a good precondition for a \u0027generic\u0027 copying function like in the elements accessor, so I check it explicitly in TryCopyElementsHandleFastNumber and return false if they are not met, defaulting to the slow-path.",
+      "parentUuid": "ec3a0039_8c43de47",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8dc67ee_a6319e13",
         "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
         "patchSetId": 2
@@ -84,6 +156,24 @@
       "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6592cb_a0b0b2ed",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-25T12:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8dc67ee_a6319e13",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
