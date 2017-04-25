@@ -50,6 +50,50 @@ function TestConstructFromArrayWithSideEffectsHoley(constr) {
   assertEquals(4, ta[3]);
 }
 
+function TestConstructFromArrayHoleySmi(constr) {
+  var arr = [0, 1, , 3];
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, defaultValue(constr), 3], ta);
+}
+
+function TestConstructFromArrayHoleyDouble(constr) {
+  var arr = [0.0, 1.0, , 3.0];
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, defaultValue(constr), 3], ta);
+}
+
+function TestConstructFromArrayHoleySmiWithOtherPrototype(constr) {
+  var arr = [0, 1, , 3];
+  Object.setPrototypeOf(arr, { 2: 2 });
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, 2, 3], ta);
+}
+
+function TestConstructFromArrayHoleySmiWithSubclass(constr) {
+  class SubArray extends Array {}
+  var arr = new SubArray(0, 1);
+  arr[3] = 3;
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, defaultValue(constr), 3], ta);
+}
+
+function TestConstructFromArrayHoleySmiWithModifiedArrayProto(constr) {
+  var arr = [0, 1, , 3];
+  Array.prototype[2] = 2;
+
+  var ta = new constr(arr);
+
+  assertArrayEquals([0, 1, 2, 3], ta);
+}
+
 function TestConstructFromArrayNoIteratorWithGetter(constr) {
   var arr = [1, 2, 3];
   arr[Symbol.iterator] = undefined;
@@ -203,6 +247,11 @@ Test(TestConstructSmallObject);
 Test(TestConstructLargeObject);
 Test(TestConstructFromArrayWithSideEffects);
 Test(TestConstructFromArrayWithSideEffectsHoley);
+Test(TestConstructFromArrayHoleySmi);
+Test(TestConstructFromArrayHoleyDouble);
+Test(TestConstructFromArrayHoleySmiWithOtherPrototype);
+Test(TestConstructFromArrayHoleySmiWithSubclass);
+Test(TestConstructFromArrayHoleySmiWithModifiedArrayProto);
 Test(TestConstructFromArrayNoIteratorWithGetter);
 Test(TestConstructFromArray);
 Test(TestConstructFromTypedArray);
