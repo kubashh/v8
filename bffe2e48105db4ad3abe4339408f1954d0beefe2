@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e28462bc_c4e7e9ff",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T08:58:52Z",
+      "side": 1,
+      "message": "Actually we should disallow JS as well.. we probably need a combined scope at some point.",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a88f5d6e_847284de",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3187,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T08:58:52Z",
+      "side": 1,
+      "message": "nit: Isolate* isolate \u003d ...",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc02bb06_99a6ac93",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3188,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T08:58:52Z",
+      "side": 1,
+      "message": "nit: isolate-\u003eheap()-\u003eundefined_value();",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3a0039_8c43de47",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T08:58:52Z",
+      "side": 1,
+      "message": "Here comes the nasty part:\n- you have to explicitly check IsFastArrayConstructorPrototypeChainIntact for holey receivers here.\n- you have to explicitly check for elements on the complete prototype chain in the holey case as the array might be a subclass / not have the default prototype.",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8dc67ee_a6319e13",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-04-25T08:58:52Z",
+      "side": 1,
+      "message": "- Please add a separate test file where you actually mock with the default array prototype to fill in a hole.\n- please add a test where you modify the source array\u0027s prototype\n- please add a test where the source array is a subclass of an array",
+      "revId": "bffe2e48105db4ad3abe4339408f1954d0beefe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
