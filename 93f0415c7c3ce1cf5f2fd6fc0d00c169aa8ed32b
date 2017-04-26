@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad69e4e_a2adf60f",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-26T13:14:24Z",
+      "side": 1,
+      "message": "This code can be moved to the else case below (line 1882).",
+      "range": {
+        "startLine": 1869,
+        "startChar": 4,
+        "endLine": 1875,
+        "endChar": 5
+      },
+      "revId": "93f0415c7c3ce1cf5f2fd6fc0d00c169aa8ed32b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1488d8d_d380c14f",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-26T13:14:24Z",
+      "side": 1,
+      "message": "And this DCHECK can be moved after the following for loop, such that we check that the {weak_exported_functions} array was fully initialized.",
+      "range": {
+        "startLine": 1886,
+        "startChar": 0,
+        "endLine": 1886,
+        "endChar": 63
+      },
+      "revId": "93f0415c7c3ce1cf5f2fd6fc0d00c169aa8ed32b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
