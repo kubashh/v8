@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "63ba5d2c_df28ad5a",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3198,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-26T15:18:58Z",
+      "side": 1,
+      "message": "It takes a JSObject*, and the prototype can be null so we have to do the check :(. \n\nFactored the whole check out into a helper, and allowed the null proto case to still use the fast-case. Proxies go to slow-path now (accidentally fast-cased them earlier).",
+      "parentUuid": "eab7feee_b0a13517",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "679954fb_0dc35406",
         "filename": "src/elements.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b3f3f3f_09240a1a",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-26T15:18:58Z",
+      "side": 1,
+      "message": "We can just remove these two checks, it is pretty redundant anyway, because we would bail out earlier on if this were false.",
+      "parentUuid": "679954fb_0dc35406",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0170b33d_6dd22557",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like-prototype-element-added.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-26T15:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40e8395c_7c1560c9",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8724ea0d_a7a30cb3",
         "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9df47939_a3dbf43a",
+        "filename": "test/mjsunit/es6/typedarray-construct-by-array-like.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-04-26T15:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8724ea0d_a7a30cb3",
+      "revId": "fc54e1b7a5e98af4c2d052630add87b56269c078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
