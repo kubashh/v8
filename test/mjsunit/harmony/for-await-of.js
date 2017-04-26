@@ -105,7 +105,6 @@ let testFailure;
     let sum = 0;
     testDone = false;
     for await (var value of async([100, 200, 300, 400, 500])) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       sum += value;
@@ -146,7 +145,6 @@ let testFailure;
     ];
     testDone = false;
     for await (var {key = 'unknown', value} of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -183,7 +181,6 @@ let testFailure;
     let collection = [['first', 10], [undefined, 20], [, 30], ['last', 40]];
     testDone = false;
     for await (var [key = 'unknown', value] of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -218,7 +215,6 @@ let testFailure;
     let sum = 0;
     testDone = false;
     for await (let value of async([100, 200, 300, 400, 500])) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       sum += value;
@@ -259,7 +255,6 @@ let testFailure;
     ];
     testDone = false;
     for await (let {key = 'unknown', value} of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -350,7 +345,6 @@ let testFailure;
     let collection = [['first', 10], [undefined, 20], [, 30], ['last', 40]];
     testDone = false;
     for await (let [key = 'unknown', value] of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -439,7 +433,6 @@ let testFailure;
     let sum = 0;
     testDone = false;
     for await (const value of async([100, 200, 300, 400, 500])) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       sum += value;
@@ -480,7 +473,6 @@ let testFailure;
     ];
     testDone = false;
     for await (const {key = 'unknown', value} of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -571,7 +563,6 @@ let testFailure;
     let collection = [['first', 10], [undefined, 20], [, 30], ['last', 40]];
     testDone = false;
     for await (const [key = 'unknown', value] of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -662,7 +653,6 @@ let testFailure;
     let value;
     testDone = false;
     for await (value of async([100, 200, 300, 400, 500])) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       sum += value;
@@ -709,7 +699,6 @@ let testFailure;
     ];
     testDone = false;
     for await ({key = 'unknown', value} of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -733,7 +722,6 @@ let testFailure;
     let collection = [['first', 1], [undefined, 2], [, 3], ['last', 4]];
     testDone = false;
     for await ([key = 'unknown', value] of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
@@ -760,7 +748,6 @@ let testFailure;
     ];
     testDone = false;
     for await ({key = 'unknown', value} of async(collection)) {
-      'use strict';
       let strict = (function() { return this === undefined; })();
       assertFalse(strict);
       keys.push(key);
