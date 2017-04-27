@@ -22,6 +22,30 @@
       "revId": "797fcb595be731d5906506f23751cf556fdd5cfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05d342df_a4525f05",
+        "filename": "test/mjsunit/asm/asm-memory.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-27T14:09:50Z",
+      "side": 1,
+      "message": "Done. Yep, good idea, added 10 and 16 now.",
+      "parentUuid": "2b50ec61_22a1422c",
+      "range": {
+        "startLine": 16,
+        "startChar": 54,
+        "endLine": 16,
+        "endChar": 55
+      },
+      "revId": "797fcb595be731d5906506f23751cf556fdd5cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
