@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d41419d_70d1acad",
+        "filename": "test/mjsunit/wasm/asm-wasm.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-27T13:45:02Z",
+      "side": 0,
+      "message": "Review hint: Instantiating Int32Array(undefined) will create an underlying buffer of size zero according to JavaScript semantics.",
+      "range": {
+        "startLine": 552,
+        "startChar": 32,
+        "endLine": 552,
+        "endChar": 38
+      },
+      "revId": "4e78b5a70c6443e3829b0bef10fd731062e27aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e7aa2a8_141d98e7",
+        "filename": "test/mjsunit/wasm/asm-wasm.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1231,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-27T13:45:02Z",
+      "side": 0,
+      "message": "Review hint: Likewise.",
+      "range": {
+        "startLine": 1231,
+        "startChar": 22,
+        "endLine": 1231,
+        "endChar": 28
+      },
+      "revId": "4e78b5a70c6443e3829b0bef10fd731062e27aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
