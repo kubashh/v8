@@ -178,8 +178,8 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
   Add(ExternalReference::address_of_uint32_bias().address(), "uint32_bias");
   Add(ExternalReference::get_mark_code_as_executed_function(isolate).address(),
       "Code::MarkCodeAsExecuted");
-  Add(ExternalReference::is_profiling_address(isolate).address(),
-      "Isolate::is_profiling");
+  Add(ExternalReference::use_slow_api_callback_address(isolate).address(),
+      "Isolate::use_slow_api_callback_address");
   Add(ExternalReference::scheduled_exception_address(isolate).address(),
       "Isolate::scheduled_exception");
   Add(ExternalReference::invoke_function_callback(isolate).address(),

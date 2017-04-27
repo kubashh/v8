@@ -584,7 +584,7 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
         return ReduceArrayConstructor(node);
       }
 
-      if (!FLAG_runtime_stats && shared->IsApiFunction()) {
+      if (shared->IsApiFunction()) {
         Handle<FunctionTemplateInfo> function_template_info(
             FunctionTemplateInfo::cast(shared->function_data()), isolate());
         return ReduceCallApiFunction(node, function_template_info);

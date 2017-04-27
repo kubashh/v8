@@ -52,6 +52,7 @@ void TracingCategoryObserver::OnTraceEnabled() {
   if (enabled) {
     v8::internal::FLAG_ic_stats |= ENABLED_BY_TRACING;
   }
+  // TODO(cbruni): update use_slow_api_callback_address
 }
 
 void TracingCategoryObserver::OnTraceDisabled() {
@@ -59,6 +60,7 @@ void TracingCategoryObserver::OnTraceDisabled() {
       ~(ENABLED_BY_TRACING | ENABLED_BY_SAMPLING);
   v8::internal::FLAG_gc_stats &= ~ENABLED_BY_TRACING;
   v8::internal::FLAG_ic_stats &= ~ENABLED_BY_TRACING;
+  // TODO(cbruni): update use_slow_api_callback_address
 }
 
 }  // namespace tracing

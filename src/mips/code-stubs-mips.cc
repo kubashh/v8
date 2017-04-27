@@ -2819,17 +2819,17 @@ static void CallApiFunctionAndReturn(
 
   DCHECK(function_address.is(a1) || function_address.is(a2));
 
-  Label profiler_disabled;
+  Label use_fast_path;
   Label end_profiler_check;
-  __ li(t9, Operand(ExternalReference::is_profiling_address(isolate)));
+  __ li(t9, Operand(ExternalReference::use_slow_api_callback_address(isolate)));
   __ lb(t9, MemOperand(t9, 0));
-  __ Branch(&profiler_disabled, eq, t9, Operand(zero_reg));
+  __ Branch(&use_fast_path, eq, t9, Operand(zero_reg));
 
   // Additional parameter is the address of the actual callback.
   __ li(t9, Operand(thunk_ref));
   __ jmp(&end_profiler_check);
 
-  __ bind(&profiler_disabled);
+  __ bind(&use_fast_path);
   __ mov(t9, function_address);
   __ bind(&end_profiler_check);
 

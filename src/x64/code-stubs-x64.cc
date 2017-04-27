@@ -2579,18 +2579,18 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
     __ PopSafepointRegisters();
   }
 
-  Label profiler_disabled;
+  Label use_fast_path;
   Label end_profiler_check;
-  __ Move(rax, ExternalReference::is_profiling_address(isolate));
+  __ Move(rax, ExternalReference::use_slow_api_callback_address(isolate));
   __ cmpb(Operand(rax, 0), Immediate(0));
-  __ j(zero, &profiler_disabled);
+  __ j(zero, &use_fast_path);
 
   // Third parameter is the address of the actual getter function.
   __ Move(thunk_last_arg, function_address);
   __ Move(rax, thunk_ref);
   __ jmp(&end_profiler_check);
 
-  __ bind(&profiler_disabled);
+  __ bind(&use_fast_path);
   // Call the api function!
   __ Move(rax, function_address);
 

@@ -429,6 +429,7 @@ typedef List<HeapObject*> DebugObjectCache;
   V(int, bytecode_and_metadata_size, 0)                                       \
   /* true if being profiled. Causes collection of extra compile info. */      \
   V(bool, is_profiling, false)                                                \
+  V(bool, use_slow_api_callback, false)                                       \
   /* true if a trace is being formatted through Error.prepareStackTrace. */   \
   V(bool, formatting_stack_trace, false)                                      \
   /* Perform side effect checks on function call and API callbacks. */        \
@@ -958,7 +959,7 @@ class Isolate {
 
   Debug* debug() { return debug_; }
 
-  bool* is_profiling_address() { return &is_profiling_; }
+  bool* use_slow_api_callback_address() { return &use_slow_api_callback_; }
   CodeEventDispatcher* code_event_dispatcher() const {
     return code_event_dispatcher_.get();
   }
