@@ -2639,7 +2639,6 @@ class AsyncCompileJob {
   Handle<Context> context_;
   Handle<JSPromise> module_promise_;
   WasmModule* module_ = nullptr;
-  ModuleResult result_;
   std::unique_ptr<CompilationHelper> helper_ = nullptr;
   std::unique_ptr<ModuleBytesEnv> module_bytes_env_ = nullptr;
 
@@ -2696,7 +2695,7 @@ class AsyncCompileJob {
   template <typename Task, typename... Args>
   void DoSync(Args... args) {
     static_assert(Task::type == SYNC, "Scheduled type must be sync");
-    Task* task = new Task(args...);
+    Task* task = new Task(std::forward<Args>(args)...);
     task->job_ = this;
     V8::GetCurrentPlatform()->CallOnForegroundThread(
         reinterpret_cast<v8::Isolate*>(isolate_), task);
@@ -2705,7 +2704,7 @@ class AsyncCompileJob {
   template <typename Task, typename... Args>
   void DoAsync(Args... args) {
     static_assert(Task::type == ASYNC, "Scheduled type must be async");
-    Task* task = new Task(args...);
+    Task* task = new Task(std::forward<Args>(args)...);
     task->job_ = this;
     V8::GetCurrentPlatform()->CallOnBackgroundThread(
         task, v8::Platform::kShortRunningTask);
@@ -2716,22 +2715,22 @@ class AsyncCompileJob {
   //==========================================================================
   class DecodeModule : public CompileTask<ASYNC> {
     void Run() override {
+      ModuleResult result;
       {
         DisallowHandleAllocation no_handle;
         DisallowHeapAllocation no_allocation;
         // Decode the module bytes.
         TRACE_COMPILE("(1) Decoding module...\n");
-        job_->result_ =
-            DecodeWasmModule(job_->isolate_, job_->wire_bytes_.start(),
-                             job_->wire_bytes_.end(), true, kWasmOrigin);
+        result = DecodeWasmModule(job_->isolate_, job_->wire_bytes_.start(),
+                                  job_->wire_bytes_.end(), true, kWasmOrigin);
       }
-      if (job_->result_.failed()) {
+      if (result.failed()) {
         // Decoding failure; reject the promise and clean up.
-        if (job_->result_.val) delete job_->result_.val;
-        job_->DoSync<DecodeFail>();
+        if (result.val) delete result.val;
+        job_->DoSync<DecodeFail>(std::move(result));
       } else {
         // Decode passed.
-        job_->module_ = const_cast<WasmModule*>(job_->result_.val);
+        job_->module_ = const_cast<WasmModule*>(result.val);
         job_->DoSync<PrepareAndStartCompile>();
       }
     }
@@ -2742,10 +2741,14 @@ class AsyncCompileJob {
   //==========================================================================
   class DecodeFail : public CompileTask<SYNC> {
    public:
+    explicit DecodeFail(ModuleResult result) : result_(std::move(result)) {}
+
+   private:
+    ModuleResult result_;
     void Run() override {
       HandleScope scope(job_->isolate_);
       ErrorThrower thrower(job_->isolate_, "AsyncCompile");
-      thrower.CompileFailed("Wasm decoding failed", job_->result_);
+      thrower.CompileFailed("Wasm decoding failed", result_);
       // {job_} is deleted in AsyncCompileFailed, therefore the {return}.
       return job_->AsyncCompileFailed(thrower.Reify());
     }
