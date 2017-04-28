@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cf7287d_edb46cbf",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-28T13:00:07Z",
+      "side": 1,
+      "message": "This comment no longer applies AFAICT (because FLAG_opt is also checked in V8::InitializeOncePerProcessImpl, and FLAG_crankshaft isn\u0027t). Should we remove this comment?\n\nSee the following CL about the discussion that led to this comment: https://chromium-review.googlesource.com/c/452620/",
+      "range": {
+        "startLine": 14,
+        "startChar": 35,
+        "endLine": 14,
+        "endChar": 65
+      },
+      "revId": "3255057f6b9762539ba724e5498356e10ba5aa18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
