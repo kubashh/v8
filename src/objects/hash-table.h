@@ -7,6 +7,9 @@
 
 #include "src/objects.h"
 
+#include "src/base/compiler-specific.h"
+#include "src/globals.h"
+
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
 
