@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f3c361e_263407a5",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1127729
+      },
+      "writtenOn": "2017-04-28T14:59:43Z",
+      "side": 1,
+      "message": "I like the move, and I now wonder, should thrower have copy semantics, even?\n\nI think the design intent here is to ensure each instance of a WaitForBackgroundTasks has its own thrower, correct? This got me thinking - isn\u0027t the only error case \"CompileError\" anyway? Do we carry more info than that? Wouldn\u0027t it be sufficient to pass a boolean (or maybe just mark the job as failed) - sorry for nit picking here.\n\nBTW, it seems like we have for each ExecuteCompilationUnits a corresponding FinishCompilationUnit and then a corresponding WaitForBackgroundTaks. Is this scalable? (this is not related to this CL)",
+      "range": {
+        "startLine": 2898,
+        "startChar": 51,
+        "endLine": 2898,
+        "endChar": 55
+      },
+      "revId": "b86ce889317dec6a4e0b7e986561bb444a1aeda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
