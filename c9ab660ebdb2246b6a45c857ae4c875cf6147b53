@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f047ab0_c58ca24c",
+        "filename": "test/mjsunit/wasm/gc-buffer.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-04-28T13:45:11Z",
+      "side": 0,
+      "message": "could you replace this flag with --gc-interval\u003d500 --stress-compaction please?",
+      "range": {
+        "startLine": 5,
+        "startChar": 25,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "c9ab660ebdb2246b6a45c857ae4c875cf6147b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf3cea01_1e122815",
+        "filename": "test/mjsunit/wasm/gc-stress.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-04-28T13:45:11Z",
+      "side": 0,
+      "message": "same here",
+      "range": {
+        "startLine": 5,
+        "startChar": 25,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "c9ab660ebdb2246b6a45c857ae4c875cf6147b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
