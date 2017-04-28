@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "777a9250_2e194025",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-28T11:57:32Z",
+      "side": 1,
+      "message": "question copied from other CL: Our current {List} implementation fires {V8::FatalProcessOutOfMemory} in case the allocation of the backing store fails. Is there any plan to make sure this still happens or are we fine with the std::vector default behavior? Note that I am thinking less about this particular \"DebugObjectCache\" list but the general policy we are shooting aiming for.",
+      "range": {
+        "startLine": 398,
+        "startChar": 8,
+        "endLine": 398,
+        "endChar": 19
+      },
+      "revId": "a20988d500dfc0faeca8bdf107eb729055ec0320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
