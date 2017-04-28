@@ -22,6 +22,30 @@
       "revId": "3255057f6b9762539ba724e5498356e10ba5aa18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c15bff27_1f5bf9dc",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-04-28T13:39:41Z",
+      "side": 1,
+      "message": "Thanks Michi. Done",
+      "parentUuid": "4cf7287d_edb46cbf",
+      "range": {
+        "startLine": 14,
+        "startChar": 35,
+        "endLine": 14,
+        "endChar": 65
+      },
+      "revId": "3255057f6b9762539ba724e5498356e10ba5aa18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
