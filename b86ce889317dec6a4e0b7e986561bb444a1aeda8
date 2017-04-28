@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7e1bb577_855dfa06",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2668,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-04-28T16:02:37Z",
+      "side": 1,
+      "message": "RejectPromise requires an open handle scope, so either open one here, or in each caller of AsyncCompileFailed.",
+      "revId": "b86ce889317dec6a4e0b7e986561bb444a1aeda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f3c361e_263407a5",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
