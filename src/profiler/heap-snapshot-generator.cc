@@ -270,6 +270,7 @@ HeapEntry* HeapSnapshot::AddEntry(HeapEntry::Type type,
                                   size_t size,
                                   unsigned trace_node_id) {
   HeapEntry entry(this, type, name, id, size, trace_node_id);
+  DCHECK(sorted_entries_.is_empty());
   entries_.Add(entry);
   return &entries_.last();
 }
@@ -290,19 +291,6 @@ void HeapSnapshot::FillChildren() {
     edge->from()->add_child(edge);
   }
 }
-
-
-class FindEntryById {
- public:
-  explicit FindEntryById(SnapshotObjectId id) : id_(id) { }
-  int operator()(HeapEntry* const* entry) {
-    if ((*entry)->id() == id_) return 0;
-    return (*entry)->id() < id_ ? -1 : 1;
-  }
- private:
-  SnapshotObjectId id_;
-};
-
 
 HeapEntry* HeapSnapshot::GetEntryById(SnapshotObjectId id) {
   List<HeapEntry*>* entries_by_id = GetSortedEntriesList();
