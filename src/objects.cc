@@ -16816,9 +16816,8 @@ template class Dictionary<NameDictionary, NameDictionaryShape, Handle<Name> >;
 template class Dictionary<GlobalDictionary, GlobalDictionaryShape,
                           Handle<Name> >;
 
-template class Dictionary<SeededNumberDictionary,
-                          SeededNumberDictionaryShape,
-                          uint32_t>;
+template class EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    Dictionary<SeededNumberDictionary, SeededNumberDictionaryShape, uint32_t>;
 
 template class Dictionary<UnseededNumberDictionary,
                           UnseededNumberDictionaryShape,
@@ -16988,6 +16987,16 @@ Dictionary<NameDictionary, NameDictionaryShape, Handle<Name>>::CollectKeysTo(
     Handle<Dictionary<NameDictionary, NameDictionaryShape, Handle<Name>>>
         dictionary,
     KeyAccumulator* keys);
+
+template int
+Dictionary<SeededNumberDictionary, SeededNumberDictionaryShape,
+           uint32_t>::AddEntry(Handle<SeededNumberDictionary> dictionary,
+                               uint32_t key, Handle<Object> value,
+                               PropertyDetails details, uint32_t hash);
+
+template int
+Dictionary<SeededNumberDictionary, SeededNumberDictionaryShape,
+           uint32_t>::NumberOfElementsFilterAttributes(PropertyFilter filter);
 
 Handle<Object> JSObject::PrepareSlowElementsForSort(
     Handle<JSObject> object, uint32_t limit) {
