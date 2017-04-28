@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9e752f8_e95d930f",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3591,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-04-28T12:53:47Z",
+      "side": 1,
+      "message": "Define this close(r) to its usage, please. [Also below, in CloseTemplateLiteral.]\n\n(In particular, I\u0027d prefer if the DCHECKs - which really define the preconditions for calling the method - would remain at the top.)",
+      "range": {
+        "startLine": 3591,
+        "startChar": 2,
+        "endLine": 3591,
+        "endChar": 22
+      },
+      "revId": "63adc05c6a5d776e1cd47e41349bfae13d6f9d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
