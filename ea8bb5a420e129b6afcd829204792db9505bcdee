@@ -16,6 +16,24 @@
       "revId": "ea8bb5a420e129b6afcd829204792db9505bcdee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b396259e_ea3916bf",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2911,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-28T13:03:37Z",
+      "side": 1,
+      "message": "Oh, good catch. You are totally right.\nLooking further into this, it turned out that we had this bug the whole time: The exception is generated in the handle scope of step 4, and then thrown in step 5. This never worked. I fixed this in https://chromium-review.googlesource.com/490085, and rebased this change on it.\nWe now just pass the ErrorThrower instead of the Handle\u003cException\u003e.",
+      "parentUuid": "141c4f34_2e3367a5",
+      "revId": "ea8bb5a420e129b6afcd829204792db9505bcdee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
