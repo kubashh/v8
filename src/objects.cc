@@ -16989,6 +16989,16 @@ Dictionary<NameDictionary, NameDictionaryShape, Handle<Name>>::CollectKeysTo(
         dictionary,
     KeyAccumulator* keys);
 
+template int
+Dictionary<SeededNumberDictionary, SeededNumberDictionaryShape,
+           uint32_t>::AddEntry(Handle<SeededNumberDictionary> dictionary,
+                               uint32_t key, Handle<Object> value,
+                               PropertyDetails details, uint32_t hash);
+
+template int
+Dictionary<SeededNumberDictionary, SeededNumberDictionaryShape,
+           uint32_t>::NumberOfElementsFilterAttributes(PropertyFilter filter);
+
 Handle<Object> JSObject::PrepareSlowElementsForSort(
     Handle<JSObject> object, uint32_t limit) {
   DCHECK(object->HasDictionaryElements());
