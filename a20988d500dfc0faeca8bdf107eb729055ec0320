@@ -22,6 +22,30 @@
       "revId": "a20988d500dfc0faeca8bdf107eb729055ec0320",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc05ba4a_6d274fb1",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-04-28T15:07:42Z",
+      "side": 1,
+      "message": "As discussed offline: We might eventually want to use an allocator with std::vector that triggers {V8::FatalProcessOutOfMemory}, but this can always be done later and is an easy and mechanical change. It is orthogonal to switching to the std::vector interface which is uncontroversial. I am fine with punting on this for the time being.",
+      "parentUuid": "777a9250_2e194025",
+      "range": {
+        "startLine": 398,
+        "startChar": 8,
+        "endLine": 398,
+        "endChar": 19
+      },
+      "revId": "a20988d500dfc0faeca8bdf107eb729055ec0320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
