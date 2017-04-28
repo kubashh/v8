@@ -22,6 +22,30 @@
       "revId": "32124f3b13b7b7faca98d948d838e299cbb5e4f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28de882c_a9ed6e98",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-04-28T14:51:52Z",
+      "side": 0,
+      "message": "for cctest, I need to annotate way more functions :/",
+      "parentUuid": "6a4627b9_7d9ef380",
+      "range": {
+        "startLine": 204,
+        "startChar": 2,
+        "endLine": 204,
+        "endChar": 25
+      },
+      "revId": "32124f3b13b7b7faca98d948d838e299cbb5e4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
