@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a4627b9_7d9ef380",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-04-28T12:01:16Z",
+      "side": 0,
+      "message": "How about the same for cctest?\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/BUILD.gn?q\u003dcctest/b+package:%5Echromium$\u0026l\u003d348",
+      "range": {
+        "startLine": 204,
+        "startChar": 2,
+        "endLine": 204,
+        "endChar": 25
+      },
+      "revId": "32124f3b13b7b7faca98d948d838e299cbb5e4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
