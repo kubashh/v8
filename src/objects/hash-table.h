@@ -7,6 +7,8 @@
 
 #include "src/objects.h"
 
+#include "src/base/compiler-specific.h"
+
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
 
@@ -131,7 +133,7 @@ class HashTableBase : public FixedArray {
 };
 
 template <typename Derived, typename Shape, typename Key>
-class HashTable : public HashTableBase {
+class HashTable : public NON_EXPORTED_BASE(HashTableBase) {
  public:
   typedef Shape ShapeT;
 
