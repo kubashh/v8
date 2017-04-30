@@ -81,6 +81,30 @@
       "revId": "b86ce889317dec6a4e0b7e986561bb444a1aeda8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aec9466b_9aa20375",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-04-30T11:53:05Z",
+      "side": 1,
+      "message": "And about passing too much information: The error thrower contains an error message with more detailed information. That shouldn\u0027t be the business of this function, so we just pass it on as it is.",
+      "parentUuid": "b54569ef_270f2a9c",
+      "range": {
+        "startLine": 2898,
+        "startChar": 51,
+        "endLine": 2898,
+        "endChar": 55
+      },
+      "revId": "b86ce889317dec6a4e0b7e986561bb444a1aeda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
