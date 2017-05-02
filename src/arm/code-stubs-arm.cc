@@ -2640,18 +2640,19 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
 
   DCHECK(function_address.is(r1) || function_address.is(r2));
 
-  Label profiler_disabled;
+  Label use_fast_path;
   Label end_profiler_check;
-  __ mov(r9, Operand(ExternalReference::is_profiling_address(isolate)));
+  __ mov(r9,
+         Operand(ExternalReference::use_slow_api_callbacks_address(isolate)));
   __ ldrb(r9, MemOperand(r9, 0));
   __ cmp(r9, Operand(0));
-  __ b(eq, &profiler_disabled);
+  __ b(eq, &use_fast_path);
 
   // Additional parameter is the address of the actual callback.
   __ mov(r3, Operand(thunk_ref));
   __ jmp(&end_profiler_check);
 
-  __ bind(&profiler_disabled);
+  __ bind(&use_fast_path);
   __ Move(r3, function_address);
   __ bind(&end_profiler_check);
 

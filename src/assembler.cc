@@ -1346,11 +1346,11 @@ ExternalReference ExternalReference::address_of_double_neg_constant() {
   return ExternalReference(reinterpret_cast<void*>(&double_negate_constant));
 }
 
-
-ExternalReference ExternalReference::is_profiling_address(Isolate* isolate) {
-  return ExternalReference(isolate->is_profiling_address());
+ExternalReference ExternalReference::use_slow_api_callbacks_address(
+    Isolate* isolate) {
+  return ExternalReference(
+      reinterpret_cast<void*>(&FLAG_use_slow_api_callbacks));
 }
-
 
 ExternalReference ExternalReference::invoke_function_callback(
     Isolate* isolate) {
