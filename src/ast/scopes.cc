@@ -1919,11 +1919,11 @@ bool AccessNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
     // VAR bindings, either from var or function declarations), but the variable
     // they shadow might need a hole check, which we want to do if we decide
     // that no shadowing variable was dynamically introoduced.
-    DCHECK(!var->binding_needs_init());
+    DCHECK_EQ(kCreatedInitialized, var->initialization_flag());
     return AccessNeedsHoleCheck(var->local_if_not_shadowed(), proxy, scope);
   }
 
-  if (!var->binding_needs_init()) {
+  if (var->initialization_flag() == kCreatedInitialized) {
     return false;
   }
 
@@ -1931,6 +1931,7 @@ bool AccessNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
   // unknown at compilation time whether the binding referred to in the
   // exporting module itself requires hole checks.
   if (var->location() == VariableLocation::MODULE && !var->IsExport()) {
+    var->ForceHoleInitialization();
     return true;
   }
 
@@ -1953,12 +1954,14 @@ bool AccessNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
   // The scope of the variable needs to be checked, in case the use is
   // in a sub-block which may be linear.
   if (var->scope()->GetDeclarationScope() != scope->GetDeclarationScope()) {
+    var->ForceHoleInitialization();
     return true;
   }
 
   if (var->is_this()) {
     DCHECK(IsDerivedConstructor(scope->GetDeclarationScope()->function_kind()));
     // TODO(littledan): implement 'this' hole check elimination.
+    var->ForceHoleInitialization();
     return true;
   }
 
@@ -1966,8 +1969,13 @@ bool AccessNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
   DCHECK(var->initializer_position() != kNoSourcePosition);
   DCHECK(proxy->position() != kNoSourcePosition);
 
-  return var->scope()->is_nonlinear() ||
-         var->initializer_position() >= proxy->position();
+  if (var->scope()->is_nonlinear() ||
+      var->initializer_position() >= proxy->position()) {
+    var->ForceHoleInitialization();
+    return true;
+  }
+
+  return false;
 }
 
 }  // anonymous namespace
