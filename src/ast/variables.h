@@ -69,10 +69,14 @@ class Variable final : public ZoneObject {
   bool binding_needs_init() const {
     DCHECK(initialization_flag() != kNeedsInitialization ||
            IsLexicalVariableMode(mode()));
-    return initialization_flag() == kNeedsInitialization;
+    return initialization_flag() == kNeedsInitialization &&
+           (InitRequiredField::decode(bit_field_) || !IsStackAllocated());
   }
   bool throw_on_const_assignment(LanguageMode language_mode) const {
     return kind() != SLOPPY_FUNCTION_NAME_VARIABLE || is_strict(language_mode);
+  }
+  void RequireInit() {
+    bit_field_ = InitRequiredField::update(bit_field_, true);
   }
 
   bool is_function() const { return kind() == FUNCTION_VARIABLE; }
@@ -152,10 +156,11 @@ class Variable final : public ZoneObject {
   class IsUsedField
       : public BitField16<bool, ForceContextAllocationField::kNext, 1> {};
   class InitializationFlagField
-      : public BitField16<InitializationFlag, IsUsedField::kNext, 2> {};
+      : public BitField16<InitializationFlag, IsUsedField::kNext, 1> {};
+  class InitRequiredField
+      : public BitField16<bool, InitializationFlagField::kNext, 1> {};
   class MaybeAssignedFlagField
-      : public BitField16<MaybeAssignedFlag, InitializationFlagField::kNext,
-                          2> {};
+      : public BitField16<MaybeAssignedFlag, InitRequiredField::kNext, 2> {};
   Variable** next() { return &next_; }
   friend List;
 };
