@@ -499,6 +499,10 @@ double CompilerDispatcherJob::EstimateRuntimeOfNextStepInMs() const {
       return tracer_->EstimatePrepareToParseInMs();
 
     case CompileJobStatus::kReadyToParse:
+      if (parse_info_->end_position() == kNoSourcePosition) {
+        // TODO(wiktorg) more reasonable estimate for that case
+        return 50.0;
+      }
       return tracer_->EstimateParseInMs(parse_info_->end_position() -
                                         parse_info_->start_position());
 
