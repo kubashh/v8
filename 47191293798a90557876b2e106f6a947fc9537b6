@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ea69130_99658a08",
+        "filename": "src/base/export-template.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-05-02T10:39:06Z",
+      "side": 1,
+      "message": "s/export/expand/",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 14
+      },
+      "revId": "47191293798a90557876b2e106f6a947fc9537b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
