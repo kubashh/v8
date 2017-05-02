@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1174bc0a_572bbd57",
+        "filename": "src/string-stream.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-02T09:20:05Z",
+      "side": 1,
+      "message": "nit: Why not just use %zu instead of casting (here and two more below)?",
+      "range": {
+        "startLine": 195,
+        "startChar": 14,
+        "endLine": 195,
+        "endChar": 16
+      },
+      "revId": "3b257c40c2f5a253a7f0b1e423d6e0d715254924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
