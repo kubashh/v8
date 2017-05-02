@@ -2856,15 +2856,15 @@ static void CallApiFunctionAndReturn(
 
   DCHECK(function_address.is(x1) || function_address.is(x2));
 
-  Label profiler_disabled;
+  Label use_fast_path;
   Label end_profiler_check;
-  __ Mov(x10, ExternalReference::is_profiling_address(isolate));
+  __ Mov(x10, ExternalReference::use_slow_api_callbacks_address(isolate));
   __ Ldrb(w10, MemOperand(x10));
-  __ Cbz(w10, &profiler_disabled);
+  __ Cbz(w10, &use_fast_path);
   __ Mov(x3, thunk_ref);
   __ B(&end_profiler_check);
 
-  __ Bind(&profiler_disabled);
+  __ Bind(&use_fast_path);
   __ Mov(x3, function_address);
   __ Bind(&end_profiler_check);
 

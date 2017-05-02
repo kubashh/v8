@@ -329,6 +329,7 @@ void CpuProfiler::StartProcessorIfNotStarted() {
   profiler_listener->AddObserver(this);
   is_profiling_ = true;
   isolate_->set_is_profiling(true);
+  FLAG_use_slow_api_callbacks = true;
   // Enumerate stuff we already have in the heap.
   DCHECK(isolate_->heap()->HasBeenSetUp());
   if (!FLAG_prof_browser_mode) {
@@ -361,6 +362,7 @@ void CpuProfiler::StopProcessor() {
   Logger* logger = isolate_->logger();
   is_profiling_ = false;
   isolate_->set_is_profiling(false);
+  FLAG_use_slow_api_callbacks = false;
   ProfilerListener* profiler_listener = logger->profiler_listener();
   profiler_listener->RemoveObserver(this);
   processor_->StopSynchronously();

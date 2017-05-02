@@ -1001,10 +1001,13 @@ DEFINE_BOOL(print_all_exceptions, false,
             "print exception object and stack trace on each thrown exception")
 
 // runtime.cc
+DEFINE_BOOL(use_slow_api_callbacks, false,
+            "Always jump to the runtime for api callbacksi.")
 DEFINE_BOOL(runtime_call_stats, false, "report runtime call counts and times")
 DEFINE_INT(runtime_stats, 0,
            "internal usage only for controlling runtime statistics")
 DEFINE_VALUE_IMPLICATION(runtime_call_stats, runtime_stats, 1)
+DEFINE_VALUE_IMPLICATION(runtime_call_stats, use_slow_api_callbacks, 1)
 
 // snapshot-common.cc
 DEFINE_BOOL(profile_deserialization, false,

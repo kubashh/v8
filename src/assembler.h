@@ -1011,7 +1011,7 @@ class ExternalReference BASE_EMBEDDED {
       Isolate* isolate);
   static ExternalReference debug_after_break_target_address(Isolate* isolate);
 
-  static ExternalReference is_profiling_address(Isolate* isolate);
+  static ExternalReference use_slow_api_callbacks_address(Isolate* isolate);
   static ExternalReference invoke_function_callback(Isolate* isolate);
   static ExternalReference invoke_accessor_getter_callback(Isolate* isolate);
 

@@ -36,6 +36,7 @@ void TracingCategoryObserver::OnTraceEnabled() {
       TRACE_DISABLED_BY_DEFAULT("v8.runtime_stats"), &enabled);
   if (enabled) {
     v8::internal::FLAG_runtime_stats |= ENABLED_BY_TRACING;
+    v8::internal::FLAG_use_slow_api_callbacks = true;
   }
   TRACE_EVENT_CATEGORY_GROUP_ENABLED(
       TRACE_DISABLED_BY_DEFAULT("v8.runtime_stats_sampling"), &enabled);
@@ -57,6 +58,7 @@ void TracingCategoryObserver::OnTraceEnabled() {
 void TracingCategoryObserver::OnTraceDisabled() {
   v8::internal::FLAG_runtime_stats &=
       ~(ENABLED_BY_TRACING | ENABLED_BY_SAMPLING);
+  v8::internal::FLAG_use_slow_api_callbacks = false;
   v8::internal::FLAG_gc_stats &= ~ENABLED_BY_TRACING;
   v8::internal::FLAG_ic_stats &= ~ENABLED_BY_TRACING;
 }

@@ -2716,16 +2716,17 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
   DCHECK(function_address.is(r3) || function_address.is(r4));
   Register scratch = r5;
 
-  __ mov(scratch, Operand(ExternalReference::is_profiling_address(isolate)));
+  __ mov(scratch,
+         Operand(ExternalReference::use_slow_api_callbacks_address(isolate)));
   __ LoadlB(scratch, MemOperand(scratch, 0));
   __ CmpP(scratch, Operand::Zero());
 
-  Label profiler_disabled;
+  Label use_fast_path;
   Label end_profiler_check;
-  __ beq(&profiler_disabled, Label::kNear);
+  __ beq(&use_fast_path, Label::kNear);
   __ mov(scratch, Operand(thunk_ref));
   __ b(&end_profiler_check, Label::kNear);
-  __ bind(&profiler_disabled);
+  __ bind(&use_fast_path);
   __ LoadRR(scratch, function_address);
   __ bind(&end_profiler_check);
 
