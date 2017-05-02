@@ -255,9 +255,7 @@ function TypedArraySetFromArrayLike(target, source, sourceLength, offset) {
     }
   }
   else {
-    for (var i = 0; i < sourceLength; i++) {
-      target[i] = source[i];
-    }
+    %TypedArrayCopyElements(target, source, sourceLength);
   }
 }
 
@@ -321,7 +319,6 @@ function TypedArraySet(obj, offset) {
   if (intOffset > %_MaxSmi()) {
     throw %make_range_error(kTypedArraySetSourceTooLarge);
   }
-
   switch (%TypedArraySetFastCases(this, obj, intOffset)) {
     // These numbers should be synchronized with runtime.cc.
     case 0: // TYPED_ARRAY_SET_TYPED_ARRAY_SAME_TYPE
@@ -330,12 +327,8 @@ function TypedArraySet(obj, offset) {
       TypedArraySetFromOverlappingTypedArray(this, obj, intOffset);
       return;
     case 2: // TYPED_ARRAY_SET_TYPED_ARRAY_NONOVERLAPPING
-      if (intOffset === 0) {
-        %TypedArrayCopyElements(this, obj, %_TypedArrayGetLength(obj));
-      } else {
-        TypedArraySetFromArrayLike(
-            this, obj, %_TypedArrayGetLength(obj), intOffset);
-      }
+      TypedArraySetFromArrayLike(this,
+          obj, %_TypedArrayGetLength(obj), intOffset);
       return;
     case 3: // TYPED_ARRAY_SET_NON_TYPED_ARRAY
       var l = obj.length;

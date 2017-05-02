@@ -50,16 +50,12 @@ class Builtins {
 
   // Convenience wrappers.
   Handle<Code> CallFunction(
-      ConvertReceiverMode = ConvertReceiverMode::kAny,
-      TailCallMode tail_call_mode = TailCallMode::kDisallow);
-  Handle<Code> Call(ConvertReceiverMode = ConvertReceiverMode::kAny,
-                    TailCallMode tail_call_mode = TailCallMode::kDisallow);
-  Handle<Code> CallBoundFunction(TailCallMode tail_call_mode);
+      ConvertReceiverMode = ConvertReceiverMode::kAny);
+  Handle<Code> Call(ConvertReceiverMode = ConvertReceiverMode::kAny);
   Handle<Code> NonPrimitiveToPrimitive(
       ToPrimitiveHint hint = ToPrimitiveHint::kDefault);
   Handle<Code> OrdinaryToPrimitive(OrdinaryToPrimitiveHint hint);
   Handle<Code> InterpreterPushArgsThenCall(ConvertReceiverMode receiver_mode,
-                                           TailCallMode tail_call_mode,
                                            InterpreterPushArgsMode mode);
   Handle<Code> InterpreterPushArgsThenConstruct(InterpreterPushArgsMode mode);
   Handle<Code> NewFunctionContext(ScopeType scope_type);
@@ -75,8 +71,6 @@ class Builtins {
   Address builtin_address(Name name) {
     return reinterpret_cast<Address>(&builtins_[name]);
   }
-
-  static int GetBuiltinParameterCount(Name name);
 
   static Callable CallableFor(Isolate* isolate, Name name);
 
@@ -115,20 +109,17 @@ class Builtins {
   Builtins();
 
   static void Generate_CallFunction(MacroAssembler* masm,
-                                    ConvertReceiverMode mode,
-                                    TailCallMode tail_call_mode);
+                                    ConvertReceiverMode mode);
 
-  static void Generate_CallBoundFunctionImpl(MacroAssembler* masm,
-                                             TailCallMode tail_call_mode);
+  static void Generate_CallBoundFunctionImpl(MacroAssembler* masm);
 
-  static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode,
-                            TailCallMode tail_call_mode);
+  static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode);
   static void Generate_CallForwardVarargs(MacroAssembler* masm,
                                           Handle<Code> code);
 
   static void Generate_InterpreterPushArgsThenCallImpl(
       MacroAssembler* masm, ConvertReceiverMode receiver_mode,
-      TailCallMode tail_call_mode, InterpreterPushArgsMode mode);
+      InterpreterPushArgsMode mode);
 
   static void Generate_InterpreterPushArgsThenConstructImpl(
       MacroAssembler* masm, InterpreterPushArgsMode mode);

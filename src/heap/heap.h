@@ -6,7 +6,7 @@
 #define V8_HEAP_HEAP_H_
 
 #include <cmath>
-#include <vector>
+#include <map>
 
 // Clients of this interface shouldn't depend on lots of heap internals.
 // Do not include anything from src/heap here!

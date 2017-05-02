@@ -5435,10 +5435,9 @@ Node* CodeStubAssembler::CallGetterIfAccessor(Node* value, Node* details,
     // JSArray AccessorInfo case.
     BIND(&if_array);
     {
-      // We only deal with the "length" accessor on JSArray.
-      GotoIfNot(IsLengthString(
-                    LoadObjectField(accessor_info, AccessorInfo::kNameOffset)),
-                if_bailout);
+      // The only AccessorInfo on JSArray is the "length" property.
+      CSA_ASSERT(this, IsLengthString(LoadObjectField(
+                           accessor_info, AccessorInfo::kNameOffset)));
       var_value.Bind(LoadJSArrayLength(receiver));
       Goto(&done);
     }

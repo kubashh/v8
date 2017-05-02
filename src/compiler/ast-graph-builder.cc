@@ -1695,8 +1695,7 @@ void AstGraphBuilder::VisitCall(Call* expr) {
   float const frequency = ComputeCallFrequency(expr->CallFeedbackICSlot());
   VectorSlotPair feedback = CreateVectorSlotPair(expr->CallFeedbackICSlot());
   const Operator* call =
-      javascript()->Call(args->length() + 2, frequency, feedback, receiver_hint,
-                         expr->tail_call_mode());
+      javascript()->Call(args->length() + 2, frequency, feedback, receiver_hint);
   PrepareEagerCheckpoint(expr->CallId());
   Node* value = ProcessArguments(call, args->length() + 2);
   // The callee passed to the call, we just need to push something here to

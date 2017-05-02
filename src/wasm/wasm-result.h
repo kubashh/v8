@@ -22,7 +22,7 @@ class Isolate;
 namespace wasm {
 
 // Base class for Result<T>.
-class V8_EXPORT_PRIVATE ResultBase {
+class ResultBase {
  protected:
   ResultBase(ResultBase&& other)
       : error_offset_(other.error_offset_),
@@ -97,8 +97,6 @@ class V8_EXPORT_PRIVATE ErrorThrower {
  public:
   ErrorThrower(Isolate* isolate, const char* context)
       : isolate_(isolate), context_(context) {}
-  // Explicitly allow move-construction. Disallow copy (below).
-  ErrorThrower(ErrorThrower&& other);
   ~ErrorThrower();
 
   PRINTF_FORMAT(2, 3) void TypeError(const char* fmt, ...);
@@ -114,11 +112,7 @@ class V8_EXPORT_PRIVATE ErrorThrower {
                  result.error_offset());
   }
 
-  // Create and return exception object.
-  MUST_USE_RESULT Handle<Object> Reify();
-
-  // Reset any error which was set on this thrower.
-  void Reset();
+  Handle<Object> Reify();
 
   bool error() const { return error_type_ != kNone; }
   bool wasm_error() { return error_type_ >= kFirstWasmError; }
@@ -144,8 +138,6 @@ class V8_EXPORT_PRIVATE ErrorThrower {
   const char* context_;
   ErrorType error_type_ = kNone;
   std::string error_msg_;
-
-  DISALLOW_COPY_AND_ASSIGN(ErrorThrower);
 };
 
 }  // namespace wasm

@@ -273,7 +273,7 @@ class Simulator : public DecoderVisitor {
 
   void ResetState();
 
-  // Runtime call support. Uses the isolate in a thread-safe way.
+  // Runtime call support.
   static void* RedirectExternalReference(Isolate* isolate,
                                          void* external_function,
                                          ExternalReference::Type type);

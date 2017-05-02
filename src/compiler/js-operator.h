@@ -115,15 +115,10 @@ SpreadWithArityParameter const& SpreadWithArityParameterOf(Operator const*);
 // is used as parameter by JSCallForwardVarargs operators.
 class CallForwardVarargsParameters final {
  public:
-  CallForwardVarargsParameters(uint32_t start_index,
-                               TailCallMode tail_call_mode)
-      : bit_field_(StartIndexField::encode(start_index) |
-                   TailCallModeField::encode(tail_call_mode)) {}
+  CallForwardVarargsParameters(uint32_t start_index)
+      : bit_field_(StartIndexField::encode(start_index)) {}
 
   uint32_t start_index() const { return StartIndexField::decode(bit_field_); }
-  TailCallMode tail_call_mode() const {
-    return TailCallModeField::decode(bit_field_);
-  }
 
   bool operator==(CallForwardVarargsParameters const& that) const {
     return this->bit_field_ == that.bit_field_;
@@ -138,7 +133,6 @@ class CallForwardVarargsParameters final {
   }
 
   typedef BitField<uint32_t, 0, 30> StartIndexField;
-  typedef BitField<TailCallMode, 31, 1> TailCallModeField;
 
   uint32_t const bit_field_;
 };
@@ -153,10 +147,9 @@ CallForwardVarargsParameters const& CallForwardVarargsParametersOf(
 class CallParameters final {
  public:
   CallParameters(size_t arity, float frequency, VectorSlotPair const& feedback,
-                 TailCallMode tail_call_mode, ConvertReceiverMode convert_mode)
+                 ConvertReceiverMode convert_mode)
       : bit_field_(ArityField::encode(arity) |
-                   ConvertReceiverModeField::encode(convert_mode) |
-                   TailCallModeField::encode(tail_call_mode)),
+                   ConvertReceiverModeField::encode(convert_mode)),
         frequency_(frequency),
         feedback_(feedback) {}
 
@@ -164,9 +157,6 @@ class CallParameters final {
   float frequency() const { return frequency_; }
   ConvertReceiverMode convert_mode() const {
     return ConvertReceiverModeField::decode(bit_field_);
-  }
-  TailCallMode tail_call_mode() const {
-    return TailCallModeField::decode(bit_field_);
   }
   VectorSlotPair const& feedback() const { return feedback_; }
 
@@ -184,7 +174,6 @@ class CallParameters final {
 
   typedef BitField<size_t, 0, 29> ArityField;
   typedef BitField<ConvertReceiverMode, 29, 2> ConvertReceiverModeField;
-  typedef BitField<TailCallMode, 31, 1> TailCallModeField;
 
   uint32_t const bit_field_;
   float const frequency_;
@@ -633,13 +622,11 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* CreateLiteralRegExp(Handle<String> constant_pattern,
                                       int literal_flags, int literal_index);
 
-  const Operator* CallForwardVarargs(uint32_t start_index,
-                                     TailCallMode tail_call_mode);
+  const Operator* CallForwardVarargs(uint32_t start_index);
   const Operator* Call(
       size_t arity, float frequency = 0.0f,
       VectorSlotPair const& feedback = VectorSlotPair(),
-      ConvertReceiverMode convert_mode = ConvertReceiverMode::kAny,
-      TailCallMode tail_call_mode = TailCallMode::kDisallow);
+      ConvertReceiverMode convert_mode = ConvertReceiverMode::kAny);
   const Operator* CallWithSpread(uint32_t arity);
   const Operator* CallRuntime(Runtime::FunctionId id);
   const Operator* CallRuntime(Runtime::FunctionId id, size_t arity);

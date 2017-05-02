@@ -1841,7 +1841,7 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
       : InterpreterAssembler(state, bytecode, operand_scale) {}
 
   // Generates code to perform a JS call that collects type feedback.
-  void JSCall(ConvertReceiverMode receiver_mode, TailCallMode tail_call_mode) {
+  void JSCall(ConvertReceiverMode receiver_mode) {
     Node* function_reg = BytecodeOperandReg(0);
     Node* function = LoadRegister(function_reg);
     Node* first_arg_reg = BytecodeOperandReg(1);
@@ -1861,7 +1861,7 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     Node* context = GetContext();
     Node* result =
         CallJSWithFeedback(function, context, first_arg, args_count, slot_id,
-                           feedback_vector, receiver_mode, tail_call_mode);
+                           feedback_vector, receiver_mode);
     SetAccumulator(result);
     Dispatch();
   }
@@ -1924,11 +1924,11 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
 // |arg_count| arguments in subsequent registers. Collect type feedback
 // into |feedback_slot_id|
 IGNITION_HANDLER(CallAnyReceiver, InterpreterJSCallAssembler) {
-  JSCall(ConvertReceiverMode::kAny, TailCallMode::kDisallow);
+  JSCall(ConvertReceiverMode::kAny);
 }
 
 IGNITION_HANDLER(CallProperty, InterpreterJSCallAssembler) {
-  JSCall(ConvertReceiverMode::kNotNullOrUndefined, TailCallMode::kDisallow);
+  JSCall(ConvertReceiverMode::kNotNullOrUndefined);
 }
 
 IGNITION_HANDLER(CallProperty0, InterpreterJSCallAssembler) {
@@ -1944,7 +1944,7 @@ IGNITION_HANDLER(CallProperty2, InterpreterJSCallAssembler) {
 }
 
 IGNITION_HANDLER(CallUndefinedReceiver, InterpreterJSCallAssembler) {
-  JSCall(ConvertReceiverMode::kNullOrUndefined, TailCallMode::kDisallow);
+  JSCall(ConvertReceiverMode::kNullOrUndefined);
 }
 
 IGNITION_HANDLER(CallUndefinedReceiver0, InterpreterJSCallAssembler) {
@@ -1957,15 +1957,6 @@ IGNITION_HANDLER(CallUndefinedReceiver1, InterpreterJSCallAssembler) {
 
 IGNITION_HANDLER(CallUndefinedReceiver2, InterpreterJSCallAssembler) {
   JSCallN(2, ConvertReceiverMode::kNullOrUndefined);
-}
-
-// TailCall <callable> <receiver> <arg_count> <feedback_slot_id>
-//
-// Tail call a JSfunction or Callable in |callable| with the |receiver| and
-// |arg_count| arguments in subsequent registers. Collect type feedback
-// into |feedback_slot_id|
-IGNITION_HANDLER(TailCall, InterpreterJSCallAssembler) {
-  JSCall(ConvertReceiverMode::kAny, TailCallMode::kAllow);
 }
 
 // CallRuntime <function_id> <first_arg> <arg_count>
@@ -2044,7 +2035,7 @@ IGNITION_HANDLER(CallJSRuntime, InterpreterAssembler) {
 
   // Call the function.
   Node* result = CallJS(function, context, first_arg, args_count,
-                        ConvertReceiverMode::kAny, TailCallMode::kDisallow);
+                        ConvertReceiverMode::kAny);
   SetAccumulator(result);
   Dispatch();
 }

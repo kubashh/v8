@@ -877,6 +877,7 @@ v8_source_set("v8_builtins_generators") {
   visibility = [
     ":*",
     "test/cctest:*",
+    "test/unittests:*",
   ]
 
   deps = [
@@ -1014,21 +1015,6 @@ v8_header_set("v8_version") {
     "include/v8-value-serializer-version.h",
     "include/v8-version-string.h",
     "include/v8-version.h",
-  ]
-}
-
-# This is split out to be a non-code containing target that the Chromium browser
-# can depend upon to get basic v8 types.
-v8_header_set("v8_headers") {
-  configs = [ ":internal_config" ]
-
-  sources = [
-    "include/v8.h",
-    "include/v8config.h",
-  ]
-
-  deps = [
-    ":v8_version",
   ]
 }
 
@@ -1601,8 +1587,6 @@ v8_source_set("v8_base") {
     "src/heap/scavenger-inl.h",
     "src/heap/scavenger.cc",
     "src/heap/scavenger.h",
-    "src/heap/sequential-marking-deque.cc",
-    "src/heap/sequential-marking-deque.h",
     "src/heap/slot-set.h",
     "src/heap/spaces-inl.h",
     "src/heap/spaces.cc",
@@ -2382,9 +2366,9 @@ v8_source_set("v8_base") {
 
   defines = []
   deps = [
-    ":v8_headers",
     ":v8_libbase",
     ":v8_libsampler",
+    ":v8_version",
     "src/inspector:inspector",
   ]
 
@@ -2429,7 +2413,6 @@ v8_component("v8_libbase") {
     "src/base/debug/stack_trace.h",
     "src/base/division-by-constant.cc",
     "src/base/division-by-constant.h",
-    "src/base/export-template.h",
     "src/base/file-utils.cc",
     "src/base/file-utils.h",
     "src/base/flags.h",
@@ -2732,31 +2715,6 @@ if (is_component_build) {
 
     public_configs = [ ":external_config" ]
   }
-
-  v8_component("v8_for_testing") {
-    testonly = true
-
-    sources = [
-      "src/v8dll-main.cc",
-    ]
-
-    deps = [
-      ":v8_dump_build_config",
-    ]
-
-    public_deps = [
-      ":v8_base",
-      ":v8_maybe_snapshot",
-    ]
-
-    if (v8_use_snapshot) {
-      public_deps += [ ":v8_builtins_generators" ]
-    }
-
-    configs = [ ":internal_config" ]
-
-    public_configs = [ ":external_config" ]
-  }
 } else {
   group("v8") {
     deps = [
@@ -2767,25 +2725,6 @@ if (is_component_build) {
       ":v8_base",
       ":v8_maybe_snapshot",
     ]
-
-    public_configs = [ ":external_config" ]
-  }
-
-  group("v8_for_testing") {
-    testonly = true
-
-    deps = [
-      ":v8_dump_build_config",
-    ]
-
-    public_deps = [
-      ":v8_base",
-      ":v8_maybe_snapshot",
-    ]
-
-    if (v8_use_snapshot) {
-      public_deps += [ ":v8_builtins_generators" ]
-    }
 
     public_configs = [ ":external_config" ]
   }

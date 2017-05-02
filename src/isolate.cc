@@ -3509,7 +3509,6 @@ void Isolate::RunMicrotasksInternal() {
   while (pending_microtask_count() > 0) {
     HandleScope scope(this);
     int num_tasks = pending_microtask_count();
-    // Do not use factory()->microtask_queue() here; we need a fresh handle!
     Handle<FixedArray> queue(heap()->microtask_queue(), this);
     DCHECK(num_tasks <= queue->length());
     set_pending_microtask_count(0);
@@ -3639,25 +3638,16 @@ std::string Isolate::GetTurboCfgFileName() {
   }
 }
 
-void Isolate::SetTailCallEliminationEnabled(bool enabled) {
-  if (is_tail_call_elimination_enabled_ == enabled) return;
-  is_tail_call_elimination_enabled_ = enabled;
-  // TODO(ishell): Introduce DependencyGroup::kTailCallChangedGroup to
-  // deoptimize only those functions that are affected by the change of this
-  // flag.
-  internal::Deoptimizer::DeoptimizeAll(this);
-}
-
 // Heap::detached_contexts tracks detached contexts as pairs
 // (number of GC since the context was detached, the context).
 void Isolate::AddDetachedContext(Handle<Context> context) {
   HandleScope scope(this);
   Handle<WeakCell> cell = factory()->NewWeakCell(context);
-  Handle<FixedArray> detached_contexts =
-      factory()->CopyFixedArrayAndGrow(factory()->detached_contexts(), 2);
-  int new_length = detached_contexts->length();
-  detached_contexts->set(new_length - 2, Smi::kZero);
-  detached_contexts->set(new_length - 1, *cell);
+  Handle<FixedArray> detached_contexts = factory()->detached_contexts();
+  int length = detached_contexts->length();
+  detached_contexts = factory()->CopyFixedArrayAndGrow(detached_contexts, 2);
+  detached_contexts->set(length, Smi::kZero);
+  detached_contexts->set(length + 1, *cell);
   heap()->set_detached_contexts(*detached_contexts);
 }
 

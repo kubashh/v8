@@ -301,9 +301,6 @@ class Expression : public AstNode {
     kTest
   };
 
-  // Mark this expression as being in tail position.
-  void MarkTail();
-
   // True iff the expression is a valid reference expression.
   bool IsValidReferenceExpression() const;
 
@@ -1905,12 +1902,6 @@ class Call final : public Expression {
     return IsPossiblyEvalField::decode(bit_field_);
   }
 
-  TailCallMode tail_call_mode() const {
-    return IsTailField::decode(bit_field_) ? TailCallMode::kAllow
-                                           : TailCallMode::kDisallow;
-  }
-  void MarkTail() { bit_field_ = IsTailField::update(bit_field_, true); }
-
   bool only_last_arg_is_spread() {
     return !arguments_->is_empty() && arguments_->last()->IsSpread();
   }
@@ -1961,8 +1952,7 @@ class Call final : public Expression {
 
   class IsUninitializedField
       : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
-  class IsTailField : public BitField<bool, IsUninitializedField::kNext, 1> {};
-  class IsPossiblyEvalField : public BitField<bool, IsTailField::kNext, 1> {};
+  class IsPossiblyEvalField : public BitField<bool, IsUninitializedField::kNext, 1> {};
 
   FeedbackSlot ic_slot_;
   Expression* expression_;
@@ -2134,17 +2124,6 @@ class BinaryOperation final : public Expression {
   Handle<AllocationSite> allocation_site() const { return allocation_site_; }
   void set_allocation_site(Handle<AllocationSite> allocation_site) {
     allocation_site_ = allocation_site;
-  }
-
-  void MarkTail() {
-    switch (op()) {
-      case Token::COMMA:
-      case Token::AND:
-      case Token::OR:
-        right_->MarkTail();
-      default:
-        break;
-    }
   }
 
   // The short-circuit logical operations need an AST ID for their
@@ -2373,11 +2352,6 @@ class Conditional final : public Expression {
   void set_condition(Expression* e) { condition_ = e; }
   void set_then_expression(Expression* e) { then_expression_ = e; }
   void set_else_expression(Expression* e) { else_expression_ = e; }
-
-  void MarkTail() {
-    then_expression_->MarkTail();
-    else_expression_->MarkTail();
-  }
 
   static int num_ids() { return parent_num_ids() + 2; }
   BailoutId ThenId() const { return BailoutId(local_id(0)); }
@@ -2764,8 +2738,6 @@ class FunctionLiteral final : public Expression {
   void set_function_literal_id(int function_literal_id) {
     function_literal_id_ = function_literal_id;
   }
-
-  void ReplaceBodyAndScope(FunctionLiteral* other);
 
  private:
   friend class AstNodeFactory;

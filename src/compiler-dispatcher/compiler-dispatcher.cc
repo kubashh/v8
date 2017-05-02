@@ -248,6 +248,8 @@ CompilerDispatcher::~CompilerDispatcher() {
 bool CompilerDispatcher::CanEnqueue() {
   if (!IsEnabled()) return false;
 
+  DCHECK(FLAG_ignition);
+
   if (memory_pressure_level_.Value() != MemoryPressureLevel::kNone) {
     return false;
   }
@@ -261,8 +263,6 @@ bool CompilerDispatcher::CanEnqueue() {
 }
 
 bool CompilerDispatcher::CanEnqueue(Handle<SharedFunctionInfo> function) {
-  DCHECK_IMPLIES(IsEnabled(), FLAG_ignition);
-
   if (!CanEnqueue()) return false;
 
   // We only handle functions (no eval / top-level code / wasm) that are
@@ -473,31 +473,14 @@ bool CompilerDispatcher::FinishNow(Handle<SharedFunctionInfo> function) {
   JobMap::const_iterator job = GetJobFor(function);
   CHECK(job != jobs_.end());
   bool result = FinishNow(job->second.get());
+  if (!job->second->shared().is_null()) {
+    shared_to_job_id_.Delete(job->second->shared());
+  }
   RemoveIfFinished(job);
   return result;
 }
 
 void CompilerDispatcher::FinishAllNow() {
-  // First finish all jobs not running in background
-  for (auto it = jobs_.cbegin(); it != jobs_.cend();) {
-    CompilerDispatcherJob* job = it->second.get();
-    bool is_running_in_background;
-    {
-      base::LockGuard<base::Mutex> lock(&mutex_);
-      is_running_in_background =
-          running_background_jobs_.find(job) != running_background_jobs_.end();
-      pending_background_jobs_.erase(job);
-    }
-    if (!is_running_in_background) {
-      while (!IsFinished(job)) {
-        DoNextStepOnMainThread(isolate_, job, ExceptionHandling::kThrow);
-      }
-      it = RemoveIfFinished(it);
-    } else {
-      ++it;
-    }
-  }
-  // Potentially wait for jobs that were running in background
   for (auto it = jobs_.cbegin(); it != jobs_.cend();
        it = RemoveIfFinished(it)) {
     FinishNow(it->second.get());
@@ -615,7 +598,7 @@ CompilerDispatcher::JobMap::const_iterator CompilerDispatcher::GetJobFor(
 
 void CompilerDispatcher::ScheduleIdleTaskFromAnyThread() {
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate_);
-  if (!platform_->IdleTasksEnabled(v8_isolate)) return;
+  DCHECK(platform_->IdleTasksEnabled(v8_isolate));
   {
     base::LockGuard<base::Mutex> lock(&mutex_);
     if (idle_task_scheduled_) return;

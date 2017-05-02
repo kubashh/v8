@@ -707,20 +707,6 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
     }
   }
 
-  // If we are inlining a JS call at tail position then we have to pop current
-  // frame state and its potential arguments adaptor frame state in order to
-  // make the call stack be consistent with non-inlining case.
-  // After that we add a tail caller frame state which lets deoptimizer handle
-  // the case when the outermost function inlines a tail call (it should remove
-  // potential arguments adaptor frame that belongs to outermost function when
-  // deopt happens).
-  if (node->opcode() == IrOpcode::kJSCall) {
-    const CallParameters& p = CallParametersOf(node->op());
-    if (p.tail_call_mode() == TailCallMode::kAllow) {
-      frame_state = CreateTailCallerFrameState(node, frame_state);
-    }
-  }
-
   // Insert argument adaptor frame if required. The callees formal parameter
   // count (i.e. value outputs of start node minus target, receiver, new target,
   // arguments count and context) have to match the number of arguments passed

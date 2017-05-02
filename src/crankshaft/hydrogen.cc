@@ -7555,7 +7555,7 @@ void HOptimizedGraphBuilder::HandlePolymorphicCallNamed(Call* expr,
   bool handled_string = false;
   int ordered_functions = 0;
 
-  TailCallMode syntactic_tail_call_mode = expr->tail_call_mode();
+  TailCallMode syntactic_tail_call_mode = TailCallMode::kDisallow;
   TailCallMode tail_call_mode =
       function_state()->ComputeTailCallMode(syntactic_tail_call_mode);
 
@@ -8125,7 +8125,7 @@ bool HOptimizedGraphBuilder::TryInline(Handle<JSFunction> target,
 bool HOptimizedGraphBuilder::TryInlineCall(Call* expr) {
   return TryInline(expr->target(), expr->arguments()->length(), NULL,
                    expr->id(), expr->ReturnId(), NORMAL_RETURN,
-                   expr->tail_call_mode());
+                   TailCallMode::kDisallow);
 }
 
 
@@ -8167,15 +8167,13 @@ bool HOptimizedGraphBuilder::TryInlineIndirectCall(Handle<JSFunction> function,
                                                    Call* expr,
                                                    int arguments_count) {
   return TryInline(function, arguments_count, NULL, expr->id(),
-                   expr->ReturnId(), NORMAL_RETURN, expr->tail_call_mode());
+                   expr->ReturnId(), NORMAL_RETURN, TailCallMode::kDisallow);
 }
 
 
 bool HOptimizedGraphBuilder::TryInlineBuiltinFunctionCall(Call* expr) {
   if (!expr->target()->shared()->HasBuiltinFunctionId()) return false;
   BuiltinFunctionId id = expr->target()->shared()->builtin_function_id();
-  // We intentionally ignore expr->tail_call_mode() here because builtins
-  // we inline here do not observe if they were tail called or not.
   switch (id) {
     case kMathCos:
     case kMathExp:
@@ -8727,7 +8725,7 @@ bool HOptimizedGraphBuilder::TryInlineApiFunctionCall(Call* expr,
   int argc = expr->arguments()->length();
   SmallMapList receiver_maps;
   return TryInlineApiCall(function, receiver, &receiver_maps, argc, expr->id(),
-                          kCallApiFunction, expr->tail_call_mode());
+                          kCallApiFunction, TailCallMode::kDisallow);
 }
 
 
@@ -8739,7 +8737,7 @@ bool HOptimizedGraphBuilder::TryInlineApiMethodCall(
   Handle<JSFunction> function = expr->target();
   int argc = expr->arguments()->length();
   return TryInlineApiCall(function, receiver, receiver_maps, argc, expr->id(),
-                          kCallApiMethod, expr->tail_call_mode());
+                          kCallApiMethod, TailCallMode::kDisallow);
 }
 
 bool HOptimizedGraphBuilder::TryInlineApiGetter(Handle<Object> function,
@@ -8920,7 +8918,7 @@ void HOptimizedGraphBuilder::HandleIndirectCall(Call* expr, HValue* function,
     }
   }
 
-  TailCallMode syntactic_tail_call_mode = expr->tail_call_mode();
+  TailCallMode syntactic_tail_call_mode = TailCallMode::kDisallow;
   TailCallMode tail_call_mode =
       function_state()->ComputeTailCallMode(syntactic_tail_call_mode);
 
@@ -8981,7 +8979,7 @@ void HOptimizedGraphBuilder::BuildFunctionApply(Call* expr) {
   HValue* checked_function = AddCheckMap(function, function_map);
 
   if (function_state()->outer() == NULL) {
-    TailCallMode syntactic_tail_call_mode = expr->tail_call_mode();
+    TailCallMode syntactic_tail_call_mode = TailCallMode::kDisallow;
     TailCallMode tail_call_mode =
         function_state()->ComputeTailCallMode(syntactic_tail_call_mode);
 
@@ -9238,7 +9236,7 @@ void HOptimizedGraphBuilder::VisitCall(Call* expr) {
   int argument_count = expr->arguments()->length() + 1;  // Plus receiver.
   HInstruction* call = NULL;
 
-  TailCallMode syntactic_tail_call_mode = expr->tail_call_mode();
+  TailCallMode syntactic_tail_call_mode = TailCallMode::kDisallow;
   TailCallMode tail_call_mode =
       function_state()->ComputeTailCallMode(syntactic_tail_call_mode);
 

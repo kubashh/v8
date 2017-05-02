@@ -129,15 +129,14 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
       compiler::Node* function, compiler::Node* context,
       compiler::Node* first_arg, compiler::Node* arg_count,
       compiler::Node* slot_id, compiler::Node* feedback_vector,
-      ConvertReceiverMode receiver_mode, TailCallMode tail_call_mode);
+      ConvertReceiverMode receiver_mode);
 
   // Call JSFunction or Callable |function| with |arg_count| arguments (not
   // including receiver) and the first argument located at |first_arg|, possibly
   // including the receiver depending on |receiver_mode|.
   compiler::Node* CallJS(compiler::Node* function, compiler::Node* context,
                          compiler::Node* first_arg, compiler::Node* arg_count,
-                         ConvertReceiverMode receiver_mode,
-                         TailCallMode tail_call_mode);
+                         ConvertReceiverMode receiver_mode);
 
   // Call JSFunction or Callable |function| with |arg_count|
   // arguments (not including receiver) and the first argument

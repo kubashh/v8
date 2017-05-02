@@ -100,10 +100,6 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   Node* target = NodeProperties::GetValueInput(node, 0);
   CallParameters const& p = CallParametersOf(node->op());
-  // Tail calls to Function.prototype.apply are not properly supported
-  // down the pipeline, so we disable this optimization completely for
-  // tail calls (for now).
-  if (p.tail_call_mode() == TailCallMode::kAllow) return NoChange();
   Handle<JSFunction> apply =
       Handle<JSFunction>::cast(HeapObjectMatcher(target).Value());
   size_t arity = p.arity();
@@ -166,7 +162,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
       node->RemoveInput(0);  // Function.prototype.apply
       node->RemoveInput(2);  // arguments
       NodeProperties::ChangeOp(node, javascript()->CallForwardVarargs(
-                                         start_index, p.tail_call_mode()));
+                                         start_index));
       return Changed(node);
     }
     // Get to the actual frame state from which to extract the arguments;
@@ -196,8 +192,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   // Change {node} to the new {JSCall} operator.
   NodeProperties::ChangeOp(
       node,
-      javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode,
-                         p.tail_call_mode()));
+      javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode));
   // Change context of {node} to the Function.prototype.apply context,
   // to ensure any exception is thrown in the correct context.
   NodeProperties::ReplaceContextInput(
@@ -237,8 +232,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
   }
   NodeProperties::ChangeOp(
       node,
-      javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode,
-                         p.tail_call_mode()));
+      javascript()->Call(arity, p.frequency(), VectorSlotPair(), convert_mode));
   // Try to further reduce the JSCall {node}.
   Reduction const reduction = ReduceJSCall(node);
   return reduction.Changed() ? reduction : Changed(node);
@@ -619,7 +613,7 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       NodeProperties::ChangeOp(
           node,
           javascript()->Call(arity, p.frequency(), VectorSlotPair(),
-                             convert_mode, p.tail_call_mode()));
+                             convert_mode));
       // Try to further reduce the JSCall {node}.
       Reduction const reduction = ReduceJSCall(node);
       return reduction.Changed() ? reduction : Changed(node);
@@ -634,9 +628,6 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
   if (!p.feedback().IsValid()) return NoChange();
   CallICNexus nexus(p.feedback().vector(), p.feedback().slot());
   if (nexus.IsUninitialized()) {
-    // TODO(turbofan): Tail-calling to a CallIC stub is not supported.
-    if (p.tail_call_mode() == TailCallMode::kAllow) return NoChange();
-
     // Insert a CallIC here to collect feedback for uninitialized calls.
     int const arg_count = static_cast<int>(p.arity() - 2);
     Callable callable = CodeFactory::CallIC(isolate(), p.convert_mode());

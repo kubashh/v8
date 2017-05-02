@@ -341,7 +341,7 @@ Reduction JSIntrinsicLowering::ReduceCall(Node* node) {
   NodeProperties::ChangeOp(
       node,
       javascript()->Call(arity, 0.0f, VectorSlotPair(),
-                         ConvertReceiverMode::kAny, TailCallMode::kDisallow));
+                         ConvertReceiverMode::kAny));
   return Changed(node);
 }
 

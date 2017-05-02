@@ -116,22 +116,6 @@ Handle<Code> Builtins::OrdinaryToPrimitive(OrdinaryToPrimitiveHint hint) {
 }
 
 // static
-int Builtins::GetBuiltinParameterCount(Name name) {
-  switch (name) {
-#define TFJ_CASE(Name, ParamCount, ...) \
-  case k##Name: {                       \
-    return ParamCount;                  \
-  }
-    BUILTIN_LIST(IGNORE_BUILTIN, IGNORE_BUILTIN, TFJ_CASE, IGNORE_BUILTIN,
-                 IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN)
-#undef TFJ_CASE
-    default:
-      UNREACHABLE();
-      return 0;
-  }
-}
-
-// static
 Callable Builtins::CallableFor(Isolate* isolate, Name name) {
   switch (name) {
 #define CASE(Name, ...)                                              \

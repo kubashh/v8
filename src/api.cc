@@ -2470,7 +2470,6 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
     source->parser->ReportErrors(isolate, script);
   }
   source->parser->UpdateStatistics(isolate, script);
-  source->info->UpdateStatisticsAfterBackgroundParse(isolate);
 
   i::DeferredHandleScope deferred_handle_scope(isolate);
   {
@@ -2709,10 +2708,6 @@ void v8::TryCatch::ResetInternal() {
 
 void v8::TryCatch::SetVerbose(bool value) {
   is_verbose_ = value;
-}
-
-bool v8::TryCatch::IsVerbose() const {
-  return is_verbose_;
 }
 
 
@@ -9153,13 +9148,10 @@ void Debug::SetLiveEditEnabled(Isolate* isolate, bool enable) {
 }
 
 bool Debug::IsTailCallEliminationEnabled(Isolate* isolate) {
-  i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  return internal_isolate->is_tail_call_elimination_enabled();
+  return false;
 }
 
 void Debug::SetTailCallEliminationEnabled(Isolate* isolate, bool enabled) {
-  i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  internal_isolate->SetTailCallEliminationEnabled(enabled);
 }
 
 MaybeLocal<Array> Debug::GetInternalProperties(Isolate* v8_isolate,

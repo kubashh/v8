@@ -4,7 +4,6 @@
 
 #include "src/parsing/parser.h"
 
-#include <algorithm>
 #include <memory>
 
 #include "src/api.h"
@@ -15,7 +14,6 @@
 #include "src/bailout-reason.h"
 #include "src/base/platform/platform.h"
 #include "src/char-predicates-inl.h"
-#include "src/compiler-dispatcher/compiler-dispatcher.h"
 #include "src/messages.h"
 #include "src/objects-inl.h"
 #include "src/parsing/duplicate-finder.h"
@@ -443,10 +441,6 @@ Literal* Parser::ExpressionFromLiteral(Token::Value token, int pos) {
   return NULL;
 }
 
-void Parser::MarkTailPosition(Expression* expression) {
-  expression->MarkTail();
-}
-
 Expression* Parser::NewV8Intrinsic(const AstRawString* name,
                                    ZoneList<Expression*>* args, int pos,
                                    bool* ok) {
@@ -542,8 +536,6 @@ Parser::Parser(ParseInfo* info)
   allow_lazy_ = FLAG_lazy && info->allow_lazy_parsing() && !info->is_native() &&
                 info->extension() == nullptr && can_compile_lazily;
   set_allow_natives(FLAG_allow_natives_syntax || info->is_native());
-  set_allow_tailcalls(FLAG_harmony_tailcalls && !info->is_native() &&
-                      info->is_tail_call_elimination_enabled());
   set_allow_harmony_do_expressions(FLAG_harmony_do_expressions);
   set_allow_harmony_function_sent(FLAG_harmony_function_sent);
   set_allow_harmony_restrictive_generators(FLAG_harmony_restrictive_generators);
@@ -623,14 +615,24 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
   source = String::Flatten(source);
   FunctionLiteral* result;
 
-  if (FLAG_use_parse_tasks) {
-    source_ = source;
-    compiler_dispatcher_ = isolate->compiler_dispatcher();
-    main_parse_info_ = info;
-  }
-
   {
     std::unique_ptr<Utf16CharacterStream> stream(ScannerStream::For(source));
+    if (FLAG_use_parse_tasks) {
+      // FIXME(wiktorg) make it useful for something
+      // TODO(wiktorg) make preparser work also with modules
+      if (!info->is_module()) {
+        scanner_.Initialize(stream.get());
+        // NOTE: Some features will be double counted - once here and one more
+        //  time while being fully parsed by a parse task.
+        PreParser::PreParseResult result =
+            reusable_preparser()->PreParseProgram(false, use_counts_);
+        if (result == PreParser::kPreParseStackOverflow) {
+          set_stack_overflow();
+          return nullptr;
+        }
+        stream->Seek(0);
+      }
+    }
     scanner_.Initialize(stream.get());
     result = DoParseProgram(info);
   }
@@ -638,14 +640,6 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
     DCHECK_EQ(scanner_.peek_location().beg_pos, source->length());
   }
   HandleSourceURLComments(isolate, info->script());
-
-  if (FLAG_use_parse_tasks) {
-    compiler_dispatcher_->FinishAllNow();
-    StitchAst(info, isolate);
-    source_ = Handle<String>();
-    compiler_dispatcher_ = nullptr;
-    main_parse_info_ = nullptr;
-  }
 
   if (FLAG_trace_parse && result != nullptr) {
     double ms = timer.Elapsed().InMillisecondsF();
@@ -1767,11 +1761,6 @@ Statement* Parser::RewriteTryStatement(Block* try_block, Block* catch_block,
   }
 
   if (catch_block != nullptr) {
-    // For a try-catch construct append return expressions from the catch block
-    // to the list of return expressions.
-    function_state_->tail_call_expressions().Append(
-        catch_info.tail_call_expressions);
-
     DCHECK_NULL(finally_block);
     DCHECK_NOT_NULL(catch_info.scope);
     return factory()->NewTryCatchStatement(try_block, catch_info.scope,
@@ -2621,16 +2610,12 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   DCHECK_IMPLIES(parse_lazily(), allow_lazy_);
   DCHECK_IMPLIES(parse_lazily(), extension_ == nullptr);
 
-  const bool source_is_external =
-      !source_.is_null() && (source_->IsExternalTwoByteString() ||
-                             source_->IsExternalOneByteString());
   const bool is_lazy =
       eager_compile_hint == FunctionLiteral::kShouldLazyCompile;
   const bool is_top_level =
       impl()->AllowsLazyParsingWithoutUnresolvedVariables();
   const bool is_lazy_top_level_function = is_lazy && is_top_level;
   const bool is_lazy_inner_function = is_lazy && !is_top_level;
-  const bool is_eager_top_level_function = !is_lazy && is_top_level;
   const bool is_declaration = function_type == FunctionLiteral::kDeclaration;
 
   RuntimeCallTimerScope runtime_timer(
@@ -2660,14 +2645,9 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       parse_lazily() && FLAG_lazy_inner_functions && is_lazy_inner_function &&
       (is_declaration || FLAG_aggressive_lazy_inner_functions);
 
-  bool should_use_parse_task =
-      FLAG_use_parse_tasks && parse_lazily() && compiler_dispatcher_ &&
-      is_eager_top_level_function && source_is_external;
-
   // This may be modified later to reflect preparsing decision taken
-  bool should_preparse = (parse_lazily() && (is_lazy_top_level_function ||
-                                             should_use_parse_task)) ||
-                         should_preparse_inner;
+  bool should_preparse =
+      (parse_lazily() && is_lazy_top_level_function) || should_preparse_inner;
 
   ZoneList<Statement*>* body = nullptr;
   int expected_property_count = -1;
@@ -2713,16 +2693,15 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
     // try to lazy parse in the first place, we'll have to parse eagerly.
     if (should_preparse) {
       DCHECK(parse_lazily());
-      DCHECK(is_lazy_top_level_function || is_lazy_inner_function ||
-             should_use_parse_task);
+      DCHECK(is_lazy_top_level_function || is_lazy_inner_function);
       Scanner::BookmarkScope bookmark(scanner());
       bookmark.Set();
       LazyParsingResult result =
           SkipFunction(kind, scope, &num_parameters, is_lazy_inner_function,
                        is_lazy_top_level_function, CHECK_OK);
 
-      // TODO(wiktorg) revisit preparsing aborted in case of parse tasks
       if (result == kLazyParsingAborted) {
+        DCHECK(is_lazy_top_level_function);
         bookmark.Apply();
         // This is probably an initialization function. Inform the compiler it
         // should also eager-compile this function, and that we expect it to be
@@ -2733,39 +2712,6 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
         zone_scope.Reset();
         // Trigger eager (re-)parsing, just below this block.
         should_preparse = false;
-        should_use_parse_task = false;
-      }
-      if (should_use_parse_task) {
-        int start_pos = scope->start_position();
-        if (function_name_location.IsValid()) {
-          start_pos = function_name_location.beg_pos;
-        }
-        // Warning!
-        // Only sets fields in compiler_hints that are currently used.
-        int compiler_hints = SharedFunctionInfo::FunctionKindBits::encode(kind);
-        if (function_type == FunctionLiteral::kDeclaration) {
-          compiler_hints |= 1 << SharedFunctionInfo::kIsDeclaration;
-        }
-        // TODO(wiktorg) enqueue parse tasks before preparsing
-        should_use_parse_task = compiler_dispatcher_->Enqueue(
-            source_, start_pos, scope->end_position(), language_mode,
-            function_literal_id, allow_natives(), parsing_module_,
-            function_type == FunctionLiteral::kNamedExpression, compiler_hints,
-            main_parse_info_, nullptr);
-        if (FLAG_trace_parse_tasks) {
-          PrintF("Spining off task for function at %d: %s\n",
-                 scope->start_position(),
-                 should_use_parse_task ? "SUCCESS" : "FAILED");
-        }
-        if (should_use_parse_task) {
-          scope->ResetAfterPreparsing(ast_value_factory(), false);
-        } else {
-          // Fallback to eager parsing below if we failed to enqueue parse tasks
-          bookmark.Apply();
-          scope->ResetAfterPreparsing(ast_value_factory(), true);
-          zone_scope.Reset();
-          should_preparse = false;
-        }
       }
     }
 
@@ -2827,9 +2773,6 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       function_name, scope, body, expected_property_count, num_parameters,
       function_length, duplicate_parameters, function_type, eager_compile_hint,
       pos, true, function_literal_id);
-  if (should_use_parse_task) {
-    literals_to_stitch_.emplace_back(function_literal);
-  }
   function_literal->set_function_token_position(function_token_pos);
   if (should_be_used_once_hint)
     function_literal->set_should_be_used_once_hint();
@@ -2846,8 +2789,6 @@ Parser::LazyParsingResult Parser::SkipFunction(FunctionKind kind,
                                                int* num_parameters,
                                                bool is_inner_function,
                                                bool may_abort, bool* ok) {
-  FunctionState function_state(&function_state_, &scope_, function_scope);
-
   DCHECK_NE(kNoSourcePosition, function_scope->start_position());
   DCHECK_EQ(kNoSourcePosition, parameters_end_pos_);
   if (produce_cached_parse_data()) CHECK(log_);
@@ -2879,6 +2820,32 @@ Parser::LazyParsingResult Parser::SkipFunction(FunctionKind kind,
       return kLazyParsingComplete;
     }
     cached_parse_data_->Reject();
+  }
+
+  if (FLAG_use_parse_tasks && !is_inner_function &&
+      reusable_preparser()->preparse_data()) {
+    // All top-level functions are already preparsed and parser tasks for eager
+    // functions are already created. Use data gathered during the preparse step
+    // to skip the function.
+    PreParseData::FunctionData data =
+        reusable_preparser()->preparse_data()->GetFunctionData(
+            function_scope->start_position());
+    if (data.is_valid()) {
+      if (FLAG_trace_parse_tasks) {
+        PrintF("Skipping top level func @ %d : %d using preparse data\n",
+               function_scope->start_position(), data.end);
+      }
+      function_scope->set_end_position(data.end);
+      scanner()->SeekForward(data.end - 1);
+      Expect(Token::RBRACE, CHECK_OK_VALUE(kLazyParsingComplete));
+      *num_parameters = data.num_parameters;
+      SetLanguageMode(function_scope, data.language_mode);
+      if (data.uses_super_property) {
+        function_scope->RecordSuperPropertyUsage();
+      }
+      SkipFunctionLiterals(data.num_inner_functions);
+      return kLazyParsingComplete;
+    }
   }
 
   // FIXME(marja): There are 3 ways to skip functions now. Unify them.
@@ -3521,6 +3488,13 @@ void Parser::UpdateStatistics(Isolate* isolate, Handle<Script> script) {
   }
   isolate->counters()->total_preparse_skipped()->Increment(
       total_preparse_skipped_);
+  if (!parsing_on_main_thread_ &&
+      FLAG_runtime_stats ==
+          v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE) {
+    // Copy over the counters from the background thread to the main counters on
+    // the isolate.
+    isolate->counters()->runtime_call_stats()->Add(runtime_call_stats_);
+  }
 }
 
 void Parser::ParseOnBackground(ParseInfo* info) {
@@ -3536,6 +3510,10 @@ void Parser::ParseOnBackground(ParseInfo* info) {
     } else {
       compile_options_ = ScriptCompiler::kNoCompileOptions;
     }
+  }
+  if (FLAG_runtime_stats) {
+    // Create separate runtime stats for background parsing.
+    runtime_call_stats_ = new (zone()) RuntimeCallStats();
   }
 
   std::unique_ptr<Utf16CharacterStream> stream;
@@ -3779,10 +3757,8 @@ ZoneList<Expression*>* Parser::PrepareSpreadArguments(
 Expression* Parser::SpreadCall(Expression* function,
                                ZoneList<Expression*>* args, int pos,
                                Call::PossiblyEval is_possibly_eval) {
-  // Handle these cases in BytecodeGenerator.
-  // [Call,New]WithSpread bytecodes aren't used with tailcalls - see
-  // https://crbug.com/v8/5867
-  if (!allow_tailcalls() && OnlyLastArgIsSpread(args)) {
+  // Handle this case in BytecodeGenerator.
+  if (OnlyLastArgIsSpread(args)) {
     return factory()->NewCall(function, args, pos);
   }
 
@@ -3861,14 +3837,6 @@ void Parser::SetAsmModule() {
   ++use_counts_[v8::Isolate::kUseAsm];
   DCHECK(scope()->is_declaration_scope());
   scope()->AsDeclarationScope()->set_asm_module();
-}
-
-void Parser::MarkCollectedTailCallExpressions() {
-  const ZoneList<Expression*>& tail_call_expressions =
-      function_state_->tail_call_expressions().expressions();
-  for (int i = 0; i < tail_call_expressions.length(); ++i) {
-    MarkTailPosition(tail_call_expressions[i]);
-  }
 }
 
 Expression* Parser::ExpressionListToExpression(ZoneList<Expression*>* args) {
@@ -5207,35 +5175,6 @@ Statement* Parser::FinalizeForOfStatement(ForOfStatement* loop,
   }
 
   return final_loop;
-}
-
-void Parser::StitchAst(ParseInfo* top_level_parse_info, Isolate* isolate) {
-  if (literals_to_stitch_.empty()) return;
-  std::map<int, ParseInfo*> child_infos = top_level_parse_info->child_infos();
-  DCHECK(std::is_sorted(literals_to_stitch_.begin(), literals_to_stitch_.end(),
-                        [](FunctionLiteral* a, FunctionLiteral* b) {
-                          return a->start_position() < b->start_position();
-                        }));
-  auto it = literals_to_stitch_.begin();
-  for (auto& child_info : child_infos) {
-    ParseInfo* result = child_info.second;
-    // If the parse task failed the function will be treated as lazy function
-    // and reparsed before it gets called
-    if (!result) continue;
-    result->UpdateStatisticsAfterBackgroundParse(isolate);
-    if (!result->literal()) continue;
-    while ((*it)->start_position() != child_info.first) {
-      if (++it == literals_to_stitch_.end()) {
-        return;
-      }
-    }
-    FunctionLiteral* literal = *it;
-    // TODO(wiktorg) in the future internalize somewhere else (stitching may be
-    // done on streamer thread)
-    result->ast_value_factory()->Internalize(isolate);
-    literal->ReplaceBodyAndScope(result->literal());
-    literal->SetShouldEagerCompile();
-  }
 }
 
 #undef CHECK_OK

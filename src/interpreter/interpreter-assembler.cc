@@ -563,7 +563,7 @@ Node* InterpreterAssembler::CallJSWithFeedback(
     compiler::Node* function, compiler::Node* context,
     compiler::Node* first_arg, compiler::Node* arg_count,
     compiler::Node* slot_id, compiler::Node* feedback_vector,
-    ConvertReceiverMode receiver_mode, TailCallMode tail_call_mode) {
+    ConvertReceiverMode receiver_mode) {
   // Static checks to assert it is safe to examine the type feedback element.
   // We don't know that we have a weak cell. We might have a private symbol
   // or an AllocationSite, but the memory is safe to examine.
@@ -605,8 +605,7 @@ Node* InterpreterAssembler::CallJSWithFeedback(
 
     // Call using call function builtin.
     Callable callable = CodeFactory::InterpreterPushArgsThenCall(
-        isolate(), receiver_mode, tail_call_mode,
-        InterpreterPushArgsMode::kJSFunction);
+        isolate(), receiver_mode, InterpreterPushArgsMode::kJSFunction);
     Node* code_target = HeapConstant(callable.code());
     Node* ret_value = CallStub(callable.descriptor(), code_target, context,
                                arg_count, first_arg, function);
@@ -730,7 +729,7 @@ Node* InterpreterAssembler::CallJSWithFeedback(
 
     // Call using call builtin.
     Callable callable_call = CodeFactory::InterpreterPushArgsThenCall(
-        isolate(), receiver_mode, tail_call_mode,
+        isolate(), receiver_mode,
         InterpreterPushArgsMode::kOther);
     Node* code_target_call = HeapConstant(callable_call.code());
     Node* ret_value = CallStub(callable_call.descriptor(), code_target_call,
@@ -745,13 +744,12 @@ Node* InterpreterAssembler::CallJSWithFeedback(
 
 Node* InterpreterAssembler::CallJS(Node* function, Node* context,
                                    Node* first_arg, Node* arg_count,
-                                   ConvertReceiverMode receiver_mode,
-                                   TailCallMode tail_call_mode) {
+                                   ConvertReceiverMode receiver_mode) {
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   DCHECK(Bytecodes::IsCallOrConstruct(bytecode_));
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
   Callable callable = CodeFactory::InterpreterPushArgsThenCall(
-      isolate(), receiver_mode, tail_call_mode,
+      isolate(), receiver_mode,
       InterpreterPushArgsMode::kOther);
   Node* code_target = HeapConstant(callable.code());
 
@@ -764,7 +762,7 @@ Node* InterpreterAssembler::CallJSWithSpread(Node* function, Node* context,
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), ConvertReceiverMode::kAny);
   Callable callable = CodeFactory::InterpreterPushArgsThenCall(
-      isolate(), ConvertReceiverMode::kAny, TailCallMode::kDisallow,
+      isolate(), ConvertReceiverMode::kAny,
       InterpreterPushArgsMode::kWithFinalSpread);
   Node* code_target = HeapConstant(callable.code());
 

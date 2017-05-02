@@ -1792,10 +1792,6 @@ Reduction JSTypedLowering::ReduceJSCallForwardVarargs(Node* node) {
   if (target_type->Is(Type::Function())) {
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
-    if (p.tail_call_mode() == TailCallMode::kAllow) {
-      flags |= CallDescriptor::kSupportsTailCalls;
-    }
-
     // Patch {node} to an indirect call via CallFunctionForwardVarargs.
     Callable callable = CodeFactory::CallFunctionForwardVarargs(isolate());
     node->InsertInput(graph()->zone(), 0,
@@ -1863,10 +1859,6 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
 
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
-    if (p.tail_call_mode() == TailCallMode::kAllow) {
-      flags |= CallDescriptor::kSupportsTailCalls;
-    }
-
     Node* new_target = jsgraph()->UndefinedConstant();
     Node* argument_count = jsgraph()->Constant(arity);
     if (NeedsArgumentAdaptorFrame(shared, arity)) {
@@ -1902,10 +1894,6 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   if (target_type->Is(Type::Function())) {
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
-    if (p.tail_call_mode() == TailCallMode::kAllow) {
-      flags |= CallDescriptor::kSupportsTailCalls;
-    }
-
     // Patch {node} to an indirect call via the CallFunction builtin.
     Callable callable = CodeFactory::CallFunction(isolate(), convert_mode);
     node->InsertInput(graph()->zone(), 0,
@@ -1922,8 +1910,7 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   if (p.convert_mode() != convert_mode) {
     NodeProperties::ChangeOp(
         node,
-        javascript()->Call(p.arity(), p.frequency(), p.feedback(), convert_mode,
-                           p.tail_call_mode()));
+        javascript()->Call(p.arity(), p.frequency(), p.feedback(), convert_mode));
     return Changed(node);
   }
 

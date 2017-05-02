@@ -2108,6 +2108,8 @@ void BytecodeGenerator::BuildThrowReferenceError(const AstRawString* name) {
 }
 
 void BytecodeGenerator::BuildThrowIfHole(Variable* variable) {
+  // TODO(interpreter): Can the parser reduce the number of checks
+  // performed? Or should there be a ThrowIfHole bytecode.
   BytecodeLabel no_reference_error;
   builder()->JumpIfNotHole(&no_reference_error);
 
@@ -2598,7 +2600,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
   RegisterList args = register_allocator()->NewGrowableRegisterList();
 
   bool implicit_undefined_receiver = false;
-  bool is_tail_call = (expr->tail_call_mode() == TailCallMode::kAllow);
+  bool is_tail_call = false;
   // When a call contains a spread, a Call AST node is only created if there is
   // exactly one spread, and it is the last argument.
   bool is_spread_call = expr->only_last_arg_is_spread();

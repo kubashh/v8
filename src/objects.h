@@ -1189,7 +1189,7 @@ class Object {
   inline double Number() const;
   INLINE(bool IsNaN() const);
   INLINE(bool IsMinusZero() const);
-  V8_EXPORT_PRIVATE bool ToInt32(int32_t* value);
+  bool ToInt32(int32_t* value);
   inline bool ToUint32(uint32_t* value);
 
   inline Representation OptimalRepresentation();
@@ -3480,6 +3480,7 @@ class FixedTypedArrayBase: public FixedArrayBase {
 
   static inline int TypedArraySize(InstanceType type, int length);
   inline int TypedArraySize(InstanceType type);
+  static inline int ElementSize(InstanceType type);
 
   // Use with care: returns raw pointer into heap.
   inline void* DataPtr();
@@ -3487,8 +3488,6 @@ class FixedTypedArrayBase: public FixedArrayBase {
   inline int DataSize();
 
  private:
-  static inline int ElementSize(InstanceType type);
-
   inline int DataSize(InstanceType type);
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(FixedTypedArrayBase);
@@ -9866,11 +9865,6 @@ class TemplateInfo: public Struct {
   static const int kHeaderSize = kPropertyAccessorsOffset + kPointerSize;
 
   static const int kFastTemplateInstantiationsCacheSize = 1 * KB;
-
-  // While we could grow the slow cache until we run out of memory, we put
-  // a limit on it anyway to not crash for embedders that re-create templates
-  // instead of caching them.
-  static const int kSlowTemplateInstantiationsCacheSize = 1 * MB;
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateInfo);

@@ -94,17 +94,15 @@ Callable CodeFactory::KeyedLoadICInOptimizedCode(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::CallIC(Isolate* isolate, ConvertReceiverMode mode,
-                             TailCallMode tail_call_mode) {
-  CallICStub stub(isolate, mode, tail_call_mode);
+Callable CodeFactory::CallIC(Isolate* isolate, ConvertReceiverMode mode) {
+  CallICStub stub(isolate, mode);
   return make_callable(stub);
 }
 
 // static
 Callable CodeFactory::CallICTrampoline(Isolate* isolate,
-                                       ConvertReceiverMode mode,
-                                       TailCallMode tail_call_mode) {
-  CallICTrampolineStub stub(isolate, mode, tail_call_mode);
+                                       ConvertReceiverMode mode) {
+  CallICTrampolineStub stub(isolate, mode);
   return make_callable(stub);
 }
 
@@ -408,9 +406,8 @@ Callable CodeFactory::ArgumentAdaptor(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode,
-                           TailCallMode tail_call_mode) {
-  return Callable(isolate->builtins()->Call(mode, tail_call_mode),
+Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode) {
+  return Callable(isolate->builtins()->Call(mode),
                   CallTrampolineDescriptor(isolate));
 }
 
@@ -421,9 +418,8 @@ Callable CodeFactory::CallWithSpread(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode,
-                                   TailCallMode tail_call_mode) {
-  return Callable(isolate->builtins()->CallFunction(mode, tail_call_mode),
+Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode) {
+  return Callable(isolate->builtins()->CallFunction(mode),
                   CallTrampolineDescriptor(isolate));
 }
 
@@ -460,9 +456,9 @@ Callable CodeFactory::ConstructFunction(Isolate* isolate) {
 // static
 Callable CodeFactory::InterpreterPushArgsThenCall(
     Isolate* isolate, ConvertReceiverMode receiver_mode,
-    TailCallMode tail_call_mode, InterpreterPushArgsMode mode) {
+    InterpreterPushArgsMode mode) {
   return Callable(isolate->builtins()->InterpreterPushArgsThenCall(
-                      receiver_mode, tail_call_mode, mode),
+                      receiver_mode, mode),
                   InterpreterPushArgsThenCallDescriptor(isolate));
 }
 

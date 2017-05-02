@@ -177,7 +177,8 @@ class Genesis BASE_EMBEDDED {
 #undef DECLARE_FEATURE_INITIALIZATION
 
   void InstallOneBuiltinFunction(Handle<Object> prototype, const char* method,
-                                 Builtins::Name name);
+                                 Builtins::Name name,
+                                 int internal_formal_parameter_count);
   void InitializeGlobal_experimental_fast_array_builtins();
 
   Handle<JSFunction> InstallArrayBuffer(Handle<JSObject> target,
@@ -396,14 +397,14 @@ Handle<JSFunction> SimpleCreateFunction(Isolate* isolate, Handle<String> name,
 
 Handle<JSFunction> InstallArrayBuiltinFunction(Handle<JSObject> base,
                                                const char* name,
-                                               Builtins::Name call) {
+                                               Builtins::Name call,
+                                               int argument_count) {
   Isolate* isolate = base->GetIsolate();
   Handle<String> str_name = isolate->factory()->InternalizeUtf8String(name);
   Handle<JSFunction> fun =
       CreateFunction(isolate, str_name, JS_OBJECT_TYPE, JSObject::kHeaderSize,
                      MaybeHandle<JSObject>(), call, true);
-  fun->shared()->set_internal_formal_parameter_count(
-      Builtins::GetBuiltinParameterCount(call));
+  fun->shared()->set_internal_formal_parameter_count(argument_count);
 
   // Set the length to 1 to satisfy ECMA-262.
   fun->shared()->set_length(1);
@@ -1594,10 +1595,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     number_fun->shared()->SetConstructStub(
         *isolate->builtins()->NumberConstructor_ConstructStub());
     number_fun->shared()->set_length(1);
-    // https://tc39.github.io/ecma262/#sec-built-in-function-objects says
-    // that "Built-in functions that are ECMAScript function objects must
-    // be strict functions".
-    number_fun->shared()->set_language_mode(STRICT);
     InstallWithIntrinsicDefaultProto(isolate, number_fun,
                                      Context::NUMBER_FUNCTION_INDEX);
 
@@ -1743,10 +1740,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         *isolate->builtins()->StringConstructor_ConstructStub());
     string_fun->shared()->DontAdaptArguments();
     string_fun->shared()->set_length(1);
-    // https://tc39.github.io/ecma262/#sec-built-in-function-objects says
-    // that "Built-in functions that are ECMAScript function objects must
-    // be strict functions".
-    string_fun->shared()->set_language_mode(STRICT);
     InstallWithIntrinsicDefaultProto(isolate, string_fun,
                                      Context::STRING_FUNCTION_INDEX);
 
@@ -3870,7 +3863,8 @@ void InstallPublicSymbol(Factory* factory, Handle<Context> native_context,
 
 void Genesis::InstallOneBuiltinFunction(Handle<Object> prototype,
                                         const char* method_name,
-                                        Builtins::Name builtin_name) {
+                                        Builtins::Name builtin_name,
+                                        int internal_formal_parameter_count) {
   LookupIterator it(
       prototype, isolate()->factory()->NewStringFromAsciiChecked(method_name),
       LookupIterator::OWN_SKIP_INTERCEPTOR);
@@ -3879,8 +3873,7 @@ void Genesis::InstallOneBuiltinFunction(Handle<Object> prototype,
       isolate()->builtins()->builtin(builtin_name));
   SharedFunctionInfo* info = Handle<JSFunction>::cast(function)->shared();
   info->set_code(isolate()->builtins()->builtin(builtin_name));
-  info->set_internal_formal_parameter_count(
-      Builtins::GetBuiltinParameterCount(builtin_name));
+  info->set_internal_formal_parameter_count(internal_formal_parameter_count);
 }
 
 void Genesis::InitializeGlobal_experimental_fast_array_builtins() {
@@ -3890,13 +3883,17 @@ void Genesis::InitializeGlobal_experimental_fast_array_builtins() {
         native_context()->typed_array_prototype(), isolate());
     // Insert experimental fast TypedArray builtins here.
     InstallOneBuiltinFunction(typed_array_prototype, "every",
-                              Builtins::kTypedArrayPrototypeEvery);
+                              Builtins::kTypedArrayPrototypeEvery,
+                              SharedFunctionInfo::kDontAdaptArgumentsSentinel);
     InstallOneBuiltinFunction(typed_array_prototype, "some",
-                              Builtins::kTypedArrayPrototypeSome);
+                              Builtins::kTypedArrayPrototypeSome,
+                              SharedFunctionInfo::kDontAdaptArgumentsSentinel);
     InstallOneBuiltinFunction(typed_array_prototype, "reduce",
-                              Builtins::kTypedArrayPrototypeReduce);
+                              Builtins::kTypedArrayPrototypeReduce,
+                              SharedFunctionInfo::kDontAdaptArgumentsSentinel);
     InstallOneBuiltinFunction(typed_array_prototype, "reduceRight",
-                              Builtins::kTypedArrayPrototypeReduceRight);
+                              Builtins::kTypedArrayPrototypeReduceRight,
+                              SharedFunctionInfo::kDontAdaptArgumentsSentinel);
   }
 }
 
@@ -4361,29 +4358,41 @@ bool Genesis::InstallNatives(GlobalContextType context_type) {
     concat->shared()->set_length(1);
 
     // Install Array.prototype.forEach
-    Handle<JSFunction> forEach =
-        InstallArrayBuiltinFunction(proto, "forEach", Builtins::kArrayForEach);
+    Handle<JSFunction> forEach = InstallArrayBuiltinFunction(
+        proto, "forEach", Builtins::kArrayForEach,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
     // Add forEach to the context.
     native_context()->set_array_for_each_iterator(*forEach);
 
     // Install Array.prototype.filter
-    InstallArrayBuiltinFunction(proto, "filter", Builtins::kArrayFilter);
+    InstallArrayBuiltinFunction(
+        proto, "filter", Builtins::kArrayFilter,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
 
     // Install Array.prototype.map
-    InstallArrayBuiltinFunction(proto, "map", Builtins::kArrayMap);
+    InstallArrayBuiltinFunction(
+        proto, "map", Builtins::kArrayMap,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
 
     // Install Array.prototype.every
-    InstallArrayBuiltinFunction(proto, "every", Builtins::kArrayEvery);
+    InstallArrayBuiltinFunction(
+        proto, "every", Builtins::kArrayEvery,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
 
     // Install Array.prototype.some
-    InstallArrayBuiltinFunction(proto, "some", Builtins::kArraySome);
+    InstallArrayBuiltinFunction(
+        proto, "some", Builtins::kArraySome,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
 
     // Install Array.prototype.reduce
-    InstallArrayBuiltinFunction(proto, "reduce", Builtins::kArrayReduce);
+    InstallArrayBuiltinFunction(
+        proto, "reduce", Builtins::kArrayReduce,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
 
     // Install Array.prototype.reduceRight
-    InstallArrayBuiltinFunction(proto, "reduceRight",
-                                Builtins::kArrayReduceRight);
+    InstallArrayBuiltinFunction(
+        proto, "reduceRight", Builtins::kArrayReduceRight,
+        SharedFunctionInfo::kDontAdaptArgumentsSentinel);
   }
 
   // Install InternalArray.prototype.concat

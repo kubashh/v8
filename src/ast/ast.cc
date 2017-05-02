@@ -151,16 +151,6 @@ bool Expression::IsAnonymousFunctionDefinition() const {
           AsDoExpression()->IsAnonymousFunctionDefinition());
 }
 
-void Expression::MarkTail() {
-  if (IsConditional()) {
-    AsConditional()->MarkTail();
-  } else if (IsCall()) {
-    AsCall()->MarkTail();
-  } else if (IsBinaryOperation()) {
-    AsBinaryOperation()->MarkTail();
-  }
-}
-
 bool DoExpression::IsAnonymousFunctionDefinition() const {
   // This is specifically to allow DoExpressions to represent ClassLiterals.
   return represented_function_ != nullptr &&
@@ -348,23 +338,6 @@ bool FunctionLiteral::NeedsHomeObject(Expression* expr) {
   if (expr == nullptr || !expr->IsFunctionLiteral()) return false;
   DCHECK_NOT_NULL(expr->AsFunctionLiteral()->scope());
   return expr->AsFunctionLiteral()->scope()->NeedsHomeObject();
-}
-
-void FunctionLiteral::ReplaceBodyAndScope(FunctionLiteral* other) {
-  DCHECK_NULL(body_);
-  DCHECK_NOT_NULL(scope_);
-  DCHECK_NOT_NULL(other->scope());
-
-  Scope* outer_scope = scope_->outer_scope();
-
-  body_ = other->body();
-  scope_ = other->scope();
-  scope_->ReplaceOuterScope(outer_scope);
-#ifdef DEBUG
-  scope_->set_replaced_from_parse_task(true);
-#endif
-
-  function_length_ = other->function_length_;
 }
 
 ObjectLiteralProperty::ObjectLiteralProperty(Expression* key, Expression* value,

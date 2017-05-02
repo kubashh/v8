@@ -273,8 +273,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
 
   void SetCachedData(ParseInfo* info);
 
-  void StitchAst(ParseInfo* top_level_parse_info, Isolate* isolate);
-
   ScriptCompiler::CompileOptions compile_options() const {
     return compile_options_;
   }
@@ -293,7 +291,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
                         preparsed_scope_data_, parsing_on_main_thread_);
 #define SET_ALLOW(name) reusable_preparser_->set_allow_##name(allow_##name());
       SET_ALLOW(natives);
-      SET_ALLOW(tailcalls);
       SET_ALLOW(harmony_do_expressions);
       SET_ALLOW(harmony_function_sent);
       SET_ALLOW(harmony_trailing_commas);
@@ -626,9 +623,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
 
   void SetLanguageMode(Scope* scope, LanguageMode mode);
   void SetAsmModule();
-
-  V8_INLINE void MarkCollectedTailCallExpressions();
-  V8_INLINE void MarkTailPosition(Expression* expression);
 
   // Rewrite all DestructuringAssignments in the current FunctionState.
   V8_INLINE void RewriteDestructuringAssignments();
@@ -1153,11 +1147,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   Scanner scanner_;
   PreParser* reusable_preparser_;
   Mode mode_;
-
-  std::vector<FunctionLiteral*> literals_to_stitch_;
-  Handle<String> source_;
-  CompilerDispatcher* compiler_dispatcher_ = nullptr;
-  ParseInfo* main_parse_info_ = nullptr;
 
   friend class ParserTarget;
   friend class ParserTargetScope;
