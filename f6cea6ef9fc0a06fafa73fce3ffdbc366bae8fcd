@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be57b34d_d24cc638",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-05-02T23:50:10Z",
+      "side": 1,
+      "message": "I don\u0027t love having to dot this function with these, nor to make a function called \"AccessNeedsHoleCheck\" have side-effects. I first tried doing this in the caller, but I had to move it here to deal with the local_if_not_shadowed case. Happy to move it if reviewers have a better suggestion (or a better name for this function).",
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
