@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea6b7436_bd85196c",
+        "filename": "src/full-codegen/arm/full-codegen-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-03T11:26:52Z",
+      "side": 0,
+      "message": "nit: Looks like we can remove the entry from the bailout-reason.h file now.",
+      "range": {
+        "startLine": 1774,
+        "startChar": 19,
+        "endLine": 1774,
+        "endChar": 46
+      },
+      "revId": "25b7e882f23fbf26d42fa755a90683030d29907f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

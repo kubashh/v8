@@ -34,6 +34,47 @@
       "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71401c5_429ba739",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-03T11:26:52Z",
+      "side": 1,
+      "message": "+1 on what Leszek suggested.",
+      "parentUuid": "c8a2f279_883f0b43",
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13fe8af4_834d3c7e",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-03T11:26:52Z",
+      "side": 1,
+      "message": "nit: Could we add printing of this flag in {PrintVar} in the scopes.cc file? I am fine with only printing it for stack-local variables. But we should print a \"positive result\" (i.e. when the analysis determines that initialization can be skipped).",
+      "range": {
+        "startLine": 184,
+        "startChar": 8,
+        "endLine": 184,
+        "endChar": 36
+      },
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
