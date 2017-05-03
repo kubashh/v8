@@ -16,6 +16,24 @@
       "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8a2f279_883f0b43",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-03T10:37:57Z",
+      "side": 1,
+      "message": "Why not rename to something like \"UpdateNeedsHoleCheck\" and set proxy-\u003eset_needs_hole_check() in this function too?",
+      "parentUuid": "be57b34d_d24cc638",
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
