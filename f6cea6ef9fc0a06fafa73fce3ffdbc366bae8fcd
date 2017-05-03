@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9a0865b1_da810652",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-05-03T18:00:56Z",
+      "side": 1,
+      "message": "Done, and moved the pair of mutations into a helper function.",
+      "parentUuid": "b71401c5_429ba739",
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13fe8af4_834d3c7e",
         "filename": "src/ast/variables.h",
         "patchSetId": 6
@@ -75,6 +93,30 @@
       "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "492f19e9_4694b079",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-05-03T18:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13fe8af4_834d3c7e",
+      "range": {
+        "startLine": 184,
+        "startChar": 8,
+        "endLine": 184,
+        "endChar": 36
+      },
+      "revId": "f6cea6ef9fc0a06fafa73fce3ffdbc366bae8fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
