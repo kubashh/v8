@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2edc5f8_d50505b8",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-05-04T16:47:49Z",
+      "side": 1,
+      "message": "I think this is nicer, thanks!\n\nOne more nitpick: The way it\u0027s written now, one of the two if-s is unnecessary. This should do the same thing as if+if+return:\n\nDCHECK(token \u003d\u003d Token::ILLEGAL || token \u003d\u003d Token::WHITESPACE);\nif (source_pos() \u003d\u003d start_position) token \u003d Token::ILLEGAL;\nreturn token;",
+      "range": {
+        "startLine": 483,
+        "startChar": 4,
+        "endLine": 493,
+        "endChar": 27
+      },
+      "revId": "fb248fe1607cce0d2feeab75c77dcb6788572165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
