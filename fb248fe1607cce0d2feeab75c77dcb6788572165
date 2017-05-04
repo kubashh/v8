@@ -46,6 +46,30 @@
       "revId": "fb248fe1607cce0d2feeab75c77dcb6788572165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21f31930_ac9e1788",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-05-04T17:59:36Z",
+      "side": 1,
+      "message": "Hrrm. Yeah, I somehow overlooked the two closing braces \u0026 the indent. Please ignore. :-]",
+      "parentUuid": "3afc81e3_c00b0800",
+      "range": {
+        "startLine": 483,
+        "startChar": 4,
+        "endLine": 493,
+        "endChar": 27
+      },
+      "revId": "fb248fe1607cce0d2feeab75c77dcb6788572165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
