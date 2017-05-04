@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b2338ed_8aeed9d0",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-05-04T11:09:10Z",
+      "side": 1,
+      "message": "It looks a bit hacky to me that this function can now have the side effect of reporting an error but that it may also return false without having reported an error. At least I would expect a comment about it, maybe even at the call site in Scan(). But I\u0027m not really familiar with the scanner, so I\u0027d like vogelheim@ to decide.\n\nOther than that I\u0027m happy with the CL.",
+      "revId": "a703b43caad7c2581b6c0d8540d19845ea64cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
