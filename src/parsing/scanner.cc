@@ -182,16 +182,16 @@ Scanner::Scanner(UnicodeCache* unicode_cache)
       octal_message_(MessageTemplate::kNone),
       found_html_comment_(false) {}
 
-void Scanner::Initialize(Utf16CharacterStream* source) {
+void Scanner::Initialize(Utf16CharacterStream* source, bool is_module) {
   DCHECK_NOT_NULL(source);
   source_ = source;
+  is_module_ = is_module;
   // Need to capture identifiers in order to recognize "get" and "set"
   // in object literals.
   Init();
   // Skip initial whitespace allowing HTML comment ends just like
   // after a newline and scan first token.
   has_line_terminator_before_next_ = true;
-  SkipWhiteSpace();
   Scan();
 }
 
@@ -481,11 +481,21 @@ bool Scanner::SkipWhiteSpace() {
     }
 
     // Treat the rest of the line as a comment.
-    SkipSingleLineComment();
+    if (SkipSingleLineComment() == Token::ILLEGAL) {
+      return false;
+    }
   }
 
   // Return whether or not we skipped any characters.
   return source_pos() != start_position;
+}
+
+Token::Value Scanner::SkipSingleHTMLComment() {
+  if (is_module_) {
+    ReportScannerError(source_pos(), MessageTemplate::kHtmlCommentInModule);
+    return Token::ILLEGAL;
+  }
+  return SkipSingleLineComment();
 }
 
 Token::Value Scanner::SkipSingleLineComment() {
@@ -606,7 +616,7 @@ Token::Value Scanner::ScanHtmlComment() {
   }
 
   found_html_comment_ = true;
-  return SkipSingleLineComment();
+  return SkipSingleHTMLComment();
 }
 
 void Scanner::Scan() {
@@ -712,7 +722,7 @@ void Scanner::Scan() {
           if (c0_ == '>' && HasAnyLineTerminatorBeforeNext()) {
             // For compatibility with SpiderMonkey, we skip lines that
             // start with an HTML comment end '-->'.
-            token = SkipSingleLineComment();
+            token = SkipSingleHTMLComment();
           } else {
             token = Token::DEC;
           }
