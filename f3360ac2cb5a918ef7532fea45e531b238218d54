@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f2795e3_701e0b32",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "Pls add a link to the spec \"amendment\" that calling math funcs don\u0027t need annotations.",
+      "range": {
+        "startLine": 599,
+        "startChar": 6,
+        "endLine": 599,
+        "endChar": 31
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bd2a610_908f81a9",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "Maybe: would it be possible to enter the local scope here?",
+      "range": {
+        "startLine": 744,
+        "startChar": 2,
+        "endLine": 744,
+        "endChar": 24
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "400a82e2_2351312c",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "And exit here?",
+      "range": {
+        "startLine": 746,
+        "startChar": 2,
+        "endLine": 746,
+        "endChar": 24
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df70993e_529a8cf0",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "???",
+      "range": {
+        "startLine": 816,
+        "startChar": 2,
+        "endLine": 816,
+        "endChar": 30
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4781af_96bf487d",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "This was the confusing one",
+      "range": {
+        "startLine": 862,
+        "startChar": 4,
+        "endLine": 864,
+        "endChar": 32
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "247beeaa_b547827f",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "HeapView",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 12
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e0b5a17_12c52631",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "Comment: only set for function table",
+      "range": {
+        "startLine": 70,
+        "startChar": 12,
+        "endLine": 70,
+        "endChar": 16
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "837cb3de_1da13495",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-04T09:03:41Z",
+      "side": 1,
+      "message": "This comment is not very clear.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 56
+      },
+      "revId": "f3360ac2cb5a918ef7532fea45e531b238218d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
