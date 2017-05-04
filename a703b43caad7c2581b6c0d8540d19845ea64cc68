@@ -16,6 +16,24 @@
       "revId": "a703b43caad7c2581b6c0d8540d19845ea64cc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed08c902_e2e5dd7e",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-05-04T15:05:16Z",
+      "side": 1,
+      "message": "Thanks for pointing that out. This is a bit weird, but given that the error handling in the scanner is rather ad-hoc anyhow I don\u0027t see an obviously better way.\n\nA bool is kinda the wrong return type, since this is really a three-state thing: success, no whitespace, and error.\nOther functions use a Token \u0026 Token::ILLEGAL for error handling, but there is no token for the \u0027no whitespace\u0027 case either.\nI\u0027m mostly undecided here, but I guess I\u0027d prefer to leave this as-is until I actually have a better idea of how to handle this systematically.",
+      "parentUuid": "1b2338ed_8aeed9d0",
+      "revId": "a703b43caad7c2581b6c0d8540d19845ea64cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
