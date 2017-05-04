@@ -22,6 +22,30 @@
       "revId": "9381aa4f391d6ee0e063892da3dfaeba30ef6acd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aacdd7c_6dbc919c",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-05-04T23:03:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b7bad6a_e5f6a3c1",
+      "range": {
+        "startLine": 1642,
+        "startChar": 4,
+        "endLine": 1642,
+        "endChar": 10
+      },
+      "revId": "9381aa4f391d6ee0e063892da3dfaeba30ef6acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
