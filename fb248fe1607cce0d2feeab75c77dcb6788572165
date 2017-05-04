@@ -22,6 +22,30 @@
       "revId": "fb248fe1607cce0d2feeab75c77dcb6788572165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3afc81e3_c00b0800",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-04T17:03:45Z",
+      "side": 1,
+      "message": "Sorry if I\u0027m misunderstanding your comment, but I need the first \u0027if\u0027 to break out of the while loop right?",
+      "parentUuid": "b2edc5f8_d50505b8",
+      "range": {
+        "startLine": 483,
+        "startChar": 4,
+        "endLine": 493,
+        "endChar": 27
+      },
+      "revId": "fb248fe1607cce0d2feeab75c77dcb6788572165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
