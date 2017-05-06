@@ -14792,10 +14792,12 @@ void BytecodeArray::Disassemble(std::ostream& os) {
     iterator.Advance();
   }
 
+#ifdef OBJECT_PRINT
   if (constant_pool()->length() > 0) {
     os << "Constant pool (size = " << constant_pool()->length() << ")\n";
     constant_pool()->Print();
   }
+#endif
 
 #ifdef ENABLE_DISASSEMBLER
   if (handler_table()->length() > 0) {

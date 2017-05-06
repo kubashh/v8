@@ -132,6 +132,7 @@ int Interpreter::InterruptBudget() {
 namespace {
 
 bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
+#ifdef ENABLE_DISASSEMBLER
   if (!FLAG_print_bytecode) return false;
 
   // Checks whether function passed the filter.
@@ -141,6 +142,9 @@ bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
   } else {
     return shared->PassesFilter(FLAG_print_bytecode_filter);
   }
+#else
+  return false;
+#endif  // ENABLE_DISASSEMBLER
 }
 
 }  // namespace
@@ -155,13 +159,14 @@ InterpreterCompilationJob::InterpreterCompilationJob(CompilationInfo* info)
 InterpreterCompilationJob::Status InterpreterCompilationJob::PrepareJobImpl() {
   CodeGenerator::MakeCodePrologue(info(), "interpreter");
 
+#ifdef ENABLE_DISASSEMBLER
   if (print_bytecode_) {
     OFStream os(stdout);
     std::unique_ptr<char[]> name = info()->GetDebugName();
     os << "[generating bytecode for function: " << info()->GetDebugName().get()
-       << "]" << std::endl
-       << std::flush;
+       << "]" << std::endl;
   }
+#endif
 
   return SUCCEEDED;
 }
@@ -197,11 +202,13 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
     return FAILED;
   }
 
+#ifdef ENABLE_DISASSEMBLER
   if (print_bytecode_) {
     OFStream os(stdout);
-    bytecodes->Print(os);
+    bytecodes->Disassemble(os);
     os << std::flush;
   }
+#endif
 
   info()->SetBytecodeArray(bytecodes);
   info()->SetCode(info()->isolate()->builtins()->InterpreterEntryTrampoline());
