@@ -20,7 +20,7 @@ BUILTIN(StringPrototypeToUpperCaseIntl) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toUpperCase");
   string = String::Flatten(string);
-  return ConvertCase(string, true, isolate);
+  return ConvertToUpper(string, isolate);
 }
 
 BUILTIN(StringPrototypeNormalizeIntl) {
