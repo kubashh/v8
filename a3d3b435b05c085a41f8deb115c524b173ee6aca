@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e47a1bdf_fdcbb3be",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T09:13:04Z",
+      "side": 1,
+      "message": "Can you move these back to the Ignition section please.",
+      "range": {
+        "startLine": 1277,
+        "startChar": 0,
+        "endLine": 1277,
+        "endChar": 71
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f07f4c2_6a5bb4c2",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T09:13:04Z",
+      "side": 1,
+      "message": "Why did you need to add #ifdef ENABLE_DISASSEMBLER everywhere here? I\u0027d prefer you didn\u0027t do this and just set print_bytecode_ to false if it\u0027s not possible to print",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2d26bbd_8ca8b0fa",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T09:13:04Z",
+      "side": 1,
+      "message": "Please don\u0027t change this, Print should call Disassemble anyway, and we want the other information as well as the disassembly",
+      "range": {
+        "startLine": 211,
+        "startChar": 15,
+        "endLine": 211,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
