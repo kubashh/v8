@@ -20,14 +20,14 @@ BUILTIN(StringPrototypeToLowerCaseIntl) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLowerCase");
   string = String::Flatten(string);
-  return ConvertCase(string, false, isolate);
+  return ConvertToLower(string, isolate);
 }
 
 BUILTIN(StringPrototypeToUpperCaseIntl) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toUpperCase");
   string = String::Flatten(string);
-  return ConvertCase(string, true, isolate);
+  return ConvertToUpper(string, isolate);
 }
 
 BUILTIN(StringPrototypeNormalizeIntl) {
