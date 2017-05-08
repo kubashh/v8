@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "545bb24b_09578f2d",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T14:26:04Z",
+      "side": 1,
+      "message": "Generally only one InterpreterCompilationJob is created at a time, so I would rather just have that byte and avoid the #ifdef in the code.",
+      "parentUuid": "67ce9f37_616d2c1b",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2d26bbd_8ca8b0fa",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 2
@@ -112,6 +136,76 @@
         "startChar": 15,
         "endLine": 211,
         "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9a66a5c_75788bc5",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T14:26:04Z",
+      "side": 1,
+      "message": "Ahh sorry, I thought the bytecode array fields were printed out by Print, but it seems they are printed by Disassemble too. This is fine in that case.",
+      "parentUuid": "ad3d3135_1e2d6a54",
+      "range": {
+        "startLine": 211,
+        "startChar": 15,
+        "endLine": 211,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7356e35_a8555b86",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14795,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T14:26:04Z",
+      "side": 1,
+      "message": "Could you print the length and just ifdef the constant_pool()-\u003ePrint() please",
+      "range": {
+        "startLine": 14795,
+        "startChar": 0,
+        "endLine": 14795,
+        "endChar": 19
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6f5f1d8_41d6bc2f",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14804,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-08T14:26:04Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 14804,
+        "startChar": 3,
+        "endLine": 14804,
+        "endChar": 24
       },
       "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
