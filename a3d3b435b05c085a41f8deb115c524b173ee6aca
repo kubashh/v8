@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e9e708a5_70b1afac",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-05-08T14:45:44Z",
+      "side": 1,
+      "message": "Since FLAG_print_bytecode will not be available if ENABLE_DISASSEMBLER is not set, at least one #ifdef is needed in ShouldPrintBytecode. I believe you want me to remove all other #ifdefs?",
+      "parentUuid": "545bb24b_09578f2d",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2d26bbd_8ca8b0fa",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 2
@@ -190,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "51cc609f_addcfe86",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14795,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-05-08T14:45:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7356e35_a8555b86",
+      "range": {
+        "startLine": 14795,
+        "startChar": 0,
+        "endLine": 14795,
+        "endChar": 19
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6f5f1d8_41d6bc2f",
         "filename": "src/objects.cc",
         "patchSetId": 2
@@ -210,6 +258,30 @@
       "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6bf8977_4fba8531",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14804,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-05-08T14:45:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6f5f1d8_41d6bc2f",
+      "range": {
+        "startLine": 14804,
+        "startChar": 3,
+        "endLine": 14804,
+        "endChar": 24
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
