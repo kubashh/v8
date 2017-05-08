@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "67ce9f37_616d2c1b",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-05-08T09:55:39Z",
+      "side": 1,
+      "message": "I was just copying https://cs.chromium.org/chromium/src/v8/src/full-codegen/x64/full-codegen-x64.cc?l\u003d30 .\n\nSince InterpreterCompilationJob object will be created a lot of times, I just thought it might worth to save one byte.",
+      "parentUuid": "5f07f4c2_6a5bb4c2",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2d26bbd_8ca8b0fa",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2017-05-08T09:13:04Z",
       "side": 1,
       "message": "Please don\u0027t change this, Print should call Disassemble anyway, and we want the other information as well as the disassembly",
+      "range": {
+        "startLine": 211,
+        "startChar": 15,
+        "endLine": 211,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad3d3135_1e2d6a54",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1154620
+      },
+      "writtenOn": "2017-05-08T09:55:39Z",
+      "side": 1,
+      "message": "Not sure about what other information you meant? I compared the output of debug build before and after CL, there is no difference.",
+      "parentUuid": "f2d26bbd_8ca8b0fa",
       "range": {
         "startLine": 211,
         "startChar": 15,
