@@ -2670,7 +2670,7 @@ class AsyncCompileJob {
   };
 
   template <typename Task, typename... Args>
-  void DoSync(Args... args) {
+  void DoSync(Args&&... args) {
     static_assert(Task::type == SYNC, "Scheduled type must be sync");
     Task* task = new Task(std::forward<Args>(args)...);
     task->job_ = this;
@@ -2679,7 +2679,7 @@ class AsyncCompileJob {
   }
 
   template <typename Task, typename... Args>
-  void DoAsync(Args... args) {
+  void DoAsync(Args&&... args) {
     static_assert(Task::type == ASYNC, "Scheduled type must be async");
     Task* task = new Task(std::forward<Args>(args)...);
     task->job_ = this;
