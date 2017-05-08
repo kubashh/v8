@@ -67,7 +67,9 @@ class InterpreterCompilationJob final : public CompilationJob {
   BytecodeGenerator generator_;
   RuntimeCallStats* runtime_call_stats_;
   RuntimeCallCounter background_execute_counter_;
+#ifdef ENABLE_DISASSEMBLER
   bool print_bytecode_;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(InterpreterCompilationJob);
 };
@@ -131,6 +133,7 @@ int Interpreter::InterruptBudget() {
 
 namespace {
 
+#ifdef ENABLE_DISASSEMBLER
 bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
   if (!FLAG_print_bytecode) return false;
 
@@ -142,6 +145,7 @@ bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
     return shared->PassesFilter(FLAG_print_bytecode_filter);
   }
 }
+#endif  // ENABLE_DISASSEMBLER
 
 }  // namespace
 
@@ -149,19 +153,23 @@ InterpreterCompilationJob::InterpreterCompilationJob(CompilationInfo* info)
     : CompilationJob(info->isolate(), info, "Ignition"),
       generator_(info),
       runtime_call_stats_(info->isolate()->counters()->runtime_call_stats()),
-      background_execute_counter_("CompileBackgroundIgnition"),
-      print_bytecode_(ShouldPrintBytecode(info->shared_info())) {}
+      background_execute_counter_("CompileBackgroundIgnition") {
+#ifdef ENABLE_DISASSEMBLER
+  print_bytecode_ = ShouldPrintBytecode(info->shared_info());
+#endif
+}
 
 InterpreterCompilationJob::Status InterpreterCompilationJob::PrepareJobImpl() {
   CodeGenerator::MakeCodePrologue(info(), "interpreter");
 
+#ifdef ENABLE_DISASSEMBLER
   if (print_bytecode_) {
     OFStream os(stdout);
     std::unique_ptr<char[]> name = info()->GetDebugName();
     os << "[generating bytecode for function: " << info()->GetDebugName().get()
-       << "]" << std::endl
-       << std::flush;
+       << "]" << std::endl;
   }
+#endif
 
   return SUCCEEDED;
 }
@@ -197,11 +205,13 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
     return FAILED;
   }
 
+#ifdef ENABLE_DISASSEMBLER
   if (print_bytecode_) {
     OFStream os(stdout);
-    bytecodes->Print(os);
+    bytecodes->Disassemble(os);
     os << std::flush;
   }
+#endif
 
   info()->SetBytecodeArray(bytecodes);
   info()->SetCode(info()->isolate()->builtins()->InterpreterEntryTrampoline());
