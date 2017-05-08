@@ -763,14 +763,6 @@ RUNTIME_FUNCTION(Runtime_StringToLowerCaseIntl) {
   return ConvertToLower(s, isolate);
 }
 
-RUNTIME_FUNCTION(Runtime_StringToUpperCaseIntl) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(args.length(), 1);
-  CONVERT_ARG_HANDLE_CHECKED(String, s, 0);
-  s = String::Flatten(s);
-  return ConvertToUpper(s, isolate);
-}
-
 RUNTIME_FUNCTION(Runtime_StringLocaleConvertCase) {
   HandleScope scope(isolate);
   DCHECK_EQ(args.length(), 3);
