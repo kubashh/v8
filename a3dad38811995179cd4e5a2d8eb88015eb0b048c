@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1309f10d_d07fa4b7",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-05-09T18:27:57Z",
+      "side": 1,
+      "message": "`BuildCreateGeneratorObjectIfNeeded()` might be a more appropriate name for this",
+      "revId": "a3dad38811995179cd4e5a2d8eb88015eb0b048c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c7b401_484de3e8",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3196,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-05-09T18:27:57Z",
+      "side": 1,
+      "message": "Couldn\u0027t we build the initial yield in BytecodeGenerator as well? I think the tools should all be there for that.\n\nI\u0027m mainly suggesting it because these 2 identical lines are a bit strange.",
+      "revId": "a3dad38811995179cd4e5a2d8eb88015eb0b048c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
