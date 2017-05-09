@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dcf85f1_783e8ad3",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-09T16:09:06Z",
+      "side": 1,
+      "message": "You can remove one level of if-nesting without sacrificing readability IMO.",
+      "revId": "cfa66ab30bc49de44a53cd85c6da46dadf429370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7278af_be57240e",
+        "filename": "test/mjsunit/asm/return-types.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-09T16:09:06Z",
+      "side": 1,
+      "message": "You could have both a \"FailVoidNonVoidMismatch\" and a \"FailNonVoidVoidMismatch\", where the current implementation would be the latter, and fir the first one the two return statements would be switched.",
+      "revId": "cfa66ab30bc49de44a53cd85c6da46dadf429370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
