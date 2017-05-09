@@ -744,14 +744,21 @@ void AsmJsParser::ValidateFunction() {
   function_temp_locals_used_ = 0;
   function_temp_locals_depth_ = 0;
 
+  bool last_statement_is_return = false;
   while (!failed_ && !Peek('}')) {
+    last_statement_is_return = Peek(TOK(return));
     RECURSE(ValidateStatement());
   }
   EXPECT_TOKEN('}');
 
-  if (return_type_ == nullptr) {
-    return_type_ = AsmType::Void();
+  if (!last_statement_is_return) {
+    if (return_type_ == nullptr) {
+      return_type_ = AsmType::Void();
+    } else if (!return_type_->IsA(AsmType::Void())) {
+      FAIL("Expected return at end of non-void function");
+    }
   }
+  DCHECK_NOT_NULL(return_type_);
 
   // TODO(bradnelson): WasmModuleBuilder can't take this in the right order.
   //                   We should fix that so we can use it instead.
