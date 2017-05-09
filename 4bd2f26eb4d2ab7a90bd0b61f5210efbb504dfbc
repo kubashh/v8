@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbe01b32_73a78edf",
+        "filename": "src/js/intl.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-05-09T01:05:15Z",
+      "side": 1,
+      "message": "This manner of calling these functions is vulnerable to being messed with if String.prototype.toUpperCase has been modified from its original value. To avoid depending on global state, please use %_Call and pass in direct references to the underlying JS function (ToLocaleUpperCaseIntl, in this case), just as is being done for StringSubstr earlier in this expression.",
+      "range": {
+        "startLine": 707,
+        "startChar": 41,
+        "endLine": 707,
+        "endChar": 55
+      },
+      "revId": "4bd2f26eb4d2ab7a90bd0b61f5210efbb504dfbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
