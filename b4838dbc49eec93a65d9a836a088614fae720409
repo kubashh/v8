@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ef97b5d_0cba3147",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-05-09T08:40:19Z",
+      "side": 1,
+      "message": "Nit: Fall through for resuming with return.",
+      "revId": "b4838dbc49eec93a65d9a836a088614fae720409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
