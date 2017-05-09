@@ -46,6 +46,30 @@
       "revId": "3b257c40c2f5a253a7f0b1e423d6e0d715254924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "762f7076_47ed91ff",
+        "filename": "src/string-stream.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-09T09:17:32Z",
+      "side": 1,
+      "message": "Ack. Ah, got it. Casting is also OK, nevermind then. Please disregard my original comment.",
+      "parentUuid": "4105b1d7_7ae12088",
+      "range": {
+        "startLine": 195,
+        "startChar": 14,
+        "endLine": 195,
+        "endChar": 16
+      },
+      "revId": "3b257c40c2f5a253a7f0b1e423d6e0d715254924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
