@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3f6fbe3a_12840603",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-09T09:09:31Z",
+      "side": 1,
+      "message": "Yes please, the print_code flags aren\u0027t ifdefed by ENABLE_DISASSEMBLER, so I don\u0027t think print-bytecode should be either.",
+      "parentUuid": "fa000e80_aa300875",
+      "range": {
+        "startLine": 1277,
+        "startChar": 0,
+        "endLine": 1277,
+        "endChar": 71
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f07f4c2_6a5bb4c2",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 2
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Since FLAG_print_bytecode will not be available if ENABLE_DISASSEMBLER is not set, at least one #ifdef is needed in ShouldPrintBytecode. I believe you want me to remove all other #ifdefs?",
       "parentUuid": "545bb24b_09578f2d",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "a3d3b435b05c085a41f8deb115c524b173ee6aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0485b8_4683f2b1",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-09T09:09:31Z",
+      "side": 1,
+      "message": "As mentioned, please keep FLAG_print_bytecode even if ENABLE_DISASSEMBLER is not set.  BytecodeArray::Disassemble is avaliable even if ENABLE_DISASSEMBLER is false, so we can print bytecode no matter what that define.",
+      "parentUuid": "e9e708a5_70b1afac",
       "range": {
         "startLine": 70,
         "startChar": 7,
