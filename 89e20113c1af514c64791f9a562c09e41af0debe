@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9e06bcf_0d8104ba",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7233,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-10T13:53:25Z",
+      "side": 1,
+      "message": "nit - Smi: -\u003e Smi",
+      "range": {
+        "startLine": 7233,
+        "startChar": 23,
+        "endLine": 7233,
+        "endChar": 24
+      },
+      "revId": "89e20113c1af514c64791f9a562c09e41af0debe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
