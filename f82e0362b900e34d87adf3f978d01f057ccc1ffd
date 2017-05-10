@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f74a74d_a71db6e6",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "Nit: can get rid of the ! by reversing this",
+      "range": {
+        "startLine": 153,
+        "startChar": 14,
+        "endLine": 153,
+        "endChar": 56
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7455fd1e_2c6836a3",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "When does this happen? Is this some kind of an error case?",
+      "range": {
+        "startLine": 162,
+        "startChar": 6,
+        "endLine": 162,
+        "endChar": 21
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8248a294_f0d81901",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "Ditto\n\nAlso this should probably be nullptr as above, not 0.",
+      "range": {
+        "startLine": 173,
+        "startChar": 6,
+        "endLine": 173,
+        "endChar": 15
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "018e52fa_27621933",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "Random idea: Is it possible to add some meaningful dchecks here, like, if we didn\u0027t fail, then certain stuff must have happened / some data structures have been filled in / ...?\n\n(Not sure if there\u0027s anything meaningful to check here, just a random idea.)",
+      "range": {
+        "startLine": 181,
+        "startChar": 10,
+        "endLine": 181,
+        "endChar": 17
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9947672_bc6e6050",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "I still don\u0027t get why this is correct.\n\nE.g., if statements also add kRegular blocks into the stack.\n\nSo how come this is is correct in the case of:\n\nfor(...) {\n  if (...) {\n    if (...) { \u003c\u003c kRegular block here and label is kTokenNone\n      break;\n    }\n  }\n}",
+      "range": {
+        "startLine": 331,
+        "startChar": 2,
+        "endLine": 337,
+        "endChar": 3
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be4d492_e1e853a5",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "#include nit: whoever includes parser shouldn\u0027t need to include scanner.\n\nAfaics it\u0027s mainly needed because of the token type... non-trivial... probably not worth fixing.",
+      "range": {
+        "startLine": 11,
+        "startChar": 24,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ef13b37_d0fcd47c",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "If I understand correctly, AsmJsParser kicks in when we are in GenerateUnoptimizedCode. Does it mean that we have already parsed the script with the normal parser once (without any bailout)? That seems wasteful. Shouldn\u0027t we instead bail out from the normal parser if we\u0027re sure this code path will kick in later?",
+      "range": {
+        "startLine": 34,
+        "startChar": 53,
+        "endLine": 34,
+        "endChar": 74
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78bdf473_1d46cf3d",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "Maybe you told me what this is but I already forgot. Maybe add a comment?",
+      "range": {
+        "startLine": 70,
+        "startChar": 12,
+        "endLine": 70,
+        "endChar": 16
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ae0cd9_58830a6b",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "This block could use a comment.",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 34
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eee73f5_106e840a",
+        "filename": "src/asmjs/asm-parser.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-10T14:34:05Z",
+      "side": 1,
+      "message": "Doesn\u0027t this belong to the Scanner?",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 52
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
