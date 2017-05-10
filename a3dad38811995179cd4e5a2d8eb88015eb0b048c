@@ -37,6 +37,47 @@
     },
     {
       "key": {
+        "uuid": "c560d3ea_01502c85",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-10T10:46:09Z",
+      "side": 1,
+      "message": "If you want to keep it as \"Visit\", I would prefer moving generator_object_var to a parameter (maintaining consistency with the others).",
+      "parentUuid": "93b2f574_d03d2c19",
+      "revId": "a3dad38811995179cd4e5a2d8eb88015eb0b048c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "436d7588_b6639b7f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3538,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-10T10:46:09Z",
+      "side": 1,
+      "message": "Would checking closure_scope()-\u003egenerator_object_var() for nullptr be enough? That\u0027s all we do for the other VisitXVariable functions.",
+      "range": {
+        "startLine": 3538,
+        "startChar": 7,
+        "endLine": 3538,
+        "endChar": 26
+      },
+      "revId": "a3dad38811995179cd4e5a2d8eb88015eb0b048c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c7b401_484de3e8",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 2
