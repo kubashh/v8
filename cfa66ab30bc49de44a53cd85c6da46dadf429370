@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df463c0d_e1cddcb3",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-10T08:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dcf85f1_783e8ad3",
+      "revId": "cfa66ab30bc49de44a53cd85c6da46dadf429370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e7278af_be57240e",
         "filename": "test/mjsunit/asm/return-types.js",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "cfa66ab30bc49de44a53cd85c6da46dadf429370",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e563f193_7c085275",
+        "filename": "test/mjsunit/asm/return-types.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-10T08:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e7278af_be57240e",
+      "revId": "cfa66ab30bc49de44a53cd85c6da46dadf429370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
