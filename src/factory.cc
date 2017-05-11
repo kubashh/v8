@@ -2917,38 +2917,11 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
 
 Handle<Map> Factory::CreateClassFunctionMap(Handle<JSFunction> empty_function) {
   Handle<Map> map = NewMap(JS_FUNCTION_TYPE, JSFunction::kSize);
-  SetClassFunctionInstanceDescriptor(map);
   map->set_is_constructor(true);
   map->set_is_callable();
+  map->set_dictionary_map(true);
   Map::SetPrototype(map, empty_function);
   return map;
-}
-
-void Factory::SetClassFunctionInstanceDescriptor(Handle<Map> map) {
-  Map::EnsureDescriptorSlack(map, 2);
-
-  PropertyAttributes rw_attribs =
-      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE);
-  PropertyAttributes roc_attribs =
-      static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY);
-
-  STATIC_ASSERT(JSFunction::kLengthDescriptorIndex == 0);
-  {  // Add length.
-    Handle<AccessorInfo> length =
-        Accessors::FunctionLengthInfo(isolate(), roc_attribs);
-    Descriptor d = Descriptor::AccessorConstant(
-        handle(Name::cast(length->name())), length, roc_attribs);
-    map->AppendDescriptor(&d);
-  }
-
-  {
-    // Add prototype.
-    Handle<AccessorInfo> prototype =
-        Accessors::FunctionPrototypeInfo(isolate(), rw_attribs);
-    Descriptor d = Descriptor::AccessorConstant(
-        Handle<Name>(Name::cast(prototype->name())), prototype, rw_attribs);
-    map->AppendDescriptor(&d);
-  }
 }
 
 }  // namespace internal
