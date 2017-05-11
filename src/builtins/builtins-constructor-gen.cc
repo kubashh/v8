@@ -30,6 +30,12 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   // Create a new closure from the given function info in new space
   Node* result = Allocate(JSFunction::kSize);
 
+  Node* empty_fixed_array = HeapConstant(factory->empty_fixed_array());
+  StoreObjectFieldNoWriteBarrier(result, JSObject::kPropertiesOffset,
+                                 empty_fixed_array);
+  StoreObjectFieldNoWriteBarrier(result, JSObject::kElementsOffset,
+                                 empty_fixed_array);
+
   // Calculate the index of the map we should install on the function based on
   // the FunctionKind and LanguageMode of the function.
   // Note: Must be kept in sync with Context::FunctionMapIndex
@@ -106,6 +112,9 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   BIND(&if_class_constructor);
   {
     map_index.Bind(IntPtrConstant(Context::CLASS_FUNCTION_MAP_INDEX));
+    StoreObjectFieldNoWriteBarrier(
+        result, JSObject::kPropertiesOffset,
+        HeapConstant(factory->empty_properties_dictionary()));
     Goto(&load_map);
   }
 
@@ -126,11 +135,6 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   StoreMapNoWriteBarrier(result, map_slot_value);
 
   // Initialize the rest of the function.
-  Node* empty_fixed_array = HeapConstant(factory->empty_fixed_array());
-  StoreObjectFieldNoWriteBarrier(result, JSObject::kPropertiesOffset,
-                                 empty_fixed_array);
-  StoreObjectFieldNoWriteBarrier(result, JSObject::kElementsOffset,
-                                 empty_fixed_array);
   Node* literals_cell = LoadFixedArrayElement(
       feedback_vector, slot, 0, CodeStubAssembler::SMI_PARAMETERS);
   {

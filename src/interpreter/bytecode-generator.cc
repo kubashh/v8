@@ -1530,7 +1530,8 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr) {
 
   VisitClassLiteralProperties(expr, constructor, prototype);
   BuildClassLiteralNameProperty(expr, constructor);
-  builder()->CallRuntime(Runtime::kToFastProperties, constructor);
+  builder()->LoadAccumulatorWithRegister(constructor);
+
   // Assign to class variable.
   if (expr->class_variable_proxy() != nullptr) {
     VariableProxy* proxy = expr->class_variable_proxy();
