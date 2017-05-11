@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6537249_30ff8bd9",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-11T09:35:49Z",
+      "side": 1,
+      "message": "Nah, unfortunately not, our {byte} typedefs to {uint8_t} which is unsigned, but {char} can be (and is on my system) signed. Compiler becomes unhappy.",
+      "parentUuid": "d1406965_42f54252",
+      "range": {
+        "startLine": 196,
+        "startChar": 17,
+        "endLine": 196,
+        "endChar": 47
+      },
+      "revId": "aaf6ff42672923a2a723af0c7a9674e2c901374e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6016ac6_dde64eb8",
         "filename": "src/wasm/wasm-module-builder.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-11T09:11:42Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 570,
+        "startChar": 23,
+        "endLine": 570,
+        "endChar": 53
+      },
+      "revId": "aaf6ff42672923a2a723af0c7a9674e2c901374e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24514258_cab802ad",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-11T09:35:49Z",
+      "side": 1,
+      "message": "Likewise.",
+      "parentUuid": "b6016ac6_dde64eb8",
       "range": {
         "startLine": 570,
         "startChar": 23,
