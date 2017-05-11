@@ -17,38 +17,91 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+class MockStreamingProcessor : public StreamingProcessor {
+ public:
+  bool ProcessModuleHeader(Vector<const uint8_t> bytes) override {
+    // TODO(ahaas): Share code with the module-decoder.
+    Decoder decoder(bytes.begin(), bytes.end());
+    uint32_t magic_word = decoder.consume_u32("wasm magic");
+    if (decoder.failed() || magic_word != kWasmMagic) {
+      ok_ = false;
+      return false;
+    }
+    uint32_t magic_version = decoder.consume_u32("wasm version");
+    if (decoder.failed() || magic_version != kWasmVersion) {
+      ok_ = false;
+      return false;
+    }
+    return true;
+  }
+  // Process all sections but the code section.
+  bool ProcessSection(Vector<const uint8_t> bytes) override {
+    ++num_sections_;
+    return true;
+  }
+  // Process a function body.
+  bool ProcessFunctionBody(Vector<const uint8_t> bytes) override {
+    ++num_functions_;
+    return true;
+  }
+  // Report an error detected in the StreamingDecoder.
+  void Error(Vector<const uint8_t> bytes) override { ok_ = false; }
+  // Finish the processing of the stream.
+  void Finish() override {}
+
+  size_t num_sections() const { return num_sections_; }
+  size_t num_functions() const { return num_functions_; }
+  bool ok() const { return ok_; }
+
+ private:
+  size_t num_sections_ = 0;
+  size_t num_functions_ = 0;
+  bool ok_ = true;
+};
+
 class WasmStreamingDecoderTest : public ::testing::Test {
  public:
-  void ExpectVerifies(Vector<const uint8_t> data) {
+  void ExpectVerifies(Vector<const uint8_t> data, size_t expected_sections,
+                      size_t expected_functions) {
     for (int split = 0; split <= data.length(); ++split) {
-      StreamingDecoder stream(nullptr);
+      MockStreamingProcessor processor;
+      StreamingDecoder stream(&processor);
       stream.OnBytesReceived(data.SubVector(0, split));
       stream.OnBytesReceived(data.SubVector(split, data.length()));
-      EXPECT_TRUE(stream.FinishForTesting());
+      stream.Finish();
+      EXPECT_TRUE(processor.ok());
+      EXPECT_EQ(expected_sections, processor.num_sections());
+      EXPECT_EQ(expected_functions, processor.num_functions());
     }
   }
 
   void ExpectFailure(Vector<const uint8_t> data) {
     for (int split = 0; split <= data.length(); ++split) {
-      StreamingDecoder stream(nullptr);
+      MockStreamingProcessor processor;
+      StreamingDecoder stream(&processor);
       stream.OnBytesReceived(data.SubVector(0, split));
       stream.OnBytesReceived(data.SubVector(split, data.length()));
-      EXPECT_FALSE(stream.FinishForTesting());
+      stream.Finish();
+      EXPECT_FALSE(processor.ok());
     }
   }
 };
 
 TEST_F(WasmStreamingDecoderTest, EmptyStream) {
-  StreamingDecoder stream(nullptr);
-  EXPECT_FALSE(stream.FinishForTesting());
+  MockStreamingProcessor processor;
+  StreamingDecoder stream(&processor);
+  stream.Finish();
+  EXPECT_FALSE(processor.ok());
 }
 
 TEST_F(WasmStreamingDecoderTest, IncompleteModuleHeader) {
   const uint8_t data[] = {U32_LE(kWasmMagic), U32_LE(kWasmVersion)};
   {
-    StreamingDecoder stream(nullptr);
+    MockStreamingProcessor processor;
+    StreamingDecoder stream(&processor);
     stream.OnBytesReceived(Vector<const uint8_t>(data, 1));
-    EXPECT_FALSE(stream.FinishForTesting());
+    stream.Finish();
+    EXPECT_FALSE(processor.ok());
   }
   for (int length = 1; length < static_cast<int>(arraysize(data)); ++length) {
     ExpectFailure(Vector<const uint8_t>(data, length));
@@ -57,7 +110,7 @@ TEST_F(WasmStreamingDecoderTest, IncompleteModuleHeader) {
 
 TEST_F(WasmStreamingDecoderTest, MagicAndVersion) {
   const uint8_t data[] = {U32_LE(kWasmMagic), U32_LE(kWasmVersion)};
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 0, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, BadMagic) {
@@ -87,7 +140,7 @@ TEST_F(WasmStreamingDecoderTest, OneSection) {
       0x0,                   // 5
       0x0                    // 6
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneSection_b) {
@@ -104,7 +157,7 @@ TEST_F(WasmStreamingDecoderTest, OneSection_b) {
       0x0,                   // 5
       0x0                    // 6
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneShortSection) {
@@ -118,7 +171,7 @@ TEST_F(WasmStreamingDecoderTest, OneShortSection) {
       0x0,                   // Payload
       0x0                    // 2
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneShortSection_b) {
@@ -132,7 +185,7 @@ TEST_F(WasmStreamingDecoderTest, OneShortSection_b) {
       0x0,                   // Payload
       0x0                    // 2
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneEmptySection) {
@@ -142,7 +195,7 @@ TEST_F(WasmStreamingDecoderTest, OneEmptySection) {
       0x1,                   // Section ID
       0x0                    // Section Length
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneSectionNotEnoughPayload1) {
@@ -207,7 +260,7 @@ TEST_F(WasmStreamingDecoderTest, TwoLongSections) {
       0x0,                   // 6
       0x0                    // 7
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 2, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, TwoShortSections) {
@@ -222,7 +275,7 @@ TEST_F(WasmStreamingDecoderTest, TwoShortSections) {
       0x0,                   // Payload
       0x0,                   // 2
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 2, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, TwoSectionsShortLong) {
@@ -242,7 +295,7 @@ TEST_F(WasmStreamingDecoderTest, TwoSectionsShortLong) {
       0x0,                   // 6
       0x0                    // 7
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 2, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, TwoEmptySections) {
@@ -254,7 +307,7 @@ TEST_F(WasmStreamingDecoderTest, TwoEmptySections) {
       0x2,                   // Section ID
       0x0                    // Section Length
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 2, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, EmptyCodeSection) {
@@ -266,7 +319,7 @@ TEST_F(WasmStreamingDecoderTest, EmptyCodeSection) {
       0xb,                   // Section ID
       0x0                    // Section Length
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 1, 0);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneFunction) {
@@ -284,7 +337,7 @@ TEST_F(WasmStreamingDecoderTest, OneFunction) {
       0x0,                   // 5
       0x0,                   // 6
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 0, 1);
 }
 
 TEST_F(WasmStreamingDecoderTest, OneShortFunction) {
@@ -297,7 +350,7 @@ TEST_F(WasmStreamingDecoderTest, OneShortFunction) {
       0x1,                   // Function Length
       0x0,                   // Function
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 0, 1);
 }
 
 TEST_F(WasmStreamingDecoderTest, EmptyFunction) {
@@ -335,7 +388,7 @@ TEST_F(WasmStreamingDecoderTest, TwoFunctions) {
       0x0,                   // 6
       0x0,                   // 7
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 0, 2);
 }
 
 TEST_F(WasmStreamingDecoderTest, TwoFunctions_b) {
@@ -356,7 +409,7 @@ TEST_F(WasmStreamingDecoderTest, TwoFunctions_b) {
       0x0,                   // 6
       0x0,                   // 7
   };
-  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)));
+  ExpectVerifies(Vector<const uint8_t>(data, arraysize(data)), 0, 2);
 }
 
 TEST_F(WasmStreamingDecoderTest, CodeSectionLengthTooHigh) {

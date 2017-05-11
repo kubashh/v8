@@ -21,7 +21,7 @@ using namespace v8::internal::wasm;
 
 void StreamingDecoder::OnBytesReceived(Vector<const uint8_t> bytes) {
   int current = 0;
-  while (decoder()->ok() && current < bytes.length()) {
+  while (ok() && current < bytes.length()) {
     int num_bytes = static_cast<int>(
         state_->ReadBytes(this, bytes.SubVector(current, bytes.length())));
     current += num_bytes;
@@ -35,18 +35,17 @@ void StreamingDecoder::OnBytesReceived(Vector<const uint8_t> bytes) {
 size_t StreamingDecoder::DecodingState::ReadBytes(StreamingDecoder* streaming,
                                                   Vector<const uint8_t> bytes) {
   size_t num_bytes = std::min(static_cast<size_t>(bytes.length()), remaining());
-  memcpy(buffer() + offset(), &bytes.first(), num_bytes);
+  memcpy(buffer() + offset(), bytes.begin(), num_bytes);
   set_offset(offset() + num_bytes);
   return num_bytes;
 }
 
-MaybeHandle<WasmModuleObject> StreamingDecoder::Finish() {
-  UNIMPLEMENTED();
-  return Handle<WasmModuleObject>::null();
-}
-
-bool StreamingDecoder::FinishForTesting() {
-  return decoder_.ok() && state_->is_finishing_allowed();
+void StreamingDecoder::Finish() {
+  if (ok() && !state_->is_finishing_allowed()) {
+    // The byte stream ended too early, we report an error.
+    Error();
+  }
+  processor_->Finish();
 }
 
 // An abstract class to share code among the states which decode VarInts. This
@@ -83,6 +82,10 @@ class StreamingDecoder::DecodeModuleHeader : public DecodingState {
   size_t size() const override { return kModuleHeaderSize; }
   uint8_t* buffer() override { return byte_buffer_; }
 
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    return Vector<const uint8_t>(buffer(), static_cast<int>(size()));
+  }
+
   std::unique_ptr<DecodingState> Next(StreamingDecoder* streaming) override;
 
  private:
@@ -98,6 +101,12 @@ class StreamingDecoder::DecodeSectionID : public DecodingState {
  public:
   size_t size() const override { return 1; }
   uint8_t* buffer() override { return &id_; }
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    // No streaming errors happen when decoding the section ID.
+    UNREACHABLE();
+    return Vector<const uint8_t>();
+  }
+
   bool is_finishing_allowed() const override { return true; }
 
   uint8_t id() const { return id_; }
@@ -118,6 +127,14 @@ class StreamingDecoder::DecodeSectionLength : public DecodeVarInt32 {
   std::unique_ptr<DecodingState> NextWithValue(
       StreamingDecoder* streaming) override;
 
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    // No {SectionBuffer} exists yet, we have to create it.
+    SectionBuffer* b = streaming->CreateNewBuffer(
+        section_id(), 0,
+        Vector<const uint8_t>(buffer(), static_cast<int>(size())));
+    return Vector<const uint8_t>(b->bytes(), static_cast<int>(b->length()));
+  }
+
  private:
   uint8_t section_id_;
 };
@@ -134,6 +151,13 @@ class StreamingDecoder::DecodeSectionPayload : public DecodingState {
 
   std::unique_ptr<DecodingState> Next(StreamingDecoder* streaming) override;
 
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    return Vector<const uint8_t>(section_buffer_->bytes(),
+                                 static_cast<int>(section_buffer_->length()));
+  }
+
+  SectionBuffer* section_buffer() const { return section_buffer_; }
+
  private:
   SectionBuffer* section_buffer_;
 };
@@ -147,6 +171,16 @@ class StreamingDecoder::DecodeNumberOfFunctions : public DecodeVarInt32 {
 
   std::unique_ptr<DecodingState> NextWithValue(
       StreamingDecoder* streaming) override;
+
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    // Copy the bytes we read into the section buffer.
+    size_t num_bytes =
+        std::min(section_buffer_->payload_length(), bytes_needed());
+    memcpy(section_buffer_->bytes() + section_buffer_->payload_offset(),
+           buffer(), num_bytes);
+    return Vector<const uint8_t>(section_buffer_->bytes(),
+                                 static_cast<int>(section_buffer_->length()));
+  }
 
  private:
   SectionBuffer* section_buffer_;
@@ -171,6 +205,15 @@ class StreamingDecoder::DecodeFunctionLength : public DecodeVarInt32 {
 
   std::unique_ptr<DecodingState> NextWithValue(
       StreamingDecoder* streaming) override;
+
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    // Copy the bytes we read into the section buffer.
+    size_t num_bytes =
+        std::min(section_buffer_->length() - buffer_offset_, bytes_needed());
+    memcpy(section_buffer_->bytes() + buffer_offset_, buffer(), num_bytes);
+    return Vector<const uint8_t>(section_buffer_->bytes(),
+                                 static_cast<int>(section_buffer_->length()));
+  }
 
  private:
   SectionBuffer* section_buffer_;
@@ -197,6 +240,10 @@ class StreamingDecoder::DecodeFunctionBody : public DecodingState {
   SectionBuffer* section_buffer() const { return section_buffer_; }
 
   std::unique_ptr<DecodingState> Next(StreamingDecoder* streaming) override;
+  Vector<const uint8_t> get_error_buffer(StreamingDecoder* streaming) override {
+    return Vector<const uint8_t>(section_buffer_->bytes(),
+                                 static_cast<int>(section_buffer_->length()));
+  }
 
  private:
   SectionBuffer* section_buffer_;
@@ -209,18 +256,17 @@ size_t StreamingDecoder::DecodeVarInt32::ReadBytes(
     StreamingDecoder* streaming, Vector<const uint8_t> bytes) {
   size_t bytes_read =
       std::min(static_cast<size_t>(bytes.length()), remaining());
-  memcpy(buffer() + offset(), &bytes.first(), bytes_read);
-  streaming->decoder()->Reset(buffer(), buffer() + offset() + bytes_read);
-  value_ = streaming->decoder()->consume_i32v();
+  memcpy(buffer() + offset(), bytes.begin(), bytes_read);
+  Decoder decoder(buffer(), buffer() + offset() + bytes_read);
+  value_ = decoder.consume_i32v();
   // The number of bytes we actually needed to read.
-  DCHECK_GT(streaming->decoder()->pc(), buffer());
-  bytes_needed_ = static_cast<size_t>(streaming->decoder()->pc() - buffer());
+  DCHECK_GT(decoder.pc(), buffer());
+  bytes_needed_ = static_cast<size_t>(decoder.pc() - buffer());
 
-  if (streaming->decoder()->failed()) {
-    if (offset() + bytes_read < size()) {
-      // We did not decode a full buffer, so we ignore errors. Maybe the
-      // decoding will succeed when we have more bytes.
-      streaming->decoder()->Reset(nullptr, nullptr);
+  if (decoder.failed()) {
+    if (offset() + bytes_read == size()) {
+      // We only report an error if we read all bytes.
+      streaming->Error();
     }
     set_offset(offset() + bytes_read);
     return bytes_read;
@@ -235,43 +281,20 @@ size_t StreamingDecoder::DecodeVarInt32::ReadBytes(
 
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeVarInt32::Next(StreamingDecoder* streaming) {
-  if (streaming->decoder()->failed()) {
+  if (!streaming->ok()) {
     return std::unique_ptr<DecodingState>(nullptr);
   }
   if (value() > max_value_) {
-    streaming->decoder()->errorf(buffer(), "size > maximum function size: %zu",
-                                 value());
-    return std::unique_ptr<DecodingState>(nullptr);
+    return streaming->Error();
   }
 
   return NextWithValue(streaming);
 }
 
-#define BYTES(x) (x & 0xff), (x >> 8) & 0xff, (x >> 16) & 0xff, (x >> 24) & 0xff
-// Decode the module header. The error state of the decoder stores the result.
-void StreamingDecoder::DecodeModuleHeader::CheckHeader(Decoder* decoder) {
-  // TODO(ahaas): Share code with the module-decoder.
-  decoder->Reset(buffer(), buffer() + size());
-  uint32_t magic_word = decoder->consume_u32("wasm magic");
-  if (magic_word != kWasmMagic) {
-    decoder->errorf(buffer(),
-                    "expected magic word %02x %02x %02x %02x, "
-                    "found %02x %02x %02x %02x",
-                    BYTES(kWasmMagic), BYTES(magic_word));
-  }
-  uint32_t magic_version = decoder->consume_u32("wasm version");
-  if (magic_version != kWasmVersion) {
-    decoder->errorf(buffer(),
-                    "expected version %02x %02x %02x %02x, "
-                    "found %02x %02x %02x %02x",
-                    BYTES(kWasmVersion), BYTES(magic_version));
-  }
-}
-#undef BYTES
-
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeModuleHeader::Next(StreamingDecoder* streaming) {
-  CheckHeader(streaming->decoder());
+  if (!streaming->ProcessModuleHeader())
+    return std::unique_ptr<DecodingState>(nullptr);
   return std::unique_ptr<DecodingState>(new DecodeSectionID());
 }
 
@@ -288,6 +311,11 @@ StreamingDecoder::DecodeSectionLength::NextWithValue(
       Vector<const uint8_t>(buffer(), static_cast<int>(bytes_needed())));
   if (value() == 0) {
     // There is no payload, we go to the next section immediately.
+    if (section_id() != SectionCode::kCodeSectionCode) {
+      if (!streaming->ProcessSection(buf)) {
+        return std::unique_ptr<DecodingState>(nullptr);
+      }
+    }
     return std::unique_ptr<DecodingState>(new DecodeSectionID());
   } else if (section_id() == SectionCode::kCodeSectionCode) {
     // We reached the code section. All functions of the code section are put
@@ -300,6 +328,9 @@ StreamingDecoder::DecodeSectionLength::NextWithValue(
 
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeSectionPayload::Next(StreamingDecoder* streaming) {
+  if (!streaming->ProcessSection(section_buffer())) {
+    return std::unique_ptr<DecodingState>(nullptr);
+  }
   return std::unique_ptr<DecodingState>(new DecodeSectionID());
 }
 
@@ -311,8 +342,7 @@ StreamingDecoder::DecodeNumberOfFunctions::NextWithValue(
     memcpy(section_buffer_->bytes() + section_buffer_->payload_offset(),
            buffer(), bytes_needed());
   } else {
-    streaming->decoder()->error("Invalid code section length");
-    return std::unique_ptr<DecodingState>(new DecodeSectionID());
+    return streaming->Error();
   }
 
   // {value} is the number of functions.
@@ -332,18 +362,15 @@ StreamingDecoder::DecodeFunctionLength::NextWithValue(
   if (section_buffer_->length() >= buffer_offset_ + bytes_needed()) {
     memcpy(section_buffer_->bytes() + buffer_offset_, buffer(), bytes_needed());
   } else {
-    streaming->decoder()->error("Invalid code section length");
-    return std::unique_ptr<DecodingState>(new DecodeSectionID());
+    return streaming->Error();
   }
 
   // {value} is the length of the function.
   if (value() == 0) {
-    streaming->decoder()->errorf(buffer(), "Invalid function length (0)");
-    return std::unique_ptr<DecodingState>(nullptr);
+    return streaming->Error();
   } else if (buffer_offset() + bytes_needed() + value() >
              section_buffer()->length()) {
-    streaming->decoder()->errorf(buffer(), "not enough code section bytes");
-    return std::unique_ptr<DecodingState>(nullptr);
+    return streaming->Error();
   }
 
   return std::unique_ptr<DecodingState>(
@@ -353,28 +380,22 @@ StreamingDecoder::DecodeFunctionLength::NextWithValue(
 
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeFunctionBody::Next(StreamingDecoder* streaming) {
-  // TODO(ahaas): Start compilation of the function here.
+  if (!streaming->ProcessFunctionBody(
+          Vector<const uint8_t>(buffer(), static_cast<int>(size())))) {
+    return std::unique_ptr<DecodingState>(nullptr);
+  }
   if (num_remaining_functions() != 0) {
     return std::unique_ptr<DecodingState>(new DecodeFunctionLength(
         section_buffer(), buffer_offset() + size(), num_remaining_functions()));
   } else {
     if (buffer_offset() + size() != section_buffer()->length()) {
-      streaming->decoder()->Reset(
-          section_buffer()->bytes(),
-          section_buffer()->bytes() + section_buffer()->length());
-      streaming->decoder()->errorf(
-          section_buffer()->bytes() + buffer_offset() + size(),
-          "not all code section bytes were used");
-      return std::unique_ptr<DecodingState>(nullptr);
+      return streaming->Error();
     }
     return std::unique_ptr<DecodingState>(new DecodeSectionID());
   }
 }
 
-StreamingDecoder::StreamingDecoder(Isolate* isolate)
-    : isolate_(isolate),
+StreamingDecoder::StreamingDecoder(StreamingProcessor* processor)
+    : processor_(processor),
       // A module always starts with a module header.
-      state_(new DecodeModuleHeader()),
-      decoder_(nullptr, nullptr) {
-  USE(isolate_);
-}
+      state_(new DecodeModuleHeader()) {}

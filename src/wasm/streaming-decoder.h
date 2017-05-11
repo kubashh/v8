@@ -14,21 +14,35 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+// This class is an interface for the StreamingDecoder to start the processing
+// of the incoming module bytes.
+class V8_EXPORT_PRIVATE StreamingProcessor {
+ public:
+  virtual ~StreamingProcessor() = default;
+  // Process the first 8 bytes of a WebAssembly module.
+  virtual bool ProcessModuleHeader(Vector<const uint8_t> bytes) = 0;
+  // Process all sections but the code section.
+  virtual bool ProcessSection(Vector<const uint8_t> bytes) = 0;
+  // Process a function body.
+  virtual bool ProcessFunctionBody(Vector<const uint8_t> bytes) = 0;
+  // Report an error detected in the StreamingDecoder.
+  virtual void Error(Vector<const uint8_t> bytes) = 0;
+  // Finish the processing of the stream.
+  virtual void Finish() = 0;
+};
+
 // The StreamingDecoder takes a sequence of byte arrays, each received by a call
 // of {OnBytesReceived}, and extracts the bytes which belong to section payloads
 // and function bodies.
 class V8_EXPORT_PRIVATE StreamingDecoder {
  public:
-  explicit StreamingDecoder(Isolate* isolate);
+  explicit StreamingDecoder(StreamingProcessor* processor);
 
   // The buffer passed into OnBytesReceived is owned by the caller.
   void OnBytesReceived(Vector<const uint8_t> bytes);
 
   // Finishes the stream and returns compiled WasmModuleObject.
-  MaybeHandle<WasmModuleObject> Finish();
-
-  // Finishes the streaming and returns true if no error was detected.
-  bool FinishForTesting();
+  void Finish();
 
  private:
   // The SectionBuffer is the data object for the content of a single section.
@@ -101,6 +115,12 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
     virtual size_t size() const = 0;
     // The buffer to store the received bytes.
     virtual uint8_t* buffer() = 0;
+    // In case of an error the buffer returned by {get_error_buffer} contains
+    // the {SectionBuffer} with the bytes which caused the error. This means
+    // that states like {DecodeFunctionLength} have to copy their buffer into
+    // the {SectionBuffer}.
+    virtual Vector<const uint8_t> get_error_buffer(
+        StreamingDecoder* streaming) = 0;
     // The number of bytes which were already received.
     size_t offset() const { return offset_; }
     void set_offset(size_t value) { offset_ = value; }
@@ -133,12 +153,35 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
     return section_buffers_.back().get();
   }
 
-  Decoder* decoder() { return &decoder_; }
+  std::unique_ptr<DecodingState> Error() {
+    ok_ = false;
+    processor_->Error(state_->get_error_buffer(this));
+    return std::unique_ptr<DecodingState>(nullptr);
+  }
 
-  Isolate* isolate_;
+  bool ProcessModuleHeader() {
+    ok_ &= processor_->ProcessModuleHeader(Vector<const uint8_t>(
+        state_->buffer(), static_cast<int>(state_->size())));
+    return ok_;
+  }
+
+  bool ProcessSection(SectionBuffer* buffer) {
+    ok_ &= processor_->ProcessSection(Vector<const uint8_t>(
+        buffer->bytes(), static_cast<int>(buffer->length())));
+    return ok_;
+  }
+
+  bool ProcessFunctionBody(Vector<const uint8_t> bytes) {
+    ok_ &= processor_->ProcessFunctionBody(bytes);
+    return ok_;
+  }
+
+  bool ok() const { return ok_; }
+
+  StreamingProcessor* processor_;
+  bool ok_ = true;
   std::unique_ptr<DecodingState> state_;
   // The decoder is an instance variable because we use it for error handling.
-  Decoder decoder_;
   std::vector<std::unique_ptr<SectionBuffer>> section_buffers_;
   size_t total_size_ = 0;
 
