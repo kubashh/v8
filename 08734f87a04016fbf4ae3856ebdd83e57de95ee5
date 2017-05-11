@@ -22,6 +22,30 @@
       "revId": "08734f87a04016fbf4ae3856ebdd83e57de95ee5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6fd7f76_4e84ad00",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-11T13:01:50Z",
+      "side": 1,
+      "message": "I actually wanted is_valid() so changed that. Also made FunctionData use kNoSourcePosition instead of magic -1.",
+      "parentUuid": "5e816da4_1e1b77e0",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 140,
+        "endChar": 27
+      },
+      "revId": "08734f87a04016fbf4ae3856ebdd83e57de95ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
