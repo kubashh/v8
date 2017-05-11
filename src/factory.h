@@ -842,8 +842,6 @@ class V8_EXPORT_PRIVATE Factory final {
 
   void SetStrictFunctionInstanceDescriptor(Handle<Map> map,
                                            FunctionMode function_mode);
-
-  void SetClassFunctionInstanceDescriptor(Handle<Map> map);
 };
 
 }  // namespace internal
