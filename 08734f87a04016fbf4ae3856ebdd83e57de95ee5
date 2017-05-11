@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e816da4_1e1b77e0",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-05-11T12:38:05Z",
+      "side": 1,
+      "message": "Hmm. If this needs a comment, then why not check !\u003d kNoSourcePosition ?",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 140,
+        "endChar": 27
+      },
+      "revId": "08734f87a04016fbf4ae3856ebdd83e57de95ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
