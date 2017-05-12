@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82689687_8ce1f8a1",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-12T09:29:41Z",
+      "side": 1,
+      "message": "For readability: \"!function_exports_.empty()\"?",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 34
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eedf7d0d_61672733",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-12T09:29:41Z",
+      "side": 1,
+      "message": "We could also add a method ZoneBuffer::write_string(Vector\u003cconst char\u003e).",
+      "range": {
+        "startLine": 473,
+        "startChar": 6,
+        "endLine": 475,
+        "endChar": 50
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da3ef86d_b29ce831",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-12T09:29:41Z",
+      "side": 1,
+      "message": "Another candidate for Vector\u003cconst char\u003e.\nAlso, we should define WasmFunctionImport and WasmFunctionExport identically, wrt. order and type of fields.\nKeeping them separate seems right though.",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 255,
+        "endChar": 20
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34b4cfd1_2e9c6787",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-12T09:29:41Z",
+      "side": 1,
+      "message": "The WasmFunctionBuilder already stores the WasmModuleBuilder.\nI would propose to add a getter, and just pass the WasmFunctionBuilder here.\nWe can also keep the WasmFunctionBuilder::ExportAs method then.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 71
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
