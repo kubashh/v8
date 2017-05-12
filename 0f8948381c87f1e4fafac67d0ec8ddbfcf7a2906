@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "85db2701_7ffb77c4",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T11:35:21Z",
+      "side": 1,
+      "message": "Ack. I feel that passing just the index makes the interface less robust. The new signature would be (Vector\u003cconst char\u003e, uint32_t) which makes it way easier to pass some \"random integer\" as the index or somehow mess up the semantics of the second argument. Keeping it this way makes sure that only valid functions are exported. Also, all the call sites would become more verbose. WDYT? Would you be OK with keeping the interface as is?",
+      "parentUuid": "d2808f41_338f6bbc",
+      "range": {
+        "startLine": 234,
+        "startChar": 42,
+        "endLine": 234,
+        "endChar": 70
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da3ef86d_b29ce831",
         "filename": "src/wasm/wasm-module-builder.h",
         "patchSetId": 2
