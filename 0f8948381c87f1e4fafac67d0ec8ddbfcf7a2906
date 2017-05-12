@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1518f6cf_7e6c1782",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T10:40:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82689687_8ce1f8a1",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 34
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eedf7d0d_61672733",
         "filename": "src/wasm/wasm-module-builder.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a32ce815_289ac697",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T10:40:05Z",
+      "side": 1,
+      "message": "Done. For now I kept emitting the size (i.e. the {write_size} right before) separate and outside of the {write_string} function. Let me know if you think it makes sense to make this part of {write_string} as well.",
+      "parentUuid": "eedf7d0d_61672733",
+      "range": {
+        "startLine": 473,
+        "startChar": 6,
+        "endLine": 475,
+        "endChar": 50
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "42b48ea8_189b52a2",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T10:40:05Z",
+      "side": 1,
+      "message": "Done. Agreed, definitely want to keep them separate, they just \"happen to have\" the same layout now, but conceptually they are very different.",
+      "parentUuid": "da3ef86d_b29ce831",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 255,
+        "endChar": 20
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34b4cfd1_2e9c6787",
         "filename": "test/cctest/wasm/test-run-wasm-module.cc",
         "patchSetId": 2
@@ -114,6 +186,30 @@
       "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7605ff53_9e1b38b3",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T10:40:05Z",
+      "side": 1,
+      "message": "Done. I went with the {builder} getter. Keeping {ExportAs} seemed more contrived to me.",
+      "parentUuid": "34b4cfd1_2e9c6787",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 71
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
