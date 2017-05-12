@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "26bc1b83_0a9f13a6",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T11:44:29Z",
+      "side": 1,
+      "message": "Agreed. Makes sense, we can always revisit it again. Keeping it as is for now until then. Thanks!",
+      "parentUuid": "daa49f30_418de3c5",
+      "range": {
+        "startLine": 234,
+        "startChar": 42,
+        "endLine": 234,
+        "endChar": 70
+      },
+      "revId": "0f8948381c87f1e4fafac67d0ec8ddbfcf7a2906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da3ef86d_b29ce831",
         "filename": "src/wasm/wasm-module-builder.h",
         "patchSetId": 2
