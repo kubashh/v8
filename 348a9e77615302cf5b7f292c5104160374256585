@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa25d9d2_99d7759e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3534,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-12T08:16:35Z",
+      "side": 1,
+      "message": "let\u0027s move this check to outside the function, for symmetry with the generator prologue building in GenerateBytecode.",
+      "range": {
+        "startLine": 3534,
+        "startChar": 2,
+        "endLine": 3534,
+        "endChar": 62
+      },
+      "revId": "348a9e77615302cf5b7f292c5104160374256585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
