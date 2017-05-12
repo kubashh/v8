@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b0b1b394_4b2b9a7c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-05-12T15:40:37Z",
+      "side": 1,
+      "message": "Haha.. you got me. Done.",
+      "parentUuid": "a7ce43c2_cbd46430",
+      "range": {
+        "startLine": 2609,
+        "startChar": 4,
+        "endLine": 2609,
+        "endChar": 25
+      },
+      "revId": "d23addf20e06b00728a7f50a7c2caa064b333f77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ca43c3e_eb7ea081",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-12T08:28:56Z",
       "side": 1,
       "message": "This works only if all markers use WhiteToBlack (which I think holds for young generation marker).\n\nIf there is a call-site that does \"if (ObjectMarking::WhiteToGrey())\" concurrently then both WhiteToGrey and WhiteToBlack can fail.",
+      "range": {
+        "startLine": 2649,
+        "startChar": 25,
+        "endLine": 2649,
+        "endChar": 37
+      },
+      "revId": "d23addf20e06b00728a7f50a7c2caa064b333f77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8466e2_138a0d41",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2649,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-05-12T15:40:37Z",
+      "side": 1,
+      "message": "Yes, this is how it is supposed to work. There are only WhiteToBlack calls for the young generation.",
+      "parentUuid": "2ca43c3e_eb7ea081",
       "range": {
         "startLine": 2649,
         "startChar": 25,
