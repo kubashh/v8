@@ -773,7 +773,9 @@ TF_BUILTIN(FastArrayPop, CodeStubAssembler) {
 
     // 4) Check that we're not supposed to shrink the backing store.
     Node* capacity = SmiUntag(LoadFixedArrayBaseLength(elements));
-    GotoIf(IntPtrLessThan(IntPtrAdd(new_length, new_length), capacity),
+    Node* incr_length = IntPtrAdd(
+        new_length, IntPtrConstant(JSObject::kMinAddedElementsCapacity));
+    GotoIf(IntPtrLessThan(IntPtrAdd(incr_length, incr_length), capacity),
            &runtime);
 
     StoreObjectFieldNoWriteBarrier(receiver, JSArray::kLengthOffset,
