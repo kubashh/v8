@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c00e25f_8f4ca965",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "who would delete b?",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc97687_6bd8417b",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "Nit: correlate the 2 pieces of information: \"1st 8 bytes of a WebAssembly module\" and \"ModuleHeader\" (like... Process the first 8 bytes of a WebAssembly module, which are expected to be the Module Header)",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc2b11f_b1f1d2e7",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "s/but/except for (it\u0027s more clear, imho)",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c2a319e_ba604f7e",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "ReportError? or is it OnError?\n\nalso... report where?",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0714c9d6_e1932cc8",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "is it OnFinish?",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d608354e_91f8d5f2",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "Did you mean \"...the buffer returned by {get_error_buffer} is the subset of the buffer being processed by this {SectionBuffer} that starts at the offending offset\"\n\nWhy not just return the offset? \n\nSeparately, get_error_buffer doesn\u0027t need to be virtual, you can just have it as public, and have a protected set_error_buffer.\n\nAlso, either \"error_buffer\", or \"GetErrorBuffer\"",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42ce5c1a_c7e3207d",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "Now that we have Vector\u003cT\u003e in terms of size_t, no need to cast here.",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7126239d_5277715c",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "...nor here.",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bead272c_886a53d3",
+        "filename": "test/unittests/wasm/streaming-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "can we do a CHECK in Finish for something? or we just check in tests the num_{sections|functions}?",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f98f2b15_e17f0711",
+        "filename": "test/unittests/wasm/streaming-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-05-12T06:05:11Z",
+      "side": 1,
+      "message": "Should we also have a test where we have an error mid-section?",
+      "revId": "0aeb516e481694138b938ad539f02d88f8f73085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
