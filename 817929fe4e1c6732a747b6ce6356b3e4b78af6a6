@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10ffa51e_6e7d22ab",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-12T10:45:42Z",
+      "side": 1,
+      "message": "Hm, with this implementation, I would have named this just \"write\" or \"write_bytes\". If it\u0027s \"write_string\", then I think it should also emit the length first.\nOr we have both methods, if there are users of both.",
+      "range": {
+        "startLine": 89,
+        "startChar": 7,
+        "endLine": 89,
+        "endChar": 19
+      },
+      "revId": "817929fe4e1c6732a747b6ce6356b3e4b78af6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
