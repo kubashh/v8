@@ -22,6 +22,30 @@
       "revId": "817929fe4e1c6732a747b6ce6356b3e4b78af6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd066418_7dd17f92",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-12T11:17:57Z",
+      "side": 1,
+      "message": "Done. Went with the former.",
+      "parentUuid": "10ffa51e_6e7d22ab",
+      "range": {
+        "startLine": 89,
+        "startChar": 7,
+        "endLine": 89,
+        "endChar": 19
+      },
+      "revId": "817929fe4e1c6732a747b6ce6356b3e4b78af6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
