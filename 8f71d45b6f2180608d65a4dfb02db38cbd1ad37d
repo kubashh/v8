@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "322e63c9_4ea3e523",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-15T06:57:28Z",
+      "side": 1,
+      "message": "Could you extend the comment? Previously it was: shrink backing store if it\u0027s less than half empty.",
+      "revId": "8f71d45b6f2180608d65a4dfb02db38cbd1ad37d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0c54e56_d8623ae3",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-15T06:57:28Z",
+      "side": 1,
+      "message": "This essentially means that we never shrink below 32 elements backing stores.\nI think that\u0027s rather aggressive.\nCould you maybe outline in the CL description the cases where you end up having to always  copy over elements?\nWe only grow once we reach full capacity and only shrink when half-empty, I don\u0027t immediately see how this can lead to the grow/shrink on ever push/pop operation?",
+      "revId": "8f71d45b6f2180608d65a4dfb02db38cbd1ad37d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42bd37a6_eb0adfaa",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-15T06:57:28Z",
+      "side": 1,
+      "message": "You could use WordShl for the multiplication by 2.",
+      "revId": "8f71d45b6f2180608d65a4dfb02db38cbd1ad37d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
