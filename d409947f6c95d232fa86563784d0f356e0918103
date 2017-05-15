@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "392f27f0_e3523def",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2017-05-15T18:45:47Z",
+      "side": 1,
+      "message": "s/callbacksi/callbacks/?",
+      "range": {
+        "startLine": 1005,
+        "startChar": 48,
+        "endLine": 1005,
+        "endChar": 58
+      },
+      "revId": "d409947f6c95d232fa86563784d0f356e0918103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
