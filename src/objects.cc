@@ -14838,7 +14838,7 @@ void JSArray::SetLength(Handle<JSArray> array, uint32_t new_length) {
   if (array->SetLengthWouldNormalize(new_length)) {
     JSObject::NormalizeElements(array);
   }
-  array->GetElementsAccessor()->SetLength(array, new_length);
+  array->GetElementsAccessor()->SetLength(array, new_length, false);
 }
 
 

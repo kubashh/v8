@@ -736,14 +736,16 @@ class ElementsAccessorBase : public ElementsAccessor {
     return Handle<Object>();
   }
 
-  void SetLength(Handle<JSArray> array, uint32_t length) final {
+  void SetLength(Handle<JSArray> array, uint32_t length,
+                 bool leave_space) final {
     Subclass::SetLengthImpl(array->GetIsolate(), array, length,
-                            handle(array->elements()));
+                            handle(array->elements()), leave_space);
   }
 
   static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
                             uint32_t length,
-                            Handle<FixedArrayBase> backing_store) {
+                            Handle<FixedArrayBase> backing_store,
+                            bool leave_space) {
     DCHECK(!array->SetLengthWouldNormalize(length));
     DCHECK(IsFastElementsKind(array->GetElementsKind()));
     uint32_t old_length = 0;
@@ -769,9 +771,14 @@ class ElementsAccessorBase : public ElementsAccessor {
           backing_store = handle(array->elements(), isolate);
         }
       }
-      if (2 * length <= capacity) {
+      if (2 * length + JSObject::kMinAddedElementsCapacity <= capacity) {
         // If more than half the elements won't be used, trim the array.
-        isolate->heap()->RightTrimFixedArray(*backing_store, capacity - length);
+        // Do not trim from short arrays to prevent frequent trimming on
+        // repeated pop operations.
+        // Leave some space to allow for subsequent push operations.
+        int elements_to_trim =
+            leave_space ? (capacity - length) / 2 : capacity - length;
+        isolate->heap()->RightTrimFixedArray(*backing_store, elements_to_trim);
       } else {
         // Otherwise, fill the unused tail with holes.
         BackingStore::cast(*backing_store)->FillWithHoles(length, old_length);
@@ -1355,7 +1362,8 @@ class DictionaryElementsAccessor
 
   static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
                             uint32_t length,
-                            Handle<FixedArrayBase> backing_store) {
+                            Handle<FixedArrayBase> backing_store,
+                            bool leave_space) {
     Handle<SeededNumberDictionary> dict =
         Handle<SeededNumberDictionary>::cast(backing_store);
     int capacity = dict->Capacity();
@@ -2150,8 +2158,8 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
                            int hole_end) {
     Heap* heap = isolate->heap();
     Handle<BackingStore> dst_elms = Handle<BackingStore>::cast(backing_store);
-    if (heap->CanMoveObjectStart(*dst_elms) && dst_index == 0 &&
-        len > JSArray::kMaxCopyElements) {
+    if (len > JSArray::kMaxCopyElements && dst_index == 0 &&
+        heap->CanMoveObjectStart(*dst_elms)) {
       // Update all the copies of this backing_store handle.
       *dst_elms.location() =
           BackingStore::cast(heap->LeftTrimFixedArray(*dst_elms, src_index));
@@ -2407,7 +2415,7 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
       Subclass::MoveElements(isolate, receiver, backing_store, 0, 1, new_length,
                              0, 0);
     }
-    Subclass::SetLengthImpl(isolate, receiver, new_length, backing_store);
+    Subclass::SetLengthImpl(isolate, receiver, new_length, backing_store, true);
 
     if (IsHoleyElementsKind(kind) && result->IsTheHole(isolate)) {
       return isolate->factory()->undefined_value();
@@ -2798,7 +2806,8 @@ class TypedElementsAccessor
 
   static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
                             uint32_t length,
-                            Handle<FixedArrayBase> backing_store) {
+                            Handle<FixedArrayBase> backing_store,
+                            bool leave_space) {
     // External arrays do not support changing their length.
     UNREACHABLE();
   }
@@ -3407,7 +3416,8 @@ class SloppyArgumentsElementsAccessor
 
   static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
                             uint32_t length,
-                            Handle<FixedArrayBase> parameter_map) {
+                            Handle<FixedArrayBase> parameter_map,
+                            bool leave_space) {
     // Sloppy arguments objects are not arrays.
     UNREACHABLE();
   }
