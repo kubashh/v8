@@ -709,7 +709,7 @@ bytecodes: [
                 B(CallRuntime), U16(Runtime::kDefineClass), R(4), U8(4),
                 B(Star), R(4),
                 B(CallRuntime), U16(Runtime::kInstallClassNameAccessor), R(3), U8(1),
-                B(CallRuntime), U16(Runtime::kToFastProperties), R(3), U8(1),
+                B(Ldar), R(5),
                 B(StaModuleVariable), I8(1), U8(0),
                 B(LdaCurrentContextSlot), U8(5),
                 B(Star), R(3),

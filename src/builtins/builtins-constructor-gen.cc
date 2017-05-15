@@ -27,9 +27,6 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   Factory* factory = isolate->factory();
   IncrementCounter(isolate->counters()->fast_new_closure_total(), 1);
 
-  // Create a new closure from the given function info in new space
-  Node* result = Allocate(JSFunction::kSize);
-
   // Calculate the index of the map we should install on the function based on
   // the FunctionKind and LanguageMode of the function.
   // Note: Must be kept in sync with Context::FunctionMapIndex
@@ -123,7 +120,14 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   Node* native_context = LoadNativeContext(context);
   Node* map_slot_value =
       LoadFixedArrayElement(native_context, map_index.value());
+
+  // Create a new closure from the given function info in new space
+  Node* instance_size_in_bytes =
+      WordShl(LoadMapInstanceSize(map_slot_value), kPointerSizeLog2);
+  Node* result = Allocate(instance_size_in_bytes);
   StoreMapNoWriteBarrier(result, map_slot_value);
+  InitializeJSObjectBody(result, map_slot_value, instance_size_in_bytes,
+                         JSFunction::kSize);
 
   // Initialize the rest of the function.
   Node* empty_fixed_array = HeapConstant(factory->empty_fixed_array());
