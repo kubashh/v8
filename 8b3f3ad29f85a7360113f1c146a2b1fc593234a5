@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9c78ca93_7dc6bb76",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-05-15T19:44:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "912a1d7c_56f218a6",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbdc73c2_3379ce35",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-15T14:06:33Z",
       "side": 1,
       "message": "Nit: IntPtrMax may be simpler to read.",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4d4674f_caad89fd",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-05-15T19:44:16Z",
+      "side": 1,
+      "message": "I prefer the comparison... do you insist?",
+      "parentUuid": "cbdc73c2_3379ce35",
       "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "421e3919_d113c532",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-05-15T19:44:16Z",
+      "side": 1,
+      "message": "Well, it\u0027s not all, it\u0027s just the core... which is not a lot of machine code, so inlining it should be fine. (Packaging it as a separate builtin would have overhead, so unless we have \u003e2 callers doesn\u0027t save memory.)\n\n(Assuming you mean Array.p.includes) Yes, I\u0027ll unify .indexOf and .includes in a future CL.",
+      "parentUuid": "ac295700_78468a71",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0c0d547_9cb63978",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "643d8afa_ff7c8948",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-05-15T19:44:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0c0d547_9cb63978",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
