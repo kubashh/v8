@@ -12,7 +12,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 56
+bytecode array length: 53
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateClosure), U8(0), U8(3), U8(2),
@@ -27,13 +27,12 @@ bytecodes: [
                 B(CallRuntime), U16(Runtime::kDefineClass), R(3), U8(4),
                 B(Star), R(3),
                 B(CallRuntime), U16(Runtime::kInstallClassNameAccessor), R(2), U8(1),
-                B(CallRuntime), U16(Runtime::kToFastProperties), R(2), U8(1),
-                B(Star), R(0),
-                B(Star), R(1),
+                B(Mov), R(4), R(0),
+                B(Mov), R(0), R(1),
   /*   89 S> */ B(CreateArrayLiteral), U8(1), U8(6), U8(17),
                 B(Star), R(3),
                 B(Ldar), R(1),
-  /*   89 E> */ B(ConstructWithSpread), R(1), R(3), U8(1),
+  /*   89 E> */ B(ConstructWithSpread), R(2), R(3), U8(1),
                 B(LdaUndefined),
   /*  110 S> */ B(Return),
 ]
@@ -51,7 +50,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 59
+bytecode array length: 56
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateClosure), U8(0), U8(3), U8(2),
@@ -66,15 +65,14 @@ bytecodes: [
                 B(CallRuntime), U16(Runtime::kDefineClass), R(3), U8(4),
                 B(Star), R(3),
                 B(CallRuntime), U16(Runtime::kInstallClassNameAccessor), R(2), U8(1),
-                B(CallRuntime), U16(Runtime::kToFastProperties), R(2), U8(1),
-                B(Star), R(0),
-                B(Star), R(1),
+                B(Mov), R(4), R(0),
+                B(Mov), R(0), R(1),
   /*   89 S> */ B(LdaZero),
                 B(Star), R(3),
                 B(CreateArrayLiteral), U8(1), U8(6), U8(17),
                 B(Star), R(4),
                 B(Ldar), R(1),
-  /*   89 E> */ B(ConstructWithSpread), R(1), R(3), U8(2),
+  /*   89 E> */ B(ConstructWithSpread), R(2), R(3), U8(2),
                 B(LdaUndefined),
   /*  113 S> */ B(Return),
 ]
@@ -92,7 +90,7 @@ snippet: "
 "
 frame size: 8
 parameter count: 1
-bytecode array length: 90
+bytecode array length: 87
 bytecodes: [
   /*   30 E> */ B(StackCheck),
                 B(CreateClosure), U8(0), U8(3), U8(2),
@@ -107,9 +105,8 @@ bytecodes: [
                 B(CallRuntime), U16(Runtime::kDefineClass), R(3), U8(4),
                 B(Star), R(3),
                 B(CallRuntime), U16(Runtime::kInstallClassNameAccessor), R(2), U8(1),
-                B(CallRuntime), U16(Runtime::kToFastProperties), R(2), U8(1),
-                B(Star), R(0),
-                B(Star), R(1),
+                B(Mov), R(4), R(0),
+                B(Mov), R(0), R(1),
   /*   89 S> */ B(LdaUndefined),
                 B(Star), R(2),
                 B(LdaUndefined),

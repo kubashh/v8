@@ -1522,15 +1522,17 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr) {
   Register prototype = register_allocator()->NewRegister();
   builder()->StoreAccumulatorInRegister(prototype);
 
-  if (FunctionLiteral::NeedsHomeObject(expr->constructor())) {
-    // Prototype is already in the accumulator.
-    builder()->StoreHomeObjectProperty(
-        constructor, feedback_index(expr->HomeObjectSlot()), language_mode());
-  }
+  //  if (FunctionLiteral::NeedsHomeObject(expr->constructor())) {
+  //    // Prototype is already in the accumulator.
+  //    builder()->StoreHomeObjectProperty(
+  //        constructor, feedback_index(expr->HomeObjectSlot()),
+  //        language_mode());
+  //  }
 
   VisitClassLiteralProperties(expr, constructor, prototype);
   BuildClassLiteralNameProperty(expr, constructor);
-  builder()->CallRuntime(Runtime::kToFastProperties, constructor);
+  builder()->LoadAccumulatorWithRegister(constructor);
+
   // Assign to class variable.
   if (expr->class_variable_proxy() != nullptr) {
     VariableProxy* proxy = expr->class_variable_proxy();

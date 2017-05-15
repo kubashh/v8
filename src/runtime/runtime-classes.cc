@@ -149,19 +149,19 @@ static MaybeHandle<Object> DefineClass(Isolate* isolate,
   map->SetConstructor(*constructor);
   Handle<JSObject> prototype = isolate->factory()->NewJSObjectFromMap(map);
 
-  JSFunction::SetPrototype(constructor, prototype);
-  PropertyAttributes attribs =
-      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE | READ_ONLY);
-  RETURN_ON_EXCEPTION(isolate,
-                      JSObject::SetOwnPropertyIgnoreAttributes(
-                          constructor, isolate->factory()->prototype_string(),
-                          prototype, attribs),
-                      Object);
+  constructor->map()->set_is_prototype_map(true);
 
-  if (!constructor_parent.is_null()) {
-    MAYBE_RETURN_NULL(JSObject::SetPrototype(constructor, constructor_parent,
-                                             false, Object::THROW_ON_ERROR));
-  }
+  JSFunction::SetPrototype(constructor, prototype);
+  //  PropertyAttributes attribs =
+  //      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE | READ_ONLY);
+  //  RETURN_ON_EXCEPTION(isolate,
+  //                      JSObject::SetOwnPropertyIgnoreAttributes(
+  //                          constructor,
+  //                          isolate->factory()->prototype_string(), prototype,
+  //                          attribs),
+  //                      Object);
+
+  DCHECK(constructor->HasFastProperties());
 
   JSObject::AddProperty(prototype, isolate->factory()->constructor_string(),
                         constructor, DONT_ENUM);
@@ -178,6 +178,67 @@ static MaybeHandle<Object> DefineClass(Isolate* isolate,
                    constructor, isolate->factory()->class_end_position_symbol(),
                    handle(Smi::FromInt(end_position), isolate), STRICT),
       Object);
+  RETURN_ON_EXCEPTION(
+      isolate,
+      Object::SetProperty(constructor, isolate->factory()->home_object_symbol(),
+                          prototype, STRICT),
+      Object);
+
+  JSObject::OptimizeAsPrototype(constructor, FAST_PROTOTYPE);
+
+  if (!constructor_parent.is_null()) {
+    MAYBE_RETURN_NULL(JSObject::SetPrototype(constructor, constructor_parent,
+                                             false, Object::THROW_ON_ERROR));
+  }
+
+  //  // Add required class constructor's properties directly to the properties
+  //  // dictionary.
+  //  Handle<NameDictionary> constructor_properties(
+  //      constructor->property_dictionary(), isolate);
+  //
+  //  // Add length.
+  //  STATIC_ASSERT(JSFunction::kLengthDescriptorIndex == 0);
+  //  {
+  //    PropertyAttributes attrs =
+  //        static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY);
+  //    Handle<AccessorInfo> accessor_info =
+  //        Accessors::FunctionLengthInfo(isolate, attrs);
+  //    Handle<Name> name(Name::cast(accessor_info->name()), isolate);
+  //    PropertyDetails details(kAccessor, attrs, 0, PropertyCellType::kNoCell);
+  //    constructor_properties = NameDictionary::Add(constructor_properties,
+  //    name,
+  //                                                 accessor_info, details);
+  //  }
+  //
+  //  // Add prototype.
+  //  {
+  //    PropertyAttributes attrs =
+  //        static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE |
+  //        READ_ONLY);
+  //    Handle<AccessorInfo> accessor_info =
+  //        Accessors::FunctionPrototypeInfo(isolate, attrs);
+  //    Handle<Name> name(Name::cast(accessor_info->name()), isolate);
+  //    PropertyDetails details(kAccessor, attrs, 0, PropertyCellType::kNoCell);
+  //    constructor_properties = NameDictionary::Add(constructor_properties,
+  //    name,
+  //                                                 accessor_info, details);
+  //  }
+  //
+  //  // Install private properties that are used to construct the
+  //  FunctionToString.
+  //  {
+  //    PropertyDetails details(kData, DONT_ENUM, 0, PropertyCellType::kNoCell);
+  //    constructor_properties = NameDictionary::Add(
+  //        constructor_properties,
+  //        isolate->factory()->class_start_position_symbol(),
+  //        handle(Smi::FromInt(start_position), isolate), details);
+  //    constructor_properties = NameDictionary::Add(
+  //        constructor_properties,
+  //        isolate->factory()->class_end_position_symbol(),
+  //        handle(Smi::FromInt(end_position), isolate), details);
+  //  }
+  //  constructor->set_properties(*constructor_properties);
+  DCHECK(!constructor->HasFastProperties());
 
   // Caller already has access to constructor, so return the prototype.
   return prototype;

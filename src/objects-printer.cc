@@ -1011,6 +1011,8 @@ void JSFunction::JSFunctionPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "Function");
   os << "\n - initial_map = ";
   if (has_initial_map()) os << Brief(initial_map());
+  os << "\n - Function.prototype = ";
+  if (has_prototype()) os << Brief(prototype());
   os << "\n - shared_info = " << Brief(shared());
   os << "\n - name = " << Brief(shared()->name());
   os << "\n - formal_parameter_count = "
