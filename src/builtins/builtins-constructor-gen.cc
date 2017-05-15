@@ -590,13 +590,14 @@ Node* ConstructorBuiltinsAssembler::EmitFastCloneShallowObject(
   // Directly copy over the property store for dict-mode boilerplates.
   Label dict_properties(this), allocate_object(this);
   Branch(IsDictionaryMap(boilerplate_map), &dict_properties, &allocate_object);
-  Bind(&dict_properties);
+  BIND(&dict_properties);
   {
     properties.Bind(
         CopyNameDictionary(LoadProperties(boilerplate), call_runtime));
     in_object_property_count.Bind(IntPtrConstant(0));
     Goto(&allocate_object);
   }
+  BIND(&dict_properties);
   Bind(&allocate_object);
 
   // Calculate the object and allocation size based on the properties count.
