@@ -94,6 +94,29 @@
     },
     {
       "key": {
+        "uuid": "b1013726_cd830f56",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:34:20Z",
+      "side": 1,
+      "message": "Is it possible to insert some checks / dchecks into this CopyCurrentIdentifierString (in Scanner or Parser) checking that we actually have an identifier (ie that the current token is an identifier)?\n\nScanner just blindly returns identifier_string_ without any checks.\n\nIn addition, could the Scanner reset identifier_string_ when it moves past the identifier?",
+      "range": {
+        "startLine": 275,
+        "startChar": 32,
+        "endLine": 275,
+        "endChar": 59
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9947672_bc6e6050",
         "filename": "src/asmjs/asm-parser.cc",
         "patchSetId": 5
@@ -110,6 +133,52 @@
         "startChar": 2,
         "endLine": 337,
         "endChar": 3
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c58faf61_b96f0d13",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:34:20Z",
+      "side": 1,
+      "message": "Nit: could this be moved below ValidateFunctionTable so that they\u0027re ordered logically?",
+      "range": {
+        "startLine": 618,
+        "startChar": 18,
+        "endLine": 618,
+        "endChar": 32
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc1436b5_7d060939",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:34:20Z",
+      "side": 1,
+      "message": "Confused... why would it be ok to have a global here?\n\nDoes it happen when we happen to use a name of an existing global variable as a variable name here too?\n\nAnd I\u0027m confused by this !IsGlobal() \u0026\u0026 !IsLocal() since... we basically need to tell the Scanner which one to expect. And I\u0027d guess we\u0027re inside a local scope here... ah wait, so IsGlobal can only be true when we\u0027re in a local scope but the variable name is already a global variable name?\n\nLogically, isn\u0027t the name here independent of any global and local variables which might have the same name? Is it only because of the restriction of the scanner that it always check for existing names before creating new ones that this code looks like this?",
+      "range": {
+        "startLine": 625,
+        "startChar": 11,
+        "endLine": 625,
+        "endChar": 30
       },
       "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -225,6 +294,29 @@
         "startChar": 2,
         "endLine": 119,
         "endChar": 52
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0586a104_fb206ca6",
+        "filename": "src/asmjs/asm-scanner.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:34:20Z",
+      "side": 1,
+      "message": "Here we just crash V8. Shouldn\u0027t we just fail the validation instead?\n\nkMaxIdentifierCount is only used in these CHECKs...\n\nThis is a bit below the max string length so isn\u0027t it possible that we hit them?\n\n(Max string length is (1 \u003c\u003c 28) - 16 which is roughly 286 millions and this is 0xf000000 which is 251 millions.)",
+      "range": {
+        "startLine": 263,
+        "startChar": 4,
+        "endLine": 263,
+        "endChar": 9
       },
       "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
