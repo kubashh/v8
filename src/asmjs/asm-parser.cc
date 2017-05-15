@@ -71,6 +71,7 @@ namespace wasm {
 AsmJsParser::AsmJsParser(Isolate* isolate, Zone* zone, Handle<Script> script,
                          int start, int end)
     : zone_(zone),
+      isolate_(isolate),
       module_builder_(new (zone) WasmModuleBuilder(zone)),
       return_type_(nullptr),
       stack_limit_(isolate->stack_guard()->real_climit()),
@@ -174,6 +175,9 @@ FunctionSig* AsmJsParser::ConvertSignature(
 }
 
 bool AsmJsParser::Run() {
+  HistogramTimerScope asm_wasm_time_scope(
+      isolate_->counters()->asm_wasm_translation_time());
+
   ValidateModule();
   return !failed_;
 }

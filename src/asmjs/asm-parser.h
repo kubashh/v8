@@ -108,6 +108,7 @@ class AsmJsParser {
   class TemporaryVariableScope;
 
   Zone* zone_;
+  Isolate* isolate_;
   AsmJsScanner scanner_;
   WasmModuleBuilder* module_builder_;
   WasmFunctionBuilder* current_function_builder_;
