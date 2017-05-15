@@ -186,6 +186,30 @@
     },
     {
       "key": {
+        "uuid": "f035d193_0f91bfcd",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T14:20:04Z",
+      "side": 1,
+      "message": "Offline discussion:\n\n- Here it should never be local -\u003e DCHECK\n- This check should be only if (!scanner_.IsGlobal()) { .. }",
+      "parentUuid": "bc1436b5_7d060939",
+      "range": {
+        "startLine": 625,
+        "startChar": 11,
+        "endLine": 625,
+        "endChar": 30
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be4d492_e1e853a5",
         "filename": "src/asmjs/asm-parser.h",
         "patchSetId": 5
