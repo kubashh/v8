@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "517a6011_24ceea95",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:41:40Z",
+      "side": 1,
+      "message": "Done; but I\u0027m slightly bothered by the fact that that would allow -2... Not sure what\u0027s the right thing to check against here.",
+      "parentUuid": "86a113cf_3bc0ed79",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "2ad3756d183072c68b7b99969ba435163f22b2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1863858d_82d82a90",
         "filename": "src/parsing/preparsed-scope-data.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "2ad3756d183072c68b7b99969ba435163f22b2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1968ce_e30b1df8",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-15T13:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1863858d_82d82a90",
+      "range": {
+        "startLine": 106,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 25
+      },
+      "revId": "2ad3756d183072c68b7b99969ba435163f22b2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
