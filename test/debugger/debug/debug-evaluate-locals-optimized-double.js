@@ -154,7 +154,11 @@ function g3(i, x1, y1) {
   a1 = a1 + a1 / 100;
   b1 = b1 + b1 / 100;
   h(i - 1, a1, b1);
-  return a1 + b1;
+  if (i) {
+    return a1 + b1;
+  } else {
+    return a1 - b1;
+  }
 };
 
 function g2(i) {
@@ -163,7 +167,11 @@ function g2(i) {
   a2 = a2 + a2 / 100;
   b2 = b2 + b2 / 100;
   g3(i - 1, a2, b2);
-  return a2 + b2;
+  if (i) {
+    return a2 + b2;
+  } else {
+    return a2 - b2;
+  }
 };
 
 function g1(i, x3, y3, z3) {
@@ -172,7 +180,11 @@ function g1(i, x3, y3, z3) {
   a3 = a3 + a3 / 100;
   b3 = b3 + b3 / 100;
   new g2(i - 1, a3, b3);
-  return a3 + b3;
+  if (i) {
+    return a3 + b3;
+  } else {
+    return a3 - b3;
+  }
 };
 
 function f(i, x4, y4) {
@@ -181,7 +193,11 @@ function f(i, x4, y4) {
   a4 = a4 + a4 / 100;
   b4 = b4 + b4 / 100;
   g1(i - 1, a4, b4);
-  return a4 + b4;
+  if (i) {
+    return a4 + b4;
+  } else {
+    return a4 - b4;
+  }
 };
 
 // Test calling f normally and as a constructor.
