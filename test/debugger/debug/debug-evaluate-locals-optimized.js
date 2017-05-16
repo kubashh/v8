@@ -141,28 +141,44 @@ function g3(i, x1, y1) {
   var a1 = expected[i].locals.a1;
   var b1 = expected[i].locals.b1;
   h(i - 1, a1, b1);
-  return a1 + b1;
+  if (i) {
+    return a1 + b1;
+  } else {
+    return a1 - b1;
+  }
 }
 
 function g2(i) {
   var a2 = expected[i].locals.a2;
   var b2 = expected[i].locals.b2;
   g3(i - 1, a2, b2);
-  return a2 + b2;
+  if (i) {
+    return a2 + b2;
+  } else {
+    return a2 - b2;
+  }
 }
 
 function g1(i, x3, y3, z3) {
   var a3 = expected[i].locals.a3;
   var b3 = expected[i].locals.b3;
   new g2(i - 1, a3, b3);
-  return a3 + b3;
+  if (i) {
+    return a3 + b3;
+  } else {
+    return a3 - b3;
+  }
 }
 
 function f(i, x4, y4) {
   var a4 = expected[i].locals.a4;
   var b4 = expected[i].locals.b4;
   g1(i - 1, a4, b4);
-  return a4 + b4;
+  if (i) {
+    return a4 + b4;
+  } else {
+    return a4 - b4;
+  }
 }
 
 // Test calling f normally and as a constructor.
