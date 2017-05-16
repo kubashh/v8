@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "6e4a1c71_bd4a8c2a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-16T08:27:33Z",
+      "side": 1,
+      "message": "Nope go ahead, no strong opinion.",
+      "parentUuid": "f4d4674f_caad89fd",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac295700_78468a71",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -104,6 +122,24 @@
       "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69689a90_0fe94cb6",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-16T08:27:33Z",
+      "side": 1,
+      "message": "Ack. Yep, Array.p.includes of course :)",
+      "parentUuid": "421e3919_d113c532",
+      "revId": "8b3f3ad29f85a7360113f1c146a2b1fc593234a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
