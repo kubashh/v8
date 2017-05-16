@@ -210,6 +210,52 @@
     },
     {
       "key": {
+        "uuid": "2adf8673_87d6dfbc",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-16T11:30:07Z",
+      "side": 1,
+      "message": "This is still very confusing... so we don\u0027t really \"stay\" in the local scope ever, we\u0027re just telling the scanner that the next identifier it reaches is a local, and were doing that by entering the local scope, scanning one token forward and then immediately exiting the local scope.\n\nWould an API like this be cleaer:\n\nscanner_.NextIdentifierIsLocal();\nEXPECT_TOKEN(TOK(var)); \u003c\u003c Scanner would clear the flag now as it has reached the next identifier.\n\nNextIdentifierIsLocal could also DCHECK that it\u0027s called early enough (ie we\u0027re not in a position where we have just scanned an identifier).",
+      "range": {
+        "startLine": 862,
+        "startChar": 4,
+        "endLine": 864,
+        "endChar": 32
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f9622e9_e5b7c128",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-16T11:30:07Z",
+      "side": 1,
+      "message": "Here 0 is used as a special \"no token\" value. But in Scanner, it doesn\u0027t look like it\u0027s \"reserved\" for that purpose:\n\n// 0        .. 255                         :: Single char tokens\n\nWould it make sense to make it explicit in the Scanner that 0 is the \"no token\" token, and define a constant for it, and use it here (and possibly in other places)?",
+      "range": {
+        "startLine": 1016,
+        "startChar": 2,
+        "endLine": 1016,
+        "endChar": 48
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be4d492_e1e853a5",
         "filename": "src/asmjs/asm-parser.h",
         "patchSetId": 5
