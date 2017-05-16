@@ -45,6 +45,30 @@
       "revId": "4b6d858e77823f3d4c9422f7fb14351d1fd7bb7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cad12d9_78407bb3",
+        "filename": "src/code-factory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-05-16T15:31:50Z",
+      "side": 1,
+      "message": "Builtins::CallableFor() is apparently only usable for TFC, TFS and TFH builtins, but not CPP builtins.",
+      "parentUuid": "f528f518_628793b2",
+      "range": {
+        "startLine": 187,
+        "startChar": 18,
+        "endLine": 187,
+        "endChar": 28
+      },
+      "revId": "4b6d858e77823f3d4c9422f7fb14351d1fd7bb7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
