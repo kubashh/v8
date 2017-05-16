@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fd6015c_ec9fed76",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-05-16T15:06:24Z",
+      "side": 1,
+      "message": "s/lenght/length",
+      "range": {
+        "startLine": 1011,
+        "startChar": 26,
+        "endLine": 1011,
+        "endChar": 32
+      },
+      "revId": "4b6d858e77823f3d4c9422f7fb14351d1fd7bb7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f528f518_628793b2",
+        "filename": "src/code-factory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-05-16T15:06:24Z",
+      "side": 1,
+      "message": "I think now there is this method Builtins::CallableFor() so you either don\u0027t have to add ArrayShift here in code-factory or in your implementation you can use that method.",
+      "range": {
+        "startLine": 187,
+        "startChar": 18,
+        "endLine": 187,
+        "endChar": 28
+      },
+      "revId": "4b6d858e77823f3d4c9422f7fb14351d1fd7bb7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
