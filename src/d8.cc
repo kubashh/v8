@@ -137,6 +137,37 @@ class ShellArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
     return data;
   }
 #endif
+
+  virtual void* Reserve(size_t length) {
+    return base::VirtualMemory::ReserveRegion(length);
+  }
+
+  virtual void Free(void* data, size_t length,
+                    v8::ArrayBuffer::Allocator::AllocationMode mode) {
+    switch (mode) {
+      case v8::ArrayBuffer::Allocator::AllocationMode::kNormal: {
+        return Free(data, length);
+      }
+      case v8::ArrayBuffer::Allocator::AllocationMode::kReservation: {
+        base::VirtualMemory::ReleaseRegion(data, length);
+      }
+    }
+  }
+
+  virtual void SetProtection(
+      void* data, size_t length,
+      v8::ArrayBuffer::Allocator::Protection protection) {
+    switch (protection) {
+      case v8::ArrayBuffer::Allocator::Protection::kNoAccess: {
+        base::VirtualMemory::UncommitRegion(data, length);
+        return;
+      }
+      case v8::ArrayBuffer::Allocator::Protection::kReadWrite: {
+        const bool is_executable = false;
+        base::VirtualMemory::CommitRegion(data, length, is_executable);
+      }
+    }
+  }
 };
 
 
@@ -151,6 +182,36 @@ class MockArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
     return length > 10 * MB ? malloc(1) : malloc(length);
   }
   void Free(void* p, size_t) override { free(p); }
+  void* Reserve(size_t length) override {
+    return base::VirtualMemory::ReserveRegion(length);
+  }
+
+  void Free(void* data, size_t length,
+            v8::ArrayBuffer::Allocator::AllocationMode mode) override {
+    switch (mode) {
+      case v8::ArrayBuffer::Allocator::AllocationMode::kNormal: {
+        return Free(data, length);
+      }
+      case v8::ArrayBuffer::Allocator::AllocationMode::kReservation: {
+        base::VirtualMemory::ReleaseRegion(data, length);
+      }
+    }
+  }
+
+  void SetProtection(
+      void* data, size_t length,
+      v8::ArrayBuffer::Allocator::Protection protection) override {
+    switch (protection) {
+      case v8::ArrayBuffer::Allocator::Protection::kNoAccess: {
+        base::VirtualMemory::UncommitRegion(data, length);
+        return;
+      }
+      case v8::ArrayBuffer::Allocator::Protection::kReadWrite: {
+        const bool is_executable = false;
+        base::VirtualMemory::CommitRegion(data, length, is_executable);
+      }
+    }
+  }
 };
 
 

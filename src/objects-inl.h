@@ -6922,6 +6922,31 @@ void JSArrayBuffer::set_backing_store(void* value, WriteBarrierMode mode) {
 
 ACCESSORS(JSArrayBuffer, byte_length, Object, kByteLengthOffset)
 
+void* JSArrayBuffer::allocation_base() const {
+  intptr_t ptr = READ_INTPTR_FIELD(this, kAllocationBaseOffset);
+  return reinterpret_cast<void*>(ptr);
+}
+
+void JSArrayBuffer::set_allocation_base(void* value, WriteBarrierMode mode) {
+  intptr_t ptr = reinterpret_cast<intptr_t>(value);
+  WRITE_INTPTR_FIELD(this, kAllocationBaseOffset, ptr);
+}
+
+size_t JSArrayBuffer::allocation_length() const {
+  return *reinterpret_cast<const size_t*>(
+      FIELD_ADDR_CONST(this, kAllocationLengthOffset));
+}
+
+void JSArrayBuffer::set_allocation_length(size_t value) {
+  (*reinterpret_cast<size_t*>(FIELD_ADDR(this, kAllocationLengthOffset))) =
+      value;
+}
+
+ArrayBuffer::Allocator::AllocationMode JSArrayBuffer::allocation_mode() const {
+  using AllocationMode = ArrayBuffer::Allocator::AllocationMode;
+  return has_guard_region() ? AllocationMode::kReservation
+                            : AllocationMode::kNormal;
+}
 
 void JSArrayBuffer::set_bit_field(uint32_t bits) {
   if (kInt32Size != kPointerSize) {
@@ -6944,7 +6969,6 @@ bool JSArrayBuffer::is_external() { return IsExternal::decode(bit_field()); }
 
 
 void JSArrayBuffer::set_is_external(bool value) {
-  DCHECK(!value || !has_guard_region());
   set_bit_field(IsExternal::update(bit_field(), value));
 }
 
@@ -6974,7 +6998,7 @@ void JSArrayBuffer::set_is_shared(bool value) {
   set_bit_field(IsShared::update(bit_field(), value));
 }
 
-bool JSArrayBuffer::has_guard_region() {
+bool JSArrayBuffer::has_guard_region() const {
   return HasGuardRegion::decode(bit_field());
 }
 
