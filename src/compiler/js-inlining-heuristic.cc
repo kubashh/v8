@@ -55,10 +55,6 @@ bool CanInlineFunction(Handle<SharedFunctionInfo> shared) {
   // Only choose user code for inlining.
   if (!shared->IsUserJavaScript()) return false;
 
-  // Quick check on the size of the AST to avoid parsing large candidate.
-  if (shared->ast_node_count() > FLAG_max_inlined_nodes) {
-    return false;
-  }
 
   // Avoid inlining across the boundary of asm.js code.
   if (shared->asm_function()) return false;
@@ -101,6 +97,7 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
 
   // Functions marked with %SetForceInlineFlag are immediately inlined.
   bool can_inline = false, force_inline = true, small_inline = true;
+  int total_nodes = 0;
   for (int i = 0; i < candidate.num_functions; ++i) {
     Handle<SharedFunctionInfo> shared =
         candidate.functions[i].is_null()
@@ -115,7 +112,9 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
     if (!IsSmallInlineFunction(shared)) {
       small_inline = false;
     }
+    total_nodes += shared->ast_node_count();
   }
+  if (total_nodes > FLAG_max_inlined_nodes) return NoChange();
   if (force_inline) return InlineCandidate(candidate);
   if (!can_inline) return NoChange();
 
@@ -167,6 +166,8 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
   }
 
   // Forcibly inline small functions here.
+  // TODO(mythria): What do we do with polymorphic inlining. If all
+  // functions are small then inline.
   if (small_inline) {
     TRACE("Inlining small function(s) at call site #%d:%s\n", node->id(),
           node->op()->mnemonic());
