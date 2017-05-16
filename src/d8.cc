@@ -73,9 +73,37 @@ const int kMaxSerializerMemoryUsage = 1 * MB;  // Arbitrary maximum for testing.
 // array buffers storing the lengths as a SMI internally.
 #define TWO_GB (2u * 1024u * 1024u * 1024u)
 
-class ShellArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+// Forwards memory reservation and protection functions to the V8 default
+// allocator. Used by ShellArrayBufferAllocator and MockArrayBufferAllocator.
+class ArrayBufferAllocatorBase : public v8::ArrayBuffer::Allocator {
+  std::unique_ptr<Allocator> allocator_ =
+      std::unique_ptr<Allocator>(NewDefaultAllocator());
+
  public:
-  virtual void* Allocate(size_t length) {
+  void* Reserve(size_t length) override { return allocator_->Reserve(length); }
+
+  void Free(void*, size_t) override = 0;
+
+  void Free(void* data, size_t length, AllocationMode mode) override {
+    switch (mode) {
+      case AllocationMode::kNormal: {
+        return Free(data, length);
+      }
+      case AllocationMode::kReservation: {
+        return allocator_->Free(data, length, mode);
+      }
+    }
+  }
+
+  void SetProtection(void* data, size_t length,
+                     Protection protection) override {
+    allocator_->SetProtection(data, length, protection);
+  }
+};
+
+class ShellArrayBufferAllocator : public ArrayBufferAllocatorBase {
+ public:
+  void* Allocate(size_t length) override {
 #if USE_VM
     if (RoundToPageSize(&length)) {
       void* data = VirtualMemoryAllocate(length);
@@ -95,7 +123,7 @@ class ShellArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
     void* data = AllocateUninitialized(length);
     return data == NULL ? data : memset(data, 0, length);
   }
-  virtual void* AllocateUninitialized(size_t length) {
+  void* AllocateUninitialized(size_t length) override {
 #if USE_VM
     if (RoundToPageSize(&length)) return VirtualMemoryAllocate(length);
 #endif
@@ -107,7 +135,7 @@ class ShellArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
     return malloc(length);
 #endif
   }
-  virtual void Free(void* data, size_t length) {
+  void Free(void* data, size_t length) override {
 #if USE_VM
     if (RoundToPageSize(&length)) {
       base::VirtualMemory::ReleaseRegion(data, length);
@@ -139,8 +167,7 @@ class ShellArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
 #endif
 };
 
-
-class MockArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+class MockArrayBufferAllocator : public ArrayBufferAllocatorBase {
  public:
   void* Allocate(size_t length) override {
     size_t actual_length = length > 10 * MB ? 1 : length;
