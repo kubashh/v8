@@ -50,9 +50,6 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   // exists.
   RegisterInfo* GetEquivalentToMaterialize();
 
-  // Marks all temporary registers of the equivalence set as unmaterialized.
-  void MarkTemporariesAsUnmaterialized(Register temporary_base);
-
   // Get an equivalent register. Returns this if none exists.
   RegisterInfo* GetEquivalent();
 
@@ -171,19 +168,6 @@ BytecodeRegisterOptimizer::RegisterInfo::GetEquivalentToMaterialize() {
     visitor = visitor->next_;
   }
   return best_info;
-}
-
-void BytecodeRegisterOptimizer::RegisterInfo::MarkTemporariesAsUnmaterialized(
-    Register temporary_base) {
-  DCHECK(this->register_value() < temporary_base);
-  DCHECK(this->materialized());
-  RegisterInfo* visitor = this->next_;
-  while (visitor != this) {
-    if (visitor->register_value() >= temporary_base) {
-      visitor->set_materialized(false);
-    }
-    visitor = visitor->next_;
-  }
 }
 
 BytecodeRegisterOptimizer::RegisterInfo*
@@ -343,13 +327,6 @@ void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
     output_info->set_materialized(false);
     RegisterInfo* materialized_info = input_info->GetMaterializedEquivalent();
     OutputRegisterTransfer(materialized_info, output_info);
-  }
-
-  bool input_is_observable = RegisterIsObservable(input_info->register_value());
-  if (input_is_observable) {
-    // If input is observable by the debugger, mark all other temporaries
-    // registers as unmaterialized so that this register is used in preference.
-    input_info->MarkTemporariesAsUnmaterialized(temporary_base_);
   }
 }
 
