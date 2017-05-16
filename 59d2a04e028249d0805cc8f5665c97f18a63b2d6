@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb0845a3_49915148",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-16T10:34:44Z",
+      "side": 1,
+      "message": "I don\u0027t think these are needed any longer (hangover from an old approach in the constant pool builder) - could you remove them all from this file please?",
+      "range": {
+        "startLine": 684,
+        "startChar": 2,
+        "endLine": 684,
+        "endChar": 44
+      },
+      "revId": "59d2a04e028249d0805cc8f5665c97f18a63b2d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
