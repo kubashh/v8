@@ -680,6 +680,103 @@ TEST_F(BytecodeArrayBuilderTest, BackwardJumps) {
   CHECK(iterator.done());
 }
 
+TEST_F(BytecodeArrayBuilderTest, SmallSwitch) {
+  CanonicalHandleScope canonical(isolate());
+  BytecodeArrayBuilder builder(isolate(), zone(), 1, 0, 1);
+
+  // Small jump table that fits into the single-size constant pool
+  int small_jump_table_size = 5;
+  int small_jump_table_base = -2;
+  BytecodeJumpTable* small_jump_table =
+      builder.AllocateJumpTable(small_jump_table_size, small_jump_table_base);
+
+  builder.LoadLiteral(Smi::FromInt(7)).SwitchOnSmiNoFeedback(small_jump_table);
+  for (int i = 0; i < small_jump_table_size; i++) {
+    builder.Bind(small_jump_table, small_jump_table_base + i).Debugger();
+  }
+  builder.Return();
+
+  Handle<BytecodeArray> array = builder.ToBytecodeArray(isolate());
+  BytecodeArrayIterator iterator(array);
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kLdaSmi);
+  iterator.Advance();
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kSwitchOnSmiNoFeedback);
+  CHECK_EQ(iterator.current_operand_scale(), OperandScale::kSingle);
+  {
+    int i = 0;
+    int switch_end =
+        iterator.current_offset() + iterator.current_bytecode_size();
+
+    for (const auto& entry : iterator.GetJumpTableTargetOffsets()) {
+      CHECK_EQ(entry.case_value, small_jump_table_base + i);
+      CHECK_EQ(entry.target_offset, switch_end + i);
+
+      i++;
+    }
+    CHECK_EQ(i, small_jump_table_size);
+  }
+  iterator.Advance();
+
+  for (int i = 0; i < small_jump_table_size; i++) {
+    CHECK_EQ(iterator.current_bytecode(), Bytecode::kDebugger);
+    iterator.Advance();
+  }
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kReturn);
+  iterator.Advance();
+  CHECK(iterator.done());
+}
+
+TEST_F(BytecodeArrayBuilderTest, WideSwitch) {
+  CanonicalHandleScope canonical(isolate());
+  BytecodeArrayBuilder builder(isolate(), zone(), 1, 0, 1);
+
+  // Large jump table that requires a wide Switch bytecode.
+  int large_jump_table_size = 256;
+  int large_jump_table_base = -10;
+  BytecodeJumpTable* large_jump_table =
+      builder.AllocateJumpTable(large_jump_table_size, large_jump_table_base);
+
+  builder.LoadLiteral(Smi::FromInt(7)).SwitchOnSmiNoFeedback(large_jump_table);
+  for (int i = 0; i < large_jump_table_size; i++) {
+    builder.Bind(large_jump_table, large_jump_table_base + i).Debugger();
+  }
+  builder.Return();
+
+  Handle<BytecodeArray> array = builder.ToBytecodeArray(isolate());
+  BytecodeArrayIterator iterator(array);
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kLdaSmi);
+  iterator.Advance();
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kSwitchOnSmiNoFeedback);
+  CHECK_EQ(iterator.current_operand_scale(), OperandScale::kDouble);
+  {
+    int i = 0;
+    int switch_end =
+        iterator.current_offset() + iterator.current_bytecode_size();
+
+    for (const auto& entry : iterator.GetJumpTableTargetOffsets()) {
+      CHECK_EQ(entry.case_value, large_jump_table_base + i);
+      CHECK_EQ(entry.target_offset, switch_end + i);
+
+      i++;
+    }
+    CHECK_EQ(i, large_jump_table_size);
+  }
+  iterator.Advance();
+
+  for (int i = 0; i < large_jump_table_size; i++) {
+    CHECK_EQ(iterator.current_bytecode(), Bytecode::kDebugger);
+    iterator.Advance();
+  }
+
+  CHECK_EQ(iterator.current_bytecode(), Bytecode::kReturn);
+  iterator.Advance();
+  CHECK(iterator.done());
+}
 
 TEST_F(BytecodeArrayBuilderTest, LabelReuse) {
   CanonicalHandleScope canonical(isolate());
