@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b3bc9f39_2e697389",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Is this the fix: https://chromium.googlesource.com/v8/v8/+/2de2840f2ec238226504fcf05bac6f01cfd2b53d%5E%21/#F0\n\nThe problem with Map currently is that some of the bootstrapping is still done in js so the prototype will still transition if we do this.",
+      "parentUuid": "6480d1fb_ce5698f1",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a8597d8_4eda1e85",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-17T10:46:16Z",
       "side": 1,
       "message": "Nit: CSA_ASSERT(WordEqual(js_map_func, LoadContext(..)) for clarity.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ad0d76_8a457bf1",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Hmm, I\u0027m not passing in the context at all. Do you think it\u0027s worthwhile to pass in an unused arg just for the dcheck?",
+      "parentUuid": "4a8597d8_4eda1e85",
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "38b985d0_08d1c7e4",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Will do all optimizations in follow on pass. Added TODO",
+      "parentUuid": "fdc73973_70d5004d",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62d808c7_d99872c9",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1b63a3_42522a24",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62d808c7_d99872c9",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1b0bce58_556db6b2",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9929413e_79852a40",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aadfb53_07008644",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -101,6 +191,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9354fc33_172a3ddd",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aadfb53_07008644",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "3f4b13ee_3c3d371b",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d48f6af_d93e407a",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f920a1f_2cd197ee",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -135,6 +261,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c181bf3c_1b0ce9ad",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f920a1f_2cd197ee",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "15b46a99_fec07986",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "As discussed offline, this is observable.",
+      "parentUuid": "286806e0_4efb2ca5",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fbb5308_8910e8c8",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -169,6 +331,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6778b108_f8c679ca",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fbb5308_8910e8c8",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "3e873088_cc11bad2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9181,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fd05da9_3914f0a2",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "428a9ce2_08c7dece",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -203,6 +401,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f8ae90_f2b39365",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9187,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "428a9ce2_08c7dece",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "82a54e8e_c77a24b6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9207,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85d7605b_e185b228",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c950a5b_1527aa37",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -237,6 +471,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b3350c_2fbe2fe1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9217,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9c950a5b_1527aa37",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "396752f6_39cac2b1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9296,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a07ef72b_a2b7ec59",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a92030ef_8e62fdf5",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -274,6 +544,24 @@
     },
     {
       "key": {
+        "uuid": "951a9b64_a8faa80a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9301,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a92030ef_8e62fdf5",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c167fe2a_5672e20e",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 2
@@ -285,6 +573,24 @@
       "writtenOn": "2017-05-17T10:46:16Z",
       "side": 1,
       "message": "Why not put these in a relevant builtins-*-gen file? That way the code isn\u0027t compiled into snapshot builds.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbc1c3f7_3c2b7cd5",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "This will be used by other builtins (promises, etc)",
+      "parentUuid": "c167fe2a_5672e20e",
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

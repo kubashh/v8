@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fbbdc038_702d1f54",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3201473_33cbe13c",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f9a6a61_faad2f70",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-17T11:37:48Z",
       "side": 1,
       "message": "I don\u0027t think we have the correct tests in place for the Map and Set constructors.\nCould you add a couple of js tests? Preferably separate file as es6/collection.js is already rather large and might have invalidated certain fast-paths by the time we reach the tests.\nAlso, conclude every modification with %VerifyHeapObject(map).",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90d85ab7_1b36181e",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "We have exhaustive test262 for this, do you think we should add more?",
+      "parentUuid": "9f9a6a61_faad2f70",
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9ce1d49a_31558325",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08ae70b7_1ef850b9",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9b475d6_27455e97",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c32eaeb7_c5b8fc62",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9b475d6_27455e97",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "3e832e20_4422b6f7",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bacb863_1412214e",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e176136_020e7e54",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 3
@@ -101,6 +191,24 @@
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d6148a8_7f6b082c",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e176136_020e7e54",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "c2423433_2486a0d4",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9207,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abb301d2_27c25d98",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b3d7fc5_920df049",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -135,6 +261,24 @@
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c585f29a_62b32185",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9268,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b3d7fc5_920df049",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "d0fa1465_6f97ebf7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9287,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d4f6636_5f3b8246",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45f87487_ec3ebdbb",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "959c5d97_9e7fc637",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9301,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45f87487_ec3ebdbb",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d5c8da9_7d2b3494",
         "filename": "src/heap-symbols.h",
         "patchSetId": 3
@@ -186,6 +366,24 @@
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c58b553_3f1f0452",
+        "filename": "src/heap-symbols.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-17T13:29:04Z",
+      "side": 1,
+      "message": "Nice. TIL. I put this in the bootstrapper, lmk if there\u0027s a better place",
+      "parentUuid": "1d5c8da9_7d2b3494",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
