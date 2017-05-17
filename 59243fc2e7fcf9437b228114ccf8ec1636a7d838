@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2df6beaf_2cbf7aa6",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T13:46:01Z",
+      "side": 1,
+      "message": "Yup. It\u0027s hacky, but maybe we should just MigrateSlowToFast in Genesis::InstallNatives.",
+      "parentUuid": "b3bc9f39_2e697389",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a8597d8_4eda1e85",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Hmm, I\u0027m not passing in the context at all. Do you think it\u0027s worthwhile to pass in an unused arg just for the dcheck?",
       "parentUuid": "4a8597d8_4eda1e85",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6fd4c02_b75c3f7a",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T13:46:01Z",
+      "side": 1,
+      "message": "Right.. as you like. I like the assert since it makes it explicit that js_map_function is only passed in to avoid a repeated load from the context.",
+      "parentUuid": "d5ad0d76_8a457bf1",
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +140,24 @@
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b59bd825_2985ade6",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T13:46:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "38b985d0_08d1c7e4",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -591,6 +645,24 @@
       "side": 1,
       "message": "This will be used by other builtins (promises, etc)",
       "parentUuid": "c167fe2a_5672e20e",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84a30cf1_26bcbe35",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T13:46:01Z",
+      "side": 1,
+      "message": "Sure, but that doesn\u0027t mean it needs to stay in c-s-a.cc - for example the other builtins could instantiate an IteratorBuiltinsAssembler.",
+      "parentUuid": "fbc1c3f7_3c2b7cd5",
       "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
