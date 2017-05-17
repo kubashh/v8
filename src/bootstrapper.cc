@@ -2900,12 +2900,28 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
   }
 
   {  // -- M a p
-    Handle<JSFunction> js_map_fun = InstallFunction(
-        global, "Map", JS_MAP_TYPE, JSMap::kSize,
-        isolate->initial_object_prototype(), Builtins::kIllegal);
+    Handle<JSObject> prototype =
+        factory->NewJSObject(isolate->object_function(), TENURED);
+    Handle<JSFunction> js_map_fun =
+        InstallFunction(global, "Map", JS_MAP_TYPE, JSMap::kSize, prototype,
+                        Builtins::kMapConstructor);
     InstallWithIntrinsicDefaultProto(isolate, js_map_fun,
                                      Context::JS_MAP_FUN_INDEX);
-    InstallSpeciesGetter(js_map_fun);
+
+    Handle<SharedFunctionInfo> shared(js_map_fun->shared(), isolate);
+    shared->SetConstructStub(*isolate->builtins()->JSBuiltinsConstructStub());
+    shared->set_instance_class_name(isolate->heap()->Object_string());
+    shared->set_internal_formal_parameter_count(1);
+    shared->set_length(1);
+
+    // Install the "constructor" property on the {prototype}.
+    JSObject::AddProperty(prototype, factory->constructor_string(), js_map_fun,
+                          DONT_ENUM);
+
+    // Install the @@toStringTag property on the {prototype}.
+    JSObject::AddProperty(
+        prototype, factory->to_string_tag_symbol(), factory->Map_string(),
+        static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
   }
 
   {  // -- S e t
