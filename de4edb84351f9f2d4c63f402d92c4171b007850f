@@ -16,6 +16,176 @@
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f9a6a61_faad2f70",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "I don\u0027t think we have the correct tests in place for the Map and Set constructors.\nCould you add a couple of js tests? Preferably separate file as es6/collection.js is already rather large and might have invalidated certain fast-paths by the time we reach the tests.\nAlso, conclude every modification with %VerifyHeapObject(map).",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08ae70b7_1ef850b9",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "nit: underscores please :)",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9b475d6_27455e97",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "no need to initialize the variable, both branches below bind a value.",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bacb863_1412214e",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "GotoIf(IsUndefined(iterable), \u0026exit);",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e176136_020e7e54",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "GotoIf(IsNull(iterable), \u0026exit);",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abb301d2_27c25d98",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9207,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "uhm, why not just use branches, and a \"done\" variable and return that.",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b3d7fc5_920df049",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9268,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "same here, just us branches instead of lambdas.",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d4f6636_5f3b8246",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9287,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "GotoIfNot(IsUndefined(exception), \u0026done)",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45f87487_ec3ebdbb",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 9301,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "GotoIfNot(WordEqual(exception, UndefinedConstant()), \u0026done);",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d5c8da9_7d2b3494",
+        "filename": "src/heap-symbols.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-17T11:37:48Z",
+      "side": 1,
+      "message": "You should set a proper index hash on the zero and one_string, otherwise we cannot take direct elements lookup and first convert the string back to an index.\nSee Uint32ToString.",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
