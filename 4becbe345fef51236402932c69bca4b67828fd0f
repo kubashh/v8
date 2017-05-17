@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f3061c08_5e347eab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-17T10:55:22Z",
+      "side": 1,
+      "message": "It\u0027s changing what used to be a --trace-ignition flag on mksnapshot (kind-of compile time), to enabling/disabling printing at runtime. So --trace-ignition becomes a runtime flag (activating printing), and v8_enable_trace_ignition is the new compile-time flag (controlling the existence of the feature), while previously --trace-ignition controlled the existence and printing was unconditional. Does that make sense?",
+      "parentUuid": "e1a47a6b_b08e0a80",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "4becbe345fef51236402932c69bca4b67828fd0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10f5f3da_b785a398",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "4becbe345fef51236402932c69bca4b67828fd0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "107cf0e2_1f6296b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-17T10:55:22Z",
+      "side": 1,
+      "message": "Just debug performance, --trace-ignition is rarely used and this adds two runtime calls to every single bytecode. Compiling with v8_enable_trace_ignition but keeping the runtime flag off is reasonable, mksnapshot is one example, debugging an ignition issue without having to recompile for tracing is another. See Adam\u0027s message on v8-dev: https://groups.google.com/forum/#!topic/v8-dev/iOycSfP4f9U",
+      "parentUuid": "10f5f3da_b785a398",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "4becbe345fef51236402932c69bca4b67828fd0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
