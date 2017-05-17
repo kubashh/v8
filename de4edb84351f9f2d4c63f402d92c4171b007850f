@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3201473_33cbe13c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "In collection.js the length is 0.",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

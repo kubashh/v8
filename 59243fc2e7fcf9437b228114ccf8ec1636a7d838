@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6480d1fb_ce5698f1",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Since we\u0027re here, could you fix http://crbug.com/v8/5902 for Map and Set? Both currently have dict_mode maps.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a8597d8_4eda1e85",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: CSA_ASSERT(WordEqual(js_map_func, LoadContext(..)) for clarity.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdc73973_70d5004d",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "I suggest not adapting arguments since iterable is optional.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62d808c7_d99872c9",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: We have a context, why not pass it in?",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9929413e_79852a40",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: IsUndefined, IsNull. If these are both unlikely we could avoid one branch (see IsNullOrUndefined in string builtins).",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aadfb53_07008644",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: IsCallable(adder)",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d48f6af_d93e407a",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "IsUndefined",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f920a1f_2cd197ee",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "We should really extract this pattern to CSA at some point.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "286806e0_4efb2ca5",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "SmiConstant(x) is fine instead of zero/one_string.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fbb5308_8910e8c8",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Args in JS code are different:\n\nthrow %make_type_error(kPropertyNotFunction, adder, \u0027set\u0027, this);",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fd05da9_3914f0a2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9181,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Can this be a Smi? If not, please add a CSA_ASSERT.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "428a9ce2_08c7dece",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9187,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: Unreachable();",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85d7605b_e185b228",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9207,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Nit: The () are not needed :)",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c950a5b_1527aa37",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9217,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "We could extract this pattern to CSA::ToBoolean_Inline (see e.g. ToLength_Inline).",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a07ef72b_a2b7ec59",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9296,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Unreachable()",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a92030ef_8e62fdf5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9301,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Could we move this before GotoIfException to avoid duplication?",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c167fe2a_5672e20e",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 1,
+      "message": "Why not put these in a relevant builtins-*-gen file? That way the code isn\u0027t compiled into snapshot builds.",
+      "revId": "59243fc2e7fcf9437b228114ccf8ec1636a7d838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

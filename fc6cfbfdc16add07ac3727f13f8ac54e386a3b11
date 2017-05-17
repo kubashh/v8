@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ad1f3e2_71030ad5",
+        "filename": "src/js/collection.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-17T10:46:16Z",
+      "side": 0,
+      "message": "Isn\u0027t all of this setup is now in bootstrapper? Up to L440.",
+      "revId": "fc6cfbfdc16add07ac3727f13f8ac54e386a3b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
