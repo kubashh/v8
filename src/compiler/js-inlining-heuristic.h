@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_JS_INLINING_HEURISTIC_H_
 #define V8_COMPILER_JS_INLINING_HEURISTIC_H_
 
+#include "src/compilation-info.h"
 #include "src/compiler/js-inlining.h"
 
 namespace v8 {
@@ -22,7 +23,10 @@ class JSInliningHeuristic final : public AdvancedReducer {
         inliner_(editor, local_zone, info, jsgraph, source_positions),
         candidates_(local_zone),
         seen_(local_zone),
-        jsgraph_(jsgraph) {}
+        jsgraph_(jsgraph) {
+    // Initialize cumulative_count_ with the size of the current function.
+    cumulative_count_ = info->shared_info()->ast_node_count();
+  }
 
   Reduction Reduce(Node* node) final;
 
