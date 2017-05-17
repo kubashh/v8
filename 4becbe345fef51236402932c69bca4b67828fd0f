@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1a47a6b_b08e0a80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-05-17T06:51:22Z",
+      "side": 1,
+      "message": "This is a bit confusing. Aren\u0027t you mainly making it a compile-time flag with this change? Or rather some sort of combination, i.e. the existence of the feature is now controlled at compile-time, while printing is activated at runtime.",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "4becbe345fef51236402932c69bca4b67828fd0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f5f3da_b785a398",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-05-17T06:51:22Z",
+      "side": 1,
+      "message": "Why actually? Why not have it on by default or even remove the flag entirely? Would there be a reason to compile with v8_enable_trace_ignition, but keep the runtime flag off? Is it only for avoiding to print in mksnapshot?",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "4becbe345fef51236402932c69bca4b67828fd0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
