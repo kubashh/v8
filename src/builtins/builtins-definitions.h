@@ -541,6 +541,9 @@ namespace internal {
   TFH(LoadGlobalICInsideTypeofTrampoline, LOAD_GLOBAL_IC, kNoExtraICState,     \
       LoadGlobal)                                                              \
                                                                                \
+  /* Map */                                                                    \
+  TFJ(MapConstructor, 1, kIterable)                                            \
+                                                                               \
   /* Math */                                                                   \
   /* ES6 #sec-math.abs */                                                      \
   TFJ(MathAbs, 1, kX)                                                          \

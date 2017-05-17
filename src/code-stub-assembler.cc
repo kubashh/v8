@@ -9171,6 +9171,142 @@ Node* CodeStubAssembler::MarkerIsNotFrameType(Node* marker_or_function,
                       IntPtrConstant(StackFrame::TypeToMarker(frame_type)));
 }
 
+Node* CodeStubAssembler::GetIterator(Node* context, Node* object) {
+  Node* method = GetProperty(context, object, factory()->iterator_symbol());
+
+  Callable callable = CodeFactory::Call(isolate());
+  Node* iterator = CallJS(callable, context, method, object);
+
+  Label done(this), if_notobject(this, Label::kDeferred);
+  GotoIf(TaggedIsSmi(iterator), &if_notobject);
+  Branch(IsJSReceiver(iterator), &done, &if_notobject);
+
+  BIND(&if_notobject);
+  {
+    CallRuntime(Runtime::kThrowTypeError, context,
+                SmiConstant(MessageTemplate::kNotAnIterator), iterator);
+    Unreachable();
+  }
+
+  BIND(&done);
+  return iterator;
+}
+
+Node* CodeStubAssembler::IteratorStep(Node* context, Node* iterator,
+                                      Label* if_done,
+                                      Node* fast_iterator_result_map) {
+  DCHECK_NOT_NULL(if_done);
+  Node* next_method = GetProperty(context, iterator, factory()->next_string());
+
+  Callable callable = CodeFactory::Call(isolate());
+  Node* result = CallJS(callable, context, next_method, iterator);
+
+  Label if_notobject(this, Label::kDeferred), return_result(this);
+  GotoIf(TaggedIsSmi(result), &if_notobject);
+  GotoIfNot(IsJSReceiver(result), &if_notobject);
+
+  Label if_generic(this);
+  VARIABLE(var_done, MachineRepresentation::kTagged);
+
+  if (fast_iterator_result_map != nullptr) {
+    Node* map = LoadMap(result);
+    GotoIfNot(WordEqual(map, fast_iterator_result_map), &if_generic);
+    Node* done = LoadObjectField(result, JSIteratorResult::kDoneOffset);
+    CSA_ASSERT(this, IsBoolean(done));
+    var_done.Bind(done);
+    Goto(&return_result);
+  } else {
+    Goto(&if_generic);
+  }
+
+  BIND(&if_generic);
+  {
+    Node* done = GetProperty(context, result, factory()->done_string());
+    var_done.Bind(done);
+
+    Label to_boolean(this, Label::kDeferred);
+    GotoIf(TaggedIsSmi(done), &to_boolean);
+    Branch(IsBoolean(done), &return_result, &to_boolean);
+
+    BIND(&to_boolean);
+    var_done.Bind(CallStub(CodeFactory::ToBoolean(isolate()), context, done));
+    Goto(&return_result);
+  }
+
+  BIND(&if_notobject);
+  {
+    CallRuntime(Runtime::kThrowIteratorResultNotAnObject, context, result);
+    Goto(if_done);
+  }
+
+  BIND(&return_result);
+  GotoIf(IsTrue(var_done.value()), if_done);
+  return result;
+}
+
+Node* CodeStubAssembler::IteratorValue(Node* context, Node* result,
+                                       Node* fast_iterator_result_map) {
+  CSA_ASSERT(this, IsJSReceiver(result));
+
+  Label exit(this), if_generic(this);
+  VARIABLE(var_value, MachineRepresentation::kTagged);
+  if (fast_iterator_result_map != nullptr) {
+    Node* map = LoadMap(result);
+    GotoIfNot(WordEqual(map, fast_iterator_result_map), &if_generic);
+    var_value.Bind(LoadObjectField(result, JSIteratorResult::kValueOffset));
+    Goto(&exit);
+  } else {
+    Goto(&if_generic);
+  }
+
+  Bind(&if_generic);
+  {
+    Node* value = GetProperty(context, result, factory()->value_string());
+    var_value.Bind(value);
+    Goto(&exit);
+  }
+
+  Bind(&exit);
+  return var_value.value();
+}
+
+void CodeStubAssembler::IteratorClose(Node* context, Node* iterator,
+                                      Node* exception) {
+  CSA_ASSERT(this, IsJSReceiver(iterator));
+
+  Node* method = GetProperty(context, iterator, factory()->return_string());
+
+  Label done(this), if_iter_exception(this), if_notobject(this);
+  VARIABLE(var_iter_exception, MachineRepresentation::kTagged,
+           UndefinedConstant());
+  GotoIf(IsUndefined(method), &done);
+
+  Node* inner_result =
+      CallJS(CodeFactory::Call(isolate()), context, method, iterator);
+
+  GotoIfException(inner_result, &if_iter_exception, &var_iter_exception);
+  GotoIfNot(IsUndefined(exception), &done);
+
+  GotoIf(TaggedIsSmi(inner_result), &if_notobject);
+  Branch(IsJSReceiver(inner_result), &done, &if_notobject);
+
+  BIND(&if_notobject);
+  {
+    CallRuntime(Runtime::kThrowIteratorResultNotAnObject, context,
+                inner_result);
+    Unreachable();
+  }
+
+  BIND(&if_iter_exception);
+  {
+    GotoIfNot(WordEqual(exception, UndefinedConstant()), &done);
+    CallRuntime(Runtime::kReThrow, context, var_iter_exception.value());
+    Unreachable();
+  }
+
+  BIND(&done);
+}
+
 void CodeStubAssembler::Print(const char* s) {
 #ifdef DEBUG
   std::string formatted(s);
