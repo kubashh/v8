@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e29c53_23d0ad50",
+        "filename": "tools/release/update_node.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-05-17T06:29:28Z",
+      "side": 1,
+      "message": "nit: I assume these are fake names? Might be better to call them \"fake\" or fake@chromium.org, otherwise it might lead to confusion in the future and somebody might look for a v8-bot user?",
+      "range": {
+        "startLine": 75,
+        "startChar": 31,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "46b4da86f4ebfe98f34902530ca387eac197c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
