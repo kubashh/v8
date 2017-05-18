@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <functional>
 #include <memory>
 
 #include "src/asmjs/asm-js.h"
@@ -322,7 +323,8 @@ class CompilationHelper {
         : CancelableTask(helper->isolate_), helper_(helper) {}
 
     void RunInternal() override {
-      while (helper_->FetchAndExecuteCompilationUnit()) {
+      // No need for the no_finisher_callback here.
+      while (helper_->FetchAndExecuteCompilationUnit([]() {})) {
       }
       helper_->module_->pending_tasks.get()->Signal();
     }
@@ -337,9 +339,11 @@ class CompilationHelper {
   base::Mutex result_mutex_;
   base::AtomicNumber<size_t> next_unit_;
   size_t num_background_tasks_ = 0;
+  volatile bool finisher_is_running_ = false;
 
   // Run by each compilation task and by the main thread.
-  bool FetchAndExecuteCompilationUnit() {
+  bool FetchAndExecuteCompilationUnit(
+      std::function<void()> no_finisher_callback) {
     DisallowHeapAllocation no_allocation;
     DisallowHandleAllocation no_handles;
     DisallowHandleDereference no_deref;
@@ -354,8 +358,16 @@ class CompilationHelper {
     std::unique_ptr<compiler::WasmCompilationUnit> unit =
         std::move(compilation_units_.at(index));
     unit->ExecuteCompilation();
-    base::LockGuard<base::Mutex> guard(&result_mutex_);
-    executed_units_.push(std::move(unit));
+    {
+      base::LockGuard<base::Mutex> guard(&result_mutex_);
+      executed_units_.push(std::move(unit));
+      if (!finisher_is_running_) {
+        no_finisher_callback();
+        // We set the finisher_is_running_ field already to avoid spawning
+        // multiple finisher tasks.
+        finisher_is_running_ = true;
+      }
+    }
     return true;
   }
 
@@ -410,11 +422,19 @@ class CompilationHelper {
 
   void FinishCompilationUnits(std::vector<Handle<Code>>& results,
                               ErrorThrower* thrower) {
+    {
+      base::LockGuard<base::Mutex> guard(&result_mutex_);
+      finisher_is_running_ = true;
+    }
     while (true) {
       int func_index = -1;
       Handle<Code> result = FinishCompilationUnit(thrower, &func_index);
       if (func_index < 0) break;
       results[func_index] = result;
+    }
+    {
+      base::LockGuard<base::Mutex> guard(&result_mutex_);
+      finisher_is_running_ = false;
     }
   }
 
@@ -474,7 +494,9 @@ class CompilationHelper {
     //      unit at a time and execute the parallel phase of the compilation
     //      unit. After finishing the execution of the parallel phase, the
     //      result is enqueued in {executed_units}.
-    while (FetchAndExecuteCompilationUnit()) {
+
+    // No need for the no_finisher_callback here.
+    while (FetchAndExecuteCompilationUnit([]() {})) {
       // 3.b) If {executed_units} contains a compilation unit, the main thread
       //      dequeues it and finishes the compilation unit. Compilation units
       //      are finished concurrently to the background threads to save
@@ -2877,13 +2899,13 @@ class AsyncCompileJob {
         {
           DisallowHandleAllocation no_handle;
           DisallowHeapAllocation no_allocation;
-          if (!job_->helper_->FetchAndExecuteCompilationUnit()) break;
+          if (!job_->helper_->FetchAndExecuteCompilationUnit([this]() {
+                if (!job_->failed_) {
+                  job_->DoSync<FinishCompilationUnits>();
+                }
+              }))
+            break;
         }
-        // TODO(ahaas): Create one FinishCompilationUnit job for all compilation
-        // units.
-        job_->DoSync<FinishCompilationUnit>();
-        // TODO(ahaas): Limit the number of outstanding compilation units to be
-        // finished to reduce memory overhead.
       }
       // Special handling for predictable mode, see above.
       if (!FLAG_verify_predictable)
@@ -2894,21 +2916,27 @@ class AsyncCompileJob {
   //==========================================================================
   // Step 4 (sync x each function): Finish a single compilation unit.
   //==========================================================================
-  class FinishCompilationUnit : public SyncCompileTask {
+  class FinishCompilationUnits : public SyncCompileTask {
     void RunImpl() override {
-      TRACE_COMPILE("(4a) Finishing compilation unit...\n");
+      TRACE_COMPILE("(4a) Finishing compilation units...\n");
       HandleScope scope(job_->isolate_);
-      if (job_->failed_) return;  // already failed
-
-      int func_index = -1;
       ErrorThrower thrower(job_->isolate_, "AsyncCompile");
-      Handle<Code> result =
-          job_->helper_->FinishCompilationUnit(&thrower, &func_index);
-      if (thrower.error()) {
-        job_->failed_ = true;
-      } else {
-        DCHECK(func_index >= 0);
-        job_->code_table_->set(func_index, *(result));
+      while (true) {
+        if (job_->failed_) return;  // already failed
+
+        int func_index = -1;
+
+        Handle<Code> result =
+            job_->helper_->FinishCompilationUnit(&thrower, &func_index);
+        if (thrower.error()) {
+          job_->failed_ = true;
+          break;
+        } else if (result.is_null()) {
+          break;
+        } else {
+          DCHECK(func_index >= 0);
+          job_->code_table_->set(func_index, *(result));
+        }
       }
       if (thrower.error() || --job_->outstanding_units_ == 0) {
         // All compilation units are done. We still need to wait for the
