@@ -483,6 +483,7 @@
         'builtins/builtins-call.cc',
         'builtins/builtins-call-gen.cc',
         'builtins/builtins-callsite.cc',
+        'builtins/builtins-collections-gen.cc',
         'builtins/builtins-console.cc',
         'builtins/builtins-console-gen.cc',
         'builtins/builtins-constructor-gen.cc',
