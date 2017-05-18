@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "e268cf1b_31f4eb61",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-18T08:32:18Z",
+      "side": 1,
+      "message": "For the base implementation you have right now test262 is probably fine.\nOnce you start adding optimizations you have to write specific tests focusing on the different code paths within V8.\nTest262 is too much spec focused for these kind of tests.",
+      "parentUuid": "90d85ab7_1b36181e",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08ae70b7_1ef850b9",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 3
@@ -381,6 +399,24 @@
       "side": 1,
       "message": "Nice. TIL. I put this in the bootstrapper, lmk if there\u0027s a better place",
       "parentUuid": "1d5c8da9_7d2b3494",
+      "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca661d9e_ee29c5fb",
+        "filename": "src/heap-symbols.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-18T08:32:18Z",
+      "side": 1,
+      "message": "yes, bootstrapper is the place to go.",
+      "parentUuid": "0c58b553_3f1f0452",
       "revId": "de4edb84351f9f2d4c63f402d92c4171b007850f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

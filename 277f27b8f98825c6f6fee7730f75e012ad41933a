@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "031dc0f2_64afb5a2",
+        "filename": "src/isolate.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-18T08:32:18Z",
+      "side": 1,
+      "message": "merge artifact?",
+      "revId": "277f27b8f98825c6f6fee7730f75e012ad41933a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
