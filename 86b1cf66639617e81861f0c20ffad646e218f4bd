@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a2549f3_92dc6635",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "This field is only accessed in a locked scope. No need for volatile.\nPlease add a comment here that this field must only be accessed while holding result_mutex_.",
+      "range": {
+        "startLine": 342,
+        "startChar": 2,
+        "endLine": 342,
+        "endChar": 10
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b69623a_6cc5b77b",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "Can you extend the comment of the function to shortly describe when this callback will be called?",
+      "range": {
+        "startLine": 346,
+        "startChar": 28,
+        "endLine": 346,
+        "endChar": 48
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "677b9796_79fdca76",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "SetFinisherIsRunning(true)",
+      "range": {
+        "startLine": 424,
+        "startChar": 4,
+        "endLine": 427,
+        "endChar": 5
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a8022e6_994a7439",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "SetFinisherIsRunning(false)",
+      "range": {
+        "startLine": 434,
+        "startChar": 3,
+        "endLine": 437,
+        "endChar": 5
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7833aba_58234b16",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "no need to static_cast here.",
+      "range": {
+        "startLine": 2617,
+        "startChar": 9,
+        "endLine": 2617,
+        "endChar": 28
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb73c300_05f3a046",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "I think it would be nicer to assign this lambda to a variable outside of the for loop. Giving it a name probably also increases readability.",
+      "range": {
+        "startLine": 2911,
+        "startChar": 61,
+        "endLine": 2915,
+        "endChar": 17
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99359d69_fec5a20c",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2926,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "This comment is outdated.",
+      "range": {
+        "startLine": 2926,
+        "startChar": 13,
+        "endLine": 2926,
+        "endChar": 33
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28bdfdf5_adb41c4a",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2937,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "I am wondering if this loop can be written as \"do {...} while (MonotonicallyIncreasingTimeInMs() \u003c deadline);\". This would increase readability a lot. You would have to move the \"SetFinisherIsRunning(false)\"  to the \"if (result.is_null())\" body.",
+      "range": {
+        "startLine": 2937,
+        "startChar": 0,
+        "endLine": 2937,
+        "endChar": 20
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c62554e4_961aa942",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "This can be outside of the loop. (the if-statement and the variable declaration)",
+      "range": {
+        "startLine": 2938,
+        "startChar": 8,
+        "endLine": 2941,
+        "endChar": 0
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edfbc8d1_8c9eccfa",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2953,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T13:17:17Z",
+      "side": 1,
+      "message": "The parentheses are confusing.",
+      "range": {
+        "startLine": 2953,
+        "startChar": 44,
+        "endLine": 2953,
+        "endChar": 52
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
