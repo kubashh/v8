@@ -140,6 +140,29 @@
     },
     {
       "key": {
+        "uuid": "aac4b0cc_635966a6",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "This is using a magic -1 to signal \"not found\".\n\nA more explicit approach would be:\nbool FindBreakLabelDepth(token label, int* depth);",
+      "range": {
+        "startLine": 338,
+        "startChar": 10,
+        "endLine": 338,
+        "endChar": 11
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c58faf61_b96f0d13",
         "filename": "src/asmjs/asm-parser.cc",
         "patchSetId": 5
@@ -249,6 +272,190 @@
         "startChar": 2,
         "endLine": 1016,
         "endChar": 48
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51d20a2b_b362b9dd",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "Interesting... looks like not all loops check failed_ - should they? Or is this one superfluous?\n\nDon\u0027t EXPECT_TOKEN above and RECURSE below return if we fail, so, here failed_ can never be true, and checking it is unnecessary?",
+      "range": {
+        "startLine": 1022,
+        "startChar": 10,
+        "endLine": 1022,
+        "endChar": 17
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0783fd72_ff88bae7",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "Why another pending_label_ here?",
+      "range": {
+        "startLine": 1115,
+        "startChar": 2,
+        "endLine": 1115,
+        "endChar": 6
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "631cfe7b_4652aeb3",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "Why do we use pending_label_ again here?",
+      "range": {
+        "startLine": 1141,
+        "startChar": 30,
+        "endLine": 1141,
+        "endChar": 44
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab94d38_71e9b920",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "Nit: surprising choice of words since \"race\" means something else when talking about threads. \"Skip\"?",
+      "range": {
+        "startLine": 1185,
+        "startChar": 5,
+        "endLine": 1185,
+        "endChar": 9
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40d62965_b692aa8d",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "It\u0027s nontrivial to see where pending_label_ is reset. Seems to be a bunch of places...\n\nBut here it should be reset anyway so can we DCHECK_EQ(pending_label_, 0); here?\n\n(And I assume it can\u0027t be reset after this RECURSE since that\u0027s too late; it needs to be reset right after it\u0027s used.)\n\nAn alternative approach would be to not have pending_label_ but pass it explicitly as a parameter. How messy would that be?",
+      "range": {
+        "startLine": 1248,
+        "startChar": 2,
+        "endLine": 1248,
+        "endChar": 9
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8924d66c_3068aaa1",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "Ditto (here and below)",
+      "range": {
+        "startLine": 1282,
+        "startChar": 10,
+        "endLine": 1282,
+        "endChar": 17
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e075cfb_ab8bad92",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "bool negate \u003d Check(\u0027-\u0027);",
+      "range": {
+        "startLine": 1299,
+        "startChar": 2,
+        "endLine": 1302,
+        "endChar": 3
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aefbe5a5_d13cc96d",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-18T11:48:46Z",
+      "side": 1,
+      "message": "When can this happen?",
+      "range": {
+        "startLine": 1395,
+        "startChar": 8,
+        "endLine": 1395,
+        "endChar": 38
       },
       "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
