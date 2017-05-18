@@ -304,7 +304,17 @@ function MapGet(key) {
                         'Map.prototype.get', this);
   }
   var table = %_JSCollectionGetTable(this);
+  var nof = ORDERED_HASH_TABLE_ELEMENT_COUNT(table);
   var numBuckets = ORDERED_HASH_TABLE_BUCKET_COUNT(table);
+  if (nof < 16) {
+      for(var i = 0; i < nof; i++) {
+          var candidate = ORDERED_HASH_MAP_KEY_AT(table, i, numBuckets);
+          if (key === candidate) {
+              return ORDERED_HASH_MAP_VALUE_AT(table, i, numBuckets);
+          }
+      }
+      return UNDEFINED;
+  }
   var hash = GetExistingHash(key);
   if (IS_UNDEFINED(hash)) return UNDEFINED;
   var entry = MapFindEntry(table, numBuckets, key, hash);
