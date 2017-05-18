@@ -649,6 +649,7 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
       // Placeholder to hold {node}'s value dependencies while {node} is
       // replaced.
       Node* dummy = graph()->NewNode(common()->Dead());
+      PrintF("dummy: %i\n", dummy->id());
       NodeProperties::ReplaceUses(node, dummy, node, node, node);
       Node* result;
       if (FLAG_harmony_restrict_constructor_return &&
@@ -687,9 +688,8 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
         result =
             graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
                              create, node, merge);
-        NodeProperties::ReplaceUses(node_success, node_success, node_success,
-                                    merge);
-        // Fix input destroyed by the above {ReplaceUses} call.
+        ReplaceWithValue(node_success, node_success, node_success, merge);
+        // Fix input destroyed by the above {ReplaceWithValue} call.
         NodeProperties::ReplaceControlInput(branch_is_undefined, node_success,
                                             0);
       } else {
@@ -702,7 +702,7 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
                              check, node, create);
       }
       receiver = create;  // The implicit receiver.
-      NodeProperties::ReplaceUses(dummy, result);
+      ReplaceWithValue(dummy, result);
     } else if (IsDerivedConstructor(shared_info->kind())) {
       Node* node_success =
           NodeProperties::FindSuccessfulControlProjection(node);
@@ -726,9 +726,9 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
       NodeProperties::MergeControlToEnd(graph(), common(),
                                         branch_is_receiver_false);
 
-      NodeProperties::ReplaceUses(node_success, node_success, node_success,
-                                  branch_is_receiver_true);
-      // Fix input destroyed by the above {ReplaceUses} call.
+      ReplaceWithValue(node_success, node_success, node_success,
+                       branch_is_receiver_true);
+      // Fix input destroyed by the above {ReplaceWithValue} call.
       NodeProperties::ReplaceControlInput(branch_is_receiver, node_success, 0);
     }
     node->ReplaceInput(1, receiver);
