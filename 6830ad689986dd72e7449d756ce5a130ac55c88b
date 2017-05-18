@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e651a24_50cba0c8",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T14:31:07Z",
+      "side": 1,
+      "message": "You could also make this constexpr while you change it anyway.",
+      "range": {
+        "startLine": 23,
+        "startChar": 9,
+        "endLine": 23,
+        "endChar": 14
+      },
+      "revId": "6830ad689986dd72e7449d756ce5a130ac55c88b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c91275b7_a4310b0e",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-18T14:31:07Z",
+      "side": 1,
+      "message": "Did you check whether growing by a factor of three is really worth it?",
+      "range": {
+        "startLine": 128,
+        "startChar": 47,
+        "endLine": 128,
+        "endChar": 51
+      },
+      "revId": "6830ad689986dd72e7449d756ce5a130ac55c88b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
