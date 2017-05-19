@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "583a7538_4109fdc2",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "this doesn\u0027t set the proper index hash, use Uint32ToString or do the same as for the zero_string",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b3887d_59ef139c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9383,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "Could you scope the IteratorNext and IteratorComplete steps and add a comment, makes following the code much easier.",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75986134_faab1bfd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9467,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "nit: move this up right after GetProperty",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7efcf518_b87e3ac9",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9473,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "if I read the spec correctly, this statements corresponds to 7.4.6 step 6, which comes before the inner_result checks.",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e99e0f_5e35c651",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9487,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "IsUndefined(exception)",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c72280c_f97ce831",
+        "filename": "src/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-05-19T09:03:11Z",
+      "side": 1,
+      "message": "I think your added return statement warrants a comment :):\n\nif (code-\u003eGetCode()-\u003eis_promise_rejection()) {\n  // ??\n  if (code-\u003eGetCode()-\u003eis_exception_caught() {\n     return HandlerTable::UNCAUGHT;\n  }\n  return HandlerTable::PROMISE;\n}",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
