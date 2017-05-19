@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2c332e0a_48b48ce3",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a2549f3_92dc6635",
+      "range": {
+        "startLine": 342,
+        "startChar": 2,
+        "endLine": 342,
+        "endChar": 10
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b69623a_6cc5b77b",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73fd06de_623fdc51",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b69623a_6cc5b77b",
+      "range": {
+        "startLine": 346,
+        "startChar": 28,
+        "endLine": 346,
+        "endChar": 48
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e1dbec3e_28cda427",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "677b9796_79fdca76",
+      "range": {
+        "startLine": 424,
+        "startChar": 4,
+        "endLine": 427,
+        "endChar": 5
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a8022e6_994a7439",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2407b207_8a636116",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a8022e6_994a7439",
+      "range": {
+        "startLine": 434,
+        "startChar": 3,
+        "endLine": 437,
+        "endChar": 5
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6c0ef028_b7372b3e",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7833aba_58234b16",
+      "range": {
+        "startLine": 2617,
+        "startChar": 9,
+        "endLine": 2617,
+        "endChar": 28
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb73c300_05f3a046",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046fe65a_5106463a",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb73c300_05f3a046",
+      "range": {
+        "startLine": 2911,
+        "startChar": 61,
+        "endLine": 2915,
+        "endChar": 17
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "9712f88a_0c4bbf16",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2926,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99359d69_fec5a20c",
+      "range": {
+        "startLine": 2926,
+        "startChar": 13,
+        "endLine": 2926,
+        "endChar": 33
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28bdfdf5_adb41c4a",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
@@ -174,6 +342,30 @@
       "writtenOn": "2017-05-18T13:17:17Z",
       "side": 1,
       "message": "I am wondering if this loop can be written as \"do {...} while (MonotonicallyIncreasingTimeInMs() \u003c deadline);\". This would increase readability a lot. You would have to move the \"SetFinisherIsRunning(false)\"  to the \"if (result.is_null())\" body.",
+      "range": {
+        "startLine": 2937,
+        "startChar": 0,
+        "endLine": 2937,
+        "endChar": 20
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "899d8eee_3b03b4fa",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2937,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "This is indeed a complex loop, but I don\u0027t see an easy way to make it simpler. There are multiple exits to this loop, and the code after the loop is not the same in all cases. I restructured the code now to make it more readable, and I added comments. Changing the loop condition would not help though.",
+      "parentUuid": "28bdfdf5_adb41c4a",
       "range": {
         "startLine": 2937,
         "startChar": 0,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "ed942018_6c953e1b",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "The variable is only needed in the loop, why should it be moved out of the loop? If it is because of the initialization with -1, then I think it\u0027s still worth to initialize this variable in each loop iteration because of the DCHECK below.",
+      "parentUuid": "c62554e4_961aa942",
+      "range": {
+        "startLine": 2938,
+        "startChar": 8,
+        "endLine": 2941,
+        "endChar": 0
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "edfbc8d1_8c9eccfa",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 3
@@ -229,6 +445,30 @@
       "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05badf19_b2500b0d",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2953,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-05-19T11:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edfbc8d1_8c9eccfa",
+      "range": {
+        "startLine": 2953,
+        "startChar": 44,
+        "endLine": 2953,
+        "endChar": 52
+      },
+      "revId": "86b1cf66639617e81861f0c20ffad646e218f4bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
