@@ -128,7 +128,8 @@ void AccessorAssembler::HandlePolymorphicCase(Node* receiver_map,
 
 void AccessorAssembler::HandleLoadICHandlerCase(
     const LoadICParameters* p, Node* handler, Label* miss,
-    ExitPoint* exit_point, ElementSupport support_elements) {
+    ExitPoint* exit_point, ElementSupport support_elements,
+    SkipReceiver skip_receiver) {
   Comment("have_handler");
 
   VARIABLE(var_holder, MachineRepresentation::kTagged, p->receiver);
@@ -153,7 +154,8 @@ void AccessorAssembler::HandleLoadICHandlerCase(
   {
     GotoIf(IsCodeMap(LoadMap(handler)), &call_handler);
     HandleLoadICProtoHandlerCase(p, handler, &var_holder, &var_smi_handler,
-                                 &if_smi_handler, miss, exit_point, false);
+                                 &if_smi_handler, miss, exit_point, false,
+                                 skip_receiver);
   }
 
   BIND(&call_handler);
@@ -390,7 +392,8 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
 void AccessorAssembler::HandleLoadICProtoHandlerCase(
     const LoadICParameters* p, Node* handler, Variable* var_holder,
     Variable* var_smi_handler, Label* if_smi_handler, Label* miss,
-    ExitPoint* exit_point, bool throw_reference_error_if_nonexistent) {
+    ExitPoint* exit_point, bool throw_reference_error_if_nonexistent,
+    SkipReceiver skip_receiver) {
   DCHECK_EQ(MachineRepresentation::kTagged, var_holder->rep());
   DCHECK_EQ(MachineRepresentation::kTagged, var_smi_handler->rep());
 
@@ -414,34 +417,38 @@ void AccessorAssembler::HandleLoadICProtoHandlerCase(
   Goto(&validity_cell_check_done);
 
   BIND(&validity_cell_check_done);
-  Node* smi_handler = LoadObjectField(handler, LoadHandler::kSmiHandlerOffset);
-  CSA_ASSERT(this, TaggedIsSmi(smi_handler));
-  Node* handler_flags = SmiUntag(smi_handler);
+  Node* smi_handler =
+      LoadObjectField(handler, LoadHandler::kSmiHandlerOffset);
+  if (skip_receiver == kPerformReceiverCheck) {
+    CSA_ASSERT(this, TaggedIsSmi(smi_handler));
+    Node* handler_flags = SmiUntag(smi_handler);
 
-  Label check_prototypes(this);
-  GotoIfNot(IsSetWord<LoadHandler::LookupOnReceiverBits>(handler_flags),
-            &check_prototypes);
-  {
-    CSA_ASSERT(this, Word32BinaryNot(
-                         HasInstanceType(p->receiver, JS_GLOBAL_OBJECT_TYPE)));
-    Node* properties = LoadProperties(p->receiver);
-    VARIABLE(var_name_index, MachineType::PointerRepresentation());
-    Label found(this, &var_name_index);
-    NameDictionaryLookup<NameDictionary>(properties, p->name, &found,
-                                         &var_name_index, &check_prototypes);
-    BIND(&found);
+    Label check_prototypes(this);
+    GotoIfNot(IsSetWord<LoadHandler::LookupOnReceiverBits>(handler_flags),
+              &check_prototypes);
     {
-      VARIABLE(var_details, MachineRepresentation::kWord32);
-      VARIABLE(var_value, MachineRepresentation::kTagged);
-      LoadPropertyFromNameDictionary(properties, var_name_index.value(),
-                                     &var_details, &var_value);
-      Node* value = CallGetterIfAccessor(var_value.value(), var_details.value(),
-                                         p->context, p->receiver, miss);
-      exit_point->Return(value);
+      CSA_ASSERT(this, Word32BinaryNot(HasInstanceType(p->receiver,
+                                                       JS_GLOBAL_OBJECT_TYPE)));
+      Node* properties = LoadProperties(p->receiver);
+      VARIABLE(var_name_index, MachineType::PointerRepresentation());
+      Label found(this, &var_name_index);
+      NameDictionaryLookup<NameDictionary>(properties, p->name, &found,
+                                           &var_name_index, &check_prototypes);
+      BIND(&found);
+      {
+        VARIABLE(var_details, MachineRepresentation::kWord32);
+        VARIABLE(var_value, MachineRepresentation::kTagged);
+        LoadPropertyFromNameDictionary(properties, var_name_index.value(),
+                                       &var_details, &var_value);
+        Node* value =
+            CallGetterIfAccessor(var_value.value(), var_details.value(),
+                                 p->context, p->receiver, miss);
+        exit_point->Return(value);
+      }
     }
-  }
 
-  BIND(&check_prototypes);
+    BIND(&check_prototypes);
+  }
   Node* maybe_holder_cell =
       LoadObjectField(handler, LoadHandler::kHolderCellOffset);
   Label array_handler(this), tuple_handler(this);
@@ -1468,12 +1475,35 @@ void AccessorAssembler::GenericElementLoad(Node* receiver, Node* receiver_map,
   }
 }
 
+void AccessorAssembler::PrototypeHandlerLookup(Node* name, Node* receiver_map,
+                                               Label* if_handler,
+                                               Variable* var_handler,
+                                               Label* miss) {
+  VARIABLE(var_handler_index, MachineType::PointerRepresentation());
+  Label found_handler(this, &var_handler_index);
+  Node* prototype = LoadMapPrototype(receiver_map);
+  Node* proto_map = LoadMap(prototype);
+  Node* proto_info = LoadMapPrototypeInfo(proto_map, miss);
+  Node* handlers =
+      LoadObjectField(proto_info, PrototypeInfo::kLoadHandlersOffset);
+  GotoIf(IsUndefined(handlers), miss);
+  // TODO(jkummerow): Don't use a NameDictionary here, we only need
+  // two words per entry.
+  NameDictionaryLookup<NameDictionary>(handlers, name, &found_handler,
+                                       &var_handler_index, miss);
+  BIND(&found_handler);
+  var_handler->Bind(
+      LoadValueByKeyIndex<NameDictionary>(handlers, var_handler_index.value()));
+  Goto(if_handler);
+}
+
 void AccessorAssembler::GenericPropertyLoad(Node* receiver, Node* receiver_map,
                                             Node* instance_type, Node* key,
                                             const LoadICParameters* p,
                                             Label* slow,
-                                            UseStubCache use_stub_cache) {
+                                            Label* stub_cache_miss) {
   ExitPoint direct_exit(this);
+  bool use_stub_cache = stub_cache_miss != nullptr;
 
   Comment("key is unique name");
   Label if_found_on_receiver(this), if_property_dictionary(this),
@@ -1501,7 +1531,7 @@ void AccessorAssembler::GenericPropertyLoad(Node* receiver, Node* receiver_map,
   Label if_descriptor_found(this), stub_cache(this);
   VARIABLE(var_name_index, MachineType::PointerRepresentation());
   Label* notfound =
-      use_stub_cache == kUseStubCache ? &stub_cache : &lookup_prototype_chain;
+      use_stub_cache ? &stub_cache : &lookup_prototype_chain;
   DescriptorLookup(key, descriptors, bitfield3, &if_descriptor_found,
                    &var_name_index, notfound);
 
@@ -1513,26 +1543,23 @@ void AccessorAssembler::GenericPropertyLoad(Node* receiver, Node* receiver_map,
     Goto(&if_found_on_receiver);
   }
 
-  if (use_stub_cache == kUseStubCache) {
+  if (use_stub_cache) {
     BIND(&stub_cache);
     Comment("stub cache probe for fast property load");
     VARIABLE(var_handler, MachineRepresentation::kTagged);
-    Label found_handler(this, &var_handler), stub_cache_miss(this);
-    TryProbeStubCache(isolate()->load_stub_cache(), receiver, key,
-                      &found_handler, &var_handler, &stub_cache_miss);
+    Label found_handler(this, &var_handler);
+
+
+
+    // TODO: update this
+
+    PrototypeHandlerLookup(key, receiver_map, &found_handler, &var_handler,
+                           stub_cache_miss);
     BIND(&found_handler);
     {
-      HandleLoadICHandlerCase(p, var_handler.value(), &stub_cache_miss,
-                              &direct_exit);
-    }
-
-    BIND(&stub_cache_miss);
-    {
-      // TODO(jkummerow): Check if the property exists on the prototype
-      // chain. If it doesn't, then there's no point in missing.
-      Comment("KeyedLoadGeneric_miss");
-      TailCallRuntime(Runtime::kKeyedLoadIC_Miss, p->context, p->receiver,
-                      p->name, p->slot, p->vector);
+      HandleLoadICHandlerCase(p, var_handler.value(), stub_cache_miss,
+                              &direct_exit, kOnlyProperties,
+                              kSkipReceiverCheck);
     }
   }
 
@@ -1849,8 +1876,14 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
     GotoIfNot(WordEqual(feedback, LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
               &try_uninitialized);
 
-    TryProbeStubCache(isolate()->load_stub_cache(), p->receiver, p->name,
-                      if_handler, var_handler, miss);
+
+    // TODO: update this
+
+    Node* instance_type = LoadMapInstanceType(receiver_map);
+    GenericPropertyLoad(p->receiver, receiver_map, instance_type, p->name, p,
+                        miss, miss);
+    //TryProbeStubCache(isolate()->load_stub_cache(), p->receiver, p->name,
+    //                  if_handler, var_handler, miss);
   }
 
   BIND(&try_uninitialized);
@@ -1892,7 +1925,7 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
   }
 
   GenericPropertyLoad(receiver, receiver_map, instance_type, p->name, p, &miss,
-                      kDontUseStubCache);
+                      nullptr /* don't use stub cache */);
 
   BIND(&miss);
   {
@@ -2106,8 +2139,17 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
 
   BIND(&if_unique_name);
   {
+    Label stub_cache_miss(this);
     GenericPropertyLoad(receiver, receiver_map, instance_type,
-                        var_unique.value(), p, &slow);
+                        var_unique.value(), p, &slow, &stub_cache_miss);
+    BIND(&stub_cache_miss);
+    {
+      // TODO(jkummerow): Check if the property exists on the prototype
+      // chain. If it doesn't, then there's no point in missing.
+      Comment("KeyedLoadGeneric_miss");
+      TailCallRuntime(Runtime::kKeyedLoadIC_Miss, p->context, p->receiver,
+                      p->name, p->slot, p->vector);
+    }
   }
 
   BIND(&if_notunique);
@@ -2296,8 +2338,8 @@ void AccessorAssembler::GenerateLoadIC_Noninlined() {
   LoadIC_Noninlined(&p, receiver_map, feedback, &var_handler, &if_handler,
                     &miss, &direct_exit);
 
-  BIND(&if_handler);
-  HandleLoadICHandlerCase(&p, var_handler.value(), &miss, &direct_exit);
+  //BIND(&if_handler);
+  //HandleLoadICHandlerCase(&p, var_handler.value(), &miss, &direct_exit);
 
   BIND(&miss);
   direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, context, receiver, name,
