@@ -46,6 +46,30 @@
       "revId": "0c02df0f5bb1e376c0ebc353f613e9babbb5d460",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b929908_b6652923",
+        "filename": "test/fuzzer/testcfg.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-05-19T08:29:13Z",
+      "side": 1,
+      "message": "awesome, though nit: 80col :)\n\nhow about this one-liner:\n\nif subtest in [\"wasm\", \"wasm_asmjs\"] and fname.endswith(\".wasm\"):",
+      "parentUuid": "91e55686_149fc236",
+      "range": {
+        "startLine": 35,
+        "startChar": 11,
+        "endLine": 35,
+        "endChar": 56
+      },
+      "revId": "0c02df0f5bb1e376c0ebc353f613e9babbb5d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
