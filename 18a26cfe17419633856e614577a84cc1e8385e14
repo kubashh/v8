@@ -22,6 +22,30 @@
       "revId": "18a26cfe17419633856e614577a84cc1e8385e14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b3c73e9_3246ebf1",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-05-19T19:56:08Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "4964db37_e4471abb",
+      "range": {
+        "startLine": 1113,
+        "startChar": 55,
+        "endLine": 1113,
+        "endChar": 56
+      },
+      "revId": "18a26cfe17419633856e614577a84cc1e8385e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "19836ebf_d058b034",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 19600,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-05-19T19:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b011ffd7_661f71a1",
+      "range": {
+        "startLine": 19600,
+        "startChar": 27,
+        "endLine": 19600,
+        "endChar": 34
+      },
+      "revId": "fe1ca22b1e5e3bff2b1e99ae94f3865b35300f1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f628316_90875b27",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-19T18:36:04Z",
       "side": 1,
       "message": "I remember discussing the ordering of this offline recently - the dangling pointer caused by the ordering of Neutering after Free here. I think some context here would be good, could you add a comment as to why this needs to be this way?",
+      "range": {
+        "startLine": 2229,
+        "startChar": 2,
+        "endLine": 2229,
+        "endChar": 3
+      },
+      "revId": "fe1ca22b1e5e3bff2b1e99ae94f3865b35300f1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a5b8969_be7ee792",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-05-19T19:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f628316_90875b27",
       "range": {
         "startLine": 2229,
         "startChar": 2,
