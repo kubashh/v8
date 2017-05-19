@@ -601,7 +601,7 @@ Node* ConstructorBuiltinsAssembler::EmitFastCloneShallowObject(
 
   // Calculate the object and allocation size based on the properties count.
   Node* object_size =
-      IntPtrAdd(WordShl(in_object_property_count.value(), kPointerSizeLog2),
+      IntPtrAdd(TimesPointerSize(in_object_property_count.value()),
                 IntPtrConstant(JSObject::kHeaderSize));
   Node* allocation_size = object_size;
   if (FLAG_allocation_site_pretenuring) {
