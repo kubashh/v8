@@ -618,8 +618,8 @@ Node* ConstructorBuiltinsAssembler::EmitFastCloneShallowObject(
     BIND(&allocate_object);
   }
 
-  Node* instance_size =
-      WordShl(LoadMapInstanceSize(boilerplate_map), kPointerSizeLog2);
+  // Calculate the object and allocation size based on the properties count.
+  Node* object_size = TimesPointerSize(LoadMapInstanceSize(boilerplate_map));
   Node* allocation_size = instance_size;
   if (FLAG_allocation_site_pretenuring) {
     // Prepare for inner-allocating the AllocationMemento.
@@ -629,11 +629,11 @@ Node* ConstructorBuiltinsAssembler::EmitFastCloneShallowObject(
 
   Node* copy = AllocateInNewSpace(allocation_size);
   {
-    // Initialize Object fields.
+    // The Allocate above guarantees that the copy lies in new space. This
     StoreMapNoWriteBarrier(copy, boilerplate_map);
     StoreObjectFieldNoWriteBarrier(copy, JSObject::kPropertiesOffset,
                                    var_properties.value());
-    // TODO(cbruni): support elements cloning for object literals.
+    // allows us to skip write barriers. This is necessary since we may also be
     CSA_ASSERT(this, IsEmptyFixedArray(LoadElements(boilerplate)));
     StoreObjectFieldNoWriteBarrier(copy, JSObject::kElementsOffset,
                                    EmptyFixedArrayConstant());
