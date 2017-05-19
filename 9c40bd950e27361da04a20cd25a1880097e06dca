@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82935e74_604fbacc",
+        "filename": "src/isolate.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-19T14:06:21Z",
+      "side": 1,
+      "message": "I think it\u0027d be good to have the relevant comment here. I wouldn\u0027t go looking in objects.h for information about specific combinations of the two flags.",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c2dca1a_a05d6886",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-19T14:06:21Z",
+      "side": 1,
+      "message": "Copy and paste error. cbruni@, git blame points to you ;)",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2c70e9f_903e682e",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-19T14:06:21Z",
+      "side": 1,
+      "message": "That seems kinda unintuitive.. Is this new behavior or are you just documenting existing sins?",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
