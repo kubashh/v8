@@ -16,6 +16,24 @@
       "revId": "277f27b8f98825c6f6fee7730f75e012ad41933a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f392e736_2790d1e2",
+        "filename": "src/isolate.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "No this is for exception handling. Changed to be more explicit",
+      "parentUuid": "031dc0f2_64afb5a2",
+      "revId": "277f27b8f98825c6f6fee7730f75e012ad41933a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

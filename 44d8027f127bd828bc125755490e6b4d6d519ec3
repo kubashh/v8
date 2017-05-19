@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7c4e8d67_79470c05",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "Changed in latest patch",
+      "parentUuid": "583a7538_4109fdc2",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09b3887d_59ef139c",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29aa3a3e_b3e7ee0b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9383,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09b3887d_59ef139c",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "2e4ed655_baddfb97",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9467,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75986134_faab1bfd",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7efcf518_b87e3ac9",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 10
@@ -67,6 +121,24 @@
       "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11554e0b_5ecff04c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9473,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7efcf518_b87e3ac9",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "c89d9513_8da48c1e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9487,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51e99e0f_5e35c651",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c72280c_f97ce831",
         "filename": "src/isolate.cc",
         "patchSetId": 10
@@ -98,6 +188,24 @@
       "writtenOn": "2017-05-19T09:03:11Z",
       "side": 1,
       "message": "I think your added return statement warrants a comment :):\n\nif (code-\u003eGetCode()-\u003eis_promise_rejection()) {\n  // ??\n  if (code-\u003eGetCode()-\u003eis_exception_caught() {\n     return HandlerTable::UNCAUGHT;\n  }\n  return HandlerTable::PROMISE;\n}",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9af3c9f_855f789e",
+        "filename": "src/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-19T09:30:34Z",
+      "side": 1,
+      "message": "I added comments in objects.h, do you think I should duplicate this here?\n\nAlso I think I prefer the existing style slightly as it makes the subtle difference clearer. WDYT?",
+      "parentUuid": "0c72280c_f97ce831",
       "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
