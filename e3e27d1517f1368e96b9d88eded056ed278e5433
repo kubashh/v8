@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdcb9acf_47b73a35",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-19T11:37:54Z",
+      "side": 1,
+      "message": "nit: Looks like left-over debug code. Please remove.",
+      "range": {
+        "startLine": 652,
+        "startChar": 6,
+        "endLine": 652,
+        "endChar": 12
+      },
+      "revId": "e3e27d1517f1368e96b9d88eded056ed278e5433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
