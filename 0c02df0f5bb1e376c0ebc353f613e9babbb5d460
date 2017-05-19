@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7c9ca11_d3538c62",
+        "filename": "test/fuzzer/testcfg.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-05-19T07:46:38Z",
+      "side": 1,
+      "message": "Maybe merge the two if statements and add a continue statement.",
+      "range": {
+        "startLine": 35,
+        "startChar": 11,
+        "endLine": 35,
+        "endChar": 56
+      },
+      "revId": "0c02df0f5bb1e376c0ebc353f613e9babbb5d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
