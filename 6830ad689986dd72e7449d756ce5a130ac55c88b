@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5afe3e7_06274d5d",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-19T08:47:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e651a24_50cba0c8",
+      "range": {
+        "startLine": 23,
+        "startChar": 9,
+        "endLine": 23,
+        "endChar": 14
+      },
+      "revId": "6830ad689986dd72e7449d756ce5a130ac55c88b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c91275b7_a4310b0e",
         "filename": "src/wasm/wasm-module-builder.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "6830ad689986dd72e7449d756ce5a130ac55c88b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fdd90bd_10dd2a53",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-19T08:47:54Z",
+      "side": 1,
+      "message": "Done. Changed it to the common growing factor of two. The growing factor of three pays off on some workloads for the final module in the end but is worse for the smaller function bodies on others. Results inconclusive, hence I am sticking with the \"more obvious\" choice. The biggest impact comes from getting rid of the constant 4k bump during the early growing steps.",
+      "parentUuid": "c91275b7_a4310b0e",
+      "range": {
+        "startLine": 128,
+        "startChar": 47,
+        "endLine": 128,
+        "endChar": 51
+      },
+      "revId": "6830ad689986dd72e7449d756ce5a130ac55c88b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
