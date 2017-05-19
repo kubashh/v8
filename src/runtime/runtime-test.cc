@@ -995,8 +995,14 @@ RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
 RUNTIME_FUNCTION(Runtime_WasmNumInterpretedCalls) {
   DCHECK_EQ(1, args.length());
   HandleScope scope(isolate);
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, instance_obj, 0);
-  CHECK(WasmInstanceObject::IsWasmInstanceObject(*instance_obj));
+  CONVERT_ARG_HANDLE_CHECKED(Object, instance_obj, 0);
+
+  // This function is used by fuzzers. Ignore illegal argument type to avoid
+  // runtime errors.
+  if (!WasmInstanceObject::IsWasmInstanceObject(*instance_obj)) {
+    return isolate->heap()->undefined_value();
+  }
+
   Handle<WasmInstanceObject> instance =
       Handle<WasmInstanceObject>::cast(instance_obj);
   if (!instance->has_debug_info()) return 0;
@@ -1007,13 +1013,21 @@ RUNTIME_FUNCTION(Runtime_WasmNumInterpretedCalls) {
 RUNTIME_FUNCTION(Runtime_RedirectToWasmInterpreter) {
   DCHECK_EQ(2, args.length());
   HandleScope scope(isolate);
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, instance_obj, 0);
-  CONVERT_SMI_ARG_CHECKED(function_index, 1);
-  CHECK(WasmInstanceObject::IsWasmInstanceObject(*instance_obj));
+  CONVERT_ARG_HANDLE_CHECKED(Object, instance_obj, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Object, function_index_obj, 1);
+
+  // This function is used by fuzzers. Ignore illegal argument types to avoid
+  // runtime errors.
+  if (!WasmInstanceObject::IsWasmInstanceObject(*instance_obj) ||
+      !function_index_obj->IsSmi()) {
+    return isolate->heap()->undefined_value();
+  }
+
   Handle<WasmInstanceObject> instance =
       Handle<WasmInstanceObject>::cast(instance_obj);
   Handle<WasmDebugInfo> debug_info =
       WasmInstanceObject::GetOrCreateDebugInfo(instance);
+  int function_index = Smi::cast(*function_index_obj)->value();
   WasmDebugInfo::RedirectToInterpreter(debug_info,
                                        Vector<int>(&function_index, 1));
   return isolate->heap()->undefined_value();
