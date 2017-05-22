@@ -104,6 +104,24 @@
       "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d7b7c4_22a527a3",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-22T08:49:11Z",
+      "side": 1,
+      "message": "Perhaps combine IsPromiseRejectionField and IsExceptionCaughtField into a 2-bit enum?",
+      "parentUuid": "05a6624e_9d92cd0f",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
