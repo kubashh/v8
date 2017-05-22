@@ -1678,6 +1678,22 @@ void BytecodeGraphBuilder::VisitReThrow() {
   MergeControlToLeaveFunction(control);
 }
 
+void BytecodeGraphBuilder::VisitThrowIfHole() {
+  PrepareEagerCheckpoint();
+  Node* value = environment()->LookupAccumulator();
+  // Bailout if the value is the Hole.
+  NewNode(simplified()->CheckNotTaggedHole(), value);
+  environment()->BindAccumulator(value);
+}
+
+void BytecodeGraphBuilder::VisitThrowIfNotHole() {
+  PrepareEagerCheckpoint();
+  Node* value = environment()->LookupAccumulator();
+  // Bailout if the value is not the Hole.
+  NewNode(simplified()->CheckTaggedHole(), value);
+  environment()->BindAccumulator(value);
+}
+
 void BytecodeGraphBuilder::BuildBinaryOp(const Operator* op) {
   PrepareEagerCheckpoint();
   Node* left =
@@ -2117,12 +2133,6 @@ void BytecodeGraphBuilder::VisitJumpIfToBooleanFalse() {
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanFalseConstant() {
   BuildJumpIfToBooleanFalse();
-}
-
-void BytecodeGraphBuilder::VisitJumpIfNotHole() { BuildJumpIfNotHole(); }
-
-void BytecodeGraphBuilder::VisitJumpIfNotHoleConstant() {
-  BuildJumpIfNotHole();
 }
 
 void BytecodeGraphBuilder::VisitJumpIfJSReceiver() { BuildJumpIfJSReceiver(); }
