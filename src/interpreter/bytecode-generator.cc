@@ -2014,7 +2014,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable, FeedbackSlot slot,
       // subsequent expressions assign to the same variable.
       builder()->LoadAccumulatorWithRegister(source);
       if (hole_check_mode == HoleCheckMode::kRequired) {
-        BuildThrowIfHole(variable);
+        builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
       }
       break;
     }
@@ -2030,7 +2030,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable, FeedbackSlot slot,
       // subsequent expressions assign to the same variable.
       builder()->LoadAccumulatorWithRegister(source);
       if (hole_check_mode == HoleCheckMode::kRequired) {
-        BuildThrowIfHole(variable);
+        builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
       }
       break;
     }
@@ -2065,7 +2065,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable, FeedbackSlot slot,
       builder()->LoadContextSlot(context_reg, variable->index(), depth,
                                  immutable);
       if (hole_check_mode == HoleCheckMode::kRequired) {
-        BuildThrowIfHole(variable);
+        builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
       }
       break;
     }
@@ -2078,7 +2078,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable, FeedbackSlot slot,
           builder()->LoadLookupContextSlot(variable->raw_name(), typeof_mode,
                                            local_variable->index(), depth);
           if (hole_check_mode == HoleCheckMode::kRequired) {
-            BuildThrowIfHole(variable);
+            builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
           }
           break;
         }
@@ -2098,7 +2098,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable, FeedbackSlot slot,
       int depth = execution_context()->ContextChainDepth(variable->scope());
       builder()->LoadModuleVariable(variable->index(), depth);
       if (hole_check_mode == HoleCheckMode::kRequired) {
-        BuildThrowIfHole(variable);
+        builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
       }
       break;
     }
@@ -2179,45 +2179,18 @@ void BytecodeGenerator::BuildAbort(BailoutReason bailout_reason) {
       .CallRuntime(Runtime::kAbort, reason);
 }
 
-void BytecodeGenerator::BuildThrowReferenceError(const AstRawString* name) {
-  RegisterAllocationScope register_scope(this);
-  Register name_reg = register_allocator()->NewRegister();
-  builder()->LoadLiteral(name).StoreAccumulatorInRegister(name_reg).CallRuntime(
-      Runtime::kThrowReferenceError, name_reg);
-}
-
-void BytecodeGenerator::BuildThrowIfHole(Variable* variable) {
-  BytecodeLabel no_reference_error;
-  builder()->JumpIfNotHole(&no_reference_error);
-
-  if (variable->is_this()) {
-    DCHECK(variable->mode() == CONST);
-    builder()->CallRuntime(Runtime::kThrowSuperNotCalled);
-  } else {
-    BuildThrowReferenceError(variable->raw_name());
-  }
-
-  builder()->Bind(&no_reference_error);
-}
-
 void BytecodeGenerator::BuildHoleCheckForVariableAssignment(Variable* variable,
                                                             Token::Value op) {
   if (variable->is_this() && variable->mode() == CONST && op == Token::INIT) {
     // Perform an initialization check for 'this'. 'this' variable is the
     // only variable able to trigger bind operations outside the TDZ
     // via 'super' calls.
-    BytecodeLabel no_reference_error, reference_error;
-    builder()
-        ->JumpIfNotHole(&reference_error)
-        .Jump(&no_reference_error)
-        .Bind(&reference_error)
-        .CallRuntime(Runtime::kThrowSuperAlreadyCalledError)
-        .Bind(&no_reference_error);
+    builder()->ThrowIfNotHole();
   } else {
     // Perform an initialization check for let/const declared variables.
     // E.g. let x = (x = 20); is not allowed.
     DCHECK(IsLexicalVariableMode(variable->mode()));
-    BuildThrowIfHole(variable);
+    builder()->ThrowIfHole(variable->raw_name(), variable->is_this());
   }
 }
 
