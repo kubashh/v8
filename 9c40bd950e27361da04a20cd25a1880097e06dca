@@ -140,6 +140,24 @@
       "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6764e44_87779888",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T14:18:22Z",
+      "side": 1,
+      "message": "I\u0027m reusing two bits from the Flag field, not sure how this can be combined into an enum? I\u0027ve updated all the logic to be in one single location (GetBuiltinCatchPrediciton) and made the exception accessors private, maybe it\u0027s more clearer now?",
+      "parentUuid": "c5d7b7c4_22a527a3",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f9f37bf_5e4e2b2b",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T14:18:22Z",
+      "side": 1,
+      "message": "As discussed throwing here is fine, it\u0027s propagated upwards, we don\u0027t have to catch it.",
+      "parentUuid": "861c45b1_95793bdf",
+      "revId": "58e4373ed8470aa284c803146f0b801881c993ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "47830dc0_d5d460d0",
         "filename": "src/builtins/builtins-iterator-gen.cc",
         "patchSetId": 16
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-22T13:42:09Z",
       "side": 1,
       "message": "https://tc39.github.io/ecma262/#sec-getmethod merges null and undefined.\nI think you have to check for both here.. please write a test that covers this case.\nFrom how I read, you would throw a TypeError instead of just returning.",
+      "revId": "58e4373ed8470aa284c803146f0b801881c993ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f0c7d73_0cd1ea46",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T14:18:22Z",
+      "side": 1,
+      "message": "Added check for null. The return from here /always/ throws (The map constructor never does a NormalCompletion after calling IteratorClose). I\u0027ve changed this a bit to make it more explicit.",
+      "parentUuid": "47830dc0_d5d460d0",
       "revId": "58e4373ed8470aa284c803146f0b801881c993ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
