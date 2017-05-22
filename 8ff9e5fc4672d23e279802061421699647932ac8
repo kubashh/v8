@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9b10c74_ca2a2003",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2907,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-22T09:40:39Z",
+      "side": 1,
+      "message": "This scope can be removed now.",
+      "range": {
+        "startLine": 2907,
+        "startChar": 0,
+        "endLine": 2907,
+        "endChar": 9
+      },
+      "revId": "8ff9e5fc4672d23e279802061421699647932ac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "208dc392_5a83a09f",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2923,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-22T09:40:39Z",
+      "side": 1,
+      "message": "a single compilation units?",
+      "range": {
+        "startLine": 2923,
+        "startChar": 26,
+        "endLine": 2923,
+        "endChar": 53
+      },
+      "revId": "8ff9e5fc4672d23e279802061421699647932ac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
