@@ -158,6 +158,24 @@
       "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "197f3322_ef3ced39",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-05-22T14:45:52Z",
+      "side": 1,
+      "message": "I meant that, if the two fields are inherently related, they could be merged into a single BitField containing 2 bits, which could encode up to 4 enum values. Something like:\n\nNOT_CAUGHT, PROMISE_REJECTION, IS_CAUGHT, /* Is there a good name for this case? */\n\nDoes that make sense? Otherwise I\u0027m fine with GetBuildinCatchPrediction.",
+      "parentUuid": "f6764e44_87779888",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
