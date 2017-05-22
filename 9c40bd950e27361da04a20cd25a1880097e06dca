@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "83707f82_49b2d082",
+        "filename": "src/isolate.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T08:42:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82935e74_604fbacc",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c2dca1a_a05d6886",
         "filename": "src/objects.h",
         "patchSetId": 13
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "8a974cdd_7bb7e0c5",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T08:42:14Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/#/c/480072/4/src/objects.h@3898",
+      "parentUuid": "5c2dca1a_a05d6886",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2c70e9f_903e682e",
         "filename": "src/objects.h",
         "patchSetId": 13
@@ -47,6 +83,24 @@
       "writtenOn": "2017-05-19T14:06:21Z",
       "side": 1,
       "message": "That seems kinda unintuitive.. Is this new behavior or are you just documenting existing sins?",
+      "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05a6624e_9d92cd0f",
+        "filename": "src/objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T08:42:14Z",
+      "side": 1,
+      "message": "This is a new sin. Yeah, I agree that this isn\u0027t intuitive but I didn\u0027t want to waste an extra bit for this. Can you think of a better alternative?",
+      "parentUuid": "f2c70e9f_903e682e",
       "revId": "9c40bd950e27361da04a20cd25a1880097e06dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

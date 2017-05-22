@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "34051775_957487fe",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9473,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-05-22T08:42:14Z",
+      "side": 1,
+      "message": "I added this back since there\u0027s a check right before the ReThrow below that catches. I think this a bug with the CSA -- if I have a branch statement before the GotoIfException, then the CallJS isn\u0027t executed \u003e.\u003e \n\nI\u0027ve also added a test262 test for this",
+      "parentUuid": "11554e0b_5ecff04c",
+      "revId": "44d8027f127bd828bc125755490e6b4d6d519ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51e99e0f_5e35c651",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 10
