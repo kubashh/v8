@@ -3897,11 +3897,15 @@ class Code: public HeapObject {
 
   // [is_promise_rejection]: For kind BUILTIN tells whether the exception
   // thrown by the code will lead to promise rejection.
+  // If both is_promise_rejection and is_exception_caught is set, then
+  // the exception is not caught internally.
   inline bool is_promise_rejection();
   inline void set_is_promise_rejection(bool flag);
 
   // [is_exception_caught]: For kind BUILTIN tells whether the exception
   // thrown by the code will be caught internally.
+  // If both is_promise_rejection and is_exception_caught is set, then
+  // the exception is not caught internally.
   inline bool is_exception_caught();
   inline void set_is_exception_caught(bool flag);
 
