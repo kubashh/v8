@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad4732ef_b055ca49",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-05-22T19:35:20Z",
+      "side": 1,
+      "message": "This is a deopt loop, as TurboFan doesn\u0027t learn anything on next attempt. I\u0027m not exactly sure how to address this, but maybe as a first safety guard, add a global protector on the isolate and if the protector is invalidated (because we hit the hole somewhere) don\u0027t generate this operator but generate the explicit control flow and in the case below.",
+      "revId": "46c896c1e79d37dd0f5c8b756a3ed73910b0cd0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
