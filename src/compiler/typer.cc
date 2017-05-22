@@ -1870,6 +1870,12 @@ Type* Typer::Visitor::TypeCheckTaggedHole(Node* node) {
   return type;
 }
 
+Type* Typer::Visitor::TypeCheckNotTaggedHole(Node* node) {
+  Type* type = Operand(node, 0);
+  type = Type::Intersect(type, Type::NonInternal(), zone());
+  return type;
+}
+
 Type* Typer::Visitor::TypeConvertTaggedHoleToUndefined(Node* node) {
   Type* type = Operand(node, 0);
   if (type->Maybe(Type::Hole())) {
