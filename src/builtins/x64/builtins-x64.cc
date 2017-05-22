@@ -776,15 +776,17 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   // First check if there is optimized code in the feedback vector which we
   // could call instead.
-  Label switch_to_optimized_code;
+  Label optimized_code_cell_is_smi, switch_to_optimized_code;
   Register optimized_code_entry = rcx;
   __ movp(rbx, FieldOperand(rdi, JSFunction::kFeedbackVectorOffset));
   __ movp(rbx, FieldOperand(rbx, Cell::kValueOffset));
   __ movp(rbx,
           FieldOperand(rbx, FeedbackVector::kOptimizedCodeIndex * kPointerSize +
                                 FeedbackVector::kHeaderSize));
+  __ JumpIfSmi(rbx, &optimized_code_cell_is_smi);
   __ movp(optimized_code_entry, FieldOperand(rbx, WeakCell::kValueOffset));
   __ JumpIfNotSmi(optimized_code_entry, &switch_to_optimized_code);
+  __ bind(&optimized_code_cell_is_smi);
 
   // Get the bytecode array from the function object (or from the DebugInfo if
   // it is present) and load it into kInterpreterBytecodeArrayRegister.
@@ -1215,6 +1217,7 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   __ movp(entry,
           FieldOperand(rbx, FeedbackVector::kOptimizedCodeIndex * kPointerSize +
                                 FeedbackVector::kHeaderSize));
+  __ JumpIfSmi(entry, &try_shared);
   __ movp(entry, FieldOperand(entry, WeakCell::kValueOffset));
   __ JumpIfSmi(entry, &try_shared);
 
