@@ -1378,6 +1378,13 @@ HandlerTable::CatchPrediction PredictException(JavaScriptFrame* frame) {
       for (const FrameSummary& summary : summaries) {
         Handle<AbstractCode> code = summary.AsJavaScript().abstract_code();
         if (code->IsCode() && code->kind() == AbstractCode::BUILTIN) {
+          // If both is_promise_rejection and is_exception_caught is
+          // set, then the exception is not caught internally.
+          if (code->GetCode()->is_promise_rejection() &&
+              code->GetCode()->is_exception_caught()) {
+            return HandlerTable::UNCAUGHT;
+          }
+
           if (code->GetCode()->is_promise_rejection()) {
             return HandlerTable::PROMISE;
           }
