@@ -306,6 +306,10 @@ void FeedbackVector::SetOptimizedCode(Handle<FeedbackVector> vector,
   vector->set(kOptimizedCodeIndex, *cell);
 }
 
+void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
+  set(kOptimizedCodeIndex, Smi::FromEnum(marker));
+}
+
 void FeedbackVector::ClearOptimizedCode() {
   set(kOptimizedCodeIndex, Smi::kZero);
 }

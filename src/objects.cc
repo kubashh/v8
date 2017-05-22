@@ -12090,14 +12090,20 @@ void JSFunction::MarkForOptimization() {
   DCHECK(!IsOptimized());
   DCHECK(shared()->allows_lazy_compilation() ||
          !shared()->optimization_disabled());
-  set_code_no_write_barrier(
-      isolate->builtins()->builtin(Builtins::kCompileOptimized));
-  // No write barrier required, since the builtin is part of the root set.
-  if (FLAG_mark_shared_functions_for_tier_up) {
-    shared()->set_marked_for_tier_up(true);
+  if (IsInterpreted()) {
+    feedback_vector()->SetOptimizationMarker(
+        OptimizationMarker::kCompileOptimized);
+  } else {
+    // Non I+TF path, use the old marking method.
+
+    set_code_no_write_barrier(
+        isolate->builtins()->builtin(Builtins::kCompileOptimized));
+    // No write barrier required, since the builtin is part of the root set.
+    if (FLAG_mark_shared_functions_for_tier_up) {
+      shared()->set_marked_for_tier_up(true);
+    }
   }
 }
-
 
 void JSFunction::AttemptConcurrentOptimization() {
   Isolate* isolate = GetIsolate();
@@ -12117,13 +12123,20 @@ void JSFunction::AttemptConcurrentOptimization() {
     PrintF(" for concurrent recompilation.\n");
   }
 
-  set_code_no_write_barrier(
-      isolate->builtins()->builtin(Builtins::kCompileOptimizedConcurrent));
-  // No write barrier required, since the builtin is part of the root set.
-  if (FLAG_mark_shared_functions_for_tier_up) {
-    // TODO(leszeks): The compilation isn't concurrent if we trigger it using
-    // this bit.
-    shared()->set_marked_for_tier_up(true);
+  if (IsInterpreted()) {
+    feedback_vector()->SetOptimizationMarker(
+        OptimizationMarker::kCompileOptimizedConcurrent);
+  } else {
+    // Non I+TF path, use the old marking method.
+
+    set_code_no_write_barrier(
+        isolate->builtins()->builtin(Builtins::kCompileOptimizedConcurrent));
+    // No write barrier required, since the builtin is part of the root set.
+    if (FLAG_mark_shared_functions_for_tier_up) {
+      // TODO(leszeks): The compilation isn't concurrent if we trigger it
+      // using this bit.
+      shared()->set_marked_for_tier_up(true);
+    }
   }
 }
 

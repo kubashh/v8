@@ -1415,6 +1415,29 @@ inline std::ostream& operator<<(std::ostream& os,
   return os;
 }
 
+enum class OptimizationMarker {
+  kRunUnoptimized,
+  kCompileOptimized,
+  kCompileOptimizedConcurrent,
+  kInOptimizationQueue
+};
+
+inline std::ostream& operator<<(std::ostream& os,
+                                const OptimizationMarker& marker) {
+  switch (marker) {
+    case OptimizationMarker::kRunUnoptimized:
+      return os << "OptimizationMarker::kRunUnoptimized";
+    case OptimizationMarker::kCompileOptimized:
+      return os << "OptimizationMarker::kCompileOptimized";
+    case OptimizationMarker::kCompileOptimizedConcurrent:
+      return os << "OptimizationMarker::kCompileOptimizedConcurrent";
+    case OptimizationMarker::kInOptimizationQueue:
+      return os << "OptimizationMarker::kInOptimizationQueue";
+  }
+  UNREACHABLE();
+  return os;
+}
+
 }  // namespace internal
 }  // namespace v8
 

@@ -113,8 +113,12 @@ void FeedbackVector::clear_invocation_count() {
   set(kInvocationCountIndex, Smi::kZero);
 }
 
+Object* FeedbackVector::optimized_code_cell() const {
+  return get(kOptimizedCodeIndex);
+}
+
 Code* FeedbackVector::optimized_code() const {
-  Object* slot = get(kOptimizedCodeIndex);
+  Object* slot = optimized_code_cell();
   if (slot->IsSmi()) return nullptr;
   WeakCell* cell = WeakCell::cast(slot);
   return cell->cleared() ? nullptr : Code::cast(cell->value());
@@ -122,6 +126,13 @@ Code* FeedbackVector::optimized_code() const {
 
 bool FeedbackVector::has_optimized_code() const {
   return optimized_code() != nullptr;
+}
+
+bool FeedbackVector::has_optimization_marker(OptimizationMarker marker) const {
+  Object* slot = optimized_code_cell();
+  if (!slot->IsSmi()) return false;
+  Smi* value = Smi::cast(slot);
+  return value->value() == static_cast<int>(marker);
 }
 
 // Conversion from an integer index to either a slot or an ic slot.

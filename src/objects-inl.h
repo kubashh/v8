@@ -6413,7 +6413,10 @@ FeedbackVector* JSFunction::feedback_vector() const {
 }
 
 bool JSFunction::IsOptimized() {
-  return code()->kind() == Code::OPTIMIZED_FUNCTION;
+  return code()->kind() == Code::OPTIMIZED_FUNCTION ||
+         (IsInterpreted() &&
+          feedback_vector_cell()->value()->IsFeedbackVector() &&
+          feedback_vector()->has_optimized_code());
 }
 
 bool JSFunction::IsInterpreted() {
@@ -6421,18 +6424,30 @@ bool JSFunction::IsInterpreted() {
 }
 
 bool JSFunction::IsMarkedForOptimization() {
+  if (IsInterpreted()) {
+    return feedback_vector()->has_optimization_marker(
+        OptimizationMarker::kCompileOptimized);
+  }
   return code() == GetIsolate()->builtins()->builtin(
       Builtins::kCompileOptimized);
 }
 
 
 bool JSFunction::IsMarkedForConcurrentOptimization() {
+  if (IsInterpreted()) {
+    return feedback_vector()->has_optimization_marker(
+        OptimizationMarker::kCompileOptimizedConcurrent);
+  }
   return code() == GetIsolate()->builtins()->builtin(
       Builtins::kCompileOptimizedConcurrent);
 }
 
 
 bool JSFunction::IsInOptimizationQueue() {
+  if (IsInterpreted()) {
+    return feedback_vector()->has_optimization_marker(
+        OptimizationMarker::kInOptimizationQueue);
+  }
   return code() == GetIsolate()->builtins()->builtin(
       Builtins::kInOptimizationQueue);
 }
@@ -6495,20 +6510,23 @@ void JSFunction::ClearOptimizedCodeSlot(const char* reason) {
     if (FLAG_trace_opt) {
       PrintF("[evicting entry from optimizing code feedback slot (%s) for ",
              reason);
-      shared()->ShortPrint();
+      ShortPrint();
       PrintF("]\n");
     }
     feedback_vector()->ClearOptimizedCode();
   }
 }
 
-void JSFunction::ReplaceCode(Code* code) {
-  bool was_optimized = IsOptimized();
-  bool is_optimized = code->kind() == Code::OPTIMIZED_FUNCTION;
-
-  if (was_optimized && is_optimized) {
-    ClearOptimizedCodeSlot("Replacing with another optimized code");
+void JSFunction::ClearOptimizationMarker() {
+  if (has_feedback_vector() && !feedback_vector()->has_optimized_code()) {
+    feedback_vector()->SetOptimizationMarker(
+        OptimizationMarker::kRunUnoptimized);
   }
+}
+
+void JSFunction::ReplaceCode(Code* code) {
+  bool was_optimized = this->code()->kind() == Code::OPTIMIZED_FUNCTION;
+  bool is_optimized = code->kind() == Code::OPTIMIZED_FUNCTION;
 
   set_code(code);
 
@@ -6516,8 +6534,7 @@ void JSFunction::ReplaceCode(Code* code) {
   // context based on the state change.
   if (!was_optimized && is_optimized) {
     context()->native_context()->AddOptimizedFunction(this);
-  }
-  if (was_optimized && !is_optimized) {
+  } else if (was_optimized && !is_optimized) {
     // TODO(titzer): linear in the number of optimized functions; fix!
     context()->native_context()->RemoveOptimizedFunction(this);
   }

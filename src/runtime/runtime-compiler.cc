@@ -358,8 +358,14 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
             function->PrintName();
             PrintF(" for non-concurrent optimization]\n");
           }
-          function->ReplaceCode(
-              isolate->builtins()->builtin(Builtins::kCompileOptimized));
+          if (function->IsInterpreted()) {
+            function->feedback_vector()->SetOptimizationMarker(
+                OptimizationMarker::kCompileOptimized);
+          } else {
+            // Non I+TF path, use the old marking method.
+            function->ReplaceCode(
+                isolate->builtins()->builtin(Builtins::kCompileOptimized));
+          }
         }
       } else {
         // Crankshafted OSR code can be installed into the function.

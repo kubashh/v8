@@ -1591,6 +1591,13 @@ class Smi: public Object {
     return reinterpret_cast<Smi*>((value << smi_shift_bits) | kSmiTag);
   }
 
+  template <typename E,
+            typename = typename std::enable_if<std::is_enum<E>::value>::type>
+  static inline Smi* FromEnum(E value) {
+    STATIC_ASSERT(sizeof(E) <= sizeof(int));
+    return FromInt(static_cast<int>(value));
+  }
+
   // Returns whether value can be represented in a Smi.
   static inline bool IsValid(intptr_t value) {
     bool result = Internals::IsValidSmi(value);
@@ -6078,6 +6085,9 @@ class JSFunction: public JSObject {
 
   // Clears the optimized code slot in the function's feedback vector.
   inline void ClearOptimizedCodeSlot(const char* reason);
+
+  // Clears the optimization marker in the function's feedback vector.
+  inline void ClearOptimizationMarker();
 
   // Completes inobject slack tracking on initial map if it is active.
   inline void CompleteInobjectSlackTrackingIfActive();

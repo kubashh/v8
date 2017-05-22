@@ -737,13 +737,27 @@ MUST_USE_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
   return MaybeHandle<Code>();
 }
 
+void ClearOptimizedCodeCache(CompilationInfo* info) {
+  Handle<JSFunction> function = info->closure();
+  if (info->osr_ast_id().IsNone()) {
+    Handle<FeedbackVector> vector =
+        handle(function->feedback_vector(), function->GetIsolate());
+    vector->ClearOptimizedCode();
+  }
+}
+
 void InsertCodeIntoOptimizedCodeCache(CompilationInfo* info) {
   Handle<Code> code = info->code();
   if (code->kind() != Code::OPTIMIZED_FUNCTION) return;  // Nothing to do.
 
   // Function context specialization folds-in the function context,
   // so no sharing can occur.
-  if (info->is_function_context_specializing()) return;
+  if (info->is_function_context_specializing()) {
+    // Native context specialized code is not shared, so make sure the optimized
+    // code cache is clear.
+    ClearOptimizedCodeCache(info);
+    return;
+  }
   // Frame specialization implies function context specialization.
   DCHECK(!info->is_frame_specializing());
 
@@ -965,7 +979,15 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   if (mode == Compiler::CONCURRENT) {
     if (GetOptimizedCodeLater(job.get())) {
       job.release();  // The background recompile job owns this now.
-      return isolate->builtins()->InOptimizationQueue();
+
+      if (FLAG_turbo && shared->HasBytecodeArray()) {
+        function->feedback_vector()->SetOptimizationMarker(
+            OptimizationMarker::kInOptimizationQueue);
+        return MaybeHandle<Code>();
+      } else {
+        // Non I+TF path, use the old marking method.
+        return isolate->builtins()->InOptimizationQueue();
+      }
     }
   } else {
     if (GetOptimizedCodeNow(job.get())) return info->code();
@@ -1281,9 +1303,25 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag) {
 
 bool Compiler::CompileOptimized(Handle<JSFunction> function,
                                 ConcurrencyMode mode) {
-  if (function->IsOptimized()) return true;
+  if (function->IsOptimized()) {
+    if (function->code()->kind() != Code::OPTIMIZED_FUNCTION) {
+      // Make sure we move the optimized code across from the optimized code
+      // slot.
+      Code* code = function->feedback_vector()->optimized_code();
+      DCHECK_NOT_NULL(code);
+      function->ReplaceCode(code);
+    }
+    return true;
+  }
   Isolate* isolate = function->GetIsolate();
   DCHECK(AllowCompilation::IsAllowed(isolate));
+
+  // Make sure we clear the optimization marker on the function so that we
+  // don't try to re-optimize if optimization fails.
+  if (function->IsInterpreted() &&
+      function->feedback_vector_cell()->value()->IsFeedbackVector()) {
+    function->feedback_vector()->ClearOptimizedCode();
+  }
 
   // Start a compilation.
   Handle<Code> code;
@@ -1886,6 +1924,9 @@ void Compiler::PostInstantiation(Handle<JSFunction> function,
   if (FLAG_always_opt && shared->allows_lazy_compilation() &&
       !function->shared()->HasAsmWasmData() &&
       function->shared()->is_compiled()) {
+    if (function->IsInterpreted()) {
+      JSFunction::EnsureLiterals(function);
+    }
     function->MarkForOptimization();
   }
 

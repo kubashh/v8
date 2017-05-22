@@ -75,6 +75,8 @@ namespace internal {
   V(kExpectedNativeContext, "Expected native context")                         \
   V(kExpectedNonIdenticalObjects, "Expected non-identical objects")            \
   V(kExpectedNonNullContext, "Expected non-null context")                      \
+  V(kExpectedOptimizationSentinel,                                             \
+    "Expected optimized code cell or optimization sentinel")                   \
   V(kExpectedPositiveZero, "Expected +0.0")                                    \
   V(kExpectedNewSpaceObject, "Expected new space object")                      \
   V(kExpectedUndefinedOrCell, "Expected undefined or cell in register")        \
