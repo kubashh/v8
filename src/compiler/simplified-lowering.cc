@@ -2325,9 +2325,15 @@ class RepresentationSelector {
         return;
       }
       case IrOpcode::kStringCharCodeAt: {
+        Type* string_type = TypeOf(node->InputAt(0));
         // TODO(turbofan): Allow builtins to return untagged values.
         VisitBinop(node, UseInfo::AnyTagged(), UseInfo::TruncatingWord32(),
                    MachineRepresentation::kTaggedSigned);
+        if (lower()) {
+          if (string_type->Is(Type::SeqString())) {
+            NodeProperties::ChangeOp(node, simplified()->SeqStringCharCodeAt());
+          }
+        }
         return;
       }
       case IrOpcode::kStringFromCharCode: {
