@@ -683,6 +683,21 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
   native_context()->set_strict_function_without_prototype_map(
       *strict_function_without_prototype_map);
 
+  Handle<Map> method_with_name_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME, empty);
+  native_context()->set_method_with_name_map(*method_with_name_map);
+
+  Handle<Map> method_with_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_HOME_OBJECT, empty);
+  native_context()->set_method_with_home_object_map(
+      *method_with_home_object_map);
+
+  Handle<Map> method_with_name_and_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME_AND_HOME_OBJECT,
+                                         empty);
+  native_context()->set_method_with_name_and_home_object_map(
+      *method_with_name_and_home_object_map);
+
   // Allocate map for the strict mode functions. This map is temporary, used
   // only for processing of builtins.
   // Later the map is replaced with writable prototype map, allocated below.

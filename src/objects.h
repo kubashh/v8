@@ -5250,6 +5250,9 @@ class SharedFunctionInfo: public HeapObject {
   inline int end_position() const;
   inline void set_end_position(int end_position);
 
+  // Returns true if the function closure requires a name to be set.
+  inline bool needs_function_set_name() const;
+
   // Is this function a named function expression in the source code.
   DECL_BOOLEAN_ACCESSORS(is_named_expression)
 

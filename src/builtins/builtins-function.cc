@@ -135,7 +135,9 @@ MaybeHandle<Object> CreateDynamicFunction(Isolate* isolate,
 
     Handle<SharedFunctionInfo> shared_info(function->shared(), isolate);
     Handle<Map> map = Map::AsLanguageMode(
-        initial_map, shared_info->language_mode(), shared_info->kind());
+        initial_map, shared_info->language_mode(), shared_info->kind(),
+        shared_info->needs_function_set_name(),
+        shared_info->needs_home_object());
 
     Handle<Context> context(function->context(), isolate);
     function = isolate->factory()->NewFunctionFromSharedFunctionInfo(
