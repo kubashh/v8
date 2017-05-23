@@ -6015,6 +6015,10 @@ PSEUDO_SMI_ACCESSORS_HI(SharedFunctionInfo,
 
 #endif
 
+bool SharedFunctionInfo::needs_function_set_name() const {
+  return String::cast(name())->length() == 0;
+}
+
 AbstractCode* SharedFunctionInfo::abstract_code() {
   if (HasBytecodeArray()) {
     return AbstractCode::cast(bytecode_array());

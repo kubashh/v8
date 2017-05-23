@@ -1576,8 +1576,9 @@ Handle<JSFunction> Factory::NewFunctionFromSharedFunctionInfo(
     Handle<SharedFunctionInfo> info,
     Handle<Context> context,
     PretenureFlag pretenure) {
-  int map_index =
-      Context::FunctionMapIndex(info->language_mode(), info->kind());
+  int map_index = Context::FunctionMapIndex(info->language_mode(), info->kind(),
+                                            info->needs_function_set_name(),
+                                            info->needs_home_object());
   Handle<Map> initial_map(Map::cast(context->native_context()->get(map_index)));
 
   return NewFunctionFromSharedFunctionInfo(initial_map, info, context,
@@ -1587,8 +1588,9 @@ Handle<JSFunction> Factory::NewFunctionFromSharedFunctionInfo(
 Handle<JSFunction> Factory::NewFunctionFromSharedFunctionInfo(
     Handle<SharedFunctionInfo> info, Handle<Context> context,
     Handle<Cell> vector, PretenureFlag pretenure) {
-  int map_index =
-      Context::FunctionMapIndex(info->language_mode(), info->kind());
+  int map_index = Context::FunctionMapIndex(info->language_mode(), info->kind(),
+                                            info->needs_function_set_name(),
+                                            info->needs_home_object());
   Handle<Map> initial_map(Map::cast(context->native_context()->get(map_index)));
 
   return NewFunctionFromSharedFunctionInfo(initial_map, info, context, vector,
@@ -2878,7 +2880,17 @@ Handle<Map> Factory::CreateStrictFunctionMap(
 
 void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
                                                   FunctionMode function_mode) {
-  int size = IsFunctionModeWithPrototype(function_mode) ? 3 : 2;
+  DCHECK_EQ(JS_FUNCTION_TYPE, map->instance_type());
+  int inobject_properties_count = 0;
+  if (IsFunctionModeWithName(function_mode)) ++inobject_properties_count;
+  if (IsFunctionModeWithHomeObject(function_mode)) ++inobject_properties_count;
+  map->SetInObjectProperties(inobject_properties_count);
+  map->set_instance_size(JSFunction::kSize +
+                         inobject_properties_count * kPointerSize);
+
+  int size = (IsFunctionModeWithPrototype(function_mode) ? 3 : 2) +
+             inobject_properties_count;
+
   Map::EnsureDescriptorSlack(map, size);
 
   PropertyAttributes rw_attribs =
@@ -2890,7 +2902,12 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
 
   DCHECK(function_mode == FUNCTION_WITH_WRITEABLE_PROTOTYPE ||
          function_mode == FUNCTION_WITH_READONLY_PROTOTYPE ||
-         function_mode == FUNCTION_WITHOUT_PROTOTYPE);
+         function_mode == FUNCTION_WITHOUT_PROTOTYPE ||
+         function_mode == METHOD_WITH_NAME ||
+         function_mode == METHOD_WITH_HOME_OBJECT ||
+         function_mode == METHOD_WITH_NAME_AND_HOME_OBJECT);
+
+  int field_index = 0;
   STATIC_ASSERT(JSFunction::kLengthDescriptorIndex == 0);
   {  // Add length.
     Handle<AccessorInfo> length =
@@ -2901,13 +2918,22 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
   }
 
   STATIC_ASSERT(JSFunction::kNameDescriptorIndex == 1);
-  {  // Add name.
+  if (IsFunctionModeWithName(function_mode)) {
+    // Add name field.
+    Handle<Name> name = isolate()->factory()->name_string();
+    Descriptor d = Descriptor::DataField(name, field_index++, roc_attribs,
+                                         Representation::Tagged());
+    map->AppendDescriptor(&d);
+
+  } else {
+    // Add name accessor.
     Handle<AccessorInfo> name =
         Accessors::FunctionNameInfo(isolate(), roc_attribs);
     Descriptor d = Descriptor::AccessorConstant(
         handle(Name::cast(name->name())), name, roc_attribs);
     map->AppendDescriptor(&d);
   }
+
   if (IsFunctionModeWithPrototype(function_mode)) {
     // Add prototype.
     PropertyAttributes attribs =
@@ -2917,6 +2943,14 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
         Accessors::FunctionPrototypeInfo(isolate(), attribs);
     Descriptor d = Descriptor::AccessorConstant(
         Handle<Name>(Name::cast(prototype->name())), prototype, attribs);
+    map->AppendDescriptor(&d);
+  }
+
+  if (IsFunctionModeWithHomeObject(function_mode)) {
+    // Add home object field.
+    Handle<Name> name = isolate()->factory()->home_object_symbol();
+    Descriptor d = Descriptor::DataField(name, field_index++, DONT_ENUM,
+                                         Representation::Tagged());
     map->AppendDescriptor(&d);
   }
 }

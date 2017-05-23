@@ -9028,9 +9028,10 @@ Handle<Map> Map::CopyAsElementsKind(Handle<Map> map, ElementsKind kind,
   return new_map;
 }
 
-
 Handle<Map> Map::AsLanguageMode(Handle<Map> initial_map,
-                                LanguageMode language_mode, FunctionKind kind) {
+                                LanguageMode language_mode, FunctionKind kind,
+                                bool needs_set_function_name,
+                                bool needs_home_object) {
   DCHECK_EQ(JS_FUNCTION_TYPE, initial_map->instance_type());
   // Initial map for sloppy mode function is stored in the function
   // constructor. Initial maps for strict mode are cached as special transitions
@@ -9038,7 +9039,8 @@ Handle<Map> Map::AsLanguageMode(Handle<Map> initial_map,
   if (language_mode == SLOPPY) return initial_map;
   Isolate* isolate = initial_map->GetIsolate();
 
-  int map_index = Context::FunctionMapIndex(language_mode, kind);
+  int map_index = Context::FunctionMapIndex(
+      language_mode, kind, needs_set_function_name, needs_home_object);
   Handle<Map> function_map(
       Map::cast(isolate->native_context()->get(map_index)));
 
@@ -12921,6 +12923,7 @@ void JSFunction::SetName(Handle<JSFunction> function, Handle<Name> name,
     builder.AppendString(function_name);
     function_name = builder.Finish().ToHandleChecked();
   }
+
   JSObject::DefinePropertyOrElementIgnoreAttributes(
       function, isolate->factory()->name_string(), function_name,
       static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY))

@@ -25,7 +25,10 @@ enum FunctionMode {
   FUNCTION_WITH_WRITEABLE_PROTOTYPE,
   FUNCTION_WITH_READONLY_PROTOTYPE,
   // Without prototype.
-  FUNCTION_WITHOUT_PROTOTYPE
+  FUNCTION_WITHOUT_PROTOTYPE,
+  METHOD_WITH_NAME,
+  METHOD_WITH_HOME_OBJECT,
+  METHOD_WITH_NAME_AND_HOME_OBJECT
 };
 
 // Interface for handle based allocation.
@@ -753,6 +756,16 @@ class V8_EXPORT_PRIVATE Factory final {
   static bool IsFunctionModeWithPrototype(FunctionMode function_mode) {
     return (function_mode == FUNCTION_WITH_WRITEABLE_PROTOTYPE ||
             function_mode == FUNCTION_WITH_READONLY_PROTOTYPE);
+  }
+
+  static bool IsFunctionModeWithName(FunctionMode function_mode) {
+    return (function_mode == METHOD_WITH_NAME ||
+            function_mode == METHOD_WITH_NAME_AND_HOME_OBJECT);
+  }
+
+  static bool IsFunctionModeWithHomeObject(FunctionMode function_mode) {
+    return (function_mode == METHOD_WITH_HOME_OBJECT ||
+            function_mode == METHOD_WITH_NAME_AND_HOME_OBJECT);
   }
 
   Handle<Map> CreateSloppyFunctionMap(FunctionMode function_mode);
