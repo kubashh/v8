@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e97bb047_9526590c",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-05-23T14:06:20Z",
+      "side": 1,
+      "message": "It seems like class A { [\"\"](){} }; A.prototype[\"\"].name would also yield undefined... please add a test and fix.",
+      "revId": "3b93a4b23b02b9251ba0376e0adb04710c61ebf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8b00053_2ba55635",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-05-23T14:06:20Z",
+      "side": 1,
+      "message": "Can you avoid branches if you sequence the maps so you can just calculate the offset?",
+      "revId": "3b93a4b23b02b9251ba0376e0adb04710c61ebf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf13211_af657ba4",
+        "filename": "src/contexts.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-05-23T14:06:20Z",
+      "side": 1,
+      "message": "Same here?",
+      "revId": "3b93a4b23b02b9251ba0376e0adb04710c61ebf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca70c65_6a5b3648",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6019,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-05-23T14:06:20Z",
+      "side": 1,
+      "message": "I doubt this works. You\u0027ll need to install a special private symbol as marker in case we know from the parser that it has a computed property name.",
+      "revId": "3b93a4b23b02b9251ba0376e0adb04710c61ebf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
