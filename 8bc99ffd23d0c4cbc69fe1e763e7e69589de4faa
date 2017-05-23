@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef9b5d89_6119cb4a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-23T10:19:50Z",
+      "side": 1,
+      "message": "I think this would make sense - the ComplileLazy builtin might need to make two runtime calls, but actually that\u0027s not likely since the bytecode must have been created in order for the code to have been optimized, and since we don\u0027t clear bytecode it must still be around, so the try_shared branch of CompileLazy will succeed and we won\u0027t call into the CompileLazy runtime function. WDYT?",
+      "range": {
+        "startLine": 778,
+        "startChar": 12,
+        "endLine": 778,
+        "endChar": 19
+      },
+      "revId": "8bc99ffd23d0c4cbc69fe1e763e7e69589de4faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edfaee5e_9f8ac2e1",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-23T10:19:50Z",
+      "side": 1,
+      "message": "Not super keen on having this leave in a helper function, makes the caller seem unbalanced with respect to building and tearing down the stack frame. I was going to suggest not tail calling from here, but given the tail calls to runtime calls below this wouldn\u0027t really work. Instead, how about calling this before we build a frame in InterpreterEntryTrampoline, then we don\u0027t need to worry about leaving the frame? We need to make sure we don\u0027t clobber rdi/rsi/rdx since they would be needed by the optimized code anyway.",
+      "range": {
+        "startLine": 789,
+        "startChar": 4,
+        "endLine": 791,
+        "endChar": 5
+      },
+      "revId": "8bc99ffd23d0c4cbc69fe1e763e7e69589de4faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
