@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fbaf85a_9aac5c33",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-05-23T10:53:56Z",
+      "side": 1,
+      "message": "nit: I know this is not part of your change, but I think it\u0027s time to move this constructor into the .cc-file (and also only include the compilation-info.h header there). WDYT?",
+      "range": {
+        "startLine": 28,
+        "startChar": 24,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "7e46448d082640a803ecdd3d32e48470e99e1ab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
