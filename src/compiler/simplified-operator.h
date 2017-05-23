@@ -415,7 +415,11 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckNumber();
   const Operator* CheckSmi();
   const Operator* CheckString();
+<<<<<<< HEAD
   const Operator* CheckSymbol();
+=======
+  const Operator* CheckSeqString();
+>>>>>>> Add CheckSeqString so that we have type info
   const Operator* CheckReceiver();
 
   const Operator* CheckedInt32Add();
