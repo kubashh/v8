@@ -16,6 +16,52 @@
       "revId": "46c896c1e79d37dd0f5c8b756a3ed73910b0cd0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b34907f7_d88420d6",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-23T09:44:29Z",
+      "side": 1,
+      "message": "As discussed, let\u0027s see if we can do the check on the variable name being \"this\" instead of having the extra operand.",
+      "range": {
+        "startLine": 2017,
+        "startChar": 53,
+        "endLine": 2017,
+        "endChar": 61
+      },
+      "revId": "46c896c1e79d37dd0f5c8b756a3ed73910b0cd0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e00c08dd_1ab2aac9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-23T09:44:29Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s unify this with the other bytecode and take a name (which will always be \"this\" for now), or name it more specifically to be about super already being called.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 15,
+        "endLine": 2188,
+        "endChar": 29
+      },
+      "revId": "46c896c1e79d37dd0f5c8b756a3ed73910b0cd0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
