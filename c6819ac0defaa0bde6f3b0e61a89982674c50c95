@@ -16,6 +16,24 @@
       "revId": "c6819ac0defaa0bde6f3b0e61a89982674c50c95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ea4d0cd_c44cb793",
+        "filename": "src/safepoint-table.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-05-23T18:57:50Z",
+      "side": 1,
+      "message": "After offline discussion: Added a longer general comment to the whole function.\nI agree that the name {RemoveDuplicates} is not optimal, but noone came up with a better one yet.",
+      "parentUuid": "4a93c0e8_c6f2ce99",
+      "revId": "c6819ac0defaa0bde6f3b0e61a89982674c50c95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
