@@ -5640,6 +5640,7 @@ ObjectTemplateInfo* ObjectTemplateInfo::GetParent(Isolate* isolate) {
 }
 
 ACCESSORS(PrototypeInfo, weak_cell, Object, kWeakCellOffset)
+ACCESSORS(PrototypeInfo, load_handlers, Object, kLoadHandlersOffset)
 ACCESSORS(PrototypeInfo, prototype_users, Object, kPrototypeUsersOffset)
 ACCESSORS(PrototypeInfo, object_create_map, Object, kObjectCreateMap)
 SMI_ACCESSORS(PrototypeInfo, registry_slot, kRegistrySlotOffset)

@@ -4512,6 +4512,9 @@ class PrototypeInfo : public Struct {
   // [weak_cell]: A WeakCell containing this prototype. ICs cache the cell here.
   DECL_ACCESSORS(weak_cell, Object)
 
+  // [load_handlers]: A name -> handler dictionary for LoadICs.
+  DECL_ACCESSORS(load_handlers, Object)
+
   // [prototype_users]: WeakFixedArray containing maps using this prototype,
   // or Smi(0) if uninitialized.
   DECL_ACCESSORS(prototype_users, Object)
@@ -4546,7 +4549,8 @@ class PrototypeInfo : public Struct {
   DECLARE_VERIFIER(PrototypeInfo)
 
   static const int kWeakCellOffset = HeapObject::kHeaderSize;
-  static const int kPrototypeUsersOffset = kWeakCellOffset + kPointerSize;
+  static const int kLoadHandlersOffset = kWeakCellOffset + kPointerSize;
+  static const int kPrototypeUsersOffset = kLoadHandlersOffset + kPointerSize;
   static const int kRegistrySlotOffset = kPrototypeUsersOffset + kPointerSize;
   static const int kValidityCellOffset = kRegistrySlotOffset + kPointerSize;
   static const int kObjectCreateMap = kValidityCellOffset + kPointerSize;

@@ -129,7 +129,8 @@ class IC {
 
   void UpdateMonomorphicIC(Handle<Object> handler, Handle<Name> name);
   bool UpdatePolymorphicIC(Handle<Name> name, Handle<Object> code);
-  void UpdateMegamorphicCache(Map* map, Name* name, Object* code);
+  void UpdateMegamorphicCache(Handle<Map> map, Handle<Name> name,
+                              Handle<Object> handler);
 
   StubCache* stub_cache();
 

@@ -718,7 +718,7 @@ void IC::CopyICToMegamorphicCache(Handle<Name> name) {
   TargetMaps(&maps);
   if (!nexus()->FindHandlers(&handlers, static_cast<int>(maps.size()))) return;
   for (int i = 0; i < static_cast<int>(maps.size()); i++) {
-    UpdateMegamorphicCache(*maps.at(i), *name, *handlers.at(i));
+    UpdateMegamorphicCache(maps.at(i), name, handlers.at(i));
   }
 }
 
@@ -764,7 +764,7 @@ void IC::PatchCache(Handle<Name> name, Handle<Object> handler) {
       ConfigureVectorState(MEGAMORPHIC, name);
     // Fall through.
     case MEGAMORPHIC:
-      UpdateMegamorphicCache(*receiver_map(), *name, *handler);
+      UpdateMegamorphicCache(receiver_map(), name, handler);
       // Indicate that we've handled this case.
       vector_set_ = true;
       break;
@@ -882,6 +882,77 @@ Handle<WeakCell> HolderCell(Isolate* isolate, Handle<JSObject> holder,
   return Map::GetOrCreatePrototypeWeakCell(holder, isolate);
 }
 
+class PrototypeCacheHelper {
+ public:
+  explicit PrototypeCacheHelper(Isolate* isolate, Handle<Map> receiver_map,
+                                LookupIterator* lookup)
+      : isolate_(isolate) {
+    bool holder_is_receiver =
+        lookup->IsFound() &&
+        lookup->GetReceiver().is_identical_to(lookup->GetHolder<Object>());
+    Object* prototype = receiver_map->prototype();
+    use_prototype_cache_ = !holder_is_receiver && prototype->IsJSObject();
+    if (!use_prototype_cache_) return;
+
+    Handle<Map> prototype_map =
+        handle(JSObject::cast(prototype)->map(), isolate);
+    proto_info_ = Map::GetOrCreatePrototypeInfo(prototype_map, isolate);
+    Object* maybe_handlers = proto_info->load_handlers();
+    if (!maybe_handlers->IsNameDictionary()) {
+      handlers_ = NameDictionary::New(isolate, 2);
+      proto_info->set_load_handlers(*handlers);
+      DCHECK_EQ(NameDictionary::kNotFound, entry_);
+      name_ = lookup->name();
+    } else {
+      handlers_ = handle(NameDictionary::cast(maybe_handlers), isolate);
+      entry_ = handlers_->FindEntry(lookup->name());
+    }
+  }
+
+  Handle<Object> GetCachedHandler() {
+    if (!use_prototype_cache_) return Handle<Object>();
+    if (entry_ == NameDictionary::kNotFound) return Handle<Object>();
+    return handlers_->ValueAt(entry_);
+  }
+
+  void UpdateCachedHandler(Handle<Object> handler) {
+    if (!use_prototype_cache_) return;
+    if (entry_ == NameDictionary::kNotFound) {
+      handlers_ = NameDictionary::Add(handlers_, name_, handler,
+                                      PropertyDetails::Empty());
+      proto_info_->set_load_handlers(*handlers_);
+    } else {
+      handlers_->ValueAtPut(entry_, handler);
+    }
+  }
+
+ private:
+  Isolate* isolate_;
+  bool use_prototype_cache_;
+  Handle<Name> name_;
+  Handle<PrototypeInfo> proto_info_;
+  Handle<NameDictionary> handlers_;
+  int entry_ = NameDictionary::kNotFound;
+};
+
+Handle<Object> LookupCachedHandler(Handle<Map> prototype_map,
+                                   Isolate* isolate) {
+  Handle<PrototypeInfo> proto_info =
+      Map::GetOrCreatePrototypeInfo(prototype_map, isolate);
+  Object* maybe_handlers = proto_info->load_handlers();
+  if (!maybe_handlers->IsNameDictionary()) {
+    Handle<NameDictionary> handlers = NameDictionary::New(isolate, 2);
+    proto_info->set_load_handlers(*handlers);
+    return Handle<Object>();
+  }
+}
+
+void UpdateCachedHandler(Handle<Map> prototype_map, Isolate* isolate) {
+  Handle<PrototypeInfo> proto_info =
+      handle(PrototypeInfo::cast(prototype_map->prototype_info()), isolate);
+  Handle<NameDictionary> handlers
+}
+
 }  // namespace
 
 Handle<Object> LoadIC::LoadFromPrototype(Handle<Map> receiver_map,
@@ -977,6 +1048,8 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
     return;
   }
 
+
+
   Handle<Object> code;
   if (lookup->state() == LookupIterator::JSPROXY ||
       lookup->state() == LookupIterator::ACCESS_CHECK) {
@@ -1004,6 +1077,58 @@ void LoadIC::UpdateCaches(LookupIterator* lookup) {
     code = ComputeHandler(lookup);
   }
 
+
+  // TODO: update this
+  do {
+    bool verbose = false;
+    if (lookup->IsFound() &&
+        lookup->GetReceiver().is_identical_to(lookup->GetHolder<Object>())) {
+      break;
+    }
+    Object* prototype = receiver_map()->prototype();
+    if (!prototype->IsJSObject()) break;
+    Handle<Map> prototype_map =
+        handle(JSReceiver::cast(prototype)->map(), isolate());
+    Handle<PrototypeInfo> proto_info =
+        Map::GetOrCreatePrototypeInfo(prototype_map, isolate());
+    Object* maybe_handlers = proto_info->load_handlers();
+    if (!maybe_handlers->IsNameDictionary()) {
+      Handle<NameDictionary> handlers = NameDictionary::New(isolate(), 2);
+      handlers = NameDictionary::Add(handlers, lookup->name(), code,
+                                     PropertyDetails::Empty());
+      if (verbose) {
+        printf("created handlers dictionary\n");
+      }
+      proto_info->set_load_handlers(*handlers);
+      break;
+    }
+    Handle<NameDictionary> load_handlers(NameDictionary::cast(maybe_handlers),
+                                         isolate());
+    int entry = load_handlers->FindEntry(lookup->name());
+    if (entry == NameDictionary::kNotFound) {
+      Handle<NameDictionary> new_handlers = NameDictionary::Add(
+          load_handlers, lookup->name(), code, PropertyDetails::Empty());
+      if (!load_handlers.is_identical_to(new_handlers)) {
+        if (verbose) {
+          printf("grew handlers dictionary to capacity: %d\n",
+                 new_handlers->Capacity());
+        }
+        proto_info->set_load_handlers(*new_handlers);
+      }
+      if (verbose) {
+        printf("handlers dictionary size: %d\n",
+               new_handlers->NumberOfElements());
+      }
+    } else {
+
+      // TODO: this is happening quite frequently, since several receiver maps
+      // sharing the same prototype will all update the cache. Can we make
+      // clever use of this somehow?
+
+      load_handlers->ValueAtPut(entry, *code);
+    }
+  } while (false);
+
   PatchCache(lookup->name(), code);
   TRACE_IC("LoadIC", lookup->name());
 }
@@ -1017,8 +1142,17 @@ StubCache* IC::stub_cache() {
   }
 }
 
-void IC::UpdateMegamorphicCache(Map* map, Name* name, Object* handler) {
-  stub_cache()->Set(name, map, handler);
+void IC::UpdateMegamorphicCache(Handle<Map> map, Handle<Name> name,
+                                Handle<Object> handler) {
+
+
+  // TODO: update this
+
+
+  if (IsAnyLoad()) {
+    return;
+  }
+  stub_cache()->Set(*name, *map, *handler);
 }
 
 void IC::TraceHandlerCacheHitStats(LookupIterator* lookup) {
@@ -1057,8 +1191,33 @@ Handle<Object> IC::ComputeHandler(LookupIterator* lookup) {
       // cache (which just missed) is different from the cached handler.
       if (state() == MEGAMORPHIC && lookup->GetReceiver()->IsHeapObject()) {
         Map* map = Handle<HeapObject>::cast(lookup->GetReceiver())->map();
-        Object* megamorphic_cached_handler =
-            stub_cache()->Get(*lookup->name(), map);
+
+
+        // TODO: update this
+        Object* megamorphic_cached_handler = nullptr;
+        if (IsAnyLoad()) {
+          do {
+            Object* proto = map->prototype();
+            if (!proto->IsJSReceiver()) break;
+            Object* maybe_proto_info =
+                JSReceiver::cast(proto)->map()->prototype_info();
+            if (!maybe_proto_info->IsPrototypeInfo()) break;
+            Object* maybe_handlers =
+                PrototypeInfo::cast(maybe_proto_info)->load_handlers();
+            if (!maybe_handlers->IsNameDictionary()) break;
+            NameDictionary* handlers = NameDictionary::cast(maybe_handlers);
+            int entry = handlers->FindEntry(lookup->name());
+            if (entry == NameDictionary::kNotFound) break;
+            megamorphic_cached_handler = handlers->ValueAt(entry);
+          } while(false);
+        } else {
+          megamorphic_cached_handler =
+              isolate()->store_stub_cache()->Get(*lookup->name(), map);
+        }
+
+
+        //Object* megamorphic_cached_handler =
+        //    stub_cache()->Get(*lookup->name(), map);
         if (megamorphic_cached_handler != *handler) {
           TraceHandlerCacheHitStats(lookup);
           return handler;

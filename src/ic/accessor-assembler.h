@@ -126,10 +126,11 @@ class AccessorAssembler : public CodeStubAssembler {
                              Label* if_miss, int min_feedback_capacity);
 
   // LoadIC implementation.
-
+  enum SkipReceiver { kPerformReceiverCheck, kSkipReceiverCheck };
   void HandleLoadICHandlerCase(
       const LoadICParameters* p, Node* handler, Label* miss,
-      ExitPoint* exit_point, ElementSupport support_elements = kOnlyProperties);
+      ExitPoint* exit_point, ElementSupport support_elements = kOnlyProperties,
+      SkipReceiver skip_receiver = kPerformReceiverCheck);
 
   void HandleLoadICSmiHandlerCase(const LoadICParameters* p, Node* holder,
                                   Node* smi_handler, Label* miss,
@@ -137,12 +138,11 @@ class AccessorAssembler : public CodeStubAssembler {
                                   bool throw_reference_error_if_nonexistent,
                                   ElementSupport support_elements);
 
-  void HandleLoadICProtoHandlerCase(const LoadICParameters* p, Node* handler,
-                                    Variable* var_holder,
-                                    Variable* var_smi_handler,
-                                    Label* if_smi_handler, Label* miss,
-                                    ExitPoint* exit_point,
-                                    bool throw_reference_error_if_nonexistent);
+  void HandleLoadICProtoHandlerCase(
+      const LoadICParameters* p, Node* handler, Variable* var_holder,
+      Variable* var_smi_handler, Label* if_smi_handler, Label* miss,
+      ExitPoint* exit_point, bool throw_reference_error_if_nonexistent,
+      SkipReceiver skip_receiver = kPerformReceiverCheck);
 
   void HandleLoadField(Node* holder, Node* handler_word,
                        Variable* var_double_value, Label* rebox_double,
@@ -180,11 +180,11 @@ class AccessorAssembler : public CodeStubAssembler {
   void GenericElementLoad(Node* receiver, Node* receiver_map,
                           Node* instance_type, Node* index, Label* slow);
 
-  enum UseStubCache { kUseStubCache, kDontUseStubCache };
+  // |stub_cache_miss| == nullptr means that no stub cache lookup will be done.
   void GenericPropertyLoad(Node* receiver, Node* receiver_map,
                            Node* instance_type, Node* key,
                            const LoadICParameters* p, Label* slow,
-                           UseStubCache use_stub_cache = kUseStubCache);
+                           Label* stub_cache_miss = nullptr);
 
   // Low-level helpers.
 
@@ -211,6 +211,9 @@ class AccessorAssembler : public CodeStubAssembler {
   void NameDictionaryNegativeLookup(Node* object, Node* name, Label* miss);
 
   // Stub cache access helpers.
+  void PrototypeHandlerLookup(Node* name, Node* receiver_map, Label* if_handler,
+                              Variable* var_handler, Label* miss,
+                              Label* null_prototype);
 
   // This enum is used here as a replacement for StubCache::Table to avoid
   // including stub cache header.
