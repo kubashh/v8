@@ -16,6 +16,24 @@
       "revId": "4ecd013f66c4a86bcd1d4258bef083f0b0a9a3f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9517577_023a8734",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-05-24T13:52:04Z",
+      "side": 1,
+      "message": "Because templates are cool! :-)",
+      "parentUuid": "5bb8efa7_be3ad7a1",
+      "revId": "4ecd013f66c4a86bcd1d4258bef083f0b0a9a3f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
