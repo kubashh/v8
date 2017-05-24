@@ -425,6 +425,15 @@ void Deoptimizer::DeoptimizeFunction(JSFunction* function, Code* code) {
   TRACE_EVENT0("v8", "V8.DeoptimizeCode");
   if (code == nullptr) code = function->code();
   if (code->kind() == Code::OPTIMIZED_FUNCTION) {
+    if (FLAG_trace_deopt) {
+      PrintF("[Deoptimizer::DeoptimizeFunction for ");
+      function->ShortPrint();
+      PrintF(", ");
+      code->ShortPrint();
+      PrintF(", ");
+      function->code()->ShortPrint();
+      PrintF("]\n");
+    }
     // Mark the code for deoptimization and unlink any functions that also
     // refer to that code. The code cannot be shared across native contexts,
     // so we only need to search one.

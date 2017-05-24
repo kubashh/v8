@@ -279,6 +279,8 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
   // If the function is already optimized, just return.
   if (function->IsOptimized()) return isolate->heap()->undefined_value();
 
+  // TODO(mvstanton): pass pretenure flag to EnsureLiterals.
+  JSFunction::EnsureLiterals(function);
   function->MarkForOptimization();
   if (FLAG_trace_opt) {
     PrintF("[manually marking ");

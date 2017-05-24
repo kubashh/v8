@@ -145,9 +145,7 @@ namespace internal {
   ASM(InterpreterOnStackReplacement)                                           \
                                                                                \
   /* Code life-cycle */                                                        \
-  ASM(CompileOptimized)                                                        \
-  ASM(CompileOptimizedConcurrent)                                              \
-  ASM(InOptimizationQueue)                                                     \
+  ASM(CheckOptimizationMarker)                                                 \
   ASM(InstantiateAsmJs)                                                        \
   ASM(MarkCodeAsToBeExecutedOnce)                                              \
   ASM(MarkCodeAsExecutedOnce)                                                  \

@@ -12090,14 +12090,15 @@ void JSFunction::MarkForOptimization() {
   DCHECK(!IsOptimized());
   DCHECK(shared()->allows_lazy_compilation() ||
          !shared()->optimization_disabled());
-  set_code_no_write_barrier(
-      isolate->builtins()->builtin(Builtins::kCompileOptimized));
-  // No write barrier required, since the builtin is part of the root set.
-  if (FLAG_mark_shared_functions_for_tier_up) {
-    shared()->set_marked_for_tier_up(true);
+  feedback_vector()->SetOptimizationMarker(
+      OptimizationMarker::kCompileOptimized);
+  if (!IsInterpreted()) {
+    // For non I+TF path, install a shim which checks the optimization marker.
+    // No write barrier required, since the builtin is part of the root set.
+    set_code_no_write_barrier(
+        isolate->builtins()->builtin(Builtins::kCheckOptimizationMarker));
   }
 }
-
 
 void JSFunction::AttemptConcurrentOptimization() {
   Isolate* isolate = GetIsolate();
@@ -12116,14 +12117,13 @@ void JSFunction::AttemptConcurrentOptimization() {
     ShortPrint();
     PrintF(" for concurrent recompilation.\n");
   }
-
-  set_code_no_write_barrier(
-      isolate->builtins()->builtin(Builtins::kCompileOptimizedConcurrent));
-  // No write barrier required, since the builtin is part of the root set.
-  if (FLAG_mark_shared_functions_for_tier_up) {
-    // TODO(leszeks): The compilation isn't concurrent if we trigger it using
-    // this bit.
-    shared()->set_marked_for_tier_up(true);
+  feedback_vector()->SetOptimizationMarker(
+      OptimizationMarker::kCompileOptimizedConcurrent);
+  if (!IsInterpreted()) {
+    // For non I+TF path, install a shim which checks the optimization marker.
+    // No write barrier required, since the builtin is part of the root set.
+    set_code_no_write_barrier(
+        isolate->builtins()->builtin(Builtins::kCheckOptimizationMarker));
   }
 }
 
