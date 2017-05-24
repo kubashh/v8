@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35807010_d458bf45",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-05-24T12:07:22Z",
+      "side": 1,
+      "message": "Please refactor this into a single instance type check :-)",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 42
+      },
+      "revId": "687787da9e14bfb6e50f17f85094e9a31c919e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
