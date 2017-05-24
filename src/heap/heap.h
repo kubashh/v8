@@ -177,6 +177,7 @@ using v8::MemoryPressureLevel;
   V(PropertyCell, array_iterator_protector, ArrayIteratorProtector)            \
   V(PropertyCell, array_buffer_neutering_protector,                            \
     ArrayBufferNeuteringProtector)                                             \
+  V(PropertyCell, hole_check_protector, HoleCheckProtector)                    \
   /* Special numbers */                                                        \
   V(HeapNumber, nan_value, NanValue)                                           \
   V(HeapNumber, hole_nan_value, HoleNanValue)                                  \
@@ -336,6 +337,7 @@ using v8::MemoryPressureLevel;
   V(UninitializedValue)                 \
   V(WeakCellMap)                        \
   V(WithContextMap)                     \
+  V(HoleCheckProtector)                 \
   PRIVATE_SYMBOL_LIST(V)
 
 // Forward declarations.

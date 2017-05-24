@@ -338,6 +338,8 @@ namespace internal {
   F(ThrowNotConstructor, 1, 1)                     \
   F(ThrowRangeError, -1 /* >= 1 */, 1)             \
   F(ThrowReferenceError, 1, 1)                     \
+  F(ThrowIfHoleError, 1, 1)                        \
+  F(ThrowIfNotHoleError, 1, 1)                     \
   F(ThrowStackOverflow, 0, 1)                      \
   F(ThrowSymbolAsyncIteratorInvalid, 0, 1)         \
   F(ThrowTypeError, -1 /* >= 1 */, 1)              \
