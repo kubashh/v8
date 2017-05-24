@@ -160,6 +160,12 @@ macro ORDERED_HASH_MAP_CHAIN_AT(table, entry, numBuckets) = (FIXED_ARRAY_GET(tab
 # Must match OrderedHashTable::kNotFound.
 define NOT_FOUND = -1;
 
+# Must match OrderedHashMap::kEntrySize.
+define kMapEntrySize = 3;
+
+# Must match OrderedHashTable::kHashTableStartIndex.
+define kHashTableStartIndex = 3;
+
 # Check whether debug is active.
 define DEBUG_IS_ACTIVE = (%_DebugIsActive() != 0);
 

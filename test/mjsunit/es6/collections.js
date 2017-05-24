@@ -1476,3 +1476,20 @@ TestConstructorOrderOfAdderIterator(Map, 'set');
 TestConstructorOrderOfAdderIterator(Set, 'add');
 TestConstructorOrderOfAdderIterator(WeakMap, 'set');
 TestConstructorOrderOfAdderIterator(WeakSet, 'add');
+
+(function() {
+  var x = new Map();
+  var values = [];
+
+  function verify() {
+    for (var val of values) {
+      assertEquals(x.get(val), val);
+    }
+  }
+
+  // Test linear scan upto 16 elements.
+  for (var i = 0; i < 17; i++) {
+    x.set(i, i);
+    verify();
+  }
+})();
