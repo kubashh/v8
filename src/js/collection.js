@@ -304,7 +304,23 @@ function MapGet(key) {
                         'Map.prototype.get', this);
   }
   var table = %_JSCollectionGetTable(this);
+  var nof = ORDERED_HASH_TABLE_ELEMENT_COUNT(table);
   var numBuckets = ORDERED_HASH_TABLE_BUCKET_COUNT(table);
+  var keyIsNaN = NUMBER_IS_NAN(key);
+  if (nof < 16) {
+    var index = 3 + numBuckets;
+    for(var i = 0; i < nof; i++) {
+      var candidate = FIXED_ARRAY_GET(table, index);
+      if (key === candidate) {
+        return ORDERED_HASH_MAP_VALUE_AT(table, i, numBuckets);
+      }
+      if (keyIsNaN && NUMBER_IS_NAN(candidate)) {
+        return ORDERED_HASH_MAP_VALUE_AT(table, i, numBuckets);
+      }
+      index = index + 3;
+    }
+    return UNDEFINED;
+  }
   var hash = GetExistingHash(key);
   if (IS_UNDEFINED(hash)) return UNDEFINED;
   var entry = MapFindEntry(table, numBuckets, key, hash);
