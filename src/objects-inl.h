@@ -5809,10 +5809,6 @@ BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, has_duplicate_parameters,
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, asm_function, kIsAsmFunction)
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, is_declaration,
                kIsDeclaration)
-BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, marked_for_tier_up,
-               kMarkedForTierUp)
-BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints,
-               has_concurrent_optimization_job, kHasConcurrentOptimizationJob)
 
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, needs_home_object,
                kNeedsHomeObject)
@@ -5958,8 +5954,7 @@ ACCESSORS(SharedFunctionInfo, outer_scope_info, HeapObject,
 
 bool SharedFunctionInfo::is_compiled() const {
   Builtins* builtins = GetIsolate()->builtins();
-  DCHECK(code() != builtins->builtin(Builtins::kCompileOptimizedConcurrent));
-  DCHECK(code() != builtins->builtin(Builtins::kCompileOptimized));
+  DCHECK(code() != builtins->builtin(Builtins::kCheckOptimizationMarker));
   return code() != builtins->builtin(Builtins::kCompileLazy);
 }
 
@@ -6172,7 +6167,10 @@ FeedbackVector* JSFunction::feedback_vector() const {
 }
 
 bool JSFunction::IsOptimized() {
-  return code()->kind() == Code::OPTIMIZED_FUNCTION;
+  return code()->kind() == Code::OPTIMIZED_FUNCTION ||
+         (IsInterpreted() &&
+          feedback_vector_cell()->value()->IsFeedbackVector() &&
+          feedback_vector()->has_optimized_code());
 }
 
 bool JSFunction::IsInterpreted() {
@@ -6180,20 +6178,21 @@ bool JSFunction::IsInterpreted() {
 }
 
 bool JSFunction::IsMarkedForOptimization() {
-  return code() == GetIsolate()->builtins()->builtin(
-      Builtins::kCompileOptimized);
+  return has_feedback_vector() && feedback_vector()->has_optimization_marker(
+                                      OptimizationMarker::kCompileOptimized);
 }
 
 
 bool JSFunction::IsMarkedForConcurrentOptimization() {
-  return code() == GetIsolate()->builtins()->builtin(
-      Builtins::kCompileOptimizedConcurrent);
+  return has_feedback_vector() &&
+         feedback_vector()->has_optimization_marker(
+             OptimizationMarker::kCompileOptimizedConcurrent);
 }
 
 
 bool JSFunction::IsInOptimizationQueue() {
-  return code() == GetIsolate()->builtins()->builtin(
-      Builtins::kInOptimizationQueue);
+  return has_feedback_vector() && feedback_vector()->has_optimization_marker(
+                                      OptimizationMarker::kInOptimizationQueue);
 }
 
 
@@ -6254,20 +6253,23 @@ void JSFunction::ClearOptimizedCodeSlot(const char* reason) {
     if (FLAG_trace_opt) {
       PrintF("[evicting entry from optimizing code feedback slot (%s) for ",
              reason);
-      shared()->ShortPrint();
+      ShortPrint();
       PrintF("]\n");
     }
     feedback_vector()->ClearOptimizedCode();
   }
 }
 
-void JSFunction::ReplaceCode(Code* code) {
-  bool was_optimized = IsOptimized();
-  bool is_optimized = code->kind() == Code::OPTIMIZED_FUNCTION;
-
-  if (was_optimized && is_optimized) {
-    ClearOptimizedCodeSlot("Replacing with another optimized code");
+void JSFunction::ClearOptimizationMarker() {
+  if (has_feedback_vector() && !feedback_vector()->has_optimized_code()) {
+    feedback_vector()->SetOptimizationMarker(
+        OptimizationMarker::kRunUnoptimized);
   }
+}
+
+void JSFunction::ReplaceCode(Code* code) {
+  bool was_optimized = this->code()->kind() == Code::OPTIMIZED_FUNCTION;
+  bool is_optimized = code->kind() == Code::OPTIMIZED_FUNCTION;
 
   set_code(code);
 
@@ -6275,8 +6277,7 @@ void JSFunction::ReplaceCode(Code* code) {
   // context based on the state change.
   if (!was_optimized && is_optimized) {
     context()->native_context()->AddOptimizedFunction(this);
-  }
-  if (was_optimized && !is_optimized) {
+  } else if (was_optimized && !is_optimized) {
     // TODO(titzer): linear in the number of optimized functions; fix!
     context()->native_context()->RemoveOptimizedFunction(this);
   }
@@ -6372,8 +6373,9 @@ Object* JSFunction::prototype() {
 bool JSFunction::is_compiled() {
   Builtins* builtins = GetIsolate()->builtins();
   return code() != builtins->builtin(Builtins::kCompileLazy) &&
-         code() != builtins->builtin(Builtins::kCompileOptimized) &&
-         code() != builtins->builtin(Builtins::kCompileOptimizedConcurrent);
+         (code() != builtins->builtin(Builtins::kCheckOptimizationMarker) ||
+          !feedback_vector()->has_optimization_marker(
+              OptimizationMarker::kRunUnoptimized));
 }
 
 ACCESSORS(JSProxy, target, JSReceiver, kTargetOffset)

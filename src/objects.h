@@ -1592,6 +1592,13 @@ class Smi: public Object {
     return reinterpret_cast<Smi*>((value << smi_shift_bits) | kSmiTag);
   }
 
+  template <typename E,
+            typename = typename std::enable_if<std::is_enum<E>::value>::type>
+  static inline Smi* FromEnum(E value) {
+    STATIC_ASSERT(sizeof(E) <= sizeof(int));
+    return FromInt(static_cast<int>(value));
+  }
+
   // Returns whether value can be represented in a Smi.
   static inline bool IsValid(intptr_t value) {
     bool result = Internals::IsValidSmi(value);
@@ -5317,12 +5324,6 @@ class SharedFunctionInfo: public HeapObject {
   // Whether this function was created from a FunctionDeclaration.
   DECL_BOOLEAN_ACCESSORS(is_declaration)
 
-  // Whether this function was marked to be tiered up.
-  DECL_BOOLEAN_ACCESSORS(marked_for_tier_up)
-
-  // Whether this function has a concurrent compilation job running.
-  DECL_BOOLEAN_ACCESSORS(has_concurrent_optimization_job)
-
   // Indicates that asm->wasm conversion failed and should not be re-attempted.
   DECL_BOOLEAN_ACCESSORS(is_asm_wasm_broken)
 
@@ -5593,7 +5594,7 @@ class SharedFunctionInfo: public HeapObject {
   enum CompilerHints {
     // byte 0
     kAllowLazyCompilation,
-    kMarkedForTierUp,
+    kIsAsmWasmBroken,
     kOptimizationDisabled,
     kHasDuplicateParameters,
     kNative,
@@ -5605,11 +5606,11 @@ class SharedFunctionInfo: public HeapObject {
     kIsAsmFunction,
     kMustUseIgnitionTurbo,
     kIsDeclaration,
-    kIsAsmWasmBroken,
-    kHasConcurrentOptimizationJob,
 
     kUnused1,  // Unused fields.
     kUnused2,
+    kUnused3,
+    kUnused4,
 
     // byte 2
     kFunctionKind,
@@ -5675,9 +5676,6 @@ class SharedFunctionInfo: public HeapObject {
   static const int kAllFunctionKindBitsMask = FunctionKindBits::kMask
                                               << kCompilerHintsSmiTagSize;
 
-  static const int kMarkedForTierUpBit =
-      kMarkedForTierUp + kCompilerHintsSmiTagSize;
-
   // Constants for optimizing codegen for strict mode function and
   // native tests.
   // Allows to use byte-width instructions.
@@ -5693,9 +5691,6 @@ class SharedFunctionInfo: public HeapObject {
   static const int kDerivedConstructorBitsWithinByte =
       FunctionKind::kDerivedConstructor << kCompilerHintsSmiTagSize;
   STATIC_ASSERT(kDerivedConstructorBitsWithinByte < (1 << kBitsPerByte));
-
-  static const int kMarkedForTierUpBitWithinByte =
-      kMarkedForTierUpBit % kBitsPerByte;
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 #define BYTE_OFFSET(compiler_hint) \
@@ -5713,7 +5708,6 @@ class SharedFunctionInfo: public HeapObject {
   static const int kFunctionKindByteOffset = BYTE_OFFSET(kFunctionKind);
   static const int kHasDuplicateParametersByteOffset =
       BYTE_OFFSET(kHasDuplicateParameters);
-  static const int kMarkedForTierUpByteOffset = BYTE_OFFSET(kMarkedForTierUp);
 #undef BYTE_OFFSET
 
  private:
@@ -6086,6 +6080,9 @@ class JSFunction: public JSObject {
 
   // Clears the optimized code slot in the function's feedback vector.
   inline void ClearOptimizedCodeSlot(const char* reason);
+
+  // Clears the optimization marker in the function's feedback vector.
+  inline void ClearOptimizationMarker();
 
   // Completes inobject slack tracking on initial map if it is active.
   inline void CompleteInobjectSlackTrackingIfActive();
