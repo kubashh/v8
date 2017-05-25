@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6d878f0_de435400",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "nit - hole_check_operator",
+      "range": {
+        "startLine": 1684,
+        "startChar": 20,
+        "endLine": 1684,
+        "endChar": 34
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7615ca8_cdde08a1",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "nit - move this below the AssumPropertyCell and PrepareEagerCheckpoint calls call below",
+      "range": {
+        "startLine": 1686,
+        "startChar": 1,
+        "endLine": 1686,
+        "endChar": 57
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6b0479_0111c0b4",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "Don\u0027t think you need the eager checkpoint here (no speculative optimization going on)",
+      "range": {
+        "startLine": 1703,
+        "startChar": 4,
+        "endLine": 1703,
+        "endChar": 26
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25193941_1f50b6f6",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "Not keen on using the runtime_id to decide that we need to get an operand in the bytecode. Could you just pass this in from the bytecode visitor instead please",
+      "range": {
+        "startLine": 1707,
+        "startChar": 6,
+        "endLine": 1708,
+        "endChar": 61
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db43c540_857f74e5",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "DCHECK this is the expected runtimeID",
+      "range": {
+        "startLine": 1711,
+        "startChar": 6,
+        "endLine": 1711,
+        "endChar": 10
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edaa883f_674e0019",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "nit - ThrowReferenceErrorIfHole (to be in sync with the others) ?",
+      "range": {
+        "startLine": 389,
+        "startChar": 24,
+        "endLine": 389,
+        "endChar": 35
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c66729c_6aaab03b",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "Ditto - ThrowReferenceErrorIfHole",
+      "range": {
+        "startLine": 306,
+        "startChar": 17,
+        "endLine": 306,
+        "endChar": 41
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f01d311a_57f251a5",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:38:23Z",
+      "side": 1,
+      "message": "I thought we weren\u0027t doing this check on name \u003d\u003d \"this\" any longer ?",
+      "range": {
+        "startLine": 314,
+        "startChar": 3,
+        "endLine": 317,
+        "endChar": 10
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
