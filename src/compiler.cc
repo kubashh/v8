@@ -737,13 +737,27 @@ MUST_USE_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
   return MaybeHandle<Code>();
 }
 
+void ClearOptimizedCodeCache(CompilationInfo* info) {
+  Handle<JSFunction> function = info->closure();
+  if (info->osr_ast_id().IsNone()) {
+    Handle<FeedbackVector> vector =
+        handle(function->feedback_vector(), function->GetIsolate());
+    vector->ClearOptimizedCode();
+  }
+}
+
 void InsertCodeIntoOptimizedCodeCache(CompilationInfo* info) {
   Handle<Code> code = info->code();
   if (code->kind() != Code::OPTIMIZED_FUNCTION) return;  // Nothing to do.
 
   // Function context specialization folds-in the function context,
   // so no sharing can occur.
-  if (info->is_function_context_specializing()) return;
+  if (info->is_function_context_specializing()) {
+    // Native context specialized code is not shared, so make sure the optimized
+    // code cache is clear.
+    ClearOptimizedCodeCache(info);
+    return;
+  }
   // Frame specialization implies function context specialization.
   DCHECK(!info->is_frame_specializing());
 
@@ -802,16 +816,6 @@ bool GetOptimizedCodeLater(CompilationJob* job) {
   CompilationInfo* info = job->info();
   Isolate* isolate = info->isolate();
 
-  if (FLAG_mark_optimizing_shared_functions &&
-      info->closure()->shared()->has_concurrent_optimization_job()) {
-    if (FLAG_trace_concurrent_recompilation) {
-      PrintF("  ** Compilation job already running for ");
-      info->shared_info()->ShortPrint();
-      PrintF(".\n");
-    }
-    return false;
-  }
-
   if (!isolate->optimizing_compile_dispatcher()->IsQueueAvailable()) {
     if (FLAG_trace_concurrent_recompilation) {
       PrintF("  ** Compilation queue full, will retry optimizing ");
@@ -846,7 +850,6 @@ bool GetOptimizedCodeLater(CompilationJob* job) {
 
   if (job->PrepareJob() != CompilationJob::SUCCEEDED) return false;
   isolate->optimizing_compile_dispatcher()->QueueForOptimization(job);
-  info->closure()->shared()->set_has_concurrent_optimization_job(true);
 
   if (FLAG_trace_concurrent_recompilation) {
     PrintF("  ** Queued ");
@@ -965,7 +968,16 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   if (mode == Compiler::CONCURRENT) {
     if (GetOptimizedCodeLater(job.get())) {
       job.release();  // The background recompile job owns this now.
-      return isolate->builtins()->InOptimizationQueue();
+
+      function->feedback_vector()->SetOptimizationMarker(
+          OptimizationMarker::kInOptimizationQueue);
+      // Make sure the function checks the optimization marker.
+      DCHECK(function->IsInterpreted() ||
+             function->code() ==
+                 isolate->builtins()->builtin(Builtins::kCompileLazy) ||
+             function->code() == isolate->builtins()->builtin(
+                                     Builtins::kCheckOptimizationMarker));
+      return MaybeHandle<Code>();
     }
   } else {
     if (GetOptimizedCodeNow(job.get())) return info->code();
@@ -973,13 +985,6 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
 
   if (isolate->has_pending_exception()) isolate->clear_pending_exception();
   return MaybeHandle<Code>();
-}
-
-MaybeHandle<Code> GetOptimizedCodeMaybeLater(Handle<JSFunction> function) {
-  Isolate* isolate = function->GetIsolate();
-  return GetOptimizedCode(function, isolate->concurrent_recompilation_enabled()
-                                        ? Compiler::CONCURRENT
-                                        : Compiler::NOT_CONCURRENT);
 }
 
 CompilationJob::Status FinalizeOptimizedCompilationJob(CompilationJob* job) {
@@ -1000,11 +1005,6 @@ CompilationJob::Status FinalizeOptimizedCompilationJob(CompilationJob* job) {
   } else if (shared->HasBytecodeArray()) {
     shared->set_profiler_ticks(0);
   }
-
-  shared->set_has_concurrent_optimization_job(false);
-
-  // Shared function no longer needs to be tiered up.
-  shared->set_marked_for_tier_up(false);
 
   DCHECK(!shared->HasDebugInfo());
 
@@ -1053,37 +1053,12 @@ MaybeHandle<Code> GetLazyCode(Handle<JSFunction> function) {
   AggregatedHistogramTimerScope timer(isolate->counters()->compile_lazy());
 
   if (function->shared()->is_compiled()) {
-    // Function has already been compiled, get the optimized code if possible,
-    // otherwise return baseline code.
-    Handle<Code> cached_code;
-    if (GetCodeFromOptimizedCodeCache(function, BailoutId::None())
-            .ToHandle(&cached_code)) {
-      if (FLAG_trace_opt) {
-        PrintF("[found optimized code for ");
-        function->ShortPrint();
-        PrintF(" during unoptimized compile]\n");
-      }
-      DCHECK(function->shared()->is_compiled());
-      return cached_code;
+    // Function has already been compiled.
+    if (FLAG_trace_opt) {
+      PrintF("[using already compiled ");
+      function->shared()->ShortPrint();
+      PrintF("]\n");
     }
-
-    if (function->shared()->marked_for_tier_up()) {
-      DCHECK(FLAG_mark_shared_functions_for_tier_up);
-
-      function->shared()->set_marked_for_tier_up(false);
-
-      if (FLAG_trace_opt) {
-        PrintF("[optimizing method ");
-        function->ShortPrint();
-        PrintF(" eagerly (shared function marked for tier up)]\n");
-      }
-
-      Handle<Code> code;
-      if (GetOptimizedCodeMaybeLater(function).ToHandle(&code)) {
-        return code;
-      }
-    }
-
     return Handle<Code>(function->shared()->code());
   } else {
     // Function doesn't have any baseline compiled code, compile now.
@@ -1281,9 +1256,25 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag) {
 
 bool Compiler::CompileOptimized(Handle<JSFunction> function,
                                 ConcurrencyMode mode) {
-  if (function->IsOptimized()) return true;
+  if (function->IsOptimized()) {
+    if (function->code()->kind() != Code::OPTIMIZED_FUNCTION) {
+      // Make sure we move the optimized code across from the optimized code
+      // slot.
+      Code* code = function->feedback_vector()->optimized_code();
+      DCHECK_NOT_NULL(code);
+      function->ReplaceCode(code);
+    }
+    return true;
+  }
   Isolate* isolate = function->GetIsolate();
   DCHECK(AllowCompilation::IsAllowed(isolate));
+
+  // Make sure we clear the optimization marker on the function so that we
+  // don't try to re-optimize if optimization fails.
+  if (function->IsInterpreted() &&
+      function->feedback_vector_cell()->value()->IsFeedbackVector()) {
+    function->feedback_vector()->ClearOptimizedCode();
+  }
 
   // Start a compilation.
   Handle<Code> code;
@@ -1886,6 +1877,9 @@ void Compiler::PostInstantiation(Handle<JSFunction> function,
   if (FLAG_always_opt && shared->allows_lazy_compilation() &&
       !function->shared()->HasAsmWasmData() &&
       function->shared()->is_compiled()) {
+    // TODO(mvstanton): pass pretenure flag to EnsureLiterals.
+    JSFunction::EnsureLiterals(function);
+
     function->MarkForOptimization();
   }
 

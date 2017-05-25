@@ -73,7 +73,6 @@ RUNTIME_FUNCTION(Runtime_EvictOptimizedCodeSlot) {
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
 
-  DCHECK(function->is_compiled());
   function->feedback_vector()->EvictOptimizedCodeMarkedForDeoptimization(
       function->shared(), "Runtime_EvictOptimizedCodeSlot");
   return function->code();
@@ -358,8 +357,14 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
             function->PrintName();
             PrintF(" for non-concurrent optimization]\n");
           }
-          function->ReplaceCode(
-              isolate->builtins()->builtin(Builtins::kCompileOptimized));
+          function->feedback_vector()->SetOptimizationMarker(
+              OptimizationMarker::kCompileOptimized);
+          // Make sure the function checks the optimization marker.
+          DCHECK(function->IsInterpreted() ||
+                 function->code() ==
+                     isolate->builtins()->builtin(Builtins::kCompileLazy) ||
+                 function->code() == isolate->builtins()->builtin(
+                                         Builtins::kCheckOptimizationMarker));
         }
       } else {
         // Crankshafted OSR code can be installed into the function.
