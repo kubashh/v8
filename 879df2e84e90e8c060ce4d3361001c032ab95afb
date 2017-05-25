@@ -22,6 +22,30 @@
       "revId": "879df2e84e90e8c060ce4d3361001c032ab95afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce5e0d89_a6350519",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-25T15:50:48Z",
+      "side": 0,
+      "message": "It was actually failing, I can re-investigate the cases where that was, I think it was those weird \"not quite normal execution\" paths.",
+      "parentUuid": "379e8c9f_f3b7b090",
+      "range": {
+        "startLine": 76,
+        "startChar": 1,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "879df2e84e90e8c060ce4d3361001c032ab95afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
