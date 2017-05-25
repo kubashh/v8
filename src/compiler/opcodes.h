@@ -327,6 +327,7 @@
   V(CheckHeapObject)                \
   V(CheckFloat64Hole)               \
   V(CheckTaggedHole)                \
+  V(CheckNotTaggedHole)             \
   V(ConvertTaggedHoleToUndefined)   \
   V(Allocate)                       \
   V(LoadField)                      \

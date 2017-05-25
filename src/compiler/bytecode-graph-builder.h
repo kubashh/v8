@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_BYTECODE_GRAPH_BUILDER_H_
 #define V8_COMPILER_BYTECODE_GRAPH_BUILDER_H_
 
+#include "src/compilation-dependencies.h"
 #include "src/compiler/bytecode-analysis.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-type-hint-lowering.h"
@@ -30,6 +31,7 @@ class BytecodeGraphBuilder {
       Zone* local_zone, Handle<SharedFunctionInfo> shared,
       Handle<FeedbackVector> feedback_vector, BailoutId osr_ast_id,
       JSGraph* jsgraph, CallFrequency invocation_frequency,
+      CompilationDependencies* dependencies,
       SourcePositionTable* source_positions,
       int inlining_id = SourcePosition::kNotInlined,
       JSTypeHintLowering::Flags flags = JSTypeHintLowering::kNoFlags);
@@ -179,6 +181,8 @@ class BytecodeGraphBuilder {
   void BuildTestingOp(const Operator* op);
   void BuildDelete(LanguageMode language_mode);
   void BuildCastOperator(const Operator* op);
+  void BuildHoleCheckAndThrow(Node* condition, Runtime::FunctionId runtime_id);
+  void BuildHoleCheckWithDeopt(const Operator* deopt_operator);
 
   // Optional early lowering to the simplified operator level. Returns the node
   // representing the lowered operation or {nullptr} if no lowering available.
@@ -317,6 +321,8 @@ class BytecodeGraphBuilder {
     needs_eager_checkpoint_ = value;
   }
 
+  CompilationDependencies* dependencies() { return dependencies_; }
+
 #define DECLARE_VISIT_BYTECODE(name, ...) void Visit##name();
   BYTECODE_LIST(DECLARE_VISIT_BYTECODE)
 #undef DECLARE_VISIT_BYTECODE
@@ -333,6 +339,7 @@ class BytecodeGraphBuilder {
   const BytecodeAnalysis* bytecode_analysis_;
   Environment* environment_;
   BailoutId osr_ast_id_;
+  CompilationDependencies* dependencies_;
 
   // Merge environments are snapshots of the environment at points where the
   // control flow merges. This models a forward data flow propagation of all
