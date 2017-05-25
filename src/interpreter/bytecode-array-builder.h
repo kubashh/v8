@@ -386,6 +386,9 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
   BytecodeArrayBuilder& Throw();
   BytecodeArrayBuilder& ReThrow();
   BytecodeArrayBuilder& Return();
+  BytecodeArrayBuilder& ThrowIfHole(const AstRawString* name);
+  BytecodeArrayBuilder& ThrowSuperNotCalledIfHole();
+  BytecodeArrayBuilder& ThrowSuperAlreadyCalledIfNotHole();
 
   // Debugger.
   BytecodeArrayBuilder& Debugger();
