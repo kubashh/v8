@@ -266,7 +266,6 @@ namespace interpreter {
   V(JumpIfTrueConstant, AccumulatorUse::kRead, OperandType::kIdx)              \
   V(JumpIfFalseConstant, AccumulatorUse::kRead, OperandType::kIdx)             \
   V(JumpIfJSReceiverConstant, AccumulatorUse::kRead, OperandType::kIdx)        \
-  V(JumpIfNotHoleConstant, AccumulatorUse::kRead, OperandType::kIdx)           \
   /* - [Start ToBoolean jumps] */                                              \
   V(JumpIfToBooleanTrueConstant, AccumulatorUse::kRead, OperandType::kIdx)     \
   V(JumpIfToBooleanFalseConstant, AccumulatorUse::kRead, OperandType::kIdx)    \
@@ -282,7 +281,6 @@ namespace interpreter {
   V(JumpIfUndefined, AccumulatorUse::kRead, OperandType::kUImm)                \
   V(JumpIfNotUndefined, AccumulatorUse::kRead, OperandType::kUImm)             \
   V(JumpIfJSReceiver, AccumulatorUse::kRead, OperandType::kUImm)               \
-  V(JumpIfNotHole, AccumulatorUse::kRead, OperandType::kUImm)                  \
                                                                                \
   /* Smi-table lookup for switch statements */                                 \
   V(SwitchOnSmiNoFeedback, AccumulatorUse::kRead, OperandType::kIdx,           \
@@ -307,6 +305,9 @@ namespace interpreter {
   V(Throw, AccumulatorUse::kRead)                                              \
   V(ReThrow, AccumulatorUse::kRead)                                            \
   V(Return, AccumulatorUse::kRead)                                             \
+  V(ThrowIfHole, AccumulatorUse::kRead, OperandType::kIdx)                     \
+  V(ThrowSuperNotCalledIfHole, AccumulatorUse::kRead)                          \
+  V(ThrowSuperAlreadyCalledIfNotHole, AccumulatorUse::kRead)                   \
                                                                                \
   /* Generators */                                                             \
   V(SuspendGenerator, AccumulatorUse::kRead, OperandType::kReg,                \
@@ -382,7 +383,6 @@ namespace interpreter {
   V(JumpIfUndefined)                                    \
   V(JumpIfNotUndefined)                                 \
   V(JumpIfJSReceiver)                                   \
-  V(JumpIfNotHole)
 
 #define JUMP_CONDITIONAL_CONSTANT_BYTECODE_LIST(V)     \
   JUMP_TOBOOLEAN_CONDITIONAL_CONSTANT_BYTECODE_LIST(V) \
@@ -393,7 +393,6 @@ namespace interpreter {
   V(JumpIfTrueConstant)                                \
   V(JumpIfFalseConstant)                               \
   V(JumpIfJSReceiverConstant)                          \
-  V(JumpIfNotHoleConstant)
 
 #define JUMP_CONSTANT_BYTECODE_LIST(V)         \
   JUMP_UNCONDITIONAL_CONSTANT_BYTECODE_LIST(V) \
@@ -546,7 +545,7 @@ class V8_EXPORT_PRIVATE Bytecodes final {
   // an immediate byte operand (OperandType::kImm).
   static constexpr bool IsConditionalJumpImmediate(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpIfToBooleanTrue &&
-           bytecode <= Bytecode::kJumpIfNotHole;
+           bytecode <= Bytecode::kJumpIfJSReceiver;
   }
 
   // Returns true if the bytecode is a conditional jump taking
@@ -560,7 +559,7 @@ class V8_EXPORT_PRIVATE Bytecodes final {
   // any kind of operand.
   static constexpr bool IsConditionalJump(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpIfNullConstant &&
-           bytecode <= Bytecode::kJumpIfNotHole;
+           bytecode <= Bytecode::kJumpIfJSReceiver;
   }
 
   // Returns true if the bytecode is an unconditional jump.
@@ -594,13 +593,14 @@ class V8_EXPORT_PRIVATE Bytecodes final {
   // any kind of operand.
   static constexpr bool IsJump(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpLoop &&
-           bytecode <= Bytecode::kJumpIfNotHole;
+           bytecode <= Bytecode::kJumpIfJSReceiver;
   }
 
   // Returns true if the bytecode is a forward jump or conditional jump taking
   // any kind of operand.
   static constexpr bool IsForwardJump(Bytecode bytecode) {
-    return bytecode >= Bytecode::kJump && bytecode <= Bytecode::kJumpIfNotHole;
+    return bytecode >= Bytecode::kJump &&
+           bytecode <= Bytecode::kJumpIfJSReceiver;
   }
 
   // Returns true if the bytecode is a conditional jump, a jump, or a return.

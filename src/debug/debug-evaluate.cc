@@ -443,6 +443,9 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     case Bytecode::kForInStep:
     case Bytecode::kThrow:
     case Bytecode::kReThrow:
+    case Bytecode::kThrowIfHole:
+    case Bytecode::kThrowSuperNotCalledIfHole:
+    case Bytecode::kThrowSuperAlreadyCalledIfNotHole:
     case Bytecode::kIllegal:
     case Bytecode::kCallJSRuntime:
     case Bytecode::kStackCheck:

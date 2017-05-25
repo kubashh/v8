@@ -440,6 +440,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
     Zone* local_zone, Handle<SharedFunctionInfo> shared_info,
     Handle<FeedbackVector> feedback_vector, BailoutId osr_ast_id,
     JSGraph* jsgraph, CallFrequency invocation_frequency,
+    CompilationDependencies* dependencies,
     SourcePositionTable* source_positions, int inlining_id,
     JSTypeHintLowering::Flags flags)
     : local_zone_(local_zone),
@@ -458,6 +459,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       bytecode_analysis_(nullptr),
       environment_(nullptr),
       osr_ast_id_(osr_ast_id),
+      dependencies_(dependencies),
       merge_environments_(local_zone),
       exception_handlers_(local_zone),
       current_exception_handler_(0),
@@ -1678,6 +1680,91 @@ void BytecodeGraphBuilder::VisitReThrow() {
   MergeControlToLeaveFunction(control);
 }
 
+void BytecodeGraphBuilder::BuildHoleCheckWithDeopt(
+    const Operator* deopt_operator) {
+  DCHECK(jsgraph()->isolate()->IsHoleCheckProtectorIntact());
+  Node* accumulator = environment()->LookupAccumulator();
+  dependencies()->AssumePropertyCell(
+      jsgraph()->isolate()->factory()->hole_check_protector());
+  PrepareEagerCheckpoint();
+  NewNode(deopt_operator, accumulator);
+  environment()->BindAccumulator(accumulator);
+}
+
+void BytecodeGraphBuilder::BuildHoleCheckAndThrow(
+    Node* condition, Runtime::FunctionId runtime_id) {
+  Node* accumulator = environment()->LookupAccumulator();
+  Environment* merge_environment;
+  NewBranch(condition);
+  {
+    SubEnvironment sub_environment(this);
+
+    NewIfTrue();
+    PrepareEagerCheckpoint();
+    const Operator* op = javascript()->CallRuntime(runtime_id);
+    Node* node;
+    if (runtime_id == Runtime::kThrowIfHoleError) {
+      Node* name = jsgraph()->Constant(
+          bytecode_iterator().GetConstantForIndexOperand(0));
+      node = NewNode(op, name);
+    } else {
+      node = NewNode(op);
+    }
+    environment()->BindAccumulator(node, Environment::kAttachFrameState);
+    merge_environment = environment();
+  }
+  NewIfFalse();
+  NewMerge();
+  environment()->Merge(merge_environment);
+  environment()->BindAccumulator(accumulator);
+}
+
+void BytecodeGraphBuilder::VisitThrowIfHole() {
+  // To avoid deopt loops, we generate regular control flow, if we ever saw
+  // a throw because of the hole check.
+  if (jsgraph()->isolate()->IsHoleCheckProtectorIntact()) {
+    // Bailout if the value is the Hole.
+    BuildHoleCheckWithDeopt(simplified()->CheckNotTaggedHole());
+  } else {
+    // Generate the control flow to avoid deopt loop.
+    Node* accumulator = environment()->LookupAccumulator();
+    Node* check_for_hole = NewNode(simplified()->ReferenceEqual(), accumulator,
+                                   jsgraph()->TheHoleConstant());
+    BuildHoleCheckAndThrow(check_for_hole, Runtime::kThrowIfHoleError);
+  }
+}
+
+void BytecodeGraphBuilder::VisitThrowSuperNotCalledIfHole() {
+  // To avoid deopt loops, we generate regular control flow, if we ever saw
+  // a throw because of the hole check.
+  if (jsgraph()->isolate()->IsHoleCheckProtectorIntact()) {
+    // Bailout if the value is the Hole.
+    BuildHoleCheckWithDeopt(simplified()->CheckNotTaggedHole());
+  } else {
+    Node* accumulator = environment()->LookupAccumulator();
+    Node* check_for_hole = NewNode(simplified()->ReferenceEqual(), accumulator,
+                                   jsgraph()->TheHoleConstant());
+    BuildHoleCheckAndThrow(check_for_hole, Runtime::kThrowSuperNotCalled);
+  }
+}
+
+void BytecodeGraphBuilder::VisitThrowSuperAlreadyCalledIfNotHole() {
+  // To avoid deopt loops, we generate regular control flow, if we ever saw
+  // a throw because of the hole check.
+  if (jsgraph()->isolate()->IsHoleCheckProtectorIntact()) {
+    // Bailout if the value is not the Hole.
+    BuildHoleCheckWithDeopt(simplified()->CheckTaggedHole());
+  } else {
+    Node* accumulator = environment()->LookupAccumulator();
+    Node* check_for_hole = NewNode(simplified()->ReferenceEqual(), accumulator,
+                                   jsgraph()->TheHoleConstant());
+    Node* check_for_not_hole =
+        NewNode(simplified()->BooleanNot(), check_for_hole);
+    BuildHoleCheckAndThrow(check_for_not_hole,
+                           Runtime::kThrowSuperAlreadyCalledError);
+  }
+}
+
 void BytecodeGraphBuilder::BuildBinaryOp(const Operator* op) {
   PrepareEagerCheckpoint();
   Node* left =
@@ -2117,12 +2204,6 @@ void BytecodeGraphBuilder::VisitJumpIfToBooleanFalse() {
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanFalseConstant() {
   BuildJumpIfToBooleanFalse();
-}
-
-void BytecodeGraphBuilder::VisitJumpIfNotHole() { BuildJumpIfNotHole(); }
-
-void BytecodeGraphBuilder::VisitJumpIfNotHoleConstant() {
-  BuildJumpIfNotHole();
 }
 
 void BytecodeGraphBuilder::VisitJumpIfJSReceiver() { BuildJumpIfJSReceiver(); }
