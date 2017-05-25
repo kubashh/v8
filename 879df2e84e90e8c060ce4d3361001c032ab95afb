@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "379e8c9f_f3b7b090",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 0,
+      "message": "Why remove the DCHECK? We should only have optimized code if the function was already compiled - I\u0027d like to maintain this invariant.",
+      "range": {
+        "startLine": 76,
+        "startChar": 1,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "879df2e84e90e8c060ce4d3361001c032ab95afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

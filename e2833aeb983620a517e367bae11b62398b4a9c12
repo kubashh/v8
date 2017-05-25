@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "948874dd_2b8e3fae",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "nit - please add a comment that if the weak cell is empty, clear the whole slot explicitly",
+      "range": {
+        "startLine": 206,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 25
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea8988dc_84f90ca4",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "nit - cleared",
+      "range": {
+        "startLine": 741,
+        "startChar": 59,
+        "endLine": 741,
+        "endChar": 64
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "793081f5_20c281d0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Call the runtime to clear it.",
+      "range": {
+        "startLine": 764,
+        "startChar": 66,
+        "endLine": 765,
+        "endChar": 18
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "481b6862_33fc6e86",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "These should all be preserved by the C entry stub, I don\u0027t think you need a frame scope here at all, I think all you need to do here is GenerateTailCallToReturnedCode(masm, Runtime::kEvictOptimizedCodeSlot) which will just re-enter the IET, compile lazy or check optimized code shim which is in the function\u0027s code slot. WDYT?",
+      "range": {
+        "startLine": 785,
+        "startChar": 6,
+        "endLine": 789,
+        "endChar": 31
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b3c60b9_5eda76f4",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Why not just compare against kRunUnoptimized directly?",
+      "range": {
+        "startLine": 810,
+        "startChar": 4,
+        "endLine": 810,
+        "endChar": 78
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa7558ec_bd8695e0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Worth a helper function :\n  TailCallRuntimeOptimizeCodeIfMarkerEquals(masm, Smi marker, Runtime::FunctionId id); \n\n?",
+      "range": {
+        "startLine": 818,
+        "startChar": 6,
+        "endLine": 825,
+        "endChar": 5
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef519c10_b770d155",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Where do you do this? Also, why do we always check for the feedback vector being undefined - surely it should also be a feedback vector, am I missing something?",
+      "range": {
+        "startLine": 1295,
+        "startChar": 3,
+        "endLine": 1296,
+        "endChar": 33
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcac5167_fa988d93",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Unused?",
+      "range": {
+        "startLine": 1321,
+        "startChar": 2,
+        "endLine": 1321,
+        "endChar": 65
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cdcfb12_616a4634",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "nit - if you agree with the suggestion below on reverting the IsOptimized change please revert this change too.",
+      "range": {
+        "startLine": 1260,
+        "startChar": 4,
+        "endLine": 1260,
+        "endChar": 63
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95b72251_e1738bfe",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "GetOptimizedCode checks the optimized code cache (which is the feedback vector slot) but you are clearing the optimized code here before reaching GetOptimized code - why?",
+      "range": {
+        "startLine": 1272,
+        "startChar": 1,
+        "endLine": 1278,
+        "endChar": 0
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e3fe0f_7039e251",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6173,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure we  should make this change - we should only count the JSFunction as being optimized if it actually has optimized code in it\u0027s code entry (which it would on next run due to self healing) any reason to make this change?",
+      "range": {
+        "startLine": 6170,
+        "startChar": 51,
+        "endLine": 6173,
+        "endChar": 50
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e3a21a_5899e70b",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6263,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Unused? Seems a bit dangerous as well (potentially does nothing if there is already optimized code) - just remove?",
+      "range": {
+        "startLine": 6263,
+        "startChar": 17,
+        "endLine": 6263,
+        "endChar": 40
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "337a12b2_7c8413fe",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "Why is this needed here? If we have the optimization marker then the code must be compiled (since we no longer flush code) right?",
+      "range": {
+        "startLine": 6376,
+        "startChar": 10,
+        "endLine": 6376,
+        "endChar": 73
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d25ccf8b_75deb442",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 12125,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "nit - could you just make MarkForOptimized take an argument as to whether to mark for concurrent or non-concurrent optimization?",
+      "range": {
+        "startLine": 12125,
+        "startChar": 2,
+        "endLine": 12125,
+        "endChar": 41
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9e6a25_1fe8440a",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "How about checking this in SetOptimizationMarker (possibly pulling that function into JSFunction) ?",
+      "range": {
+        "startLine": 363,
+        "startChar": 10,
+        "endLine": 367,
+        "endChar": 77
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88b76f21_c87e1d8d",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-25T15:10:13Z",
+      "side": 1,
+      "message": "How about just ensuring literals in MarkForOptimization?",
+      "range": {
+        "startLine": 283,
+        "startChar": 12,
+        "endLine": 283,
+        "endChar": 31
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
