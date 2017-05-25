@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5eac6198_15a20c91",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-25T09:26:07Z",
+      "side": 1,
+      "message": "SGTM, done.",
+      "parentUuid": "ef9b5d89_6119cb4a",
+      "range": {
+        "startLine": 778,
+        "startChar": 12,
+        "endLine": 778,
+        "endChar": 19
+      },
+      "revId": "8bc99ffd23d0c4cbc69fe1e763e7e69589de4faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edfaee5e_9f8ac2e1",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "8bc99ffd23d0c4cbc69fe1e763e7e69589de4faa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d7c615e_b40fb651",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-05-25T09:26:07Z",
+      "side": 1,
+      "message": "Done, much cleaner.",
+      "parentUuid": "edfaee5e_9f8ac2e1",
+      "range": {
+        "startLine": 789,
+        "startChar": 4,
+        "endLine": 791,
+        "endChar": 5
+      },
+      "revId": "8bc99ffd23d0c4cbc69fe1e763e7e69589de4faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
