@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e968690_5fdf4b98",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2017-05-26T12:13:56Z",
+      "side": 1,
+      "message": "This change seems unrelated to the assert change and indeed a real functionality change. Can you explain what the motivation is? Is perhaps an additional test case necessary?",
+      "revId": "32ce4911b8308216084a95b2b43a559d833c3e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
