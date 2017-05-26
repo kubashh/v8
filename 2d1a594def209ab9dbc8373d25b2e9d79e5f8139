@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "83eba413_f256d5ae",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6d878f0_de435400",
+      "range": {
+        "startLine": 1684,
+        "startChar": 20,
+        "endLine": 1684,
+        "endChar": 34
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7615ca8_cdde08a1",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a2748f61_2814a56d",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7615ca8_cdde08a1",
+      "range": {
+        "startLine": 1686,
+        "startChar": 1,
+        "endLine": 1686,
+        "endChar": 57
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b6b0479_0111c0b4",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2017-05-25T15:38:23Z",
       "side": 1,
       "message": "Don\u0027t think you need the eager checkpoint here (no speculative optimization going on)",
+      "range": {
+        "startLine": 1703,
+        "startChar": 4,
+        "endLine": 1703,
+        "endChar": 26
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee161ba_4e26ce7a",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Yes, it is not actually required, but since I use CallRuntime that is expected to deopt verifier tries to find FrameStates and fails.",
+      "parentUuid": "3b6b0479_0111c0b4",
       "range": {
         "startLine": 1703,
         "startChar": 4,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1dd21a45_60c07449",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25193941_1f50b6f6",
+      "range": {
+        "startLine": 1707,
+        "startChar": 6,
+        "endLine": 1708,
+        "endChar": 61
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db43c540_857f74e5",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4c73617_1fda3599",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db43c540_857f74e5",
+      "range": {
+        "startLine": 1711,
+        "startChar": 6,
+        "endLine": 1711,
+        "endChar": 10
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "37b6ed72_dd4423e8",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edaa883f_674e0019",
+      "range": {
+        "startLine": 389,
+        "startChar": 24,
+        "endLine": 389,
+        "endChar": 35
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c66729c_6aaab03b",
         "filename": "src/runtime/runtime-internal.cc",
         "patchSetId": 7
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "53efb07f_1609acc2",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c66729c_6aaab03b",
+      "range": {
+        "startLine": 306,
+        "startChar": 17,
+        "endLine": 306,
+        "endChar": 41
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f01d311a_57f251a5",
         "filename": "src/runtime/runtime-internal.cc",
         "patchSetId": 7
@@ -183,6 +351,30 @@
       "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080fa9cb_431cf1af",
+        "filename": "src/runtime/runtime-internal.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-05-26T10:13:27Z",
+      "side": 1,
+      "message": "Thanks, that was a bug. Done",
+      "parentUuid": "f01d311a_57f251a5",
+      "range": {
+        "startLine": 314,
+        "startChar": 3,
+        "endLine": 317,
+        "endChar": 10
+      },
+      "revId": "2d1a594def209ab9dbc8373d25b2e9d79e5f8139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
