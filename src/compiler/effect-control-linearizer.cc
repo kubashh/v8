@@ -784,6 +784,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kCheckTaggedHole:
       result = LowerCheckTaggedHole(node, frame_state);
       break;
+    case IrOpcode::kCheckNotTaggedHole:
+      result = LowerCheckNotTaggedHole(node, frame_state);
+      break;
     case IrOpcode::kConvertTaggedHoleToUndefined:
       result = LowerConvertTaggedHoleToUndefined(node);
       break;
@@ -2384,6 +2387,14 @@ Node* EffectControlLinearizer::LowerCheckFloat64Hole(Node* node,
 
 Node* EffectControlLinearizer::LowerCheckTaggedHole(Node* node,
                                                     Node* frame_state) {
+  Node* value = node->InputAt(0);
+  Node* check = __ WordEqual(value, __ TheHoleConstant());
+  __ DeoptimizeUnless(DeoptimizeReason::kHole, check, frame_state);
+  return value;
+}
+
+Node* EffectControlLinearizer::LowerCheckNotTaggedHole(Node* node,
+                                                       Node* frame_state) {
   Node* value = node->InputAt(0);
   Node* check = __ WordEqual(value, __ TheHoleConstant());
   __ DeoptimizeIf(DeoptimizeReason::kHole, check, frame_state);
