@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de4e4c86_db9821e2",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-26T13:40:44Z",
+      "side": 1,
+      "message": "nit - I would rather if/else on the runtime_id and CHECK that the name is non-null for the if case",
+      "range": {
+        "startLine": 1706,
+        "startChar": 8,
+        "endLine": 1706,
+        "endChar": 23
+      },
+      "revId": "e9c8e408c7a29cf1382bdf219d279445aae144d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
