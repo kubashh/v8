@@ -259,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "4010c72a_09a06288",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-26T15:06:47Z",
+      "side": 1,
+      "message": "Please update comment.",
+      "parentUuid": "9533bff3_838ff083",
+      "range": {
+        "startLine": 1295,
+        "startChar": 3,
+        "endLine": 1296,
+        "endChar": 33
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcac5167_fa988d93",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 3
@@ -376,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "b6b8407c_37b1b6c2",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-26T15:06:47Z",
+      "side": 1,
+      "message": "I think that would work, or just clear the marker when you start optimizing and it will either later get set to InOptimizationQueue or the optimized code?",
+      "parentUuid": "7e6287d0_a965d8ff",
+      "range": {
+        "startLine": 1272,
+        "startChar": 1,
+        "endLine": 1278,
+        "endChar": 0
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04e3fe0f_7039e251",
         "filename": "src/objects-inl.h",
         "patchSetId": 3
@@ -411,6 +459,30 @@
       "side": 1,
       "message": "The reasoning was to not trigger optimizations based on IsOptimized when the optimized code already exists. I could repackage this as another method, e.g. OptimizedCodeExists?",
       "parentUuid": "04e3fe0f_7039e251",
+      "range": {
+        "startLine": 6170,
+        "startChar": 51,
+        "endLine": 6173,
+        "endChar": 50
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c37a728a_01744974",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6173,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-26T15:06:47Z",
+      "side": 1,
+      "message": "As discussed, let\u0027s see if we can remove is_compiled from JSFunction (and always use SFI) and make IsOptimized on JSFunction just check the JS function\u0027s code entry (maybe do this as a seperate CL).",
+      "parentUuid": "930f5b1f_e0d3d223",
       "range": {
         "startLine": 6170,
         "startChar": 51,
@@ -505,6 +577,30 @@
       "side": 1,
       "message": "Well, this was the closest approximation to the old functionality, where the idea is to only check the marker if the function is \"check marker\". Note that the old function would return \"false\" for kCompileOptimized...",
       "parentUuid": "337a12b2_7c8413fe",
+      "range": {
+        "startLine": 6376,
+        "startChar": 10,
+        "endLine": 6376,
+        "endChar": 73
+      },
+      "revId": "e2833aeb983620a517e367bae11b62398b4a9c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04de8b07_a6d55830",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-05-26T15:06:47Z",
+      "side": 1,
+      "message": "As discussed, let\u0027s try and remove this function and replace with checks on SFI instead.",
+      "parentUuid": "a39fb081_4d20d689",
       "range": {
         "startLine": 6376,
         "startChar": 10,
