@@ -16,6 +16,24 @@
       "revId": "32ce4911b8308216084a95b2b43a559d833c3e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b192f80_d6af54e5",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-05-29T08:29:42Z",
+      "side": 1,
+      "message": "For TypedArray, the difference between STORE_NO_TRANSITION_IGNORE_OUT_OF_BOUNDS and STANDARD_STORE is that STANDARD_STORE always throws when out-of-bounds, while STORE_NO_TRANSITION_IGNORE_OUT_OF_BOUNDS only throws for negative keys and silently (but safely) ignores too high keys. Negative keys are impossible anyway on this code-path, and too high keys are impossible according to the assertion (both old and new)  and the respective checks in JSTypedArray::Create. So this should not change functionality. \n\nThe motivation is that STANDARD_STORE seems like the more robust choice (in the sense of detecting errors) and also saves one branch because it doesn\u0027t distinguish positive and negative overflow.\n\nWe already have a test that tries to produce a too small target array for %TypedArray%.prototype.map.",
+      "parentUuid": "8e968690_5fdf4b98",
+      "revId": "32ce4911b8308216084a95b2b43a559d833c3e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
