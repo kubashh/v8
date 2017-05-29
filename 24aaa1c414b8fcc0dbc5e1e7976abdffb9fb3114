@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d622d0f8_e35e0917",
+        "filename": "src/js/collection.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-05-29T08:22:46Z",
+      "side": 1,
+      "message": "This does not look correct - it seems to get the key from *bucket* \u0027i\u0027, but then below it gets the value from *entry* \u0027i\u0027.",
+      "range": {
+        "startLine": 313,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 52
+      },
+      "revId": "24aaa1c414b8fcc0dbc5e1e7976abdffb9fb3114",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
