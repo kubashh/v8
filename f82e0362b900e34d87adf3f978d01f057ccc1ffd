@@ -463,6 +463,236 @@
     },
     {
       "key": {
+        "uuid": "3d5b9bb7_8ca149b0",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "It\u0027s pretty hard to follow where this is set to true and to false again.\n\nWould it make sense to add DCHECKs, like, here DCHECK(!inside_heap_assignment_)?",
+      "range": {
+        "startLine": 1433,
+        "startChar": 4,
+        "endLine": 1433,
+        "endChar": 27
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4182ce33_309432f5",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Can you Check here instead of Peek, since you\u0027re doing EXPECT_TOKEN right below?",
+      "range": {
+        "startLine": 1453,
+        "startChar": 8,
+        "endLine": 1453,
+        "endChar": 12
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7dc9c72_ed86b859",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "This kind of code reoccurs really often (see above), and makes the functions long. Is it possible to move this to a helper? Maybe something that takes a and b, and a param indicating what kind of operation we\u0027re doing (here add), and which them looks up the right thing to emit in an array?",
+      "range": {
+        "startLine": 1728,
+        "startChar": 6,
+        "endLine": 1738,
+        "endChar": 74
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71365bd_bf756e6c",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Why is this relevant only in this branch?",
+      "range": {
+        "startLine": 1741,
+        "startChar": 8,
+        "endLine": 1744,
+        "endChar": 9
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61bcf856_1d2cb51c",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Why does the switch have to be in this loop? (Maybe a comment?) I\u0027m confused! Are we handling something like a \u003d\u003d b \u003d\u003d c here?",
+      "range": {
+        "startLine": 1851,
+        "startChar": 2,
+        "endLine": 1851,
+        "endChar": 12
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a7f6f7_75b5109c",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "This is the same as above except that the function for getting B is different... wondering if collapsing these 2 macros would make sense... Dunno.",
+      "range": {
+        "startLine": 1853,
+        "startChar": 8,
+        "endLine": 1853,
+        "endChar": 19
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efff2dea_22ae2780",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1995,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Nit: typo",
+      "range": {
+        "startLine": 1995,
+        "startChar": 10,
+        "endLine": 1995,
+        "endChar": 32
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a92222d7_5d407d7f",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "This could be moved to a helper to make this long function (300 lines!) shorter.",
+      "range": {
+        "startLine": 2074,
+        "startChar": 2,
+        "endLine": 2094,
+        "endChar": 21
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b057d458_36c9125e",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Can this code be moved to a helper too?",
+      "range": {
+        "startLine": 2164,
+        "startChar": 4,
+        "endLine": 2164,
+        "endChar": 64
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d402c01_6a6828a1",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-05-29T16:02:28Z",
+      "side": 1,
+      "message": "Is this because it here we\u0027re sure that it\u0027s indexing into the function table (even if we don\u0027t yet know what the name of the function table is ie kUnused above)? Or what is this?\n\n(Maybe needs a comment?)",
+      "range": {
+        "startLine": 2320,
+        "startChar": 21,
+        "endLine": 2320,
+        "endChar": 25
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be4d492_e1e853a5",
         "filename": "src/asmjs/asm-parser.h",
         "patchSetId": 5
