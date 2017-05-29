@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9d506d8_414c6f94",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4317,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-05-29T12:16:19Z",
+      "side": 1,
+      "message": "We can now have two tasks trying to lock the same page: one for old-\u003enew slots and another for old-\u003eold slots.\n\nNot sure if that is a problem. Would it make sense to have one item that is responsible for all slots in a page?",
+      "range": {
+        "startLine": 4317,
+        "startChar": 10,
+        "endLine": 4317,
+        "endChar": 19
+      },
+      "revId": "2da23486f629eb9237f09634815e1e2d3a26e39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e175f6d_36770c1d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4459,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-05-29T12:16:19Z",
+      "side": 1,
+      "message": "The label is not accurate because the job also includes old -\u003e old pointer updates.",
+      "range": {
+        "startLine": 4459,
+        "startChar": 32,
+        "endLine": 4459,
+        "endChar": 72
+      },
+      "revId": "2da23486f629eb9237f09634815e1e2d3a26e39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
