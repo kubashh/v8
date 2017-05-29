@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "021d4a6e_9def57b7",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7957,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-05-29T09:36:01Z",
+      "side": 1,
+      "message": "DCHECK maybe?",
+      "range": {
+        "startLine": 7957,
+        "startChar": 31,
+        "endLine": 7957,
+        "endChar": 67
+      },
+      "revId": "e1dd423dec5151490f515606fcb7095ecf0d03bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
