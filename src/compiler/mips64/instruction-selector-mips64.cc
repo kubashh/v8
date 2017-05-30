@@ -3093,6 +3093,18 @@ void InstructionSelector::VisitS128Not(Node* node) {
   VisitRR(this, kMips64S128Not, node);
 }
 
+void InstructionSelector::VisitF32x4AddHoriz(Node* node) {
+  VisitRRR(this, kMips64F32x4AddHoriz, node);
+}
+
+void InstructionSelector::VisitI32x4AddHoriz(Node* node) {
+  VisitRRR(this, kMips64I32x4AddHoriz, node);
+}
+
+void InstructionSelector::VisitI16x8AddHoriz(Node* node) {
+  VisitRRR(this, kMips64I16x8AddHoriz, node);
+}
+
 // static
 MachineOperatorBuilder::Flags
 InstructionSelector::SupportedMachineOperatorFlags() {
