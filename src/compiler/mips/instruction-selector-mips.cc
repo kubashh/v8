@@ -2341,6 +2341,54 @@ void InstructionSelector::VisitS128Not(Node* node) {
   VisitRR(this, kMipsS128Not, node);
 }
 
+void InstructionSelector::VisitI32x4SConvertI16x8Low(Node* node) {
+  VisitRR(this, kMipsI32x4SConvertI16x8Low, node);
+}
+
+void InstructionSelector::VisitI32x4SConvertI16x8High(Node* node) {
+  VisitRR(this, kMipsI32x4SConvertI16x8High, node);
+}
+
+void InstructionSelector::VisitI32x4UConvertI16x8Low(Node* node) {
+  VisitRR(this, kMipsI32x4UConvertI16x8Low, node);
+}
+
+void InstructionSelector::VisitI32x4UConvertI16x8High(Node* node) {
+  VisitRR(this, kMipsI32x4UConvertI16x8High, node);
+}
+
+void InstructionSelector::VisitI16x8SConvertI8x16Low(Node* node) {
+  VisitRR(this, kMipsI16x8SConvertI8x16Low, node);
+}
+
+void InstructionSelector::VisitI16x8SConvertI8x16High(Node* node) {
+  VisitRR(this, kMipsI16x8SConvertI8x16High, node);
+}
+
+void InstructionSelector::VisitI16x8UConvertI8x16Low(Node* node) {
+  VisitRR(this, kMipsI16x8UConvertI8x16Low, node);
+}
+
+void InstructionSelector::VisitI16x8UConvertI8x16High(Node* node) {
+  VisitRR(this, kMipsI16x8UConvertI8x16High, node);
+}
+
+void InstructionSelector::VisitI16x8SConvertI32x4(Node* node) {
+  VisitRRR(this, kMipsI16x8SConvertI32x4, node);
+}
+
+void InstructionSelector::VisitI16x8UConvertI32x4(Node* node) {
+  VisitRRR(this, kMipsI16x8UConvertI32x4, node);
+}
+
+void InstructionSelector::VisitI8x16SConvertI16x8(Node* node) {
+  VisitRRR(this, kMipsI8x16SConvertI16x8, node);
+}
+
+void InstructionSelector::VisitI8x16UConvertI16x8(Node* node) {
+  VisitRRR(this, kMipsI8x16UConvertI16x8, node);
+}
+
 // static
 MachineOperatorBuilder::Flags
 InstructionSelector::SupportedMachineOperatorFlags() {

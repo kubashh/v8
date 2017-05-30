@@ -228,7 +228,19 @@ namespace compiler {
   V(MipsS128And)                   \
   V(MipsS128Or)                    \
   V(MipsS128Xor)                   \
-  V(MipsS128Not)
+  V(MipsS128Not)                   \
+  V(MipsI32x4SConvertI16x8Low)     \
+  V(MipsI32x4SConvertI16x8High)    \
+  V(MipsI32x4UConvertI16x8Low)     \
+  V(MipsI32x4UConvertI16x8High)    \
+  V(MipsI16x8SConvertI8x16Low)     \
+  V(MipsI16x8SConvertI8x16High)    \
+  V(MipsI16x8SConvertI32x4)        \
+  V(MipsI16x8UConvertI32x4)        \
+  V(MipsI16x8UConvertI8x16Low)     \
+  V(MipsI16x8UConvertI8x16High)    \
+  V(MipsI8x16SConvertI16x8)        \
+  V(MipsI8x16UConvertI16x8)
 
 // Addressing modes represent the "shape" of inputs to an instruction.
 // Many instructions support multiple addressing modes. Addressing modes
