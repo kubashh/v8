@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03223d92_d115c412",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-05-30T15:14:55Z",
+      "side": 1,
+      "message": "this empty line is why CQ didn\u0027t skip tree checks and tryjobs. Only line 34 is footer, while 28..32 are no longer footers.",
+      "revId": "9569ff210a61cd9c988c5f4363d34825bf68e4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
