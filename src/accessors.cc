@@ -645,12 +645,13 @@ void Accessors::ScriptEvalFromFunctionNameGetter(
   Handle<Script> script(
       Script::cast(Handle<JSValue>::cast(object)->value()), isolate);
   Handle<Object> result = isolate->factory()->undefined_value();
+  CHECK(false);
   if (!script->eval_from_shared()->IsUndefined(isolate)) {
     Handle<SharedFunctionInfo> shared(
         SharedFunctionInfo::cast(script->eval_from_shared()));
     // Find the name of the function calling eval.
-    if (!shared->name()->IsUndefined(isolate)) {
-      result = Handle<Object>(shared->name(), isolate);
+    if (!shared->needs_function_set_name()) {
+      result = Handle<Object>(shared->raw_name(), isolate);
     } else {
       result = Handle<Object>(shared->inferred_name(), isolate);
     }

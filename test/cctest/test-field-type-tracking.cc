@@ -1500,11 +1500,10 @@ TEST(ReconfigureDataFieldAttribute_DataConstantToDataFieldAfterTargetMap) {
     TestConfig() {
       Isolate* isolate = CcTest::i_isolate();
       Factory* factory = isolate->factory();
-      Handle<String> name = factory->empty_string();
       Handle<Map> sloppy_map =
           factory->CreateSloppyFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE);
       Handle<SharedFunctionInfo> info = factory->NewSharedFunctionInfo(
-          name, MaybeHandle<Code>(), sloppy_map->is_constructor());
+          Handle<String>(), MaybeHandle<Code>(), sloppy_map->is_constructor());
       function_type_ = FieldType::Class(sloppy_map, isolate);
       CHECK(sloppy_map->is_stable());
 
@@ -2639,11 +2638,10 @@ TEST(TransitionDataConstantToAnotherDataConstant) {
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
-  Handle<String> name = factory->empty_string();
   Handle<Map> sloppy_map =
       factory->CreateSloppyFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE);
   Handle<SharedFunctionInfo> info = factory->NewSharedFunctionInfo(
-      name, MaybeHandle<Code>(), sloppy_map->is_constructor());
+      Handle<String>(), MaybeHandle<Code>(), sloppy_map->is_constructor());
   Handle<FieldType> function_type = FieldType::Class(sloppy_map, isolate);
   CHECK(sloppy_map->is_stable());
 

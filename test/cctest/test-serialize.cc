@@ -1885,9 +1885,9 @@ TEST(CodeSerializerCell) {
   RelocIterator rit1(*code, 1 << RelocInfo::CELL);
   CHECK_EQ(*number, rit1.rinfo()->target_cell()->value());
 
-  Handle<String> source = isolate->factory()->empty_string();
   Handle<SharedFunctionInfo> sfi =
-      isolate->factory()->NewSharedFunctionInfo(source, code, false);
+      isolate->factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
+  Handle<String> source = isolate->factory()->empty_string();
   ScriptData* script_data = CodeSerializer::Serialize(isolate, sfi, source);
 
   Handle<SharedFunctionInfo> copy =
@@ -1934,9 +1934,9 @@ TEST(CodeSerializerEmbeddedObject) {
   RelocIterator rit1(*code, RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT));
   CHECK_EQ(*number, rit1.rinfo()->target_object());
 
-  Handle<String> source = isolate->factory()->empty_string();
   Handle<SharedFunctionInfo> sfi =
-      isolate->factory()->NewSharedFunctionInfo(source, code, false);
+      isolate->factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
+  Handle<String> source = isolate->factory()->empty_string();
   ScriptData* script_data = CodeSerializer::Serialize(isolate, sfi, source);
 
   Handle<SharedFunctionInfo> copy =
