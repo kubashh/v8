@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "d366a0fb_b2ff5e1d",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-05-31T11:21:50Z",
+      "side": 1,
+      "message": "This should not be necessary (moreover, PrepareEagerCheckpoint should only appear in the beginning of Visit* function because that\u0027s the place where it will resume).",
+      "range": {
+        "startLine": 1703,
+        "startChar": 4,
+        "endLine": 1703,
+        "endChar": 26
+      },
+      "revId": "57d07fa7782e0c5f9575c5f7e9f4f532035c7bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d88703_95dc041e",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-05-31T11:21:50Z",
+      "side": 1,
+      "message": "The runtime call never returns and it does not store into the accumulator. This should be replaced with\n\nenvironment()-\u003eRecordAfterState(...) \nMergeControlToLeaveFunction(node);",
+      "range": {
+        "startLine": 1714,
+        "startChar": 4,
+        "endLine": 1715,
+        "endChar": 38
+      },
+      "revId": "57d07fa7782e0c5f9575c5f7e9f4f532035c7bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4512d332_7af0d914",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-05-31T11:21:50Z",
+      "side": 1,
+      "message": "Hmm, I think this might not work in the real world - if any module fails the hole check, we will penalize all functions in the app. Could you create a bug for making the protection per-function (feedback-vector) and link it from here?",
+      "range": {
+        "startLine": 1726,
+        "startChar": 2,
+        "endLine": 1726,
+        "endChar": 57
+      },
+      "revId": "57d07fa7782e0c5f9575c5f7e9f4f532035c7bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d616c2_7a55a699",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-05-31T11:21:50Z",
+      "side": 1,
+      "message": "Good catch, could you write a test for this?\n\nIs the CheckTaggedHole operator still needed?",
+      "range": {
+        "startLine": 2169,
+        "startChar": 10,
+        "endLine": 2170,
+        "endChar": 68
+      },
+      "revId": "57d07fa7782e0c5f9575c5f7e9f4f532035c7bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a86c071_b12c90e8",
         "filename": "src/compiler/typer.cc",
         "patchSetId": 9
