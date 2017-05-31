@@ -1161,12 +1161,36 @@ Reduction JSTypedLowering::ReduceJSToStringInput(Node* input) {
 }
 
 Reduction JSTypedLowering::ReduceJSToString(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSToString, node->opcode());
   // Try to reduce the input first.
   Node* const input = node->InputAt(0);
   Reduction reduction = ReduceJSToStringInput(input);
   if (reduction.Changed()) {
     ReplaceWithValue(node, reduction.replacement());
     return reduction;
+  }
+  return NoChange();
+}
+
+Reduction JSTypedLowering::ReduceJSToPrimitiveToString(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSToPrimitiveToString, node->opcode());
+  Node* input = NodeProperties::GetValueInput(node, 0);
+  Type* input_type = NodeProperties::GetType(input);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  if (input_type->Is(Type::Primitive())) {
+    // If node is already a primitive, then reduce to JSToString and try to
+    // reduce that further.
+    Node* value =
+        graph()->NewNode(javascript()->ToString(), input, effect, control);
+    ReplaceWithValue(node, value, effect);
+
+    Reduction reduction = ReduceJSToString(value);
+    if (reduction.Changed()) {
+      return reduction;
+    }
+    return Replace(value);
   }
   return NoChange();
 }
@@ -2242,6 +2266,8 @@ Reduction JSTypedLowering::Reduce(Node* node) {
       return ReduceJSToNumber(node);
     case IrOpcode::kJSToString:
       return ReduceJSToString(node);
+    case IrOpcode::kJSToPrimitiveToString:
+      return ReduceJSToPrimitiveToString(node);
     case IrOpcode::kJSToObject:
       return ReduceJSToObject(node);
     case IrOpcode::kJSTypeOf:
