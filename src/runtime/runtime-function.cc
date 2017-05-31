@@ -38,7 +38,7 @@ RUNTIME_FUNCTION(Runtime_FunctionSetName) {
   CONVERT_ARG_HANDLE_CHECKED(String, name, 1);
 
   name = String::Flatten(name);
-  f->shared()->set_name(*name);
+  f->shared()->set_raw_name(*name);
   return isolate->heap()->undefined_value();
 }
 

@@ -1072,7 +1072,7 @@ std::ostream& operator<<(std::ostream& os, FunctionKind kind) {
 
 void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "SharedFunctionInfo");
-  os << "\n - name = " << Brief(name());
+  os << "\n - raw_name = " << Brief(raw_name());
   os << "\n - kind = " << kind();
   os << "\n - formal_parameter_count = " << internal_formal_parameter_count();
   os << "\n - expected_nof_properties = " << expected_nof_properties();
