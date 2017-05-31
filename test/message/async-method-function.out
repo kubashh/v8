@@ -1,0 +1,4 @@
+*%(basename)s:8: SyntaxError: Unexpected token function
+  async function() { }
+        ^^^^^^^^
+SyntaxError: Unexpected token function

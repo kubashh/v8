@@ -2150,6 +2150,14 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParsePropertyName(
     *kind = PropertyKind::kMethodProperty;
     *is_async = true;
     pos = peek_position();
+
+    if (token == Token::FUNCTION) {
+      // AsyncMethodDefinition with the property name "function" are disallowed,
+      // due to being future-hostile, per github.com/tc39/ecma262/issues/832
+      ReportUnexpectedTokenAt(scanner()->peek_location(), token);
+      *ok = false;
+      return impl()->EmptyExpression();
+    }
   }
 
   if (token == Token::IDENTIFIER && !*is_generator && !*is_async) {
