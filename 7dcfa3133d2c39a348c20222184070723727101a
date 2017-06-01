@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "623f633a_aa66f18c",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-01T15:38:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b96c3c4b_c36d2195",
+      "range": {
+        "startLine": 1722,
+        "startChar": 2,
+        "endLine": 1722,
+        "endChar": 57
+      },
+      "revId": "7dcfa3133d2c39a348c20222184070723727101a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83949806_5e7ce046",
         "filename": "src/compiler/bytecode-graph-builder.h",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-01T13:20:27Z",
       "side": 1,
       "message": "nit: Could we forward declare \"CompilationDependencies\" instead?",
+      "range": {
+        "startLine": 8,
+        "startChar": 14,
+        "endLine": 8,
+        "endChar": 38
+      },
+      "revId": "7dcfa3133d2c39a348c20222184070723727101a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aec0313_fb5fe492",
+        "filename": "src/compiler/bytecode-graph-builder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-01T15:38:25Z",
+      "side": 1,
+      "message": "I haven\u0027t done this because rest of the declarations are in v8::internal::compiler scope, and compilationDependencies is in v8::internal scope. I felt this better than one declaration hanging around separately.  Also, we would need  this include in the .cc if we don\u0027t include here. I can still change it forward declare if its better.",
+      "parentUuid": "83949806_5e7ce046",
       "range": {
         "startLine": 8,
         "startChar": 14,
@@ -68,6 +116,30 @@
       "revId": "7dcfa3133d2c39a348c20222184070723727101a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28ca6556_6f483739",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-01T15:38:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18df7b12_a0614f88",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 342,
+        "endChar": 29
+      },
+      "revId": "7dcfa3133d2c39a348c20222184070723727101a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
