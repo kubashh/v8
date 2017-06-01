@@ -68,9 +68,6 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   Factory* factory = isolate->factory();
   IncrementCounter(isolate->counters()->fast_new_closure_total(), 1);
 
-  // Create a new closure from the given function info in new space
-  Node* result = Allocate(JSFunction::kSize);
-
   // Calculate the index of the map we should install on the function based on
   // the FunctionKind and LanguageMode of the function.
   // Note: Must be kept in sync with Context::FunctionMapIndex
@@ -81,8 +78,8 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
       compiler_hints, Int32Constant(1 << SharedFunctionInfo::kStrictModeBit));
 
   Label if_normal(this), if_generator(this), if_async(this),
-      if_class_constructor(this), if_function_without_prototype(this),
-      load_map(this);
+      if_arrow_function(this), if_class_constructor(this),
+      if_function_without_prototype(this), load_map(this);
   VARIABLE(map_index, MachineType::PointerRepresentation());
 
   STATIC_ASSERT(FunctionKind::kNormalFunction == 0);
@@ -101,6 +98,11 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
                                     << SharedFunctionInfo::kFunctionKindShift));
   GotoIf(is_async, &if_async);
 
+  Node* is_arrow_function = Word32And(
+      compiler_hints, Int32Constant(FunctionKind::kArrowFunction
+                                    << SharedFunctionInfo::kFunctionKindShift));
+  GotoIf(is_arrow_function, &if_arrow_function);
+
   Node* is_class_constructor = Word32And(
       compiler_hints, Int32Constant(FunctionKind::kClassConstructor
                                     << SharedFunctionInfo::kFunctionKindShift));
@@ -112,7 +114,6 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
         this,
         Word32And(compiler_hints,
                   Int32Constant((FunctionKind::kAccessorFunction |
-                                 FunctionKind::kArrowFunction |
                                  FunctionKind::kConciseMethod)
                                 << SharedFunctionInfo::kFunctionKindShift)));
   }
@@ -144,6 +145,13 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
     Goto(&load_map);
   }
 
+  BIND(&if_arrow_function);
+  {
+    map_index.Bind(
+        IntPtrConstant(Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX));
+    Goto(&load_map);
+  }
+
   BIND(&if_class_constructor);
   {
     map_index.Bind(IntPtrConstant(Context::CLASS_FUNCTION_MAP_INDEX));
@@ -152,8 +160,22 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
 
   BIND(&if_function_without_prototype);
   {
-    map_index.Bind(
-        IntPtrConstant(Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX));
+    STATIC_ASSERT(Context::METHOD_WITH_NAME_MAP_INDEX ==
+                  Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX + 1);
+    STATIC_ASSERT(Context::METHOD_WITH_HOME_OBJECT_MAP_INDEX ==
+                  Context::METHOD_WITH_NAME_MAP_INDEX + 1);
+    STATIC_ASSERT(Context::METHOD_WITH_NAME_AND_HOME_OBJECT_MAP_INDEX ==
+                  Context::METHOD_WITH_HOME_OBJECT_MAP_INDEX + 1);
+
+    Node* name = LoadObjectField(shared_info, SharedFunctionInfo::kNameOffset);
+    Node* needs_set_name = IsNeedsSetNameSymbol(name);
+    Node* needs_home_object =
+        IsSetWord32(compiler_hints, 1 << SharedFunctionInfo::kNeedsHomeObject);
+    Node* index_offset = Int32Add(
+        needs_set_name, Word32Shl(needs_home_object, Int32Constant(1)));
+    map_index.Bind(IntPtrAdd(
+        IntPtrConstant(Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX),
+        ChangeUint32ToWord(index_offset)));
     Goto(&load_map);
   }
 
@@ -164,6 +186,14 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewClosure(Node* shared_info,
   Node* native_context = LoadNativeContext(context);
   Node* map_slot_value =
       LoadFixedArrayElement(native_context, map_index.value());
+
+  // Create a new closure from the given function info in new space
+  Node* instance_size_in_bytes =
+      WordShl(LoadMapInstanceSize(map_slot_value), kPointerSizeLog2);
+  Node* result = Allocate(instance_size_in_bytes);
+  InitializeJSObjectBody(result, map_slot_value, instance_size_in_bytes,
+                         JSFunction::kSize);
+
   StoreMapNoWriteBarrier(result, map_slot_value);
 
   // Initialize the rest of the function.

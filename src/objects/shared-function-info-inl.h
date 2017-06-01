@@ -18,7 +18,7 @@ TYPE_CHECKER(SharedFunctionInfo, SHARED_FUNCTION_INFO_TYPE)
 CAST_ACCESSOR(SharedFunctionInfo)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(SharedFunctionInfo, Object)
 
-ACCESSORS(SharedFunctionInfo, name, Object, kNameOffset)
+ACCESSORS(SharedFunctionInfo, raw_name, Object, kNameOffset)
 ACCESSORS(SharedFunctionInfo, construct_stub, Code, kConstructStubOffset)
 ACCESSORS(SharedFunctionInfo, feedback_metadata, FeedbackMetadata,
           kFeedbackMetadataOffset)
@@ -110,6 +110,16 @@ PSEUDO_SMI_ACCESSORS_HI(SharedFunctionInfo, profiler_ticks,
                         kProfilerTicksOffset)
 
 #endif
+
+bool SharedFunctionInfo::needs_set_function_name() const {
+  return raw_name()->IsSymbol();
+}
+
+String* SharedFunctionInfo::name() const {
+  Object* maybe_name = raw_name();
+  if (maybe_name->IsSymbol()) return GetHeap()->empty_string();
+  return String::cast(maybe_name);
+}
 
 AbstractCode* SharedFunctionInfo::abstract_code() {
   if (HasBytecodeArray()) {
