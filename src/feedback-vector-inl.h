@@ -158,6 +158,27 @@ BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback) {
   UNREACHABLE();
 }
 
+// Helper function to transform the feedback to ToPrimitiveToStringHint.
+ToPrimitiveToStringHint ToPrimitiveToStringHintFromFeedback(int type_feedback) {
+  // TODO(rmcilroy): We share BinaryOpIC slot type, so make sure None and Any
+  // match up. Remove this once we allocate slots in the bytecode generator.
+  static_assert((static_cast<uint8_t>(ToPrimitiveToStringFeedback::kNone) ==
+                 static_cast<uint8_t>(BinaryOperationFeedback::kNone)) &&
+                    (static_cast<uint8_t>(ToPrimitiveToStringFeedback::kAny) ==
+                     static_cast<uint8_t>(BinaryOperationFeedback::kAny)),
+                "ToPrimitiveToString and BinaryOp feedback should match");
+  switch (type_feedback) {
+    case ToPrimitiveToStringFeedback::kNone:
+      return ToPrimitiveToStringHint::kNone;
+    case ToPrimitiveToStringFeedback::kString:
+      return ToPrimitiveToStringHint::kString;
+    case ToPrimitiveToStringFeedback::kAny:
+    default:
+      return ToPrimitiveToStringHint::kAny;
+  }
+  UNREACHABLE();
+}
+
 // Helper function to transform the feedback to CompareOperationHint.
 CompareOperationHint CompareOperationHintFromFeedback(int type_feedback) {
   switch (type_feedback) {

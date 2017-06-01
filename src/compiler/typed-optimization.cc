@@ -102,6 +102,8 @@ Reduction TypedOptimization::Reduce(Node* node) {
       return ReduceSelect(node);
     case IrOpcode::kSpeculativeToNumber:
       return ReduceSpeculativeToNumber(node);
+    case IrOpcode::kSpeculativeToPrimitiveToString:
+      return ReduceSpeculativeToPrimitiveToString(node);
     default:
       break;
   }
@@ -343,6 +345,18 @@ Reduction TypedOptimization::ReduceSpeculativeToNumber(Node* node) {
   Type* const input_type = NodeProperties::GetType(input);
   if (input_type->Is(Type::Number())) {
     // SpeculativeToNumber(x:number) => x
+    ReplaceWithValue(node, input);
+    return Replace(input);
+  }
+  return NoChange();
+}
+
+Reduction TypedOptimization::ReduceSpeculativeToPrimitiveToString(Node* node) {
+  DCHECK_EQ(IrOpcode::kSpeculativeToPrimitiveToString, node->opcode());
+  Node* const input = NodeProperties::GetValueInput(node, 0);
+  Type* const input_type = NodeProperties::GetType(input);
+  if (input_type->Is(Type::String())) {
+    // SpeculativeToPrimitiveToString(x:string) => x
     ReplaceWithValue(node, input);
     return Replace(input);
   }

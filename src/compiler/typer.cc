@@ -1745,6 +1745,10 @@ Type* Typer::Visitor::TypePlainPrimitiveToNumber(Node* node) {
   return TypeUnaryOp(node, ToNumber);
 }
 
+Type* Typer::Visitor::TypeSpeculativeToPrimitiveToString(Node* node) {
+  return TypeUnaryOp(node, ToPrimitiveToString);
+}
+
 Type* Typer::Visitor::TypePlainPrimitiveToWord32(Node* node) {
   return Type::Integral32();
 }

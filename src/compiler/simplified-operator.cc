@@ -383,6 +383,11 @@ NumberOperationHint NumberOperationHintOf(const Operator* op) {
   return OpParameter<NumberOperationHint>(op);
 }
 
+ToPrimitiveToStringHint ToPrimitiveToStringHintOf(const Operator* op) {
+  DCHECK(op->opcode() == IrOpcode::kSpeculativeToPrimitiveToString);
+  return OpParameter<ToPrimitiveToStringHint>(op);
+}
+
 size_t hash_value(AllocateParameters info) {
   return base::hash_combine(info.type(), info.pretenure());
 }
@@ -726,6 +731,20 @@ struct SimplifiedOperatorGlobalCache final {
   SpeculativeToNumberOperator<NumberOperationHint::kNumberOrOddball>
       kSpeculativeToNumberNumberOrOddballOperator;
 
+  template <ToPrimitiveToStringHint kHint>
+  struct SpeculativeToPrimitiveToStringOperator final
+      : public Operator1<ToPrimitiveToStringHint> {
+    SpeculativeToPrimitiveToStringOperator()
+        : Operator1<ToPrimitiveToStringHint>(
+              IrOpcode::kSpeculativeToPrimitiveToString,  // opcode
+              Operator::kFoldable | Operator::kNoThrow,   // flags
+              "SpeculativeToPrimitiveToString",           // name
+              1, 1, 1, 1, 1, 0,                           // counts
+              kHint) {}                                   // parameter
+  };
+  SpeculativeToPrimitiveToStringOperator<ToPrimitiveToStringHint::kString>
+      kSpeculativeToPrimitiveToStringStringOperator;
+
 #define BUFFER_ACCESS(Type, type, TYPE, ctype, size)                          \
   struct LoadBuffer##Type##Operator final : public Operator1<BufferAccess> {  \
     LoadBuffer##Type##Operator()                                              \
@@ -749,10 +768,8 @@ struct SimplifiedOperatorGlobalCache final {
 #undef BUFFER_ACCESS
 };
 
-
 static base::LazyInstance<SimplifiedOperatorGlobalCache>::type kCache =
     LAZY_INSTANCE_INITIALIZER;
-
 
 SimplifiedOperatorBuilder::SimplifiedOperatorBuilder(Zone* zone)
     : cache_(kCache.Get()), zone_(zone) {}
@@ -854,6 +871,19 @@ const Operator* SimplifiedOperatorBuilder::SpeculativeToNumber(
       return &cache_.kSpeculativeToNumberNumberOperator;
     case NumberOperationHint::kNumberOrOddball:
       return &cache_.kSpeculativeToNumberNumberOrOddballOperator;
+  }
+  UNREACHABLE();
+}
+
+const Operator* SimplifiedOperatorBuilder::SpeculativeToPrimitiveToString(
+    ToPrimitiveToStringHint hint) {
+  switch (hint) {
+    case ToPrimitiveToStringHint::kString:
+      return &cache_.kSpeculativeToPrimitiveToStringStringOperator;
+    case ToPrimitiveToStringHint::kNone:
+    case ToPrimitiveToStringHint::kAny:
+      UNREACHABLE();
+      return nullptr;
   }
   UNREACHABLE();
 }

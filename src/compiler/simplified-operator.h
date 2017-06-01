@@ -14,6 +14,7 @@
 #include "src/handles.h"
 #include "src/machine-type.h"
 #include "src/objects.h"
+#include "src/type-hints.h"
 #include "src/zone/zone-handle-set.h"
 
 namespace v8 {
@@ -243,6 +244,9 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, NumberOperationHint);
 NumberOperationHint NumberOperationHintOf(const Operator* op)
     WARN_UNUSED_RESULT;
 
+ToPrimitiveToStringHint ToPrimitiveToStringHintOf(const Operator* op)
+    WARN_UNUSED_RESULT;
+
 int FormalParameterCountOf(const Operator* op) WARN_UNUSED_RESULT;
 bool IsRestLengthOf(const Operator* op) WARN_UNUSED_RESULT;
 
@@ -384,6 +388,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* StringIndexOf();
 
   const Operator* SpeculativeToNumber(NumberOperationHint hint);
+  const Operator* SpeculativeToPrimitiveToString(ToPrimitiveToStringHint hint);
 
   const Operator* PlainPrimitiveToNumber();
   const Operator* PlainPrimitiveToWord32();

@@ -928,6 +928,11 @@ void Verifier::Visitor::Check(Node* node) {
       CheckValueInputIs(node, 0, Type::Any());
       CheckTypeIs(node, Type::Number());
       break;
+    case IrOpcode::kSpeculativeToPrimitiveToString:
+      // Any -> String
+      CheckValueInputIs(node, 0, Type::Any());
+      CheckTypeIs(node, Type::String());
+      break;
     case IrOpcode::kPlainPrimitiveToNumber:
       // PlainPrimitive -> Number
       CheckValueInputIs(node, 0, Type::PlainPrimitive());

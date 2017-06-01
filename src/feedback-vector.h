@@ -692,6 +692,9 @@ class BinaryOpICNexus final : public FeedbackNexus {
 
   InlineCacheState StateFromFeedback() const final;
   BinaryOperationHint GetBinaryOperationFeedback() const;
+  // TODO(rmcilroy): This should really not be a BinaryOp feedback slot type -
+  // fix this once we allocate slots in the bytecode generator.
+  ToPrimitiveToStringHint GetToPrimitiveToStringFeedback() const;
 
   int ExtractMaps(MapHandles* maps) const final {
     // BinaryOpICs don't record map feedback.
@@ -774,6 +777,8 @@ class CollectTypeProfileNexus : public FeedbackNexus {
 
 inline BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback);
 inline CompareOperationHint CompareOperationHintFromFeedback(int type_feedback);
+inline ToPrimitiveToStringHint ToPrimitiveToStringHintFromFeedback(
+    int type_feedback);
 
 }  // namespace internal
 }  // namespace v8
