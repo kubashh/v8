@@ -165,7 +165,6 @@ RUNTIME_FUNCTION(Runtime_DeoptimizeFunction) {
     return isolate->heap()->undefined_value();
   }
   Handle<JSFunction> function = Handle<JSFunction>::cast(function_object);
-  function->shared()->set_marked_for_tier_up(false);
 
   // If the function is not optimized, just return.
   if (!function->IsOptimized()) return isolate->heap()->undefined_value();
@@ -277,22 +276,26 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
   }
 
   // If the function is already optimized, just return.
-  if (function->IsOptimized()) return isolate->heap()->undefined_value();
+  if (function->HasOptimizedCode()) return isolate->heap()->undefined_value();
 
-  function->MarkForOptimization();
-  if (FLAG_trace_opt) {
-    PrintF("[manually marking ");
-    function->ShortPrint();
-    PrintF(" for optimization]\n");
-  }
+  // TODO(mvstanton): pass pretenure flag to EnsureLiterals.
+  JSFunction::EnsureLiterals(function);
 
+  bool concurrent = false;
   if (args.length() == 2) {
     CONVERT_ARG_HANDLE_CHECKED(String, type, 1);
     if (type->IsOneByteEqualTo(STATIC_CHAR_VECTOR("concurrent")) &&
         isolate->concurrent_recompilation_enabled()) {
-      function->AttemptConcurrentOptimization();
+      concurrent = true;
     }
   }
+  if (FLAG_trace_opt) {
+    PrintF("[manually marking ");
+    function->ShortPrint();
+    PrintF(" for %s optimization]\n",
+           concurrent ? "concurrent" : "non-concurrent");
+  }
+  function->MarkForOptimization(concurrent);
 
   return isolate->heap()->undefined_value();
 }

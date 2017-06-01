@@ -196,7 +196,7 @@ void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
     }
     CompilationInfo* info = job->info();
     Handle<JSFunction> function(*info->closure());
-    if (function->IsOptimized()) {
+    if (function->HasOptimizedCode()) {
       if (FLAG_trace_concurrent_recompilation) {
         PrintF("  ** Aborting compilation for ");
         function->ShortPrint();
