@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75c7e0d4_f25b8487",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "Update comment please (now it\u0027s cleared if the weak cell was empty or if marked for deopt)",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 11
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d9aba6e_0c21e389",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "Update comment",
+      "range": {
+        "startLine": 689,
+        "startChar": 66,
+        "endLine": 690,
+        "endChar": 18
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17feda54_726ee036",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "GenerateTailCallToReturnedCode(masm, Runtime::kEvictOptimizedCodeSlot) here too?",
+      "range": {
+        "startLine": 720,
+        "startChar": 6,
+        "endLine": 720,
+        "endChar": 57
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2b328fc_72b05758",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "Check against marked directly (like x64).\n\n[Just realized you said x64 only, so ignoring the reset of ia32 for now]",
+      "range": {
+        "startLine": 739,
+        "startChar": 33,
+        "endLine": 739,
+        "endChar": 44
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d0142b_e7079dd0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "nit - comment mentions zero but using kNone now",
+      "range": {
+        "startLine": 776,
+        "startChar": 7,
+        "endLine": 776,
+        "endChar": 11
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "028993b5_9c52ff0b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "nit - put this section in it\u0027s a block to make it clear it\u0027s the fallthrough from the previous tests",
+      "range": {
+        "startLine": 789,
+        "startChar": 7,
+        "endLine": 789,
+        "endChar": 16
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a9f313d_2bbece38",
+        "filename": "src/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "How about doing this right at the start of GetOptimizedCode ?",
+      "range": {
+        "startLine": 891,
+        "startChar": 3,
+        "endLine": 891,
+        "endChar": 0
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3823292_9bbd7d63",
+        "filename": "src/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "nit - comment that we do this since it might be marked with kInOptimizationQueue, but is no longer in the optimization queue.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 2,
+        "endLine": 1046,
+        "endChar": 46
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a162058_fbd50a2e",
+        "filename": "src/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "nit - could we use enum ConcurrencyMode for this function (maybe pulling it out to globals.h or somewhere if necessary) ?",
+      "range": {
+        "startLine": 1880,
+        "startChar": 34,
+        "endLine": 1880,
+        "endChar": 39
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27aa3dc0_58476924",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "Any reason you only want to do this on InstallCode interrupt? Performance of checking the dispatcher?",
+      "range": {
+        "startLine": 406,
+        "startChar": 30,
+        "endLine": 406,
+        "endChar": 54
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50490b7e_966c4ee0",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "Could you DCHECK that function-\u003eChecksOptimiztionMarker()) ?",
+      "range": {
+        "startLine": 279,
+        "startChar": 6,
+        "endLine": 279,
+        "endChar": 34
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b146c480_52fc06cb",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:43:16Z",
+      "side": 1,
+      "message": "nit - move this just above MarkForOptimization ?",
+      "range": {
+        "startLine": 282,
+        "startChar": 3,
+        "endLine": 282,
+        "endChar": 37
+      },
+      "revId": "54e97148fd4674b7db3c3e361527bf083e4f2a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
