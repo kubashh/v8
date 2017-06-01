@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8717ea8_17fc6384",
+        "filename": "src/heap/marking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-01T11:12:56Z",
+      "side": 1,
+      "message": "to \"set\"",
+      "range": {
+        "startLine": 177,
+        "startChar": 61,
+        "endLine": 177,
+        "endChar": 66
+      },
+      "revId": "a0c8f46e39848e83846ec10a693234bb38674cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfc197cd_99cea5ec",
+        "filename": "src/heap/marking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-01T11:12:56Z",
+      "side": 1,
+      "message": "This looks very familiar to MarkBit::Set and MarkBit::Clear with the difference that MarkBit has already a cell ptr instead of a cell_index. Can you investigate whether it makes sense to somehow merge the actual implementations?",
+      "range": {
+        "startLine": 375,
+        "startChar": 20,
+        "endLine": 375,
+        "endChar": 33
+      },
+      "revId": "a0c8f46e39848e83846ec10a693234bb38674cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
