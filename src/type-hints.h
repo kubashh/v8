@@ -76,6 +76,7 @@ DEFINE_OPERATORS_FOR_FLAGS(ToBooleanHints)
 // Type hints for a ToPrimitiveToString operation.
 enum class ToPrimitiveToStringHint : uint8_t {
   kNone,
+  kNonEmptyString,
   kString,
   kAny = static_cast<uint8_t>(BinaryOperationHint::kAny),
 };
