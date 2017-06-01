@@ -45,6 +45,29 @@
       "revId": "7dcfa3133d2c39a348c20222184070723727101a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18df7b12_a0614f88",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-01T13:27:13Z",
+      "side": 1,
+      "message": "nit: s/IfHole/OnHole/ ... otherwise it sounds like it is a conditional throw IMHO.",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 342,
+        "endChar": 29
+      },
+      "revId": "7dcfa3133d2c39a348c20222184070723727101a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
