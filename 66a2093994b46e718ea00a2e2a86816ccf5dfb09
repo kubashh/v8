@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86f50051_32ff795d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2586,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:50:25Z",
+      "side": 1,
+      "message": "Could you add a TODO here (or even better, the actual code) to add debug code that checks that the state is really throw here",
+      "revId": "66a2093994b46e718ea00a2e2a86816ccf5dfb09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "977ce102_3cef46bb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2587,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-01T15:50:25Z",
+      "side": 1,
+      "message": "nit - could you add scope blocks for each of the cases to make the block boundaries clear.",
+      "range": {
+        "startLine": 2587,
+        "startChar": 7,
+        "endLine": 2587,
+        "endChar": 11
+      },
+      "revId": "66a2093994b46e718ea00a2e2a86816ccf5dfb09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
