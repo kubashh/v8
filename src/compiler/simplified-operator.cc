@@ -529,6 +529,7 @@ UnicodeEncoding UnicodeEncodingOf(const Operator* op) {
   V(CheckSmi, 1, 1)                     \
   V(CheckString, 1, 1)                  \
   V(CheckSeqString, 1, 1)               \
+  V(CheckNonEmptyString, 1, 1)          \
   V(CheckSymbol, 1, 1)                  \
   V(CheckTaggedHole, 1, 1)              \
   V(CheckedInt32Add, 2, 1)              \
@@ -742,6 +743,9 @@ struct SimplifiedOperatorGlobalCache final {
               1, 1, 1, 1, 1, 0,                           // counts
               kHint) {}                                   // parameter
   };
+  SpeculativeToPrimitiveToStringOperator<
+      ToPrimitiveToStringHint::kNonEmptyString>
+      kSpeculativeToPrimitiveToStringNonEmptyStringOperator;
   SpeculativeToPrimitiveToStringOperator<ToPrimitiveToStringHint::kString>
       kSpeculativeToPrimitiveToStringStringOperator;
 
@@ -878,6 +882,8 @@ const Operator* SimplifiedOperatorBuilder::SpeculativeToNumber(
 const Operator* SimplifiedOperatorBuilder::SpeculativeToPrimitiveToString(
     ToPrimitiveToStringHint hint) {
   switch (hint) {
+    case ToPrimitiveToStringHint::kNonEmptyString:
+      return &cache_.kSpeculativeToPrimitiveToStringNonEmptyStringOperator;
     case ToPrimitiveToStringHint::kString:
       return &cache_.kSpeculativeToPrimitiveToStringStringOperator;
     case ToPrimitiveToStringHint::kNone:

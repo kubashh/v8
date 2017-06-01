@@ -109,6 +109,8 @@ std::ostream& operator<<(std::ostream& os, ToPrimitiveToStringHint hint) {
   switch (hint) {
     case ToPrimitiveToStringHint::kNone:
       return os << "None";
+    case ToPrimitiveToStringHint::kNonEmptyString:
+      return os << "NonEmptyString";
     case ToPrimitiveToStringHint::kString:
       return os << "String";
     case ToPrimitiveToStringHint::kAny:
