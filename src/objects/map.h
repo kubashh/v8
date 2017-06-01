@@ -453,7 +453,9 @@ class Map : public HeapObject {
 
   static Handle<Map> AsLanguageMode(Handle<Map> initial_map,
                                     LanguageMode language_mode,
-                                    FunctionKind kind);
+                                    FunctionKind kind,
+                                    bool needs_set_function_name,
+                                    bool needs_home_object);
 
   static Handle<Map> CopyForPreventExtensions(Handle<Map> map,
                                               PropertyAttributes attrs_to_add,

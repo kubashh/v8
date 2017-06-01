@@ -1197,7 +1197,7 @@ Handle<SharedFunctionInfo> FunctionTemplateInfo::GetOrCreateSharedFunctionInfo(
   Handle<Object> class_name(info->class_name(), isolate);
   Handle<String> name = class_name->IsString()
                             ? Handle<String>::cast(class_name)
-                            : isolate->factory()->empty_string();
+                            : Handle<String>();
   Handle<Code> code = isolate->builtins()->HandleApiCall();
   bool is_constructor = !info->remove_prototype();
   Handle<SharedFunctionInfo> result =
@@ -2782,19 +2782,16 @@ void JSObject::JSObjectShortPrint(StringStream* accumulator) {
           if (!heap->Contains(JSFunction::cast(constructor)->shared())) {
             accumulator->Add("!!!INVALID SHARED ON CONSTRUCTOR!!!");
           } else {
-            Object* constructor_name =
+            String* constructor_name =
                 JSFunction::cast(constructor)->shared()->name();
-            if (constructor_name->IsString()) {
-              String* str = String::cast(constructor_name);
-              if (str->length() > 0) {
-                accumulator->Add(global_object ? "<GlobalObject " : "<");
-                accumulator->Put(str);
-                accumulator->Add(
-                    " %smap = %p",
-                    map_of_this->is_deprecated() ? "deprecated-" : "",
-                    map_of_this);
-                printed = true;
-              }
+            if (constructor_name->length() > 0) {
+              accumulator->Add(global_object ? "<GlobalObject " : "<");
+              accumulator->Put(constructor_name);
+              accumulator->Add(
+                  " %smap = %p",
+                  map_of_this->is_deprecated() ? "deprecated-" : "",
+                  map_of_this);
+              printed = true;
             }
           }
         } else if (constructor->IsFunctionTemplateInfo()) {
@@ -3207,7 +3204,7 @@ Handle<String> JSReceiver::GetConstructorName(Handle<JSReceiver> receiver) {
     Object* maybe_constructor = receiver->map()->GetConstructor();
     if (maybe_constructor->IsJSFunction()) {
       JSFunction* constructor = JSFunction::cast(maybe_constructor);
-      String* name = String::cast(constructor->shared()->name());
+      String* name = constructor->shared()->name();
       if (name->length() == 0) name = constructor->shared()->inferred_name();
       if (name->length() != 0 &&
           !name->Equals(isolate->heap()->Object_string())) {
@@ -3235,7 +3232,7 @@ Handle<String> JSReceiver::GetConstructorName(Handle<JSReceiver> receiver) {
   Handle<String> result = isolate->factory()->Object_string();
   if (maybe_constructor->IsJSFunction()) {
     JSFunction* constructor = JSFunction::cast(*maybe_constructor);
-    String* name = String::cast(constructor->shared()->name());
+    String* name = constructor->shared()->name();
     if (name->length() == 0) name = constructor->shared()->inferred_name();
     if (name->length() > 0) result = handle(name, isolate);
   }
@@ -9010,9 +9007,10 @@ Handle<Map> Map::CopyAsElementsKind(Handle<Map> map, ElementsKind kind,
   return new_map;
 }
 
-
 Handle<Map> Map::AsLanguageMode(Handle<Map> initial_map,
-                                LanguageMode language_mode, FunctionKind kind) {
+                                LanguageMode language_mode, FunctionKind kind,
+                                bool needs_set_function_name,
+                                bool needs_home_object) {
   DCHECK_EQ(JS_FUNCTION_TYPE, initial_map->instance_type());
   // Initial map for sloppy mode function is stored in the function
   // constructor. Initial maps for strict mode are cached as special transitions
@@ -9020,7 +9018,8 @@ Handle<Map> Map::AsLanguageMode(Handle<Map> initial_map,
   if (language_mode == SLOPPY) return initial_map;
   Isolate* isolate = initial_map->GetIsolate();
 
-  int map_index = Context::FunctionMapIndex(language_mode, kind);
+  int map_index = Context::FunctionMapIndex(
+      language_mode, kind, needs_set_function_name, needs_home_object);
   Handle<Map> function_map(
       Map::cast(isolate->native_context()->get(map_index)));
 
@@ -12893,6 +12892,7 @@ void JSFunction::SetName(Handle<JSFunction> function, Handle<Name> name,
     builder.AppendString(function_name);
     function_name = builder.Finish().ToHandleChecked();
   }
+
   JSObject::DefinePropertyOrElementIgnoreAttributes(
       function, isolate->factory()->name_string(), function_name,
       static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY))
@@ -12907,14 +12907,11 @@ char const kNativeCodeSource[] = "function () { [native code] }";
 Handle<String> NativeCodeFunctionSourceString(
     Handle<SharedFunctionInfo> shared_info) {
   Isolate* const isolate = shared_info->GetIsolate();
-  if (shared_info->name()->IsString()) {
-    IncrementalStringBuilder builder(isolate);
-    builder.AppendCString("function ");
-    builder.AppendString(handle(String::cast(shared_info->name()), isolate));
-    builder.AppendCString("() { [native code] }");
-    return builder.Finish().ToHandleChecked();
-  }
-  return isolate->factory()->NewStringFromAsciiChecked(kNativeCodeSource);
+  IncrementalStringBuilder builder(isolate);
+  builder.AppendCString("function ");
+  builder.AppendString(handle(shared_info->name(), isolate));
+  builder.AppendCString("() { [native code] }");
+  return builder.Finish().ToHandleChecked();
 }
 
 }  // namespace
@@ -12984,7 +12981,7 @@ Handle<String> JSFunction::ToString(Handle<JSFunction> function) {
     if (shared_info->name_should_print_as_anonymous()) {
       builder.AppendCString("anonymous");
     } else if (!shared_info->is_anonymous_expression()) {
-      builder.AppendString(handle(String::cast(shared_info->name()), isolate));
+      builder.AppendString(handle(shared_info->name(), isolate));
     }
   }
   builder.AppendString(Handle<String>::cast(shared_info->GetSourceCode()));
@@ -13396,7 +13393,8 @@ void SharedFunctionInfo::set_debugger_hints(int value) {
 }
 
 String* SharedFunctionInfo::DebugName() {
-  Object* n = name();
+  String* n = name();
+  DCHECK(n->IsString());
   if (!n->IsString() || String::cast(n)->length() == 0) return inferred_name();
   return String::cast(n);
 }
@@ -13549,9 +13547,9 @@ std::ostream& operator<<(std::ostream& os, const SourceCodeOf& v) {
 
   if (!s->is_toplevel()) {
     os << "function ";
-    Object* name = s->name();
-    if (name->IsString() && String::cast(name)->length() > 0) {
-      String::cast(name)->PrintUC16(os);
+    String* name = s->name();
+    if (name->length() > 0) {
+      name->PrintUC16(os);
     }
   }
 

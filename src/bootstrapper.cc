@@ -682,6 +682,21 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
   native_context()->set_strict_function_without_prototype_map(
       *strict_function_without_prototype_map);
 
+  Handle<Map> method_with_name_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME, empty);
+  native_context()->set_method_with_name_map(*method_with_name_map);
+
+  Handle<Map> method_with_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_HOME_OBJECT, empty);
+  native_context()->set_method_with_home_object_map(
+      *method_with_home_object_map);
+
+  Handle<Map> method_with_name_and_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME_AND_HOME_OBJECT,
+                                         empty);
+  native_context()->set_method_with_name_and_home_object_map(
+      *method_with_name_and_home_object_map);
+
   // Allocate map for the strict mode functions. This map is temporary, used
   // only for processing of builtins.
   // Later the map is replaced with writable prototype map, allocated below.
@@ -1403,7 +1418,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     // --- A s y n c F r o m S y n c I t e r a t o r
     Handle<Code> code = isolate->builtins()->AsyncIteratorValueUnwrap();
     Handle<SharedFunctionInfo> info =
-        factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+        factory->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     native_context()->set_async_iterator_value_unwrap_shared_fun(*info);
@@ -1425,7 +1440,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     Handle<Code> code =
         isolate->builtins()->AsyncGeneratorAwaitResolveClosure();
     Handle<SharedFunctionInfo> info =
-        factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+        factory->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     native_context()->set_async_generator_await_resolve_shared_fun(*info);
@@ -1433,7 +1448,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     code = handle(isolate->builtins()->builtin(
                       Builtins::kAsyncGeneratorAwaitRejectClosure),
                   isolate);
-    info = factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+    info = factory->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     native_context()->set_async_generator_await_reject_shared_fun(*info);
@@ -2087,7 +2102,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
   {
     Handle<Code> code = isolate->builtins()->PromiseGetCapabilitiesExecutor();
     Handle<SharedFunctionInfo> info =
-        factory->NewSharedFunctionInfo(factory->empty_string(), code, true);
+        factory->NewSharedFunctionInfo(Handle<String>(), code, true);
     info->SetConstructStub(*isolate->builtins()->JSBuiltinsConstructStub());
     info->set_instance_class_name(isolate->heap()->Object_string());
     info->set_internal_formal_parameter_count(2);
@@ -2207,7 +2222,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
           handle(isolate->builtins()->builtin(Builtins::kPromiseResolveClosure),
                  isolate);
       Handle<SharedFunctionInfo> info =
-          factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+          factory->NewSharedFunctionInfo(Handle<String>(), code, false);
       info->set_internal_formal_parameter_count(1);
       info->set_length(1);
       native_context()->set_promise_resolve_shared_fun(*info);
@@ -2215,8 +2230,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
       code =
           handle(isolate->builtins()->builtin(Builtins::kPromiseRejectClosure),
                  isolate);
-      info =
-          factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+      info = factory->NewSharedFunctionInfo(Handle<String>(), code, false);
       info->set_internal_formal_parameter_count(1);
       info->set_length(1);
       native_context()->set_promise_reject_shared_fun(*info);
@@ -3787,7 +3801,7 @@ void Bootstrapper::ExportFromRuntime(Isolate* isolate,
       Handle<Code> code =
           isolate->builtins()->AsyncFunctionAwaitRejectClosure();
       Handle<SharedFunctionInfo> info =
-          factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+          factory->NewSharedFunctionInfo(Handle<String>(), code, false);
       info->set_internal_formal_parameter_count(1);
       info->set_length(1);
       native_context->set_async_function_await_reject_shared_fun(*info);
@@ -3797,7 +3811,7 @@ void Bootstrapper::ExportFromRuntime(Isolate* isolate,
       Handle<Code> code =
           isolate->builtins()->AsyncFunctionAwaitResolveClosure();
       Handle<SharedFunctionInfo> info =
-          factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+          factory->NewSharedFunctionInfo(Handle<String>(), code, false);
       info->set_internal_formal_parameter_count(1);
       info->set_length(1);
       native_context->set_async_function_await_resolve_shared_fun(*info);
@@ -4025,8 +4039,8 @@ void Genesis::InitializeGlobal_harmony_promise_finally() {
     Handle<Code> code =
         handle(isolate()->builtins()->builtin(Builtins::kPromiseThenFinally),
                isolate());
-    Handle<SharedFunctionInfo> info = factory()->NewSharedFunctionInfo(
-        factory()->empty_string(), code, false);
+    Handle<SharedFunctionInfo> info =
+        factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     info->set_native(true);
@@ -4037,8 +4051,8 @@ void Genesis::InitializeGlobal_harmony_promise_finally() {
     Handle<Code> code =
         handle(isolate()->builtins()->builtin(Builtins::kPromiseCatchFinally),
                isolate());
-    Handle<SharedFunctionInfo> info = factory()->NewSharedFunctionInfo(
-        factory()->empty_string(), code, false);
+    Handle<SharedFunctionInfo> info =
+        factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     info->set_native(true);
@@ -4049,8 +4063,8 @@ void Genesis::InitializeGlobal_harmony_promise_finally() {
     Handle<Code> code = handle(
         isolate()->builtins()->builtin(Builtins::kPromiseValueThunkFinally),
         isolate());
-    Handle<SharedFunctionInfo> info = factory()->NewSharedFunctionInfo(
-        factory()->empty_string(), code, false);
+    Handle<SharedFunctionInfo> info =
+        factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(0);
     info->set_length(0);
     native_context()->set_promise_value_thunk_finally_shared_fun(*info);
@@ -4060,8 +4074,8 @@ void Genesis::InitializeGlobal_harmony_promise_finally() {
     Handle<Code> code =
         handle(isolate()->builtins()->builtin(Builtins::kPromiseThrowerFinally),
                isolate());
-    Handle<SharedFunctionInfo> info = factory()->NewSharedFunctionInfo(
-        factory()->empty_string(), code, false);
+    Handle<SharedFunctionInfo> info =
+        factory()->NewSharedFunctionInfo(Handle<String>(), code, false);
     info->set_internal_formal_parameter_count(0);
     info->set_length(0);
     native_context()->set_promise_thrower_finally_shared_fun(*info);

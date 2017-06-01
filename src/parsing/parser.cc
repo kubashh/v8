@@ -797,7 +797,7 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info) {
   {
     std::unique_ptr<Utf16CharacterStream> stream(ScannerStream::For(
         source, shared_info->start_position(), shared_info->end_position()));
-    Handle<String> name(String::cast(shared_info->name()));
+    Handle<String> name(shared_info->name());
     scanner_.Initialize(stream.get(), info->is_module());
     info->set_function_name(ast_value_factory()->GetString(name));
     result = DoParseFunction(info);
@@ -2565,11 +2565,6 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   // handle to decide whether to invoke function name inference.
   bool should_infer_name = function_name == NULL;
 
-  // We want a non-null handle as the function name.
-  if (should_infer_name) {
-    function_name = ast_value_factory()->empty_string();
-  }
-
   FunctionLiteral::EagerCompileHint eager_compile_hint =
       function_state_->next_function_is_likely_called()
           ? FunctionLiteral::kShouldEagerCompile
@@ -3209,9 +3204,9 @@ ZoneList<Statement*>* Parser::ParseFunction(
   if (expected_parameters_end_pos != kNoSourcePosition) {
     // This is the first function encountered in a CreateDynamicFunction eval.
     parameters_end_pos_ = kNoSourcePosition;
-    // The function name should have been ignored, giving us the empty string
+    // The function name should have been ignored, giving us the nullptr
     // here.
-    DCHECK_EQ(function_name, ast_value_factory()->empty_string());
+    DCHECK_NULL(function_name);
   }
 
   ParserFormalParameters formals(function_scope);

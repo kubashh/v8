@@ -18,8 +18,11 @@ namespace internal {
 // shared by multiple instances of the function.
 class SharedFunctionInfo : public HeapObject {
  public:
+  // [raw_name]: Function name string or |needs_set_name_symbol| sentinel.
+  DECL_ACCESSORS(raw_name, Object)
+
   // [name]: Function name.
-  DECL_ACCESSORS(name, Object)
+  inline String* name() const;
 
   // [code]: Function code.
   DECL_ACCESSORS(code, Code)
@@ -234,6 +237,9 @@ class SharedFunctionInfo : public HeapObject {
   // End position of this function in the script source.
   inline int end_position() const;
   inline void set_end_position(int end_position);
+
+  // Returns true if the function closure requires a name to be set.
+  inline bool needs_set_function_name() const;
 
   // Is this function a named function expression in the source code.
   DECL_BOOLEAN_ACCESSORS(is_named_expression)

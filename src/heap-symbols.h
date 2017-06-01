@@ -216,6 +216,7 @@
   V(megamorphic_symbol)                     \
   V(native_context_index_symbol)            \
   V(nonextensible_symbol)                   \
+  V(needs_set_name_symbol)                  \
   V(not_mapped_symbol)                      \
   V(premonomorphic_symbol)                  \
   V(promise_async_stack_id_symbol)          \

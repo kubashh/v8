@@ -45,6 +45,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(MinusZeroValue, MinusZero)                        \
   V(MutableHeapNumberMap, MutableHeapNumberMap)       \
   V(NanValue, Nan)                                    \
+  V(needs_set_name_symbol, NeedsSetNameSymbol)        \
   V(NoClosuresCellMap, NoClosuresCellMap)             \
   V(NullValue, Null)                                  \
   V(OneClosureCellMap, OneClosureCellMap)             \

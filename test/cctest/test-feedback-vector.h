@@ -43,7 +43,7 @@ template <typename Spec>
 Handle<FeedbackVector> NewFeedbackVector(Isolate* isolate, Spec* spec) {
   Handle<FeedbackMetadata> metadata = FeedbackMetadata::New(isolate, spec);
   Handle<SharedFunctionInfo> shared = isolate->factory()->NewSharedFunctionInfo(
-      isolate->factory()->empty_string(), MaybeHandle<Code>(), false);
+      Handle<String>(), MaybeHandle<Code>(), false);
   shared->set_feedback_metadata(*metadata);
   return FeedbackVector::New(isolate, shared);
 }

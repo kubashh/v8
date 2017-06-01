@@ -352,6 +352,10 @@ enum ContextLookupFlags {
   V(STRICT_FUNCTION_MAP_INDEX, Map, strict_function_map)                       \
   V(STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX, Map,                          \
     strict_function_without_prototype_map)                                     \
+  V(METHOD_WITH_NAME_MAP_INDEX, Map, method_with_name_map)                     \
+  V(METHOD_WITH_HOME_OBJECT_MAP_INDEX, Map, method_with_home_object_map)       \
+  V(METHOD_WITH_NAME_AND_HOME_OBJECT_MAP_INDEX, Map,                           \
+    method_with_name_and_home_object_map)                                      \
   V(GENERATOR_FUNCTION_MAP_INDEX, Map, generator_function_map)                 \
   V(ASYNC_GENERATOR_FUNCTION_MAP_INDEX, Map, async_generator_function_map)     \
   V(CLASS_FUNCTION_MAP_INDEX, Map, class_function_map)                         \
@@ -664,7 +668,9 @@ class Context: public FixedArray {
     return kHeaderSize + index * kPointerSize - kHeapObjectTag;
   }
 
-  static int FunctionMapIndex(LanguageMode language_mode, FunctionKind kind) {
+  static int FunctionMapIndex(LanguageMode language_mode, FunctionKind kind,
+                              bool needs_set_function_name,
+                              bool needs_home_object) {
     // Note: Must be kept in sync with the FastNewClosure builtin.
     if (IsGeneratorFunction(kind)) {
       return IsAsyncFunction(kind) ? ASYNC_GENERATOR_FUNCTION_MAP_INDEX
@@ -682,9 +688,21 @@ class Context: public FixedArray {
       return CLASS_FUNCTION_MAP_INDEX;
     }
 
-    if (IsArrowFunction(kind) || IsConciseMethod(kind) ||
-        IsAccessorFunction(kind)) {
+    if (IsArrowFunction(kind)) {
       return STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX;
+    }
+
+    if (IsConciseMethod(kind) || IsAccessorFunction(kind)) {
+      STATIC_ASSERT(METHOD_WITH_NAME_MAP_INDEX ==
+                    STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX + 1);
+      STATIC_ASSERT(METHOD_WITH_HOME_OBJECT_MAP_INDEX ==
+                    METHOD_WITH_NAME_MAP_INDEX + 1);
+      STATIC_ASSERT(METHOD_WITH_NAME_AND_HOME_OBJECT_MAP_INDEX ==
+                    METHOD_WITH_HOME_OBJECT_MAP_INDEX + 1);
+      int offset = static_cast<int>(needs_set_function_name) |
+                   (static_cast<int>(needs_home_object) << 1);
+      DCHECK_EQ(0, offset & ~3);
+      return STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX + offset;
     }
 
     return is_strict(language_mode) ? STRICT_FUNCTION_MAP_INDEX

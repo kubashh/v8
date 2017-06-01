@@ -516,6 +516,10 @@ void AstPrinter::PrintLabels(ZoneList<const AstRawString*>* labels) {
 }
 
 void AstPrinter::PrintLiteral(Handle<Object> value, bool quote) {
+  if (value.is_null()) {
+    Print("<nil>");
+    return;
+  }
   Object* object = *value;
   if (object->IsString()) {
     String* string = String::cast(object);

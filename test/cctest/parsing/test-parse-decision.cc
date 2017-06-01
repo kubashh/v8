@@ -34,7 +34,7 @@ void GetTopLevelFunctionInfo(
   SharedFunctionInfo::ScriptIterator iterator(i_script);
 
   while (SharedFunctionInfo* shared = iterator.Next()) {
-    std::unique_ptr<char[]> name = String::cast(shared->name())->ToCString();
+    std::unique_ptr<char[]> name = shared->name()->ToCString();
     is_compiled->insert(std::make_pair(name.get(), shared->is_compiled()));
   }
 }
