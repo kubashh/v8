@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c261ab5d_0fb52846",
+        "filename": "src/compiler/bytecode-graph-builder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-01T15:59:56Z",
+      "side": 1,
+      "message": "After discussing with Ross, changed it to forward declaration. Done.",
+      "parentUuid": "8aec0313_fb5fe492",
+      "range": {
+        "startLine": 8,
+        "startChar": 14,
+        "endLine": 8,
+        "endChar": 38
+      },
+      "revId": "7dcfa3133d2c39a348c20222184070723727101a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18df7b12_a0614f88",
         "filename": "src/runtime/runtime.h",
         "patchSetId": 14
