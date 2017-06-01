@@ -46,6 +46,30 @@
       "revId": "879df2e84e90e8c060ce4d3361001c032ab95afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edf6a2cf_77f21579",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-01T13:13:27Z",
+      "side": 0,
+      "message": "Ah, so this was when JSFunction\u0027s CompileLazy was hitting the SFI-marking equivalent of already optimised code. What we actually want to check here is shared()-\u003eis_compiled(), updated the DCHECK.",
+      "parentUuid": "ce5e0d89_a6350519",
+      "range": {
+        "startLine": 76,
+        "startChar": 1,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "879df2e84e90e8c060ce4d3361001c032ab95afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
