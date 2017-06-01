@@ -860,7 +860,7 @@ RUNTIME_FUNCTION(Runtime_DefineGetterPropertyUnchecked) {
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, getter, 2);
   CONVERT_PROPERTY_ATTRIBUTES_CHECKED(attrs, 3);
 
-  if (String::cast(getter->shared()->name())->length() == 0) {
+  if (getter->shared()->needs_function_set_name()) {
     JSFunction::SetName(getter, name, isolate->factory()->get_string());
   }
 
@@ -930,7 +930,7 @@ RUNTIME_FUNCTION(Runtime_DefineSetterPropertyUnchecked) {
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, setter, 2);
   CONVERT_PROPERTY_ATTRIBUTES_CHECKED(attrs, 3);
 
-  if (String::cast(setter->shared()->name())->length() == 0) {
+  if (setter->shared()->needs_function_set_name()) {
     JSFunction::SetName(setter, name, isolate->factory()->set_string());
   }
 
