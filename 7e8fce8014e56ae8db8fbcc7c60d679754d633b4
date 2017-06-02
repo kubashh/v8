@@ -22,6 +22,30 @@
       "revId": "7e8fce8014e56ae8db8fbcc7c60d679754d633b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b04f4cb4_cf6f24ce",
+        "filename": "src/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1176519
+      },
+      "writtenOn": "2017-06-02T11:15:16Z",
+      "side": 1,
+      "message": "ptal (BUILD.gn)",
+      "parentUuid": "8da6c4d5_b79b6753",
+      "range": {
+        "startLine": 222,
+        "startChar": 39,
+        "endLine": 222,
+        "endChar": 44
+      },
+      "revId": "7e8fce8014e56ae8db8fbcc7c60d679754d633b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
