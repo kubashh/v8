@@ -73,6 +73,19 @@ std::string ToString(ToBooleanHints);
 
 DEFINE_OPERATORS_FOR_FLAGS(ToBooleanHints)
 
+// Type hints for a ToPrimitiveToString operation.
+enum class ToPrimitiveToStringHint : uint8_t {
+  kNone,
+  kString,
+  kAny = static_cast<uint8_t>(BinaryOperationHint::kAny),
+};
+
+inline size_t hash_value(ToPrimitiveToStringHint hint) {
+  return static_cast<unsigned>(hint);
+}
+
+std::ostream& operator<<(std::ostream&, ToPrimitiveToStringHint);
+
 enum StringAddFlags {
   // Omit both parameter checks.
   STRING_ADD_CHECK_NONE = 0,

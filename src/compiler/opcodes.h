@@ -307,6 +307,7 @@
 #define SIMPLIFIED_SPECULATIVE_NUMBER_UNOP_LIST(V) V(SpeculativeToNumber)
 
 #define SIMPLIFIED_OTHER_OP_LIST(V) \
+  V(SpeculativeToPrimitiveToString) \
   V(PlainPrimitiveToNumber)         \
   V(PlainPrimitiveToWord32)         \
   V(PlainPrimitiveToFloat64)        \

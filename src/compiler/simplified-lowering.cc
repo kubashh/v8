@@ -2646,6 +2646,30 @@ class RepresentationSelector {
         if (lower()) DeferReplacement(node, node->InputAt(0));
         return;
       }
+      case IrOpcode::kSpeculativeToPrimitiveToString: {
+        ToPrimitiveToStringHint const hint =
+            ToPrimitiveToStringHintOf(node->op());
+        switch (hint) {
+          case ToPrimitiveToStringHint::kString:
+            if (InputIs(node, Type::String())) {
+              VisitUnop(node, UseInfo::AnyTagged(),
+                        MachineRepresentation::kTaggedPointer);
+              if (lower()) DeferReplacement(node, node->InputAt(0));
+            } else {
+              VisitUnop(node, UseInfo::CheckedHeapObjectAsTaggedPointer(),
+                        MachineRepresentation::kTaggedPointer);
+              if (lower()) {
+                NodeProperties::ChangeOp(node, simplified()->CheckString());
+              }
+            }
+            break;
+          case ToPrimitiveToStringHint::kAny:
+          case ToPrimitiveToStringHint::kNone:
+            UNREACHABLE();
+            break;
+        }
+        return;
+      }
       case IrOpcode::kObjectIsDetectableCallable: {
         VisitObjectIs(node, Type::DetectableCallable(), lowering);
         return;

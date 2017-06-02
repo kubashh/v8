@@ -105,6 +105,18 @@ std::string ToString(ToBooleanHint hint) {
   UNREACHABLE();
 }
 
+std::ostream& operator<<(std::ostream& os, ToPrimitiveToStringHint hint) {
+  switch (hint) {
+    case ToPrimitiveToStringHint::kNone:
+      return os << "None";
+    case ToPrimitiveToStringHint::kString:
+      return os << "String";
+    case ToPrimitiveToStringHint::kAny:
+      return os << "Any";
+  }
+  UNREACHABLE();
+}
+
 std::ostream& operator<<(std::ostream& os, ToBooleanHints hints) {
   if (hints == ToBooleanHint::kAny) return os << "Any";
   if (hints == ToBooleanHint::kNone) return os << "None";

@@ -1240,10 +1240,10 @@ inline uint32_t ObjectHash(Address address) {
 // Type feedback is encoded in such a way that, we can combine the feedback
 // at different points by performing an 'OR' operation. Type feedback moves
 // to a more generic type when we combine feedback.
-// kString          -> kAny
+// kString -> kAny
 class ToPrimitiveToStringFeedback {
  public:
-  enum { kNone = 0x0, kString = 0x1, kAny = 0x3 };
+  enum { kNone = 0x0, kString = 0x1, kAny = 0x1F };
 };
 
 // Type feedback is encoded in such a way that, we can combine the feedback

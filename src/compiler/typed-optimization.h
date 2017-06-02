@@ -55,6 +55,7 @@ class V8_EXPORT_PRIVATE TypedOptimization final
   Reduction ReduceReferenceEqual(Node* node);
   Reduction ReduceSelect(Node* node);
   Reduction ReduceSpeculativeToNumber(Node* node);
+  Reduction ReduceSpeculativeToPrimitiveToString(Node* node);
 
   CompilationDependencies* dependencies() const { return dependencies_; }
   Factory* factory() const;

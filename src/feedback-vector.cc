@@ -883,6 +883,14 @@ IcCheckType KeyedStoreICNexus::GetKeyType() const {
 
 InlineCacheState BinaryOpICNexus::StateFromFeedback() const {
   BinaryOperationHint hint = GetBinaryOperationFeedback();
+  // TODO(rmcilroy): Use a new nexus for ToPrimitiveToString feedback when
+  // bytecode generator allocates slots. For now, make sure None and Any match
+  // up.
+  static_assert((static_cast<uint8_t>(BinaryOperationHint::kNone) ==
+                 static_cast<uint8_t>(ToPrimitiveToStringHint::kNone)) &&
+                    (static_cast<uint8_t>(BinaryOperationHint::kAny) ==
+                     static_cast<uint8_t>(ToPrimitiveToStringHint::kAny)),
+                "BinaryOperationHint and ToPrimitiveToStringHint must match");
   if (hint == BinaryOperationHint::kNone) {
     return UNINITIALIZED;
   } else if (hint == BinaryOperationHint::kAny) {
@@ -906,6 +914,12 @@ InlineCacheState CompareICNexus::StateFromFeedback() const {
 BinaryOperationHint BinaryOpICNexus::GetBinaryOperationFeedback() const {
   int feedback = Smi::cast(GetFeedback())->value();
   return BinaryOperationHintFromFeedback(feedback);
+}
+
+ToPrimitiveToStringHint BinaryOpICNexus::GetToPrimitiveToStringFeedback()
+    const {
+  int feedback = Smi::cast(GetFeedback())->value();
+  return ToPrimitiveToStringHintFromFeedback(feedback);
 }
 
 CompareOperationHint CompareICNexus::GetCompareOperationFeedback() const {
