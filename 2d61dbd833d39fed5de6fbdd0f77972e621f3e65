@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b488422_803c8df5",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-02T12:18:39Z",
+      "side": 1,
+      "message": "maybe add || dcheck_always_on ?\nSee line 463 where it sets DEBUG.\n\nI\u0027m not sure why you added v8_enable_v8_checks? That one only defines V8_ENABLE_CHECKS and not DEBUG.",
+      "range": {
+        "startLine": 144,
+        "startChar": 55,
+        "endLine": 144,
+        "endChar": 74
+      },
+      "revId": "2d61dbd833d39fed5de6fbdd0f77972e621f3e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
