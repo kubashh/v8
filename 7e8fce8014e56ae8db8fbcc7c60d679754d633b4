@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8da6c4d5_b79b6753",
+        "filename": "src/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-02T11:09:35Z",
+      "side": 1,
+      "message": "Note there is a subtle difference between DEBUG and the gn is_debug, as DEBUG can also be set whith gn dcheck_always_on",
+      "range": {
+        "startLine": 222,
+        "startChar": 39,
+        "endLine": 222,
+        "endChar": 44
+      },
+      "revId": "7e8fce8014e56ae8db8fbcc7c60d679754d633b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
