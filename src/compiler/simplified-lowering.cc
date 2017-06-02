@@ -1000,6 +1000,19 @@ class RepresentationSelector {
     return;
   }
 
+  void VisitIsTypeOrChangeToCheck(Node* node, Type* type,
+                                  const Operator* check_op) {
+    if (InputIs(node, type)) {
+      VisitUnop(node, UseInfo::AnyTagged(),
+                MachineRepresentation::kTaggedPointer);
+      if (lower()) DeferReplacement(node, node->InputAt(0));
+    } else {
+      VisitUnop(node, UseInfo::CheckedHeapObjectAsTaggedPointer(),
+                MachineRepresentation::kTaggedPointer);
+      if (lower()) NodeProperties::ChangeOp(node, check_op);
+    }
+  }
+
   void VisitCall(Node* node, SimplifiedLowering* lowering) {
     const CallDescriptor* desc = CallDescriptorOf(node->op());
     int params = static_cast<int>(desc->ParameterCount());
@@ -2439,22 +2452,14 @@ class RepresentationSelector {
         VisitCheck(node, Type::String(), lowering);
         return;
       }
+      case IrOpcode::kCheckSeqString: {
+        VisitCheck(node, Type::SeqString(), lowering);
+        return;
+      }
       case IrOpcode::kCheckSymbol: {
         VisitCheck(node, Type::Symbol(), lowering);
         return;
       }
-      case IrOpcode::kCheckSeqString: {
-        if (InputIs(node, Type::SeqString())) {
-          VisitUnop(node, UseInfo::AnyTagged(),
-                    MachineRepresentation::kTaggedPointer);
-          if (lower()) DeferReplacement(node, node->InputAt(0));
-        } else {
-          VisitUnop(node, UseInfo::CheckedHeapObjectAsTaggedPointer(),
-                    MachineRepresentation::kTaggedPointer);
-        }
-        return;
-      }
-
       case IrOpcode::kAllocate: {
         ProcessInput(node, 0, UseInfo::TruncatingWord32());
         ProcessRemainingInputs(node, 1);
@@ -2650,18 +2655,13 @@ class RepresentationSelector {
         ToPrimitiveToStringHint const hint =
             ToPrimitiveToStringHintOf(node->op());
         switch (hint) {
+          case ToPrimitiveToStringHint::kNonEmptyString:
+            VisitIsTypeOrChangeToCheck(node, Type::NonEmptyString(),
+                                       simplified()->CheckNonEmptyString());
+            break;
           case ToPrimitiveToStringHint::kString:
-            if (InputIs(node, Type::String())) {
-              VisitUnop(node, UseInfo::AnyTagged(),
-                        MachineRepresentation::kTaggedPointer);
-              if (lower()) DeferReplacement(node, node->InputAt(0));
-            } else {
-              VisitUnop(node, UseInfo::CheckedHeapObjectAsTaggedPointer(),
-                        MachineRepresentation::kTaggedPointer);
-              if (lower()) {
-                NodeProperties::ChangeOp(node, simplified()->CheckString());
-              }
-            }
+            VisitIsTypeOrChangeToCheck(node, Type::String(),
+                                       simplified()->CheckString());
             break;
           case ToPrimitiveToStringHint::kAny:
           case ToPrimitiveToStringHint::kNone:

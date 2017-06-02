@@ -170,6 +170,8 @@ ToPrimitiveToStringHint ToPrimitiveToStringHintFromFeedback(int type_feedback) {
   switch (type_feedback) {
     case ToPrimitiveToStringFeedback::kNone:
       return ToPrimitiveToStringHint::kNone;
+    case ToPrimitiveToStringFeedback::kNonEmptyString:
+      return ToPrimitiveToStringHint::kNonEmptyString;
     case ToPrimitiveToStringFeedback::kString:
       return ToPrimitiveToStringHint::kString;
     case ToPrimitiveToStringFeedback::kAny:
