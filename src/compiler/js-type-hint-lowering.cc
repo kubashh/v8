@@ -258,7 +258,8 @@ Reduction JSTypeHintLowering::ReduceToPrimitiveToStringOperation(
   DCHECK(!slot.IsInvalid());
   BinaryOpICNexus nexus(feedback_vector(), slot);
   ToPrimitiveToStringHint hint = nexus.GetToPrimitiveToStringFeedback();
-  if (hint == ToPrimitiveToStringHint::kString) {
+  if (hint == ToPrimitiveToStringHint::kNonEmptyString ||
+      hint == ToPrimitiveToStringHint::kString) {
     Node* node = jsgraph()->graph()->NewNode(
         jsgraph()->simplified()->SpeculativeToPrimitiveToString(hint), input,
         effect, control);

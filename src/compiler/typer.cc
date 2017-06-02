@@ -43,7 +43,7 @@ Typer::Typer(Isolate* isolate, Flags flags, Graph* graph)
   Zone* zone = this->zone();
   Factory* const factory = isolate->factory();
 
-  singleton_empty_string_ = Type::HeapConstant(factory->empty_string(), zone);
+  singleton_empty_string_ = Type::NewConstant(factory->empty_string(), zone);
   singleton_false_ = operation_typer_.singleton_false();
   singleton_true_ = operation_typer_.singleton_true();
   falsish_ = Type::Union(
@@ -1746,7 +1746,12 @@ Type* Typer::Visitor::TypePlainPrimitiveToNumber(Node* node) {
 }
 
 Type* Typer::Visitor::TypeSpeculativeToPrimitiveToString(Node* node) {
-  return TypeUnaryOp(node, ToPrimitiveToString);
+  Type* type = TypeUnaryOp(node, ToPrimitiveToString);
+  if (ToPrimitiveToStringHintOf(node->op()) ==
+      ToPrimitiveToStringHint::kNonEmptyString) {
+    type = Type::Intersect(type, Type::NonEmptyString(), zone());
+  }
+  return type;
 }
 
 Type* Typer::Visitor::TypePlainPrimitiveToWord32(Node* node) {
@@ -1862,6 +1867,11 @@ Type* Typer::Visitor::TypeCheckString(Node* node) {
 Type* Typer::Visitor::TypeCheckSeqString(Node* node) {
   Type* arg = Operand(node, 0);
   return Type::Intersect(arg, Type::SeqString(), zone());
+}
+
+Type* Typer::Visitor::TypeCheckNonEmptyString(Node* node) {
+  Type* arg = Operand(node, 0);
+  return Type::Intersect(arg, Type::NonEmptyString(), zone());
 }
 
 Type* Typer::Visitor::TypeCheckSymbol(Node* node) {
