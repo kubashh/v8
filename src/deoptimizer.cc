@@ -426,6 +426,15 @@ void Deoptimizer::DeoptimizeFunction(JSFunction* function, Code* code) {
   TRACE_EVENT0("v8", "V8.DeoptimizeCode");
   if (code == nullptr) code = function->code();
   if (code->kind() == Code::OPTIMIZED_FUNCTION) {
+    if (FLAG_trace_deopt) {
+      PrintF("[Deoptimizer::DeoptimizeFunction for ");
+      function->ShortPrint();
+      PrintF(", ");
+      code->ShortPrint();
+      PrintF(", ");
+      function->code()->ShortPrint();
+      PrintF("]\n");
+    }
     // Mark the code for deoptimization and unlink any functions that also
     // refer to that code. The code cannot be shared across native contexts,
     // so we only need to search one.
@@ -524,9 +533,8 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
   CHECK(AllowHeapAllocation::IsAllowed());
   disallow_heap_allocation_ = new DisallowHeapAllocation();
 #endif  // DEBUG
-  if (function != nullptr && function->IsOptimized() &&
-      (compiled_code_->kind() != Code::OPTIMIZED_FUNCTION ||
-       !compiled_code_->deopt_already_counted())) {
+  if (compiled_code_->kind() != Code::OPTIMIZED_FUNCTION ||
+      !compiled_code_->deopt_already_counted()) {
     // If the function is optimized, and we haven't counted that deopt yet, then
     // increment the function's deopt count so that we can avoid optimising
     // functions that deopt too often.
@@ -535,7 +543,7 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
       // Soft deopts shouldn't count against the overall deoptimization count
       // that can eventually lead to disabling optimization for a function.
       isolate->counters()->soft_deopts_executed()->Increment();
-    } else {
+    } else if (function != nullptr) {
       function->shared()->increment_deopt_count();
     }
   }
