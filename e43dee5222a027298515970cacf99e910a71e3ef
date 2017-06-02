@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bcfb3ad_baa6b01a",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2447,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-02T08:44:32Z",
+      "side": 1,
+      "message": "Is this even reachable? It seems that only SpeculativeToPrimitiveToString introduces the node. In fact, the SpeculativeToPrimitiveToString case seems to be broken because the graph should not be touched unless inside the lowering phase? Could you fix that?",
+      "revId": "e43dee5222a027298515970cacf99e910a71e3ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cab80fe5_073e4b64",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-02T08:44:32Z",
+      "side": 1,
+      "message": "The graph can only be mutated in the lowering phase. Please say if (lower()) NodeProperties::ChangeOp...\n\nThe case below seems to be broken as well.",
+      "range": {
+        "startLine": 2650,
+        "startChar": 12,
+        "endLine": 2650,
+        "endChar": 80
+      },
+      "revId": "e43dee5222a027298515970cacf99e910a71e3ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
