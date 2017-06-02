@@ -22,6 +22,30 @@
       "revId": "ff67ebd4df9fd73c28fefbcb4d9d32d1e93401be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab0bfc0c_77ad500a",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-02T10:52:10Z",
+      "side": 1,
+      "message": "There is no verifier here, you are on your own :-/\n\nOutput of WordEqual is Word32, so you should be fine.\n\n(I suppose you could do Word32Xor(..., 1) or Int32Subtract(1, ...) instead of Word32Equal(..., 0), but I am not sure it is better or more readable.)",
+      "parentUuid": "aaedcb25_74f13663",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1371,
+        "endChar": 74
+      },
+      "revId": "ff67ebd4df9fd73c28fefbcb4d9d32d1e93401be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

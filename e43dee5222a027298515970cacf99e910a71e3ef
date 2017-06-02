@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b5d7326a_f8009f4f",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2447,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-02T10:52:10Z",
+      "side": 1,
+      "message": "We generally do not like to keep dead and untested code around, so perhaps it is best to remove it from here.",
+      "parentUuid": "65ba2f8a_c5a76a92",
+      "revId": "e43dee5222a027298515970cacf99e910a71e3ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cab80fe5_073e4b64",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 2
