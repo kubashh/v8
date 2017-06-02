@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "65ba2f8a_c5a76a92",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2447,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-02T10:34:21Z",
+      "side": 1,
+      "message": "Fixed the lowering of the of SpeculativeToPrimitiveToString. As it stands, this isn\u0027t reachable since only SpeculativeToPrimitiveToString adds it, but I thought it best to deal with this opcode here in case we end up introducing the node elsewhere (e.g., in js-typed-lowering) which we might want to do in the future (e.g., check non empty for StringAdd so we can do the cons lowering regardless of whether the LHS is known to be a sequential / external string).",
+      "parentUuid": "7bcfb3ad_baa6b01a",
+      "revId": "e43dee5222a027298515970cacf99e910a71e3ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cab80fe5_073e4b64",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2017-06-02T08:44:32Z",
       "side": 1,
       "message": "The graph can only be mutated in the lowering phase. Please say if (lower()) NodeProperties::ChangeOp...\n\nThe case below seems to be broken as well.",
+      "range": {
+        "startLine": 2650,
+        "startChar": 12,
+        "endLine": 2650,
+        "endChar": 80
+      },
+      "revId": "e43dee5222a027298515970cacf99e910a71e3ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4248cfe_cc2402ed",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-02T10:34:21Z",
+      "side": 1,
+      "message": "Done (the case below is for the preceeding in-review CL https://chromium-review.googlesource.com/c/521123/) which I\u0027ve also fixed.",
+      "parentUuid": "cab80fe5_073e4b64",
       "range": {
         "startLine": 2650,
         "startChar": 12,

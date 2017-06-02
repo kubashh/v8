@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaedcb25_74f13663",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-02T10:34:21Z",
+      "side": 1,
+      "message": "Same comment I had on PS1: \nThis is the best way I could come up with for WordNotEqual - is there any simpler alternative? Also, this does a Word32Equal on the output of a WordEqual - is that allowed (I think the CSA verifier would complain about this, but nothing seems to here)? Is there an operator to convert from Word -\u003e Word32?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1371,
+        "endChar": 74
+      },
+      "revId": "ff67ebd4df9fd73c28fefbcb4d9d32d1e93401be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
