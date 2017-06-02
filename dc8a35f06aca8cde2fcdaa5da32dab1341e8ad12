@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4de8655e_be21e0ea",
+        "filename": "tools/foozzie/v8_mock.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-02T12:00:16Z",
+      "side": 1,
+      "message": "Main fix: The old version lacked this new call.",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 21
+      },
+      "revId": "dc8a35f06aca8cde2fcdaa5da32dab1341e8ad12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f673dd0_e74a80ec",
+        "filename": "tools/foozzie/v8_mock.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-02T12:00:16Z",
+      "side": 1,
+      "message": "Secondary fix: Some typed array functions have type checking and require the object to be a typed array. Re-binding it to the original object.",
+      "range": {
+        "startLine": 99,
+        "startChar": 10,
+        "endLine": 103,
+        "endChar": 12
+      },
+      "revId": "dc8a35f06aca8cde2fcdaa5da32dab1341e8ad12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
