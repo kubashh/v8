@@ -46,6 +46,30 @@
       "revId": "ff67ebd4df9fd73c28fefbcb4d9d32d1e93401be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf1501ad_66a68f2e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-02T11:16:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab0bfc0c_77ad500a",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1371,
+        "endChar": 74
+      },
+      "revId": "ff67ebd4df9fd73c28fefbcb4d9d32d1e93401be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
