@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399c428b_7043e31b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-03T10:15:19Z",
+      "side": 1,
+      "message": "Michi pointed out that the deopting version should be as fast as the throwing version (unless we are in try catch block). I tried to measure this on ARES/Air and there it indeed does not make difference.\n\nDo you know a workload where it would make difference? If not, perhaps we can remove the protector and this function?",
+      "range": {
+        "startLine": 1685,
+        "startChar": 2,
+        "endLine": 1685,
+        "endChar": 60
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "463b1d33_e2ce1679",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-03T10:15:19Z",
+      "side": 1,
+      "message": "You might want to use a branch hint to force the throwing branch into deferred code:\n\nNewBranch(condition, BranchHint::kFalse);",
+      "range": {
+        "startLine": 1700,
+        "startChar": 2,
+        "endLine": 1700,
+        "endChar": 23
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
