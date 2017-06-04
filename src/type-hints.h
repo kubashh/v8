@@ -17,6 +17,7 @@ enum class BinaryOperationHint : uint8_t {
   kSignedSmall,
   kSigned32,
   kNumberOrOddball,
+  kNonEmptyString,
   kString,
   kAny
 };

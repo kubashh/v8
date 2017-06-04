@@ -149,6 +149,8 @@ BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback) {
     case BinaryOperationFeedback::kNumber:
     case BinaryOperationFeedback::kNumberOrOddball:
       return BinaryOperationHint::kNumberOrOddball;
+    case BinaryOperationFeedback::kNonEmptyString:
+      return BinaryOperationHint::kNonEmptyString;
     case BinaryOperationFeedback::kString:
       return BinaryOperationHint::kString;
     case BinaryOperationFeedback::kAny:
