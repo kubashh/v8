@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5807368a_921ca498",
+        "filename": "src/compiler/mips64/code-generator-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2554,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-06-05T11:45:40Z",
+      "side": 1,
+      "message": "I would suggest  putting in the comment the meaning of constant 0xB1",
+      "range": {
+        "startLine": 2554,
+        "startChar": 45,
+        "endLine": 2554,
+        "endChar": 46
+      },
+      "revId": "6098c16a0879c36aeec165a8e1974772128f43ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
