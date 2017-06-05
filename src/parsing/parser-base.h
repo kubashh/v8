@@ -3006,6 +3006,10 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseYieldExpression(
     // Async generator yield is rewritten in Ignition, and doesn't require
     // producing an Iterator Result.
     expression = impl()->BuildIteratorResult(expression, false);
+  } else {
+    // Per https://github.com/tc39/proposal-async-iteration/pull/102, the yield
+    // operand must be Await-ed in async generators.
+    expression = impl()->RewriteAwaitExpression(expression, pos);
   }
 
   // Hackily disambiguate o from o.next and o [Symbol.iterator]().

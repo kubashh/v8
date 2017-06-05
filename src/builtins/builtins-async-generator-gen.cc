@@ -478,19 +478,35 @@ TF_BUILTIN(AsyncGeneratorResolve, AsyncGeneratorBuiltinsAssembler) {
                   HasInstanceType(generator, JS_ASYNC_GENERATOR_OBJECT_TYPE));
   CSA_ASSERT(this, IsGeneratorNotSuspendedForAwait(generator));
 
+  // If this assertion fails, the `value` component was not Awaited as it should
+  // have been, per https://github.com/tc39/proposal-async-iteration/pull/102/.
+  CSA_SLOW_ASSERT(this, DoesntHaveInstanceType(value, JS_PROMISE_TYPE));
+
   Node* const next = TakeFirstAsyncGeneratorRequestFromQueue(generator);
   Node* const promise = LoadPromiseFromAsyncGeneratorRequest(next);
 
-  Node* const wrapper = AllocateAndInitJSPromise(context);
-  CallBuiltin(Builtins::kResolveNativePromise, context, wrapper, value);
+  // Let iteratorResult be CreateIterResultObject(value, done).
+  Node* const iter_result = Allocate(JSIteratorResult::kSize);
+  {
+    Node* map = LoadContextElement(LoadNativeContext(context),
+                                   Context::ITERATOR_RESULT_MAP_INDEX);
+    StoreMapNoWriteBarrier(iter_result, map);
+    StoreObjectFieldRoot(iter_result, JSIteratorResult::kPropertiesOffset,
+                         Heap::kEmptyFixedArrayRootIndex);
+    StoreObjectFieldRoot(iter_result, JSIteratorResult::kElementsOffset,
+                         Heap::kEmptyFixedArrayRootIndex);
+    StoreObjectFieldNoWriteBarrier(iter_result, JSIteratorResult::kValueOffset,
+                                   value);
+    StoreObjectFieldNoWriteBarrier(iter_result, JSIteratorResult::kDoneOffset,
+                                   done);
+  }
 
-  Node* const on_fulfilled =
-      CreateUnwrapClosure(LoadNativeContext(context), done);
+  // Perform Call(promiseCapability.[[Resolve]], undefined, «iteratorResult»).
+  CallBuiltin(Builtins::kResolveNativePromise, context, promise, iter_result);
 
   // Per spec, AsyncGeneratorResolve() returns undefined. However, for the
   // benefit of %TraceExit(), return the Promise.
-  Return(CallBuiltin(Builtins::kPerformNativePromiseThen, context, wrapper,
-                     on_fulfilled, UndefinedConstant(), promise));
+  Return(promise);
 }
 
 TF_BUILTIN(AsyncGeneratorReject, AsyncGeneratorBuiltinsAssembler) {

@@ -4596,11 +4596,14 @@ Expression* Parser::RewriteYieldStar(Expression* generator,
       VariableProxy* output_proxy = factory()->NewVariableProxy(var_output);
       Expression* literal = factory()->NewStringLiteral(
           ast_value_factory()->value_string(), nopos);
-      Assignment* assign = factory()->NewAssignment(
-          Token::ASSIGN, output_proxy,
+
+      Expression* value = RewriteAwaitExpression(
           factory()->NewProperty(factory()->NewVariableProxy(var_output),
                                  literal, nopos),
           nopos);
+
+      Assignment* assign =
+          factory()->NewAssignment(Token::ASSIGN, output_proxy, value, nopos);
       loop_body->statements()->Add(
           factory()->NewExpressionStatement(assign, nopos), zone());
     }
