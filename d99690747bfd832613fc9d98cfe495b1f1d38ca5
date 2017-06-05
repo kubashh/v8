@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e17c7caa_812b44f7",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-05T08:57:38Z",
+      "side": 1,
+      "message": "I was also thinking about ARES/Air. I tried to measure it locally, on the averageWorstCase mean there seems to be a slight improvement with this. Without this the averageWorstCase ranges from 45-47ms and with this change it is in the range 44-46ms. That is kind of 2% improvement. It is a bit noisy and I ran it only about 7-8 times. \n\nSince, there seems to be a slight improvement how about landing this and then removing the Deopt version as a separate cl. If there are any regressions on the bots we could revert it.",
+      "parentUuid": "399c428b_7043e31b",
+      "range": {
+        "startLine": 1685,
+        "startChar": 2,
+        "endLine": 1685,
+        "endChar": 60
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "463b1d33_e2ce1679",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88211938_c65ca706",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-05T08:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "463b1d33_e2ce1679",
+      "range": {
+        "startLine": 1700,
+        "startChar": 2,
+        "endLine": 1700,
+        "endChar": 23
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
