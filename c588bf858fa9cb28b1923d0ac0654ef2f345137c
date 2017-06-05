@@ -22,6 +22,30 @@
       "revId": "c588bf858fa9cb28b1923d0ac0654ef2f345137c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaada0b0_04dc5222",
+        "filename": "src/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-05T16:53:09Z",
+      "side": 0,
+      "message": "Originally, the assumption was that the CompileLazy builtin will have already checked the code cache (and the marker). But, that turned out to not be true, because e.g. failed asm.js compilations call into the runtime. So, restored this.",
+      "parentUuid": "0d882f52_fd3a78b7",
+      "range": {
+        "startLine": 1059,
+        "startChar": 8,
+        "endLine": 1059,
+        "endChar": 37
+      },
+      "revId": "c588bf858fa9cb28b1923d0ac0654ef2f345137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
