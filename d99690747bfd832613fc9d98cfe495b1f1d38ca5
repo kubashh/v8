@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ee32dd48_c6534478",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-06-05T14:29:09Z",
+      "side": 1,
+      "message": "Thanks Jaro. I will land this and will have a follow up cl that simplifies this logic. That way we would also get performance alerts if things regress.",
+      "parentUuid": "b2e3c971_2343433b",
+      "range": {
+        "startLine": 1685,
+        "startChar": 2,
+        "endLine": 1685,
+        "endChar": 60
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "463b1d33_e2ce1679",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 17
