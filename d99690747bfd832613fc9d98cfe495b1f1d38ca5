@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b2e3c971_2343433b",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-06-05T13:13:19Z",
+      "side": 1,
+      "message": "In the compiled code, there should not be any difference between throwing and deopting (unless the throwing is inside a try-catch). The only differences I can think of is compile time, but I think ARES does not compile very much now.\n\nNormally, I think it is better to start with a simpler version and then try out more complex alternatives, but I am fine with committing this and then trying to simplify.",
+      "parentUuid": "e17c7caa_812b44f7",
+      "range": {
+        "startLine": 1685,
+        "startChar": 2,
+        "endLine": 1685,
+        "endChar": 60
+      },
+      "revId": "d99690747bfd832613fc9d98cfe495b1f1d38ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "463b1d33_e2ce1679",
         "filename": "src/compiler/bytecode-graph-builder.cc",
         "patchSetId": 17
