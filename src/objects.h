@@ -1181,8 +1181,8 @@ class Object {
   STRUCT_LIST(DECLARE_STRUCT_PREDICATE)
 #undef DECLARE_STRUCT_PREDICATE
 
-  // ES6, section 7.2.2 IsArray.  NOT to be confused with %_IsArray.
-  MUST_USE_RESULT static Maybe<bool> IsArray(Handle<Object> object);
+  // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
+  INLINE(MUST_USE_RESULT Maybe<bool> IsArray() const);
 
   INLINE(bool IsNameDictionary() const);
   INLINE(bool IsGlobalDictionary() const);
@@ -2045,6 +2045,9 @@ class JSReceiver: public HeapObject {
       Handle<JSReceiver> object, ShouldThrow should_throw);
 
   MUST_USE_RESULT static Maybe<bool> IsExtensible(Handle<JSReceiver> object);
+
+  // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
+  INLINE(MUST_USE_RESULT Maybe<bool> IsArray() const);
 
   // Returns the class name ([[Class]] property in the specification).
   V8_EXPORT_PRIVATE String* class_name();
@@ -7318,6 +7321,9 @@ class JSProxy: public JSReceiver {
                                                   ShouldThrow should_throw);
   // ES6 9.5.3
   MUST_USE_RESULT static Maybe<bool> IsExtensible(Handle<JSProxy> proxy);
+
+  // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
+  MUST_USE_RESULT Maybe<bool> IsArray() const;
 
   // ES6 9.5.4 (when passed DONT_THROW)
   MUST_USE_RESULT static Maybe<bool> PreventExtensions(

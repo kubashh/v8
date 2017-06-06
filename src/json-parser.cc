@@ -41,7 +41,7 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
       isolate_, value, Object::GetPropertyOrElement(holder, name), Object);
   if (value->IsJSReceiver()) {
     Handle<JSReceiver> object = Handle<JSReceiver>::cast(value);
-    Maybe<bool> is_array = Object::IsArray(object);
+    Maybe<bool> is_array = object->IsArray();
     if (is_array.IsNothing()) return MaybeHandle<Object>();
     if (is_array.FromJust()) {
       Handle<Object> length_object;

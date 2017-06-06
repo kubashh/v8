@@ -949,7 +949,7 @@ static Maybe<bool> IsConcatSpreadable(Isolate* isolate, Handle<Object> obj) {
     if (!maybeValue.ToHandle(&value)) return Nothing<bool>();
     if (!value->IsUndefined(isolate)) return Just(value->BooleanValue());
   }
-  return Object::IsArray(obj);
+  return obj->IsArray();
 }
 
 Object* Slow_ArrayConcat(BuiltinArguments* args, Handle<Object> species,

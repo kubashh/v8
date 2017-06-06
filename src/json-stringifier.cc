@@ -104,7 +104,7 @@ MaybeHandle<Object> JsonStringifier::Stringify(Handle<Object> object,
 bool JsonStringifier::InitializeReplacer(Handle<Object> replacer) {
   DCHECK(property_list_.is_null());
   DCHECK(replacer_function_.is_null());
-  Maybe<bool> is_array = Object::IsArray(replacer);
+  Maybe<bool> is_array = replacer->IsArray();
   if (is_array.IsNothing()) return false;
   if (is_array.FromJust()) {
     HandleScope handle_scope(isolate_);
@@ -583,7 +583,7 @@ JsonStringifier::Result JsonStringifier::SerializeJSProxy(
   HandleScope scope(isolate_);
   Result stack_push = StackPush(object);
   if (stack_push != SUCCESS) return stack_push;
-  Maybe<bool> is_array = Object::IsArray(object);
+  Maybe<bool> is_array = object->IsArray();
   if (is_array.IsNothing()) return EXCEPTION;
   if (is_array.FromJust()) {
     Handle<Object> length_object;

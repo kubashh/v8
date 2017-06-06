@@ -853,23 +853,6 @@ MaybeHandle<Object> Object::InstanceOf(Isolate* isolate, Handle<Object> object,
   return result;
 }
 
-Maybe<bool> Object::IsArray(Handle<Object> object) {
-  if (object->IsJSArray()) return Just(true);
-  if (object->IsJSProxy()) {
-    Handle<JSProxy> proxy = Handle<JSProxy>::cast(object);
-    Isolate* isolate = proxy->GetIsolate();
-    if (proxy->IsRevoked()) {
-      isolate->Throw(*isolate->factory()->NewTypeError(
-          MessageTemplate::kProxyRevoked,
-          isolate->factory()->NewStringFromAsciiChecked("IsArray")));
-      return Nothing<bool>();
-    }
-    return Object::IsArray(handle(proxy->target(), isolate));
-  }
-  return Just(false);
-}
-
-
 // static
 MaybeHandle<Object> Object::GetMethod(Handle<JSReceiver> receiver,
                                       Handle<Name> name) {
@@ -2298,7 +2281,7 @@ MaybeHandle<Object> Object::ArraySpeciesConstructor(
     return default_species;
   }
   Handle<Object> constructor = isolate->factory()->undefined_value();
-  Maybe<bool> is_array = Object::IsArray(original_array);
+  Maybe<bool> is_array = original_array->IsArray();
   MAYBE_RETURN_NULL(is_array);
   if (is_array.FromJust()) {
     ASSIGN_RETURN_ON_EXCEPTION(
@@ -5071,6 +5054,31 @@ void JSProxy::Revoke(Handle<JSProxy> proxy) {
   DCHECK(proxy->IsRevoked());
 }
 
+Maybe<bool> JSProxy::IsArray() const {
+  DisallowHeapAllocation no_gc;
+  const JSReceiver* object = this;
+  for (int i = 0; i < 1024; i++) {
+    const JSProxy* proxy = JSProxy::cast(object);
+    if (proxy->IsRevoked()) {
+      AllowHeapAllocation allocate_error;
+      Isolate* isolate = GetIsolate();
+      isolate->Throw(*isolate->factory()->NewTypeError(
+          MessageTemplate::kProxyRevoked,
+          isolate->factory()->NewStringFromAsciiChecked("IsArray")));
+      return Nothing<bool>();
+    }
+    object = proxy->target();
+    if (object->IsJSArray()) return Just(true);
+    if (!object->IsJSProxy()) return Just(false);
+  }
+
+  // Too deep recursion, throw a RangeError.
+  {
+    AllowHeapAllocation allocate_error;
+    GetIsolate()->StackOverflow();
+    return Nothing<bool>();
+  }
+}
 
 Maybe<bool> JSProxy::HasProperty(Isolate* isolate, Handle<JSProxy> proxy,
                                  Handle<Name> name) {
