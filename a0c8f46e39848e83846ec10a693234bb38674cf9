@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a82f7ba3_5d79645e",
+        "filename": "src/heap/marking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-06T12:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8717ea8_17fc6384",
+      "range": {
+        "startLine": 177,
+        "startChar": 61,
+        "endLine": 177,
+        "endChar": 66
+      },
+      "revId": "a0c8f46e39848e83846ec10a693234bb38674cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfc197cd_99cea5ec",
         "filename": "src/heap/marking.h",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-01T11:12:56Z",
       "side": 1,
       "message": "This looks very familiar to MarkBit::Set and MarkBit::Clear with the difference that MarkBit has already a cell ptr instead of a cell_index. Can you investigate whether it makes sense to somehow merge the actual implementations?",
+      "range": {
+        "startLine": 375,
+        "startChar": 20,
+        "endLine": 375,
+        "endChar": 33
+      },
+      "revId": "a0c8f46e39848e83846ec10a693234bb38674cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2802b862_f6cc7487",
+        "filename": "src/heap/marking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-06T12:53:30Z",
+      "side": 1,
+      "message": "The implementations can be merged, but I am not sure that it would make the code cleaner since the behavior differs slightly: MarkBit functions can fail, and Bitmap functions cannot fail.\n\nLanding as is for now.",
+      "parentUuid": "cfc197cd_99cea5ec",
       "range": {
         "startLine": 375,
         "startChar": 20,
