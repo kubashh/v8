@@ -1181,8 +1181,8 @@ class Object {
   STRUCT_LIST(DECLARE_STRUCT_PREDICATE)
 #undef DECLARE_STRUCT_PREDICATE
 
-  // ES6, section 7.2.2 IsArray.  NOT to be confused with %_IsArray.
-  MUST_USE_RESULT static Maybe<bool> IsArray(Handle<Object> object);
+  // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
+  INLINE(MUST_USE_RESULT static Maybe<bool> IsArray(Handle<Object> object));
 
   INLINE(bool IsNameDictionary() const);
   INLINE(bool IsGlobalDictionary() const);
@@ -7319,6 +7319,9 @@ class JSProxy: public JSReceiver {
   // ES6 9.5.3
   MUST_USE_RESULT static Maybe<bool> IsExtensible(Handle<JSProxy> proxy);
 
+  // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
+  MUST_USE_RESULT static Maybe<bool> IsArray(Handle<JSProxy> proxy);
+
   // ES6 9.5.4 (when passed DONT_THROW)
   MUST_USE_RESULT static Maybe<bool> PreventExtensions(
       Handle<JSProxy> proxy, ShouldThrow should_throw);
@@ -7365,6 +7368,8 @@ class JSProxy: public JSReceiver {
   // Dispatched behavior.
   DECLARE_PRINTER(JSProxy)
   DECLARE_VERIFIER(JSProxy)
+
+  static const int kMaxIterationLimit = 100 * 1024;
 
   // Layout description.
   static const int kTargetOffset = JSReceiver::kHeaderSize;
