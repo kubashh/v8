@@ -117,6 +117,7 @@ TYPE_CHECKER(TypeFeedbackInfo, TUPLE3_TYPE)
 TYPE_CHECKER(WeakCell, WEAK_CELL_TYPE)
 TYPE_CHECKER(WeakFixedArray, FIXED_ARRAY_TYPE)
 TYPE_CHECKER(SmallOrderedHashSet, SMALL_ORDERED_HASH_SET_TYPE)
+TYPE_CHECKER(SmallOrderedHashMap, SMALL_ORDERED_HASH_MAP_TYPE)
 
 #define TYPED_ARRAY_TYPE_CHECKER(Type, type, TYPE, ctype, size) \
   TYPE_CHECKER(Fixed##Type##Array, FIXED_##TYPE##_ARRAY_TYPE)
@@ -465,6 +466,10 @@ bool Object::IsOrderedHashSet() const { return IsOrderedHashTable(); }
 
 bool Object::IsOrderedHashMap() const { return IsOrderedHashTable(); }
 
+bool Object::IsSmallOrderedHashTable() const {
+  return IsSmallOrderedHashSet() || IsSmallOrderedHashMap();
+}
+
 bool Object::IsPrimitive() const {
   return IsSmi() || HeapObject::cast(this)->map()->IsPrimitiveMap();
 }
@@ -637,6 +642,7 @@ CAST_ACCESSOR(Tuple3)
 CAST_ACCESSOR(TypeFeedbackInfo)
 CAST_ACCESSOR(UnseededNumberDictionary)
 CAST_ACCESSOR(WeakCell)
+CAST_ACCESSOR(SmallOrderedHashMap)
 CAST_ACCESSOR(SmallOrderedHashSet)
 CAST_ACCESSOR(WeakFixedArray)
 CAST_ACCESSOR(WeakHashTable)
@@ -4201,6 +4207,9 @@ int HeapObject::SizeFromMap(Map* map) {
   if (instance_type == SMALL_ORDERED_HASH_SET_TYPE) {
     return reinterpret_cast<SmallOrderedHashSet*>(this)->Size();
   }
+  if (instance_type == SMALL_ORDERED_HASH_MAP_TYPE) {
+    return reinterpret_cast<SmallOrderedHashMap*>(this)->Size();
+  }
   DCHECK(instance_type == CODE_TYPE);
   return reinterpret_cast<Code*>(this)->CodeSize();
 }
@@ -5884,10 +5893,11 @@ void Foreign::set_foreign_address(Address value) {
 }
 
 template <class Derived>
-void SmallOrderedHashTable<Derived>::SetDataEntry(int entry, Object* value) {
-  int offset = GetDataEntryOffset(entry);
-  RELAXED_WRITE_FIELD(this, offset, value);
-  WRITE_BARRIER(GetHeap(), this, offset, value);
+void SmallOrderedHashTable<Derived>::SetDataEntry(int entry, int offset,
+                                                  Object* value) {
+  int table_offset = GetDataEntryOffset(entry, offset);
+  RELAXED_WRITE_FIELD(this, table_offset, value);
+  WRITE_BARRIER(GetHeap(), this, table_offset, value);
 }
 
 ACCESSORS(JSGeneratorObject, function, JSFunction, kFunctionOffset)

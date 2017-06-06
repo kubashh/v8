@@ -280,6 +280,40 @@ class SmallOrderedHashSet::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+class SmallOrderedHashMap::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(HeapObject* obj, int offset) {
+    SmallOrderedHashMap* table = reinterpret_cast<SmallOrderedHashMap*>(obj);
+    if (offset < table->GetDataTableStartOffset()) return false;
+    return IsValidSlotImpl(obj, offset);
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(HeapObject* obj, int object_size,
+                                 ObjectVisitor* v) {
+    SmallOrderedHashMap* table = reinterpret_cast<SmallOrderedHashMap*>(obj);
+    int start = table->GetDataTableStartOffset();
+    for (int i = 0; i < table->Capacity(); i++) {
+      IteratePointer(obj, start + (i * kPointerSize), v);
+    }
+  }
+
+  template <typename StaticVisitor>
+  static inline void IterateBody(HeapObject* obj, int object_size) {
+    Heap* heap = obj->GetHeap();
+    SmallOrderedHashMap* table = reinterpret_cast<SmallOrderedHashMap*>(obj);
+    int start = table->GetDataTableStartOffset();
+    for (int i = 0; i < table->Capacity(); i++) {
+      IteratePointer<StaticVisitor>(heap, obj, start + (i * kPointerSize));
+    }
+  }
+
+  static inline int SizeOf(Map* map, HeapObject* obj) {
+    SmallOrderedHashMap* table = reinterpret_cast<SmallOrderedHashMap*>(obj);
+    return table->Size();
+  }
+};
+
 class ByteArray::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(HeapObject* obj, int offset) { return false; }
@@ -693,6 +727,9 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3) {
       return Op::template apply<BytecodeArray::BodyDescriptor>(p1, p2, p3);
     case SMALL_ORDERED_HASH_SET_TYPE:
       return Op::template apply<SmallOrderedHashSet::BodyDescriptor>(p1, p2,
+                                                                     p3);
+    case SMALL_ORDERED_HASH_MAP_TYPE:
+      return Op::template apply<SmallOrderedHashMap::BodyDescriptor>(p1, p2,
                                                                      p3);
     case HEAP_NUMBER_TYPE:
     case MUTABLE_HEAP_NUMBER_TYPE:

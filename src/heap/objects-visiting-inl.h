@@ -94,6 +94,11 @@ void StaticNewSpaceVisitor<StaticVisitor>::Initialize() {
                            int>::Visit);
 
   table_.Register(
+      kVisitSmallOrderedHashMap,
+      &FlexibleBodyVisitor<StaticVisitor, SmallOrderedHashMap::BodyDescriptor,
+                           int>::Visit);
+
+  table_.Register(
       kVisitSmallOrderedHashSet,
       &FlexibleBodyVisitor<StaticVisitor, SmallOrderedHashSet::BodyDescriptor,
                            int>::Visit);
@@ -195,6 +200,11 @@ void StaticMarkingVisitor<StaticVisitor>::Initialize() {
   table_.Register(kVisitPropertyCell,
                   &FixedBodyVisitor<StaticVisitor, PropertyCell::BodyDescriptor,
                                     void>::Visit);
+
+  table_.Register(
+      kVisitSmallOrderedHashMap,
+      &FlexibleBodyVisitor<StaticVisitor, SmallOrderedHashMap::BodyDescriptor,
+                           void>::Visit);
 
   table_.Register(
       kVisitSmallOrderedHashSet,
