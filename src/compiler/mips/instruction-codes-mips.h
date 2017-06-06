@@ -236,7 +236,10 @@ namespace compiler {
   V(MipsS1x16AnyTrue)              \
   V(MipsS1x16AllTrue)              \
   V(MipsMsaLd)                     \
-  V(MipsMsaSt)
+  V(MipsMsaSt)                     \
+  V(MipsF32x4AddHoriz)             \
+  V(MipsI32x4AddHoriz)             \
+  V(MipsI16x8AddHoriz)
 
 // Addressing modes represent the "shape" of inputs to an instruction.
 // Many instructions support multiple addressing modes. Addressing modes
