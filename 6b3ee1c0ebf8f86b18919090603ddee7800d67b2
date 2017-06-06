@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22928a48_181bac4f",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-06-06T13:17:09Z",
+      "side": 1,
+      "message": "Should we move this to right before the recursive call?",
+      "revId": "6b3ee1c0ebf8f86b18919090603ddee7800d67b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
