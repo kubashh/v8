@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5e201be_03a5e467",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-06T09:50:00Z",
+      "side": 1,
+      "message": "I\u0027d prefer if you passed these in as scratch registers so it\u0027s clear to the callee which registers get clobbered (for all arches)",
+      "range": {
+        "startLine": 1017,
+        "startChar": 38,
+        "endLine": 1017,
+        "endChar": 60
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccbeb4a0_73a8276d",
+        "filename": "src/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-06T09:50:00Z",
+      "side": 1,
+      "message": "Leftover debugging code?",
+      "range": {
+        "startLine": 1074,
+        "startChar": 16,
+        "endLine": 1074,
+        "endChar": 17
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ff739f_71269a64",
+        "filename": "src/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-06T09:50:00Z",
+      "side": 1,
+      "message": "Does the DCHECK work, could you just add it if so?",
+      "range": {
+        "startLine": 1081,
+        "startChar": 66,
+        "endLine": 1082,
+        "endChar": 24
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0936f568_f1cc6d1f",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-06T09:50:00Z",
+      "side": 1,
+      "message": "nit - please make this kNotConcurrent and kConcurrent since it\u0027s now an enum class",
+      "range": {
+        "startLine": 1444,
+        "startChar": 29,
+        "endLine": 1444,
+        "endChar": 43
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
