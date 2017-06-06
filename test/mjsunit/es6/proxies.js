@@ -1504,3 +1504,13 @@ function TestConstructorWithProxyPrototype2(create, handler) {
   %OptimizeFunctionOnNextCall(f);
   assertEquals(10, f());
 })();
+
+// IsArray
+
+(function TestIsArrayStackOverflow() {
+  var proxy = new Proxy([], {});
+  for(var i=0; i<1e5; i++) {
+      proxy = new Proxy(proxy, {});
+  }
+  assertThrows(() => Array.isArray(proxy), RangeError);
+})();

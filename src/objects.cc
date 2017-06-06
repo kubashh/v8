@@ -858,6 +858,7 @@ Maybe<bool> Object::IsArray(Handle<Object> object) {
   if (object->IsJSProxy()) {
     Handle<JSProxy> proxy = Handle<JSProxy>::cast(object);
     Isolate* isolate = proxy->GetIsolate();
+    STACK_CHECK(isolate, Nothing<bool>());
     if (proxy->IsRevoked()) {
       isolate->Throw(*isolate->factory()->NewTypeError(
           MessageTemplate::kProxyRevoked,
