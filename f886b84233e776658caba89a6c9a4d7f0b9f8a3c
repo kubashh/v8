@@ -22,6 +22,30 @@
       "revId": "f886b84233e776658caba89a6c9a4d7f0b9f8a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68b6ffe3_6441af4d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-07T16:09:09Z",
+      "side": 1,
+      "message": "Ok will do. I\u0027m expecting other node kinds to also use this method, but I can add it then once we get a few more use sites.",
+      "parentUuid": "2929c47c_abd08c33",
+      "range": {
+        "startLine": 1373,
+        "startChar": 4,
+        "endLine": 1373,
+        "endChar": 47
+      },
+      "revId": "f886b84233e776658caba89a6c9a4d7f0b9f8a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
