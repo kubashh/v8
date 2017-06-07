@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2929c47c_abd08c33",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-07T15:17:19Z",
+      "side": 1,
+      "message": "I\u0027d prefer just to be consistent with the other cases of Allocate the Increment here rather than adding this extra method just for DoWhile.",
+      "range": {
+        "startLine": 1373,
+        "startChar": 4,
+        "endLine": 1373,
+        "endChar": 47
+      },
+      "revId": "f886b84233e776658caba89a6c9a4d7f0b9f8a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
