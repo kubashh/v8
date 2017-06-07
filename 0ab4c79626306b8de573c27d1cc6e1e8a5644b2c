@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6d49eda_678c15c5",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-07T07:29:49Z",
+      "side": 1,
+      "message": "It\u0027s a bit confusing that the GetEntryOffset would return a table_offset... probably just rename the car to entry_offset. Same below.",
+      "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31b4f0be_0595cf77",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-07T07:29:49Z",
+      "side": 1,
+      "message": "dito.",
+      "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8150227a_dbd023d1",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-07T07:29:49Z",
+      "side": 1,
+      "message": "offsets are usually byte-offset, in this case it it is an index (you multiply with kPointerSize).\n\nHow about GetDataEntryOffset(int entry, int relative_index) ?",
+      "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0337afbb_bbc4d958",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-07T07:29:49Z",
+      "side": 1,
+      "message": "sorry for being pedantic :D: offset \u003d\u003e byte offsets, you\u0027re talking about indices/relative indices here.",
+      "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
