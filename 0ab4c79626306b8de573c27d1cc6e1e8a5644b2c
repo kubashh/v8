@@ -67,6 +67,23 @@
       "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7688c8f_9aa46c21",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-07T14:44:12Z",
+      "side": 1,
+      "message": "Could you do something like (here + above):\n\n CHECK_EQ(key1-\u003eGetIdentityHash(), key2-\u003eGetIdentityHash());",
+      "revId": "0ab4c79626306b8de573c27d1cc6e1e8a5644b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
