@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "73584160_05e9d4cd",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-07T09:54:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00280c78_766eb89e",
+      "range": {
+        "startLine": 1017,
+        "startChar": 38,
+        "endLine": 1017,
+        "endChar": 60
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccbeb4a0_73a8276d",
         "filename": "src/compiler.cc",
         "patchSetId": 12
@@ -140,6 +164,30 @@
       "revId": "56579188516c6e8642b0dbb442836272564d4903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb35229_b5225676",
+        "filename": "src/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-07T09:54:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "60770c02_04cc4024",
+      "range": {
+        "startLine": 1081,
+        "startChar": 66,
+        "endLine": 1082,
+        "endChar": 24
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
