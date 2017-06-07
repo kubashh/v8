@@ -993,6 +993,8 @@ class PreParser : public ParserBase<PreParser> {
                                               int pos);
 
   V8_INLINE void RewriteDestructuringAssignments() {}
+  V8_INLINE void MoveDestructuringAssignmentsToArrowFormalParameters(
+      FunctionState* from, FunctionState* to, int begin) {}
 
   V8_INLINE PreParserExpression RewriteExponentiation(PreParserExpression left,
                                                       PreParserExpression right,

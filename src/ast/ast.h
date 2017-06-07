@@ -2479,6 +2479,10 @@ class Assignment final : public Expression {
 class RewritableExpression final : public Expression {
  public:
   Expression* expression() const { return expr_; }
+
+  // Returns true if the RewritableExpression is an Assignment whose RHS is also
+  // an Assignment, and if so, replaces `expression` with the RHS assignment.
+  bool ReplaceAssignmentWithRHSAssignment();
   bool is_rewritten() const { return IsRewrittenField::decode(bit_field_); }
 
   void Rewrite(Expression* new_expression) {
