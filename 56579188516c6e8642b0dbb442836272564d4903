@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00280c78_766eb89e",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-07T08:54:18Z",
+      "side": 1,
+      "message": "This is mildly tricky because ReplaceClosureEntryWithOptimizedCode (on some archs at least) requires its scratch registers to have certain values. That said, it\u0027s not *less* clear with scratch params, so ok.",
+      "parentUuid": "a5e201be_03a5e467",
+      "range": {
+        "startLine": 1017,
+        "startChar": 38,
+        "endLine": 1017,
+        "endChar": 60
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccbeb4a0_73a8276d",
         "filename": "src/compiler.cc",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "00673cbd_87e1cd72",
+        "filename": "src/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-07T08:54:18Z",
+      "side": 1,
+      "message": "Done, thanks.",
+      "parentUuid": "ccbeb4a0_73a8276d",
+      "range": {
+        "startLine": 1074,
+        "startChar": 16,
+        "endLine": 1074,
+        "endChar": 17
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12ff739f_71269a64",
         "filename": "src/compiler.cc",
         "patchSetId": 12
@@ -59,6 +107,30 @@
       "writtenOn": "2017-06-06T09:50:00Z",
       "side": 1,
       "message": "Does the DCHECK work, could you just add it if so?",
+      "range": {
+        "startLine": 1081,
+        "startChar": 66,
+        "endLine": 1082,
+        "endChar": 24
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60770c02_04cc4024",
+        "filename": "src/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-07T08:54:18Z",
+      "side": 1,
+      "message": "I\u0027m hesitant to put one it at the minute, because the same path that sends us down this branch (asm.js failed compilations) could, maybe, I think, hypothetically, with the right combination of bad luck and intrinsic calls, end up in a state where the function is marked for optimization. I\u0027d rather instead make sure this function is always called from the builtin, and we can just DCHECK(!function-\u003eshared()-\u003eis_compiled()) with the assumption that the builtin handles the other cases.",
+      "parentUuid": "12ff739f_71269a64",
       "range": {
         "startLine": 1081,
         "startChar": 66,
@@ -91,6 +163,30 @@
       "revId": "56579188516c6e8642b0dbb442836272564d4903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8374280b_6f9d6cb2",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-07T08:54:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0936f568_f1cc6d1f",
+      "range": {
+        "startLine": 1444,
+        "startChar": 29,
+        "endLine": 1444,
+        "endChar": 43
+      },
+      "revId": "56579188516c6e8642b0dbb442836272564d4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
