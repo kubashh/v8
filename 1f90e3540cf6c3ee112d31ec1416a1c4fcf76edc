@@ -16,6 +16,24 @@
       "revId": "1f90e3540cf6c3ee112d31ec1416a1c4fcf76edc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b586fab_20c3a6ff",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-07T07:18:23Z",
+      "side": 1,
+      "message": "Nice, didn\u0027t know about that one.",
+      "parentUuid": "267e7721_337f762f",
+      "revId": "1f90e3540cf6c3ee112d31ec1416a1c4fcf76edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
