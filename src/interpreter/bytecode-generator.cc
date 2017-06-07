@@ -1368,15 +1368,19 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
 }
 
 void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
+  int body_slot = AllocateBlockCoverageSlot(stmt->body_range());
   LoopBuilder loop_builder(builder());
   if (stmt->cond()->ToBooleanIsFalse()) {
+    IncBlockCounter(body_slot);
     VisitIterationBody(stmt, &loop_builder);
   } else if (stmt->cond()->ToBooleanIsTrue()) {
     VisitIterationHeader(stmt, &loop_builder);
+    IncBlockCounter(body_slot);
     VisitIterationBody(stmt, &loop_builder);
     loop_builder.JumpToHeader(loop_depth_);
   } else {
     VisitIterationHeader(stmt, &loop_builder);
+    IncBlockCounter(body_slot);
     VisitIterationBody(stmt, &loop_builder);
     builder()->SetExpressionAsStatementPosition(stmt->cond());
     BytecodeLabels loop_backbranch(zone());
@@ -1388,6 +1392,8 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
+  int body_slot = AllocateBlockCoverageSlot(stmt->body_range());
+
   if (stmt->cond()->ToBooleanIsFalse()) {
     // If the condition is false there is no need to generate the loop.
     return;
@@ -1402,6 +1408,7 @@ void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  IncBlockCounter(body_slot);
   VisitIterationBody(stmt, &loop_builder);
   loop_builder.JumpToHeader(loop_depth_);
 }
@@ -1410,6 +1417,9 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
   if (stmt->init() != nullptr) {
     Visit(stmt->init());
   }
+
+  int body_slot = AllocateBlockCoverageSlot(stmt->body_range());
+
   if (stmt->cond() && stmt->cond()->ToBooleanIsFalse()) {
     // If the condition is known to be false there is no need to generate
     // body, next or condition blocks. Init block should be generated.
@@ -1425,6 +1435,7 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  IncBlockCounter(body_slot);
   VisitIterationBody(stmt, &loop_builder);
   if (stmt->next() != nullptr) {
     builder()->SetStatementPosition(stmt->next());
