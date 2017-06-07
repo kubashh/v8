@@ -180,6 +180,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   int AllocateBlockCoverageSlotIfEnabled(SourceRange range);
   void BuildIncrementBlockCoverageCounterIfEnabled(int coverage_array_slot);
+  void BuildIncrementBlockCoverageCounterIfEnabled(SourceRange range);
 
   // Visitors for obtaining expression result in the accumulator, in a
   // register, or just getting the effect. Some visitors return a TypeHint which

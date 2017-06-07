@@ -1370,13 +1370,16 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
 void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
   LoopBuilder loop_builder(builder());
   if (stmt->cond()->ToBooleanIsFalse()) {
+    BuildIncrementBlockCoverageCounterIfEnabled(stmt->body_range());
     VisitIterationBody(stmt, &loop_builder);
   } else if (stmt->cond()->ToBooleanIsTrue()) {
     VisitIterationHeader(stmt, &loop_builder);
+    BuildIncrementBlockCoverageCounterIfEnabled(stmt->body_range());
     VisitIterationBody(stmt, &loop_builder);
     loop_builder.JumpToHeader(loop_depth_);
   } else {
     VisitIterationHeader(stmt, &loop_builder);
+    BuildIncrementBlockCoverageCounterIfEnabled(stmt->body_range());
     VisitIterationBody(stmt, &loop_builder);
     builder()->SetExpressionAsStatementPosition(stmt->cond());
     BytecodeLabels loop_backbranch(zone());
@@ -1388,6 +1391,8 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
+  int body_slot = AllocateBlockCoverageSlotIfEnabled(stmt->body_range());
+
   if (stmt->cond()->ToBooleanIsFalse()) {
     // If the condition is false there is no need to generate the loop.
     return;
@@ -1402,6 +1407,7 @@ void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  BuildIncrementBlockCoverageCounterIfEnabled(body_slot);
   VisitIterationBody(stmt, &loop_builder);
   loop_builder.JumpToHeader(loop_depth_);
 }
@@ -1410,6 +1416,9 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
   if (stmt->init() != nullptr) {
     Visit(stmt->init());
   }
+
+  int body_slot = AllocateBlockCoverageSlotIfEnabled(stmt->body_range());
+
   if (stmt->cond() && stmt->cond()->ToBooleanIsFalse()) {
     // If the condition is known to be false there is no need to generate
     // body, next or condition blocks. Init block should be generated.
@@ -1425,6 +1434,7 @@ void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
                  TestFallthrough::kThen);
     loop_body.Bind(builder());
   }
+  BuildIncrementBlockCoverageCounterIfEnabled(body_slot);
   VisitIterationBody(stmt, &loop_builder);
   if (stmt->next() != nullptr) {
     builder()->SetStatementPosition(stmt->next());
@@ -3919,6 +3929,14 @@ void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
     int coverage_array_slot) {
   if (block_coverage_builder_ != nullptr) {
     block_coverage_builder_->IncrementBlockCounter(coverage_array_slot);
+  }
+}
+
+void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
+    SourceRange range) {
+  if (block_coverage_builder_ != nullptr) {
+    int slot = block_coverage_builder_->AllocateBlockCoverageSlot(range);
+    block_coverage_builder_->IncrementBlockCounter(slot);
   }
 }
 
