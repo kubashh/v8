@@ -38,7 +38,6 @@ Node* CollectionsBuiltinsAssembler::AllocateJSCollection(
 }
 
 TF_BUILTIN(MapConstructor, CollectionsBuiltinsAssembler) {
-  // TODO(gsathya): Don't use arguments adaptor
   Node* const iterable = Parameter(Descriptor::kIterable);
   Node* const new_target = Parameter(Descriptor::kNewTarget);
   Node* const context = Parameter(Descriptor::kContext);
@@ -159,7 +158,6 @@ TF_BUILTIN(MapConstructor, CollectionsBuiltinsAssembler) {
 }
 
 TF_BUILTIN(SetConstructor, CollectionsBuiltinsAssembler) {
-  // TODO(gsathya): Don't use arguments adaptor
   Node* const iterable = Parameter(Descriptor::kIterable);
   Node* const new_target = Parameter(Descriptor::kNewTarget);
   Node* const context = Parameter(Descriptor::kContext);
