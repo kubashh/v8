@@ -4387,12 +4387,17 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
     }
     impl()->CheckConflictingVarDeclarations(formal_parameters.scope, CHECK_OK);
 
+    FunctionState* parent_state = function_state.outer();
+    DCHECK_NOT_NULL(parent_state);
+    DCHECK_GE(parent_state->destructuring_assignments_to_rewrite().length(),
+              rewritable_length);
+
     if (is_lazy_top_level_function) {
-      FunctionState* parent_state = function_state.outer();
-      DCHECK_NOT_NULL(parent_state);
-      DCHECK_GE(parent_state->destructuring_assignments_to_rewrite().length(),
-                rewritable_length);
       parent_state->RewindDestructuringAssignments(rewritable_length);
+    } else {
+      // Move rewritable expressions to the correct function state
+      impl()->MoveDestructuringAssignmentsToArrowFormalParameters(
+          parent_state, &function_state, rewritable_length);
     }
 
     impl()->RewriteDestructuringAssignments();

@@ -1153,6 +1153,19 @@ bool Literal::Match(void* literal1, void* literal2) {
          (x->IsNumber() && y->IsNumber() && x->AsNumber() == y->AsNumber());
 }
 
+bool RewritableExpression::ReplaceAssignmentWithRHSAssignment() {
+  DCHECK(!is_rewritten());
+  Assignment* assign = expr_->AsAssignment();
+  if (assign && assign->op() == Token::ASSIGN) {
+    Assignment* value = assign->value()->AsAssignment();
+    if (value && value->op() == Token::ASSIGN) {
+      expr_ = value;
+      return true;
+    }
+  }
+  return false;
+}
+
 const char* CallRuntime::debug_name() {
 #ifdef DEBUG
   return is_jsruntime() ? NameForNativeContextIntrinsicIndex(context_index_)

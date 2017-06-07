@@ -3996,6 +3996,28 @@ void Parser::RewriteDestructuringAssignments() {
   }
 }
 
+void Parser::MoveDestructuringAssignmentsToArrowFormalParameters(
+    FunctionState* from, FunctionState* to, int begin) {
+  DCHECK_NOT_NULL(from);
+  DCHECK_NOT_NULL(to);
+  DCHECK_GE(from->destructuring_assignments_to_rewrite().length(), begin);
+
+  auto& list = from->destructuring_assignments_to_rewrite();
+  for (int i = begin; i < list.length(); ++i) {
+    const DestructuringAssignment& dest = list.at(i);
+    Expression* expr = dest.assignment;
+
+    RewritableExpression* to_rewrite = expr->AsRewritableExpression();
+    if (to_rewrite == nullptr) continue;
+
+    if (to_rewrite->ReplaceAssignmentWithRHSAssignment()) {
+      to->AddDestructuringAssignment({to_rewrite, dest.scope});
+    }
+  }
+
+  from->RewindDestructuringAssignments(begin);
+}
+
 Expression* Parser::RewriteExponentiation(Expression* left, Expression* right,
                                           int pos) {
   ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(2, zone());
