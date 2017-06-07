@@ -525,6 +525,7 @@ UnicodeEncoding UnicodeEncodingOf(const Operator* op) {
   V(CheckSmi, 1, 1)                    \
   V(CheckString, 1, 1)                 \
   V(CheckSeqString, 1, 1)              \
+  V(CheckNonEmptyString, 1, 1)         \
   V(CheckSymbol, 1, 1)                 \
   V(CheckTaggedHole, 1, 0)             \
   V(CheckNotTaggedHole, 1, 1)          \
