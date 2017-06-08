@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c4f8fb4_6a602467",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-08T09:49:05Z",
+      "side": 1,
+      "message": "+ copyright header",
+      "revId": "b29c4b06e382296104da95e9f7158827c2a30a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a09d88b_f58c4cf5",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-08T09:49:05Z",
+      "side": 1,
+      "message": "We normally don\u0027t set host_arch, it\u0027s auto-detected. I think what you need to set is v8_target_arch? E.g. to get an arm simulator build with target_arch\u003dia32 and v8_target_arch\u003darm.",
+      "range": {
+        "startLine": 48,
+        "startChar": 75,
+        "endLine": 48,
+        "endChar": 90
+      },
+      "revId": "b29c4b06e382296104da95e9f7158827c2a30a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
