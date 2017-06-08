@@ -575,6 +575,9 @@ namespace internal {
   TFJ(MapConstructor, 1, kIterable)                                            \
   TFJ(MapGet, 1, kKey)                                                         \
   TFJ(MapHas, 1, kKey)                                                         \
+  CPP(MapGetSize)                                                              \
+  CPP(MapClear)                                                                \
+  CPP(MapForEach)                                                              \
                                                                                \
   /* Math */                                                                   \
   /* ES6 #sec-math.abs */                                                      \
@@ -851,6 +854,9 @@ namespace internal {
   /* Set */                                                                    \
   TFJ(SetConstructor, 1, kIterable)                                            \
   TFJ(SetHas, 1, kKey)                                                         \
+  CPP(SetGetSize)                                                              \
+  CPP(SetClear)                                                                \
+  CPP(SetForEach)                                                              \
                                                                                \
   /* SharedArrayBuffer */                                                      \
   CPP(SharedArrayBufferPrototypeGetByteLength)                                 \
