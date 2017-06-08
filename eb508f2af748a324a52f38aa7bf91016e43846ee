@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "768a18da_0815f29a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-08T16:11:46Z",
+      "side": 1,
+      "message": "self nit: debug code, remove",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 437,
+        "endChar": 5
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f3d80dc_cea1f96c",
         "filename": "src/feedback-vector.cc",
         "patchSetId": 14
@@ -45,6 +68,30 @@
       "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eea7416_ee8648d1",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-08T16:11:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f3d80dc_cea1f96c",
+      "range": {
+        "startLine": 313,
+        "startChar": 27,
+        "endLine": 313,
+        "endChar": 37
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "7d29c586_2b104909",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 5757,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-08T16:11:46Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e3d7fbcd_c5f56f06",
+      "range": {
+        "startLine": 5757,
+        "startChar": 17,
+        "endLine": 5757,
+        "endChar": 38
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1702d4d4_ea553636",
         "filename": "src/objects.h",
         "patchSetId": 14
@@ -94,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "78477bd7_edd54cbd",
+        "filename": "src/objects.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 3823,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-08T16:11:46Z",
+      "side": 1,
+      "message": "Ah, I was wondering. Done.",
+      "parentUuid": "1702d4d4_ea553636",
+      "range": {
+        "startLine": 3823,
+        "startChar": 5,
+        "endLine": 3823,
+        "endChar": 33
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c25ba71_158f6fa0",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 14
@@ -114,6 +209,30 @@
       "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96de95f6_b16db235",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-08T16:11:46Z",
+      "side": 1,
+      "message": "So this was quite interesting -- because suddenly all closures effectively become updated to check \"InOptimizationQueue\", rather than just the one that triggered the optmization, if there were a bunch of closures with the same SFI that were all being called at around the same time, they would all call into the runtime to check the optimization queue, because none of them cleared the interrupt -- and then each one in turn had to acquire a mutex to actually check the optimization queue. This regressed Box2D by 25%, with the majority of time spent in mutex acquisition, and clearing the interrupt fixed the regression.\n\nThe comment in MaybeTailCallOptimizedCodeSlot is rather that we want to avoid calling the runtime as much as possible, so we only do so if there\u0027s some sort of interrupt (the assumption being that checking the type of the interrupt is too much bother for the fast path).",
+      "parentUuid": "0c25ba71_158f6fa0",
+      "range": {
+        "startLine": 406,
+        "startChar": 6,
+        "endLine": 406,
+        "endChar": 56
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
