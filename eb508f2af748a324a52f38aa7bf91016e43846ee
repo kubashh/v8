@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea7bd9d6_0d62e72c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-08T11:20:19Z",
+      "side": 1,
+      "message": "nit: Please add a comment explaining the purpose of this block of instructions (here and on other architectures).",
+      "range": {
+        "startLine": 1131,
+        "startChar": 1,
+        "endLine": 1131,
+        "endChar": 25
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f3d80dc_cea1f96c",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-08T11:20:19Z",
+      "side": 1,
+      "message": "nit: Lets instead use \"OptimizationMarker::kNone\" directly, for static safety. Here and two other occurrences in this file AFAICT.",
+      "range": {
+        "startLine": 313,
+        "startChar": 27,
+        "endLine": 313,
+        "endChar": 37
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3d7fbcd_c5f56f06",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 5757,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-08T11:20:19Z",
+      "side": 1,
+      "message": "nit: Let\u0027s add DCHECK(has_feedback_vector()), just to drive home the point that \"you really need a feedbacl vector to call this\".",
+      "range": {
+        "startLine": 5757,
+        "startChar": 17,
+        "endLine": 5757,
+        "endChar": 38
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1702d4d4_ea553636",
+        "filename": "src/objects.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 3823,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-08T11:20:19Z",
+      "side": 1,
+      "message": "nit: We use the [foo] syntax for fields or bits that are actually stored on the object. This seems to be just a helper, lets just drop the \"[checks_optimization_marker]:\" prefix.",
+      "range": {
+        "startLine": 3823,
+        "startChar": 5,
+        "endLine": 3823,
+        "endChar": 33
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c25ba71_158f6fa0",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-08T11:20:19Z",
+      "side": 1,
+      "message": "question: Why this change? The comment in MaybeTailCallOptimizedCodeSlot seems to indicate that we want check the compile-dispatcher queue even if the stack guard was triggered due to other means. Is this change necessary? Can you elaborate?",
+      "range": {
+        "startLine": 406,
+        "startChar": 6,
+        "endLine": 406,
+        "endChar": 56
+      },
+      "revId": "eb508f2af748a324a52f38aa7bf91016e43846ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
