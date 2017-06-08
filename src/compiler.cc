@@ -890,11 +890,7 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
 
   // Reset profiler ticks, function is no longer considered hot.
   DCHECK(shared->is_compiled());
-  if (shared->HasBaselineCode()) {
-    shared->code()->set_profiler_ticks(0);
-  } else if (shared->HasBytecodeArray()) {
-    shared->set_profiler_ticks(0);
-  }
+  shared->set_profiler_ticks(0);
 
   VMState<COMPILER> state(isolate);
   DCHECK(!isolate->has_pending_exception());
@@ -1002,11 +998,7 @@ CompilationJob::Status FinalizeOptimizedCompilationJob(CompilationJob* job) {
   Handle<SharedFunctionInfo> shared = info->shared_info();
 
   // Reset profiler ticks, function is no longer considered hot.
-  if (shared->HasBaselineCode()) {
-    shared->code()->set_profiler_ticks(0);
-  } else if (shared->HasBytecodeArray()) {
-    shared->set_profiler_ticks(0);
-  }
+  shared->set_profiler_ticks(0);
 
   shared->set_has_concurrent_optimization_job(false);
 
