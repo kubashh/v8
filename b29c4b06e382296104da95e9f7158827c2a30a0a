@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1e29c98d_1676309c",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-08T16:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c4f8fb4_6a602467",
+      "revId": "b29c4b06e382296104da95e9f7158827c2a30a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a09d88b_f58c4cf5",
         "filename": "tools/gcov.sh",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "b29c4b06e382296104da95e9f7158827c2a30a0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f45e745_3416e7a9",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-08T16:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a09d88b_f58c4cf5",
+      "range": {
+        "startLine": 48,
+        "startChar": 75,
+        "endLine": 48,
+        "endChar": 90
+      },
+      "revId": "b29c4b06e382296104da95e9f7158827c2a30a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
