@@ -1253,6 +1253,8 @@
         'objects/script-inl.h',
         'objects/shared-function-info-inl.h',
         'objects/shared-function-info.h',
+        'objects/string-inl.h',
+        'objects/string.h',
         'objects/string-table.h',
         'ostreams.cc',
         'ostreams.h',
@@ -2567,6 +2569,8 @@
             'objects/script-inl.h',
             'objects/shared-function-info.h',
             'objects/shared-function-info-inl.h',
+            'objects/string.h',
+            'objects/string-inl.h',
         ],
       },
       'actions': [
