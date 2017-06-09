@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f1b23c31_40051560",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T10:12:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure it will, we still need to patch binary ops in FCG as far as I understand.",
+      "parentUuid": "0d846c4b_53b76499",
+      "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb7dca65_1d0f0d7d",
         "filename": "src/objects.cc",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-06-09T09:03:49Z",
       "side": 1,
       "message": "Are there any other kinds of SFI?",
+      "range": {
+        "startLine": 13727,
+        "startChar": 6,
+        "endLine": 13727,
+        "endChar": 42
+      },
+      "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d11fe61_91dfce8c",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13727,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T10:12:47Z",
+      "side": 1,
+      "message": "Builtins, stubs, and native functions I guess?",
+      "parentUuid": "bb7dca65_1d0f0d7d",
       "range": {
         "startLine": 13727,
         "startChar": 6,
@@ -62,6 +104,30 @@
       "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c1017a9_66a7342b",
+        "filename": "src/runtime-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T10:12:47Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4681013e_444203b5",
+      "range": {
+        "startLine": 446,
+        "startChar": 4,
+        "endLine": 446,
+        "endChar": 22
+      },
+      "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "9fef8fd21ffb220b20f309b1e72635a5bf329edd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73fae342_9636186b",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T10:12:47Z",
+      "side": 0,
+      "message": "Good question, probably yes? I\u0027ll punt on it in this CL though, in case it has unexpected regressions.",
+      "parentUuid": "f353d583_6104ea24",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 30
+      },
+      "revId": "9fef8fd21ffb220b20f309b1e72635a5bf329edd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
