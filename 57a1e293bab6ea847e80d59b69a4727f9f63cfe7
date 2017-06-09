@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "28feec15_f246c866",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T12:34:30Z",
+      "side": 1,
+      "message": "Discussed f2f that it\u0027s better to mention Crankshaft by name in the comment.",
+      "parentUuid": "f1b23c31_40051560",
+      "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb7dca65_1d0f0d7d",
         "filename": "src/objects.cc",
         "patchSetId": 1
@@ -81,6 +99,30 @@
       "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a304e3_324564c6",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13727,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-09T12:34:30Z",
+      "side": 1,
+      "message": "Discussed f2f and check removed.",
+      "parentUuid": "0d11fe61_91dfce8c",
+      "range": {
+        "startLine": 13727,
+        "startChar": 6,
+        "endLine": 13727,
+        "endChar": 42
+      },
+      "revId": "57a1e293bab6ea847e80d59b69a4727f9f63cfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
