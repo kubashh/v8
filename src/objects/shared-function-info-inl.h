@@ -92,8 +92,8 @@ BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, needs_home_object,
                kNeedsHomeObject)
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, native, kNative)
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, force_inline, kForceInline)
-BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, must_use_ignition_turbo,
-               kMustUseIgnitionTurbo)
+BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, must_use_ignition,
+               kMustUseIgnition)
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, is_asm_wasm_broken,
                kIsAsmWasmBroken)
 BOOL_ACCESSORS(SharedFunctionInfo, compiler_hints, optimization_disabled,

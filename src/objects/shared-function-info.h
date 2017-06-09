@@ -307,9 +307,8 @@ class SharedFunctionInfo : public HeapObject {
   DECL_BOOLEAN_ACCESSORS(force_inline)
 
   // Indicates that code for this function must be compiled through the
-  // Ignition / TurboFan pipeline, and is unsupported by
-  // FullCodegen / Crankshaft.
-  DECL_BOOLEAN_ACCESSORS(must_use_ignition_turbo)
+  // Ignition / TurboFan pipeline, and is unsupported by FullCodegen.
+  DECL_BOOLEAN_ACCESSORS(must_use_ignition)
 
   // Indicates that this function is an asm function.
   DECL_BOOLEAN_ACCESSORS(asm_function)
@@ -524,7 +523,7 @@ class SharedFunctionInfo : public HeapObject {
     // byte 1
     kForceInline,
     kIsAsmFunction,
-    kMustUseIgnitionTurbo,
+    kMustUseIgnition,
     kIsDeclaration,
     kIsAsmWasmBroken,
     kHasConcurrentOptimizationJob,
