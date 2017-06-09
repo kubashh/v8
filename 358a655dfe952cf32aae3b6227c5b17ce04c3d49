@@ -22,6 +22,30 @@
       "revId": "358a655dfe952cf32aae3b6227c5b17ce04c3d49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0bb5741_6c1724fd",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-09T12:54:24Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "033d7d3d_07d1a91a",
+      "range": {
+        "startLine": 331,
+        "startChar": 41,
+        "endLine": 331,
+        "endChar": 64
+      },
+      "revId": "358a655dfe952cf32aae3b6227c5b17ce04c3d49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
