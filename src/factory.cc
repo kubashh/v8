@@ -828,6 +828,10 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
   return slice;
 }
 
+Handle<String> Factory::NewSubString(Handle<String> str, int begin, int end) {
+  if (begin == 0 && end == str->length()) return str;
+  return NewProperSubString(str, begin, end);
+}
 
 MaybeHandle<String> Factory::NewExternalStringFromOneByte(
     const ExternalOneByteString::Resource* resource) {
@@ -2595,6 +2599,15 @@ Handle<String> Factory::NumberToString(Handle<Object> number,
   return js_string;
 }
 
+Handle<String> Factory::Uint32ToString(uint32_t value) {
+  Handle<String> result = NumberToString(NewNumberFromUint(value));
+
+  if (result->length() <= String::kMaxArrayIndexSize) {
+    uint32_t field = StringHasher::MakeArrayIndexHash(value, result->length());
+    result->set_hash_field(field);
+  }
+  return result;
+}
 
 Handle<DebugInfo> Factory::NewDebugInfo(Handle<SharedFunctionInfo> shared) {
   DCHECK(!shared->HasDebugInfo());
