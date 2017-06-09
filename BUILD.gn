@@ -725,6 +725,8 @@ action("postmortem-metadata") {
     "src/objects/script-inl.h",
     "src/objects/shared-function-info.h",
     "src/objects/shared-function-info-inl.h",
+    "src/objects/string.h",
+    "src/objects/string-inl.h",
   ]
 
   outputs = [
@@ -1799,7 +1801,9 @@ v8_source_set("v8_base") {
     "src/objects/script.h",
     "src/objects/shared-function-info-inl.h",
     "src/objects/shared-function-info.h",
+    "src/objects/string-inl.h",
     "src/objects/string-table.h",
+    "src/objects/string.h",
     "src/ostreams.cc",
     "src/ostreams.h",
     "src/parsing/duplicate-finder.h",
