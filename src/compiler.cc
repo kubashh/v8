@@ -328,21 +328,14 @@ void EnsureFeedbackMetadata(CompilationInfo* info) {
 }
 
 bool UseTurboFan(Handle<SharedFunctionInfo> shared) {
-  bool must_use_ignition_turbo = shared->must_use_ignition_turbo();
-
   // Check the enabling conditions for Turbofan.
   // 1. "use asm" code.
   bool is_turbofanable_asm = FLAG_turbo_asm && shared->asm_function();
 
-  // 2. Fallback for features unsupported by Crankshaft.
-  bool is_unsupported_by_crankshaft_but_turbofanable =
-      must_use_ignition_turbo && strcmp(FLAG_turbo_filter, "~~") == 0;
-
-  // 3. Explicitly enabled by the command-line filter.
+  // 2. Explicitly enabled by the command-line filter.
   bool passes_turbo_filter = shared->PassesFilter(FLAG_turbo_filter);
 
-  return is_turbofanable_asm || is_unsupported_by_crankshaft_but_turbofanable ||
-         passes_turbo_filter;
+  return is_turbofanable_asm || passes_turbo_filter;
 }
 
 bool ShouldUseIgnition(Handle<SharedFunctionInfo> shared,
