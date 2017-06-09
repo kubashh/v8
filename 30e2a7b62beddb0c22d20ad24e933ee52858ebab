@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0ed98e_e2936a94",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-09T16:51:51Z",
+      "side": 1,
+      "message": "As discussed offline, I think it would be better to make this a macro, just to make it more obvious that when this function is called, it will not return.",
+      "revId": "30e2a7b62beddb0c22d20ad24e933ee52858ebab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
