@@ -575,15 +575,11 @@ class SharedFunctionInfo : public HeapObject {
 
   static const int kFunctionKindShift = FunctionKindBits::kShift;
 
-  static const int kMarkedForTierUpBit = MarkedForTierUpBit::kShift;
-
   // Constants for optimizing codegen for strict mode function and
   // native tests.
   // Allows to use byte-width instructions.
   static const int kStrictModeBitWithinByte = kStrictModeBit % kBitsPerByte;
   static const int kNativeBitWithinByte = kNativeBit % kBitsPerByte;
-  static const int kHasDuplicateParametersBitWithinByte =
-      kHasDuplicateParametersBit % kBitsPerByte;
 
   static const int kClassConstructorBitsWithinByte =
       FunctionKind::kClassConstructor;
@@ -592,9 +588,6 @@ class SharedFunctionInfo : public HeapObject {
   static const int kDerivedConstructorBitsWithinByte =
       FunctionKind::kDerivedConstructor;
   STATIC_ASSERT(kDerivedConstructorBitsWithinByte < (1 << kBitsPerByte));
-
-  static const int kMarkedForTierUpBitWithinByte =
-      kMarkedForTierUpBit % kBitsPerByte;
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 #define BYTE_OFFSET(compiler_hint) \
@@ -606,16 +599,10 @@ class SharedFunctionInfo : public HeapObject {
 #else
 #error Unknown byte ordering
 #endif
-  static const int kStrictModeByteOffset = BYTE_OFFSET(IsStrictBit::kShift);
-  static const int kNativeByteOffset = BYTE_OFFSET(IsNativeBit::kShift);
   // FunctionKind bit field has to be byte-aligned
   STATIC_ASSERT((FunctionKindBits::kShift % kBitsPerByte) == 0);
   static const int kFunctionKindByteOffset =
       BYTE_OFFSET(FunctionKindBits::kShift);
-  static const int kHasDuplicateParametersByteOffset =
-      BYTE_OFFSET(kHasDuplicateParametersBit);
-  static const int kMarkedForTierUpByteOffset =
-      BYTE_OFFSET(MarkedForTierUpBit::kShift);
 #undef BYTE_OFFSET
 
  private:
