@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f353d583_6104ea24",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T09:03:49Z",
+      "side": 0,
+      "message": "Looks like we\u0027ve never done this for SFIs - should we?",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 30
+      },
+      "revId": "9fef8fd21ffb220b20f309b1e72635a5bf329edd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
