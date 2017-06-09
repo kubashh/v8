@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "360add11_8e8c9da9",
+        "filename": "src/builtins/builtins-collections.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-06-09T14:40:40Z",
+      "side": 1,
+      "message": "I don\u0027t think this will be used in any kind of fast paths to, because you can\u0027t do index access in a collection. I\u0027d rather entirely avoid CSA if possible.",
+      "parentUuid": "10d2d97a_75e2a7be",
+      "revId": "c12f7eec38fe1d050107c1e45bc62410694d42a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c609744_a6ce6f9e",
         "filename": "src/builtins/builtins-collections.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "c12f7eec38fe1d050107c1e45bc62410694d42a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501665cc_a0f41ec8",
+        "filename": "src/builtins/builtins-collections.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-06-09T14:40:40Z",
+      "side": 1,
+      "message": "Agreed. The current JS implementation just does a Runtime call so this isn\u0027t any worse. But as you mentioned, we should make this like Array.p.forEach once we\u0027ve optimized the Iterators.",
+      "parentUuid": "7c609744_a6ce6f9e",
+      "revId": "c12f7eec38fe1d050107c1e45bc62410694d42a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
