@@ -92,6 +92,30 @@
       "revId": "335949f832eb988cfa4296ec98e66b8773a3c5a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da3fff3d_8975ab04",
+        "filename": "src/objects/string.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-06-09T09:09:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1234cd77_720d4504",
+      "range": {
+        "startLine": 855,
+        "startChar": 6,
+        "endLine": 855,
+        "endChar": 22
+      },
+      "revId": "335949f832eb988cfa4296ec98e66b8773a3c5a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
