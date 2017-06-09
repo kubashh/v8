@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "858d0e94_0667d086",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T12:33:09Z",
+      "side": 1,
+      "message": "DisableFullCodegen ?",
+      "range": {
+        "startLine": 702,
+        "startChar": 4,
+        "endLine": 702,
+        "endChar": 22
+      },
+      "revId": "0bbea67e1c3f2d23b71f606a17ef33649d12e8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "589e6ed9_c2a97c74",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T12:33:09Z",
+      "side": 1,
+      "message": "disable_fullcodegen_reason_",
+      "range": {
+        "startLine": 719,
+        "startChar": 8,
+        "endLine": 719,
+        "endChar": 34
+      },
+      "revId": "0bbea67e1c3f2d23b71f606a17ef33649d12e8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce29961f_e823f9f0",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T12:33:09Z",
+      "side": 1,
+      "message": "Can we reword this as just enforcing_ignition",
+      "range": {
+        "startLine": 727,
+        "startChar": 33,
+        "endLine": 727,
+        "endChar": 46
+      },
+      "revId": "0bbea67e1c3f2d23b71f606a17ef33649d12e8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c570b51c_5c44a3b7",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T12:33:09Z",
+      "side": 1,
+      "message": "nit - could we rename this must_use_ignition()",
+      "range": {
+        "startLine": 344,
+        "startChar": 14,
+        "endLine": 344,
+        "endChar": 37
+      },
+      "revId": "0bbea67e1c3f2d23b71f606a17ef33649d12e8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d46f47e4_53b8f83b",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-09T12:33:09Z",
+      "side": 1,
+      "message": "Should we remove this?",
+      "range": {
+        "startLine": 358,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 39
+      },
+      "revId": "0bbea67e1c3f2d23b71f606a17ef33649d12e8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
