@@ -1510,9 +1510,9 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   __ LoadP(entry,
            FieldMemOperand(closure, JSFunction::kSharedFunctionInfoOffset));
   // Is the shared function marked for tier up?
-  __ lbz(r8, FieldMemOperand(entry,
-                             SharedFunctionInfo::kMarkedForTierUpByteOffset));
-  __ TestBit(r8, SharedFunctionInfo::kMarkedForTierUpBitWithinByte, r0);
+  __ LoadlW(r8,
+            FieldMemOperand(entry, SharedFunctionInfo::kCompilerHintsOffset));
+  __ TestBit(r8, SharedFunctionInfo::MarkedForTierUpBit::kShift, r0);
   __ bne(&gotta_call_runtime, cr0);
 
   // If SFI points to anything other than CompileLazy, install that.
