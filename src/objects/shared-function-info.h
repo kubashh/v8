@@ -505,35 +505,33 @@ class SharedFunctionInfo : public HeapObject {
   typedef BitField<bool, IsNamedExpressionBits::kNext, 1> IsTopLevelBits;
   typedef BitField<int, IsTopLevelBits::kNext, 30> StartPositionBits;
 
-  // TODO(ishell): turn this into a set of BitFields.
-  // Bit positions in compiler_hints.
-  enum CompilerHints {
-    // byte 0
-    kAllowLazyCompilation,
-    kMarkedForTierUp,
-    kOptimizationDisabled,
-    kHasDuplicateParameters,
-    kNative,
-    kStrictModeFunction,
-    kUsesArguments,
-    kNeedsHomeObject,
-    // byte 1
-    kForceInline,
-    kIsAsmFunction,
-    kMustUseIgnitionTurbo,
-    kIsDeclaration,
-    kIsAsmWasmBroken,
-    kHasConcurrentOptimizationJob,
+  // Bit positions in |compiler_hints|.
+  // byte 0
+  typedef BitField<bool, 0, 1> AllowLazyCompilationBits;
+  typedef BitField<bool, AllowLazyCompilationBits::kNext, 1>
+      MarkedForTierUpBits;
+  typedef BitField<bool, MarkedForTierUpBits::kNext, 1>
+      OptimizationDisabledBits;
+  typedef BitField<bool, OptimizationDisabledBits::kNext, 1>
+      HasDuplicateParametersBits;
+  typedef BitField<bool, HasDuplicateParametersBits::kNext, 1> IsNativeBits;
+  typedef BitField<bool, IsNativeBits::kNext, 1> IsStrictBits;
+  typedef BitField<bool, IsStrictBits::kNext, 1> UsesArgumentsBits;
+  typedef BitField<bool, UsesArgumentsBits::kNext, 1> NeedsHomeObjectBits;
 
-    kUnused1,  // Unused fields.
-    kUnused2,
+  // byte 1
+  typedef BitField<bool, kBitsPerByte, 1> ForceInlineBits;
+  typedef BitField<bool, ForceInlineBits::kNext, 1> IsAsmFunctionBits;
+  typedef BitField<bool, IsAsmFunctionBits::kNext, 1> MustUseIgnitionTurboBits;
+  typedef BitField<bool, MustUseIgnitionTurboBits::kNext, 1> IsDeclarationBits;
+  typedef BitField<bool, IsDeclarationBits::kNext, 1> IsAsmWasmBrokenBits;
+  typedef BitField<bool, IsAsmWasmBrokenBits::kNext, 1>
+      HasConcurrentOptimizationJobBits;
+  // Bits 14-15 are unused.
 
-    // byte 2
-    kFunctionKind,
-    // rest of byte 2 and first two bits of byte 3 are used by FunctionKind
-    // byte 3
-    kCompilerHintsCount = kFunctionKind + 10,  // Pseudo entry
-  };
+  // byte 2
+  typedef BitField<FunctionKind, kBitsPerByte * 2, 10> FunctionKindBits;
+  // Bits 27-31 are unused.
 
   // Bit positions in |debugger_hints|.
   enum DebuggerHints {
@@ -546,11 +544,6 @@ class SharedFunctionInfo : public HeapObject {
     kComputedDebugIsBlackboxed,
     kHasReportedBinaryCoverage
   };
-
-  // kFunctionKind has to be byte-aligned
-  STATIC_ASSERT((kFunctionKind % kBitsPerByte) == 0);
-
-  class FunctionKindBits : public BitField<FunctionKind, kFunctionKind, 10> {};
 
   // Bit fields in |counters|.
   typedef BitField<int, 0, 4> DeoptCountBits;
@@ -567,22 +560,18 @@ class SharedFunctionInfo : public HeapObject {
 
   inline int length() const;
 
-  static const int kCompilerHintsSize = kIntSize;
-
-  STATIC_ASSERT(SharedFunctionInfo::kCompilerHintsCount <=
-                SharedFunctionInfo::kCompilerHintsSize * kBitsPerByte);
-
  public:
   // Constants for optimizing codegen for strict mode function and
   // native tests when using integer-width instructions.
-  static const int kStrictModeBit = kStrictModeFunction;
-  static const int kNativeBit = kNative;
-  static const int kHasDuplicateParametersBit = kHasDuplicateParameters;
+  // TODO(ishell): use respective bit field definition directly.
+  static const int kStrictModeBit = IsStrictBits::kShift;
+  static const int kNativeBit = IsNativeBits::kShift;
+  static const int kHasDuplicateParametersBit =
+      HasDuplicateParametersBits::kShift;
 
-  static const int kFunctionKindShift = kFunctionKind;
-  static const int kAllFunctionKindBitsMask = FunctionKindBits::kMask;
+  static const int kFunctionKindShift = FunctionKindBits::kShift;
 
-  static const int kMarkedForTierUpBit = kMarkedForTierUp;
+  static const int kMarkedForTierUpBit = MarkedForTierUpBits::kShift;
 
   // Constants for optimizing codegen for strict mode function and
   // native tests.
@@ -613,12 +602,16 @@ class SharedFunctionInfo : public HeapObject {
 #else
 #error Unknown byte ordering
 #endif
-  static const int kStrictModeByteOffset = BYTE_OFFSET(kStrictModeFunction);
-  static const int kNativeByteOffset = BYTE_OFFSET(kNative);
-  static const int kFunctionKindByteOffset = BYTE_OFFSET(kFunctionKind);
+  static const int kStrictModeByteOffset = BYTE_OFFSET(IsStrictBits::kShift);
+  static const int kNativeByteOffset = BYTE_OFFSET(IsNativeBits::kShift);
+  // FunctionKind bit field has to be byte-aligned
+  STATIC_ASSERT((FunctionKindBits::kShift % kBitsPerByte) == 0);
+  static const int kFunctionKindByteOffset =
+      BYTE_OFFSET(FunctionKindBits::kShift);
   static const int kHasDuplicateParametersByteOffset =
-      BYTE_OFFSET(kHasDuplicateParameters);
-  static const int kMarkedForTierUpByteOffset = BYTE_OFFSET(kMarkedForTierUp);
+      BYTE_OFFSET(kHasDuplicateParametersBit);
+  static const int kMarkedForTierUpByteOffset =
+      BYTE_OFFSET(MarkedForTierUpBits::kShift);
 #undef BYTE_OFFSET
 
  private:
