@@ -50,10 +50,9 @@ namespace internal {
 namespace compiler {
 
 namespace {
-const Operator* UnsupportedOpcode(wasm::WasmOpcode opcode) {
+[[noreturn]] void UnsupportedOpcode(wasm::WasmOpcode opcode) {
   V8_Fatal(__FILE__, __LINE__, "Unsupported opcode #%d:%s", opcode,
            wasm::WasmOpcodes::OpcodeName(opcode));
-  return nullptr;
 }
 
 void MergeControlToEnd(JSGraph* jsgraph, Node* node) {
@@ -585,7 +584,7 @@ Node* WasmGraphBuilder::Binop(wasm::WasmOpcode opcode, Node* left, Node* right,
     case wasm::kExprF64AsmjsStoreMem:
       return BuildAsmjsStoreMem(MachineType::Float64(), left, right);
     default:
-      op = UnsupportedOpcode(opcode);
+      UnsupportedOpcode(opcode);
   }
   return graph()->NewNode(op, left, right);
 }
@@ -846,7 +845,7 @@ Node* WasmGraphBuilder::Unop(wasm::WasmOpcode opcode, Node* input,
     case wasm::kExprF64AsmjsLoadMem:
       return BuildAsmjsLoadMem(MachineType::Float64(), input);
     default:
-      op = UnsupportedOpcode(opcode);
+      UnsupportedOpcode(opcode);
   }
   return graph()->NewNode(op, input);
 }
@@ -3503,7 +3502,7 @@ Node* WasmGraphBuilder::SimdOp(wasm::WasmOpcode opcode,
     case wasm::kExprS1x16AllTrue:
       return graph()->NewNode(jsgraph()->machine()->S1x16AllTrue(), inputs[0]);
     default:
-      return graph()->NewNode(UnsupportedOpcode(opcode), nullptr);
+      UnsupportedOpcode(opcode);
   }
 }
 
@@ -3536,7 +3535,7 @@ Node* WasmGraphBuilder::SimdLaneOp(wasm::WasmOpcode opcode, uint8_t lane,
       return graph()->NewNode(jsgraph()->machine()->I8x16ReplaceLane(lane),
                               inputs[0], inputs[1]);
     default:
-      return graph()->NewNode(UnsupportedOpcode(opcode), nullptr);
+      UnsupportedOpcode(opcode);
   }
 }
 
@@ -3569,7 +3568,7 @@ Node* WasmGraphBuilder::SimdShiftOp(wasm::WasmOpcode opcode, uint8_t shift,
       return graph()->NewNode(jsgraph()->machine()->I8x16ShrU(shift),
                               inputs[0]);
     default:
-      return graph()->NewNode(UnsupportedOpcode(opcode), nullptr);
+      UnsupportedOpcode(opcode);
   }
 }
 
