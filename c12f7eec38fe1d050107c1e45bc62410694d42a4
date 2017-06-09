@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10d2d97a_75e2a7be",
+        "filename": "src/builtins/builtins-collections.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-09T12:52:55Z",
+      "side": 1,
+      "message": "I dont\u0027 think size makes sense as a classic C++ builtin, fast-path CSA-\u003eC++ should be much faster, given that it does no computation.",
+      "revId": "c12f7eec38fe1d050107c1e45bc62410694d42a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c609744_a6ce6f9e",
+        "filename": "src/builtins/builtins-collections.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-09T12:52:55Z",
+      "side": 1,
+      "message": "This should definitely only be a temporary solution and implemented the same way as Array.prototype.forEach and friends.\nConstantly jumping back and forth between the runtime function and JS will be rather slow.",
+      "revId": "c12f7eec38fe1d050107c1e45bc62410694d42a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
