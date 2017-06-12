@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b99f1988_4b6cdb14",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-12T09:05:44Z",
+      "side": 1,
+      "message": "once you have ::Get:\n\nCHECK_EQ(*value1, map-\u003eGet(*key1));\nCHECK_EQ(*value2, map-\u003eGet(*key2));",
+      "revId": "8a24fa2a54e1274f2fd1f3c93237e203b1632977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5ebc9a6_2cf7cca6",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-12T09:05:44Z",
+      "side": 1,
+      "message": "size_t \u003d\u003e int",
+      "revId": "8a24fa2a54e1274f2fd1f3c93237e203b1632977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ea8340_b007d287",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-12T09:05:44Z",
+      "side": 1,
+      "message": "How about creating all those keys in a single loop upfront?",
+      "revId": "8a24fa2a54e1274f2fd1f3c93237e203b1632977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
