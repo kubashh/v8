@@ -22,6 +22,30 @@
       "revId": "2c4af14b04bc9428b958d1cbe127914383bf0835",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0f79a4_0f9a6565",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-12T10:35:58Z",
+      "side": 1,
+      "message": "I\u0027ll clean this up in a follow-up CL where I\u0027m going to introduce a |map_index| bit field into the |compiler_hints| which will simplify the surrounding code a lot.",
+      "parentUuid": "68b9d427_272ce5b0",
+      "range": {
+        "startLine": 121,
+        "startChar": 2,
+        "endLine": 121,
+        "endChar": 24
+      },
+      "revId": "2c4af14b04bc9428b958d1cbe127914383bf0835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
