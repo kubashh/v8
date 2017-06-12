@@ -317,12 +317,6 @@ class SharedFunctionInfo : public HeapObject {
   // Whether this function was created from a FunctionDeclaration.
   DECL_BOOLEAN_ACCESSORS(is_declaration)
 
-  // Whether this function was marked to be tiered up.
-  DECL_BOOLEAN_ACCESSORS(marked_for_tier_up)
-
-  // Whether this function has a concurrent compilation job running.
-  DECL_BOOLEAN_ACCESSORS(has_concurrent_optimization_job)
-
   // Indicates that asm->wasm conversion failed and should not be re-attempted.
   DECL_BOOLEAN_ACCESSORS(is_asm_wasm_broken)
 
@@ -509,27 +503,25 @@ class SharedFunctionInfo : public HeapObject {
   DEFINE_BIT_FIELDS(START_POSITION_AND_TYPE_BIT_FIELDS)
 
 // Bit positions in |compiler_hints|.
-#define COMPILER_HINTS_BIT_FIELDS(V, _)          \
-  /* byte 0 */                                   \
-  V(AllowLazyCompilationBit, bool, 1, _)         \
-  V(MarkedForTierUpBit, bool, 1, _)              \
-  V(OptimizationDisabledBit, bool, 1, _)         \
-  V(HasDuplicateParametersBit, bool, 1, _)       \
-  V(IsNativeBit, bool, 1, _)                     \
-  V(IsStrictBit, bool, 1, _)                     \
-  V(UsesArgumentsBit, bool, 1, _)                \
-  V(NeedsHomeObjectBit, bool, 1, _)              \
-  /* byte 1 */                                   \
-  V(ForceInlineBit, bool, 1, _)                  \
-  V(IsAsmFunctionBit, bool, 1, _)                \
-  V(MustUseIgnitionTurboBit, bool, 1, _)         \
-  V(IsDeclarationBit, bool, 1, _)                \
-  V(IsAsmWasmBrokenBit, bool, 1, _)              \
-  V(HasConcurrentOptimizationJobBit, bool, 1, _) \
-  /* Bits 14-15 are unused. */                   \
-  V(UnusedBits1, int, 2, _)                      \
-  /* byte 2 */                                   \
-  V(FunctionKindBits, FunctionKind, 10, _)       \
+#define COMPILER_HINTS_BIT_FIELDS(V, _)    \
+  /* byte 0 */                             \
+  V(AllowLazyCompilationBit, bool, 1, _)   \
+  V(IsDeclarationBit, bool, 1, _)          \
+  V(OptimizationDisabledBit, bool, 1, _)   \
+  V(HasDuplicateParametersBit, bool, 1, _) \
+  V(IsNativeBit, bool, 1, _)               \
+  V(IsStrictBit, bool, 1, _)               \
+  V(UsesArgumentsBit, bool, 1, _)          \
+  V(NeedsHomeObjectBit, bool, 1, _)        \
+  /* byte 1 */                             \
+  V(ForceInlineBit, bool, 1, _)            \
+  V(IsAsmFunctionBit, bool, 1, _)          \
+  V(MustUseIgnitionTurboBit, bool, 1, _)   \
+  V(IsAsmWasmBrokenBit, bool, 1, _)        \
+  /* Bits 12-15 are unused. */             \
+  V(UnusedBits1, int, 4, _)                \
+  /* byte 2 */                             \
+  V(FunctionKindBits, FunctionKind, 10, _) \
   /* Bits 27-31 are unused. */
 
   DEFINE_BIT_FIELDS(COMPILER_HINTS_BIT_FIELDS)
@@ -577,8 +569,6 @@ class SharedFunctionInfo : public HeapObject {
 
   static const int kFunctionKindShift = FunctionKindBits::kShift;
 
-  static const int kMarkedForTierUpBit = MarkedForTierUpBit::kShift;
-
   // Constants for optimizing codegen for strict mode function and
   // native tests.
   // Allows to use byte-width instructions.
@@ -594,9 +584,6 @@ class SharedFunctionInfo : public HeapObject {
   static const int kDerivedConstructorBitsWithinByte =
       FunctionKind::kDerivedConstructor;
   STATIC_ASSERT(kDerivedConstructorBitsWithinByte < (1 << kBitsPerByte));
-
-  static const int kMarkedForTierUpBitWithinByte =
-      kMarkedForTierUpBit % kBitsPerByte;
 
 #if defined(V8_TARGET_LITTLE_ENDIAN)
 #define BYTE_OFFSET(compiler_hint) \
@@ -616,8 +603,6 @@ class SharedFunctionInfo : public HeapObject {
       BYTE_OFFSET(FunctionKindBits::kShift);
   static const int kHasDuplicateParametersByteOffset =
       BYTE_OFFSET(kHasDuplicateParametersBit);
-  static const int kMarkedForTierUpByteOffset =
-      BYTE_OFFSET(MarkedForTierUpBit::kShift);
 #undef BYTE_OFFSET
 
  private:
