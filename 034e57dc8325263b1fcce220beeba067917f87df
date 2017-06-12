@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "532b13d5_e388728e",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-12T11:17:39Z",
+      "side": 1,
+      "message": "I don\u0027t understand how you\u0027re using this. I\u0027d also not call it host.\n\nIn my understanding the host is where we build. The target is where we physically run. The v8 target is the architecture for which v8 generates code (possibly simulated).\n\nIf you want correct simulator builds, you should better set both target_arch and v8_target_arch explicitly below. I remember we might infer it, but \u0027explicit\u0027 would safe me from searching that code. E.g. for arm64 simulator we\u0027d need:\ntarget_arch\u003dx64 v8_target_arch\u003darm64\n\nI think in the general case, the host_arch is x64 for all four builds this script is targeted for. So that for arm sim we\u0027d have, e.g.: host\u003dx64 target\u003dia32 v8\u003darm",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "034e57dc8325263b1fcce220beeba067917f87df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
