@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68b9d427_272ce5b0",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-06-12T10:32:19Z",
+      "side": 1,
+      "message": "nit: while you\u0027re here, you can drop this. CSA_ASSERT contains a FLAG_debug_code check anyway.",
+      "range": {
+        "startLine": 121,
+        "startChar": 2,
+        "endLine": 121,
+        "endChar": 24
+      },
+      "revId": "2c4af14b04bc9428b958d1cbe127914383bf0835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
