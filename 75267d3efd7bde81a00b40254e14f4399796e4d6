@@ -22,6 +22,30 @@
       "revId": "75267d3efd7bde81a00b40254e14f4399796e4d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9345b524_e3fe0e43",
+        "filename": "test/common/wasm/flag-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-12T13:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ffecfd0_575e44c0",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "75267d3efd7bde81a00b40254e14f4399796e4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
