@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2f964389_0f0b990f",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-06-12T18:45:45Z",
+      "side": 1,
+      "message": "These opcodes no longer exist in WASM. There are only S32x4Shuffle, S16x8Shuffle, and S8x16Shuffle. Soon, we\u0027ll eliminate all but S8x16Shuffle.",
+      "revId": "c0ce9f3cb5571f915f493ea0714ab8efeb03877d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bca96026_e228c11b",
         "filename": "src/compiler/mips/code-generator-mips.cc",
         "patchSetId": 1
