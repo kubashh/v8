@@ -13,14 +13,15 @@
 #include "src/objects-inl.h"
 #include "src/objects.h"
 #include "src/wasm/wasm-module.h"
+#include "test/common/wasm/flag-utils.h"
 #include "test/common/wasm/wasm-module-runner.h"
 #include "test/fuzzer/fuzzer-support.h"
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  unsigned int max_mem_flag_value = v8::internal::FLAG_wasm_max_mem_pages;
-  unsigned int max_table_flag_value = v8::internal::FLAG_wasm_max_table_size;
-  v8::internal::FLAG_wasm_max_mem_pages = 32;
-  v8::internal::FLAG_wasm_max_table_size = 100;
+  v8::internal::EnableFlagScope<uint32_t> max_mem_flag_scope(
+      &v8::internal::FLAG_wasm_max_mem_pages, 32);
+  v8::internal::EnableFlagScope<uint32_t> max_table_size_scope(
+      &v8::internal::FLAG_wasm_max_table_size, 100);
   v8_fuzzer::FuzzerSupport* support = v8_fuzzer::FuzzerSupport::Get();
   v8::Isolate* isolate = support->GetIsolate();
   v8::internal::Isolate* i_isolate =
@@ -39,7 +40,5 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   v8::internal::wasm::testing::CompileAndRunWasmModule(
       i_isolate, data, data + size,
       v8::internal::wasm::ModuleOrigin::kAsmJsOrigin);
-  v8::internal::FLAG_wasm_max_mem_pages = max_mem_flag_value;
-  v8::internal::FLAG_wasm_max_table_size = max_table_flag_value;
   return 0;
 }
