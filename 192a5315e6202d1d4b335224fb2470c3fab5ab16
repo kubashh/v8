@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eafe2df2_4e4c8e3a",
+        "filename": "src/objects-body-descriptors-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-12T18:35:10Z",
+      "side": 1,
+      "message": "Here and below: Can we use the proper ::cast() accessors, e.g. ByteArray::cast(obj)?",
+      "range": {
+        "startLine": 296,
+        "startChar": 8,
+        "endLine": 296,
+        "endChar": 24
+      },
+      "revId": "192a5315e6202d1d4b335224fb2470c3fab5ab16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
