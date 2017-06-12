@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ffecfd0_575e44c0",
+        "filename": "test/common/wasm/flag-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-12T13:28:11Z",
+      "side": 1,
+      "message": "As discussed offline: Let\u0027s name this just \"FlagScope\".",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "75267d3efd7bde81a00b40254e14f4399796e4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
