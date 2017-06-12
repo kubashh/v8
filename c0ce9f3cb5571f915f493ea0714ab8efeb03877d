@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bca96026_e228c11b",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2290,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-06-12T15:51:31Z",
+      "side": 1,
+      "message": "Examples, nice :)",
+      "revId": "c0ce9f3cb5571f915f493ea0714ab8efeb03877d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
