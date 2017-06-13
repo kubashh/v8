@@ -195,15 +195,11 @@ template <typename Char>
 class SequentialStringKey : public StringTableKey {
  public:
   explicit SequentialStringKey(Vector<const Char> string, uint32_t seed)
-      : string_(string), seed_(seed) {}
-
-  uint32_t ComputeHashField() override {
-    return StringHasher::HashSequentialString<Char>(string_.start(),
-                                                    string_.length(), seed_);
-  }
+      : StringTableKey(StringHasher::HashSequentialString<Char>(
+            string.start(), string.length(), seed)),
+        string_(string) {}
 
   Vector<const Char> string_;
-  uint32_t seed_;
 };
 
 class OneByteStringKey : public SequentialStringKey<uint8_t> {
@@ -220,11 +216,6 @@ class OneByteStringKey : public SequentialStringKey<uint8_t> {
 
 class SeqOneByteSubStringKey : public StringTableKey {
  public:
-  SeqOneByteSubStringKey(Handle<SeqOneByteString> string, int from, int length)
-      : string_(string), from_(from), length_(length) {
-    DCHECK(string_->IsSeqOneByteString());
-  }
-
 // VS 2017 on official builds gives this spurious warning:
 // warning C4789: buffer 'key' of size 16 bytes will be overrun; 4 bytes will
 // be written starting at offset 16
@@ -233,12 +224,15 @@ class SeqOneByteSubStringKey : public StringTableKey {
 #pragma warning(push)
 #pragma warning(disable : 4789)
 #endif
-  uint32_t ComputeHashField() override {
-    DCHECK(length_ >= 0);
-    DCHECK(from_ + length_ <= string_->length());
-    const uint8_t* chars = string_->GetChars() + from_;
-    return StringHasher::HashSequentialString(chars, length_,
-                                              string_->GetHeap()->HashSeed());
+  SeqOneByteSubStringKey(Handle<SeqOneByteString> string, int from, int length)
+      : StringTableKey(StringHasher::HashSequentialString(
+            string->GetChars() + from, length, string->GetHeap()->HashSeed())),
+        string_(string),
+        from_(from),
+        length_(length) {
+    DCHECK_LE(0, length_);
+    DCHECK_LE(from_ + length_, string_->length());
+    DCHECK(string_->IsSeqOneByteString());
   }
 #if defined(V8_CC_MSVC)
 #pragma warning(pop)
@@ -269,14 +263,11 @@ class TwoByteStringKey : public SequentialStringKey<uc16> {
 class Utf8StringKey : public StringTableKey {
  public:
   explicit Utf8StringKey(Vector<const char> string, uint32_t seed)
-      : string_(string), seed_(seed) {}
+      : StringTableKey(StringHasher::ComputeUtf8Hash(string, seed, &chars_)),
+        string_(string) {}
 
   bool IsMatch(Object* string) override {
     return String::cast(string)->IsUtf8EqualTo(string_);
-  }
-
-  uint32_t ComputeHashField() override {
-    return StringHasher::ComputeUtf8Hash(string_, seed_, &chars_);
   }
 
   Handle<Object> AsHandle(Isolate* isolate) override {
@@ -284,9 +275,9 @@ class Utf8StringKey : public StringTableKey {
                                                              HashField());
   }
 
+ private:
   Vector<const char> string_;
   int chars_;  // Caches the number of characters when computing the hash code.
-  uint32_t seed_;
 };
 
 bool String::Equals(String* other) {
