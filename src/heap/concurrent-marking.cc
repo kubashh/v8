@@ -52,7 +52,7 @@ class ConcurrentMarkingVisitor final
       : deque_(deque) {}
 
   bool ShouldVisit(HeapObject* object) override {
-    return ObjectMarking::GreyToBlack<MarkBit::AccessMode::ATOMIC>(
+    return ObjectMarking::GreyToBlack<AccessMode::ATOMIC>(
         object, marking_state(object));
   }
 
@@ -168,8 +168,8 @@ class ConcurrentMarkingVisitor final
   }
 
   void MarkObject(HeapObject* object) {
-    if (ObjectMarking::WhiteToGrey<MarkBit::AccessMode::ATOMIC>(
-            object, marking_state(object))) {
+    if (ObjectMarking::WhiteToGrey<AccessMode::ATOMIC>(object,
+                                                       marking_state(object))) {
       deque_->Push(object, MarkingThread::kConcurrent, TargetDeque::kShared);
     }
   }
