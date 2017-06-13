@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad4dc824_cea05c7c",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-13T08:38:17Z",
+      "side": 1,
+      "message": "I guess this should be be called just SHARED_FUNCTION_INFO_FIELDS.",
+      "range": {
+        "startLine": 445,
+        "startChar": 50,
+        "endLine": 445,
+        "endChar": 0
+      },
+      "revId": "42df2448e3352653a615c33be97da8fc29372f7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
