@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee9c89e3_16320b93",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-13T13:43:31Z",
+      "side": 1,
+      "message": "maybe add a static helper for this monster :)",
+      "revId": "1561663237ae1b9c9a4d937cbc80c5d4de0537aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
