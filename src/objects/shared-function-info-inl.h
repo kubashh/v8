@@ -23,9 +23,6 @@ ACCESSORS(SharedFunctionInfo, construct_stub, Code, kConstructStubOffset)
 ACCESSORS(SharedFunctionInfo, feedback_metadata, FeedbackMetadata,
           kFeedbackMetadataOffset)
 SMI_ACCESSORS(SharedFunctionInfo, function_literal_id, kFunctionLiteralIdOffset)
-#if V8_SFI_HAS_UNIQUE_ID
-SMI_ACCESSORS(SharedFunctionInfo, unique_id, kUniqueIdOffset)
-#endif
 ACCESSORS(SharedFunctionInfo, instance_class_name, Object,
           kInstanceClassNameOffset)
 ACCESSORS(SharedFunctionInfo, function_data, Object, kFunctionDataOffset)
@@ -40,6 +37,9 @@ BIT_FIELD_ACCESSORS(SharedFunctionInfo, start_position_and_type,
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, start_position_and_type, is_toplevel,
                     SharedFunctionInfo::IsTopLevelBit)
 
+#if V8_SFI_HAS_UNIQUE_ID
+INT_ACCESSORS(SharedFunctionInfo, unique_id, kUniqueIdOffset)
+#endif
 INT_ACCESSORS(SharedFunctionInfo, length, kLengthOffset)
 INT_ACCESSORS(SharedFunctionInfo, internal_formal_parameter_count,
               kFormalParameterCountOffset)
