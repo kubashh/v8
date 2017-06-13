@@ -22,6 +22,30 @@
       "revId": "034e57dc8325263b1fcce220beeba067917f87df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6cc03eb_f82003a2",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-13T16:29:49Z",
+      "side": 1,
+      "message": "I thought host refers to where v8 runs, and target refers to what v8 JITs. gn, at least, observes that convention (plus, it fits the compiler nomenclature, as seen in gcc, for instance:\nhttps://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html)\n\nHave we departed from that in gyp?\n\nIn any case, at the moment, $host is used just to check we support the requested target $arch architecture.",
+      "parentUuid": "532b13d5_e388728e",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "034e57dc8325263b1fcce220beeba067917f87df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
