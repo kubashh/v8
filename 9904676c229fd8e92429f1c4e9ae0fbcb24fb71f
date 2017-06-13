@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ec6f31a_9364472e",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-13T09:41:26Z",
+      "side": 1,
+      "message": "could you add the following check for the if_done case:\n\n CSA_ASSERT(this, Word32Equal(kind, Int32Constant(FAST_ELEMENTS)))",
+      "revId": "9904676c229fd8e92429f1c4e9ae0fbcb24fb71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
