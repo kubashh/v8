@@ -292,7 +292,7 @@ class ByteArray::BodyDescriptor final : public BodyDescriptorBase {
   static inline void IterateBody(HeapObject* obj, int object_size) {}
 
   static inline int SizeOf(Map* map, HeapObject* obj) {
-    return reinterpret_cast<ByteArray*>(obj)->ByteArraySize();
+    return ByteArray::SizeFor(ByteArray::cast(obj)->synchronized_length());
   }
 };
 
@@ -320,7 +320,8 @@ class BytecodeArray::BodyDescriptor final : public BodyDescriptorBase {
   }
 
   static inline int SizeOf(Map* map, HeapObject* obj) {
-    return reinterpret_cast<BytecodeArray*>(obj)->BytecodeArraySize();
+    return BytecodeArray::SizeFor(
+        BytecodeArray::cast(obj)->synchronized_length());
   }
 };
 
@@ -337,7 +338,7 @@ class FixedDoubleArray::BodyDescriptor final : public BodyDescriptorBase {
 
   static inline int SizeOf(Map* map, HeapObject* obj) {
     return FixedDoubleArray::SizeFor(
-        reinterpret_cast<FixedDoubleArray*>(obj)->length());
+        FixedDoubleArray::cast(obj)->synchronized_length());
   }
 };
 
@@ -360,7 +361,7 @@ class FixedTypedArrayBase::BodyDescriptor final : public BodyDescriptorBase {
   }
 
   static inline int SizeOf(Map* map, HeapObject* object) {
-    return reinterpret_cast<FixedTypedArrayBase*>(object)->size();
+    return FixedTypedArrayBase::cast(object)->size();
   }
 };
 
