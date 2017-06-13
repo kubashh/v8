@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e827e76_344f83d9",
+        "filename": "src/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-13T09:12:30Z",
+      "side": 1,
+      "message": "It would be nice to have a comment explaining this enum magic, it took me a minute to understand.",
+      "range": {
+        "startLine": 418,
+        "startChar": 50,
+        "endLine": 418,
+        "endChar": 77
+      },
+      "revId": "10a7239ded9d1244fa236df0eb26c66bee79cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
