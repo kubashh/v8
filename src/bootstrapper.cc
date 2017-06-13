@@ -2490,10 +2490,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 
   {  // -- J S O N
     Handle<String> name = factory->InternalizeUtf8String("JSON");
-    Handle<JSFunction> cons = factory->NewFunction(name);
-    JSFunction::SetPrototype(cons, isolate->initial_object_prototype());
-    Handle<JSObject> json_object = factory->NewJSObject(cons, TENURED);
-    DCHECK(json_object->IsJSObject());
+    Handle<JSObject> json_object =
+        factory->NewJSObject(isolate->object_function(), TENURED);
     JSObject::AddProperty(global, name, json_object, DONT_ENUM);
     SimpleInstallFunction(json_object, "parse", Builtins::kJsonParse, 2, false);
     SimpleInstallFunction(json_object, "stringify", Builtins::kJsonStringify, 3,
@@ -2506,9 +2504,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 
   {  // -- M a t h
     Handle<String> name = factory->InternalizeUtf8String("Math");
-    Handle<JSFunction> cons = factory->NewFunction(name);
-    JSFunction::SetPrototype(cons, isolate->initial_object_prototype());
-    Handle<JSObject> math = factory->NewJSObject(cons, TENURED);
+    Handle<JSObject> math =
+        factory->NewJSObject(isolate->object_function(), TENURED);
     DCHECK(math->IsJSObject());
     JSObject::AddProperty(global, name, math, DONT_ENUM);
     SimpleInstallFunction(math, "abs", Builtins::kMathAbs, 1, true);
@@ -2638,9 +2635,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
 #ifdef V8_INTL_SUPPORT
   {  // -- I n t l
     Handle<String> name = factory->InternalizeUtf8String("Intl");
-    Handle<JSFunction> cons = factory->NewFunction(name);
-    JSFunction::SetPrototype(cons, isolate->initial_object_prototype());
-    Handle<JSObject> intl = factory->NewJSObject(cons, TENURED);
+    Handle<JSObject> intl =
+        factory->NewJSObject(isolate->object_function(), TENURED);
     DCHECK(intl->IsJSObject());
     JSObject::AddProperty(global, name, intl, DONT_ENUM);
 
