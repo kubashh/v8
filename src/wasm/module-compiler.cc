@@ -39,9 +39,15 @@ namespace internal {
 namespace wasm {
 
 ModuleCompiler::CodeGenerationSchedule::CodeGenerationSchedule(
-    base::RandomNumberGenerator* random_number_generator)
-    : random_number_generator_(random_number_generator) {
+    base::RandomNumberGenerator* random_number_generator, base::Mutex* mutex)
+    : random_number_generator_(random_number_generator), mutex_(mutex) {
   DCHECK_NOT_NULL(random_number_generator_);
+}
+
+bool ModuleCompiler::CodeGenerationSchedule::AcceptsWork() {
+  base::LockGuard<base::Mutex> guard(mutex_);
+  while (schedule_.size() > max_size_) cv_.Wait(mutex_);
+  return true;
 }
 
 void ModuleCompiler::CodeGenerationSchedule::Schedule(
@@ -56,6 +62,7 @@ ModuleCompiler::CodeGenerationSchedule::GetNext() {
   auto ret = std::move(schedule_[index]);
   std::swap(schedule_[schedule_.size() - 1], schedule_[index]);
   schedule_.pop_back();
+  cv_.NotifyOne();
   return ret;
 }
 
@@ -73,7 +80,7 @@ ModuleCompiler::ModuleCompiler(Isolate* isolate,
       module_(std::move(module)),
       counters_shared_(isolate->counters_shared()),
       is_sync_(is_sync),
-      executed_units_(isolate->random_number_generator()) {
+      executed_units_(isolate->random_number_generator(), &result_mutex_) {
   counters_ = counters_shared_.get();
 }
 
@@ -82,7 +89,14 @@ ModuleCompiler::CompilationTask::CompilationTask(ModuleCompiler* compiler)
     : CancelableTask(compiler->isolate_), compiler_(compiler) {}
 
 void ModuleCompiler::CompilationTask::RunInternal() {
-  while (compiler_->FetchAndExecuteCompilationUnit()) {
+  // We allow threads to enter if the executed_units_ size is low enough.
+  // It is possible all threads enter when the size is one less than the maximum
+  // allowed, which means the amount of unfinished work is bound by 2*max_size_
+  // The immediate goal is to throttle the amount of unfinished work, in a
+  // change that can be easily back-merged. A more substantive fix should happen
+  // when we consolidate the async and parallel compilation code.
+  while (compiler_->executed_units_.AcceptsWork() &&
+         compiler_->FetchAndExecuteCompilationUnit()) {
   }
   compiler_->module_->pending_tasks.get()->Signal();
 }
@@ -140,6 +154,7 @@ uint32_t* ModuleCompiler::StartCompilationTasks() {
   num_background_tasks_ =
       Min(static_cast<size_t>(FLAG_wasm_num_compilation_tasks),
           V8::GetCurrentPlatform()->NumberOfAvailableBackgroundThreads());
+  executed_units_.InitMaxSize(num_background_tasks_);
   uint32_t* task_ids = new uint32_t[num_background_tasks_];
   for (size_t i = 0; i < num_background_tasks_; ++i) {
     CompilationTask* task = new CompilationTask(this);
