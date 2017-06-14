@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77fe5d52_b49b3439",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-06-14T18:05:16Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right/optimal. WithArrayLike does iterate from 0 to len, which might not be what you want here. Can\u0027t we just tailcall into the CallVarargs instead?",
+      "range": {
+        "startLine": 322,
+        "startChar": 4,
+        "endLine": 322,
+        "endChar": 32
+      },
+      "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
