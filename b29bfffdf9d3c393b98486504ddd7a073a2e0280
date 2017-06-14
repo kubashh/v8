@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5121ce5_9483fba5",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-14T08:53:50Z",
+      "side": 0,
+      "message": "nit: Lets keep this DCHECK here or remove it at the other places as well (either way is fine with me).",
+      "range": {
+        "startLine": 2496,
+        "startChar": 4,
+        "endLine": 2496,
+        "endChar": 38
+      },
+      "revId": "b29bfffdf9d3c393b98486504ddd7a073a2e0280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
