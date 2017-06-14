@@ -267,6 +267,28 @@ let salat = 12;
 }
 
 
+// Local (non-exported) variable, nested access.
+let salad = 12;
+{
+  function listener(event, exec_state) {
+    if (event == Debug.DebugEvent.Break) {
+      let scope_count = exec_state.frame().scopeCount();
+      let module_scope = exec_state.frame().scope(2);
+      assertEquals(debug.ScopeType.Module, module_scope.scopeType());
+      module_scope.setVariableValue('salad', 42);
+    }
+  }
+
+  Debug.setListener(listener);
+  function foo() {
+    assertEquals(12, salad);
+    debugger;
+    assertEquals(42, salad);
+  };
+  foo();
+}
+
+
 // Exported variable.
 export let salami = 1;
 {
@@ -283,6 +305,28 @@ export let salami = 1;
   assertEquals(1, salami);
   debugger;
   assertEquals(2, salami);
+}
+
+
+// Exported variable, nested access.
+export let ham = 1;
+{
+  function listener(event, exec_state) {
+    if (event == Debug.DebugEvent.Break) {
+      let scope_count = exec_state.frame().scopeCount();
+      let module_scope = exec_state.frame().scope(2);
+      assertEquals(debug.ScopeType.Module, module_scope.scopeType());
+      module_scope.setVariableValue('ham', 2);
+    }
+  }
+
+  Debug.setListener(listener);
+  function foo() {
+    assertEquals(1, ham);
+    debugger;
+    assertEquals(2, ham);
+  };
+  foo();
 }
 
 
@@ -306,6 +350,32 @@ import { salami as wurst } from "./debug-modules-set-variable-value.js";
   debugger;
   assertEquals(2, wurst);
   assertTrue(exception !== undefined);
+}
+
+
+// Imported variable, nested access. Setting is currently not supported.
+import { salami as wurstl } from "./debug-modules-set-variable-value.js";
+{
+  let exception;
+  function listener(event, exec_state) {
+    if (event == Debug.DebugEvent.Break) {
+      let scope_count = exec_state.frame().scopeCount();
+      let module_scope = exec_state.frame().scope(2);
+      assertEquals(debug.ScopeType.Module, module_scope.scopeType());
+      try {
+        module_scope.setVariableValue('wurstl', 3);
+      } catch(e) { exception = e; }
+    }
+  }
+
+  Debug.setListener(listener);
+  function foo() {
+    assertEquals(2, wurstl);
+    debugger;
+    assertEquals(2, wurstl);
+    assertTrue(exception !== undefined);
+  };
+  foo();
 }
 
 
