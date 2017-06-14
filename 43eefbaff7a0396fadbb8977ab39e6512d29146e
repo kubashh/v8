@@ -22,6 +22,30 @@
       "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db865cfe_9877d180",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-06-14T18:56:01Z",
+      "side": 1,
+      "message": "It\u0027s correct but yeh not optimal, we repeat a lot of stuff in CallOrConstructWithArrayLike, I call into that here because we need the double handling logic. I think we can probably refactor that better though, I\u0027ll have a look",
+      "parentUuid": "77fe5d52_b49b3439",
+      "range": {
+        "startLine": 322,
+        "startChar": 4,
+        "endLine": 322,
+        "endChar": 32
+      },
+      "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
