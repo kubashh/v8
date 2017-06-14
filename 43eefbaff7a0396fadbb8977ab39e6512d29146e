@@ -46,6 +46,30 @@
       "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7abf8c48_780b4c69",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-06-14T20:00:49Z",
+      "side": 1,
+      "message": "How about adding a CallDoubleVarargs builtin, that deals with the doubles? Such that you don\u0027t need to create the temporary FixedArray at all.",
+      "parentUuid": "db865cfe_9877d180",
+      "range": {
+        "startLine": 322,
+        "startChar": 4,
+        "endLine": 322,
+        "endChar": 32
+      },
+      "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
