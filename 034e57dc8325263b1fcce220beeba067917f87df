@@ -46,6 +46,30 @@
       "revId": "034e57dc8325263b1fcce220beeba067917f87df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14601c59_b6344f14",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-14T08:05:02Z",
+      "side": 1,
+      "message": "Gyp understands these three variables:\nhost_arch, target_arch, v8_target_arch.\nhost_arch is where we build - for this purpose it\u0027s just x64. This is auto-detected and doesn\u0027t need to be set.\n\ntarget_arch is where the executable runs\nv8_target_arch is what V8 jits\n\nTo be sure what we\u0027re getting out of this, you should explicitly set target_arch and v8_target_arch in GYP. At least when using simulators. The (v8_target_arch, target_arch) pairs that are needed here are exactly the ones you specified in line 12.\n\nSee e.g. an example bot that runs simulators and still uses gyp:\nhttps://build.chromium.org/p/client.v8.ports/builders/V8%20Linux%20-%20s390%20-%20sim/builds/6027/steps/generate_build_files/logs/stdout\n\nFYI, in GN, target_arch is target_cpu and v8_target_arch is v8_target_cpu.",
+      "parentUuid": "d6cc03eb_f82003a2",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "034e57dc8325263b1fcce220beeba067917f87df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
