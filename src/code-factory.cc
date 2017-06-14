@@ -399,7 +399,7 @@ Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode,
 // static
 Callable CodeFactory::CallWithSpread(Isolate* isolate) {
   return Callable(isolate->builtins()->CallWithSpread(),
-                  CallTrampolineDescriptor(isolate));
+                  CallWithSpreadDescriptor(isolate));
 }
 
 // static

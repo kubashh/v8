@@ -1001,6 +1001,11 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   // rbx and rdx will be modified.
   Generate_InterpreterPushArgs(masm, rcx, rbx, rdx);
 
+  if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
+    __ Pop(rbx);                 // Pass the spread in a register
+    __ subp(rax, Immediate(1));  // Subtract one for spread
+  }
+
   // Call the target.
   __ PushReturnAddressFrom(kScratchRegister);  // Re-push return address.
 
@@ -2968,19 +2973,19 @@ static void CheckSpreadAndPushToStack(MacroAssembler* masm) {
 }
 
 // static
-void Builtins::Generate_CallWithSpread(MacroAssembler* masm) {
-  // ----------- S t a t e -------------
-  //  -- rax : the number of arguments (not including the receiver)
-  //  -- rdi : the target to call (can be any Object)
-  // -----------------------------------
+// void Builtins::Generate_CallWithSpread(MacroAssembler* masm) {
+//   // ----------- S t a t e -------------
+//   //  -- rax : the number of arguments (not including the receiver)
+//   //  -- rdi : the target to call (can be any Object)
+//   // -----------------------------------
 
-  // CheckSpreadAndPushToStack will push rdx to save it.
-  __ LoadRoot(rdx, Heap::kUndefinedValueRootIndex);
-  CheckSpreadAndPushToStack(masm);
-  __ Jump(masm->isolate()->builtins()->Call(ConvertReceiverMode::kAny,
-                                            TailCallMode::kDisallow),
-          RelocInfo::CODE_TARGET);
-}
+//   // CheckSpreadAndPushToStack will push rdx to save it.
+//   __ LoadRoot(rdx, Heap::kUndefinedValueRootIndex);
+//   CheckSpreadAndPushToStack(masm);
+//   __ Jump(masm->isolate()->builtins()->Call(ConvertReceiverMode::kAny,
+//                                             TailCallMode::kDisallow),
+//           RelocInfo::CODE_TARGET);
+// }
 
 // static
 void Builtins::Generate_ConstructFunction(MacroAssembler* masm) {

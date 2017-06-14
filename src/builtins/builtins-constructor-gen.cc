@@ -39,7 +39,9 @@ TF_BUILTIN(ConstructWithArrayLike, CallOrConstructBuiltinsAssembler) {
   Node* arguments_list =
       Parameter(ConstructWithArrayLikeDescriptor::kArgumentsList);
   Node* context = Parameter(ConstructWithArrayLikeDescriptor::kContext);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  Node* args_count = Int32Constant(0);  // args already on the stack
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, args_count,
+                               context);
 }
 
 typedef compiler::Node Node;

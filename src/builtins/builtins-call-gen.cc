@@ -100,7 +100,8 @@ void Builtins::Generate_CallFunctionForwardVarargs(MacroAssembler* masm) {
 }
 
 void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
-    Node* target, Node* new_target, Node* arguments_list, Node* context) {
+    Node* target, Node* new_target, Node* arguments_list, Node* args_count,
+    Node* context) {
   Variable var_elements(this, MachineRepresentation::kTagged);
   Variable var_length(this, MachineRepresentation::kWord32);
   Label if_done(this), if_arguments(this), if_array(this), if_double(this),
@@ -237,13 +238,89 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
     Node* length = var_length.value();
     if (new_target == nullptr) {
       Callable callable = CodeFactory::CallVarargs(isolate());
-      TailCallStub(callable, context, target, Int32Constant(0), elements,
-                   length);
+      TailCallStub(callable, context, target, args_count, elements, length);
     } else {
       Callable callable = CodeFactory::ConstructVarargs(isolate());
-      TailCallStub(callable, context, target, new_target, Int32Constant(0),
-                   elements, length);
+      TailCallStub(callable, context, target, new_target, args_count, elements,
+                   length);
     }
+  }
+}
+
+void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
+    Node* target, Node* new_target, Node* spread, Node* args_count,
+    Node* context) {
+  Label if_done(this), if_holey(this), if_runtime(this, Label::kDeferred);
+
+  VARIABLE(spread_result, MachineRepresentation::kTagged, spread);
+
+  GotoIf(TaggedIsSmi(spread), &if_runtime);
+  Node* spread_map = LoadMap(spread);
+  GotoIfNot(IsJSArrayMap(spread_map), &if_runtime);
+
+  Node* native_context = LoadNativeContext(context);
+
+  // Check that we have the original ArrayPrototype.
+  Node* prototype = LoadMapPrototype(spread_map);
+  Node* array_prototype = LoadContextElement(
+      native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
+  GotoIfNot(WordEqual(prototype, array_prototype), &if_runtime);
+
+  // Check that the ArrayPrototype hasn't been modified in a way that would
+  // affect iteration.
+  Node* protector_cell = LoadRoot(Heap::kArrayIteratorProtectorRootIndex);
+  DCHECK(isolate()->heap()->array_iterator_protector()->IsPropertyCell());
+  GotoIfNot(
+      WordEqual(LoadObjectField(protector_cell, PropertyCell::kValueOffset),
+                SmiConstant(Smi::FromInt(Isolate::kProtectorValid))),
+      &if_runtime);
+
+  // Check that the map of the initial array iterator hasn't changed.
+  Node* arr_it_proto_map = LoadMap(LoadContextElement(
+      native_context, Context::INITIAL_ARRAY_ITERATOR_PROTOTYPE_INDEX));
+  Node* initial_map = LoadContextElement(
+      native_context, Context::INITIAL_ARRAY_ITERATOR_PROTOTYPE_MAP_INDEX);
+  GotoIfNot(WordEqual(arr_it_proto_map, initial_map), &if_runtime);
+
+  Node* kind = LoadMapElementsKind(spread_map);
+
+  STATIC_ASSERT(FAST_SMI_ELEMENTS == 0);
+  STATIC_ASSERT(FAST_HOLEY_SMI_ELEMENTS == 1);
+  STATIC_ASSERT(FAST_ELEMENTS == 2);
+  STATIC_ASSERT(FAST_HOLEY_ELEMENTS == 3);
+  STATIC_ASSERT(FAST_DOUBLE_ELEMENTS == 4);
+  STATIC_ASSERT(FAST_HOLEY_DOUBLE_ELEMENTS == 5);
+  STATIC_ASSERT(LAST_FAST_ELEMENTS_KIND == FAST_HOLEY_DOUBLE_ELEMENTS);
+
+  GotoIf(Int32GreaterThan(kind, Int32Constant(LAST_FAST_ELEMENTS_KIND)),
+         &if_runtime);
+  Branch(Word32And(kind, Int32Constant(1)), &if_holey, &if_done);
+
+  // Check the ArrayProtector cell for holey arrays.
+  BIND(&if_holey);
+  {
+    Node* protector_cell = LoadRoot(Heap::kArrayProtectorRootIndex);
+    DCHECK(isolate()->heap()->array_protector()->IsPropertyCell());
+    Branch(
+        WordEqual(LoadObjectField(protector_cell, PropertyCell::kValueOffset),
+                  SmiConstant(Smi::FromInt(Isolate::kProtectorValid))),
+        &if_done, &if_runtime);
+  }
+
+  BIND(&if_runtime);
+  {
+    Node* spread_iterable = LoadContextElement(LoadNativeContext(context),
+                                               Context::SPREAD_ITERABLE_INDEX);
+    spread_result.Bind(CallJS(CodeFactory::Call(isolate()), context,
+                              spread_iterable, UndefinedConstant(), spread));
+    CSA_ASSERT(this, IsJSArray(spread_result.value()));
+    Goto(&if_done);
+  }
+
+  BIND(&if_done);
+  {
+    CallOrConstructWithArrayLike(target, new_target, spread_result.value(),
+                                 args_count, context);
   }
 }
 
@@ -252,7 +329,18 @@ TF_BUILTIN(CallWithArrayLike, CallOrConstructBuiltinsAssembler) {
   Node* new_target = nullptr;
   Node* arguments_list = Parameter(CallWithArrayLikeDescriptor::kArgumentsList);
   Node* context = Parameter(CallWithArrayLikeDescriptor::kContext);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  Node* args_count = Int32Constant(0);  // args already on the stack
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, args_count,
+                               context);
+}
+
+TF_BUILTIN(CallWithSpread, CallOrConstructBuiltinsAssembler) {
+  Node* target = Parameter(CallWithSpreadDescriptor::kTarget);
+  Node* new_target = nullptr;
+  Node* spread = Parameter(CallWithSpreadDescriptor::kSpread);
+  Node* args_count = Parameter(CallWithSpreadDescriptor::kArgumentsCount);
+  Node* context = Parameter(CallWithSpreadDescriptor::kContext);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
 }
 
 }  // namespace internal

@@ -76,7 +76,7 @@ namespace internal {
   ASM(TailCall_ReceiverIsNotNullOrUndefined)                                   \
   ASM(TailCall_ReceiverIsAny)                                                  \
   ASM(CallVarargs)                                                             \
-  ASM(CallWithSpread)                                                          \
+  TFC(CallWithSpread, CallWithSpread, 1)                                       \
   TFC(CallWithArrayLike, CallWithArrayLike, 1)                                 \
   ASM(CallForwardVarargs)                                                      \
   ASM(CallFunctionForwardVarargs)                                              \

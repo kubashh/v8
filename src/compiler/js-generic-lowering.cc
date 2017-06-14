@@ -635,14 +635,18 @@ void JSGenericLowering::LowerJSCall(Node* node) {
 void JSGenericLowering::LowerJSCallWithSpread(Node* node) {
   SpreadWithArityParameter const& p = SpreadWithArityParameterOf(node->op());
   int const arg_count = static_cast<int>(p.arity() - 2);
-  Callable callable = CodeFactory::CallWithSpread(isolate());
+  int const spread_index = static_cast<int>(p.arity() + 1);
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
+  Callable callable = CodeFactory::CallWithSpread(isolate());
   CallDescriptor* desc = Linkage::GetStubCallDescriptor(
-      isolate(), zone(), callable.descriptor(), arg_count + 1, flags);
+      isolate(), zone(), callable.descriptor(), arg_count, flags);
   Node* stub_code = jsgraph()->HeapConstant(callable.code());
-  Node* stub_arity = jsgraph()->Int32Constant(arg_count);
+  // We pass the spread in a register, not on the stack.
+  Node* stack_arg_count = jsgraph()->Int32Constant(arg_count - 1);
   node->InsertInput(zone(), 0, stub_code);
-  node->InsertInput(zone(), 2, stub_arity);
+  node->InsertInput(zone(), 2, stack_arg_count);
+  node->InsertInput(zone(), 3, node->InputAt(spread_index));
+  node->RemoveInput(spread_index + 1);
   NodeProperties::ChangeOp(node, common()->Call(desc));
 }
 

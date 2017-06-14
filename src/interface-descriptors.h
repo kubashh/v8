@@ -46,6 +46,7 @@ class PlatformInterfaceDescriptor;
   V(CallICTrampoline)                      \
   V(CallVarargs)                           \
   V(CallForwardVarargs)                    \
+  V(CallWithSpread)                        \
   V(CallWithArrayLike)                     \
   V(CallConstruct)                         \
   V(CallTrampoline)                        \
@@ -590,6 +591,13 @@ class CallForwardVarargsDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kTarget, kActualArgumentsCount, kStartIndex)
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(CallForwardVarargsDescriptor,
+                                               CallInterfaceDescriptor)
+};
+
+class CallWithSpreadDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kTarget, kArgumentsCount, kSpread)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(CallWithSpreadDescriptor,
                                                CallInterfaceDescriptor)
 };
 
