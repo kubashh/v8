@@ -107,7 +107,7 @@ class Name : public HeapObject {
   // kMaxCachedArrayIndexLength.
   STATIC_ASSERT(IS_POWER_OF_TWO(kMaxCachedArrayIndexLength + 1));
 
-  static const unsigned int kContainsCachedArrayIndexMask =
+  static const unsigned int kContainsNoCachedArrayIndexMask =
       (~static_cast<unsigned>(kMaxCachedArrayIndexLength)
        << ArrayIndexLengthBits::kShift) |
       kIsNotArrayIndexMask;
