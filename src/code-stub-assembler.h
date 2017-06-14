@@ -807,6 +807,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsFixedTypedArray(Node* object);
   Node* IsJSRegExp(Node* object);
   Node* IsFeedbackVector(Node* object);
+  Node* IsUndetectableMap(Node* map);
 
   // True iff |object| is a Smi or a HeapNumber.
   Node* IsNumber(Node* object);
