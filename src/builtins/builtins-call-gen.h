@@ -16,7 +16,10 @@ class CallOrConstructBuiltinsAssembler : public CodeStubAssembler {
       : CodeStubAssembler(state) {}
 
   void CallOrConstructWithArrayLike(Node* target, Node* new_target,
-                                    Node* arguments_list, Node* context);
+                                    Node* arguments_list, Node* args_count,
+                                    Node* context);
+  void CallOrConstructWithSpread(Node* target, Node* new_target, Node* spread,
+                                 Node* args_count, Node* context);
 };
 
 }  // namespace internal
