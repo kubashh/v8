@@ -22,6 +22,30 @@
       "revId": "b29bfffdf9d3c393b98486504ddd7a073a2e0280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7d8ced1_b04dc141",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-06-15T17:57:03Z",
+      "side": 0,
+      "message": "Removed elsewhere.",
+      "parentUuid": "e5121ce5_9483fba5",
+      "range": {
+        "startLine": 2496,
+        "startChar": 4,
+        "endLine": 2496,
+        "endChar": 38
+      },
+      "revId": "b29bfffdf9d3c393b98486504ddd7a073a2e0280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
