@@ -50,11 +50,17 @@ class ModuleCompiler {
 
     std::unique_ptr<compiler::WasmCompilationUnit> GetNext();
 
+    void InitAvailableWork(size_t size) {
+      available_work_.reset(new base::Semaphore(static_cast<int>(size)));
+    }
+    base::Semaphore* available_work() { return available_work_.get(); }
+
    private:
     size_t GetRandomIndexInSchedule();
 
     base::RandomNumberGenerator* random_number_generator_ = nullptr;
     std::vector<std::unique_ptr<compiler::WasmCompilationUnit>> schedule_;
+    std::unique_ptr<base::Semaphore> available_work_;
   };
 
   Isolate* isolate_;
@@ -85,8 +91,8 @@ class ModuleCompiler {
 
   void WaitForCompilationTasks(uint32_t* task_ids);
 
-  void FinishCompilationUnits(std::vector<Handle<Code>>& results,
-                              ErrorThrower* thrower);
+  size_t FinishCompilationUnits(std::vector<Handle<Code>>& results,
+                                ErrorThrower* thrower);
 
   void SetFinisherIsRunning(bool value);
 
