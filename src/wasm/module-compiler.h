@@ -42,19 +42,29 @@ class ModuleCompiler {
   class CodeGenerationSchedule {
    public:
     explicit CodeGenerationSchedule(
-        base::RandomNumberGenerator* random_number_generator);
+        base::RandomNumberGenerator* random_number_generator,
+        base::Mutex* mutex);
 
+    void InitMaxSize(size_t size) {
+      DCHECK_EQ(0, max_size_);
+      max_size_ = size;
+    }
     void Schedule(std::unique_ptr<compiler::WasmCompilationUnit>&& item);
 
     bool IsEmpty() const { return schedule_.empty(); }
-
+    bool AcceptsWork();
     std::unique_ptr<compiler::WasmCompilationUnit> GetNext();
+    void WaitForWork();
 
    private:
     size_t GetRandomIndexInSchedule();
 
     base::RandomNumberGenerator* random_number_generator_ = nullptr;
     std::vector<std::unique_ptr<compiler::WasmCompilationUnit>> schedule_;
+    size_t max_size_ = 0;
+    base::Mutex* mutex_;
+    base::ConditionVariable cv_;
+    base::Semaphore has_work_;
   };
 
   Isolate* isolate_;
@@ -64,8 +74,10 @@ class ModuleCompiler {
   bool is_sync_;
   std::vector<std::unique_ptr<compiler::WasmCompilationUnit>>
       compilation_units_;
-  CodeGenerationSchedule executed_units_;
+  // the result_mutex_ is used in the initialization of
+  // CodeGenerationSchedule
   base::Mutex result_mutex_;
+  CodeGenerationSchedule executed_units_;
   base::AtomicNumber<size_t> next_unit_;
   size_t num_background_tasks_ = 0;
   // This flag should only be set while holding result_mutex_.
@@ -85,8 +97,8 @@ class ModuleCompiler {
 
   void WaitForCompilationTasks(uint32_t* task_ids);
 
-  void FinishCompilationUnits(std::vector<Handle<Code>>& results,
-                              ErrorThrower* thrower);
+  size_t FinishCompilationUnits(std::vector<Handle<Code>>& results,
+                                ErrorThrower* thrower);
 
   void SetFinisherIsRunning(bool value);
 
