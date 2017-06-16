@@ -3949,6 +3949,7 @@ void WasmCompilationUnit::ExecuteCompilation() {
         isolate_->counters()->wasm_compile_function_time());
   }
   ExecuteCompilationInternal();
+  set_memory_cost(job_->AllocatedMemory());
 }
 
 void WasmCompilationUnit::ExecuteCompilationInternal() {
