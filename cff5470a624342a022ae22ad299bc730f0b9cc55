@@ -16,6 +16,24 @@
       "revId": "cff5470a624342a022ae22ad299bc730f0b9cc55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f922aaae_44a4c20c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-06-16T17:04:36Z",
+      "side": 1,
+      "message": "Was that the only reason they were set up this way previously? If so, I do think it\u0027d make sense to make that more explicit, rather than instantiating an extra function just for this purpose.\n\nHow are these objects different from the prototype objects with respect to transitions (is it that we get rid of transitions when we set an object as a prototype?)?",
+      "parentUuid": "f8653484_5c03fd13",
+      "revId": "cff5470a624342a022ae22ad299bc730f0b9cc55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
