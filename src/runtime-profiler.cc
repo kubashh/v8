@@ -45,6 +45,8 @@ static const int kOSRCodeSizeAllowancePerTick =
     4 * FullCodeGenerator::kCodeSizeMultiplier;
 static const int kOSRCodeSizeAllowancePerTickIgnition =
     2 * interpreter::Interpreter::kCodeSizeMultiplier;
+static const int kCodeSizeAllowancePerTickIgnition =
+    50 * interpreter::Interpreter::kCodeSizeMultiplier;
 
 // Maximum size in bytes of generated code for a function to be optimized
 // the very first time it is seen on the stack.
@@ -366,7 +368,10 @@ OptimizationReason RuntimeProfiler::ShouldOptimizeIgnition(
     return OptimizationReason::kDoNotOptimize;
   }
 
-  if (ticks >= kProfilerTicksBeforeOptimization) {
+  int ticks_for_optimization =
+      kProfilerTicksBeforeOptimization +
+      (shared->bytecode_array()->Size() / kCodeSizeAllowancePerTickIgnition);
+  if (ticks >= ticks_for_optimization) {
     int typeinfo, generic, total, type_percentage, generic_percentage;
     GetICCounts(function, &typeinfo, &generic, &total, &type_percentage,
                 &generic_percentage);
