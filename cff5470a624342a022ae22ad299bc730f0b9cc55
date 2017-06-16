@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8653484_5c03fd13",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-06-16T14:05:08Z",
+      "side": 1,
+      "message": "We should probably detach these objects from their transition tree, since they are known special objects? Otherwise we\u0027ll just keep multiple maps alive for no reason...",
+      "revId": "cff5470a624342a022ae22ad299bc730f0b9cc55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
