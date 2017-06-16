@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "466a274a_a39c947a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-16T09:46:24Z",
+      "side": 0,
+      "message": "Spurious change?",
+      "revId": "c94d9d41b8f869288723db9b528fa4c3ab64edca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

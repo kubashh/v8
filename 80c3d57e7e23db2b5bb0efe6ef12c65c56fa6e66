@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af86f0e1_52df0d87",
+        "filename": "src/objects/name.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-16T09:46:24Z",
+      "side": 1,
+      "message": "While you are here, please add a comment like:\n// When any of the bits is set then the hash field does not contain cached array index.\n\nand \n1) maybe kDoesNotContainCachedArrayIndexMask would be a better name. \n2) maybe add a helper method to improve readability of C++ code:\n  static inline bool HashContainsCachedArrayIndex(uint32_t hash) {\n    return (hash \u0026 kDoesNotContainCachedArrayIndexMask) \u003d\u003d 0);\n  }\n\nWDYT?",
+      "revId": "80c3d57e7e23db2b5bb0efe6ef12c65c56fa6e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
