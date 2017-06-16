@@ -206,10 +206,8 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
   } else {
     // Instantiate a JSArray or JSObject literal from the given {description}.
     boilerplate = Boilerplate::Create(isolate, vector, description, flags);
-    if (IsUninitializedLiteralSite(literal_site)) {
-      PreInitializeLiteralSite(vector, literals_slot);
-      return boilerplate;
-    }
+    // TODO(cbruni): Enable two-step literal initialization again after fixing
+    // inner object map deprecation.
     // Install AllocationSite objects.
     AllocationSiteCreationContext creation_context(isolate);
     site = creation_context.EnterNewScope();
