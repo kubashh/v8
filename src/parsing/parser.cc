@@ -170,6 +170,7 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
                                             int end_pos) {
   int expected_property_count = -1;
   const int parameter_count = 0;
+  if (name == nullptr) name = ast_value_factory()->empty_string();
 
   FunctionKind kind = call_super ? FunctionKind::kDefaultDerivedConstructor
                                  : FunctionKind::kDefaultBaseConstructor;
