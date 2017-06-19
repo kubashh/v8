@@ -170,7 +170,6 @@ FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,
                                             int end_pos) {
   int expected_property_count = -1;
   const int parameter_count = 0;
-  if (name == nullptr) name = ast_value_factory()->empty_string();
 
   FunctionKind kind = call_super ? FunctionKind::kDefaultDerivedConstructor
                                  : FunctionKind::kDefaultBaseConstructor;
@@ -3196,9 +3195,6 @@ ZoneList<Statement*>* Parser::ParseFunction(
     // The function name should have been ignored, giving us the empty string
     // here.
     DCHECK_EQ(function_name, ast_value_factory()->empty_string());
-    // The function name should have been ignored, giving us the nullptr
-    // here.
-    // DCHECK_NULL(function_name);
   }
 
   ParserFormalParameters formals(function_scope);
