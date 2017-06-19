@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4e05fd96_24604089",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-19T15:50:34Z",
+      "side": 1,
+      "message": "That would be preferable, but my goal here was to keep the change small so it can be backported, so I maintained the invariant that we hold the bg threads until we finish compiling. Naively, I imagine going the alternate route may be more involved. Also, I expect this entire solution to be overwritten once we consolidate async and parallel compilation.",
+      "parentUuid": "7a9f8f2c_7d2fe447",
+      "revId": "9b6ff43f0799b9d7c2372c50422f19d5fcf5e1a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "726ddb5a_19600d34",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 20
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-19T15:18:03Z",
       "side": 1,
       "message": "Did you actually see a problem with contention here, or is this a premature optimization?",
+      "revId": "9b6ff43f0799b9d7c2372c50422f19d5fcf5e1a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daa6a38c_04ccd9fd",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-19T15:50:34Z",
+      "side": 1,
+      "message": "https://cs.chromium.org/chromium/src/base/synchronization/condition_variable.h?l\u003d34\n\nI haven\u0027t measured with the alternative, and the recommended pattern is straightforward to implement, too.",
+      "parentUuid": "726ddb5a_19600d34",
       "revId": "9b6ff43f0799b9d7c2372c50422f19d5fcf5e1a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
