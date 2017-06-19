@@ -38,8 +38,19 @@ TF_BUILTIN(ConstructWithArrayLike, CallOrConstructBuiltinsAssembler) {
   Node* new_target = Parameter(ConstructWithArrayLikeDescriptor::kNewTarget);
   Node* arguments_list =
       Parameter(ConstructWithArrayLikeDescriptor::kArgumentsList);
+  Node* args_count = Int32Constant(0);  // args already on the stack
   Node* context = Parameter(ConstructWithArrayLikeDescriptor::kContext);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, args_count,
+                               context);
+}
+
+TF_BUILTIN(ConstructWithSpread, CallOrConstructBuiltinsAssembler) {
+  Node* target = Parameter(ConstructWithSpreadDescriptor::kTarget);
+  Node* new_target = Parameter(ConstructWithSpreadDescriptor::kNewTarget);
+  Node* spread = Parameter(ConstructWithSpreadDescriptor::kSpread);
+  Node* args_count = Parameter(ConstructWithSpreadDescriptor::kArgumentsCount);
+  Node* context = Parameter(ConstructWithSpreadDescriptor::kContext);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
 }
 
 typedef compiler::Node Node;
