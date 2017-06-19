@@ -4195,7 +4195,8 @@ void Parser::SetFunctionNameFromIdentifierRef(Expression* value,
 void Parser::SetFunctionName(Expression* value, const AstRawString* name,
                              const AstRawString* prefix) {
   if (!value->IsAnonymousFunctionDefinition() &&
-      !value->IsConciseMethodDefinition() && !value->IsAccessorDefinition())) {
+      !value->IsConciseMethodDefinition() &&
+      !value->IsAccessorFunctionDefinition()) {
     return;
   }
   auto function = value->AsFunctionLiteral();
