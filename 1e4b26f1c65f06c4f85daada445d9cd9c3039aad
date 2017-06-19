@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed0ce4fc_21d3eab3",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-06-19T18:44:42Z",
+      "side": 1,
+      "message": "ZipLeft, ZipRight, etc. don\u0027t have any meaning in wasm after we switched to a single S8x16Shuffle operation.",
+      "range": {
+        "startLine": 2285,
+        "startChar": 22,
+        "endLine": 2285,
+        "endChar": 26
+      },
+      "revId": "1e4b26f1c65f06c4f85daada445d9cd9c3039aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc251c1_f4a92f4d",
+        "filename": "src/compiler/mips/instruction-selector-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2239,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-06-19T18:44:42Z",
+      "side": 1,
+      "message": "Note: the order in which we try to match should be from most advantageous instruction sequence to least advantageous. For example, we try to match 32x4 shuffles first on ARM but arch shuffles first on ARM64.",
+      "range": {
+        "startLine": 2239,
+        "startChar": 6,
+        "endLine": 2239,
+        "endChar": 25
+      },
+      "revId": "1e4b26f1c65f06c4f85daada445d9cd9c3039aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a701d9_d86eb5f2",
+        "filename": "src/compiler/mips64/code-generator-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-06-19T18:44:42Z",
+      "side": 1,
+      "message": "ZipLeft, ZipRight, etc. not wasm instructions any more.",
+      "range": {
+        "startLine": 2604,
+        "startChar": 9,
+        "endLine": 2604,
+        "endChar": 16
+      },
+      "revId": "1e4b26f1c65f06c4f85daada445d9cd9c3039aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
