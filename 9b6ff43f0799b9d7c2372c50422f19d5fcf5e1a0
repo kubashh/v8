@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a9f8f2c_7d2fe447",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-19T15:18:03Z",
+      "side": 1,
+      "message": "Why do we block the background thread instead of terminating the task and starting new tasks once the queue gets empty enough again?",
+      "revId": "9b6ff43f0799b9d7c2372c50422f19d5fcf5e1a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "726ddb5a_19600d34",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-19T15:18:03Z",
+      "side": 1,
+      "message": "Did you actually see a problem with contention here, or is this a premature optimization?",
+      "revId": "9b6ff43f0799b9d7c2372c50422f19d5fcf5e1a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
