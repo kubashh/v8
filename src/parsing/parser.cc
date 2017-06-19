@@ -4160,9 +4160,15 @@ void Parser::SetFunctionNameFromPropertyName(LiteralProperty* property,
   // we are not going to set it later.
   if (property->NeedsSetFunctionName()) {
     name = nullptr;
-  } else if (name == nullptr) {
-    name = ast_value_factory()->empty_string();
     prefix = nullptr;
+  } else {
+    // If the property value is an anonymous function or an anonymous class or
+    // a concise method or an accessor function which doesn't require the name
+    // to be set then the shared name must be provided.
+    DCHECK_IMPLIES(property->value()->IsAnonymousFunctionDefinition() ||
+                       property->value()->IsConciseMethodDefinition() ||
+                       property->value()->IsAccessorFunctionDefinition(),
+                   name != nullptr);
   }
 
   Expression* value = property->value();
@@ -4174,6 +4180,7 @@ void Parser::SetFunctionNameFromPropertyName(ObjectLiteralProperty* property,
                                              const AstRawString* prefix) {
   // Ignore "__proto__" as a name when it's being used to set the [[Prototype]]
   // of an object literal.
+  // See ES #sec-__proto__-property-names-in-object-initializers.
   if (property->IsPrototype()) return;
 
   DCHECK(!property->value()->IsAnonymousFunctionDefinition() ||
@@ -4208,6 +4215,8 @@ void Parser::SetFunctionName(Expression* value, const AstRawString* name,
       } else {
         cons_name = ast_value_factory()->NewConsString(name);
       }
+    } else {
+      DCHECK_NULL(prefix);
     }
     function->set_raw_name(cons_name);
   }
