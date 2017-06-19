@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "941ffd4b_45668806",
+        "filename": "src/runtime-profiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-19T16:00:54Z",
+      "side": 1,
+      "message": "nit - could you move this away from the OSR related values (probably below the kTicksWhenNotEnoughTypeInfo assert)",
+      "range": {
+        "startLine": 48,
+        "startChar": 17,
+        "endLine": 48,
+        "endChar": 50
+      },
+      "revId": "d97f5eb93726e6380fff6749a0d12e1133c3b424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
