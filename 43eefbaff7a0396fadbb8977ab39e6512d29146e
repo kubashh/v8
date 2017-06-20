@@ -70,6 +70,30 @@
       "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71170218_cd95a201",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-06-20T08:35:14Z",
+      "side": 1,
+      "message": "OK, did that as we discussed, in CSA for now so we still create the temporary FixedArray, but at least we don\u0027t have to add any more native code.",
+      "parentUuid": "7abf8c48_780b4c69",
+      "range": {
+        "startLine": 322,
+        "startChar": 4,
+        "endLine": 322,
+        "endChar": 32
+      },
+      "revId": "43eefbaff7a0396fadbb8977ab39e6512d29146e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
