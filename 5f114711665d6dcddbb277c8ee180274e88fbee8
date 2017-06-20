@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2c6893a_1afa9c7f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-20T13:52:56Z",
+      "side": 1,
+      "message": "Where do these get incremented? I thought it would make sense to deal with this in the BreakableControlFlowBuilder (for break) / LoopBuilder (for continue). WDYT?",
+      "range": {
+        "startLine": 1255,
+        "startChar": 2,
+        "endLine": 1256,
+        "endChar": 53
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
