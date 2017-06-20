@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0adca66_0323d560",
+        "filename": "test/mjsunit/wasm/export-global.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-20T13:54:17Z",
+      "side": 1,
+      "message": "could you also add globals of type F32 and F64?",
+      "revId": "690ad2bd56a0ea24b5fb1da8637569d9daf4ed77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
