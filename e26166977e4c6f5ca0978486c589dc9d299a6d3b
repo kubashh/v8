@@ -16,6 +16,24 @@
       "revId": "e26166977e4c6f5ca0978486c589dc9d299a6d3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b50c68_c0ad8e52",
+        "filename": "test/mjsunit/es6/spread-call.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-06-20T11:15:33Z",
+      "side": 1,
+      "message": "OK I added a new test file under mjsunit/compiler, let me know if it covers what you were thinking of",
+      "parentUuid": "56a0e3de_68c25245",
+      "revId": "e26166977e4c6f5ca0978486c589dc9d299a6d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
