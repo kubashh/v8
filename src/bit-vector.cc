@@ -32,7 +32,7 @@ void BitVector::Iterator::Advance() {
   while (val == 0) {
     current_index_++;
     if (Done()) return;
-    val = target_->data_[current_index_];
+    val = target_->storage_.ptr_[current_index_];
     current_ = current_index_ << kDataBitShift;
   }
   val = SkipZeroBytes(val);
@@ -42,16 +42,15 @@ void BitVector::Iterator::Advance() {
 
 
 int BitVector::Count() const {
-  int count = 0;
-  for (int i = 0; i < data_length_; i++) {
-    uintptr_t data = data_[i];
-    if (sizeof(data) == 8) {
-      count += base::bits::CountPopulation64(data);
-    } else {
-      count += base::bits::CountPopulation32(static_cast<uint32_t>(data));
+  if (data_length_ == 0) {
+    return base::bits::CountPopulation(storage_.inline_);
+  } else {
+    int count = 0;
+    for (int i = 0; i < data_length_; i++) {
+      count += base::bits::CountPopulation(storage_.ptr_[i]);
     }
+    return count;
   }
-  return count;
 }
 
 }  // namespace internal
