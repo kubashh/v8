@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17aacbe1_49e1051c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-20T11:06:30Z",
+      "side": 1,
+      "message": "nit: DCHECK for AND? I know it checks above but this would make it clearer.",
+      "range": {
+        "startLine": 3566,
+        "startChar": 11,
+        "endLine": 3566,
+        "endChar": 12
+      },
+      "revId": "27e85e1fbe5ea866adbea515eb246fd20543a6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83c0306a_9028d1b9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4011,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-20T11:06:30Z",
+      "side": 1,
+      "message": "optional: this seems quite test focused, and only (currently?) used for tests. Should it be VisitInTestExecutionScope, so that we can remove the \"IsTest\"?",
+      "range": {
+        "startLine": 4011,
+        "startChar": 24,
+        "endLine": 4011,
+        "endChar": 49
+      },
+      "revId": "27e85e1fbe5ea866adbea515eb246fd20543a6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
