@@ -16,6 +16,24 @@
       "revId": "a971a64d1c4a51df017ef023d8505e2c4ed6c5cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "674e9848_7d6d1d62",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-06-20T14:16:19Z",
+      "side": 1,
+      "message": "Thanks, I made a CL here: https://chromium-review.googlesource.com/c/541283/",
+      "parentUuid": "c0f4ace0_22c660fe",
+      "revId": "a971a64d1c4a51df017ef023d8505e2c4ed6c5cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
