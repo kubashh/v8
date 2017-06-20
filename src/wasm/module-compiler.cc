@@ -1031,6 +1031,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   // Set up the exports object for the new instance.
   //--------------------------------------------------------------------------
   ProcessExports(code_table, instance, compiled_module_);
+  if (thrower_->error()) return {};
 
   //--------------------------------------------------------------------------
   // Add instance to Memory object
@@ -1692,7 +1693,7 @@ void InstanceBuilder::ProcessExports(
           case kWasmI64:
             thrower_->LinkError(
                 "export of globals of type I64 is not allowed.");
-            break;
+            return;
           default:
             UNREACHABLE();
         }
