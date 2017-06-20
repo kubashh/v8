@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f21f6da_580c05f6",
+        "filename": "test/mjsunit/compiler/spread-call.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-06-20T11:33:38Z",
+      "side": 1,
+      "message": "Here the exact parameters are known to TurboFan, although we don\u0027t yet make use of this ability. In addition we need these tests with different arrays but not known to TurboFan.",
+      "revId": "f355c93237a0d476e39228812a134d7804dd8e33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
