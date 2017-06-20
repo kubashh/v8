@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5913c0e4_87a6acc7",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "\"Returns the source position (line number and column number) of the ith module specifier\u0027s first occurrence in this module.\"",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a649b7f4_8a89679c",
         "filename": "include/v8.h",
         "patchSetId": 1
@@ -13,6 +30,126 @@
       "writtenOn": "2017-06-20T16:25:29Z",
       "side": 1,
       "message": "Is the use of pair\u003c\u003e here consistent with how positions are represented elsewhere in devtools? I imagine \u003cline, column\u003e is a pretty standard ordering, but I\u0027m always a little bit worried by pairs of identical types, and wonder if they should be named in a struct instead.",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0ddb37_c43d69ed",
+        "filename": "src/ast/modules.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "Since we have the storage now anyway, why not just record the precise specifier position rather than that of the name? I.e. Add a specifier_loc argument (to be provided by the parser) and pass that to AddModuleRequest.\n\n(Same elsewhere below.)",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e624d27_587c28e3",
+        "filename": "src/ast/modules.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "Please rename loc to specifier_loc",
+      "range": {
+        "startLine": 49,
+        "startChar": 51,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74aa46d_bcecbde8",
+        "filename": "src/objects/module-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "Please add the module_requests and module_request_positions here.",
+      "range": {
+        "startLine": 70,
+        "startChar": 61,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca61a95d_f02897ce",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "Nit: int size \u003d static_cast\u003cint\u003e(descr-\u003emodule_requests().size())), then reuse.\n\nAlso please add sth like DCHECK_EQ(descr-\u003emodule_request_positions.size(), size).",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d465b27_7a0a9a27",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "You should also implement the corresponding deserialization in scopes.cc ModuleScope(Handle\u003cScopeInfo\u003e scope_info, ...)",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84718ceb_78b6f32d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-20T16:53:36Z",
+      "side": 1,
+      "message": "Isn\u0027t that the location of the semicolon?\n\nBelow you\u0027re also not using the exact location of the specifier, any reason for that?",
+      "range": {
+        "startLine": 1153,
+        "startChar": 70,
+        "endLine": 1153,
+        "endChar": 0
+      },
       "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
