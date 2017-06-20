@@ -59,16 +59,15 @@ HeapObject* LiveObjectIterator<T>::Next() {
       // Clear the first bit of the found object..
       current_cell_ &= ~(1u << trailing_zeros);
 
-      uint32_t second_bit_index = 0;
-      if (trailing_zeros < Bitmap::kBitIndexMask) {
-        second_bit_index = 1u << (trailing_zeros + 1);
-      } else {
+      uint32_t second_bit_index = 1u << (trailing_zeros + 1);
+      if (trailing_zeros >= Bitmap::kBitIndexMask) {
         second_bit_index = 0x1;
         // The overlapping case; there has to exist a cell after the current
         // cell.
-        // However, if there is a black area at the end of the page, and the
-        // last word is a one word filler, we are not allowed to advance. In
-        // that case we can return immediately.
+        //
+        // Exception: If there if there is a black area at the end of the page
+        // and the last word is a one word filler, we are not allowed to
+        // advance. Return immediately in that case.
         if (!it_.Advance()) {
           DCHECK(HeapObject::FromAddress(addr)->map() == one_word_filler_map_);
           return nullptr;
@@ -77,44 +76,33 @@ HeapObject* LiveObjectIterator<T>::Next() {
         current_cell_ = *it_.CurrentCell();
       }
 
-      Map* map = nullptr;
-      if (current_cell_ & second_bit_index) {
-        // We found a black object. If the black object is within a black area,
-        // make sure that we skip all set bits in the black area until the
-        // object ends.
-        HeapObject* black_object = HeapObject::FromAddress(addr);
-        map = base::NoBarrierAtomicValue<Map*>::FromAddress(addr)->Value();
-        Address end = addr + black_object->SizeFromMap(map) - kPointerSize;
-        // One word filler objects do not borrow the second mark bit. We have
-        // to jump over the advancing and clearing part.
-        // Note that we know that we are at a one word filler when
-        // object_start + object_size - kPointerSize == object_start.
-        if (addr != end) {
-          DCHECK_EQ(chunk_, MemoryChunk::FromAddress(end));
-          uint32_t end_mark_bit_index = chunk_->AddressToMarkbitIndex(end);
-          unsigned int end_cell_index =
-              end_mark_bit_index >> Bitmap::kBitsPerCellLog2;
-          MarkBit::CellType end_index_mask =
-              1u << Bitmap::IndexInCell(end_mark_bit_index);
-          if (it_.Advance(end_cell_index)) {
-            cell_base_ = it_.CurrentCellBase();
-            current_cell_ = *it_.CurrentCell();
-          }
+      object = HeapObject::FromAddress(addr);
+      Map* map = object->map();
+      bool second_bit_set = current_cell_ & second_bit_index;
 
-          // Clear all bits in current_cell, including the end index.
-          current_cell_ &= ~(end_index_mask + end_index_mask - 1);
+      // Advance the iterator. One word filler objects do not borrow the
+      // second mark bit. For all others we can jump over the object payload.
+      // Note that for black allocated objects we actually have to advance
+      // over the object payload, while for regular black or grey objects
+      // this would be optional.
+      if (map != one_word_filler_map_) {
+        Address object_end = addr + object->SizeFromMap(map) - kPointerSize;
+        DCHECK_EQ(chunk_, MemoryChunk::FromAddress(object_end));
+        uint32_t end_mark_bit_index = chunk_->AddressToMarkbitIndex(object_end);
+        unsigned int end_cell_index =
+            end_mark_bit_index >> Bitmap::kBitsPerCellLog2;
+        MarkBit::CellType end_index_mask =
+            1u << Bitmap::IndexInCell(end_mark_bit_index);
+        if (it_.Advance(end_cell_index)) {
+          cell_base_ = it_.CurrentCellBase();
+          current_cell_ = *it_.CurrentCell();
         }
-
-        if (T == kBlackObjects || T == kAllLiveObjects) {
-          object = black_object;
-        }
-      } else if ((T == kGreyObjects || T == kAllLiveObjects)) {
-        map = base::NoBarrierAtomicValue<Map*>::FromAddress(addr)->Value();
-        object = HeapObject::FromAddress(addr);
+        // Clear all bits in current_cell, including the end index.
+        current_cell_ &= ~(end_index_mask + end_index_mask - 1);
       }
 
-      // We found a live object.
-      if (object != nullptr) {
+      if (T == kAllLiveObjects || (T == kBlackObjects && second_bit_set) ||
+          (T == kGreyObjects && !second_bit_set)) {
         // Do not use IsFiller() here. This may cause a data race for reading
         // out the instance type when a new map concurrently is written into
         // this object while iterating over the object.
