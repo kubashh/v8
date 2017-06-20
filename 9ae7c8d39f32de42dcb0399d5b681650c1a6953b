@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a649b7f4_8a89679c",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-06-20T16:25:29Z",
+      "side": 1,
+      "message": "Is the use of pair\u003c\u003e here consistent with how positions are represented elsewhere in devtools? I imagine \u003cline, column\u003e is a pretty standard ordering, but I\u0027m always a little bit worried by pairs of identical types, and wonder if they should be named in a struct instead.",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
