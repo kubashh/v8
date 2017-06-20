@@ -678,26 +678,9 @@ Reduction JSTypedLowering::ReduceCreateConsString(Node* node) {
     second_type = NodeProperties::GetType(second);
   }
 
-  // Determine the {first} length.
-  HeapObjectBinopMatcher m(node);
-  Node* first_length =
-      (m.left().HasValue() && m.left().Value()->IsString())
-          ? jsgraph()->Constant(
-                Handle<String>::cast(m.left().Value())->length())
-          : effect = graph()->NewNode(
-                simplified()->LoadField(AccessBuilder::ForStringLength()),
-                first, effect, control);
-
-  // Determine the {second} length.
-  Node* second_length =
-      (m.right().HasValue() && m.right().Value()->IsString())
-          ? jsgraph()->Constant(
-                Handle<String>::cast(m.right().Value())->length())
-          : effect = graph()->NewNode(
-                simplified()->LoadField(AccessBuilder::ForStringLength()),
-                second, effect, control);
-
   // Compute the resulting length.
+  Node* first_length = BuildGetStringLength(first, &effect, control);
+  Node* second_length = BuildGetStringLength(second, &effect, control);
   Node* length =
       graph()->NewNode(simplified()->NumberAdd(), first_length, second_length);
 
@@ -716,35 +699,203 @@ Reduction JSTypedLowering::ReduceCreateConsString(Node* node) {
   } else {
     Node* branch =
         graph()->NewNode(common()->Branch(BranchHint::kTrue), check, control);
-    Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
-    Node* efalse = effect;
     {
-      // Throw a RangeError in case of overflow.
-      Node* vfalse = efalse = if_false = graph()->NewNode(
-          javascript()->CallRuntime(Runtime::kThrowInvalidStringLength),
-          context, frame_state, efalse, if_false);
-
-      // Update potential {IfException} uses of {node} to point to the
-      // %ThrowInvalidStringLength runtime call node instead.
-      Node* on_exception = nullptr;
-      if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
-        NodeProperties::ReplaceControlInput(on_exception, vfalse);
-        NodeProperties::ReplaceEffectInput(on_exception, efalse);
-        if_false = graph()->NewNode(common()->IfSuccess(), vfalse);
-        Revisit(on_exception);
-      }
-
-      // The above %ThrowInvalidStringLength runtime call is an unconditional
-      // throw, making it impossible to return a successful completion in this
-      // case. We simply connect the successful completion to the graph end.
-      if_false = graph()->NewNode(common()->Throw(), efalse, if_false);
-      // TODO(bmeurer): This should be on the AdvancedReducer somehow.
-      NodeProperties::MergeControlToEnd(graph(), common(), if_false);
-      Revisit(graph()->end());
+      Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
+      BuildThrowStringRangeError(node, context, frame_state, effect, if_false);
     }
     control = graph()->NewNode(common()->IfTrue(), branch);
   }
+  Node* result = effect =
+      BuildCreateConsString(first, second, length, effect, control, node);
+  DCHECK_EQ(result, node);
+  ReplaceWithValue(result, result, effect, control);
+  return Changed(result);
+}
 
+namespace {
+
+// Check if a string concatenation will definitely result in creating a
+// ConsString for all operands, i.e. if the combined length of the first two
+// operands exceeds the ConsString minimum length and we never concatenate the
+// empty string.
+bool ShouldConcatenateAsConsStrings(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSStringConcat, node->opcode());
+  DCHECK_GE(StringConcatParameterOf(node->op()).operand_count(), 3);
+
+  // Check that the first ConsString will be greater than kMinLength and won't
+  // break ConsString invariants if RHS is the empty string.
+  Node* first_operand = NodeProperties::GetValueInput(node, 0);
+  Node* second_operand = NodeProperties::GetValueInput(node, 1);
+  DCHECK(NodeProperties::GetType(first_operand)->Is(Type::String()));
+  DCHECK(NodeProperties::GetType(second_operand)->Is(Type::String()));
+  HeapObjectMatcher first_matcher(first_operand);
+  HeapObjectMatcher second_matcher(second_operand);
+
+  bool can_be_cons_result = false;
+  if (first_matcher.HasValue()) {
+    DCHECK(first_matcher.Value()->IsString());
+    Handle<String> first_string = Handle<String>::cast(first_matcher.Value());
+    // The invariant for ConsString requires the left hand side to be
+    // a sequential or external string if the right hand side is the
+    // empty string.
+    if (first_string->length() >= ConsString::kMinLength &&
+        (NodeProperties::GetType(second_operand)->Is(Type::NonEmptyString()) ||
+         first_string->IsSeqString() || first_string->IsExternalString())) {
+      can_be_cons_result = true;
+    }
+  } else if (second_matcher.HasValue()) {
+    DCHECK(second_matcher.Value()->IsString());
+    Handle<String> second_string = Handle<String>::cast(second_matcher.Value());
+    if (second_string->length() >= ConsString::kMinLength) {
+      can_be_cons_result = true;
+    }
+  }
+  if (!can_be_cons_result) return false;
+
+  // Now check that all other RHSs of the ConsStrings will be non-empty.
+  int operand_count = StringConcatParameterOf(node->op()).operand_count();
+  for (int i = 2; i < operand_count; ++i) {
+    Node* operand = NodeProperties::GetValueInput(node, i);
+    DCHECK(NodeProperties::GetType(operand)->Is(Type::String()));
+    if (!NodeProperties::GetType(operand)->Is(Type::NonEmptyString())) {
+      return false;
+    }
+  }
+
+  // If all these constraints hold, the result will definitely be a ConsString.
+  return true;
+}
+
+}  // namespace
+
+Reduction JSTypedLowering::ReduceJSStringConcat(Node* node) {
+  if (ShouldConcatenateAsConsStrings(node)) {
+    Node* context = NodeProperties::GetContextInput(node);
+    Node* frame_state = NodeProperties::GetFrameStateInput(node);
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+    int operand_count = StringConcatParameterOf(node->op()).operand_count();
+
+    // Set up string overflow check dependencies.
+    NodeVector overflow_controls(graph()->zone());
+    NodeVector overflow_effects(graph()->zone());
+    if (isolate()->IsStringLengthOverflowIntact()) {
+      // Add a code dependency on the string length overflow protector.
+      dependencies()->AssumePropertyCell(factory()->string_length_protector());
+    }
+
+    // Get the first operand and its length.
+    Node* current_result = NodeProperties::GetValueInput(node, 0);
+    Node* current_length =
+        BuildGetStringLength(current_result, &effect, control);
+
+    for (int i = 1; i < operand_count; ++i) {
+      bool last_operand = i == operand_count - 1;
+      // Get the next operand and its length.
+      Node* current_operand = NodeProperties::GetValueInput(node, i);
+      HeapObjectMatcher m(current_operand);
+      Node* operand_length =
+          BuildGetStringLength(current_operand, &effect, control);
+
+      // Update the current length and check that it it doesn't overflow.
+      current_length = graph()->NewNode(simplified()->NumberAdd(),
+                                        current_length, operand_length);
+      Node* check = graph()->NewNode(simplified()->NumberLessThanOrEqual(),
+                                     current_length,
+                                     jsgraph()->Constant(String::kMaxLength));
+      if (isolate()->IsStringLengthOverflowIntact()) {
+        // We can just deoptimize if the {check} fails. Besides generating a
+        // shorter code sequence than the version below, this has the additional
+        // benefit of not holding on to the lazy {frame_state} and thus
+        // potentially reduces the number of live ranges and allows for more
+        // truncations.
+        effect =
+            graph()->NewNode(simplified()->CheckIf(), check, effect, control);
+      } else {
+        // Otherwise insert a branch to the runtime call which throws on
+        // overflow.
+        Node* branch = graph()->NewNode(common()->Branch(BranchHint::kTrue),
+                                        check, control);
+        overflow_controls.push_back(
+            graph()->NewNode(common()->IfFalse(), branch));
+        overflow_effects.push_back(effect);
+
+        // Build the string overflow throwing code if we have checked all the
+        // lengths.
+        if (last_operand) {
+          // Merge control and effect of overflow checks.
+          int merge_count = operand_count - 1;
+          DCHECK_EQ(overflow_controls.size(), static_cast<size_t>(merge_count));
+          DCHECK_EQ(overflow_effects.size(), static_cast<size_t>(merge_count));
+
+          Node* if_false =
+              graph()->NewNode(common()->Merge(merge_count), merge_count,
+                               &overflow_controls.front());
+          overflow_effects.push_back(if_false);
+          Node* efalse =
+              graph()->NewNode(common()->EffectPhi(merge_count),
+                               merge_count + 1, &overflow_effects.front());
+
+          // And throw the range error.
+          BuildThrowStringRangeError(node, context, frame_state, efalse,
+                                     if_false);
+        }
+        control = graph()->NewNode(common()->IfTrue(), branch);
+      }
+      current_result = effect =
+          BuildCreateConsString(current_result, current_operand, current_length,
+                                effect, control, last_operand ? node : nullptr);
+    }
+    DCHECK_EQ(current_result, node);
+    ReplaceWithValue(current_result, current_result, effect, control);
+    return Changed(current_result);
+  }
+  return NoChange();
+}
+
+Node* JSTypedLowering::BuildGetStringLength(Node* value, Node** effect,
+                                            Node* control) {
+  HeapObjectMatcher m(value);
+  Node* length =
+      (m.HasValue() && m.Value()->IsString())
+          ? jsgraph()->Constant(Handle<String>::cast(m.Value())->length())
+          : (*effect) = graph()->NewNode(
+                simplified()->LoadField(AccessBuilder::ForStringLength()),
+                value, *effect, control);
+  return length;
+}
+
+void JSTypedLowering::BuildThrowStringRangeError(Node* node, Node* context,
+                                                 Node* frame_state,
+                                                 Node* effect, Node* control) {
+  // Throw a RangeError in case of overflow.
+  Node* value = effect = control = graph()->NewNode(
+      javascript()->CallRuntime(Runtime::kThrowInvalidStringLength), context,
+      frame_state, effect, control);
+
+  // Update potential {IfException} uses of {node} to point to the
+  // %ThrowInvalidStringLength runtime call node instead.
+  Node* on_exception = nullptr;
+  if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
+    NodeProperties::ReplaceControlInput(on_exception, value);
+    NodeProperties::ReplaceEffectInput(on_exception, effect);
+    control = graph()->NewNode(common()->IfSuccess(), value);
+    Revisit(on_exception);
+  }
+
+  // The above %ThrowInvalidStringLength runtime call is an unconditional
+  // throw, making it impossible to return a successful completion in this
+  // case. We simply connect the successful completion to the graph end.
+  control = graph()->NewNode(common()->Throw(), effect, control);
+  // TODO(bmeurer): This should be on the AdvancedReducer somehow.
+  NodeProperties::MergeControlToEnd(graph(), common(), control);
+  Revisit(graph()->end());
+}
+
+Node* JSTypedLowering::BuildCreateConsString(Node* first, Node* second,
+                                             Node* length, Node* effect,
+                                             Node* control,
+                                             Node* node_to_replace) {
   // Figure out the map for the resulting ConsString.
   // TODO(turbofan): We currently just use the cons_string_map here for
   // the sake of simplicity; we could also try to be smarter here and
@@ -773,13 +924,17 @@ Reduction JSTypedLowering::ReduceCreateConsString(Node* node) {
       simplified()->StoreField(AccessBuilder::ForConsStringSecond()), value,
       second, effect, control);
 
-  // Morph the {node} into a {FinishRegion}.
-  ReplaceWithValue(node, node, node, control);
-  node->ReplaceInput(0, value);
-  node->ReplaceInput(1, effect);
-  node->TrimInputCount(2);
-  NodeProperties::ChangeOp(node, common()->FinishRegion());
-  return Changed(node);
+  if (node_to_replace != nullptr) {
+    // Morph the {node_to_replace} into a {FinishRegion}.
+    node_to_replace->ReplaceInput(0, value);
+    node_to_replace->ReplaceInput(1, effect);
+    node_to_replace->TrimInputCount(2);
+    NodeProperties::ChangeOp(node_to_replace, common()->FinishRegion());
+    return node_to_replace;
+  } else {
+    // Return a new {FinishRegion} node.
+    return graph()->NewNode(common()->FinishRegion(), value, effect);
+  }
 }
 
 Reduction JSTypedLowering::ReduceSpeculativeNumberComparison(Node* node) {
@@ -2405,6 +2560,8 @@ Reduction JSTypedLowering::Reduce(Node* node) {
       return ReduceJSToString(node);
     case IrOpcode::kJSToPrimitiveToString:
       return ReduceJSToPrimitiveToString(node);
+    case IrOpcode::kJSStringConcat:
+      return ReduceJSStringConcat(node);
     case IrOpcode::kJSToObject:
       return ReduceJSToObject(node);
     case IrOpcode::kJSTypeOf:
