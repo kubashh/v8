@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "72293288_6662307e",
+        "filename": "test/mjsunit/regress/regress-crbug-734162.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-20T09:50:04Z",
+      "side": 1,
+      "message": "Please s/__v_/v/g and s/__f_/f/g",
+      "revId": "34b8c90cdc74fe15f3d42b722809cbf35f22864f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31497856_74c243c6",
         "filename": "test/mjsunit/regress/regress-crbug-734162.js",
         "patchSetId": 2
