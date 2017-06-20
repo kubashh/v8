@@ -18,7 +18,7 @@ void ModuleDescriptor::AddImport(
   Entry* entry = new (zone) Entry(loc);
   entry->local_name = local_name;
   entry->import_name = import_name;
-  entry->module_request = AddModuleRequest(module_request);
+  entry->module_request = AddModuleRequest(module_request, loc);
   AddRegularImport(entry);
 }
 
@@ -28,12 +28,13 @@ void ModuleDescriptor::AddStarImport(
     Scanner::Location loc, Zone* zone) {
   Entry* entry = new (zone) Entry(loc);
   entry->local_name = local_name;
-  entry->module_request = AddModuleRequest(module_request);
+  entry->module_request = AddModuleRequest(module_request, loc);
   AddNamespaceImport(entry, zone);
 }
 
-void ModuleDescriptor::AddEmptyImport(const AstRawString* module_request) {
-  AddModuleRequest(module_request);
+void ModuleDescriptor::AddEmptyImport(const AstRawString* module_request,
+                                      Scanner::Location loc) {
+  AddModuleRequest(module_request, loc);
 }
 
 
@@ -55,7 +56,7 @@ void ModuleDescriptor::AddExport(
   Entry* entry = new (zone) Entry(loc);
   entry->export_name = export_name;
   entry->import_name = import_name;
-  entry->module_request = AddModuleRequest(module_request);
+  entry->module_request = AddModuleRequest(module_request, loc);
   AddSpecialExport(entry, zone);
 }
 
@@ -63,7 +64,7 @@ void ModuleDescriptor::AddExport(
 void ModuleDescriptor::AddStarExport(
     const AstRawString* module_request, Scanner::Location loc, Zone* zone) {
   Entry* entry = new (zone) Entry(loc);
-  entry->module_request = AddModuleRequest(module_request);
+  entry->module_request = AddModuleRequest(module_request, loc);
   AddSpecialExport(entry, zone);
 }
 

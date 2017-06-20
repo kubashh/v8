@@ -49,6 +49,10 @@ class ModuleInfo : public FixedArray {
     return FixedArray::cast(get(kNamespaceImportsIndex));
   }
 
+  inline FixedArray* module_request_positions() const {
+    return FixedArray::cast(get(kModuleRequestPositionsIndex));
+  }
+
   // Accessors for [regular_exports].
   int RegularExportCount() const;
   String* RegularExportLocalName(int i) const;
@@ -76,6 +80,7 @@ class ModuleInfo : public FixedArray {
     kRegularExportsIndex,
     kNamespaceImportsIndex,
     kRegularImportsIndex,
+    kModuleRequestPositionsIndex,
     kLength
   };
   enum {

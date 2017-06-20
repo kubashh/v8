@@ -1095,6 +1095,12 @@ class V8_EXPORT Module {
   Local<String> GetModuleRequest(int i) const;
 
   /**
+   * Returns line number and column number of module request position in module
+   * source.
+   */
+  std::pair<int, int> GetModuleRequestPosition(int i) const;
+
+  /**
    * Returns the identity hash for this object.
    */
   int GetIdentityHash() const;

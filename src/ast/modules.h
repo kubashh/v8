@@ -45,7 +45,8 @@ class ModuleDescriptor : public ZoneObject {
   // import "foo.js";
   // import {} from "foo.js";
   // export {} from "foo.js";  (sic!)
-  void AddEmptyImport(const AstRawString* module_request);
+  void AddEmptyImport(const AstRawString* module_request,
+                      const Scanner::Location loc);
 
   // export {x};
   // export {x as y};
@@ -114,8 +115,14 @@ class ModuleDescriptor : public ZoneObject {
   enum CellIndexKind { kInvalid, kExport, kImport };
   static CellIndexKind GetCellIndexKind(int cell_index);
 
+  struct ModuleRequest {
+    int index;
+    int position;
+    ModuleRequest(int index, int position) : index(index), position(position) {}
+  };
+
   // Module requests.
-  const ZoneMap<const AstRawString*, int>& module_requests() const {
+  const ZoneMap<const AstRawString*, ModuleRequest>& module_requests() const {
     return module_requests_;
   }
 
@@ -179,7 +186,7 @@ class ModuleDescriptor : public ZoneObject {
 
  private:
   // TODO(neis): Use STL datastructure instead of ZoneList?
-  ZoneMap<const AstRawString*, int> module_requests_;
+  ZoneMap<const AstRawString*, ModuleRequest> module_requests_;
   ZoneList<const Entry*> special_exports_;
   ZoneList<const Entry*> namespace_imports_;
   ZoneMultimap<const AstRawString*, Entry*> regular_exports_;
@@ -212,13 +219,15 @@ class ModuleDescriptor : public ZoneObject {
   // Assign a cell_index of 0 to anything else.
   void AssignCellIndices();
 
-  int AddModuleRequest(const AstRawString* specifier) {
+  int AddModuleRequest(const AstRawString* specifier, Scanner::Location loc) {
     DCHECK_NOT_NULL(specifier);
     int module_requests_count = static_cast<int>(module_requests_.size());
-    auto it = module_requests_
-                  .insert(std::make_pair(specifier, module_requests_count))
-                  .first;
-    return it->second;
+    auto it =
+        module_requests_
+            .insert(std::make_pair(
+                specifier, ModuleRequest(module_requests_count, loc.beg_pos)))
+            .first;
+    return it->second.index;
   }
 };
 
