@@ -104,6 +104,9 @@ macro SET_PRIVATE(obj, sym, val) = (obj[sym] = val);
 # To avoid ES2015 Function name inference.
 macro ANONYMOUS_FUNCTION(fn) = (0, (fn));
 
+macro DEFINE_METHODS(obj, class_def) = %DefineMethodsInternal(obj, class class_def);
+macro DEFINE_METHOD(obj, method_def) = %DefineMethodsInternal(obj, class { method_def });
+
 # Constants.  The compiler constant folds them.
 define INFINITY = (1/0);
 define UNDEFINED = (void 0);

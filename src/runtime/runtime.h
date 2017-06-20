@@ -429,6 +429,7 @@ namespace internal {
   F(CopyDataPropertiesWithExcludedProperties, -1 /* >= 1 */, 1) \
   F(DefineGetterPropertyUnchecked, 4, 1)                        \
   F(DefineSetterPropertyUnchecked, 4, 1)                        \
+  F(DefineMethodsInternal, 2, 1)                                \
   F(ToObject, 1, 1)                                             \
   F(ToPrimitive, 1, 1)                                          \
   F(ToPrimitive_Number, 1, 1)                                   \

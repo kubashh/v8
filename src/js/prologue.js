@@ -78,29 +78,6 @@ function InstallFunctions(object, attributes, functions) {
 }
 
 
-// Helper function to install a getter-only accessor property.
-function InstallGetter(object, name, getter, attributes, prefix) {
-  %CheckIsBootstrapping();
-  if (IS_UNDEFINED(attributes)) attributes = DONT_ENUM;
-  SetFunctionName(getter, name, IS_UNDEFINED(prefix) ? "get" : prefix);
-  %FunctionRemovePrototype(getter);
-  %DefineGetterPropertyUnchecked(object, name, getter, attributes);
-  %SetNativeFlag(getter);
-}
-
-
-function OverrideFunction(object, name, f, afterInitialBootstrap) {
-  %CheckIsBootstrapping();
-  %object_define_property(object, name, { value: f,
-                                          writeable: true,
-                                          configurable: true,
-                                          enumerable: false });
-  SetFunctionName(f, name);
-  if (!afterInitialBootstrap) %FunctionRemovePrototype(f);
-  %SetNativeFlag(f);
-}
-
-
 // Prevents changes to the prototype of a built-in function.
 // The "prototype" property of the function object is made non-configurable,
 // and the prototype object is made non-extensible. The latter prevents
@@ -159,8 +136,6 @@ utils.Export = Export;
 utils.SetFunctionName = SetFunctionName;
 utils.InstallConstants = InstallConstants;
 utils.InstallFunctions = InstallFunctions;
-utils.InstallGetter = InstallGetter;
-utils.OverrideFunction = OverrideFunction;
 utils.SetUpLockedPrototype = SetUpLockedPrototype;
 utils.PostNatives = PostNatives;
 

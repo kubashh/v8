@@ -29,12 +29,9 @@ var GlobalNumber = global.Number;
 var GlobalRegExp = global.RegExp;
 var GlobalString = global.String;
 var IntlFallbackSymbol = utils.ImportNow("intl_fallback_symbol");
-var InstallFunctions = utils.InstallFunctions;
-var InstallGetter = utils.InstallGetter;
 var InternalArray = utils.InternalArray;
 var MaxSimple;
 var ObjectHasOwnProperty = global.Object.prototype.hasOwnProperty;
-var OverrideFunction = utils.OverrideFunction;
 var patternSymbol = utils.ImportNow("intl_pattern_symbol");
 var resolvedSymbol = utils.ImportNow("intl_resolved_symbol");
 var SetFunctionName = utils.SetFunctionName;
@@ -49,11 +46,6 @@ utils.Import(function(from) {
 
 // Utilities for definitions
 
-function InstallFunction(object, name, func) {
-  InstallFunctions(object, DONT_ENUM, [name, func]);
-}
-
-
 /**
  * Adds bound method to the prototype of the given object.
  */
@@ -61,12 +53,10 @@ function AddBoundMethod(obj, methodName, implementation, length, typename,
                         compat) {
   %CheckIsBootstrapping();
   var internalName = %CreatePrivateSymbol(methodName);
-  // Making getter an anonymous function will cause
-  // %DefineGetterPropertyUnchecked to properly set the "name"
-  // property on each JSFunction instance created here, rather
-  // than (as utils.InstallGetter would) on the SharedFunctionInfo
-  // associated with all functions returned from AddBoundMethod.
-  var getter = ANONYMOUS_FUNCTION(function() {
+
+  DEFINE_METHOD(
+   obj.prototype,
+   get [methodName]() {
     var receiver = Unwrap(this, typename, obj, methodName, compat);
     if (IS_UNDEFINED(receiver[internalName])) {
       var boundMethod;
@@ -91,11 +81,8 @@ function AddBoundMethod(obj, methodName, implementation, length, typename,
       receiver[internalName] = boundMethod;
     }
     return receiver[internalName];
-  });
-
-  %FunctionRemovePrototype(getter);
-  %DefineGetterPropertyUnchecked(obj.prototype, methodName, getter, DONT_ENUM);
-  %SetNativeFlag(getter);
+   }
+  );
 }
 
 function IntlConstruct(receiver, constructor, create, newTarget, args,
@@ -914,8 +901,19 @@ function BuildLanguageTagREs() {
 }
 
 // ECMA 402 section 8.2.1
-InstallFunction(GlobalIntl, 'getCanonicalLocales', function(locales) {
+DEFINE_METHOD(
+  GlobalIntl,
+  getCanonicalLocales(locales) {
     return makeArray(canonicalizeLocaleList(locales));
+  }
+);
+
+DEFINE_METHODS(
+  GlobalIntl,
+  {
+    getCanonicalLocales_TO_REMOVE(locales) {
+      return makeArray(canonicalizeLocaleList(locales));
+    }
   }
 );
 
@@ -1035,7 +1033,9 @@ function CollatorConstructor() {
 /**
  * Collator resolvedOptions method.
  */
-InstallFunction(GlobalIntlCollator.prototype, 'resolvedOptions', function() {
+DEFINE_METHOD(
+  GlobalIntlCollator.prototype,
+  resolvedOptions() {
     var coll = Unwrap(this, 'collator', GlobalIntlCollator, 'resolvedOptions',
                       false);
     return {
@@ -1057,7 +1057,9 @@ InstallFunction(GlobalIntlCollator.prototype, 'resolvedOptions', function() {
  * order in the returned list as in the input list.
  * Options are optional parameter.
  */
-InstallFunction(GlobalIntlCollator, 'supportedLocalesOf', function(locales) {
+DEFINE_METHOD(
+  GlobalIntlCollator,
+  supportedLocalesOf(locales) {
     return supportedLocalesOf('collator', locales, arguments[1]);
   }
 );
@@ -1254,8 +1256,9 @@ function NumberFormatConstructor() {
 /**
  * NumberFormat resolvedOptions method.
  */
-InstallFunction(GlobalIntlNumberFormat.prototype, 'resolvedOptions',
-  function() {
+DEFINE_METHOD(
+  GlobalIntlNumberFormat.prototype,
+  resolvedOptions() {
     var format = Unwrap(this, 'numberformat', GlobalIntlNumberFormat,
                         'resolvedOptions', true);
     var result = {
@@ -1295,8 +1298,9 @@ InstallFunction(GlobalIntlNumberFormat.prototype, 'resolvedOptions',
  * order in the returned list as in the input list.
  * Options are optional parameter.
  */
-InstallFunction(GlobalIntlNumberFormat, 'supportedLocalesOf',
-  function(locales) {
+DEFINE_METHOD(
+  GlobalIntlNumberFormat,
+  supportedLocalesOf(locales) {
     return supportedLocalesOf('numberformat', locales, arguments[1]);
   }
 );
@@ -1614,8 +1618,9 @@ function DateTimeFormatConstructor() {
 /**
  * DateTimeFormat resolvedOptions method.
  */
-InstallFunction(GlobalIntlDateTimeFormat.prototype, 'resolvedOptions',
-  function() {
+DEFINE_METHOD(
+  GlobalIntlDateTimeFormat.prototype,
+  resolvedOptions() {
     var format = Unwrap(this, 'dateformat', GlobalIntlDateTimeFormat,
                         'resolvedOptions', true);
 
@@ -1666,8 +1671,9 @@ InstallFunction(GlobalIntlDateTimeFormat.prototype, 'resolvedOptions',
  * order in the returned list as in the input list.
  * Options are optional parameter.
  */
-InstallFunction(GlobalIntlDateTimeFormat, 'supportedLocalesOf',
-  function(locales) {
+DEFINE_METHOD(
+  GlobalIntlDateTimeFormat,
+  supportedLocalesOf(locales) {
     return supportedLocalesOf('dateformat', locales, arguments[1]);
   }
 );
@@ -1691,8 +1697,9 @@ function formatDate(formatter, dateValue) {
   return %InternalDateFormat(formatter, new GlobalDate(dateMs));
 }
 
-InstallFunction(GlobalIntlDateTimeFormat.prototype, 'formatToParts',
-  function(dateValue) {
+DEFINE_METHOD(
+  GlobalIntlDateTimeFormat.prototype,
+  formatToParts(dateValue) {
     CHECK_OBJECT_COERCIBLE(this, "Intl.DateTimeFormat.prototype.formatToParts");
     if (!IS_OBJECT(this)) {
       throw %make_type_error(kCalledOnNonObject, this);
@@ -1810,8 +1817,9 @@ function v8BreakIteratorConstructor() {
 /**
  * BreakIterator resolvedOptions method.
  */
-InstallFunction(GlobalIntlv8BreakIterator.prototype, 'resolvedOptions',
-  function() {
+DEFINE_METHOD(
+  GlobalIntlv8BreakIterator.prototype,
+  resolvedOptions() {
     if (!IS_UNDEFINED(new.target)) {
       throw %make_type_error(kOrdinaryFunctionCalledAsConstructor);
     }
@@ -1833,8 +1841,9 @@ InstallFunction(GlobalIntlv8BreakIterator.prototype, 'resolvedOptions',
  * order in the returned list as in the input list.
  * Options are optional parameter.
  */
-InstallFunction(GlobalIntlv8BreakIterator, 'supportedLocalesOf',
-  function(locales) {
+DEFINE_METHOD(
+  GlobalIntlv8BreakIterator,
+  supportedLocalesOf(locales) {
     if (!IS_UNDEFINED(new.target)) {
       throw %make_type_error(kOrdinaryFunctionCalledAsConstructor);
     }
@@ -1976,7 +1985,9 @@ function LocaleConvertCase(s, locales, isToUpper) {
  * Compares this and that, and returns less than 0, 0 or greater than 0 value.
  * Overrides the built-in method.
  */
-OverrideFunction(GlobalString.prototype, 'localeCompare', function(that) {
+DEFINE_METHOD(
+  GlobalString.prototype,
+  localeCompare(that) {
     if (IS_NULL_OR_UNDEFINED(this)) {
       throw %make_type_error(kMethodInvokedOnNullOrUndefined);
     }
@@ -1988,26 +1999,32 @@ OverrideFunction(GlobalString.prototype, 'localeCompare', function(that) {
   }
 );
 
-function ToLocaleLowerCaseIntl(locales) {
-  CHECK_OBJECT_COERCIBLE(this, "String.prototype.toLocaleLowerCase");
-  return LocaleConvertCase(TO_STRING(this), locales, false);
-}
+var StringPrototypeMethods = {};
+DEFINE_METHODS(
+  StringPrototypeMethods,
+  {
+    toLocaleLowerCase(locales) {
+      CHECK_OBJECT_COERCIBLE(this, "String.prototype.toLocaleLowerCase");
+      return LocaleConvertCase(TO_STRING(this), locales, false);
+    }
 
-%FunctionSetLength(ToLocaleLowerCaseIntl, 0);
-
-function ToLocaleUpperCaseIntl(locales) {
-  CHECK_OBJECT_COERCIBLE(this, "String.prototype.toLocaleUpperCase");
-  return LocaleConvertCase(TO_STRING(this), locales, true);
-}
-
-%FunctionSetLength(ToLocaleUpperCaseIntl, 0);
+    toLocaleUpperCase(locales) {
+      CHECK_OBJECT_COERCIBLE(this, "String.prototype.toLocaleUpperCase");
+      return LocaleConvertCase(TO_STRING(this), locales, true);
+    }
+  }
+);
+%FunctionSetLength(StringPrototypeMethods.toLocaleLowerCase, 0);
+%FunctionSetLength(StringPrototypeMethods.toLocaleUpperCase, 0);
 
 
 /**
  * Formats a Number object (this) using locale and options values.
  * If locale or options are omitted, defaults are used.
  */
-OverrideFunction(GlobalNumber.prototype, 'toLocaleString', function() {
+DEFINE_METHOD(
+  GlobalNumber.prototype,
+  toLocaleString() {
     if (!(this instanceof GlobalNumber) && typeof(this) !== 'number') {
       throw %make_type_error(kMethodInvokedOnWrongType, "Number");
     }
@@ -2045,7 +2062,9 @@ function toLocaleDateTime(date, locales, options, required, defaults, service) {
  * If locale or options are omitted, defaults are used - both date and time are
  * present in the output.
  */
-OverrideFunction(GlobalDate.prototype, 'toLocaleString', function() {
+DEFINE_METHOD(
+  GlobalDate.prototype,
+  toLocaleString() {
     var locales = arguments[0];
     var options = arguments[1];
     return toLocaleDateTime(
@@ -2059,7 +2078,9 @@ OverrideFunction(GlobalDate.prototype, 'toLocaleString', function() {
  * If locale or options are omitted, defaults are used - only date is present
  * in the output.
  */
-OverrideFunction(GlobalDate.prototype, 'toLocaleDateString', function() {
+DEFINE_METHOD(
+  GlobalDate.prototype,
+  toLocaleDateString() {
     var locales = arguments[0];
     var options = arguments[1];
     return toLocaleDateTime(
@@ -2073,7 +2094,9 @@ OverrideFunction(GlobalDate.prototype, 'toLocaleDateString', function() {
  * If locale or options are omitted, defaults are used - only time is present
  * in the output.
  */
-OverrideFunction(GlobalDate.prototype, 'toLocaleTimeString', function() {
+DEFINE_METHOD(
+  GlobalDate.prototype,
+  toLocaleTimeString() {
     var locales = arguments[0];
     var options = arguments[1];
     return toLocaleDateTime(
@@ -2081,15 +2104,9 @@ OverrideFunction(GlobalDate.prototype, 'toLocaleTimeString', function() {
   }
 );
 
-%FunctionRemovePrototype(ToLocaleLowerCaseIntl);
-%FunctionRemovePrototype(ToLocaleUpperCaseIntl);
-
-utils.SetFunctionName(ToLocaleLowerCaseIntl, "toLocaleLowerCase");
-utils.SetFunctionName(ToLocaleUpperCaseIntl, "toLocaleUpperCase");
-
 utils.Export(function(to) {
-  to.ToLocaleLowerCaseIntl = ToLocaleLowerCaseIntl;
-  to.ToLocaleUpperCaseIntl = ToLocaleUpperCaseIntl;
+  to.ToLocaleLowerCaseIntl = StringPrototypeMethods.toLocaleLowerCase;
+  to.ToLocaleUpperCaseIntl = StringPrototypeMethods.toLocaleUpperCase;
 });
 
 })
