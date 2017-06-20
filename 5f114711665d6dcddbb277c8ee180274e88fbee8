@@ -69,6 +69,30 @@
       "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "affaea74_15b8f16e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-20T14:56:35Z",
+      "side": 1,
+      "message": "Re 1: yeah I realized that, but I don\u0027t think we can get a sense of where the allocation should happen without also knowing where the incrementing will happen. Is there any reason you want to land the allocating without the incrementing?\n\nRe 2: I mean doing something similar to the LoopBuilder where the BreakableControlFlowBuilder is in control of allocating slots and incrementing them at the appropriate point, but thinking about this a bit more I don\u0027t think this would work. The main question I have is where the counters get incremented - are they incremented when you hit the Break/Continue? If so can\u0027t we just do that right here alongside the allocation?",
+      "parentUuid": "3807e9fb_3c0a63e9",
+      "range": {
+        "startLine": 1255,
+        "startChar": 2,
+        "endLine": 1256,
+        "endChar": 53
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
