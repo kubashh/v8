@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56a0e3de_68c25245",
+        "filename": "test/mjsunit/es6/spread-call.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-06-20T09:47:38Z",
+      "side": 1,
+      "message": "Can you add individual tests for the optimizing compiler? I\u0027m worried that this single monster test won\u0027t really catch the interesting bugs in TurboFan. Especially tests for spread with different arguments and rest parameters?",
+      "revId": "e26166977e4c6f5ca0978486c589dc9d299a6d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
