@@ -22,6 +22,30 @@
       "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3807e9fb_3c0a63e9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-20T14:08:14Z",
+      "side": 1,
+      "message": "Re 1: I mentioned this in the CL message: \u0027Jumps just allocate a counter, but don\u0027t generate bytecode - code after an unconditional jump is never reached.\u0027\n\nRe 2: Do you mean passing in the continuation range to \n\nexecution_control()-\u003eBreak(stmt-\u003etarget());\n\n(and then possibly all the way down to BreakableControlFlowBuilder::Break)? I\u0027m not sure the code would become cleaner as we\u0027d need to pass the range around, but if you prefer let\u0027s do it that way.",
+      "parentUuid": "b2c6893a_1afa9c7f",
+      "range": {
+        "startLine": 1255,
+        "startChar": 2,
+        "endLine": 1256,
+        "endChar": 53
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
