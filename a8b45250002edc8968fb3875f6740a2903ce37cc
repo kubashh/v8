@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15108cd1_e4c08416",
+        "filename": "src/base/atomic-utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-20T11:52:34Z",
+      "side": 1,
+      "message": "Here and below: Just used to allow const modifier for *_Load methods.",
+      "range": {
+        "startLine": 322,
+        "startChar": 31,
+        "endLine": 322,
+        "endChar": 46
+      },
+      "revId": "a8b45250002edc8968fb3875f6740a2903ce37cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3c7c181_b21c5fce",
+        "filename": "src/heap/slot-set.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-20T11:52:34Z",
+      "side": 1,
+      "message": "As far as I understand it, we publish this memory through the linked list on TypedSlotSet, so non-atomic should be fine here.",
+      "range": {
+        "startLine": 533,
+        "startChar": 13,
+        "endLine": 533,
+        "endChar": 18
+      },
+      "revId": "a8b45250002edc8968fb3875f6740a2903ce37cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
