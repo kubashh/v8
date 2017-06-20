@@ -45,6 +45,30 @@
       "revId": "a8b45250002edc8968fb3875f6740a2903ce37cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1abc63d_2b805920",
+        "filename": "src/heap/slot-set.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-20T12:13:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3c7c181_b21c5fce",
+      "range": {
+        "startLine": 533,
+        "startChar": 13,
+        "endLine": 533,
+        "endChar": 18
+      },
+      "revId": "a8b45250002edc8968fb3875f6740a2903ce37cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
