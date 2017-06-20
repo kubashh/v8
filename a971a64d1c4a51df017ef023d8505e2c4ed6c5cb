@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0f4ace0_22c660fe",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-06-20T13:59:22Z",
+      "side": 1,
+      "message": "I believe MIPS64 ports require Dsubu instead of Subu, unless there is some specific reason to use Subu",
+      "revId": "a971a64d1c4a51df017ef023d8505e2c4ed6c5cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
