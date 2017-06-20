@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eae54fae_0556273f",
+        "filename": "test/mjsunit/object-literal.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-20T09:54:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6981cd61_b89d6d7c",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 7
+      },
+      "revId": "34b8c90cdc74fe15f3d42b722809cbf35f22864f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72293288_6662307e",
         "filename": "test/mjsunit/regress/regress-crbug-734162.js",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "8c06db66_a268cdf3",
+        "filename": "test/mjsunit/regress/regress-crbug-734162.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-20T09:54:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72293288_6662307e",
+      "revId": "34b8c90cdc74fe15f3d42b722809cbf35f22864f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31497856_74c243c6",
         "filename": "test/mjsunit/regress/regress-crbug-734162.js",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2017-06-20T09:24:39Z",
       "side": 1,
       "message": "Note, this test case repros for me regarding issue 734162. The one above doesn\u0027t. At least in the setting, compare ia32 to x64.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "34b8c90cdc74fe15f3d42b722809cbf35f22864f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "937a910c_a295b465",
+        "filename": "test/mjsunit/regress/regress-crbug-734162.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-20T09:54:03Z",
+      "side": 1,
+      "message": "I prefer having both, if that\u0027s ok.",
+      "parentUuid": "31497856_74c243c6",
       "range": {
         "startLine": 28,
         "startChar": 0,
