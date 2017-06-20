@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "72c1d0fe_132dd6d8",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-20T18:09:01Z",
+      "side": 1,
+      "message": "It was actually, the prototype instrumented IterationStatement, JumpStatement, CaseClause, IfStatement. See https://docs.google.com/document/d/1e4HUA6kvmVDXhIoBYawxRetY-vuewDh9GxQepYyX5CI/edit#",
+      "parentUuid": "1508c4ee_cc4c632e",
+      "range": {
+        "startLine": 791,
+        "startChar": 10,
+        "endLine": 791,
+        "endChar": 27
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2c6893a_1afa9c7f",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Re 1: yeah I realized that, but I don\u0027t think we can get a sense of where the allocation should happen without also knowing where the incrementing will happen. Is there any reason you want to land the allocating without the incrementing?\n\nRe 2: I mean doing something similar to the LoopBuilder where the BreakableControlFlowBuilder is in control of allocating slots and incrementing them at the appropriate point, but thinking about this a bit more I don\u0027t think this would work. The main question I have is where the counters get incremented - are they incremented when you hit the Break/Continue? If so can\u0027t we just do that right here alongside the allocation?",
       "parentUuid": "3807e9fb_3c0a63e9",
+      "range": {
+        "startLine": 1255,
+        "startChar": 2,
+        "endLine": 1256,
+        "endChar": 53
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "337fc144_ee06fc11",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-20T18:09:01Z",
+      "side": 1,
+      "message": "Re 1: The slots for jump statements are not intended to be incremented at all. They show the execution count for the continuation after the jump statement:\n\nif (true) {\n  f();\n  return;\n  g();  // return slot covers this line, count is always 0.\n}\n\nRe 2: Since we\u0027re only allocating, wdyt about keeping the current solution?",
+      "parentUuid": "affaea74_15b8f16e",
       "range": {
         "startLine": 1255,
         "startChar": 2,
