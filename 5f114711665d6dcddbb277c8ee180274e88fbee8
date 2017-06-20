@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1508c4ee_cc4c632e",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-06-20T14:43:17Z",
+      "side": 1,
+      "message": "How much does this increase the AST size (or was this kind of thing already a part of the previous measurements you sent around? I guess not?)?",
+      "range": {
+        "startLine": 791,
+        "startChar": 10,
+        "endLine": 791,
+        "endChar": 27
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2c6893a_1afa9c7f",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
