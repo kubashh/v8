@@ -2213,7 +2213,7 @@ class YoungGenerationMarkingVisitor final
   using BaseClass = HeapVisitor<int, YoungGenerationMarkingVisitor>;
 
   YoungGenerationMarkingVisitor(Heap* heap,
-                                WorkStealingMarkingDeque* global_marking_deque,
+                                WorkStealingBag* global_marking_deque,
                                 int task_id)
       : heap_(heap), marking_deque_(global_marking_deque, task_id) {}
 
@@ -2306,7 +2306,7 @@ class YoungGenerationMarkingVisitor final
   }
 
   Heap* heap_;
-  LocalWorkStealingMarkingDeque marking_deque_;
+  LocalWorkStealingBag marking_deque_;
 };
 
 class MinorMarkCompactCollector::RootMarkingVisitor : public RootVisitor {
@@ -2362,8 +2362,7 @@ class YoungGenerationMarkingTask : public ItemParallelJob::Task {
  public:
   YoungGenerationMarkingTask(Isolate* isolate,
                              MinorMarkCompactCollector* collector,
-                             WorkStealingMarkingDeque* marking_deque,
-                             int task_id)
+                             WorkStealingBag* marking_deque, int task_id)
       : ItemParallelJob::Task(isolate),
         collector_(collector),
         marking_deque_(marking_deque, task_id),
@@ -2417,11 +2416,9 @@ class YoungGenerationMarkingTask : public ItemParallelJob::Task {
 
   void EmptyMarkingDeque() {
     HeapObject* object = nullptr;
-    while (marking_deque_.WaitForMoreObjects()) {
-      while (marking_deque_.Pop(&object)) {
-        const int size = visitor_.Visit(object);
-        IncrementLiveBytes(object, size);
-      }
+    while (marking_deque_.Pop(&object)) {
+      const int size = visitor_.Visit(object);
+      IncrementLiveBytes(object, size);
     }
   }
 
@@ -2438,7 +2435,7 @@ class YoungGenerationMarkingTask : public ItemParallelJob::Task {
   }
 
   MinorMarkCompactCollector* collector_;
-  LocalWorkStealingMarkingDeque marking_deque_;
+  LocalWorkStealingBag marking_deque_;
   YoungGenerationMarkingVisitor visitor_;
   std::unordered_map<Page*, intptr_t, Page::Hasher> local_live_bytes_;
 };
@@ -2602,11 +2599,11 @@ class MinorMarkCompactCollector::RootMarkingVisitorSeedOnly
 
 MinorMarkCompactCollector::MinorMarkCompactCollector(Heap* heap)
     : MarkCompactCollectorBase(heap),
-      marking_deque_(new WorkStealingMarkingDeque()),
+      marking_deque_(new WorkStealingBag()),
       main_marking_visitor_(
           new YoungGenerationMarkingVisitor(heap, marking_deque_, kMainMarker)),
       page_parallel_job_semaphore_(0) {
-  static_assert(kNumMarkers <= WorkStealingMarkingDeque::kMaxNumTasks,
+  static_assert(kNumMarkers <= WorkStealingBag::kMaxNumTasks,
                 "more marker tasks than marking deque can handle");
 }
 
@@ -2707,8 +2704,7 @@ void MinorMarkCompactCollector::ProcessMarkingDeque() {
 }
 
 void MinorMarkCompactCollector::EmptyMarkingDeque() {
-  LocalWorkStealingMarkingDeque local_marking_deque(marking_deque(),
-                                                    kMainMarker);
+  LocalWorkStealingBag local_marking_deque(marking_deque(), kMainMarker);
   HeapObject* object = nullptr;
   while (local_marking_deque.Pop(&object)) {
     DCHECK(!object->IsFiller());
