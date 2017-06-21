@@ -236,6 +236,24 @@
     },
     {
       "key": {
+        "uuid": "c9331a61_71b91f4b",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:18:07Z",
+      "side": 1,
+      "message": "Sorry, I was confused (there is no descr-\u003emodule_request_positions).",
+      "parentUuid": "915e70f7_678bc4c8",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d465b27_7a0a9a27",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 1

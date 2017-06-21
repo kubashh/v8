@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f230989_0861cdcf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:18:07Z",
+      "side": 1,
+      "message": "Maybe write \"importing\" instead of \"import\" since it may also be an \"export\" statement.",
+      "revId": "a9d0bd6a1483e1323c47cbd384d4e81d4e3bef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9597be9d_daba174f",
+        "filename": "include/v8.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:18:07Z",
+      "side": 1,
+      "message": "I think this should be removed.",
+      "revId": "a9d0bd6a1483e1323c47cbd384d4e81d4e3bef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "673eb577_5e5d6e4f",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:18:07Z",
+      "side": 1,
+      "message": "Here you should pass the location of the specifier that is parsed in line 1351.",
+      "revId": "a9d0bd6a1483e1323c47cbd384d4e81d4e3bef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b255b36_2c81503e",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:18:07Z",
+      "side": 1,
+      "message": "Here too.\n\nMaybe add a few more tests to exercise the different import/export statement forms.",
+      "revId": "a9d0bd6a1483e1323c47cbd384d4e81d4e3bef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
