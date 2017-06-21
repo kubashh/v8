@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "4bcebed7_a974b619",
+        "filename": "include/v8.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-21T12:35:35Z",
+      "side": 1,
+      "message": "Ah I missed that that was private. To me it looks more reasonable with a public constructor than with a friend class.",
+      "parentUuid": "a305839a_7058e0fb",
+      "revId": "a9d0bd6a1483e1323c47cbd384d4e81d4e3bef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "673eb577_5e5d6e4f",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 7
