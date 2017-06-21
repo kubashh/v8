@@ -1251,6 +1251,7 @@ void Module::ModuleVerify() {
   VerifyPointer(exports());
   VerifyPointer(module_namespace());
   VerifyPointer(requested_modules());
+  VerifyPointer(script());
   VerifySmiField(kHashOffset);
   VerifySmiField(kStatusOffset);
 
