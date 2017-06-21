@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "493d597c_33ed8dc0",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5913c0e4_87a6acc7",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a649b7f4_8a89679c",
         "filename": "include/v8.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-20T16:25:29Z",
       "side": 1,
       "message": "Is the use of pair\u003c\u003e here consistent with how positions are represented elsewhere in devtools? I imagine \u003cline, column\u003e is a pretty standard ordering, but I\u0027m always a little bit worried by pairs of identical types, and wonder if they should be named in a struct instead.",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad61aa70_b345684b",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "In our internal interface between inspector and v8 (debug-interface.h) we have separate debug::Location struct. In v8.h all API has two separate methods: GetLineNumber and GetColumnNumber because it\u0027s stored as line and column internally.\nHere we internally store position as code offset so we need convenient way to get line and column to avoid double script position lookup. Looks like Location is better way here, so added it.",
+      "parentUuid": "a649b7f4_8a89679c",
       "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ef8d7e_39a3c7f6",
+        "filename": "src/ast/modules.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d0ddb37_c43d69ed",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "8854f366_d55b25ac",
+        "filename": "src/ast/modules.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e624d27_587c28e3",
+      "range": {
+        "startLine": 49,
+        "startChar": 51,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c74aa46d_bcecbde8",
         "filename": "src/objects/module-info.h",
         "patchSetId": 1
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "dce67b67_8eae5b7a",
+        "filename": "src/objects/module-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c74aa46d_bcecbde8",
+      "range": {
+        "startLine": 70,
+        "startChar": 61,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca61a95d_f02897ce",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 1
@@ -116,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "915e70f7_678bc4c8",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Is this DCHECK to actually check that size is valid int value?",
+      "parentUuid": "ca61a95d_f02897ce",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d465b27_7a0a9a27",
         "filename": "src/objects/scope-info.cc",
         "patchSetId": 1
@@ -127,6 +247,24 @@
       "writtenOn": "2017-06-20T16:53:36Z",
       "side": 1,
       "message": "You should also implement the corresponding deserialization in scopes.cc ModuleScope(Handle\u003cScopeInfo\u003e scope_info, ...)",
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "892d45d4_020373bb",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "In offline discussion we decided that it\u0027s not necessary to add this deserialization right now and we can add it later.",
+      "parentUuid": "1d465b27_7a0a9a27",
       "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -153,6 +291,30 @@
       "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcc34c27_8eaa31d0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-06-21T11:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84718ceb_78b6f32d",
+      "range": {
+        "startLine": 1153,
+        "startChar": 70,
+        "endLine": 1153,
+        "endChar": 0
+      },
+      "revId": "9ae7c8d39f32de42dcb0399d5b681650c1a6953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
