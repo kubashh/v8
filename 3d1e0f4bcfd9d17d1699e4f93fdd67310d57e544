@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38d968c8_b392f30d",
+        "filename": "src/bit-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "Looks like CountPopulation doesn\u0027t work on mac on the bots for some reason.",
+      "range": {
+        "startLine": 46,
+        "startChar": 23,
+        "endLine": 46,
+        "endChar": 38
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1ab274a_04a36c72",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "Let\u0027s try changing the inline_ data_length_ to 1, this should avoid the need for this -1 here, WDYT?",
+      "range": {
+        "startLine": 28,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02d5b71c_2f21894a",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to add this extra constructor - it\u0027s not really clear that it wont work if length \u003c\u003d kDataBits",
+      "range": {
+        "startLine": 75,
+        "startChar": 11,
+        "endLine": 75,
+        "endChar": 32
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7420917e_6204ab8a",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 27
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcea6c2f_1f09677d",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "This (and the previous implementation) will implicitly set any bits between length_ and data_length_ without updating length_ (so if we resize they become set). Is this something we want, or is it not an issue since we don\u0027t call AddAll from GrowableBitVector? Should probably add a comment about this either way.",
+      "range": {
+        "startLine": 156,
+        "startChar": 15,
+        "endLine": 156,
+        "endChar": 22
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b1e0b1f_7fb118a4",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 1,
+      "message": "nit - I think this should still be data_ (given use of old_data and data_length_ variables also used)",
+      "range": {
+        "startLine": 288,
+        "startChar": 14,
+        "endLine": 288,
+        "endChar": 22
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

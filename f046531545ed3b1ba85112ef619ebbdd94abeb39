@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2579662_19896648",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T11:32:15Z",
+      "side": 0,
+      "message": "Any reason for this?",
+      "range": {
+        "startLine": 208,
+        "startChar": 11,
+        "endLine": 208,
+        "endChar": 20
+      },
+      "revId": "f046531545ed3b1ba85112ef619ebbdd94abeb39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
