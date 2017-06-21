@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f5e9fe8_d65cf147",
+        "filename": "test/common/wasm/wasm-module-runner.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-21T09:36:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e37a2f0a_a6d06ba4",
+      "revId": "76125a97ab93b1084856adc3f8b87262a92dc63e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4071e2d2_5007200d",
         "filename": "test/common/wasm/wasm-module-runner.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "76125a97ab93b1084856adc3f8b87262a92dc63e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6d37460_7b463eae",
+        "filename": "test/common/wasm/wasm-module-runner.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-21T09:36:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4071e2d2_5007200d",
+      "revId": "76125a97ab93b1084856adc3f8b87262a92dc63e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
