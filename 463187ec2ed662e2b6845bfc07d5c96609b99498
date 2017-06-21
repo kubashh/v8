@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5850d14_1975cd60",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-21T07:15:23Z",
+      "side": 1,
+      "message": "Since we don\u0027t have this output on Android, we need to differentiate somehow to not make the regexp for MaxMemory fail.\n1) One (dirty) option would be a sentinel here. E.g.:\nif runnable.process_size:\n  stdout + \"\\nMaxMemory: 0\\n\"\n\n2) Or maybe optional tests? E.g. if we add a field \"optional\", it should not report an error if the regexp doesn\u0027t match.\n\n3) Another option might be to not expose the MaxMemory in the json files, but hard-code it here, only on desktop platform. E.g. when process_size is set, automatically add a trace called MaxMemory.\n\nwdyt? any other ideas?",
+      "revId": "463187ec2ed662e2b6845bfc07d5c96609b99498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
