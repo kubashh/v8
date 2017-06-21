@@ -141,6 +141,30 @@
       "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e8f98a_b1cecbb2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-21T10:19:58Z",
+      "side": 1,
+      "message": "The issue that I have with this is that it adds memory overhead and complexity to break/continue/return statement AST nodes:\n - to track something that we know will always be zero\n - that could be determined statically by looking at the source\n - and that shouldn\u0027t really occur in real-world code.\n\nThe last point is the most important to me - do we have any evidence that this will have any benefit to users? Are they shipping code that is dead by definition by being after break/continue/return?",
+      "parentUuid": "337fc144_ee06fc11",
+      "range": {
+        "startLine": 1255,
+        "startChar": 2,
+        "endLine": 1256,
+        "endChar": 53
+      },
+      "revId": "5f114711665d6dcddbb277c8ee180274e88fbee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
