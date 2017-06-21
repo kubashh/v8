@@ -16,6 +16,24 @@
       "revId": "463187ec2ed662e2b6845bfc07d5c96609b99498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c03cc28_1bed3216",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-21T23:20:08Z",
+      "side": 1,
+      "message": "For starts, option 1, while dirty, is quick. Option 2 would hide an actual error to report; and option 3 - I suspect running time will add noise; I would prefer us not adding it for all tests, just to those where some noise is fine. \n\nWhich segways to your other question; I\u0027d want to see how this behaves on bots (noise-wise), with the wasm compile benchmarks, then regroup and decide what to do next. A possibility may be that we only use it for long-running benchmarks, like these compile ones, where I suspect time\u0027s noise to not matter much to runtime measurements.",
+      "parentUuid": "c5850d14_1975cd60",
+      "revId": "463187ec2ed662e2b6845bfc07d5c96609b99498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
