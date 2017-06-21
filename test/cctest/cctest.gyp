@@ -202,7 +202,6 @@
       'test-unscopables-hidden-prototype.cc',
       'test-usecounters.cc',
       'test-utils.cc',
-      'test-version.cc',
       'test-weakmaps.cc',
       'test-weaksets.cc',
       'trace-extension.cc',
