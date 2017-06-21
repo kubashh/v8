@@ -27,79 +27,121 @@
 
 #include "src/v8.h"
 
+#include "src/utils.h"
 #include "src/version.h"
 #include "test/cctest/cctest.h"
 
 using namespace v8::internal;
 
-
-namespace v8 {
-namespace internal {
-
-void SetVersion(int major, int minor, int build, int patch,
-                bool candidate, const char* soname) {
-  Version::major_ = major;
-  Version::minor_ = minor;
-  Version::build_ = build;
-  Version::patch_ = patch;
-  Version::candidate_ = candidate;
-  Version::soname_ = soname;
+// Calculate the V8 version string.
+template <int Major, int Minor, int Build, int Patch, bool Candidate>
+void VersionImpl<Major, Minor, Build, Patch, Candidate>::GetString(
+    Vector<char> str) {
+  // void VersionImpl::GetString(Vector<char> str) {
+  const char* candidate = IsCandidate() ? " (candidate)" : "";
+#ifdef USE_SIMULATOR
+  const char* is_simulator = " SIMULATOR";
+#else
+  const char* is_simulator = "";
+#endif  // USE_SIMULATOR
+  if (GetPatch() > 0) {
+    SNPrintF(str, "%d.%d.%d.%d%s%s", GetMajor(), GetMinor(), GetBuild(),
+             GetPatch(), candidate, is_simulator);
+  } else {
+    SNPrintF(str, "%d.%d.%d%s%s", GetMajor(), GetMinor(), GetBuild(), candidate,
+             is_simulator);
+  }
 }
 
-}  // namespace internal
-}  // namespace v8
+// Calculate the SONAME for the V8 shared library.
+template <int Major, int Minor, int Build, int Patch, bool Candidate>
+void VersionImpl<Major, Minor, Build, Patch, Candidate>::GetSONAME(
+    Vector<char> str) {
+  // void VersionImpl::GetSONAME(Vector<char> str) {
+  if (soname_ == NULL || *soname_ == '\0') {
+    // Generate generic SONAME if no specific SONAME is defined.
+    const char* candidate = IsCandidate() ? "-candidate" : "";
+    if (GetPatch() > 0) {
+      SNPrintF(str, "libv8-%d.%d.%d.%d%s.so", GetMajor(), GetMinor(),
+               GetBuild(), GetPatch(), candidate);
+    } else {
+      SNPrintF(str, "libv8-%d.%d.%d%s.so", GetMajor(), GetMinor(), GetBuild(),
+               candidate);
+    }
+  } else {
+    // Use specific SONAME.
+    SNPrintF(str, "%s", soname_);
+  }
+}
 
-
-static void CheckVersion(int major, int minor, int build,
-                         int patch, bool candidate,
-                         const char* expected_version_string,
-                         const char* expected_generic_soname) {
+template <int Major, int Minor, int Build, int Patch, bool Candidate>
+void VersionImpl<Major, Minor, Build, Patch, Candidate>::CheckVersion(
+    const char* expected_version_string, const char* expected_generic_soname) {
   static v8::internal::EmbeddedVector<char, 128> version_str;
   static v8::internal::EmbeddedVector<char, 128> soname_str;
 
   // Test version without specific SONAME.
-  SetVersion(major, minor, build, patch, candidate, "");
-  Version::GetString(version_str);
+  soname_ = "";
+  GetString(version_str);
   CHECK_EQ(0, strcmp(expected_version_string, version_str.start()));
-  Version::GetSONAME(soname_str);
+  GetSONAME(soname_str);
   CHECK_EQ(0, strcmp(expected_generic_soname, soname_str.start()));
 
   // Test version with specific SONAME.
   const char* soname = "libv8.so.1";
-  SetVersion(major, minor, build, patch, candidate, soname);
-  Version::GetString(version_str);
+  soname_ = soname;
+  GetString(version_str);
   CHECK_EQ(0, strcmp(expected_version_string, version_str.start()));
-  Version::GetSONAME(soname_str);
+  GetSONAME(soname_str);
   CHECK_EQ(0, strcmp(soname, soname_str.start()));
 }
 
+using ver1 = VersionImpl<0, 0, 0, 0, false>;
+using ver2 = VersionImpl<0, 0, 0, 0, true>;
+using ver3 = VersionImpl<1, 0, 0, 0, false>;
+using ver4 = VersionImpl<1, 0, 0, 0, true>;
+using ver5 = VersionImpl<1, 0, 0, 1, false>;
+using ver6 = VersionImpl<1, 0, 0, 1, true>;
+using ver7 = VersionImpl<2, 5, 10, 7, false>;
+using ver8 = VersionImpl<2, 5, 10, 7, true>;
+
+template <>
+const char* ver1::soname_ = nullptr;
+template <>
+const char* ver2::soname_ = nullptr;
+template <>
+const char* ver3::soname_ = nullptr;
+template <>
+const char* ver4::soname_ = nullptr;
+template <>
+const char* ver5::soname_ = nullptr;
+template <>
+const char* ver6::soname_ = nullptr;
+template <>
+const char* ver7::soname_ = nullptr;
+template <>
+const char* ver8::soname_ = nullptr;
 
 TEST(VersionString) {
 #ifdef USE_SIMULATOR
-  CheckVersion(0, 0, 0, 0, false, "0.0.0 SIMULATOR", "libv8-0.0.0.so");
-  CheckVersion(0, 0, 0, 0, true,
-               "0.0.0 (candidate) SIMULATOR", "libv8-0.0.0-candidate.so");
-  CheckVersion(1, 0, 0, 0, false, "1.0.0 SIMULATOR", "libv8-1.0.0.so");
-  CheckVersion(1, 0, 0, 0, true,
-               "1.0.0 (candidate) SIMULATOR", "libv8-1.0.0-candidate.so");
-  CheckVersion(1, 0, 0, 1, false, "1.0.0.1 SIMULATOR", "libv8-1.0.0.1.so");
-  CheckVersion(1, 0, 0, 1, true,
-               "1.0.0.1 (candidate) SIMULATOR", "libv8-1.0.0.1-candidate.so");
-  CheckVersion(2, 5, 10, 7, false, "2.5.10.7 SIMULATOR", "libv8-2.5.10.7.so");
-  CheckVersion(2, 5, 10, 7, true,
-               "2.5.10.7 (candidate) SIMULATOR", "libv8-2.5.10.7-candidate.so");
+  ver1::CheckVersion("0.0.0 SIMULATOR", "libv8-0.0.0.so");
+  ver2::CheckVersion("0.0.0 (candidate) SIMULATOR", "libv8-0.0.0-candidate.so");
+  ver3::CheckVersion("1.0.0 SIMULATOR", "libv8-1.0.0.so");
+  ver4::CheckVersion("1.0.0 (candidate) SIMULATOR", "libv8-1.0.0-candidate.so");
+  ver5::CheckVersion("1.0.0.1 SIMULATOR", "libv8-1.0.0.1.so");
+  ver6::CheckVersion("1.0.0.1 (candidate) SIMULATOR",
+                     "libv8-1.0.0.1-candidate.so");
+  ver7::CheckVersion("2.5.10.7 SIMULATOR", "libv8-2.5.10.7.so");
+  ver8::CheckVersion("2.5.10.7 (candidate) SIMULATOR",
+                     "libv8-2.5.10.7-candidate.so");
 #else
-  CheckVersion(0, 0, 0, 0, false, "0.0.0", "libv8-0.0.0.so");
-  CheckVersion(0, 0, 0, 0, true,
-               "0.0.0 (candidate)", "libv8-0.0.0-candidate.so");
-  CheckVersion(1, 0, 0, 0, false, "1.0.0", "libv8-1.0.0.so");
-  CheckVersion(1, 0, 0, 0, true,
-               "1.0.0 (candidate)", "libv8-1.0.0-candidate.so");
-  CheckVersion(1, 0, 0, 1, false, "1.0.0.1", "libv8-1.0.0.1.so");
-  CheckVersion(1, 0, 0, 1, true,
-               "1.0.0.1 (candidate)", "libv8-1.0.0.1-candidate.so");
-  CheckVersion(2, 5, 10, 7, false, "2.5.10.7", "libv8-2.5.10.7.so");
-  CheckVersion(2, 5, 10, 7, true,
-               "2.5.10.7 (candidate)", "libv8-2.5.10.7-candidate.so");
+  ver1::CheckVersion("0.0.0", "libv8-0.0.0.so");
+  ver2::CheckVersion("0.0.0 (candidate)", "libv8-0.0.0-candidate.so");
+  ver3::CheckVersion("1.0.0", "libv8-1.0.0.so");
+  ver4::CheckVersion("1.0.0 (candidate)", "libv8-1.0.0-candidate.so");
+  ver5::CheckVersion("1.0.0.1", "libv8-1.0.0.1.so");
+  ver6::CheckVersion("1.0.0.1 (candidate)", "libv8-1.0.0.1-candidate.so");
+  ver7::CheckVersion("2.5.10.7", "libv8-2.5.10.7.so");
+  ver8::CheckVersion("2.5.10.7 (candidate)", "libv8-2.5.10.7-candidate.so");
 #endif
 }
