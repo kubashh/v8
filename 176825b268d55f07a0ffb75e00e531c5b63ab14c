@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d1bada8_d1b28cb8",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-21T07:23:25Z",
+      "side": 1,
+      "message": "nit: why not for clarification:\ns/host/target_arch\ns/arch/v8_target_arch\n\nto use the same variable names as gyp? When we switch to GN we can rename the variables to GN-style.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "176825b268d55f07a0ffb75e00e531c5b63ab14c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
