@@ -693,6 +693,52 @@
     },
     {
       "key": {
+        "uuid": "ce91c13c_4e7c4352",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-06-21T13:57:50Z",
+      "side": 1,
+      "message": "Does heap_access_type_ here satisfy a condition like \"it\u0027s either null or already info-\u003etype\"?",
+      "range": {
+        "startLine": 2348,
+        "startChar": 6,
+        "endLine": 2348,
+        "endChar": 37
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cbd8439_36ebbe02",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2439,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-06-21T13:57:50Z",
+      "side": 1,
+      "message": "Peek + Next can be combined to Check here, right?",
+      "range": {
+        "startLine": 2439,
+        "startChar": 29,
+        "endLine": 2439,
+        "endChar": 33
+      },
+      "revId": "f82e0362b900e34d87adf3f978d01f057ccc1ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be4d492_e1e853a5",
         "filename": "src/asmjs/asm-parser.h",
         "patchSetId": 5
