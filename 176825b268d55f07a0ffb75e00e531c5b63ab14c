@@ -22,6 +22,30 @@
       "revId": "176825b268d55f07a0ffb75e00e531c5b63ab14c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "445ece25_48b7ebf5",
+        "filename": "tools/gcov.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-21T23:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d1bada8_d1b28cb8",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "176825b268d55f07a0ffb75e00e531c5b63ab14c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
