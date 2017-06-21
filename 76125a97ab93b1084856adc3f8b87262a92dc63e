@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e37a2f0a_a6d06ba4",
+        "filename": "test/common/wasm/wasm-module-runner.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-21T09:19:43Z",
+      "side": 1,
+      "message": "This name should be inlined.",
+      "revId": "76125a97ab93b1084856adc3f8b87262a92dc63e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4071e2d2_5007200d",
+        "filename": "test/common/wasm/wasm-module-runner.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-21T09:19:43Z",
+      "side": 1,
+      "message": "missing clang-format (wrong indendation).",
+      "revId": "76125a97ab93b1084856adc3f8b87262a92dc63e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
