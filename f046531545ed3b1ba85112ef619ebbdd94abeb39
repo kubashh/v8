@@ -22,6 +22,30 @@
       "revId": "f046531545ed3b1ba85112ef619ebbdd94abeb39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38953ddb_0818f463",
+        "filename": "test/cctest/test-bit-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-21T14:16:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8ffe9e5_d8dce594",
+      "range": {
+        "startLine": 131,
+        "startChar": 12,
+        "endLine": 131,
+        "endChar": 20
+      },
+      "revId": "f046531545ed3b1ba85112ef619ebbdd94abeb39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
