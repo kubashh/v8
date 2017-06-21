@@ -209,7 +209,16 @@ class V8_PLATFORM_EXPORT TraceConfig {
   void operator=(const TraceConfig&) = delete;
 };
 
-class V8_PLATFORM_EXPORT TracingController {
+#if !defined(NON_EXPORTED_BASE)
+#if defined(_MSC_VER)
+#define NON_EXPORTED_BASE(code) __pragma(warning(suppress : 4275)) code
+#else
+#define NON_EXPORTED_BASE(code) code
+#endif  // defined(_MSC_VER)
+#endif  // !defined(NON_EXPORTED_BASE)
+
+class V8_PLATFORM_EXPORT TracingController
+    : public NON_EXPORTED_BASE(v8::TracingController) {
  public:
   enum Mode { DISABLED = 0, RECORDING_MODE };
 
@@ -229,23 +238,27 @@ class V8_PLATFORM_EXPORT TracingController {
   TracingController();
   ~TracingController();
   void Initialize(TraceBuffer* trace_buffer);
-  const uint8_t* GetCategoryGroupEnabled(const char* category_group);
-  static const char* GetCategoryGroupName(const uint8_t* category_enabled_flag);
+
+  // v8::TracingController implementation.
+  const uint8_t* GetCategoryGroupEnabled(const char* category_group) override;
   uint64_t AddTraceEvent(
       char phase, const uint8_t* category_enabled_flag, const char* name,
       const char* scope, uint64_t id, uint64_t bind_id, int32_t num_args,
       const char** arg_names, const uint8_t* arg_types,
       const uint64_t* arg_values,
       std::unique_ptr<v8::ConvertableToTraceFormat>* arg_convertables,
-      unsigned int flags);
+      unsigned int flags) override;
   void UpdateTraceEventDuration(const uint8_t* category_enabled_flag,
-                                const char* name, uint64_t handle);
+                                const char* name, uint64_t handle) override;
+  void AddTraceStateObserver(
+      v8::TracingController::TraceStateObserver* observer) override;
+  void RemoveTraceStateObserver(
+      v8::TracingController::TraceStateObserver* observer) override;
 
   void StartTracing(TraceConfig* trace_config);
   void StopTracing();
 
-  void AddTraceStateObserver(Platform::TraceStateObserver* observer);
-  void RemoveTraceStateObserver(Platform::TraceStateObserver* observer);
+  static const char* GetCategoryGroupName(const uint8_t* category_enabled_flag);
 
  private:
   const uint8_t* GetCategoryGroupEnabledInternal(const char* category_group);
@@ -255,7 +268,7 @@ class V8_PLATFORM_EXPORT TracingController {
   std::unique_ptr<TraceBuffer> trace_buffer_;
   std::unique_ptr<TraceConfig> trace_config_;
   std::unique_ptr<base::Mutex> mutex_;
-  std::unordered_set<Platform::TraceStateObserver*> observers_;
+  std::unordered_set<v8::TracingController::TraceStateObserver*> observers_;
   Mode mode_ = DISABLED;
 
   // Disallow copy and assign
