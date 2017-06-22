@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f27d472_1efc5169",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 17544,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-22T06:31:20Z",
+      "side": 1,
+      "message": "This should probably be renamed to ::DeleteEntry given the input parameters.",
+      "revId": "644e9cbb467f28764e1c0f1b13ca47ca5005bb58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0769d3ca_e61ff661",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 17548,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-22T06:31:20Z",
+      "side": 1,
+      "message": "DCHECK_IMPLIES(Shape::kEntrySize \u003d\u003d 3, \n               dictionary-\u003eDetailsAt(entry).IsConfigurable());",
+      "revId": "644e9cbb467f28764e1c0f1b13ca47ca5005bb58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
