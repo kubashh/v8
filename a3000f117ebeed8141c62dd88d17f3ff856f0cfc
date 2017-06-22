@@ -22,6 +22,30 @@
       "revId": "a3000f117ebeed8141c62dd88d17f3ff856f0cfc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "314521cf_cb96f599",
+        "filename": "test/cctest/scope-test-helper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-06-22T13:10:57Z",
+      "side": 1,
+      "message": "Done (one version of that)\n\nCan\u0027t check at the top of CompareVariables because we cannot do AsDeclarationScope() to any scope, so the check would be a bit more complicated.",
+      "parentUuid": "8b2971cb_2fc21afe",
+      "range": {
+        "startLine": 37,
+        "startChar": 6,
+        "endLine": 37,
+        "endChar": 32
+      },
+      "revId": "a3000f117ebeed8141c62dd88d17f3ff856f0cfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
