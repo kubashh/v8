@@ -34,6 +34,24 @@
       "revId": "463187ec2ed662e2b6845bfc07d5c96609b99498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98ceaca4_3d8d18aa",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-22T08:31:53Z",
+      "side": 1,
+      "message": "Regarding 3 I thought we\u0027d still set the flag on the tests where we want it. But we wouldn\u0027t specify a trace with regexp. That could be done automatically.\n\nWe could also do option 1 and add a filter to remove the zero-trace on Android again. Hack on a hack.\n\nOne additional problem with the current design is how this trace influences the total calculation. Maybe doing max mem measurements should for now disable total calculation by default. It\u0027s first done on the bot infrastructure, but it makes a geometric mean. And zeros are not so helpful there...",
+      "parentUuid": "9c03cc28_1bed3216",
+      "revId": "463187ec2ed662e2b6845bfc07d5c96609b99498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
