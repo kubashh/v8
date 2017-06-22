@@ -794,7 +794,7 @@ PipelineWasmCompilationJob::ExecuteJobImpl() {
     pipeline_.RunPrintAndVerify("Optimized Machine", true);
   }
 
-  if (!pipeline_.ScheduleAndSelectInstructions(&linkage_, true)) return FAILED;
+  if (!pipeline_.ScheduleAndSelectInstructions(&linkage_, false)) return FAILED;
   return SUCCEEDED;
 }
 
