@@ -4023,7 +4023,7 @@ void WasmCompilationUnit::ExecuteCompilation() {
 
     job_.reset(Pipeline::NewWasmCompilationJob(
         info_.get(), jsgraph_, descriptor, source_positions,
-        &protected_instructions, !module_env_->module->is_wasm()));
+        &protected_instructions, module_env_->module->is_wasm()));
     ok_ = job_->ExecuteJob() == CompilationJob::SUCCEEDED;
     // TODO(bradnelson): Improve histogram handling of size_t.
     isolate_->counters()->wasm_compile_function_peak_memory_bytes()->AddSample(
