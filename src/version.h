@@ -24,27 +24,14 @@ class Version {
         base::hash_combine(major_, minor_, build_, patch_));
   }
 
-  // Calculate the V8 version string.
-  static void GetString(Vector<char> str);
-
-  // Calculate the SONAME for the V8 shared library.
-  static void GetSONAME(Vector<char> str);
-
   static const char* GetVersion() { return version_string_; }
-
  private:
-  // NOTE: can't make these really const because of test-version.cc.
-  static int major_;
-  static int minor_;
-  static int build_;
-  static int patch_;
-  static bool candidate_;
-  static const char* soname_;
+  static const int major_;
+  static const int minor_;
+  static const int build_;
+  static const int patch_;
+  static const bool candidate_;
   static const char* version_string_;
-
-  // In test-version.cc.
-  friend void SetVersion(int major, int minor, int build, int patch,
-                         bool candidate, const char* soname);
 };
 
 }  // namespace internal
