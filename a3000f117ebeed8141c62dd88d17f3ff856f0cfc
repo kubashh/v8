@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b2971cb_2fc21afe",
+        "filename": "test/cctest/scope-test-helper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1117099
+      },
+      "writtenOn": "2017-06-22T11:19:30Z",
+      "side": 1,
+      "message": "nitpick: I guess this won\u0027t make a real difference, but this wouldn\u0027t catch something where baseline doesn\u0027t have a function var, but scope does.\n\nMaybe DCHECK_EQ(!!function, !!scope-\u003e...-\u003efunction_var()), or better, have an equivalent check at the top of CompareVariables.",
+      "range": {
+        "startLine": 37,
+        "startChar": 6,
+        "endLine": 37,
+        "endChar": 32
+      },
+      "revId": "a3000f117ebeed8141c62dd88d17f3ff856f0cfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
