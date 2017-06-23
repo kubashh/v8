@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ded30128_15aefd27",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-06-23T17:14:01Z",
+      "side": 1,
+      "message": "nit - I prefer the original if/else (checking against kDataLengthForInline maybe) to the tertiary operator (but keeping the DCHECK on length \u003e kDataBits for non inline case sounds good)",
+      "revId": "2949b028ce1d797770fc9224dd674fa8ceef1d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
