@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_H_
 #define V8_OBJECTS_H_
 
+#include <forward_list>
 #include <iosfwd>
 #include <memory>
 
@@ -4855,9 +4856,25 @@ class Module : public Struct {
   // Hash for this object (a random non-zero Smi).
   DECL_INT_ACCESSORS(hash)
 
-  // Internal instantiation status.
+  // Status.
   DECL_INT_ACCESSORS(status)
-  enum InstantiationStatus { kUnprepared, kPrepared };
+  enum Status {
+    // Order matters!
+    kUninstantiated,
+    kPreInstantiating,
+    kInstantiating,
+    kInstantiated,
+    kEvaluating,
+    kEvaluated,
+    kErrored
+  };
+
+  // TODO(neis): Don't store those in the module object?
+  DECL_INT_ACCESSORS(dfs_index)
+  DECL_INT_ACCESSORS(dfs_ancestor_index)
+
+  // The exception in the case {status} is kErrored.
+  DECL_ACCESSORS(exception, Object)
 
   // The namespace object (or undefined).
   DECL_ACCESSORS(module_namespace, HeapObject)
@@ -4872,9 +4889,6 @@ class Module : public Struct {
 
   // Get the ModuleInfo associated with the code.
   inline ModuleInfo* info() const;
-
-  inline bool instantiated() const;
-  inline bool evaluated() const;
 
   // Implementation of spec operation ModuleDeclarationInstantiation.
   // Returns false if an exception occurred during instantiation, true
@@ -4910,7 +4924,10 @@ class Module : public Struct {
   static const int kRequestedModulesOffset =
       kModuleNamespaceOffset + kPointerSize;
   static const int kStatusOffset = kRequestedModulesOffset + kPointerSize;
-  static const int kScriptOffset = kStatusOffset + kPointerSize;
+  static const int kDfsIndexOffset = kStatusOffset + kPointerSize;
+  static const int kDfsAncestorIndexOffset = kDfsIndexOffset + kPointerSize;
+  static const int kExceptionOffset = kDfsAncestorIndexOffset + kPointerSize;
+  static const int kScriptOffset = kExceptionOffset + kPointerSize;
   static const int kSize = kScriptOffset + kPointerSize;
 
  private:
@@ -4940,13 +4957,15 @@ class Module : public Struct {
       Handle<Module> module, Handle<String> name, MessageLocation loc,
       bool must_resolve, ResolveSet* resolve_set);
 
-  inline void set_evaluated();
-
   static MUST_USE_RESULT bool PrepareInstantiate(
       Handle<Module> module, v8::Local<v8::Context> context,
       v8::Module::ResolveCallback callback);
-  static MUST_USE_RESULT bool FinishInstantiate(Handle<Module> module,
-                                                v8::Local<v8::Context> context);
+  static MUST_USE_RESULT bool FinishInstantiate(
+      Handle<Module> module, std::forward_list<Handle<Module>>* stack,
+      unsigned* dfs_index);
+  static MUST_USE_RESULT MaybeHandle<Object> Evaluate(
+      Handle<Module> module, std::forward_list<Handle<Module>>* stack,
+      unsigned* dfs_index);
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Module);
 };

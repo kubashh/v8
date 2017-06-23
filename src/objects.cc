@@ -19535,6 +19535,53 @@ void Module::StoreVariable(Handle<Module> module, int cell_index,
   module->GetCell(cell_index)->set_value(*value);
 }
 
+namespace {
+// Helpers for module instantiation and evaluation.
+
+// To set kErrored, use RecordError instead.
+void SetStatus(Module* module, Module::Status status) {
+  DCHECK_LE(module->status(), status);
+  DCHECK_NE(status, Module::kErrored);
+  module->set_status(status);
+}
+
+void RecordError(Module* module) {
+  DisallowHeapAllocation no_alloc;
+
+  Isolate* isolate = module->GetIsolate();
+  Object* exception = isolate->pending_exception();
+  DCHECK(!exception->IsTheHole(isolate));
+
+  switch (module->status()) {
+    case Module::kUninstantiated:
+    case Module::kPreInstantiating:
+    case Module::kInstantiating:
+    case Module::kEvaluating:
+      break;
+    case Module::kErrored:
+      DCHECK_EQ(module->exception(), exception);
+      return;
+    default:
+      UNREACHABLE();
+  }
+
+  module->set_code(module->info());
+
+  DCHECK(module->exception()->IsTheHole(isolate));
+  module->set_status(Module::kErrored);
+  module->set_exception(exception);
+}
+
+Object* GetException(Module* module) {
+  DisallowHeapAllocation no_alloc;
+  DCHECK_EQ(module->status(), Module::kErrored);
+  Object* exception = module->exception();
+  DCHECK(!exception->IsTheHole(module->GetIsolate()));
+  return exception;
+}
+
+}  // anonymous namespace
+
 MaybeHandle<Cell> Module::ResolveImport(Handle<Module> module,
                                         Handle<String> name, int module_request,
                                         MessageLocation loc, bool must_resolve,
@@ -19542,15 +19589,23 @@ MaybeHandle<Cell> Module::ResolveImport(Handle<Module> module,
   Isolate* isolate = module->GetIsolate();
   Handle<Module> requested_module(
       Module::cast(module->requested_modules()->get(module_request)), isolate);
-  return Module::ResolveExport(requested_module, name, loc, must_resolve,
-                               resolve_set);
+  MaybeHandle<Cell> result = Module::ResolveExport(requested_module, name, loc,
+                                                   must_resolve, resolve_set);
+  if (isolate->has_pending_exception()) {
+    DCHECK(result.is_null());
+    RecordError(*module);
+  }
+  return result;
 }
 
 MaybeHandle<Cell> Module::ResolveExport(Handle<Module> module,
                                         Handle<String> name,
                                         MessageLocation loc, bool must_resolve,
                                         Module::ResolveSet* resolve_set) {
-  DCHECK_EQ(module->status(), kPrepared);
+  DCHECK_NE(module->status(), kErrored);
+  DCHECK_NE(module->status(), kEvaluating);
+  DCHECK_GE(module->status(), kPreInstantiating);
+
   Isolate* isolate = module->GetIsolate();
   Handle<Object> object(module->exports()->Lookup(name), isolate);
   if (object->IsCell()) {
@@ -19672,14 +19727,40 @@ MaybeHandle<Cell> Module::ResolveExportUsingStarExports(
 
 bool Module::Instantiate(Handle<Module> module, v8::Local<v8::Context> context,
                          v8::Module::ResolveCallback callback) {
-  return PrepareInstantiate(module, context, callback) &&
-         FinishInstantiate(module, context);
+  Isolate* isolate = module->GetIsolate();
+  if (module->status() == kErrored) {
+    isolate->Throw(GetException(*module));
+    return false;
+  }
+
+  if (!PrepareInstantiate(module, context, callback)) {
+    return false;
+  }
+
+  Zone zone(isolate->allocator(), ZONE_NAME);
+
+  auto stack = new (&zone) std::forward_list<Handle<Module>>;
+  unsigned dfs_index = 0;
+  if (!FinishInstantiate(module, stack, &dfs_index)) {
+    for (auto& descendant : *stack) {
+      RecordError(*descendant);
+    }
+    DCHECK_EQ(GetException(*module), isolate->pending_exception());
+    return false;
+  }
+  DCHECK(module->status() == kInstantiated || module->status() == kEvaluated);
+  DCHECK(stack->empty());
+  return true;
 }
 
 bool Module::PrepareInstantiate(Handle<Module> module,
                                 v8::Local<v8::Context> context,
                                 v8::Module::ResolveCallback callback) {
-  if (module->status() == kPrepared) return true;
+  DCHECK_NE(module->status(), kErrored);
+  DCHECK_NE(module->status(), kEvaluating);
+  DCHECK_NE(module->status(), kInstantiating);
+  if (module->status() >= kPreInstantiating) return true;
+  SetStatus(*module, kPreInstantiating);
 
   // Obtain requested modules.
   Isolate* isolate = module->GetIsolate();
@@ -19693,18 +19774,29 @@ bool Module::PrepareInstantiate(Handle<Module> module,
                   v8::Utils::ToLocal(module))
              .ToLocal(&api_requested_module)) {
       isolate->PromoteScheduledException();
+      RecordError(*module);
       return false;
     }
     Handle<Module> requested_module = Utils::OpenHandle(*api_requested_module);
+    if (requested_module->status() == kErrored) {
+      // TODO(neis): Move this into callback?
+      isolate->Throw(GetException(*requested_module));
+      RecordError(*module);
+      DCHECK_EQ(GetException(*module), GetException(*requested_module));
+      return false;
+    }
     requested_modules->set(i, *requested_module);
   }
 
   // Recurse.
-  module->set_status(kPrepared);
   for (int i = 0, length = requested_modules->length(); i < length; ++i) {
     Handle<Module> requested_module(Module::cast(requested_modules->get(i)),
                                     isolate);
-    if (!PrepareInstantiate(requested_module, context, callback)) return false;
+    if (!PrepareInstantiate(requested_module, context, callback)) {
+      RecordError(*module);
+      DCHECK_EQ(GetException(*module), GetException(*requested_module));
+      return false;
+    }
   }
 
   // Set up local exports.
@@ -19730,34 +19822,57 @@ bool Module::PrepareInstantiate(Handle<Module> module,
     CreateIndirectExport(module, Handle<String>::cast(export_name), entry);
   }
 
-  DCHECK_EQ(module->status(), kPrepared);
-  DCHECK(!module->instantiated());
+  DCHECK_EQ(module->status(), kPreInstantiating);
   return true;
 }
 
 bool Module::FinishInstantiate(Handle<Module> module,
-                               v8::Local<v8::Context> context) {
-  DCHECK_EQ(module->status(), kPrepared);
-  if (module->instantiated()) return true;
+                               std::forward_list<Handle<Module>>* stack,
+                               unsigned* dfs_index) {
+  DCHECK_NE(module->status(), kErrored);
+  DCHECK_NE(module->status(), kEvaluating);
+  if (module->status() >= kInstantiating) return true;
+  DCHECK_EQ(module->status(), kPreInstantiating);
 
-  // Instantiate SharedFunctionInfo and mark module as instantiated for
+  // Instantiate SharedFunctionInfo and mark module as instantiating for
   // the recursion.
   Isolate* isolate = module->GetIsolate();
   Handle<SharedFunctionInfo> shared(SharedFunctionInfo::cast(module->code()),
                                     isolate);
   Handle<JSFunction> function =
       isolate->factory()->NewFunctionFromSharedFunctionInfo(
-          shared,
-          handle(Utils::OpenHandle(*context)->native_context(), isolate));
+          shared, isolate->native_context());
   module->set_code(*function);
-  DCHECK(module->instantiated());
+  SetStatus(*module, kInstantiating);
+  module->set_dfs_index(*dfs_index);
+  module->set_dfs_ancestor_index(*dfs_index);
+  stack->push_front(module);
+  (*dfs_index)++;
 
   // Recurse.
   Handle<FixedArray> requested_modules(module->requested_modules(), isolate);
   for (int i = 0, length = requested_modules->length(); i < length; ++i) {
     Handle<Module> requested_module(Module::cast(requested_modules->get(i)),
                                     isolate);
-    if (!FinishInstantiate(requested_module, context)) return false;
+    if (!FinishInstantiate(requested_module, stack, dfs_index)) {
+      return false;
+    }
+
+    DCHECK_NE(requested_module->status(), kErrored);
+    DCHECK_NE(requested_module->status(), kEvaluating);
+    DCHECK_GE(requested_module->status(), kInstantiating);
+    SLOW_DCHECK(
+        // {requested_module} is instantiating iff it's on the {stack}.
+        (requested_module->status() == kInstantiating) ==
+        std::count_if(stack->begin(), stack->end(), [&](Handle<Module> m) {
+          return m.is_identical_to(requested_module);
+        }));
+
+    if (requested_module->status() == kInstantiating) {
+      module->set_dfs_ancestor_index(
+          std::min(module->dfs_ancestor_index(),
+                   requested_module->dfs_ancestor_index()));
+    }
   }
 
   Zone zone(isolate->allocator(), ZONE_NAME);
@@ -19803,17 +19918,67 @@ bool Module::FinishInstantiate(Handle<Module> module,
     }
   }
 
+  SLOW_DCHECK(
+      // {module} is on the {stack}.
+      std::count_if(stack->begin(), stack->end(), [&](Handle<Module> m) {
+        return m.is_identical_to(module);
+      }) == 1);
+  DCHECK_LE(module->dfs_ancestor_index(), module->dfs_index());
+  if (module->dfs_ancestor_index() == module->dfs_index()) {
+    Handle<Module> ancestor;
+    do {
+      ancestor = stack->front();
+      stack->pop_front();
+      DCHECK_EQ(ancestor->status(), kInstantiating);
+      SetStatus(*ancestor, kInstantiated);
+    } while (!ancestor.equals(module));
+  }
   return true;
 }
 
 MaybeHandle<Object> Module::Evaluate(Handle<Module> module) {
-  DCHECK(module->instantiated());
-
-  // Each module can only be evaluated once.
   Isolate* isolate = module->GetIsolate();
-  if (module->evaluated()) return isolate->factory()->undefined_value();
+  if (module->status() == kErrored) {
+    isolate->Throw(GetException(*module));
+    return MaybeHandle<Object>();
+  }
+  DCHECK_NE(module->status(), kEvaluating);
+  DCHECK_GE(module->status(), kInstantiated);
+  Zone zone(isolate->allocator(), ZONE_NAME);
+
+  auto stack = new (&zone) std::forward_list<Handle<Module>>;
+  unsigned dfs_index = 0;
+  Handle<Object> result;
+  if (!Evaluate(module, stack, &dfs_index).ToHandle(&result)) {
+    for (auto& descendant : *stack) {
+      DCHECK_EQ(descendant->status(), kEvaluating);
+      RecordError(*descendant);
+    }
+    DCHECK_EQ(GetException(*module), isolate->pending_exception());
+    return MaybeHandle<Object>();
+  }
+  DCHECK_EQ(module->status(), kEvaluated);
+  DCHECK(stack->empty());
+  return result;
+}
+
+MaybeHandle<Object> Module::Evaluate(Handle<Module> module,
+                                     std::forward_list<Handle<Module>>* stack,
+                                     unsigned* dfs_index) {
+  Isolate* isolate = module->GetIsolate();
+  DCHECK_NE(module->status(), kErrored);
+  if (module->status() >= kEvaluating) {
+    return isolate->factory()->undefined_value();
+  }
+  DCHECK_EQ(module->status(), kInstantiated);
+
   Handle<JSFunction> function(JSFunction::cast(module->code()), isolate);
-  module->set_evaluated();
+  module->set_code(function->shared()->scope_info()->ModuleDescriptorInfo());
+  SetStatus(*module, kEvaluating);
+  module->set_dfs_index(*dfs_index);
+  module->set_dfs_ancestor_index(*dfs_index);
+  stack->push_front(module);
+  (*dfs_index)++;
 
   // Initialization.
   DCHECK_EQ(MODULE_SCOPE, function->shared()->scope_info()->scope_type());
@@ -19828,8 +19993,25 @@ MaybeHandle<Object> Module::Evaluate(Handle<Module> module) {
   // Recursion.
   Handle<FixedArray> requested_modules(module->requested_modules(), isolate);
   for (int i = 0, length = requested_modules->length(); i < length; ++i) {
-    Handle<Module> import(Module::cast(requested_modules->get(i)), isolate);
-    RETURN_ON_EXCEPTION(isolate, Evaluate(import), Object);
+    Handle<Module> requested_module(Module::cast(requested_modules->get(i)),
+                                    isolate);
+    RETURN_ON_EXCEPTION(isolate, Evaluate(requested_module, stack, dfs_index),
+                        Object);
+
+    DCHECK_GE(requested_module->status(), kEvaluating);
+    DCHECK_NE(requested_module->status(), kErrored);
+    SLOW_DCHECK(
+        // {requested_module} is evaluating iff it's on the {stack}.
+        (requested_module->status() == kEvaluating) ==
+        std::count_if(stack->begin(), stack->end(), [&](Handle<Module> m) {
+          return m.is_identical_to(requested_module);
+        }));
+
+    if (requested_module->status() == kEvaluating) {
+      module->set_dfs_ancestor_index(
+          std::min(module->dfs_ancestor_index(),
+                   requested_module->dfs_ancestor_index()));
+    }
   }
 
   // Evaluation of module body.
@@ -19842,6 +20024,23 @@ MaybeHandle<Object> Module::Evaluate(Handle<Module> module) {
   DCHECK(static_cast<JSIteratorResult*>(JSObject::cast(*result))
              ->done()
              ->BooleanValue());
+
+  SLOW_DCHECK(
+      // {module} is on the {stack}.
+      std::count_if(stack->begin(), stack->end(), [&](Handle<Module> m) {
+        return m.is_identical_to(module);
+      }) == 1);
+  DCHECK_LE(module->dfs_ancestor_index(), module->dfs_index());
+  if (module->dfs_ancestor_index() == module->dfs_index()) {
+    Handle<Module> ancestor;
+    do {
+      ancestor = stack->front();
+      stack->pop_front();
+      DCHECK_EQ(ancestor->status(), kEvaluating);
+      SetStatus(*ancestor, kEvaluated);
+    } while (!ancestor.equals(module));
+  }
+
   return handle(
       static_cast<JSIteratorResult*>(JSObject::cast(*result))->value(),
       isolate);
@@ -19851,7 +20050,8 @@ namespace {
 
 void FetchStarExports(Handle<Module> module, Zone* zone,
                       UnorderedModuleSet* visited) {
-  DCHECK(module->instantiated());
+  DCHECK_NE(module->status(), Module::kErrored);
+  DCHECK_GE(module->status(), Module::kInstantiated);
 
   bool cycle = !visited->insert(module).second;
   if (cycle) return;
