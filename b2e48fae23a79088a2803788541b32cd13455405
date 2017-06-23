@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e1542a30_9d27223d",
+        "filename": "tools/release/filter_build_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-23T09:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fbeae1f_b5f8cee0",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 16
+      },
+      "revId": "b2e48fae23a79088a2803788541b32cd13455405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b48c8db_d5c4dbb3",
         "filename": "tools/release/filter_build_files.py",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7a4af77c_050c6852",
+        "filename": "tools/release/filter_build_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-23T09:12:56Z",
+      "side": 1,
+      "message": "yes 2.7",
+      "parentUuid": "3b48c8db_d5c4dbb3",
+      "range": {
+        "startLine": 77,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 49
+      },
+      "revId": "b2e48fae23a79088a2803788541b32cd13455405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "104ec3ea_a7d13c6c",
         "filename": "tools/release/filter_build_files.py",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2017-06-23T08:37:18Z",
       "side": 1,
       "message": "I find this a bit odd, since os.walk already gives you all the file names, and then within the loop you ask the library for all the file names again via glob. You might just match the globs against the list of strings os.walk gives you. (I think it\u0027s fnmatch; not sure though.)",
+      "range": {
+        "startLine": 78,
+        "startChar": 15,
+        "endLine": 78,
+        "endChar": 17
+      },
+      "revId": "b2e48fae23a79088a2803788541b32cd13455405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd354730_3e9a9f84",
+        "filename": "tools/release/filter_build_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-06-23T09:12:56Z",
+      "side": 1,
+      "message": "True, but the code will still be much longer and performance is not an issue here:\n  for root, _, filenames in os.walk(\n      os.path.join(args.dir, \u0027obj\u0027), followlinks\u003dTrue):\n    list_of_files.extend(\n        os.path.join(root, f)\n        for f in filenames if any(\n            fnmatch.fnmatch(f, g) for g in LIBRARY_FILES[args.platform])\n    )",
+      "parentUuid": "104ec3ea_a7d13c6c",
       "range": {
         "startLine": 78,
         "startChar": 15,
