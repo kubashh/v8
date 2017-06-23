@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0623685d_c19e3235",
+        "filename": "src/bit-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "Should be happy after a rebase.",
+      "parentUuid": "38d968c8_b392f30d",
+      "range": {
+        "startLine": 46,
+        "startChar": 23,
+        "endLine": 46,
+        "endChar": 38
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1ab274a_04a36c72",
         "filename": "src/bit-vector.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "020b54f5_6c3040d8",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1ab274a_04a36c72",
+      "range": {
+        "startLine": 28,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1b0ebbd2_f4950bb6",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "OK, but I will add a default constructor (with length \u003d\u003d 0).",
+      "parentUuid": "02d5b71c_2f21894a",
+      "range": {
+        "startLine": 75,
+        "startChar": 11,
+        "endLine": 75,
+        "endChar": 32
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7420917e_6204ab8a",
         "filename": "src/bit-vector.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "091e5506_133e4280",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7420917e_6204ab8a",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 27
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6e1e0fe5_eb7e6bbe",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "That\u0027s a great point -- AddAll from GrowableBitVector isn\u0027t a big issue, but CopyFrom is. I\u0027ve added a comment, and will follow up (I want to keep any follow-up separate, because it could introduce a performance difference).",
+      "parentUuid": "fcea6c2f_1f09677d",
+      "range": {
+        "startLine": 156,
+        "startChar": 15,
+        "endLine": 156,
+        "endChar": 22
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b1e0b1f_7fb118a4",
         "filename": "src/bit-vector.h",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ed4a8b4_0f48e935",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-23T16:27:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b1e0b1f_7fb118a4",
+      "range": {
+        "startLine": 288,
+        "startChar": 14,
+        "endLine": 288,
+        "endChar": 22
+      },
+      "revId": "3d1e0f4bcfd9d17d1699e4f93fdd67310d57e544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
