@@ -21,25 +21,24 @@ import os
 import re
 import sys
 
-EXECUTABLES = [
+EXECUTABLE_GLOBS = [
   'd8',
   'v8_hello_world',
   'v8_parser_shell',
   'v8_sample_process',
-  'v8_shell',
 ]
 
-SUPPLEMENTARY_FILES = [
+SUPPLEMENTARY_FILE_GLOBS = [
   'icudtl.dat',
   'natives_blob.bin',
   'snapshot_blob.bin',
   'v8_build_config.json',
 ]
 
-LIBS = {
-  'linux': ['*.a', '*.so', 'obj/*.a', 'obj/*.so'],
-  'mac': ['*.a', '*.so', 'obj/*.a', 'obj/*.so'],
-  'win': ['*.lib', '*.dll', 'obj\\*.a', 'obj\\*.so'],
+LIBRARY_GLOBS = {
+  'linux': ['*.a', '*.so'],
+  'mac': ['*.a', '*.so'],
+  'win': ['*.lib', '*.dll'],
 }
 
 
@@ -60,17 +59,28 @@ def main(argv):
 
   args.dir = os.path.abspath(args.dir)
 
-  extended_executables = [
-    f + '.exe' if args.platform == 'win' else f
-    for f in EXECUTABLES]
+  list_of_files = []
+  def add_files_from_globs(globs):
+    list_of_files.extend(itertools.chain(*map(glob.iglob, globs)))
 
-  all_globs = [
-    os.path.join(args.dir, f)
-    for f in extended_executables + SUPPLEMENTARY_FILES + LIBS[args.platform]
-  ]
+  # Add toplevel executables, supplementary files and libraries.
+  extended_executable_globs = [
+    f + '.exe' if args.platform == 'win' else f
+    for f in EXECUTABLE_GLOBS]
+  add_files_from_globs(
+      os.path.join(args.dir, f)
+      for f in extended_executable_globs +
+               SUPPLEMENTARY_FILE_GLOBS +
+               LIBRARY_GLOBS[args.platform]
+  )
+
+  # Add libraries recursively from obj directory.
+  for root, _, __ in os.walk(os.path.join(args.dir, 'obj'), followlinks=True):
+    add_files_from_globs(
+        os.path.join(root, g) for g in LIBRARY_GLOBS[args.platform])
 
   with open(args.json_output, 'w') as f:
-    json.dump(list(itertools.chain(*map(glob.iglob, all_globs))), f)
+    json.dump(list_of_files, f)
 
   return 0
 
