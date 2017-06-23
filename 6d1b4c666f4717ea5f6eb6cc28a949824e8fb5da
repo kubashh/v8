@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a41f34a1_bc3a346a",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4422,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-23T16:19:38Z",
+      "side": 0,
+      "message": "This is always true for non-kCompileLazy builtins.",
+      "revId": "6d1b4c666f4717ea5f6eb6cc28a949824e8fb5da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f9499be_3b286264",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4465,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-06-23T16:19:38Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "6d1b4c666f4717ea5f6eb6cc28a949824e8fb5da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
