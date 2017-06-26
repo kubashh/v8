@@ -224,9 +224,7 @@ void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
 
   if (holder->IsJSGlobalObject()) {
     Handle<GlobalDictionary> dictionary(holder->global_dictionary());
-    Handle<PropertyCell> cell(
-        PropertyCell::cast(dictionary->ValueAt(dictionary_entry())));
-    DCHECK(!cell->IsTheHole(isolate_));
+    Handle<PropertyCell> cell(dictionary->ValueAt(dictionary_entry()));
     property_details_ = cell->property_details();
     PropertyCell::PrepareForValue(dictionary, dictionary_entry(), value,
                                   property_details_);
@@ -599,9 +597,7 @@ Handle<Object> LookupIterator::FetchValue() const {
     return accessor->Get(holder, number_);
   } else if (holder_->IsJSGlobalObject()) {
     Handle<JSObject> holder = GetHolder<JSObject>();
-    result = holder->global_dictionary()->ValueAt(number_);
-    DCHECK(result->IsPropertyCell());
-    result = PropertyCell::cast(result)->value();
+    result = holder->global_dictionary()->ValueAt(number_)->value();
   } else if (!holder_->HasFastProperties()) {
     result = holder_->property_dictionary()->ValueAt(number_);
   } else if (property_details_.location() == kField) {
@@ -710,9 +706,8 @@ Handle<FieldType> LookupIterator::GetFieldType() const {
 Handle<PropertyCell> LookupIterator::GetPropertyCell() const {
   DCHECK(!IsElement());
   Handle<JSGlobalObject> holder = GetHolder<JSGlobalObject>();
-  Object* value = holder->global_dictionary()->ValueAt(dictionary_entry());
-  DCHECK(value->IsPropertyCell());
-  return handle(PropertyCell::cast(value), isolate_);
+  return handle(holder->global_dictionary()->ValueAt(dictionary_entry()),
+                isolate_);
 }
 
 
@@ -751,9 +746,7 @@ void LookupIterator::WriteDataValue(Handle<Object> value,
     }
   } else if (holder->IsJSGlobalObject()) {
     GlobalDictionary* dictionary = JSObject::cast(*holder)->global_dictionary();
-    Object* cell = dictionary->ValueAt(dictionary_entry());
-    DCHECK(cell->IsPropertyCell());
-    PropertyCell::cast(cell)->set_value(*value);
+    dictionary->ValueAt(dictionary_entry())->set_value(*value);
   } else {
     NameDictionary* dictionary = holder->property_dictionary();
     dictionary->ValueAtPut(dictionary_entry(), *value);
@@ -835,7 +828,7 @@ LookupIterator::State LookupIterator::LookupInSpecialHolder(
         if (number == GlobalDictionary::kNotFound) return NOT_FOUND;
         number_ = static_cast<uint32_t>(number);
         DCHECK(dict->ValueAt(number_)->IsPropertyCell());
-        PropertyCell* cell = PropertyCell::cast(dict->ValueAt(number_));
+        PropertyCell* cell = dict->ValueAt(number_);
         if (cell->value()->IsTheHole(isolate_)) return NOT_FOUND;
         property_details_ = cell->property_details();
         has_property_ = true;
