@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "9db80e79_899cab5f",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-26T09:21:50Z",
+      "side": 1,
+      "message": "I would expect that this call is inlined and has the same perf as the template parameter.\nDo you observe perf difference in practice?",
+      "range": {
+        "startLine": 667,
+        "startChar": 18,
+        "endLine": 667,
+        "endChar": 29
+      },
+      "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99fbc59e_522c7280",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-26T09:21:50Z",
+      "side": 1,
+      "message": "I would prefer ShouldVisitMap virtual function (if it is inlined and as fast as template).",
+      "range": {
+        "startLine": 670,
+        "startChar": 8,
+        "endLine": 670,
+        "endChar": 23
+      },
+      "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "488a35dc_4619ca00",
         "filename": "src/heap/objects-visiting.h",
         "patchSetId": 1
