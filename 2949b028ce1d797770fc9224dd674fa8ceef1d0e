@@ -16,6 +16,24 @@
       "revId": "2949b028ce1d797770fc9224dd674fa8ceef1d0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f102e5a1_32341e94",
+        "filename": "src/bit-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-06-26T10:01:04Z",
+      "side": 1,
+      "message": "Nice, checking against kDataBits makes this a bit neater.",
+      "parentUuid": "ded30128_15aefd27",
+      "revId": "2949b028ce1d797770fc9224dd674fa8ceef1d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
