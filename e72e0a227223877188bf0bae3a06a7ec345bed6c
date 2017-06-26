@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70007d01_c14632a9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4072,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-26T11:23:45Z",
+      "side": 1,
+      "message": "add a space before the string?",
+      "range": {
+        "startLine": 4072,
+        "startChar": 53,
+        "endLine": 4072,
+        "endChar": 54
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31ed8c2e_a421e37c",
+        "filename": "test/mjsunit/wasm/unicode.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-26T11:23:45Z",
+      "side": 1,
+      "message": "I think it would be nicer to make this a real function and then use it below in the assert as well.",
+      "range": {
+        "startLine": 17,
+        "startChar": 58,
+        "endLine": 17,
+        "endChar": 68
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283b1366_539da8d8",
+        "filename": "test/mjsunit/wasm/unicode.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-06-26T11:23:45Z",
+      "side": 1,
+      "message": "is it intentional that this \u0027add\u0027 has no ☺?",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 42
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
