@@ -267,11 +267,13 @@ VisitorDispatchTable<typename StaticMarkingVisitor<StaticVisitor>::Callback>
   V(TransitionArray)             \
   V(WeakCell)
 
-// The base class for visitors that need to dispatch on object type.
-// It is similar to StaticVisitor except it uses virtual dispatch
-// instead of static dispatch table. The default behavour of all
-// visit functions is to iterate body of the given object using
-// the BodyDescriptor of the object.
+enum class VisitationMode { VISIT_SIMPLE, VISIT_MAP };
+enum class FilteringMode { FILTER_OBJECTS, DONT_FILTER_OBJECTS };
+
+// The base class for visitors that need to dispatch on object type. It is
+// similar to StaticVisitor except it uses virtual dispatch instead of static
+// dispatch table. The default behavior of all visit functions is to iterate
+// body of the given object using the BodyDescriptor of the object.
 //
 // The visit functions return the size of the object cast to ResultType.
 //
@@ -281,9 +283,10 @@ VisitorDispatchTable<typename StaticMarkingVisitor<StaticVisitor>::Callback>
 //     ...
 //   }
 //
-// This is an example of Curiously recurring template pattern.
 // TODO(ulan): replace static visitors with the HeapVisitor.
-template <typename ResultType, typename ConcreteVisitor>
+template <typename ResultType, typename ConcreteVisitor,
+          VisitationMode visitation_mode = VisitationMode::VISIT_MAP,
+          FilteringMode filtering_mode = FilteringMode::FILTER_OBJECTS>
 class HeapVisitor : public ObjectVisitor {
  public:
   ResultType Visit(HeapObject* object);
@@ -293,23 +296,32 @@ class HeapVisitor : public ObjectVisitor {
   // A guard predicate for visiting the object.
   // If it returns false then the default implementations of the Visit*
   // functions bailout from iterating the object pointers.
-  virtual bool ShouldVisit(HeapObject* object);
-  // A callback for visiting the map pointer in the object header.
-  virtual void VisitMapPointer(HeapObject* host, HeapObject** map);
+  //
+  // Requires FilteringMode::FILTER_OBJECTS to be specified.
+  V8_INLINE virtual bool ShouldVisit(HeapObject* object);
 
-#define VISIT(type) virtual ResultType Visit##type(Map* map, type* object);
+  // A callback for visiting the map pointer in the object header.
+  //
+  // Requires VisitationMode::VISIT_MAP to be specified.
+  V8_INLINE virtual void VisitMapPointer(HeapObject* host, HeapObject** map);
+
+#define VISIT(type) \
+  V8_INLINE virtual ResultType Visit##type(Map* map, type* object);
   TYPED_VISITOR_ID_LIST(VISIT)
 #undef VISIT
-  virtual ResultType VisitShortcutCandidate(Map* map, ConsString* object);
-  virtual ResultType VisitNativeContext(Map* map, Context* object);
-  virtual ResultType VisitDataObject(Map* map, HeapObject* object);
-  virtual ResultType VisitJSObjectFast(Map* map, JSObject* object);
-  virtual ResultType VisitJSApiObject(Map* map, JSObject* object);
-  virtual ResultType VisitStruct(Map* map, HeapObject* object);
-  virtual ResultType VisitFreeSpace(Map* map, FreeSpace* object);
+  V8_INLINE virtual ResultType VisitShortcutCandidate(Map* map,
+                                                      ConsString* object);
+  V8_INLINE virtual ResultType VisitNativeContext(Map* map, Context* object);
+  V8_INLINE virtual ResultType VisitDataObject(Map* map, HeapObject* object);
+  V8_INLINE virtual ResultType VisitJSObjectFast(Map* map, JSObject* object);
+  V8_INLINE virtual ResultType VisitJSApiObject(Map* map, JSObject* object);
+  V8_INLINE virtual ResultType VisitStruct(Map* map, HeapObject* object);
+  V8_INLINE virtual ResultType VisitFreeSpace(Map* map, FreeSpace* object);
 };
 
-class NewSpaceVisitor : public HeapVisitor<int, NewSpaceVisitor> {
+class NewSpaceVisitor
+    : public HeapVisitor<int, NewSpaceVisitor, VisitationMode::VISIT_SIMPLE,
+                         FilteringMode::DONT_FILTER_OBJECTS> {
  public:
   void VisitCodeEntry(JSFunction* host, Address code_entry) final {
     // Code is not in new space.
@@ -317,12 +329,9 @@ class NewSpaceVisitor : public HeapVisitor<int, NewSpaceVisitor> {
 
   // Special cases for young generation.
 
-  inline int VisitJSFunction(Map* map, JSFunction* object) final;
-  inline int VisitNativeContext(Map* map, Context* object) final;
-
-  int VisitJSApiObject(Map* map, JSObject* object) final {
-    return VisitJSObject(map, object);
-  }
+  V8_INLINE int VisitJSFunction(Map* map, JSFunction* object) final;
+  V8_INLINE int VisitNativeContext(Map* map, Context* object) final;
+  V8_INLINE int VisitJSApiObject(Map* map, JSObject* object) final;
 
   int VisitBytecodeArray(Map* map, BytecodeArray* object) final {
     UNREACHABLE();
