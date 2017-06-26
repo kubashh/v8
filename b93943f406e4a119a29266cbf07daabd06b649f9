@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72dfa46e_a11ada0f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-26T22:22:33Z",
+      "side": 1,
+      "message": "We looked more into what\u0027s going on here, for wasm. The high-level summary is that:\n\n- the ValueNumberingReducer pass is the one that contributes to compile-time, and removing which leads to an increase in RelocInfo. This appears to be due to it managing to remove redundant memory checks, because each memory check has associated with it a reloc info entry.\n\n- the other passes don\u0027t contribute to compile time much, but they appear to negatively contribute to code size. That\u0027s how we end up saving on code size when they are all removed.\n\n- independently, we currently generate, for each mem check, a separate jump to a separate call to handling the error exception, but to the same handler. Each call site means one extra reloc info entry. If we replaced all such jumps with one jump, to one call, we\u0027d reduce all such reloc info entries to 1 (Brad\u0027s taking a quick look).\n\n- we\u0027d still want to remove redundant memory bounds checks. The value of doing so appears to be primarily code and reloc info size, at least in the payloads we measure. We\u0027d want to explore a wasm-specific approach, perhaps as early as decode time, that achieves a similar result (perhaps remember the last proof on a per-block basis, and tell the graph builder to skip checking, if proof is available?)",
+      "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
