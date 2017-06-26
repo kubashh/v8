@@ -117,7 +117,8 @@ DeoptimizedFrameInfo* Deoptimizer::DebuggerInspectableFrame(
   int counter = jsframe_index;
   for (auto it = translated_values.begin(); it != translated_values.end();
        it++) {
-    if (it->kind() == TranslatedFrame::kInterpretedFunction) {
+    if (it->kind() == TranslatedFrame::kInterpretedFunction ||
+        it->kind() == TranslatedFrame::kJavaScriptBuiltinContinuation) {
       if (counter == 0) {
         frame_it = it;
         break;
