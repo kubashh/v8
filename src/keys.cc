@@ -200,10 +200,12 @@ bool KeyAccumulator::IsShadowed(Handle<Object> key) {
 }
 
 void KeyAccumulator::AddShadowingKey(Object* key) {
+  DCHECK(!key->IsPropertyCell());
   if (mode_ == KeyCollectionMode::kOwnOnly) return;
   AddShadowingKey(handle(key, isolate_));
 }
 void KeyAccumulator::AddShadowingKey(Handle<Object> key) {
+  DCHECK(!key->IsPropertyCell());
   if (mode_ == KeyCollectionMode::kOwnOnly) return;
   if (shadowing_keys_.is_null()) {
     shadowing_keys_ = ObjectHashSet::New(isolate_, 16);
