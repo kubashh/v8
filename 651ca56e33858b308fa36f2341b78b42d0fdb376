@@ -45,6 +45,30 @@
       "revId": "651ca56e33858b308fa36f2341b78b42d0fdb376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1db9a88_4fcad995",
+        "filename": "src/heap/worklist.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-06-26T09:30:42Z",
+      "side": 1,
+      "message": "This is for future (when this method is used for flushing). It ensures the invariant that all segment in the global pool are non-empty.\n\nWithout this, publishing an empty segment from one thread and stealing it from the other thread will break the pop operation.",
+      "parentUuid": "53ab0cf9_abc31b04",
+      "range": {
+        "startLine": 192,
+        "startChar": 9,
+        "endLine": 192,
+        "endChar": 30
+      },
+      "revId": "651ca56e33858b308fa36f2341b78b42d0fdb376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
