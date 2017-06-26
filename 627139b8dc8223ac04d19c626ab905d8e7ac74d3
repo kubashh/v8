@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "488a35dc_4619ca00",
+        "filename": "src/heap/objects-visiting.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-26T08:05:18Z",
+      "side": 1,
+      "message": "We could merge those flags for now, as we only need them in combination. Couldn\u0027t come up with a proper name though, so I created separate enums.",
+      "range": {
+        "startLine": 270,
+        "startChar": 11,
+        "endLine": 270,
+        "endChar": 25
+      },
+      "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
