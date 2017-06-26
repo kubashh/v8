@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ace1252b_b8b3e892",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4072,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-26T11:39:58Z",
+      "side": 1,
+      "message": "Hm, the output has always been this way. If we want to change this, we should think about a general scheme for printing these names. It could also be something like\n#d (module_name:function_name)\nor\n#d:\"module_name:function_name\"\n\nShould we open a bug about this?",
+      "parentUuid": "70007d01_c14632a9",
+      "range": {
+        "startLine": 4072,
+        "startChar": 53,
+        "endLine": 4072,
+        "endChar": 54
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31ed8c2e_a421e37c",
         "filename": "test/mjsunit/wasm/unicode.js",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5853e681_bbe2131b",
+        "filename": "test/mjsunit/wasm/unicode.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-26T11:39:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31ed8c2e_a421e37c",
+      "range": {
+        "startLine": 17,
+        "startChar": 58,
+        "endLine": 17,
+        "endChar": 68
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283b1366_539da8d8",
         "filename": "test/mjsunit/wasm/unicode.js",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be4b97c1_ee1b2948",
+        "filename": "test/mjsunit/wasm/unicode.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-26T11:39:58Z",
+      "side": 1,
+      "message": "Oops, this was meant the other way around: This first \"sanity check\" should not contain any unicode. Fixed.",
+      "parentUuid": "283b1366_539da8d8",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 42
+      },
+      "revId": "e72e0a227223877188bf0bae3a06a7ec345bed6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
