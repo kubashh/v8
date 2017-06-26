@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2c4db623_2901fe72",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-26T10:46:21Z",
+      "side": 1,
+      "message": "As discussed offline: Lets try devirtualizing first. We only ever call through the bottom most children and don\u0027t really need a virtual dispatch.",
+      "parentUuid": "9db80e79_899cab5f",
+      "range": {
+        "startLine": 667,
+        "startChar": 18,
+        "endLine": 667,
+        "endChar": 29
+      },
+      "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99fbc59e_522c7280",
         "filename": "src/heap/objects-visiting-inl.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "212ffbd2_b6ad424c",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-26T10:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99fbc59e_522c7280",
+      "range": {
+        "startLine": 670,
+        "startChar": 8,
+        "endLine": 670,
+        "endChar": 23
+      },
+      "revId": "627139b8dc8223ac04d19c626ab905d8e7ac74d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
