@@ -2470,10 +2470,12 @@ Reduction JSTypedLowering::ReduceJSGeneratorRestoreRegister(Node* node) {
   Node* generator = NodeProperties::GetValueInput(node, 0);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
+
   int index = OpParameter<int>(node);
 
   FieldAccess array_field = AccessBuilder::ForJSGeneratorObjectRegisterFile();
-  FieldAccess element_field = AccessBuilder::ForFixedArraySlot(index);
+  FieldAccess element_field = AccessBuilder::ForJSGeneratorRegisterFileSlot(
+      index, NodeProperties::GetType(node));
 
   Node* array = effect = graph()->NewNode(simplified()->LoadField(array_field),
                                           generator, effect, control);

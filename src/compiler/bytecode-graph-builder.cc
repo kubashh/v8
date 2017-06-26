@@ -1,3 +1,4 @@
+
 // Copyright 2015 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -458,6 +459,7 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       bytecode_analysis_(nullptr),
       environment_(nullptr),
       osr_ast_id_(osr_ast_id),
+      suspended_registers_(nullptr),
       merge_environments_(local_zone),
       exception_handlers_(local_zone),
       current_exception_handler_(0),
@@ -2374,6 +2376,10 @@ void BytecodeGraphBuilder::VisitSuspendGenerator() {
   SuspendFlags flags = interpreter::SuspendGeneratorBytecodeFlags::Decode(
       bytecode_iterator().GetFlagOperand(3));
 
+  DCHECK_NULL(suspended_registers_);
+  suspended_registers_ =
+      new (local_zone()) NodeVector(register_count, local_zone());
+
   // The offsets used by the bytecode iterator are relative to a different base
   // than what is used in the interpreter, hence the addition.
   Node* offset =
@@ -2387,8 +2393,9 @@ void BytecodeGraphBuilder::VisitSuspendGenerator() {
   value_inputs[1] = state;
   value_inputs[2] = offset;
   for (int i = 0; i < register_count; ++i) {
-    value_inputs[3 + i] =
-        environment()->LookupRegister(interpreter::Register(i));
+    Node* reg = environment()->LookupRegister(interpreter::Register(i));
+    value_inputs[3 + i] = reg;
+    suspended_registers_->push_back(reg);
   }
 
   MakeNode(javascript()->GeneratorStore(register_count, flags),
@@ -2409,17 +2416,22 @@ void BytecodeGraphBuilder::VisitRestoreGeneratorRegisters() {
   Node* generator =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
   interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
-  // We assume we are restoring registers starting fromm index 0.
+  // We assume we are restoring registers starting from index 0.
   CHECK_EQ(0, first_reg.index());
   int register_count =
       static_cast<int>(bytecode_iterator().GetRegisterCountOperand(2));
 
+  DCHECK_NOT_NULL(suspended_registers_);
+  DCHECK_EQ(static_cast<size_t>(register_count), suspended_registers_->size());
+
   // Bijection between registers and array indices must match that used in
   // InterpreterAssembler::ExportRegisterFile.
   for (int i = 0; i < register_count; ++i) {
-    Node* value = NewNode(javascript()->GeneratorRestoreRegister(i), generator);
+    Node* value = NewNode(javascript()->GeneratorRestoreRegister(i), generator,
+                          suspended_registers_->at(i));
     environment()->BindRegister(interpreter::Register(i), value);
   }
+  suspended_registers_ = nullptr;
 }
 
 void BytecodeGraphBuilder::VisitWide() {
@@ -2534,10 +2546,14 @@ void BytecodeGraphBuilder::BuildLoopExitsForFunctionExit() {
 }
 
 void BytecodeGraphBuilder::BuildJump() {
+  // Should never jump between suspend and resume.
+  DCHECK_NULL(suspended_registers_);
   MergeIntoSuccessorEnvironment(bytecode_iterator().GetJumpTargetOffset());
 }
 
 void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
+  // Should never jump between suspend and resume.
+  DCHECK_NULL(suspended_registers_);
   NewBranch(condition);
   {
     SubEnvironment sub_environment(this);
@@ -2548,6 +2564,8 @@ void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
 }
 
 void BytecodeGraphBuilder::BuildJumpIfNot(Node* condition) {
+  // Should never jump between suspend and resume.
+  DCHECK_NULL(suspended_registers_);
   NewBranch(condition);
   {
     SubEnvironment sub_environment(this);

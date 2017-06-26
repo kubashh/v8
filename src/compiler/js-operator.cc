@@ -951,7 +951,7 @@ const Operator* JSOperatorBuilder::GeneratorRestoreRegister(int index) {
   return new (zone()) Operator1<int>(                             // --
       IrOpcode::kJSGeneratorRestoreRegister, Operator::kNoThrow,  // opcode
       "JSGeneratorRestoreRegister",                               // name
-      1, 1, 1, 1, 1, 0,                                           // counts
+      2, 1, 1, 1, 1, 0,                                           // counts
       index);                                                     // parameter
 }
 

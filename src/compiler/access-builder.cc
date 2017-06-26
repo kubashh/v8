@@ -257,6 +257,15 @@ FieldAccess AccessBuilder::ForJSGeneratorObjectRegisterFile() {
   return access;
 }
 
+FieldAccess AccessBuilder::ForJSGeneratorRegisterFileSlot(size_t index,
+                                                          Type* type) {
+  int offset = FixedArray::OffsetOfElementAt(static_cast<int>(index));
+  FieldAccess access = {kTaggedBase,        offset, Handle<Name>(),
+                        MaybeHandle<Map>(), type,   MachineType::AnyTagged(),
+                        kFullWriteBarrier};
+  return access;
+}
+
 // static
 FieldAccess AccessBuilder::ForJSGeneratorObjectResumeMode() {
   FieldAccess access = {

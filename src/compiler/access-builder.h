@@ -94,6 +94,9 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to JSGeneratorObject::register_file() field.
   static FieldAccess ForJSGeneratorObjectRegisterFile();
 
+  // Provides access to a slot in the JSGeneratorObject's regiter file..
+  static FieldAccess ForJSGeneratorRegisterFileSlot(size_t index, Type* type);
+
   // Provides access to JSGeneratorObject::function() field.
   static FieldAccess ForJSGeneratorObjectFunction();
 

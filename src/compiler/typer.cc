@@ -1704,7 +1704,8 @@ Type* Typer::Visitor::TypeJSGeneratorRestoreContinuation(Node* node) {
 }
 
 Type* Typer::Visitor::TypeJSGeneratorRestoreRegister(Node* node) {
-  return Type::Any();
+  // Retain type from register before the suspend.
+  return Operand(node, 1);
 }
 
 Type* Typer::Visitor::TypeJSStackCheck(Node* node) { return Type::Any(); }

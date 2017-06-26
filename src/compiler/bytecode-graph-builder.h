@@ -335,6 +335,10 @@ class BytecodeGraphBuilder {
   Environment* environment_;
   BailoutId osr_ast_id_;
 
+  // Used to link up the values in registers between a generator suspend and
+  // resume. This is then used to propagate typing information.
+  NodeVector* suspended_registers_;
+
   // Merge environments are snapshots of the environment at points where the
   // control flow merges. This models a forward data flow propagation of all
   // values from all predecessors of the merge in question.
