@@ -185,7 +185,10 @@ class NameDictionary
 
 class GlobalDictionaryShape : public NameDictionaryShape {
  public:
-  static const int kEntrySize = 2;  // Overrides NameDictionaryShape::kEntrySize
+  static inline bool IsMatch(Handle<Name> key, Object* other);
+  static inline uint32_t HashForObject(Isolate* isolate, Object* object);
+
+  static const int kEntrySize = 1;  // Overrides NameDictionaryShape::kEntrySize
 
   template <typename Dictionary>
   static inline PropertyDetails DetailsAt(Dictionary* dict, int entry);
@@ -202,6 +205,10 @@ class GlobalDictionary
     : public BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape> {
  public:
   DECLARE_CAST(GlobalDictionary)
+
+  Object* ValueAt(int entry) { return KeyAt(entry); }
+  inline void SetEntry(int entry, Object* key, Object* value,
+                       PropertyDetails details);
 };
 
 class NumberDictionaryShape : public BaseDictionaryShape<uint32_t> {

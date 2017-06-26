@@ -1482,9 +1482,9 @@ Handle<Object> Oddball::ToNumber(Handle<Oddball> input) {
 
 ACCESSORS(Cell, value, Object, kValueOffset)
 ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
-ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
+ACCESSORS(PropertyCell, name, Name, kNameOffset)
 ACCESSORS(PropertyCell, value, Object, kValueOffset)
-
+ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
 
 PropertyDetails PropertyCell::property_details() {
   return PropertyDetails(Smi::cast(property_details_raw()));
@@ -6037,13 +6037,14 @@ bool AccessorPair::IsJSAccessor(Object* obj) {
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::ClearEntry(int entry) {
   Object* the_hole = this->GetHeap()->the_hole_value();
-  SetEntry(entry, the_hole, the_hole, PropertyDetails::Empty());
+  PropertyDetails details = PropertyDetails::Empty();
+  Derived::cast(this)->SetEntry(entry, the_hole, the_hole, details);
 }
 
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::SetEntry(int entry, Object* key, Object* value,
                                           PropertyDetails details) {
-  STATIC_ASSERT(Dictionary::kEntrySize == 2 || Dictionary::kEntrySize == 3);
+  DCHECK(Dictionary::kEntrySize == 2 || Dictionary::kEntrySize == 3);
   DCHECK(!key->IsName() || details.dictionary_index() > 0);
   int index = DerivedHashTable::EntryToIndex(entry);
   DisallowHeapAllocation no_gc;
@@ -6053,6 +6054,12 @@ void Dictionary<Derived, Shape>::SetEntry(int entry, Object* key, Object* value,
   if (Shape::kHasDetails) DetailsAtPut(entry, details);
 }
 
+void GlobalDictionary::SetEntry(int entry, Object* key, Object* value,
+                                PropertyDetails details) {
+  DCHECK_EQ(key, PropertyCell::cast(value)->name());
+  set(EntryToIndex(entry) + kEntryKeyIndex, value);
+  DetailsAtPut(entry, details);
+}
 
 bool NumberDictionaryShape::IsMatch(uint32_t key, Object* other) {
   DCHECK(other->IsNumber());
@@ -6105,6 +6112,14 @@ uint32_t NameDictionaryShape::HashForObject(Isolate* isolate, Object* other) {
   return Name::cast(other)->Hash();
 }
 
+bool GlobalDictionaryShape::IsMatch(Handle<Name> key, Object* other) {
+  DCHECK(PropertyCell::cast(other)->name()->IsUniqueName());
+  return *key == PropertyCell::cast(other)->name();
+}
+
+uint32_t GlobalDictionaryShape::HashForObject(Isolate* isolate, Object* other) {
+  return PropertyCell::cast(other)->name()->Hash();
+}
 
 Handle<Object> NameDictionaryShape::AsHandle(Isolate* isolate,
                                              Handle<Name> key) {

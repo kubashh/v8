@@ -1927,7 +1927,7 @@ void JSObject::SetNormalizedProperty(Handle<JSObject> object,
     int entry = dictionary->FindEntry(isolate, name, hash);
 
     if (entry == GlobalDictionary::kNotFound) {
-      auto cell = isolate->factory()->NewPropertyCell();
+      auto cell = isolate->factory()->NewPropertyCell(name);
       cell->set_value(*value);
       auto cell_type = value->IsUndefined(isolate)
                            ? PropertyCellType::kUndefined
@@ -16803,7 +16803,7 @@ Handle<PropertyCell> JSGlobalObject::EnsureEmptyPropertyCell(
     cell->set_property_details(details);
     return cell;
   }
-  cell = isolate->factory()->NewPropertyCell();
+  cell = isolate->factory()->NewPropertyCell(name);
   PropertyDetails details(kData, NONE, cell_type);
   dictionary =
       GlobalDictionary::Add(dictionary, name, cell, details, entry_out);
@@ -17613,7 +17613,8 @@ Handle<Derived> Dictionary<Derived, Shape>::Add(Handle<Derived> dictionary,
   uint32_t entry = dictionary->FindInsertionEntry(hash);
   dictionary->SetEntry(entry, *k, *value, details);
   DCHECK(dictionary->KeyAt(entry)->IsNumber() ||
-         dictionary->KeyAt(entry)->IsUniqueName());
+         dictionary->KeyAt(entry)->IsUniqueName() ||
+         dictionary->KeyAt(entry)->IsPropertyCell());
   dictionary->ElementAdded();
   if (entry_out) *entry_out = entry;
   return dictionary;
@@ -19173,7 +19174,8 @@ Handle<PropertyCell> PropertyCell::InvalidateEntry(
   // Swap with a copy.
   DCHECK(dictionary->ValueAt(entry)->IsPropertyCell());
   Handle<PropertyCell> cell(PropertyCell::cast(dictionary->ValueAt(entry)));
-  Handle<PropertyCell> new_cell = isolate->factory()->NewPropertyCell();
+  Handle<Name> name(cell->name(), isolate);
+  Handle<PropertyCell> new_cell = isolate->factory()->NewPropertyCell(name);
   new_cell->set_value(cell->value());
   dictionary->ValueAtPut(entry, *new_cell);
   bool is_the_hole = cell->value()->IsTheHole(isolate);
