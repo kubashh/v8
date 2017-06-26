@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6176db46_1f7b0c0d",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5021,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": "nit: \n \n Handle\u003cPropertyCell\u003e cell(properties-\u003eValueAt(index), isolate());",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf2bdff_c6af97af",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4966,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": "nit: \n\n CSA_ASSERT(this, IsNotTheHole(key));",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "186b793e_ddf53039",
+        "filename": "src/lookup.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": ".., isolate_);",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d521b8_c915c97b",
+        "filename": "src/lookup.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": "...), isolate_);",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53fd623b_3d7cdeb7",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19169,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": ", isolate);",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dbb9d1c_fcb3f1ca",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19254,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-06-26T14:37:04Z",
+      "side": 1,
+      "message": ".., isolate);",
+      "revId": "feabfd89ff1257c152a87e63130f5e002dd8c42c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
