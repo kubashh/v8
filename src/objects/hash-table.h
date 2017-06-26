@@ -58,6 +58,7 @@ class BaseShape {
   typedef KeyT Key;
   static inline Map* GetMap(Isolate* isolate);
   static const bool kNeedsHoleCheck = true;
+  static Object* Unwrap(Object* key) { return key; }
 };
 
 class V8_EXPORT_PRIVATE HashTableBase : public NON_EXPORTED_BASE(FixedArray) {

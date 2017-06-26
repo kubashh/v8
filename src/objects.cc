@@ -1927,7 +1927,7 @@ void JSObject::SetNormalizedProperty(Handle<JSObject> object,
     int entry = dictionary->FindEntry(isolate, name, hash);
 
     if (entry == GlobalDictionary::kNotFound) {
-      auto cell = isolate->factory()->NewPropertyCell();
+      auto cell = isolate->factory()->NewPropertyCell(name);
       cell->set_value(*value);
       auto cell_type = value->IsUndefined(isolate)
                            ? PropertyCellType::kUndefined
@@ -7467,16 +7467,16 @@ Maybe<bool> JSReceiver::SetIntegrityLevel(Handle<JSReceiver> receiver,
 namespace {
 
 template <typename Dictionary>
-bool TestDictionaryPropertiesIntegrityLevel(Dictionary dict, Isolate* isolate,
+bool TestDictionaryPropertiesIntegrityLevel(Dictionary* dict, Isolate* isolate,
                                             PropertyAttributes level) {
   DCHECK(level == SEALED || level == FROZEN);
 
   uint32_t capacity = dict->Capacity();
   for (uint32_t i = 0; i < capacity; i++) {
     Object* key = dict->KeyAt(i);
-    if (!dict->IsKey(isolate, key) || key->FilterKey(ALL_PROPERTIES) ||
-        dict->IsDeleted(i))
-      continue;
+    if (!dict->IsKey(isolate, key)) continue;
+    key = Dictionary::ShapeT::Unwrap(key);
+    if (key->FilterKey(ALL_PROPERTIES)) continue;
     PropertyDetails details = dict->DetailsAt(i);
     if (details.IsConfigurable()) return false;
     if (level == FROZEN && details.kind() == kData && !details.IsReadOnly()) {
@@ -7778,20 +7778,18 @@ void ApplyAttributesToDictionary(Isolate* isolate,
   int capacity = dictionary->Capacity();
   for (int i = 0; i < capacity; i++) {
     Object* k = dictionary->KeyAt(i);
-    if (dictionary->IsKey(isolate, k) &&
-        !(k->IsSymbol() && Symbol::cast(k)->is_private())) {
-      PropertyDetails details = dictionary->DetailsAt(i);
-      int attrs = attributes;
-      // READ_ONLY is an invalid attribute for JS setters/getters.
-      if ((attributes & READ_ONLY) && details.kind() == kAccessor) {
-        Object* v = dictionary->ValueAt(i);
-        if (v->IsPropertyCell()) v = PropertyCell::cast(v)->value();
-        if (v->IsAccessorPair()) attrs &= ~READ_ONLY;
-      }
-      details = details.CopyAddAttributes(
-          static_cast<PropertyAttributes>(attrs));
-      dictionary->DetailsAtPut(i, details);
+    if (!dictionary->IsKey(isolate, k)) continue;
+    k = Dictionary::ShapeT::Unwrap(k);
+    if (k->FilterKey(ALL_PROPERTIES)) continue;
+    PropertyDetails details = dictionary->DetailsAt(i);
+    int attrs = attributes;
+    // READ_ONLY is an invalid attribute for JS setters/getters.
+    if ((attributes & READ_ONLY) && details.kind() == kAccessor) {
+      Object* v = dictionary->ValueAt(i);
+      if (v->IsAccessorPair()) attrs &= ~READ_ONLY;
     }
+    details = details.CopyAddAttributes(static_cast<PropertyAttributes>(attrs));
+    dictionary->DetailsAtPut(i, details);
   }
 }
 
@@ -15532,6 +15530,7 @@ void Dictionary<Derived, Shape>::Print(std::ostream& os) {  // NOLINT
     Object* k = this->KeyAt(i);
     if (this->IsKey(isolate, k)) {
       os << "\n   ";
+      k = Shape::Unwrap(k);
       if (k->IsString()) {
         String::cast(k)->StringPrint(os);
       } else {
@@ -16789,9 +16788,7 @@ Handle<PropertyCell> JSGlobalObject::EnsureEmptyPropertyCell(
   Handle<PropertyCell> cell;
   if (entry != GlobalDictionary::kNotFound) {
     if (entry_out) *entry_out = entry;
-    // This call should be idempotent.
-    DCHECK(dictionary->ValueAt(entry)->IsPropertyCell());
-    cell = handle(PropertyCell::cast(dictionary->ValueAt(entry)));
+    cell = handle(dictionary->CellAt(entry));
     PropertyCellType original_cell_type = cell->property_details().cell_type();
     DCHECK(original_cell_type == PropertyCellType::kInvalidated ||
            original_cell_type == PropertyCellType::kUninitialized);
@@ -16803,7 +16800,7 @@ Handle<PropertyCell> JSGlobalObject::EnsureEmptyPropertyCell(
     cell->set_property_details(details);
     return cell;
   }
-  cell = isolate->factory()->NewPropertyCell();
+  cell = isolate->factory()->NewPropertyCell(name);
   PropertyDetails details(kData, NONE, cell_type);
   dictionary =
       GlobalDictionary::Add(dictionary, name, cell, details, entry_out);
@@ -17613,7 +17610,7 @@ Handle<Derived> Dictionary<Derived, Shape>::Add(Handle<Derived> dictionary,
   uint32_t entry = dictionary->FindInsertionEntry(hash);
   dictionary->SetEntry(entry, *k, *value, details);
   DCHECK(dictionary->KeyAt(entry)->IsNumber() ||
-         dictionary->KeyAt(entry)->IsUniqueName());
+         Shape::Unwrap(dictionary->KeyAt(entry))->IsUniqueName());
   dictionary->ElementAdded();
   if (entry_out) *entry_out = entry;
   return dictionary;
@@ -17626,7 +17623,6 @@ bool SeededNumberDictionary::HasComplexElements() {
   for (int i = 0; i < capacity; i++) {
     Object* k = this->KeyAt(i);
     if (!this->IsKey(isolate, k)) continue;
-    DCHECK(!IsDeleted(i));
     PropertyDetails details = this->DetailsAt(i);
     if (details.kind() == kAccessor) return true;
     PropertyAttributes attr = details.attributes();
@@ -17695,12 +17691,12 @@ int Dictionary<Derived, Shape>::NumberOfEnumerableProperties() {
   int result = 0;
   for (int i = 0; i < capacity; i++) {
     Object* k = this->KeyAt(i);
-    if (this->IsKey(isolate, k) && !k->FilterKey(ENUMERABLE_STRINGS)) {
-      if (this->IsDeleted(i)) continue;
-      PropertyDetails details = this->DetailsAt(i);
-      PropertyAttributes attr = details.attributes();
-      if ((attr & ONLY_ENUMERABLE) == 0) result++;
-    }
+    if (!Derived::cast(this)->IsKey(isolate, k)) continue;
+    k = Shape::Unwrap(k);
+    if (k->FilterKey(ENUMERABLE_STRINGS)) continue;
+    PropertyDetails details = this->DetailsAt(i);
+    PropertyAttributes attr = details.attributes();
+    if ((attr & ONLY_ENUMERABLE) == 0) result++;
   }
   return result;
 }
@@ -17729,8 +17725,9 @@ void BaseNameDictionary<Derived, Shape>::CopyEnumKeysTo(
   int properties = 0;
   for (int i = 0; i < capacity; i++) {
     Object* key = dictionary->KeyAt(i);
-    bool is_shadowing_key = false;
     if (!dictionary->IsKey(isolate, key)) continue;
+    bool is_shadowing_key = false;
+    key = Shape::Unwrap(key);
     if (key->IsSymbol()) continue;
     PropertyDetails details = dictionary->DetailsAt(i);
     if (details.IsDontEnum()) {
@@ -17740,7 +17737,6 @@ void BaseNameDictionary<Derived, Shape>::CopyEnumKeysTo(
         continue;
       }
     }
-    if (dictionary->IsDeleted(i)) continue;
     if (is_shadowing_key) {
       accumulator->AddShadowingKey(key);
       continue;
@@ -17764,7 +17760,7 @@ void BaseNameDictionary<Derived, Shape>::CopyEnumKeysTo(
   std::sort(start, start + length, cmp);
   for (int i = 0; i < length; i++) {
     int index = Smi::cast(raw_storage->get(i))->value();
-    raw_storage->set(i, raw_dictionary->KeyAt(index));
+    raw_storage->set(i, raw_dictionary->NameAt(index));
   }
 }
 
@@ -17782,7 +17778,6 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
     for (int i = 0; i < capacity; i++) {
       Object* k = raw_dictionary->KeyAt(i);
       if (!raw_dictionary->IsKey(isolate, k)) continue;
-      if (raw_dictionary->IsDeleted(i)) continue;
       array->set(array_size++, Smi::FromInt(i));
     }
 
@@ -17814,8 +17809,9 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
     Derived* raw_dictionary = *dictionary;
     for (int i = 0; i < capacity; i++) {
       Object* k = raw_dictionary->KeyAt(i);
-      if (!raw_dictionary->IsKey(isolate, k) || k->FilterKey(filter)) continue;
-      if (raw_dictionary->IsDeleted(i)) continue;
+      if (!raw_dictionary->IsKey(isolate, k)) continue;
+      k = Shape::Unwrap(k);
+      if (k->FilterKey(filter)) continue;
       PropertyDetails details = raw_dictionary->DetailsAt(i);
       if ((details.attributes() & filter) != 0) {
         keys->AddShadowingKey(k);
@@ -17824,9 +17820,6 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
       if (filter & ONLY_ALL_CAN_READ) {
         if (details.kind() != kAccessor) continue;
         Object* accessors = raw_dictionary->ValueAt(i);
-        if (accessors->IsPropertyCell()) {
-          accessors = PropertyCell::cast(accessors)->value();
-        }
         if (!accessors->IsAccessorInfo()) continue;
         if (!AccessorInfo::cast(accessors)->all_can_read()) continue;
       }
@@ -17845,7 +17838,7 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
   bool has_seen_symbol = false;
   for (int i = 0; i < array_size; i++) {
     int index = Smi::cast(array->get(i))->value();
-    Object* key = dictionary->KeyAt(index);
+    Object* key = dictionary->NameAt(index);
     if (key->IsSymbol()) {
       has_seen_symbol = true;
       continue;
@@ -17855,28 +17848,24 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
   if (has_seen_symbol) {
     for (int i = 0; i < array_size; i++) {
       int index = Smi::cast(array->get(i))->value();
-      Object* key = dictionary->KeyAt(index);
+      Object* key = dictionary->NameAt(index);
       if (!key->IsSymbol()) continue;
       keys->AddKey(key, DO_NOT_CONVERT);
     }
   }
 }
 
-
 // Backwards lookup (slow).
 template <typename Derived, typename Shape>
 Object* Dictionary<Derived, Shape>::SlowReverseLookup(Object* value) {
-  Isolate* isolate = this->GetIsolate();
-  int capacity = this->Capacity();
+  Derived* dictionary = Derived::cast(this);
+  Isolate* isolate = dictionary->GetIsolate();
+  int capacity = dictionary->Capacity();
   for (int i = 0; i < capacity; i++) {
-    Object* k = this->KeyAt(i);
-    if (!this->IsKey(isolate, k)) continue;
-    Object* e = this->ValueAt(i);
-    // TODO(dcarney): this should be templatized.
-    if (e->IsPropertyCell()) {
-      e = PropertyCell::cast(e)->value();
-    }
-    if (e == value) return k;
+    Object* k = dictionary->KeyAt(i);
+    if (!dictionary->IsKey(isolate, k)) continue;
+    Object* e = dictionary->ValueAt(i);
+    if (e == value) return Shape::Unwrap(k);
   }
   return isolate->heap()->undefined_value();
 }
@@ -19171,9 +19160,9 @@ Handle<PropertyCell> PropertyCell::InvalidateEntry(
     Handle<GlobalDictionary> dictionary, int entry) {
   Isolate* isolate = dictionary->GetIsolate();
   // Swap with a copy.
-  DCHECK(dictionary->ValueAt(entry)->IsPropertyCell());
-  Handle<PropertyCell> cell(PropertyCell::cast(dictionary->ValueAt(entry)));
-  Handle<PropertyCell> new_cell = isolate->factory()->NewPropertyCell();
+  Handle<PropertyCell> cell(dictionary->CellAt(entry));
+  Handle<Name> name(cell->name(), isolate);
+  Handle<PropertyCell> new_cell = isolate->factory()->NewPropertyCell(name);
   new_cell->set_value(cell->value());
   dictionary->ValueAtPut(entry, *new_cell);
   bool is_the_hole = cell->value()->IsTheHole(isolate);
@@ -19256,19 +19245,20 @@ Handle<PropertyCell> PropertyCell::PrepareForValue(
     PropertyDetails details) {
   Isolate* isolate = dictionary->GetIsolate();
   DCHECK(!value->IsTheHole(isolate));
-  DCHECK(dictionary->ValueAt(entry)->IsPropertyCell());
-  Handle<PropertyCell> cell(PropertyCell::cast(dictionary->ValueAt(entry)));
+  Handle<PropertyCell> cell(dictionary->CellAt(entry));
   const PropertyDetails original_details = cell->property_details();
   // Data accesses could be cached in ics or optimized code.
   bool invalidate =
       original_details.kind() == kData && details.kind() == kAccessor;
-  int index = original_details.dictionary_index();
+  int index;
   PropertyCellType old_type = original_details.cell_type();
   // Preserve the enumeration index unless the property was deleted or never
   // initialized.
   if (cell->value()->IsTheHole(isolate)) {
     index = dictionary->NextEnumerationIndex();
     dictionary->SetNextEnumerationIndex(index + 1);
+  } else {
+    index = original_details.dictionary_index();
   }
   DCHECK_LT(0, index);
   details = details.set_index(index);

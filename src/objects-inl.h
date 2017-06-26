@@ -646,6 +646,7 @@ bool Object::KeyEquals(Object* second) {
 }
 
 bool Object::FilterKey(PropertyFilter filter) {
+  DCHECK(!IsPropertyCell());
   if (IsSymbol()) {
     if (filter & SKIP_SYMBOLS) return true;
     if (Symbol::cast(this)->is_private()) return true;
@@ -1482,9 +1483,9 @@ Handle<Object> Oddball::ToNumber(Handle<Oddball> input) {
 
 ACCESSORS(Cell, value, Object, kValueOffset)
 ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
-ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
+ACCESSORS(PropertyCell, name, Name, kNameOffset)
 ACCESSORS(PropertyCell, value, Object, kValueOffset)
-
+ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
 
 PropertyDetails PropertyCell::property_details() {
   return PropertyDetails(Smi::cast(property_details_raw()));
@@ -6037,13 +6038,14 @@ bool AccessorPair::IsJSAccessor(Object* obj) {
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::ClearEntry(int entry) {
   Object* the_hole = this->GetHeap()->the_hole_value();
-  SetEntry(entry, the_hole, the_hole, PropertyDetails::Empty());
+  PropertyDetails details = PropertyDetails::Empty();
+  Derived::cast(this)->SetEntry(entry, the_hole, the_hole, details);
 }
 
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::SetEntry(int entry, Object* key, Object* value,
                                           PropertyDetails details) {
-  STATIC_ASSERT(Dictionary::kEntrySize == 2 || Dictionary::kEntrySize == 3);
+  DCHECK(Dictionary::kEntrySize == 2 || Dictionary::kEntrySize == 3);
   DCHECK(!key->IsName() || details.dictionary_index() > 0);
   int index = DerivedHashTable::EntryToIndex(entry);
   DisallowHeapAllocation no_gc;
@@ -6053,6 +6055,32 @@ void Dictionary<Derived, Shape>::SetEntry(int entry, Object* key, Object* value,
   if (Shape::kHasDetails) DetailsAtPut(entry, details);
 }
 
+Object* GlobalDictionaryShape::Unwrap(Object* object) {
+  return PropertyCell::cast(object)->name();
+}
+
+bool GlobalDictionary::IsKey(Isolate* isolate, Object* object) {
+  return BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>::IsKey(
+             isolate, object) &&
+         !PropertyCell::cast(object)->value()->IsTheHole(isolate);
+}
+
+Name* NameDictionary::NameAt(int entry) { return Name::cast(KeyAt(entry)); }
+
+PropertyCell* GlobalDictionary::CellAt(int entry) {
+  DCHECK(KeyAt(entry)->IsPropertyCell());
+  return PropertyCell::cast(KeyAt(entry));
+}
+
+Name* GlobalDictionary::NameAt(int entry) { return CellAt(entry)->name(); }
+Object* GlobalDictionary::ValueAt(int entry) { return CellAt(entry)->value(); }
+
+void GlobalDictionary::SetEntry(int entry, Object* key, Object* value,
+                                PropertyDetails details) {
+  DCHECK_EQ(key, PropertyCell::cast(value)->name());
+  set(EntryToIndex(entry) + kEntryKeyIndex, value);
+  DetailsAtPut(entry, details);
+}
 
 bool NumberDictionaryShape::IsMatch(uint32_t key, Object* other) {
   DCHECK(other->IsNumber());
@@ -6105,6 +6133,14 @@ uint32_t NameDictionaryShape::HashForObject(Isolate* isolate, Object* other) {
   return Name::cast(other)->Hash();
 }
 
+bool GlobalDictionaryShape::IsMatch(Handle<Name> key, Object* other) {
+  DCHECK(PropertyCell::cast(other)->name()->IsUniqueName());
+  return *key == PropertyCell::cast(other)->name();
+}
+
+uint32_t GlobalDictionaryShape::HashForObject(Isolate* isolate, Object* other) {
+  return PropertyCell::cast(other)->name()->Hash();
+}
 
 Handle<Object> NameDictionaryShape::AsHandle(Isolate* isolate,
                                              Handle<Name> key) {
@@ -6116,10 +6152,7 @@ Handle<Object> NameDictionaryShape::AsHandle(Isolate* isolate,
 template <typename Dictionary>
 PropertyDetails GlobalDictionaryShape::DetailsAt(Dictionary* dict, int entry) {
   DCHECK_LE(0, entry);  // Not found is -1, which is not caught by get().
-  Object* raw_value = dict->ValueAt(entry);
-  DCHECK(raw_value->IsPropertyCell());
-  PropertyCell* cell = PropertyCell::cast(raw_value);
-  return cell->property_details();
+  return dict->CellAt(entry)->property_details();
 }
 
 
@@ -6127,21 +6160,13 @@ template <typename Dictionary>
 void GlobalDictionaryShape::DetailsAtPut(Dictionary* dict, int entry,
                                          PropertyDetails value) {
   DCHECK_LE(0, entry);  // Not found is -1, which is not caught by get().
-  PropertyCell* cell = PropertyCell::cast(dict->ValueAt(entry));
+  PropertyCell* cell = dict->CellAt(entry);
   if (cell->property_details().IsReadOnly() != value.IsReadOnly()) {
     cell->dependent_code()->DeoptimizeDependentCodeGroup(
         cell->GetIsolate(), DependentCode::kPropertyCellChangedGroup);
   }
   cell->set_property_details(value);
 }
-
-template <typename Dictionary>
-bool GlobalDictionaryShape::IsDeleted(Dictionary* dict, int entry) {
-  DCHECK(dict->ValueAt(entry)->IsPropertyCell());
-  Isolate* isolate = dict->GetIsolate();
-  return PropertyCell::cast(dict->ValueAt(entry))->value()->IsTheHole(isolate);
-}
-
 
 bool ObjectHashTableShape::IsMatch(Handle<Object> key, Object* other) {
   return key->SameValue(other);
