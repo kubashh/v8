@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ef37d8a_957b26d3",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-27T11:25:27Z",
+      "side": 1,
+      "message": "It\u0027s not supposed to be called in that case (it will cause an ApiCheck failure). I thought that\u0027s clear from the way I phrased the description.",
+      "parentUuid": "4dd7e322_91bb95c5",
+      "revId": "710bed1a85d0a01eba46a74a5521923e233b8183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8729dbab_a622451a",
         "filename": "test/cctest/test-modules.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-27T09:07:54Z",
       "side": 1,
       "message": "Order should be CHECK_EQ(expected, actual)",
+      "revId": "710bed1a85d0a01eba46a74a5521923e233b8183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "633d5b7f_8eb9e339",
+        "filename": "test/cctest/test-modules.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-06-27T11:25:27Z",
+      "side": 1,
+      "message": "I changed it for the sake of consistency. I do however think this it\u0027s more natural to read the way I had it before, and it doesn\u0027t matter for the produced error message, which is symmetrical.",
+      "parentUuid": "8729dbab_a622451a",
       "revId": "710bed1a85d0a01eba46a74a5521923e233b8183",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
