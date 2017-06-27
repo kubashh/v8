@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8f2296c_d71fd045",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-27T07:12:39Z",
+      "side": 1,
+      "message": "Could you add a CHECK(frame_it-\u003ekind() \u003d\u003d TranslatedFrame::kInterpretedFunction) here, and possibly a comment explaining that continuation frames are only included above to count indices correctly?\n\nI don\u0027t think we can handle the special continuation frames further on in DeoptimizedFrameInfo, and it\u0027d be nice to fail early in case something goes wrong.",
+      "revId": "6b89101bd2f7be58c5e3bf44b9514ed9fe8b0c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
