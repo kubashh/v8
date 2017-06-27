@@ -5191,9 +5191,6 @@ void Code::set_stub_key(uint32_t key) {
 }
 
 
-INT_ACCESSORS(Code, ic_age, kICAgeOffset)
-
-
 byte* Code::instruction_start()  {
   return FIELD_ADDR(this, kHeaderSize);
 }
