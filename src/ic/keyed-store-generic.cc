@@ -762,12 +762,11 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
     Comment("fast property store");
     Node* bitfield3 = LoadMapBitField3(receiver_map);
     Node* descriptors = LoadMapDescriptors(receiver_map);
-    Label descriptor_found(this);
+    Label descriptor_found(this), lookup_transition(this);
     VARIABLE(var_name_index, MachineType::PointerRepresentation());
-    // TODO(jkummerow): Maybe look for existing map transitions?
     Label* notfound = use_stub_cache == kUseStubCache ? &stub_cache : slow;
     DescriptorLookup(p->name, descriptors, bitfield3, &descriptor_found,
-                     &var_name_index, notfound);
+                     &var_name_index, &lookup_transition);
 
     BIND(&descriptor_found);
     {
@@ -792,6 +791,31 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
                                       descriptors, name_index, details,
                                       p->value, slow);
         Return(p->value);
+      }
+    }
+
+    BIND(&lookup_transition);
+    {
+      Comment("lookup transition");
+      VARIABLE(var_handler, MachineRepresentation::kTagged);
+      Label found_handler(this, &var_handler);
+      Node* maybe_handler =
+          LoadObjectField(receiver_map, Map::kTransitionsOrPrototypeInfoOffset);
+      GotoIf(TaggedIsSmi(maybe_handler), notfound);
+      Node* instance_type = LoadInstanceType(maybe_handler);
+      var_handler.Bind(maybe_handler);
+      GotoIf(Word32Equal(instance_type, Int32Constant(TUPLE3_TYPE)),
+             &found_handler);
+      GotoIf(Word32Equal(instance_type, Int32Constant(FIXED_ARRAY_TYPE)),
+             &found_handler);
+
+      // TODO(jkummerow): Consider implementing TransitionArray search.
+      Goto(notfound);
+
+      BIND(&found_handler);
+      {
+        Comment("KeyedStoreGeneric found transition handler");
+        HandleStoreICHandlerCase(p, var_handler.value(), notfound);
       }
     }
   }

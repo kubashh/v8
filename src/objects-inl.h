@@ -77,6 +77,7 @@ TYPE_CHECKER(Cell, CELL_TYPE)
 TYPE_CHECKER(Code, CODE_TYPE)
 TYPE_CHECKER(ConstantElementsPair, TUPLE2_TYPE)
 TYPE_CHECKER(CoverageInfo, FIXED_ARRAY_TYPE)
+TYPE_CHECKER(FixedArray, FIXED_ARRAY_TYPE)
 TYPE_CHECKER(FixedDoubleArray, FIXED_DOUBLE_ARRAY_TYPE)
 TYPE_CHECKER(Foreign, FOREIGN_TYPE)
 TYPE_CHECKER(FreeSpace, FREE_SPACE_TYPE)
@@ -126,12 +127,6 @@ TYPED_ARRAYS(TYPED_ARRAY_TYPE_CHECKER)
 
 bool HeapObject::IsFixedArrayBase() const {
   return IsFixedArray() || IsFixedDoubleArray() || IsFixedTypedArrayBase();
-}
-
-bool HeapObject::IsFixedArray() const {
-  InstanceType instance_type = map()->instance_type();
-  return instance_type == FIXED_ARRAY_TYPE ||
-         instance_type == TRANSITION_ARRAY_TYPE;
 }
 
 bool HeapObject::IsSloppyArgumentsElements() const { return IsFixedArray(); }
@@ -1882,7 +1877,7 @@ void FixedArray::set(int index, Smi* value) {
 
 void FixedArray::set(int index, Object* value) {
   DCHECK_NE(GetHeap()->fixed_cow_array_map(), map());
-  DCHECK(IsFixedArray());
+  DCHECK(IsFixedArray() || IsTransitionArray());
   DCHECK_GE(index, 0);
   DCHECK_LT(index, this->length());
   int offset = kHeaderSize + index * kPointerSize;
@@ -4437,8 +4432,8 @@ Object* Map::GetBackPointer() {
 
 
 Map* Map::ElementsTransitionMap() {
-  return TransitionArray::SearchSpecial(
-      this, GetHeap()->elements_transition_symbol());
+  return TransitionsAccessor(this).SearchSpecial(
+      GetHeap()->elements_transition_symbol());
 }
 
 
