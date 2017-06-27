@@ -1763,8 +1763,8 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
 
 class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
  public:
-  static const intptr_t kLabSize = 4 * KB;
-  static const intptr_t kMaxLabObjectSize = 256;
+  static const intptr_t kLabSize = 64 * KB;
+  static const intptr_t kMaxLabObjectSize = 16 * KB;
 
   explicit EvacuateNewSpaceVisitor(Heap* heap,
                                    CompactionSpaceCollection* compaction_spaces,
