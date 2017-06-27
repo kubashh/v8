@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29b5447c_d8e09f91",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-06-27T08:59:15Z",
+      "side": 0,
+      "message": "This is the actual optimization.",
+      "range": {
+        "startLine": 760,
+        "startChar": 2,
+        "endLine": 760,
+        "endChar": 17
+      },
+      "revId": "4ea4e7294e242583a7ec31b9a7e4f0101512e3b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
