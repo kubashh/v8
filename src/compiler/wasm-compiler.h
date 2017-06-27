@@ -216,6 +216,18 @@ class WasmGraphBuilder {
   void EnsureFunctionTableNodes();
 
   //-----------------------------------------------------------------------
+  // Operations involving the CEntryStub, a dependency we want to remove
+  // to get off the GC heap.
+  //-----------------------------------------------------------------------
+  Node* BuildCallToRuntime(Runtime::FunctionId f, Node** parameters,
+                           int parameter_count);
+
+  Node* BuildCallToRuntimeWithContext(Runtime::FunctionId f, Node* context,
+                                      Node** parameters, int parameter_count);
+
+  Node* BuildModifyThreadInWasmFlag(bool new_value);
+
+  //-----------------------------------------------------------------------
   // Operations that concern the linear memory.
   //-----------------------------------------------------------------------
   Node* CurrentMemoryPages();
