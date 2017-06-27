@@ -2107,6 +2107,35 @@ Maybe<bool> DynamicImportResult::FinishDynamicImportFailure(
   return Just(true);
 }
 
+Module::Status Module::GetStatus() const {
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  switch (self->status()) {
+    case i::Module::kUninstantiated:
+      return kUninstantiated;
+    case i::Module::kPreInstantiating:
+    case i::Module::kInstantiating:
+      return kInstantiating;
+    case i::Module::kInstantiated:
+      return kInstantiated;
+    case i::Module::kEvaluating:
+      return kEvaluating;
+    case i::Module::kEvaluated:
+      return kEvaluated;
+    case i::Module::kErrored:
+      return kErrored;
+  }
+  UNREACHABLE();
+}
+
+Local<Value> Module::GetException() const {
+  Utils::ApiCheck(GetStatus() == kErrored, "v8::Module::GetException",
+                  "Module status must be kErrored");
+  i::Handle<i::Module> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  // TODO(neis): Expose GetException?
+  return ToApiHandle<Value>(i::handle(self->exception(), isolate));
+}
+
 int Module::GetModuleRequestsLength() const {
   i::Handle<i::Module> self = Utils::OpenHandle(this);
   return self->info()->module_requests()->length();
