@@ -6,6 +6,7 @@
 #define V8_HEAP_MARK_COMPACT_H_
 
 #include <deque>
+#include <vector>
 
 #include "src/base/bits.h"
 #include "src/base/platform/condition-variable.h"
@@ -375,12 +376,14 @@ class MinorMarkCompactCollector final : public MarkCompactCollectorBase {
   void EvacuatePagesInParallel() override;
   void UpdatePointersAfterEvacuation() override;
 
+  void CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+
   int NumberOfParallelMarkingTasks(int pages);
 
   Worklist* worklist_;
   YoungGenerationMarkingVisitor* main_marking_visitor_;
   base::Semaphore page_parallel_job_semaphore_;
-  List<Page*> new_space_evacuation_pages_;
+  std::vector<Page*> new_space_evacuation_pages_;
   std::vector<Page*> sweep_to_iterate_pages_;
 
   friend class MarkYoungGenerationJobTraits;
@@ -752,6 +755,9 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   void EvacuatePagesInParallel() override;
   void UpdatePointersAfterEvacuation() override;
 
+  void CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+  void CollectOldSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+
   void ReleaseEvacuationCandidates();
   void PostProcessEvacuationCandidates();
   void ReportAbortedEvacuationCandidate(HeapObject* failed_object, Page* page);
@@ -789,10 +795,10 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   MarkingWorklist marking_worklist_;
 
   // Candidates for pages that should be evacuated.
-  List<Page*> evacuation_candidates_;
+  std::vector<Page*> evacuation_candidates_;
   // Pages that are actually processed during evacuation.
-  List<Page*> old_space_evacuation_pages_;
-  List<Page*> new_space_evacuation_pages_;
+  std::vector<Page*> old_space_evacuation_pages_;
+  std::vector<Page*> new_space_evacuation_pages_;
   std::vector<std::pair<HeapObject*, Page*>> aborted_evacuation_candidates_;
 
   Sweeper sweeper_;
