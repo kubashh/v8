@@ -745,20 +745,26 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitFreeSpace(
   return static_cast<ResultType>(FreeSpace::cast(object)->size());
 }
 
-int NewSpaceVisitor::VisitJSFunction(Map* map, JSFunction* object) {
+template <typename ConcreteVisitor>
+int NewSpaceVisitor<ConcreteVisitor>::VisitJSFunction(Map* map,
+                                                      JSFunction* object) {
   int size = JSFunction::BodyDescriptorWeak::SizeOf(map, object);
   JSFunction::BodyDescriptorWeak::IterateBody(object, size, this);
   return size;
 }
 
-int NewSpaceVisitor::VisitNativeContext(Map* map, Context* object) {
+template <typename ConcreteVisitor>
+int NewSpaceVisitor<ConcreteVisitor>::VisitNativeContext(Map* map,
+                                                         Context* object) {
   int size = Context::BodyDescriptor::SizeOf(map, object);
   Context::BodyDescriptor::IterateBody(object, size, this);
   return size;
 }
 
-int NewSpaceVisitor::VisitJSApiObject(Map* map, JSObject* object) {
-  return VisitJSObject(map, object);
+template <typename ConcreteVisitor>
+int NewSpaceVisitor<ConcreteVisitor>::VisitJSApiObject(Map* map,
+                                                       JSObject* object) {
+  return ConcreteVisitor::VisitJSObject(map, object);
 }
 
 }  // namespace internal
