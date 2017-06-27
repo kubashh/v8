@@ -16,6 +16,24 @@
       "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9aa6a14_afcd3f52",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-06-27T09:17:28Z",
+      "side": 1,
+      "message": "Interesting analysis. Just a quick note about the third point: We need the separate calls to attach source position information to it. This is used for generating correct locations in stack traces.\nRedundant checks can and should still be eliminated though.",
+      "parentUuid": "72dfa46e_a11ada0f",
+      "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
