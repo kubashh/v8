@@ -480,9 +480,14 @@ void StaticMarkingVisitor<StaticVisitor>::VisitTransitionArray(
     StaticVisitor::VisitPointer(heap, array,
                                 array->GetPrototypeTransitionsSlot());
   }
-  int num_transitions = TransitionArray::NumberOfTransitions(array);
+  int num_transitions = array->number_of_entries();
   for (int i = 0; i < num_transitions; ++i) {
     StaticVisitor::VisitPointer(heap, array, array->GetKeySlot(i));
+    // A TransitionArray can hold maps or (transitioning StoreIC) handlers.
+    // Maps have custom weak handling; handlers are strong references.
+    if (!array->GetRawTarget(i)->IsMap()) {
+      StaticVisitor::VisitPointer(heap, array, array->GetTargetSlot(i));
+    }
   }
   // Enqueue the array in linked list of encountered transition arrays if it is
   // not already in the list.
