@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "cbbcb990_e4fb5655",
+        "filename": "test/cctest/test-modules.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-06-28T07:58:08Z",
+      "side": 1,
+      "message": "Huh, didn\u0027t realize our CHECK_EQ was symmetric. Ah well.",
+      "parentUuid": "633d5b7f_8eb9e339",
+      "revId": "710bed1a85d0a01eba46a74a5521923e233b8183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbbac623_e63a092e",
         "filename": "test/cctest/test-modules.cc",
         "patchSetId": 2
