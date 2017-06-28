@@ -24,6 +24,8 @@ InspectedContext::InspectedContext(V8InspectorImpl* inspector,
       m_origin(toString16(info.origin)),
       m_humanReadableName(toString16(info.humanReadableName)),
       m_auxData(toString16(info.auxData)) {
+  v8::MicrotasksScope microtasksScope(m_inspector->isolate(),
+                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::debug::SetContextId(info.context, contextId);
   if (!info.hasMemoryOnConsole) return;
   v8::Context::Scope contextScope(info.context);

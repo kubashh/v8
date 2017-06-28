@@ -130,6 +130,8 @@ Response InjectedScript::getProperties(
     std::unique_ptr<Array<PropertyDescriptor>>* properties,
     Maybe<protocol::Runtime::ExceptionDetails>* exceptionDetails) {
   v8::HandleScope handles(m_context->isolate());
+  v8::MicrotasksScope microtasksScope(m_context->isolate(),
+                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::Local<v8::Context> context = m_context->context();
   V8FunctionCall function(m_context->inspector(), m_context->context(),
                           v8Value(), "getProperties");
@@ -178,6 +180,8 @@ Response InjectedScript::wrapObject(
     bool generatePreview,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result) const {
   v8::HandleScope handles(m_context->isolate());
+  v8::MicrotasksScope microtasksScope(m_context->isolate(),
+                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::Local<v8::Value> wrappedObject;
   v8::Local<v8::Context> context = m_context->context();
   Response response = wrapValue(value, groupName, forceValueType,
@@ -250,6 +254,8 @@ Response InjectedScript::wrapValue(v8::Local<v8::Value> value,
 std::unique_ptr<protocol::Runtime::RemoteObject> InjectedScript::wrapTable(
     v8::Local<v8::Value> table, v8::Local<v8::Value> columns) const {
   v8::HandleScope handles(m_context->isolate());
+  v8::MicrotasksScope microtasksScope(m_context->isolate(),
+                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::Local<v8::Context> context = m_context->context();
   V8FunctionCall function(m_context->inspector(), context, v8Value(),
                           "wrapTable");

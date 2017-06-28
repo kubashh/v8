@@ -567,6 +567,7 @@ class RuntimeCallTimer final {
 };
 
 #define FOR_EACH_API_COUNTER(V)                            \
+  V(debug_CompileInspectorScript)                          \
   V(ArrayBuffer_Cast)                                      \
   V(ArrayBuffer_Neuter)                                    \
   V(ArrayBuffer_New)                                       \

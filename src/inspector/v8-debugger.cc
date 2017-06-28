@@ -572,6 +572,8 @@ Response V8Debugger::setScriptSource(
 }
 
 JavaScriptCallFrames V8Debugger::currentCallFrames(int limit) {
+  v8::MicrotasksScope microtasks(m_isolate,
+                                 v8::MicrotasksScope::kDoNotRunMicrotasks);
   if (!isPaused()) return JavaScriptCallFrames();
   v8::Local<v8::Value> currentCallFramesV8;
   v8::Local<v8::Value> argv[] = {m_executionState,
@@ -631,6 +633,8 @@ void V8Debugger::handleProgramBreak(v8::Local<v8::Context> pausedContext,
   if (!hitBreakpointNumbers.IsEmpty()) {
     breakpointIds.reserve(hitBreakpointNumbers->Length());
     for (uint32_t i = 0; i < hitBreakpointNumbers->Length(); i++) {
+      v8::MicrotasksScope microtasks(m_isolate,
+                                     v8::MicrotasksScope::kDoNotRunMicrotasks);
       v8::Local<v8::Value> hitBreakpointNumber =
           hitBreakpointNumbers->Get(debuggerContext(), i).ToLocalChecked();
       DCHECK(hitBreakpointNumber->IsInt32());
