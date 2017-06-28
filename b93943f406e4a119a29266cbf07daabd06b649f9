@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "43c9528a_fb3bc485",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-06-28T08:15:51Z",
+      "side": 1,
+      "message": "Can we use the origin enum here?",
+      "range": {
+        "startLine": 736,
+        "startChar": 11,
+        "endLine": 736,
+        "endChar": 22
+      },
+      "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72dfa46e_a11ada0f",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 4
@@ -49,6 +72,24 @@
       "side": 1,
       "message": "Created v8:6535 to track having an alternative way to fish out stack traces.",
       "parentUuid": "d9aa6a14_afcd3f52",
+      "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9bec67d_d914644f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-06-28T08:15:51Z",
+      "side": 1,
+      "message": "use origin_ \u003d\u003d kAsmJsOrigin",
+      "parentUuid": "3c4a8bd0_c533fa34",
       "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
