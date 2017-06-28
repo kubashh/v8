@@ -324,6 +324,8 @@ class UtilsExtension : public IsolateData::SetupGlobalTask {
   static void Print(const v8::FunctionCallbackInfo<v8::Value>& args) {
     for (int i = 0; i < args.Length(); i++) {
       v8::HandleScope handle_scope(args.GetIsolate());
+      v8::MicrotasksScope microtasks_scope(args.GetIsolate(),
+                                           v8::MicrotasksScope::kRunMicrotasks);
       if (i != 0) {
         printf(" ");
       }
