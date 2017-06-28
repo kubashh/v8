@@ -34,6 +34,24 @@
       "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4a8bd0_c533fa34",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-06-28T04:13:48Z",
+      "side": 1,
+      "message": "Created v8:6535 to track having an alternative way to fish out stack traces.",
+      "parentUuid": "d9aa6a14_afcd3f52",
+      "revId": "b93943f406e4a119a29266cbf07daabd06b649f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
