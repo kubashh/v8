@@ -183,12 +183,62 @@ class StoreHandler {
   static const int kSmiHandlerOffset = Tuple3::kValue2Offset;
   static const int kValidityCellOffset = Tuple3::kValue3Offset;
 
+  static WeakCell* GetTuple3TransitionCell(Object* tuple3_handler) {
+    WeakCell* cell = WeakCell::cast(Tuple3::cast(tuple3_handler)->value1());
+    DCHECK(!cell->cleared());
+    return cell;
+  }
+
+  static bool IsTuple3StillValid(Object* tuple3_handler) {
+    Object* raw_cell = Tuple3::cast(tuple3_handler)->value3();
+    // Can be Smi::kZero if no validity cell is required (counts as valid).
+    if (!raw_cell->IsCell()) return true;
+    return Cell::cast(raw_cell)->value() ==
+           Smi::FromInt(Map::kPrototypeChainValid);
+  }
+
   // The layout of an array handler representing a transitioning store
   // when prototype chain checks include non-existing lookups and access checks.
   static const int kSmiHandlerIndex = 0;
   static const int kValidityCellIndex = 1;
   static const int kTransitionCellIndex = 2;
   static const int kFirstPrototypeIndex = 3;
+
+  static WeakCell* GetArrayTransitionCell(Object* array_handler) {
+    WeakCell* cell = WeakCell::cast(
+        FixedArray::cast(array_handler)->get(kTransitionCellIndex));
+    DCHECK(!cell->cleared());
+    return cell;
+  }
+
+  static bool IsArrayStillValid(Object* array_handler, Name* name) {
+    FixedArray* handler = FixedArray::cast(array_handler);
+    Object* value = Cell::cast(handler->get(kValidityCellIndex))->value();
+    if (value != Smi::FromInt(Map::kPrototypeChainValid)) return false;
+    if (name != nullptr) {
+      Heap* heap = handler->GetHeap();
+      Isolate* isolate = heap->isolate();
+      Handle<Name> name_handle(name, isolate);
+      for (int i = kFirstPrototypeIndex; i < handler->length(); i++) {
+        // This mirrors AccessorAssembler::CheckPrototype.
+        WeakCell* prototype_cell = WeakCell::cast(handler->get(i));
+        if (prototype_cell->cleared()) return false;
+        HeapObject* maybe_prototype = HeapObject::cast(prototype_cell->value());
+        if (maybe_prototype->IsPropertyCell()) {
+          Object* value = PropertyCell::cast(maybe_prototype)->value();
+          if (value != heap->the_hole_value()) return false;
+        } else {
+          DCHECK(maybe_prototype->map()->is_dictionary_map());
+          // Do a negative dictionary lookup.
+          NameDictionary* dict =
+              JSObject::cast(maybe_prototype)->property_dictionary();
+          int number = dict->FindEntry(isolate, name_handle);
+          if (number != NameDictionary::kNotFound) return false;
+        }
+      }
+    }
+    return true;
+  }
 
   // Creates a Smi-handler for storing a field to fast object.
   static inline Handle<Smi> StoreField(Isolate* isolate, int descriptor,
