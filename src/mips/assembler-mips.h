@@ -1884,10 +1884,9 @@ class Assembler : public AssemblerBase {
   // Load Scaled Address instruction.
   void lsa(Register rd, Register rt, Register rs, uint8_t sa);
 
-  // Helpers.
-  void LoadRegPlusOffsetToAt(const MemOperand& src);
-  int32_t LoadRegPlusUpperOffsetPartToAt(const MemOperand& src);
-  int32_t LoadUpperOffsetForTwoMemoryAccesses(const MemOperand& src);
+  // Helper function for memory load/store using base register and offset.
+  void AdjustBaseAndOffset(MemOperand& src, bool is_doubleword,
+                           bool is_float = false);
 
   // Relocation for a type-recording IC has the AST id added to it.  This
   // member variable is a way to pass the information from the call site to
