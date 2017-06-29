@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8509c_e12a3774",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-06-29T12:32:27Z",
+      "side": 1,
+      "message": "I think this bit of this context is now out of date.",
+      "range": {
+        "startLine": 191,
+        "startChar": 41,
+        "endLine": 192,
+        "endChar": 33
+      },
+      "revId": "5c24a43b4a978d1c4f4b8f814566a390cf637db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
