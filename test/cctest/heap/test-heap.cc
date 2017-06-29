@@ -2432,6 +2432,7 @@ TEST(OptimizedAllocationAlwaysInNewSpace) {
 
 
 TEST(OptimizedPretenuringAllocationFolding) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2484,6 +2485,7 @@ TEST(OptimizedPretenuringAllocationFolding) {
 
 
 TEST(OptimizedPretenuringObjectArrayLiterals) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2526,6 +2528,7 @@ TEST(OptimizedPretenuringObjectArrayLiterals) {
 
 
 TEST(OptimizedPretenuringMixedInObjectProperties) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2585,6 +2588,7 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
 
 
 TEST(OptimizedPretenuringDoubleArrayProperties) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2626,6 +2630,7 @@ TEST(OptimizedPretenuringDoubleArrayProperties) {
 
 
 TEST(OptimizedPretenuringdoubleArrayLiterals) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2667,6 +2672,7 @@ TEST(OptimizedPretenuringdoubleArrayLiterals) {
 
 
 TEST(OptimizedPretenuringNestedMixedArrayLiterals) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2719,6 +2725,7 @@ TEST(OptimizedPretenuringNestedMixedArrayLiterals) {
 
 
 TEST(OptimizedPretenuringNestedObjectLiterals) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();
@@ -2771,6 +2778,7 @@ TEST(OptimizedPretenuringNestedObjectLiterals) {
 
 
 TEST(OptimizedPretenuringNestedDoubleLiterals) {
+  if (!FLAG_allocation_site_pretenuring) return;
   FLAG_allow_natives_syntax = true;
   FLAG_expose_gc = true;
   CcTest::InitializeVM();

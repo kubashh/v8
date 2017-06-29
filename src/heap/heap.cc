@@ -1448,7 +1448,8 @@ bool Heap::PerformGarbageCollection(
   ConfigureInitialOldGenerationSize();
 
   if (!fast_promotion_mode_ || collector == MARK_COMPACTOR) {
-    ComputeFastPromotionMode(promotion_ratio_ + semi_space_copied_rate_);
+    ComputeFastPromotionMode(collector,
+                             promotion_ratio_ + semi_space_copied_rate_);
   }
 
   isolate_->counters()->objs_since_last_young()->Set(0);
@@ -1875,17 +1876,21 @@ void Heap::Scavenge() {
   SetGCState(NOT_IN_GC);
 }
 
-void Heap::ComputeFastPromotionMode(double survival_rate) {
+void Heap::ComputeFastPromotionMode(GarbageCollector collector,
+                                    double survival_rate) {
   const size_t survived_in_new_space =
       survived_last_scavenge_ * 100 / new_space_->Capacity();
   fast_promotion_mode_ =
       !FLAG_optimize_for_size && FLAG_fast_promotion_new_space &&
-      !ShouldReduceMemory() && new_space_->IsAtMaximumCapacity() &&
+      collector != MARK_COMPACTOR && !ShouldReduceMemory() &&
+      new_space_->IsAtMaximumCapacity() &&
       survived_in_new_space >= kMinPromotedPercentForFastPromotionMode;
   if (FLAG_trace_gc_verbose) {
-    PrintIsolate(
-        isolate(), "Fast promotion mode: %s survival rate: %" PRIuS "%%\n",
-        fast_promotion_mode_ ? "true" : "false", survived_in_new_space);
+    PrintIsolate(isolate(),
+                 "Fast promotion mode: %s collector: %d survival rate: %" PRIuS
+                 "%%\n",
+                 fast_promotion_mode_ ? "true" : "false", collector,
+                 survived_in_new_space);
   }
 }
 

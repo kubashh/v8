@@ -1800,7 +1800,8 @@ class Heap {
 
   void InvokeOutOfMemoryCallback();
 
-  void ComputeFastPromotionMode(double survival_rate);
+  void ComputeFastPromotionMode(GarbageCollector collector,
+                                double survival_rate);
 
   // Attempt to over-approximate the weak closure by marking object groups and
   // implicit references from global handles, but don't atomically complete
