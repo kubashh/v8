@@ -1366,39 +1366,53 @@ Object* Isolate::UnwindAndFindHandler() {
 
 namespace {
 HandlerTable::CatchPrediction PredictException(JavaScriptFrame* frame) {
-  HandlerTable::CatchPrediction prediction;
-  if (frame->is_optimized()) {
-    if (frame->LookupExceptionHandlerInTable(nullptr, nullptr) > 0) {
-      // This optimized frame will catch. It's handler table does not include
-      // exception prediction, and we need to use the corresponding handler
-      // tables on the unoptimized code objects.
-      List<FrameSummary> summaries;
-      frame->Summarize(&summaries);
-      for (const FrameSummary& summary : summaries) {
-        Handle<AbstractCode> code = summary.AsJavaScript().abstract_code();
-        if (code->IsCode() && code->kind() == AbstractCode::BUILTIN) {
-          return code->GetCode()->GetBuiltinCatchPrediction();
-        }
+  if (!frame->is_optimized()) {
+    HandlerTable::CatchPrediction prediction;
+    int handler = frame->LookupExceptionHandlerInTable(nullptr, &prediction);
+    return (handler > 0) ? prediction : HandlerTable::UNCAUGHT;
+  }
 
-        if (code->kind() == AbstractCode::OPTIMIZED_FUNCTION) {
-          DCHECK(summary.AsJavaScript().function()->shared()->asm_function());
-          // asm code cannot contain try-catch.
-          continue;
-        }
-        // Must have been constructed from a bytecode array.
-        CHECK_EQ(AbstractCode::INTERPRETED_FUNCTION, code->kind());
+  DCHECK(frame->is_optimized());
+
+  if (frame->LookupExceptionHandlerInTable(nullptr, nullptr) <= 0) {
+    // No handler registered for this optimized frame.
+    return HandlerTable::UNCAUGHT;
+  }
+
+  // This optimized frame will catch. It's handler table does not include
+  // exception prediction, and we need to use the corresponding handler
+  // tables on the unoptimized code objects.
+  List<FrameSummary> summaries;
+  frame->Summarize(&summaries);
+  for (int i = summaries.length() - 1; i >= 0; i--) {
+    const FrameSummary& summary = summaries[i];
+    Handle<AbstractCode> code = summary.AsJavaScript().abstract_code();
+
+    switch (code->kind()) {
+      case AbstractCode::BUILTIN: {
+        if (!code->IsCode()) continue;
+        HandlerTable::CatchPrediction prediction =
+            code->GetCode()->GetBuiltinCatchPrediction();
+        if (prediction != HandlerTable::UNCAUGHT) return prediction;
+      } break;
+      case AbstractCode::OPTIMIZED_FUNCTION: {
+        DCHECK(summary.AsJavaScript().function()->shared()->asm_function());
+        continue;  // asm code cannot contain try-catch.
+      } break;
+      case AbstractCode::INTERPRETED_FUNCTION: {
         int code_offset = summary.code_offset();
         BytecodeArray* bytecode = code->GetBytecodeArray();
         HandlerTable* table = HandlerTable::cast(bytecode->handler_table());
-        int index = table->LookupRange(code_offset, nullptr, &prediction);
-        if (index <= 0) continue;
-        if (prediction == HandlerTable::UNCAUGHT) continue;
+        HandlerTable::CatchPrediction prediction;
+        int handler = table->LookupRange(code_offset, nullptr, &prediction);
+        if (handler <= 0 || prediction == HandlerTable::UNCAUGHT) continue;
         return prediction;
-      }
+      } break;
+      default:
+        UNREACHABLE();
     }
-  } else if (frame->LookupExceptionHandlerInTable(nullptr, &prediction) > 0) {
-    return prediction;
   }
+
   return HandlerTable::UNCAUGHT;
 }
 
