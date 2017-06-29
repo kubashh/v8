@@ -1454,11 +1454,9 @@ Isolate::CatchType Isolate::PredictExceptionCatcher() {
 
       case StackFrame::STUB: {
         Handle<Code> code(frame->LookupCode());
-        if (code->kind() == Code::BUILTIN && code->is_turbofanned() &&
-            code->handler_table()->length()) {
+        if (code->kind() == Code::BUILTIN) {
           CatchType prediction = ToCatchType(code->GetBuiltinCatchPrediction());
-          if (prediction == NOT_CAUGHT) break;
-          return prediction;
+          if (prediction != NOT_CAUGHT) return prediction;
         }
       } break;
 
