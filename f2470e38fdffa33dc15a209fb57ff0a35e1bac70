@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2316e0e4_1bab2e1b",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-29T15:29:56Z",
+      "side": 1,
+      "message": "I wonder if these are really the only code kinds that can occur in inlined frames.",
+      "revId": "f2470e38fdffa33dc15a209fb57ff0a35e1bac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
