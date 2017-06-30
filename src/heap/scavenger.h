@@ -11,15 +11,12 @@
 namespace v8 {
 namespace internal {
 
-typedef void (*ScavengingCallback)(Map* map, HeapObject** slot,
-                                   HeapObject* object);
-
 class Scavenger {
  public:
   explicit Scavenger(Heap* heap) : heap_(heap) {}
 
-  // Initializes static visitor dispatch tables.
-  static void Initialize();
+  V8_INLINE void DispatchToVisitor(HeapObject** slot, Map* map,
+                                   HeapObject* object);
 
   // Callback function passed to Heap::Iterate etc.  Copies an object if
   // necessary, the object might be promoted to an old space.  The caller must
@@ -32,16 +29,14 @@ class Scavenger {
   // Slow part of {ScavengeObject} above.
   static inline void ScavengeObjectSlow(HeapObject** p, HeapObject* object);
 
-  // Chooses an appropriate static visitor table depending on the current state
-  // of the heap (i.e. incremental marking, logging and profiling).
-  void SelectScavengingVisitorsTable();
+  void UpdateConstraints();
 
   Isolate* isolate();
   Heap* heap() { return heap_; }
 
  private:
   Heap* heap_;
-  VisitorDispatchTable<ScavengingCallback> scavenging_visitors_table_;
+  bool logging_;
 };
 
 // Helper class for turning the scavenger into an object visitor that is also
