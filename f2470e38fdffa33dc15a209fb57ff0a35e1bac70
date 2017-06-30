@@ -16,6 +16,24 @@
       "revId": "f2470e38fdffa33dc15a209fb57ff0a35e1bac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65f8387a_9871a2f3",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-30T12:43:42Z",
+      "side": 1,
+      "message": "With the above early exit that returns out of this function of the handler table is empty, we should not be able to hit \"Kind::FUNCTION\" here. I think no other kind should reach this. Which other code kinds did you have in mind?",
+      "parentUuid": "2316e0e4_1bab2e1b",
+      "revId": "f2470e38fdffa33dc15a209fb57ff0a35e1bac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
