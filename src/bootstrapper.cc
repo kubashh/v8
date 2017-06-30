@@ -255,8 +255,13 @@ class Genesis BASE_EMBEDDED {
   // prototype for the processing of JS builtins. Later the function maps are
   // replaced in order to make prototype writable. These are the final, writable
   // prototype, maps.
-  Handle<Map> sloppy_function_map_writable_prototype_;
-  Handle<Map> strict_function_map_writable_prototype_;
+  Handle<Map> sloppy_function_map_with_writable_prototype_;
+  Handle<Map> sloppy_function_map_with_name_and_writable_prototype_;
+  Handle<Map> strict_function_map_with_writable_prototype_;
+  Handle<Map> strict_function_map_with_name_and_writable_prototype_;
+  Handle<Map> strict_function_map_with_home_object_and_writable_prototype_;
+  Handle<Map>
+      strict_function_map_with_name_and_home_object_and_writable_prototype_;
   Handle<Map> class_function_map_;
   Handle<JSFunction> strict_poison_function_;
   Handle<JSFunction> restricted_function_properties_thrower_;
@@ -521,6 +526,11 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
   native_context()->set_sloppy_function_without_prototype_map(
       *function_without_prototype_map);
 
+  Handle<Map> function_with_name_and_without_prototype_map =
+      factory()->CreateSloppyFunctionMap(METHOD_WITH_NAME);
+  native_context()->set_sloppy_function_with_name_and_without_prototype_map(
+      *function_with_name_and_without_prototype_map);
+
   // Allocate the function map. This map is temporary, used only for processing
   // of builtins.
   // Later the map is replaced with writable prototype map, allocated below.
@@ -530,10 +540,19 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
   native_context()->set_sloppy_function_with_readonly_prototype_map(
       *function_map);
 
+  Handle<Map> function_with_name_map = factory()->CreateSloppyFunctionMap(
+      FUNCTION_WITH_NAME_AND_READONLY_PROTOTYPE);
+  native_context()->set_sloppy_function_with_name_map(*function_with_name_map);
+  native_context()->set_sloppy_function_with_name_and_readonly_prototype_map(
+      *function_with_name_map);
+
   // The final map for functions. Writeable prototype.
   // This map is installed in MakeFunctionInstancePrototypeWritable.
-  sloppy_function_map_writable_prototype_ =
+  sloppy_function_map_with_writable_prototype_ =
       factory()->CreateSloppyFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE);
+  sloppy_function_map_with_name_and_writable_prototype_ =
+      factory()->CreateSloppyFunctionMap(
+          FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE);
   Factory* factory = isolate->factory();
 
   Handle<String> object_name = factory->Object_string();
@@ -611,13 +630,14 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
   SharedFunctionInfo::SetScript(handle(empty_function->shared()), script);
 
   // Set prototypes for the function maps.
-  Handle<Map> sloppy_function_map(native_context()->sloppy_function_map(),
-                                  isolate);
-  Handle<Map> sloppy_function_without_prototype_map(
-      native_context()->sloppy_function_without_prototype_map(), isolate);
-  Map::SetPrototype(sloppy_function_map, empty_function);
-  Map::SetPrototype(sloppy_function_without_prototype_map, empty_function);
-  Map::SetPrototype(sloppy_function_map_writable_prototype_, empty_function);
+  Map::SetPrototype(isolate->sloppy_function_map(), empty_function);
+  Map::SetPrototype(isolate->sloppy_function_with_name_map(), empty_function);
+  Map::SetPrototype(isolate->sloppy_function_without_prototype_map(),
+                    empty_function);
+  Map::SetPrototype(sloppy_function_map_with_writable_prototype_,
+                    empty_function);
+  Map::SetPrototype(sloppy_function_map_with_name_and_writable_prototype_,
+                    empty_function);
 
   return empty_function;
 }
@@ -682,6 +702,21 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
   native_context()->set_strict_function_without_prototype_map(
       *strict_function_without_prototype_map);
 
+  Handle<Map> method_with_name_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME, empty);
+  native_context()->set_method_with_name_map(*method_with_name_map);
+
+  Handle<Map> method_with_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_HOME_OBJECT, empty);
+  native_context()->set_method_with_home_object_map(
+      *method_with_home_object_map);
+
+  Handle<Map> method_with_name_and_home_object_map =
+      factory()->CreateStrictFunctionMap(METHOD_WITH_NAME_AND_HOME_OBJECT,
+                                         empty);
+  native_context()->set_method_with_name_and_home_object_map(
+      *method_with_name_and_home_object_map);
+
   // Allocate map for the strict mode functions. This map is temporary, used
   // only for processing of builtins.
   // Later the map is replaced with writable prototype map, allocated below.
@@ -689,10 +724,26 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
       FUNCTION_WITH_READONLY_PROTOTYPE, empty);
   native_context()->set_strict_function_map(*strict_function_map);
 
+  Handle<Map> strict_function_with_name_map =
+      factory()->CreateStrictFunctionMap(
+          FUNCTION_WITH_NAME_AND_READONLY_PROTOTYPE, empty);
+  native_context()->set_strict_function_with_name_map(
+      *strict_function_with_name_map);
+
   // The final map for the strict mode functions. Writeable prototype.
   // This map is installed in MakeFunctionInstancePrototypeWritable.
-  strict_function_map_writable_prototype_ = factory()->CreateStrictFunctionMap(
-      FUNCTION_WITH_WRITEABLE_PROTOTYPE, empty);
+  strict_function_map_with_writable_prototype_ =
+      factory()->CreateStrictFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE,
+                                         empty);
+  strict_function_map_with_name_and_writable_prototype_ =
+      factory()->CreateStrictFunctionMap(
+          FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE, empty);
+  strict_function_map_with_home_object_and_writable_prototype_ =
+      factory()->CreateStrictFunctionMap(
+          FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE, empty);
+  strict_function_map_with_name_and_home_object_and_writable_prototype_ =
+      factory()->CreateStrictFunctionMap(
+          FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE, empty);
 
   // Allocate map for classes
   class_function_map_ = factory()->CreateClassFunctionMap(empty);
@@ -702,6 +753,19 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
   // restricted "arguments" and "caller" getters.
   AddRestrictedFunctionProperties(empty);
 }
+
+namespace {
+
+Handle<Map> CreateNonConstructorMap(Isolate* isolate, Handle<Map> source_map,
+                                    Handle<JSObject> prototype,
+                                    const char* reason) {
+  Handle<Map> map = Map::Copy(source_map, reason);
+  map->set_is_constructor(false);
+  Map::SetPrototype(map, prototype);
+  return map;
+}
+
+}  // namespace
 
 void Genesis::CreateIteratorMaps(Handle<JSFunction> empty) {
   // Create iterator-related meta-objects.
@@ -761,13 +825,29 @@ void Genesis::CreateIteratorMaps(Handle<JSFunction> empty) {
   // maps in the native context. The "prototype" property descriptor is
   // writable, non-enumerable, and non-configurable (as per ES6 draft
   // 04-14-15, section 25.2.4.3).
-  Handle<Map> strict_function_map(strict_function_map_writable_prototype_);
   // Generator functions do not have "caller" or "arguments" accessors.
-  Handle<Map> generator_function_map =
-      Map::Copy(strict_function_map, "GeneratorFunction");
-  generator_function_map->set_is_constructor(false);
-  Map::SetPrototype(generator_function_map, generator_function_prototype);
-  native_context()->set_generator_function_map(*generator_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_writable_prototype_,
+      generator_function_prototype, "GeneratorFunction");
+  native_context()->set_generator_function_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_name_and_writable_prototype_,
+      generator_function_prototype, "GeneratorFunction with name");
+  native_context()->set_generator_function_with_name_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_home_object_and_writable_prototype_,
+      generator_function_prototype, "GeneratorFunction with home object");
+  native_context()->set_generator_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(),
+      strict_function_map_with_name_and_home_object_and_writable_prototype_,
+      generator_function_prototype,
+      "GeneratorFunction with name and home object");
+  native_context()->set_generator_function_with_name_and_home_object_map(*map);
 
   Handle<JSFunction> object_function(native_context()->object_function());
   Handle<Map> generator_object_prototype_map = Map::Create(isolate(), 0);
@@ -863,15 +943,31 @@ void Genesis::CreateAsyncIteratorMaps(Handle<JSFunction> empty) {
   // maps in the native context. The "prototype" property descriptor is
   // writable, non-enumerable, and non-configurable (as per ES6 draft
   // 04-14-15, section 25.2.4.3).
-  Handle<Map> strict_function_map(strict_function_map_writable_prototype_);
   // Async Generator functions do not have "caller" or "arguments" accessors.
-  Handle<Map> async_generator_function_map =
-      Map::Copy(strict_function_map, "AsyncGeneratorFunction");
-  async_generator_function_map->set_is_constructor(false);
-  Map::SetPrototype(async_generator_function_map,
-                    async_generator_function_prototype);
-  native_context()->set_async_generator_function_map(
-      *async_generator_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_writable_prototype_,
+      async_generator_function_prototype, "AsyncGeneratorFunction");
+  native_context()->set_async_generator_function_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_name_and_writable_prototype_,
+      async_generator_function_prototype, "AsyncGeneratorFunction with name");
+  native_context()->set_async_generator_function_with_name_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_map_with_home_object_and_writable_prototype_,
+      async_generator_function_prototype,
+      "AsyncGeneratorFunction with home object");
+  native_context()->set_async_generator_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(),
+      strict_function_map_with_name_and_home_object_and_writable_prototype_,
+      async_generator_function_prototype,
+      "AsyncGeneratorFunction with name and home object");
+  native_context()->set_async_generator_function_with_name_and_home_object_map(
+      *map);
 
   Handle<JSFunction> object_function(native_context()->object_function());
   Handle<Map> async_generator_object_prototype_map = Map::Create(isolate(), 0);
@@ -892,13 +988,26 @@ void Genesis::CreateAsyncFunctionMaps(Handle<JSFunction> empty) {
                         factory()->NewStringFromAsciiChecked("AsyncFunction"),
                         static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
 
-  Handle<Map> strict_function_map(
-      native_context()->strict_function_without_prototype_map());
-  Handle<Map> async_function_map =
-      Map::Copy(strict_function_map, "AsyncFunction");
-  async_function_map->set_is_constructor(false);
-  Map::SetPrototype(async_function_map, async_function_prototype);
-  native_context()->set_async_function_map(*async_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->strict_function_without_prototype_map(),
+      async_function_prototype, "AsyncFunction");
+  native_context()->set_async_function_map(*map);
+
+  map = CreateNonConstructorMap(isolate(), isolate()->method_with_name_map(),
+                                async_function_prototype,
+                                "AsyncFunction with name");
+  native_context()->set_async_function_with_name_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->method_with_home_object_map(),
+      async_function_prototype, "AsyncFunction with home object");
+  native_context()->set_async_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->method_with_name_and_home_object_map(),
+      async_function_prototype, "AsyncFunction with name and home object");
+  native_context()->set_async_function_with_name_and_home_object_map(*map);
 }
 
 void Genesis::CreateJSProxyMaps() {
@@ -1040,7 +1149,7 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
   }
 
   if (js_global_object_template.is_null()) {
-    Handle<String> name = Handle<String>(heap()->empty_string());
+    Handle<String> name = isolate()->factory()->empty_string();
     Handle<Code> code = isolate()->builtins()->Illegal();
     Handle<JSObject> prototype =
         factory()->NewFunctionPrototype(isolate()->object_function());
@@ -1069,7 +1178,7 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
   // Step 2: (re)initialize the global proxy object.
   Handle<JSFunction> global_proxy_function;
   if (global_proxy_template.IsEmpty()) {
-    Handle<String> name = Handle<String>(heap()->empty_string());
+    Handle<String> name = isolate()->factory()->empty_string();
     Handle<Code> code = isolate()->builtins()->Illegal();
     global_proxy_function =
         factory()->NewFunction(name, code, JS_GLOBAL_PROXY_TYPE,
@@ -1081,7 +1190,7 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
             FunctionTemplateInfo::cast(data->constructor()));
     global_proxy_function = ApiNatives::CreateApiFunction(
         isolate(), global_constructor, factory()->the_hole_value(),
-        ApiNatives::GlobalProxyType);
+        ApiNatives::GlobalProxyType, isolate()->factory()->empty_string());
   }
   Handle<String> global_name = factory()->global_string();
   global_proxy_function->shared()->set_instance_class_name(*global_name);
@@ -1352,7 +1461,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         InstallFunction(global, "Function", JS_FUNCTION_TYPE, JSFunction::kSize,
                         prototype, Builtins::kFunctionConstructor);
     function_fun->set_prototype_or_initial_map(
-        *sloppy_function_map_writable_prototype_);
+        *sloppy_function_map_with_writable_prototype_);
     function_fun->shared()->DontAdaptArguments();
     function_fun->shared()->SetConstructStub(
         *isolate->builtins()->FunctionConstructor());
@@ -1389,8 +1498,16 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     JSObject::AddProperty(prototype, factory->constructor_string(),
                           function_fun, DONT_ENUM);
 
-    sloppy_function_map_writable_prototype_->SetConstructor(*function_fun);
-    strict_function_map_writable_prototype_->SetConstructor(*function_fun);
+    sloppy_function_map_with_writable_prototype_->SetConstructor(*function_fun);
+    sloppy_function_map_with_name_and_writable_prototype_->SetConstructor(
+        *function_fun);
+    strict_function_map_with_writable_prototype_->SetConstructor(*function_fun);
+    strict_function_map_with_name_and_writable_prototype_->SetConstructor(
+        *function_fun);
+    strict_function_map_with_home_object_and_writable_prototype_
+        ->SetConstructor(*function_fun);
+    strict_function_map_with_name_and_home_object_and_writable_prototype_
+        ->SetConstructor(*function_fun);
     class_function_map_->SetConstructor(*function_fun);
   }
 
@@ -5023,14 +5140,21 @@ void Genesis::MakeFunctionInstancePrototypeWritable() {
   // The maps with writable prototype are created in CreateEmptyFunction
   // and CreateStrictModeFunctionMaps respectively. Initially the maps are
   // created with read-only prototype for JS builtins processing.
-  DCHECK(!sloppy_function_map_writable_prototype_.is_null());
-  DCHECK(!strict_function_map_writable_prototype_.is_null());
+  DCHECK(!sloppy_function_map_with_writable_prototype_.is_null());
+  DCHECK(!sloppy_function_map_with_name_and_writable_prototype_.is_null());
+  DCHECK(!strict_function_map_with_writable_prototype_.is_null());
+  DCHECK(!strict_function_map_with_name_and_writable_prototype_.is_null());
 
   // Replace function instance maps to make prototype writable.
   native_context()->set_sloppy_function_map(
-      *sloppy_function_map_writable_prototype_);
+      *sloppy_function_map_with_writable_prototype_);
+  native_context()->set_sloppy_function_with_name_map(
+      *sloppy_function_map_with_name_and_writable_prototype_);
+
   native_context()->set_strict_function_map(
-      *strict_function_map_writable_prototype_);
+      *strict_function_map_with_writable_prototype_);
+  native_context()->set_strict_function_with_name_map(
+      *strict_function_map_with_name_and_writable_prototype_);
 }
 
 
