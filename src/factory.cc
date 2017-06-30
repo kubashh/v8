@@ -1462,18 +1462,22 @@ Handle<JSFunction> Factory::NewFunction(Handle<Map> map,
 Handle<JSFunction> Factory::NewFunction(Handle<Map> map,
                                         Handle<String> name,
                                         MaybeHandle<Code> code) {
+  DCHECK(!name.is_null());
   Handle<Context> context(isolate()->native_context());
   Handle<SharedFunctionInfo> info =
       NewSharedFunctionInfo(name, code, map->is_constructor());
   // Proper language mode in shared function info will be set outside.
   DCHECK(is_sloppy(info->language_mode()));
   DCHECK(!map->IsUndefined(isolate()));
+  // TODO(ishell): update this check.
   DCHECK(
       map.is_identical_to(isolate()->sloppy_function_map()) ||
+      map.is_identical_to(isolate()->sloppy_function_with_name_map()) ||
       map.is_identical_to(isolate()->sloppy_function_without_prototype_map()) ||
       map.is_identical_to(
           isolate()->sloppy_function_with_readonly_prototype_map()) ||
       map.is_identical_to(isolate()->strict_function_map()) ||
+      map.is_identical_to(isolate()->strict_function_with_name_map()) ||
       map.is_identical_to(isolate()->strict_function_without_prototype_map()) ||
       // TODO(titzer): wasm_function_map() could be undefined here. ugly.
       (*map == context->get(Context::WASM_FUNCTION_MAP_INDEX)) ||
@@ -2412,11 +2416,15 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     MaybeHandle<String> name, FunctionKind kind, Handle<Code> code,
     Handle<ScopeInfo> scope_info) {
   DCHECK(IsValidFunctionKind(kind));
+  //  if (name.is_null() && (kind == kNormalFunction ||
+  //  IsClassConstructor(kind))) {
+  //    name = empty_string();
+  //  }
   Handle<SharedFunctionInfo> shared =
-      NewSharedFunctionInfo(name, code, IsConstructable(kind));
+      NewSharedFunctionInfo(name, code, IsConstructable(kind), kind);
   shared->set_scope_info(*scope_info);
   shared->set_outer_scope_info(*the_hole_value());
-  shared->set_kind(kind);
+  //  shared->set_kind(kind);
   if (IsGeneratorFunction(kind)) {
     shared->set_instance_class_name(isolate()->heap()->Generator_string());
   }
@@ -2455,7 +2463,7 @@ Handle<JSMessageObject> Factory::NewJSMessageObject(
 
 Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     MaybeHandle<String> maybe_name, MaybeHandle<Code> maybe_code,
-    bool is_constructor) {
+    bool is_constructor, FunctionKind kind) {
   // Function names are assumed to be flat elsewhere. Must flatten before
   // allocating SharedFunctionInfo to avoid GC seeing the uninitialized SFI.
   Handle<String> shared_name;
@@ -2509,12 +2517,17 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
   // All compiler hints default to false or 0.
   share->set_compiler_hints(0);
   share->set_opt_count_and_bailout_reason(0);
+  share->set_kind(kind);
+  //  share->UpdateFunctionMapIndex();
 
   // Link into the list.
   Handle<Object> new_noscript_list =
       WeakFixedArray::Add(noscript_shared_function_infos(), share);
   isolate()->heap()->set_noscript_shared_function_infos(*new_noscript_list);
 
+#ifdef VERIFY_HEAP
+  share->SharedFunctionInfoVerify();
+#endif
   return share;
 }
 
@@ -2811,22 +2824,31 @@ Handle<String> Factory::ToPrimitiveHintString(ToPrimitiveHint hint) {
 
 Handle<Map> Factory::CreateSloppyFunctionMap(FunctionMode function_mode) {
   Handle<Map> map = NewMap(JS_FUNCTION_TYPE, JSFunction::kSize);
-  SetFunctionInstanceDescriptor(map, function_mode);
+  SetSloppyFunctionInstanceDescriptor(map, function_mode);
   map->set_is_constructor(IsFunctionModeWithPrototype(function_mode));
   map->set_is_callable();
   return map;
 }
 
-void Factory::SetFunctionInstanceDescriptor(Handle<Map> map,
-                                            FunctionMode function_mode) {
+void Factory::SetSloppyFunctionInstanceDescriptor(Handle<Map> map,
+                                                  FunctionMode function_mode) {
   int size = IsFunctionModeWithPrototype(function_mode) ? 5 : 4;
+  int inobject_properties_count = 0;
+  if (IsFunctionModeWithName(function_mode)) ++inobject_properties_count;
+  map->SetInObjectProperties(inobject_properties_count);
+  map->set_instance_size(JSFunction::kSize +
+                         inobject_properties_count * kPointerSize);
+
   Map::EnsureDescriptorSlack(map, size);
 
   PropertyAttributes ro_attribs =
       static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE | READ_ONLY);
+  PropertyAttributes rw_attribs =
+      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE);
   PropertyAttributes roc_attribs =
       static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY);
 
+  int field_index = 0;
   STATIC_ASSERT(JSFunction::kLengthDescriptorIndex == 0);
   Handle<AccessorInfo> length =
       Accessors::FunctionLengthInfo(isolate(), roc_attribs);
@@ -2837,9 +2859,17 @@ void Factory::SetFunctionInstanceDescriptor(Handle<Map> map,
   }
 
   STATIC_ASSERT(JSFunction::kNameDescriptorIndex == 1);
-  Handle<AccessorInfo> name =
-      Accessors::FunctionNameInfo(isolate(), roc_attribs);
-  {  // Add name.
+  if (IsFunctionModeWithName(function_mode)) {
+    // Add name field.
+    Handle<Name> name = isolate()->factory()->name_string();
+    Descriptor d = Descriptor::DataField(name, field_index++, roc_attribs,
+                                         Representation::Tagged());
+    map->AppendDescriptor(&d);
+
+  } else {
+    // Add name accessor.
+    Handle<AccessorInfo> name =
+        Accessors::FunctionNameInfo(isolate(), roc_attribs);
     Descriptor d = Descriptor::AccessorConstant(
         Handle<Name>(Name::cast(name->name())), name, roc_attribs);
     map->AppendDescriptor(&d);
@@ -2859,15 +2889,16 @@ void Factory::SetFunctionInstanceDescriptor(Handle<Map> map,
     map->AppendDescriptor(&d);
   }
   if (IsFunctionModeWithPrototype(function_mode)) {
-    if (function_mode == FUNCTION_WITH_WRITEABLE_PROTOTYPE) {
-      ro_attribs = static_cast<PropertyAttributes>(ro_attribs & ~READ_ONLY);
-    }
+    PropertyAttributes attribs =
+        IsFunctionModeWithWritablePrototype(function_mode) ? rw_attribs
+                                                           : ro_attribs;
     Handle<AccessorInfo> prototype =
-        Accessors::FunctionPrototypeInfo(isolate(), ro_attribs);
+        Accessors::FunctionPrototypeInfo(isolate(), attribs);
     Descriptor d = Descriptor::AccessorConstant(
-        Handle<Name>(Name::cast(prototype->name())), prototype, ro_attribs);
+        Handle<Name>(Name::cast(prototype->name())), prototype, attribs);
     map->AppendDescriptor(&d);
   }
+  DCHECK_EQ(inobject_properties_count, field_index);
 }
 
 Handle<Map> Factory::CreateStrictFunctionMap(
@@ -2882,7 +2913,17 @@ Handle<Map> Factory::CreateStrictFunctionMap(
 
 void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
                                                   FunctionMode function_mode) {
-  int size = IsFunctionModeWithPrototype(function_mode) ? 3 : 2;
+  DCHECK_EQ(JS_FUNCTION_TYPE, map->instance_type());
+  int inobject_properties_count = 0;
+  if (IsFunctionModeWithName(function_mode)) ++inobject_properties_count;
+  if (IsFunctionModeWithHomeObject(function_mode)) ++inobject_properties_count;
+  map->SetInObjectProperties(inobject_properties_count);
+  map->set_instance_size(JSFunction::kSize +
+                         inobject_properties_count * kPointerSize);
+
+  int size = (IsFunctionModeWithPrototype(function_mode) ? 3 : 2) +
+             inobject_properties_count;
+
   Map::EnsureDescriptorSlack(map, size);
 
   PropertyAttributes rw_attribs =
@@ -2892,9 +2933,7 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
   PropertyAttributes roc_attribs =
       static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY);
 
-  DCHECK(function_mode == FUNCTION_WITH_WRITEABLE_PROTOTYPE ||
-         function_mode == FUNCTION_WITH_READONLY_PROTOTYPE ||
-         function_mode == FUNCTION_WITHOUT_PROTOTYPE);
+  int field_index = 0;
   STATIC_ASSERT(JSFunction::kLengthDescriptorIndex == 0);
   {  // Add length.
     Handle<AccessorInfo> length =
@@ -2905,17 +2944,26 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
   }
 
   STATIC_ASSERT(JSFunction::kNameDescriptorIndex == 1);
-  {  // Add name.
+  if (IsFunctionModeWithName(function_mode)) {
+    // Add name field.
+    Handle<Name> name = isolate()->factory()->name_string();
+    Descriptor d = Descriptor::DataField(name, field_index++, roc_attribs,
+                                         Representation::Tagged());
+    map->AppendDescriptor(&d);
+
+  } else {
+    // Add name accessor.
     Handle<AccessorInfo> name =
         Accessors::FunctionNameInfo(isolate(), roc_attribs);
     Descriptor d = Descriptor::AccessorConstant(
         handle(Name::cast(name->name())), name, roc_attribs);
     map->AppendDescriptor(&d);
   }
+
   if (IsFunctionModeWithPrototype(function_mode)) {
     // Add prototype.
     PropertyAttributes attribs =
-        function_mode == FUNCTION_WITH_WRITEABLE_PROTOTYPE ? rw_attribs
+        IsFunctionModeWithWritablePrototype(function_mode) ? rw_attribs
                                                            : ro_attribs;
     Handle<AccessorInfo> prototype =
         Accessors::FunctionPrototypeInfo(isolate(), attribs);
@@ -2923,6 +2971,15 @@ void Factory::SetStrictFunctionInstanceDescriptor(Handle<Map> map,
         Handle<Name>(Name::cast(prototype->name())), prototype, attribs);
     map->AppendDescriptor(&d);
   }
+
+  if (IsFunctionModeWithHomeObject(function_mode)) {
+    // Add home object field.
+    Handle<Name> name = isolate()->factory()->home_object_symbol();
+    Descriptor d = Descriptor::DataField(name, field_index++, DONT_ENUM,
+                                         Representation::Tagged());
+    map->AppendDescriptor(&d);
+  }
+  DCHECK_EQ(inobject_properties_count, field_index);
 }
 
 Handle<Map> Factory::CreateClassFunctionMap(Handle<JSFunction> empty_function) {
