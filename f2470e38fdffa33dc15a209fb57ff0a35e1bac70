@@ -34,6 +34,24 @@
       "revId": "f2470e38fdffa33dc15a209fb57ff0a35e1bac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29644a3b_1fe3e49f",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-30T12:53:34Z",
+      "side": 1,
+      "message": "Nothing specific, but it\u0027s good to have confirmation from someone with more inlining / deoptimization knowledge!",
+      "parentUuid": "65f8387a_9871a2f3",
+      "revId": "f2470e38fdffa33dc15a209fb57ff0a35e1bac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
