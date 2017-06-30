@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3a42cb5_1aa570f1",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-30T12:21:34Z",
+      "side": 1,
+      "message": "suggestion: \"... and will not be propagated further or re-thrown.\"",
+      "range": {
+        "startLine": 1104,
+        "startChar": 61,
+        "endLine": 1104,
+        "endChar": 71
+      },
+      "revId": "7ba9eb108ca08d9a16b1879523ab136bf83af55b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a85bf9a_9e1e40ec",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-06-30T12:21:34Z",
+      "side": 1,
+      "message": "suggestion: We should only ever hit the \"prediction !\u003d NOT_CAUGHT\" case if \"code-\u003eis_turbofanned()\" and \"code-\u003ehandler_table()-\u003elength() \u003e 0\" holds. Can we DCHECK that implication? I actually preferred the old code structure because it made it clear that the code is in sync with {Isolate::UnwindAndFindHandler}.",
+      "range": {
+        "startLine": 1459,
+        "startChar": 14,
+        "endLine": 1459,
+        "endChar": 38
+      },
+      "revId": "7ba9eb108ca08d9a16b1879523ab136bf83af55b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
