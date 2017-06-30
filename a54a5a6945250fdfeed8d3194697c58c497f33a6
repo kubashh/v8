@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "86dbc770_fc637549",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-06-30T13:02:04Z",
+      "side": 1,
+      "message": "this is ok too if you don\u0027t want to introduce enums",
+      "revId": "a54a5a6945250fdfeed8d3194697c58c497f33a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "235e380d_efbb2f3e",
         "filename": "src/mips/assembler-mips.h",
         "patchSetId": 1
@@ -47,6 +64,23 @@
       "writtenOn": "2017-06-28T12:23:47Z",
       "side": 1,
       "message": "Maybe define\nis_doubleword\u003dfalse",
+      "revId": "a54a5a6945250fdfeed8d3194697c58c497f33a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d40e27_4bf005f9",
+        "filename": "src/mips/assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-06-30T13:02:04Z",
+      "side": 1,
+      "message": "Agree with Ilija. Also, it may be a better idea to introduce new types (or reuse existing) instead of generic bools, since they are more descriptive e.g.\nAdjustBaseAndOffset(MemOperand(r1), DOUBLEWORD, FLOAT)\ninstead of\nAdjustBaseAndOffset(MemOperand(r1), true, true)",
       "revId": "a54a5a6945250fdfeed8d3194697c58c497f33a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
