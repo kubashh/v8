@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ade644e_abce926a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-30T12:39:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3a42cb5_1aa570f1",
+      "range": {
+        "startLine": 1104,
+        "startChar": 61,
+        "endLine": 1104,
+        "endChar": 71
+      },
+      "revId": "7ba9eb108ca08d9a16b1879523ab136bf83af55b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a85bf9a_9e1e40ec",
         "filename": "src/isolate.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "7ba9eb108ca08d9a16b1879523ab136bf83af55b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb04579_daf848af",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-06-30T12:39:11Z",
+      "side": 1,
+      "message": "As discussed offline, changed the condition in L1457 to match UnwindAndFindHandler.",
+      "parentUuid": "6a85bf9a_9e1e40ec",
+      "range": {
+        "startLine": 1459,
+        "startChar": 14,
+        "endLine": 1459,
+        "endChar": 38
+      },
+      "revId": "7ba9eb108ca08d9a16b1879523ab136bf83af55b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
