@@ -1374,26 +1374,28 @@ HandlerTable::CatchPrediction PredictException(JavaScriptFrame* frame) {
       // tables on the unoptimized code objects.
       List<FrameSummary> summaries;
       frame->Summarize(&summaries);
-      for (const FrameSummary& summary : summaries) {
+      for (int i = summaries.length() - 1; i >= 0; i--) {
+        const FrameSummary& summary = summaries[i];
         Handle<AbstractCode> code = summary.AsJavaScript().abstract_code();
         if (code->IsCode() && code->kind() == AbstractCode::BUILTIN) {
-          return code->GetCode()->GetBuiltinCatchPrediction();
-        }
-
-        if (code->kind() == AbstractCode::OPTIMIZED_FUNCTION) {
+          prediction = code->GetCode()->GetBuiltinCatchPrediction();
+          if (prediction == HandlerTable::UNCAUGHT) continue;
+          return prediction;
+        } else if (code->kind() == AbstractCode::OPTIMIZED_FUNCTION) {
           DCHECK(summary.AsJavaScript().function()->shared()->asm_function());
           // asm code cannot contain try-catch.
           continue;
+        } else {
+          // Must have been constructed from a bytecode array.
+          CHECK_EQ(AbstractCode::INTERPRETED_FUNCTION, code->kind());
+          int code_offset = summary.code_offset();
+          BytecodeArray* bytecode = code->GetBytecodeArray();
+          HandlerTable* table = HandlerTable::cast(bytecode->handler_table());
+          int index = table->LookupRange(code_offset, nullptr, &prediction);
+          if (index <= 0) continue;
+          if (prediction == HandlerTable::UNCAUGHT) continue;
+          return prediction;
         }
-        // Must have been constructed from a bytecode array.
-        CHECK_EQ(AbstractCode::INTERPRETED_FUNCTION, code->kind());
-        int code_offset = summary.code_offset();
-        BytecodeArray* bytecode = code->GetBytecodeArray();
-        HandlerTable* table = HandlerTable::cast(bytecode->handler_table());
-        int index = table->LookupRange(code_offset, nullptr, &prediction);
-        if (index <= 0) continue;
-        if (prediction == HandlerTable::UNCAUGHT) continue;
-        return prediction;
       }
     }
   } else if (frame->LookupExceptionHandlerInTable(nullptr, &prediction) > 0) {
