@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71529c56_ab25b286",
+        "filename": "tools/release/test_scripts.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2017-07-03T10:48:19Z",
+      "side": 1,
+      "message": "wow, i didn\u0027t know we had this flag.",
+      "range": {
+        "startLine": 974,
+        "startChar": 37,
+        "endLine": 974,
+        "endChar": 44
+      },
+      "revId": "c946e7a7cbc0e295cc1b8861559fbb35be22a963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
