@@ -282,7 +282,7 @@ snippet: "
 "
 frame size: 24
 parameter count: 1
-bytecode array length: 571
+bytecode array length: 567
 bytecodes: [
                 B(Mov), R(new_target), R(10),
                 B(Ldar), R(new_target),
@@ -381,19 +381,16 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(16),
                 B(Mov), R(20), R(17),
-                B(Jump), U8(60),
+                B(Jump), U8(56),
                 B(LdaZero),
                 B(Star), R(6),
                 B(JumpLoop), U8(128), I8(0),
-                B(Jump), U8(40),
+                B(Jump), U8(36),
                 B(Star), R(20),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(20), U8(12), U8(13),
-                B(Star), R(19),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(19),
                 B(PushContext), R(20),
+                B(Star), R(19),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(6), U8(16),
                 B(JumpIfFalse), U8(6),
@@ -546,17 +543,17 @@ constant pool: [
   Smi [6],
   Smi [14],
   FIXED_ARRAY_TYPE,
-  Smi [412],
+  Smi [408],
   Smi [6],
   Smi [28],
   Smi [35],
 ]
 handlers: [
-  [52, 498, 504],
-  [55, 459, 461],
-  [106, 305, 311],
+  [52, 494, 500],
+  [55, 455, 457],
+  [106, 301, 307],
   [109, 265, 267],
-  [372, 382, 384],
+  [368, 378, 380],
 ]
 
 ---

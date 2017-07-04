@@ -971,30 +971,9 @@ class TryStatement : public Statement {
   Block* try_block() const { return try_block_; }
   void set_try_block(Block* b) { try_block_ = b; }
 
-  // Prediction of whether exceptions thrown into the handler for this try block
-  // will be caught.
-  //
-  // This is set in ast-numbering and later compiled into the code's handler
-  // table.  The runtime uses this information to implement a feature that
-  // notifies the debugger when an uncaught exception is thrown, _before_ the
-  // exception propagates to the top.
-  //
-  // Since it's generally undecidable whether an exception will be caught, our
-  // prediction is only an approximation.
-  HandlerTable::CatchPrediction catch_prediction() const {
-    return catch_prediction_;
-  }
-  void set_catch_prediction(HandlerTable::CatchPrediction prediction) {
-    catch_prediction_ = prediction;
-  }
-
  protected:
   TryStatement(Block* try_block, int pos, NodeType type)
-      : Statement(pos, type),
-        catch_prediction_(HandlerTable::UNCAUGHT),
-        try_block_(try_block) {}
-
-  HandlerTable::CatchPrediction catch_prediction_;
+      : Statement(pos, type), try_block_(try_block) {}
 
  private:
   Block* try_block_;
@@ -1006,6 +985,21 @@ class TryCatchStatement final : public TryStatement {
   Scope* scope() { return scope_; }
   Block* catch_block() const { return catch_block_; }
   void set_catch_block(Block* b) { catch_block_ = b; }
+
+  // Prediction of whether exceptions thrown into the handler for this try block
+  // will be caught.
+  //
+  // BytecodeGenerator tracks the state of catch prediction, which can change
+  // with each TryCatchStatement encountered. The tracked catch prediction is
+  // later compiled into the code's handler table. The runtime uses this
+  // information to implement a feature that notifies the debugger when an
+  // uncaught exception is thrown, _before_ the exception propagates to the top.
+  //
+  // Since it's generally undecidable whether an exception will be caught, our
+  // prediction is only an approximation.
+  HandlerTable::CatchPrediction catch_prediction() const {
+    return catch_prediction_;
+  }
 
   // The clear_pending_message flag indicates whether or not to clear the
   // isolate's pending exception message before executing the catch_block.  In
@@ -1028,12 +1022,12 @@ class TryCatchStatement final : public TryStatement {
                     HandlerTable::CatchPrediction catch_prediction, int pos)
       : TryStatement(try_block, pos, kTryCatchStatement),
         scope_(scope),
-        catch_block_(catch_block) {
-    catch_prediction_ = catch_prediction;
-  }
+        catch_block_(catch_block),
+        catch_prediction_(catch_prediction) {}
 
   Scope* scope_;
   Block* catch_block_;
+  HandlerTable::CatchPrediction catch_prediction_;
 };
 
 

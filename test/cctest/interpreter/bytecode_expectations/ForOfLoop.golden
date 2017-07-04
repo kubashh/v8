@@ -1041,7 +1041,7 @@ snippet: "
 "
 frame size: 23
 parameter count: 2
-bytecode array length: 397
+bytecode array length: 393
 bytecodes: [
                 B(CreateFunctionContext), U8(1),
                 B(PushContext), R(12),
@@ -1087,15 +1087,12 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(7),
                 B(JumpLoop), U8(53), I8(0),
-                B(Jump), U8(40),
+                B(Jump), U8(36),
                 B(Star), R(21),
                 B(Ldar), R(closure),
   /*   55 E> */ B(CreateCatchContext), R(21), U8(4), U8(5),
-                B(Star), R(20),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(20),
                 B(PushContext), R(21),
+                B(Star), R(20),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(7), U8(15),
                 B(JumpIfFalse), U8(6),
@@ -1237,11 +1234,11 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [21, 352, 358],
-  [24, 307, 309],
-  [30, 152, 158],
+  [21, 348, 354],
+  [24, 303, 305],
+  [30, 148, 154],
   [33, 112, 114],
-  [218, 228, 230],
+  [214, 224, 226],
 ]
 
 ---
@@ -1253,7 +1250,7 @@ snippet: "
 "
 frame size: 26
 parameter count: 2
-bytecode array length: 537
+bytecode array length: 533
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -1344,19 +1341,16 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(18),
                 B(Mov), R(22), R(19),
-                B(Jump), U8(60),
+                B(Jump), U8(56),
                 B(LdaZero),
                 B(Star), R(7),
                 B(JumpLoop), U8(132), I8(0),
-                B(Jump), U8(40),
+                B(Jump), U8(36),
                 B(Star), R(22),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(22), U8(8), U8(9),
-                B(Star), R(21),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(21),
                 B(PushContext), R(22),
+                B(Star), R(21),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(7), U8(15),
                 B(JumpIfFalse), U8(6),
@@ -1508,10 +1502,10 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [70, 492, 498],
-  [73, 447, 449],
-  [79, 280, 286],
+  [70, 488, 494],
+  [73, 443, 445],
+  [79, 276, 282],
   [82, 240, 242],
-  [347, 357, 359],
+  [343, 353, 355],
 ]
 

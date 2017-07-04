@@ -798,7 +798,8 @@ BytecodeGenerator::BytecodeGenerator(CompilationInfo* info)
       generator_jump_table_(nullptr),
       generator_object_(),
       generator_state_(),
-      loop_depth_(0) {
+      loop_depth_(0),
+      catch_prediction_(HandlerTable::UNCAUGHT) {
   DCHECK_EQ(closure_scope(), closure_scope()->GetClosureScope());
   if (info->is_block_coverage_enabled()) {
     DCHECK(FLAG_block_coverage);
@@ -1576,7 +1577,11 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
-  TryCatchBuilder try_control_builder(builder(), stmt->catch_prediction());
+  HandlerTable::CatchPrediction outer_catch_prediction = catch_prediction_;
+  if (stmt->catch_prediction() != HandlerTable::UNCAUGHT) {
+    catch_prediction_ = stmt->catch_prediction();
+  }
+  TryCatchBuilder try_control_builder(builder(), catch_prediction_);
 
   // Preserve the context in a dedicated register, so that it can be restored
   // when the handler is entered by the stack-unwinding machinery.
@@ -1592,6 +1597,7 @@ void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
     Visit(stmt->try_block());
   }
   try_control_builder.EndTry();
+  catch_prediction_ = outer_catch_prediction;
 
   // Create a catch scope that binds the exception.
   BuildNewLocalCatchContext(stmt->scope());
@@ -1611,7 +1617,7 @@ void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitTryFinallyStatement(TryFinallyStatement* stmt) {
-  TryFinallyBuilder try_control_builder(builder(), stmt->catch_prediction());
+  TryFinallyBuilder try_control_builder(builder(), catch_prediction_);
 
   // We keep a record of all paths that enter the finally-block to be able to
   // dispatch to the correct continuation point after the statements in the
@@ -3251,13 +3257,28 @@ void BytecodeGenerator::VisitCallNew(CallNew* expr) {
 
 void BytecodeGenerator::VisitCallRuntime(CallRuntime* expr) {
   if (expr->is_jsruntime()) {
+    int context_index = expr->context_index();
+
+    if (catch_prediction_ == HandlerTable::ASYNC_AWAIT) {
+      switch (context_index) {
+        case Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX:
+          context_index = Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX;
+          break;
+        case Context::ASYNC_GENERATOR_AWAIT_CAUGHT:
+          context_index = Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT;
+          break;
+        default:
+          break;
+      }
+    }
+
     RegisterList args = register_allocator()->NewGrowableRegisterList();
     // Allocate a register for the receiver and load it with undefined.
     // TODO(leszeks): If CallJSRuntime always has an undefined receiver, use the
     // same mechanism as CallUndefinedReceiver.
     BuildPushUndefinedIntoRegisterList(&args);
     VisitArguments(expr->arguments(), &args);
-    builder()->CallJSRuntime(expr->context_index(), args);
+    builder()->CallJSRuntime(context_index, args);
   } else {
     // Evaluate all arguments to the runtime call.
     RegisterList args = register_allocator()->NewGrowableRegisterList();
