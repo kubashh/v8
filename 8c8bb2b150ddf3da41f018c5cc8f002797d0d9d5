@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "07205a33_74586811",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-04T13:15:48Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "18f3a81c_8020021e",
+      "range": {
+        "startLine": 372,
+        "startChar": 9,
+        "endLine": 372,
+        "endChar": 30
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58a1e348_ddbf5bf4",
         "filename": "src/ast/ast-numbering.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-04T12:46:31Z",
       "side": 0,
       "message": "Please remove set_catch_prediction since it\u0027s no longer used. Also, can we move catch_prediction to TryCatchStatement (and either way update the comment in ast.h which refers to it being set in ast-numbering).",
+      "range": {
+        "startLine": 385,
+        "startChar": 8,
+        "endLine": 385,
+        "endChar": 28
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9077e582_9e5ca0c7",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-04T13:15:48Z",
+      "side": 0,
+      "message": "comment is updated. I\u0027ve moved the getter to TryCatchStatement, but that did require changes to the ast printer, so I can put it back if that\u0027s too much.",
+      "parentUuid": "58a1e348_ddbf5bf4",
       "range": {
         "startLine": 385,
         "startChar": 8,
