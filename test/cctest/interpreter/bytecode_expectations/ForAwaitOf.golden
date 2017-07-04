@@ -16,7 +16,7 @@ snippet: "
 "
 frame size: 25
 parameter count: 1
-bytecode array length: 676
+bytecode array length: 672
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -96,7 +96,7 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(17),
                 B(Mov), R(21), R(18),
-                B(Jump), U8(98),
+                B(Jump), U8(94),
                 B(Mov), R(21), R(5),
   /*   40 E> */ B(InvokeIntrinsic), U8(Runtime::k_IsJSReceiver), R(21), U8(1),
                 B(ToBooleanLogicalNot),
@@ -114,15 +114,12 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(6),
                 B(JumpLoop), U8(132), I8(0),
-                B(Jump), U8(40),
+                B(Jump), U8(36),
                 B(Star), R(21),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(21), U8(12), U8(13),
-                B(Star), R(20),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(20),
                 B(PushContext), R(21),
+                B(Star), R(20),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(6), U8(20),
                 B(JumpIfFalse), U8(6),
@@ -304,8 +301,8 @@ bytecodes: [
 ]
 constant pool: [
   Smi [102],
-  Smi [382],
-  Smi [477],
+  Smi [378],
+  Smi [473],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
@@ -331,11 +328,11 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [62, 631, 637],
-  [65, 586, 588],
-  [71, 294, 300],
+  [62, 627, 633],
+  [65, 582, 584],
+  [71, 290, 296],
   [74, 254, 256],
-  [361, 434, 436],
+  [357, 430, 432],
 ]
 
 ---
@@ -347,7 +344,7 @@ snippet: "
 "
 frame size: 25
 parameter count: 1
-bytecode array length: 704
+bytecode array length: 700
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -427,7 +424,7 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(17),
                 B(Mov), R(21), R(18),
-                B(Jump), U8(101),
+                B(Jump), U8(97),
                 B(Mov), R(21), R(5),
   /*   40 E> */ B(InvokeIntrinsic), U8(Runtime::k_IsJSReceiver), R(21), U8(1),
                 B(ToBooleanLogicalNot),
@@ -445,16 +442,13 @@ bytecodes: [
   /*   56 S> */ B(LdaSmi), I8(1),
                 B(Star), R(17),
                 B(Mov), R(8), R(18),
-                B(Jump), U8(54),
-                B(Jump), U8(40),
+                B(Jump), U8(50),
+                B(Jump), U8(36),
                 B(Star), R(21),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(21), U8(12), U8(13),
-                B(Star), R(20),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(20),
                 B(PushContext), R(21),
+                B(Star), R(20),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(6), U8(20),
                 B(JumpIfFalse), U8(6),
@@ -647,8 +641,8 @@ bytecodes: [
 ]
 constant pool: [
   Smi [102],
-  Smi [385],
-  Smi [480],
+  Smi [381],
+  Smi [476],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
@@ -676,11 +670,11 @@ constant pool: [
   Smi [25],
 ]
 handlers: [
-  [62, 643, 649],
-  [65, 598, 600],
-  [71, 297, 303],
+  [62, 639, 645],
+  [65, 594, 596],
+  [71, 293, 299],
   [74, 257, 259],
-  [364, 437, 439],
+  [360, 433, 435],
 ]
 
 ---
@@ -695,7 +689,7 @@ snippet: "
 "
 frame size: 25
 parameter count: 1
-bytecode array length: 694
+bytecode array length: 690
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -775,7 +769,7 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(17),
                 B(Mov), R(21), R(18),
-                B(Jump), U8(116),
+                B(Jump), U8(112),
                 B(Mov), R(21), R(5),
   /*   40 E> */ B(InvokeIntrinsic), U8(Runtime::k_IsJSReceiver), R(21), U8(1),
                 B(ToBooleanLogicalNot),
@@ -801,15 +795,12 @@ bytecodes: [
                 B(LdaZero),
                 B(Star), R(6),
                 B(JumpLoop), U8(150), I8(0),
-                B(Jump), U8(40),
+                B(Jump), U8(36),
                 B(Star), R(21),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(21), U8(12), U8(13),
-                B(Star), R(20),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(20),
                 B(PushContext), R(21),
+                B(Star), R(20),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(6), U8(22),
                 B(JumpIfFalse), U8(6),
@@ -991,8 +982,8 @@ bytecodes: [
 ]
 constant pool: [
   Smi [102],
-  Smi [400],
-  Smi [495],
+  Smi [396],
+  Smi [491],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
@@ -1018,11 +1009,11 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [62, 649, 655],
-  [65, 604, 606],
-  [71, 312, 318],
+  [62, 645, 651],
+  [65, 600, 602],
+  [71, 308, 314],
   [74, 272, 274],
-  [379, 452, 454],
+  [375, 448, 450],
 ]
 
 ---
@@ -1035,7 +1026,7 @@ snippet: "
 "
 frame size: 19
 parameter count: 1
-bytecode array length: 432
+bytecode array length: 428
 bytecodes: [
   /*   16 E> */ B(StackCheck),
                 B(LdaUndefined),
@@ -1080,16 +1071,13 @@ bytecodes: [
                 B(Star), R(14),
                 B(LdaZero),
                 B(Star), R(13),
-                B(Jump), U8(54),
-                B(Jump), U8(40),
+                B(Jump), U8(50),
+                B(Jump), U8(36),
                 B(Star), R(17),
                 B(Ldar), R(closure),
                 B(CreateCatchContext), R(17), U8(7), U8(8),
-                B(Star), R(16),
-                B(LdaTheHole),
-                B(SetPendingMessage),
-                B(Ldar), R(16),
                 B(PushContext), R(17),
+                B(Star), R(16),
                 B(LdaSmi), I8(2),
                 B(TestEqualStrict), R(4), U8(21),
                 B(JumpIfFalse), U8(6),
@@ -1248,10 +1236,10 @@ constant pool: [
   Smi [25],
 ]
 handlers: [
-  [13, 371, 377],
-  [16, 325, 327],
-  [30, 157, 163],
+  [13, 367, 373],
+  [16, 321, 323],
+  [30, 153, 159],
   [33, 117, 119],
-  [224, 234, 236],
+  [220, 230, 232],
 ]
 
