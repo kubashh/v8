@@ -137,10 +137,30 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildNewLocalWithContext(Scope* scope);
 
   void BuildGeneratorPrologue();
-  void BuildGeneratorSuspend(Suspend* expr, Register value,
+  void BuildGeneratorSuspend(int suspend_id, SuspendFlags flags, Register value,
                              RegisterList registers_to_save);
-  void BuildGeneratorResume(Suspend* expr, RegisterList registers_to_restore);
-  void BuildAbruptResume(Suspend* expr);
+  inline void BuildGeneratorSuspend(Suspend* expr, Register value,
+                                    RegisterList registers_to_save) {
+    BuildGeneratorSuspend(expr->suspend_id(), expr->flags(), value,
+                          registers_to_save);
+  }
+  void BuildAwait(int suspend_id, int position, SuspendFlags flags,
+                  Register input, RegisterList registers);
+  void BuildAwait(int suspend_id, int position, SuspendFlags flags,
+                  Register input);
+  void BuildGeneratorResume(int suspend_id, SuspendFlags flags,
+                            RegisterList registers_to_restore);
+  inline void BuildGeneratorResume(Suspend* expr,
+                                   RegisterList registers_to_restore) {
+    BuildGeneratorResume(expr->suspend_id(), expr->flags(),
+                         registers_to_restore);
+  }
+  void BuildAbruptResume(int suspend_id, int position, SuspendFlags flags,
+                         Suspend::OnAbruptResume on_abrup);
+  inline void BuildAbruptResume(Suspend* expr) {
+    BuildAbruptResume(expr->suspend_id(), expr->position(), expr->flags(),
+                      expr->on_abrupt_resume());
+  }
   void BuildGetIterator(Expression* iterable, IteratorType hint,
                         FeedbackSlot load_slot, FeedbackSlot call_slot,
                         FeedbackSlot async_load_slot,
@@ -282,6 +302,14 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   Register generator_object_;
   Register generator_state_;
   int loop_depth_;
+
+  inline bool is_await_uncaught() const {
+    DCHECK(catch_prediction_ != HandlerTable::UNCAUGHT);
+    return catch_prediction_ == HandlerTable::ASYNC_AWAIT;
+  }
+
+  class CatchPredictionScope;
+  HandlerTable::CatchPrediction catch_prediction_;
 };
 
 }  // namespace interpreter
