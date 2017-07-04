@@ -798,7 +798,8 @@ BytecodeGenerator::BytecodeGenerator(CompilationInfo* info)
       generator_jump_table_(nullptr),
       generator_object_(),
       generator_state_(),
-      loop_depth_(0) {
+      loop_depth_(0),
+      catch_prediction_(HandlerTable::UNCAUGHT) {
   DCHECK_EQ(closure_scope(), closure_scope()->GetClosureScope());
   if (info->is_block_coverage_enabled()) {
     DCHECK(FLAG_block_coverage);
@@ -1576,7 +1577,17 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
-  TryCatchBuilder try_control_builder(builder(), stmt->catch_prediction());
+  // Update catch prediction tracking. If a try/catch statement is marked as
+  // UNCAUGHT, it is meant to rethrow the exception, and so depends on the
+  // outer catch prediction state for all internal purposes. Thus, the catch
+  // prediction state is not updated for UNCAUGHT try/catch statements.
+  const auto outer_catch_prediction = catch_prediction();
+  if (stmt->catch_prediction() != HandlerTable::UNCAUGHT) {
+    set_catch_prediction(stmt->catch_prediction());
+  }
+  const auto inner_catch_prediction = catch_prediction();
+
+  TryCatchBuilder try_control_builder(builder(), inner_catch_prediction);
 
   // Preserve the context in a dedicated register, so that it can be restored
   // when the handler is entered by the stack-unwinding machinery.
@@ -1592,13 +1603,25 @@ void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
     Visit(stmt->try_block());
   }
   try_control_builder.EndTry();
+  set_catch_prediction(outer_catch_prediction);
 
   // Create a catch scope that binds the exception.
   BuildNewLocalCatchContext(stmt->scope());
   builder()->StoreAccumulatorInRegister(context);
 
   // If requested, clear message object as we enter the catch block.
-  if (stmt->clear_pending_message()) {
+  if (inner_catch_prediction != HandlerTable::UNCAUGHT) {
+    // If this handler is not going to simply rethrow the exception, clear the
+    // isolate's pending exception message before executing the catch_block.
+    // In the normal use case, this flag is always on because the message object
+    // is not needed anymore when entering the catch block and should not be
+    // kept alive.
+    // The use case where the flag is off is when the catch block is guaranteed
+    // to rethrow the caught exception (using %ReThrow), which reuses the
+    // pending message instead of generating a new one.
+    // (When the catch block doesn't rethrow but is guaranteed to perform an
+    // ordinary throw, not clearing the old message is safe but not very
+    // useful.)
     builder()->LoadTheHole().SetPendingMessage();
   }
 
@@ -1611,7 +1634,7 @@ void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitTryFinallyStatement(TryFinallyStatement* stmt) {
-  TryFinallyBuilder try_control_builder(builder(), stmt->catch_prediction());
+  TryFinallyBuilder try_control_builder(builder(), catch_prediction());
 
   // We keep a record of all paths that enter the finally-block to be able to
   // dispatch to the correct continuation point after the statements in the
@@ -3249,15 +3272,48 @@ void BytecodeGenerator::VisitCallNew(CallNew* expr) {
   }
 }
 
+int BytecodeGenerator::UpdateCallRuntimeContextIndex(int context_index) {
+  // To support catch prediction within async/await:
+  //
+  // BytecodeGenerator models catch prediction (see VisitTryCatchstatement).
+  // Certain runtime calls need to be rewritten to invoke different functions,
+  // depending on the currently tracked catch prediction state. Take the
+  // following two cases of catch prediction:
+  //
+  // try { await fn(); } catch (e) { }
+  // try { await fn(); } finally { }
+  //
+  // When parsing the await that we want to mark as caught or uncaught, it's
+  // not yet known whether it will be followed by a 'finally' or a 'catch.
+  // The BytecodeGenerator has learned whether or not this Await is caught or
+  // not, and is responsible for invoking the correct function depending on
+  // those findings. It does that here.
+  if (catch_prediction() == HandlerTable::ASYNC_AWAIT) {
+    switch (context_index) {
+      case Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX:
+        context_index = Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX;
+        break;
+      case Context::ASYNC_GENERATOR_AWAIT_CAUGHT:
+        context_index = Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT;
+        break;
+      default:
+        break;
+    }
+  }
+  return context_index;
+}
+
 void BytecodeGenerator::VisitCallRuntime(CallRuntime* expr) {
   if (expr->is_jsruntime()) {
+    int context_index = UpdateCallRuntimeContextIndex(expr->context_index());
+
     RegisterList args = register_allocator()->NewGrowableRegisterList();
     // Allocate a register for the receiver and load it with undefined.
     // TODO(leszeks): If CallJSRuntime always has an undefined receiver, use the
     // same mechanism as CallUndefinedReceiver.
     BuildPushUndefinedIntoRegisterList(&args);
     VisitArguments(expr->arguments(), &args);
-    builder()->CallJSRuntime(expr->context_index(), args);
+    builder()->CallJSRuntime(context_index, args);
   } else {
     // Evaluate all arguments to the runtime call.
     RegisterList args = register_allocator()->NewGrowableRegisterList();
