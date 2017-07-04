@@ -91,6 +91,30 @@
       "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "690f3687_03d4c32f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3272,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-04T14:36:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d67e045_aed95e9a",
+      "range": {
+        "startLine": 3263,
+        "startChar": 6,
+        "endLine": 3272,
+        "endChar": 7
+      },
+      "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

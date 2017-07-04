@@ -116,6 +116,30 @@
       "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5888538_32574a42",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-04T14:36:03Z",
+      "side": 0,
+      "message": "No, these came from the TryCatchStatement\u0027s `clear_pending_message()` method no longer returning the correct value. I\u0027ve addressed it in the last patch.",
+      "parentUuid": "06324533_e7495d4c",
+      "range": {
+        "startLine": 395,
+        "startChar": 26,
+        "endLine": 395,
+        "endChar": 27
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
