@@ -282,6 +282,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   Register generator_object_;
   Register generator_state_;
   int loop_depth_;
+
+  HandlerTable::CatchPrediction catch_prediction_;
 };
 
 }  // namespace interpreter
