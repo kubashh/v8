@@ -127,8 +127,8 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
 // Called by the parser from the desugaring of 'await' when catch
 // prediction indicates that there is a locally surrounding catch block.
 TF_BUILTIN(AsyncFunctionAwaitCaught, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 3);
-  Node* const generator = Parameter(Descriptor::kGenerator);
+  CSA_ASSERT_JS_ARGC_EQ(this, 2);
+  Node* const generator = Parameter(Descriptor::kReceiver);
   Node* const awaited = Parameter(Descriptor::kAwaited);
   Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
   Node* const context = Parameter(Descriptor::kContext);
@@ -142,8 +142,8 @@ TF_BUILTIN(AsyncFunctionAwaitCaught, AsyncFunctionBuiltinsAssembler) {
 // Called by the parser from the desugaring of 'await' when catch
 // prediction indicates no locally surrounding catch block.
 TF_BUILTIN(AsyncFunctionAwaitUncaught, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 3);
-  Node* const generator = Parameter(Descriptor::kGenerator);
+  CSA_ASSERT_JS_ARGC_EQ(this, 2);
+  Node* const generator = Parameter(Descriptor::kReceiver);
   Node* const awaited = Parameter(Descriptor::kAwaited);
   Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
   Node* const context = Parameter(Descriptor::kContext);
