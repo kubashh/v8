@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1f25d60_32836351",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-04T12:46:31Z",
+      "side": 1,
+      "message": "Please add a setter/getter for catch_prediction and use them here and below.",
+      "range": {
+        "startLine": 1580,
+        "startChar": 57,
+        "endLine": 1580,
+        "endChar": 74
+      },
+      "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82684c00_5d286a56",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-04T12:46:31Z",
+      "side": 1,
+      "message": "Please keep the comment about why we use the outer block prediction for uncaught",
+      "range": {
+        "startLine": 1581,
+        "startChar": 12,
+        "endLine": 1581,
+        "endChar": 28
+      },
+      "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0843105_70dc3e1d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-04T12:46:31Z",
+      "side": 1,
+      "message": "Please add a comment here stating why we use the outer prediction for finally",
+      "range": {
+        "startLine": 1620,
+        "startChar": 50,
+        "endLine": 1620,
+        "endChar": 68
+      },
+      "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d67e045_aed95e9a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3272,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-04T12:46:31Z",
+      "side": 1,
+      "message": "Could you move this to a separate function which returns the new value of  context_index and add back the comment to that function that explains why it\u0027s necessary.",
+      "range": {
+        "startLine": 3263,
+        "startChar": 6,
+        "endLine": 3272,
+        "endChar": 7
+      },
+      "revId": "fb9337895f7a44d2cc09c1836300babd92b29bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
