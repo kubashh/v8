@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "95d0edb9_f009d2f2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-05T14:11:07Z",
+      "side": 1,
+      "message": "This happens above the TryCatchBuilder declaration, because TryCatchBuilder uses the stored catch prediction value (used by MarkHandler() in TryCatchBuilder::EndTry()).\n\nIt might be hard/awkward to make it visually clear that it only applies to the try block. Some options: add the catch prediction as a parameter to EndTry(), or add add an accessor to set the catch_prediction_ bit after construction. Both of these are a bit awkward, though.\n\nIf all else fails, how about just a comment describing the lifetime of the updated catch prediction?",
+      "parentUuid": "498154f6_c45ed59b",
+      "range": {
+        "startLine": 1580,
+        "startChar": 2,
+        "endLine": 1582,
+        "endChar": 73
+      },
+      "revId": "0d7a0e26251fba02ba48aa1a551bc96c6ee78142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7eae172_b10ec993",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "0d7a0e26251fba02ba48aa1a551bc96c6ee78142",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6399979_4f2e18aa",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-05T14:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7eae172_b10ec993",
+      "range": {
+        "startLine": 1608,
+        "startChar": 4,
+        "endLine": 1618,
+        "endChar": 15
+      },
+      "revId": "0d7a0e26251fba02ba48aa1a551bc96c6ee78142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
