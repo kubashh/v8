@@ -96,6 +96,52 @@
     },
     {
       "key": {
+        "uuid": "3b5824ca_24f2488f",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-05T09:38:41Z",
+      "side": 0,
+      "message": "Can you add this comment to the top of VisitTryFinallyStatement where  catch_prediction() is passed to the TryFinallyBuilder.",
+      "range": {
+        "startLine": 383,
+        "startChar": 2,
+        "endLine": 384,
+        "endChar": 78
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffd823b4_8f748bc3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-05T09:38:41Z",
+      "side": 0,
+      "message": "Any reason to remove this - I think it\u0027s clearer to have the clear_pending_message() invariant in the ast node based on it\u0027s own catch prediction rather than having to keep the local inner_catch_prediction around for this and do it here.",
+      "range": {
+        "startLine": 1601,
+        "startChar": 6,
+        "endLine": 1601,
+        "endChar": 35
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06324533_e7495d4c",
         "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
         "patchSetId": 2
