@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "498154f6_c45ed59b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-05T14:00:50Z",
+      "side": 1,
+      "message": "nit - could you move this into the block scoped try (just above ControlScopeForTryCatch) ?",
+      "range": {
+        "startLine": 1580,
+        "startChar": 2,
+        "endLine": 1582,
+        "endChar": 73
+      },
+      "revId": "0d7a0e26251fba02ba48aa1a551bc96c6ee78142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7eae172_b10ec993",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-05T14:00:50Z",
+      "side": 1,
+      "message": "This comment should probably live in ShouldClearPendingException (or augment the comment you\u0027ve currently got there).",
+      "range": {
+        "startLine": 1608,
+        "startChar": 4,
+        "endLine": 1618,
+        "endChar": 15
+      },
+      "revId": "0d7a0e26251fba02ba48aa1a551bc96c6ee78142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
