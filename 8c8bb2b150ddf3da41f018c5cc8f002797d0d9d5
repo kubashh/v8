@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e8ca16b5_3c8534a9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-05T11:35:55Z",
+      "side": 0,
+      "message": "Good point. How about having a ShouldClearPendingMessage(CatchPrediction outer_catch_prediction) on the ast node which does the decision. In a similar vain, how about having a GetCatchPrediction(CatchPrediction outer_catch_prediction) on the AST node (instead of the catch_prediction accessor which could be removed) and using that above to set our current catch prediction - this would keep all the logic for dealing with UNCAUGHT in one place - WDYT?",
+      "parentUuid": "89cfbe07_e4ca6489",
+      "range": {
+        "startLine": 1601,
+        "startChar": 6,
+        "endLine": 1601,
+        "endChar": 35
+      },
+      "revId": "8c8bb2b150ddf3da41f018c5cc8f002797d0d9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06324533_e7495d4c",
         "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
         "patchSetId": 2
