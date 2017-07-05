@@ -1884,10 +1884,18 @@ class Assembler : public AssemblerBase {
   // Load Scaled Address instruction.
   void lsa(Register rd, Register rt, Register rs, uint8_t sa);
 
-  // Helpers.
-  void LoadRegPlusOffsetToAt(const MemOperand& src);
-  int32_t LoadRegPlusUpperOffsetPartToAt(const MemOperand& src);
-  int32_t LoadUpperOffsetForTwoMemoryAccesses(const MemOperand& src);
+  // Readable constants for base and offset adjustment helper, these indicate if
+  // aside from offset, another value like offset + 4 should fit into int16.
+  enum class OffsetAccessType : bool {
+    SINGLE_ACCESS = false,
+    TWO_ACCESSES = true
+  };
+
+  // Helper function for memory load/store using base register and offset.
+  void AdjustBaseAndOffset(
+      MemOperand& src,
+      OffsetAccessType access_type = OffsetAccessType::SINGLE_ACCESS,
+      int second_access_add_to_offset = 4);
 
   // Relocation for a type-recording IC has the AST id added to it.  This
   // member variable is a way to pass the information from the call site to
