@@ -488,6 +488,24 @@ Reduction JSCallReducer::ReduceReflectGetPrototypeOf(Node* node) {
   return ReduceObjectGetPrototype(node, target);
 }
 
+bool CanInlineArrayIteratingBuiltin(Handle<Map> receiver_map) {
+  Isolate* const isolate = receiver_map->GetIsolate();
+  if (!receiver_map->prototype()->IsJSArray()) return false;
+  Handle<JSArray> receiver_prototype(JSArray::cast(receiver_map->prototype()),
+                                     isolate);
+  // Ensure that all prototypes of the {receiver} are stable.
+  for (PrototypeIterator it(isolate, receiver_prototype, kStartAtReceiver);
+       !it.IsAtEnd(); it.Advance()) {
+    Handle<JSReceiver> current = PrototypeIterator::GetCurrent<JSReceiver>(it);
+    if (!current->map()->is_stable()) return false;
+  }
+  return receiver_map->instance_type() == JS_ARRAY_TYPE &&
+         IsFastElementsKind(receiver_map->elements_kind()) &&
+         (!receiver_map->is_prototype_map() || receiver_map->is_stable()) &&
+         isolate->IsFastArrayConstructorPrototypeChainIntact() &&
+         isolate->IsAnyInitialArrayPrototype(receiver_prototype);
+}
+
 Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
                                             Node* node) {
   if (!FLAG_turbo_inline_array_builtins) return NoChange();
@@ -515,14 +533,19 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
   if (receiver_maps.size() != 1) return NoChange();
   Handle<Map> receiver_map(receiver_maps[0]);
   ElementsKind kind = receiver_map->elements_kind();
-  // TODO(danno): Handle holey Smi and Object fast elements kinds and double
-  // packed.
-  if (!IsFastPackedElementsKind(kind) || IsDoubleElementsKind(kind)) {
+  // TODO(danno): Handle double packed elements
+  if (!IsFastElementsKind(kind) ||
+      !CanInlineArrayIteratingBuiltin(receiver_map)) {
     return NoChange();
   }
 
   // TODO(danno): forEach can throw. Hook up exceptional edges.
   if (NodeProperties::IsExceptionalCall(node)) return NoChange();
+
+  // Install code dependencies on the {receiver} prototype maps and the
+  // global array protector cell.
+  dependencies()->AssumePropertyCell(factory()->array_protector());
+  dependencies()->AssumePrototypeMapsStable(receiver_map);
 
   Node* k = jsgraph()->ZeroConstant();
 
@@ -552,13 +575,13 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
       {receiver, fncallback, this_arg, k, original_length});
   const int stack_parameters = static_cast<int>(checkpoint_params.size());
 
-  Node* frame_state = CreateJavaScriptBuiltinContinuationFrameState(
+  Node* eager_frame_state = CreateJavaScriptBuiltinContinuationFrameState(
       jsgraph(), function, Builtins::kArrayForEachLoopEagerDeoptContinuation,
       node->InputAt(0), context, &checkpoint_params[0], stack_parameters,
       outer_frame_state, ContinuationFrameStateMode::EAGER);
 
-  effect =
-      graph()->NewNode(common()->Checkpoint(), frame_state, effect, control);
+  effect = graph()->NewNode(common()->Checkpoint(), eager_frame_state, effect,
+                            control);
 
   // Make sure the map hasn't changed during the iteration
   Node* orig_map = jsgraph()->HeapConstant(receiver_map);
@@ -592,14 +615,41 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
   Node* next_k =
       graph()->NewNode(simplified()->NumberAdd(), k, jsgraph()->Constant(1));
   checkpoint_params[3] = next_k;
-  frame_state = CreateJavaScriptBuiltinContinuationFrameState(
+
+  Node* hole_true = nullptr;
+  Node* hole_false = nullptr;
+  Node* effect_true = effect;
+
+  if (IsHoleyElementsKind(kind)) {
+    // Holey elements kind require a hole check and skipping of the element in
+    // the case of a hole.
+    Node* check = graph()->NewNode(simplified()->ReferenceEqual(), element,
+                                   jsgraph()->TheHoleConstant());
+    Node* branch =
+        graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
+    hole_true = graph()->NewNode(common()->IfTrue(), branch);
+    hole_false = graph()->NewNode(common()->IfFalse(), branch);
+    control = hole_false;
+  }
+
+  Node* lazy_frame_state = CreateJavaScriptBuiltinContinuationFrameState(
       jsgraph(), function, Builtins::kArrayForEachLoopLazyDeoptContinuation,
       node->InputAt(0), context, &checkpoint_params[0], stack_parameters,
       outer_frame_state, ContinuationFrameStateMode::LAZY);
-
   control = effect = graph()->NewNode(
       javascript()->Call(5, p.frequency()), fncallback, this_arg, element, k,
-      receiver, context, frame_state, effect, control);
+      receiver, context, lazy_frame_state, effect, control);
+
+  if (IsHoleyElementsKind(kind)) {
+    Node* after_call_control = control;
+    Node* after_call_effect = effect;
+    control = hole_true;
+    effect = effect_true;
+
+    control = graph()->NewNode(common()->Merge(2), control, after_call_control);
+    effect = graph()->NewNode(common()->EffectPhi(2), effect, after_call_effect,
+                              control);
+  }
 
   k = next_k;
 
