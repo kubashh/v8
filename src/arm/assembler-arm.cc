@@ -2775,10 +2775,10 @@ static bool FitsVmovFPImmediate(Double d, uint32_t* encoding) {
   return true;
 }
 
-void Assembler::vmov(const SwVfpRegister dst, float imm) {
+void Assembler::vmov(const SwVfpRegister dst, Float32 imm) {
   uint32_t enc;
   if (CpuFeatures::IsSupported(VFPv3) &&
-      FitsVmovFPImmediate(Double(imm), &enc)) {
+      FitsVmovFPImmediate(Double(imm.get_scalar()), &enc)) {
     CpuFeatureScope scope(this, VFPv3);
     // The float can be encoded in the instruction.
     //
@@ -2792,7 +2792,7 @@ void Assembler::vmov(const SwVfpRegister dst, float imm) {
   } else {
     UseScratchRegisterScope temps(this);
     Register scratch = temps.Acquire();
-    mov(scratch, Operand(bit_cast<int32_t>(imm)));
+    mov(ip, Operand(imm.get_bits()));
     vmov(dst, scratch);
   }
 }
