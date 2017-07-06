@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0c725ff_756948b9",
+        "filename": "test/inspector/cpu-profiler/coverage-block-expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-06T14:28:18Z",
+      "side": 1,
+      "message": "Why isBlockCoverage was changed to false?",
+      "revId": "62c24075e4ed556f605013e780158473567ac908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43999831_91220d94",
+        "filename": "test/inspector/cpu-profiler/coverage-block-expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-06T14:28:18Z",
+      "side": 1,
+      "message": "Why this count is not 8 (there was a block with count 8 before)?",
+      "revId": "62c24075e4ed556f605013e780158473567ac908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
