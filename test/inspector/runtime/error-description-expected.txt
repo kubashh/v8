@@ -1,0 +1,53 @@
+Tests that error object has description
+
+Running test: testPromiseReject
+{
+    id : <messageId>
+    result : {
+        exceptionDetails : {
+            columnNumber : 0
+            exception : {
+                description : Error: asdf     at <anonymous>:1:16
+                type : object
+                value : {
+                }
+            }
+            exceptionId : <exceptionId>
+            lineNumber : 0
+            text : Uncaught (in promise)
+        }
+        result : {
+            description : Error: asdf     at <anonymous>:1:16
+            type : object
+            value : {
+            }
+        }
+    }
+}
+
+Running test: testErrorByValue
+{
+    id : <messageId>
+    result : {
+        result : {
+            description : Error: asdf     at <anonymous>:1:1
+            type : object
+            value : {
+            }
+        }
+    }
+}
+
+Running test: testError
+{
+    id : <messageId>
+    result : {
+        result : {
+            className : Error
+            description : Error: asdf     at <anonymous>:1:1
+            objectId : <objectId>
+            subtype : error
+            type : object
+        }
+    }
+}

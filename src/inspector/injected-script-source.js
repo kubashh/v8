@@ -743,6 +743,10 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
                 break;
             }
         }
+        // Provide user-friendly error description.
+        if (InjectedScriptHost.subtype(object) === "error") {
+            this.description = injectedScript._describe(object);
+        }
 
         return;
     }
