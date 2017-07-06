@@ -77,6 +77,9 @@ class JSCallReducer final : public AdvancedReducer {
 
   Reduction ReduceSoftDeoptimize(Node* node, DeoptimizeReason reason);
 
+  void GenerateEmptyPrototypeElementCheck(Node* frame_state, Node* array,
+                                          Node** effect, Node** control);
+
   Graph* graph() const;
   JSGraph* jsgraph() const { return jsgraph_; }
   Isolate* isolate() const;
