@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ee69797_a935e298",
+        "filename": "src/arm/macro-assembler-arm.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T09:14:19Z",
+      "side": 1,
+      "message": "The reason why I\u0027m not naming this Push is that the other Push\u0027s will move into TurboAssembler, but this one will stay in MacroAssembler. If I would call this Push as well, then all uses of the other Push\u0027s through MacroAssembler (which subclasses TurboAssembler) would have be to be qualified using TurboAssembler::.",
+      "range": {
+        "startLine": 335,
+        "startChar": 41,
+        "endLine": 335,
+        "endChar": 0
+      },
+      "revId": "2a21b190e6bb2a5e182d3d6e0dea770bdb7c25fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
