@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7c4d45e_f1830598",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-06T07:33:50Z",
+      "side": 1,
+      "message": "In order to reduce nesting and indentation, I would prefer a \"if (!ok()) break;\" here. We could then even remove the \"ok()\" check from the for loop.",
+      "revId": "7f150bc3c783502f58dfa5698c725fc27539577a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
