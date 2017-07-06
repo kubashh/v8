@@ -2732,10 +2732,10 @@ static bool FitsVmovFPImmediate(Double d, uint32_t* encoding) {
   return true;
 }
 
-void Assembler::vmov(const SwVfpRegister dst, float imm) {
+void Assembler::vmov(const SwVfpRegister dst, Float32 imm) {
   uint32_t enc;
   if (CpuFeatures::IsSupported(VFPv3) &&
-      FitsVmovFPImmediate(Double(imm), &enc)) {
+      FitsVmovFPImmediate(Double(imm.get_scalar()), &enc)) {
     CpuFeatureScope scope(this, VFPv3);
     // The float can be encoded in the instruction.
     //
@@ -2747,7 +2747,7 @@ void Assembler::vmov(const SwVfpRegister dst, float imm) {
     dst.split_code(&vd, &d);
     emit(al | 0x1D * B23 | d * B22 | 0x3 * B20 | vd * B12 | 0x5 * B9 | enc);
   } else {
-    mov(ip, Operand(bit_cast<int32_t>(imm)));
+    mov(ip, Operand(imm.get_bits()));
     vmov(dst, ip);
   }
 }

@@ -46,6 +46,7 @@
 #include "src/arm/constants-arm.h"
 #include "src/assembler.h"
 #include "src/double.h"
+#include "src/float.h"
 
 namespace v8 {
 namespace internal {
@@ -1165,7 +1166,7 @@ class Assembler : public AssemblerBase {
             SwVfpRegister last,
             Condition cond = al);
 
-  void vmov(const SwVfpRegister dst, float imm);
+  void vmov(const SwVfpRegister dst, Float32 imm);
   void vmov(const DwVfpRegister dst,
             Double imm,
             const Register scratch = no_reg);
