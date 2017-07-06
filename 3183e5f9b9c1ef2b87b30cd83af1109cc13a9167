@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8920911_0a90f23b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "Please update w.r.t to the parts that you moved to a different CL.",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71553d8f_8f43945c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "\"We never emit abrupt resume points for yield*.\"",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74e4f837_155b6138",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "Please add an explaining comment.",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8e5fdc6_6defda59",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4138,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "This seems unused.",
+      "range": {
+        "startLine": 4138,
+        "startChar": 1,
+        "endLine": 4138,
+        "endChar": 0
+      },
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f6792e9_b16c1fcb",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "With just two calls I think it\u0027s not worth having this function.",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86097d3c_d6655fcd",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 157,
+        "startChar": 3,
+        "endLine": 157,
+        "endChar": 0
+      },
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13bf49b7_ad443129",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de2f79ce_9ab935a9",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-06T11:53:25Z",
+      "side": 1,
+      "message": "DCHECK_NE",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
