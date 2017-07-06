@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "f006e225_a4d0bb0c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71553d8f_8f43945c",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74e4f837_155b6138",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "ad3fe825_6a17c3e4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74e4f837_155b6138",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8e5fdc6_6defda59",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 3
@@ -64,6 +100,30 @@
       "writtenOn": "2017-07-06T11:53:25Z",
       "side": 1,
       "message": "This seems unused.",
+      "range": {
+        "startLine": 4138,
+        "startChar": 1,
+        "endLine": 4138,
+        "endChar": 0
+      },
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171ff188_098f59ae",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4138,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done ---\n\nIt\u0027s used in the yield* CL --- I wasn\u0027t sure which one would land first, so it seemed simpler to keep them as close as possible.\n\nI\u0027ve dropped it, but I think that means this one ought to land before the yield* CL.",
+      "parentUuid": "c8e5fdc6_6defda59",
       "range": {
         "startLine": 4138,
         "startChar": 1,
@@ -93,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "45189200_97d6b66b",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f6792e9_b16c1fcb",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86097d3c_d6655fcd",
         "filename": "src/interpreter/bytecode-generator.h",
         "patchSetId": 3
@@ -116,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "d703440c_8cfd948b",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86097d3c_d6655fcd",
+      "range": {
+        "startLine": 157,
+        "startChar": 3,
+        "endLine": 157,
+        "endChar": 0
+      },
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13bf49b7_ad443129",
         "filename": "src/interpreter/bytecode-generator.h",
         "patchSetId": 3
@@ -133,6 +235,24 @@
     },
     {
       "key": {
+        "uuid": "1586d8a3_9fa895d9",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13bf49b7_ad443129",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de2f79ce_9ab935a9",
         "filename": "src/interpreter/bytecode-generator.h",
         "patchSetId": 3
@@ -144,6 +264,24 @@
       "writtenOn": "2017-07-06T11:53:25Z",
       "side": 1,
       "message": "DCHECK_NE",
+      "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34b806c6_946f096b",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-06T13:03:50Z",
+      "side": 1,
+      "message": "The thing with DCHECK_NE is it requires that we have a function to serialize the enum. We also don\u0027t require that it tell us what the value was in lieu of the expected value, because if the assertion fails, we know the value is HandlerTable::UNCAUGHT.\n\nSo, we get some savings by not using DCHECK_NE here (and for other enum classes if the contraint above holds).",
+      "parentUuid": "de2f79ce_9ab935a9",
       "revId": "3183e5f9b9c1ef2b87b30cd83af1109cc13a9167",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
