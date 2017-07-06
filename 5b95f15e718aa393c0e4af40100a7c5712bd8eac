@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c533149_1d916702",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6164,
+      "author": {
+        "id": 1212320
+      },
+      "writtenOn": "2017-07-06T12:34:33Z",
+      "side": 1,
+      "message": "Maybe add comments that would explain the values.",
+      "revId": "5b95f15e718aa393c0e4af40100a7c5712bd8eac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8eb9c34_c482b49d",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6187,
+      "author": {
+        "id": 1212320
+      },
+      "writtenOn": "2017-07-06T12:34:33Z",
+      "side": 1,
+      "message": "Possible problem here is that we are missing initial values in destination register so the test doesn\u0027t check if remaining bits are overwritten with zeros.",
+      "revId": "5b95f15e718aa393c0e4af40100a7c5712bd8eac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3eb4f6_99b8b36f",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6213,
+      "author": {
+        "id": 1212320
+      },
+      "writtenOn": "2017-07-06T12:34:33Z",
+      "side": 1,
+      "message": "Also maybe add comments here as well as for mips64.",
+      "revId": "5b95f15e718aa393c0e4af40100a7c5712bd8eac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
