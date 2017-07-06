@@ -16,6 +16,24 @@
       "revId": "7f150bc3c783502f58dfa5698c725fc27539577a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "982cb6ce_7230c527",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-06T11:43:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7c4d45e_f1830598",
+      "revId": "7f150bc3c783502f58dfa5698c725fc27539577a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
