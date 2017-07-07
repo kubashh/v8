@@ -1060,7 +1060,7 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
   // Save callee-saved double registers.
   __ MultiPushDoubles(kCalleeSavedDoubles);
   // Set up the reserved register for 0.0.
-  __ LoadDoubleLiteral(kDoubleRegZero, 0.0, r0);
+  __ LoadDoubleLiteral(kDoubleRegZero, Double(0.0), r0);
 
   // Push a frame with special values setup to mark it as an entry frame.
   // r3: code entry
