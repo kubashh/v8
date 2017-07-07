@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad273bf_1f85664d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-07T04:06:46Z",
+      "side": 1,
+      "message": "Does this loop add anything to the logic just below? If we are verifying that our prototype is the initial array prototype, and that the initial array prototype chain is intact, then this code is unnecessary. What we support for the optimization at hand is precisely this chain of prototypes: initial_array_prototype-\u003einitial_object_prototype-\u003enull.\n\nI definitely sympathize with the wish for additional generality here and fervently await the day we support long chains of prototypes in our array optimizations that the code above genuflects toward. :D",
+      "range": {
+        "startLine": 497,
+        "startChar": 2,
+        "endLine": 501,
+        "endChar": 3
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aefcfda9_95bb651b",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-07T04:06:46Z",
+      "side": 1,
+      "message": "Awesome...! I think some of this is extra, like:\n\n(!receiver_map-\u003eis_prototype_map() || receiver_map-\u003eis_stable())\n\nshould be covered by the condition that \n\nisolate-\u003eIsAnyInitialArrayPrototype(receiver_prototype)\n\nholds, and that \n\nisolate-\u003eIsFastArrayConstructorPrototypeChainIntact()\n\nholds, right? I mean, if the receiver prototype appears as a prototype, then by the rules of our system it\u0027s map should be a prototype map (if I understand correctly). Seems more like \"receiver_map-\u003eis_prototype_map()\" could/should appear as a DCHECK than as a necessary part of the predicate above.",
+      "range": {
+        "startLine": 502,
+        "startChar": 3,
+        "endLine": 506,
+        "endChar": 65
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036ace9b_3e88ea68",
+        "filename": "test/mjsunit/optimized-foreach-holey-3.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-07T04:06:46Z",
+      "side": 1,
+      "message": "Boom! Nice.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 10
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
