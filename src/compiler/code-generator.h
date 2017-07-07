@@ -289,6 +289,8 @@ class CodeGenerator final : public GapResolver::Assembler {
     int pc_offset() const { return pc_offset_; }
     DeoptimizeKind kind() const { return kind_; }
     DeoptimizeReason reason() const { return reason_; }
+    int trampoline_pc() { return trampoline_pc_; }
+    void set_trampoline_pc(int t_pc) { trampoline_pc_ = t_pc; }
 
    private:
     BailoutId bailout_id_;
@@ -296,6 +298,7 @@ class CodeGenerator final : public GapResolver::Assembler {
     int pc_offset_;
     DeoptimizeKind kind_;
     DeoptimizeReason reason_;
+    int trampoline_pc_;
   };
 
   struct HandlerInfo {
