@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3d1897fb_0a42f67d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7a3e6c9_0d5be613",
+      "range": {
+        "startLine": 2597,
+        "startChar": 46,
+        "endLine": 2598,
+        "endChar": 64
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8160e5d_45108191",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "188e94a3_e14bf0e1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2616,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8160e5d_45108191",
+      "range": {
+        "startLine": 2616,
+        "startChar": 31,
+        "endLine": 2616,
+        "endChar": 63
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1289213d_eb40eef0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2661,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d322378_570c8c2a",
+      "range": {
+        "startLine": 2659,
+        "startChar": 42,
+        "endLine": 2661,
+        "endChar": 75
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b3a827c_a3238f8b",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d13c85_ac754fea",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b3a827c_a3238f8b",
+      "range": {
+        "startLine": 4144,
+        "startChar": 24,
+        "endLine": 4146,
+        "endChar": 58
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bc873813_87f35285",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4158,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74ac97e6_cd7a495e",
+      "range": {
+        "startLine": 4158,
+        "startChar": 3,
+        "endLine": 4158,
+        "endChar": 51
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b36f163_31d3a113",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -128,6 +248,30 @@
       "writtenOn": "2017-07-07T10:42:26Z",
       "side": 1,
       "message": "Please move all this after the suspend to keep the code dealing with the runtime call in one place.",
+      "range": {
+        "startLine": 4153,
+        "startChar": 4,
+        "endLine": 4161,
+        "endChar": 0
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f874c2c5_f4a1f757",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4161,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "I\u0027ve actually moved it all to before the suspend, to be consistent with my proposed simplification of the suspend/resume primitives. It\u0027s also more consistent with the code that\u0027s generated already.\n\nMoving it to after would allow avoiding generation of a couple Star ops, though.",
+      "parentUuid": "6b36f163_31d3a113",
       "range": {
         "startLine": 4153,
         "startChar": 4,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "824b9ef4_0651a954",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b9b9aac_dfbd1946",
+      "range": {
+        "startLine": 4167,
+        "startChar": 4,
+        "endLine": 4182,
+        "endChar": 70
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfd5a954_03d8cff7",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "05c8f05f_fa30bd1e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4192,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfd5a954_03d8cff7",
+      "range": {
+        "startLine": 4192,
+        "startChar": 6,
+        "endLine": 4192,
+        "endChar": 38
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f24ce0d_4e38dd9d",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
@@ -206,6 +398,30 @@
       "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e786b3_035c4886",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-07T21:38:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f24ce0d_4e38dd9d",
+      "range": {
+        "startLine": 4203,
+        "startChar": 6,
+        "endLine": 4203,
+        "endChar": 39
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
