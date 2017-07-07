@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "9a16f3f7_e03522ae",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-07T12:55:51Z",
+      "side": 1,
+      "message": "You are right, I was reading the receiver_map as the map of the receiver\u0027s prototype for some reason. Sorry to complain about nothing!",
+      "parentUuid": "4103fd29_3ca2a891",
+      "range": {
+        "startLine": 502,
+        "startChar": 3,
+        "endLine": 506,
+        "endChar": 65
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "036ace9b_3e88ea68",
         "filename": "test/mjsunit/optimized-foreach-holey-3.js",
         "patchSetId": 4
