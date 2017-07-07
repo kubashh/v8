@@ -93,7 +93,7 @@ BUILTIN(MapIteratorPrototypeNext) {
   bool done = true;
   if (iterator->HasMore()) {
     done = false;
-    switch (Smi::cast(iterator->kind())->value()) {
+    switch (Smi::ToInt(iterator->kind())) {
       case JSMapIterator::kKindEntries:
         value = MakeEntryPair(isolate, handle(iterator->CurrentKey(), isolate),
                               handle(iterator->CurrentValue(), isolate));
@@ -185,7 +185,7 @@ BUILTIN(SetIteratorPrototypeNext) {
   if (iterator->HasMore()) {
     value = handle(iterator->CurrentKey(), isolate);
     done = false;
-    if (Smi::cast(iterator->kind())->value() == JSSetIterator::kKindEntries) {
+    if (Smi::ToInt(iterator->kind()) == JSSetIterator::kKindEntries) {
       value = MakeEntryPair(isolate, value, value);
     }
     iterator->MoveNext();
