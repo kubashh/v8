@@ -113,8 +113,7 @@ Reduction BranchElimination::ReduceDeoptimizeConditional(Node* node) {
     }
     return Replace(dead());
   }
-  return UpdateConditions(
-      node, conditions->AddCondition(zone_, condition, condition_is_true));
+  return UpdateConditions(node, conditions, condition, condition_is_true);
 }
 
 Reduction BranchElimination::ReduceIf(Node* node, bool is_true_branch) {
@@ -128,8 +127,7 @@ Reduction BranchElimination::ReduceIf(Node* node, bool is_true_branch) {
     return UpdateConditions(node, nullptr);
   }
   Node* condition = branch->InputAt(0);
-  return UpdateConditions(
-      node, from_branch->AddCondition(zone_, condition, is_true_branch));
+  return UpdateConditions(node, from_branch, condition, is_true_branch);
 }
 
 
@@ -224,6 +222,20 @@ Reduction BranchElimination::UpdateConditions(
   return NoChange();
 }
 
+Reduction BranchElimination::UpdateConditions(
+    Node* node, const ControlPathConditions* prev_conditions,
+    Node* current_condition, bool is_true_branch) {
+  const ControlPathConditions* original = node_conditions_.Get(node);
+  DCHECK(prev_conditions != nullptr && current_condition != nullptr);
+  if (original == nullptr ||
+      !original->Equals(prev_conditions, current_condition, is_true_branch)) {
+    const ControlPathConditions* new_condition =
+        prev_conditions->AddCondition(zone_, current_condition, is_true_branch);
+    node_conditions_.Set(node, new_condition);
+    return Changed(node);
+  }
+  return NoChange();
+}
 
 // static
 const BranchElimination::ControlPathConditions*
@@ -290,12 +302,8 @@ Maybe<bool> BranchElimination::ControlPathConditions::LookupCondition(
   return Nothing<bool>();
 }
 
-
-bool BranchElimination::ControlPathConditions::operator==(
-    const ControlPathConditions& other) const {
-  if (condition_count_ != other.condition_count_) return false;
-  BranchCondition* this_condition = head_;
-  BranchCondition* other_condition = other.head_;
+bool BranchElimination::ControlPathConditions::IsSamePath(
+    BranchCondition* this_condition, BranchCondition* other_condition) const {
   while (true) {
     if (this_condition == other_condition) return true;
     if (this_condition->condition != other_condition->condition ||
@@ -306,6 +314,26 @@ bool BranchElimination::ControlPathConditions::operator==(
     other_condition = other_condition->next;
   }
   UNREACHABLE();
+}
+
+bool BranchElimination::ControlPathConditions::operator==(
+    const ControlPathConditions& other) const {
+  if (condition_count_ != other.condition_count_) return false;
+  return IsSamePath(head_, other.head_);
+}
+
+bool BranchElimination::ControlPathConditions::Equals(
+    const ControlPathConditions* prev_conditions, const Node* curr_condition,
+    bool branch_condition) const {
+  if (condition_count_ != prev_conditions->condition_count_ + 1) return false;
+  // Check for the head
+  BranchCondition* this_condition = head_;
+  if (this_condition->condition != curr_condition ||
+      this_condition->is_true != branch_condition) {
+    return false;
+  }
+  // Check if the rest of the pat is the same.
+  return IsSamePath(head_->next, prev_conditions->head_);
 }
 
 Graph* BranchElimination::graph() const { return jsgraph()->graph(); }
