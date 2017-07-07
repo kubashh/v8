@@ -958,9 +958,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   // Load accumulator and dispatch table into registers.
   __ LoadRoot(kInterpreterAccumulatorRegister, Heap::kUndefinedValueRootIndex);
-  __ Move(
-      kInterpreterDispatchTableRegister,
-      ExternalReference::interpreter_dispatch_table_address(masm->isolate()));
+  __ Move(kInterpreterDispatchTableRegister,
+          ExternalReference::interpreter_dispatch_table_of_nop_address(
+              masm->isolate()));
 
   // Dispatch to the first bytecode handler for the function.
   __ movzxbp(rbx, Operand(kInterpreterBytecodeArrayRegister,
@@ -1226,9 +1226,9 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ Push(rbx);
 
   // Initialize dispatch table register.
-  __ Move(
-      kInterpreterDispatchTableRegister,
-      ExternalReference::interpreter_dispatch_table_address(masm->isolate()));
+  __ Move(kInterpreterDispatchTableRegister,
+          ExternalReference::interpreter_dispatch_table_of_nop_address(
+              masm->isolate()));
 
   // Get the bytecode array pointer from the frame.
   __ movp(kInterpreterBytecodeArrayRegister,

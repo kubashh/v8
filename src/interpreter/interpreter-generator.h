@@ -15,6 +15,10 @@ namespace interpreter {
 extern Handle<Code> GenerateBytecodeHandler(Isolate* isolate, Bytecode bytecode,
                                             OperandScale operand_scale);
 
+extern Handle<Code> GenerateNopBytecodeHandler(Isolate* isolate,
+                                               Bytecode bytecode,
+                                               OperandScale operand_scale);
+
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8

@@ -28,6 +28,12 @@ class SetupInterpreter {
   static void InstallBytecodeHandler(Isolate* isolate, Address* dispatch_table,
                                      Bytecode bytecode,
                                      OperandScale operand_scale);
+  // Generates handler for given |bytecode| and |operand_scale|
+  // and installs it into the |dispatch_table|.
+  static void InstallNopBytecodeHandler(Isolate* isolate,
+                                        Address* dispatch_table,
+                                        Bytecode bytecode,
+                                        OperandScale operand_scale);
 };
 
 }  // namespace interpreter

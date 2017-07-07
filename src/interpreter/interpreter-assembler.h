@@ -234,7 +234,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   Bytecode bytecode() const { return bytecode_; }
   static bool TargetSupportsUnalignedAccess();
 
- private:
+ public:
   // Returns a tagged pointer to the current function's BytecodeArray object.
   compiler::Node* BytecodeArrayTaggedPointer();
 
@@ -360,6 +360,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   bool disable_stack_check_across_call_;
   compiler::Node* stack_pointer_before_call_;
 
+ private:
   DISALLOW_COPY_AND_ASSIGN(InterpreterAssembler);
 };
 

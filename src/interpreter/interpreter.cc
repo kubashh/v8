@@ -74,6 +74,7 @@ class InterpreterCompilationJob final : public CompilationJob {
 
 Interpreter::Interpreter(Isolate* isolate) : isolate_(isolate) {
   memset(dispatch_table_, 0, sizeof(dispatch_table_));
+  memset(dispatch_table_of_nop_, 0, sizeof(dispatch_table_of_nop_));
 
   if (FLAG_trace_ignition_dispatches) {
     static const int kBytecodeCount = static_cast<int>(Bytecode::kLast) + 1;
@@ -119,6 +120,18 @@ void Interpreter::IterateDispatchTable(RootVisitor* v) {
     v->VisitRootPointer(Root::kDispatchTable, &code);
     if (code != old_code) {
       dispatch_table_[i] = reinterpret_cast<Code*>(code)->entry();
+    }
+  }
+
+  for (int i = 0; i < kDispatchTableSize; i++) {
+    Address code_entry = dispatch_table_of_nop_[i];
+    Object* code = code_entry == nullptr
+                       ? nullptr
+                       : Code::GetCodeFromTargetAddress(code_entry);
+    Object* old_code = code;
+    v->VisitRootPointer(Root::kDispatchTable, &code);
+    if (code != old_code) {
+      dispatch_table_of_nop_[i] = reinterpret_cast<Code*>(code)->entry();
     }
   }
 }
@@ -211,7 +224,7 @@ CompilationJob* Interpreter::NewCompilationJob(CompilationInfo* info) {
 }
 
 bool Interpreter::IsDispatchTableInitialized() {
-  return dispatch_table_[0] != nullptr;
+  return dispatch_table_[0] != nullptr && dispatch_table_of_nop_[0] != nullptr;
 }
 
 const char* Interpreter::LookupNameOfBytecodeHandler(Code* code) {

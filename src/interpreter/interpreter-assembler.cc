@@ -64,7 +64,8 @@ InterpreterAssembler::~InterpreterAssembler() {
   // If the following check fails the handler does not use the
   // accumulator in the way described in the bytecode definitions in
   // bytecodes.h.
-  DCHECK_EQ(accumulator_use_, Bytecodes::GetAccumulatorUse(bytecode_));
+  if (accumulator_use_ != AccumulatorUse::kNone)
+    DCHECK_EQ(accumulator_use_, Bytecodes::GetAccumulatorUse(bytecode_));
   UnregisterCallGenerationCallbacks();
 }
 
@@ -189,13 +190,14 @@ Node* InterpreterAssembler::BytecodeArrayTaggedPointer() {
 }
 
 Node* InterpreterAssembler::DispatchTableRawPointer() {
-  if (Bytecodes::MakesCallAlongCriticalPath(bytecode_) && made_call_ &&
-      (dispatch_table_.value() ==
-       Parameter(InterpreterDispatchDescriptor::kDispatchTable))) {
-    dispatch_table_.Bind(ExternalConstant(
-        ExternalReference::interpreter_dispatch_table_address(isolate())));
-  }
-  return dispatch_table_.value();
+  // if (Bytecodes::MakesCallAlongCriticalPath(bytecode_) && made_call_ &&
+  //     (dispatch_table_.value() ==
+  //      Parameter(InterpreterDispatchDescriptor::kDispatchTable))) {
+  //   dispatch_table_.Bind(ExternalConstant(
+  //       ExternalReference::interpreter_dispatch_table_address(isolate())));
+  // }
+  return Parameter(InterpreterDispatchDescriptor::kDispatchTable);
+  // dispatch_table_.value();
 }
 
 Node* InterpreterAssembler::RegisterLocation(Node* reg_index) {

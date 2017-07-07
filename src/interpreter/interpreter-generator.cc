@@ -3421,6 +3421,88 @@ Handle<Code> GenerateBytecodeHandler(Isolate* isolate, Bytecode bytecode,
   return code;
 }
 
+namespace {
+
+// NewNop
+//
+// No operation.
+class NewNopAssembler : public InterpreterAssembler {
+ public:
+  explicit NewNopAssembler(compiler::CodeAssemblerState* state,
+                           Bytecode bytecode, OperandScale scale)
+      : InterpreterAssembler(state, bytecode, scale) {}
+  static void Generate(compiler::CodeAssemblerState* state, Bytecode bytecode,
+                       OperandScale scale);
+
+ private:
+  void GenerateImpl();
+  DISALLOW_COPY_AND_ASSIGN(NewNopAssembler);
+};
+void NewNopAssembler::Generate(compiler::CodeAssemblerState* state,
+                               Bytecode bytecode, OperandScale scale) {
+  NewNopAssembler assembler(state, bytecode, scale);
+  state->SetInitialDebugInformation("NewNop", __FILE__, __LINE__);
+  assembler.GenerateImpl();
+}
+void NewNopAssembler::GenerateImpl() {
+  Node* bytecode_offset = BytecodeOffset();
+  Node* next_bytecode = LoadBytecode(bytecode_offset);
+
+  Node* real_dispatch_table = ExternalConstant(
+      ExternalReference::interpreter_dispatch_table_address(isolate()));
+  Node* return_dispatch_table = ExternalConstant(
+      ExternalReference::interpreter_dispatch_table_of_nop_address(isolate()));
+
+  Node* target_index;
+  switch (operand_scale()) {
+    case OperandScale::kDouble:
+      target_index =
+          IntPtrAdd(IntPtrConstant(1 << kBitsPerByte), next_bytecode);
+      break;
+    case OperandScale::kQuadruple:
+      target_index =
+          IntPtrAdd(IntPtrConstant(2 << kBitsPerByte), next_bytecode);
+      break;
+    default:
+      target_index = next_bytecode;
+  }
+  Node* target_code_entry = Load(MachineType::Pointer(), real_dispatch_table,
+                                 TimesPointerSize(target_index));
+
+  InterpreterDispatchDescriptor descriptor(isolate());
+  TailCallBytecodeDispatch(descriptor, target_code_entry,
+                           GetAccumulatorUnchecked(), bytecode_offset,
+                           BytecodeArrayTaggedPointer(), return_dispatch_table);
+}
+
+}  // namespace
+
+Handle<Code> GenerateNopBytecodeHandler(Isolate* isolate, Bytecode bytecode,
+                                        OperandScale operand_scale) {
+  Zone zone(isolate->allocator(), ZONE_NAME);
+  InterpreterDispatchDescriptor descriptor(isolate);
+  compiler::CodeAssemblerState state(isolate, &zone, descriptor,
+                                     Code::ComputeFlags(Code::BYTECODE_HANDLER),
+                                     Bytecodes::ToString(bytecode), 0);
+
+  NewNopAssembler::Generate(&state, bytecode, operand_scale);
+
+  Handle<Code> code = compiler::CodeAssembler::GenerateCode(&state);
+  std::string code_name = Bytecodes::ToString(bytecode, operand_scale);
+  code_name = "NopFor" + code_name;
+  PROFILE(isolate,
+          CodeCreateEvent(CodeEventListener::BYTECODE_HANDLER_TAG,
+                          AbstractCode::cast(*code), code_name.c_str()));
+#ifdef ENABLE_DISASSEMBLER
+  if (FLAG_trace_ignition_codegen) {
+    OFStream os(stdout);
+    code->Disassemble(code_name.c_str(), os);
+    os << std::flush;
+  }
+#endif  // ENABLE_DISASSEMBLER
+  return code;
+}
+
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8

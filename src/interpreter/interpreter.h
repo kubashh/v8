@@ -56,6 +56,10 @@ class Interpreter {
     return reinterpret_cast<Address>(&dispatch_table_[0]);
   }
 
+  Address dispatch_table_of_nop_address() {
+    return reinterpret_cast<Address>(&dispatch_table_of_nop_[0]);
+  }
+
   Address bytecode_dispatch_counters_table() {
     return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
   }
@@ -81,6 +85,7 @@ class Interpreter {
 
   Isolate* isolate_;
   Address dispatch_table_[kDispatchTableSize];
+  Address dispatch_table_of_nop_[kDispatchTableSize];
   std::unique_ptr<uintptr_t[]> bytecode_dispatch_counters_table_;
 
   DISALLOW_COPY_AND_ASSIGN(Interpreter);

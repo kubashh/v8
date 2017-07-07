@@ -47,6 +47,22 @@ void SetupInterpreter::InstallBytecodeHandlers(Interpreter* interpreter) {
     }
   }
 
+  Address* dispatch_table_of_nop = interpreter->dispatch_table_of_nop_;
+  for (OperandScale operand_scale : kOperandScales) {
+#define GENERATE_CODE(Name, ...)                                          \
+  InstallNopBytecodeHandler(interpreter->isolate_, dispatch_table_of_nop, \
+                            Bytecode::k##Name, operand_scale);
+    BYTECODE_LIST(GENERATE_CODE)
+#undef GENERATE_CODE
+  }
+
+  // Fill unused entries will the illegal bytecode handler.
+  for (size_t index = 0; index < Interpreter::kDispatchTableSize; ++index) {
+    if (dispatch_table_of_nop[index] == nullptr) {
+      dispatch_table_of_nop[index] = dispatch_table_of_nop[illegal_index];
+    }
+  }
+
   // Initialization should have been successful.
   DCHECK(interpreter->IsDispatchTableInitialized());
 }
@@ -86,6 +102,20 @@ void SetupInterpreter::InstallBytecodeHandler(Isolate* isolate,
 
   size_t index = Interpreter::GetDispatchTableIndex(bytecode, operand_scale);
   Handle<Code> code = GenerateBytecodeHandler(isolate, bytecode, operand_scale);
+  dispatch_table[index] = code->entry();
+}
+
+// static
+void SetupInterpreter::InstallNopBytecodeHandler(Isolate* isolate,
+                                                 Address* dispatch_table,
+                                                 Bytecode bytecode,
+                                                 OperandScale operand_scale) {
+  if (!Bytecodes::BytecodeHasHandler(bytecode, operand_scale)) return;
+  if (ReuseExistingHandler(dispatch_table, bytecode, operand_scale)) return;
+
+  size_t index = Interpreter::GetDispatchTableIndex(bytecode, operand_scale);
+  Handle<Code> code =
+      GenerateNopBytecodeHandler(isolate, bytecode, operand_scale);
   dispatch_table[index] = code->entry();
 }
 

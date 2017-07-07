@@ -869,6 +869,12 @@ ExternalReference ExternalReference::interpreter_dispatch_table_address(
   return ExternalReference(isolate->interpreter()->dispatch_table_address());
 }
 
+ExternalReference ExternalReference::interpreter_dispatch_table_of_nop_address(
+    Isolate* isolate) {
+  return ExternalReference(
+      isolate->interpreter()->dispatch_table_of_nop_address());
+}
+
 ExternalReference ExternalReference::interpreter_dispatch_counters(
     Isolate* isolate) {
   return ExternalReference(
