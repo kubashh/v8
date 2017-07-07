@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7a3e6c9_0d5be613",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "Await is also a Suspend expression, so you can just pass the await expression to this function without having to change the arguments.",
+      "range": {
+        "startLine": 2597,
+        "startChar": 46,
+        "endLine": 2598,
+        "endChar": 64
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8160e5d_45108191",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2616,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "This is still got changes from the async Yield* desugaring which have been changed there. Overall it would be simpler if these CLs formed a chain which built on top of each other in a particular order, rather than sharing some of the changes and thereby having those changes reviewed twice.",
+      "range": {
+        "startLine": 2616,
+        "startChar": 31,
+        "endLine": 2616,
+        "endChar": 63
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d322378_570c8c2a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2661,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2659,
+        "startChar": 42,
+        "endLine": 2661,
+        "endChar": 75
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b3a827c_a3238f8b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "Please just inline BuildAwait in VisitAwait since it\u0027s only used there. We can out-of-line it again if needed for the yield* desugaring, but that might not be necessary given my comments there.",
+      "range": {
+        "startLine": 4144,
+        "startChar": 24,
+        "endLine": 4146,
+        "endChar": 58
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74ac97e6_cd7a495e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4158,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "Don\u0027t use the virtual_accumulator please",
+      "range": {
+        "startLine": 4158,
+        "startChar": 3,
+        "endLine": 4158,
+        "endChar": 51
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b36f163_31d3a113",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4161,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "Please move all this after the suspend to keep the code dealing with the runtime call in one place.",
+      "range": {
+        "startLine": 4153,
+        "startChar": 4,
+        "endLine": 4161,
+        "endChar": 0
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9b9aac_dfbd1946",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4182,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "I\u0027m not keen on this. Please just do:\nint runtime_context_index;\nint runtime_arg_count;\nif (IsAsyncGenerator(flags)) {\n  runtime_context_index \u003d is_await_uncaught() ? ... : ...\n  runtime_arg_count \u003d 2;\n} else {\n  ...\n}",
+      "range": {
+        "startLine": 4167,
+        "startChar": 4,
+        "endLine": 4182,
+        "endChar": 70
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfd5a954_03d8cff7",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4192,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "I\u0027d rather just use args[0/1/2] directly when they are being immediately set from something which makes it clear what the argument is  - e.g:\n  builder()-\u003eMoveRegister(generator_object_, arg[0])\n      .MoveRegister(input, arg[1]);\n  if (!IsAsyncGenerator(flags)) {\n     // AsyncFunction Await builtins require a 3rd parameter to hold the outer\n      // promise.\n      BuildVariableLoadForAccumulatorValue(closure_scope()-\u003epromise_var(), FeedbackSlot::Invalid(),\n                                           HoleCheckMode::kElided);\n      builder()-\u003eStoreAccumulatorInRegister(arg[2]);\n  }",
+      "range": {
+        "startLine": 4192,
+        "startChar": 6,
+        "endLine": 4192,
+        "endChar": 38
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f24ce0d_4e38dd9d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-07T10:42:26Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 4203,
+        "startChar": 6,
+        "endLine": 4203,
+        "endChar": 39
+      },
+      "revId": "363d7c48fc879733b61a37ea7bd01bdf84ce1fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
