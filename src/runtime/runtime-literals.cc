@@ -306,6 +306,7 @@ MaybeHandle<JSObject> DeepCopy(Handle<JSObject> object,
 }
 
 struct ObjectBoilerplate {
+  static const bool kNeedsInitialBoilerplate = false;
   static Handle<JSObject> Create(Isolate* isolate,
                                  Handle<HeapObject> description, int flags,
                                  PretenureFlag pretenure_flag) {
@@ -381,6 +382,7 @@ struct ObjectBoilerplate {
 };
 
 struct ArrayBoilerplate {
+  static const bool kNeedsInitialBoilerplate = true;
   static Handle<JSObject> Create(Isolate* isolate,
                                  Handle<HeapObject> description, int flags,
                                  PretenureFlag pretenure_flag) {
@@ -475,8 +477,10 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
     site = Handle<AllocationSite>::cast(literal_site);
     boilerplate = Handle<JSObject>(site->boilerplate(), isolate);
   } else {
-    // Instantiate a JSArray or JSObject literal from the given {description}.
-    if (IsUninitializedLiteralSite(literal_site)) {
+    // Create JSObject boilerplates only after the second run to not waste
+    // memory for code that is run only once.
+    if (!Boilerplate::kNeedsInitialBoilerplate &&
+        IsUninitializedLiteralSite(literal_site)) {
       PreInitializeLiteralSite(vector, literals_slot);
       boilerplate =
           Boilerplate::Create(isolate, description, flags, NOT_TENURED);
