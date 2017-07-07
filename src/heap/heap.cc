@@ -1744,10 +1744,11 @@ void Heap::Scavenge() {
 
   const int kScavengerTasks = 1;
   const int kMainThreadId = 0;
+  CopiedList copied_list(kScavengerTasks);
   PromotionList promotion_list(kScavengerTasks);
   Scavenger scavenger(this, IsLogging(isolate()),
-                      incremental_marking()->IsMarking(), &promotion_list,
-                      kMainThreadId);
+                      incremental_marking()->IsMarking(), &copied_list,
+                      &promotion_list, kMainThreadId);
   RootScavengeVisitor root_scavenge_visitor(this, &scavenger);
 
   isolate()->global_handles()->IdentifyWeakUnmodifiedObjects(
@@ -2008,35 +2009,65 @@ Address Heap::DoScavenge(Scavenger* scavenger, Address new_space_front) {
   const int kProcessPromotionListThreshold = kPromotionListSegmentSize / 2;
   ScavengeVisitor scavenge_visitor(this, scavenger);
   PromotionList::View* promotion_list = scavenger->promotion_list();
-  do {
-    SemiSpace::AssertValidRange(new_space_front, new_space_->top());
-    // The addresses new_space_front and new_space_.top() define a
-    // queue of unprocessed copied objects.  Process them until the
-    // queue is empty.
-    while ((promotion_list->LocalPushSegmentSize() <
-            kProcessPromotionListThreshold) &&
-           new_space_front != new_space_->top()) {
-      if (!Page::IsAlignedToPageSize(new_space_front)) {
-        HeapObject* object = HeapObject::FromAddress(new_space_front);
-        new_space_front += scavenge_visitor.Visit(object);
-      } else {
-        new_space_front = Page::FromAllocationAreaAddress(new_space_front)
-                              ->next_page()
-                              ->area_start();
-      }
-    }
+  CopiedRangesList* copied_list = scavenger->copied_list();
 
+  bool processed = false;
+  do {
+    processed =
+        copied_list->Process([this, scavenger, &scavenge_visitor,
+                              promotion_list, copied_list](HeapObject* object) {
+          scavenge_visitor.Visit(object);
+          // Interleave with promoted objects to avoid allocating segments.
+          if (promotion_list->LocalPushSegmentSize() >
+              kProcessPromotionListThreshold) {
+            ObjectAndSize object_and_size;
+            while (promotion_list->Pop(&object_and_size)) {
+              HeapObject* target = object_and_size.first;
+              int size = object_and_size.second;
+              DCHECK(!target->IsMap());
+              IterateAndScavengePromotedObject(scavenger, target, size);
+            }
+          }
+        });
     ObjectAndSize object_and_size;
     while (promotion_list->Pop(&object_and_size)) {
+      processed = true;
       HeapObject* target = object_and_size.first;
       int size = object_and_size.second;
       DCHECK(!target->IsMap());
       IterateAndScavengePromotedObject(scavenger, target, size);
     }
+  } while (processed);
 
-    // Take another spin if there are now unswept objects in new space
-    // (there are currently no more unswept promoted objects).
-  } while (new_space_front != new_space_->top());
+  // do {
+  //   SemiSpace::AssertValidRange(new_space_front, new_space_->top());
+  //   // The addresses new_space_front and new_space_.top() define a
+  //   // queue of unprocessed copied objects.  Process them until the
+  //   // queue is empty.
+  //   while ((promotion_list->LocalPushSegmentSize() <
+  //           kProcessPromotionListThreshold) &&
+  //          new_space_front != new_space_->top()) {
+  //     if (!Page::IsAlignedToPageSize(new_space_front)) {
+  //       HeapObject* object = HeapObject::FromAddress(new_space_front);
+  //       new_space_front += scavenge_visitor.Visit(object);
+  //     } else {
+  //       new_space_front = Page::FromAllocationAreaAddress(new_space_front)
+  //                             ->next_page()
+  //                             ->area_start();
+  //     }
+  //   }
+
+  //   ObjectAndSize object_and_size;
+  //   while (promotion_list->Pop(&object_and_size)) {
+  //     HeapObject* target = object_and_size.first;
+  //     int size = object_and_size.second;
+  //     DCHECK(!target->IsMap());
+  //     IterateAndScavengePromotedObject(scavenger, target, size);
+  //   }
+
+  //   // Take another spin if there are now unswept objects in new space
+  //   // (there are currently no more unswept promoted objects).
+  // } while (new_space_front != new_space_->top());
 
   return new_space_front;
 }
