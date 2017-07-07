@@ -268,6 +268,11 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
     catch_prediction_ = value;
   }
 
+  inline bool is_await_uncaught() const {
+    DCHECK(catch_prediction_ != HandlerTable::UNCAUGHT);
+    return catch_prediction_ == HandlerTable::ASYNC_AWAIT;
+  }
+
   Zone* zone_;
   BytecodeArrayBuilder* builder_;
   CompilationInfo* info_;
