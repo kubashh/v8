@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f52a2a25_95a569e5",
+        "filename": "src/float.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-07-07T11:16:15Z",
+      "side": 1,
+      "message": "s/loose/lose\n\n(mistake was in original comment)",
+      "range": {
+        "startLine": 15,
+        "startChar": 40,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "c6b03b968a4aa0b9190baf25bf2b2a98130c6ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3366fae9_22f9f6f4",
+        "filename": "src/float.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-07-07T11:16:15Z",
+      "side": 1,
+      "message": "same.",
+      "revId": "c6b03b968a4aa0b9190baf25bf2b2a98130c6ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a888d362_16562e3a",
+        "filename": "src/float.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-07-07T11:16:15Z",
+      "side": 1,
+      "message": "Can we get a TODO to unify this with Double?",
+      "revId": "c6b03b968a4aa0b9190baf25bf2b2a98130c6ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
