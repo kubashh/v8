@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e99fc9c1_46f41bea",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-07T07:56:43Z",
+      "side": 1,
+      "message": "As per offline discussion yesterday: Most of this was copy\u0026paste from Crankshaft and is really in need of cleanup (especially on the runtime side). After talking with Michael I agree that the prototype chain walk is unnecessary for the 2nd order builtins.",
+      "parentUuid": "7ad273bf_1f85664d",
+      "range": {
+        "startLine": 497,
+        "startChar": 2,
+        "endLine": 501,
+        "endChar": 3
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aefcfda9_95bb651b",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 4
