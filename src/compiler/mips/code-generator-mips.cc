@@ -82,8 +82,8 @@ class MipsOperandConverter final : public InstructionOperandConverter {
         return Operand(
             isolate()->factory()->NewNumber(constant.ToFloat32(), TENURED));
       case Constant::kFloat64:
-        return Operand(
-            isolate()->factory()->NewNumber(constant.ToFloat64(), TENURED));
+        return Operand(isolate()->factory()->NewNumber(
+            constant.ToFloat64().value(), TENURED));
       case Constant::kInt64:
       case Constant::kExternalReference:
       case Constant::kHeapObject:
@@ -3284,7 +3284,8 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
           UNREACHABLE();
           break;
         case Constant::kFloat64:
-          __ li(dst, isolate()->factory()->NewNumber(src.ToFloat64(), TENURED));
+          __ li(dst, isolate()->factory()->NewNumber(src.ToFloat64().value(),
+                                                     TENURED));
           break;
         case Constant::kExternalReference:
           __ li(dst, Operand(src.ToExternalReference()));
@@ -3323,7 +3324,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
       DoubleRegister dst = destination->IsFPRegister()
                                ? g.ToDoubleRegister(destination)
                                : kScratchDoubleReg;
-      __ Move(dst, src.ToFloat64());
+      __ Move(dst, src.ToFloat64().value());
       if (destination->IsFPStackSlot()) {
         __ Sdc1(dst, g.ToMemOperand(destination));
       }
