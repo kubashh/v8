@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8a8c1db4_831e4c88",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2017-07-07T08:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e99fc9c1_46f41bea",
+      "range": {
+        "startLine": 497,
+        "startChar": 2,
+        "endLine": 501,
+        "endChar": 3
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aefcfda9_95bb651b",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 4
@@ -60,6 +84,30 @@
       "writtenOn": "2017-07-07T04:06:46Z",
       "side": 1,
       "message": "Awesome...! I think some of this is extra, like:\n\n(!receiver_map-\u003eis_prototype_map() || receiver_map-\u003eis_stable())\n\nshould be covered by the condition that \n\nisolate-\u003eIsAnyInitialArrayPrototype(receiver_prototype)\n\nholds, and that \n\nisolate-\u003eIsFastArrayConstructorPrototypeChainIntact()\n\nholds, right? I mean, if the receiver prototype appears as a prototype, then by the rules of our system it\u0027s map should be a prototype map (if I understand correctly). Seems more like \"receiver_map-\u003eis_prototype_map()\" could/should appear as a DCHECK than as a necessary part of the predicate above.",
+      "range": {
+        "startLine": 502,
+        "startChar": 3,
+        "endLine": 506,
+        "endChar": 65
+      },
+      "revId": "7aa68368ef0edd5f6ffdd186ab139d53c0f72cc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4103fd29_3ca2a891",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2017-07-07T08:09:29Z",
+      "side": 1,
+      "message": "I think I understand what you\u0027re getting at, but it is not exactly what the code is trying to do. Note that IsFastArrayConstructorPrototypeChainIntact is a global function, and IsAnyInitialArrayPrototype operates on the receivers prototype, not the receiver itself. The additional prototype and stability tests are on the _receiver_, the the receiver prototype, and in the case of the is_prototype_map is a negative test, that is we need to make sure that the receiver itself isn\u0027t a prototype. So upshot: these tests are not redundant. \n\nYou are right that there is a lot of stuff in this predicate, but it is essentially a copy of the carefully cobbled-together logic that Crankshaft used for something similar, and I have discussed with Benedikt and we came to the conclusion that the logic here is a the minimal safe set that we currently need. In the future we probably want to clean up the predicates, especially when we move to NO_ELEMENTS. But for now, I want to be really careful to leverage the knowledge that Benedikt/Toon distilled into this code from previous experience without being to clever on the refactor front at the moment.",
+      "parentUuid": "aefcfda9_95bb651b",
       "range": {
         "startLine": 502,
         "startChar": 3,
