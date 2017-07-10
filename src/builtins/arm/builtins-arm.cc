@@ -642,17 +642,20 @@ void Generate_JSConstructStubGeneric(MacroAssembler* masm,
     __ CompareObjectType(r0, r4, r5, FIRST_JS_RECEIVER_TYPE);
     __ b(ge, &leave_frame);
 
-    __ bind(&other_result);
     // The result is now neither undefined nor an object.
+    __ bind(&other_result);
+    __ ldr(r4, MemOperand(fp, ConstructFrameConstants::kConstructorOffset));
+    __ ldr(r4, FieldMemOperand(r4, JSFunction::kSharedFunctionInfoOffset));
+    __ ldr(r4, FieldMemOperand(r4, SharedFunctionInfo::kCompilerHintsOffset));
+    __ tst(r4, Operand(SharedFunctionInfo::kClassConstructorMask));
+
     if (restrict_constructor_return) {
       // Throw if constructor function is a class constructor
-      __ ldr(r4, MemOperand(fp, ConstructFrameConstants::kConstructorOffset));
-      __ ldr(r4, FieldMemOperand(r4, JSFunction::kSharedFunctionInfoOffset));
-      __ ldr(r4, FieldMemOperand(r4, SharedFunctionInfo::kCompilerHintsOffset));
-      __ tst(r4, Operand(SharedFunctionInfo::kClassConstructorMask));
       __ b(eq, &use_receiver);
-
     } else {
+      __ b(ne, &use_receiver);
+      __ CallRuntime(
+          Runtime::kIncrementUseCounterConstructorReturnNonUndefinedPrimitive);
       __ b(&use_receiver);
     }
 
@@ -1660,7 +1663,7 @@ static void GenerateMakeCodeYoungAgainCommon(MacroAssembler* masm) {
   //   r3 - new target
   FrameScope scope(masm, StackFrame::MANUAL);
   __ stm(db_w, sp, r0.bit() | r1.bit() | r3.bit() | fp.bit() | lr.bit());
-  __ PrepareCallCFunction(2, 0, r2);
+  __ PrepareCallCFunction(2, 0);
   __ mov(r1, Operand(ExternalReference::isolate_address(masm->isolate())));
   __ CallCFunction(
       ExternalReference::get_make_code_young_function(masm->isolate()), 2);
@@ -1688,7 +1691,7 @@ void Builtins::Generate_MarkCodeAsExecutedOnce(MacroAssembler* masm) {
   //   r3 - new target
   FrameScope scope(masm, StackFrame::MANUAL);
   __ stm(db_w, sp, r0.bit() | r1.bit() | r3.bit() | fp.bit() | lr.bit());
-  __ PrepareCallCFunction(2, 0, r2);
+  __ PrepareCallCFunction(2, 0);
   __ mov(r1, Operand(ExternalReference::isolate_address(masm->isolate())));
   __ CallCFunction(
       ExternalReference::get_mark_code_as_executed_function(masm->isolate()),

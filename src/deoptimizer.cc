@@ -421,6 +421,7 @@ void Deoptimizer::DeoptimizeFunction(JSFunction* function, Code* code) {
   TimerEventScope<TimerEventDeoptimizeCode> timer(isolate);
   TRACE_EVENT0("v8", "V8.DeoptimizeCode");
   if (code == nullptr) code = function->code();
+
   if (code->kind() == Code::OPTIMIZED_FUNCTION) {
     // Mark the code for deoptimization and unlink any functions that also
     // refer to that code. The code cannot be shared across native contexts,
@@ -711,7 +712,7 @@ void Deoptimizer::DoComputeOutputFrames() {
     }
   }
 
-  BailoutId node_id = input_data->AstId(bailout_id_);
+  BailoutId node_id = input_data->BytecodeOffset(bailout_id_);
   ByteArray* translations = input_data->TranslationByteArray();
   unsigned translation_index =
       input_data->TranslationIndex(bailout_id_)->value();
@@ -1064,10 +1065,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
     intptr_t context_value = reinterpret_cast<intptr_t>(Smi::kZero);
     Register context_reg = JavaScriptFrame::context_register();
     output_frame->SetRegister(context_reg.code(), context_value);
-  }
-
-  // Set the continuation for the topmost frame.
-  if (is_topmost) {
+    // Set the continuation for the topmost frame.
     Code* continuation = builtins->builtin(Builtins::kNotifyDeoptimized);
     if (bailout_type_ == LAZY) {
       continuation = builtins->builtin(Builtins::kNotifyLazyDeoptimized);
@@ -2035,8 +2033,8 @@ unsigned Deoptimizer::ComputeInputFrameSize() const {
   unsigned result = fixed_size_above_fp + fp_to_sp_delta_;
   if (compiled_code_->kind() == Code::OPTIMIZED_FUNCTION) {
     unsigned stack_slots = compiled_code_->stack_slots();
-    unsigned outgoing_size =
-        ComputeOutgoingArgumentSize(compiled_code_, bailout_id_);
+    unsigned outgoing_size = 0;
+    //        ComputeOutgoingArgumentSize(compiled_code_, bailout_id_);
     CHECK_EQ(fixed_size_above_fp + (stack_slots * kPointerSize) -
                  CommonFrameConstants::kFixedFrameSizeAboveFp + outgoing_size,
              result);
@@ -2064,16 +2062,6 @@ unsigned Deoptimizer::ComputeInterpretedFixedSize(SharedFunctionInfo* shared) {
 // static
 unsigned Deoptimizer::ComputeIncomingArgumentSize(SharedFunctionInfo* shared) {
   return (shared->internal_formal_parameter_count() + 1) * kPointerSize;
-}
-
-
-// static
-unsigned Deoptimizer::ComputeOutgoingArgumentSize(Code* code,
-                                                  unsigned bailout_id) {
-  DeoptimizationInputData* data =
-      DeoptimizationInputData::cast(code->deoptimization_data());
-  unsigned height = data->ArgumentsStackHeight(bailout_id)->value();
-  return height * kPointerSize;
 }
 
 void Deoptimizer::EnsureCodeForDeoptimizationEntry(Isolate* isolate,
@@ -3682,6 +3670,35 @@ Handle<Object> TranslatedState::MaterializeCapturedObjectAt(
       }
       return object;
     }
+    case JS_SET_KEY_VALUE_ITERATOR_TYPE:
+    case JS_SET_VALUE_ITERATOR_TYPE: {
+      Handle<JSSetIterator> object = Handle<JSSetIterator>::cast(
+          isolate_->factory()->NewJSObjectFromMap(map, NOT_TENURED));
+      Handle<Object> properties = materializer.FieldAt(value_index);
+      Handle<Object> elements = materializer.FieldAt(value_index);
+      Handle<Object> table = materializer.FieldAt(value_index);
+      Handle<Object> index = materializer.FieldAt(value_index);
+      object->set_properties(FixedArray::cast(*properties));
+      object->set_elements(FixedArrayBase::cast(*elements));
+      object->set_table(*table);
+      object->set_index(*index);
+      return object;
+    }
+    case JS_MAP_KEY_ITERATOR_TYPE:
+    case JS_MAP_KEY_VALUE_ITERATOR_TYPE:
+    case JS_MAP_VALUE_ITERATOR_TYPE: {
+      Handle<JSMapIterator> object = Handle<JSMapIterator>::cast(
+          isolate_->factory()->NewJSObjectFromMap(map, NOT_TENURED));
+      Handle<Object> properties = materializer.FieldAt(value_index);
+      Handle<Object> elements = materializer.FieldAt(value_index);
+      Handle<Object> table = materializer.FieldAt(value_index);
+      Handle<Object> index = materializer.FieldAt(value_index);
+      object->set_properties(FixedArray::cast(*properties));
+      object->set_elements(FixedArrayBase::cast(*elements));
+      object->set_table(*table);
+      object->set_index(*index);
+      return object;
+    }
     case JS_TYPED_ARRAY_KEY_ITERATOR_TYPE:
     case JS_FAST_ARRAY_KEY_ITERATOR_TYPE:
     case JS_GENERIC_ARRAY_KEY_ITERATOR_TYPE:
@@ -3934,8 +3951,6 @@ Handle<Object> TranslatedState::MaterializeCapturedObjectAt(
     case JS_DATA_VIEW_TYPE:
     case JS_SET_TYPE:
     case JS_MAP_TYPE:
-    case JS_SET_ITERATOR_TYPE:
-    case JS_MAP_ITERATOR_TYPE:
     case JS_WEAK_MAP_TYPE:
     case JS_WEAK_SET_TYPE:
     case JS_PROMISE_CAPABILITY_TYPE:
@@ -3983,6 +3998,10 @@ Handle<Object> TranslatedState::MaterializeCapturedObjectAt(
     case PADDING_TYPE_1:
     case PADDING_TYPE_2:
     case PADDING_TYPE_3:
+    case WASM_MODULE_TYPE:
+    case WASM_INSTANCE_TYPE:
+    case WASM_MEMORY_TYPE:
+    case WASM_TABLE_TYPE:
       OFStream os(stderr);
       os << "[couldn't handle instance type " << map->instance_type() << "]"
          << std::endl;

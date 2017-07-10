@@ -1514,9 +1514,17 @@ Handle<JSFunction> Factory::NewFunctionWithoutPrototype(
 
 Handle<JSFunction> Factory::NewFunction(Handle<String> name, Handle<Code> code,
                                         Handle<Object> prototype,
-                                        LanguageMode language_mode) {
-  Handle<Map> map = is_strict(language_mode) ? isolate()->strict_function_map()
-                                             : isolate()->sloppy_function_map();
+                                        LanguageMode language_mode,
+                                        MutableMode prototype_mutability) {
+  Handle<Map> map;
+  if (prototype_mutability == MUTABLE) {
+    map = is_strict(language_mode) ? isolate()->strict_function_map()
+                                   : isolate()->sloppy_function_map();
+  } else {
+    map = is_strict(language_mode)
+              ? isolate()->strict_function_with_readonly_prototype_map()
+              : isolate()->sloppy_function_with_readonly_prototype_map();
+  }
   Handle<JSFunction> result = NewFunction(map, name, code);
   result->set_prototype_or_initial_map(*prototype);
   result->shared()->set_language_mode(language_mode);
@@ -1526,10 +1534,11 @@ Handle<JSFunction> Factory::NewFunction(Handle<String> name, Handle<Code> code,
 Handle<JSFunction> Factory::NewFunction(Handle<String> name, Handle<Code> code,
                                         Handle<Object> prototype,
                                         InstanceType type, int instance_size,
-                                        LanguageMode language_mode) {
+                                        LanguageMode language_mode,
+                                        MutableMode prototype_mutability) {
   // Allocate the function
   Handle<JSFunction> function =
-      NewFunction(name, code, prototype, language_mode);
+      NewFunction(name, code, prototype, language_mode, prototype_mutability);
 
   ElementsKind elements_kind =
       type == JS_ARRAY_TYPE ? PACKED_SMI_ELEMENTS : HOLEY_SMI_ELEMENTS;
@@ -1925,7 +1934,7 @@ Handle<JSArray> Factory::NewJSArrayWithElements(Handle<FixedArrayBase> elements,
 
   array->set_elements(*elements);
   array->set_length(Smi::FromInt(length));
-  JSObject::ValidateElements(array);
+  JSObject::ValidateElements(*array);
   return array;
 }
 
@@ -2078,20 +2087,24 @@ Handle<JSSet> Factory::NewJSSet() {
   return js_set;
 }
 
-
-Handle<JSMapIterator> Factory::NewJSMapIterator() {
-  Handle<Map> map(isolate()->native_context()->map_iterator_map());
-  CALL_HEAP_FUNCTION(isolate(),
-                     isolate()->heap()->AllocateJSObjectFromMap(*map),
-                     JSMapIterator);
+Handle<JSMapIterator> Factory::NewJSMapIterator(Handle<Map> map,
+                                                Handle<OrderedHashMap> table,
+                                                int index) {
+  Handle<JSMapIterator> result =
+      Handle<JSMapIterator>::cast(NewJSObjectFromMap(map));
+  result->set_table(*table);
+  result->set_index(Smi::FromInt(index));
+  return result;
 }
 
-
-Handle<JSSetIterator> Factory::NewJSSetIterator() {
-  Handle<Map> map(isolate()->native_context()->set_iterator_map());
-  CALL_HEAP_FUNCTION(isolate(),
-                     isolate()->heap()->AllocateJSObjectFromMap(*map),
-                     JSSetIterator);
+Handle<JSSetIterator> Factory::NewJSSetIterator(Handle<Map> map,
+                                                Handle<OrderedHashSet> table,
+                                                int index) {
+  Handle<JSSetIterator> result =
+      Handle<JSSetIterator>::cast(NewJSObjectFromMap(map));
+  result->set_table(*table);
+  result->set_index(Smi::FromInt(index));
+  return result;
 }
 
 ExternalArrayType Factory::GetArrayTypeFromElementsKind(ElementsKind kind) {
@@ -2823,11 +2836,16 @@ Handle<String> Factory::ToPrimitiveHintString(ToPrimitiveHint hint) {
   UNREACHABLE();
 }
 
-Handle<Map> Factory::CreateSloppyFunctionMap(FunctionMode function_mode) {
+Handle<Map> Factory::CreateSloppyFunctionMap(
+    FunctionMode function_mode, MaybeHandle<JSFunction> maybe_empty_function) {
   Handle<Map> map = NewMap(JS_FUNCTION_TYPE, JSFunction::kSize);
   SetFunctionInstanceDescriptor(map, function_mode);
   map->set_is_constructor(IsFunctionModeWithPrototype(function_mode));
   map->set_is_callable();
+  Handle<JSFunction> empty_function;
+  if (maybe_empty_function.ToHandle(&empty_function)) {
+    Map::SetPrototype(map, empty_function);
+  }
   return map;
 }
 

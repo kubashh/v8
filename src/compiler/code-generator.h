@@ -81,12 +81,13 @@ class CodeGenerator final : public GapResolver::Assembler {
  public:
   explicit CodeGenerator(Frame* frame, Linkage* linkage,
                          InstructionSequence* code, CompilationInfo* info,
-                         base::Optional<OsrHelper> osr_helper);
+                         base::Optional<OsrHelper> osr_helper,
+                         int start_source_position);
 
   // Generate native code. After calling AssembleCode, call FinalizeCode to
   // produce the actual code object. If an error occurs during either phase,
   // FinalizeCode returns a null handle.
-  void AssembleCode();
+  void AssembleCode();  // Does not need to run on main thread.
   Handle<Code> FinalizeCode();
 
   InstructionSequence* code() const { return code_; }
@@ -97,8 +98,11 @@ class CodeGenerator final : public GapResolver::Assembler {
 
   Label* GetLabel(RpoNumber rpo) { return &labels_[rpo.ToSize()]; }
 
-  void AssembleSourcePosition(Instruction* instr);
+  SourcePosition start_source_position() const {
+    return start_source_position_;
+  }
 
+  void AssembleSourcePosition(Instruction* instr);
   void AssembleSourcePosition(SourcePosition source_position);
 
   // Record a safepoint with the given pointer map.
@@ -108,7 +112,7 @@ class CodeGenerator final : public GapResolver::Assembler {
   Zone* zone() const { return code()->zone(); }
 
  private:
-  MacroAssembler* masm() { return &masm_; }
+  TurboAssembler* tasm() { return &tasm_; }
   GapResolver* resolver() { return &resolver_; }
   SafepointTableBuilder* safepoints() { return &safepoints_; }
   CompilationInfo* info() const { return info_; }
@@ -278,13 +282,16 @@ class CodeGenerator final : public GapResolver::Assembler {
           translation_id_(translation_id),
           pc_offset_(pc_offset),
           kind_(kind),
-          reason_(reason) {}
+          reason_(reason),
+          trampoline_pc_(-1) {}
 
     BailoutId bailout_id() const { return bailout_id_; }
     int translation_id() const { return translation_id_; }
     int pc_offset() const { return pc_offset_; }
     DeoptimizeKind kind() const { return kind_; }
     DeoptimizeReason reason() const { return reason_; }
+    int trampoline_pc() { return trampoline_pc_; }
+    void set_trampoline_pc(int t_pc) { trampoline_pc_ = t_pc; }
 
    private:
     BailoutId bailout_id_;
@@ -292,6 +299,7 @@ class CodeGenerator final : public GapResolver::Assembler {
     int pc_offset_;
     DeoptimizeKind kind_;
     DeoptimizeReason reason_;
+    int trampoline_pc_;
   };
 
   struct HandlerInfo {
@@ -309,8 +317,9 @@ class CodeGenerator final : public GapResolver::Assembler {
   Label* const labels_;
   Label return_label_;
   RpoNumber current_block_;
+  SourcePosition start_source_position_;
   SourcePosition current_source_position_;
-  MacroAssembler masm_;
+  TurboAssembler tasm_;
   GapResolver resolver_;
   SafepointTableBuilder safepoints_;
   ZoneVector<HandlerInfo> handlers_;

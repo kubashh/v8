@@ -3095,16 +3095,13 @@ Node* CodeStubAssembler::ToThisValue(Node* context, Node* value,
           GotoIf(WordEqual(value_map, BooleanMapConstant()), &done_loop);
           break;
         case PrimitiveType::kNumber:
-          GotoIf(
-              Word32Equal(value_instance_type, Int32Constant(HEAP_NUMBER_TYPE)),
-              &done_loop);
+          GotoIf(WordEqual(value_map, HeapNumberMapConstant()), &done_loop);
           break;
         case PrimitiveType::kString:
           GotoIf(IsStringInstanceType(value_instance_type), &done_loop);
           break;
         case PrimitiveType::kSymbol:
-          GotoIf(Word32Equal(value_instance_type, Int32Constant(SYMBOL_TYPE)),
-                 &done_loop);
+          GotoIf(WordEqual(value_map, SymbolMapConstant()), &done_loop);
           break;
       }
       Goto(&done_throw);
@@ -3141,6 +3138,14 @@ Node* CodeStubAssembler::ToThisValue(Node* context, Node* value,
   return var_value.value();
 }
 
+void CodeStubAssembler::ThrowIncompatibleMethodReceiver(Node* context,
+                                                        const char* method_name,
+                                                        Node* receiver) {
+  CallRuntime(Runtime::kThrowIncompatibleMethodReceiver, context,
+              CStringConstant(method_name), receiver);
+  Unreachable();
+}
+
 Node* CodeStubAssembler::ThrowIfNotInstanceType(Node* context, Node* value,
                                                 InstanceType instance_type,
                                                 char const* method_name) {
@@ -3158,11 +3163,7 @@ Node* CodeStubAssembler::ThrowIfNotInstanceType(Node* context, Node* value,
 
   // The {value} is not a compatible receiver for this method.
   BIND(&throw_exception);
-  CallRuntime(
-      Runtime::kThrowIncompatibleMethodReceiver, context,
-      HeapConstant(factory()->NewStringFromAsciiChecked(method_name, TENURED)),
-      value);
-  Unreachable();
+  ThrowIncompatibleMethodReceiver(context, method_name, value);
 
   BIND(&out);
   return var_value_map.value();
@@ -4032,17 +4033,17 @@ void CodeStubAssembler::DerefIndirectString(Variable* var_string,
 
 void CodeStubAssembler::MaybeDerefIndirectString(Variable* var_string,
                                                  Node* instance_type,
-                                                 Variable* var_did_something) {
-  Label deref(this), done(this, var_did_something);
+                                                 Label* did_deref,
+                                                 Label* cannot_deref) {
+  Label deref(this);
   BranchIfCanDerefIndirectString(var_string->value(), instance_type, &deref,
-                                 &done);
+                                 cannot_deref);
 
   BIND(&deref);
-  DerefIndirectString(var_string, instance_type);
-  var_did_something->Bind(IntPtrConstant(1));
-  Goto(&done);
-
-  BIND(&done);
+  {
+    DerefIndirectString(var_string, instance_type);
+    Goto(did_deref);
+  }
 }
 
 void CodeStubAssembler::MaybeDerefIndirectStrings(Variable* var_left,
@@ -4050,13 +4051,24 @@ void CodeStubAssembler::MaybeDerefIndirectStrings(Variable* var_left,
                                                   Variable* var_right,
                                                   Node* right_instance_type,
                                                   Label* did_something) {
-  VARIABLE(var_did_something, MachineType::PointerRepresentation(),
-           IntPtrConstant(0));
-  MaybeDerefIndirectString(var_left, left_instance_type, &var_did_something);
-  MaybeDerefIndirectString(var_right, right_instance_type, &var_did_something);
+  Label did_nothing_left(this), did_something_left(this),
+      didnt_do_anything(this);
+  MaybeDerefIndirectString(var_left, left_instance_type, &did_something_left,
+                           &did_nothing_left);
 
-  GotoIf(WordNotEqual(var_did_something.value(), IntPtrConstant(0)),
-         did_something);
+  BIND(&did_something_left);
+  {
+    MaybeDerefIndirectString(var_right, right_instance_type, did_something,
+                             did_something);
+  }
+
+  BIND(&did_nothing_left);
+  {
+    MaybeDerefIndirectString(var_right, right_instance_type, did_something,
+                             &didnt_do_anything);
+  }
+
+  BIND(&didnt_do_anything);
   // Fall through if neither string was an indirect string.
 }
 
@@ -9142,6 +9154,58 @@ Node* CodeStubAssembler::AllocateJSArrayIterator(Node* array, Node* array_map,
   StoreObjectFieldNoWriteBarrier(
       iterator, JSArrayIterator::kIteratedObjectMapOffset, array_map);
   return iterator;
+}
+
+Node* CodeStubAssembler::AllocateJSIteratorResult(Node* context, Node* value,
+                                                  Node* done) {
+  CSA_ASSERT(this, IsBoolean(done));
+  Node* native_context = LoadNativeContext(context);
+  Node* map =
+      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX);
+  Node* result = Allocate(JSIteratorResult::kSize);
+  StoreMapNoWriteBarrier(result, map);
+  StoreObjectFieldRoot(result, JSIteratorResult::kPropertiesOffset,
+                       Heap::kEmptyFixedArrayRootIndex);
+  StoreObjectFieldRoot(result, JSIteratorResult::kElementsOffset,
+                       Heap::kEmptyFixedArrayRootIndex);
+  StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, value);
+  StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kDoneOffset, done);
+  return result;
+}
+
+Node* CodeStubAssembler::AllocateJSIteratorResultForEntry(Node* context,
+                                                          Node* key,
+                                                          Node* value) {
+  Node* native_context = LoadNativeContext(context);
+  Node* length = SmiConstant(2);
+  int const elements_size = FixedArray::SizeFor(2);
+  Node* elements =
+      Allocate(elements_size + JSArray::kSize + JSIteratorResult::kSize);
+  StoreObjectFieldRoot(elements, FixedArray::kMapOffset,
+                       Heap::kFixedArrayMapRootIndex);
+  StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset, length);
+  StoreFixedArrayElement(elements, 0, key);
+  StoreFixedArrayElement(elements, 1, value);
+  Node* array_map = LoadContextElement(
+      native_context, Context::JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX);
+  Node* array = InnerAllocate(elements, elements_size);
+  StoreMapNoWriteBarrier(array, array_map);
+  StoreObjectFieldRoot(array, JSArray::kPropertiesOffset,
+                       Heap::kEmptyFixedArrayRootIndex);
+  StoreObjectFieldNoWriteBarrier(array, JSArray::kElementsOffset, elements);
+  StoreObjectFieldNoWriteBarrier(array, JSArray::kLengthOffset, length);
+  Node* iterator_map =
+      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX);
+  Node* result = InnerAllocate(array, JSArray::kSize);
+  StoreMapNoWriteBarrier(result, iterator_map);
+  StoreObjectFieldRoot(result, JSIteratorResult::kPropertiesOffset,
+                       Heap::kEmptyFixedArrayRootIndex);
+  StoreObjectFieldRoot(result, JSIteratorResult::kElementsOffset,
+                       Heap::kEmptyFixedArrayRootIndex);
+  StoreObjectFieldNoWriteBarrier(result, JSIteratorResult::kValueOffset, array);
+  StoreObjectFieldRoot(result, JSIteratorResult::kDoneOffset,
+                       Heap::kFalseValueRootIndex);
+  return result;
 }
 
 Node* CodeStubAssembler::TypedArraySpeciesCreateByLength(Node* context,
