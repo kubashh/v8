@@ -249,6 +249,10 @@ class Genesis BASE_EMBEDDED {
   Handle<Context> native_context_;
   Handle<JSGlobalProxy> global_proxy_;
 
+  // Temporary function maps needed only during bootstrapping.
+  Handle<Map> strict_function_with_home_object_map_;
+  Handle<Map> strict_function_with_name_and_home_object_map_;
+
   Handle<JSFunction> strict_poison_function_;
   Handle<JSFunction> restricted_function_properties_thrower_;
 
@@ -534,16 +538,29 @@ void Genesis::CreateSloppyModeFunctionMaps(Handle<JSFunction> empty) {
   Factory* factory = isolate_->factory();
   Handle<Map> map;
 
+  //
+  // Allocate maps for sloppy functions without prototype.
+  //
   map = factory->CreateSloppyFunctionMap(FUNCTION_WITHOUT_PROTOTYPE, empty);
   native_context()->set_sloppy_function_without_prototype_map(*map);
 
+  //
+  // Allocate maps for sloppy functions with readonly prototype.
+  //
   map =
       factory->CreateSloppyFunctionMap(FUNCTION_WITH_READONLY_PROTOTYPE, empty);
   native_context()->set_sloppy_function_with_readonly_prototype_map(*map);
 
+  //
+  // Allocate maps for sloppy functions with writable prototype.
+  //
   map = factory->CreateSloppyFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE,
                                          empty);
   native_context()->set_sloppy_function_map(*map);
+
+  map = factory->CreateSloppyFunctionMap(
+      FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE, empty);
+  native_context()->set_sloppy_function_with_name_map(*map);
 }
 
 // Creates the %ThrowTypeError% function.
@@ -602,17 +619,53 @@ void Genesis::CreateStrictModeFunctionMaps(Handle<JSFunction> empty) {
   Factory* factory = isolate_->factory();
   Handle<Map> map;
 
+  //
+  // Allocate maps for strict functions without prototype.
+  //
   map = factory->CreateStrictFunctionMap(FUNCTION_WITHOUT_PROTOTYPE, empty);
   native_context()->set_strict_function_without_prototype_map(*map);
 
+  map = factory->CreateStrictFunctionMap(METHOD_WITH_NAME, empty);
+  native_context()->set_method_with_name_map(*map);
+
+  map = factory->CreateStrictFunctionMap(METHOD_WITH_HOME_OBJECT, empty);
+  native_context()->set_method_with_home_object_map(*map);
+
+  map =
+      factory->CreateStrictFunctionMap(METHOD_WITH_NAME_AND_HOME_OBJECT, empty);
+  native_context()->set_method_with_name_and_home_object_map(*map);
+
+  //
+  // Allocate maps for strict functions with writable prototype.
+  //
   map = factory->CreateStrictFunctionMap(FUNCTION_WITH_WRITEABLE_PROTOTYPE,
                                          empty);
   native_context()->set_strict_function_map(*map);
 
+  map = factory->CreateStrictFunctionMap(
+      FUNCTION_WITH_NAME_AND_WRITEABLE_PROTOTYPE, empty);
+  native_context()->set_strict_function_with_name_map(*map);
+
+  strict_function_with_home_object_map_ = factory->CreateStrictFunctionMap(
+      FUNCTION_WITH_HOME_OBJECT_AND_WRITEABLE_PROTOTYPE, empty);
+  strict_function_with_name_and_home_object_map_ =
+      factory->CreateStrictFunctionMap(
+          FUNCTION_WITH_NAME_AND_HOME_OBJECT_AND_WRITEABLE_PROTOTYPE, empty);
+
+  //
+  // Allocate maps for strict functions with readonly prototype.
+  //
   map =
       factory->CreateStrictFunctionMap(FUNCTION_WITH_READONLY_PROTOTYPE, empty);
   native_context()->set_strict_function_with_readonly_prototype_map(*map);
 
+  map = factory->CreateStrictFunctionMap(
+      FUNCTION_WITH_NAME_AND_READONLY_PROTOTYPE, empty);
+  native_context()->set_strict_function_with_name_map(*map);
+
+  //
+  // Allocate map for class functions.
+  //
   map = factory->CreateClassFunctionMap(empty);
   native_context()->set_class_function_map(*map);
 
@@ -676,6 +729,19 @@ void Genesis::CreateObjectFunction(Handle<JSFunction> empty_function) {
   }
 }
 
+namespace {
+
+Handle<Map> CreateNonConstructorMap(Isolate* isolate, Handle<Map> source_map,
+                                    Handle<JSObject> prototype,
+                                    const char* reason) {
+  Handle<Map> map = Map::Copy(source_map, reason);
+  map->set_is_constructor(false);
+  Map::SetPrototype(map, prototype);
+  return map;
+}
+
+}  // namespace
+
 void Genesis::CreateIteratorMaps(Handle<JSFunction> empty) {
   // Create iterator-related meta-objects.
   Handle<JSObject> iterator_prototype =
@@ -732,11 +798,27 @@ void Genesis::CreateIteratorMaps(Handle<JSFunction> empty) {
   // writable, non-enumerable, and non-configurable (as per ES6 draft
   // 04-14-15, section 25.2.4.3).
   // Generator functions do not have "caller" or "arguments" accessors.
-  Handle<Map> generator_function_map =
-      Map::Copy(isolate()->strict_function_map(), "GeneratorFunction");
-  generator_function_map->set_is_constructor(false);
-  Map::SetPrototype(generator_function_map, generator_function_prototype);
-  native_context()->set_generator_function_map(*generator_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(isolate(), isolate()->strict_function_map(),
+                                generator_function_prototype,
+                                "GeneratorFunction");
+  native_context()->set_generator_function_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->strict_function_with_name_map(),
+      generator_function_prototype, "GeneratorFunction with name");
+  native_context()->set_generator_function_with_name_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_with_home_object_map_,
+      generator_function_prototype, "GeneratorFunction with home object");
+  native_context()->set_generator_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(isolate(),
+                                strict_function_with_name_and_home_object_map_,
+                                generator_function_prototype,
+                                "GeneratorFunction with name and home object");
+  native_context()->set_generator_function_with_name_and_home_object_map(*map);
 
   Handle<JSFunction> object_function(native_context()->object_function());
   Handle<Map> generator_object_prototype_map = Map::Create(isolate(), 0);
@@ -829,13 +911,29 @@ void Genesis::CreateAsyncIteratorMaps(Handle<JSFunction> empty) {
   // writable, non-enumerable, and non-configurable (as per ES6 draft
   // 04-14-15, section 25.2.4.3).
   // Async Generator functions do not have "caller" or "arguments" accessors.
-  Handle<Map> async_generator_function_map =
-      Map::Copy(isolate()->strict_function_map(), "AsyncGeneratorFunction");
-  async_generator_function_map->set_is_constructor(false);
-  Map::SetPrototype(async_generator_function_map,
-                    async_generator_function_prototype);
-  native_context()->set_async_generator_function_map(
-      *async_generator_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(isolate(), isolate()->strict_function_map(),
+                                async_generator_function_prototype,
+                                "AsyncGeneratorFunction");
+  native_context()->set_async_generator_function_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->strict_function_with_name_map(),
+      async_generator_function_prototype, "AsyncGeneratorFunction with name");
+  native_context()->set_async_generator_function_with_name_map(*map);
+
+  map =
+      CreateNonConstructorMap(isolate(), strict_function_with_home_object_map_,
+                              async_generator_function_prototype,
+                              "AsyncGeneratorFunction with home object");
+  native_context()->set_async_generator_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), strict_function_with_name_and_home_object_map_,
+      async_generator_function_prototype,
+      "AsyncGeneratorFunction with name and home object");
+  native_context()->set_async_generator_function_with_name_and_home_object_map(
+      *map);
 
   Handle<JSFunction> object_function(native_context()->object_function());
   Handle<Map> async_generator_object_prototype_map = Map::Create(isolate(), 0);
@@ -856,13 +954,26 @@ void Genesis::CreateAsyncFunctionMaps(Handle<JSFunction> empty) {
                         factory()->NewStringFromAsciiChecked("AsyncFunction"),
                         static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
 
-  Handle<Map> strict_function_map(
-      native_context()->strict_function_without_prototype_map());
-  Handle<Map> async_function_map =
-      Map::Copy(strict_function_map, "AsyncFunction");
-  async_function_map->set_is_constructor(false);
-  Map::SetPrototype(async_function_map, async_function_prototype);
-  native_context()->set_async_function_map(*async_function_map);
+  Handle<Map> map;
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->strict_function_without_prototype_map(),
+      async_function_prototype, "AsyncFunction");
+  native_context()->set_async_function_map(*map);
+
+  map = CreateNonConstructorMap(isolate(), isolate()->method_with_name_map(),
+                                async_function_prototype,
+                                "AsyncFunction with name");
+  native_context()->set_async_function_with_name_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->method_with_home_object_map(),
+      async_function_prototype, "AsyncFunction with home object");
+  native_context()->set_async_function_with_home_object_map(*map);
+
+  map = CreateNonConstructorMap(
+      isolate(), isolate()->method_with_name_and_home_object_map(),
+      async_function_prototype, "AsyncFunction with name and home object");
+  native_context()->set_async_function_with_name_and_home_object_map(*map);
 }
 
 void Genesis::CreateJSProxyMaps() {
@@ -1018,7 +1129,7 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
         FunctionTemplateInfo::cast(js_global_object_template->constructor()));
     js_global_object_function = ApiNatives::CreateApiFunction(
         isolate(), js_global_object_constructor, factory()->the_hole_value(),
-        ApiNatives::GlobalObjectType);
+        ApiNatives::GlobalObjectType, isolate()->factory()->empty_string());
   }
 
   js_global_object_function->initial_map()->set_is_prototype_map(true);
@@ -1041,7 +1152,7 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
             FunctionTemplateInfo::cast(data->constructor()));
     global_proxy_function = ApiNatives::CreateApiFunction(
         isolate(), global_constructor, factory()->the_hole_value(),
-        ApiNatives::GlobalProxyType);
+        ApiNatives::GlobalProxyType, isolate()->factory()->empty_string());
   }
   Handle<String> global_name = factory()->global_string();
   global_proxy_function->shared()->set_instance_class_name(*global_name);
@@ -1349,9 +1460,14 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
       isolate->sloppy_function_map()->SetConstructor(*function_fun);
       isolate->sloppy_function_with_readonly_prototype_map()->SetConstructor(
           *function_fun);
+      isolate->sloppy_function_with_name_map()->SetConstructor(*function_fun);
 
       isolate->strict_function_map()->SetConstructor(*function_fun);
       isolate->strict_function_with_readonly_prototype_map()->SetConstructor(
+          *function_fun);
+      isolate->strict_function_with_name_map()->SetConstructor(*function_fun);
+      strict_function_with_home_object_map_->SetConstructor(*function_fun);
+      strict_function_with_name_and_home_object_map_->SetConstructor(
           *function_fun);
 
       isolate->class_function_map()->SetConstructor(*function_fun);
