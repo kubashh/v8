@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c64f10ef_ad553587",
+        "filename": "test/mjsunit/allocation-site-info.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-10T18:55:19Z",
+      "side": 1,
+      "message": "I guess if this has performance implications, well, we\u0027ll see it! :)",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 17
+      },
+      "revId": "9339c4d8ca715bf19b4a296e34535e9953498157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

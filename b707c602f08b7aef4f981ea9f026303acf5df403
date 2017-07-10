@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a188fc3_cff54f8b",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-07-10T18:55:19Z",
+      "side": 0,
+      "message": "Wow, nice simplification.",
+      "range": {
+        "startLine": 778,
+        "startChar": 35,
+        "endLine": 778,
+        "endChar": 49
+      },
+      "revId": "b707c602f08b7aef4f981ea9f026303acf5df403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
