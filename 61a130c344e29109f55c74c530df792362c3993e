@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "553189e5_3f8d3a6e",
+        "filename": "tools/run-tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-07-10T12:14:46Z",
+      "side": 1,
+      "message": "outdir is already misused as output folder here. Can you not just use that one for your case? Or is this to omit passing out/?",
+      "range": {
+        "startLine": 477,
+        "startChar": 18,
+        "endLine": 477,
+        "endChar": 32
+      },
+      "revId": "61a130c344e29109f55c74c530df792362c3993e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46a006b6_9c71ebea",
+        "filename": "tools/run-tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-07-10T12:14:46Z",
+      "side": 1,
+      "message": "mode\u003doptdebug might not be understood everywhere. See e.g. the failing trybot. This has been a construction yard for years and is somewhat tracked with https://crbug.com/v8/5533",
+      "range": {
+        "startLine": 517,
+        "startChar": 17,
+        "endLine": 517,
+        "endChar": 34
+      },
+      "revId": "61a130c344e29109f55c74c530df792362c3993e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
