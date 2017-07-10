@@ -307,6 +307,8 @@ def BuildOptions():
                     " \"%s\"" % ",".join(EXHAUSTIVE_VARIANTS))
   result.add_option("--outdir", help="Base directory with compile output",
                     default="out")
+  result.add_option("--output-folder", help="Specific build directory within "
+                    "--outdir", default=None)
   result.add_option("--gn", help="Scan out.gn for the last built configuration",
                     default=False, action="store_true")
   result.add_option("--predictable",
@@ -467,11 +469,14 @@ def ProcessOptions(options):
   if options.buildbot:
     build_config_path = os.path.join(
         BASE_DIR, options.outdir, options.mode, "v8_build_config.json")
+  elif options.output_folder:
+    build_config_path = os.path.join(
+        BASE_DIR, options.outdir, options.output_folder, "v8_build_config.json")
   else:
     build_config_path = os.path.join(
         BASE_DIR, options.outdir, "v8_build_config.json")
 
-  # Auto-detect test configurations based on the build (GN only).
+  # Auto-detect test configurations based on the build(GN only).
   if os.path.exists(build_config_path):
     try:
       with open(build_config_path) as f:
@@ -495,6 +500,16 @@ def ProcessOptions(options):
     # In V8 land, GN's x86 is called ia32.
     if build_config["v8_target_cpu"] == "x86":
       build_config["v8_target_cpu"] = "ia32"
+    build_config_mode = 'release'
+    if build_config["is_debug"]:
+      if build_config['v8_optimized_debug']:
+        build_config_mode = 'optdebug'
+      else:
+        build_config_mode = 'debug'
+      # For now, allow overriding optdebug/debug if specified.
+      mode = getattr(options, 'mode');
+      if mode != None:
+        build_config_mode = mode
 
     # Update options based on the build config. Sanity check that we're not
     # trying to use inconsistent options.
@@ -503,7 +518,7 @@ def ProcessOptions(options):
         ('asan', build_config["is_asan"]),
         ('dcheck_always_on', build_config["dcheck_always_on"]),
         ('gcov_coverage', build_config["is_gcov_coverage"]),
-        ('mode', 'debug' if build_config["is_debug"] else 'release'),
+        ('mode', build_config_mode),
         ('msan', build_config["is_msan"]),
         ('no_i18n', not build_config["v8_enable_i18n_support"]),
         ('no_snap', not build_config["v8_use_snapshot"]),
@@ -763,8 +778,8 @@ def Execute(arch, mode, args, options, suites):
   shell_dir = options.shell_dir
   if not shell_dir:
     if options.auto_detect:
-      # If an output dir with a build was passed, test directly in that
-      # directory.
+      # If an output dir with a build / output-folder  was passed, test directly
+      # in that directory.
       shell_dir = os.path.join(BASE_DIR, options.outdir)
     elif options.buildbot:
       # TODO(machenbach): Get rid of different output folder location on
