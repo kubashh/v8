@@ -1,0 +1,320 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e445b211_806359c6",
+        "filename": "src/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Now that Await is a different node type from suspend, could we move it out of the SuspendFlags? Now that we have different AST nodes for each type of suspend I think we can eventually remove the flags entirely (and just keep a simple enum for whether it\u0027s an async generator).",
+      "range": {
+        "startLine": 1421,
+        "startChar": 12,
+        "endLine": 1421,
+        "endChar": 19
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b07a4e6b_2aa0c6f8",
+        "filename": "src/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Remove please",
+      "range": {
+        "startLine": 1430,
+        "startChar": 12,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640040e4_b85d13d2",
+        "filename": "src/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Remove please",
+      "range": {
+        "startLine": 1430,
+        "startChar": 12,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfdd32a2_84b7553d",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Please revert this change (no longer needed here AFAICT)",
+      "range": {
+        "startLine": 451,
+        "startChar": 2,
+        "endLine": 451,
+        "endChar": 43
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7acdd7f5_5b601689",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2960,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "nit - move into the block and /s/input/operand",
+      "range": {
+        "startLine": 2960,
+        "startChar": 5,
+        "endLine": 2960,
+        "endChar": 33
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f408b662_7c8bab31",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2973,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "I don\u0027t think this DCHECK is necessary - BuildVariableLoad will crash very obviously if the variable is null.",
+      "range": {
+        "startLine": 2973,
+        "startChar": 6,
+        "endLine": 2973,
+        "endChar": 35
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf2e2929_d9d5bee5",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2979,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "nit - await_builtin_function_id",
+      "range": {
+        "startLine": 2979,
+        "startChar": 8,
+        "endLine": 2979,
+        "endChar": 21
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad9fec59_302ae1aa",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Could you just make this \"catch_prediction_ \u003d\u003d HandlerTable::ASYNC_AWAIT\" here and do the DCHECK !HandlerTable::UNCAUGHT at the top of the visit?  Also, should HandlerTable::ASYNC_AWAIT be called HandlerTable::ASYNC_AWAIT_UNCAUGHT ?",
+      "range": {
+        "startLine": 2981,
+        "startChar": 22,
+        "endLine": 2981,
+        "endChar": 41
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df5b8154_0ef02930",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "Rather than the two different \"expr-\u003eis_async_generator()\" checks, I think this would be shorter and clearer if we just build the arguments independently for either branch, namely something like:\n\nint await_builtin_function_id;\nRegisterList args;\nif (expr-\u003eis_async_generator()) {\n  await_builtin \u003d ...\n  args \u003d register_allocator()-\u003eNewRegisterList(3);\n  builder()\n        -\u003eMoveRegister(generator_object_, args[0])\n        .MoveRegister(operand, args[1]);\n  // AsyncFunction Await builtins require a 3rd parameter to hold the outer\n  // promise.\n  Variable* var_promise \u003d closure_scope()-\u003epromise_var();\n  BuildVariableLoadForAccumulatorValue(closure_scope()-\u003epromise_var(), FeedbackSlot::Invalid(),\n                                       HoleCheckMode::kElided);\n  builder()-\u003eStoreAccumulatorInRegister(args[2]);\n} else {\n  await_builtin \u003d ...\n  args \u003d register_allocator()-\u003eNewRegisterList(2);\n  builder()\n        -\u003eMoveRegister(generator_object_, args[0])\n        .MoveRegister(operand, args[1]);\n}",
+      "range": {
+        "startLine": 2964,
+        "startChar": 4,
+        "endLine": 2988,
+        "endChar": 5
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a2d4320_43332921",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "nit - newline above",
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51e4a64_0f813fda",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2997,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "please add a comment: \"// Upon resume, we continue here.\" above this line",
+      "range": {
+        "startLine": 2997,
+        "startChar": 2,
+        "endLine": 2997,
+        "endChar": 22
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ae848dc_a003d869",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "no real need for this extra RegisterAllocationScope or block scoping - all registers will go out of scope at the end of the function anyway",
+      "range": {
+        "startLine": 2999,
+        "startChar": 0,
+        "endLine": 3000,
+        "endChar": 49
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5fec721_471fe6b5",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "What happens to the branch with kReturn? Can that not occur on awaits? If so, no need for this static assert",
+      "range": {
+        "startLine": 3008,
+        "startChar": 3,
+        "endLine": 3008,
+        "endChar": 78
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc960535_578e7d25",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T10:46:05Z",
+      "side": 1,
+      "message": "If you are only switching on a single item it is less bytecode to just do a strict equals.",
+      "range": {
+        "startLine": 3012,
+        "startChar": 15,
+        "endLine": 3012,
+        "endChar": 49
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
