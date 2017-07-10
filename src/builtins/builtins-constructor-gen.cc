@@ -541,11 +541,10 @@ void ConstructorBuiltinsAssembler::CreateFastCloneShallowArrayBuiltin(
   BIND(&call_runtime);
   {
     Comment("call runtime");
-    Node* flags =
-        SmiConstant(Smi::FromInt(ArrayLiteral::kShallowElements |
-                                 (allocation_site_mode == TRACK_ALLOCATION_SITE
-                                      ? 0
-                                      : ArrayLiteral::kDisableMementos)));
+    Node* flags = SmiConstant(ComplexLiteral::kIsShallow |
+                              (allocation_site_mode == TRACK_ALLOCATION_SITE
+                                   ? 0
+                                   : ComplexLiteral::kDisableMementos));
     Return(CallRuntime(Runtime::kCreateArrayLiteral, context, closure,
                        literal_index, constant_elements, flags));
   }
