@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_SCAVENGER_H_
 #define V8_HEAP_SCAVENGER_H_
 
+#include "src/heap/local-allocator.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/slot-set.h"
 #include "src/heap/worklist.h"
@@ -74,6 +75,7 @@ class Scavenger {
         promotion_list_(promotion_list, task_id),
         copied_list_(copied_list, task_id),
         local_pretenuring_feedback_(kInitialLocalPretenuringFeedbackCapacity),
+        allocator_(heap),
         is_logging_(is_logging),
         is_incremental_marking_(is_incremental_marking) {}
 
@@ -132,6 +134,7 @@ class Scavenger {
   PromotionList::View promotion_list_;
   CopiedRangesList copied_list_;
   base::HashMap local_pretenuring_feedback_;
+  LocalAllocator allocator_;
   bool is_logging_;
   bool is_incremental_marking_;
 };
