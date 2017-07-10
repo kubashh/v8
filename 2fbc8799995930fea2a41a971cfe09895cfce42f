@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1e0f730_b47c833f",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T09:55:29Z",
+      "side": 1,
+      "message": "Please add some comments above the if and in the if block to explain what you are checking and why",
+      "range": {
+        "startLine": 230,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 7
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ac719d1_1a45109e",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T09:55:29Z",
+      "side": 1,
+      "message": "Having Equals and \u003d\u003d is a bit confusing. How about having this one be WouldBeEqualsIfAddCondition or something better please.",
+      "range": {
+        "startLine": 325,
+        "startChar": 47,
+        "endLine": 325,
+        "endChar": 53
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d6d8616_f4bda893",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T09:55:29Z",
+      "side": 1,
+      "message": "is there a \u003d\u003d operator on BranchConditions? Maybe adding that one would make this clearer?",
+      "range": {
+        "startLine": 330,
+        "startChar": 2,
+        "endLine": 330,
+        "endChar": 17
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

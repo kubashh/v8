@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdb1fa4c_918b4077",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-10T09:55:29Z",
+      "side": 1,
+      "message": "path",
+      "range": {
+        "startLine": 335,
+        "startChar": 30,
+        "endLine": 335,
+        "endChar": 33
+      },
+      "revId": "c47b79f70d6970d208c9504a21580f3f02567bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
