@@ -22,6 +22,30 @@
       "revId": "9339c4d8ca715bf19b4a296e34535e9953498157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8243df5_6d74eee3",
+        "filename": "test/mjsunit/allocation-site-info.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-10T19:07:21Z",
+      "side": 1,
+      "message": "Yes... although I\u0027m tempted to say that if some code relies on Array(0) producing a packed array (instead of just using Array() or []), then well, ya know...",
+      "parentUuid": "c64f10ef_ad553587",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 17
+      },
+      "revId": "9339c4d8ca715bf19b4a296e34535e9953498157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
