@@ -1354,8 +1354,9 @@ static Local<FunctionTemplate> FunctionTemplateNew(
   obj->set_undetectable(false);
   obj->set_needs_access_check(false);
   obj->set_accept_any_receiver(true);
-  if (!signature.IsEmpty())
+  if (!signature.IsEmpty()) {
     obj->set_signature(*Utils::OpenHandle(*signature));
+  }
   obj->set_cached_property_name(
       cached_property_name.IsEmpty()
           ? isolate->heap()->the_hole_value()
@@ -2375,14 +2376,9 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
                         Function);
   TRACE_EVENT0("v8", "V8.ScriptCompiler");
   i::Handle<i::String> source_string;
-  int parameters_end_pos = i::kNoSourcePosition;
   auto factory = isolate->factory();
   if (arguments_count) {
-    if (i::FLAG_harmony_function_tostring) {
-      source_string = factory->NewStringFromStaticChars("(function anonymous(");
-    } else {
-      source_string = factory->NewStringFromStaticChars("(function(");
-    }
+    source_string = factory->NewStringFromStaticChars("(function(");
     for (size_t i = 0; i < arguments_count; ++i) {
       IsIdentifierHelper helper;
       if (!helper.Check(*Utils::OpenHandle(*arguments[i]))) {
@@ -2401,25 +2397,12 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
       RETURN_ON_FAILED_EXECUTION(Function);
     }
     i::Handle<i::String> brackets;
-    if (i::FLAG_harmony_function_tostring) {
-      // Append linefeed and signal that text beyond the linefeed is not part of
-      // the formal parameters.
-      brackets = factory->NewStringFromStaticChars("\n) {\n");
-      parameters_end_pos = source_string->length() + 1;
-    } else {
-      brackets = factory->NewStringFromStaticChars("){");
-    }
+    brackets = factory->NewStringFromStaticChars("){");
     has_pending_exception = !factory->NewConsString(source_string, brackets)
                                  .ToHandle(&source_string);
     RETURN_ON_FAILED_EXECUTION(Function);
   } else {
-    if (i::FLAG_harmony_function_tostring) {
-      source_string =
-          factory->NewStringFromStaticChars("(function anonymous(\n) {\n");
-      parameters_end_pos = source_string->length() - 4;
-    } else {
-      source_string = factory->NewStringFromStaticChars("(function(){");
-    }
+    source_string = factory->NewStringFromStaticChars("(function(){");
   }
 
   int scope_position = source_string->length();
@@ -2469,7 +2452,7 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
   has_pending_exception =
       !i::Compiler::GetFunctionFromEval(
            source_string, outer_info, context, i::SLOPPY,
-           i::ONLY_SINGLE_FUNCTION_LITERAL, parameters_end_pos,
+           i::ONLY_SINGLE_FUNCTION_LITERAL, i::kNoSourcePosition,
            eval_scope_position, eval_position, line_offset,
            column_offset - scope_position, name_obj, source->resource_options)
            .ToHandle(&fun);
@@ -7395,13 +7378,20 @@ Maybe<bool> Map::Delete(Local<Context> context, Local<Value> key) {
 }
 
 namespace {
+
+enum class MapAsArrayKind {
+  kEntries = i::JS_MAP_KEY_VALUE_ITERATOR_TYPE,
+  kKeys = i::JS_MAP_KEY_ITERATOR_TYPE,
+  kValues = i::JS_MAP_VALUE_ITERATOR_TYPE
+};
+
 i::Handle<i::JSArray> MapAsArray(i::Isolate* isolate, i::Object* table_obj,
-                                 int offset, int kind) {
+                                 int offset, MapAsArrayKind kind) {
   i::Factory* factory = isolate->factory();
   i::Handle<i::OrderedHashMap> table(i::OrderedHashMap::cast(table_obj));
   if (offset >= table->NumberOfElements()) return factory->NewJSArray(0);
   int length = (table->NumberOfElements() - offset) *
-               (kind == i::JSMapIterator::kKindEntries ? 2 : 1);
+               (kind == MapAsArrayKind::kEntries ? 2 : 1);
   i::Handle<i::FixedArray> result = factory->NewFixedArray(length);
   int result_index = 0;
   {
@@ -7412,12 +7402,10 @@ i::Handle<i::JSArray> MapAsArray(i::Isolate* isolate, i::Object* table_obj,
       i::Object* key = table->KeyAt(i);
       if (key == the_hole) continue;
       if (offset-- > 0) continue;
-      if (kind == i::JSMapIterator::kKindEntries ||
-          kind == i::JSMapIterator::kKindKeys) {
+      if (kind == MapAsArrayKind::kEntries || kind == MapAsArrayKind::kKeys) {
         result->set(result_index++, key);
       }
-      if (kind == i::JSMapIterator::kKindEntries ||
-          kind == i::JSMapIterator::kKindValues) {
+      if (kind == MapAsArrayKind::kEntries || kind == MapAsArrayKind::kValues) {
         result->set(result_index++, table->ValueAt(i));
       }
     }
@@ -7426,6 +7414,7 @@ i::Handle<i::JSArray> MapAsArray(i::Isolate* isolate, i::Object* table_obj,
   DCHECK_EQ(result_index, length);
   return factory->NewJSArrayWithElements(result, i::PACKED_ELEMENTS, length);
 }
+
 }  // namespace
 
 Local<Array> Map::AsArray() const {
@@ -7434,7 +7423,7 @@ Local<Array> Map::AsArray() const {
   LOG_API(isolate, Map, AsArray);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
   return Utils::ToLocal(
-      MapAsArray(isolate, obj->table(), 0, i::JSMapIterator::kKindEntries));
+      MapAsArray(isolate, obj->table(), 0, MapAsArrayKind::kEntries));
 }
 
 
@@ -7720,10 +7709,10 @@ MaybeLocal<Proxy> Proxy::New(Local<Context> context, Local<Object> local_target,
 }
 
 Local<String> WasmCompiledModule::GetWasmWireBytes() {
-  i::Handle<i::JSObject> obj =
-      i::Handle<i::JSObject>::cast(Utils::OpenHandle(this));
+  i::Handle<i::WasmModuleObject> obj =
+      i::Handle<i::WasmModuleObject>::cast(Utils::OpenHandle(this));
   i::Handle<i::WasmCompiledModule> compiled_part =
-      i::handle(i::WasmCompiledModule::cast(obj->GetEmbedderField(0)));
+      i::handle(i::WasmCompiledModule::cast(obj->compiled_module()));
   i::Handle<i::String> wire_bytes(compiled_part->module_bytes());
   return Local<String>::Cast(Utils::ToLocal(wire_bytes));
 }
@@ -7759,10 +7748,10 @@ MaybeLocal<WasmCompiledModule> WasmCompiledModule::FromTransferrableModule(
 }
 
 WasmCompiledModule::SerializedModule WasmCompiledModule::Serialize() {
-  i::Handle<i::JSObject> obj =
-      i::Handle<i::JSObject>::cast(Utils::OpenHandle(this));
+  i::Handle<i::WasmModuleObject> obj =
+      i::Handle<i::WasmModuleObject>::cast(Utils::OpenHandle(this));
   i::Handle<i::WasmCompiledModule> compiled_part =
-      i::handle(i::WasmCompiledModule::cast(obj->GetEmbedderField(0)));
+      i::handle(i::WasmCompiledModule::cast(obj->compiled_module()));
 
   std::unique_ptr<i::ScriptData> script_data =
       i::WasmCompiledModuleSerializer::SerializeWasmModule(obj->GetIsolate(),
@@ -9794,12 +9783,13 @@ v8::MaybeLocal<v8::Array> debug::EntriesPreview(Isolate* v8_isolate,
   if (object->IsJSMapIterator()) {
     i::Handle<i::JSMapIterator> iterator =
         i::Handle<i::JSMapIterator>::cast(object);
-    int iterator_kind = i::Smi::cast(iterator->kind())->value();
-    *is_key_value = iterator_kind == i::JSMapIterator::kKindEntries;
+    MapAsArrayKind const kind =
+        static_cast<MapAsArrayKind>(iterator->map()->instance_type());
+    *is_key_value = kind == MapAsArrayKind::kEntries;
     if (!iterator->HasMore()) return v8::Array::New(v8_isolate);
     return Utils::ToLocal(MapAsArray(isolate, iterator->table(),
                                      i::Smi::cast(iterator->index())->value(),
-                                     iterator_kind));
+                                     kind));
   }
   if (object->IsJSSetIterator()) {
     i::Handle<i::JSSetIterator> it = i::Handle<i::JSSetIterator>::cast(object);
@@ -9859,6 +9849,18 @@ debug::ConsoleCallArguments::ConsoleCallArguments(
 
 int debug::GetStackFrameId(v8::Local<v8::StackFrame> frame) {
   return Utils::OpenHandle(*frame)->id();
+}
+
+v8::Local<v8::StackTrace> debug::GetDetailedStackTrace(
+    Isolate* v8_isolate, v8::Local<v8::Object> v8_error) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  i::Handle<i::JSReceiver> error = Utils::OpenHandle(*v8_error);
+  if (!error->IsJSObject()) {
+    return v8::Local<v8::StackTrace>();
+  }
+  i::Handle<i::FixedArray> stack_trace =
+      isolate->GetDetailedStackTrace(i::Handle<i::JSObject>::cast(error));
+  return Utils::StackTraceToLocal(stack_trace);
 }
 
 MaybeLocal<debug::Script> debug::GeneratorObject::Script() {

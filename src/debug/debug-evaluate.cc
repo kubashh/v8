@@ -277,8 +277,6 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(IsJSProxy)                       \
   V(IsJSMap)                         \
   V(IsJSSet)                         \
-  V(IsJSMapIterator)                 \
-  V(IsJSSetIterator)                 \
   V(IsJSWeakMap)                     \
   V(IsJSWeakSet)                     \
   V(IsRegExp)                        \
@@ -313,7 +311,6 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(FixedArrayGet)                   \
   V(StringGetRawHashField)           \
   V(GenericHash)                     \
-  V(MapIteratorInitialize)           \
   V(MapInitialize)                   \
   V(SetInitialize)                   \
   /* Called from builtins */         \
@@ -440,6 +437,7 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     case Bytecode::kToObject:
     case Bytecode::kToNumber:
     case Bytecode::kToName:
+    case Bytecode::kToPrimitiveToString:
     // Misc.
     case Bytecode::kStringConcat:
     case Bytecode::kForInPrepare:
@@ -538,6 +536,9 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kMapConstructor:
     case Builtins::kMapGet:
     case Builtins::kMapGetSize:
+    case Builtins::kMapPrototypeEntries:
+    case Builtins::kMapPrototypeKeys:
+    case Builtins::kMapPrototypeValues:
     // Math builtins.
     case Builtins::kMathAbs:
     case Builtins::kMathAcos:
@@ -590,6 +591,8 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     // Set builtins.
     case Builtins::kSetConstructor:
     case Builtins::kSetGetSize:
+    case Builtins::kSetPrototypeEntries:
+    case Builtins::kSetPrototypeValues:
     // String builtins. Strings are immutable.
     case Builtins::kStringFromCharCode:
     case Builtins::kStringFromCodePoint:

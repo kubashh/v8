@@ -73,6 +73,10 @@
 //           - JSDate
 //         - JSMessageObject
 //         - JSModuleNamespace
+//         - WasmInstanceObject
+//         - WasmMemoryObject
+//         - WasmModuleObject
+//         - WasmTableObject
 //       - JSProxy
 //     - FixedArrayBase
 //       - ByteArray
@@ -99,6 +103,8 @@
 //         - ModuleInfo
 //         - ScriptContextTable
 //         - WeakFixedArray
+//         - WasmSharedModuleData
+//         - WasmCompiledModule
 //       - FixedDoubleArray
 //     - Name
 //       - String
@@ -394,8 +400,11 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(JS_DATA_VIEW_TYPE)                                                         \
   V(JS_SET_TYPE)                                                               \
   V(JS_MAP_TYPE)                                                               \
-  V(JS_SET_ITERATOR_TYPE)                                                      \
-  V(JS_MAP_ITERATOR_TYPE)                                                      \
+  V(JS_SET_KEY_VALUE_ITERATOR_TYPE)                                            \
+  V(JS_SET_VALUE_ITERATOR_TYPE)                                                \
+  V(JS_MAP_KEY_ITERATOR_TYPE)                                                  \
+  V(JS_MAP_KEY_VALUE_ITERATOR_TYPE)                                            \
+  V(JS_MAP_VALUE_ITERATOR_TYPE)                                                \
   V(JS_WEAK_MAP_TYPE)                                                          \
   V(JS_WEAK_SET_TYPE)                                                          \
   V(JS_PROMISE_CAPABILITY_TYPE)                                                \
@@ -445,6 +454,10 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(JS_FAST_HOLEY_DOUBLE_ARRAY_VALUE_ITERATOR_TYPE)                            \
   V(JS_GENERIC_ARRAY_VALUE_ITERATOR_TYPE)                                      \
                                                                                \
+  V(WASM_INSTANCE_TYPE)                                                        \
+  V(WASM_MEMORY_TYPE)                                                          \
+  V(WASM_MODULE_TYPE)                                                          \
+  V(WASM_TABLE_TYPE)                                                           \
   V(JS_BOUND_FUNCTION_TYPE)                                                    \
   V(JS_FUNCTION_TYPE)
 
@@ -747,8 +760,11 @@ enum InstanceType {
   JS_DATA_VIEW_TYPE,
   JS_SET_TYPE,
   JS_MAP_TYPE,
-  JS_SET_ITERATOR_TYPE,
-  JS_MAP_ITERATOR_TYPE,
+  JS_SET_KEY_VALUE_ITERATOR_TYPE,
+  JS_SET_VALUE_ITERATOR_TYPE,
+  JS_MAP_KEY_ITERATOR_TYPE,
+  JS_MAP_KEY_VALUE_ITERATOR_TYPE,
+  JS_MAP_VALUE_ITERATOR_TYPE,
   JS_WEAK_MAP_TYPE,
   JS_WEAK_SET_TYPE,
   JS_PROMISE_CAPABILITY_TYPE,
@@ -798,6 +814,10 @@ enum InstanceType {
   JS_FAST_HOLEY_DOUBLE_ARRAY_VALUE_ITERATOR_TYPE,
   JS_GENERIC_ARRAY_VALUE_ITERATOR_TYPE,
 
+  WASM_INSTANCE_TYPE,
+  WASM_MEMORY_TYPE,
+  WASM_MODULE_TYPE,
+  WASM_TABLE_TYPE,
   JS_BOUND_FUNCTION_TYPE,
   JS_FUNCTION_TYPE,  // LAST_JS_OBJECT_TYPE, LAST_JS_RECEIVER_TYPE
 
@@ -1053,6 +1073,10 @@ template <class C> inline bool Is(Object* obj);
   V(JSMapIterator)                     \
   V(JSMessageObject)                   \
   V(JSModuleNamespace)                 \
+  V(WasmInstanceObject)                \
+  V(WasmMemoryObject)                  \
+  V(WasmModuleObject)                  \
+  V(WasmTableObject)                   \
   V(JSObject)                          \
   V(JSPromise)                         \
   V(JSPromiseCapability)               \
@@ -2201,17 +2225,6 @@ class JSObject: public JSReceiver {
   // Requires: HasFastElements().
   static void EnsureWritableFastElements(Handle<JSObject> object);
 
-  // Collects elements starting at index 0.
-  // Undefined values are placed after non-undefined values.
-  // Returns the number of non-undefined values.
-  static Handle<Object> PrepareElementsForSort(Handle<JSObject> object,
-                                               uint32_t limit);
-  // As PrepareElementsForSort, but only on objects where elements is
-  // a dictionary, and it will stay a dictionary.  Collates undefined and
-  // unexisting elements below limit from position zero of the elements.
-  static Handle<Object> PrepareSlowElementsForSort(Handle<JSObject> object,
-                                                   uint32_t limit);
-
   MUST_USE_RESULT static Maybe<bool> SetPropertyWithInterceptor(
       LookupIterator* it, ShouldThrow should_throw, Handle<Object> value);
 
@@ -2344,7 +2357,7 @@ class JSObject: public JSReceiver {
   MUST_USE_RESULT static MaybeHandle<Object> GetPropertyWithInterceptor(
       LookupIterator* it, bool* done);
 
-  static void ValidateElements(Handle<JSObject> object);
+  static void ValidateElements(JSObject* object);
 
   // Makes sure that this object can contain HeapObject as elements.
   static inline void EnsureCanContainHeapObjectElements(Handle<JSObject> obj);
@@ -2400,7 +2413,7 @@ class JSObject: public JSReceiver {
 
   // Get the header size for a JSObject.  Used to compute the index of
   // embedder fields as well as the number of embedder fields.
-  static inline int GetHeaderSize(InstanceType instance_type);
+  static int GetHeaderSize(InstanceType instance_type);
   inline int GetHeaderSize();
 
   static inline int GetEmbedderFieldCount(const Map* map);
@@ -3457,7 +3470,7 @@ class DeoptimizationInputData: public FixedArray {
   static const int kTranslationByteArrayIndex = 0;
   static const int kInlinedFunctionCountIndex = 1;
   static const int kLiteralArrayIndex = 2;
-  static const int kOsrAstIdIndex = 3;
+  static const int kOsrBytecodeOffsetIndex = 3;
   static const int kOsrPcOffsetIndex = 4;
   static const int kOptimizationIdIndex = 5;
   static const int kSharedFunctionInfoIndex = 6;
@@ -3466,9 +3479,9 @@ class DeoptimizationInputData: public FixedArray {
   static const int kFirstDeoptEntryIndex = 9;
 
   // Offsets of deopt entry elements relative to the start of the entry.
-  static const int kAstIdRawOffset = 0;
+  static const int kBytecodeOffsetRawOffset = 0;
   static const int kTranslationIndexOffset = 1;
-  static const int kArgumentsStackHeightOffset = 2;
+  static const int kTrampolinePcOffset = 2;
   static const int kPcOffset = 3;
   static const int kDeoptEntrySize = 4;
 
@@ -3480,7 +3493,7 @@ class DeoptimizationInputData: public FixedArray {
   DECL_ELEMENT_ACCESSORS(TranslationByteArray, ByteArray)
   DECL_ELEMENT_ACCESSORS(InlinedFunctionCount, Smi)
   DECL_ELEMENT_ACCESSORS(LiteralArray, FixedArray)
-  DECL_ELEMENT_ACCESSORS(OsrAstId, Smi)
+  DECL_ELEMENT_ACCESSORS(OsrBytecodeOffset, Smi)
   DECL_ELEMENT_ACCESSORS(OsrPcOffset, Smi)
   DECL_ELEMENT_ACCESSORS(OptimizationId, Smi)
   DECL_ELEMENT_ACCESSORS(SharedFunctionInfo, Object)
@@ -3494,16 +3507,16 @@ class DeoptimizationInputData: public FixedArray {
   inline type* name(int i);              \
   inline void Set##name(int i, type* value);
 
-  DECL_ENTRY_ACCESSORS(AstIdRaw, Smi)
+  DECL_ENTRY_ACCESSORS(BytecodeOffsetRaw, Smi)
   DECL_ENTRY_ACCESSORS(TranslationIndex, Smi)
-  DECL_ENTRY_ACCESSORS(ArgumentsStackHeight, Smi)
+  DECL_ENTRY_ACCESSORS(TrampolinePc, Smi)
   DECL_ENTRY_ACCESSORS(Pc, Smi)
 
 #undef DECL_ENTRY_ACCESSORS
 
-  inline BailoutId AstId(int i);
+  inline BailoutId BytecodeOffset(int i);
 
-  inline void SetAstId(int i, BailoutId value);
+  inline void SetBytecodeOffset(int i, BailoutId value);
 
   inline int DeoptCount();
 
@@ -3924,8 +3937,8 @@ class Code: public HeapObject {
 
   void ClearInlineCaches();
 
-  BailoutId TranslatePcOffsetToAstId(uint32_t pc_offset);
-  uint32_t TranslateAstIdToPcOffset(BailoutId ast_id);
+  BailoutId TranslatePcOffsetToBytecodeOffset(uint32_t pc_offset);
+  uint32_t TranslateBytecodeOffsetToPcOffset(BailoutId bytecode_offset);
 
 #define DECL_CODE_AGE_ENUM(X) k##X##CodeAge,
   enum Age {
@@ -4673,6 +4686,8 @@ enum BuiltinFunctionId {
   kArrayKeys,
   kArrayValues,
   kArrayIteratorNext,
+  kMapIteratorNext,
+  kSetIteratorNext,
   kDataViewBuffer,
   kDataViewByteLength,
   kDataViewByteOffset,
@@ -7058,39 +7073,87 @@ class TemplateInfo: public Struct {
   DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateInfo);
 };
 
-
+// See the api-exposed FunctionTemplate for more information.
 class FunctionTemplateInfo: public TemplateInfo {
  public:
+  // Handler invoked when calling an instance of this FunctionTemplateInfo.
+  // Either CallInfoHandler or Undefined.
   DECL_ACCESSORS(call_code, Object)
+
+  // ObjectTemplateInfo or Undefined, used for the prototype property of the
+  // resulting JSFunction instance of this FunctionTemplate.
   DECL_ACCESSORS(prototype_template, Object)
+
+  // In the case the prototype_template is Undefined we use the
+  // protoype_provider_template to retrieve the instance prototype. Either
+  // contains an ObjectTemplateInfo or Undefined.
   DECL_ACCESSORS(prototype_provider_template, Object)
+
+  // Used to create protoype chains. The parent_template's prototype is set as
+  // __proto__ of this FunctionTemplate's instance prototype. Is either a
+  // FunctionTemplateInfo or Undefined.
   DECL_ACCESSORS(parent_template, Object)
+
+  // Returns an InterceptorInfo or Undefined for named properties.
   DECL_ACCESSORS(named_property_handler, Object)
+  // Returns an InterceptorInfo or Undefined for indexed properties/elements.
   DECL_ACCESSORS(indexed_property_handler, Object)
+
+  // An ObjectTemplateInfo that is used when instantiating the JSFunction
+  // associated with this FunctionTemplateInfo. Contains either an
+  // ObjectTemplateInfo or Undefined. A default instance_template is assigned
+  // upon first instantiation if it's Undefined.
   DECL_ACCESSORS(instance_template, Object)
+
   DECL_ACCESSORS(class_name, Object)
+
+  // If the signature is a FunctionTemplateInfo it is used to check whether the
+  // receiver calling the associated JSFunction is a compatible receiver, i.e.
+  // it is an instance of the signare FunctionTemplateInfo or any of the
+  // receiver's prototypes are.
   DECL_ACCESSORS(signature, Object)
+
+  // Either a CallHandlerInfo or Undefined. If an instance_call_handler is
+  // provided the instances created from the associated JSFunction are marked as
+  // callable.
   DECL_ACCESSORS(instance_call_handler, Object)
+
   DECL_ACCESSORS(access_check_info, Object)
   DECL_ACCESSORS(shared_function_info, Object)
-  DECL_ACCESSORS(js_function, Object)
+
+  // Internal field to store a flag bitfield.
   DECL_INT_ACCESSORS(flag)
 
-  inline int length() const;
-  inline void set_length(int value);
+  // "length" property of the final JSFunction.
+  DECL_INT_ACCESSORS(length)
 
-  // Following properties use flag bits.
+  // Either the_hole or a private symbol. Used to cache the result on
+  // the receiver under the the cached_property_name when this
+  // FunctionTemplateInfo is used as a getter.
+  DECL_ACCESSORS(cached_property_name, Object)
+
+  // Begin flag bits ---------------------
   DECL_BOOLEAN_ACCESSORS(hidden_prototype)
   DECL_BOOLEAN_ACCESSORS(undetectable)
-  // If the bit is set, object instances created by this function
+
+  // If set, object instances created by this function
   // requires access check.
   DECL_BOOLEAN_ACCESSORS(needs_access_check)
-  DECL_BOOLEAN_ACCESSORS(read_only_prototype)
-  DECL_BOOLEAN_ACCESSORS(remove_prototype)
-  DECL_BOOLEAN_ACCESSORS(do_not_cache)
-  DECL_BOOLEAN_ACCESSORS(accept_any_receiver)
 
-  DECL_ACCESSORS(cached_property_name, Object)
+  DECL_BOOLEAN_ACCESSORS(read_only_prototype)
+
+  // If set, do not create a prototype property for the associated
+  // JSFunction. This bit implies that neither the prototype_template nor the
+  // prototype_provoider_template are instantiated.
+  DECL_BOOLEAN_ACCESSORS(remove_prototype)
+
+  // If set, do not attach a serial number to this FunctionTemplate and thus do
+  // not keep an instance boilerplate around.
+  DECL_BOOLEAN_ACCESSORS(do_not_cache)
+
+  // If not set an access may be performed on calling the associated JSFunction.
+  DECL_BOOLEAN_ACCESSORS(accept_any_receiver)
+  // End flag bits ---------------------
 
   DECL_CAST(FunctionTemplateInfo)
 

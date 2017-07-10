@@ -238,7 +238,7 @@ class IncrementalMarkingMarkingVisitor final
       int start_offset =
           Max(FixedArray::BodyDescriptor::kStartOffset, chunk->progress_bar());
       if (start_offset < object_size) {
-#ifdef CONCURRENT_MARKING
+#ifdef V8_CONCURRENT_MARKING
         incremental_marking_->marking_worklist()->PushBailout(object);
 #else
         if (ObjectMarking::IsGrey<IncrementalMarking::kAtomicity>(
@@ -290,7 +290,7 @@ class IncrementalMarkingMarkingVisitor final
     return Parent::VisitNativeContext(map, context);
   }
 
-  inline void VisitPointer(HeapObject* host, Object** p) final {
+  V8_INLINE void VisitPointer(HeapObject* host, Object** p) final {
     Object* target = *p;
     if (target->IsHeapObject()) {
       collector_->RecordSlot(host, p, target);
@@ -298,8 +298,8 @@ class IncrementalMarkingMarkingVisitor final
     }
   }
 
-  inline void VisitPointers(HeapObject* host, Object** start,
-                            Object** end) final {
+  V8_INLINE void VisitPointers(HeapObject* host, Object** start,
+                               Object** end) final {
     for (Object** p = start; p < end; p++) {
       Object* target = *p;
       if (target->IsHeapObject()) {

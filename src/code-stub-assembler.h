@@ -648,6 +648,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                             Node* context, IterationKind mode);
 
   Node* AllocateJSArrayIterator(Node* array, Node* array_map, Node* map);
+  Node* AllocateJSIteratorResult(Node* context, Node* value, Node* done);
+  Node* AllocateJSIteratorResultForEntry(Node* context, Node* key, Node* value);
 
   Node* TypedArraySpeciesCreateByLength(Node* context, Node* originalArray,
                                         Node* len);
@@ -755,6 +757,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // returns the {value} (or wrapped value) otherwise.
   Node* ToThisValue(Node* context, Node* value, PrimitiveType primitive_type,
                     char const* method_name);
+
+  // Throws a TypeError for {method_name}. Terminates the current block.
+  void ThrowIncompatibleMethodReceiver(Node* context, char const* method_name,
+                                       Node* receiver);
 
   // Throws a TypeError for {method_name} if {value} is not of the given
   // instance type. Returns {value}'s map.
@@ -872,7 +878,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Check if |var_string| has an indirect (thin or flat cons) string type,
   // and unpack it if so.
   void MaybeDerefIndirectString(Variable* var_string, Node* instance_type,
-                                Variable* var_did_something);
+                                Label* did_deref, Label* cannot_deref);
   // Check if |var_left| or |var_right| has an indirect (thin or flat cons)
   // string type, and unpack it/them if so. Fall through if nothing was done.
   void MaybeDerefIndirectStrings(Variable* var_left, Node* left_instance_type,
@@ -1017,6 +1023,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   void Increment(Variable& variable, int value = 1,
                  ParameterMode mode = INTPTR_PARAMETERS);
+  void Decrement(Variable& variable, int value = 1,
+                 ParameterMode mode = INTPTR_PARAMETERS) {
+    Increment(variable, -value, mode);
+  }
 
   // Generates "if (false) goto label" code. Useful for marking a label as
   // "live" to avoid assertion failures during graph building. In the resulting

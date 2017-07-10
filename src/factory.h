@@ -572,9 +572,12 @@ class V8_EXPORT_PRIVATE Factory final {
   Handle<JSMap> NewJSMap();
   Handle<JSSet> NewJSSet();
 
-  // TODO(aandrey): Maybe these should take table, index and kind arguments.
-  Handle<JSMapIterator> NewJSMapIterator();
-  Handle<JSSetIterator> NewJSSetIterator();
+  Handle<JSMapIterator> NewJSMapIterator(Handle<Map> map,
+                                         Handle<OrderedHashMap> table,
+                                         int index);
+  Handle<JSSetIterator> NewJSSetIterator(Handle<Map> map,
+                                         Handle<OrderedHashSet> table,
+                                         int index);
 
   // Allocates a bound function.
   MaybeHandle<JSBoundFunction> NewJSBoundFunction(
@@ -600,7 +603,8 @@ class V8_EXPORT_PRIVATE Factory final {
                                  PretenureFlag pretenure = TENURED);
   Handle<JSFunction> NewFunction(Handle<String> name, Handle<Code> code,
                                  Handle<Object> prototype,
-                                 LanguageMode language_mode = SLOPPY);
+                                 LanguageMode language_mode = SLOPPY,
+                                 MutableMode prototype_mutability = MUTABLE);
   Handle<JSFunction> NewFunction(Handle<String> name);
   Handle<JSFunction> NewFunctionWithoutPrototype(
       Handle<String> name, Handle<Code> code,
@@ -626,7 +630,8 @@ class V8_EXPORT_PRIVATE Factory final {
   Handle<JSFunction> NewFunction(Handle<String> name, Handle<Code> code,
                                  Handle<Object> prototype, InstanceType type,
                                  int instance_size,
-                                 LanguageMode language_mode = SLOPPY);
+                                 LanguageMode language_mode = SLOPPY,
+                                 MutableMode prototype_mutability = MUTABLE);
   Handle<JSFunction> NewFunction(Handle<String> name,
                                  Handle<Code> code,
                                  InstanceType type,
@@ -766,7 +771,8 @@ class V8_EXPORT_PRIVATE Factory final {
             function_mode == FUNCTION_WITH_READONLY_PROTOTYPE);
   }
 
-  Handle<Map> CreateSloppyFunctionMap(FunctionMode function_mode);
+  Handle<Map> CreateSloppyFunctionMap(
+      FunctionMode function_mode, MaybeHandle<JSFunction> maybe_empty_function);
 
   Handle<Map> CreateStrictFunctionMap(FunctionMode function_mode,
                                       Handle<JSFunction> empty_function);

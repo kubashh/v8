@@ -92,20 +92,22 @@ TYPE_CHECKER(JSError, JS_ERROR_TYPE)
 TYPE_CHECKER(JSFunction, JS_FUNCTION_TYPE)
 TYPE_CHECKER(JSGlobalObject, JS_GLOBAL_OBJECT_TYPE)
 TYPE_CHECKER(JSMap, JS_MAP_TYPE)
-TYPE_CHECKER(JSMapIterator, JS_MAP_ITERATOR_TYPE)
 TYPE_CHECKER(JSMessageObject, JS_MESSAGE_OBJECT_TYPE)
 TYPE_CHECKER(JSModuleNamespace, JS_MODULE_NAMESPACE_TYPE)
 TYPE_CHECKER(JSPromiseCapability, JS_PROMISE_CAPABILITY_TYPE)
 TYPE_CHECKER(JSPromise, JS_PROMISE_TYPE)
 TYPE_CHECKER(JSRegExp, JS_REGEXP_TYPE)
 TYPE_CHECKER(JSSet, JS_SET_TYPE)
-TYPE_CHECKER(JSSetIterator, JS_SET_ITERATOR_TYPE)
 TYPE_CHECKER(JSAsyncFromSyncIterator, JS_ASYNC_FROM_SYNC_ITERATOR_TYPE)
 TYPE_CHECKER(JSStringIterator, JS_STRING_ITERATOR_TYPE)
 TYPE_CHECKER(JSTypedArray, JS_TYPED_ARRAY_TYPE)
 TYPE_CHECKER(JSValue, JS_VALUE_TYPE)
 TYPE_CHECKER(JSWeakMap, JS_WEAK_MAP_TYPE)
 TYPE_CHECKER(JSWeakSet, JS_WEAK_SET_TYPE)
+TYPE_CHECKER(WasmInstanceObject, WASM_INSTANCE_TYPE)
+TYPE_CHECKER(WasmMemoryObject, WASM_MEMORY_TYPE)
+TYPE_CHECKER(WasmModuleObject, WASM_MODULE_TYPE)
+TYPE_CHECKER(WasmTableObject, WASM_TABLE_TYPE)
 TYPE_CHECKER(Map, MAP_TYPE)
 TYPE_CHECKER(MutableHeapNumber, MUTABLE_HEAP_NUMBER_TYPE)
 TYPE_CHECKER(Oddball, ODDBALL_TYPE)
@@ -284,6 +286,18 @@ bool HeapObject::IsJSObject() const {
 }
 
 bool HeapObject::IsJSProxy() const { return map()->IsJSProxyMap(); }
+
+bool HeapObject::IsJSMapIterator() const {
+  InstanceType instance_type = map()->instance_type();
+  return (instance_type >= JS_MAP_KEY_ITERATOR_TYPE &&
+          instance_type <= JS_MAP_VALUE_ITERATOR_TYPE);
+}
+
+bool HeapObject::IsJSSetIterator() const {
+  InstanceType instance_type = map()->instance_type();
+  return (instance_type == JS_SET_VALUE_ITERATOR_TYPE ||
+          instance_type == JS_SET_KEY_VALUE_ITERATOR_TYPE);
+}
 
 bool HeapObject::IsJSArrayIterator() const {
   InstanceType instance_type = map()->instance_type();
@@ -1236,7 +1250,7 @@ Address AllocationMemento::GetAllocationSiteUnchecked() const {
 }
 
 void JSObject::EnsureCanContainHeapObjectElements(Handle<JSObject> object) {
-  JSObject::ValidateElements(object);
+  JSObject::ValidateElements(*object);
   ElementsKind elements_kind = object->map()->elements_kind();
   if (!IsObjectElementsKind(elements_kind)) {
     if (IsHoleyElementsKind(elements_kind)) {
@@ -1453,79 +1467,12 @@ void WeakCell::clear_next(Object* the_hole_value) {
 
 bool WeakCell::next_cleared() { return next()->IsTheHole(GetIsolate()); }
 
-int JSObject::GetHeaderSize() { return GetHeaderSize(map()->instance_type()); }
-
-
-int JSObject::GetHeaderSize(InstanceType type) {
+int JSObject::GetHeaderSize() {
   // Check for the most common kind of JavaScript object before
   // falling into the generic switch. This speeds up the internal
   // field operations considerably on average.
-  if (type == JS_OBJECT_TYPE) return JSObject::kHeaderSize;
-  switch (type) {
-    case JS_API_OBJECT_TYPE:
-    case JS_SPECIAL_API_OBJECT_TYPE:
-      return JSObject::kHeaderSize;
-    case JS_GENERATOR_OBJECT_TYPE:
-      return JSGeneratorObject::kSize;
-    case JS_ASYNC_GENERATOR_OBJECT_TYPE:
-      return JSAsyncGeneratorObject::kSize;
-    case JS_GLOBAL_PROXY_TYPE:
-      return JSGlobalProxy::kSize;
-    case JS_GLOBAL_OBJECT_TYPE:
-      return JSGlobalObject::kSize;
-    case JS_BOUND_FUNCTION_TYPE:
-      return JSBoundFunction::kSize;
-    case JS_FUNCTION_TYPE:
-      return JSFunction::kSize;
-    case JS_VALUE_TYPE:
-      return JSValue::kSize;
-    case JS_DATE_TYPE:
-      return JSDate::kSize;
-    case JS_ARRAY_TYPE:
-      return JSArray::kSize;
-    case JS_ARRAY_BUFFER_TYPE:
-      return JSArrayBuffer::kSize;
-    case JS_TYPED_ARRAY_TYPE:
-      return JSTypedArray::kSize;
-    case JS_DATA_VIEW_TYPE:
-      return JSDataView::kSize;
-    case JS_SET_TYPE:
-      return JSSet::kSize;
-    case JS_MAP_TYPE:
-      return JSMap::kSize;
-    case JS_SET_ITERATOR_TYPE:
-      return JSSetIterator::kSize;
-    case JS_MAP_ITERATOR_TYPE:
-      return JSMapIterator::kSize;
-    case JS_WEAK_MAP_TYPE:
-      return JSWeakMap::kSize;
-    case JS_WEAK_SET_TYPE:
-      return JSWeakSet::kSize;
-    case JS_PROMISE_CAPABILITY_TYPE:
-      return JSPromiseCapability::kSize;
-    case JS_PROMISE_TYPE:
-      return JSPromise::kSize;
-    case JS_REGEXP_TYPE:
-      return JSRegExp::kSize;
-    case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
-      return JSObject::kHeaderSize;
-    case JS_MESSAGE_OBJECT_TYPE:
-      return JSMessageObject::kSize;
-    case JS_ARGUMENTS_TYPE:
-      return JSArgumentsObject::kHeaderSize;
-    case JS_ERROR_TYPE:
-      return JSObject::kHeaderSize;
-    case JS_STRING_ITERATOR_TYPE:
-      return JSStringIterator::kSize;
-    case JS_MODULE_NAMESPACE_TYPE:
-      return JSModuleNamespace::kHeaderSize;
-    default:
-      if (type >= FIRST_ARRAY_ITERATOR_TYPE &&
-          type <= LAST_ARRAY_ITERATOR_TYPE) {
-        return JSArrayIterator::kSize;
-      }
-      UNREACHABLE();
-  }
+  InstanceType type = map()->instance_type();
+  return type == JS_OBJECT_TYPE ? JSObject::kHeaderSize : GetHeaderSize(type);
 }
 
 inline bool IsSpecialReceiverInstanceType(InstanceType instance_type) {
@@ -2640,24 +2587,23 @@ FixedTypedArray<Traits>::cast(const Object* object) {
 DEFINE_DEOPT_ELEMENT_ACCESSORS(TranslationByteArray, ByteArray)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(InlinedFunctionCount, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(LiteralArray, FixedArray)
-DEFINE_DEOPT_ELEMENT_ACCESSORS(OsrAstId, Smi)
+DEFINE_DEOPT_ELEMENT_ACCESSORS(OsrBytecodeOffset, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(OsrPcOffset, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(OptimizationId, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(WeakCellCache, Object)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(InliningPositions, PodArray<InliningPosition>)
 
-DEFINE_DEOPT_ENTRY_ACCESSORS(AstIdRaw, Smi)
+DEFINE_DEOPT_ENTRY_ACCESSORS(BytecodeOffsetRaw, Smi)
 DEFINE_DEOPT_ENTRY_ACCESSORS(TranslationIndex, Smi)
-DEFINE_DEOPT_ENTRY_ACCESSORS(ArgumentsStackHeight, Smi)
+DEFINE_DEOPT_ENTRY_ACCESSORS(TrampolinePc, Smi)
 DEFINE_DEOPT_ENTRY_ACCESSORS(Pc, Smi)
 
-BailoutId DeoptimizationInputData::AstId(int i) {
-  return BailoutId(AstIdRaw(i)->value());
+BailoutId DeoptimizationInputData::BytecodeOffset(int i) {
+  return BailoutId(BytecodeOffsetRaw(i)->value());
 }
 
-
-void DeoptimizationInputData::SetAstId(int i, BailoutId value) {
-  SetAstIdRaw(i, Smi::FromInt(value.ToInt()));
+void DeoptimizationInputData::SetBytecodeOffset(int i, BailoutId value) {
+  SetBytecodeOffsetRaw(i, Smi::FromInt(value.ToInt()));
 }
 
 
@@ -4891,7 +4837,6 @@ ACCESSORS(JSCollection, table, Object, kTableOffset)
 
 ORDERED_HASH_TABLE_ITERATOR_ACCESSORS(table, Object, kTableOffset)
 ORDERED_HASH_TABLE_ITERATOR_ACCESSORS(index, Object, kIndexOffset)
-ORDERED_HASH_TABLE_ITERATOR_ACCESSORS(kind, Object, kKindOffset)
 
 #undef ORDERED_HASH_TABLE_ITERATOR_ACCESSORS
 
@@ -6247,17 +6192,6 @@ Object* OrderedHashTableIterator<Derived, TableType>::CurrentKey() {
 }
 
 
-void JSSetIterator::PopulateValueArray(FixedArray* array) {
-  array->set(0, CurrentKey());
-}
-
-
-void JSMapIterator::PopulateValueArray(FixedArray* array) {
-  array->set(0, CurrentKey());
-  array->set(1, CurrentValue());
-}
-
-
 Object* JSMapIterator::CurrentValue() {
   OrderedHashMap* table(OrderedHashMap::cast(this->table()));
   int index = Smi::cast(this->index())->value();
@@ -6286,7 +6220,7 @@ static inline Handle<Object> MakeEntryPair(Isolate* isolate, uint32_t index,
                                                     PACKED_ELEMENTS, 2);
 }
 
-static inline Handle<Object> MakeEntryPair(Isolate* isolate, Handle<Name> key,
+static inline Handle<Object> MakeEntryPair(Isolate* isolate, Handle<Object> key,
                                            Handle<Object> value) {
   Handle<FixedArray> entry_storage =
       isolate->factory()->NewUninitializedFixedArray(2);
