@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e14b5d3b_d282ef87",
+        "filename": "tools/run-tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-07-10T13:58:46Z",
+      "side": 1,
+      "message": "nit: since it\u0027s never empty string or false or 0:\nif mode:",
+      "range": {
+        "startLine": 511,
+        "startChar": 6,
+        "endLine": 511,
+        "endChar": 22
+      },
+      "revId": "c301d80bffb95a48ce1f1bab185a7f3267a6be55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
