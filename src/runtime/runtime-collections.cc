@@ -81,8 +81,8 @@ RUNTIME_FUNCTION(Runtime_SetIteratorClone) {
   CONVERT_ARG_HANDLE_CHECKED(JSSetIterator, holder, 0);
   return *isolate->factory()->NewJSSetIterator(
       handle(OrderedHashSet::cast(holder->table()), isolate),
-      Smi::cast(holder->index())->value(),
-      static_cast<JSSetIterator::Kind>(Smi::cast(holder->kind())->value()));
+      Smi::ToInt(holder->index()),
+      static_cast<JSSetIterator::Kind>(Smi::ToInt(holder->kind())));
 }
 
 // The array returned contains the following information:
@@ -136,8 +136,8 @@ RUNTIME_FUNCTION(Runtime_MapIteratorClone) {
   CONVERT_ARG_HANDLE_CHECKED(JSMapIterator, holder, 0);
   return *isolate->factory()->NewJSMapIterator(
       handle(OrderedHashMap::cast(holder->table()), isolate),
-      Smi::cast(holder->index())->value(),
-      static_cast<JSMapIterator::Kind>(Smi::cast(holder->kind())->value()));
+      Smi::ToInt(holder->index()),
+      static_cast<JSMapIterator::Kind>(Smi::ToInt(holder->kind())));
 }
 
 
