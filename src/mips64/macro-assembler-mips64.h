@@ -755,6 +755,7 @@ class MacroAssembler: public Assembler {
   // Push a handle.
   void Push(Handle<Object> handle);
   void Push(Smi* smi) { Push(Handle<Smi>(smi, isolate())); }
+  void PushObject(Handle<Object> handle);
 
   // Push two registers. Pushes leftmost register first (to highest address).
   void Push(Register src1, Register src2) {
@@ -1884,6 +1885,7 @@ const Operand& rt = Operand(zero_reg), BranchDelaySlot bd = PROTECT
   friend class StandardFrame;
 };
 
+using TurboAssembler = MacroAssembler;  // TODO(mips): Implement TurboAssembler.
 
 // The code patcher is used to patch (typically) small parts of code e.g. for
 // debugging and other types of instrumentation. When using the code patcher

@@ -6161,30 +6161,75 @@ uint32_t run_Ins(uint32_t imm, uint32_t source, uint16_t pos, uint16_t size) {
 TEST(Ins) {
   CcTest::InitializeVM();
 
-  // Test Ins macro-instruction.
+  //       run_Ins(rt_value, rs_value, pos, size), expected_result
+  CHECK_EQ(run_Ins(0x55555555, 0xabcdef01, 31, 1), 0xd5555555);
+  CHECK_EQ(run_Ins(0x55555555, 0xabcdef02, 30, 2), 0x95555555);
+  CHECK_EQ(run_Ins(0x01234567, 0xfabcdeff, 0, 32), 0xfabcdeff);
 
-  struct TestCaseIns {
-    uint32_t imm;
-    uint32_t source;
-    uint16_t pos;
-    uint16_t size;
-    uint32_t expected_res;
-  };
+  // Results with positive sign.
+  CHECK_EQ(run_Ins(0x55555550, 0x80000001, 0, 1), 0x55555551);
+  CHECK_EQ(run_Ins(0x55555555, 0x40000001, 0, 32), 0x40000001);
+  CHECK_EQ(run_Ins(0x55555555, 0x20000001, 1, 31), 0x40000003);
+  CHECK_EQ(run_Ins(0x55555555, 0x80700001, 8, 24), 0x70000155);
+  CHECK_EQ(run_Ins(0x55555555, 0x80007001, 16, 16), 0x70015555);
+  CHECK_EQ(run_Ins(0x55555555, 0x80000071, 24, 8), 0x71555555);
+  CHECK_EQ(run_Ins(0x75555555, 0x40000000, 31, 1), 0x75555555);
 
-  // We load imm to v0 and source to t0 and then call
-  // Ins(v0, t0, pos, size) to test cases listed below.
-  struct TestCaseIns tc[] = {
-      // imm, source, pos, size, expected_res
-      {0x55555555, 0xabcdef01, 31, 1, 0xd5555555},
-      {0x55555555, 0xabcdef02, 30, 2, 0x95555555},
-      {0x01234567, 0xfabcdeff, 0, 32, 0xfabcdeff},
-  };
+  // Results with negative sign.
+  CHECK_EQ(run_Ins(0x85555550, 0x80000001, 0, 1), 0x85555551);
+  CHECK_EQ(run_Ins(0x55555555, 0x80000001, 0, 32), 0x80000001);
+  CHECK_EQ(run_Ins(0x55555555, 0x40000001, 1, 31), 0x80000003);
+  CHECK_EQ(run_Ins(0x55555555, 0x80800001, 8, 24), 0x80000155);
+  CHECK_EQ(run_Ins(0x55555555, 0x80008001, 16, 16), 0x80015555);
+  CHECK_EQ(run_Ins(0x55555555, 0x80000081, 24, 8), 0x81555555);
+  CHECK_EQ(run_Ins(0x75555555, 0x00000001, 31, 1), 0xf5555555);
+}
 
-  size_t nr_test_cases = sizeof(tc) / sizeof(TestCaseIns);
-  for (size_t i = 0; i < nr_test_cases; ++i) {
-    CHECK_EQ(tc[i].expected_res,
-             run_Ins(tc[i].imm, tc[i].source, tc[i].pos, tc[i].size));
-  }
+uint32_t run_Ext(uint32_t source, uint16_t pos, uint16_t size) {
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+
+  MacroAssembler assm(isolate, NULL, 0, v8::internal::CodeObjectRequired::kYes);
+
+  __ li(v0, 0xffffffff);
+  __ li(t0, source);
+  __ Ext(v0, t0, pos, size);
+  __ jr(ra);
+  __ nop();
+
+  CodeDesc desc;
+  assm.GetCode(isolate, &desc);
+  Handle<Code> code = isolate->factory()->NewCode(
+      desc, Code::ComputeFlags(Code::STUB), Handle<Code>());
+  F2 f = FUNCTION_CAST<F2>(code->entry());
+
+  uint32_t res = reinterpret_cast<uint32_t>(
+      CALL_GENERATED_CODE(isolate, f, 0, 0, 0, 0, 0));
+
+  return res;
+}
+
+TEST(Ext) {
+  CcTest::InitializeVM();
+
+  // Source values with negative sign.
+  //       run_Ext(rs_value, pos, size), expected_result
+  CHECK_EQ(run_Ext(0x80000001, 0, 1), 0x00000001);
+  CHECK_EQ(run_Ext(0x80000001, 0, 32), 0x80000001);
+  CHECK_EQ(run_Ext(0x80000002, 1, 31), 0x40000001);
+  CHECK_EQ(run_Ext(0x80000100, 8, 24), 0x00800001);
+  CHECK_EQ(run_Ext(0x80010000, 16, 16), 0x00008001);
+  CHECK_EQ(run_Ext(0x81000000, 24, 8), 0x00000081);
+  CHECK_EQ(run_Ext(0x80000000, 31, 1), 0x00000001);
+
+  // Source values with positive sign.
+  CHECK_EQ(run_Ext(0x00000001, 0, 1), 0x00000001);
+  CHECK_EQ(run_Ext(0x40000001, 0, 32), 0x40000001);
+  CHECK_EQ(run_Ext(0x40000002, 1, 31), 0x20000001);
+  CHECK_EQ(run_Ext(0x40000100, 8, 24), 0x00400001);
+  CHECK_EQ(run_Ext(0x40010000, 16, 16), 0x00004001);
+  CHECK_EQ(run_Ext(0x41000000, 24, 8), 0x00000041);
+  CHECK_EQ(run_Ext(0x40000000, 31, 1), 0x00000000);
 }
 
 struct TestCaseMsaI5 {
@@ -6840,6 +6885,115 @@ TEST(MSA_nloc) {
     run_msa_2r(&tc_h[i], [](MacroAssembler& assm) { __ nloc_h(w2, w0); });
     run_msa_2r(&tc_w[i], [](MacroAssembler& assm) { __ nloc_w(w2, w0); });
     run_msa_2r(&tc_d[i], [](MacroAssembler& assm) { __ nloc_d(w2, w0); });
+  }
+}
+
+struct TestCaseMsaVector {
+  uint64_t wd_lo;
+  uint64_t wd_hi;
+  uint64_t ws_lo;
+  uint64_t ws_hi;
+  uint64_t wt_lo;
+  uint64_t wt_hi;
+};
+
+template <typename InstFunc, typename OperFunc>
+void run_msa_vector(struct TestCaseMsaVector* input,
+                    InstFunc GenerateVectorInstructionFunc,
+                    OperFunc GenerateOperationFunc) {
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+
+  MacroAssembler assm(isolate, NULL, 0, v8::internal::CodeObjectRequired::kYes);
+  CpuFeatureScope fscope(&assm, MIPS_SIMD);
+  msa_reg_t res;
+
+#define LOAD_W_REG(lo, hi, w_reg)                            \
+  __ li(t0, static_cast<uint32_t>(lo & 0xffffffff));         \
+  __ li(t1, static_cast<uint32_t>((lo >> 32) & 0xffffffff)); \
+  __ insert_w(w_reg, 0, t0);                                 \
+  __ insert_w(w_reg, 1, t1);                                 \
+  __ li(t0, static_cast<uint32_t>(hi & 0xffffffff));         \
+  __ li(t1, static_cast<uint32_t>((hi >> 32) & 0xffffffff)); \
+  __ insert_w(w_reg, 2, t0);                                 \
+  __ insert_w(w_reg, 3, t1)
+
+  LOAD_W_REG(input->ws_lo, input->ws_hi, w0);
+  LOAD_W_REG(input->wt_lo, input->wt_hi, w2);
+  LOAD_W_REG(input->wd_lo, input->wd_hi, w4);
+#undef LOAD_W_REG
+
+  GenerateVectorInstructionFunc(assm);
+
+  __ copy_u_w(t2, w4, 0);
+  __ sw(t2, MemOperand(a0, 0));
+  __ copy_u_w(t2, w4, 1);
+  __ sw(t2, MemOperand(a0, 4));
+  __ copy_u_w(t2, w4, 2);
+  __ sw(t2, MemOperand(a0, 8));
+  __ copy_u_w(t2, w4, 3);
+  __ sw(t2, MemOperand(a0, 12));
+
+  __ jr(ra);
+  __ nop();
+
+  CodeDesc desc;
+  assm.GetCode(isolate, &desc);
+  Handle<Code> code = isolate->factory()->NewCode(
+      desc, Code::ComputeFlags(Code::STUB), Handle<Code>());
+#ifdef OBJECT_PRINT
+  code->Print(std::cout);
+#endif
+  F3 f = FUNCTION_CAST<F3>(code->entry());
+
+  (CALL_GENERATED_CODE(isolate, f, &res, 0, 0, 0, 0));
+
+  CHECK_EQ(GenerateOperationFunc(input->wd_lo, input->ws_lo, input->wt_lo),
+           res.d[0]);
+  CHECK_EQ(GenerateOperationFunc(input->wd_hi, input->ws_hi, input->wt_hi),
+           res.d[1]);
+}
+
+TEST(MSA_vector) {
+  if (!IsMipsArchVariant(kMips32r6) || !CpuFeatures::IsSupported(MIPS_SIMD))
+    return;
+
+  CcTest::InitializeVM();
+
+  struct TestCaseMsaVector tc[] = {
+      // wd_lo, wd_hi, ws_lo, ws_hi, wt_lo, wt_hi
+      {0xf35862e13e38f8b0, 0x4f41ffdef2bfe636, 0xdcd39d91f9057627,
+       0x64be4f6dbe9caa51, 0x6b23de1a687d9cb9, 0x49547aad691da4ca},
+      {0xf35862e13e38f8b0, 0x4f41ffdef2bfe636, 0x401614523d830549,
+       0xd7c46d613f50eddd, 0x52284cbc60a1562b, 0x1756ed510d8849cd},
+      {0xf35862e13e38f8b0, 0x4f41ffdef2bfe636, 0xd6e2d2ebcb40d72f,
+       0x13a619afce67b079, 0x36cce284343e40f9, 0xb4e8f44fd148bf7f}};
+
+  for (size_t i = 0; i < sizeof(tc) / sizeof(TestCaseMsaVector); ++i) {
+    run_msa_vector(
+        &tc[i], [](MacroAssembler& assm) { __ and_v(w4, w0, w2); },
+        [](uint64_t wd, uint64_t ws, uint64_t wt) { return ws & wt; });
+    run_msa_vector(
+        &tc[i], [](MacroAssembler& assm) { __ or_v(w4, w0, w2); },
+        [](uint64_t wd, uint64_t ws, uint64_t wt) { return ws | wt; });
+    run_msa_vector(
+        &tc[i], [](MacroAssembler& assm) { __ nor_v(w4, w0, w2); },
+        [](uint64_t wd, uint64_t ws, uint64_t wt) { return ~(ws | wt); });
+    run_msa_vector(
+        &tc[i], [](MacroAssembler& assm) { __ xor_v(w4, w0, w2); },
+        [](uint64_t wd, uint64_t ws, uint64_t wt) { return ws ^ wt; });
+    run_msa_vector(&tc[i], [](MacroAssembler& assm) { __ bmnz_v(w4, w0, w2); },
+                   [](uint64_t wd, uint64_t ws, uint64_t wt) {
+                     return (ws & wt) | (wd & ~wt);
+                   });
+    run_msa_vector(&tc[i], [](MacroAssembler& assm) { __ bmz_v(w4, w0, w2); },
+                   [](uint64_t wd, uint64_t ws, uint64_t wt) {
+                     return (ws & ~wt) | (wd & wt);
+                   });
+    run_msa_vector(&tc[i], [](MacroAssembler& assm) { __ bsel_v(w4, w0, w2); },
+                   [](uint64_t wd, uint64_t ws, uint64_t wt) {
+                     return (ws & ~wd) | (wt & wd);
+                   });
   }
 }
 

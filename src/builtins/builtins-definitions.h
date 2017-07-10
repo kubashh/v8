@@ -264,8 +264,7 @@ namespace internal {
   /* Special internal builtins */                                              \
   CPP(EmptyFunction)                                                           \
   CPP(Illegal)                                                                 \
-  CPP(RestrictedFunctionPropertiesThrower)                                     \
-  CPP(RestrictedStrictArgumentsPropertiesThrower)                              \
+  CPP(StrictPoisonPillThrower)                                                 \
   CPP(UnsupportedThrower)                                                      \
   TFJ(ReturnReceiver, 0)                                                       \
                                                                                \
@@ -583,6 +582,14 @@ namespace internal {
   CPP(MapGetSize)                                                              \
   CPP(MapClear)                                                                \
   CPP(MapForEach)                                                              \
+  /* ES #sec-map.prototype.entries */                                          \
+  TFJ(MapPrototypeEntries, 0)                                                  \
+  /* ES #sec-map.prototype.keys */                                             \
+  TFJ(MapPrototypeKeys, 0)                                                     \
+  /* ES #sec-map.prototype.values */                                           \
+  TFJ(MapPrototypeValues, 0)                                                   \
+  /* ES #sec-%mapiteratorprototype%.next */                                    \
+  TFJ(MapIteratorPrototypeNext, 0)                                             \
                                                                                \
   /* Math */                                                                   \
   /* ES6 #sec-math.abs */                                                      \
@@ -779,6 +786,8 @@ namespace internal {
   TFJ(PromiseThrowerFinally, 0)                                                \
   /* ES #sec-promise.all */                                                    \
   TFJ(PromiseAll, 1, kIterable)                                                \
+  /* ES #sec-promise.race */                                                   \
+  TFJ(PromiseRace, 1, kIterable)                                               \
                                                                                \
   /* Proxy */                                                                  \
   CPP(ProxyConstructor)                                                        \
@@ -863,6 +872,12 @@ namespace internal {
   CPP(SetGetSize)                                                              \
   CPP(SetClear)                                                                \
   CPP(SetForEach)                                                              \
+  /* ES #sec-set.prototype.entries */                                          \
+  TFJ(SetPrototypeEntries, 0)                                                  \
+  /* ES #sec-set.prototype.values */                                           \
+  TFJ(SetPrototypeValues, 0)                                                   \
+  /* ES #sec-%setiteratorprototype%.next */                                    \
+  TFJ(SetIteratorPrototypeNext, 0)                                             \
                                                                                \
   /* SharedArrayBuffer */                                                      \
   CPP(SharedArrayBufferPrototypeGetByteLength)                                 \
@@ -1097,6 +1112,7 @@ namespace internal {
   V(PromiseAll)                                      \
   V(PromiseConstructor)                              \
   V(PromiseHandle)                                   \
+  V(PromiseRace)                                     \
   V(PromiseResolve)                                  \
   V(PromiseResolveClosure)                           \
   V(RejectNativePromise)                             \

@@ -41,11 +41,9 @@ BUILTIN(MapForEach) {
   }
 
   Handle<Object> receiver = args.atOrUndefined(isolate, 2);
-  Handle<OrderedHashMap> table(OrderedHashMap::cast(map->table()));
-  Handle<JSMapIterator> iterator = isolate->factory()->NewJSMapIterator();
-  iterator->set_table(*table);
-  iterator->set_index(Smi::kZero);
-  iterator->set_kind(Smi::FromInt(JSMapIterator::kKindEntries));
+  Handle<OrderedHashMap> table(OrderedHashMap::cast(map->table()), isolate);
+  Handle<JSMapIterator> iterator = isolate->factory()->NewJSMapIterator(
+      isolate->map_key_value_iterator_map(), table, 0);
 
   while (iterator->HasMore()) {
     Handle<Object> key(iterator->CurrentKey(), isolate);
@@ -92,11 +90,9 @@ BUILTIN(SetForEach) {
   }
 
   Handle<Object> receiver = args.atOrUndefined(isolate, 2);
-  Handle<OrderedHashSet> table(OrderedHashSet::cast(set->table()));
-  Handle<JSSetIterator> iterator = isolate->factory()->NewJSSetIterator();
-  iterator->set_table(*table);
-  iterator->set_index(Smi::kZero);
-  iterator->set_kind(Smi::FromInt(JSSetIterator::kKindValues));
+  Handle<OrderedHashSet> table(OrderedHashSet::cast(set->table()), isolate);
+  Handle<JSSetIterator> iterator = isolate->factory()->NewJSSetIterator(
+      isolate->set_value_iterator_map(), table, 0);
 
   while (iterator->HasMore()) {
     Handle<Object> key(iterator->CurrentKey(), isolate);

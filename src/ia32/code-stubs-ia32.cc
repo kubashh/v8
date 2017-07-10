@@ -1867,7 +1867,7 @@ void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
 
   NameDictionaryLookupStub stub(masm->isolate(), properties, r0, r0,
                                 NEGATIVE_LOOKUP);
-  __ push(Immediate(Handle<Object>(name)));
+  __ push(Immediate(name));
   __ push(Immediate(name->Hash()));
   __ CallStub(&stub);
   __ test(r0, r0);
@@ -2139,10 +2139,10 @@ void RecordWriteStub::CheckNeedsToInformIncrementalMarker(
   // Fall through when we need to inform the incremental marker.
 }
 
-void ProfileEntryHookStub::MaybeCallEntryHookDelayed(MacroAssembler* masm,
+void ProfileEntryHookStub::MaybeCallEntryHookDelayed(TurboAssembler* tasm,
                                                      Zone* zone) {
-  if (masm->isolate()->function_entry_hook() != NULL) {
-    masm->CallStubDelayed(new (zone) ProfileEntryHookStub(nullptr));
+  if (tasm->isolate()->function_entry_hook() != NULL) {
+    tasm->CallStubDelayed(new (zone) ProfileEntryHookStub(nullptr));
   }
 }
 

@@ -222,8 +222,11 @@ Type::bitset BitsetType::Lub(i::Map* map) {
     case JS_DATA_VIEW_TYPE:
     case JS_SET_TYPE:
     case JS_MAP_TYPE:
-    case JS_SET_ITERATOR_TYPE:
-    case JS_MAP_ITERATOR_TYPE:
+    case JS_SET_KEY_VALUE_ITERATOR_TYPE:
+    case JS_SET_VALUE_ITERATOR_TYPE:
+    case JS_MAP_KEY_ITERATOR_TYPE:
+    case JS_MAP_KEY_VALUE_ITERATOR_TYPE:
+    case JS_MAP_VALUE_ITERATOR_TYPE:
     case JS_STRING_ITERATOR_TYPE:
     case JS_ASYNC_FROM_SYNC_ITERATOR_TYPE:
 
@@ -267,6 +270,10 @@ Type::bitset BitsetType::Lub(i::Map* map) {
     case JS_WEAK_SET_TYPE:
     case JS_PROMISE_CAPABILITY_TYPE:
     case JS_PROMISE_TYPE:
+    case WASM_MODULE_TYPE:
+    case WASM_INSTANCE_TYPE:
+    case WASM_MEMORY_TYPE:
+    case WASM_TABLE_TYPE:
       DCHECK(!map->is_callable());
       DCHECK(!map->is_undetectable());
       return kOtherObject;

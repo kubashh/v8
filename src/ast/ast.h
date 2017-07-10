@@ -986,6 +986,8 @@ class TryCatchStatement final : public TryStatement {
   Block* catch_block() const { return catch_block_; }
   void set_catch_block(Block* b) { catch_block_ = b; }
 
+  SourceRange catch_range() const { return catch_range_; }
+
   // Prediction of whether exceptions thrown into the handler for this try block
   // will be caught.
   //
@@ -1038,15 +1040,18 @@ class TryCatchStatement final : public TryStatement {
   friend class AstNodeFactory;
 
   TryCatchStatement(Block* try_block, Scope* scope, Block* catch_block,
-                    HandlerTable::CatchPrediction catch_prediction, int pos)
+                    HandlerTable::CatchPrediction catch_prediction, int pos,
+                    const SourceRange& catch_range)
       : TryStatement(try_block, pos, kTryCatchStatement),
         scope_(scope),
         catch_block_(catch_block),
-        catch_prediction_(catch_prediction) {}
+        catch_prediction_(catch_prediction),
+        catch_range_(catch_range) {}
 
   Scope* scope_;
   Block* catch_block_;
   HandlerTable::CatchPrediction catch_prediction_;
+  SourceRange catch_range_;
 };
 
 
@@ -1055,14 +1060,19 @@ class TryFinallyStatement final : public TryStatement {
   Block* finally_block() const { return finally_block_; }
   void set_finally_block(Block* b) { finally_block_ = b; }
 
+  SourceRange finally_range() const { return finally_range_; }
+
  private:
   friend class AstNodeFactory;
 
-  TryFinallyStatement(Block* try_block, Block* finally_block, int pos)
+  TryFinallyStatement(Block* try_block, Block* finally_block, int pos,
+                      const SourceRange& finally_range)
       : TryStatement(try_block, pos, kTryFinallyStatement),
-        finally_block_(finally_block) {}
+        finally_block_(finally_block),
+        finally_range_(finally_range) {}
 
   Block* finally_block_;
+  SourceRange finally_range_;
 };
 
 
@@ -1145,12 +1155,6 @@ class Literal final : public Expression {
 // Base class for literals that need space in the type feedback vector.
 class MaterializedLiteral : public Expression {
  public:
-  bool is_initialized() const { return 0 < depth_; }
-  int depth() const {
-    DCHECK(is_initialized());
-    return depth_;
-  }
-
   void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
                            FeedbackSlotCache* cache) {
     literal_slot_ = spec->AddLiteralSlot();
@@ -1159,15 +1163,13 @@ class MaterializedLiteral : public Expression {
   FeedbackSlot literal_slot() const { return literal_slot_; }
 
  private:
-  int depth_ : 31;
   FeedbackSlot literal_slot_;
 
   class IsSimpleField
       : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
 
  protected:
-  MaterializedLiteral(int pos, NodeType type)
-      : Expression(pos, type), depth_(0) {
+  MaterializedLiteral(int pos, NodeType type) : Expression(pos, type) {
     bit_field_ |= IsSimpleField::encode(false);
   }
 
@@ -1180,13 +1182,10 @@ class MaterializedLiteral : public Expression {
 
   friend class CompileTimeValue;
 
-  void set_depth(int depth) {
-    DCHECK(!is_initialized());
-    depth_ = depth;
-  }
-
   // Populate the depth field and any flags the literal has.
-  void InitDepthAndFlags();
+  int InitDepthAndFlags();
+
+  bool NeedsInitialAllocationSite();
 
   // Populate the constant properties/elements fixed array.
   void BuildConstants(Isolate* isolate);
@@ -1201,6 +1200,78 @@ class MaterializedLiteral : public Expression {
   Handle<Object> GetBoilerplateValue(Expression* expression, Isolate* isolate);
 
   static const uint8_t kNextBitFieldIndex = IsSimpleField::kNext;
+};
+
+// Node for capturing a regexp literal.
+class RegExpLiteral final : public MaterializedLiteral {
+ public:
+  Handle<String> pattern() const { return pattern_->string(); }
+  const AstRawString* raw_pattern() const { return pattern_; }
+  int flags() const { return flags_; }
+  int depth() const { return 1; }
+
+ private:
+  friend class AstNodeFactory;
+
+  RegExpLiteral(const AstRawString* pattern, int flags, int pos)
+      : MaterializedLiteral(pos, kRegExpLiteral),
+        flags_(flags),
+        pattern_(pattern) {}
+
+  int const flags_;
+  const AstRawString* const pattern_;
+};
+
+// Base class for Array and Object literals that have nested subliterals.
+class ComplexLiteral : public MaterializedLiteral {
+ public:
+  enum Flags {
+    kNoFlags = 0,
+    kIsShallow = 1,
+    kDisableMementos = 1 << 1,
+    kNeedsInitialAllocationSite = 1 << 2,
+  };
+
+  bool is_initialized() const { return 0 < depth_; }
+  int depth() const {
+    DCHECK(is_initialized());
+    return depth_;
+  }
+
+  bool is_shallow() const { return depth() == 1; }
+  bool needs_initial_allocation_site() const {
+    return NeedsInitialAllocationSiteField::decode(bit_field_);
+  }
+
+  int ComputeFlags(bool disable_mementos = false) const {
+    int flags = kNoFlags;
+    if (is_shallow()) flags |= kIsShallow;
+    if (disable_mementos) flags |= kDisableMementos;
+    if (needs_initial_allocation_site()) flags |= kNeedsInitialAllocationSite;
+    return flags;
+  }
+
+ private:
+  int depth_ : 31;
+  class NeedsInitialAllocationSiteField
+      : public BitField<bool, MaterializedLiteral::kNextBitFieldIndex, 1> {};
+
+ protected:
+  friend class AstNodeFactory;
+  ComplexLiteral(int pos, NodeType type)
+      : MaterializedLiteral(pos, type), depth_(0) {
+    bit_field_ |= NeedsInitialAllocationSiteField::encode(false);
+  }
+  void set_depth(int depth) {
+    DCHECK(!is_initialized());
+    depth_ = depth;
+  }
+  void set_needs_initial_allocation_site(bool required) {
+    bit_field_ = NeedsInitialAllocationSiteField::update(bit_field_, required);
+  }
+
+  static const uint8_t kNextBitFieldIndex =
+      NeedsInitialAllocationSiteField::kNext;
 };
 
 // Common supertype for ObjectLiteralProperty and ClassLiteralProperty
@@ -1288,7 +1359,7 @@ class ObjectLiteralProperty final : public LiteralProperty {
 
 // An object literal has a boilerplate object that is used
 // for minimizing the work when constructing it at runtime.
-class ObjectLiteral final : public MaterializedLiteral {
+class ObjectLiteral final : public ComplexLiteral {
  public:
   typedef ObjectLiteralProperty Property;
 
@@ -1298,18 +1369,17 @@ class ObjectLiteral final : public MaterializedLiteral {
   }
   int properties_count() const { return boilerplate_properties_; }
   ZoneList<Property*>* properties() const { return properties_; }
-  bool fast_elements() const { return FastElementsField::decode(bit_field_); }
   bool has_elements() const { return HasElementsField::decode(bit_field_); }
-  bool has_shallow_properties() const { return depth() == 1; }
   bool has_rest_property() const {
     return HasRestPropertyField::decode(bit_field_);
   }
+  bool fast_elements() const { return FastElementsField::decode(bit_field_); }
   bool has_null_prototype() const {
     return HasNullPrototypeField::decode(bit_field_);
   }
 
   // Populate the depth field and flags.
-  void InitDepthAndFlags();
+  int InitDepthAndFlags();
 
   // Get the constant properties fixed array, populating it if necessary.
   Handle<BoilerplateDescription> GetOrBuildConstantProperties(
@@ -1333,27 +1403,25 @@ class ObjectLiteral final : public MaterializedLiteral {
 
   // Assemble bitfield of flags for the CreateObjectLiteral helper.
   int ComputeFlags(bool disable_mementos = false) const {
-    int flags = fast_elements() ? kFastElements : kNoFlags;
-    if (has_shallow_properties()) flags |= kShallowProperties;
-    if (disable_mementos) flags |= kDisableMementos;
+    int flags = ComplexLiteral::ComputeFlags(disable_mementos);
+    if (fast_elements()) flags |= kFastElements;
     if (has_null_prototype()) flags |= kHasNullPrototype;
     return flags;
   }
 
   int EncodeLiteralType() {
-    int flags = fast_elements() ? kFastElements : kNoFlags;
-    if (has_shallow_properties()) flags |= kShallowProperties;
+    int flags = kNoFlags;
+    if (fast_elements()) flags |= kFastElements;
     if (has_null_prototype()) flags |= kHasNullPrototype;
     return flags;
   }
 
   enum Flags {
-    kNoFlags = 0,
-    kShallowProperties = 1,
-    kDisableMementos = 1 << 1,
-    kFastElements = 1 << 2,
-    kHasNullPrototype = 1 << 3,
+    kFastElements = 1 << 3,
+    kHasNullPrototype = 1 << 4,
   };
+  STATIC_ASSERT(static_cast<int>(ComplexLiteral::kNeedsInitialAllocationSite) <
+                static_cast<int>(kFastElements));
 
   struct Accessors: public ZoneObject {
     Accessors() : getter(NULL), setter(NULL) {}
@@ -1372,22 +1440,22 @@ class ObjectLiteral final : public MaterializedLiteral {
   ObjectLiteral(ZoneList<Property*>* properties,
                 uint32_t boilerplate_properties, int pos,
                 bool has_rest_property)
-      : MaterializedLiteral(pos, kObjectLiteral),
+      : ComplexLiteral(pos, kObjectLiteral),
         boilerplate_properties_(boilerplate_properties),
         properties_(properties) {
-    bit_field_ |= FastElementsField::encode(false) |
-                  HasElementsField::encode(false) |
+    bit_field_ |= HasElementsField::encode(false) |
                   HasRestPropertyField::encode(has_rest_property) |
+                  FastElementsField::encode(false) |
                   HasNullPrototypeField::encode(false);
   }
 
   void InitFlagsForPendingNullPrototype(int i);
 
-  void set_fast_elements(bool fast_elements) {
-    bit_field_ = FastElementsField::update(bit_field_, fast_elements);
-  }
   void set_has_elements(bool has_elements) {
     bit_field_ = HasElementsField::update(bit_field_, has_elements);
+  }
+  void set_fast_elements(bool fast_elements) {
+    bit_field_ = FastElementsField::update(bit_field_, fast_elements);
   }
   void set_has_null_protoype(bool has_null_prototype) {
     bit_field_ = HasNullPrototypeField::update(bit_field_, has_null_prototype);
@@ -1397,14 +1465,14 @@ class ObjectLiteral final : public MaterializedLiteral {
   Handle<BoilerplateDescription> constant_properties_;
   ZoneList<Property*>* properties_;
 
-  class FastElementsField
-      : public BitField<bool, MaterializedLiteral::kNextBitFieldIndex, 1> {};
-  class HasElementsField : public BitField<bool, FastElementsField::kNext, 1> {
-  };
+  class HasElementsField
+      : public BitField<bool, ComplexLiteral::kNextBitFieldIndex, 1> {};
   class HasRestPropertyField
       : public BitField<bool, HasElementsField::kNext, 1> {};
-  class HasNullPrototypeField
+  class FastElementsField
       : public BitField<bool, HasRestPropertyField::kNext, 1> {};
+  class HasNullPrototypeField
+      : public BitField<bool, FastElementsField::kNext, 1> {};
 };
 
 
@@ -1431,31 +1499,9 @@ class AccessorTable
 };
 
 
-// Node for capturing a regexp literal.
-class RegExpLiteral final : public MaterializedLiteral {
- public:
-  Handle<String> pattern() const { return pattern_->string(); }
-  const AstRawString* raw_pattern() const { return pattern_; }
-  int flags() const { return flags_; }
-
- private:
-  friend class AstNodeFactory;
-
-  RegExpLiteral(const AstRawString* pattern, int flags, int pos)
-      : MaterializedLiteral(pos, kRegExpLiteral),
-        flags_(flags),
-        pattern_(pattern) {
-    set_depth(1);
-  }
-
-  int const flags_;
-  const AstRawString* const pattern_;
-};
-
-
 // An array literal has a literals object that is used
 // for minimizing the work when constructing it at runtime.
-class ArrayLiteral final : public MaterializedLiteral {
+class ArrayLiteral final : public ComplexLiteral {
  public:
   Handle<ConstantElementsPair> constant_elements() const {
     return constant_elements_;
@@ -1464,7 +1510,7 @@ class ArrayLiteral final : public MaterializedLiteral {
   ZoneList<Expression*>* values() const { return values_; }
 
   // Populate the depth field and flags.
-  void InitDepthAndFlags();
+  int InitDepthAndFlags();
 
   // Get the constant elements fixed array, populating it if necessary.
   Handle<ConstantElementsPair> GetOrBuildConstantElements(Isolate* isolate) {
@@ -1482,9 +1528,7 @@ class ArrayLiteral final : public MaterializedLiteral {
 
   // Assemble bitfield of flags for the CreateArrayLiteral helper.
   int ComputeFlags(bool disable_mementos = false) const {
-    int flags = depth() == 1 ? kShallowElements : kNoFlags;
-    if (disable_mementos) flags |= kDisableMementos;
-    return flags;
+    return ComplexLiteral::ComputeFlags(disable_mementos);
   }
 
   // Provide a mechanism for iterating through values to rewrite spreads.
@@ -1497,12 +1541,6 @@ class ArrayLiteral final : public MaterializedLiteral {
   // Rewind an array literal omitting everything from the first spread on.
   void RewindSpreads();
 
-  enum Flags {
-    kNoFlags = 0,
-    kShallowElements = 1,
-    kDisableMementos = 1 << 1
-  };
-
   void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
                            FeedbackSlotCache* cache);
   FeedbackSlot LiteralFeedbackSlot() const { return literal_slot_; }
@@ -1511,7 +1549,7 @@ class ArrayLiteral final : public MaterializedLiteral {
   friend class AstNodeFactory;
 
   ArrayLiteral(ZoneList<Expression*>* values, int first_spread_index, int pos)
-      : MaterializedLiteral(pos, kArrayLiteral),
+      : ComplexLiteral(pos, kArrayLiteral),
         first_spread_index_(first_spread_index),
         values_(values) {}
 
@@ -2421,14 +2459,20 @@ class Throw final : public Expression {
  public:
   Expression* exception() const { return exception_; }
   void set_exception(Expression* e) { exception_ = e; }
+  // The first source position past the end of the throw statement, used by
+  // block coverage.
+  int32_t continuation_pos() const { return continuation_pos_; }
 
  private:
   friend class AstNodeFactory;
 
-  Throw(Expression* exception, int pos)
-      : Expression(pos, kThrow), exception_(exception) {}
+  Throw(Expression* exception, int pos, int32_t continuation_pos)
+      : Expression(pos, kThrow),
+        exception_(exception),
+        continuation_pos_(continuation_pos) {}
 
   Expression* exception_;
+  int32_t continuation_pos_;
 };
 
 
@@ -2914,14 +2958,35 @@ class GetIterator final : public Expression {
     return async_iterator_call_feedback_slot_;
   }
 
+  Expression* iterable_for_call_printer() const {
+    return destructured_iterable_ != nullptr ? destructured_iterable_
+                                             : iterable_;
+  }
+
  private:
   friend class AstNodeFactory;
 
-  explicit GetIterator(Expression* iterable, IteratorType hint, int pos)
-      : Expression(pos, kGetIterator), hint_(hint), iterable_(iterable) {}
+  GetIterator(Expression* iterable, Expression* destructured_iterable,
+              IteratorType hint, int pos)
+      : Expression(pos, kGetIterator),
+        hint_(hint),
+        iterable_(iterable),
+        destructured_iterable_(destructured_iterable) {}
+
+  GetIterator(Expression* iterable, IteratorType hint, int pos)
+      : Expression(pos, kGetIterator),
+        hint_(hint),
+        iterable_(iterable),
+        destructured_iterable_(nullptr) {}
 
   IteratorType hint_;
   Expression* iterable_;
+
+  // iterable_ is the variable proxy, while destructured_iterable_ points to
+  // the raw value stored in the variable proxy. This is only used for
+  // pretty printing error messages.
+  Expression* destructured_iterable_;
+
   FeedbackSlot iterator_property_feedback_slot_;
   FeedbackSlot iterator_call_feedback_slot_;
   FeedbackSlot async_iterator_property_feedback_slot_;
@@ -3185,9 +3250,10 @@ class AstNodeFactory final BASE_EMBEDDED {
   }
 
   TryCatchStatement* NewTryCatchStatement(Block* try_block, Scope* scope,
-                                          Block* catch_block, int pos) {
-    return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::CAUGHT, pos);
+                                          Block* catch_block, int pos,
+                                          const SourceRange catch_range = {}) {
+    return new (zone_) TryCatchStatement(
+        try_block, scope, catch_block, HandlerTable::CAUGHT, pos, catch_range);
   }
 
   TryCatchStatement* NewTryCatchStatementForReThrow(Block* try_block,
@@ -3195,7 +3261,7 @@ class AstNodeFactory final BASE_EMBEDDED {
                                                     Block* catch_block,
                                                     int pos) {
     return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::UNCAUGHT, pos);
+                                         HandlerTable::UNCAUGHT, pos, {});
   }
 
   TryCatchStatement* NewTryCatchStatementForDesugaring(Block* try_block,
@@ -3203,7 +3269,7 @@ class AstNodeFactory final BASE_EMBEDDED {
                                                        Block* catch_block,
                                                        int pos) {
     return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::DESUGARING, pos);
+                                         HandlerTable::DESUGARING, pos, {});
   }
 
   TryCatchStatement* NewTryCatchStatementForAsyncAwait(Block* try_block,
@@ -3211,12 +3277,14 @@ class AstNodeFactory final BASE_EMBEDDED {
                                                        Block* catch_block,
                                                        int pos) {
     return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::ASYNC_AWAIT, pos);
+                                         HandlerTable::ASYNC_AWAIT, pos, {});
   }
 
-  TryFinallyStatement* NewTryFinallyStatement(Block* try_block,
-                                              Block* finally_block, int pos) {
-    return new (zone_) TryFinallyStatement(try_block, finally_block, pos);
+  TryFinallyStatement* NewTryFinallyStatement(
+      Block* try_block, Block* finally_block, int pos,
+      const SourceRange& finally_range = {}) {
+    return new (zone_)
+        TryFinallyStatement(try_block, finally_block, pos, finally_range);
   }
 
   DebuggerStatement* NewDebuggerStatement(int pos) {
@@ -3432,8 +3500,9 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) YieldStar(expression, pos, flags);
   }
 
-  Throw* NewThrow(Expression* exception, int pos) {
-    return new (zone_) Throw(exception, pos);
+  Throw* NewThrow(Expression* exception, int pos,
+                  int32_t continuation_pos = kNoSourcePosition) {
+    return new (zone_) Throw(exception, pos, continuation_pos);
   }
 
   FunctionLiteral* NewFunctionLiteral(
@@ -3520,6 +3589,12 @@ class AstNodeFactory final BASE_EMBEDDED {
 
   EmptyParentheses* NewEmptyParentheses(int pos) {
     return new (zone_) EmptyParentheses(pos);
+  }
+
+  GetIterator* NewGetIterator(Expression* iterable,
+                              Expression* destructured_iterable,
+                              IteratorType hint, int pos) {
+    return new (zone_) GetIterator(iterable, destructured_iterable, hint, pos);
   }
 
   GetIterator* NewGetIterator(Expression* iterable, IteratorType hint,
