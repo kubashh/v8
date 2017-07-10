@@ -46,7 +46,8 @@
   V(PointerConstant)          \
   V(HeapConstant)             \
   V(RelocatableInt32Constant) \
-  V(RelocatableInt64Constant)
+  V(RelocatableInt64Constant) \
+  V(ObjectId)
 
 #define INNER_OP_LIST(V)    \
   V(Select)                 \
