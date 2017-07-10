@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cab77ad1_dc5fe594",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-07-10T12:25:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1e0f730_b47c833f",
+      "range": {
+        "startLine": 230,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 7
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ac719d1_1a45109e",
         "filename": "src/compiler/branch-elimination.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "09eea82c_f3d282b0",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-07-10T12:25:55Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4ac719d1_1a45109e",
+      "range": {
+        "startLine": 325,
+        "startChar": 47,
+        "endLine": 325,
+        "endChar": 53
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d6d8616_f4bda893",
         "filename": "src/compiler/branch-elimination.cc",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2017-07-10T09:55:29Z",
       "side": 1,
       "message": "is there a \u003d\u003d operator on BranchConditions? Maybe adding that one would make this clearer?",
+      "range": {
+        "startLine": 330,
+        "startChar": 2,
+        "endLine": 330,
+        "endChar": 17
+      },
+      "revId": "2fbc8799995930fea2a41a971cfe09895cfce42f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfef1bad_a08abd1b",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-07-10T12:25:55Z",
+      "side": 1,
+      "message": "There is no \u003d\u003d operator. In this case, we have not created a BranchCondition from the curr_condition and branch_direction. So I haven\u0027t added this operator. I changed the name from branch_condition to branch_direction to make it a bit more clear.",
+      "parentUuid": "5d6d8616_f4bda893",
       "range": {
         "startLine": 330,
         "startChar": 2,
