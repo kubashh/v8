@@ -7455,6 +7455,9 @@ TEST(DestructuringNegativeTests) {
         "{ x : y++ }",
         "[a++]",
         "(x => y)",
+        "(async x => y)",
+        "((x, z) => y)",
+        "(async (x, z) => y)",
         "a[i]", "a()",
         "a.b",
         "new a",
@@ -7469,6 +7472,8 @@ TEST(DestructuringNegativeTests) {
         "a <<< a",
         "a >>> a",
         "function a() {}",
+        "function* a() {}",
+        "async function a() {}",
         "a`bcd`",
         "this",
         "null",
@@ -7535,6 +7540,11 @@ TEST(DestructuringNegativeTests) {
       NULL
     };
 
+    const char* async_gen_data[] = {
+      "async function* a() {}",
+      NULL
+    };
+
     // clang-format on
     RunParserSyncTest(context_data, data, kError);
     RunParserSyncTest(context_data, rest_data, kError);
@@ -7543,6 +7553,9 @@ TEST(DestructuringNegativeTests) {
                       arraysize(flags));
     RunParserSyncTest(context_data, rest_data, kError, NULL, 0, flags,
                       arraysize(flags));
+    static const ParserFlag async_gen_flags[] = {kAllowHarmonyAsyncIteration};
+    RunParserSyncTest(context_data, async_gen_data, kError, NULL, 0,
+                      async_gen_flags, arraysize(async_gen_flags));
   }
 
   {  // All modes.
