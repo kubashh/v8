@@ -487,6 +487,7 @@ Parser::Parser(ParseInfo* info)
       scanner_(info->unicode_cache()),
       reusable_preparser_(nullptr),
       mode_(PARSE_EAGERLY),  // Lazy mode must be set explicitly.
+      source_range_map_(info->source_range_map()),
       target_stack_(nullptr),
       compile_options_(info->compile_options()),
       cached_parse_data_(nullptr),

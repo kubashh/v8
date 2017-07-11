@@ -1034,6 +1034,11 @@ bool Expression::IsMonomorphic() const {
   }
 }
 
+SourceRange Block::continuation_range() const {
+  DCHECK_NOT_NULL(scope_);
+  return SourceRange::OpenEnded(scope_->end_position());
+}
+
 void Call::AssignFeedbackSlots(FeedbackVectorSpec* spec,
                                LanguageMode language_mode,
                                FeedbackSlotCache* cache) {
