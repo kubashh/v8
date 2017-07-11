@@ -29,6 +29,12 @@ namespace wasm {
 #else
 #define TRACE(...)
 #endif
+
+#define PRIs_truncated "%.*s%s"
+#define ARGs_truncated(max, len, str)                                     \
+  (len) > (max) ? static_cast<int>((max)-3) : static_cast<int>(len), str, \
+      (len) > (max) ? "..." : ""
+
 namespace {
 
 const char kNameString[] = "name";
@@ -625,9 +631,13 @@ class ModuleDecoder : public Decoder {
         DCHECK(!cmp_less(*it, *last));  // Vector must be sorted.
         if (!cmp_less(*last, *it)) {
           const byte* pc = start() + GetBufferRelativeOffset(it->name.offset());
-          errorf(pc, "Duplicate export name '%.*s' for %s %d and %s %d",
-                 it->name.length(), pc, ExternalKindName(last->kind),
-                 last->index, ExternalKindName(it->kind), it->index);
+          constexpr int max_name_len = 50;
+          errorf(pc,
+                 "Duplicate export name '" PRIs_truncated
+                 "' for %s %d and %s %d",
+                 ARGs_truncated(max_name_len, it->name.length(), pc),
+                 ExternalKindName(last->kind), last->index,
+                 ExternalKindName(it->kind), it->index);
           break;
         }
       }
