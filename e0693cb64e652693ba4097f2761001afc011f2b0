@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9648d7e6_8f063bce",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:29:20Z",
+      "side": 1,
+      "message": "I know that this evaluates (len) and (max) several times, but I see no other way to do this in macros.",
+      "revId": "e0693cb64e652693ba4097f2761001afc011f2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
