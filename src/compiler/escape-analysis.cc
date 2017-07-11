@@ -1687,8 +1687,8 @@ Node* EscapeAnalysis::GetOrCreateObjectState(Node* effect, Node* node) {
         }
         int input_count = static_cast<int>(cache_->fields().size());
         Node* new_object_state =
-            graph()->NewNode(common()->ObjectState(input_count), input_count,
-                             &cache_->fields().front());
+            graph()->NewNode(common()->ObjectState(vobj->id(), input_count),
+                             input_count, &cache_->fields().front());
         NodeProperties::SetType(new_object_state, Type::OtherInternal());
         vobj->SetObjectState(new_object_state);
         TRACE(
