@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d6eb2d53_431a9f09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T18:47:15Z",
+      "side": 1,
+      "message": "Seems like this sentence got cut off?",
+      "range": {
+        "startLine": 10,
+        "startChar": 37,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "1851fc9c52808b5e81f54d5bf0060a06adb26db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28b60319_f6a929b5",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 1
