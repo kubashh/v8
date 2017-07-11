@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "526bb97e_b1161a0c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3172,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-11T12:12:31Z",
+      "side": 1,
+      "message": "Nit: 0-based?",
+      "revId": "ef4040031db0d2c17395ee25100f0942e70ff8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1030deb1_383e4167",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3183,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-11T12:12:31Z",
+      "side": 1,
+      "message": "Not sure if this structure is intentional to reduce the nr of args for the runtime call when possible. Otherwise, we could just go with the default value of UndefinedConstant() for argX and unconditionally pass in all 3 args.\n\nOn second thought, your current solution seems like the way to go.",
+      "revId": "ef4040031db0d2c17395ee25100f0942e70ff8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
