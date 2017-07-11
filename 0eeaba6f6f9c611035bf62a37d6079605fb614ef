@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1926787_3b9b1112",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-11T08:23:27Z",
+      "side": 1,
+      "message": "nit: TimesPointerSize(LoadMapInstanceSize(function_map));",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3be9b766_22efd801",
+        "filename": "src/factory.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-11T08:23:27Z",
+      "side": 1,
+      "message": "nit: could we have these two constants defined somewhere? I\u0027m not a particular fan of having wild int constants running around :P",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3461fd8c_2a3f5f74",
+        "filename": "src/objects.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 13669,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-11T08:23:27Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
