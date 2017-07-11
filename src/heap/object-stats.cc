@@ -409,8 +409,13 @@ void ObjectStatsCollector::RecordJSObjectDetails(JSObject* object) {
   if (CanRecordFixedArray(heap_, properties) &&
       SameLiveness(object, properties) && !IsCowArray(heap_, properties)) {
     if (properties->IsDictionary()) {
-      NameDictionary* dict = NameDictionary::cast(properties);
-      RecordHashTableHelper(object, dict, DICTIONARY_PROPERTIES_SUB_TYPE);
+      if (object->IsJSGlobalObject()) {
+        GlobalDictionary* dict = GlobalDictionary::cast(properties);
+        RecordHashTableHelper(object, dict, DICTIONARY_PROPERTIES_SUB_TYPE);
+      } else {
+        NameDictionary* dict = NameDictionary::cast(properties);
+        RecordHashTableHelper(object, dict, DICTIONARY_PROPERTIES_SUB_TYPE);
+      }
     } else {
       stats_->RecordFixedArraySubTypeStats(properties, FAST_PROPERTIES_SUB_TYPE,
                                            properties->Size(), overhead);
