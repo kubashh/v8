@@ -5436,9 +5436,11 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseThrowStatement(
   }
   ExpressionT exception = ParseExpression(true, CHECK_OK);
   ExpectSemicolon(CHECK_OK);
-  int continuation_pos = scanner_->location().end_pos;
 
-  return impl()->NewThrowStatement(exception, pos, continuation_pos);
+  StatementT stmt = impl()->NewThrowStatement(exception, pos);
+  impl()->RecordThrowSourceRange(stmt, scanner_->location().end_pos);
+
+  return stmt;
 }
 
 template <typename Impl>

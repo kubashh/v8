@@ -4,6 +4,7 @@
 
 #include "src/interpreter/bytecode-generator.h"
 
+#include "src/ast/ast-source-ranges.h"
 #include "src/ast/compile-time-value.h"
 #include "src/ast/scopes.h"
 #include "src/builtins/builtins-constructor.h"
@@ -2951,7 +2952,7 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
 }
 
 void BytecodeGenerator::VisitThrow(Throw* expr) {
-  AllocateBlockCoverageSlotIfEnabled(expr->continuation_range());
+  AllocateBlockCoverageSlotIfEnabled(expr, SourceRangeKind::kContinuation);
   VisitForAccumulatorValue(expr->exception());
   builder()->SetExpressionPosition(expr);
   builder()->Throw();
@@ -4154,10 +4155,36 @@ void BytecodeGenerator::BuildLoadPropertyKey(LiteralProperty* property,
 }
 
 int BytecodeGenerator::AllocateBlockCoverageSlotIfEnabled(
+    AstNode* node, SourceRangeKind kind) {
+  if (block_coverage_builder_ != nullptr) {
+    SourceRangeMap* source_range_map = info()->parse_info()->source_range_map();
+    AstNodeSourceRanges* ranges = source_range_map->Find(node);
+    if (ranges != nullptr) {
+      const SourceRange& range = ranges->GetRange(kind);
+      return block_coverage_builder_->AllocateBlockCoverageSlot(range);
+    }
+  }
+  return BlockCoverageBuilder::kNoCoverageArraySlot;
+}
+
+int BytecodeGenerator::AllocateBlockCoverageSlotIfEnabled(
     const SourceRange& range) {
   return (block_coverage_builder_ == nullptr)
              ? BlockCoverageBuilder::kNoCoverageArraySlot
              : block_coverage_builder_->AllocateBlockCoverageSlot(range);
+}
+
+void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
+    AstNode* node, SourceRangeKind kind) {
+  if (block_coverage_builder_ == nullptr) return;
+
+  SourceRangeMap* source_range_map = info()->parse_info()->source_range_map();
+  AstNodeSourceRanges* ranges = source_range_map->Find(node);
+  if (ranges != nullptr) {
+    const SourceRange& range = ranges->GetRange(kind);
+    int slot = block_coverage_builder_->AllocateBlockCoverageSlot(range);
+    block_coverage_builder_->IncrementBlockCounter(slot);
+  }
 }
 
 void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
