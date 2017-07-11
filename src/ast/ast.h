@@ -2455,21 +2455,13 @@ class Throw final : public Expression {
   Expression* exception() const { return exception_; }
   void set_exception(Expression* e) { exception_ = e; }
 
-  // The range starting after the throw statement, used for block coverage.
-  SourceRange continuation_range() const {
-    return SourceRange::OpenEnded(continuation_pos_);
-  }
-
  private:
   friend class AstNodeFactory;
 
-  Throw(Expression* exception, int pos, int32_t continuation_pos)
-      : Expression(pos, kThrow),
-        exception_(exception),
-        continuation_pos_(continuation_pos) {}
+  Throw(Expression* exception, int pos)
+      : Expression(pos, kThrow), exception_(exception) {}
 
   Expression* exception_;
-  int32_t continuation_pos_;
 };
 
 
@@ -3497,9 +3489,8 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) YieldStar(expression, pos, flags);
   }
 
-  Throw* NewThrow(Expression* exception, int pos,
-                  int32_t continuation_pos = kNoSourcePosition) {
-    return new (zone_) Throw(exception, pos, continuation_pos);
+  Throw* NewThrow(Expression* exception, int pos) {
+    return new (zone_) Throw(exception, pos);
   }
 
   FunctionLiteral* NewFunctionLiteral(

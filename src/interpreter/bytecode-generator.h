@@ -16,6 +16,7 @@ namespace internal {
 
 class AstStringConstants;
 class CompilationInfo;
+enum class SourceRangeKind;
 
 namespace interpreter {
 
@@ -192,7 +193,10 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void BuildLoadPropertyKey(LiteralProperty* property, Register out_reg);
 
+  int AllocateBlockCoverageSlotIfEnabled(AstNode* node, SourceRangeKind kind);
   int AllocateBlockCoverageSlotIfEnabled(const SourceRange& range);
+  void BuildIncrementBlockCoverageCounterIfEnabled(AstNode* node,
+                                                   SourceRangeKind kind);
   void BuildIncrementBlockCoverageCounterIfEnabled(int coverage_array_slot);
   void BuildIncrementBlockCoverageCounterIfEnabled(const SourceRange& range);
 
