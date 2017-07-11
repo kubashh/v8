@@ -583,7 +583,7 @@
   'd8-os': [SKIP],
 
   # crbug.com/v8/5803
-  'wasm/gc-frame': [SKIP],
+  # 'wasm/gc-frame': [SKIP],
 }],  # 'predictable == True'
 
 ##############################################################################
