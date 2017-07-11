@@ -272,6 +272,10 @@ SlotCallbackResult Scavenger::CheckAndScavengeObject(Heap* heap,
     if (heap->InToSpace(object)) {
       return KEEP_SLOT;
     }
+  } else if (heap->InToSpace(object)) {
+    // Already updated slot. This can happen when processing of the work list
+    // is interleaved with processing roots.
+    return KEEP_SLOT;
   }
   // Slots can point to "to" space if the slot has been recorded multiple
   // times in the remembered set. We remove the redundant slot now.
