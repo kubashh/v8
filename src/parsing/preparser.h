@@ -1638,8 +1638,7 @@ class PreParser : public ParserBase<PreParser> {
   }
 
   V8_INLINE PreParserStatement NewThrowStatement(PreParserExpression exception,
-                                                 int pos,
-                                                 int32_t continuation_pos) {
+                                                 int pos) {
     return PreParserStatement::Jump();
   }
 
@@ -1744,6 +1743,11 @@ class PreParser : public ParserBase<PreParser> {
   }
 
   V8_INLINE bool ParsingDynamicFunctionDeclaration() const { return false; }
+
+  void RecordBlockSourceRange(PreParserStatement node,
+                              int32_t continuation_position) {}
+  void RecordThrowSourceRange(PreParserStatement node,
+                              int32_t continuation_position) {}
 
   // Preparser's private field members.
 

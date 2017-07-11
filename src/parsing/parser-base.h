@@ -5035,7 +5035,9 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseBlock(
     }
 
     Expect(Token::RBRACE, CHECK_OK_CUSTOM(NullBlock));
-    scope()->set_end_position(scanner()->location().end_pos);
+    int end_pos = scanner()->location().end_pos;
+    scope()->set_end_position(end_pos);
+    if (labels != nullptr) impl()->RecordBlockSourceRange(body, end_pos);
     body->set_scope(scope()->FinalizeBlockScope());
   }
   return body;
@@ -5436,9 +5438,11 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseThrowStatement(
   }
   ExpressionT exception = ParseExpression(true, CHECK_OK);
   ExpectSemicolon(CHECK_OK);
-  int continuation_pos = scanner_->location().end_pos;
 
-  return impl()->NewThrowStatement(exception, pos, continuation_pos);
+  StatementT stmt = impl()->NewThrowStatement(exception, pos);
+  impl()->RecordThrowSourceRange(stmt, scanner_->location().end_pos);
+
+  return stmt;
 }
 
 template <typename Impl>

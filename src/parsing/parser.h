@@ -5,6 +5,7 @@
 #ifndef V8_PARSING_PARSER_H_
 #define V8_PARSING_PARSER_H_
 
+#include "src/ast/ast-source-ranges.h"
 #include "src/ast/ast.h"
 #include "src/ast/scopes.h"
 #include "src/base/compiler-specific.h"
@@ -1051,10 +1052,9 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
                                        ZoneList<Expression*>* args, int pos,
                                        bool* ok);
 
-  V8_INLINE Statement* NewThrowStatement(Expression* exception, int pos,
-                                         int32_t continuation_pos) {
+  V8_INLINE Statement* NewThrowStatement(Expression* exception, int pos) {
     return factory()->NewExpressionStatement(
-        factory()->NewThrow(exception, pos, continuation_pos), pos);
+        factory()->NewThrow(exception, pos), pos);
   }
 
   V8_INLINE void AddParameterInitializationBlock(
@@ -1147,6 +1147,23 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
     return parameters_end_pos_ != kNoSourcePosition;
   }
 
+  // Functions for recording source ranges used by block code coverage.
+  V8_INLINE void RecordBlockSourceRange(Block* node,
+                                        int32_t continuation_position) {
+    if (source_range_map_ == nullptr) return;
+    source_range_map_->Insert(
+        node, new (zone()) BlockSourceRanges(continuation_position));
+  }
+
+  V8_INLINE void RecordThrowSourceRange(Statement* node,
+                                        int32_t continuation_position) {
+    if (source_range_map_ == nullptr) return;
+    ExpressionStatement* expr_stmt = static_cast<ExpressionStatement*>(node);
+    Throw* throw_expr = static_cast<Throw*>(expr_stmt->expression());
+    source_range_map_->Insert(
+        throw_expr, new (zone()) ThrowSourceRanges(continuation_position));
+  }
+
   // Parser's private field members.
   friend class DiscardableZoneScope;  // Uses reusable_preparser_.
   // FIXME(marja): Make reusable_preparser_ always use its own temp Zone (call
@@ -1160,6 +1177,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   Handle<String> source_;
   CompilerDispatcher* compiler_dispatcher_ = nullptr;
   ParseInfo* main_parse_info_ = nullptr;
+
+  SourceRangeMap* source_range_map_ = nullptr;
 
   friend class ParserTarget;
   friend class ParserTargetScope;
