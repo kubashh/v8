@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97a494ce_b46645f6",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "s/NULL/nullptr/ while you\u0027re here?",
+      "range": {
+        "startLine": 584,
+        "startChar": 19,
+        "endLine": 584,
+        "endChar": 23
+      },
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171b301b_c99ea91c",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "\u0027else\u0027 reads funny to me here due to the early return. I\u0027d prefer this left as it was previously (same goes below).",
+      "range": {
+        "startLine": 826,
+        "startChar": 4,
+        "endLine": 826,
+        "endChar": 8
+      },
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "895d2ab2_ba744629",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "Does this bit still need to live on MaterializedLiteral? It look like it could move down to ComplexLiteral, with a slightly modification to CompileTimeValue.",
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df1dd59_3c67eb02",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "Please document the return value in this comment (and the same comments in ObjectLiteral and ArrayLiteral).",
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69104336_9c703f27",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "Does this have any callers? I think they might be all gone with your changes to InitDepthAndFlags().",
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7611a70d_899142bd",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "This was confusing on first read, as it suggested that it was only used for Arrays and Objects that have subliterals. How about something like:\n\n// Base class for Array and Object literals, providing common code\n// for handling nested subliterals",
+      "range": {
+        "startLine": 1248,
+        "startChar": 44,
+        "endLine": 1248,
+        "endChar": 53
+      },
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20977b7e_6d3db186",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "\"Complex\" seems weird here, especially since I\u0027m suggesting moving the is_simple bit here. What about \"AggregateLiteral\" instead?",
+      "range": {
+        "startLine": 1249,
+        "startChar": 6,
+        "endLine": 1249,
+        "endChar": 20
+      },
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fff68946_1d2eae96",
+        "filename": "test/mjsunit/allocation-site-info.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-11T22:25:54Z",
+      "side": 1,
+      "message": "Would be good to use at least \"for (var i \u003d 0\" to avoid polluting the global scope with \"i\" here.",
+      "range": {
+        "startLine": 274,
+        "startChar": 2,
+        "endLine": 274,
+        "endChar": 12
+      },
+      "revId": "3cc2b4708300ea3a39e5f9ca9a176804890f9887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
