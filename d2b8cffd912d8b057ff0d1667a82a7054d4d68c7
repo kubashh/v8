@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "1ff3479c_d8a9c6d6",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-11T14:33:05Z",
+      "side": 1,
+      "message": "The ownership transfer from the ModuleDecoder to the Managed object on the heap actually happens later than I thought. I have to check if I actually need this CL.",
+      "parentUuid": "78598bef_de63031a",
+      "range": {
+        "startLine": 288,
+        "startChar": 2,
+        "endLine": 288,
+        "endChar": 43
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abb86890_d633512a",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 1
