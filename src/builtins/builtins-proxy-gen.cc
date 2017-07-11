@@ -21,7 +21,7 @@ TF_BUILTIN(ProxyConstructor, CodeStubAssembler) {
 
   CallRuntime(Runtime::kThrowTypeError, context,
               SmiConstant(MessageTemplate::kConstructorNotFunction),
-              CStringConstant("Proxy"));
+              StringConstant("Proxy"));
   Unreachable();
 }
 
