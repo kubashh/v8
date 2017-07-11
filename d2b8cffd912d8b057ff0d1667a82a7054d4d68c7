@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82f85c26_a975ac03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "missing space",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 11
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ac3a8ca_a8a9d04c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "missing space",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cc0c0a7_aa16ae01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "missing space",
+      "range": {
+        "startLine": 14,
+        "startChar": 50,
+        "endLine": 14,
+        "endChar": 63
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74cddc0e_b3f13360",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "transferred",
+      "range": {
+        "startLine": 16,
+        "startChar": 38,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78598bef_de63031a",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "This looks quite fragile. If the caller does not store the result long enough, our internal pointer is dangling. Maybe return a shared_ptr instead?",
+      "range": {
+        "startLine": 288,
+        "startChar": 2,
+        "endLine": 288,
+        "endChar": 43
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abb86890_d633512a",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-11T14:02:30Z",
+      "side": 1,
+      "message": "You can use the DecodeResult instead (move it to another header if needed):\nhttps://cs.chromium.org/chromium/src/v8/src/wasm/function-body-decoder.h?type\u003dcs\u0026sq\u003dpackage:chromium\u0026l\u003d47",
+      "range": {
+        "startLine": 785,
+        "startChar": 1,
+        "endLine": 785,
+        "endChar": 14
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
