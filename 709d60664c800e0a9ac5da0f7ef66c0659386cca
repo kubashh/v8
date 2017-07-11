@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c937f55_1dd74b51",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-07-11T11:53:25Z",
+      "side": 1,
+      "message": "Why not delete those two lines?",
+      "range": {
+        "startLine": 586,
+        "startChar": 13,
+        "endLine": 586,
+        "endChar": 18
+      },
+      "revId": "709d60664c800e0a9ac5da0f7ef66c0659386cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
