@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28b60319_f6a929b5",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7458,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T13:43:54Z",
+      "side": 1,
+      "message": "Please also add cases such as `({ a: async function() {} } \u003d {})`, and similar (so that I can be comfortable that BindingPatternUnexpectedToken() also breaks destructuring assignment)",
+      "revId": "1851fc9c52808b5e81f54d5bf0060a06adb26db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
