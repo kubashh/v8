@@ -2950,6 +2950,81 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
   builder()->LoadAccumulatorWithRegister(output_value);
 }
 
+void BytecodeGenerator::VisitAwait(Await* expr) {
+  builder()->SetExpressionPosition(expr);
+  Register operand = VisitForRegisterValue(expr->expression());
+  RegisterList registers(0, operand.index());
+
+  {  // Await(input) and suspend.
+    RegisterAllocationScope register_scope(this);
+
+    // Perform the Await.
+    int parameter_count = expr->is_async_generator() ? 2 : 3;
+    RegisterList args = register_allocator()->NewRegisterList(parameter_count);
+    builder()
+        ->MoveRegister(generator_object_, args[0])
+        .MoveRegister(operand, args[1]);
+    if (!expr->is_async_generator()) {
+      // AsyncFunction Await builtins require a 3rd parameter to hold the outer
+      // promise.
+      Variable* var_promise = closure_scope()->promise_var();
+      DCHECK_NOT_NULL(var_promise);
+      BuildVariableLoadForAccumulatorValue(var_promise, FeedbackSlot::Invalid(),
+                                           HoleCheckMode::kElided);
+      builder()->StoreAccumulatorInRegister(args[2]);
+    }
+
+    int await_builtin;
+    if (expr->is_async_generator()) {
+      await_builtin = is_await_uncaught()
+                          ? Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT
+                          : Context::ASYNC_GENERATOR_AWAIT_CAUGHT;
+    } else {
+      await_builtin = is_await_uncaught()
+                          ? Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX
+                          : Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX;
+    }
+
+    builder()
+        ->CallJSRuntime(await_builtin, args)
+        .StoreAccumulatorInRegister(operand);
+
+    BuildGeneratorSuspend(expr, operand, registers);
+  }
+  builder()->Bind(generator_jump_table_, static_cast<int>(expr->suspend_id()));
+  BuildGeneratorResume(expr, registers);
+
+  {
+    RegisterAllocationScope register_scope(this);
+    Register input = register_allocator()->NewRegister();
+    builder()->StoreAccumulatorInRegister(input);
+
+    builder()->CallRuntime(Runtime::kInlineGeneratorGetResumeMode,
+                           generator_object_);
+
+    // Now dispatch on resume mode.
+    STATIC_ASSERT(JSGeneratorObject::kNext + 1 == JSGeneratorObject::kReturn);
+
+    BytecodeJumpTable* jump_table =
+        builder()->AllocateJumpTable(1, JSGeneratorObject::kNext);
+    builder()->SwitchOnSmiNoFeedback(jump_table);
+
+    {
+      // Resume with throw (switch fallthrough).
+      // TODO(leszeks): Add a debug-only check that the accumulator is
+      // JSGeneratorObject::kThrow.
+      builder()->SetExpressionPosition(expr);
+      builder()->LoadAccumulatorWithRegister(input).ReThrow();
+    }
+
+    {
+      // Resume with next.
+      builder()->Bind(jump_table, JSGeneratorObject::kNext);
+      builder()->LoadAccumulatorWithRegister(input);
+    }
+  }
+}
+
 void BytecodeGenerator::VisitThrow(Throw* expr) {
   AllocateBlockCoverageSlotIfEnabled(expr->continuation_range());
   VisitForAccumulatorValue(expr->exception());

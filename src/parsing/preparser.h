@@ -651,6 +651,10 @@ class PreParserFactory {
                                  SuspendFlags flags) {
     return PreParserExpression::Default();
   }
+  PreParserExpression NewAwait(PreParserExpression expression, int pos,
+                               SuspendFlags flags) {
+    return PreParserExpression::Default();
+  }
   PreParserExpression NewConditional(PreParserExpression condition,
                                      PreParserExpression then_expression,
                                      PreParserExpression else_expression,
@@ -860,6 +864,7 @@ struct ParserTypes<PreParser> {
   typedef PreParserExpression ObjectLiteralProperty;
   typedef PreParserExpression ClassLiteralProperty;
   typedef PreParserExpression Suspend;
+  typedef PreParserExpression Await;
   typedef PreParserExpressionList ExpressionList;
   typedef PreParserExpressionList ObjectPropertyList;
   typedef PreParserExpressionList ClassPropertyList;
@@ -1025,10 +1030,6 @@ class PreParser : public ParserBase<PreParser> {
     return left;
   }
 
-  V8_INLINE PreParserExpression
-  RewriteAwaitExpression(PreParserExpression value, int pos) {
-    return value;
-  }
   V8_INLINE void PrepareAsyncFunctionBody(PreParserStatementList body,
                                           FunctionKind kind, int pos) {}
   V8_INLINE void RewriteAsyncFunctionBody(PreParserStatementList body,
