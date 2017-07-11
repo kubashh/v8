@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6f40249_7af6522e",
+        "filename": "src/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "As mentioned in other CL, these flags do something important in TF and the ResumeGeneratorTrampoline builtins. It involves keeping function.sent working.\n\nThis CL is getting pretty large so I\u0027d prefer to keep it in place until this lands, but am happy to remove support for function.sent in a separate CL (and also remove await from SuspendFlags, and TF-affected bits).",
+      "parentUuid": "e445b211_806359c6",
+      "range": {
+        "startLine": 1421,
+        "startChar": 12,
+        "endLine": 1421,
+        "endChar": 19
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b07a4e6b_2aa0c6f8",
         "filename": "src/globals.h",
         "patchSetId": 6
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "07c5afdd_4397ae14",
+        "filename": "src/globals.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b07a4e6b_2aa0c6f8",
+      "range": {
+        "startLine": 1430,
+        "startChar": 12,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfdd32a2_84b7553d",
         "filename": "src/interpreter/bytecode-array-builder.h",
         "patchSetId": 6
@@ -91,6 +139,30 @@
       "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac923325_397bc3f0",
+        "filename": "src/interpreter/bytecode-array-builder.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfdd32a2_84b7553d",
+      "range": {
+        "startLine": 451,
+        "startChar": 2,
+        "endLine": 451,
+        "endChar": 43
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "cc69a638_e003808e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2960,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7acdd7f5_5b601689",
+      "range": {
+        "startLine": 2960,
+        "startChar": 5,
+        "endLine": 2960,
+        "endChar": 33
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f408b662_7c8bab31",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "f81ebbf1_691191f9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2973,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f408b662_7c8bab31",
+      "range": {
+        "startLine": 2973,
+        "startChar": 6,
+        "endLine": 2973,
+        "endChar": 35
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf2e2929_d9d5bee5",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -160,6 +280,30 @@
       "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98919f8_b2a3e92b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2979,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf2e2929_d9d5bee5",
+      "range": {
+        "startLine": 2979,
+        "startChar": 8,
+        "endLine": 2979,
+        "endChar": 21
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -210,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "b931dc13_e7bdab28",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3bdbb6e_23cfc323",
+      "range": {
+        "startLine": 2981,
+        "startChar": 22,
+        "endLine": 2981,
+        "endChar": 41
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df5b8154_0ef02930",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -233,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "727745e0_6533949b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df5b8154_0ef02930",
+      "range": {
+        "startLine": 2964,
+        "startChar": 4,
+        "endLine": 2988,
+        "endChar": 5
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a2d4320_43332921",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -247,6 +439,24 @@
       "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c19c92_4d4479fc",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a2d4320_43332921",
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -273,6 +483,30 @@
     },
     {
       "key": {
+        "uuid": "71a20e34_2c9ff489",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2997,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e51e4a64_0f813fda",
+      "range": {
+        "startLine": 2997,
+        "startChar": 2,
+        "endLine": 2997,
+        "endChar": 22
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ae848dc_a003d869",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -293,6 +527,30 @@
       "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cd6e8d_50430dc6",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ae848dc_a003d869",
+      "range": {
+        "startLine": 2999,
+        "startChar": 0,
+        "endLine": 3000,
+        "endChar": 49
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -319,6 +577,30 @@
     },
     {
       "key": {
+        "uuid": "07c97208_1117084e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "It can\u0027t happen with awaits --- removed.",
+      "parentUuid": "e5fec721_471fe6b5",
+      "range": {
+        "startLine": 3008,
+        "startChar": 3,
+        "endLine": 3008,
+        "endChar": 78
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc960535_578e7d25",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 6
@@ -330,6 +612,30 @@
       "writtenOn": "2017-07-10T10:46:05Z",
       "side": 1,
       "message": "If you are only switching on a single item it is less bytecode to just do a strict equals.",
+      "range": {
+        "startLine": 3012,
+        "startChar": 15,
+        "endLine": 3012,
+        "endChar": 49
+      },
+      "revId": "af6554fa6670b2adba2d0f61b2a38ddd15f13019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d68a317_c3d2e8bf",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-11T17:14:30Z",
+      "side": 1,
+      "message": "Done, and yeah, this looks like an improvement.",
+      "parentUuid": "dc960535_578e7d25",
       "range": {
         "startLine": 3012,
         "startChar": 15,
