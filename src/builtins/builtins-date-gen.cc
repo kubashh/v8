@@ -249,9 +249,7 @@ TF_BUILTIN(DatePrototypeToPrimitive, CodeStubAssembler) {
   BIND(&receiver_is_invalid);
   {
     CallRuntime(Runtime::kThrowIncompatibleMethodReceiver, context,
-                HeapConstant(factory()->NewStringFromAsciiChecked(
-                    "Date.prototype [ @@toPrimitive ]", TENURED)),
-                receiver);
+                CStringConstant("Date.prototype [ @@toPrimitive ]"), receiver);
     Unreachable();
   }
 }

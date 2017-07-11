@@ -756,8 +756,7 @@ Node* RegExpBuiltinsAssembler::ThrowIfNotJSReceiver(
   BIND(&throw_exception);
   {
     Node* const message_id = SmiConstant(msg_template);
-    Node* const method_name_str = HeapConstant(
-        isolate()->factory()->NewStringFromAsciiChecked(method_name, TENURED));
+    Node* const method_name_str = CStringConstant(method_name);
 
     Node* const value_str =
         CallBuiltin(Builtins::kToString, context, maybe_receiver);
@@ -1388,7 +1387,6 @@ TF_BUILTIN(RegExpPrototypeSourceGetter, RegExpBuiltinsAssembler) {
 
   BIND(&if_isnotjsregexp);
   {
-    Isolate* isolate = this->isolate();
     Node* const native_context = LoadNativeContext(context);
     Node* const regexp_fun =
         LoadContextElement(native_context, Context::REGEXP_FUNCTION_INDEX);
@@ -1406,17 +1404,14 @@ TF_BUILTIN(RegExpPrototypeSourceGetter, RegExpBuiltinsAssembler) {
       Node* const counter_smi = SmiConstant(counter);
       CallRuntime(Runtime::kIncrementUseCounter, context, counter_smi);
 
-      Node* const result =
-          HeapConstant(isolate->factory()->NewStringFromAsciiChecked("(?:)"));
+      Node* const result = CStringConstant("(?:)");
       Return(result);
     }
 
     BIND(&if_isnotprototype);
     {
       Node* const message_id = SmiConstant(MessageTemplate::kRegExpNonRegExp);
-      Node* const method_name_str =
-          HeapConstant(isolate->factory()->NewStringFromAsciiChecked(
-              "RegExp.prototype.source"));
+      Node* const method_name_str = CStringConstant("RegExp.prototype.source");
       TailCallRuntime(Runtime::kThrowTypeError, context, message_id,
                       method_name_str);
     }

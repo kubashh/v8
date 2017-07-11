@@ -2992,8 +2992,7 @@ Node* CodeStubAssembler::ToThisString(Node* context, Node* value,
       {
         // The {value} is either null or undefined.
         CallRuntime(Runtime::kThrowCalledOnNullOrUndefined, context,
-                    HeapConstant(factory()->NewStringFromAsciiChecked(
-                        method_name, TENURED)));
+                    CStringConstant(method_name));
         Unreachable();
       }
     }
@@ -9435,9 +9434,8 @@ void CodeStubAssembler::Print(const char* s) {
 #ifdef DEBUG
   std::string formatted(s);
   formatted += "\n";
-  Handle<String> string = isolate()->factory()->NewStringFromAsciiChecked(
-      formatted.c_str(), TENURED);
-  CallRuntime(Runtime::kGlobalPrint, NoContextConstant(), HeapConstant(string));
+  CallRuntime(Runtime::kGlobalPrint, NoContextConstant(),
+              CStringConstant(formatted.c_str()));
 #endif
 }
 
