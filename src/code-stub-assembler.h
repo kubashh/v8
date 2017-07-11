@@ -767,6 +767,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* ThrowIfNotInstanceType(Node* context, Node* value,
                                InstanceType instance_type,
                                char const* method_name);
+  void ThrowTypeError(Node* context, MessageTemplate::Template message,
+                      char const* arg1 = nullptr, char const* arg2 = nullptr);
+  void ThrowTypeError(Node* context, MessageTemplate::Template message,
+                      Node* arg1, Node* arg2 = nullptr, Node* arg3 = nullptr);
 
   // Type checks.
   // Check whether the map is for an object with special properties, such as a
