@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "881d6816_65fb6e6b",
+        "filename": "src/interpreter/block-coverage-builder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T12:14:20Z",
+      "side": 1,
+      "message": "It looks like this is only used by the LoopBuilder. Could you instead just pass the AstNode (or IterableStatement* for type checking) to the LoopBuilder and have it call BlockCoverageBuilder directly?",
+      "range": {
+        "startLine": 59,
+        "startChar": 6,
+        "endLine": 59,
+        "endChar": 31
+      },
+      "revId": "68d730b925804f8a8bcb5e69399905f6cb76709d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
