@@ -22,6 +22,30 @@
       "revId": "560dce9cb3dd3faafb93cfe26af6aa8a932740e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f00fc1_800a0106",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-07-12T15:40:34Z",
+      "side": 1,
+      "message": "That\u0027s right. Added a comment for this function.",
+      "parentUuid": "7516122d_7330cf6a",
+      "range": {
+        "startLine": 464,
+        "startChar": 9,
+        "endLine": 464,
+        "endChar": 22
+      },
+      "revId": "560dce9cb3dd3faafb93cfe26af6aa8a932740e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
