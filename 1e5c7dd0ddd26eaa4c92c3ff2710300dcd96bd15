@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cd6f275_53854d3e",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-12T16:22:07Z",
+      "side": 1,
+      "message": "nit: info()-\u003eIsWasm() \u0026\u0026 shrink_slots \u003e 128",
+      "revId": "1e5c7dd0ddd26eaa4c92c3ff2710300dcd96bd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9c4dac7_b5654e1e",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-12T16:22:07Z",
+      "side": 1,
+      "message": "This may always be 1 in practice (I\u0027m not sure), but let\u0027s keep it in sync with CallRuntime.",
+      "range": {
+        "startLine": 1563,
+        "startChar": 49,
+        "endLine": 1563,
+        "endChar": 63
+      },
+      "revId": "1e5c7dd0ddd26eaa4c92c3ff2710300dcd96bd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
