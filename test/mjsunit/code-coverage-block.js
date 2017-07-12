@@ -472,4 +472,21 @@ TestCoverage(
  {"start":621,"end":653,"count":0}]
 );
 
+TestCoverage(
+"conditional expressions",
+`
+!function() {                             // 0000
+  Math.random() ? nop() : nop();          // 0050
+  true ? nop() : nop();                   // 0100
+  false ? nop() : nop();                  // 0150
+}();                                      // 0200
+`,
+[{"start":0,"end":249,"count":1},
+ {"start":1,"end":201,"count":1},
+ {"start":76,"end":81,"count":0},
+ {"start":117,"end":122,"count":0},
+ {"start":160,"end":165,"count":0}]
+
+);
+
 %DebugToggleBlockCoverage(false);
