@@ -69,3 +69,75 @@ newBenchmark("ProxyConstructorWithProxy", {
     return (typeof result == 'function');
   }
 });
+
+// ----------------------------------------------------------------------------
+
+newBenchmark("CallProxyWithoutTrap", {
+  setup() {
+    var l = () => { return 42; };
+    p = new Proxy(l, {});
+  },
+  run() {
+    p();
+  },
+  teardown() {
+    return (typeof result == 'number');
+  }
+});
+
+// ----------------------------------------------------------------------------
+
+newBenchmark("CallProxyWithTrap", {
+  setup() {
+    var l = () => { return 42; };
+    p = new Proxy(l, {
+      apply: function(target, thisArg, argumentsList) {
+        return 1337;
+      }
+    });
+  },
+  run() {
+    p();
+  },
+  teardown() {
+    return (typeof result == 'number');
+  }
+});
+
+var instance;
+class C {
+  constructor() {
+  }
+};
+
+// ----------------------------------------------------------------------------
+
+newBenchmark("ConstructProxyWithoutTrap", {
+  setup() {
+    p = new Proxy(C, {});
+  },
+  run() {
+    instance = new p();
+  },
+  teardown() {
+    return instance instanceof C;
+  }
+});
+
+// ----------------------------------------------------------------------------
+
+newBenchmark("ConstructProxyWithTrap", {
+  setup() {
+    p = new Proxy(C, {
+      construct: function(target, argumentsList, newTarget) {
+        return new C;
+      }
+    });
+  },
+  run() {
+    instance = new p();
+  },
+  teardown() {
+    return instance instanceof C;
+  }
+});
