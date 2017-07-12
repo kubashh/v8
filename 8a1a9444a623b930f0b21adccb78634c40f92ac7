@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e70af842_37b96520",
+        "filename": "src/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-12T09:20:25Z",
+      "side": 1,
+      "message": "This looks unnecessary.",
+      "revId": "8a1a9444a623b930f0b21adccb78634c40f92ac7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
