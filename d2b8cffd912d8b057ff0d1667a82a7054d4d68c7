@@ -141,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "443568d6_4d089c2d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-12T11:26:50Z",
+      "side": 1,
+      "message": "I don\u0027t think it is possible to use shared_ptr here. The purpose of the existing unique_ptr is not to deallocate the WasmModule, but only to document ownership. Eventually the ownership of the WasmModule is passed to a Managed object on the heap, which will deallocate the WasmModule when it gets collected by the GC.\n\nWith shared_ptr it is not possible to release an object again. As soon as you create a shared_ptr to an object, the deleter for the object will be called eventually by the last shared_ptr pointing to the object, and you cannot prevent it.",
+      "parentUuid": "1ff3479c_d8a9c6d6",
+      "range": {
+        "startLine": 288,
+        "startChar": 2,
+        "endLine": 288,
+        "endChar": 43
+      },
+      "revId": "d2b8cffd912d8b057ff0d1667a82a7054d4d68c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abb86890_d633512a",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 1
