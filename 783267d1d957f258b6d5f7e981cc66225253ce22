@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbd4ddca_7a944be9",
+        "filename": "test/js-perf-test/Proxies/proxies.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-12T10:48:56Z",
+      "side": 1,
+      "message": "Maybe you want to use Object here to make the case more clear that the construct trap returns a different object.",
+      "revId": "783267d1d957f258b6d5f7e981cc66225253ce22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
