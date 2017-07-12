@@ -1055,6 +1055,8 @@ void BytecodeGenerator::VisitBlock(Block* stmt) {
   } else {
     VisitBlockDeclarationsAndStatements(stmt);
   }
+  BuildIncrementBlockCoverageCounterIfEnabled(stmt,
+                                              SourceRangeKind::kContinuation);
 }
 
 void BytecodeGenerator::VisitBlockDeclarationsAndStatements(Block* stmt) {

@@ -1146,6 +1146,16 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
     return parameters_end_pos_ != kNoSourcePosition;
   }
 
+  V8_INLINE void MaybeRecordBlockSourceRange(Block* node,
+                                             int32_t continuation_position) {
+    if (source_range_map_ == nullptr) return;
+    // Only record a continuation source range for blocks that either contain a
+    // jump or are labeled.
+    if (!node->IsJump() && node->labels() == nullptr) return;
+    source_range_map_->Insert(
+        node, new (zone()) BlockSourceRanges(continuation_position));
+  }
+
   V8_INLINE void RecordCaseClauseSourceRange(CaseClause* node,
                                              const SourceRange& body_range) {
     if (source_range_map_ == nullptr) return;
