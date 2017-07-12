@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32b9a6d0_03e858ec",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "nit - newline above",
+      "range": {
+        "startLine": 267,
+        "startChar": 1,
+        "endLine": 267,
+        "endChar": 4
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c8ba037_4aaf5c16",
+        "filename": "src/globals.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "As mentioned on the other CL, no need to #ifdef DEBUG this",
+      "range": {
+        "startLine": 1430,
+        "startChar": 1,
+        "endLine": 1430,
+        "endChar": 12
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d421cbd_a244bf41",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2954,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "brief comment why please",
+      "range": {
+        "startLine": 2954,
+        "startChar": 2,
+        "endLine": 2954,
+        "endChar": 8
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a79756d7_958c2ad0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2963,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "nit - remove this comment (the one above is enough IMO).",
+      "range": {
+        "startLine": 2963,
+        "startChar": 4,
+        "endLine": 2963,
+        "endChar": 25
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c6eaea4_603caeee",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2971,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "nit - remove newline",
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e722035_5ababcb3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3019,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "nit - remove block scope here",
+      "range": {
+        "startLine": 3019,
+        "startChar": 3,
+        "endLine": 3019,
+        "endChar": 0
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0563fcfa_019c762e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-12T22:43:28Z",
+      "side": 1,
+      "message": "update comment",
+      "range": {
+        "startLine": 3020,
+        "startChar": 25,
+        "endLine": 3020,
+        "endChar": 46
+      },
+      "revId": "053173bca4910494b2157155b922424ff203c221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
