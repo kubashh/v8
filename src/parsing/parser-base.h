@@ -5733,7 +5733,11 @@ ParserBase<Impl>::ParseForEachStatementWithDeclarations(
     BlockState block_state(zone(), &scope_);
     scope()->set_start_position(scanner()->location().beg_pos);
 
+    SourceRange body_range;
+    SourceRangeScope range_scope(scanner(), &body_range);
+
     StatementT body = ParseStatement(nullptr, CHECK_OK);
+    impl()->RecordIterationStatementSourceRange(loop, range_scope.Finalize());
 
     BlockT body_block = impl()->NullBlock();
     ExpressionT each_variable = impl()->EmptyExpression();
@@ -5796,10 +5800,14 @@ ParserBase<Impl>::ParseForEachStatementWithoutDeclarations(
     BlockState block_state(zone(), &scope_);
     scope()->set_start_position(scanner()->location().beg_pos);
 
+    SourceRange body_range;
+    SourceRangeScope range_scope(scanner(), &body_range);
+
     StatementT body = ParseStatement(nullptr, CHECK_OK);
     scope()->set_end_position(scanner()->location().end_pos);
     StatementT final_loop =
         impl()->InitializeForEachStatement(loop, expression, enumerable, body);
+    impl()->RecordIterationStatementSourceRange(loop, range_scope.Finalize());
 
     for_scope = for_scope->FinalizeBlockScope();
     USE(for_scope);
@@ -6003,8 +6011,12 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseForAwaitStatement(
     BlockState block_state(zone(), &scope_);
     scope()->set_start_position(scanner()->location().beg_pos);
 
+    SourceRange body_range;
+    SourceRangeScope range_scope(scanner(), &body_range);
+
     StatementT body = ParseStatement(nullptr, CHECK_OK);
     scope()->set_end_position(scanner()->location().end_pos);
+    impl()->RecordIterationStatementSourceRange(loop, range_scope.Finalize());
 
     if (has_declarations) {
       BlockT body_block = impl()->NullBlock();

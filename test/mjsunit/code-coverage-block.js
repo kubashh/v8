@@ -204,6 +204,25 @@ TestCoverage(
 );
 
 TestCoverage(
+"for-of and for-each statements",
+`
+!function() {                             // 0000
+  var i;                                  // 0050
+  for (i of [0,1,2,3]) { nop(); }         // 0100
+  for (let j of [0,1,2,3]) { nop(); }     // 0150
+  for (i in [0,1,2,3]) { nop(); }         // 0200
+  for (let j in [0,1,2,3]) { nop(); }     // 0250
+}();                                      // 0300
+`,
+[{"start":0,"end":349,"count":1},
+ {"start":1,"end":301,"count":1},
+ {"start":123,"end":133,"count":4},
+ {"start":177,"end":187,"count":4},
+ {"start":223,"end":233,"count":4},
+ {"start":277,"end":287,"count":4}]
+);
+
+TestCoverage(
 "while and do-while statements",
 `
 function g() {}                           // 0000
