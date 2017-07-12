@@ -16,6 +16,24 @@
       "revId": "8a1a9444a623b930f0b21adccb78634c40f92ac7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e563e6_b90b3e7f",
+        "filename": "src/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-12T11:26:51Z",
+      "side": 1,
+      "message": "It\u0027s required for the definition of SourceRange in Factory::NewCoverageInfo.",
+      "parentUuid": "e70af842_37b96520",
+      "revId": "8a1a9444a623b930f0b21adccb78634c40f92ac7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
