@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5368f944_29f545e4",
+        "filename": "test/js-perf-test/Proxies/proxies.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-12T08:27:23Z",
+      "side": 1,
+      "message": "nit: let target \u003d ...",
+      "revId": "e53ee881307eae24118c430424856c804df7ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3842fa5f_4d63ed8a",
+        "filename": "test/js-perf-test/Proxies/proxies.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-12T08:27:23Z",
+      "side": 1,
+      "message": "You should probably add a loop here with n \u003d 1000 or so, otherwise the overhead of the benchmark framework has too much influence on the final result.\nAs a rule of thumb, you want to reach 1ms - 1s for the core functionality you want to measure",
+      "revId": "e53ee881307eae24118c430424856c804df7ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7ac04e_59318674",
+        "filename": "test/js-perf-test/Proxies/proxies.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-12T08:27:23Z",
+      "side": 1,
+      "message": "nit: let target \u003d ...",
+      "revId": "e53ee881307eae24118c430424856c804df7ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffcd399d_d02b68ad",
+        "filename": "test/js-perf-test/Proxies/proxies.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-12T08:27:23Z",
+      "side": 1,
+      "message": "Please use proper names, future you will be happy to just be able to read code in isolation and be able to make an educated guess what\u0027s going on.\n\nHow about MyClass?",
+      "revId": "e53ee881307eae24118c430424856c804df7ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
