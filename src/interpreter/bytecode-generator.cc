@@ -4,6 +4,7 @@
 
 #include "src/interpreter/bytecode-generator.h"
 
+#include "src/ast/ast-source-ranges.h"
 #include "src/ast/compile-time-value.h"
 #include "src/ast/scopes.h"
 #include "src/builtins/builtins-constructor.h"
@@ -1230,8 +1231,10 @@ void BytecodeGenerator::VisitEmptyStatement(EmptyStatement* stmt) {
 void BytecodeGenerator::VisitIfStatement(IfStatement* stmt) {
   builder()->SetStatementPosition(stmt);
 
-  int then_slot = AllocateBlockCoverageSlotIfEnabled(stmt->then_range());
-  int else_slot = AllocateBlockCoverageSlotIfEnabled(stmt->else_range());
+  int then_slot =
+      AllocateBlockCoverageSlotIfEnabled(stmt, SourceRangeKind::kThen);
+  int else_slot =
+      AllocateBlockCoverageSlotIfEnabled(stmt, SourceRangeKind::kElse);
 
   if (stmt->condition()->ToBooleanIsTrue()) {
     // Generate then block unconditionally as always true.
@@ -1266,7 +1269,8 @@ void BytecodeGenerator::VisitIfStatement(IfStatement* stmt) {
     }
     builder()->Bind(&end_label);
   }
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt->continuation_range());
+  BuildIncrementBlockCoverageCounterIfEnabled(stmt,
+                                              SourceRangeKind::kContinuation);
 }
 
 void BytecodeGenerator::VisitSloppyBlockFunctionStatement(
@@ -1275,19 +1279,19 @@ void BytecodeGenerator::VisitSloppyBlockFunctionStatement(
 }
 
 void BytecodeGenerator::VisitContinueStatement(ContinueStatement* stmt) {
-  AllocateBlockCoverageSlotIfEnabled(stmt->continuation_range());
+  AllocateBlockCoverageSlotIfEnabled(stmt, SourceRangeKind::kContinuation);
   builder()->SetStatementPosition(stmt);
   execution_control()->Continue(stmt->target());
 }
 
 void BytecodeGenerator::VisitBreakStatement(BreakStatement* stmt) {
-  AllocateBlockCoverageSlotIfEnabled(stmt->continuation_range());
+  AllocateBlockCoverageSlotIfEnabled(stmt, SourceRangeKind::kContinuation);
   builder()->SetStatementPosition(stmt);
   execution_control()->Break(stmt->target());
 }
 
 void BytecodeGenerator::VisitReturnStatement(ReturnStatement* stmt) {
-  AllocateBlockCoverageSlotIfEnabled(stmt->continuation_range());
+  AllocateBlockCoverageSlotIfEnabled(stmt, SourceRangeKind::kContinuation);
   builder()->SetStatementPosition(stmt);
   VisitForAccumulatorValue(stmt->expression());
   if (stmt->is_async_return()) {
@@ -1348,11 +1352,12 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
   for (int i = 0; i < clauses->length(); i++) {
     CaseClause* clause = clauses->at(i);
     switch_builder.SetCaseTarget(i);
-    BuildIncrementBlockCoverageCounterIfEnabled(clause->clause_range());
+    BuildIncrementBlockCoverageCounterIfEnabled(clause, SourceRangeKind::kBody);
     VisitStatements(clause->statements());
   }
   switch_builder.BindBreakTarget();
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt->continuation_range());
+  BuildIncrementBlockCoverageCounterIfEnabled(stmt,
+                                              SourceRangeKind::kContinuation);
 }
 
 void BytecodeGenerator::VisitCaseClause(CaseClause* clause) {
@@ -1371,7 +1376,7 @@ void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
 
 void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
   LoopBuilder loop_builder(builder(), block_coverage_builder_,
-                           stmt->body_range(), stmt->continuation_range());
+                           FindSourceRanges(stmt));
   if (stmt->cond()->ToBooleanIsFalse()) {
     VisitIterationBody(stmt, &loop_builder);
   } else if (stmt->cond()->ToBooleanIsTrue()) {
@@ -1392,7 +1397,7 @@ void BytecodeGenerator::VisitDoWhileStatement(DoWhileStatement* stmt) {
 
 void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
   LoopBuilder loop_builder(builder(), block_coverage_builder_,
-                           stmt->body_range(), stmt->continuation_range());
+                           FindSourceRanges(stmt));
 
   if (stmt->cond()->ToBooleanIsFalse()) {
     // If the condition is false there is no need to generate the loop.
@@ -1413,7 +1418,7 @@ void BytecodeGenerator::VisitWhileStatement(WhileStatement* stmt) {
 
 void BytecodeGenerator::VisitForStatement(ForStatement* stmt) {
   LoopBuilder loop_builder(builder(), block_coverage_builder_,
-                           stmt->body_range(), stmt->continuation_range());
+                           FindSourceRanges(stmt));
 
   if (stmt->init() != nullptr) {
     Visit(stmt->init());
@@ -1610,7 +1615,7 @@ void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
   builder()->LoadAccumulatorWithRegister(context);
 
   // Evaluate the catch-block.
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt->catch_range());
+  BuildIncrementBlockCoverageCounterIfEnabled(stmt, SourceRangeKind::kCatch);
   VisitInScope(stmt->catch_block(), stmt->scope());
   try_control_builder.EndCatch();
 }
@@ -1669,7 +1674,7 @@ void BytecodeGenerator::VisitTryFinallyStatement(TryFinallyStatement* stmt) {
       message);
 
   // Evaluate the finally-block.
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt->finally_range());
+  BuildIncrementBlockCoverageCounterIfEnabled(stmt, SourceRangeKind::kFinally);
   Visit(stmt->finally_block());
   try_control_builder.EndFinally();
 
@@ -2951,7 +2956,7 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
 }
 
 void BytecodeGenerator::VisitThrow(Throw* expr) {
-  AllocateBlockCoverageSlotIfEnabled(expr->continuation_range());
+  AllocateBlockCoverageSlotIfEnabled(expr, SourceRangeKind::kContinuation);
   VisitForAccumulatorValue(expr->exception());
   builder()->SetExpressionPosition(expr);
   builder()->Throw();
@@ -4153,11 +4158,41 @@ void BytecodeGenerator::BuildLoadPropertyKey(LiteralProperty* property,
   }
 }
 
+AstNodeSourceRanges* BytecodeGenerator::FindSourceRanges(AstNode* node) {
+  SourceRangeMap* map = info()->parse_info()->source_range_map();
+  if (map == nullptr) return nullptr;
+  return map->Find(node);
+}
+
+int BytecodeGenerator::AllocateBlockCoverageSlotIfEnabled(
+    AstNode* node, SourceRangeKind kind) {
+  if (block_coverage_builder_ != nullptr) {
+    AstNodeSourceRanges* ranges = FindSourceRanges(node);
+    if (ranges != nullptr) {
+      const SourceRange& range = ranges->GetRange(kind);
+      return block_coverage_builder_->AllocateBlockCoverageSlot(range);
+    }
+  }
+  return BlockCoverageBuilder::kNoCoverageArraySlot;
+}
+
 int BytecodeGenerator::AllocateBlockCoverageSlotIfEnabled(
     const SourceRange& range) {
   return (block_coverage_builder_ == nullptr)
              ? BlockCoverageBuilder::kNoCoverageArraySlot
              : block_coverage_builder_->AllocateBlockCoverageSlot(range);
+}
+
+void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
+    AstNode* node, SourceRangeKind kind) {
+  if (block_coverage_builder_ == nullptr) return;
+
+  AstNodeSourceRanges* ranges = FindSourceRanges(node);
+  if (ranges != nullptr) {
+    const SourceRange& range = ranges->GetRange(kind);
+    int slot = block_coverage_builder_->AllocateBlockCoverageSlot(range);
+    block_coverage_builder_->IncrementBlockCounter(slot);
+  }
 }
 
 void BytecodeGenerator::BuildIncrementBlockCoverageCounterIfEnabled(
