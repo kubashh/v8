@@ -16,6 +16,24 @@
       "revId": "e3f417d021f8a9164402f7183055c5c36c98136c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fab7ad33_07ca347a",
+        "filename": "test/mjsunit/regress/regress-740694.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-12T22:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "910888c5_3ac64a29",
+      "revId": "e3f417d021f8a9164402f7183055c5c36c98136c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
