@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "031081d0_09cab939",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-12T22:50:58Z",
+      "side": 0,
+      "message": "I\u0027d like to use this field in my CL that you actually reviewed [1] and I need it all the time regardless code coverage enabled state to generate correct source positions for return bytecode. Can I just bring it back here or could you propose better place to store it?\n\n[1] https://chromium-review.googlesource.com/c/560738/11/src/interpreter/bytecode-generator.cc#1307",
+      "revId": "f720d024dca19d110e8d4c2d7040fbd664da4456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
