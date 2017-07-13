@@ -1551,6 +1551,17 @@ void MacroAssembler::CallRuntime(const Runtime::Function* f,
   CallStub(&ces);
 }
 
+void TurboAssembler::CallRuntimeDelayed(Zone* zone, Runtime::FunctionId fid,
+                                        SaveFPRegsMode save_doubles) {
+  const Runtime::Function* f = Runtime::FunctionForId(fid);
+  // TODO(1236192): Most runtime routines don't need the number of
+  // arguments passed in because it is constant. At some point we
+  // should remove this need and make the runtime routine entry code
+  // smarter.
+  Move(eax, Immediate(f->nargs));
+  mov(ebx, Immediate(ExternalReference(f, isolate())));
+  CallStubDelayed(new (zone) CEntryStub(nullptr, 1, save_doubles));
+}
 
 void MacroAssembler::CallExternalReference(ExternalReference ref,
                                            int num_arguments) {
