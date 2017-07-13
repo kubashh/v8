@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b34c88cc_19f346e5",
+        "filename": "src/mips/simulator-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4587,
+      "author": {
+        "id": 1210724
+      },
+      "writtenOn": "2017-07-13T10:49:12Z",
+      "side": 1,
+      "message": "Can be immediate value m declared as \"uint8_t m\"?",
+      "revId": "08bdb83d34b84f570236ef5cbca4bd96c3c9f6e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
