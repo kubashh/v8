@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "770cbb36_9790558b",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-13T07:56:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cd6f275_53854d3e",
+      "revId": "1e5c7dd0ddd26eaa4c92c3ff2710300dcd96bd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c4dac7_b5654e1e",
         "filename": "src/ia32/macro-assembler-ia32.cc",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "1e5c7dd0ddd26eaa4c92c3ff2710300dcd96bd15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2dd3205_47ca4564",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-13T07:56:36Z",
+      "side": 1,
+      "message": "Done. Sorry, I misunderstood your comment at first.",
+      "parentUuid": "b9c4dac7_b5654e1e",
+      "range": {
+        "startLine": 1563,
+        "startChar": 49,
+        "endLine": 1563,
+        "endChar": 63
+      },
+      "revId": "1e5c7dd0ddd26eaa4c92c3ff2710300dcd96bd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
