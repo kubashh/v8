@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "217e4378_a5543acb",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8094a6fe_361d1179",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1926787_3b9b1112",
         "filename": "src/builtins/builtins-constructor-gen.cc",
         "patchSetId": 15
@@ -33,6 +51,24 @@
       "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0d51f29_aed544c7",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1926787_3b9b1112",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "79c5ef1f_a440eb80",
+        "filename": "src/factory.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2914,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b562a5d6_b764fc81",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3be9b766_22efd801",
         "filename": "src/factory.cc",
         "patchSetId": 15
@@ -64,6 +118,24 @@
       "writtenOn": "2017-07-11T08:23:27Z",
       "side": 1,
       "message": "nit: could we have these two constants defined somewhere? I\u0027m not a particular fan of having wild int constants running around :P",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d70f719_5bf1eecb",
+        "filename": "src/factory.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "Given that these constants are about the number of descriptors we are going to add below, I think it\u0027s fine to leave them unnamed.",
+      "parentUuid": "3be9b766_22efd801",
       "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "26b79f4e_dcf05625",
+        "filename": "src/factory.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2987,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d599734c_1e05b625",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3461fd8c_2a3f5f74",
         "filename": "src/objects.cc",
         "patchSetId": 15
@@ -98,6 +188,24 @@
       "writtenOn": "2017-07-11T08:23:27Z",
       "side": 1,
       "message": "nit: DCHECK_EQ",
+      "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10a9487c_8bd740a5",
+        "filename": "src/objects.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 13669,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-13T09:56:22Z",
+      "side": 1,
+      "message": "FunctionKind does not support operator\u003c\u003c(std::ostream\u0026, ..) yet, so DCHECK_EQ does not compile.",
+      "parentUuid": "3461fd8c_2a3f5f74",
       "revId": "0eeaba6f6f9c611035bf62a37d6079605fb614ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
