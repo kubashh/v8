@@ -798,10 +798,10 @@ class WasmRunner : public WasmRunnerBase {
   ReturnType CallInterpreter(ParamTypes... p) {
     WasmInterpreter::Thread* thread = interpreter()->GetThread(0);
     thread->Reset();
-    std::array<WasmVal, sizeof...(p)> args{{WasmVal(p)...}};
+    std::array<WasmValue, sizeof...(p)> args{{WasmValue(p)...}};
     thread->InitFrame(function(), args.data());
     if (thread->Run() == WasmInterpreter::FINISHED) {
-      WasmVal val = thread->GetReturnValue();
+      WasmValue val = thread->GetReturnValue();
       possible_nondeterminism_ |= thread->PossibleNondeterminism();
       return val.to<ReturnType>();
     } else if (thread->state() == WasmInterpreter::TRAPPED) {
