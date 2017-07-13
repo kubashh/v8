@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d5abbef_54a99179",
+        "filename": "src/compiler/new-escape-analysis-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-13T13:41:04Z",
+      "side": 1,
+      "message": "This function is identical with the old escape analysis.",
+      "revId": "f050232f02108bff2a8ef8624515dd87a75fcb3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3d38f8c_8a86358a",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-13T13:41:04Z",
+      "side": 1,
+      "message": "Start review here :)",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 73
+      },
+      "revId": "f050232f02108bff2a8ef8624515dd87a75fcb3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
