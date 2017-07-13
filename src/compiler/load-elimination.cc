@@ -871,7 +871,7 @@ Reduction LoadElimination::ReduceStoreField(Node* node) {
     if (new_value_type->IsHeapConstant()) {
       // Record the new {object} map information.
       ZoneHandleSet<Map> object_maps(
-          Handle<Map>::cast(new_value_type->AsHeapConstant()->Value()));
+          new_value_type->AsHeapConstant()->ValueAsMap());
       state = state->AddMaps(object, object_maps, zone());
     }
   } else {

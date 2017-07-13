@@ -478,6 +478,11 @@ HeapConstantType::HeapConstantType(BitsetType::bitset bitset,
                  i::Handle<i::String>::cast(object)->length() != 0);
 }
 
+Handle<Map> HeapConstantType::ValueAsMap() {
+  // Can't use Handle<T>::cast on background thread.
+  return Handle<Map>(bit_cast<Map**>(object_));
+}
+
 // -----------------------------------------------------------------------------
 // Predicates.
 
