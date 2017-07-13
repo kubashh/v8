@@ -383,6 +383,15 @@ RUNTIME_FUNCTION(Runtime_InternalSetPrototype) {
   DCHECK_EQ(2, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSReceiver, obj, 0);
   CONVERT_ARG_HANDLE_CHECKED(Object, prototype, 1);
+  if (prototype->IsJSFunction()) {
+    Handle<JSFunction> function = Handle<JSFunction>::cast(prototype);
+    if (!function->shared()->has_shared_name()) {
+      Handle<Map> function_map(function->map(), isolate);
+      JSFunction::SetName(function, isolate->factory()->proto_string(),
+                          isolate->factory()->empty_string());
+      CHECK_EQ(*function_map, function->map());
+    }
+  }
   MAYBE_RETURN(
       JSReceiver::SetPrototype(obj, prototype, false, Object::THROW_ON_ERROR),
       isolate->heap()->exception());
@@ -756,8 +765,13 @@ RUNTIME_FUNCTION(Runtime_DefineDataPropertyInLiteral) {
 
   if (flags & DataPropertyInLiteralFlag::kSetFunctionName) {
     DCHECK(value->IsJSFunction());
-    JSFunction::SetName(Handle<JSFunction>::cast(value), name,
-                        isolate->factory()->empty_string());
+    Handle<JSFunction> function = Handle<JSFunction>::cast(value);
+    DCHECK(!function->shared()->has_shared_name());
+    Handle<Map> function_map(function->map(), isolate);
+    JSFunction::SetName(function, name, isolate->factory()->empty_string());
+    // Class constructors do not reserve in-object space for name field.
+    CHECK_IMPLIES(!IsClassConstructor(function->shared()->kind()),
+                  *function_map == function->map());
   }
 
   LookupIterator it = LookupIterator::PropertyOrElement(
@@ -854,8 +868,10 @@ RUNTIME_FUNCTION(Runtime_DefineGetterPropertyUnchecked) {
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, getter, 2);
   CONVERT_PROPERTY_ATTRIBUTES_CHECKED(attrs, 3);
 
-  if (String::cast(getter->shared()->name())->length() == 0) {
+  if (!getter->shared()->has_shared_name()) {
+    Handle<Map> map(getter->map(), isolate);
     JSFunction::SetName(getter, name, isolate->factory()->get_string());
+    CHECK_EQ(*map, getter->map());
   }
 
   RETURN_FAILURE_ON_EXCEPTION(
@@ -982,8 +998,10 @@ RUNTIME_FUNCTION(Runtime_DefineSetterPropertyUnchecked) {
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, setter, 2);
   CONVERT_PROPERTY_ATTRIBUTES_CHECKED(attrs, 3);
 
-  if (String::cast(setter->shared()->name())->length() == 0) {
+  if (!setter->shared()->has_shared_name()) {
+    Handle<Map> map(setter->map(), isolate);
     JSFunction::SetName(setter, name, isolate->factory()->set_string());
+    CHECK_EQ(*map, setter->map());
   }
 
   RETURN_FAILURE_ON_EXCEPTION(

@@ -7175,7 +7175,8 @@ class FunctionTemplateInfo: public TemplateInfo {
   static const int kSize = kCachedPropertyNameOffset + kPointerSize;
 
   static Handle<SharedFunctionInfo> GetOrCreateSharedFunctionInfo(
-      Isolate* isolate, Handle<FunctionTemplateInfo> info);
+      Isolate* isolate, Handle<FunctionTemplateInfo> info,
+      MaybeHandle<Name> maybe_name);
   // Returns parent function template or null.
   inline FunctionTemplateInfo* GetParent(Isolate* isolate);
   // Returns true if |object| is an instance of this function template.
