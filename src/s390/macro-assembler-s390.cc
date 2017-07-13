@@ -2992,7 +2992,7 @@ Register GetRegisterThatIsNotOneOf(Register reg1, Register reg2, Register reg3,
 void MacroAssembler::mov(Register dst, const Operand& src) {
   if (src.rmode_ != kRelocInfo_NONEPTR) {
     // some form of relocation needed
-    RecordRelocInfo(src.rmode_, src.imm_);
+    RecordRelocInfo(src.rmode_, src.immediate());
   }
 
 #if V8_TARGET_ARCH_S390X
@@ -3646,22 +3646,22 @@ void MacroAssembler::SubLogical32(Register dst, Register src1, Register src2) {
 
 // Subtract 32-bit (Register dst = Register dst - Immediate opnd)
 void MacroAssembler::Sub32(Register dst, const Operand& imm) {
-  Add32(dst, Operand(-(imm.imm_)));
+  Add32(dst, Operand(-(imm.immediate())));
 }
 
 // Subtract Pointer Size (Register dst = Register dst - Immediate opnd)
 void MacroAssembler::SubP(Register dst, const Operand& imm) {
-  AddP(dst, Operand(-(imm.imm_)));
+  AddP(dst, Operand(-(imm.immediate())));
 }
 
 // Subtract 32-bit (Register dst = Register src - Immediate opnd)
 void MacroAssembler::Sub32(Register dst, Register src, const Operand& imm) {
-  Add32(dst, src, Operand(-(imm.imm_)));
+  Add32(dst, src, Operand(-(imm.immediate())));
 }
 
 // Subtract Pointer Sized (Register dst = Register src - Immediate opnd)
 void MacroAssembler::SubP(Register dst, Register src, const Operand& imm) {
-  AddP(dst, src, Operand(-(imm.imm_)));
+  AddP(dst, src, Operand(-(imm.immediate())));
 }
 
 // Subtract 32-bit (Register dst = Register dst - Register src)
@@ -3887,7 +3887,7 @@ void MacroAssembler::And(Register dst, const Operand& opnd) { nilf(dst, opnd); }
 // AND Pointer Size - dst = dst & imm
 void MacroAssembler::AndP(Register dst, const Operand& opnd) {
 #if V8_TARGET_ARCH_S390X
-  intptr_t value = opnd.imm_;
+  intptr_t value = opnd.immediate();
   if (value >> 32 != -1) {
     // this may not work b/c condition code won't be set correctly
     nihf(dst, Operand(value >> 32));
@@ -3907,7 +3907,7 @@ void MacroAssembler::And(Register dst, Register src, const Operand& opnd) {
 // AND Pointer Size - dst = src & imm
 void MacroAssembler::AndP(Register dst, Register src, const Operand& opnd) {
   // Try to exploit RISBG first
-  intptr_t value = opnd.imm_;
+  intptr_t value = opnd.immediate();
   if (CpuFeatures::IsSupported(GENERAL_INSTR_EXT)) {
     intptr_t shifted_value = value;
     int trailing_zeros = 0;
@@ -4009,7 +4009,7 @@ void MacroAssembler::Or(Register dst, const Operand& opnd) { oilf(dst, opnd); }
 // OR Pointer Size - dst = dst & imm
 void MacroAssembler::OrP(Register dst, const Operand& opnd) {
 #if V8_TARGET_ARCH_S390X
-  intptr_t value = opnd.imm_;
+  intptr_t value = opnd.immediate();
   if (value >> 32 != 0) {
     // this may not work b/c condition code won't be set correctly
     oihf(dst, Operand(value >> 32));
@@ -4097,7 +4097,7 @@ void MacroAssembler::Xor(Register dst, const Operand& opnd) { xilf(dst, opnd); }
 // XOR Pointer Size - dst = dst & imm
 void MacroAssembler::XorP(Register dst, const Operand& opnd) {
 #if V8_TARGET_ARCH_S390X
-  intptr_t value = opnd.imm_;
+  intptr_t value = opnd.immediate();
   xihf(dst, Operand(value >> 32));
   xilf(dst, Operand(value & 0xFFFFFFFF));
 #else
@@ -4219,7 +4219,7 @@ void MacroAssembler::Cmp32(Register dst, const Operand& opnd) {
       cfi(dst, opnd);
   } else {
     // Need to generate relocation record here
-    RecordRelocInfo(opnd.rmode_, opnd.imm_);
+    RecordRelocInfo(opnd.rmode_, opnd.immediate());
     cfi(dst, opnd);
   }
 }
@@ -4517,7 +4517,7 @@ void MacroAssembler::StoreP(const MemOperand& mem, const Operand& opnd,
 
   // Try to use MVGHI/MVHI
   if (CpuFeatures::IsSupported(GENERAL_INSTR_EXT) && is_uint12(mem.offset()) &&
-      mem.getIndexRegister().is(r0) && is_int16(opnd.imm_)) {
+      mem.getIndexRegister().is(r0) && is_int16(opnd.immediate())) {
 #if V8_TARGET_ARCH_S390X
     mvghi(mem, opnd);
 #else
@@ -5127,7 +5127,7 @@ void MacroAssembler::ShiftRightArith(Register dst, Register src, Register val) {
 // Clear right most # of bits
 void MacroAssembler::ClearRightImm(Register dst, Register src,
                                    const Operand& val) {
-  int numBitsToClear = val.imm_ % (kPointerSize * 8);
+  int numBitsToClear = val.immediate() % (kPointerSize * 8);
 
   // Try to use RISBG if possible
   if (CpuFeatures::IsSupported(GENERAL_INSTR_EXT)) {

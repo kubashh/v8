@@ -303,6 +303,8 @@ class Operand BASE_EMBEDDED {
   // rm
   INLINE(explicit Operand(Register rm));
 
+  static Operand EmbeddedNumber(double value);
+
   // Return true if this is a register operand.
   INLINE(bool is_reg() const);
 
@@ -310,18 +312,36 @@ class Operand BASE_EMBEDDED {
 
   inline intptr_t immediate() const {
     DCHECK(!rm_.is_valid());
-    return imm_;
+    DCHECK(!is_heap_number());
+    return value_.immediate;
+  }
+
+  double heap_number() const {
+    DCHECK(is_heap_number());
+    return value_.heap_number;
   }
 
   inline void setBits(int n) {
-    imm_ = (static_cast<uint32_t>(imm_) << (32 - n)) >> (32 - n);
+    value_.immediate = (static_cast<uint32_t>(imm_) << (32 - n)) >> (32 - n);
   }
 
   Register rm() const { return rm_; }
 
+  bool is_heap_number() const {
+    DCHECK_IMPLIES(is_heap_number_, !rm_.is_valid());
+    DCHECK_IMPLIES(is_heap_number_, rmode_ == RelocInfo::EMBEDDED_OBJECT);
+    return is_heap_number_;
+  }
+
  private:
   Register rm_;
-  intptr_t imm_;  // valid if rm_ == no_reg
+  int shift_imm_;                // valid if rm_ != no_reg && rs_ == no_reg
+  union {
+    double heap_number;          // if is_heap_number_
+    int32_t immediate;           // otherwise
+  } value_;                      // valid if rm_ == no_reg
+  bool is_heap_number_ = false;
+
   RelocInfo::Mode rmode_;
 
   friend class Assembler;
@@ -1268,6 +1288,12 @@ class Assembler : public AssemblerBase {
   // Mark address of a debug break slot.
   void RecordDebugBreakSlot(RelocInfo::Mode mode);
 
+  // Patch the dummy heap number that we emitted during code assembly in the
+  // constant pool entry referenced by {pc}. Replace it with the actual heap
+  // object (handle).
+  static void set_heap_number(Handle<HeapObject> number, Address pc) {
+    Memory::Object_Handle_at(pc) = number;
+  }
   // Record a comment relocation entry that can be used by a disassembler.
   // Use --code-comments to enable.
   void RecordComment(const char* msg);
