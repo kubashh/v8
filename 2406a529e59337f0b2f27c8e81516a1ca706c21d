@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66e57400_7dc3fe4c",
+        "filename": "src/compiler/escape-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-13T15:36:18Z",
+      "side": 1,
+      "message": "This is unfortunately undefined behavior and will make the CFI (control-flow integrity) bot running UBSan unhappy, because it casts Operator1\u003cHandle\u003cHeapObject\u003e\u003e to Operator1\u003cHandle\u003cMap\u003e\u003e.",
+      "range": {
+        "startLine": 1538,
+        "startChar": 35,
+        "endLine": 1538,
+        "endChar": 59
+      },
+      "revId": "2406a529e59337f0b2f27c8e81516a1ca706c21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
