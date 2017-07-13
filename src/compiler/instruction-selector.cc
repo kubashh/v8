@@ -483,7 +483,12 @@ class StateObjectDeduplicator {
 
   size_t GetObjectId(Node* node) {
     for (size_t i = 0; i < objects_.size(); ++i) {
-      if (objects_[i] == node) {
+      if (node->opcode() != IrOpcode::kArgumentsElementsState &&
+          objects_[i]->opcode() != IrOpcode::kArgumentsElementsState) {
+        if (ObjectIdOf(objects_[i]->op()) == ObjectIdOf(node->op())) {
+          return i;
+        }
+      } else if (objects_[i] == node) {
         return i;
       }
     }
@@ -527,9 +532,11 @@ size_t InstructionSelector::AddOperandToStateValueDescriptor(
     case IrOpcode::kObjectState: {
       UNREACHABLE();
     }
-    case IrOpcode::kTypedObjectState: {
+    case IrOpcode::kTypedObjectState:
+    case IrOpcode::kObjectId: {
       size_t id = deduplicator->GetObjectId(input);
       if (id == StateObjectDeduplicator::kNotDuplicated) {
+        DCHECK(input->opcode() == IrOpcode::kTypedObjectState);
         size_t entries = 0;
         id = deduplicator->InsertObject(input);
         StateValueList* nested = values->PushRecursiveField(zone, id);
