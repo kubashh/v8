@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb86faf_09372bf5",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-07-13T10:46:42Z",
+      "side": 1,
+      "message": "Can we add a macro assembler method for this pattern? (it probably occurs elsewhere, or should)",
+      "revId": "e815387a441872cb424fb18dea46c66b9ad6d644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
