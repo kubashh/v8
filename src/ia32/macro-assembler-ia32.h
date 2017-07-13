@@ -124,6 +124,9 @@ class TurboAssembler : public Assembler {
   inline bool AllowThisStubCall(CodeStub* stub);
   void CallStubDelayed(CodeStub* stub);
 
+  void CallRuntimeDelayed(Zone* zone, Runtime::FunctionId fid,
+                          SaveFPRegsMode save_doubles = kDontSaveFPRegs);
+
   // Jump the register contains a smi.
   inline void JumpIfSmi(Register value, Label* smi_label,
                         Label::Distance distance = Label::kFar) {
