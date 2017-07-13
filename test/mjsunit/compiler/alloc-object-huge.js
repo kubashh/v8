@@ -26,7 +26,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Flags: --allow-natives-syntax
-// Flags: --max-inlined-source-size=999999 --max-inlined-nodes=999999
+// Flags: --max-inlined-nodes=999999
 // Flags: --max-inlined-nodes-cumulative=999999
 
 // Test that huge constructors (more than 256 this assignments) are

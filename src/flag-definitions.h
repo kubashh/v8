@@ -345,16 +345,14 @@ DEFINE_BOOL(use_local_allocation_folding, false, "only fold in basic blocks")
 DEFINE_BOOL(use_write_barrier_elimination, true,
             "eliminate write barriers targeting allocations in optimized code")
 DEFINE_INT(max_inlining_levels, 5, "maximum number of inlining levels")
-DEFINE_INT(max_inlined_source_size, 600,
-           "maximum source size in bytes considered for a single inlining")
-DEFINE_INT(max_inlined_nodes, 230,
+DEFINE_INT(max_inlined_nodes, 500,
            "maximum number of AST nodes considered for a single inlining")
-DEFINE_INT(max_inlined_nodes_absolute, 1600,
+DEFINE_INT(max_inlined_nodes_absolute, 4000,
            "maximum absolute number of AST nodes considered for inlining "
            "(incl. small functions)")
-DEFINE_INT(max_inlined_nodes_cumulative, 400,
+DEFINE_INT(max_inlined_nodes_cumulative, 1000,
            "maximum cumulative number of AST nodes considered for inlining")
-DEFINE_INT(max_inlined_nodes_small, 10,
+DEFINE_INT(max_inlined_nodes_small, 30,
            "maximum number of AST nodes considered for small function inlining")
 DEFINE_FLOAT(min_inlining_frequency, 0.15, "minimum frequency for inlining")
 DEFINE_BOOL(fast_math, true, "faster (but maybe less accurate) math functions")
