@@ -157,19 +157,20 @@ struct BlockTypeOperand {
         return false;
     }
   }
+
   ValueType read_entry(unsigned index) {
     DCHECK_LT(index, arity);
     ValueType result;
-    CHECK(decode_local_type(types[index], &result));
+    bool success = decode_local_type(types[index], &result);
+    DCHECK(success);
+    USE(success);
     return result;
   }
 };
 
-struct Control;
 template <bool checked>
 struct BreakDepthOperand {
   uint32_t depth;
-  Control* target = nullptr;
   unsigned length;
   inline BreakDepthOperand(Decoder* decoder, const byte* pc) {
     depth = decoder->read_u32v<checked>(pc + 1, &length, "break depth");
@@ -253,7 +254,8 @@ class BranchTableIterator {
   }
   const byte* pc() { return pc_; }
 
-  BranchTableIterator(Decoder* decoder, BranchTableOperand<checked>& operand)
+  BranchTableIterator(Decoder* decoder,
+                      const BranchTableOperand<checked>& operand)
       : decoder_(decoder),
         start_(operand.start),
         pc_(operand.table),
