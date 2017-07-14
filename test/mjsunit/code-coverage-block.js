@@ -15,6 +15,7 @@ function GetCoverage(source) {
 }
 
 function TestCoverage(name, source, expectation) {
+  cond_counter = 0;
   source = source.trim();
   eval(source);
   %CollectGarbage("collect dead objects");
@@ -27,7 +28,9 @@ function TestCoverage(name, source, expectation) {
   assertEquals(stringified_expectation, stringified_result, name + " failed");
 }
 
+let cond_counter = 0;
 function nop() {}
+function cond() { return (cond_counter++ % 2) == 0; }
 
 %DebugToggleBlockCoverage(true);
 
@@ -502,6 +505,38 @@ TestCoverage(
  {"start":379,"end":403,"count":0},
  {"start":509,"end":653,"count":2},
  {"start":621,"end":653,"count":0}]
+);
+
+TestCoverage(
+"conditional expressions",
+`
+!function() {                             // 0000
+  cond() ? nop() : nop();                 // 0050
+  true ? nop() : nop();                   // 0100
+  false ? nop() : nop();                  // 0150
+  cond() ? cond() ? nop()                 // 0200
+                  : nop()                 // 0250
+         : nop();                         // 0300
+  cond() ? cond() ? nop()                 // 0350
+                  : nop()                 // 0400
+         : nop();                         // 0450
+  cond() ? nop() : cond() ? nop()         // 0500
+                          : nop();        // 0550
+  cond() ? nop() : cond() ? nop()         // 0600
+                          : nop();        // 0650
+}();                                      // 0700
+`,
+[{"start":0,"end":749,"count":1},
+ {"start":1,"end":701,"count":1},
+ {"start":69,"end":74,"count":0},
+ {"start":117,"end":122,"count":0},
+ {"start":160,"end":165,"count":0},
+ {"start":211,"end":275,"count":0},
+ {"start":370,"end":375,"count":0},
+ {"start":461,"end":466,"count":0},
+ {"start":519,"end":583,"count":0},
+ {"start":611,"end":616,"count":0},
+ {"start":678,"end":683,"count":0}]
 );
 
 %DebugToggleBlockCoverage(false);
