@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ea133ff_aa4bf888",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-14T05:12:57Z",
+      "side": 1,
+      "message": "maybe doesn\u0027t need to be included in the stub version, could be replaced with an assert instead",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cd0ab5fa_b3758cab",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-14T05:12:57Z",
+      "side": 1,
+      "message": "Why not just call the stub version here? TF can inline this or replace with the direct stub call, so performance shouldn\u0027t suffer too badly. That said, if it seems worthwhile to duplicate, I don\u0027t have a problem with the 2 versions.",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c5f07b1_24ef282a",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1957,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-14T05:12:57Z",
+      "side": 1,
+      "message": "What are the requirements for the fast path? That ctor is Promise, and prototype not modified?\n\n\nCould we get away with including the .then call in the fast path as well?",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
