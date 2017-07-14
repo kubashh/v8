@@ -1534,8 +1534,10 @@ void EscapeAnalysis::ProcessCheckMaps(Node* node) {
         // CheckMapsValue operator that takes the load-eliminated map value as
         // input.
         if (value->opcode() == IrOpcode::kHeapConstant &&
-            params.maps().contains(ZoneHandleSet<Map>(
-                Handle<Map>::cast(OpParameter<Handle<HeapObject>>(value))))) {
+            // Can't use Handle<T>::cast on background thread since its DCHECK
+            // dereferences the handle.
+            params.maps().contains(ZoneHandleSet<Map>(bit_cast<Handle<Map>>(
+                OpParameter<Handle<HeapObject>>(value))))) {
           TRACE("CheckMaps #%i seems to be redundant (until now).\n",
                 node->id());
           return;

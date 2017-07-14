@@ -362,6 +362,7 @@ class OtherNumberConstantType : public TypeBase {
 class V8_EXPORT_PRIVATE HeapConstantType : public NON_EXPORTED_BASE(TypeBase) {
  public:
   i::Handle<i::HeapObject> Value() { return object_; }
+  i::Handle<i::Map> ValueAsMap();
 
  private:
   friend class Type;
