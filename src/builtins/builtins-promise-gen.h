@@ -174,6 +174,8 @@ class PromiseBuiltinsAssembler : public CodeStubAssembler {
   void SetPromiseHandledByIfTrue(Node* context, Node* condition, Node* promise,
                                  const NodeGenerator& handled_by);
 
+  Node* CreateAndResolvePromise(Node* context, Node* receiver, Node* value);
+
  private:
   Node* AllocateJSPromise(Node* context);
 };
