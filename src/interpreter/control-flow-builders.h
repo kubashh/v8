@@ -34,13 +34,18 @@ class V8_EXPORT_PRIVATE ControlFlowBuilder BASE_EMBEDDED {
 class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
     : public ControlFlowBuilder {
  public:
-  explicit BreakableControlFlowBuilder(BytecodeArrayBuilder* builder)
-      : ControlFlowBuilder(builder), break_labels_(builder->zone()) {}
+  explicit BreakableControlFlowBuilder(
+      BytecodeArrayBuilder* builder,
+      BlockCoverageBuilder* block_coverage_builder, AstNode* node)
+      : ControlFlowBuilder(builder),
+        break_labels_(builder->zone()),
+        node_(node),
+        block_coverage_builder_(block_coverage_builder) {}
   virtual ~BreakableControlFlowBuilder();
 
   // This method should be called by the control flow owner before
   // destruction to update sites that emit jumps for break.
-  void BindBreakTarget();
+  virtual void BindBreakTarget();
 
   // This method is called when visiting break statements in the AST.
   // Inserts a jump to an unbound label that is patched when the corresponding
@@ -58,6 +63,9 @@ class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
   BytecodeLabels* break_labels() { return &break_labels_; }
 
   void set_needs_continuation_counter() { needs_continuation_counter_ = true; }
+  bool needs_continuation_counter() const {
+    return needs_continuation_counter_;
+  }
 
  protected:
   void EmitJump(BytecodeLabels* labels);
@@ -73,7 +81,9 @@ class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
 
   // A continuation counter (for block coverage) is needed e.g. when
   // encountering a break statement.
+  AstNode* node_;
   bool needs_continuation_counter_ = false;
+  BlockCoverageBuilder* block_coverage_builder_;
 };
 
 
@@ -84,7 +94,7 @@ class V8_EXPORT_PRIVATE BlockBuilder final
   BlockBuilder(BytecodeArrayBuilder* builder,
                BlockCoverageBuilder* block_coverage_builder,
                BreakableStatement* statement)
-      : BreakableControlFlowBuilder(builder),
+      : BreakableControlFlowBuilder(builder, block_coverage_builder, statement),
         block_coverage_builder_(block_coverage_builder),
         statement_(statement) {}
 
@@ -103,18 +113,14 @@ class V8_EXPORT_PRIVATE LoopBuilder final : public BreakableControlFlowBuilder {
  public:
   LoopBuilder(BytecodeArrayBuilder* builder,
               BlockCoverageBuilder* block_coverage_builder, AstNode* node)
-      : BreakableControlFlowBuilder(builder),
+      : BreakableControlFlowBuilder(builder, block_coverage_builder, node),
         continue_labels_(builder->zone()),
         generator_jump_table_location_(nullptr),
-        parent_generator_jump_table_(nullptr),
-        block_coverage_builder_(block_coverage_builder) {
+        parent_generator_jump_table_(nullptr) {
     if (block_coverage_builder_ != nullptr) {
       block_coverage_body_slot_ =
           block_coverage_builder_->AllocateBlockCoverageSlot(
               node, SourceRangeKind::kBody);
-      block_coverage_continuation_slot_ =
-          block_coverage_builder_->AllocateBlockCoverageSlot(
-              node, SourceRangeKind::kContinuation);
     }
   }
   ~LoopBuilder();
@@ -148,8 +154,6 @@ class V8_EXPORT_PRIVATE LoopBuilder final : public BreakableControlFlowBuilder {
   BytecodeJumpTable* parent_generator_jump_table_;
 
   int block_coverage_body_slot_;
-  int block_coverage_continuation_slot_;
-  BlockCoverageBuilder* block_coverage_builder_;
 };
 
 
@@ -157,8 +161,10 @@ class V8_EXPORT_PRIVATE LoopBuilder final : public BreakableControlFlowBuilder {
 class V8_EXPORT_PRIVATE SwitchBuilder final
     : public BreakableControlFlowBuilder {
  public:
-  explicit SwitchBuilder(BytecodeArrayBuilder* builder, int number_of_cases)
-      : BreakableControlFlowBuilder(builder),
+  explicit SwitchBuilder(BytecodeArrayBuilder* builder,
+                         BlockCoverageBuilder* block_coverage_builder,
+                         SwitchStatement* statement, int number_of_cases)
+      : BreakableControlFlowBuilder(builder, block_coverage_builder, statement),
         case_sites_(builder->zone()) {
     case_sites_.resize(number_of_cases);
   }
@@ -166,7 +172,7 @@ class V8_EXPORT_PRIVATE SwitchBuilder final
 
   // This method should be called by the SwitchBuilder owner when the case
   // statement with |index| is emitted to update the case jump site.
-  void SetCaseTarget(int index);
+  void SetCaseTarget(int index, CaseClause* clause);
 
   // This method is called when visiting case comparison operation for |index|.
   // Inserts a JumpIfTrue with ToBooleanMode |mode| to a unbound label that is
@@ -179,6 +185,8 @@ class V8_EXPORT_PRIVATE SwitchBuilder final
   // is a default case statement. Inserts a Jump to a unbound label that is
   // patched when the corresponding SetCaseTarget is called.
   void DefaultAt(int index) { builder()->Jump(&case_sites_.at(index)); }
+
+  void BindBreakTarget() override;
 
  private:
   // Unbound labels that identify jumps for case statements in the code.

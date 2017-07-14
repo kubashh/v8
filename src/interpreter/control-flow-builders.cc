@@ -45,7 +45,7 @@ void BlockBuilder::EndBlock() {
     builder()->Bind(&block_end_);
     BindBreakTarget();
   }
-  if (block_coverage_builder_ != nullptr && needs_continuation_counter_) {
+  if (block_coverage_builder_ != nullptr && needs_continuation_counter()) {
     block_coverage_builder_->IncrementBlockCounter(
         statement_, SourceRangeKind::kContinuation);
   }
@@ -61,7 +61,7 @@ LoopBuilder::~LoopBuilder() {
   // Generate block coverage counter for the continuation.
   if (block_coverage_builder_ != nullptr) {
     block_coverage_builder_->IncrementBlockCounter(
-        block_coverage_continuation_slot_);
+        node_, SourceRangeKind::kContinuation);
   }
 }
 
@@ -120,10 +120,21 @@ SwitchBuilder::~SwitchBuilder() {
 #endif
 }
 
-
-void SwitchBuilder::SetCaseTarget(int index) {
+void SwitchBuilder::SetCaseTarget(int index, CaseClause* clause) {
   BytecodeLabel& site = case_sites_.at(index);
   builder()->Bind(&site);
+  if (block_coverage_builder_) {
+    block_coverage_builder_->IncrementBlockCounter(clause,
+                                                   SourceRangeKind::kBody);
+  }
+}
+
+void SwitchBuilder::BindBreakTarget() {
+  BreakableControlFlowBuilder::BindBreakTarget();
+  if (block_coverage_builder_) {
+    block_coverage_builder_->IncrementBlockCounter(
+        node_, SourceRangeKind::kContinuation);
+  }
 }
 
 
