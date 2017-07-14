@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "50443f0e_b9edcef2",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T09:55:40Z",
+      "side": 1,
+      "message": "Yep, ofc. Done.",
+      "parentUuid": "5f8ed4e2_937c48d8",
+      "revId": "c74c0c0a8fef292a567635fbecb627c84d411c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a86afa6c_98c8ee1e",
         "filename": "test/mjsunit/code-coverage-block.js",
         "patchSetId": 2
@@ -56,6 +74,24 @@
       "revId": "c74c0c0a8fef292a567635fbecb627c84d411c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dc66969_643598a5",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T09:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a86afa6c_98c8ee1e",
+      "revId": "c74c0c0a8fef292a567635fbecb627c84d411c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
