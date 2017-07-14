@@ -172,6 +172,13 @@ struct hash<T*> : public std::unary_function<T*, size_t> {
   }
 };
 
+template <typename T1, typename T2>
+struct hash<std::pair<T1, T2>>
+    : public std::unary_function<std::pair<T1, T2>, size_t> {
+  V8_INLINE size_t operator()(std::pair<T1, T2> const& v) const {
+    return ::v8::base::hash_value(v);
+  }
+};
 
 // base::bit_equal_to is a function object class for bitwise equality
 // comparison, similar to std::equal_to, except that the comparison is performed
