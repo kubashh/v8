@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2736c3a_08759744",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T07:31:17Z",
+      "side": 1,
+      "message": "Nit: Please add the commit message (or similar) as a comment here to provide some context.",
+      "revId": "fc6519a77c45bdad02752551a0eff6511e049871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
