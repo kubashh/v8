@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afbc50a3_df8d4c3c",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-14T10:27:34Z",
+      "side": 1,
+      "message": "It\u0027s a bit hard to read now. Could you just use variables True and False instead of cond()?",
+      "range": {
+        "startLine": 528,
+        "startChar": 2,
+        "endLine": 528,
+        "endChar": 0
+      },
+      "revId": "5b747b689f7b05a7148e29bd3132c2727739e5bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
