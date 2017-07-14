@@ -4,7 +4,9 @@
 
 #include "src/signature.h"
 
+#include "src/base/macros.h"
 #include "src/base/platform/elapsed-timer.h"
+#include "src/base/template-utils.h"
 #include "src/bit-vector.h"
 #include "src/flags.h"
 #include "src/handles.h"
@@ -63,6 +65,8 @@ namespace wasm {
   this->errorf(this->pc_, "Prototype still not functional: %s", \
                WasmOpcodes::OpcodeName(opcode));
 
+namespace {
+
 // An SsaEnv environment carries the current local variable renaming
 // as well as the current effect and control dependency in the TF graph.
 // It maintains a control state that tracks whether the environment
@@ -87,90 +91,26 @@ struct SsaEnv {
   }
 };
 
-// An entry on the value stack.
-struct Value {
-  const byte* pc;
-  TFNode* node;
-  ValueType type;
-};
-
-struct TryInfo : public ZoneObject {
-  SsaEnv* catch_env;
-  TFNode* exception;
-
-  explicit TryInfo(SsaEnv* c) : catch_env(c), exception(nullptr) {}
-};
-
-struct MergeValues {
-  uint32_t arity;
-  union {
-    Value* array;
-    Value first;
-  } vals;  // Either multiple values or a single value.
-
-  Value& operator[](size_t i) {
-    DCHECK_GT(arity, i);
-    return arity == 1 ? vals.first : vals.array[i];
-  }
-};
-
-static Value* NO_VALUE = nullptr;
-
-enum ControlKind { kControlIf, kControlBlock, kControlLoop, kControlTry };
-
-// An entry on the control stack (i.e. if, block, loop).
-struct Control {
-  const byte* pc;
-  ControlKind kind;
-  size_t stack_depth;      // stack height at the beginning of the construct.
-  SsaEnv* end_env;         // end environment for the construct.
-  SsaEnv* false_env;       // false environment (only for if).
-  TryInfo* try_info;       // Information used for compiling try statements.
-  int32_t previous_catch;  // The previous Control (on the stack) with a catch.
-  bool unreachable;        // The current block has been ended.
-
-  // Values merged into the end of this control construct.
-  MergeValues merge;
-
-  inline bool is_if() const { return kind == kControlIf; }
-  inline bool is_block() const { return kind == kControlBlock; }
-  inline bool is_loop() const { return kind == kControlLoop; }
-  inline bool is_try() const { return kind == kControlTry; }
-
-  // Named constructors.
-  static Control Block(const byte* pc, size_t stack_depth, SsaEnv* end_env,
-                       int32_t previous_catch) {
-    return {pc,      kControlBlock,  stack_depth, end_env,        nullptr,
-            nullptr, previous_catch, false,       {0, {NO_VALUE}}};
-  }
-
-  static Control If(const byte* pc, size_t stack_depth, SsaEnv* end_env,
-                    SsaEnv* false_env, int32_t previous_catch) {
-    return {pc,      kControlIf,     stack_depth, end_env,        false_env,
-            nullptr, previous_catch, false,       {0, {NO_VALUE}}};
-  }
-
-  static Control Loop(const byte* pc, size_t stack_depth, SsaEnv* end_env,
-                      int32_t previous_catch) {
-    return {pc,      kControlLoop,   stack_depth, end_env,        nullptr,
-            nullptr, previous_catch, false,       {0, {NO_VALUE}}};
-  }
-
-  static Control Try(const byte* pc, size_t stack_depth, SsaEnv* end_env,
-                     Zone* zone, SsaEnv* catch_env, int32_t previous_catch) {
-    DCHECK_NOT_NULL(catch_env);
-    TryInfo* try_info = new (zone) TryInfo(catch_env);
-    return {pc,       kControlTry,    stack_depth, end_env,        nullptr,
-            try_info, previous_catch, false,       {0, {NO_VALUE}}};
-  }
+enum ControlKind {
+  kControlIf,
+  kControlIfElse,
+  kControlBlock,
+  kControlLoop,
+  kControlTry,
+  kControlTryCatch
 };
 
 // Macros that build nodes only if there is a graph and the current SSA
 // environment is reachable from start. This avoids problems with malformed
 // TF graphs when decoding inputs that have unreachable code.
-#define BUILD(func, ...) \
-  (build() ? CheckForException(builder_->func(__VA_ARGS__)) : nullptr)
-#define BUILD0(func) (build() ? CheckForException(builder_->func()) : nullptr)
+#define BUILD(func, ...)                                                    \
+  (build(decoder) ? CheckForException(decoder, builder_->func(__VA_ARGS__)) \
+                  : nullptr)
+
+template <typename T>
+Vector<T> vec2vec(std::vector<T>& vec) {
+  return Vector<T>(vec.data(), vec.size());
+}
 
 // Generic Wasm bytecode decoder with utilities for decoding operands,
 // lengths, etc.
@@ -356,9 +296,8 @@ class WasmDecoder : public Decoder {
 
   inline bool Validate(const byte* pc,
                        BreakDepthOperand<do_validation>& operand,
-                       ZoneVector<Control>& control) {
-    if (validate(operand.depth < control.size())) {
-      operand.target = &control[control.size() - operand.depth - 1];
+                       size_t control_depth) {
+    if (validate(operand.depth < control_depth)) {
       return true;
     }
     errorf(pc + 1, "invalid break depth: %u", operand.depth);
@@ -621,24 +560,188 @@ class WasmDecoder : public Decoder {
   }
 };
 
-static const int32_t kNullCatch = -1;
+// Name, return type, args...
+#define CONSUMER_FUNCTIONS(F)                                                \
+  F(StartFunction)                                                           \
+  F(StartFunctionBody, Control<Consumer>* block)                             \
+  F(FinishFunction)                                                          \
+  F(PopControl, const Control<Consumer>& block)                              \
+  F(Throw, const Value<Consumer>&)                                           \
+  F(Select, const Value<Consumer>& cond, const Value<Consumer>& fval,        \
+    const Value<Consumer>& tval, Value<Consumer>* result)                    \
+  F(UnOp, WasmOpcode opcode, FunctionSig*, const Value<Consumer>& value,     \
+    Value<Consumer>* result)                                                 \
+  F(BinOp, WasmOpcode opcode, FunctionSig*, const Value<Consumer>& lhs,      \
+    const Value<Consumer>& rhs, Value<Consumer>* result)                     \
+  F(I32Const, Value<Consumer>* result, int32_t value)                        \
+  F(I64Const, Value<Consumer>* result, int64_t value)                        \
+  F(F32Const, Value<Consumer>* result, float value)                          \
+  F(F64Const, Value<Consumer>* result, double value)                         \
+  F(DoReturn, Vector<Value<Consumer>> values)                                \
+  F(GetLocal, Value<Consumer>* result,                                       \
+    const LocalIndexOperand<do_validation>& operand)                         \
+  F(SetLocal, const Value<Consumer>& value,                                  \
+    const LocalIndexOperand<do_validation>& operand)                         \
+  F(TeeLocal, const Value<Consumer>& value, Value<Consumer>* result,         \
+    const LocalIndexOperand<do_validation>& operand)                         \
+  F(GetGlobal, Value<Consumer>* result,                                      \
+    const GlobalIndexOperand<do_validation>& operand)                        \
+  F(SetGlobal, const Value<Consumer>& value,                                 \
+    const GlobalIndexOperand<do_validation>& operand)                        \
+  F(Unreachable)                                                             \
+  F(FallThruTo, Control<Consumer>* c)                                        \
+  F(If, const Value<Consumer>& cond, Control<Consumer>* if_block)            \
+  F(Else, Control<Consumer>* if_block)                                       \
+  F(BreakTo, Control<Consumer>* block)                                       \
+  F(BrIf, const Value<Consumer>& cond, Control<Consumer>* block)             \
+  F(EndControl, Control<Consumer>* block)                                    \
+  F(Block, Control<Consumer>* block)                                         \
+  F(Loop, Control<Consumer>* block)                                          \
+  F(LoadMem, ValueType type, MachineType mem_type,                           \
+    const MemoryAccessOperand<do_validation>& operand,                       \
+    const Value<Consumer>& index, Value<Consumer>* result)                   \
+  F(StoreMem, ValueType type, MachineType mem_type,                          \
+    const MemoryAccessOperand<do_validation>& operand,                       \
+    const Value<Consumer>& index, const Value<Consumer>& value)              \
+  F(GrowMemory, const Value<Consumer>& value, Value<Consumer>* result)       \
+  F(CurrentMemoryPages, Value<Consumer>* result)                             \
+  F(CallDirect, const CallFunctionOperand<do_validation>& operand,           \
+    const Value<Consumer> args[], Value<Consumer> returns[])                 \
+  F(CallIndirect, const Value<Consumer>& index,                              \
+    const CallIndirectOperand<do_validation>& operand,                       \
+    const Value<Consumer> args[], Value<Consumer> returns[])                 \
+  F(SimdLaneOp, WasmOpcode opcode,                                           \
+    const SimdLaneOperand<do_validation>& operand,                           \
+    const Vector<Value<Consumer>> inputs, Value<Consumer>* result)           \
+  F(SimdShiftOp, WasmOpcode opcode,                                          \
+    const SimdShiftOperand<do_validation>& operand,                          \
+    const Value<Consumer>& input, Value<Consumer>* result)                   \
+  F(Simd8x16ShuffleOp, const Simd8x16ShuffleOperand<do_validation>& operand, \
+    const Value<Consumer>& input0, const Value<Consumer>& input1,            \
+    Value<Consumer>* result)                                                 \
+  F(SimdOp, WasmOpcode opcode, Vector<Value<Consumer>> args,                 \
+    Value<Consumer>* result)                                                 \
+  F(BrTable, const BranchTableOperand<do_validation>& operand,               \
+    const Value<Consumer>& key)                                              \
+  F(Catch, const LocalIndexOperand<do_validation>& operand,                  \
+    Control<Consumer>* block)
 
-// The full wasm decoder for bytecode. Verifies bytecode and, optionally,
-// generates a TurboFan IR graph.
-template <bool do_validation>
+#define DEFINE_CONSUMER_FUNCTOR(name, ...)        \
+  struct visitor_functor_##name {                 \
+    template <typename T, typename... Args>       \
+    bool operator()(T& t, Args&&... args) {       \
+      return t.name(std::forward<Args>(args)...); \
+    }                                             \
+  };
+CONSUMER_FUNCTIONS(DEFINE_CONSUMER_FUNCTOR)
+#undef DEFINE_CONSUMER_FUNCTOR
+
+#define IMPL_RET(ret, name, ...)                   \
+  template <bool do_validation, typename Consumer> \
+  ret name(WasmFullDecoder<do_validation, Consumer>* decoder, ##__VA_ARGS__)
+
+#define IMPL(name, ...) IMPL_RET(void, name, ##__VA_ARGS__)
+
+static constexpr int32_t kNullCatch = -1;
+
+// An entry on the value stack.
+template <typename Consumer>
+struct Value {
+  const byte* pc;
+  ValueType type;
+  typename Consumer::CValue consumer_data;
+
+  // Named constructors.
+  static Value Unreachable(const byte* pc) {
+    return {pc, kWasmVar, Consumer::CValue::Unreachable()};
+  }
+
+  static Value New(const byte* pc, ValueType type) {
+    return {pc, type, Consumer::CValue::New()};
+  }
+};
+
+template <typename Consumer>
+struct MergeValues {
+  uint32_t arity;
+  union {
+    Value<Consumer>* array;
+    Value<Consumer> first;
+  } vals;  // Either multiple values or a single value.
+
+  Value<Consumer>& operator[](size_t i) {
+    DCHECK_GT(arity, i);
+    return arity == 1 ? vals.first : vals.array[i];
+  }
+};
+
+// An entry on the control stack (i.e. if, block, loop, or try).
+template <typename Consumer>
+struct Control {
+  const byte* pc;
+  ControlKind kind;
+  size_t stack_depth;  // stack height at the beginning of the construct.
+  typename Consumer::CControl consumer_data;
+  bool unreachable;  // The current block has been ended.
+
+  // Values merged into the end of this control construct.
+  MergeValues<Consumer> merge;
+
+  inline bool is_if() const { return is_onearmed_if() || is_if_else(); }
+  inline bool is_onearmed_if() const { return kind == kControlIf; }
+  inline bool is_if_else() const { return kind == kControlIfElse; }
+  inline bool is_block() const { return kind == kControlBlock; }
+  inline bool is_loop() const { return kind == kControlLoop; }
+  inline bool is_try() const { return is_incomplete_try() || is_try_catch(); }
+  inline bool is_incomplete_try() const { return kind == kControlTry; }
+  inline bool is_try_catch() const { return kind == kControlTryCatch; }
+
+  // Named constructors.
+  static Control Block(const byte* pc, size_t stack_depth) {
+    return {pc, kControlBlock, stack_depth, Consumer::CControl::Block(), false};
+  }
+
+  static Control If(const byte* pc, size_t stack_depth) {
+    return {pc, kControlIf, stack_depth, Consumer::CControl::If(), false};
+  }
+
+  static Control Loop(const byte* pc, size_t stack_depth) {
+    return {pc, kControlLoop, stack_depth, Consumer::CControl::Loop(), false};
+  }
+
+  static Control Try(const byte* pc, size_t stack_depth) {
+    return {pc, kControlTry, stack_depth, Consumer::CControl::Try(), false};
+  }
+};
+
+template <bool do_validation, typename Consumer>
 class WasmFullDecoder : public WasmDecoder<do_validation> {
+  // All Value and Control types should be trivially copyable for
+  // performance. We push and pop them, and store them in local variables.
+  static_assert(IS_TRIVIALLY_COPYABLE(Value<Consumer>),
+                "all Value<...> types should be trivially copyable");
+  static_assert(IS_TRIVIALLY_COPYABLE(Control<Consumer>),
+                "all Control<...> types should be trivially copyable");
+
  public:
   WasmFullDecoder(Zone* zone, const wasm::WasmModule* module,
-                  const FunctionBody& body)
-      : WasmFullDecoder(zone, module, nullptr, body) {}
-
-  WasmFullDecoder(Zone* zone, TFBuilder* builder, const FunctionBody& body)
-      : WasmFullDecoder(zone, builder->module_env() == nullptr
-                                  ? nullptr
-                                  : builder->module_env()->module,
-                        builder, body) {}
+                  const FunctionBody& body, Consumer consumer)
+      : WasmDecoder<do_validation>(module, body.sig, body.start, body.end,
+                                   body.offset),
+        zone_(zone),
+        consumer_(consumer),
+        local_type_vec_(zone),
+        stack_(zone),
+        control_(zone),
+        last_end_found_(false),
+        current_catch_(kNullCatch) {
+    this->local_types_ = &local_type_vec_;
+  }
 
   bool Decode() {
+    DCHECK(stack_.empty());
+    DCHECK(control_.empty());
+
     if (FLAG_wasm_code_fuzzer_gen_test) {
       PrintRawWasmCode(this->start_, this->end_);
     }
@@ -646,8 +749,6 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     if (FLAG_trace_wasm_decode_time) {
       decode_timer.Start();
     }
-    stack_.clear();
-    control_.clear();
 
     if (this->end_ < this->pc_) {
       this->error("function body end < start");
@@ -657,9 +758,9 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     DCHECK_EQ(0, this->local_types_->size());
     WasmDecoder<do_validation>::DecodeLocals(this, this->sig_,
                                              this->local_types_);
-    InitSsaEnv();
+    consumer_.StartFunction(this);
     DecodeFunctionBody();
-    FinishFunction();
+    consumer_.FinishFunction(this);
 
     if (this->failed()) return this->TraceFailed();
 
@@ -696,120 +797,55 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     return false;
   }
 
- private:
-  WasmFullDecoder(Zone* zone, const wasm::WasmModule* module,
-                  TFBuilder* builder, const FunctionBody& body)
-      : WasmDecoder<do_validation>(module, body.sig, body.start, body.end,
-                                   body.offset),
-        zone_(zone),
-        builder_(builder),
-        local_type_vec_(zone),
-        stack_(zone),
-        control_(zone),
-        last_end_found_(false),
-        current_catch_(kNullCatch) {
-    this->local_types_ = &local_type_vec_;
+  const char* SafeOpcodeNameAt(const byte* pc) {
+    if (pc >= this->end_) return "<end>";
+    return WasmOpcodes::OpcodeName(static_cast<WasmOpcode>(*pc));
   }
 
-  static const size_t kErrorMsgSize = 128;
+ private:
+  static constexpr size_t kErrorMsgSize = 128;
+  friend class WasmGraphBuildingConsumer;
 
   Zone* zone_;
-  TFBuilder* builder_;
 
-  SsaEnv* ssa_env_;
+  Consumer consumer_;
 
   ZoneVector<ValueType> local_type_vec_;  // types of local variables.
-  ZoneVector<Value> stack_;               // stack of values.
-  ZoneVector<Control> control_;           // stack of blocks, loops, and ifs.
+  ZoneVector<Value<Consumer>> stack_;     // stack of values.
+  ZoneVector<Control<Consumer>> control_;  // stack of blocks, loops, and ifs.
   bool last_end_found_;
 
   int32_t current_catch_;
 
-  TryInfo* current_try_info() { return control_[current_catch_].try_info; }
-
-  inline bool build() { return builder_ && ssa_env_->go(); }
-
-  void InitSsaEnv() {
-    TFNode* start = nullptr;
-    SsaEnv* ssa_env = reinterpret_cast<SsaEnv*>(zone_->New(sizeof(SsaEnv)));
-    size_t size = sizeof(TFNode*) * EnvironmentCount();
-    ssa_env->state = SsaEnv::kReached;
-    ssa_env->locals =
-        size > 0 ? reinterpret_cast<TFNode**>(zone_->New(size)) : nullptr;
-
-    if (builder_) {
-      start =
-          builder_->Start(static_cast<int>(this->sig_->parameter_count() + 1));
-      // Initialize local variables.
-      uint32_t index = 0;
-      while (index < this->sig_->parameter_count()) {
-        ssa_env->locals[index] = builder_->Param(index);
-        index++;
-      }
-      while (index < local_type_vec_.size()) {
-        ValueType type = local_type_vec_[index];
-        TFNode* node = DefaultValue(type);
-        while (index < local_type_vec_.size() &&
-               local_type_vec_[index] == type) {
-          // Do a whole run of like-typed locals at a time.
-          ssa_env->locals[index++] = node;
-        }
-      }
-    }
-    ssa_env->control = start;
-    ssa_env->effect = start;
-    SetEnv("initial", ssa_env);
-  }
-
-  TFNode* DefaultValue(ValueType type) {
-    switch (type) {
-      case kWasmI32:
-        return builder_->Int32Constant(0);
-      case kWasmI64:
-        return builder_->Int64Constant(0);
-      case kWasmF32:
-        return builder_->Float32Constant(0);
-      case kWasmF64:
-        return builder_->Float64Constant(0);
-      case kWasmS128:
-        return builder_->S128Zero();
-      default:
-        UNREACHABLE();
-    }
-  }
-
   bool CheckHasMemory() {
-    if (!this->module_->has_memory) {
-      this->error(this->pc_ - 1, "memory instruction with no memory");
-    }
-    return this->module_->has_memory;
+    if (validate(this->module_->has_memory)) return true;
+    this->error(this->pc_ - 1, "memory instruction with no memory");
+    return false;
   }
 
   // Decodes the body of a function.
   void DecodeFunctionBody() {
-    TRACE("wasm-decode %p...%p (module+%u, %d bytes) %s\n",
+    TRACE("wasm-decode %p...%p (module+%u, %d bytes)\n",
           reinterpret_cast<const void*>(this->start()),
           reinterpret_cast<const void*>(this->end()), this->pc_offset(),
-          static_cast<int>(this->end() - this->start()),
-          builder_ ? "graph building" : "");
+          static_cast<int>(this->end() - this->start()));
 
+    // Set up initial function block.
     {
-      // Set up initial function block.
-      SsaEnv* break_env = ssa_env_;
-      SetEnv("initial env", Steal(break_env));
-      PushBlock(break_env);
-      Control* c = &control_.back();
+      auto* c = PushBlock();
       c->merge.arity = static_cast<uint32_t>(this->sig_->return_count());
 
       if (c->merge.arity == 1) {
-        c->merge.vals.first = {this->pc_, nullptr, this->sig_->GetReturn(0)};
+        c->merge.vals.first =
+            Value<Consumer>::New(this->pc_, this->sig_->GetReturn(0));
       } else if (c->merge.arity > 1) {
-        c->merge.vals.array = zone_->NewArray<Value>(c->merge.arity);
+        c->merge.vals.array = zone_->NewArray<Value<Consumer>>(c->merge.arity);
         for (unsigned i = 0; i < c->merge.arity; i++) {
-          c->merge.vals.array[i] = {this->pc_, nullptr,
-                                    this->sig_->GetReturn(i)};
+          c->merge.vals.array[i] =
+              Value<Consumer>::New(this->pc_, this->sig_->GetReturn(i));
         }
       }
+      consumer_.StartFunctionBody(this, c);
     }
 
     while (this->pc_ < this->end_) {  // decoding loop.
@@ -831,13 +867,11 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           case kExprNop:
             break;
           case kExprBlock: {
-            // The break environment is the outer environment.
             BlockTypeOperand<do_validation> operand(this, this->pc_);
-            SsaEnv* break_env = ssa_env_;
-            PushBlock(break_env);
-            SetEnv("block:start", Steal(break_env));
-            SetBlockType(&control_.back(), operand);
+            auto* block = PushBlock();
+            SetBlockType(block, operand);
             len = 1 + operand.length;
+            consumer_.Block(this, block);
             break;
           }
           case kExprRethrow: {
@@ -850,8 +884,8 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             // TODO(kschimpf): Fix to use type signature of exception.
             CHECK_PROTOTYPE_OPCODE(eh);
             PROTOTYPE_NOT_FUNCTIONAL(opcode);
-            Value value = Pop(0, kWasmI32);
-            BUILD(Throw, value.node);
+            auto value = Pop(0, kWasmI32);
+            consumer_.Throw(this, value);
             // TODO(titzer): Throw should end control, but currently we build a
             // (reachable) runtime call instead of connecting it directly to
             // end.
@@ -861,11 +895,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           case kExprTry: {
             CHECK_PROTOTYPE_OPCODE(eh);
             BlockTypeOperand<do_validation> operand(this, this->pc_);
-            SsaEnv* outer_env = ssa_env_;
-            SsaEnv* try_env = Steal(outer_env);
-            SsaEnv* catch_env = UnreachableEnv();
-            PushTry(outer_env, catch_env);
-            SetEnv("try_catch:start", try_env);
+            PushTry();
             SetBlockType(&control_.back(), operand);
             len = 1 + operand.length;
             break;
@@ -877,39 +907,29 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             LocalIndexOperand<do_validation> operand(this, this->pc_);
             len = 1 + operand.length;
 
-            if (control_.empty()) {
+            if (check_error(control_.empty())) {
               this->error("catch does not match any try");
               break;
             }
 
-            Control* c = &control_.back();
-            if (!c->is_try()) {
-              this->error("catch does not match any try");
-              break;
-            }
-
-            if (c->try_info->catch_env == nullptr) {
+            Control<Consumer>* c = &control_.back();
+            if (check_error(c->is_try_catch())) {
               this->error(this->pc_,
                           "catch already present for try with catch");
               break;
             }
 
+            if (check_error(!c->is_try())) {
+              this->error("catch does not match any try");
+              break;
+            }
+            c->kind = kControlTryCatch;
+
             FallThruTo(c);
             stack_.resize(c->stack_depth);
 
-            DCHECK_NOT_NULL(c->try_info);
-            SsaEnv* catch_env = c->try_info->catch_env;
-            c->try_info->catch_env = nullptr;
-            SetEnv("catch:begin", catch_env);
-            current_catch_ = c->previous_catch;
-
-            if (this->Validate(this->pc_, operand)) {
-              if (ssa_env_->locals) {
-                TFNode* exception_as_i32 =
-                    BUILD(Catch, c->try_info->exception, position());
-                ssa_env_->locals[operand.index] = exception_as_i32;
-              }
-            }
+            if (!this->Validate(this->pc_, operand)) break;
+            consumer_.Catch(this, operand, c);
 
             break;
           }
@@ -921,140 +941,106 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           }
           case kExprLoop: {
             BlockTypeOperand<do_validation> operand(this, this->pc_);
-            SsaEnv* finish_try_env = Steal(ssa_env_);
             // The continue environment is the inner environment.
-            SsaEnv* loop_body_env = PrepareForLoop(this->pc_, finish_try_env);
-            SetEnv("loop:start", loop_body_env);
-            ssa_env_->SetNotMerged();
-            PushLoop(finish_try_env);
+            auto* block = PushLoop();
             SetBlockType(&control_.back(), operand);
             len = 1 + operand.length;
+            consumer_.Loop(this, block);
             break;
           }
           case kExprIf: {
             // Condition on top of stack. Split environments for branches.
             BlockTypeOperand<do_validation> operand(this, this->pc_);
-            Value cond = Pop(0, kWasmI32);
-            TFNode* if_true = nullptr;
-            TFNode* if_false = nullptr;
-            BUILD(BranchNoHint, cond.node, &if_true, &if_false);
-            SsaEnv* end_env = ssa_env_;
-            SsaEnv* false_env = Split(ssa_env_);
-            false_env->control = if_false;
-            SsaEnv* true_env = Steal(ssa_env_);
-            true_env->control = if_true;
-            PushIf(end_env, false_env);
-            SetEnv("if:true", true_env);
-            SetBlockType(&control_.back(), operand);
+            Value<Consumer> cond = Pop(0, kWasmI32);
+            auto* if_block = PushIf();
+            SetBlockType(if_block, operand);
+            consumer_.If(this, cond, if_block);
             len = 1 + operand.length;
             break;
           }
           case kExprElse: {
-            if (control_.empty()) {
+            if (check_error(control_.empty())) {
               this->error("else does not match any if");
               break;
             }
-            Control* c = &control_.back();
-            if (!c->is_if()) {
+            Control<Consumer>* c = &control_.back();
+            if (check_error(!c->is_if())) {
               this->error(this->pc_, "else does not match an if");
               break;
             }
-            if (c->false_env == nullptr) {
+            if (c->is_if_else()) {
               this->error(this->pc_, "else already present for if");
               break;
             }
+            c->kind = kControlIfElse;
             FallThruTo(c);
             stack_.resize(c->stack_depth);
-            // Switch to environment for false branch.
-            SetEnv("if_else:false", c->false_env);
-            c->false_env = nullptr;  // record that an else is already seen
+            consumer_.Else(this, c);
             break;
           }
           case kExprEnd: {
-            if (control_.empty()) {
+            if (check_error(control_.empty())) {
               this->error("end does not match any if, try, or block");
               return;
             }
-            const char* name = "block:end";
-            Control* c = &control_.back();
+            Control<Consumer>* c = &control_.back();
             if (c->is_loop()) {
               // A loop just leaves the values on the stack.
               TypeCheckFallThru(c);
               if (c->unreachable) PushEndValues(c);
-              PopControl();
-              SetEnv("loop:end", ssa_env_);
+              PopControl(c);
               break;
             }
-            if (c->is_if()) {
-              if (c->false_env != nullptr) {
-                // End the true branch of a one-armed if.
-                Goto(c->false_env, c->end_env);
-                if (!c->unreachable && stack_.size() != c->stack_depth) {
-                  this->error("end of if expected empty stack");
-                  stack_.resize(c->stack_depth);
-                }
-                if (c->merge.arity > 0) {
-                  this->error("non-void one-armed if");
-                }
-                name = "if:merge";
-              } else {
-                // End the false branch of a two-armed if.
-                name = "if_else:merge";
+            if (c->is_onearmed_if()) {
+              // End the true branch of a one-armed if.
+              if (check_error(!c->unreachable &&
+                              stack_.size() != c->stack_depth)) {
+                this->error("end of if expected empty stack");
+                stack_.resize(c->stack_depth);
               }
-            } else if (c->is_try()) {
-              name = "try:end";
-
-              // validate that catch was seen.
-              if (c->try_info->catch_env != nullptr) {
-                this->error(this->pc_, "missing catch in try");
-                break;
+              if (check_error(c->merge.arity > 0)) {
+                this->error("non-void one-armed if");
               }
+            } else if (check_error(c->is_incomplete_try())) {
+              this->error(this->pc_, "missing catch in try");
+              break;
             }
             FallThruTo(c);
-            SetEnv(name, c->end_env);
             PushEndValues(c);
 
             if (control_.size() == 1) {
               // If at the last (implicit) control, check we are at end.
-              if (this->pc_ + 1 != this->end_) {
+              if (check_error(this->pc_ + 1 != this->end_)) {
                 this->error(this->pc_ + 1, "trailing code after function end");
                 break;
               }
               last_end_found_ = true;
-              if (ssa_env_->go()) {
+              if (c->unreachable) {
+                TypeCheckFallThru(c);
+              } else {
                 // The result of the block is the return value.
                 TRACE("  @%-8d #xx:%-20s|", startrel(this->pc_),
                       "(implicit) return");
                 DoReturn();
                 TRACE("\n");
-              } else {
-                TypeCheckFallThru(c);
               }
             }
-            PopControl();
+            PopControl(c);
             break;
           }
           case kExprSelect: {
-            Value cond = Pop(2, kWasmI32);
-            Value fval = Pop();
-            Value tval = Pop(0, fval.type);
-            if (build()) {
-              TFNode* controls[2];
-              builder_->BranchNoHint(cond.node, &controls[0], &controls[1]);
-              TFNode* merge = builder_->Merge(2, controls);
-              TFNode* vals[2] = {tval.node, fval.node};
-              TFNode* phi = builder_->Phi(tval.type, 2, vals, merge);
-              Push(tval.type, phi);
-              ssa_env_->control = merge;
-            } else {
-              Push(tval.type == kWasmVar ? fval.type : tval.type, nullptr);
-            }
+            auto cond = Pop(2, kWasmI32);
+            auto fval = Pop();
+            auto tval = Pop(0, fval.type);
+            auto* result = Push(tval.type == kWasmVar ? fval.type : tval.type);
+            consumer_.Select(this, cond, fval, tval, result);
             break;
           }
           case kExprBr: {
             BreakDepthOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand, control_)) {
-              BreakTo(operand.depth);
+            if (validate(this->Validate(this->pc_, operand, control_.size()) &&
+                         TypeCheckBreak(operand.depth))) {
+              consumer_.BreakTo(this, GetControl(operand.depth));
             }
             len = 1 + operand.length;
             EndControl();
@@ -1062,15 +1048,11 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           }
           case kExprBrIf: {
             BreakDepthOperand<do_validation> operand(this, this->pc_);
-            Value cond = Pop(0, kWasmI32);
-            if (this->ok() && this->Validate(this->pc_, operand, control_)) {
-              SsaEnv* fenv = ssa_env_;
-              SsaEnv* tenv = Split(fenv);
-              fenv->SetNotMerged();
-              BUILD(BranchNoHint, cond.node, &tenv->control, &fenv->control);
-              ssa_env_ = tenv;
-              BreakTo(operand.depth);
-              ssa_env_ = fenv;
+            Value<Consumer> cond = Pop(0, kWasmI32);
+            if (validate(this->ok() &&
+                         this->Validate(this->pc_, operand, control_.size()) &&
+                         TypeCheckBreak(operand.depth))) {
+              consumer_.BrIf(this, cond, GetControl(operand.depth));
             }
             len = 1 + operand.length;
             break;
@@ -1078,69 +1060,58 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           case kExprBrTable: {
             BranchTableOperand<do_validation> operand(this, this->pc_);
             BranchTableIterator<do_validation> iterator(this, operand);
-            if (this->Validate(this->pc_, operand, control_.size())) {
-              Value key = Pop(0, kWasmI32);
-              if (this->failed()) break;
-
-              SsaEnv* break_env = ssa_env_;
-              if (operand.table_count > 0) {
-                // Build branches to the various blocks based on the table.
-                TFNode* sw = BUILD(Switch, operand.table_count + 1, key.node);
-
-                SsaEnv* copy = Steal(break_env);
-                ssa_env_ = copy;
-                MergeValues* merge = nullptr;
-                while (this->ok() && iterator.has_next()) {
-                  uint32_t i = iterator.cur_index();
-                  const byte* pos = iterator.pc();
-                  uint32_t target = iterator.next();
-                  if (target >= control_.size()) {
-                    this->error(pos, "improper branch in br_table");
-                    break;
-                  }
-                  ssa_env_ = Split(copy);
-                  ssa_env_->control = (i == operand.table_count)
-                                          ? BUILD(IfDefault, sw)
-                                          : BUILD(IfValue, i, sw);
-                  BreakTo(target);
-
-                  // Check that label types match up.
-                  static MergeValues loop_dummy = {0, {nullptr}};
-                  Control* c = &control_[control_.size() - target - 1];
-                  MergeValues* current = c->is_loop() ? &loop_dummy : &c->merge;
-                  if (i == 0) {
-                    merge = current;
-                  } else if (check_error(merge->arity != current->arity)) {
-                    this->errorf(pos,
-                                 "inconsistent arity in br_table target %d"
-                                 " (previous was %u, this one %u)",
-                                 i, merge->arity, current->arity);
-                  } else if (check_error(control_.back().unreachable)) {
-                    for (uint32_t j = 0; this->ok() && j < merge->arity; ++j) {
-                      if ((*merge)[j].type != (*current)[j].type) {
-                        this->errorf(
-                            pos,
-                            "type error in br_table target %d operand %d"
-                            " (previous expected %s, this one %s)",
-                            i, j, WasmOpcodes::TypeName((*merge)[j].type),
-                            WasmOpcodes::TypeName((*current)[j].type));
-                      }
-                    }
-                  }
-                }
-                if (this->failed()) break;
-              } else {
-                // Only a default target. Do the equivalent of br.
-                const byte* pos = iterator.pc();
-                uint32_t target = iterator.next();
-                if (check_error(target >= control_.size())) {
-                  this->error(pos, "improper branch in br_table");
-                  break;
-                }
-                BreakTo(target);
+            if (!this->Validate(this->pc_, operand, control_.size())) break;
+            Value<Consumer> key = Pop(0, kWasmI32);
+            MergeValues<Consumer>* merge = nullptr;
+            while (iterator.has_next()) {
+              const uint32_t i = iterator.cur_index();
+              const byte* pos = iterator.pc();
+              uint32_t target = iterator.next();
+              if (check_error(target >= control_.size())) {
+                this->error(pos, "improper branch in br_table");
+                break;
               }
-              // br_table ends the control flow like br.
-              ssa_env_ = break_env;
+              // Check that label types match up.
+              static MergeValues<Consumer> loop_dummy = {0, {nullptr}};
+              Control<Consumer>* c = GetControl(target);
+              MergeValues<Consumer>* current =
+                  c->is_loop() ? &loop_dummy : &c->merge;
+              if (i == 0) {
+                merge = current;
+              } else if (check_error(merge->arity != current->arity)) {
+                this->errorf(pos,
+                             "inconsistent arity in br_table target %d"
+                             " (previous was %u, this one %u)",
+                             i, merge->arity, current->arity);
+              } else if (GetControl(0)->unreachable) {
+                for (uint32_t j = 0; validate(this->ok()) && j < merge->arity;
+                     ++j) {
+                  if (check_error((*merge)[j].type != (*current)[j].type)) {
+                    this->errorf(pos,
+                                 "type error in br_table target %d operand %d"
+                                 " (previous expected %s, this one %s)",
+                                 i, j, WasmOpcodes::TypeName((*merge)[j].type),
+                                 WasmOpcodes::TypeName((*current)[j].type));
+                  }
+                }
+              }
+              bool valid = TypeCheckBreak(target);
+              if (check_error(!valid)) break;
+            }
+            if (check_error(this->failed())) break;
+
+            if (operand.table_count > 0) {
+              consumer_.BrTable(this, operand, key);
+            } else {
+              // Only a default target. Do the equivalent of br.
+              BranchTableIterator<do_validation> iterator(this, operand);
+              const byte* pos = iterator.pc();
+              uint32_t target = iterator.next();
+              if (check_error(target >= control_.size())) {
+                this->error(pos, "improper branch in br_table");
+                break;
+              }
+              consumer_.BreakTo(this, GetControl(target));
             }
             len = 1 + iterator.length();
             EndControl();
@@ -1151,62 +1122,60 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             break;
           }
           case kExprUnreachable: {
-            BUILD(Unreachable, position());
+            consumer_.Unreachable(this);
             EndControl();
             break;
           }
           case kExprI32Const: {
             ImmI32Operand<do_validation> operand(this, this->pc_);
-            Push(kWasmI32, BUILD(Int32Constant, operand.value));
+            auto* value = Push(kWasmI32);
+            consumer_.I32Const(this, value, operand.value);
             len = 1 + operand.length;
             break;
           }
           case kExprI64Const: {
             ImmI64Operand<do_validation> operand(this, this->pc_);
-            Push(kWasmI64, BUILD(Int64Constant, operand.value));
+            auto* value = Push(kWasmI64);
+            consumer_.I64Const(this, value, operand.value);
             len = 1 + operand.length;
             break;
           }
           case kExprF32Const: {
             ImmF32Operand<do_validation> operand(this, this->pc_);
-            Push(kWasmF32, BUILD(Float32Constant, operand.value));
+            auto* value = Push(kWasmF32);
+            consumer_.F32Const(this, value, operand.value);
             len = 1 + operand.length;
             break;
           }
           case kExprF64Const: {
             ImmF64Operand<do_validation> operand(this, this->pc_);
-            Push(kWasmF64, BUILD(Float64Constant, operand.value));
+            auto* value = Push(kWasmF64);
+            consumer_.F64Const(this, value, operand.value);
             len = 1 + operand.length;
             break;
           }
           case kExprGetLocal: {
             LocalIndexOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              if (build()) {
-                Push(operand.type, ssa_env_->locals[operand.index]);
-              } else {
-                Push(operand.type, nullptr);
-              }
-            }
+            if (!this->Validate(this->pc_, operand)) break;
+            auto* value = Push(operand.type);
+            consumer_.GetLocal(this, value, operand);
             len = 1 + operand.length;
             break;
           }
           case kExprSetLocal: {
             LocalIndexOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              Value val = Pop(0, local_type_vec_[operand.index]);
-              if (ssa_env_->locals) ssa_env_->locals[operand.index] = val.node;
-            }
+            if (!this->Validate(this->pc_, operand)) break;
+            auto value = Pop(0, local_type_vec_[operand.index]);
+            consumer_.SetLocal(this, value, operand);
             len = 1 + operand.length;
             break;
           }
           case kExprTeeLocal: {
             LocalIndexOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              Value val = Pop(0, local_type_vec_[operand.index]);
-              if (ssa_env_->locals) ssa_env_->locals[operand.index] = val.node;
-              Push(val.type, val.node);
-            }
+            if (!this->Validate(this->pc_, operand)) break;
+            auto value = Pop(0, local_type_vec_[operand.index]);
+            auto* result = Push(value.type);
+            consumer_.TeeLocal(this, value, result, operand);
             len = 1 + operand.length;
             break;
           }
@@ -1216,25 +1185,23 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           }
           case kExprGetGlobal: {
             GlobalIndexOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              Push(operand.type, BUILD(GetGlobal, operand.index));
-            }
             len = 1 + operand.length;
+            if (!this->Validate(this->pc_, operand)) break;
+            auto* result = Push(operand.type);
+            consumer_.GetGlobal(this, result, operand);
             break;
           }
           case kExprSetGlobal: {
             GlobalIndexOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              if (validate(operand.global->mutability)) {
-                Value val = Pop(0, operand.type);
-                BUILD(SetGlobal, operand.index, val.node);
-              } else {
-                this->errorf(this->pc_,
-                             "immutable global #%u cannot be assigned",
-                             operand.index);
-              }
-            }
             len = 1 + operand.length;
+            if (!this->Validate(this->pc_, operand)) break;
+            if (check_error(!operand.global->mutability)) {
+              this->errorf(this->pc_, "immutable global #%u cannot be assigned",
+                           operand.index);
+              break;
+            }
+            auto value = Pop(0, operand.type);
+            consumer_.SetGlobal(this, value, operand);
             break;
           }
           case kExprI32LoadMem8S:
@@ -1309,45 +1276,46 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           case kExprGrowMemory: {
             if (!CheckHasMemory()) break;
             MemoryIndexOperand<do_validation> operand(this, this->pc_);
-            DCHECK_NOT_NULL(this->module_);
-            if (this->module_->is_wasm()) {
-              Value val = Pop(0, kWasmI32);
-              Push(kWasmI32, BUILD(GrowMemory, val.node));
-            } else {
-              this->error("grow_memory is not supported for asmjs modules");
-            }
             len = 1 + operand.length;
+            DCHECK_NOT_NULL(this->module_);
+            if (check_error(!this->module_->is_wasm())) {
+              this->error("grow_memory is not supported for asmjs modules");
+              break;
+            }
+            auto value = Pop(0, kWasmI32);
+            auto* result = Push(kWasmI32);
+            consumer_.GrowMemory(this, value, result);
             break;
           }
           case kExprMemorySize: {
             if (!CheckHasMemory()) break;
             MemoryIndexOperand<do_validation> operand(this, this->pc_);
-            Push(kWasmI32, BUILD(CurrentMemoryPages));
+            auto* result = Push(kWasmI32);
             len = 1 + operand.length;
+            consumer_.CurrentMemoryPages(this, result);
             break;
           }
           case kExprCallFunction: {
             CallFunctionOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              TFNode** buffer = PopArgs(operand.sig);
-              TFNode** rets = nullptr;
-              BUILD(CallDirect, operand.index, buffer, &rets, position());
-              PushReturns(operand.sig, rets);
-            }
             len = 1 + operand.length;
+            if (!this->Validate(this->pc_, operand)) break;
+            // TODO(clemensh): Better memory management.
+            std::vector<Value<Consumer>> args;
+            PopArgs(operand.sig, &args);
+            Value<Consumer>* returns = PushReturns(operand.sig);
+            consumer_.CallDirect(this, operand, args.data(), returns);
             break;
           }
           case kExprCallIndirect: {
             CallIndirectOperand<do_validation> operand(this, this->pc_);
-            if (this->Validate(this->pc_, operand)) {
-              Value index = Pop(0, kWasmI32);
-              TFNode** buffer = PopArgs(operand.sig);
-              if (buffer) buffer[0] = index.node;
-              TFNode** rets = nullptr;
-              BUILD(CallIndirect, operand.index, buffer, &rets, position());
-              PushReturns(operand.sig, rets);
-            }
             len = 1 + operand.length;
+            if (!this->Validate(this->pc_, operand)) break;
+            Value<Consumer> index = Pop(0, kWasmI32);
+            // TODO(clemensh): Better memory management.
+            std::vector<Value<Consumer>> args;
+            PopArgs(operand.sig, &args);
+            Value<Consumer>* returns = PushReturns(operand.sig);
+            consumer_.CallIndirect(this, index, operand, args.data(), returns);
             break;
           }
           case kSimdPrefix: {
@@ -1396,13 +1364,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
       if (FLAG_trace_wasm_decoder) {
         PrintF(" ");
         for (size_t i = 0; i < control_.size(); ++i) {
-          Control* c = &control_[i];
-          enum ControlKind {
-            kControlIf,
-            kControlBlock,
-            kControlLoop,
-            kControlTry
-          };
+          Control<Consumer>* c = &control_[i];
           switch (c->kind) {
             case kControlIf:
               PrintF("I");
@@ -1424,7 +1386,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
         }
         PrintF(" | ");
         for (size_t i = 0; i < stack_.size(); ++i) {
-          Value& val = stack_[i];
+          Value<Consumer>& val = stack_[i];
           WasmOpcode opcode = static_cast<WasmOpcode>(*val.pc);
           if (WasmOpcodes::IsPrefixOpcode(opcode)) {
             opcode = static_cast<WasmOpcode>(opcode << 8 | *(val.pc + 1));
@@ -1452,7 +1414,6 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             default:
               break;
           }
-          if (val.node == nullptr) PrintF("?");
         }
         PrintF("\n");
       }
@@ -1462,84 +1423,79 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     if (this->pc_ > this->end_ && this->ok()) this->error("Beyond end of code");
   }
 
-  void FinishFunction() {
-    if (builder_) builder_->PatchInStackCheckIfNeeded();
-  }
-
   void EndControl() {
-    ssa_env_->Kill(SsaEnv::kControlEnd);
-    if (!control_.empty()) {
-      stack_.resize(control_.back().stack_depth);
-      control_.back().unreachable = true;
-    }
+    DCHECK(!control_.empty());
+    auto* current = &control_.back();
+    stack_.resize(current->stack_depth);
+    current->unreachable = true;
+    consumer_.EndControl(this, current);
   }
 
-  void SetBlockType(Control* c, BlockTypeOperand<do_validation>& operand) {
+  void SetBlockType(Control<Consumer>* c,
+                    BlockTypeOperand<do_validation>& operand) {
     c->merge.arity = operand.arity;
     if (c->merge.arity == 1) {
-      c->merge.vals.first = {this->pc_, nullptr, operand.read_entry(0)};
+      c->merge.vals.first =
+          Value<Consumer>::New(this->pc_, operand.read_entry(0));
     } else if (c->merge.arity > 1) {
-      c->merge.vals.array = zone_->NewArray<Value>(c->merge.arity);
+      c->merge.vals.array = zone_->NewArray<Value<Consumer>>(c->merge.arity);
       for (unsigned i = 0; i < c->merge.arity; i++) {
-        c->merge.vals.array[i] = {this->pc_, nullptr, operand.read_entry(i)};
+        c->merge.vals.array[i] =
+            Value<Consumer>::New(this->pc_, operand.read_entry(i));
       }
     }
   }
 
-  TFNode** PopArgs(FunctionSig* sig) {
-    if (build()) {
-      int count = static_cast<int>(sig->parameter_count());
-      TFNode** buffer = builder_->Buffer(count + 1);
-      buffer[0] = nullptr;  // reserved for code object or function index.
-      for (int i = count - 1; i >= 0; i--) {
-        buffer[i + 1] = Pop(i, sig->GetParam(i)).node;
-      }
-      return buffer;
-    } else {
-      int count = static_cast<int>(sig->parameter_count());
-      for (int i = count - 1; i >= 0; i--) {
-        Pop(i, sig->GetParam(i));
-      }
-      return nullptr;
+  // TODO(clemensh): Better memory management.
+  void PopArgs(FunctionSig* sig, std::vector<Value<Consumer>>* result) {
+    DCHECK(result->empty());
+    int count = static_cast<int>(sig->parameter_count());
+    result->resize(count);
+    for (int i = count - 1; i >= 0; --i) {
+      (*result)[i] = Pop(i, sig->GetParam(i));
     }
   }
 
   ValueType GetReturnType(FunctionSig* sig) {
+    DCHECK_GE(1, sig->return_count());
     return sig->return_count() == 0 ? kWasmStmt : sig->GetReturn();
   }
 
-  void PushBlock(SsaEnv* end_env) {
-    control_.emplace_back(
-        Control::Block(this->pc_, stack_.size(), end_env, current_catch_));
+  Control<Consumer>* PushBlock() {
+    control_.emplace_back(Control<Consumer>::Block(this->pc_, stack_.size()));
+    return &control_.back();
   }
 
-  void PushLoop(SsaEnv* end_env) {
-    control_.emplace_back(
-        Control::Loop(this->pc_, stack_.size(), end_env, current_catch_));
+  Control<Consumer>* PushLoop() {
+    control_.emplace_back(Control<Consumer>::Loop(this->pc_, stack_.size()));
+    return &control_.back();
   }
 
-  void PushIf(SsaEnv* end_env, SsaEnv* false_env) {
-    control_.emplace_back(Control::If(this->pc_, stack_.size(), end_env,
-                                      false_env, current_catch_));
+  Control<Consumer>* PushIf() {
+    control_.emplace_back(Control<Consumer>::If(this->pc_, stack_.size()));
+    return &control_.back();
   }
 
-  void PushTry(SsaEnv* end_env, SsaEnv* catch_env) {
-    control_.emplace_back(Control::Try(this->pc_, stack_.size(), end_env, zone_,
-                                       catch_env, current_catch_));
-    current_catch_ = static_cast<int32_t>(control_.size() - 1);
+  Control<Consumer>* PushTry() {
+    control_.emplace_back(Control<Consumer>::Try(this->pc_, stack_.size()));
+    // current_catch_ = static_cast<int32_t>(control_.size() - 1);
+    return &control_.back();
   }
 
-  void PopControl() { control_.pop_back(); }
+  void PopControl(Control<Consumer>* c) {
+    DCHECK_EQ(c, &control_.back());
+    consumer_.PopControl(this, *c);
+    control_.pop_back();
+  }
 
   int DecodeLoadMem(ValueType type, MachineType mem_type) {
     if (!CheckHasMemory()) return 0;
     MemoryAccessOperand<do_validation> operand(
         this, this->pc_, ElementSizeLog2Of(mem_type.representation()));
 
-    Value index = Pop(0, kWasmI32);
-    TFNode* node = BUILD(LoadMem, type, mem_type, index.node, operand.offset,
-                         operand.alignment, position());
-    Push(type, node);
+    auto index = Pop(0, kWasmI32);
+    auto* result = Push(type);
+    consumer_.LoadMem(this, type, mem_type, operand, index, result);
     return 1 + operand.length;
   }
 
@@ -1547,10 +1503,9 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     if (!CheckHasMemory()) return 0;
     MemoryAccessOperand<do_validation> operand(
         this, this->pc_, ElementSizeLog2Of(mem_type.representation()));
-    Value val = Pop(1, type);
-    Value index = Pop(0, kWasmI32);
-    BUILD(StoreMem, mem_type, index.node, operand.offset, operand.alignment,
-          val.node, position(), type);
+    Value<Consumer> value = Pop(1, type);
+    Value<Consumer> index = Pop(0, kWasmI32);
+    consumer_.StoreMem(this, type, mem_type, operand, index, value);
     return 1 + operand.length;
   }
 
@@ -1559,10 +1514,9 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     MemoryAccessOperand<do_validation> operand(
         this, this->pc_ + 1, ElementSizeLog2Of(mem_type.representation()));
 
-    Value index = Pop(0, kWasmI32);
-    TFNode* node = BUILD(LoadMem, type, mem_type, index.node, operand.offset,
-                         operand.alignment, position());
-    Push(type, node);
+    auto index = Pop(0, kWasmI32);
+    auto* result = Push(type);
+    consumer_.LoadMem(this, type, mem_type, operand, index, result);
     return operand.length;
   }
 
@@ -1570,20 +1524,18 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     if (!CheckHasMemory()) return 0;
     MemoryAccessOperand<do_validation> operand(
         this, this->pc_ + 1, ElementSizeLog2Of(mem_type.representation()));
-    Value val = Pop(1, type);
-    Value index = Pop(0, kWasmI32);
-    BUILD(StoreMem, mem_type, index.node, operand.offset, operand.alignment,
-          val.node, position());
+    Value<Consumer> value = Pop(1, type);
+    Value<Consumer> index = Pop(0, kWasmI32);
+    consumer_.StoreMem(this, type, mem_type, operand, index, value);
     return operand.length;
   }
 
   unsigned SimdExtractLane(WasmOpcode opcode, ValueType type) {
     SimdLaneOperand<do_validation> operand(this, this->pc_);
     if (this->Validate(this->pc_, opcode, operand)) {
-      compiler::NodeVector inputs(1, zone_);
-      inputs[0] = Pop(0, ValueType::kSimd128).node;
-      TFNode* node = BUILD(SimdLaneOp, opcode, operand.lane, inputs);
-      Push(type, node);
+      Value<Consumer> inputs[] = {Pop(0, ValueType::kSimd128)};
+      auto* result = Push(type);
+      consumer_.SimdLaneOp(this, opcode, operand, ArrayVector(inputs), result);
     }
     return operand.length;
   }
@@ -1591,11 +1543,11 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
   unsigned SimdReplaceLane(WasmOpcode opcode, ValueType type) {
     SimdLaneOperand<do_validation> operand(this, this->pc_);
     if (this->Validate(this->pc_, opcode, operand)) {
-      compiler::NodeVector inputs(2, zone_);
-      inputs[1] = Pop(1, type).node;
-      inputs[0] = Pop(0, ValueType::kSimd128).node;
-      TFNode* node = BUILD(SimdLaneOp, opcode, operand.lane, inputs);
-      Push(ValueType::kSimd128, node);
+      Value<Consumer> inputs[2];
+      inputs[1] = Pop(1, type);
+      inputs[0] = Pop(0, ValueType::kSimd128);
+      auto* result = Push(ValueType::kSimd128);
+      consumer_.SimdLaneOp(this, opcode, operand, ArrayVector(inputs), result);
     }
     return operand.length;
   }
@@ -1603,10 +1555,9 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
   unsigned SimdShiftOp(WasmOpcode opcode) {
     SimdShiftOperand<do_validation> operand(this, this->pc_);
     if (this->Validate(this->pc_, opcode, operand)) {
-      compiler::NodeVector inputs(1, zone_);
-      inputs[0] = Pop(0, ValueType::kSimd128).node;
-      TFNode* node = BUILD(SimdShiftOp, opcode, operand.shift, inputs);
-      Push(ValueType::kSimd128, node);
+      auto input = Pop(0, ValueType::kSimd128);
+      auto* result = Push(ValueType::kSimd128);
+      consumer_.SimdShiftOp(this, opcode, operand, input, result);
     }
     return operand.length;
   }
@@ -1614,11 +1565,10 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
   unsigned Simd8x16ShuffleOp() {
     Simd8x16ShuffleOperand<do_validation> operand(this, this->pc_);
     if (this->Validate(this->pc_, operand)) {
-      compiler::NodeVector inputs(2, zone_);
-      inputs[1] = Pop(1, ValueType::kSimd128).node;
-      inputs[0] = Pop(0, ValueType::kSimd128).node;
-      TFNode* node = BUILD(Simd8x16ShuffleOp, operand.shuffle, inputs);
-      Push(ValueType::kSimd128, node);
+      auto input1 = Pop(1, ValueType::kSimd128);
+      auto input0 = Pop(0, ValueType::kSimd128);
+      auto* result = Push(ValueType::kSimd128);
+      consumer_.Simd8x16ShuffleOp(this, operand, input0, input1, result);
     }
     return 16;
   }
@@ -1670,17 +1620,15 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
         break;
       default: {
         FunctionSig* sig = WasmOpcodes::Signature(opcode);
-        if (sig != nullptr) {
-          compiler::NodeVector inputs(sig->parameter_count(), zone_);
-          for (size_t i = sig->parameter_count(); i > 0; i--) {
-            Value val = Pop(static_cast<int>(i - 1), sig->GetParam(i - 1));
-            inputs[i - 1] = val.node;
-          }
-          TFNode* node = BUILD(SimdOp, opcode, inputs);
-          Push(GetReturnType(sig), node);
-        } else {
+        if (check_error(sig == nullptr)) {
           this->error("invalid simd opcode");
+          break;
         }
+        std::vector<Value<Consumer>> args;
+        PopArgs(sig, &args);
+        auto* result =
+            sig->return_count() == 0 ? nullptr : Push(GetReturnType(sig));
+        consumer_.SimdOp(this, opcode, vec2vec(args), result);
       }
     }
     return len;
@@ -1689,27 +1637,27 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
   void BuildAtomicOperator(WasmOpcode opcode) { UNIMPLEMENTED(); }
 
   void DoReturn() {
-    int count = static_cast<int>(this->sig_->return_count());
-    TFNode** buffer = nullptr;
-    if (build()) buffer = builder_->Buffer(count);
+    // TODO(clemensh): Optimize memory usage here (it will be mostly 0 or 1
+    // returned values).
+    int return_count = static_cast<int>(this->sig_->return_count());
+    std::vector<Value<Consumer>> values(return_count);
 
     // Pop return values off the stack in reverse order.
-    for (int i = count - 1; i >= 0; i--) {
-      Value val = Pop(i, this->sig_->GetReturn(i));
-      if (buffer) buffer[i] = val.node;
+    for (int i = return_count - 1; i >= 0; --i) {
+      values[i] = Pop(i, this->sig_->GetReturn(i));
     }
 
-    BUILD(Return, count, buffer);
+    consumer_.DoReturn(this, vec2vec(values));
     EndControl();
   }
 
-  void Push(ValueType type, TFNode* node) {
-    if (type != kWasmStmt) {
-      stack_.push_back({this->pc_, node, type});
-    }
+  inline Value<Consumer>* Push(ValueType type) {
+    DCHECK(type != kWasmStmt);
+    stack_.push_back(Value<Consumer>::New(this->pc_, type));
+    return &stack_.back();
   }
 
-  void PushEndValues(Control* c) {
+  void PushEndValues(Control<Consumer>* c) {
     DCHECK_EQ(c, &control_.back());
     stack_.resize(c->stack_depth);
     if (c->merge.arity == 1) {
@@ -1722,20 +1670,18 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     DCHECK_EQ(c->stack_depth + c->merge.arity, stack_.size());
   }
 
-  void PushReturns(FunctionSig* sig, TFNode** rets) {
-    for (size_t i = 0; i < sig->return_count(); i++) {
-      // When verifying only, then {rets} will be null, so push null.
-      Push(sig->GetReturn(i), rets ? rets[i] : nullptr);
+  Value<Consumer>* PushReturns(FunctionSig* sig) {
+    size_t return_count = sig->return_count();
+    if (return_count == 0) return nullptr;
+    size_t old_size = stack_.size();
+    for (size_t i = 0; i < return_count; ++i) {
+      Push(sig->GetReturn(i));
     }
+    return stack_.data() + old_size;
   }
 
-  const char* SafeOpcodeNameAt(const byte* pc) {
-    if (pc >= this->end_) return "<end>";
-    return WasmOpcodes::OpcodeName(static_cast<WasmOpcode>(*pc));
-  }
-
-  Value Pop(int index, ValueType expected) {
-    Value val = Pop();
+  Value<Consumer> Pop(int index, ValueType expected) {
+    Value<Consumer> val = Pop();
     if (check_error(val.type != expected && val.type != kWasmVar &&
                     expected != kWasmVar)) {
       this->errorf(val.pc, "%s[%d] expected type %s, found %s of type %s",
@@ -1746,118 +1692,492 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     return val;
   }
 
-  Value Pop() {
-    size_t limit = control_.empty() ? 0 : control_.back().stack_depth;
+  Value<Consumer> Pop() {
+    DCHECK(!control_.empty());
+    size_t limit = control_.back().stack_depth;
     if (stack_.size() <= limit) {
       // Popping past the current control start in reachable code.
-      Value val = {this->pc_, nullptr, kWasmVar};
       if (check_error(!control_.back().unreachable)) {
         this->errorf(this->pc_, "%s found empty stack",
                      SafeOpcodeNameAt(this->pc_));
       }
-      return val;
+      return Value<Consumer>::Unreachable(this->pc_);
     }
-    Value val = stack_.back();
+    Value<Consumer> val = stack_.back();
     stack_.pop_back();
     return val;
   }
 
   int startrel(const byte* ptr) { return static_cast<int>(ptr - this->start_); }
 
-  void BreakTo(unsigned depth) {
-    Control* c = &control_[control_.size() - depth - 1];
+  inline Control<Consumer>* GetControl(unsigned depth) {
+    DCHECK_GT(control_.size(), depth);
+    return &control_[control_.size() - depth - 1];
+  }
+
+  bool TypeCheckBreak(unsigned depth) {
+    DCHECK(do_validation);  // Only call this for validation.
+    Control<Consumer>* c = GetControl(depth);
     if (c->is_loop()) {
       // This is the inner loop block, which does not have a value.
-      Goto(ssa_env_, c->end_env);
-    } else {
-      // Merge the value(s) into the end of the block.
-      size_t expected = control_.back().stack_depth + c->merge.arity;
-      if (check_error(stack_.size() < expected &&
-                      !control_.back().unreachable)) {
-        this->errorf(
-            this->pc_,
-            "expected at least %u values on the stack for br to @%d, found %d",
-            c->merge.arity, startrel(c->pc),
-            static_cast<int>(stack_.size() - c->stack_depth));
-        return;
-      }
-      MergeValuesInto(c);
+      return true;
     }
+    size_t expected = control_.back().stack_depth + c->merge.arity;
+    if (stack_.size() < expected && !control_.back().unreachable) {
+      this->errorf(
+          this->pc_,
+          "expected at least %u values on the stack for br to @%d, found %d",
+          c->merge.arity, startrel(c->pc),
+          static_cast<int>(stack_.size() - c->stack_depth));
+      return false;
+    }
+
+    return TypeCheckMergeValues(c);
   }
 
-  void FallThruTo(Control* c) {
+  void FallThruTo(Control<Consumer>* c) {
     DCHECK_EQ(c, &control_.back());
-    // Merge the value(s) into the end of the block.
-    size_t expected = c->stack_depth + c->merge.arity;
-    if (validate(stack_.size() == expected ||
-                 (stack_.size() < expected && c->unreachable))) {
-      MergeValuesInto(c);
-      c->unreachable = false;
-      return;
-    }
-    this->errorf(this->pc_,
-                 "expected %u elements on the stack for fallthru to @%d",
-                 c->merge.arity, startrel(c->pc));
+    TypeCheckFallThru(c);
+    c->unreachable = false;
+
+    consumer_.FallThruTo(this, c);
   }
 
-  inline Value& GetMergeValueFromStack(Control* c, size_t i) {
+  inline const Value<Consumer>& GetMergeValueFromStack(Control<Consumer>* c,
+                                                       size_t i) {
+    DCHECK_GT(c->merge.arity, i);
+    DCHECK_GE(stack_.size(), c->merge.arity);
     return stack_[stack_.size() - c->merge.arity + i];
   }
 
-  void TypeCheckFallThru(Control* c) {
+  bool TypeCheckMergeValues(Control<Consumer>* c) {
+    // Typecheck the values left on the stack.
+    size_t avail = stack_.size() - c->stack_depth;
+    size_t start = avail >= c->merge.arity ? 0 : c->merge.arity - avail;
+    for (size_t i = start; i < c->merge.arity; ++i) {
+      auto& val = GetMergeValueFromStack(c, i);
+      auto& old = c->merge[i];
+      if (val.type != old.type && val.type != kWasmVar) {
+        this->errorf(
+            this->pc_, "type error in merge[%zu] (expected %s, got %s)", i,
+            WasmOpcodes::TypeName(old.type), WasmOpcodes::TypeName(val.type));
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  void TypeCheckFallThru(Control<Consumer>* c) {
+    if (!do_validation) return;
     DCHECK_EQ(c, &control_.back());
     if (!do_validation) return;
     // Fallthru must match arity exactly.
-    int arity = static_cast<int>(c->merge.arity);
-    if (c->stack_depth + arity < stack_.size() ||
-        (c->stack_depth + arity != stack_.size() && !c->unreachable)) {
+    size_t expected = c->stack_depth + c->merge.arity;
+    if (stack_.size() != expected &&
+        (stack_.size() > expected || !c->unreachable)) {
       this->errorf(this->pc_,
-                   "expected %d elements on the stack for fallthru to @%d",
-                   arity, startrel(c->pc));
+                   "expected %u elements on the stack for fallthru to @%d",
+                   c->merge.arity, startrel(c->pc));
       return;
     }
-    // Typecheck the values left on the stack.
-    size_t avail = stack_.size() - c->stack_depth;
-    for (size_t i = avail >= c->merge.arity ? 0 : c->merge.arity - avail;
-         i < c->merge.arity; i++) {
-      Value& val = GetMergeValueFromStack(c, i);
-      Value& old = c->merge[i];
-      if (val.type != old.type) {
-        this->errorf(
-            this->pc_, "type error in merge[%zu] (expected %s, got %s)", i,
-            WasmOpcodes::TypeName(old.type), WasmOpcodes::TypeName(val.type));
-        return;
+
+    TypeCheckMergeValues(c);
+  }
+
+  uint32_t EnvironmentCount() {
+    return static_cast<uint32_t>(local_type_vec_.size());
+  }
+
+  virtual void onFirstError() {
+    this->end_ = this->pc_;  // Terminate decoding loop.
+    TRACE(" !%s\n", this->error_msg_.c_str());
+  }
+
+  inline wasm::WasmCodePosition position() {
+    int offset = static_cast<int>(this->pc_ - this->start_);
+    DCHECK_EQ(this->pc_ - this->start_, offset);  // overflows cannot happen
+    return offset;
+  }
+
+  inline void BuildSimpleOperator(WasmOpcode opcode, FunctionSig* sig) {
+    switch (sig->parameter_count()) {
+      case 1: {
+        Value<Consumer> val = Pop(0, sig->GetParam(0));
+        Value<Consumer>* ret =
+            sig->return_count() == 0 ? nullptr : Push(sig->GetReturn(0));
+        consumer_.UnOp(this, opcode, sig, val, ret);
+        break;
       }
+      case 2: {
+        Value<Consumer> rval = Pop(1, sig->GetParam(1));
+        Value<Consumer> lval = Pop(0, sig->GetParam(0));
+        Value<Consumer>* ret =
+            sig->return_count() == 0 ? nullptr : Push(sig->GetReturn(0));
+        consumer_.BinOp(this, opcode, sig, lval, rval, ret);
+        break;
+      }
+      default:
+        UNREACHABLE();
+    }
+  }
+};
+
+class EmptyConsumer {
+ public:
+  struct CValue {
+    static CValue Unreachable() { return {}; }
+    static CValue New() { return {}; }
+  };
+  struct CControl {
+    static CControl Block() { return {}; }
+    static CControl If() { return {}; }
+    static CControl Loop() { return {}; }
+    static CControl Try() { return {}; }
+  };
+
+#define DEFINE_EMPTY_CALLBACKS(name, ...) \
+  IMPL(name, ##__VA_ARGS__) {}
+  CONSUMER_FUNCTIONS(DEFINE_EMPTY_CALLBACKS)
+#undef DEFINE_EMPTY_CALLBACKS
+};
+
+class WasmGraphBuildingConsumer : public EmptyConsumer {
+ public:
+  struct CValue {
+    TFNode* node;
+
+    static CValue Unreachable() { return {nullptr}; }
+    static CValue New() { return {nullptr}; }
+  };
+
+  struct TryInfo : public ZoneObject {
+    SsaEnv* catch_env;
+    TFNode* exception;
+
+    explicit TryInfo(SsaEnv* c) : catch_env(c), exception(nullptr) {}
+  };
+
+  struct CControl {
+    SsaEnv* end_env;         // end environment for the construct.
+    SsaEnv* false_env;       // false environment (only for if).
+    TryInfo* try_info;       // information used for compiling try statements.
+    int32_t previous_catch;  // previous Control (on the stack) with a catch.
+
+    static CControl Block() { return {}; }
+    static CControl If() { return {}; }
+    static CControl Loop() { return {}; }
+    static CControl Try() { return {}; }
+  };
+
+  explicit WasmGraphBuildingConsumer(TFBuilder* builder) : builder_(builder) {}
+
+  IMPL(StartFunction) {
+    SsaEnv* ssa_env =
+        reinterpret_cast<SsaEnv*>(decoder->zone_->New(sizeof(SsaEnv)));
+    uint32_t env_count = decoder->EnvironmentCount();
+    size_t size = sizeof(TFNode*) * env_count;
+    ssa_env->state = SsaEnv::kReached;
+    ssa_env->locals =
+        size > 0 ? reinterpret_cast<TFNode**>(decoder->zone_->New(size))
+                 : nullptr;
+
+    TFNode* start =
+        builder_->Start(static_cast<int>(decoder->sig_->parameter_count() + 1));
+    // Initialize local variables.
+    uint32_t index = 0;
+    for (; index < decoder->sig_->parameter_count(); ++index) {
+      ssa_env->locals[index] = builder_->Param(index);
+    }
+    while (index < env_count) {
+      ValueType type = decoder->local_type_vec_[index];
+      TFNode* node = DefaultValue(type);
+      while (index < env_count && decoder->local_type_vec_[index] == type) {
+        // Do a whole run of like-typed locals at a time.
+        ssa_env->locals[index++] = node;
+      }
+    }
+    ssa_env->control = start;
+    ssa_env->effect = start;
+    SetEnv(ssa_env);
+  }
+
+  IMPL(FinishFunction) { builder_->PatchInStackCheckIfNeeded(); }
+
+  IMPL(StartFunctionBody, Control<Consumer>* block) {
+    SsaEnv* break_env = ssa_env_;
+    SetEnv(Steal(decoder->zone_, break_env));
+    block->consumer_data.end_env = break_env;
+  }
+
+  IMPL(Unreachable) { BUILD(Unreachable, decoder->position()); }
+
+  IMPL(FallThruTo, Control<Consumer>* c) {
+    MergeValuesInto(decoder, c);
+    SetEnv(c->consumer_data.end_env);
+  }
+
+  IMPL(I32Const, Value<Consumer>* result, int32_t value) {
+    result->consumer_data.node = builder_->Int32Constant(value);
+  }
+
+  IMPL(I64Const, Value<Consumer>* result, int64_t value) {
+    result->consumer_data.node = builder_->Int64Constant(value);
+  }
+
+  IMPL(F32Const, Value<Consumer>* result, float value) {
+    result->consumer_data.node = builder_->Float32Constant(value);
+  }
+
+  IMPL(F64Const, Value<Consumer>* result, double value) {
+    result->consumer_data.node = builder_->Float64Constant(value);
+  }
+
+  IMPL(GetLocal, Value<Consumer>* result,
+       const LocalIndexOperand<do_validation>& operand) {
+    if (!ssa_env_->locals) return;  // unreachable
+    result->consumer_data.node = ssa_env_->locals[operand.index];
+  }
+
+  IMPL(SetLocal, const Value<Consumer>& value,
+       const LocalIndexOperand<do_validation>& operand) {
+    if (!ssa_env_->locals) return;  // unreachable
+    ssa_env_->locals[operand.index] = value.consumer_data.node;
+  }
+
+  IMPL(TeeLocal, const Value<Consumer>& value, Value<Consumer>* result,
+       const LocalIndexOperand<do_validation>& operand) {
+    result->consumer_data.node = value.consumer_data.node;
+    if (!ssa_env_->locals) return;  // unreachable
+    ssa_env_->locals[operand.index] = value.consumer_data.node;
+  }
+
+  IMPL(GetGlobal, Value<Consumer>* result,
+       const GlobalIndexOperand<do_validation>& operand) {
+    result->consumer_data.node = BUILD(GetGlobal, operand.index);
+  }
+
+  IMPL(SetGlobal, const Value<Consumer>& value,
+       const GlobalIndexOperand<do_validation>& operand) {
+    BUILD(SetGlobal, operand.index, value.consumer_data.node);
+  }
+
+  IMPL(UnOp, WasmOpcode opcode, FunctionSig* sig, const Value<Consumer>& value,
+       Value<Consumer>* result) {
+    result->consumer_data.node =
+        BUILD(Unop, opcode, value.consumer_data.node, decoder->position());
+  }
+
+  IMPL(BinOp, WasmOpcode opcode, FunctionSig* sig, const Value<Consumer>& lhs,
+       const Value<Consumer>& rhs, Value<Consumer>* result) {
+    result->consumer_data.node =
+        BUILD(Binop, opcode, lhs.consumer_data.node, rhs.consumer_data.node,
+              decoder->position());
+  }
+
+  IMPL(DoReturn, Vector<Value<Consumer>> values) {
+    size_t num_values = values.size();
+    TFNode** buffer = GetNodes(values);
+    for (size_t i = 0; i < num_values; ++i) {
+      buffer[i] = values[i].consumer_data.node;
+    }
+    BUILD(Return, static_cast<unsigned>(values.size()), buffer);
+  }
+
+  IMPL(If, const Value<Consumer>& cond, Control<Consumer>* if_block) {
+    TFNode* if_true = nullptr;
+    TFNode* if_false = nullptr;
+    BUILD(BranchNoHint, cond.consumer_data.node, &if_true, &if_false);
+    SsaEnv* end_env = ssa_env_;
+    SsaEnv* false_env = Split(decoder, ssa_env_);
+    false_env->control = if_false;
+    SsaEnv* true_env = Steal(decoder->zone_, ssa_env_);
+    true_env->control = if_true;
+    if_block->consumer_data.end_env = end_env;
+    if_block->consumer_data.false_env = false_env;
+    SetEnv(true_env);
+  }
+
+  IMPL(Else, Control<Consumer>* if_block) {
+    SetEnv(if_block->consumer_data.false_env);
+  }
+
+  IMPL(BreakTo, Control<Consumer>* block) {
+    if (block->is_loop()) {
+      Goto(decoder, ssa_env_, block->consumer_data.end_env);
+    } else {
+      MergeValuesInto(decoder, block);
     }
   }
 
-  void MergeValuesInto(Control* c) {
-    SsaEnv* target = c->end_env;
-    bool first = target->state == SsaEnv::kUnreachable;
-    bool reachable = ssa_env_->go();
-    Goto(ssa_env_, target);
-
-    size_t avail = stack_.size() - control_.back().stack_depth;
-    for (size_t i = avail >= c->merge.arity ? 0 : c->merge.arity - avail;
-         i < c->merge.arity; i++) {
-      Value& val = GetMergeValueFromStack(c, i);
-      Value& old = c->merge[i];
-      if (check_error(val.type != old.type && val.type != kWasmVar)) {
-        this->errorf(
-            this->pc_, "type error in merge[%zu] (expected %s, got %s)", i,
-            WasmOpcodes::TypeName(old.type), WasmOpcodes::TypeName(val.type));
-        return;
-      }
-      if (builder_ && reachable) {
-        DCHECK_NOT_NULL(val.node);
-        old.node =
-            first ? val.node : CreateOrMergeIntoPhi(old.type, target->control,
-                                                    old.node, val.node);
-      }
+  IMPL(PopControl, const Control<Consumer>& block) {
+    if (block.is_onearmed_if()) {
+      Goto(decoder, block.consumer_data.false_env, block.consumer_data.end_env);
     }
   }
 
-  void SetEnv(const char* reason, SsaEnv* env) {
+  IMPL(BrIf, const Value<Consumer>& cond, Control<Consumer>* block) {
+    SsaEnv* fenv = ssa_env_;
+    SsaEnv* tenv = Split(decoder, fenv);
+    fenv->SetNotMerged();
+    BUILD(BranchNoHint, cond.consumer_data.node, &tenv->control,
+          &fenv->control);
+    ssa_env_ = tenv;
+    BreakTo(decoder, block);
+    ssa_env_ = fenv;
+  }
+
+  IMPL(EndControl, Control<Consumer>* block) { ssa_env_->Kill(); }
+
+  IMPL(Block, Control<Consumer>* block) {
+    // The break environment is the outer environment.
+    block->consumer_data.end_env = ssa_env_;
+    SetEnv(Steal(decoder->zone_, ssa_env_));
+  }
+
+  IMPL(Loop, Control<Consumer>* block) {
+    SsaEnv* finish_try_env = Steal(decoder->zone_, ssa_env_);
+    block->consumer_data.end_env = finish_try_env;
+    // The continue environment is the inner environment.
+    SetEnv(PrepareForLoop(decoder, finish_try_env));
+    ssa_env_->SetNotMerged();
+  }
+
+  IMPL(LoadMem, ValueType type, MachineType mem_type,
+       const MemoryAccessOperand<do_validation>& operand,
+       const Value<Consumer>& index, Value<Consumer>* result) {
+    result->consumer_data.node =
+        BUILD(LoadMem, type, mem_type, index.consumer_data.node, operand.offset,
+              operand.alignment, decoder->position());
+  }
+
+  IMPL(StoreMem, ValueType type, MachineType mem_type,
+       const MemoryAccessOperand<do_validation>& operand,
+       const Value<Consumer>& index, const Value<Consumer>& value) {
+    BUILD(StoreMem, mem_type, index.consumer_data.node, operand.offset,
+          operand.alignment, value.consumer_data.node, decoder->position());
+  }
+
+  IMPL(GrowMemory, const Value<Consumer>& value, Value<Consumer>* result) {
+    result->consumer_data.node = BUILD(GrowMemory, value.consumer_data.node);
+  }
+
+  IMPL(CurrentMemoryPages, Value<Consumer>* result) {
+    result->consumer_data.node = BUILD(CurrentMemoryPages);
+  }
+
+  IMPL(CallDirect, const CallFunctionOperand<do_validation>& operand,
+       const Value<Consumer> args[], Value<Consumer> returns[]) {
+    DoCall(decoder, nullptr, operand, args, returns, false);
+  }
+
+  IMPL(CallIndirect, const Value<Consumer>& index,
+       const CallIndirectOperand<do_validation>& operand,
+       const Value<Consumer> args[], Value<Consumer> returns[]) {
+    DoCall(decoder, index.consumer_data.node, operand, args, returns, true);
+  }
+
+  IMPL(SimdLaneOp, WasmOpcode opcode,
+       const SimdLaneOperand<do_validation> operand,
+       Vector<Value<Consumer>> inputs, Value<Consumer>* result) {
+    TFNode** nodes = GetNodes(inputs);
+    result->consumer_data.node = BUILD(SimdLaneOp, opcode, operand.lane, nodes);
+  }
+
+  IMPL(SimdShiftOp, WasmOpcode opcode,
+       const SimdShiftOperand<do_validation> operand,
+       const Value<Consumer>& input, Value<Consumer>* result) {
+    TFNode* inputs[] = {input.consumer_data.node};
+    result->consumer_data.node =
+        BUILD(SimdShiftOp, opcode, operand.shift, inputs);
+  }
+
+  IMPL(Simd8x16ShuffleOp, const Simd8x16ShuffleOperand<do_validation>& operand,
+       const Value<Consumer>& input0, const Value<Consumer>& input1,
+       Value<Consumer>* result) {
+    TFNode* input_nodes[] = {input0.consumer_data.node,
+                             input1.consumer_data.node};
+    result->consumer_data.node =
+        BUILD(Simd8x16ShuffleOp, operand.shuffle, input_nodes);
+  }
+
+  IMPL(SimdOp, WasmOpcode opcode, Vector<Value<Consumer>> args,
+       Value<Consumer>* result) {
+    TFNode** inputs = GetNodes(args);
+    TFNode* node = BUILD(SimdOp, opcode, inputs);
+    if (result) result->consumer_data.node = node;
+  }
+
+  IMPL(BrTable, const BranchTableOperand<do_validation>& operand,
+       const Value<Consumer>& key) {
+    SsaEnv* break_env = ssa_env_;
+    // Build branches to the various blocks based on the table.
+    TFNode* sw = BUILD(Switch, operand.table_count + 1, key.consumer_data.node);
+
+    SsaEnv* copy = Steal(decoder->zone_, break_env);
+    ssa_env_ = copy;
+    BranchTableIterator<do_validation> iterator(decoder, operand);
+    while (iterator.has_next()) {
+      uint32_t i = iterator.cur_index();
+      uint32_t target = iterator.next();
+      ssa_env_ = Split(decoder, copy);
+      ssa_env_->control = (i == operand.table_count) ? BUILD(IfDefault, sw)
+                                                     : BUILD(IfValue, i, sw);
+      BreakTo(decoder, decoder->GetControl(target));
+    }
+    DCHECK(decoder->ok());
+    ssa_env_ = break_env;
+  }
+
+  IMPL(Select, const Value<Consumer>& cond, const Value<Consumer>& fval,
+       const Value<Consumer>& tval, Value<Consumer>* result) {
+    TFNode* controls[2];
+    BUILD(BranchNoHint, cond.consumer_data.node, &controls[0], &controls[1]);
+    TFNode* merge = builder_->Merge(2, controls);
+    TFNode* vals[2] = {tval.consumer_data.node, fval.consumer_data.node};
+    TFNode* phi = builder_->Phi(tval.type, 2, vals, merge);
+    result->consumer_data.node = phi;
+    ssa_env_->control = merge;
+  }
+
+  IMPL(Catch, const LocalIndexOperand<do_validation>& operand,
+       Control<Consumer>* block) {
+    DCHECK_NOT_NULL(block->consumer_data.try_info);
+    current_catch_ = block->consumer_data.previous_catch;
+
+    if (!ssa_env_->locals) return;  // unreachable
+
+    TFNode* exception_as_i32 = BUILD(
+        Catch, block->consumer_data.try_info->exception, decoder->position());
+    ssa_env_->locals[operand.index] = exception_as_i32;
+  }
+
+ private:
+  SsaEnv* ssa_env_;
+  TFBuilder* builder_;
+  int32_t current_catch_ = kNullCatch;
+
+  IMPL_RET(bool, build) { return ssa_env_->go() && validate(decoder->ok()); }
+
+  IMPL_RET(TryInfo*, current_try_info) {
+    return decoder->control_[current_catch_].consumer_data.try_info;
+  }
+
+  template <typename Consumer>
+  TFNode** GetNodes(Value<Consumer>* values, size_t count) {
+    TFNode** nodes = builder_->Buffer(count);
+    for (size_t i = 0; i < count; ++i) {
+      nodes[i] = values[i].consumer_data.node;
+    }
+    return nodes;
+  }
+
+  template <typename Consumer>
+  TFNode** GetNodes(Vector<Value<Consumer>> values) {
+    return GetNodes(values.start(), values.size());
+  }
+
+  void SetEnv(SsaEnv* env) {
 #if DEBUG
     if (FLAG_trace_wasm_decoder) {
       char state = 'X';
@@ -1877,8 +2197,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             break;
         }
       }
-      PrintF("{set_env = %p, state = %c, reason = %s", static_cast<void*>(env),
-             state, reason);
+      PrintF("{set_env = %p, state = %c", static_cast<void*>(env), state);
       if (env && env->control) {
         PrintF(", control = ");
         compiler::WasmGraphBuilder::PrintDebugName(env->control);
@@ -1887,13 +2206,11 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     }
 #endif
     ssa_env_ = env;
-    if (builder_) {
-      builder_->set_control_ptr(&env->control);
-      builder_->set_effect_ptr(&env->effect);
-    }
+    builder_->set_control_ptr(&env->control);
+    builder_->set_effect_ptr(&env->effect);
   }
 
-  TFNode* CheckForException(TFNode* node) {
+  IMPL_RET(TFNode*, CheckForException, TFNode* node) {
     if (node == nullptr) {
       return nullptr;
     }
@@ -1910,13 +2227,13 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
       return node;
     }
 
-    SsaEnv* success_env = Steal(ssa_env_);
+    SsaEnv* success_env = Steal(decoder->zone_, ssa_env_);
     success_env->control = if_success;
 
-    SsaEnv* exception_env = Split(success_env);
+    SsaEnv* exception_env = Split(decoder, success_env);
     exception_env->control = if_exception;
-    TryInfo* try_info = current_try_info();
-    Goto(exception_env, try_info->catch_env);
+    TryInfo* try_info = current_try_info(decoder);
+    Goto(decoder, exception_env, try_info->catch_env);
     TFNode* exception = try_info->exception;
     if (exception == nullptr) {
       DCHECK_EQ(SsaEnv::kReached, try_info->catch_env->state);
@@ -1928,11 +2245,53 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
                                try_info->exception, if_exception);
     }
 
-    SetEnv("if_success", success_env);
+    SetEnv(success_env);
     return node;
   }
 
-  void Goto(SsaEnv* from, SsaEnv* to) {
+  TFNode* DefaultValue(ValueType type) {
+    switch (type) {
+      case kWasmI32:
+        return builder_->Int32Constant(0);
+      case kWasmI64:
+        return builder_->Int64Constant(0);
+      case kWasmF32:
+        return builder_->Float32Constant(0);
+      case kWasmF64:
+        return builder_->Float64Constant(0);
+      case kWasmS128:
+        return builder_->S128Zero();
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  IMPL(MergeValuesInto, Control<Consumer>* c) {
+    if (!ssa_env_->go()) return;
+
+    SsaEnv* target = c->consumer_data.end_env;
+    const bool first = target->state == SsaEnv::kUnreachable;
+    Goto(decoder, ssa_env_, target);
+
+    size_t avail =
+        decoder->stack_.size() - decoder->control_.back().stack_depth;
+    size_t start = avail >= c->merge.arity ? 0 : c->merge.arity - avail;
+    for (size_t i = start; i < c->merge.arity; ++i) {
+      auto& val = decoder->GetMergeValueFromStack(c, i);
+      auto& old = c->merge[i];
+      DCHECK_NOT_NULL(val.consumer_data.node);
+      // TODO(clemensh): Remove first.
+      DCHECK_EQ(first, old.consumer_data.node == nullptr);
+      DCHECK(val.type == old.type || val.type == kWasmVar);
+      old.consumer_data.node =
+          first ? val.consumer_data.node
+                : CreateOrMergeIntoPhi(old.type, target->control,
+                                       old.consumer_data.node,
+                                       val.consumer_data.node);
+    }
+  }
+
+  IMPL(Goto, SsaEnv* from, SsaEnv* to) {
     DCHECK_NOT_NULL(to);
     if (!from->go()) return;
     switch (to->state) {
@@ -1945,7 +2304,6 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
       }
       case SsaEnv::kReached: {  // Create a new merge.
         to->state = SsaEnv::kMerged;
-        if (!builder_) break;
         // Merge control.
         TFNode* controls[] = {to->control, from->control};
         TFNode* merge = builder_->Merge(2, controls);
@@ -1956,18 +2314,18 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           to->effect = builder_->EffectPhi(2, effects, merge);
         }
         // Merge SSA values.
-        for (int i = EnvironmentCount() - 1; i >= 0; i--) {
+        for (int i = decoder->EnvironmentCount() - 1; i >= 0; i--) {
           TFNode* a = to->locals[i];
           TFNode* b = from->locals[i];
           if (a != b) {
             TFNode* vals[] = {a, b};
-            to->locals[i] = builder_->Phi(local_type_vec_[i], 2, vals, merge);
+            to->locals[i] =
+                builder_->Phi(decoder->local_type_vec_[i], 2, vals, merge);
           }
         }
         break;
       }
       case SsaEnv::kMerged: {
-        if (!builder_) break;
         TFNode* merge = to->control;
         // Extend the existing merge.
         builder_->AppendToMerge(merge, from->control);
@@ -1984,7 +2342,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
           to->effect = builder_->EffectPhi(count, effects, merge);
         }
         // Merge locals.
-        for (int i = EnvironmentCount() - 1; i >= 0; i--) {
+        for (int i = decoder->EnvironmentCount() - 1; i >= 0; i--) {
           TFNode* tnode = to->locals[i];
           TFNode* fnode = from->locals[i];
           if (builder_->IsPhiWithMerge(tnode, merge)) {
@@ -1997,7 +2355,7 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
             }
             vals[count - 1] = fnode;
             to->locals[i] =
-                builder_->Phi(local_type_vec_[i], count, vals, merge);
+                builder_->Phi(decoder->local_type_vec_[i], count, vals, merge);
           }
         }
         break;
@@ -2010,7 +2368,6 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
 
   TFNode* CreateOrMergeIntoPhi(ValueType type, TFNode* merge, TFNode* tnode,
                                TFNode* fnode) {
-    DCHECK_NOT_NULL(builder_);
     if (builder_->IsPhiWithMerge(tnode, merge)) {
       builder_->AppendToPhi(tnode, fnode);
     } else if (tnode != fnode) {
@@ -2023,54 +2380,56 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     return tnode;
   }
 
-  SsaEnv* PrepareForLoop(const byte* pc, SsaEnv* env) {
-    if (!builder_) return Split(env);
-    if (!env->go()) return Split(env);
+  IMPL_RET(SsaEnv*, PrepareForLoop, SsaEnv* env) {
+    if (!env->go()) return Split(decoder, env);
     env->state = SsaEnv::kMerged;
 
     env->control = builder_->Loop(env->control);
     env->effect = builder_->EffectPhi(1, &env->effect, env->control);
     builder_->Terminate(env->effect, env->control);
-    BitVector* assigned = this->AnalyzeLoopAssignment(
-        this, pc, static_cast<int>(this->total_locals()), zone_);
-    if (this->failed()) return env;
+    BitVector* assigned = WasmDecoder<do_validation>::AnalyzeLoopAssignment(
+        decoder, decoder->pc_, static_cast<int>(decoder->total_locals()),
+        decoder->zone_);
+    if (decoder->failed()) return env;
     if (assigned != nullptr) {
       // Only introduce phis for variables assigned in this loop.
-      for (int i = EnvironmentCount() - 1; i >= 0; i--) {
+      for (int i = decoder->EnvironmentCount() - 1; i >= 0; i--) {
         if (!assigned->Contains(i)) continue;
-        env->locals[i] =
-            builder_->Phi(local_type_vec_[i], 1, &env->locals[i], env->control);
+        env->locals[i] = builder_->Phi(decoder->local_type_vec_[i], 1,
+                                       &env->locals[i], env->control);
       }
-      SsaEnv* loop_body_env = Split(env);
-      builder_->StackCheck(position(), &(loop_body_env->effect),
+      SsaEnv* loop_body_env = Split(decoder, env);
+      builder_->StackCheck(decoder->position(), &(loop_body_env->effect),
                            &(loop_body_env->control));
       return loop_body_env;
     }
 
     // Conservatively introduce phis for all local variables.
-    for (int i = EnvironmentCount() - 1; i >= 0; i--) {
-      env->locals[i] =
-          builder_->Phi(local_type_vec_[i], 1, &env->locals[i], env->control);
+    for (int i = decoder->EnvironmentCount() - 1; i >= 0; i--) {
+      env->locals[i] = builder_->Phi(decoder->local_type_vec_[i], 1,
+                                     &env->locals[i], env->control);
     }
 
-    SsaEnv* loop_body_env = Split(env);
-    builder_->StackCheck(position(), &(loop_body_env->effect),
-                         &(loop_body_env->control));
+    SsaEnv* loop_body_env = Split(decoder, env);
+    builder_->StackCheck(decoder->position(), &loop_body_env->effect,
+                         &loop_body_env->control);
     return loop_body_env;
   }
 
   // Create a complete copy of the {from}.
-  SsaEnv* Split(SsaEnv* from) {
+  IMPL_RET(SsaEnv*, Split, SsaEnv* from) {
     DCHECK_NOT_NULL(from);
-    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone_->New(sizeof(SsaEnv)));
-    size_t size = sizeof(TFNode*) * EnvironmentCount();
+    SsaEnv* result =
+        reinterpret_cast<SsaEnv*>(decoder->zone_->New(sizeof(SsaEnv)));
+    size_t size = sizeof(TFNode*) * decoder->EnvironmentCount();
     result->control = from->control;
     result->effect = from->effect;
 
     if (from->go()) {
       result->state = SsaEnv::kReached;
       result->locals =
-          size > 0 ? reinterpret_cast<TFNode**>(zone_->New(size)) : nullptr;
+          size > 0 ? reinterpret_cast<TFNode**>(decoder->zone_->New(size))
+                   : nullptr;
       memcpy(result->locals, from->locals, size);
     } else {
       result->state = SsaEnv::kUnreachable;
@@ -2082,10 +2441,10 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
 
   // Create a copy of {from} that steals its state and leaves {from}
   // unreachable.
-  SsaEnv* Steal(SsaEnv* from) {
+  SsaEnv* Steal(Zone* zone, SsaEnv* from) {
     DCHECK_NOT_NULL(from);
-    if (!from->go()) return UnreachableEnv();
-    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone_->New(sizeof(SsaEnv)));
+    if (!from->go()) return UnreachableEnv(zone);
+    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone->New(sizeof(SsaEnv)));
     result->state = SsaEnv::kReached;
     result->locals = from->locals;
     result->control = from->control;
@@ -2095,8 +2454,8 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
   }
 
   // Create an unreachable environment.
-  SsaEnv* UnreachableEnv() {
-    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone_->New(sizeof(SsaEnv)));
+  SsaEnv* UnreachableEnv(Zone* zone) {
+    SsaEnv* result = reinterpret_cast<SsaEnv*>(zone->New(sizeof(SsaEnv)));
     result->state = SsaEnv::kUnreachable;
     result->control = nullptr;
     result->effect = nullptr;
@@ -2104,45 +2463,35 @@ class WasmFullDecoder : public WasmDecoder<do_validation> {
     return result;
   }
 
-  int EnvironmentCount() {
-    if (builder_) return static_cast<int>(local_type_vec_.size());
-    return 0;  // if we aren't building a graph, don't bother with SSA renaming.
-  }
-
-  virtual void onFirstError() {
-    this->end_ = this->pc_;  // Terminate decoding loop.
-    builder_ = nullptr;  // Don't build any more nodes.
-    TRACE(" !%s\n", this->error_msg_.c_str());
-  }
-
-  inline wasm::WasmCodePosition position() {
-    int offset = static_cast<int>(this->pc_ - this->start_);
-    DCHECK_EQ(this->pc_ - this->start_, offset);  // overflows cannot happen
-    return offset;
-  }
-
-  inline void BuildSimpleOperator(WasmOpcode opcode, FunctionSig* sig) {
-    TFNode* node;
-    switch (sig->parameter_count()) {
-      case 1: {
-        Value val = Pop(0, sig->GetParam(0));
-        node = BUILD(Unop, opcode, val.node, position());
-        break;
-      }
-      case 2: {
-        Value rval = Pop(1, sig->GetParam(1));
-        Value lval = Pop(0, sig->GetParam(0));
-        node = BUILD(Binop, opcode, lval.node, rval.node, position());
-        break;
-      }
-      default:
-        UNREACHABLE();
-        node = nullptr;
-        break;
+  template <bool do_validation, typename Operand>
+  void DoCall(
+      WasmFullDecoder<do_validation, WasmGraphBuildingConsumer>* decoder,
+      TFNode* index_node, const Operand& operand,
+      const Value<WasmGraphBuildingConsumer> args[],
+      Value<WasmGraphBuildingConsumer> returns[], bool is_indirect) {
+    if (!build(decoder)) return;
+    int param_count = static_cast<int>(operand.sig->parameter_count());
+    TFNode** arg_nodes = builder_->Buffer(param_count + 1);
+    TFNode** return_nodes = nullptr;
+    arg_nodes[0] = index_node;
+    for (int i = 0; i < param_count; ++i) {
+      arg_nodes[i + 1] = args[i].consumer_data.node;
     }
-    Push(GetReturnType(sig), node);
+    if (is_indirect) {
+      builder_->CallIndirect(operand.index, arg_nodes, &return_nodes,
+                             decoder->position());
+    } else {
+      builder_->CallDirect(operand.index, arg_nodes, &return_nodes,
+                           decoder->position());
+    }
+    int return_count = static_cast<int>(operand.sig->return_count());
+    for (int i = 0; i < return_count; ++i) {
+      returns[i].consumer_data.node = return_nodes[i];
+    }
   }
 };
+
+}  // namespace
 
 bool DecodeLocalDecls(BodyLocalDecls* decls, const byte* start,
                       const byte* end) {
@@ -2170,7 +2519,7 @@ DecodeResult VerifyWasmCode(AccountingAllocator* allocator,
                             const wasm::WasmModule* module,
                             FunctionBody& body) {
   Zone zone(allocator, ZONE_NAME);
-  WasmFullDecoder<true> decoder(&zone, module, body);
+  WasmFullDecoder<true, EmptyConsumer> decoder(&zone, module, body, {});
   decoder.Decode();
   return decoder.toResult(nullptr);
 }
@@ -2178,7 +2527,10 @@ DecodeResult VerifyWasmCode(AccountingAllocator* allocator,
 DecodeResult BuildTFGraph(AccountingAllocator* allocator, TFBuilder* builder,
                           FunctionBody& body) {
   Zone zone(allocator, ZONE_NAME);
-  WasmFullDecoder<true> decoder(&zone, builder, body);
+  const wasm::WasmModule* module =
+      builder->module_env() ? builder->module_env()->module : nullptr;
+  WasmFullDecoder<true, WasmGraphBuildingConsumer> decoder(
+      &zone, module, body, WasmGraphBuildingConsumer(builder));
   decoder.Decode();
   return decoder.toResult(nullptr);
 }
@@ -2219,7 +2571,7 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
                       const wasm::WasmModule* module) {
   OFStream os(stdout);
   Zone zone(allocator, ZONE_NAME);
-  WasmFullDecoder<false> decoder(&zone, module, body);
+  WasmDecoder<false> decoder(module, body.sig, body.start, body.end);
   int line_nr = 0;
 
   // Print the function signature.
