@@ -22,6 +22,30 @@
       "revId": "5b747b689f7b05a7148e29bd3132c2727739e5bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b61a01d7_10fcef4d",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T10:35:59Z",
+      "side": 1,
+      "message": "That takes different code-paths since the bytecode generator will not generate code for known dead branch (e.g. no then-branch if cond is constant false). I guess this is not the main point of these tests though so I\u0027m fine with changing it.",
+      "parentUuid": "afbc50a3_df8d4c3c",
+      "range": {
+        "startLine": 528,
+        "startChar": 2,
+        "endLine": 528,
+        "endChar": 0
+      },
+      "revId": "5b747b689f7b05a7148e29bd3132c2727739e5bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
