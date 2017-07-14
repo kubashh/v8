@@ -1450,6 +1450,7 @@
         'wasm/wasm-result.h',
         'wasm/wasm-text.cc',
         'wasm/wasm-text.h',
+        'wasm/wasm-value.h',
         'zone/accounting-allocator.cc',
         'zone/accounting-allocator.h',
         'zone/zone-segment.cc',
