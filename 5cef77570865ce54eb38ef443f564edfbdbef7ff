@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "18d26f13_290ce797",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T08:31:43Z",
+      "side": 1,
+      "message": "Nit: Missing git-cl format?",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ea133ff_aa4bf888",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 4
@@ -19,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "968adbf2_ee649b36",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T08:31:43Z",
+      "side": 1,
+      "message": "+1. And we could also skip the `WordEqual(promise_fun, receiver)` comparisons since `receiver` is guaranteed to be the PROMISE_FUNCTION on the stub call.",
+      "parentUuid": "3ea133ff_aa4bf888",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd0ab5fa_b3758cab",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 4
@@ -30,6 +65,24 @@
       "writtenOn": "2017-07-14T05:12:57Z",
       "side": 1,
       "message": "Why not just call the stub version here? TF can inline this or replace with the direct stub call, so performance shouldn\u0027t suffer too badly. That said, if it seems worthwhile to duplicate, I don\u0027t have a problem with the 2 versions.",
+      "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "033deae4_56ecd50d",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-14T08:31:43Z",
+      "side": 1,
+      "message": "Just fyi:\n\n$ out/release/d8 --print-builtin-size -e \"\" | grep PromiseResolve:\nPromiseResolve: 7540\n\n+1 on \u0027duplicate if worthwhile\u0027.",
+      "parentUuid": "cd0ab5fa_b3758cab",
       "revId": "5cef77570865ce54eb38ef443f564edfbdbef7ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
