@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "b3087370_7d027953",
+        "filename": "src/wasm/wasm-value.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-14T13:15:49Z",
+      "side": 1,
+      "message": "It\u0027s used in the WasmValue below. Should I inline it for now, and undo that later?",
+      "parentUuid": "69dc9320_918108ce",
+      "revId": "6210d4a11ffe712dcd4c3ecb2c5e6fce198ae493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87d65cf4_4c1d9184",
         "filename": "src/wasm/wasm-value.h",
         "patchSetId": 1
