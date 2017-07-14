@@ -247,6 +247,7 @@ namespace internal {
   TFH(StoreICStrict_Uninitialized, BUILTIN, kNoExtraICState, StoreWithVector)  \
                                                                                \
   TFS(ResolveNativePromise, kPromise, kValue)                                  \
+    TFS(CreateAndResolvePromise, kConstructor, kValue)                   \
   TFS(RejectNativePromise, kPromise, kValue, kDebugEvent)                      \
   TFS(PerformNativePromiseThen, kPromise, kResolveReaction, kRejectReaction,   \
       kResultPromise)                                                          \

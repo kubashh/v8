@@ -1390,23 +1390,22 @@ TF_BUILTIN(PromiseCatch, PromiseBuiltinsAssembler) {
   }
 }
 
-TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
-  //  1. Let C be the this value.
-  Node* receiver = Parameter(Descriptor::kReceiver);
-  Node* value = Parameter(Descriptor::kValue);
-  Node* context = Parameter(Descriptor::kContext);
-  Isolate* isolate = this->isolate();
-
+Node* PromiseBuiltinsAssembler::CreateAndResolvePromise(Node* context,
+                                                        Node* receiver,
+                                                        Node* value) {
   // 2. If Type(C) is not Object, throw a TypeError exception.
   ThrowIfNotJSReceiver(context, receiver, MessageTemplate::kCalledOnNonObject,
                        "PromiseResolve");
 
+  Isolate* isolate = this->isolate();
   Node* const native_context = LoadNativeContext(context);
   Node* const promise_fun =
       LoadContextElement(native_context, Context::PROMISE_FUNCTION_INDEX);
 
   Label if_valueisnativepromise(this), if_valueisnotnativepromise(this),
-      if_valueisnotpromise(this);
+      if_valueisnotpromise(this), done(this);
+
+  VARIABLE(var_result, MachineRepresentation::kTagged);
 
   // 3.If IsPromise(x) is true, then
   GotoIf(TaggedIsSmi(value), &if_valueisnotpromise);
@@ -1422,7 +1421,8 @@ TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
   BIND(&if_valueisnativepromise);
   {
     GotoIfNot(WordEqual(promise_fun, receiver), &if_valueisnotnativepromise);
-    Return(value);
+    var_result.Bind(value);
+    Goto(&done);
   }
 
   // At this point, value or/and receiver are not native promises, but
@@ -1437,7 +1437,8 @@ TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
     // 3.b If SameValue(xConstructor, C) is true, return x.
     GotoIfNot(SameValue(constructor, receiver), &if_valueisnotpromise);
 
-    Return(value);
+    var_result.Bind(value);
+    Goto(&done);
   }
 
   BIND(&if_valueisnotpromise);
@@ -1452,7 +1453,8 @@ TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
     {
       Node* const result = AllocateAndInitJSPromise(context);
       InternalResolvePromise(context, result, value);
-      Return(result);
+      var_result.Bind(result);
+      Goto(&done);
     }
 
     BIND(&if_notnativepromise);
@@ -1469,9 +1471,30 @@ TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
       // 6. Return promiseCapability.[[Promise]].
       Node* const result =
           LoadObjectField(capability, JSPromiseCapability::kPromiseOffset);
-      Return(result);
+      var_result.Bind(result);
+      Goto(&done);
     }
   }
+
+  BIND(&done);
+  return var_result.value();
+}
+
+TF_BUILTIN(PromiseResolve, PromiseBuiltinsAssembler) {
+  //  1. Let C be the this value.
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* value = Parameter(Descriptor::kValue);
+  Node* context = Parameter(Descriptor::kContext);
+  Node* result = CreateAndResolvePromise(context, receiver, value);
+  Return(result);
+}
+
+TF_BUILTIN(CreateAndResolvePromise, PromiseBuiltinsAssembler) {
+  Node* constructor = Parameter(Descriptor::kConstructor);
+  Node* value = Parameter(Descriptor::kValue);
+  Node* context = Parameter(Descriptor::kContext);
+  Node* result = CreateAndResolvePromise(context, constructor, value);
+  Return(result);
 }
 
 // ES6 #sec-getcapabilitiesexecutor-functions
@@ -1837,9 +1860,11 @@ Node* PromiseBuiltinsAssembler::PerformPromiseAll(
                                              IntPtrConstant(0), SmiConstant(0));
   Node* const remaining_elements = AllocateSmiCell(1);
 
+  VARIABLE(var_next_promise, MachineRepresentation::kTagged,
+           UndefinedConstant());
   VARIABLE(var_index, MachineRepresentation::kTagged, SmiConstant(0));
-
-  Label loop(this, &var_index), break_loop(this);
+  Variable* loop_vars[] = {&var_next_promise, &var_index};
+  Label loop(this, 2, loop_vars), break_loop(this);
   Goto(&loop);
   BIND(&loop);
   {
@@ -1860,14 +1885,32 @@ Node* PromiseBuiltinsAssembler::PerformPromiseAll(
         context, next, fast_iterator_result_map, if_exception, var_exception);
 
     // Let nextPromise be ? Invoke(constructor, "resolve", « nextValue »).
-    Node* const promise_resolve =
-        GetProperty(context, constructor, factory()->resolve_string());
-    GotoIfException(promise_resolve, &close_iterator, var_exception);
+    Label if_native(this), if_not_native(this), create_resolve_element(this);
+    BranchIfFastPath(context, constructor, &if_native, &if_not_native);
 
-    Node* const next_promise = CallJS(CodeFactory::Call(isolate()), context,
-                                      promise_resolve, constructor, next_value);
-    GotoIfException(next_promise, &close_iterator, var_exception);
+    BIND(&if_native);
+    {
+      Node* const next_promise = CallBuiltin(Builtins::kCreateAndResolvePromise,
+                                             context, constructor, next_value);
+      var_next_promise.Bind(next_promise);
+      Goto(&create_resolve_element);
+    }
 
+    BIND(&if_not_native);
+    {
+      Node* const promise_resolve =
+          GetProperty(context, constructor, factory()->resolve_string());
+      GotoIfException(promise_resolve, &close_iterator, var_exception);
+
+      Node* const next_promise =
+          CallJS(CodeFactory::Call(isolate()), context, promise_resolve,
+                 constructor, next_value);
+      var_next_promise.Bind(next_promise);
+      GotoIfException(next_promise, &close_iterator, var_exception);
+      Goto(&create_resolve_element);
+    }
+
+    BIND(&create_resolve_element);
     // Let resolveElement be a new built-in function object as defined in
     // Promise.all Resolve Element Functions.
     Node* const resolve_context =
@@ -1911,13 +1954,14 @@ Node* PromiseBuiltinsAssembler::PerformPromiseAll(
 
     // Perform ? Invoke(nextPromise, "then", « resolveElement,
     //                  resultCapability.[[Reject]] »).
-    Node* const then =
-        GetProperty(context, next_promise, factory()->then_string());
+    Node* const then = GetProperty(context, var_next_promise.value(),
+                                   factory()->then_string());
     GotoIfException(then, &close_iterator, var_exception);
 
-    Node* const then_call = CallJS(
-        CodeFactory::Call(isolate()), context, then, next_promise, resolve,
-        LoadObjectField(capability, JSPromiseCapability::kRejectOffset));
+    Node* const then_call =
+        CallJS(CodeFactory::Call(isolate()), context, then,
+               var_next_promise.value(), resolve,
+               LoadObjectField(capability, JSPromiseCapability::kRejectOffset));
     GotoIfException(then_call, &close_iterator, var_exception);
 
     // For catch prediction, mark that rejections here are semantically
