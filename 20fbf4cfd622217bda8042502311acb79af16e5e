@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3129fd3_38d067bb",
+        "filename": "src/compiler/js-builtin-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1002541
+      },
+      "writtenOn": "2017-07-15T17:08:43Z",
+      "side": 1,
+      "message": "I suspect this causes the problem when running tools/run-tests.py --gn mjsunit/regress/regress-crbug-407946, where \"v8::internal::compiler::Truncation::Generalize\" reports \"Tried to combine incompatible truncations\". Last time I checked the conflicting types [1] this was kWord64 vs.\nkAny.\n\nAny ideas about how to control the type of |length|?\n\n[1] https://codereview.chromium.org/2757853002/diff/200001/src/compiler/js-builtin-reducer.cc#newcode1254",
+      "range": {
+        "startLine": 1259,
+        "startChar": 2,
+        "endLine": 1260,
+        "endChar": 59
+      },
+      "revId": "20fbf4cfd622217bda8042502311acb79af16e5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
