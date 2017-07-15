@@ -61,6 +61,7 @@ class V8_EXPORT_PRIVATE JSBuiltinReducer final
   Reduction ReduceArrayPop(Node* node);
   Reduction ReduceArrayPush(Node* node);
   Reduction ReduceArrayShift(Node* node);
+  Reduction ReduceArrayIndexOf(Node* node);
   Reduction ReduceDateNow(Node* node);
   Reduction ReduceDateGetTime(Node* node);
   Reduction ReduceFunctionBind(Node* node);

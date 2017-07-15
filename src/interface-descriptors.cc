@@ -652,6 +652,36 @@ void ArrayNArgumentsConstructorDescriptor::InitializePlatformIndependent(
                                       machine_types);
 }
 
+void ArrayIncludesDescriptor::InitializePlatformIndependent(
+    CallInterfaceDescriptorData* data) {
+  // kElements, kSearchElement, kLength, kFromIndex
+  MachineType machine_types[] = {MachineType::AnyTagged(),
+                                 MachineType::AnyTagged(),
+                                 MachineType::IntPtr(), MachineType::IntPtr()};
+  data->InitializePlatformIndependent(arraysize(machine_types), 0,
+                                      machine_types);
+}
+
+void ArrayIncludesDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
+void ArrayIndexOfDescriptor::InitializePlatformIndependent(
+    CallInterfaceDescriptorData* data) {
+  // kElements, kSearchElement, kLength, kFromIndex
+  MachineType machine_types[] = {MachineType::AnyTagged(),
+                                 MachineType::AnyTagged(),
+                                 MachineType::IntPtr(), MachineType::IntPtr()};
+  data->InitializePlatformIndependent(arraysize(machine_types), 0,
+                                      machine_types);
+}
+
+void ArrayIndexOfDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  DefaultInitializePlatformSpecific(data, kParameterCount);
+}
+
 void ArgumentAdaptorDescriptor::InitializePlatformIndependent(
     CallInterfaceDescriptorData* data) {
   // kFunction, kNewTarget, kActualArgumentsCount, kExpectedArgumentsCount
