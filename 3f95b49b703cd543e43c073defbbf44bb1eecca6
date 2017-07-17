@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3224990_80bbaf82",
+        "filename": "src/codegen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-17T10:44:05Z",
+      "side": 0,
+      "message": "I figure this is not worth fixing with FCG going away soon.",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 63
+      },
+      "revId": "3f95b49b703cd543e43c073defbbf44bb1eecca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f23174e0_de0ffa22",
+        "filename": "src/compilation-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-17T10:44:05Z",
+      "side": 0,
+      "message": "This should never trigger since we compile before optimizing and code-aging is no longer enabled.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 48
+      },
+      "revId": "3f95b49b703cd543e43c073defbbf44bb1eecca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
