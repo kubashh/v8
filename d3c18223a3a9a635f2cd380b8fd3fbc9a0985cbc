@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "970eaf21_69915a21",
+        "filename": "src/heap/local-allocator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-07-17T09:43:37Z",
+      "side": 1,
+      "message": "We do the same thing for the full MC. Essentially, this keeps the heap compact when only run with a single task.",
+      "range": {
+        "startLine": 30,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "d3c18223a3a9a635f2cd380b8fd3fbc9a0985cbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
