@@ -75,7 +75,8 @@ class V8_EXPORT V8ContextInfo {
       : context(context),
         contextGroupId(contextGroupId),
         humanReadableName(humanReadableName),
-        hasMemoryOnConsole(false) {}
+        hasMemoryOnConsole(false),
+        destroyedWhenCollected(false) {}
 
   v8::Local<v8::Context> context;
   // Each v8::Context is a part of a group. The group id must be non-zero.
@@ -84,6 +85,9 @@ class V8_EXPORT V8ContextInfo {
   StringView origin;
   StringView auxData;
   bool hasMemoryOnConsole;
+  // If this flag is true, we won't store hard reference to context in inspector
+  // and will call contextDestroyed on inspector side.
+  bool destroyedWhenCollected;
 
   static int executionContextId(v8::Local<v8::Context> context);
 
