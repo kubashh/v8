@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacb5202_47a3d393",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-17T11:12:38Z",
+      "side": 1,
+      "message": "I think this only identifies \"asm.js functions\" but not necessarily \"asm.js modules\". Does this correctly identify cases where we request unoptimized code for an asm.js module and compilation is the delegated to the asm.js-to-WebAssembly translation?",
+      "range": {
+        "startLine": 544,
+        "startChar": 8,
+        "endLine": 544,
+        "endChar": 28
+      },
+      "revId": "484e419093322a7beca13ced6fd55a63fad602d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
