@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5788ed93_12781cce",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-07-17T08:41:02Z",
+      "side": 1,
+      "message": "LABs unlink pages from OLD_SPACE, so we cannot use RememberedSet\u003c\u003e::Iterate() anymore.\n\nThe plan is to use ItemParallelJob anyways which will, similarly to this approach, iterate the pages before kicking off the actual work.",
+      "range": {
+        "startLine": 1740,
+        "startChar": 28,
+        "endLine": 1740,
+        "endChar": 33
+      },
+      "revId": "51156ef55ae1e26abe0348f1745cb7ed3337a87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
