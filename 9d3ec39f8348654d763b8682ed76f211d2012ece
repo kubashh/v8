@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dc1b0ef_b57521d1",
+        "filename": "src/wasm/wasm-value.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-07-17T16:28:33Z",
+      "side": 1,
+      "message": "Why not just static_assert(false, ...)",
+      "revId": "9d3ec39f8348654d763b8682ed76f211d2012ece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
