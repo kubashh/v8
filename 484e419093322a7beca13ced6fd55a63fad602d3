@@ -22,6 +22,30 @@
       "revId": "484e419093322a7beca13ced6fd55a63fad602d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03debf61_6af3c523",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-17T15:02:13Z",
+      "side": 1,
+      "message": "It doesn\u0027t identify cases where asm-to-wasm translation occur, however this is kindof by design - AFAICT asm-wasm doesn\u0027t need the EnsureSharedFunctionInfosArrayOnScript to be called early (it doesn\u0027t call GetSharedFunctionInfo itself), so the only case we need it early is if the asm_wasm convertion fails and we fallthrough to full-codegen. However, we are only going to fall through to FCG for \"asm.js functions\" that pass ShouldUseFullcodegen(), the \"asm.js modules\" will still be compiled with Ignition and so this should be safe. WDYT, am I missing something?",
+      "parentUuid": "bacb5202_47a3d393",
+      "range": {
+        "startLine": 544,
+        "startChar": 8,
+        "endLine": 544,
+        "endChar": 28
+      },
+      "revId": "484e419093322a7beca13ced6fd55a63fad602d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
