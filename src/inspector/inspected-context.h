@@ -47,6 +47,18 @@ class InspectedContext {
   friend class V8InspectorImpl;
   InspectedContext(V8InspectorImpl*, const V8ContextInfo&, int contextId);
 
+  struct WeakCallbackData {
+    InspectedContext* context;
+    V8InspectorImpl* inspector;
+    int groupId;
+    int contextId;
+    WeakCallbackData(InspectedContext* context, V8InspectorImpl* inspector,
+                     int groupId, int contextId);
+  };
+  static void resetContext(const v8::WeakCallbackInfo<WeakCallbackData>& data);
+  static void callConsoleDestroyed(
+      const v8::WeakCallbackInfo<WeakCallbackData>& data);
+
   V8InspectorImpl* m_inspector;
   v8::Global<v8::Context> m_context;
   int m_contextId;
