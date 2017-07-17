@@ -1183,6 +1183,15 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
   }
 }
 
+TF_BUILTIN(ArrayClone, ArrayBuiltinCodeStubAssembler) {
+#if 0
+  Node* context = Parameter(Descriptor::kContext);
+  Node* array = Parameter(Descriptor::kSource);
+  AllocateJSArray(PACKED_SMI_ELEMENTS, array_map, len, len, nullptr,
+                  CodeStubAssembler::SMI_PARAMETERS));
+#endif
+}
+
 TF_BUILTIN(ArrayForEachLoopContinuation, ArrayBuiltinCodeStubAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* receiver = Parameter(Descriptor::kReceiver);
