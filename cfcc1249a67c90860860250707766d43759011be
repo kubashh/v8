@@ -16,6 +16,24 @@
       "revId": "cfcc1249a67c90860860250707766d43759011be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da996837_a00fe667",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-17T09:40:27Z",
+      "side": 1,
+      "message": "clarified offline.",
+      "parentUuid": "fa11edca_fd55eb9a",
+      "revId": "cfcc1249a67c90860860250707766d43759011be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
