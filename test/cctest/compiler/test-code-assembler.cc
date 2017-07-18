@@ -50,10 +50,8 @@ TEST(SimpleSmiReturn) {
   CodeAssemblerTester data(isolate);
   CodeAssembler m(data.state());
   m.Return(SmiTag(m, m.Int32Constant(37)));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(37, Handle<Smi>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(37, ft.CallChecked<Smi>()->value());
 }
 
 TEST(SimpleIntPtrReturn) {
@@ -63,8 +61,7 @@ TEST(SimpleIntPtrReturn) {
   int test;
   m.Return(m.BitcastWordToTagged(
       m.IntPtrConstant(reinterpret_cast<intptr_t>(&test))));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
+  FunctionTester ft(data.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(reinterpret_cast<intptr_t>(&test),
            reinterpret_cast<intptr_t>(*result.ToHandleChecked()));
@@ -75,10 +72,8 @@ TEST(SimpleDoubleReturn) {
   CodeAssemblerTester data(isolate);
   CodeAssembler m(data.state());
   m.Return(m.NumberConstant(0.5));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(0.5, Handle<HeapNumber>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(0.5, ft.CallChecked<HeapNumber>()->value());
 }
 
 TEST(SimpleCallRuntime1Arg) {
@@ -88,10 +83,8 @@ TEST(SimpleCallRuntime1Arg) {
   Node* context = m.HeapConstant(Handle<Context>(isolate->native_context()));
   Node* b = SmiTag(m, m.Int32Constant(0));
   m.Return(m.CallRuntime(Runtime::kNumberToSmi, context, b));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(0, Handle<Smi>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(0, ft.CallChecked<Smi>()->value());
 }
 
 TEST(SimpleTailCallRuntime1Arg) {
@@ -101,10 +94,8 @@ TEST(SimpleTailCallRuntime1Arg) {
   Node* context = m.HeapConstant(Handle<Context>(isolate->native_context()));
   Node* b = SmiTag(m, m.Int32Constant(0));
   m.TailCallRuntime(Runtime::kNumberToSmi, context, b);
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(0, Handle<Smi>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(0, ft.CallChecked<Smi>()->value());
 }
 
 TEST(SimpleCallRuntime2Arg) {
@@ -115,10 +106,8 @@ TEST(SimpleCallRuntime2Arg) {
   Node* a = SmiTag(m, m.Int32Constant(2));
   Node* b = SmiTag(m, m.Int32Constant(4));
   m.Return(m.CallRuntime(Runtime::kAdd, context, a, b));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(6, Handle<Smi>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(6, ft.CallChecked<Smi>()->value());
 }
 
 TEST(SimpleTailCallRuntime2Arg) {
@@ -129,10 +118,8 @@ TEST(SimpleTailCallRuntime2Arg) {
   Node* a = SmiTag(m, m.Int32Constant(2));
   Node* b = SmiTag(m, m.Int32Constant(4));
   m.TailCallRuntime(Runtime::kAdd, context, a, b);
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
-  MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(6, Handle<Smi>::cast(result.ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode());
+  CHECK_EQ(6, ft.CallChecked<Smi>()->value());
 }
 
 namespace {
@@ -166,8 +153,7 @@ TEST(SimpleCallJSFunction0Arg) {
     Node* result = m.CallJS(callable, context, function, receiver);
     m.Return(result);
   }
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<JSFunction> sum = CreateSumAllArgumentsFunction(ft);
   MaybeHandle<Object> result = ft.Call(sum);
@@ -190,8 +176,7 @@ TEST(SimpleCallJSFunction1Arg) {
     Node* result = m.CallJS(callable, context, function, receiver, a);
     m.Return(result);
   }
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<JSFunction> sum = CreateSumAllArgumentsFunction(ft);
   MaybeHandle<Object> result = ft.Call(sum);
@@ -215,8 +200,7 @@ TEST(SimpleCallJSFunction2Arg) {
     Node* result = m.CallJS(callable, context, function, receiver, a, b);
     m.Return(result);
   }
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<JSFunction> sum = CreateSumAllArgumentsFunction(ft);
   MaybeHandle<Object> result = ft.Call(sum);

@@ -58,8 +58,7 @@ TEST(CallCFunction9) {
     m.Return(m.SmiTag(result));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Object> result = ft.Call().ToHandleChecked();
   CHECK_EQ(36, Handle<Smi>::cast(result)->value());
@@ -102,8 +101,7 @@ TEST(ToUint32) {
   Node* const input = m.Parameter(0);
   m.Return(m.ToUint32(context, input));
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   // clang-format off
   double inputs[] = {
@@ -177,8 +175,7 @@ TEST(FixedArrayAccessSmiIndex) {
   m.Return(m.LoadFixedArrayElement(m.HeapConstant(array),
                                    m.SmiTag(m.Int32Constant(4)), 0,
                                    CodeStubAssembler::SMI_PARAMETERS));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
+  FunctionTester ft(data.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(733, Handle<Smi>::cast(result.ToHandleChecked())->value());
 }
@@ -190,8 +187,7 @@ TEST(LoadHeapNumberValue) {
   Handle<HeapNumber> number = isolate->factory()->NewHeapNumber(1234);
   m.Return(m.SmiFromWord32(
       m.ChangeFloat64ToUint32(m.LoadHeapNumberValue(m.HeapConstant(number)))));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
+  FunctionTester ft(data.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(1234, Handle<Smi>::cast(result.ToHandleChecked())->value());
 }
@@ -202,8 +198,7 @@ TEST(LoadInstanceType) {
   CodeStubAssembler m(data.state());
   Handle<HeapObject> undefined = isolate->factory()->undefined_value();
   m.Return(m.SmiFromWord32(m.LoadInstanceType(m.HeapConstant(undefined))));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
+  FunctionTester ft(data.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(InstanceType::ODDBALL_TYPE,
            Handle<Smi>::cast(result.ToHandleChecked())->value());
@@ -217,8 +212,7 @@ TEST(DecodeWordFromWord32) {
   class TestBitField : public BitField<unsigned, 3, 3> {};
   m.Return(
       m.SmiTag(m.DecodeWordFromWord32<TestBitField>(m.Int32Constant(0x2f))));
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code);
+  FunctionTester ft(data.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   // value  = 00101111
   // mask   = 00111000
@@ -234,8 +228,7 @@ TEST(JSFunction) {
   m.Return(m.SmiFromWord32(m.Int32Add(m.SmiToWord32(m.Parameter(1)),
                                       m.SmiToWord32(m.Parameter(2)))));
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   MaybeHandle<Object> result = ft.Call(isolate->factory()->undefined_value(),
                                        handle(Smi::FromInt(23), isolate),
@@ -251,8 +244,7 @@ TEST(ComputeIntegerHash) {
   m.Return(m.SmiFromWord32(m.ComputeIntegerHash(
       m.SmiUntag(m.Parameter(0)), m.SmiToWord32(m.Parameter(1)))));
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Smi> hash_seed = isolate->factory()->hash_seed();
 
@@ -277,8 +269,7 @@ TEST(ToString) {
   CodeStubAssembler m(data.state());
   m.Return(m.ToString(m.Parameter(kNumParams + 2), m.Parameter(0)));
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<FixedArray> test_cases = isolate->factory()->NewFixedArray(5);
   Handle<FixedArray> smi_test = isolate->factory()->NewFixedArray(2);
@@ -377,8 +368,7 @@ TEST(TryToName) {
     m.Return(m.BooleanConstant(false));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Object> expect_index(Smi::FromInt(kKeyIsIndex), isolate);
   Handle<Object> expect_unique(Smi::FromInt(kKeyIsUnique), isolate);
@@ -493,8 +483,7 @@ void TestEntryToIndex() {
     m.Return(m.SmiTag(result));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   // Test a wide range of entries but staying linear in the first 100 entries.
   for (int entry = 0; entry < Dictionary::kMaxCapacity;
@@ -554,8 +543,7 @@ void TestNameDictionaryLookup() {
     m.Return(m.BooleanConstant(false));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Object> expect_found(Smi::FromInt(kFound), isolate);
   Handle<Object> expect_not_found(Smi::FromInt(kNotFound), isolate);
@@ -661,8 +649,7 @@ void TestNumberDictionaryLookup() {
     m.Return(m.BooleanConstant(false));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Object> expect_found(Smi::FromInt(kFound), isolate);
   Handle<Object> expect_not_found(Smi::FromInt(kNotFound), isolate);
@@ -803,8 +790,7 @@ TEST(TryHasOwnProperty) {
     m.Return(m.BooleanConstant(false));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Object> expect_found(Smi::FromInt(kFound), isolate);
   Handle<Object> expect_not_found(Smi::FromInt(kNotFound), isolate);
@@ -981,8 +967,7 @@ TEST(TryGetOwnProperty) {
     m.Return(m.HeapConstant(bailout_symbol));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Name> deleted_property_name =
       factory->InternalizeUtf8String("deleted");
@@ -1211,8 +1196,7 @@ TEST(TryLookupElement) {
     m.Return(m.BooleanConstant(false));
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Factory* factory = isolate->factory();
   Handle<Object> smi0(Smi::kZero, isolate);
@@ -1408,8 +1392,7 @@ TEST(AllocateJSObjectFromMap) {
     m.Return(result);
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   Handle<Map> maps[] = {
       handle(isolate->object_function()->initial_map(), isolate),
@@ -1469,8 +1452,7 @@ TEST(AllocateNameDictionary) {
     m.Return(result);
   }
 
-  Handle<Code> code = data.GenerateCode();
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
 
   {
     for (int i = 0; i < 256; i = i * 1.1 + 1) {
@@ -1499,10 +1481,7 @@ TEST(PopAndReturnConstant) {
   m.PopAndReturn(m.Int32Constant(kNumProgrammaticParams),
                  m.SmiConstant(Smi::FromInt(1234)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result;
   for (int test_count = 0; test_count < 100; ++test_count) {
     result = ft.Call(isolate->factory()->undefined_value(),
@@ -1528,10 +1507,7 @@ TEST(PopAndReturnVariable) {
   // a constant.
   m.PopAndReturn(m.SmiUntag(m.Parameter(1)), m.SmiConstant(Smi::FromInt(1234)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result;
   for (int test_count = 0; test_count < 100; ++test_count) {
     result = ft.Call(isolate->factory()->undefined_value(),
@@ -1557,15 +1533,12 @@ TEST(OneToTwoByteStringCopy) {
       CodeStubAssembler::SMI_PARAMETERS);
   m.Return(m.SmiConstant(Smi::FromInt(0)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
   Handle<String> string1 = isolate->factory()->InternalizeUtf8String("abcde");
   uc16 array[] = {1000, 1001, 1002, 1003, 1004};
   Vector<const uc16> str(array);
   Handle<String> string2 =
       isolate->factory()->NewStringFromTwoByte(str).ToHandleChecked();
-  FunctionTester ft(code, 2);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   ft.Call(string1, string2);
   CHECK_EQ(Handle<SeqOneByteString>::cast(string1)->GetChars()[0],
            Handle<SeqTwoByteString>::cast(string2)->GetChars()[0]);
@@ -1593,15 +1566,12 @@ TEST(OneToOneByteStringCopy) {
       CodeStubAssembler::SMI_PARAMETERS);
   m.Return(m.SmiConstant(Smi::FromInt(0)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
   Handle<String> string1 = isolate->factory()->InternalizeUtf8String("abcde");
   uint8_t array[] = {100, 101, 102, 103, 104};
   Vector<const uint8_t> str(array);
   Handle<String> string2 =
       isolate->factory()->NewStringFromOneByte(str).ToHandleChecked();
-  FunctionTester ft(code, 2);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   ft.Call(string1, string2);
   CHECK_EQ(Handle<SeqOneByteString>::cast(string1)->GetChars()[0],
            Handle<SeqOneByteString>::cast(string2)->GetChars()[0]);
@@ -1629,15 +1599,12 @@ TEST(OneToOneByteStringCopyNonZeroStart) {
       CodeStubAssembler::SMI_PARAMETERS);
   m.Return(m.SmiConstant(Smi::FromInt(0)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
   Handle<String> string1 = isolate->factory()->InternalizeUtf8String("abcde");
   uint8_t array[] = {100, 101, 102, 103, 104};
   Vector<const uint8_t> str(array);
   Handle<String> string2 =
       isolate->factory()->NewStringFromOneByte(str).ToHandleChecked();
-  FunctionTester ft(code, 2);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   ft.Call(string1, string2);
   CHECK_EQ(Handle<SeqOneByteString>::cast(string1)->GetChars()[0],
            Handle<SeqOneByteString>::cast(string2)->GetChars()[3]);
@@ -1662,9 +1629,6 @@ TEST(TwoToTwoByteStringCopy) {
       CodeStubAssembler::SMI_PARAMETERS);
   m.Return(m.SmiConstant(Smi::FromInt(0)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
   uc16 array1[] = {2000, 2001, 2002, 2003, 2004};
   Vector<const uc16> str1(array1);
   Handle<String> string1 =
@@ -1673,7 +1637,7 @@ TEST(TwoToTwoByteStringCopy) {
   Vector<const uc16> str2(array2);
   Handle<String> string2 =
       isolate->factory()->NewStringFromTwoByte(str2).ToHandleChecked();
-  FunctionTester ft(code, 2);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   ft.Call(string1, string2);
   CHECK_EQ(Handle<SeqTwoByteString>::cast(string1)->GetChars()[0],
            Handle<SeqTwoByteString>::cast(string2)->GetChars()[0]);
@@ -1705,10 +1669,7 @@ TEST(Arguments) {
 
   m.Return(arguments.GetReceiver());
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result = ft.Call(isolate->factory()->undefined_value(),
                                   Handle<Smi>(Smi::FromInt(12), isolate),
                                   Handle<Smi>(Smi::FromInt(13), isolate),
@@ -1736,10 +1697,7 @@ TEST(ArgumentsForEach) {
 
   m.Return(sum.value());
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result = ft.Call(isolate->factory()->undefined_value(),
                                   Handle<Smi>(Smi::FromInt(12), isolate),
                                   Handle<Smi>(Smi::FromInt(13), isolate),
@@ -1763,10 +1721,7 @@ TEST(IsDebugActive) {
   m.BIND(&if_not_active);
   m.Return(m.FalseConstant());
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   CHECK(!isolate->debug()->is_active());
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
@@ -1791,7 +1746,7 @@ class AppendJSArrayCodeStubAssembler : public CodeStubAssembler {
                                  ElementsKind kind)
       : CodeStubAssembler(state), kind_(kind) {}
 
-  void TestAppendJSArrayImpl(Isolate* isolate, CodeAssemblerTester* tester,
+  void TestAppendJSArrayImpl(Isolate* isolate, CodeAssemblerTester* data,
                              Object* o1, Object* o2, Object* o3, Object* o4,
                              int initial_size, int result_size) {
     typedef CodeAssemblerVariable Variable;
@@ -1815,10 +1770,7 @@ class AppendJSArrayCodeStubAssembler : public CodeStubAssembler {
     BIND(&bailout);
     Return(SmiTag(IntPtrAdd(arg_index.value(), IntPtrConstant(2))));
 
-    Handle<Code> code = tester->GenerateCode();
-    CHECK(!code.is_null());
-
-    FunctionTester ft(code, kNumParams);
+    FunctionTester ft(data->GenerateCode(), kNumParams);
 
     Handle<Object> result =
         ft.Call(Handle<Object>(o1, isolate), Handle<Object>(o2, isolate),
@@ -1938,10 +1890,7 @@ TEST(IsPromiseHookEnabled) {
 
   m.Return(m.SelectBooleanConstant(m.IsPromiseHookEnabledOrDebugIsActive()));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK_EQ(isolate->heap()->false_value(), *result);
@@ -1966,10 +1915,7 @@ TEST(AllocateAndInitJSPromise) {
   Node* const promise = m.AllocateAndInitJSPromise(context);
   m.Return(promise);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result->IsJSPromise());
@@ -1987,10 +1933,7 @@ TEST(AllocateAndSetJSPromise) {
       context, m.SmiConstant(v8::Promise::kPending), m.SmiConstant(1));
   m.Return(promise);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result->IsJSPromise());
@@ -2020,10 +1963,7 @@ TEST(AllocatePromiseReactionJobInfo) {
       m.UndefinedConstant(), context);
   m.Return(info);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result->IsPromiseReactionJobInfo());
@@ -2058,10 +1998,7 @@ TEST(AllocatePromiseResolveThenableJobInfo) {
       thenable, then, resolve, reject, context);
   p.Return(info);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result->IsPromiseResolveThenableJobInfo());
@@ -2084,10 +2021,7 @@ TEST(IsSymbol) {
   Node* const symbol = m.Parameter(0);
   m.Return(m.SelectBooleanConstant(m.IsSymbol(symbol)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->NewSymbol()).ToHandleChecked();
   CHECK_EQ(isolate->heap()->true_value(), *result);
@@ -2106,10 +2040,7 @@ TEST(IsPrivateSymbol) {
   Node* const symbol = m.Parameter(0);
   m.Return(m.SelectBooleanConstant(m.IsPrivateSymbol(symbol)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->NewSymbol()).ToHandleChecked();
   CHECK_EQ(isolate->heap()->false_value(), *result);
@@ -2133,10 +2064,7 @@ TEST(PromiseHasHandler) {
       m.AllocateAndInitJSPromise(context, m.UndefinedConstant());
   m.Return(m.SelectBooleanConstant(m.PromiseHasHandler(promise)));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK_EQ(isolate->heap()->false_value(), *result);
@@ -2157,10 +2085,7 @@ TEST(CreatePromiseResolvingFunctionsContext) {
       promise, m.BooleanConstant(false), native_context);
   m.Return(promise_context);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result->IsContext());
@@ -2195,10 +2120,7 @@ TEST(CreatePromiseResolvingFunctions) {
   m.StoreFixedArrayElement(arr, 1, reject);
   m.Return(arr);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result_obj =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result_obj->IsFixedArray());
@@ -2213,27 +2135,25 @@ TEST(NewElementsCapacity) {
   CodeStubAssembler m(data.state());
   m.Return(m.SmiTag(m.CalculateNewElementsCapacity(
       m.SmiUntag(m.Parameter(0)), CodeStubAssembler::INTPTR_PARAMETERS)));
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, 1);
+
+  FunctionTester ft(data.GenerateCode(), 1);
   Handle<Smi> test_value = Handle<Smi>(Smi::FromInt(0), isolate);
-  Handle<Smi> result_obj =
-      Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  Handle<Smi> result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(1), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(2), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(1025), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
@@ -2245,27 +2165,25 @@ TEST(NewElementsCapacitySmi) {
   CodeStubAssembler m(data.state());
   m.Return(m.CalculateNewElementsCapacity(m.Parameter(0),
                                           CodeStubAssembler::SMI_PARAMETERS));
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, 1);
+
+  FunctionTester ft(data.GenerateCode(), 1);
   Handle<Smi> test_value = Handle<Smi>(Smi::FromInt(0), isolate);
-  Handle<Smi> result_obj =
-      Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  Handle<Smi> result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(1), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(2), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
   test_value = Handle<Smi>(Smi::FromInt(1025), isolate);
-  result_obj = Handle<Smi>::cast(ft.Call(test_value).ToHandleChecked());
+  result_obj = ft.CallChecked<Smi>(test_value);
   CHECK_EQ(
       result_obj->value(),
       static_cast<int>(JSObject::NewElementsCapacity(test_value->value())));
@@ -2292,10 +2210,7 @@ TEST(AllocateFunctionWithMapAndContext) {
       m.AllocateFunctionWithMapAndContext(map, resolve_info, promise_context);
   m.Return(resolve);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result_obj =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result_obj->IsJSFunction());
@@ -2331,10 +2246,7 @@ TEST(CreatePromiseGetCapabilitiesExecutorContext) {
       m.CreatePromiseGetCapabilitiesExecutorContext(capability, native_context);
   m.Return(executor_context);
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-
-  FunctionTester ft(code, kNumParams);
+  FunctionTester ft(data.GenerateCode(), kNumParams);
   Handle<Object> result_obj =
       ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
   CHECK(result_obj->IsContext());
@@ -2365,8 +2277,7 @@ TEST(NewPromiseCapability) {
         m.NewPromiseCapability(context, promise_constructor);
     m.Return(capability);
 
-    Handle<Code> code = data.GenerateCode();
-    FunctionTester ft(code, kNumParams);
+    FunctionTester ft(data.GenerateCode(), kNumParams);
 
     Handle<Object> result_obj =
         ft.Call(isolate->factory()->undefined_value()).ToHandleChecked();
@@ -2409,8 +2320,7 @@ TEST(NewPromiseCapability) {
     Node* const capability = m.NewPromiseCapability(context, constructor);
     m.Return(capability);
 
-    Handle<Code> code = data.GenerateCode();
-    FunctionTester ft(code, kNumParams);
+    FunctionTester ft(data.GenerateCode(), kNumParams);
 
     Handle<JSFunction> constructor_fn =
         Handle<JSFunction>::cast(v8::Utils::OpenHandle(*CompileRun(
@@ -2491,10 +2401,8 @@ TEST(DirectMemoryTest8BitWord32Immediate) {
   m.BIND(&bad);
   m.Return(m.SmiConstant(0));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, kNumParams);
-  CHECK_EQ(1, Handle<Smi>::cast(ft.Call().ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode(), kNumParams);
+  CHECK_EQ(1, ft.CallChecked<Smi>()->value());
 }
 
 TEST(DirectMemoryTest16BitWord32Immediate) {
@@ -2528,10 +2436,8 @@ TEST(DirectMemoryTest16BitWord32Immediate) {
   m.BIND(&bad);
   m.Return(m.SmiConstant(0));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, kNumParams);
-  CHECK_EQ(1, Handle<Smi>::cast(ft.Call().ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode(), kNumParams);
+  CHECK_EQ(1, ft.CallChecked<Smi>()->value());
 }
 
 TEST(DirectMemoryTest8BitWord32) {
@@ -2577,10 +2483,8 @@ TEST(DirectMemoryTest8BitWord32) {
   m.BIND(&bad);
   m.Return(m.SmiConstant(0));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, kNumParams);
-  CHECK_EQ(1, Handle<Smi>::cast(ft.Call().ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode(), kNumParams);
+  CHECK_EQ(1, ft.CallChecked<Smi>()->value());
 }
 
 TEST(DirectMemoryTest16BitWord32) {
@@ -2640,10 +2544,8 @@ TEST(DirectMemoryTest16BitWord32) {
   m.BIND(&bad);
   m.Return(m.SmiConstant(0));
 
-  Handle<Code> code = data.GenerateCode();
-  CHECK(!code.is_null());
-  FunctionTester ft(code, kNumParams);
-  CHECK_EQ(1, Handle<Smi>::cast(ft.Call().ToHandleChecked())->value());
+  FunctionTester ft(data.GenerateCode(), kNumParams);
+  CHECK_EQ(1, ft.CallChecked<Smi>()->value());
 }
 
 }  // namespace internal

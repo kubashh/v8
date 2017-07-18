@@ -39,6 +39,36 @@ class FunctionTester : public InitializedHandleScope {
                            Handle<Object> c);
   MaybeHandle<Object> Call(Handle<Object> a, Handle<Object> b, Handle<Object> c,
                            Handle<Object> d);
+  template <typename T>
+  Handle<T> CallChecked() {
+    Handle<Object> result = Call().ToHandleChecked();
+    return Handle<T>::cast(result);
+  }
+
+  template <typename T>
+  Handle<T> CallChecked(Handle<Object> a) {
+    Handle<Object> result = Call(a).ToHandleChecked();
+    return Handle<T>::cast(result);
+  }
+
+  template <typename T>
+  Handle<T> CallChecked(Handle<Object> a, Handle<Object> b) {
+    Handle<Object> result = Call(a, b).ToHandleChecked();
+    return Handle<T>::cast(result);
+  }
+
+  template <typename T>
+  Handle<T> CallChecked(Handle<Object> a, Handle<Object> b, Handle<Object> c) {
+    Handle<Object> result = Call(a, b, c).ToHandleChecked();
+    return Handle<T>::cast(result);
+  }
+
+  template <typename T>
+  Handle<T> CallChecked(Handle<Object> a, Handle<Object> b, Handle<Object> c,
+                        Handle<Object> d) {
+    Handle<Object> result = Call(a, b, c).ToHandleChecked();
+    return Handle<T>::cast(result);
+  }
 
   void CheckThrows(Handle<Object> a);
   void CheckThrows(Handle<Object> a, Handle<Object> b);

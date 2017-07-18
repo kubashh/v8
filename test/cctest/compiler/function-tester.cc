@@ -42,6 +42,7 @@ FunctionTester::FunctionTester(Handle<Code> code, int param_count)
       function((FLAG_allow_natives_syntax = true,
                 NewFunction(BuildFunction(param_count).c_str()))),
       flags_(0) {
+  CHECK(!code.is_null());
   Compile(function);
   function->ReplaceCode(*code);
 }
