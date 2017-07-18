@@ -4051,7 +4051,7 @@ AllocationResult Heap::AllocatePropertyArray(int length,
 
   result->set_map_after_allocation(property_array_map(), SKIP_WRITE_BARRIER);
   PropertyArray* array = PropertyArray::cast(result);
-  array->set_length(length);
+  array->set_raw_length(length);
   MemsetPointer(array->data_start(), undefined_value(), length);
   return result;
 }
