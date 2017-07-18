@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a40d797a_1ed2adf3",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "This is confusing. It seems like the structure is only storing kTypedObjectState, kArgumentsElementsState and kObjectId nodes. Could we assert that on insertion (and possibly on in the beginning of GetObjectId)? Also, some comment would be useful.\n\nOr maybe say \n\nstatic bool HasObjectId(Node* node) {\n  return node-\u003eopcode() \u003d\u003d IrOpcode::kTypedObjectState \u0026\u0026\n      node-\u003eopcode() \u003d\u003d IrOpcode::kObjectId;\n}\n\nand then inside the loop\n\nif (objects_[i] \u003d\u003d node) return i;\nif (HasObjectId(node) \u0026\u0026 HasObjectId(objects_[i]) \u0026\u0026\n    ObjectIdOf(objects_[i]-\u003eop()) \u003d\u003d ObjectIdOf(node-\u003eop())) {\n  return i;\n}",
+      "range": {
+        "startLine": 486,
+        "startChar": 10,
+        "endLine": 487,
+        "endChar": 68
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01081b9_da472fc6",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Some explanation of how this works, please!",
+      "range": {
+        "startLine": 25,
+        "startChar": 5,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2052e10_e3befa72",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "This needs some explanation - it is not very clear what you are iterating over (perhaps it would already help if you spelled out the explicit type here).\n\nSome high-level description of what is going on would be also nice.",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 123,
+        "endChar": 28
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd5df396_09f98d78",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "What is a meaning of a state that maps variable to nullptr?\n\nEdit: now I see it is used on line 178, but I am still confused why we cannot just remove the variable from the collection.",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 33
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48dc8519_7b6c3971",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "DCHECK_EQ here and elsewhere.",
+      "range": {
+        "startLine": 175,
+        "startChar": 10,
+        "endLine": 175,
+        "endChar": 16
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d874a3_ce99ba63",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Could you explain this line? This seems to be the only place where reducer_ is used in the VariableStates class...",
+      "range": {
+        "startLine": 190,
+        "startChar": 12,
+        "endLine": 190,
+        "endChar": 34
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "727ccdc4_385ae7e7",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "How about using Maybe\u003cVariable\u003e as a return value for FieldAt? Then you could say here:\n\nVariable var \u003d vobject-\u003eFieldAt(field).ToChecked();",
+      "range": {
+        "startLine": 211,
+        "startChar": 26,
+        "endLine": 211,
+        "endChar": 33
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ffecd27_41cf0bb9",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Normally, we put break inside the braces. It would be better to be consistent.",
+      "range": {
+        "startLine": 257,
+        "startChar": 6,
+        "endLine": 257,
+        "endChar": 12
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf122a44_2b1308e4",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Any reason why this is not part VariableStates::Scope? This would save you the ugly protected section.",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 17
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d382a20a_6464733d",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Nit: could not you use typedef here, just like we do in the rest of the compiler? (Here and below.)",
+      "range": {
+        "startLine": 136,
+        "startChar": 2,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e95f1ae_b363d6fe",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Explain in the comment what is the role of this class.\n\nIt is a bit surprising that it needs to know about the reducer.",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 20
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "995779e4_e2a62456",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "static?",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 2
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb747bf1_618bc45a",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "static?",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 2
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6df985f_d33ba7a0",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Cannot the replacement be also replaced? (That is, do not we have to walk the replacement chain?)",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 56
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f8d970_da8665a5",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "Why are you using private inheritance? This is normally discouraged (and also forbidden by the Google C++ style guide - https://google.github.io/styleguide/cppguide.html#Inheritance).\n\nAlso, why is the casing suddenly different? (see https://google.github.io/styleguide/cppguide.html#Type_Names)",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eaf9855_ffc0aeea",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-18T13:40:47Z",
+      "side": 1,
+      "message": "This looks pretty non-standard to me, perhaps there should be just a method instead of the operator overloading.",
+      "range": {
+        "startLine": 193,
+        "startChar": 2,
+        "endLine": 193,
+        "endChar": 69
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
