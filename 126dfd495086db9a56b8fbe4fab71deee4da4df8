@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ef5c0e82_4e7c226f",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a40d797a_1ed2adf3",
+      "range": {
+        "startLine": 486,
+        "startChar": 10,
+        "endLine": 487,
+        "endChar": 68
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c01081b9_da472fc6",
         "filename": "src/compiler/new-escape-analysis.cc",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52516ed8_bd9b1c72",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c01081b9_da472fc6",
+      "range": {
+        "startLine": 25,
+        "startChar": 5,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "aa297496_6fc87aa3",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c2052e10_e3befa72",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 123,
+        "endChar": 28
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd5df396_09f98d78",
         "filename": "src/compiler/new-escape-analysis.cc",
         "patchSetId": 12
@@ -82,6 +154,30 @@
       "writtenOn": "2017-07-18T13:40:47Z",
       "side": 1,
       "message": "What is a meaning of a state that maps variable to nullptr?\n\nEdit: now I see it is used on line 178, but I am still confused why we cannot just remove the variable from the collection.",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 33
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b3e3497_04d3a2ef",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "nullptr means that the variable allocation does not dominate the current position, it is the initial value of all variables and the bottom of the lattice. Uninitialized memory is represented by the Dead node instead. Exploiting our structured control flow and loop structure, the first effect input is eventually not nullptr if the variable allocation dominates the current node. So we do not have to process variables that are nullptr on the first effect input.\nI will add a comment.",
+      "parentUuid": "cd5df396_09f98d78",
       "range": {
         "startLine": 124,
         "startChar": 8,
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "b9df08de_32635a7a",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "The newly created phi nodes have to be added to the reducer. This is important, since we have to mark nodes as escaping if they flow into a created phi node. An alternative would be to only add a node if it is used as a replacement or will be used in the deopt info. The latter is hard to predict and might be so frequent that it does not pay off.",
+      "parentUuid": "79d874a3_ce99ba63",
+      "range": {
+        "startLine": 190,
+        "startChar": 12,
+        "endLine": 190,
+        "endChar": 34
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "727ccdc4_385ae7e7",
         "filename": "src/compiler/new-escape-analysis.cc",
         "patchSetId": 12
@@ -160,6 +280,30 @@
       "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8023cca0_e845fdac",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "727ccdc4_385ae7e7",
+      "range": {
+        "startLine": 211,
+        "startChar": 26,
+        "endLine": 211,
+        "endChar": 33
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "feaed88f_2bf22c29",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ffecd27_41cf0bb9",
+      "range": {
+        "startLine": 257,
+        "startChar": 6,
+        "endLine": 257,
+        "endChar": 12
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf122a44_2b1308e4",
         "filename": "src/compiler/new-escape-analysis.h",
         "patchSetId": 12
@@ -197,6 +365,30 @@
       "writtenOn": "2017-07-18T13:40:47Z",
       "side": 1,
       "message": "Any reason why this is not part VariableStates::Scope? This would save you the ugly protected section.",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 17
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e50a1977_82ae23c1",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "The idea was to compose a number of reduction scopes by inheritance, with this being the base class managing the current node and possible changes. So merging it with VariableStates::Scope would somewhat obscure this pattern.\ncurrent_node() and reduction() could not be private in VariableStates::Scope, because EscapeAnalysis::Scope needs access. They are protected instead of public to prevent NewEscapeAnalysis::ReduceNode() from having direct access to them, for example accessing node inputs without going through the Scope and so accidentially not resolving replacements. This is also the reason why I split EscapeAnalysisState from NewEscapeAnalysis using some more protected access control: to harden the interface exposed to NewEscapeAnalysis::ReduceNode() and not expose the sidetables directly.",
+      "parentUuid": "cf122a44_2b1308e4",
       "range": {
         "startLine": 134,
         "startChar": 0,
@@ -229,6 +421,30 @@
       "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be50d142_029cbd62",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d382a20a_6464733d",
+      "range": {
+        "startLine": 136,
+        "startChar": 2,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +494,30 @@
     },
     {
       "key": {
+        "uuid": "3eb87119_6df7799a",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Yes. Alternatively, these could be non-static members of a new class State, subclassing PersistentMap\u003cVariable, Node*\u003e.",
+      "parentUuid": "995779e4_e2a62456",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 2
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb747bf1_618bc45a",
         "filename": "src/compiler/new-escape-analysis.h",
         "patchSetId": 12
@@ -301,6 +541,30 @@
     },
     {
       "key": {
+        "uuid": "acf405e7_555c9e24",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fb747bf1_618bc45a",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 2
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6df985f_d33ba7a0",
         "filename": "src/compiler/new-escape-analysis.h",
         "patchSetId": 12
@@ -312,6 +576,30 @@
       "writtenOn": "2017-07-18T13:40:47Z",
       "side": 1,
       "message": "Cannot the replacement be also replaced? (That is, do not we have to walk the replacement chain?)",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 56
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32edb823_38a43bfe",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "The idea is that the replacements realize the transitive closure directly. This is important to ensure re-visitation: If the replacement of a replacement changes, then all nodes that can access this have to be updated. I will add a DCHECK here to insure the invariant that replacements have no replacements.",
+      "parentUuid": "f6df985f_d33ba7a0",
       "range": {
         "startLine": 359,
         "startChar": 4,
@@ -347,6 +635,30 @@
     },
     {
       "key": {
+        "uuid": "b82707a1_de06d340",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f4f8d970_da8665a5",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4eaf9855_ffc0aeea",
         "filename": "src/compiler/persistent-map.h",
         "patchSetId": 12
@@ -358,6 +670,30 @@
       "writtenOn": "2017-07-18T13:40:47Z",
       "side": 1,
       "message": "This looks pretty non-standard to me, perhaps there should be just a method instead of the operator overloading.",
+      "range": {
+        "startLine": 193,
+        "startChar": 2,
+        "endLine": 193,
+        "endChar": 69
+      },
+      "revId": "126dfd495086db9a56b8fbe4fab71deee4da4df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824236ec_780adfb6",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-18T16:12:51Z",
+      "side": 1,
+      "message": "The standard library contains the same hack (http://en.cppreference.com/w/cpp/utility/bitset/reference), but yes, it is a hack. There is no real need for it, I can just delete operator[] and use the Get()/Add() methods outside. Perhaps I should rename Add() to Set() for consistency.",
+      "parentUuid": "4eaf9855_ffc0aeea",
       "range": {
         "startLine": 193,
         "startChar": 2,
