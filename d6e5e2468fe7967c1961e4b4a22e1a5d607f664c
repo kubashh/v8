@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49330070_0193e13c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T13:32:04Z",
+      "side": 1,
+      "message": "Super super super nit... please remove this space :D",
+      "range": {
+        "startLine": 10,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "d6e5e2468fe7967c1961e4b4a22e1a5d607f664c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "999accd1_c6ffa9e2",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T13:32:04Z",
+      "side": 1,
+      "message": "This compiler:: can probably be removed since you are already in v8::internal::compiler?",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 16
+      },
+      "revId": "d6e5e2468fe7967c1961e4b4a22e1a5d607f664c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
