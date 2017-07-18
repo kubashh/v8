@@ -22,6 +22,23 @@
       "revId": "20fbf4cfd622217bda8042502311acb79af16e5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86a7b126_1eebeab7",
+        "filename": "src/interface-descriptors.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-18T13:19:32Z",
+      "side": 1,
+      "message": "Here: Int32()",
+      "revId": "20fbf4cfd622217bda8042502311acb79af16e5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
