@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff3e7409_387abee7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-18T09:20:57Z",
+      "side": 1,
+      "message": "nit: s/move avoid/avoid/",
+      "range": {
+        "startLine": 11,
+        "startChar": 70,
+        "endLine": 12,
+        "endChar": 5
+      },
+      "revId": "5b1cc1fe6a52e37af8de95c60e6aa30ffbe2f219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
