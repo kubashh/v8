@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47620b7f_aee3d9b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T09:35:28Z",
+      "side": 1,
+      "message": "You should also mention that you clean up the construction of FunctionTester instances.",
+      "revId": "3938d940c9b629c9a8ab454df32e2b219cc250dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28a4f955_3bc39c5e",
+        "filename": "test/cctest/compiler/function-tester.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T09:35:28Z",
+      "side": 1,
+      "message": "Could you do all of these in one definition with Var args? It would probably be pretty unreadable though. Up to you",
+      "range": {
+        "startLine": 43,
+        "startChar": 12,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "3938d940c9b629c9a8ab454df32e2b219cc250dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e42498_13ea43dc",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T09:35:28Z",
+      "side": 1,
+      "message": "I just want to be clear that \u0027data\u0027 is not a great variable name. Not your fault though :D.",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "3938d940c9b629c9a8ab454df32e2b219cc250dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

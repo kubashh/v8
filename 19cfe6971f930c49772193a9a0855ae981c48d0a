@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c38dc6_c56f3c93",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T09:35:28Z",
+      "side": 0,
+      "message": "Why don\u0027t we do the CHECK anymore, is it enforced somewhere else?",
+      "range": {
+        "startLine": 1503,
+        "startChar": 2,
+        "endLine": 1503,
+        "endChar": 7
+      },
+      "revId": "19cfe6971f930c49772193a9a0855ae981c48d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ff4cd4_31607f70",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-18T09:35:28Z",
+      "side": 0,
+      "message": "Somebody tried to have a better name :P",
+      "range": {
+        "startLine": 1794,
+        "startChar": 68,
+        "endLine": 1794,
+        "endChar": 74
+      },
+      "revId": "19cfe6971f930c49772193a9a0855ae981c48d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
