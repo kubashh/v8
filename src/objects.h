@@ -3039,6 +3039,9 @@ class PropertyArray : public HeapObject {
   // [length]: length of the array.
   inline int length() const;
   inline void set_length(int length);
+  // This is only used on a newly allocated PropertyArray which
+  // doesn't have an existing hash.
+  inline void set_raw_length(int length);
 
   // Get and set the length using acquire loads and release stores.
   inline int synchronized_length() const;
@@ -3071,6 +3074,10 @@ class PropertyArray : public HeapObject {
   typedef FlexibleBodyDescriptor<kHeaderSize> BodyDescriptor;
   // No weak fields.
   typedef BodyDescriptor BodyDescriptorWeak;
+
+  static const int kLengthMask = 1023;
+  static const int kMaxLength = kLengthMask;
+  STATIC_ASSERT(kMaxLength > kMaxNumberOfDescriptors);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PropertyArray);

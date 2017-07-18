@@ -419,6 +419,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Map::GetConstructor()).
   Node* LoadMapConstructor(Node* map);
 
+  // This is only used on a newly allocated PropertyArray which
+  // doesn't have an existing hash.
+  void StorePropertyArrayRawLength(Node* property_array, Node* capacity_node,
+                                   ParameterMode mode);
+
   // Check if the map is set for slow properties.
   Node* IsDictionaryMap(Node* map);
 

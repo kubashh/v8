@@ -2710,8 +2710,36 @@ const HashTable<Derived, Shape>* HashTable<Derived, Shape>::cast(
 SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
 SYNCHRONIZED_SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
 
-SMI_ACCESSORS(PropertyArray, length, kLengthOffset)
-SYNCHRONIZED_SMI_ACCESSORS(PropertyArray, length, kLengthOffset)
+int PropertyArray::length() const {
+  intptr_t value = READ_INTPTR_FIELD(this, kLengthOffset);
+  return value & kLengthMask;
+}
+
+void PropertyArray::set_length(int len) {
+  SLOW_DCHECK(len < kMaxLength);
+  intptr_t value = READ_INTPTR_FIELD(this, kLengthOffset);
+  int masked_value = value & (~kLengthMask);
+  value |= len;
+  WRITE_INTPTR_FIELD(this, kLengthOffset, value);
+}
+
+void PropertyArray::set_raw_length(int len) {
+  SLOW_DCHECK(len < kMaxLength);
+  WRITE_INTPTR_FIELD(this, kLengthOffset, len);
+}
+
+int PropertyArray::synchronized_length() const {
+  intptr_t value = RELAXED_READ_INTPTR_FIELD(this, kLengthOffset);
+  return value & kLengthMask;
+}
+
+void PropertyArray::synchronized_set_length(int length) {
+  SLOW_DCHECK(length < kMaxLength);
+  intptr_t value = RELAXED_READ_INTPTR_FIELD(this, kLengthOffset);
+  value &= (~kLengthMask);
+  value |= length;
+  RELAXED_WRITE_INTPTR_FIELD(this, kLengthOffset, value);
+}
 
 SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
 RELAXED_SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
