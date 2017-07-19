@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bce3fb8_ea45da96",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-19T08:22:28Z",
+      "side": 1,
+      "message": "AFAICT this should be MachineType::IntPtr in order to be in sync with the object layout. Unfortunately this might still cause problems on 64-bit architectures (at least in the JavaScript pipeline, not so much the CSA) because representation selection will still be confused about MachineType::Int64 fields.",
+      "range": {
+        "startLine": 470,
+        "startChar": 37,
+        "endLine": 470,
+        "endChar": 44
+      },
+      "revId": "3d38421fd3b12861260485dbe5adfd44d173131d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
