@@ -5,6 +5,9 @@
 #ifndef V8_CCTEST_COMPILER_FUNCTION_TESTER_H_
 #define V8_CCTEST_COMPILER_FUNCTION_TESTER_H_
 
+#include <array>
+
+#include "src/execution.h"
 #include "src/handles.h"
 #include "test/cctest/cctest.h"
 
@@ -33,12 +36,15 @@ class FunctionTester : public InitializedHandleScope {
   Handle<JSFunction> function;
 
   MaybeHandle<Object> Call();
-  MaybeHandle<Object> Call(Handle<Object> a);
-  MaybeHandle<Object> Call(Handle<Object> a, Handle<Object> b);
-  MaybeHandle<Object> Call(Handle<Object> a, Handle<Object> b,
-                           Handle<Object> c);
-  MaybeHandle<Object> Call(Handle<Object> a, Handle<Object> b, Handle<Object> c,
-                           Handle<Object> d);
+  MaybeHandle<Object> Call(int count, Handle<Object>* handles) {
+    return Execution::Call(isolate, function, undefined(), count, handles);
+  }
+  template <typename... Args>
+  MaybeHandle<Object> Call(Args... args) {
+    std::array<Handle<Object>, sizeof...(args)> args_arr{{args...}};
+    return Execution::Call(isolate, function, undefined(), sizeof...(args),
+                           &args_arr[0]);
+  }
 
   void CheckThrows(Handle<Object> a);
   void CheckThrows(Handle<Object> a, Handle<Object> b);

@@ -52,28 +52,6 @@ MaybeHandle<Object> FunctionTester::Call() {
   return Execution::Call(isolate, function, undefined(), 0, nullptr);
 }
 
-MaybeHandle<Object> FunctionTester::Call(Handle<Object> a) {
-  Handle<Object> args[] = {a};
-  return Execution::Call(isolate, function, undefined(), 1, args);
-}
-
-MaybeHandle<Object> FunctionTester::Call(Handle<Object> a, Handle<Object> b) {
-  Handle<Object> args[] = {a, b};
-  return Execution::Call(isolate, function, undefined(), 2, args);
-}
-
-MaybeHandle<Object> FunctionTester::Call(Handle<Object> a, Handle<Object> b,
-                                         Handle<Object> c) {
-  Handle<Object> args[] = {a, b, c};
-  return Execution::Call(isolate, function, undefined(), 3, args);
-}
-
-MaybeHandle<Object> FunctionTester::Call(Handle<Object> a, Handle<Object> b,
-                                         Handle<Object> c, Handle<Object> d) {
-  Handle<Object> args[] = {a, b, c, d};
-  return Execution::Call(isolate, function, undefined(), 4, args);
-}
-
 void FunctionTester::CheckThrows(Handle<Object> a) {
   TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
   MaybeHandle<Object> no_result = Call(a);

@@ -1183,6 +1183,121 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
   }
 }
 
+TF_BUILTIN(ArrayClone, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* array = Parameter(Descriptor::kSource);
+
+  CSA_ASSERT(this, IsJSArray(array));
+
+  Node* original_array_map = LoadMap(array);
+  Node* elements_kind = LoadMapElementsKind(original_array_map);
+  Node* length = LoadJSArrayLength(array);
+
+  // Use the cannonical map for the Array's ElementsKind
+  Node* native_context = LoadNativeContext(context);
+  Node* slot_index =
+      IntPtrAdd(ChangeInt32ToIntPtr(elements_kind),
+                IntPtrConstant(Context::FIRST_JS_ARRAY_MAP_SLOT));
+  Node* array_map = LoadContextElement(native_context, slot_index);
+
+  Node* result;
+  Node* elements;
+
+  Label not_double(this), not_tagged(this), fixed_array_in_new_space(this),
+      fixed_double_array_in_new_space(this), call_runtime(this);
+  GotoIf(IsElementsKindGreaterThan(elements_kind, HOLEY_ELEMENTS), &not_tagged);
+  {
+    int max_fast_elements =
+        (kMaxRegularHeapObjectSize - FixedArray::kHeaderSize - JSArray::kSize -
+         AllocationMemento::kSize) /
+        kPointerSize;
+    Branch(SmiAboveOrEqual(length, SmiConstant(max_fast_elements)),
+           &call_runtime, &fixed_array_in_new_space);
+  }
+
+  Label holey(this);
+  BIND(&fixed_array_in_new_space);
+  {
+    GotoIf(IsHoleyFastElementsKind(elements_kind), &holey);
+    std::tie(result, elements) = AllocateUninitializedJSArrayWithElements(
+        HOLEY_ELEMENTS, array_map, length, nullptr, length,
+        CodeStubAssembler::SMI_PARAMETERS);
+    Node* from_elements = LoadElements(array);
+    BuildFastFixedArrayForEach(
+        elements, HOLEY_ELEMENTS, SmiConstant(0), length,
+        [this, from_elements](Node* to_elements, Node* offset) {
+          Node* element = Load(MachineType::AnyTagged(), from_elements, offset);
+          StoreNoWriteBarrier(MachineRepresentation::kTagged, to_elements,
+                              offset, element);
+        },
+        SMI_PARAMETERS);
+    Return(result);
+  }
+
+  BIND(&holey);
+  {
+    std::tie(result, elements) = AllocateUninitializedJSArrayWithElements(
+        HOLEY_ELEMENTS, array_map, length, nullptr, length,
+        CodeStubAssembler::SMI_PARAMETERS);
+    Node* from_elements = LoadElements(array);
+    VARIABLE(index, MachineType::PointerRepresentation(), IntPtrConstant(0));
+    BuildFastFixedArrayForEach(
+        VariableList({&index}, zone()), elements, HOLEY_ELEMENTS,
+        SmiConstant(0), length,
+        [this, context, from_elements, &index](Node* to_elements,
+                                               Node* offset) {
+          VARIABLE(element, MachineType::PointerRepresentation());
+          element.Bind(Load(MachineType::AnyTagged(), from_elements, offset));
+
+          Label have_element(this, &element);
+          GotoIf(WordNotEqual(element.value(), TheHoleConstant()),
+                 &have_element);
+
+          element.Bind(GetProperty(context, from_elements, index.value()));
+          Goto(&have_element);
+
+          BIND(&have_element);
+          StoreNoWriteBarrier(MachineRepresentation::kTagged, to_elements,
+                              offset, element.value());
+          Increment(index, 1);
+        },
+        SMI_PARAMETERS);
+    Return(result);
+  }
+
+  BIND(&not_tagged);
+  {
+    GotoIf(IsElementsKindGreaterThan(elements_kind, PACKED_DOUBLE_ELEMENTS),
+           &not_double);
+    int max_fast_elements =
+        (kMaxRegularHeapObjectSize - FixedArray::kHeaderSize - JSArray::kSize -
+         AllocationMemento::kSize) /
+        kDoubleSize;
+    Branch(SmiAboveOrEqual(length, SmiConstant(max_fast_elements)),
+           &call_runtime, &fixed_double_array_in_new_space);
+  }
+
+  BIND(&fixed_double_array_in_new_space);
+  {
+    std::tie(result, elements) = AllocateUninitializedJSArrayWithElements(
+        HOLEY_DOUBLE_ELEMENTS, array_map, length, nullptr, length,
+        CodeStubAssembler::SMI_PARAMETERS);
+    Return(result);
+  }
+
+  BIND(&call_runtime);
+  {
+    CSA_ASSERT(this, BooleanConstant(false));
+    Return(SmiConstant(0));
+  }
+
+  BIND(&not_double);
+  {
+    CSA_ASSERT(this, BooleanConstant(false));
+    Return(SmiConstant(0));
+  }
+}
+
 TF_BUILTIN(ArrayForEachLoopContinuation, ArrayBuiltinCodeStubAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* receiver = Parameter(Descriptor::kReceiver);

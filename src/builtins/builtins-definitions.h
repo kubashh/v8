@@ -292,6 +292,8 @@ namespace internal {
   CPP(ArraySplice)                                                             \
   /* ES6 #sec-array.prototype.unshift */                                       \
   CPP(ArrayUnshift)                                                            \
+  /* Support for Array.from and other array-copying idioms */                  \
+  TFS(ArrayClone, kSource)                                                     \
   /* ES6 #sec-array.prototype.foreach */                                       \
   TFS(ArrayForEachLoopContinuation, kReceiver, kCallbackFn, kThisArg, kArray,  \
       kObject, kInitialK, kLength, kTo)                                        \
