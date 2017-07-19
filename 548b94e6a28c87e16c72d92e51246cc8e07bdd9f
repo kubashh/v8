@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58f2f564_7375fa50",
+        "filename": "tools/ubsan/vptr_blacklist.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-07-19T14:05:19Z",
+      "side": 1,
+      "message": "Copied from https://cs.chromium.org/chromium/src/tools/ubsan/vptr_blacklist.txt?q\u003dvptr_bl\u0026sq\u003dpackage:chromium\u0026l\u003d137\n\nmksnapshot fails otherwise.",
+      "revId": "548b94e6a28c87e16c72d92e51246cc8e07bdd9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
