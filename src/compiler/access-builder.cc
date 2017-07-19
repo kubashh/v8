@@ -461,6 +461,18 @@ FieldAccess AccessBuilder::ForFixedArrayLength() {
 }
 
 // static
+FieldAccess AccessBuilder::ForPropertyArrayLength() {
+  FieldAccess access = {kUntaggedBase,
+                        PropertyArray::kLengthOffset,
+                        MaybeHandle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get().kPositiveInteger,
+                        MachineType::Pointer(),
+                        kNoWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForFixedTypedArrayBaseBasePointer() {
   FieldAccess access = {
       kTaggedBase,           FixedTypedArrayBase::kBasePointerOffset,

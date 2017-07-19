@@ -2349,6 +2349,32 @@ Node* CodeStubAssembler::AllocateFixedArray(ElementsKind kind,
   return array;
 }
 
+void CodeStubAssembler::InitializePropertyArrayLength(Node* property_array,
+                                                      Node* capacity_node,
+                                                      ParameterMode mode) {
+  CSA_SLOW_ASSERT(this, IsPropertyArray(property_array));
+  CSA_ASSERT(this, IntPtrOrSmiGreaterThan(capacity_node,
+                                          IntPtrOrSmiConstant(0, mode), mode));
+  CSA_ASSERT(this,
+             IntPtrOrSmiLessThanOrEqual(
+                 capacity_node,
+                 IntPtrOrSmiConstant(PropertyArray::kMaxLength, mode), mode));
+  if (mode == SMI_PARAMETERS) {
+    capacity_node = SmiUntag(capacity_node);
+  }
+  StoreObjectFieldNoWriteBarrier(property_array, PropertyArray::kLengthOffset,
+                                 capacity_node);
+}
+
+Node* CodeStubAssembler::LoadPropertyArrayLength(Node* property_array) {
+  CSA_SLOW_ASSERT(this, IsPropertyArray(property_array));
+  Node* const value =
+      LoadObjectField(property_array, PropertyArray::kLengthOffset);
+  Node* const length =
+      WordAnd(value, IntPtrConstant(PropertyArray::kLengthMask));
+  return length;
+}
+
 Node* CodeStubAssembler::AllocatePropertyArray(Node* capacity_node,
                                                ParameterMode mode,
                                                AllocationFlags flags) {
@@ -2361,8 +2387,7 @@ Node* CodeStubAssembler::AllocatePropertyArray(Node* capacity_node,
   Heap::RootListIndex map_index = Heap::kPropertyArrayMapRootIndex;
   DCHECK(Heap::RootIsImmortalImmovable(map_index));
   StoreMapNoWriteBarrier(array, map_index);
-  StoreObjectFieldNoWriteBarrier(array, FixedArray::kLengthOffset,
-                                 ParameterToTagged(capacity_node, mode));
+  InitializePropertyArrayLength(array, capacity_node, mode);
   return array;
 }
 
