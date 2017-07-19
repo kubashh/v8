@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf8164b8_d216f548",
+        "filename": "src/interpreter/control-flow-builders.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-19T15:15:53Z",
+      "side": 1,
+      "message": "block_end_ seems to be unused, and BindBreakTarget doesn\u0027t do anything if there are no break labels created, so I think you could just make BlockBuilder call BindBreakTarget unconditinally, and unify all the BreakableControlFlowBuilders to call a common destructor which does both BindBreakTarget /  IncrementBlockCounter as discussed in the comment below.",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 33
+      },
+      "revId": "adbb456bf86234d736d52e0b1c1ab28e4940d6fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c6cf7f_e2ffa4d0",
+        "filename": "src/interpreter/control-flow-builders.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-19T15:15:53Z",
+      "side": 1,
+      "message": "Could you do the same with the BlockBuilder and SwitchBuilder as is done with LoopBuilder and not have explicit EndBlock / BindBreakTarget calls, but instead do all the work in the destructor. If you do that, I think everything could be moved into the BreakableControlFlowBuilders\u0027s destructor, since I think all three BreakableBlockBuilder subclasses want to BindBreakTarget and Increment the continuation counter on destruction. WDYT?",
+      "range": {
+        "startLine": 44,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 3
+      },
+      "revId": "adbb456bf86234d736d52e0b1c1ab28e4940d6fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fff99796_e7f1be79",
+        "filename": "src/interpreter/control-flow-builders.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-19T15:15:53Z",
+      "side": 1,
+      "message": "This could move moved before BindBreakTarget(), which would allow BindBreakTarget / IncreamentBlockCounter to live in the superclass destructor as discussed above.",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 3
+      },
+      "revId": "adbb456bf86234d736d52e0b1c1ab28e4940d6fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
