@@ -2710,8 +2710,20 @@ const HashTable<Derived, Shape>* HashTable<Derived, Shape>::cast(
 SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
 SYNCHRONIZED_SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
 
-SMI_ACCESSORS(PropertyArray, length, kLengthOffset)
-SYNCHRONIZED_SMI_ACCESSORS(PropertyArray, length, kLengthOffset)
+int PropertyArray::length() const {
+  intptr_t value = READ_INTPTR_FIELD(this, kLengthOffset);
+  return value & kLengthMask;
+}
+
+void PropertyArray::initialize_length(int len) {
+  SLOW_DCHECK(len < kMaxLength);
+  WRITE_INTPTR_FIELD(this, kLengthOffset, len);
+}
+
+int PropertyArray::synchronized_length() const {
+  intptr_t value = RELAXED_READ_INTPTR_FIELD(this, kLengthOffset);
+  return value & kLengthMask;
+}
 
 SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
 RELAXED_SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
