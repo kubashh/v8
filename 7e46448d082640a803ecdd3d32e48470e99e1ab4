@@ -22,6 +22,30 @@
       "revId": "7e46448d082640a803ecdd3d32e48470e99e1ab4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9b48898_db92b80a",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-07-20T11:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fbaf85a_9aac5c33",
+      "range": {
+        "startLine": 28,
+        "startChar": 24,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "7e46448d082640a803ecdd3d32e48470e99e1ab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
