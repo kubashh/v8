@@ -1050,9 +1050,7 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
   ParameterMode mode = OptimalParameterMode();
 
   Node* properties = LoadProperties(object);
-  Node* length = (mode == INTPTR_PARAMETERS)
-                     ? LoadAndUntagFixedArrayBaseLength(properties)
-                     : LoadFixedArrayBaseLength(properties);
+  Node* length = TaggedToParameter(LoadPropertyArrayLength(properties), mode);
 
   // Previous property deletion could have left behind unused backing store
   // capacity even for a map that think it doesn't have any unused fields.
