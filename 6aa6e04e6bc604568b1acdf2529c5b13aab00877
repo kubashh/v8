@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ceb9693d_9ae3dfc6",
+        "filename": "src/interpreter/control-flow-builders.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-20T15:31:01Z",
+      "side": 1,
+      "message": "Please don\u0027t ifdef this, just ifdef the code in the destructor",
+      "range": {
+        "startLine": 164,
+        "startChar": 1,
+        "endLine": 164,
+        "endChar": 6
+      },
+      "revId": "6aa6e04e6bc604568b1acdf2529c5b13aab00877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
