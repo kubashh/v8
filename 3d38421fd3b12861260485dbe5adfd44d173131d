@@ -22,6 +22,30 @@
       "revId": "3d38421fd3b12861260485dbe5adfd44d173131d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b29021_0954f301",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-20T05:00:00Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right. That still doesn\u0027t fix it -- \nhttps://build.chromium.org/p/tryserver.v8/builders/v8_linux64_rel_ng_triggered/builds/27014\n\nI don\u0027t know how representation selection works, definitely appreciate any pointers you have on fixing this.",
+      "parentUuid": "8bce3fb8_ea45da96",
+      "range": {
+        "startLine": 470,
+        "startChar": 37,
+        "endLine": 470,
+        "endChar": 44
+      },
+      "revId": "3d38421fd3b12861260485dbe5adfd44d173131d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
