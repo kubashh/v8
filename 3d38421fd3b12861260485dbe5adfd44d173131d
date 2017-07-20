@@ -46,6 +46,30 @@
       "revId": "3d38421fd3b12861260485dbe5adfd44d173131d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddd1dcc3_08230e3c",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-20T11:00:28Z",
+      "side": 1,
+      "message": "One possible solution that I see would be to keep the length be stored as a Smi (i.e. tagged value aka. MachineType::TaggedSigned) similar to the FixedArray and encode the bitfield in the Smi payload. That would limit the bits available for the hash code down to 21-bit instead of 22-bit.",
+      "parentUuid": "78b29021_0954f301",
+      "range": {
+        "startLine": 470,
+        "startChar": 37,
+        "endLine": 470,
+        "endChar": 44
+      },
+      "revId": "3d38421fd3b12861260485dbe5adfd44d173131d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
