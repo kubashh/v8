@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a0b76fa_477bb83b",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-21T04:34:27Z",
+      "side": 1,
+      "message": "shorter: int len \u003d Smi::ToInt(value);",
+      "range": {
+        "startLine": 2705,
+        "startChar": 12,
+        "endLine": 2705,
+        "endChar": 38
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46eacb45_3868e90d",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-21T04:34:27Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 2717,
+        "startChar": 12,
+        "endLine": 2717,
+        "endChar": 38
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ab9c3d8_f1133a57",
+        "filename": "src/objects.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 3045,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-21T04:34:27Z",
+      "side": 1,
+      "message": "I think you mean \"Get the length using acquire loads.\"",
+      "range": {
+        "startLine": 3045,
+        "startChar": 2,
+        "endLine": 3045,
+        "endChar": 41
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
