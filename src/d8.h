@@ -414,17 +414,6 @@ class Shell : public i::AllStatic {
   // The OS object on the global object contains methods for performing
   // operating system calls:
   //
-  // os.system("program_name", ["arg1", "arg2", ...], timeout1, timeout2) will
-  // run the command, passing the arguments to the program.  The standard output
-  // of the program will be picked up and returned as a multiline string.  If
-  // timeout1 is present then it should be a number.  -1 indicates no timeout
-  // and a positive number is used as a timeout in milliseconds that limits the
-  // time spent waiting between receiving output characters from the program.
-  // timeout2, if present, should be a number indicating the limit in
-  // milliseconds on the total running time of the program.  Exceptions are
-  // thrown on timeouts or other errors or if the exit status of the program
-  // indicates an error.
-  //
   // os.chdir(dir) changes directory to the given directory.  Throws an
   // exception/ on error.
   //
@@ -437,7 +426,6 @@ class Shell : public i::AllStatic {
   // with the current umask.  Intermediate directories are created if necessary.
   // An exception is not thrown if the directory already exists.  Analogous to
   // the "mkdir -p" command.
-  static void System(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void ChangeDirectory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void SetEnvironment(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void UnsetEnvironment(const v8::FunctionCallbackInfo<v8::Value>& args);
