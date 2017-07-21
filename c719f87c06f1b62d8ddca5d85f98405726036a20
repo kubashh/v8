@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8677b058_b97596d0",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-21T09:15:23Z",
+      "side": 1,
+      "message": "nit: In the current form this is OK. But I wonder how this will look once we add the bitfield for the hash. Because then the loaded value of this field will no be in the provided value range. Can you leave a TODO here to make sure we revisit this when the bitfield is added?\n\nquestion: The way I imagine this to look soon is that we have a {FieldAccess} for \"length and hash\", something along the lines of AccessBuilder::ForPropertyArrayLengthAndHash. Correct?",
+      "range": {
+        "startLine": 485,
+        "startChar": 41,
+        "endLine": 485,
+        "endChar": 65
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a0b76fa_477bb83b",
         "filename": "src/objects-inl.h",
         "patchSetId": 10
