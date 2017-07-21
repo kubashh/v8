@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "10d130cf_6737bcd7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d0c253_c43a2f9d",
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8677b058_b97596d0",
         "filename": "src/compiler/access-builder.cc",
         "patchSetId": 10
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "4f0761d5_f718e266",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "\u003e nit: In the current form this is OK. But I wonder how this will look once we add the bitfield for the hash. Because then the loaded value of this field will no be in the provided value range. Can you leave a TODO here to make sure we revisit this when the bitfield is added?\n\nDone.\n\n\u003e question: The way I imagine this to look soon is that we have a {FieldAccess} for \"length and hash\", something along the lines of AccessBuilder::ForPropertyArrayLengthAndHash. Correct?\n\nYep, will change in the next patch",
+      "parentUuid": "8677b058_b97596d0",
+      "range": {
+        "startLine": 485,
+        "startChar": 41,
+        "endLine": 485,
+        "endChar": 65
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59cea921_dfdae415",
         "filename": "src/heap/heap.cc",
         "patchSetId": 10
@@ -56,6 +98,24 @@
       "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0bbdf15_39960ffd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4096,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "I didn\u0027t see the need for this, leaving as such for now..",
+      "parentUuid": "59cea921_dfdae415",
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5429c136_367ad0a8",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a0b76fa_477bb83b",
+      "range": {
+        "startLine": 2705,
+        "startChar": 12,
+        "endLine": 2705,
+        "endChar": 38
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46eacb45_3868e90d",
         "filename": "src/objects-inl.h",
         "patchSetId": 10
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "5b60e9cc_cbcb2840",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46eacb45_3868e90d",
+      "range": {
+        "startLine": 2717,
+        "startChar": 12,
+        "endLine": 2717,
+        "endChar": 38
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ab9c3d8_f1133a57",
         "filename": "src/objects.h",
         "patchSetId": 10
@@ -125,6 +233,30 @@
       "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d1bdd6_140060ee",
+        "filename": "src/objects.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 3045,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-21T23:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ab9c3d8_f1133a57",
+      "range": {
+        "startLine": 3045,
+        "startChar": 2,
+        "endLine": 3045,
+        "endChar": 41
+      },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
