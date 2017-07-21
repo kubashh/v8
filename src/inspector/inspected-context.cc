@@ -15,6 +15,31 @@
 
 namespace v8_inspector {
 
+InspectedContext::WeakCallbackData::WeakCallbackData(InspectedContext* context,
+                                                     V8InspectorImpl* inspector,
+                                                     int groupId, int contextId)
+    : context(context),
+      inspector(inspector),
+      groupId(groupId),
+      contextId(contextId) {}
+
+void InspectedContext::resetContext(
+    const v8::WeakCallbackInfo<InspectedContext::WeakCallbackData>& data) {
+  // InspectedContext is alive here because weak handler is still alive.
+  data.GetParameter()->context->m_context.Reset();
+  data.SetSecondPassCallback(&InspectedContext::callContextCollected);
+}
+
+void InspectedContext::callContextCollected(
+    const v8::WeakCallbackInfo<InspectedContext::WeakCallbackData>& data) {
+  // InspectedContext can be dead here since anything can happen between first
+  // and second pass callback.
+  WeakCallbackData* callbackData = data.GetParameter();
+  callbackData->inspector->contextCollected(callbackData->groupId,
+                                            callbackData->contextId);
+  delete callbackData;
+}
+
 InspectedContext::InspectedContext(V8InspectorImpl* inspector,
                                    const V8ContextInfo& info, int contextId)
     : m_inspector(inspector),
@@ -35,6 +60,9 @@ InspectedContext::InspectedContext(V8InspectorImpl* inspector,
     m_inspector->console()->installMemoryGetter(
         info.context, v8::Local<v8::Object>::Cast(console));
   }
+  m_context.SetWeak(
+      new WeakCallbackData(this, m_inspector, m_contextGroupId, m_contextId),
+      &InspectedContext::resetContext, v8::WeakCallbackType::kParameter);
 }
 
 InspectedContext::~InspectedContext() {
