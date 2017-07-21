@@ -27,6 +27,7 @@ enum class MemoryPressureLevel;
 
 namespace internal {
 
+class AstValueFactory;
 class CancelableTaskManager;
 class CompileJobFinishCallback;
 class CompilerDispatcherJob;
@@ -97,7 +98,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcher {
   // analyzed and be ready for compilation. Returns true if a job was enqueued.
   bool Enqueue(Handle<Script> script, Handle<SharedFunctionInfo> function,
                FunctionLiteral* literal, std::shared_ptr<Zone> parse_zone,
-               std::shared_ptr<DeferredHandles> parse_handles,
+               AstValueFactory* ast_value_factory,
                std::shared_ptr<DeferredHandles> compile_handles);
 
   // Like Enqueue, but also advances the job so that it can potentially
@@ -107,7 +108,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcher {
                       Handle<SharedFunctionInfo> function,
                       FunctionLiteral* literal,
                       std::shared_ptr<Zone> parse_zone,
-                      std::shared_ptr<DeferredHandles> parse_handles,
+                      AstValueFactory* ast_value_factory,
                       std::shared_ptr<DeferredHandles> compile_handles);
 
   // Returns true if there is a pending job for the given function.

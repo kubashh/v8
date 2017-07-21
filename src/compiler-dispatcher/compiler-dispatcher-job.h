@@ -66,14 +66,11 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
                         const AstStringConstants* ast_string_constants,
                         CompileJobFinishCallback* finish_callback);
   // Creates a CompilerDispatcherJob in the analyzed state.
-  CompilerDispatcherJob(Isolate* isolate, CompilerDispatcherTracer* tracer,
-                        Handle<Script> script,
-                        Handle<SharedFunctionInfo> shared,
-                        FunctionLiteral* literal,
-                        std::shared_ptr<Zone> parse_zone,
-                        std::shared_ptr<DeferredHandles> parse_handles,
-                        std::shared_ptr<DeferredHandles> compile_handles,
-                        size_t max_stack_size);
+  CompilerDispatcherJob(
+      Isolate* isolate, CompilerDispatcherTracer* tracer, Handle<Script> script,
+      Handle<SharedFunctionInfo> shared, FunctionLiteral* literal,
+      std::shared_ptr<Zone> parse_zone, AstValueFactory* ast_value_factory,
+      std::shared_ptr<DeferredHandles> compile_handles, size_t max_stack_size);
   ~CompilerDispatcherJob();
 
   bool has_context() const { return !context_.is_null(); }
