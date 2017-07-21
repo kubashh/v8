@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e9d0c253_c43a2f9d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-21T13:39:16Z",
+      "side": 1,
+      "message": "nit: capacity_node \u003d\u003e length",
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8677b058_b97596d0",
         "filename": "src/compiler/access-builder.cc",
         "patchSetId": 10
@@ -19,6 +36,23 @@
         "endLine": 485,
         "endChar": 65
       },
+      "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59cea921_dfdae415",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4096,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-07-21T13:39:16Z",
+      "side": 1,
+      "message": "might be cleaner to add an initial_length on FixedArrayBase? (not a strong opinion about this :P)",
       "revId": "c719f87c06f1b62d8ddca5d85f98405726036a20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
