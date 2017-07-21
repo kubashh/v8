@@ -3520,7 +3520,6 @@ int ChoiceNode::CalculatePreloadCharacters(RegExpCompiler* compiler,
   if (compiler->macro_assembler()->CanReadUnaligned()) {
     bool one_byte = compiler->one_byte();
     if (one_byte) {
-      if (preload_characters > 4) preload_characters = 4;
       // We can't preload 3 characters because there is no machine instruction
       // to do that.  We can't just load 4 because we could be reading
       // beyond the end of the string, which could cause a memory fault.
