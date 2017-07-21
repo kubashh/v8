@@ -139,6 +139,7 @@ template<typename T> class ReturnValue;
 
 namespace internal {
 class Arguments;
+class DeferredHandles;
 class Heap;
 class HeapObject;
 class Isolate;
@@ -4157,6 +4158,38 @@ class V8_EXPORT WasmCompiledModule : public Object {
 
   WasmCompiledModule();
   static void CheckCast(Value* obj);
+};
+
+// TODO(mtrofin): when streaming compilation is done, we can rename this
+// to simply WasmModuleObjectBuilder
+class V8_EXPORT WasmModuleObjectBuilderStreaming final {
+ public:
+  WasmModuleObjectBuilderStreaming(Isolate* isolate, Local<Promise> promise);
+  // The buffer passed into OnBytesReceived is owned by the caller.
+  void OnBytesReceived(const uint8_t*, size_t size);
+  void Finish();
+  // Currently, we don't need an explicit Abort, because there's no
+  // activity happening until Finish is called. Should the connection
+  // be dropped, for example, the network layer is expected to reject
+  // the promise and then this object is destroyed, which, at the moment,
+  // just means the {received_buffers_} are freed.
+
+ private:
+  Isolate* isolate_ = nullptr;
+  Persistent<Promise> promise_;
+  typedef std::pair<std::unique_ptr<const uint8_t[]>, size_t> Buffer;
+
+  WasmModuleObjectBuilderStreaming(const WasmModuleObjectBuilderStreaming&) =
+      delete;
+  WasmModuleObjectBuilderStreaming(WasmModuleObjectBuilderStreaming&&) =
+      default;
+  WasmModuleObjectBuilderStreaming& operator=(
+      const WasmModuleObjectBuilderStreaming&) = delete;
+  WasmModuleObjectBuilderStreaming& operator=(
+      WasmModuleObjectBuilderStreaming&&) = default;
+
+  std::vector<Buffer> received_buffers_;
+  size_t total_size_ = 0;
 };
 
 class V8_EXPORT WasmModuleObjectBuilder final {
