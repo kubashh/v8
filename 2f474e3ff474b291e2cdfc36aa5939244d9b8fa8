@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "64f136c7_b89b7305",
+        "filename": "src/inspector/inspected-context.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-21T20:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a482479_4ec8530e",
+      "range": {
+        "startLine": 33,
+        "startChar": 23,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "2f474e3ff474b291e2cdfc36aa5939244d9b8fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c31b46f_c131ea1b",
         "filename": "src/inspector/inspected-context.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-20T20:53:16Z",
       "side": 1,
       "message": "Let\u0027s put these methods to WeakCallbackData instead? You can also move definition to cc file, forward-declaring the struct here.",
+      "range": {
+        "startLine": 58,
+        "startChar": 14,
+        "endLine": 58,
+        "endChar": 26
+      },
+      "revId": "2f474e3ff474b291e2cdfc36aa5939244d9b8fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3d8672e_de3e23cc",
+        "filename": "src/inspector/inspected-context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-21T20:08:10Z",
+      "side": 1,
+      "message": "I need to have access to private m_context field from resetContext method. I wouldn\u0027t like to put WeakCallbackData struct into v8_inspector namespace in cc file and couldn\u0027t put it into anonymous namespace since I need to declare it as friend here.",
+      "parentUuid": "8c31b46f_c131ea1b",
       "range": {
         "startLine": 58,
         "startChar": 14,
@@ -68,6 +116,30 @@
       "revId": "2f474e3ff474b291e2cdfc36aa5939244d9b8fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941f82be_795c0675",
+        "filename": "src/inspector/v8-inspector-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-07-21T20:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aee44a3_d82b06a2",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 23
+      },
+      "revId": "2f474e3ff474b291e2cdfc36aa5939244d9b8fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
