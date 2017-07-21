@@ -698,6 +698,13 @@ class ParserBase {
         tok == Token::EOS) {
       return;
     }
+
+    if (scanner()->current_token() == Token::AWAIT &&
+        !Check(Token::SEMICOLON)) {
+      DCHECK(!is_async_function());
+      ReportMessage(MessageTemplate::kAwaitNotInAsyncFunction);
+    }
+
     Expect(Token::SEMICOLON, ok);
   }
 
