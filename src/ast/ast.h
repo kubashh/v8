@@ -2269,6 +2269,9 @@ class Suspend : public Expression {
 };
 
 class Yield final : public Suspend {
+ public:
+  inline int await_return_value_suspend_id() const { return suspend_id() + 1; }
+
  private:
   friend class AstNodeFactory;
   Yield(Expression* expression, int pos, OnAbruptResume on_abrupt_resume)
