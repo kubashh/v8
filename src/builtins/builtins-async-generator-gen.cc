@@ -127,6 +127,8 @@ class AsyncGeneratorBuiltinsAssembler : public AsyncBuiltinsAssembler {
       JSAsyncGeneratorObject::ResumeMode resume_mode, Node* resume_value,
       Node* promise);
 
+  Node* HasCatchHandlerForPC(Node* generator, Node* state);
+
   // Shared implementation of the catchable and uncatchable variations of Await
   // for AsyncGenerators.
   template <typename Descriptor>
@@ -321,6 +323,99 @@ Node* AsyncGeneratorBuiltinsAssembler::TakeFirstAsyncGeneratorRequestFromQueue(
   StoreObjectField(generator, JSAsyncGeneratorObject::kQueueOffset, next);
   return request;
 }
+
+Node* AsyncGeneratorBuiltinsAssembler::HasCatchHandlerForPC(Node* generator,
+                                                            Node* state) {
+  Label done(this);
+  VARIABLE(var_result, MachineRepresentation::kTagged, FalseConstant());
+
+  GotoIf(SmiEqual(state, SmiConstant(JSGeneratorObject::kGeneratorClosed)),
+         &done);
+  Node* const function =
+      LoadObjectField(generator, JSGeneratorObject::kFunctionOffset);
+  Node* const shared =
+      LoadObjectField(function, JSFunction::kSharedFunctionInfoOffset);
+
+  VARIABLE(var_handler_table, MachineRepresentation::kTagged);
+
+  Label if_interpreted(this), if_notinterpreted(this), merge(this);
+  GotoIf(WordEqual(
+             function,
+             HeapConstant(isolate()->builtins()->InterpreterEntryTrampoline())),
+         &if_interpreted);
+  GotoIf(
+      WordEqual(function,
+                HeapConstant(
+                    isolate()->builtins()->InterpreterEnterBytecodeAdvance())),
+      &if_interpreted);
+  Branch(
+      WordEqual(function,
+                HeapConstant(
+                    isolate()->builtins()->InterpreterEnterBytecodeDispatch())),
+      &if_interpreted, &if_notinterpreted);
+
+  BIND(&if_interpreted);
+  {
+    Node* const bytecode_array =
+        LoadObjectField(shared, SharedFunctionInfo::kFunctionDataOffset);
+    CSA_SLOW_ASSERT(this, HasInstanceType(bytecode_array, BYTECODE_ARRAY_TYPE));
+    var_handler_table.Bind(
+        LoadObjectField(bytecode_array, BytecodeArray::kHandlerTableOffset));
+    Goto(&merge);
+  }
+
+  BIND(&if_notinterpreted);
+  {
+    Node* const code = LoadObjectField(shared, SharedFunctionInfo::kCodeOffset);
+    CSA_SLOW_ASSERT(this, HasInstanceType(code, CODE_TYPE));
+    var_handler_table.Bind(LoadObjectField(code, Code::kHandlerTableOffset));
+    Goto(&merge);
+  }
+
+  BIND(&merge);
+  Node* const handler_table = var_handler_table.value();
+  Node* const length = LoadFixedArrayBaseLength(handler_table);
+  Node* const pc =
+      LoadObjectField(generator, JSGeneratorObject::kInputOrDebugPosOffset);
+  CSA_ASSERT(this, TaggedIsSmi(pc));
+
+  VARIABLE(var_i, MachineRepresentation::kTaggedSigned, SmiConstant(0));
+  Label loop(this, &var_i);
+
+  // Lookup range --- immediately return true when a catch handler is found.
+  Goto(&loop);
+  BIND(&loop);
+  {
+    Label next(this);
+    Node* const i = var_i.value();
+    GotoIf(SmiGreaterThanOrEqual(i, length), &done);
+
+    const ParameterMode mode = SMI_PARAMETERS;
+    Node* const start_offset = LoadFixedArrayElement(
+        handler_table, i, HandlerTable::kRangeStartIndex, mode);
+    Node* const end_offset = LoadFixedArrayElement(
+        handler_table, i, HandlerTable::kRangeEndIndex, mode);
+    Node* const handler_field = LoadFixedArrayElement(
+        handler_table, i, HandlerTable::kRangeHandlerIndex, mode);
+
+    GotoIf(SmiLessThan(pc, start_offset), &next);
+    GotoIf(SmiGreaterThan(pc, end_offset), &next);
+
+    Node* const catch_prediction =
+        DecodeWord<HandlerTable::HandlerPredictionField>(
+            SmiUntag(handler_field));
+    GotoIfNot(WordEqual(catch_prediction, IntPtrConstant(HandlerTable::CAUGHT)),
+              &next);
+    var_result.Bind(TrueConstant());
+    Goto(&done);
+
+    BIND(&next);
+    var_i.Bind(SmiAdd(i, SmiConstant(HandlerTable::kRangeEntrySize)));
+    Goto(&loop);
+  }
+  BIND(&done);
+  return var_result.value();
+}
 }  // namespace
 
 // https://tc39.github.io/proposal-async-iteration/
@@ -438,7 +533,7 @@ TF_BUILTIN(AsyncGeneratorResumeNext, AsyncGeneratorBuiltinsAssembler) {
   Branch(IsAbruptResumeType(resume_type), &if_abrupt, &if_normal);
   BIND(&if_abrupt);
   {
-    Label settle_promise(this), fulfill_promise(this), reject_promise(this);
+    Label settle_promise(this), if_return(this), if_throw(this);
     GotoIfNot(IsGeneratorStateSuspendedAtStart(var_state.value()),
               &settle_promise);
     CloseGenerator(generator);
@@ -447,18 +542,19 @@ TF_BUILTIN(AsyncGeneratorResumeNext, AsyncGeneratorBuiltinsAssembler) {
     Goto(&settle_promise);
     BIND(&settle_promise);
 
-    GotoIfNot(IsGeneratorStateClosed(var_state.value()), &resume_generator);
-
     Branch(SmiEqual(resume_type, SmiConstant(JSGeneratorObject::kReturn)),
-           &fulfill_promise, &reject_promise);
+           &if_return, &if_throw);
 
-    BIND(&fulfill_promise);
-    // Unwrap Promise values for "return" in state "suspendedStart".
-    // This simulates `return await request.[[Completion]].[[Value]]`
-    TailCallBuiltin(Builtins::kAsyncGeneratorReturnProcessor, context,
-                    generator);
+    BIND(&if_return);
+    // Await the sent value. If the generator is not closed, resume with a .next
+    // or .throw completion. Otherwise, resolve or reject the request Promise
+    // with awaited value, and perform AsyncGeneratorResumeNext.
+    TailCallBuiltin(Builtins::kAsyncGeneratorReturn, context, generator,
+                    LoadValueFromAsyncGeneratorRequest(next),
+                    HasCatchHandlerForPC(generator, var_state.value()));
 
-    BIND(&reject_promise);
+    BIND(&if_throw);
+    GotoIfNot(IsGeneratorStateClosed(var_state.value()), &resume_generator);
     CallBuiltin(Builtins::kAsyncGeneratorReject, context, generator,
                 LoadValueFromAsyncGeneratorRequest(next));
     var_next.Bind(LoadFirstAsyncGeneratorRequestFromQueue(generator));
@@ -580,27 +676,43 @@ TF_BUILTIN(AsyncGeneratorYieldResolveClosure, AsyncGeneratorBuiltinsAssembler) {
   TailCallBuiltin(Builtins::kAsyncGeneratorResumeNext, context, generator);
 }
 
-TF_BUILTIN(AsyncGeneratorReturnProcessor, AsyncGeneratorBuiltinsAssembler) {
+TF_BUILTIN(AsyncGeneratorReturn, AsyncGeneratorBuiltinsAssembler) {
   Node* const generator = Parameter(Descriptor::kGenerator);
+  Node* const value = Parameter(Descriptor::kValue);
+  Node* const is_caught = Parameter(Descriptor::kIsCaught);
   Node* const req = LoadFirstAsyncGeneratorRequestFromQueue(generator);
 
-  CSA_SLOW_ASSERT(this, SmiEqual(LoadResumeTypeFromAsyncGeneratorRequest(req),
-                                 SmiConstant(JSGeneratorObject::kReturn)));
+  Node* const state = LoadGeneratorState(generator);
+
+  Label perform_await(this);
+  VARIABLE(var_on_resolve, MachineType::PointerRepresentation(),
+           IntPtrConstant(
+               Context::ASYNC_GENERATOR_RETURN_CLOSED_RESOLVE_SHARED_FUN));
+  VARIABLE(
+      var_on_reject, MachineType::PointerRepresentation(),
+      IntPtrConstant(Context::ASYNC_GENERATOR_RETURN_CLOSED_REJECT_SHARED_FUN));
+
+  GotoIf(SmiEqual(state, SmiConstant(JSGeneratorObject::kGeneratorClosed)),
+         &perform_await);
+  var_on_resolve.Bind(
+      IntPtrConstant(Context::ASYNC_GENERATOR_RETURN_RESOLVE_SHARED_FUN));
+  var_on_reject.Bind(
+      IntPtrConstant(Context::ASYNC_GENERATOR_AWAIT_REJECT_SHARED_FUN));
+  Goto(&perform_await);
+
+  BIND(&perform_await);
 
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
   };
 
-  const bool kIsPredictedAsCaught = false;
-
   Node* const context = Parameter(Descriptor::kContext);
   Node* const outer_promise = LoadPromiseFromAsyncGeneratorRequest(req);
-  Node* const value = LoadValueFromAsyncGeneratorRequest(req);
-  Node* const promise = Await(
-      context, generator, value, outer_promise, AwaitContext::kLength,
-      init_closure_context, Context::ASYNC_GENERATOR_RETURN_RESOLVE_SHARED_FUN,
-      Context::ASYNC_GENERATOR_RETURN_REJECT_SHARED_FUN, kIsPredictedAsCaught);
+  Node* const promise =
+      Await(context, generator, value, outer_promise, AwaitContext::kLength,
+            init_closure_context, var_on_resolve.value(), var_on_reject.value(),
+            is_caught);
 
   CSA_SLOW_ASSERT(this, IsGeneratorNotSuspendedForAwait(generator));
   StoreObjectField(generator, JSAsyncGeneratorObject::kAwaitedPromiseOffset,
@@ -618,12 +730,33 @@ TF_BUILTIN(AsyncGeneratorReturnResolveClosure,
   CSA_SLOW_ASSERT(this, IsGeneratorSuspendedForAwait(generator));
   ClearAwaitedPromise(generator);
 
-  //  Return ! AsyncGeneratorResolve(_F_.[[Generator]], _value_, *true*).
-  TailCallBuiltin(Builtins::kAsyncGeneratorResolve, context, generator, value,
-                  TrueConstant());
+  CSA_SLOW_ASSERT(this, IsGeneratorSuspended(generator));
+
+  CallStub(CodeFactory::ResumeGenerator(isolate()), context, value, generator,
+           SmiConstant(JSGeneratorObject::kReturn));
+
+  TailCallBuiltin(Builtins::kAsyncGeneratorResumeNext, context, generator);
 }
 
-TF_BUILTIN(AsyncGeneratorReturnRejectClosure, AsyncGeneratorBuiltinsAssembler) {
+TF_BUILTIN(AsyncGeneratorReturnClosedResolveClosure,
+           AsyncGeneratorBuiltinsAssembler) {
+  Node* const context = Parameter(Descriptor::kContext);
+  Node* const value = Parameter(Descriptor::kValue);
+  Node* const generator =
+      LoadContextElement(context, AwaitContext::kGeneratorSlot);
+
+  CSA_SLOW_ASSERT(this, IsGeneratorSuspendedForAwait(generator));
+  ClearAwaitedPromise(generator);
+
+  //  Return ! AsyncGeneratorResolve(_F_.[[Generator]], _value_, *true*).
+  CallBuiltin(Builtins::kAsyncGeneratorResolve, context, generator, value,
+              TrueConstant());
+
+  TailCallBuiltin(Builtins::kAsyncGeneratorResumeNext, context, generator);
+}
+
+TF_BUILTIN(AsyncGeneratorReturnClosedRejectClosure,
+           AsyncGeneratorBuiltinsAssembler) {
   Node* const context = Parameter(Descriptor::kContext);
   Node* const value = Parameter(Descriptor::kValue);
   Node* const generator =
@@ -633,7 +766,9 @@ TF_BUILTIN(AsyncGeneratorReturnRejectClosure, AsyncGeneratorBuiltinsAssembler) {
   ClearAwaitedPromise(generator);
 
   // Return ! AsyncGeneratorReject(_F_.[[Generator]], _reason_).
-  TailCallBuiltin(Builtins::kAsyncGeneratorReject, context, generator, value);
+  CallBuiltin(Builtins::kAsyncGeneratorReject, context, generator, value);
+
+  TailCallBuiltin(Builtins::kAsyncGeneratorResumeNext, context, generator);
 }
 
 }  // namespace internal
