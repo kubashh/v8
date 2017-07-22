@@ -219,18 +219,7 @@ void AstNumberingVisitor::VisitSuspend(Suspend* node) {
   Visit(node->expression());
 }
 
-void AstNumberingVisitor::VisitYield(Yield* node) {
-  node->set_suspend_id(suspend_count_);
-  suspend_count_++;
-
-  if (IsAsyncGeneratorFunction(function_kind_)) {
-    // Add an extra suspend id for Await, inserted as part of the `return`
-    // resumption. (see Yield::await_return_value_suspend_id())
-    suspend_count_++;
-  }
-
-  Visit(node->expression());
-}
+void AstNumberingVisitor::VisitYield(Yield* node) { VisitSuspend(node); }
 
 void AstNumberingVisitor::VisitYieldStar(YieldStar* node) {
   VisitSuspend(node);

@@ -3150,7 +3150,6 @@ class HandlerTable : public FixedArray {
   void HandlerTableReturnPrint(std::ostream& os);  // NOLINT
 #endif
 
- private:
   // Layout description for handler table based on ranges.
   static const int kRangeStartIndex = 0;
   static const int kRangeEndIndex = 1;
