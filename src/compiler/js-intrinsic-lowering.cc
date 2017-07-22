@@ -46,6 +46,10 @@ Reduction JSIntrinsicLowering::Reduce(Node* node) {
       return ReduceAsyncGeneratorReject(node);
     case Runtime::kInlineAsyncGeneratorResolve:
       return ReduceAsyncGeneratorResolve(node);
+    case Runtime::kInlineAsyncGeneratorYield:
+      return Change(
+          node,
+          Builtins::CallableFor(isolate(), Builtins::kAsyncGeneratorYield), 0);
     case Runtime::kInlineGeneratorGetResumeMode:
       return ReduceGeneratorGetResumeMode(node);
     case Runtime::kInlineGeneratorGetContext:
