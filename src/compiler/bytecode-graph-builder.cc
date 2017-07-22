@@ -2317,7 +2317,6 @@ void BytecodeGraphBuilder::VisitForInStep() {
 }
 
 void BytecodeGraphBuilder::VisitSuspendGenerator() {
-  Node* state = environment()->LookupAccumulator();
   Node* generator = environment()->LookupRegister(
       bytecode_iterator().GetRegisterOperand(0));
   interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
@@ -2325,6 +2324,8 @@ void BytecodeGraphBuilder::VisitSuspendGenerator() {
   CHECK_EQ(0, first_reg.index());
   int register_count =
       static_cast<int>(bytecode_iterator().GetRegisterCountOperand(2));
+  Node* suspend_id = jsgraph()->SmiConstant(
+      bytecode_iterator().GetUnsignedImmediateOperand(3));
 
   // The offsets used by the bytecode iterator are relative to a different base
   // than what is used in the interpreter, hence the addition.
@@ -2336,7 +2337,7 @@ void BytecodeGraphBuilder::VisitSuspendGenerator() {
 
   Node** value_inputs = local_zone()->NewArray<Node*>(value_input_count);
   value_inputs[0] = generator;
-  value_inputs[1] = state;
+  value_inputs[1] = suspend_id;
   value_inputs[2] = offset;
   for (int i = 0; i < register_count; ++i) {
     value_inputs[3 + i] =
