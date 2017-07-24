@@ -698,7 +698,23 @@ class ParserBase {
         tok == Token::EOS) {
       return;
     }
-    Expect(Token::SEMICOLON, ok);
+
+    Token::Value current = scanner()->current_token();
+    Token::Value next = Next();
+
+    if (next == Token::SEMICOLON) {
+      return;
+    }
+
+    if (current == Token::AWAIT) {
+      DCHECK(!is_async_function());
+      *ok = false;
+      ReportMessage(MessageTemplate::kAwaitNotInAsyncFunction);
+      return;
+    }
+
+    ReportUnexpectedToken(next);
+    *ok = false;
   }
 
   // Dummy functions, just useful as arguments to CHECK_OK_CUSTOM.
