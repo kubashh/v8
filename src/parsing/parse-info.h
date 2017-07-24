@@ -26,7 +26,6 @@ class AstRawString;
 class AstStringConstants;
 class AstValueFactory;
 class DeclarationScope;
-class DeferredHandles;
 class FunctionLiteral;
 class RuntimeCallStats;
 class ScriptData;
@@ -50,13 +49,10 @@ class V8_EXPORT_PRIVATE ParseInfo : public CompileJobFinishCallback {
 
   Zone* zone() const { return zone_.get(); }
 
-  std::shared_ptr<Zone> zone_shared() const { return zone_; }
-
-  void set_deferred_handles(std::shared_ptr<DeferredHandles> deferred_handles);
-  void set_deferred_handles(DeferredHandles* deferred_handles);
-  std::shared_ptr<DeferredHandles> deferred_handles() const {
-    return deferred_handles_;
-  }
+  // Sets this parse info to share the same zone as |other|
+  void ShareZone(ParseInfo* other);
+  // Sets this parse info to share the same ast value factory as |other|
+  void ShareAstValueFactory(ParseInfo* other);
 
 // Convenience accessor methods for flags.
 #define FLAG_ACCESSOR(flag, getter, setter)     \
@@ -133,9 +129,6 @@ class V8_EXPORT_PRIVATE ParseInfo : public CompileJobFinishCallback {
   void set_asm_function_scope(DeclarationScope* scope) {
     asm_function_scope_ = scope;
   }
-
-  // Sets this parse info to share the same ast value factory as |other|
-  void ShareAstValueFactory(ParseInfo* other);
 
   void set_ast_value_factory(AstValueFactory* ast_value_factory);
   AstValueFactory* ast_value_factory() const {
