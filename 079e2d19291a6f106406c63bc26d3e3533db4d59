@@ -22,6 +22,30 @@
       "revId": "079e2d19291a6f106406c63bc26d3e3533db4d59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e9b90ce_c2edf4b1",
+        "filename": "src/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-07-24T14:17:58Z",
+      "side": 1,
+      "message": "I like this version much more, as it avoids all the ugly special cases, and even executes faster.\nIlija, can you check whether this version fixes the errors you are seeing on mips?\nIf it does, I vote for landing this version instead, with two changes:\n- adding a comment to explain that this is taken from HD\n- constraining it to be used with signed input values only (otherwise it would produce wrong results).",
+      "parentUuid": "236b7e62_6e7c60b9",
+      "range": {
+        "startLine": 195,
+        "startChar": 11,
+        "endLine": 195,
+        "endChar": 25
+      },
+      "revId": "079e2d19291a6f106406c63bc26d3e3533db4d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
