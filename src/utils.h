@@ -187,7 +187,13 @@ T JSMin(T x, T y) {
 template <typename T,
           typename = typename std::enable_if<std::is_integral<T>::value>::type>
 typename std::make_unsigned<T>::type Abs(T a) {
-  return a < 0 ? -a : a;
+  if (a == std::numeric_limits<T>::min()) {
+    return static_cast<typename std::make_unsigned<T>::type>(
+               std::numeric_limits<T>::max()) +
+           1;
+  } else {
+    return a < 0 ? -a : a;
+  }
 }
 
 // Floor(-0.0) == 0.0
