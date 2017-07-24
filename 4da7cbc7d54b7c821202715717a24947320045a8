@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5660f40_9e43ed3f",
+        "filename": "test/mjsunit/regress/regress-747825.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-24T09:58:08Z",
+      "side": 1,
+      "message": "Lovely.",
+      "revId": "4da7cbc7d54b7c821202715717a24947320045a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
