@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e2620eab_ffd8b083",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-24T16:48:46Z",
+      "side": 1,
+      "message": "O.p.hasOwnProperty is implemented as a TF builtin, which has a fast-path, via CSA TryHasOwnProperty via CSA TryLookupProperty, for objects that are not special receiver types.\nLAST_SPECIAL_RECEIVER_TYPE is JS_SPECIAL_API_OBJECT_TYPE, so this change makes namespace a special receiver type. This will probably force the slow (runtime) path in other builtins as well, but since namespace objects currently are implemented using the slow native accessors anyways it doesn\u0027t really matter.  When we look into optimizing namespace objects, we need to revisit this of course.",
+      "parentUuid": "5c100da5_ae929da3",
+      "revId": "3aaeb2c2d992a24e2d382df4e3f526eaf810758c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d497f71_e70cace1",
         "filename": "src/runtime/runtime-object.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "3aaeb2c2d992a24e2d382df4e3f526eaf810758c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4faedd9b_07dc9b94",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-07-24T16:48:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9d497f71_e70cace1",
+      "revId": "3aaeb2c2d992a24e2d382df4e3f526eaf810758c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
