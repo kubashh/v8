@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fce0ffea_5e3558c4",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-07-24T15:30:23Z",
+      "side": 1,
+      "message": "I\u0027d suggest inlining the body of Expect here, and put this logic in the not-OK branch, for a few reasons:\n- I\u0027ve been bitten before by \"better error messages\" that trigger on valid code (though this seems good and I\u0027m not worried); if you just put logic in error cases, it\u0027s easier to see that nothing changed\n- You\u0027d mitigate a potential minor performance regression (from more checks)\n- It gets rid of the way that this code looks a little suspicious, having ReportMessage but no *ok \u003d false;\n- Once you do that, there are more cases that you could also handle with similar logic. For example, `yield` with an argument outside of a generator. You can use as slow checks as you want, since you already know it\u0027s going to be a syntax error.",
+      "revId": "58b3bc283f8d26bf1c8ca006a16218d6079a9950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "078437ee_e7486bb5",
+        "filename": "test/message/await-non-async.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-07-24T15:30:23Z",
+      "side": 1,
+      "message": "Is there a test that looks into what happens for ASI between await and an expression, both inside and outside of async functions? (You could use a `with ({get await() {...}}) { await\\nfoo }` to observe await being read.)",
+      "revId": "58b3bc283f8d26bf1c8ca006a16218d6079a9950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
