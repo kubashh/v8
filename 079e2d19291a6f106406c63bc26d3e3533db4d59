@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "236b7e62_6e7c60b9",
+        "filename": "src/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-07-24T14:05:57Z",
+      "side": 1,
+      "message": "An alternative implementation to this would be to use a branch-free version. On my x64 it beats both other implementations. The one I have measured is the following ...\n\ntemplate \u003ctypename T,\n          typename \u003d typename std::enable_if\u003cstd::is_integral\u003cT\u003e::value\u003e::type\u003e\ntypename std::make_unsigned\u003cT\u003e::type AbsC(T a) {\n  typedef typename std::make_unsigned\u003cT\u003e::type unsignedT;\n  unsignedT x \u003d static_cast\u003cunsignedT\u003e(a);\n  unsignedT y \u003d static_cast\u003cunsignedT\u003e(a \u003e\u003e 31);\n  return (x ^ y) - y;\n}\n\nI uploaded my experimental CL to reproduce the measurements here: https://chromium-review.googlesource.com/c/582952/\n\nAFAICT the above code should also avoid the undefined behavior of the unary minus operator. Ilija, can you confirm that this would also fix the bug you see in the \"Int32DivWithConstant\" unit test?\n\nDisclosure: This is taken from \"Hacker\u0027s Delight, Second Edition\", page 18.\n\nClemens, let me know what you think. Is it worth sacrificing readability for this branch-free version? WDYT?",
+      "range": {
+        "startLine": 195,
+        "startChar": 11,
+        "endLine": 195,
+        "endChar": 25
+      },
+      "revId": "079e2d19291a6f106406c63bc26d3e3533db4d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
