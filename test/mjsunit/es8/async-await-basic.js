@@ -562,3 +562,55 @@ assertDoesNotThrow(gaga);
   %RunMicrotasks();
   assertEquals(["a", "b", "c"], log);
 }
+
+{
+  function f1() {
+    var x;
+    with ({get async() { return [42] }}) {
+      x = async
+      [0];
+    };
+    return x;
+  }
+
+  assertEquals(42, f1());
+  async function f2() {
+    var x;
+    with ({get async() { return [42] }}) {
+      x = async
+      [0];
+    };
+    return x;
+  }
+
+  var ans;
+  f2().then(x => ans = x).catch(e => ans = e);
+  %RunMicrotasks();
+  assertEquals(42, ans);
+}
+
+{
+  function f1() {
+    var x, y;
+    with ({get async() { return [42] }}) {
+      x = async
+      y = 1
+    };
+    return y;
+  }
+
+  assertEquals(1, f1());
+  async function f2() {
+    var x, y;
+    with ({get async() { return [42] }}) {
+      x = async
+      y = 1
+    };
+    return y;
+  }
+
+  var ans;
+  f2().then(x => ans = x).catch(e => ans = e);
+  %RunMicrotasks();
+  assertEquals(1, ans);
+}
