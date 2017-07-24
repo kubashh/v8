@@ -1476,11 +1476,12 @@ uc32 RegExpParser::ParseClassCharacterEscape() {
   return 0;
 }
 
+static const char kNoCharClass = 0;
 
-CharacterRange RegExpParser::ParseClassAtom(uc16* char_class) {
-  DCHECK_EQ(0, *char_class);
-  uc32 first = current();
-  if (first == '\\') {
+void RegExpParser::ParseClassAtom(char* char_class, uc32* character) {
+  *char_class = kNoCharClass;
+  uc32 current_char = current();
+  if (current_char == '\\') {
     switch (Next()) {
       case 'w':
       case 'W':
@@ -1488,57 +1489,65 @@ CharacterRange RegExpParser::ParseClassAtom(uc16* char_class) {
       case 'D':
       case 's':
       case 'S': {
-        *char_class = Next();
+        *char_class = static_cast<char>(Next());
         Advance(2);
-        return CharacterRange::Singleton(0);  // Return dummy value.
+        return;
       }
       case kEndMarker:
-        return ReportError(CStrVector("\\ at end of pattern"));
+        ReportError(CStrVector("\\ at end of pattern"));
+        return;
       default:
-        first = ParseClassCharacterEscape(CHECK_FAILED);
+        *character = ParseClassCharacterEscape();
+        return;
     }
   } else {
     Advance();
+    *character = current_char;
   }
-
-  return CharacterRange::Singleton(first);
 }
 
-static const uc16 kNoCharClass = 0;
-
-// Adds range or pre-defined character class to character ranges.
-// If char_class is not kInvalidClass, it's interpreted as a class
-// escape (i.e., 's' means whitespace, from '\s').
-static inline void AddRangeOrEscape(ZoneList<CharacterRange>* ranges,
-                                    uc16 char_class, CharacterRange range,
+bool RegExpParser::ParseClassEscape(ZoneList<CharacterRange>* ranges,
+                                    uc32* char_out,
                                     bool add_unicode_case_equivalents,
                                     Zone* zone) {
-  if (char_class != kNoCharClass) {
-    CharacterRange::AddClassEscape(char_class, ranges,
-                                   add_unicode_case_equivalents, zone);
+  uc32 current_char = current();
+  if (current_char == '\\') {
+    switch (Next()) {
+      case 'w':
+      case 'W':
+      case 'd':
+      case 'D':
+      case 's':
+      case 'S': {
+        CharacterRange::AddClassEscape(static_cast<char>(Next()), ranges,
+                                       add_unicode_case_equivalents, zone);
+        Advance(2);
+        return true;
+      }
+      case kEndMarker:
+        ReportError(CStrVector("\\ at end of pattern"));
+        return false;
+      case 'p':
+      case 'P':
+        if (FLAG_harmony_regexp_property && unicode()) {
+          bool negate = Next() == 'P';
+          Advance(2);
+          if (!ParsePropertyClass(ranges, negate)) {
+            ReportError(CStrVector("Invalid property name in character class"));
+          }
+          return true;
+        }
+        break;
+      default:
+        break;
+    }
+    *char_out = ParseClassCharacterEscape();
+    return false;
   } else {
-    ranges->Add(range, zone);
-  }
-}
-
-bool RegExpParser::ParseClassProperty(ZoneList<CharacterRange>* ranges) {
-  if (!FLAG_harmony_regexp_property) return false;
-  if (!unicode()) return false;
-  if (current() != '\\') return false;
-  uc32 next = Next();
-  bool parse_success = false;
-  if (next == 'p') {
-    Advance(2);
-    parse_success = ParsePropertyClass(ranges, false);
-  } else if (next == 'P') {
-    Advance(2);
-    parse_success = ParsePropertyClass(ranges, true);
-  } else {
+    Advance();
+    *char_out = current_char;
     return false;
   }
-  if (!parse_success)
-    ReportError(CStrVector("Invalid property name in character class"));
-  return parse_success;
 }
 
 RegExpTree* RegExpParser::ParseCharacterClass() {
@@ -1557,10 +1566,9 @@ RegExpTree* RegExpParser::ParseCharacterClass() {
       new (zone()) ZoneList<CharacterRange>(2, zone());
   bool add_unicode_case_equivalents = unicode() && ignore_case();
   while (has_more() && current() != ']') {
-    bool parsed_property = ParseClassProperty(ranges CHECK_FAILED);
-    if (parsed_property) continue;
-    uc16 char_class = kNoCharClass;
-    CharacterRange first = ParseClassAtom(&char_class CHECK_FAILED);
+    uc32 char_1, char_2;
+    bool is_class_1 = ParseClassEscape(
+        ranges, &char_1, add_unicode_case_equivalents, zone() CHECK_FAILED);
     if (current() == '-') {
       Advance();
       if (current() == kEndMarker) {
@@ -1568,34 +1576,30 @@ RegExpTree* RegExpParser::ParseCharacterClass() {
         // following code report an error.
         break;
       } else if (current() == ']') {
-        AddRangeOrEscape(ranges, char_class, first,
-                         add_unicode_case_equivalents, zone());
+        if (!is_class_1) ranges->Add(CharacterRange::Singleton(char_1), zone());
         ranges->Add(CharacterRange::Singleton('-'), zone());
         break;
       }
-      uc16 char_class_2 = kNoCharClass;
-      CharacterRange next = ParseClassAtom(&char_class_2 CHECK_FAILED);
-      if (char_class != kNoCharClass || char_class_2 != kNoCharClass) {
+      bool is_class_2 = ParseClassEscape(
+          ranges, &char_2, add_unicode_case_equivalents, zone() CHECK_FAILED);
+      if (is_class_1 || is_class_2) {
         // Either end is an escaped character class. Treat the '-' verbatim.
         if (unicode()) {
           // ES2015 21.2.2.15.1 step 1.
           return ReportError(CStrVector(kRangeInvalid));
         }
-        AddRangeOrEscape(ranges, char_class, first,
-                         add_unicode_case_equivalents, zone());
+        if (!is_class_1) ranges->Add(CharacterRange::Singleton(char_1), zone());
         ranges->Add(CharacterRange::Singleton('-'), zone());
-        AddRangeOrEscape(ranges, char_class_2, next,
-                         add_unicode_case_equivalents, zone());
+        if (!is_class_2) ranges->Add(CharacterRange::Singleton(char_2), zone());
         continue;
       }
       // ES2015 21.2.2.15.1 step 6.
-      if (first.from() > next.to()) {
+      if (char_1 > char_2) {
         return ReportError(CStrVector(kRangeOutOfOrder));
       }
-      ranges->Add(CharacterRange::Range(first.from(), next.to()), zone());
+      ranges->Add(CharacterRange::Range(char_1, char_2), zone());
     } else {
-      AddRangeOrEscape(ranges, char_class, first, add_unicode_case_equivalents,
-                       zone());
+      if (!is_class_1) ranges->Add(CharacterRange::Singleton(char_1), zone());
     }
   }
   if (!has_more()) {

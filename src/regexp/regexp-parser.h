@@ -185,7 +185,15 @@ class RegExpParser BASE_EMBEDDED {
   bool ParseBackReferenceIndex(int* index_out);
 
   bool ParseClassProperty(ZoneList<CharacterRange>* result);
-  CharacterRange ParseClassAtom(uc16* char_class);
+
+  // Parse inside a class. Either add escaped class to the range, or return
+  // false and pass parsed single character through |char_out|.
+  bool ParseClassEscape(ZoneList<CharacterRange>* ranges, uc32* char_out,
+                        bool add_unicode_case_equivalents, Zone* zone);
+  void ParseClassAtom(char* char_class, uc32* character);
+
+  char ParseClassEscape();
+
   RegExpTree* ReportError(Vector<const char> message);
   void Advance();
   void Advance(int dist);
