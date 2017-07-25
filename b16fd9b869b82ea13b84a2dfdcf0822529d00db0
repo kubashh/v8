@@ -16,6 +16,24 @@
       "revId": "b16fd9b869b82ea13b84a2dfdcf0822529d00db0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "231a78ea_911877fa",
+        "filename": "test/mjsunit/es8/async-await-basic.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-07-25T17:36:01Z",
+      "side": 1,
+      "message": "Ah, ofc. Not sure why I was testing async \u003e.\u003e",
+      "parentUuid": "757c3a55_1570072f",
+      "revId": "b16fd9b869b82ea13b84a2dfdcf0822529d00db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
