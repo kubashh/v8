@@ -2808,7 +2808,7 @@ TEST(OptimizedAllocationArrayLiterals) {
 
 
 static int CountMapTransitions(Map* map) {
-  return TransitionArray::NumberOfTransitions(map->raw_transitions());
+  return TransitionsAccessor(map).NumberOfTransitions();
 }
 
 
@@ -2997,7 +2997,7 @@ TEST(TransitionArraySimpleToFull) {
   CompileRun("o = new F;"
              "root = new F");
   root = GetByName("root");
-  CHECK(TransitionArray::IsSimpleTransition(root->map()->raw_transitions()));
+  CHECK(root->map()->raw_transitions()->IsWeakCell());
   AddPropertyTo(2, root, "happy");
 
   // Count number of live transitions after marking.  Note that one transition
