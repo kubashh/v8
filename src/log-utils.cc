@@ -30,19 +30,6 @@ Log::Log(Logger* logger)
 void Log::Initialize(const char* log_file_name) {
   message_buffer_ = NewArray<char>(kMessageBufferSize);
 
-  // --log-all enables all the log flags.
-  if (FLAG_log_all) {
-    FLAG_log_api = true;
-    FLAG_log_code = true;
-    FLAG_log_gc = true;
-    FLAG_log_suspect = true;
-    FLAG_log_handles = true;
-    FLAG_log_internal_timer_events = true;
-  }
-
-  // --prof implies --log-code.
-  if (FLAG_prof) FLAG_log_code = true;
-
   // If we're logging anything, we need to open the log file.
   if (Log::InitLogAtStart()) {
     if (strcmp(log_file_name, kLogToConsole) == 0) {
