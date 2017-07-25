@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77723dd2_1a23f5fc",
+        "filename": "src/compiler/new-escape-analysis-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "2017",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2050f054_3cd4e924",
+        "filename": "src/compiler/new-escape-analysis-reducer.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "Hmm, can\u0027t you supply an equality functor to the unordered_set rather than creating this confusing wrapper?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f9f113_4b4f124e",
+        "filename": "src/compiler/new-escape-analysis-reducer.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "This needs some explanation, it is hard to see what it is. Also the public methods need at least one sentence explaining what they are doing.",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 19
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a2c35b_682c5bd3",
+        "filename": "src/compiler/new-escape-analysis-reducer.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "???",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 8
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "492eb4f8_d45a0063",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "It is still tricky to understand what the individual pieces of the loops do. Could you still add a bit more comments to explain the blocks of the loop? \n\n(The comment above is hard to map to the if cascade at the end of the loop.)\n\nWould not it make sense to start with the old state if it exists (rather than the first input\u0027s state)? But perhaps it is not worth the extra complexity.\n\nIt i s a bit confusing that this loop seems to be iterating over the result state, but in fact it iterates over the first input\u0027s state.",
+      "range": {
+        "startLine": 148,
+        "startChar": 2,
+        "endLine": 148,
+        "endChar": 28
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee44bde_9dee57e6",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "I assume you mean it was created by previous reduction of this [effect_phi]?",
+      "range": {
+        "startLine": 181,
+        "startChar": 26,
+        "endLine": 181,
+        "endChar": 49
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c66ff6_a4f6efd4",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "It is not clear how the comment above relates to the line below?",
+      "range": {
+        "startLine": 183,
+        "startChar": 7,
+        "endLine": 184,
+        "endChar": 29
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed059bdf_d4466a08",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "In this case, the defined input should be the first one, no?\n\nPerhaps we should check that...",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 30
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56b572c8_f300c94e",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "In this case, if [checked] is a non-escaping virtual object, could not you also replace with [checked]?",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 16
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5670fe12_383ffa20",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "This would be a good place to explain the exact semantics of state:\n- what is the meaning of null?\n- what is the meaning of Dead?\n- what if variable\u0027s value is not mapped at all? (I am guessing this should not happen...)",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 67
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afc122f8_6320ac1e",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "Would not it make sense to ensure that the dependencies are not added multiple times?\n\nAlso, it is somewhat surprising that Get* method has the side effect of adding dependancy. Maybe the method name should reflect that.",
+      "range": {
+        "startLine": 307,
+        "startChar": 6,
+        "endLine": 307,
+        "endChar": 58
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60680355_70d12c59",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "Nit: repl \u003d\u003e replacement",
+      "range": {
+        "startLine": 376,
+        "startChar": 14,
+        "endLine": 376,
+        "endChar": 17
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3c12417_72f8932e",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "Do we have this subclass just to get the bounds checking?\n\nIn that case I would not do it.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1f40405_0aba9dd3",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-25T21:37:52Z",
+      "side": 1,
+      "message": "size_t is unsigned so pos \u003e\u003d 0 is true for any value of pos.",
+      "range": {
+        "startLine": 22,
+        "startChar": 11,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
