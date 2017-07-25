@@ -918,6 +918,10 @@ ExternalReference ExternalReference::get_date_field_function(
   return ExternalReference(Redirect(isolate, FUNCTION_ADDR(JSDate::GetField)));
 }
 
+ExternalReference ExternalReference::is_interpreted_function(Isolate* isolate) {
+  bool (&IsInterpreted)(JSFunction*) = JSFunction::IsInterpreted;
+  return ExternalReference(Redirect(isolate, FUNCTION_ADDR(IsInterpreted)));
+}
 
 ExternalReference ExternalReference::get_make_code_young_function(
     Isolate* isolate) {

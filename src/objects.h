@@ -3156,7 +3156,6 @@ class HandlerTable : public FixedArray {
   void HandlerTableReturnPrint(std::ostream& os);  // NOLINT
 #endif
 
- private:
   // Layout description for handler table based on ranges.
   static const int kRangeStartIndex = 0;
   static const int kRangeEndIndex = 1;
@@ -5150,6 +5149,7 @@ class JSFunction: public JSObject {
   // as function->shared()->IsInterpreted() because the closure might have been
   // optimized.
   inline bool IsInterpreted();
+  static bool IsInterpreted(JSFunction* function);
 
   // Tells whether or not this function checks its optimization marker in its
   // feedback vector.
