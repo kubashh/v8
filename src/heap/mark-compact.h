@@ -742,6 +742,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // Compact every array in the global list of transition arrays and
   // trim the corresponding descriptor array if a transition target is non-live.
   void ClearFullMapTransitions();
+  void ProcessTransitionArray(TransitionArray* array);
   bool CompactTransitionArray(Map* map, TransitionArray* transitions,
                               DescriptorArray* descriptors);
   void TrimDescriptorArray(Map* map, DescriptorArray* descriptors);

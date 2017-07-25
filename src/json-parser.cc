@@ -367,20 +367,22 @@ Handle<Object> JsonParser<seq_one_byte>::ParseJsonObject() {
       // to parse it first.
       bool follow_expected = false;
       Handle<Map> target;
+      TransitionsAccessor transitions(*map);
       if (seq_one_byte) {
-        key = TransitionArray::ExpectedTransitionKey(map);
+        key = transitions.ExpectedTransitionKey();
         follow_expected = !key.is_null() && ParseJsonString(key);
       }
       // If the expected transition hits, follow it.
       if (follow_expected) {
-        target = TransitionArray::ExpectedTransitionTarget(map);
+        target = transitions.ExpectedTransitionTarget();
       } else {
         // If the expected transition failed, parse an internalized string and
         // try to find a matching transition.
         key = ParseJsonInternalizedString();
         if (key.is_null()) return ReportUnexpectedCharacter();
 
-        target = TransitionArray::FindTransitionToField(map, key);
+        // Don't reuse |transitions| because it's not GC safe.
+        target = TransitionsAccessor(map).FindTransitionToField(key);
         // If a transition was found, follow it and continue.
         transitioning = !target.is_null();
       }

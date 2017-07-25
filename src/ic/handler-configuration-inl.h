@@ -165,6 +165,21 @@ Handle<Smi> StoreHandler::TransitionToConstant(Isolate* isolate,
   return handle(Smi::FromInt(config), isolate);
 }
 
+// static
+WeakCell* StoreHandler::GetTuple3TransitionCell(Object* tuple3_handler) {
+  WeakCell* cell = WeakCell::cast(Tuple3::cast(tuple3_handler)->value1());
+  DCHECK(!cell->cleared());
+  return cell;
+}
+
+// static
+WeakCell* StoreHandler::GetArrayTransitionCell(Object* array_handler) {
+  WeakCell* cell = WeakCell::cast(
+      FixedArray::cast(array_handler)->get(kTransitionCellIndex));
+  DCHECK(!cell->cleared());
+  return cell;
+}
+
 }  // namespace internal
 }  // namespace v8
 

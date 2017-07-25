@@ -27,7 +27,7 @@ class V8_EXPORT_PRIVATE LookupIterator final BASE_EMBEDDED {
     OWN = kInterceptor,
     PROTOTYPE_CHAIN_SKIP_INTERCEPTOR = kPrototypeChain,
     PROTOTYPE_CHAIN = kPrototypeChain | kInterceptor,
-    DEFAULT = PROTOTYPE_CHAIN
+    DEFAULT = PROTOTYPE_CHAIN,
   };
 
   enum State {
@@ -129,6 +129,10 @@ class V8_EXPORT_PRIVATE LookupIterator final BASE_EMBEDDED {
   static LookupIterator PropertyOrElement(
       Isolate* isolate, Handle<Object> receiver, Handle<Object> key,
       bool* success, Configuration configuration = DEFAULT);
+
+  static LookupIterator ForTransitionHandler(
+      Isolate* isolate, Handle<Object> receiver, Handle<Name> name,
+      Handle<Object> value, Handle<Object> handler, Handle<Map> transition_map);
 
   void Restart() {
     InterceptorState state = InterceptorState::kUninitialized;
@@ -277,6 +281,11 @@ class V8_EXPORT_PRIVATE LookupIterator final BASE_EMBEDDED {
   bool LookupCachedProperty();
 
  private:
+  // For |ForTransitionHandler|.
+  LookupIterator(Isolate* isolate, Handle<Object> receiver, Handle<Name> name,
+                 Handle<Map> transition_map, PropertyDetails details,
+                 bool has_property);
+
   void InternalUpdateProtector();
 
   enum class InterceptorState {
