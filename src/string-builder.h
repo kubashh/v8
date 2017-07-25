@@ -416,6 +416,7 @@ class IncrementalStringBuilder {
 
   static const int kInitialPartLength = 32;
   static const int kMaxPartLength = 16 * 1024;
+  STATIC_ASSERT((kMaxPartLength << 3) <= String::kMaxLength);
   static const int kPartLengthGrowthFactor = 2;
 
   Isolate* isolate_;
