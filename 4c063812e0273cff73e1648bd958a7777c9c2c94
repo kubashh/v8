@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac5a0198_b5f81629",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-25T13:22:10Z",
+      "side": 1,
+      "message": "I\u0027d rather avoid the duplication of Code::is_interpreter_trampoline_builtin() logic here. Another option would be to replace this entire helper function by call into C (using CallCFunction), wdyt? There we could ideally reuse code we already have,",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70cef19f_13e09de9",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-25T13:22:10Z",
+      "side": 1,
+      "message": "IMO using these variables just to avoid inlining Await twice is a bit awkward. WDYT about making a TFS Await builtin and calling that with the relevant indices after branching here:\n\nBranch(is_closed, a, b);\n\nBIND(\u0026a);\nCallBuiltin(Await, ..., CLOSED_RESOLVE, CLOSED_REJECT, ...)\n\nBIND(\u0026b);\nCallBuiltin(Await, ..., RETURN_RESOLVE, AWAIT_REJECT, ...)\n\nBut this is also fine in another CL.",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67d0f62c_1ff8a85e",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-25T13:22:10Z",
+      "side": 1,
+      "message": "Nit: IsGeneratorStateClosed. Can we a assert a specific state after this Goto?",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3a0878_a3f915f1",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-25T13:22:10Z",
+      "side": 1,
+      "message": "Nit: I\u0027m a bit confused that on_resolve is RETURN_RESOLVE while on_reject is AWAIT_REJECT. Could AWAIT_REJECT be renamed to something more intuitive?",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c2d05a1_2ddaa7e1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-25T13:22:10Z",
+      "side": 1,
+      "message": "Nit: Please keep the named variables as documentation of what the args contain.",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
