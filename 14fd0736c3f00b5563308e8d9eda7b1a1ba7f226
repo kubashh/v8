@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e11d1a0_faa60ebf",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-07-25T13:11:32Z",
+      "side": 1,
+      "message": "Let\u0027s factor this out into a CurrentPartCanFitEscaped, which checks the length against kMaxPartSize, and against CurrentPartCanFit.\n\nReason is that this part of code is particularly performance sensitive and I suspect that doing any unnecessary calculation is going to regress performance.",
+      "range": {
+        "startLine": 655,
+        "startChar": 6,
+        "endLine": 659,
+        "endChar": 53
+      },
+      "revId": "14fd0736c3f00b5563308e8d9eda7b1a1ba7f226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
