@@ -65,6 +65,8 @@ class PlatformInterfaceDescriptor;
   V(ArrayNoArgumentConstructor)            \
   V(ArraySingleArgumentConstructor)        \
   V(ArrayNArgumentsConstructor)            \
+  V(ArrayIncludes)                         \
+  V(ArrayIndexOf)                          \
   V(Compare)                               \
   V(BinaryOp)                              \
   V(BinaryOpWithAllocationSite)            \
@@ -746,6 +748,20 @@ class ArrayNArgumentsConstructorDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kFunction, kAllocationSite, kActualArgumentsCount)
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(
       ArrayNArgumentsConstructorDescriptor, CallInterfaceDescriptor)
+};
+
+class ArrayIncludesDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kElements, kSearchElement, kLength, kFromIndex)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(ArrayIncludesDescriptor,
+                                               CallInterfaceDescriptor)
+};
+
+class ArrayIndexOfDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kElements, kSearchElement, kLength, kFromIndex)
+  DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(ArrayIndexOfDescriptor,
+                                               CallInterfaceDescriptor)
 };
 
 class CompareDescriptor : public CallInterfaceDescriptor {

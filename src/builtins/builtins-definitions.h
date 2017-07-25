@@ -272,8 +272,14 @@ namespace internal {
   /* ES6 #sec-array.isarray */                                                 \
   TFJ(ArrayIsArray, 1, kArg)                                                   \
   /* ES7 #sec-array.prototype.includes */                                      \
+  TFC(ArrayIncludesSmiOrObject, ArrayIncludes, 1)                              \
+  TFC(ArrayIncludesPackedDoubles, ArrayIncludes, 1)                            \
+  TFC(ArrayIncludesHoleyDoubles, ArrayIncludes, 1)                             \
   TFJ(ArrayIncludes, SharedFunctionInfo::kDontAdaptArgumentsSentinel)          \
   /* ES6 #sec-array.prototype.indexof */                                       \
+  TFC(ArrayIndexOfSmiOrObject, ArrayIndexOf, 1)                                \
+  TFC(ArrayIndexOfPackedDoubles, ArrayIndexOf, 1)                              \
+  TFC(ArrayIndexOfHoleyDoubles, ArrayIndexOf, 1)                               \
   TFJ(ArrayIndexOf, SharedFunctionInfo::kDontAdaptArgumentsSentinel)           \
   /* ES6 #sec-array.prototype.pop */                                           \
   CPP(ArrayPop)                                                                \
