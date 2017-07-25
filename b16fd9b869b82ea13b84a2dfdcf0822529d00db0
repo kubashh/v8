@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "757c3a55_1570072f",
+        "filename": "test/mjsunit/es8/async-await-basic.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-07-25T08:36:08Z",
+      "side": 1,
+      "message": "I was thinking of tests somewhat like these, just s/async/await/. Parsing the await keyword is the path that this patch is getting at, and async is somewhat simpler to parse (since it involves either the keyword function or \u003d\u003e). In all of these cases, async is a identifier, whereas await could be part of an AwaitExpression in the next test case.",
+      "revId": "b16fd9b869b82ea13b84a2dfdcf0822529d00db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
