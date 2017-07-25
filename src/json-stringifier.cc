@@ -632,6 +632,19 @@ void JsonStringifier::SerializeStringUnchecked_(
 }
 
 template <typename SrcChar, typename DestChar>
+void JsonStringifier::SerializeStringChecked_(Handle<String> string) {
+  FlatStringReader reader(isolate_, string);
+  for (int i = 0; i < reader.length(); i++) {
+    SrcChar c = reader.Get<SrcChar>(i);
+    if (DoNotEscape(c)) {
+      builder_.Append<SrcChar, DestChar>(c);
+    } else {
+      builder_.AppendCString(&JsonEscapeTable[c * kJsonEscapeTableEntrySize]);
+    }
+  }
+}
+
+template <typename SrcChar, typename DestChar>
 void JsonStringifier::SerializeString_(Handle<String> string) {
   int length = string->length();
   builder_.Append<uint8_t, DestChar>('"');
@@ -639,25 +652,22 @@ void JsonStringifier::SerializeString_(Handle<String> string) {
   // serialized without allocating a new string part. The worst case length of
   // an escaped character is 6.  Shifting the remainin string length right by 3
   // is a more pessimistic estimate, but faster to calculate.
-  int worst_case_length = length << 3;
-  if (builder_.CurrentPartCanFit(worst_case_length)) {
-    DisallowHeapAllocation no_gc;
-    Vector<const SrcChar> vector = string->GetCharVector<SrcChar>();
-    IncrementalStringBuilder::NoExtendBuilder<DestChar> no_extend(
-        &builder_, worst_case_length);
-    SerializeStringUnchecked_(vector, &no_extend);
-  } else {
-    FlatStringReader reader(isolate_, string);
-    for (int i = 0; i < reader.length(); i++) {
-      SrcChar c = reader.Get<SrcChar>(i);
-      if (DoNotEscape(c)) {
-        builder_.Append<SrcChar, DestChar>(c);
-      } else {
-        builder_.AppendCString(&JsonEscapeTable[c * kJsonEscapeTableEntrySize]);
-      }
+  if (builder_.CurrentPartCanFit(length)) {
+    // This shift will not overflow because length is already less than the
+    // maximum part length of the StringBuilder.
+    int worst_case_length = length << 3;
+    if (builder_.CurrentPartCanFit(worst_case_length)) {
+      DisallowHeapAllocation no_gc;
+      Vector<const SrcChar> vector = string->GetCharVector<SrcChar>();
+      IncrementalStringBuilder::NoExtendBuilder<DestChar> no_extend(
+          &builder_, worst_case_length);
+      SerializeStringUnchecked_(vector, &no_extend);
+    } else {
+      SerializeStringChecked_<SrcChar, DestChar>(string);
     }
+  } else {
+    SerializeStringChecked_<SrcChar, DestChar>(string);
   }
-
   builder_.Append<uint8_t, DestChar>('"');
 }
 
