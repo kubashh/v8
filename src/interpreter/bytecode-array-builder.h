@@ -444,13 +444,17 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
     latest_source_info_.MakeStatementPosition(stmt->position());
   }
 
-  void SetExpressionPosition(Expression* expr) {
-    if (expr->position() == kNoSourcePosition) return;
+  void SetExpressionPosition(int position) {
+    if (position == kNoSourcePosition) return;
     if (!latest_source_info_.is_statement()) {
       // Ensure the current expression position is overwritten with the
       // latest value.
-      latest_source_info_.MakeExpressionPosition(expr->position());
+      latest_source_info_.MakeExpressionPosition(position);
     }
+  }
+
+  void SetExpressionPosition(Expression* expr) {
+    SetExpressionPosition(expr->position());
   }
 
   void SetExpressionAsStatementPosition(Expression* expr) {
