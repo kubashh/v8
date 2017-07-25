@@ -850,6 +850,8 @@ class ExternalReference BASE_EMBEDDED {
   static ExternalReference get_date_field_function(Isolate* isolate);
   static ExternalReference date_cache_stamp(Isolate* isolate);
 
+  static ExternalReference is_interpreted_function(Isolate* isolate);
+
   static ExternalReference get_make_code_young_function(Isolate* isolate);
   static ExternalReference get_mark_code_as_executed_function(Isolate* isolate);
 

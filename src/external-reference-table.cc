@@ -343,6 +343,9 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
       "IncrementalMarking::RecordWrite");
   Add(ExternalReference::store_buffer_overflow_function(isolate).address(),
       "StoreBuffer::StoreBufferOverflow");
+
+  Add(ExternalReference::is_interpreted_function(isolate).address(),
+      "JSFunction::IsInterpreted()");
 }
 
 #define BUILTIN_LIST_EXTERNAL_REFS(DEF) \

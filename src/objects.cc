@@ -5684,6 +5684,11 @@ MaybeHandle<String> JSBoundFunction::GetName(Isolate* isolate,
 }
 
 // static
+bool JSFunction::IsInterpreted(JSFunction* function) {
+  return function->IsInterpreted();
+}
+
+// static
 Handle<Object> JSFunction::GetName(Isolate* isolate,
                                    Handle<JSFunction> function) {
   if (function->shared()->name_should_print_as_anonymous()) {
