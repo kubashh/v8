@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b5ff891_7cce0e25",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-07-26T10:27:11Z",
+      "side": 1,
+      "message": "Let\u0027s rename this to \"EscapedLengthIfCurrentPartFits\"",
+      "range": {
+        "startLine": 640,
+        "startChar": 39,
+        "endLine": 640,
+        "endChar": 69
+      },
+      "revId": "483b3eeed1b6b028924e38793ccb7548aecc6172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
