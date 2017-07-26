@@ -1083,6 +1083,14 @@ ExternalReference ExternalReference::wasm_word64_popcnt(Isolate* isolate) {
       Redirect(isolate, FUNCTION_ADDR(wasm::word64_popcnt_wrapper)));
 }
 
+ExternalReference ExternalReference::wasm_context_mem_size_address() {
+  return ExternalReference(reinterpret_cast<Address>(&wasm_context.mem_size));
+}
+
+ExternalReference ExternalReference::wasm_context_mem_start_address() {
+  return ExternalReference(reinterpret_cast<Address>(&wasm_context.mem_start));
+}
+
 static void f64_acos_wrapper(double* param) {
   WriteDoubleValue(param, base::ieee754::acos(ReadDoubleValue(param)));
 }

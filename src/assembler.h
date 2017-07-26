@@ -889,6 +889,10 @@ class ExternalReference BASE_EMBEDDED {
   static ExternalReference wasm_word64_popcnt(Isolate* isolate);
   static ExternalReference wasm_float64_pow(Isolate* isolate);
 
+  // Wasm context support.
+  static ExternalReference wasm_context_mem_size_address();
+  static ExternalReference wasm_context_mem_start_address();
+
   static ExternalReference f64_acos_wrapper_function(Isolate* isolate);
   static ExternalReference f64_asin_wrapper_function(Isolate* isolate);
   static ExternalReference f64_mod_wrapper_function(Isolate* isolate);
@@ -1302,6 +1306,16 @@ class HeapObjectRequest {
 
   int offset_;
 };
+
+// Wasm context to store values referenced as ExternalReference.
+struct WasmContext {
+  uint32_t mem_size;
+  byte* mem_start;
+};
+
+// Declaration of the wasm_context variable that is defined in
+// src/compiler/wasm-compiler.cc (still in the v8::internal namespace).
+extern struct WasmContext wasm_context;
 
 }  // namespace internal
 }  // namespace v8

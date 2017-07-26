@@ -300,11 +300,8 @@ void UncheckedUpdateInstanceMemory(Isolate* isolate,
   uint32_t new_size = mem_buffer->byte_length()->Number();
   Address new_mem_start = static_cast<Address>(mem_buffer->backing_store());
   DCHECK_NOT_NULL(new_mem_start);
-  Zone specialization_zone(isolate->allocator(), ZONE_NAME);
-  CodeSpecialization code_specialization(isolate, &specialization_zone);
-  code_specialization.RelocateMemoryReferences(old_mem_start, old_size,
-                                               new_mem_start, new_size);
-  code_specialization.ApplyToWholeInstance(*instance);
+  wasm_context.mem_start = new_mem_start;
+  wasm_context.mem_size = new_size;
 }
 
 }  // namespace
@@ -842,8 +839,8 @@ void WasmCompiledModule::Reset(Isolate* isolate,
     CodeSpecialization code_specialization(isolate, &specialization_zone);
 
     if (old_mem_size > 0 && old_mem_start != nullptr) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   nullptr, default_mem_size);
+      wasm_context.mem_start = nullptr;
+      wasm_context.mem_size = default_mem_size;
     }
 
     if (compiled_module->has_globals_start()) {

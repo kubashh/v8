@@ -974,8 +974,8 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     // We might get instantiated again with the same memory. No patching
     // needed in this case.
     if (old_mem_start != mem_start || old_mem_size != mem_size) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   mem_start, mem_size);
+      wasm_context.mem_start = mem_start;
+      wasm_context.mem_size = mem_size;
     }
     // Just like with globals, we need to keep both the JSArrayBuffer
     // and save the start pointer.
