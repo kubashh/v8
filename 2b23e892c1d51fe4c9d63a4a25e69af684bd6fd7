@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9e1a05d_4b1c420e",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4498,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-26T14:18:50Z",
+      "side": 0,
+      "message": "I just moved this method to map-inl.h",
+      "revId": "2b23e892c1d51fe4c9d63a4a25e69af684bd6fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
