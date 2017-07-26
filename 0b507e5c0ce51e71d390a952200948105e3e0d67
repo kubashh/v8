@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c60486de_913f4b33",
+        "filename": "src/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "Try to have only one address for the context object, not one for each field. You can use the offset input of a load node to get to each field.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f70527f4_69ba18e8",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "mem_buffer should be the new effect_ so that we get a valid effect chain.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6092814a_832e1453",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "To use just a single pointer for the wasm_context object you have to use the offset of the field in the struct instead of always using jsgraph()-\u003eInt32Constant(0).",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7c01f5_92879e94",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "Please check if Int32Constant or jsgraph()-\u003eInt32Constant is used more often. Use the same for all appearances here.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf20379_276784ae",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "same here.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a924d65_4f5807f2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "You could add a DCHECK here which checks that old_mem_start \u003d\u003d wasm_context.mem_start before you update the value, and the same for old_mem_size.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97981e84_6789df34",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-07-26T17:52:54Z",
+      "side": 1,
+      "message": "You can put an UNREACHABLE() here to make sure that the execution never gets here.",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
