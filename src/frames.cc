@@ -1478,6 +1478,15 @@ int OptimizedFrame::LookupExceptionHandlerInTable(
   HandlerTable* table = HandlerTable::cast(code->handler_table());
   int pc_offset = static_cast<int>(pc() - code->entry());
   if (stack_slots) *stack_slots = code->stack_slots();
+
+  DeoptimizationInputData* deopt_table =
+      DeoptimizationInputData::cast(code->deoptimization_data());
+  int deopt_count = deopt_table->DeoptCount();
+  for (int i = 0; i < deopt_count; i++) {
+    if (deopt_table->TrampolinePc(i)->value() == pc_offset) {
+      return table->LookupReturn(deopt_table->Pc(i)->value());
+    }
+  }
   return table->LookupReturn(pc_offset);
 }
 
