@@ -443,17 +443,8 @@ Node* ConstructorBuiltinsAssembler::NonEmptyShallowClone(
 
   Node *array, *elements;
   std::tie(array, elements) = AllocateUninitializedJSArrayWithElements(
-      kind, boilerplate_map, length, allocation_site, capacity, param_mode);
-
-  Comment("copy elements header");
-  // Header consists of map and length.
-  STATIC_ASSERT(FixedArrayBase::kHeaderSize == 2 * kPointerSize);
-  StoreMap(elements, LoadMap(boilerplate_elements));
-  {
-    int offset = FixedArrayBase::kLengthOffset;
-    StoreObjectFieldNoWriteBarrier(
-        elements, offset, LoadObjectField(boilerplate_elements, offset));
-  }
+      kind, boilerplate_map, length, allocation_site, capacity, param_mode,
+      LoadMap(boilerplate_elements));
 
   length = TaggedToParameter(length, param_mode);
 
