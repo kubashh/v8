@@ -20,7 +20,6 @@
 #include "src/tracing/trace-event.h"
 #include "src/v8.h"
 
-
 namespace v8 {
 namespace internal {
 
@@ -286,6 +285,7 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
         PrintF(scope.file(),
                " / %" V8PRIxPTR "]\n", reinterpret_cast<intptr_t>(function));
       }
+
       SafepointEntry safepoint = code->GetSafepointEntry(it.frame()->pc());
       int deopt_index = safepoint.deoptimization_index();
 
@@ -307,9 +307,7 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
 #endif
 
   // Move marked code from the optimized code list to the deoptimized
-  // code list, collecting them into a ZoneList.
-  Zone zone(isolate->allocator(), ZONE_NAME);
-  ZoneList<Code*> codes(10, &zone);
+  // code list.
 
   // Walk over all optimized code objects in this native context.
   Code* prev = NULL;
@@ -320,9 +318,6 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
     Object* next = code->next_code_link();
 
     if (code->marked_for_deoptimization()) {
-      // Put the code into the list for later patching.
-      codes.Add(code, &zone);
-
       if (prev != NULL) {
         // Skip this code in the optimized code list.
         prev->set_next_code_link(next);
@@ -341,26 +336,30 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
     element = next;
   }
 
-  // We need a handle scope only because of the macro assembler,
-  // which is used in code patching in EnsureCodeForDeoptimizationEntry.
-  HandleScope scope(isolate);
+  for (StackFrameIterator it(isolate, isolate->thread_local_top()); !it.done();
+       it.Advance()) {
+    if (it.frame()->type() == StackFrame::OPTIMIZED) {
+      Code* code = it.frame()->LookupCode();
 
-  // Now patch all the codes for deoptimization.
-  for (int i = 0; i < codes.length(); i++) {
+      if (code->kind() == Code::OPTIMIZED_FUNCTION &&
+          code->marked_for_deoptimization()) {
+        DeoptimizationInputData* deopt_table =
+            DeoptimizationInputData::cast(code->deoptimization_data());
+        SafepointEntry safepoint = code->GetSafepointEntry(it.frame()->pc());
+        int deopt_index = safepoint.deoptimization_index();
+        DCHECK(deopt_index != -1);
+
 #ifdef DEBUG
-    if (codes[i] == topmost_optimized_code) {
-      DCHECK(safe_to_deopt_topmost_optimized_code);
-    }
+        if (code == topmost_optimized_code) {
+          DCHECK(safe_to_deopt_topmost_optimized_code);
+        }
 #endif
-    // It is finally time to die, code object.
-
-    // Do platform-specific patching to force any activations to lazy deopt.
-    PatchCodeForDeoptimization(isolate, codes[i]);
-
-    // We might be in the middle of incremental marking with compaction.
-    // Tell collector to treat this code object in a special way and
-    // ignore all slots that might have been recorded on it.
-    isolate->heap()->mark_compact_collector()->InvalidateCode(codes[i]);
+        Smi* deopt_trampoline = deopt_table->TrampolinePc(deopt_index);
+        it.frame()->set_pc(code->instruction_start() +
+                           deopt_trampoline->value());
+        // PatchCodeForDeoptimization(isolate, code);
+      }
+    }
   }
 }
 
@@ -993,9 +992,11 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
       output_offset, reinterpret_cast<intptr_t>(smi_bytecode_offset));
 
   if (trace_scope_ != nullptr) {
-    DebugPrintOutputSlot(reinterpret_cast<intptr_t>(smi_bytecode_offset),
-                         frame_index, output_offset, "bytecode offset @ ");
-    PrintF(trace_scope_->file(), "%d\n", bytecode_offset);
+    Smi* smi = Smi::FromInt(bytecode_offset);
+    DebugPrintOutputSlot(reinterpret_cast<intptr_t>(smi), frame_index,
+                         output_offset, "bytecode offset @ ");
+    smi->ShortPrint(trace_scope_->file());
+    PrintF(trace_scope_->file(), "  (input #%d)\n", 0);
     PrintF(trace_scope_->file(), "    -------------------------\n");
   }
 
