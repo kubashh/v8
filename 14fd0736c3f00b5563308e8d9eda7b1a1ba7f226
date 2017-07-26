@@ -22,6 +22,30 @@
       "revId": "14fd0736c3f00b5563308e8d9eda7b1a1ba7f226",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d10cc8ca_3d08717d",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-07-26T08:03:35Z",
+      "side": 1,
+      "message": "OK I tried, the problem I ran into is that we still need the worst_case_length value here to pass to NoExtendBuilder(), so I return it from EscapedLengthCurrentPartCanFit, but it seems a bit weird to have one function returning a bool and the other a length. Thoughts?",
+      "parentUuid": "4e11d1a0_faa60ebf",
+      "range": {
+        "startLine": 655,
+        "startChar": 6,
+        "endLine": 659,
+        "endChar": 53
+      },
+      "revId": "14fd0736c3f00b5563308e8d9eda7b1a1ba7f226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
