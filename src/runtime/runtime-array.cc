@@ -788,6 +788,40 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   return Smi::FromInt(-1);
 }
 
+RUNTIME_FUNCTION(Runtime_ArrayClone) {
+  HandleScope scope(isolate);
+  DCHECK(isolate->IsFastArrayConstructorPrototypeChainIntact());
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSArray, source, 0);
+  ElementsKind kind = source->GetElementsKind();
+  if (IsSmiOrObjectElementsKind(kind)) {
+    int length = Smi::cast(source->length())->value();
+    Handle<JSArray> result =
+        isolate->factory()->NewJSArray(kind, length, length);
+    FixedArray* source_array = static_cast<FixedArray*>(source->elements());
+    FixedArray* result_array = static_cast<FixedArray*>(result->elements());
+    for (int i = 0; i < length; ++i) {
+      result_array->set(i, source_array->get(i));
+    }
+    return *result;
+  } else if (IsDoubleElementsKind(kind)) {
+    int length = Smi::cast(source->length())->value();
+    Handle<JSArray> result =
+        isolate->factory()->NewJSArray(kind, length, length);
+    FixedDoubleArray* source_array =
+        static_cast<FixedDoubleArray*>(source->elements());
+    FixedDoubleArray* result_array =
+        static_cast<FixedDoubleArray*>(result->elements());
+    for (int i = 0; i < length; ++i) {
+      result_array->set(i, source_array->get_scalar(i));
+    }
+    return *result;
+  } else {
+    UNIMPLEMENTED();
+  }
+  UNIMPLEMENTED();
+  return Smi::FromInt(0);
+}
 
 RUNTIME_FUNCTION(Runtime_SpreadIterablePrepare) {
   HandleScope scope(isolate);

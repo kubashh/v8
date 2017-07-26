@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/bootstrapper.h"
+#include "src/callable.h"
 #include "src/code-stubs.h"
 #include "src/compilation-info.h"
 #include "src/compiler/common-operator.h"
@@ -32,31 +33,49 @@ class StubTester {
             Operator::kNoProperties)),
         graph_(zone_),
         common_(zone_),
-        tester_(InitializeFunctionTester(stub),
-                interface_descriptor_.GetParameterCount()) {}
+        tester_(InitializeFunctionTester(stub->GetCode()),
+                interface_descriptor_.GetParameterCount() + 1) {}
+
+  StubTester(Isolate* isolate, Zone* zone, Builtins::Name name)
+      : zone_(zone),
+        info_(ArrayVector("test"), isolate, zone,
+              Code::ComputeFlags(Code::HANDLER)),
+        interface_descriptor_(
+            Builtins::CallableFor(isolate, name).descriptor()),
+        descriptor_(Linkage::GetStubCallDescriptor(
+            isolate, zone, interface_descriptor_,
+            interface_descriptor_.GetStackParameterCount(),
+            CallDescriptor::kNoFlags, Operator::kNoProperties)),
+        graph_(zone_),
+        common_(zone_),
+        tester_(InitializeFunctionTester(
+                    Handle<Code>(isolate->builtins()->builtin(name))),
+                interface_descriptor_.GetParameterCount() + 1) {}
 
   template <typename... Args>
   Handle<Object> Call(Args... args) {
     DCHECK_EQ(interface_descriptor_.GetParameterCount(), sizeof...(args));
-    MaybeHandle<Object> result = tester_.Call(args...).ToHandleChecked();
+    MaybeHandle<Object> result =
+        tester_.Call(args..., Handle<HeapObject>(tester_.function->context()))
+            .ToHandleChecked();
     return result.ToHandleChecked();
   }
 
   FunctionTester& ft() { return tester_; }
 
  private:
-  Graph* InitializeFunctionTester(CodeStub* stub) {
+  Graph* InitializeFunctionTester(Handle<Code> stub) {
     int parameter_count =
         interface_descriptor_.GetParameterCount() + 1;  // Add context
     int node_count = parameter_count + 3;
-    Node* start = graph_.NewNode(common_.Start(parameter_count + 1));
+    // Add an extra input for the JSFunction parameter to the start node.
+    Node* start = graph_.NewNode(common_.Start(parameter_count + 2));
     Node** node_array = zone_->NewArray<Node*>(node_count);
-    node_array[0] = graph_.NewNode(common_.HeapConstant(stub->GetCode()));
-    for (int i = 0; i < parameter_count - 1; ++i) {
+    node_array[0] = graph_.NewNode(common_.HeapConstant(stub));
+    for (int i = 0; i < parameter_count; ++i) {
       CHECK(IsAnyTagged(descriptor_->GetParameterType(i).representation()));
       node_array[i + 1] = graph_.NewNode(common_.Parameter(i + 1), start);
     }
-    node_array[parameter_count] = graph_.NewNode(common_.Parameter(0), start);
     node_array[parameter_count + 1] = start;
     node_array[parameter_count + 2] = start;
     Node* call =
@@ -98,6 +117,111 @@ TEST(RunStringLengthStub) {
   CHECK_EQ(static_cast<int>(strlen(testString)), Smi::ToInt(*result));
 }
 
+TEST(RunArrayCloneStubSimple) {
+  HandleAndZoneScope scope;
+  Isolate* isolate = scope.main_isolate();
+  Zone* zone = scope.main_zone();
+
+  StubTester tester(isolate, zone, Builtins::kFastArrayClone);
+
+  // Actuall call through to the stub, verifying its result.
+  Handle<JSArray> source_array = isolate->factory()->NewJSArray(
+      PACKED_ELEMENTS, 5, 10, INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+  static_cast<FixedArray*>(source_array->elements())->set(0, Smi::FromInt(5));
+  static_cast<FixedArray*>(source_array->elements())->set(1, Smi::FromInt(4));
+  static_cast<FixedArray*>(source_array->elements())->set(2, Smi::FromInt(3));
+  static_cast<FixedArray*>(source_array->elements())->set(3, Smi::FromInt(2));
+  static_cast<FixedArray*>(source_array->elements())->set(4, Smi::FromInt(1));
+  Handle<JSArray> result = Handle<JSArray>::cast(tester.Call(source_array));
+  CHECK_NE(*source_array, *result);
+  CHECK_EQ(result->GetElementsKind(), PACKED_ELEMENTS);
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(0),
+           Smi::FromInt(5));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(1),
+           Smi::FromInt(4));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(2),
+           Smi::FromInt(3));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(3),
+           Smi::FromInt(2));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(4),
+           Smi::FromInt(1));
+}
+
+TEST(RunArrayCloneDoubleStubSimple) {
+  HandleAndZoneScope scope;
+  Isolate* isolate = scope.main_isolate();
+  Zone* zone = scope.main_zone();
+
+  StubTester tester(isolate, zone, Builtins::kFastArrayClone);
+
+  // Actuall call through to the stub, verifying its result.
+  Handle<JSArray> source_array = isolate->factory()->NewJSArray(
+      PACKED_DOUBLE_ELEMENTS, 5, 10, INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+  static_cast<FixedArray*>(source_array->elements())->set(0, Smi::FromInt(5));
+  static_cast<FixedArray*>(source_array->elements())->set(1, Smi::FromInt(4));
+  static_cast<FixedArray*>(source_array->elements())->set(2, Smi::FromInt(3));
+  static_cast<FixedArray*>(source_array->elements())->set(3, Smi::FromInt(2));
+  static_cast<FixedArray*>(source_array->elements())->set(4, Smi::FromInt(1));
+  Handle<JSArray> result = Handle<JSArray>::cast(tester.Call(source_array));
+  CHECK_NE(*source_array, *result);
+  CHECK_EQ(result->GetElementsKind(), PACKED_DOUBLE_ELEMENTS);
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(0),
+           Smi::FromInt(5));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(1),
+           Smi::FromInt(4));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(2),
+           Smi::FromInt(3));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(3),
+           Smi::FromInt(2));
+  CHECK_EQ(static_cast<FixedArray*>(result->elements())->get(4),
+           Smi::FromInt(1));
+}
+
+TEST(RunArrayCloneStubTooBigForNewSpace) {
+  HandleAndZoneScope scope;
+  Isolate* isolate = scope.main_isolate();
+  Zone* zone = scope.main_zone();
+
+  StubTester tester(isolate, zone, Builtins::kFastArrayClone);
+
+  // Actuall call through to the stub, verifying its result.
+  Handle<JSArray> source_array = isolate->factory()->NewJSArray(
+      PACKED_ELEMENTS, 500000, 500000, INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+  for (int i = 0; i < 500000; ++i) {
+    static_cast<FixedArray*>(source_array->elements())->set(i, Smi::FromInt(i));
+  }
+  Handle<JSArray> result = Handle<JSArray>::cast(tester.Call(source_array));
+  CHECK_NE(*source_array, *result);
+  CHECK_EQ(result->GetElementsKind(), PACKED_ELEMENTS);
+  for (int i = 0; i < 500000; ++i) {
+    CHECK_EQ(static_cast<FixedArray*>(source_array->elements())->get(i),
+             static_cast<FixedArray*>(result->elements())->get(i));
+  }
+}
+
+TEST(RunArrayCloneDoubleStubTooBigForNewSpace) {
+  HandleAndZoneScope scope;
+  Isolate* isolate = scope.main_isolate();
+  Zone* zone = scope.main_zone();
+
+  StubTester tester(isolate, zone, Builtins::kFastArrayClone);
+
+  // Actuall call through to the stub, verifying its result.
+  Handle<JSArray> source_array =
+      isolate->factory()->NewJSArray(PACKED_DOUBLE_ELEMENTS, 500000, 500000,
+                                     INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+  for (int i = 0; i < 500000; ++i) {
+    static_cast<FixedDoubleArray*>(source_array->elements())->set(i, i);
+  }
+  Handle<JSArray> result = Handle<JSArray>::cast(tester.Call(source_array));
+  CHECK_NE(*source_array, *result);
+  CHECK_EQ(result->GetElementsKind(), PACKED_DOUBLE_ELEMENTS);
+  for (int i = 0; i < 500000; ++i) {
+    CHECK_EQ(
+        static_cast<FixedDoubleArray*>(source_array->elements())->get_scalar(i),
+        static_cast<FixedDoubleArray*>(result->elements())->get_scalar(i));
+  }
+}
 
 }  // namespace compiler
 }  // namespace internal
