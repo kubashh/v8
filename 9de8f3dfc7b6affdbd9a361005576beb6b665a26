@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "455f453d_3bed0fdd",
+        "filename": "src/assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "Hack to pick the correct overload of JSFunction::IsInterpreted",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ebc082_638860bc",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "Some closures were renamed, also installs the new one",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa81e74e_76655e67",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "A few adjustments are made to support resolve/reject closures that are Phis (so that AsyncGeneratorReturn can pick which closure to use)",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3bfcfba_706be481",
+        "filename": "src/builtins/builtins-async-gen.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "These overloads avoid adding changes to builtins-async-function-gen.cc and other callers in builtins-async-generators-gen.cc, but they don\u0027t have to be included in the version that lands.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "101bdbde_e2c65ab2",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "Previously, the catch handler would be statically known upon resuming the generator. Since the AsyncGeneratorResumeNext stub performs the Await on its own, it needs to figure out if rejections will be handled. This function tries to do that.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d68f04c_fced0624",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "When resuming with .return(), this stub is called. It performs an Await on the sent value before resuming the generator with a \"return\" completion. If it fails, it resumes with a \"throw\" completion.\n\nIf the generator was already closed, instead of resuming the generator, it will just perform AsyncGeneratorResolve or AsyncGeneratorReject.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be8cff7_fa0f4e1a",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "On-resolve closure for AsyncGeneratorReturn when the generator is not closed.\n\nTODO: rename this to be clear about what it actually does (AsyncGeneratorResumeAsReturnClosure?)",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be51319_6892e32d",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "On-resolve closure for AsyncGeneratorReturn when the generator was already closed.\n\nTODO: rename this to be clear about what it actually does (AsyncGeneratorResolveClosure?)",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72a91a42_9128f6f2",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "On-reject closure for AsyncGeneratorReturn wen the generator was already closed.\n\nTODO: rename this to be clear about what it actually does (AsyncGeneratorRejectClosure?)",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0fa9a3f_0d6050f6",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "TODO: All of the other Await methods (not the closures) could be built with stub-linkage and be installed in the native context.\n\nAsyncGeneratorReturn is essentially another version of Await stubs which does different actions when the Promise is resolved or rejected.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ae1309_f7a2600c",
+        "filename": "src/external-reference-table.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "ExternalReference so that IsInterpreted doesn\u0027t need to be re-implemented in CSA",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bc1e6fc_077872ec",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5688,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "Static version of this method so that it can be cast to an Address in assembler.cc --- Perhaps it really makes more sense to do all of the catch prediction in C++ rather than just figuring out if interpreted or not, but no strong opinion.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a831e6a6_8278ab47",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 1,
+      "message": "In the updated version, there\u0027s only a single call to %_GeneratorClose() in the top-level finally block in the async function, so this is always evaluated before returning. There\u0027s still another redundant LdaUndefined -\u003e Return, which is implicitly added by BytecodeGenerator if still in a block at the end of a function (which we are after leaving the outer finally block).\n\nBut theses points aren\u0027t super important, they\u0027re incidental and could be moved to a separate CL. Very small change, and some not unreasonable improvements to bytecode from it.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

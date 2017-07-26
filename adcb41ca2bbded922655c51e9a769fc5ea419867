@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee7e1c33_f48b51c2",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "The extra suspend from the spec-change CL is no longer needed because it\u0027s handled by the AsyncGeneratorReturn stub.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d8fbef9_958ca11b",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "Removed and done within AsyncGeneratorReturn stub instead, no jumptable index needed",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb4f18e_660916d3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "This is unrelated to the rest of this change, but is completely unnecessary as the %_GeneratorClose() call is added in the parser. Deleting this removes some redundant bytecode.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a319ab_daf84c3f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "Refactored at request of reviewer, to be a bit more concise.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb3ea0ef_80ca006d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2659,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "The meat of this CL, this Await goes away.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76023fd0_1992b31b",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "Notice the multiple (4 in this function) calls to %_GeneratorClose(). There\u0027s no need for this, and they\u0027re removed by the helper change to BytecodeGenerator::BuildReturn().",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07267a43_172f62e6",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "This Await should be removed from the previous CL, seems this needs to be rebaseline on top of the correct patchset.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cc6e5aa_2ef3e910",
+        "filename": "test/cctest/interpreter/bytecode_expectations/AsyncGenerators.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-07-26T16:52:12Z",
+      "side": 0,
+      "message": "This await here is the one that this CL does the job of eliminating (the await for the \"return\" completion, which is instead handled in the AsyncGeneratorReturn stub called by AsyncGeneratorResumeNext).",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
