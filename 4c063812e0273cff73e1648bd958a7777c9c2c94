@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "21cad817_19881792",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-26T15:57:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5bce812_29491554",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67d0f62c_1ff8a85e",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 5
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "c448410d_46a4d967",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-26T15:57:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "83e670e0_1b29367b",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac3a0878_a3f915f1",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 5
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "there are a few cases for resolve and reject handlners:\n\n1) on resolve, resume the generator with resume mode \"next\"\n2) on resolve, resume the generator with resume mode \"return\"\n3) on resolve, perform AsyncGeneratorResolve(generator, value, true)\n\n1) on reject, resume the generator with resume mode \"throw\"\n2) on reject, perform AsyncGeneratorReject(generator).\n\nSo we could call these \"AsyncGeneratorResumeWithNextClosure\", \"AsyncGeneratorResumeWithReturnClosure\", \"AsyncGeneratorResolveClosure\", \"AsyncGeneratorResumeWithThrowClosure\", and \"AsyncGeneratorRejectClosure\", or some variation on those.\n\nDo those seem better to you? If we want to rename these, I\u0027d prefer not to do it in these 2 patches (except for the portions which these 2 patches touch).",
       "parentUuid": "ac3a0878_a3f915f1",
+      "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c1ab6f6_3dc00d35",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-26T15:57:49Z",
+      "side": 1,
+      "message": "My main source of confusion was that, within this AsyncGeneratorReturn builtin, `on_resolve` is *RETURN*_RESOLVE while `on_reject` is *AWAIT*_REJECT. Any naming convention that makes their semantics clearer sgtm, likewise for renaming in a follow-up.",
+      "parentUuid": "cb06d1b3_2c9b5e13",
       "revId": "4c063812e0273cff73e1648bd958a7777c9c2c94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
