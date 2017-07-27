@@ -1035,6 +1035,8 @@ TF_BUILTIN(FastArrayPush, CodeStubAssembler) {
   }
 }
 
+TF_BUILTIN(FastArraySlice, CodeStubAssembler) {}
+
 TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
   Node* argc = Parameter(BuiltinDescriptor::kArgumentsCount);
   Node* context = Parameter(BuiltinDescriptor::kContext);
@@ -1181,6 +1183,86 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
     TailCallStub(CodeFactory::ArrayShift(isolate()), context, target,
                  UndefinedConstant(), argc);
   }
+}
+
+TF_BUILTIN(FastArrayClone, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* array = Parameter(Descriptor::kSource);
+
+  CSA_ASSERT(this, IsJSArray(array));
+  CSA_ASSERT(this, Word32BinaryNot(IsArrayProtectorCellInvalid()));
+
+  Node* original_array_map = LoadMap(array);
+  Node* elements_kind = LoadMapElementsKind(original_array_map);
+  Node* length = LoadJSArrayLength(array);
+
+  // Use the cannonical map for the Array's ElementsKind
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
+
+  Node* result;
+  Node* elements;
+
+  Label not_tagged(this), fixed_array_in_new_space(this),
+      fixed_double_array_in_new_space(this), call_runtime(this);
+  GotoIf(IsElementsKindGreaterThan(elements_kind, HOLEY_ELEMENTS), &not_tagged);
+  {
+    int max_fast_elements =
+        (kMaxRegularHeapObjectSize - FixedArray::kHeaderSize - JSArray::kSize -
+         AllocationMemento::kSize) /
+        kPointerSize;
+    Branch(SmiAboveOrEqual(length, SmiConstant(max_fast_elements)),
+           &call_runtime, &fixed_array_in_new_space);
+  }
+
+  BIND(&fixed_array_in_new_space);
+  {
+    std::tie(result, elements) = AllocateUninitializedJSArrayWithElements(
+        HOLEY_ELEMENTS, array_map, length, nullptr, length,
+        CodeStubAssembler::SMI_PARAMETERS);
+    Node* from_elements = LoadElements(array);
+    BuildFastFixedArrayForEach(
+        elements, PACKED_ELEMENTS, SmiConstant(0), length,
+        [this, from_elements](Node* to_elements, Node* offset) {
+          Node* element = Load(MachineType::AnyTagged(), from_elements, offset);
+          StoreNoWriteBarrier(MachineRepresentation::kTagged, to_elements,
+                              offset, element);
+        },
+        SMI_PARAMETERS);
+    Return(result);
+  }
+
+  BIND(&not_tagged);
+  {
+    GotoIf(IsElementsKindGreaterThan(elements_kind, PACKED_DOUBLE_ELEMENTS),
+           &call_runtime);
+    int max_fast_elements =
+        (kMaxRegularHeapObjectSize - FixedArray::kHeaderSize - JSArray::kSize -
+         AllocationMemento::kSize) /
+        kDoubleSize;
+    Branch(SmiAboveOrEqual(length, SmiConstant(max_fast_elements)),
+           &call_runtime, &fixed_double_array_in_new_space);
+  }
+
+  BIND(&fixed_double_array_in_new_space);
+  {
+    std::tie(result, elements) = AllocateUninitializedJSArrayWithElements(
+        HOLEY_DOUBLE_ELEMENTS, array_map, length, nullptr, length,
+        CodeStubAssembler::SMI_PARAMETERS);
+    Node* from_elements = LoadElements(array);
+    BuildFastFixedArrayForEach(
+        elements, PACKED_DOUBLE_ELEMENTS, SmiConstant(0), length,
+        [this, from_elements](Node* to_elements, Node* offset) {
+          Node* element = Load(MachineType::Float64(), from_elements, offset);
+          StoreNoWriteBarrier(MachineRepresentation::kFloat64, to_elements,
+                              offset, element);
+        },
+        SMI_PARAMETERS);
+    Return(result);
+  }
+
+  BIND(&call_runtime);
+  TailCallRuntime(Runtime::kArrayClone, context, array);
 }
 
 TF_BUILTIN(ArrayForEachLoopContinuation, ArrayBuiltinCodeStubAssembler) {
@@ -2230,10 +2312,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
     BIND(&holey_object_values);
     {
       // Check the array_protector cell, and take the slow path if it's invalid.
-      Node* invalid = SmiConstant(Isolate::kProtectorInvalid);
-      Node* cell = LoadRoot(Heap::kArrayProtectorRootIndex);
-      Node* cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
-      GotoIf(WordEqual(cell_value, invalid), &generic_values);
+      GotoIf(IsArrayProtectorCellInvalid(), &generic_values);
 
       var_value.Bind(UndefinedConstant());
       Node* value = LoadFixedArrayElement(elements, index, 0, SMI_PARAMETERS);
@@ -2245,10 +2324,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
     BIND(&holey_double_values);
     {
       // Check the array_protector cell, and take the slow path if it's invalid.
-      Node* invalid = SmiConstant(Isolate::kProtectorInvalid);
-      Node* cell = LoadRoot(Heap::kArrayProtectorRootIndex);
-      Node* cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
-      GotoIf(WordEqual(cell_value, invalid), &generic_values);
+      GotoIf(IsArrayProtectorCellInvalid(), &generic_values);
 
       var_value.Bind(UndefinedConstant());
       Node* value = LoadFixedDoubleArrayElement(
