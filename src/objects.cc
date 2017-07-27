@@ -1050,6 +1050,9 @@ MaybeHandle<Object> JSProxy::GetProperty(Isolate* isolate,
                                          bool* was_found) {
   *was_found = true;
 
+  //  proxy->Print();
+  //  name->Print();
+
   DCHECK(!name->IsPrivate());
   STACK_CHECK(isolate, MaybeHandle<Object>());
   Handle<Name> trap_name = isolate->factory()->get_string();
@@ -5042,8 +5045,8 @@ Handle<Map> Map::GetObjectCreateMap(Handle<HeapObject> prototype) {
     if (!js_prototype->map()->is_prototype_map()) {
       JSObject::OptimizeAsPrototype(js_prototype);
     }
-    Handle<PrototypeInfo> info =
-        Map::GetOrCreatePrototypeInfo(js_prototype, isolate);
+    Handle<PrototypeInfo> info = Map::GetOrCreatePrototypeInfo(
+        Handle<JSReceiver>::cast(js_prototype), isolate);
     // TODO(verwaest): Use inobject slack tracking for this map.
     if (info->HasObjectCreateMap()) {
       map = handle(info->ObjectCreateMap(), isolate);
@@ -12362,7 +12365,7 @@ void JSObject::LazyRegisterPrototypeUser(Handle<Map> user, Isolate* isolate) {
     if (maybe_proto->IsJSProxy()) return;
     Handle<JSObject> proto = Handle<JSObject>::cast(maybe_proto);
     Handle<PrototypeInfo> proto_info =
-        Map::GetOrCreatePrototypeInfo(proto, isolate);
+        Map::GetOrCreatePrototypeInfo(Handle<JSReceiver>::cast(proto), isolate);
     Handle<Object> maybe_registry(proto_info->prototype_users(), isolate);
     int slot = 0;
     Handle<WeakFixedArray> new_array =
@@ -12455,8 +12458,8 @@ void JSObject::InvalidatePrototypeChains(Map* map) {
 
 
 // static
-Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<JSObject> prototype,
-                                                    Isolate* isolate) {
+Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(
+    Handle<JSReceiver> prototype, Isolate* isolate) {
   Object* maybe_proto_info = prototype->map()->prototype_info();
   if (maybe_proto_info->IsPrototypeInfo()) {
     return handle(PrototypeInfo::cast(maybe_proto_info), isolate);
@@ -12501,9 +12504,14 @@ Handle<Cell> Map::GetOrCreatePrototypeChainValidityCell(Handle<Map> map,
   } else {
     maybe_prototype =
         handle(map->GetPrototypeChainRootMap(isolate)->prototype(), isolate);
-    if (!maybe_prototype->IsJSObject()) return Handle<Cell>::null();
+    if (!maybe_prototype->IsJSReceiver()) return Handle<Cell>::null();
   }
-  Handle<JSObject> prototype = Handle<JSObject>::cast(maybe_prototype);
+  if (maybe_prototype->IsJSProxy()) {
+    Handle<Cell> cell = isolate->factory()->NewCell(
+        handle(Smi::FromInt(Map::kPrototypeChainValid), isolate));
+    return cell;
+  }
+  Handle<JSReceiver> prototype = Handle<JSReceiver>::cast(maybe_prototype);
   // Ensure the prototype is registered with its own prototypes so its cell
   // will be invalidated when necessary.
   JSObject::LazyRegisterPrototypeUser(handle(prototype->map(), isolate),
@@ -12526,9 +12534,14 @@ Handle<Cell> Map::GetOrCreatePrototypeChainValidityCell(Handle<Map> map,
 }
 
 // static
-Handle<WeakCell> Map::GetOrCreatePrototypeWeakCell(Handle<JSObject> prototype,
+Handle<WeakCell> Map::GetOrCreatePrototypeWeakCell(Handle<JSReceiver> prototype,
                                                    Isolate* isolate) {
   DCHECK(!prototype.is_null());
+  if (prototype->IsJSProxy()) {
+    Handle<WeakCell> cell = isolate->factory()->NewWeakCell(prototype);
+    return cell;
+  }
+
   Handle<PrototypeInfo> proto_info =
       GetOrCreatePrototypeInfo(prototype, isolate);
   Object* maybe_cell = proto_info->weak_cell();

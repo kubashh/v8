@@ -289,7 +289,7 @@ class Map : public HeapObject {
   // PrototypeInfo is created lazily using this helper (which installs it on
   // the given prototype's map).
   static Handle<PrototypeInfo> GetOrCreatePrototypeInfo(
-      Handle<JSObject> prototype, Isolate* isolate);
+      Handle<JSReceiver> prototype, Isolate* isolate);
   static Handle<PrototypeInfo> GetOrCreatePrototypeInfo(
       Handle<Map> prototype_map, Isolate* isolate);
   inline bool should_be_fast_prototype_map() const;
@@ -311,7 +311,7 @@ class Map : public HeapObject {
   // Returns a WeakCell object containing given prototype. The cell is cached
   // in PrototypeInfo which is created lazily.
   static Handle<WeakCell> GetOrCreatePrototypeWeakCell(
-      Handle<JSObject> prototype, Isolate* isolate);
+      Handle<JSReceiver> prototype, Isolate* isolate);
 
   Map* FindRootMap() const;
   Map* FindFieldOwner(int descriptor) const;

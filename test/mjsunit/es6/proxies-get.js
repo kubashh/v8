@@ -67,7 +67,9 @@
     value: "different value"
   });
   assertEquals("value", proxy.property);
+  %DebugPrint(target.key);
   assertThrows(function(){ proxy.key }, TypeError);
+  console.log('After proxy.key');
   assertEquals("value", proxy.key2);
   assertEquals("value", proxy.key3);
 
