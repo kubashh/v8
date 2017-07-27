@@ -2318,7 +2318,7 @@ Node* CodeStubAssembler::AllocateUninitializedJSArrayWithoutElements(
 std::pair<Node*, Node*>
 CodeStubAssembler::AllocateUninitializedJSArrayWithElements(
     ElementsKind kind, Node* array_map, Node* length, Node* allocation_site,
-    Node* capacity, ParameterMode capacity_mode) {
+    Node* capacity, ParameterMode capacity_mode, Node* elements_map) {
   Comment("begin allocation of JSArray with elements");
   CSA_SLOW_ASSERT(this, TaggedIsPositiveSmi(length));
   CSA_SLOW_ASSERT(this, IsMap(array_map));
@@ -2339,7 +2339,19 @@ CodeStubAssembler::AllocateUninitializedJSArrayWithElements(
 
   Node* elements = InnerAllocate(array, elements_offset);
   StoreObjectFieldNoWriteBarrier(array, JSObject::kElementsOffset, elements);
-
+  // Setup elements object.
+  if (elements_map != nullptr) {
+    StoreMapNoWriteBarrier(elements, elements_map);
+  } else {
+    STATIC_ASSERT(FixedArrayBase::kHeaderSize == 2 * kPointerSize);
+    Heap::RootListIndex elements_map_index =
+        IsDoubleElementsKind(kind) ? Heap::kFixedDoubleArrayMapRootIndex
+                                   : Heap::kFixedArrayMapRootIndex;
+    DCHECK(Heap::RootIsImmortalImmovable(elements_map_index));
+    StoreMapNoWriteBarrier(elements, elements_map_index);
+  }
+  StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset,
+                                 ParameterToTagged(capacity, capacity_mode));
   return {array, elements};
 }
 
@@ -2389,14 +2401,6 @@ Node* CodeStubAssembler::AllocateJSArray(ElementsKind kind, Node* array_map,
     // Allocate both array and elements object, and initialize the JSArray.
     std::tie(array, elements) = AllocateUninitializedJSArrayWithElements(
         kind, array_map, length, allocation_site, capacity, capacity_mode);
-    // Setup elements object.
-    Heap::RootListIndex elements_map_index =
-        IsDoubleElementsKind(kind) ? Heap::kFixedDoubleArrayMapRootIndex
-                                   : Heap::kFixedArrayMapRootIndex;
-    DCHECK(Heap::RootIsImmortalImmovable(elements_map_index));
-    StoreMapNoWriteBarrier(elements, elements_map_index);
-    StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset,
-                                   ParameterToTagged(capacity, capacity_mode));
     // Fill in the elements with holes.
     FillFixedArrayWithValue(kind, elements,
                             IntPtrOrSmiConstant(0, capacity_mode), capacity,
@@ -3403,6 +3407,13 @@ Node* CodeStubAssembler::IsDeprecatedMap(Node* map) {
 Node* CodeStubAssembler::IsUndetectableMap(Node* map) {
   CSA_ASSERT(this, IsMap(map));
   return IsSetWord32(LoadMapBitField(map), 1 << Map::kIsUndetectable);
+}
+
+Node* CodeStubAssembler::IsArrayProtectorCellInvalid() {
+  Node* invalid = SmiConstant(Isolate::kProtectorInvalid);
+  Node* cell = LoadRoot(Heap::kArrayProtectorRootIndex);
+  Node* cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
+  return WordEqual(cell_value, invalid);
 }
 
 Node* CodeStubAssembler::IsCallable(Node* object) {
