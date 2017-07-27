@@ -87,6 +87,52 @@
     },
     {
       "key": {
+        "uuid": "35c8c72e_28d38abe",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-27T09:43:27Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s valid to check the JSFunction for being interpreted / not interpreted to know whether the current activation is interpreted / optimized. The current activation could have been OSRed or could have deopted which would mean that the stack frame\u0027s PC type (interpreted or optimized) wouldn\u0027t match that of the JSFunction.",
+      "range": {
+        "startLine": 342,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 46
+      },
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "178aa083_59f63d0a",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-07-27T09:43:27Z",
+      "side": 1,
+      "message": "I don\u0027t understand this - we only have non-optimized code in the SFI (optimized code goes on the JSFunction), and we never use full-codegen for generators, so why do we look for a handler table for the code offset in the SFI?",
+      "range": {
+        "startLine": 358,
+        "startChar": 2,
+        "endLine": 364,
+        "endChar": 3
+      },
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d68f04c_fced0624",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
