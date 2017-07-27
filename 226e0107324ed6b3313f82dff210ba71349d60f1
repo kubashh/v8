@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bb5a0174_89e76e79",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-07-27T17:03:04Z",
+      "side": 1,
+      "message": "This should be ok. I\u0027ll add slots recording for all concurrent marking code.",
+      "parentUuid": "65cd055b_68e40513",
+      "range": {
+        "startLine": 209,
+        "startChar": 39,
+        "endLine": 209,
+        "endChar": 44
+      },
+      "revId": "226e0107324ed6b3313f82dff210ba71349d60f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91cb77df_a48295c4",
         "filename": "src/heap/concurrent-marking.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "226e0107324ed6b3313f82dff210ba71349d60f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64237f1e_cc114248",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-07-27T17:03:04Z",
+      "side": 1,
+      "message": "Currently we don\u0027t depend on mark-compact.h. Let\u0027s keep this for now.",
+      "parentUuid": "91cb77df_a48295c4",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "226e0107324ed6b3313f82dff210ba71349d60f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
