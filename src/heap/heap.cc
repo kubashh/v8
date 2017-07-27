@@ -5969,8 +5969,9 @@ bool Heap::SetUp() {
 #ifdef V8_CONCURRENT_MARKING
   MarkCompactCollector::MarkingWorklist* marking_worklist =
       mark_compact_collector_->marking_worklist();
-  concurrent_marking_ = new ConcurrentMarking(this, marking_worklist->shared(),
-                                              marking_worklist->bailout());
+  concurrent_marking_ = new ConcurrentMarking(
+      this, marking_worklist->shared(), marking_worklist->bailout(),
+      mark_compact_collector_->weak_cells());
 #else
   concurrent_marking_ = new ConcurrentMarking(this, nullptr, nullptr);
 #endif
