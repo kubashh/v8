@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "a878be58_561200c0",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 0,
+      "message": "I see now, this is the other meat of the CL? Closed generators with return resume types now await in AsyncGeneratorReturn, which then ends up calling back into AsyncGeneratorResumeNext through the resolve/reject closures. And I assume for non-closed generators we ended up awaiting twice?",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4cb4f18e_660916d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 7
@@ -81,6 +98,24 @@
       "writtenOn": "2017-07-26T16:52:12Z",
       "side": 0,
       "message": "The meat of this CL, this Await goes away.",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046f4239_b147e7a1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2659,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 0,
+      "message": "Thanks, especially the comments in this file are very helpful to figure out the background behind these changes.",
+      "parentUuid": "cb3ea0ef_80ca006d",
       "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

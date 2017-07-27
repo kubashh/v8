@@ -70,6 +70,23 @@
     },
     {
       "key": {
+        "uuid": "9bf4c035_d2bb93c1",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Nit: At some point this should also use the LoadPromiseFromAsyncGeneratorRequest helper, doesn\u0027t have to be in this CL though.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "101bdbde_e2c65ab2",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -81,6 +98,24 @@
       "writtenOn": "2017-07-26T16:52:12Z",
       "side": 1,
       "message": "Previously, the catch handler would be statically known upon resuming the generator. Since the AsyncGeneratorResumeNext stub performs the Await on its own, it needs to figure out if rejections will be handled. This function tries to do that.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "319b169f_f25ad5b1",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "In my previous comment here, I meant not only replacing the `IsInterpreted` logic with a C call; but moving this entire `HasCatchHandlerForPC` helper to C++. There, we would ideally be able to reuse already existing logic (e.g. in isolate.cc:PredictException or similar).",
+      "parentUuid": "101bdbde_e2c65ab2",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -133,6 +168,40 @@
     },
     {
       "key": {
+        "uuid": "dd616a78_ba437008",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Please clarify here that in all cases, the resolve/reject closures end up calling AsyncGeneratorResumeNext again (the current comment sounds to me like it happens only if the generator is closed).",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64e2cd21_089a9fc6",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Nit: We could load the value before the branch.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d68f04c_fced0624",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -144,6 +213,92 @@
       "writtenOn": "2017-07-26T16:52:12Z",
       "side": 1,
       "message": "When resuming with .return(), this stub is called. It performs an Await on the sent value before resuming the generator with a \"return\" completion. If it fails, it resumes with a \"throw\" completion.\n\nIf the generator was already closed, instead of resuming the generator, it will just perform AsyncGeneratorResolve or AsyncGeneratorReject.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a7c25ec_41c59b08",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Please add something like this as a comment just above here, it\u0027s very helpful. It may also be worth mentioning the similarity to AsyncGeneratorAwait.",
+      "parentUuid": "8d68f04c_fced0624",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b7efe77_245b63fa",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Nit: CSA_ASSERT(this, WordNotEqual(request, UndefinedConstant())); to stay consistent with AsyncGeneratorAwait.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d772df4c_92cfe539",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Nit: Please assert IsAsyncGenerator(generator) here. Might be worth a helper in CSA (and update other places that check HasInstanceType(o, JS_ASYNC_GENERATOR_OBJECT_TYPE)). The refactoring is fine in another CL to avoid making this one more complicated than required.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27868b8a_1137c930",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "This now has 3 users in this file, maybe it\u0027s time to create a named helper function in AsyncGeneratorBuiltinsAssembler.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25a60cf8_a1929644",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "WDYT about moving the definition of all related closures next to each other in a follow-up? It might make it easier to see their connection / similarities / differences that way. Same for AsyncGenerator{Await,Return}. Ideally in a move-only CL without any other changes.",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -167,6 +322,58 @@
     },
     {
       "key": {
+        "uuid": "083da943_b8e1dd0a",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "A brief comment clarifying its use would also be helpful here and above other closures). Especially the \u0027when the generator is not closed\u0027 part is helpful as it\u0027s not apparent from the name.",
+      "parentUuid": "4be8cff7_fa0f4e1a",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a774404_cf330f24",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Suggestion: could we add an IsAsyncGenerator assert somewhere inside these helpers? Perhaps in LoadGeneratorAwaitedPromise. Also, would it make sense to rename these to \u0027IsAsyncGeneratorSuspendedForAwait\u0027? Fine in a follow-up.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e5662b5_ddda1d02",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Couldn\u0027t we replace the entire body with\n\n AsyncGeneratorAwaitResumeClosure(context, value,\n                                  JSAsyncGeneratorObject::kReturn);",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be51319_6892e32d",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -178,6 +385,23 @@
       "writtenOn": "2017-07-26T16:52:12Z",
       "side": 1,
       "message": "On-resolve closure for AsyncGeneratorReturn when the generator was already closed.\n\nTODO: rename this to be clear about what it actually does (AsyncGeneratorResolveClosure?)",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2442687_c9000c23",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "Nit: Please add some sort of context as to where this step is from in the spec. A link to the spec somewhere easily accessible from the CL (description or tracking bug) would also be nice. Extra nice: a link to the affected Await in the spec - I assume it\u0027s the longer instruction sequence in 10.b.i.2-9 here https://tc39.github.io/proposal-async-iteration/#sec-asyncgeneratorresumenext?",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -246,6 +470,41 @@
       "writtenOn": "2017-07-26T16:52:12Z",
       "side": 1,
       "message": "Static version of this method so that it can be cast to an Address in assembler.cc --- Perhaps it really makes more sense to do all of the catch prediction in C++ rather than just figuring out if interpreted or not, but no strong opinion.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0216b036_07e417be",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5688,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "+1 to catch prediction in C++.",
+      "parentUuid": "3bc1e6fc_077872ec",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f6b07a_f31d975d",
+        "filename": "src/objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 5150,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-07-27T09:56:31Z",
+      "side": 1,
+      "message": "As in my previous comment, I\u0027d rather move the entire handler-table functionality to C++. Then this new function becomes unnecessary, and we can also leave handler table indices above private.",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
