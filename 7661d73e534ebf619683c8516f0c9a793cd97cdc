@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2719a32a_a779365f",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "Use switch-case, please. That way we get help from the compiler if we introduce a new DeoptimizeKind.\n\nStyle nit: Even single statements should be in braces (I think this is only mandatory if the statement is on a separate line from the if/else).",
+      "range": {
+        "startLine": 88,
+        "startChar": 3,
+        "endLine": 88,
+        "endChar": 29
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f36e268_d3a73686",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "The code around is nicely commented. Could we have a brief description of what the loop is doing?",
+      "range": {
+        "startLine": 339,
+        "startChar": 2,
+        "endLine": 339,
+        "endChar": 79
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "758c497c_a0059b81",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "Why was this changed? This is not what we are really storing, no?",
+      "range": {
+        "startLine": 996,
+        "startChar": 52,
+        "endLine": 996,
+        "endChar": 55
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bdcd6c8_93ad4b2d",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "The original code on line 998 was doing the same thing (without the conversion from smi and back). Any reason to change it?",
+      "range": {
+        "startLine": 998,
+        "startChar": 4,
+        "endLine": 998,
+        "endChar": 42
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90e7b2d8_c732f4b1",
+        "filename": "src/frames.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "Would not it make sense to only do this if {code} is marked for deoptimization?",
+      "range": {
+        "startLine": 1482,
+        "startChar": 2,
+        "endLine": 1489,
+        "endChar": 3
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7f2cd4_30ffb4f4",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "No need to change this file.",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b8aabff_a213ef79",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 14000,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-07-27T13:51:47Z",
+      "side": 1,
+      "message": "This trampoline-pc lookup has appeared in the code couple of times. Could you introduce a helper function in DeoptimizationInputData that tries to translate trampoline pc to return pc and use it in place of the lookups?",
+      "range": {
+        "startLine": 13993,
+        "startChar": 0,
+        "endLine": 14000,
+        "endChar": 5
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
