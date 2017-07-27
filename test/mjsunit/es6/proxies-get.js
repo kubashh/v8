@@ -67,7 +67,9 @@
     value: "different value"
   });
   assertEquals("value", proxy.property);
+  %DebugPrint(target.key);
   assertThrows(function(){ proxy.key }, TypeError);
+  console.log('After proxy.key');
   assertEquals("value", proxy.key2);
   assertEquals("value", proxy.key3);
 
@@ -124,4 +126,23 @@
     "[[Get]](iterator, Symbol(Symbol.iterator))",
     "[[Get]](iterator, next)"
   ], log);
+})();
+
+(function testGetterWithSideEffect() {
+  var obj = {
+    key: 0
+  }
+  assertEquals(obj.key, 0);
+  var p = new Proxy(obj, {});
+  var q = new Proxy(p, {
+    get(t, name) {
+      if (name != 'key') return Reflect.get(t, name);
+      t.key++;
+      return t.key;
+    }
+  });
+
+  assertEquals(0, p.key);
+  // Assert the trap is not called twice
+  assertEquals(1, q.key);
 })();

@@ -477,6 +477,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       Node* data_pointer, Node* index_node, ElementsKind elements_kind,
       ParameterMode parameter_mode = INTPTR_PARAMETERS);
 
+  // Property descriptor helpers
+  Node* IsConfigurable(Node* map);
+  Node* IsWritable(Node* map);
+
   // Context manipulation
   Node* LoadContextElement(Node* context, int slot_index);
   Node* LoadContextElement(Node* context, Node* slot_index);
@@ -869,6 +873,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsElementsKindGreaterThan(Node* target_kind,
                                   ElementsKind reference_kind);
 
+  // True if |key| is either a String or a Symbol
+  Node* IsPropertyKey(Node* key);
+
   // String helpers.
   // Load a character from a String (might flatten a ConsString).
   Node* StringCharCodeAt(Node* string, Node* index,
@@ -1211,6 +1218,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void TryGetOwnProperty(Node* context, Node* receiver, Node* object, Node* map,
                          Node* instance_type, Node* unique_name,
                          Label* if_found, Variable* var_value,
+                         Label* if_not_found, Label* if_bailout);
+  void TryGetOwnProperty(Node* context, Node* receiver, Node* object, Node* map,
+                         Node* instance_type, Node* unique_name,
+                         Label* if_found, Variable* var_value,
+                         Variable* var_details, Variable* var_raw_value,
                          Label* if_not_found, Label* if_bailout);
 
   Node* GetProperty(Node* context, Node* receiver, Handle<Name> name) {
