@@ -777,7 +777,8 @@ TF_STUB(GetPropertyStub, CodeStubAssembler) {
         Label if_found(this);
         TryGetOwnProperty(context, receiver, holder, holder_map,
                           holder_instance_type, unique_name, &if_found,
-                          &var_value, next_holder, if_bailout);
+                          &var_value, nullptr, nullptr, next_holder,
+                          if_bailout);
         BIND(&if_found);
         {
           var_result.Bind(var_value.value());

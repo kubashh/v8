@@ -1367,6 +1367,24 @@ Node* CodeStubAssembler::LoadFixedDoubleArrayElement(
   return LoadDoubleWithHoleCheck(object, offset, if_hole, machine_type);
 }
 
+Node* CodeStubAssembler::IsConfigurable(Node* map) {
+  Node* descriptors = LoadMapDescriptors(map);
+  Node* details =
+      LoadFixedArrayElement(descriptors, DescriptorArray::ToDetailsIndex(0));
+  return WordNotEqual(
+      IsSetSmi(details, PropertyDetails::kAttributesDontDeleteMask),
+      TrueConstant());
+}
+
+Node* CodeStubAssembler::IsWritable(Node* map) {
+  Node* descriptors = LoadMapDescriptors(map);
+  Node* details =
+      LoadFixedArrayElement(descriptors, DescriptorArray::ToDetailsIndex(0));
+  return WordNotEqual(
+      IsSetSmi(details, PropertyDetails::kAttributesReadOnlyMask),
+      TrueConstant());
+}
+
 Node* CodeStubAssembler::LoadDoubleWithHoleCheck(Node* base, Node* offset,
                                                  Label* if_hole,
                                                  MachineType machine_type) {
@@ -5571,6 +5589,7 @@ void CodeStubAssembler::TryLookupProperty(
   }
   BIND(&if_objectisspecial);
   {
+    Print("Check 1 not");
     // Handle global object here and other special objects in runtime.
     GotoIfNot(Word32Equal(instance_type, Int32Constant(JS_GLOBAL_OBJECT_TYPE)),
               if_bailout);
@@ -5578,7 +5597,9 @@ void CodeStubAssembler::TryLookupProperty(
     // Handle interceptors and access checks in runtime.
     Node* bit_field = LoadMapBitField(map);
     int mask = 1 << Map::kHasNamedInterceptor | 1 << Map::kIsAccessCheckNeeded;
+    Print("Check 2");
     GotoIf(IsSetWord32(bit_field, mask), if_bailout);
+    Print("After checks");
 
     Node* dictionary = LoadProperties(object);
     var_meta_storage->Bind(dictionary);
@@ -5862,7 +5883,8 @@ Node* CodeStubAssembler::CallGetterIfAccessor(Node* value, Node* details,
 void CodeStubAssembler::TryGetOwnProperty(
     Node* context, Node* receiver, Node* object, Node* map, Node* instance_type,
     Node* unique_name, Label* if_found_value, Variable* var_value,
-    Label* if_not_found, Label* if_bailout) {
+    Variable* var_details, Variable* var_raw_value, Label* if_not_found,
+    Label* if_bailout) {
   DCHECK_EQ(MachineRepresentation::kTagged, var_value->rep());
   Comment("TryGetOwnProperty");
 
@@ -5871,10 +5893,14 @@ void CodeStubAssembler::TryGetOwnProperty(
 
   Label if_found_fast(this), if_found_dict(this), if_found_global(this);
 
-  VARIABLE(var_details, MachineRepresentation::kWord32);
-  Variable* vars[] = {var_value, &var_details};
+  VARIABLE(local_var_details, MachineRepresentation::kWord32);
+  if (!var_details) {
+    var_details = &local_var_details;
+  }
+  Variable* vars[] = {var_value, var_details};
   Label if_found(this, 2, vars);
 
+  Print("TryLookupProperty");
   TryLookupProperty(object, map, instance_type, unique_name, &if_found_fast,
                     &if_found_dict, &if_found_global, &var_meta_storage,
                     &var_entry, if_not_found, if_bailout);
@@ -5883,15 +5909,17 @@ void CodeStubAssembler::TryGetOwnProperty(
     Node* descriptors = var_meta_storage.value();
     Node* name_index = var_entry.value();
 
+    // Print("LoadPropertyFromFastObject");
     LoadPropertyFromFastObject(object, map, descriptors, name_index,
-                               &var_details, var_value);
+                               var_details, var_value);
     Goto(&if_found);
   }
   BIND(&if_found_dict);
   {
     Node* dictionary = var_meta_storage.value();
     Node* entry = var_entry.value();
-    LoadPropertyFromNameDictionary(dictionary, entry, &var_details, var_value);
+    // Print("LoadPropertyFromNameDictionary");
+    LoadPropertyFromNameDictionary(dictionary, entry, var_details, var_value);
     Goto(&if_found);
   }
   BIND(&if_found_global);
@@ -5899,14 +5927,18 @@ void CodeStubAssembler::TryGetOwnProperty(
     Node* dictionary = var_meta_storage.value();
     Node* entry = var_entry.value();
 
-    LoadPropertyFromGlobalDictionary(dictionary, entry, &var_details, var_value,
+    LoadPropertyFromGlobalDictionary(dictionary, entry, var_details, var_value,
                                      if_not_found);
     Goto(&if_found);
   }
   // Here we have details and value which could be an accessor.
   BIND(&if_found);
   {
-    Node* value = CallGetterIfAccessor(var_value->value(), var_details.value(),
+    if (var_raw_value) {
+      var_raw_value->Bind(var_value->value());
+    }
+    Print("CallGetterIfAccessor");
+    Node* value = CallGetterIfAccessor(var_value->value(), var_details->value(),
                                        context, receiver, if_bailout);
     var_value->Bind(value);
     Goto(if_found_value);
@@ -9495,6 +9527,10 @@ Node* CodeStubAssembler::IsHoleyFastElementsKind(Node* elements_kind) {
 Node* CodeStubAssembler::IsElementsKindGreaterThan(
     Node* target_kind, ElementsKind reference_kind) {
   return Int32GreaterThan(target_kind, Int32Constant(reference_kind));
+}
+
+Node* CodeStubAssembler::IsPropertyKey(Node* key) {
+  return Word32Or(IsString(key), IsSymbol(key));
 }
 
 Node* CodeStubAssembler::IsDebugActive() {
