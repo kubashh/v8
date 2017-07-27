@@ -13987,6 +13987,18 @@ void Code::CopyFrom(const CodeDesc& desc) {
 
 SafepointEntry Code::GetSafepointEntry(Address pc) {
   SafepointTable table(this);
+  if (kind() == OPTIMIZED_FUNCTION && marked_for_deoptimization()) {
+    DeoptimizationInputData* deopt_table =
+        DeoptimizationInputData::cast(deoptimization_data());
+    int pc_offset = static_cast<int>(pc - instruction_start());
+    int deopt_total = deopt_table->DeoptCount();
+    for (int i = 0; i < deopt_total; i++) {
+      if (deopt_table->TrampolinePc(i)->value() == pc_offset) {
+        return table.FindEntry(instruction_start() +
+                               deopt_table->Pc(i)->value());
+      }
+    }
+  }
   return table.FindEntry(pc);
 }
 
