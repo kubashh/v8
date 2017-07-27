@@ -81,6 +81,17 @@ void CodeGenerator::CreateFrameAccessState(Frame* frame) {
   frame_access_state_ = new (zone()) FrameAccessState(frame);
 }
 
+Deoptimizer::BailoutType CodeGenerator::DeoptimizerCallBailout(
+    int deoptimization_id, SourcePosition pos) {
+  DeoptimizeKind deopt_kind = GetDeoptimizationKind(deoptimization_id);
+  if (deopt_kind == DeoptimizeKind::kSoft)
+    return Deoptimizer::SOFT;
+  else if (deopt_kind == DeoptimizeKind::kEager)
+    return Deoptimizer::EAGER;
+  else
+    return Deoptimizer::LAZY;
+}
+
 void CodeGenerator::AssembleCode() {
   CompilationInfo* info = this->info();
 
@@ -191,7 +202,9 @@ void CodeGenerator::AssembleCode() {
     }
   }
 
-  // Assemble all eager deoptimization exits.
+  // TODO(juliana) needed for regress/regress-259
+  tasm()->nop();
+  // Assemble deoptimization exits.
   for (DeoptimizationExit* exit : deoptimization_exits_) {
     tasm()->bind(exit->label());
     int trampoline_pc = tasm()->pc_offset();
@@ -207,6 +220,7 @@ void CodeGenerator::AssembleCode() {
     while (tasm()->pc_offset() < target_offset) {
       tasm()->nop();
     }
+    // TODO(juliana): double check if we still need this.
   }
 
   FinishCode();
@@ -651,7 +665,6 @@ void CodeGenerator::RecordCallPosition(Instruction* instr) {
     DeoptimizationExit* const exit = new (zone())
         DeoptimizationExit(deopt_state_id, current_source_position_);
     deoptimization_exits_.push_back(exit);
-
     safepoints()->RecordLazyDeoptimizationIndex(deopt_state_id);
   }
 }
