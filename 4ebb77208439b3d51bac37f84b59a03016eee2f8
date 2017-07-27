@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1ccf8663_64050aae",
+        "filename": "src/compiler/new-escape-analysis-reducer.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2050f054_3cd4e924",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93f9f113_4b4f124e",
         "filename": "src/compiler/new-escape-analysis-reducer.h",
         "patchSetId": 14
@@ -68,6 +92,30 @@
       "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc49db6_a3dedc2e",
+        "filename": "src/compiler/new-escape-analysis-reducer.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f9f113_4b4f124e",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 19
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +257,30 @@
     },
     {
       "key": {
+        "uuid": "b94ab114_9d4729e1",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "current-\u003eValueInput(0) already resolves replacements, so if we have a virtual object here, then the replacement should point to the allocation itself.",
+      "parentUuid": "56b572c8_f300c94e",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 16
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5670fe12_383ffa20",
         "filename": "src/compiler/new-escape-analysis.h",
         "patchSetId": 14
@@ -255,6 +327,30 @@
     },
     {
       "key": {
+        "uuid": "caeecec7_6aaa27a9",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "Adding a dependency multiple times wastes a bit of memory in the dependency list of a VirtualObject, but has no further performance implications, as they will be ignored when walking the list. Making the list a set or doing a linear scan on each insertion is certainly possible, not sure if this helps though.\n\nThe implicit side-effect is very much the design concept: All accessors of a scope should register the necessary dependencies. It just turns out that most of them don\u0027t need that with the current strategy of revisiting all uses. The user of a scope should not have to worry if the accessors register dependencies or not, it should be impossible to misuse them. So renaming just this method kind of exposes an implementation detail that should be invisible.",
+      "parentUuid": "afc122f8_6320ac1e",
+      "range": {
+        "startLine": 307,
+        "startChar": 6,
+        "endLine": 307,
+        "endChar": 58
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60680355_70d12c59",
         "filename": "src/compiler/new-escape-analysis.h",
         "patchSetId": 14
@@ -275,6 +371,30 @@
       "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "611a13b0_c7dfeb81",
+        "filename": "src/compiler/new-escape-analysis.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60680355_70d12c59",
+      "range": {
+        "startLine": 376,
+        "startChar": 14,
+        "endLine": 376,
+        "endChar": 17
+      },
+      "revId": "4ebb77208439b3d51bac37f84b59a03016eee2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

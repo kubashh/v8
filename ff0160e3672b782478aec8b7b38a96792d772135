@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d96ddd6_0f5fe9b2",
+        "filename": "src/compiler/new-escape-analysis-reducer.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "I re-wrote this to ensure that it cannot be called twice.",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 1
+      },
+      "revId": "ff0160e3672b782478aec8b7b38a96792d772135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1eeb494_bb1c0b92",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "I added this. It is not really necessary at the moment, but I don\u0027t want to built in the implicit assumption that changing a virtual object doesn\u0027t need revisitation of its Allocate node.",
+      "range": {
+        "startLine": 167,
+        "startChar": 6,
+        "endLine": 167,
+        "endChar": 58
+      },
+      "revId": "ff0160e3672b782478aec8b7b38a96792d772135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1d60c42_dbd5e2a7",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-07-27T14:14:51Z",
+      "side": 1,
+      "message": "This ensures that we never produce the default value.",
+      "range": {
+        "startLine": 266,
+        "startChar": 4,
+        "endLine": 266,
+        "endChar": 45
+      },
+      "revId": "ff0160e3672b782478aec8b7b38a96792d772135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
