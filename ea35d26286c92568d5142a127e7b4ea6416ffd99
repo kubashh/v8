@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "3bd2b77b_4f218dfa",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "As we discussed offline:\n  DCHECK_NOT_NULL(target);",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a1839def_710242fa",
         "filename": "src/heap/objects-visiting-inl.h",
         "patchSetId": 7
@@ -42,6 +59,40 @@
         "endLine": 206,
         "endChar": 70
       },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ab895ab_de7d74e2",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "STATIC_ASSERT(kTransitionCellOffset \u003d\u003d Tuple3::kValue1Offset);\n\nor if you #include object-macros.h just\n  cell \u003d WeakCell::cast(READ_FIELD(tuple3_handler, kTransitionCellOffset));",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d85a89d6_2640cd8b",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "DCHECK_EQ(kFullTransitionArray, encoding());",
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -71,6 +122,30 @@
     },
     {
       "key": {
+        "uuid": "1fbef7d9_b2d5a095",
+        "filename": "src/transitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "daf9009e_1d0113ea",
+      "range": {
+        "startLine": 31,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 39
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d4d1772d_d8a98cc3",
         "filename": "src/transitions.h",
         "patchSetId": 7
@@ -88,6 +163,57 @@
         "endLine": 172,
         "endChar": 20
       },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beacae0d_61ae53e8",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "But there is a handlified version of the accessor, right?",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b95b522_9e28570c",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "Will it be better to check the encoding via the transition accessor?",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c011c72d_32d03b8b",
+        "filename": "test/cctest/test-transitions.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-27T15:26:18Z",
+      "side": 1,
+      "message": "Maybe it should be a fresh instance of TransitionAccessor from now on instead of Reload.\nor maybe TestTransitionsAccessor should do Reload internally after every Insert.",
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
