@@ -2319,9 +2319,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleDeoptimizerCall(
   DeoptimizeKind deoptimization_kind = GetDeoptimizationKind(deoptimization_id);
   DeoptimizeReason deoptimization_reason =
       GetDeoptimizationReason(deoptimization_id);
-  Deoptimizer::BailoutType bailout_type =
-      deoptimization_kind == DeoptimizeKind::kSoft ? Deoptimizer::SOFT
-                                                   : Deoptimizer::EAGER;
+  Deoptimizer::BailoutType bailout_type;
+  if (deoptimization_kind == DeoptimizeKind::kSoft)
+    bailout_type = Deoptimizer::SOFT;
+  else if (deoptimization_kind == DeoptimizeKind::kEager)
+    bailout_type = Deoptimizer::EAGER;
+  else
+    bailout_type = Deoptimizer::LAZY;
   Address deopt_entry = Deoptimizer::GetDeoptimizationEntry(
       __ isolate(), deoptimization_id, bailout_type);
   if (deopt_entry == nullptr) return kTooManyDeoptimizationBailouts;
