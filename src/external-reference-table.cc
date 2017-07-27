@@ -220,6 +220,8 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
       "wasm::float64_to_uint64_wrapper");
   Add(ExternalReference::wasm_float64_pow(isolate).address(),
       "wasm::float64_pow");
+  Add(ExternalReference::wasm_context_address().address(),
+      "wasm::context_address");
   Add(ExternalReference::wasm_int64_div(isolate).address(), "wasm::int64_div");
   Add(ExternalReference::wasm_int64_mod(isolate).address(), "wasm::int64_mod");
   Add(ExternalReference::wasm_uint64_div(isolate).address(),

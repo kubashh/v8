@@ -113,6 +113,9 @@ class TestingModule : public ModuleEnv {
     CHECK(size == 0 || instance->mem_start);
     memset(instance->mem_start, 0, size);
     instance->mem_size = size;
+    // update the wasm context
+    wasm_context.mem_start = instance->mem_start;
+    wasm_context.mem_size = instance->mem_size;
     return instance->mem_start;
   }
 
