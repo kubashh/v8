@@ -52,6 +52,7 @@ namespace internal {
   F(ArraySpeciesConstructor, 1, 1)  \
   F(ArrayIncludes_Slow, 3, 1)       \
   F(ArrayIndexOf, 3, 1)             \
+  F(ArrayClone, 1, 1)               \
   F(SpreadIterablePrepare, 1, 1)
 
 #define FOR_EACH_INTRINSIC_ATOMICS(F)           \
