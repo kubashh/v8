@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "45ae46bf_40e000a2",
+        "filename": "src/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c60486de_913f4b33",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f70527f4_69ba18e8",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7674cc2_748a686e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f70527f4_69ba18e8",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "67a4d8f7_0f536b70",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6092814a_832e1453",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f7c01f5_92879e94",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324d134c_dcea945a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "In wasm-compiler.cc there are 61 occurrences of jsgraph()-\u003eInt32Constant and 17 occurrences of Int32Constant, so it seems that jsgraph()-\u003eInt32Constant is used more often, so I\u0027ll use that in all my changes.\n\nFor consistency we should probably choose which one to use and change all the other occurrences in the whole file.",
+      "parentUuid": "9f7c01f5_92879e94",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "bd253630_80ab4090",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcf20379_276784ae",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a924d65_4f5807f2",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "53488c03_914a66c8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "I added the DCHECK at memory grow time, as we discussed.",
+      "parentUuid": "7a924d65_4f5807f2",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97981e84_6789df34",
         "filename": "src/wasm/wasm-code-specialization.cc",
         "patchSetId": 1
@@ -118,6 +226,24 @@
       "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124ed2db_fb84572d",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-07-27T13:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97981e84_6789df34",
+      "revId": "0b507e5c0ce51e71d390a952200948105e3e0d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
