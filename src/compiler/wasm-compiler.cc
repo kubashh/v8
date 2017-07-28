@@ -51,6 +51,11 @@
 
 namespace v8 {
 namespace internal {
+
+// Definition of the wasm_context variable externally declared in
+// src/assembler.h.
+struct WasmContext wasm_context = {0, nullptr};
+
 namespace compiler {
 
 namespace {
@@ -2812,20 +2817,19 @@ void WasmGraphBuilder::BuildWasmInterpreterEntry(
 }
 
 Node* WasmGraphBuilder::MemBuffer(uint32_t offset) {
-  DCHECK_NOT_NULL(module_);
-  uintptr_t mem_start = reinterpret_cast<uintptr_t>(
-      module_->instance ? module_->instance->mem_start : nullptr);
-  if (offset == 0) {
-    if (!mem_buffer_) {
-      mem_buffer_ = jsgraph()->RelocatableIntPtrConstant(
-          mem_start, RelocInfo::WASM_MEMORY_REFERENCE);
-    }
-    return mem_buffer_;
-  } else {
-    return jsgraph()->RelocatableIntPtrConstant(
-        static_cast<uintptr_t>(mem_start + offset),
-        RelocInfo::WASM_MEMORY_REFERENCE);
-  }
+  Node* mem_buffer = graph()->NewNode(
+      jsgraph()->machine()->Load(MachineType::UintPtr()),
+      jsgraph()->ExternalConstant(ExternalReference::wasm_context_address()),
+      jsgraph()->Int32Constant(offsetof(struct WasmContext, mem_start)),
+      *effect_, *control_);
+  *effect_ = mem_buffer;
+
+  if (offset == 0) return mem_buffer;
+
+  Node* mem_buffer_offset =
+      graph()->NewNode(jsgraph()->machine()->IntAdd(), mem_buffer,
+                       jsgraph()->Int32Constant(offset));
+  return mem_buffer_offset;
 }
 
 Node* WasmGraphBuilder::CurrentMemoryPages() {
@@ -2838,12 +2842,13 @@ Node* WasmGraphBuilder::CurrentMemoryPages() {
 }
 
 Node* WasmGraphBuilder::MemSize() {
-  DCHECK_NOT_NULL(module_);
-  if (mem_size_) return mem_size_;
-  uint32_t size = module_->instance ? module_->instance->mem_size : 0;
-  mem_size_ = jsgraph()->RelocatableInt32Constant(
-      size, RelocInfo::WASM_MEMORY_SIZE_REFERENCE);
-  return mem_size_;
+  Node* mem_size = graph()->NewNode(
+      jsgraph()->machine()->Load(MachineType::Uint32()),
+      jsgraph()->ExternalConstant(ExternalReference::wasm_context_address()),
+      jsgraph()->Int32Constant(offsetof(struct WasmContext, mem_size)),
+      *effect_, *control_);
+  *effect_ = mem_size;
+  return mem_size;
 }
 
 void WasmGraphBuilder::EnsureFunctionTableNodes() {
@@ -3010,9 +3015,7 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
 
     Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(),
                                   jsgraph()->IntPtrConstant(effective_offset),
-                                  jsgraph()->RelocatableInt32Constant(
-                                      static_cast<uint32_t>(size),
-                                      RelocInfo::WASM_MEMORY_SIZE_REFERENCE));
+                                  MemSize());
     TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
     // For offset > effective size, this relies on check above to fail and
     // effective size can be negative, relies on wrap around.
@@ -3031,10 +3034,12 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
     }
   }
 
+  Node* effective_size_node =
+      graph()->NewNode(jsgraph()->machine()->Int32Sub(), MemSize(),
+                       jsgraph()->Int32Constant(offset + memsize - 1));
+
   Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(), index,
-                                jsgraph()->RelocatableInt32Constant(
-                                    static_cast<uint32_t>(effective_size),
-                                    RelocInfo::WASM_MEMORY_SIZE_REFERENCE));
+                                effective_size_node);
   TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
 }
 

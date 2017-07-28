@@ -969,19 +969,30 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     CHECK(memory_->byte_length()->ToUint32(&mem_size));
     LoadDataSegments(mem_start, mem_size);
 
-    uint32_t old_mem_size = compiled_module_->mem_size();
-    Address old_mem_start = compiled_module_->GetEmbeddedMemStartOrNull();
+    // TODO(enricobacis): Re-add the if below when the wasm_context is in the
+    // WasmMemoryObject.
+    // uint32_t old_mem_size = compiled_module_->mem_size();
+    // Address old_mem_start = compiled_module_->GetEmbeddedMemStartOrNull();
     // We might get instantiated again with the same memory. No patching
     // needed in this case.
-    if (old_mem_start != mem_start || old_mem_size != mem_size) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   mem_start, mem_size);
-    }
+    // if (old_mem_start != mem_start || old_mem_size != mem_size) {
+    wasm_context.mem_start = mem_start;
+    wasm_context.mem_size = mem_size;
+    // }
+
     // Just like with globals, we need to keep both the JSArrayBuffer
     // and save the start pointer.
     instance->set_memory_buffer(*memory_);
     WasmCompiledModule::SetSpecializationMemInfoFrom(factory, compiled_module_,
                                                      memory_);
+  } else {
+    // TODO(enricobacis): Since we have a single WasmContext for all the
+    // instances now, we need to reset it in case there is no memory attached to
+    // the module at instantiation time. Consider to remove this part if not
+    // necessary when we move from the single WasmContext to one WasmContext per
+    // WasmMemoryObject.
+    wasm_context.mem_start = nullptr;
+    wasm_context.mem_size = 0;
   }
 
   //--------------------------------------------------------------------------

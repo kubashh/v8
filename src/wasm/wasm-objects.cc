@@ -300,11 +300,8 @@ void UncheckedUpdateInstanceMemory(Isolate* isolate,
   uint32_t new_size = mem_buffer->byte_length()->Number();
   Address new_mem_start = static_cast<Address>(mem_buffer->backing_store());
   DCHECK_NOT_NULL(new_mem_start);
-  Zone specialization_zone(isolate->allocator(), ZONE_NAME);
-  CodeSpecialization code_specialization(isolate, &specialization_zone);
-  code_specialization.RelocateMemoryReferences(old_mem_start, old_size,
-                                               new_mem_start, new_size);
-  code_specialization.ApplyToWholeInstance(*instance);
+  wasm_context.mem_start = new_mem_start;
+  wasm_context.mem_size = new_size;
 }
 
 }  // namespace
@@ -388,6 +385,9 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   if (memory_object->has_instances()) {
     Address old_mem_start = static_cast<Address>(old_buffer->backing_store());
     Handle<WeakFixedArray> instances(memory_object->instances(), isolate);
+    // Verify that the values we will change are actually the ones we expect.
+    DCHECK(wasm_context.mem_start == old_mem_start &&
+           wasm_context.mem_size == old_size);
     for (int i = 0; i < instances->Length(); i++) {
       Object* elem = instances->Get(i);
       if (!elem->IsWasmInstanceObject()) continue;
@@ -460,6 +460,9 @@ int32_t WasmInstanceObject::GrowMemory(Isolate* isolate,
   Handle<JSArrayBuffer> buffer =
       GrowMemoryBuffer(isolate, old_buffer, pages, max_pages);
   if (buffer.is_null()) return -1;
+  // Verify that the values we will change are actually the ones we expect.
+  DCHECK(wasm_context.mem_start == old_mem_start &&
+         wasm_context.mem_size == old_size);
   SetInstanceMemory(isolate, instance, buffer);
   UncheckedUpdateInstanceMemory(isolate, instance, old_mem_start, old_size);
   DCHECK_EQ(0, old_size % WasmModule::kPageSize);
@@ -842,8 +845,8 @@ void WasmCompiledModule::Reset(Isolate* isolate,
     CodeSpecialization code_specialization(isolate, &specialization_zone);
 
     if (old_mem_size > 0 && old_mem_start != nullptr) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   nullptr, default_mem_size);
+      wasm_context.mem_start = nullptr;
+      wasm_context.mem_size = default_mem_size;
     }
 
     if (compiled_module->has_globals_start()) {
