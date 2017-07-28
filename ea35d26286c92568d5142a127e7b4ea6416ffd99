@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bec1aac1_460a7e6b",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-07-28T11:07:36Z",
+      "side": 1,
+      "message": "Ack. I didn\u0027t realize that FullTransitionArray now contains weak cells via the handler.\nI saw that you rebased and moved ClearFullMapTransitions() above. That looks good.",
+      "parentUuid": "ff584aee_4772d580",
+      "range": {
+        "startLine": 2797,
+        "startChar": 7,
+        "endLine": 2797,
+        "endChar": 30
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bd2b77b_4f218dfa",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 7
