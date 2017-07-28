@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "933d5443_91cda68d",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2719a32a_a779365f",
+      "range": {
+        "startLine": 88,
+        "startChar": 3,
+        "endLine": 88,
+        "endChar": 29
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "607819e2_e2d82669",
         "filename": "src/compiler/instruction-selector.cc",
         "patchSetId": 8
@@ -39,6 +63,24 @@
       "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd70c48b_5a9f24a8",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "607819e2_e2d82669",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "fd80a898_59c8201f",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "It\u0027s probably easy to leave it for a separate CL. Will take care of it, once I\u0027m done with the rest of the comments.",
+      "parentUuid": "ba0d958b_0cdab86f",
+      "range": {
+        "startLine": 2905,
+        "startChar": 0,
+        "endLine": 2905,
+        "endChar": 68
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76a7d715_c57c7d0d",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 8
@@ -103,6 +169,24 @@
       "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bc4b157_dae23bd6",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76a7d715_c57c7d0d",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "49d8835d_c8fbbdf7",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f36e268_d3a73686",
+      "range": {
+        "startLine": 339,
+        "startChar": 2,
+        "endLine": 339,
+        "endChar": 79
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c3f5252_32b9d6ed",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 8
@@ -146,6 +254,24 @@
     },
     {
       "key": {
+        "uuid": "2c9c133d_33e79961",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c3f5252_32b9d6ed",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "758c497c_a0059b81",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 8
@@ -157,6 +283,30 @@
       "writtenOn": "2017-07-27T13:51:47Z",
       "side": 1,
       "message": "Why was this changed? This is not what we are really storing, no?",
+      "range": {
+        "startLine": 996,
+        "startChar": 52,
+        "endLine": 996,
+        "endChar": 55
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23c6147c_1d5708c4",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "This was changed so it would print the same bytecode offset as in the DeoptimizationInputData table. But maybe it does not make sense.",
+      "parentUuid": "758c497c_a0059b81",
       "range": {
         "startLine": 996,
         "startChar": 52,
@@ -215,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "7b17c16f_113ceda8",
+        "filename": "src/frames.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90e7b2d8_c732f4b1",
+      "range": {
+        "startLine": 1482,
+        "startChar": 2,
+        "endLine": 1489,
+        "endChar": 3
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b7f2cd4_30ffb4f4",
         "filename": "src/isolate.cc",
         "patchSetId": 8
@@ -229,6 +403,24 @@
       "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c22fd52a_215d85eb",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b7f2cd4_30ffb4f4",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -252,6 +444,30 @@
       "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71047752_d58210ad",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 14000,
+      "author": {
+        "id": 1228275
+      },
+      "writtenOn": "2017-07-28T10:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b8aabff_a213ef79",
+      "range": {
+        "startLine": 13993,
+        "startChar": 0,
+        "endLine": 14000,
+        "endChar": 5
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
