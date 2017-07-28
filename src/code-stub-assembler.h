@@ -656,7 +656,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // The ParameterMode argument is only used for the capacity parameter.
   std::pair<Node*, Node*> AllocateUninitializedJSArrayWithElements(
       ElementsKind kind, Node* array_map, Node* length, Node* allocation_site,
-      Node* capacity, ParameterMode capacity_mode = INTPTR_PARAMETERS);
+      Node* capacity, ParameterMode capacity_mode = INTPTR_PARAMETERS,
+      Node* elements_map = nullptr);
   // Allocate a JSArray and fill elements with the hole.
   // The ParameterMode argument is only used for the capacity parameter.
   Node* AllocateJSArray(ElementsKind kind, Node* array_map, Node* capacity,
@@ -877,6 +878,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsUnseededNumberDictionary(Node* object);
   Node* IsWeakCell(Node* object);
   Node* IsUndetectableMap(Node* map);
+  Node* IsArrayProtectorCellInvalid();
 
   // True iff |object| is a Smi or a HeapNumber.
   Node* IsNumber(Node* object);
@@ -1368,6 +1370,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   Node* Int32ToUint8Clamped(Node* int32_value);
   Node* Float64ToUint8Clamped(Node* float64_value);
+  Node* ClampToInt32(Node* object, Label* fail);
 
   Node* PrepareValueForWriteToTypedArray(Node* key, ElementsKind elements_kind,
                                          Label* bailout);

@@ -439,6 +439,12 @@ Callable CodeFactory::ArrayPush(Isolate* isolate) {
 }
 
 // static
+Callable CodeFactory::ArraySlice(Isolate* isolate) {
+  return Callable(isolate->builtins()->ArraySlice(),
+                  BuiltinDescriptor(isolate));
+}
+
+// static
 Callable CodeFactory::FunctionPrototypeBind(Isolate* isolate) {
   return Callable(isolate->builtins()->FunctionPrototypeBind(),
                   BuiltinDescriptor(isolate));
