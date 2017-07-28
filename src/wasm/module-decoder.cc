@@ -31,9 +31,9 @@ namespace wasm {
 #endif
 namespace {
 
-const char kNameString[] = "name";
-
-const char kExceptionString[] = "exception";
+constexpr char kNameString[] = "name";
+constexpr char kExceptionString[] = "exception";
+constexpr char kUnknownString[] = "<unknown>";
 
 template <size_t N>
 constexpr size_t num_chars(const char (&)[N]) {
@@ -71,9 +71,10 @@ const char* SectionName(SectionCode code) {
     case kNameSectionCode:
       return kNameString;
     case kExceptionSectionCode:
-      return kExceptionString;
+      if (FLAG_experimental_wasm_eh) return kExceptionString;
+      return kUnknownString;
     default:
-      return "<unknown>";
+      return kUnknownString;
   }
 }
 
@@ -217,11 +218,6 @@ class WasmSectionIterator {
           strncmp(reinterpret_cast<const char*>(section_name_start),
                   kNameString, num_chars(kNameString)) == 0) {
         section_code = kNameSectionCode;
-      } else if (FLAG_experimental_wasm_eh &&
-                 string.length() == num_chars(kExceptionString) &&
-                 strncmp(reinterpret_cast<const char*>(section_name_start),
-                         kExceptionString, num_chars(kExceptionString)) == 0) {
-        section_code = kExceptionSectionCode;
       }
     } else if (!IsValidSectionCode(section_code)) {
       decoder_.error() << "unknown section code "
@@ -325,9 +321,15 @@ class ModuleDecoder : public Decoder {
       error() << "unexpected section: " << SectionName(section_code);
       return;
     }
-    if (section_code != kUnknownSectionCode) {
-      next_section_ = section_code;
-      ++next_section_;
+
+    switch (section_code) {
+      case kUnknownSectionCode:
+      case kExceptionSectionCode:
+        break;
+      default:
+        next_section_ = section_code;
+        ++next_section_;
+        break;
     }
 
     switch (section_code) {
@@ -370,7 +372,11 @@ class ModuleDecoder : public Decoder {
         DecodeNameSection();
         break;
       case kExceptionSectionCode:
-        DecodeExceptionSection();
+        if (FLAG_experimental_wasm_eh) {
+          DecodeExceptionSection();
+        } else {
+          error() << "unexpected section: " << SectionName(section_code);
+        }
         break;
       default:
         error() << "unexpected section: " << SectionName(section_code);
