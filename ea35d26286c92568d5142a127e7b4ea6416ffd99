@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ff584aee_4772d580",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2797,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "The sets of maps whose transitions these two functions clear are indeed disjoint. However, ClearSimpleMapTransitions() performs the additional duty of clearing all the WeakCells for non-live maps. That makes sense because it iterates over the WeakCell chain anyway. The alternative to this reordering would therefore be to factor out the WeakCell clearing into a separate pass, but that would likely have a performance cost.",
+      "parentUuid": "b72abf5a_1e6f7b66",
+      "range": {
+        "startLine": 2797,
+        "startChar": 7,
+        "endLine": 2797,
+        "endChar": 30
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bd2b77b_4f218dfa",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 7
@@ -39,6 +63,24 @@
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fcfa18f_4ba05e74",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Done.\nGetTarget is guaranteed not to return nullptr here, because maps\u0027 WeakCells are not yet cleared (see the comment thread above about the reordering of clearing operations). So we can just DCHECK_NOT_NULL here, and undo the bigger refactoring of ClearFullMapTransitions.",
+      "parentUuid": "3bd2b77b_4f218dfa",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "f6dade85_c5a3944d",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Handlers are not wrapped in a WeakCell, they are stored directly.\n\nWe do use the same weakness as for maps, see the changes in MarkCompactCollector::CompactTransitionArray. Each handler points to its transition target map via a WeakCell. When that map is white after marking, the handler is cleared.\nI guess I should update the comment here to include the above answer :-)",
+      "parentUuid": "a1839def_710242fa",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 70
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ab895ab_de7d74e2",
         "filename": "src/ic/handler-configuration-inl.h",
         "patchSetId": 7
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "1ce59929_f9338c9b",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ab895ab_de7d74e2",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d85a89d6_2640cd8b",
         "filename": "src/objects-debug.cc",
         "patchSetId": 7
@@ -96,6 +180,24 @@
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dba3704_77457074",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "No, why? It\u0027s perfectly valid to call this for any encoding(), and in fact that\u0027s what we do from Map::MapVerify().",
+      "parentUuid": "d85a89d6_2640cd8b",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "bab1d44f_3970ed0d",
+        "filename": "src/transitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Done. FWIW I don\u0027t think this adds much value; we only use raw pointers in places that don\u0027t allocate anyway.\n\nThe handlified constructor creates TransitionAccessor instances that are just as GC unsafe, because GC can clear transitions. It would be nice if we could make that constructor take a DisallowHeapAllocation too, however some of the operations need to allocate. We could use AllowHeapAllocation scopes within the TransitionsAccessor... would you prefer that, or would that just be confusing?\n\nI agree that this state of affairs is not particularly beautiful, but I don\u0027t see a good alternative.",
+      "parentUuid": "1fbef7d9_b2d5a095",
+      "range": {
+        "startLine": 31,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 39
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4d1772d_d8a98cc3",
         "filename": "src/transitions.h",
         "patchSetId": 7
@@ -169,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "ffb7de7a_14980289",
+        "filename": "src/transitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "The idea is precisely to avoid needless recomputations. Consistency is DCHECK\u0027ed via the needs_reload_ field. I think this is the right tradeoff between performance and fool-proof-ness.\n\nSubtlety arises from the fact that transitions are weak in the GC sense, so anything that allocates could cause clearing of transitions. So *any* data about transitions (whether it involves TransitionsAccessor instances or not) becomes stale at any allocation. This is not new.",
+      "parentUuid": "d4d1772d_d8a98cc3",
+      "range": {
+        "startLine": 172,
+        "startChar": 11,
+        "endLine": 172,
+        "endChar": 20
+      },
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "beacae0d_61ae53e8",
         "filename": "src/value-serializer.cc",
         "patchSetId": 7
@@ -183,6 +333,24 @@
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07e98943_c9cc2e96",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Yes, but that doesn\u0027t help. GC can clear transitions, so a TransitionsAccessor\u0027s internal state can become stale on allocation regardless of handlification.",
+      "parentUuid": "beacae0d_61ae53e8",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +371,24 @@
     },
     {
       "key": {
+        "uuid": "5b9bb3e6_eac79cf8",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b95b522_9e28570c",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c011c72d_32d03b8b",
         "filename": "test/cctest/test-transitions.cc",
         "patchSetId": 7
@@ -217,6 +403,24 @@
       "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa196708_b5dfc194",
+        "filename": "test/cctest/test-transitions.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-07-28T04:46:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c011c72d_32d03b8b",
+      "revId": "ea35d26286c92568d5142a127e7b4ea6416ffd99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
