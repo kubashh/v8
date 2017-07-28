@@ -303,6 +303,8 @@ class SharedFunctionInfo : public HeapObject {
   // True if the function has any duplicated parameter names.
   DECL_BOOLEAN_ACCESSORS(has_duplicate_parameters)
 
+  DECL_BOOLEAN_ACCESSORS(has_been_executed)
+
   // Indicates whether the function is a native function.
   // These needs special treatment in .call and .apply since
   // null passed as the receiver should not be translated to the
@@ -504,7 +506,8 @@ class SharedFunctionInfo : public HeapObject {
   V(IsDeclarationBit, bool, 1, _)          \
   V(IsAsmWasmBrokenBit, bool, 1, _)        \
   V(FunctionMapIndexBits, int, 5, _)       \
-  /* Bits 26-31 are unused. */
+  V(HasBeenExecutedBit, bool, 1, _)
+  /* Bits 27-31 are unused. */
 
   DEFINE_BIT_FIELDS(COMPILER_HINTS_BIT_FIELDS)
 #undef COMPILER_HINTS_BIT_FIELDS

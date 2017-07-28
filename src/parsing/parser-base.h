@@ -12,6 +12,7 @@
 #include "src/base/hashmap.h"
 #include "src/counters.h"
 #include "src/globals.h"
+#include "src/log.h"
 #include "src/messages.h"
 #include "src/parsing/expression-classifier.h"
 #include "src/parsing/func-name-inferrer.h"
@@ -4166,6 +4167,10 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   RuntimeCallTimerScope runtime_timer(
       runtime_call_stats_,
       counters[Impl::IsPreParser()][parsing_on_main_thread_]);
+  base::ElapsedTimer timer;
+  if (FLAG_trace_parse) {
+    timer.Start();
+  }
 
   if (peek() == Token::ARROW && scanner_->HasAnyLineTerminatorBeforeNext()) {
     // ASI inserts `;` after arrow parameters if a line terminator is found.
@@ -4280,10 +4285,16 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   }
 
   if (FLAG_trace_preparse) {
+    double ms = timer.Elapsed().InMillisecondsF();
     Scope* scope = formal_parameters.scope;
-    PrintF("  [%s]: %i-%i (arrow function)\n",
-           is_lazy_top_level_function ? "Preparse no-resolution" : "Full parse",
-           scope->start_position(), scope->end_position());
+    const char* reason =
+        is_lazy_top_level_function ? "preparse-no-resolution" : "parse-full";
+    const char* name = "arrow";
+    LOG(Isolate::Current(),
+        FunctionEvent(reason, nullptr, ms, scope->start_position(),
+                      scope->end_position(),
+                      reinterpret_cast<const unsigned char*>(name),
+                      static_cast<int>(strlen(name))));
   }
   FunctionLiteralT function_literal = factory()->NewFunctionLiteral(
       impl()->EmptyIdentifierString(), formal_parameters.scope, body,

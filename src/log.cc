@@ -1263,6 +1263,58 @@ void Logger::SuspectReadEvent(Name* name, Object* obj) {
   msg.WriteToLogFile();
 }
 
+namespace {
+void AppendFunctionMessage(Log::MessageBuilder* msg, const char* reason,
+                           Script* script, double time_delta,
+                           int start_position, int end_position,
+                           base::ElapsedTimer* timer) {
+  msg->Append("%s,", reason);
+  if (script) {
+    if (script->name()->IsString()) {
+      msg->AppendDoubleQuotedString(
+          String::cast(script->name())->ToCString().get());
+    } else {
+      msg->Append("\"\"");
+    }
+    msg->Append(",%i,", script->id());
+  } else {
+    msg->Append("\"\",0,");
+  }
+  int timestamp = timer->IsStarted()
+                      ? static_cast<int>(timer->Elapsed().InMicroseconds())
+                      : -1;
+  msg->Append("%i,%i,%.3f,%i,", start_position, end_position, time_delta,
+              timestamp);
+}
+}  // namespace
+
+void Logger::FunctionEvent(const char* reason, Script* script,
+                           double time_delta, int start_position,
+                           int end_position, String* function_name) {
+  if (!log_->IsEnabled() || !FLAG_log_suspect) return;
+  Log::MessageBuilder msg(log_);
+  AppendFunctionMessage(&msg, reason, script, time_delta, start_position,
+                        end_position, &timer_);
+  if (function_name) {
+    msg.AppendDoubleQuotedString(function_name->ToCString().get());
+  }
+
+  msg.WriteToLogFile();
+}
+
+void Logger::FunctionEvent(const char* reason, Script* script,
+                           double time_delta, int start_position,
+                           int end_position, const unsigned char* function_name,
+                           int function_name_length) {
+  if (!log_->IsEnabled() || !FLAG_log_suspect) return;
+  Log::MessageBuilder msg(log_);
+  AppendFunctionMessage(&msg, reason, script, time_delta, start_position,
+                        end_position, &timer_);
+  if (function_name_length > 0) {
+    msg.Append("\"%.*s\"", function_name_length, function_name);
+  }
+  msg.WriteToLogFile();
+}
 
 void Logger::HeapSampleBeginEvent(const char* space, const char* kind) {
   if (!log_->IsEnabled() || !FLAG_log_gc) return;
