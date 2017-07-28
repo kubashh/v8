@@ -1,0 +1,335 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a528af84_bc380a15",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "instead of setting and checking the traverse variable the GetPropertySingleRun can just have two label parameters for proceeding iteration and for finishing iteration. This will simplify the code.",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23360311_36c47fe0",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "\"ProxyGetProperty\" is also fine here.",
+      "range": {
+        "startLine": 36,
+        "startChar": 37,
+        "endLine": 36,
+        "endChar": 57
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb0a16d9_454fea5f",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Just \"slow\".",
+      "range": {
+        "startLine": 44,
+        "startChar": 31,
+        "endLine": 44,
+        "endChar": 66
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72b34120_1572a6f2",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "This assert can be removed in favor of the assert at line 54.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33c2a3e2_40a84b1b",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "It can just be a local Node* but not a variable given that\n1) this is the only place where you bind target. \n2) it is not used outside of the loop.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad11d074_2467aaf4",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Just ProxyAssembler",
+      "range": {
+        "startLine": 14,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 35
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af8988ad_971ffe29",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "These two function can be removed.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3e989e6_3b489859",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Leftover.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "444cbce7_175feae1",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5049,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "You can revert this change.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59b34ec2_cb192421",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12368,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91990341_8e00c5c0",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12462,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "This idea didn\u0027t work out. Please revert the change.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b51b29f_0a151819",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12514,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Given that we have IsJSProxy check above this is guaranteed to be JSObject.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "963507fc_5587bf90",
+        "filename": "src/objects/map.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d31b02e6_55950596",
+        "filename": "src/runtime/runtime-proxy.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "Please rename it to GetPropertyWithReceiver.",
+      "range": {
+        "startLine": 49,
+        "startChar": 25,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db663c4_84dc41d6",
+        "filename": "src/runtime/runtime-proxy.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "holder",
+      "range": {
+        "startLine": 53,
+        "startChar": 41,
+        "endLine": 53,
+        "endChar": 47
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "243eaebf_1d68eb39",
+        "filename": "test/mjsunit/es6/proxies-get.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "target\n  to be in sync with the code below.",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 9
+      },
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25d56470_cc9fe765",
+        "filename": "test/mjsunit/es6/proxies-get.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-07-28T13:54:19Z",
+      "side": 1,
+      "message": "I think it\u0027s not necessary given that assertSame works.",
+      "revId": "d3eb5b918fbb4873c434b060a06a6daf85e37cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
