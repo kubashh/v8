@@ -25,6 +25,63 @@
     },
     {
       "key": {
+        "uuid": "607819e2_e2d82669",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-28T03:49:03Z",
+      "side": 1,
+      "message": "Nit: DCHECK_NE(DeoptimizeKind::kLazy, kind)\n\nThe convention is to have DCHECK_\u003ccond\u003e(expected, actual)",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02d6b2eb_adafefbe",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-28T03:49:03Z",
+      "side": 1,
+      "message": "This function seems to be copy and paste on all architectures (modulo the Call vs. call difference). Can you just share this whole function in the architecture independent file (and add the missing Call macros to the MacroAssembler\u0027s)?",
+      "range": {
+        "startLine": 2905,
+        "startChar": 0,
+        "endLine": 2905,
+        "endChar": 68
+      },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a7d715_c57c7d0d",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-28T03:49:03Z",
+      "side": 1,
+      "message": "Nit: Undo this unrelated change.",
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f36e268_d3a73686",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 8
@@ -42,6 +99,23 @@
         "endLine": 339,
         "endChar": 79
       },
+      "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3f5252_32b9d6ed",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-28T03:49:03Z",
+      "side": 1,
+      "message": "Changes these 4 lines to just: DCHECK_IMPLIES(code \u003d\u003d topmost_optimized_code, safe_to_deopt_topmost_optimized_code);",
       "revId": "7661d73e534ebf619683c8516f0c9a793cd97cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
