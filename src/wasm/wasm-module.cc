@@ -1023,8 +1023,8 @@ void LazyCompilationOrchestrator::CompileFunction(
     int mem_size = instance->memory_buffer()->byte_length()->Number();
     DCHECK_IMPLIES(mem_start == nullptr, mem_size == 0);
     if (mem_start != nullptr) {
-      code_specialization.RelocateMemoryReferences(nullptr, 0, mem_start,
-                                                   mem_size);
+      wasm_context.mem_start = mem_start;
+      wasm_context.mem_size = mem_size;
     }
   }
   code_specialization.RelocateDirectCalls(instance);

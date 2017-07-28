@@ -46,11 +46,6 @@ class CodeSpecialization {
   bool ApplyToWasmCode(Code*, ICacheFlushMode = FLUSH_ICACHE_IF_NEEDED);
 
  private:
-  Address old_mem_start = 0;
-  uint32_t old_mem_size = 0;
-  Address new_mem_start = 0;
-  uint32_t new_mem_size = 0;
-
   Address old_globals_start = 0;
   Address new_globals_start = 0;
 

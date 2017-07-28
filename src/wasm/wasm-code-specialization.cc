@@ -72,19 +72,6 @@ CodeSpecialization::CodeSpecialization(Isolate* isolate, Zone* zone)
 
 CodeSpecialization::~CodeSpecialization() {}
 
-void CodeSpecialization::RelocateMemoryReferences(Address old_start,
-                                                  uint32_t old_size,
-                                                  Address new_start,
-                                                  uint32_t new_size) {
-  DCHECK(old_mem_start == nullptr && old_mem_size == 0 &&
-         new_mem_start == nullptr && new_mem_size == 0);
-  DCHECK(old_start != new_start || old_size != new_size);
-  old_mem_start = old_start;
-  old_mem_size = old_size;
-  new_mem_start = new_start;
-  new_mem_size = new_size;
-}
-
 void CodeSpecialization::RelocateGlobals(Address old_start, Address new_start) {
   DCHECK(old_globals_start == 0 && new_globals_start == 0);
   DCHECK(old_start != 0 || new_start != 0);
@@ -172,8 +159,6 @@ bool CodeSpecialization::ApplyToWasmCode(Code* code,
   DisallowHeapAllocation no_gc;
   DCHECK_EQ(Code::WASM_FUNCTION, code->kind());
 
-  bool reloc_mem_addr = old_mem_start != new_mem_start;
-  bool reloc_mem_size = old_mem_size != new_mem_size;
   bool reloc_globals = old_globals_start || new_globals_start;
   bool patch_table_size = old_function_table_size || new_function_table_size;
   bool reloc_direct_calls = !relocate_direct_calls_instance.is_null();
@@ -183,8 +168,6 @@ bool CodeSpecialization::ApplyToWasmCode(Code* code,
   auto add_mode = [&reloc_mode](bool cond, RelocInfo::Mode mode) {
     if (cond) reloc_mode |= RelocInfo::ModeMask(mode);
   };
-  add_mode(reloc_mem_addr, RelocInfo::WASM_MEMORY_REFERENCE);
-  add_mode(reloc_mem_size, RelocInfo::WASM_MEMORY_SIZE_REFERENCE);
   add_mode(reloc_globals, RelocInfo::WASM_GLOBAL_REFERENCE);
   add_mode(patch_table_size, RelocInfo::WASM_FUNCTION_TABLE_SIZE_REFERENCE);
   add_mode(reloc_direct_calls, RelocInfo::CODE_TARGET);
@@ -196,18 +179,11 @@ bool CodeSpecialization::ApplyToWasmCode(Code* code,
   for (RelocIterator it(code, reloc_mode); !it.done(); it.next()) {
     RelocInfo::Mode mode = it.rinfo()->rmode();
     switch (mode) {
+      // TODO(enricobacis): Remove every occurrence of these in the code.
       case RelocInfo::WASM_MEMORY_REFERENCE:
-        DCHECK(reloc_mem_addr);
-        it.rinfo()->update_wasm_memory_reference(code->GetIsolate(),
-                                                 old_mem_start, new_mem_start,
-                                                 icache_flush_mode);
-        changed = true;
-        break;
       case RelocInfo::WASM_MEMORY_SIZE_REFERENCE:
-        DCHECK(reloc_mem_size);
-        it.rinfo()->update_wasm_memory_size(code->GetIsolate(), old_mem_size,
-                                            new_mem_size, icache_flush_mode);
-        changed = true;
+        // Verify that we are not patching these anymore.
+        UNREACHABLE();
         break;
       case RelocInfo::WASM_GLOBAL_REFERENCE:
         DCHECK(reloc_globals);
