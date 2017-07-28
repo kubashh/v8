@@ -44,9 +44,8 @@ namespace wasm {
     break;                                                                   \
   }
 
-#define PROTOTYPE_NOT_FUNCTIONAL(opcode)        \
-  error() << "Prototype still not functional: " \
-          << WasmOpcodes::OpcodeName(opcode);
+#define OPCODE_ERROR(opcode) \
+  (error(pc_) << WasmOpcodes::OpcodeName(opcode) << ": ")
 
 // An SsaEnv environment carries the current local variable renaming
 // as well as the current effect and control dependency in the TF graph.
@@ -82,8 +81,10 @@ struct Value {
 struct TryInfo : public ZoneObject {
   SsaEnv* catch_env;
   TFNode* exception;
+  size_t catch_count;
 
-  explicit TryInfo(SsaEnv* c) : catch_env(c), exception(nullptr) {}
+  explicit TryInfo(SsaEnv* c)
+      : catch_env(c), exception(nullptr), catch_count(0) {}
 };
 
 struct MergeValues {
@@ -283,6 +284,15 @@ class WasmDecoder : public Decoder {
     return false;
   }
 
+  inline bool Validate(const byte* pc, ExceptionIndexOperand<true>& operand) {
+    if (module_ != nullptr && operand.index < module_->exceptions.size()) {
+      operand.exception = &module_->exceptions[operand.index];
+      return true;
+    }
+    error(pc + 1) << "Invalid exception index: " << operand.index;
+    return false;
+  }
+
   inline bool Validate(const byte* pc, GlobalIndexOperand<true>& operand) {
     if (module_ != nullptr && operand.index < module_->globals.size()) {
       operand.global = &module_->globals[operand.index];
@@ -462,10 +472,15 @@ class WasmDecoder : public Decoder {
         return 1 + operand.length;
       }
 
+      case kExprThrow:
+      case kExprCatch: {
+        ExceptionIndexOperand<true> operand(decoder, pc);
+        return 1 + operand.length;
+      }
+
       case kExprSetLocal:
       case kExprTeeLocal:
-      case kExprGetLocal:
-      case kExprCatch: {
+      case kExprGetLocal: {
         LocalIndexOperand<true> operand(decoder, pc);
         return 1 + operand.length;
       }
@@ -752,6 +767,13 @@ class WasmFullDecoder : public WasmDecoder {
     return module_->has_memory;
   }
 
+  template <bool check>
+  inline TFNode* GetExceptionTag(ExceptionIndexOperand<check>& operand) {
+    // TODO(kschimpf): Need to get runtime exception tag values. This
+    // code only handles non-imported/exported exceptions.
+    return BUILD(Int32Constant, operand.index);
+  }
+
   // Decodes the body of a function.
   void DecodeFunctionBody() {
     TRACE("wasm-decode %p...%p (module+%u, %d bytes) %s\n",
@@ -780,6 +802,7 @@ class WasmFullDecoder : public WasmDecoder {
     while (pc_ < end_) {  // decoding loop.
       unsigned len = 1;
       WasmOpcode opcode = static_cast<WasmOpcode>(*pc_);
+      const byte* opcode_pc = pc_;
 #if DEBUG
       if (FLAG_trace_wasm_decoder && !WasmOpcodes::IsPrefixOpcode(opcode)) {
         TRACE("  @%-8d #%-20s|", startrel(pc_),
@@ -808,15 +831,20 @@ class WasmFullDecoder : public WasmDecoder {
           case kExprRethrow: {
             // TODO(kschimpf): Implement.
             CHECK_PROTOTYPE_OPCODE(eh);
-            PROTOTYPE_NOT_FUNCTIONAL(opcode);
+            OPCODE_ERROR(opcode) << ": not implemented yet";
             break;
           }
           case kExprThrow: {
-            // TODO(kschimpf): Fix to use type signature of exception.
             CHECK_PROTOTYPE_OPCODE(eh);
-            PROTOTYPE_NOT_FUNCTIONAL(opcode);
-            Value value = Pop(0, kWasmI32);
-            BUILD(Throw, value.node);
+            ExceptionIndexOperand<true> operand(this, pc_);
+            len = 1 + operand.length;
+            if (!Validate(pc_, operand)) break;
+            if (operand.exception->sig->parameter_count() > 0) {
+              // TODO(kschimpf): Fix to pull values off stack and build throw.
+              OPCODE_ERROR(opcode) << "can't handle exceptions with values yet";
+              break;
+            }
+            BUILD(Throw, GetExceptionTag(operand));
             // TODO(titzer): Throw should end control, but currently we build a
             // (reachable) runtime call instead of connecting it directly to
             // end.
@@ -838,9 +866,10 @@ class WasmFullDecoder : public WasmDecoder {
           case kExprCatch: {
             // TODO(kschimpf): Fix to use type signature of exception.
             CHECK_PROTOTYPE_OPCODE(eh);
-            PROTOTYPE_NOT_FUNCTIONAL(opcode);
-            LocalIndexOperand<true> operand(this, pc_);
+            ExceptionIndexOperand<true> operand(this, pc_);
             len = 1 + operand.length;
+
+            if (!Validate(pc_, operand)) break;
 
             if (control_.empty()) {
               error() << "catch does not match any try";
@@ -848,39 +877,51 @@ class WasmFullDecoder : public WasmDecoder {
             }
 
             Control* c = &control_.back();
+            DCHECK_NOT_NULL(c->try_info);
+
             if (!c->is_try()) {
               error() << "catch does not match any try";
               break;
             }
 
-            if (c->try_info->catch_env == nullptr) {
-              error() << "catch already present for try with catch";
+            if (c->try_info->catch_count > 0) {
+              OPCODE_ERROR(opcode) << "multiple catch blocks not implemented";
               break;
             }
+            ++c->try_info->catch_count;
 
             FallThruTo(c);
             stack_.resize(c->stack_depth);
 
-            DCHECK_NOT_NULL(c->try_info);
             SsaEnv* catch_env = c->try_info->catch_env;
-            c->try_info->catch_env = nullptr;
             SetEnv("catch:begin", catch_env);
+
             current_catch_ = c->previous_catch;
 
-            if (Validate(pc_, operand)) {
-              if (ssa_env_->locals) {
-                TFNode* exception_as_i32 =
-                    BUILD(Catch, c->try_info->exception, position());
-                ssa_env_->locals[operand.index] = exception_as_i32;
-              }
-            }
-
+            // Get the exception and see if wanted exception.
+            TFNode* exception_as_i32 =
+                BUILD(Catch, c->try_info->exception, position());
+            TFNode* exception_tag = GetExceptionTag(operand);
+            TFNode* compare_i32 = BUILD(Binop, kExprI32Eq, exception_as_i32,
+                                        exception_tag, position());
+            TFNode* if_true = nullptr;
+            TFNode* if_false = nullptr;
+            BUILD(BranchNoHint, compare_i32, &if_true, &if_false);
+            SsaEnv* end_env = ssa_env_;
+            SsaEnv* false_env = Split(end_env);
+            false_env->control = if_false;
+            SsaEnv* true_env = Steal(ssa_env_);
+            true_env->control = if_true;
+            c->try_info->catch_env = false_env;
+            SetEnv("Try:catch", true_env);
+            len = 1 + operand.length;
+            // TODO(kschimpf): Add code to pop caught exception from isolate.
             break;
           }
           case kExprCatchAll: {
             // TODO(kschimpf): Implement.
             CHECK_PROTOTYPE_OPCODE(eh);
-            PROTOTYPE_NOT_FUNCTIONAL(opcode);
+            OPCODE_ERROR(opcode) << "not implemented yet";
             break;
           }
           case kExprLoop: {
@@ -969,10 +1010,17 @@ class WasmFullDecoder : public WasmDecoder {
               name = "try:end";
 
               // validate that catch was seen.
-              if (c->try_info->catch_env != nullptr) {
-                error(pc_) << "missing catch in try";
+              if (c->try_info->catch_count == 0) {
+                error() << "missing catch in try";
                 break;
               }
+              SsaEnv* fallthru_ssa_env = ssa_env_;
+              DCHECK_NOT_NULL(c->try_info->catch_env);
+              SetEnv("Catch fail", c->try_info->catch_env);
+              BUILD0(Rethrow);
+              // TODO(karlschimpf): Why not use EndControl ()? (currently fails)
+              FallThruTo(c);
+              SetEnv("Catch fallthru", fallthru_ssa_env);
             }
             FallThruTo(c);
             SetEnv(name, c->end_env);
@@ -1382,6 +1430,17 @@ class WasmFullDecoder : public WasmDecoder {
           if (c->unreachable) PrintF("*");
         }
         PrintF(" | ");
+        // Add opcode information when not shown on stack.
+        switch (opcode) {
+          case kExprThrow:
+          case kExprCatch: {
+            ExceptionIndexOperand<true> operand(this, opcode_pc);
+            PrintF(" [%d]", operand.index);
+            break;
+          }
+          default:
+            break;
+        }
         for (size_t i = 0; i < stack_.size(); ++i) {
           Value& val = stack_[i];
           WasmOpcode opcode = static_cast<WasmOpcode>(*val.pc);
