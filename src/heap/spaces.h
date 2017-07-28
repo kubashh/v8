@@ -6,6 +6,7 @@
 #define V8_HEAP_SPACES_H_
 
 #include <list>
+#include <map>
 #include <memory>
 #include <unordered_set>
 
@@ -45,6 +46,9 @@ class SlotsBuffer;
 class SlotSet;
 class TypedSlotSet;
 class Space;
+
+// Maps objects with potentially invalid slots to theirs sizes.
+typedef std::map<HeapObject*, int> InvalidatedSlots;
 
 // -----------------------------------------------------------------------------
 // Heap structures:
@@ -354,7 +358,8 @@ class MemoryChunk {
       + kIntptrSize       // intptr_t live_byte_count_
       + kPointerSize * NUMBER_OF_REMEMBERED_SET_TYPES  // SlotSet* array
       + kPointerSize * NUMBER_OF_REMEMBERED_SET_TYPES  // TypedSlotSet* array
-      + kPointerSize                                   // SkipList* skip_list_
+      + kPointerSize    // InvalidatedSlots* invalidated_slots_
+      + kPointerSize    // SkipList* skip_list_
       + kPointerSize    // AtomicValue high_water_mark_
       + kPointerSize    // base::RecursiveMutex* mutex_
       + kPointerSize    // base::AtomicWord concurrent_sweeping_
@@ -471,6 +476,11 @@ class MemoryChunk {
   // Not safe to be called concurrently.
   template <RememberedSetType type>
   void ReleaseTypedSlotSet();
+
+  void AllocateInvalidatedSlots();
+  void ReleaseInvalidatedSlots();
+  void RegisterInvalidatedSlots(HeapObject* object, int size);
+  InvalidatedSlots* invalidated_slots() { return invalidated_slots_; }
 
   void AllocateLocalTracker();
   void ReleaseLocalTracker();
@@ -631,6 +641,7 @@ class MemoryChunk {
   // is ceil(size() / kPageSize).
   SlotSet* slot_set_[NUMBER_OF_REMEMBERED_SET_TYPES];
   TypedSlotSet* typed_slot_set_[NUMBER_OF_REMEMBERED_SET_TYPES];
+  InvalidatedSlots* invalidated_slots_;
 
   SkipList* skip_list_;
 

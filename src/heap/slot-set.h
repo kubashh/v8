@@ -18,6 +18,8 @@ namespace internal {
 
 enum SlotCallbackResult { KEEP_SLOT, REMOVE_SLOT };
 
+class HeapObject;
+
 // Data structure for maintaining a set of slots in a standard (non-large)
 // page. The base address of the page must be set with SetPageStart before any
 // operation.

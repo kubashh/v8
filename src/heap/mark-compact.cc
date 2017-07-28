@@ -4056,6 +4056,59 @@ class ToSpaceUpdatingItem : public UpdatingItem {
   MarkingState marking_state_;
 };
 
+class InvalidatedSlotFilter {
+ public:
+  explicit InvalidatedSlotFilter(MemoryChunk* chunk) {
+    invalidated_slots_ = chunk->invalidated_slots();
+    start_ = end_ = area_end_ = chunk->area_end();
+    object_ = nullptr;
+    size_ = 0;
+#ifdef DEBUG
+    last_ = chunk->area_start();
+#endif
+    if (invalidated_slots_) {
+      iterator_ = invalidated_slots_->begin();
+      if (iterator_ != invalidated_slots_->end()) {
+        start_ = iterator_->first->address();
+        end_ = start_ + iterator_->second;
+      }
+    }
+  }
+  bool IsValid(Address slot) {
+#ifdef DEBUG
+    DCHECK_LE(last_, slot);
+    last_ = slot;
+#endif
+    if (slot < start_) return true;
+    if (end_ <= slot) {
+      ++iterator_;
+      if (iterator_ != invalidated_slots_->end()) {
+        start_ = iterator_->first->address();
+        end_ = start_ + iterator_->second;
+      } else {
+        start_ = end_ = area_end_;
+      }
+      return true;
+    }
+    if (object_ == nullptr) {
+      object_ = HeapObject::FromAddress(start_);
+      size_ = object_->SizeFromMap(object_->map());
+    }
+    if (slot - start_ >= size_) return false;
+    return object_->IsValidSlot(static_cast<int>(slot - start_));
+  }
+
+ private:
+  InvalidatedSlots* invalidated_slots_;
+  InvalidatedSlots::iterator iterator_;
+  HeapObject* object_;
+  int size_;
+  Address area_end_, start_, end_;
+#ifdef DEBUG
+  Address last_;
+#endif
+};
+
 class RememberedSetUpdatingItem : public UpdatingItem {
  public:
   explicit RememberedSetUpdatingItem(Heap* heap,
@@ -4128,41 +4181,24 @@ class RememberedSetUpdatingItem : public UpdatingItem {
     // an object concurrently by another task. Hence, we need to update
     // those slots using atomics.
     if (chunk_->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>() != nullptr) {
-      if (chunk_->owner() == heap_->map_space()) {
-        RememberedSet<OLD_TO_NEW>::Iterate(
-            chunk_,
-            [this](Address slot) {
-              return CheckAndUpdateOldToNewSlot<AccessMode::ATOMIC>(slot);
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      } else {
-        RememberedSet<OLD_TO_NEW>::Iterate(
-            chunk_,
-            [this](Address slot) {
-              return CheckAndUpdateOldToNewSlot<AccessMode::NON_ATOMIC>(slot);
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      }
+      RememberedSet<OLD_TO_NEW>::Iterate(
+          chunk_,
+          [this](Address slot) {
+            return CheckAndUpdateOldToNewSlot<AccessMode::NON_ATOMIC>(slot);
+          },
+          SlotSet::PREFREE_EMPTY_BUCKETS);
     }
     if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
         (chunk_->slot_set<OLD_TO_OLD, AccessMode::NON_ATOMIC>() != nullptr)) {
-      if (chunk_->owner() == heap_->map_space()) {
-        RememberedSet<OLD_TO_OLD>::Iterate(
-            chunk_,
-            [](Address slot) {
-              return UpdateSlot<AccessMode::ATOMIC>(
-                  reinterpret_cast<Object**>(slot));
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      } else {
-        RememberedSet<OLD_TO_OLD>::Iterate(
-            chunk_,
-            [](Address slot) {
-              return UpdateSlot<AccessMode::NON_ATOMIC>(
-                  reinterpret_cast<Object**>(slot));
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      }
+      InvalidatedSlotFilter filter(chunk_);
+      RememberedSet<OLD_TO_OLD>::Iterate(
+          chunk_,
+          [&filter](Address slot) {
+            if (!filter.IsValid(slot)) return REMOVE_SLOT;
+            return UpdateSlot<AccessMode::NON_ATOMIC>(
+                reinterpret_cast<Object**>(slot));
+          },
+          SlotSet::PREFREE_EMPTY_BUCKETS);
     }
   }
 

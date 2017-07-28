@@ -4601,9 +4601,11 @@ void Heap::RegisterDeserializedObjectsForBlackAllocation(
   }
 }
 
-void Heap::NotifyObjectLayoutChange(HeapObject* object,
+void Heap::NotifyObjectLayoutChange(HeapObject* object, int size,
                                     const DisallowHeapAllocation&) {
   if (FLAG_incremental_marking && incremental_marking()->IsMarking()) {
+    MemoryChunk::FromAddress(object->address())
+        ->RegisterInvalidatedSlots(object, size);
     incremental_marking()->MarkBlackAndPush(object);
   }
 #ifdef VERIFY_HEAP
