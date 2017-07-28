@@ -546,8 +546,8 @@ Handle<Object> Isolate::CaptureSimpleStackTrace(Handle<JSReceiver> error_object,
         Handle<Code> code(exit_frame->LookupCode(), this);
         const int offset =
             static_cast<int>(exit_frame->pc() - code->instruction_start());
-
         int flags = 0;
+
         if (helper.IsStrictFrame(*fun)) flags |= FrameArray::kIsStrict;
         if (exit_frame->IsConstructor()) flags |= FrameArray::kIsConstructor;
 
