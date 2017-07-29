@@ -230,6 +230,7 @@ class RememberedSet : public AllStatic {
     while ((chunk = it.next()) != nullptr) {
       chunk->ReleaseSlotSet<OLD_TO_OLD>();
       chunk->ReleaseTypedSlotSet<OLD_TO_OLD>();
+      chunk->ReleaseInvalidatedSlots();
     }
   }
 
