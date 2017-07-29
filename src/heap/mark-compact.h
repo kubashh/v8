@@ -539,8 +539,6 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
    private:
     static const int kAllocationSpaces = LAST_PAGED_SPACE + 1;
 
-    static ClearOldToNewSlotsMode GetClearOldToNewSlotsMode(Page* p);
-
     template <typename Callback>
     void ForAllSweepingSpaces(Callback callback) {
       for (int i = 0; i < kAllocationSpaces; i++) {
@@ -607,7 +605,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   void RecordRelocSlot(Code* host, RelocInfo* rinfo, Object* target);
   void RecordCodeTargetPatch(Address pc, Code* target);
-  INLINE(void RecordSlot(HeapObject* object, Object** slot, Object* target));
+  INLINE(static void RecordSlot(HeapObject* object, Object** slot,
+                                Object* target));
   INLINE(void ForceRecordSlot(HeapObject* object, Object** slot,
                               Object* target));
   void RecordLiveSlotsOnPage(Page* page);
