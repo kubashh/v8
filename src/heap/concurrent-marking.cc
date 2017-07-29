@@ -101,7 +101,7 @@ class ConcurrentMarkingVisitor final
       VisitMapPointer(object, object->map_slot());
       // It is OK to iterate body of JS API object here because they do not have
       // unboxed double fields.
-      DCHECK(map->HasFastPointerLayout());
+      DCHECK_IMPLIES(FLAG_unbox_double_fields, map->HasFastPointerLayout());
       JSObject::BodyDescriptor::IterateBody(object, size, this);
       // The main thread will do wrapper tracing in Blink.
       bailout_.Push(object);
