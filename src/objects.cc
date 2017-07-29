@@ -4021,8 +4021,11 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
 
   if (instance_size_delta > 0) {
     Address address = object->address();
+    // The object has shrunk and is not going to use these slots again.
+    // Since there will be no untagged stores in these slots,
+    // we can just let the sweeper remove slots in the filler.
     heap->CreateFillerObjectAt(address + new_instance_size, instance_size_delta,
-                               ClearRecordedSlots::kYes);
+                               ClearRecordedSlots::kNo);
     heap->AdjustLiveBytes(*object, -instance_size_delta);
   }
 
@@ -4104,8 +4107,11 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
   DCHECK(instance_size_delta >= 0);
 
   if (instance_size_delta > 0) {
+    // The object has shrunk and is not going to use these slots again.
+    // Since there will be no untagged stores in these slots,
+    // we can just let the sweeper remove slots in the filler.
     heap->CreateFillerObjectAt(object->address() + new_instance_size,
-                               instance_size_delta, ClearRecordedSlots::kYes);
+                               instance_size_delta, ClearRecordedSlots::kNo);
     heap->AdjustLiveBytes(*object, -instance_size_delta);
   }
 
@@ -4146,6 +4152,7 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
 // static
 void JSObject::NotifyMapChange(Handle<Map> old_map, Handle<Map> new_map,
                                Isolate* isolate) {
+  DCHECK_LE(new_map->instance_size(), old_map->instance_size());
   if (!old_map->is_prototype_map()) return;
 
   InvalidatePrototypeChains(*old_map);

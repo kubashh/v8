@@ -9,6 +9,8 @@
 
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap.h"
+#include "src/heap/mark-compact-inl.h"
+#include "src/heap/mark-compact.h"
 #include "src/heap/marking.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
@@ -62,19 +64,22 @@ class ConcurrentMarkingVisitor final
   }
 
   void VisitPointers(HeapObject* host, Object** start, Object** end) override {
-    for (Object** p = start; p < end; p++) {
+    for (Object** slot = start; slot < end; slot++) {
       Object* object = reinterpret_cast<Object*>(
-          base::Relaxed_Load(reinterpret_cast<const base::AtomicWord*>(p)));
+          base::Relaxed_Load(reinterpret_cast<const base::AtomicWord*>(slot)));
       if (!object->IsHeapObject()) continue;
       MarkObject(HeapObject::cast(object));
+      MarkCompactCollector::RecordSlot(host, slot, object);
     }
   }
 
-  void VisitPointersInSnapshot(const SlotSnapshot& snapshot) {
+  void VisitPointersInSnapshot(HeapObject* host, const SlotSnapshot& snapshot) {
     for (int i = 0; i < snapshot.number_of_slots(); i++) {
+      Object** slot = snapshot.slot(i);
       Object* object = snapshot.value(i);
       if (!object->IsHeapObject()) continue;
       MarkObject(HeapObject::cast(object));
+      MarkCompactCollector::RecordSlot(host, slot, object);
     }
   }
 
@@ -86,7 +91,7 @@ class ConcurrentMarkingVisitor final
     int size = JSObject::BodyDescriptor::SizeOf(map, object);
     const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
     if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(snapshot);
+    VisitPointersInSnapshot(object, snapshot);
     return size;
   }
 
@@ -207,7 +212,10 @@ class ConcurrentMarkingVisitor final
       HeapObject* value = HeapObject::cast(object->value());
       if (ObjectMarking::IsBlackOrGrey<AccessMode::ATOMIC>(
               value, marking_state(value))) {
-        // TODO(ulan): Record slot for value.
+        // Weak cells with live values are directly processed here to reduce
+        // the processing time of weak cells during the main GC pause.
+        Object** slot = HeapObject::RawField(object, WeakCell::kValueOffset);
+        MarkCompactCollector::RecordSlot(object, slot, value);
       } else {
         // If we do not know about liveness of values of weak cells, we have to
         // process them when we know the liveness of the whole transitive

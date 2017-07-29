@@ -3322,7 +3322,7 @@ HeapObject* Heap::CreateFillerObjectAt(Address addr, int size,
     FreeSpace::cast(filler)->relaxed_write_size(size);
   }
   if (mode == ClearRecordedSlots::kYes) {
-    ClearRecordedSlotRange(addr, addr + size);
+    UNREACHABLE();
   }
 
   // At this point, we may be deserializing the heap from a snapshot, and
@@ -3408,7 +3408,8 @@ FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
   // Technically in new space this write might be omitted (except for
   // debug mode which iterates through the heap), but to play safer
   // we still do it.
-  CreateFillerObjectAt(old_start, bytes_to_trim, ClearRecordedSlots::kYes);
+  // Recorded slots will be cleared by the sweeper.
+  CreateFillerObjectAt(old_start, bytes_to_trim, ClearRecordedSlots::kNo);
 
   // Initialize header of the trimmed array. Since left trimming is only
   // performed on pages which are not concurrently swept creating a filler
@@ -3477,8 +3478,9 @@ void Heap::RightTrimFixedArray(FixedArrayBase* object, int elements_to_trim) {
   // TODO(hpayer): We should shrink the large object page if the size
   // of the object changed significantly.
   if (!lo_space()->Contains(object)) {
+    // Recorded slots will be cleared by the sweeper.
     HeapObject* filler =
-        CreateFillerObjectAt(new_end, bytes_to_trim, ClearRecordedSlots::kYes);
+        CreateFillerObjectAt(new_end, bytes_to_trim, ClearRecordedSlots::kNo);
     DCHECK_NOT_NULL(filler);
     // Clear the mark bits of the black area that belongs now to the filler.
     // This is an optimization. The sweeper will release black fillers anyway.
@@ -6417,8 +6419,8 @@ void Heap::ClearRecordedSlot(HeapObject* object, Object** slot) {
     Address slot_addr = reinterpret_cast<Address>(slot);
     Page* page = Page::FromAddress(slot_addr);
     DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
+    USE(page);
     store_buffer()->DeleteEntry(slot_addr);
-    RememberedSet<OLD_TO_OLD>::Remove(page, slot_addr);
   }
 }
 
@@ -6439,8 +6441,6 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
   if (!page->InNewSpace()) {
     DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
     store_buffer()->DeleteEntry(start, end);
-    RememberedSet<OLD_TO_OLD>::RemoveRange(page, start, end,
-                                           SlotSet::FREE_EMPTY_BUCKETS);
   }
 }
 
