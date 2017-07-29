@@ -1192,7 +1192,7 @@ class Heap {
 
   // The runtime uses this function to notify potentially unsafe object layout
   // changes that require special synchronization with the concurrent marker.
-  void NotifyObjectLayoutChange(HeapObject* object,
+  void NotifyObjectLayoutChange(HeapObject* object, int size,
                                 const DisallowHeapAllocation&);
 
 #ifdef VERIFY_HEAP

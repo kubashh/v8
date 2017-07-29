@@ -1022,6 +1022,8 @@
         'heap/incremental-marking-job.h',
         'heap/incremental-marking.cc',
         'heap/incremental-marking.h',
+        'heap/invalidated-slots-inl.h',
+        'heap/invalidated-slots.h',
         'heap/item-parallel-job.h',
         'heap/local-allocator.h',
         'heap/mark-compact-inl.h',
