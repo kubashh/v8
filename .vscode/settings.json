@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "atspi-gmain.c": "cpp",
+        "gobjectnotifyqueue.c": "cpp",
+        "*.ipp": "cpp"
+    }
+}
