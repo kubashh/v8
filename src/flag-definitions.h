@@ -228,7 +228,8 @@ DEFINE_IMPLICATION(es_staging, harmony)
     "harmony restrictions on generator declarations")                    \
   V(harmony_object_rest_spread, "harmony object rest spread properties") \
   V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")              \
-  V(harmony_regexp_dotall, "harmony regexp dotAll flag")
+  V(harmony_regexp_dotall, "harmony regexp dotAll flag")                 \
+  V(harmony_regexp_lookbehind, "harmony regexp lookbehind")
 
 // Once a shipping feature has proved stable in the wild, it will be dropped
 // from HARMONY_SHIPPING, all occurrences of the FLAG_ variable are removed,
