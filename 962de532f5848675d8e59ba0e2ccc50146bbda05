@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "de92b2e3_120678d8",
+        "filename": "test/mjsunit/es6/unicode-character-ranges.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-07-31T23:20:58Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "215947e6_606c8120",
+      "revId": "962de532f5848675d8e59ba0e2ccc50146bbda05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c73c7b45_90065234",
         "filename": "test/test262/testcfg.py",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "962de532f5848675d8e59ba0e2ccc50146bbda05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "debd7679_e74d4834",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-07-31T23:20:58Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c73c7b45_90065234",
+      "revId": "962de532f5848675d8e59ba0e2ccc50146bbda05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
