@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbfffaa6_03b37256",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2689,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-31T17:07:13Z",
+      "side": 1,
+      "message": "As discussed before: Can you make this whole method platform-independent in a follow-up CL please? (put it onto your TODO list)",
+      "revId": "21ef4f244b59e83d88fe403b50c31fdf05d0ed95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec55052_78f18a22",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-31T17:07:13Z",
+      "side": 1,
+      "message": "Remove the default: and put the UNREACHABLE() after the switch statement.",
+      "revId": "21ef4f244b59e83d88fe403b50c31fdf05d0ed95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "931569ce_f41c40ae",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-31T17:07:13Z",
+      "side": 1,
+      "message": "Nit: add empty line :-)",
+      "revId": "21ef4f244b59e83d88fe403b50c31fdf05d0ed95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b54a697_552a0e84",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-31T17:07:13Z",
+      "side": 1,
+      "message": "We can remove this here and in other places. But can be done as follow-up.",
+      "revId": "21ef4f244b59e83d88fe403b50c31fdf05d0ed95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

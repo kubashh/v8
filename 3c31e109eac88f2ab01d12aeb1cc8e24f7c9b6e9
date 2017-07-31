@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5cdb443_a547e874",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-07-31T17:07:13Z",
+      "side": 0,
+      "message": "Nit: Undo this unrelated change.",
+      "revId": "3c31e109eac88f2ab01d12aeb1cc8e24f7c9b6e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
