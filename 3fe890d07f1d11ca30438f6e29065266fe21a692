@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df3b038_c617507e",
+        "filename": "src/isolate-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Should this be nullptr instead of NULL?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5297a836_bec01238",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Would it be possible to use Runtime_WasmThrow instead, and find the object to throw through some other means? I\u0027d guess the exception object will be somewhere at hand since we can only rethrow from within a catch block.\n\nThat said, the WasmRethrow runtime call may be cleaner overall.",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e530a5e9_a2d2c270",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "To make sure I understand, this function gets called by the unwinder to tell Wasm about the exception?\n\nWhy is this called WasmGetCaughtExceptionValue rather than WasmSetCaughtExceptionValue?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43882ffc_de70294e",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Why this change?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6184ad7_5d0ebb89",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "catch_count is the number of catches associated with this try, correct?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "117d32d6_6aa37127",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Is opcode_pc used anywhere?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e43d2274_98f613f7",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Did you figure out what was up with unreachable and EndControl? Is the comment here still accurate?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed59ddb2_845d41fa",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "What does this output look like? Is it distinguishable from other control information?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "593edcfa_aa747a40",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Why is the exception section treated differently from the others? Are multiple exception sections allowed? Can they come out of order?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1facdfde_162f54ff",
+        "filename": "src/wasm/wasm-text.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "I think the Get, Set and TeeLocal cases should stay as a LocalIndexOperand, but Catch and Throw should use the new ExceptionIndexOperand, right?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c360c38_ef6fa849",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "kSig_v_v means to me \"returns void and takes no parameters.\" My understanding of the spec proposal is that exceptions only have parameters but no return values. Is that correct? (I\u0027m guessing kSig_v_v has the same encoding as kSig_v would have)",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c905fc_e91170da",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "What about naming this \"throw_if_param_not_zero\"? The way it is now makes me think this should throw the parameter as an argument to the exception, meaning the exception should have kSig_v_i instead of kSig_v_v.",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "768ad488_29f239c8",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "nit: Couldn\u0027t this be simplified with kExprI32Eqz?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ef13a40_f54ed870",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "I\u0027d also add:\n\nassertEquals(1, test_catch.exports.simple_throw_catch_to_0_1(1));",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7fddc7_e9c09236",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "Where does this limit come from?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e283bd4_ef04a823",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-07-31T23:42:04Z",
+      "side": 1,
+      "message": "For this to verify, there should be a drop after WASM_CATCH(1), right?",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
