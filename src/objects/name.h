@@ -34,6 +34,13 @@ class Name : public HeapObject {
   // Conversion.
   inline bool AsArrayIndex(uint32_t* index);
 
+  // An "interesting symbol" is a well-known symbol, like @@toStringTag,
+  // that's often looked up on random objects but is usually not present.
+  // We optimize this by setting a flag on the object's map when such
+  // symbol properties are added, so we can optimize lookups on objects
+  // that don't have the flag.
+  inline bool IsInterestingSymbol() const;
+
   // If the name is private, it can only name own properties.
   inline bool IsPrivate();
 

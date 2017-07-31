@@ -6087,6 +6087,7 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 
   // Allocate new map.
   Handle<Map> new_map = Map::CopyDropDescriptors(old_map);
+  new_map->set_has_no_interesting_symbols(false);
   new_map->set_dictionary_map(false);
 
   NotifyMapChange(old_map, new_map, isolate);
@@ -6136,6 +6137,11 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
     // TODO(jkummerow): Turn this into a DCHECK if it's not hit in the wild.
     CHECK(k->IsUniqueName());
     Handle<Name> key(k, isolate);
+
+    // Properly mark the {new_map} if the {key} is an "interesting symbol".
+    if (key->IsInterestingSymbol()) {
+      new_map->set_has_no_interesting_symbols(false);
+    }
 
     Object* value = dictionary->ValueAt(index);
 
@@ -8882,6 +8888,7 @@ Handle<Map> Map::CopyNormalized(Handle<Map> map,
 
   result->set_dictionary_map(true);
   result->set_migration_target(false);
+  result->set_has_no_interesting_symbols(false);
   result->set_construction_counter(kNoSlackTracking);
 
 #ifdef VERIFY_HEAP
@@ -8991,6 +8998,11 @@ Handle<Map> Map::ShareDescriptor(Handle<Map> map,
   Handle<Map> result = CopyDropDescriptors(map);
   Handle<Name> name = descriptor->GetKey();
 
+  // Properly mark the {result} if the {name} is an "interesting symbol".
+  if (name->IsInterestingSymbol()) {
+    result->set_has_no_interesting_symbols(false);
+  }
+
   // Ensure there's space for the new descriptor in the shared descriptor array.
   if (descriptors->NumberOfSlackDescriptors() == 0) {
     int old_size = descriptors->number_of_descriptors();
@@ -9088,12 +9100,17 @@ Handle<Map> Map::CopyReplaceDescriptors(
 
   Handle<Map> result = CopyDropDescriptors(map);
 
+  // Properly mark the {result} if the {name} is an "interesting symbol".
+  Handle<Name> name;
+  if (!maybe_name.ToHandle(&name) || name->IsInterestingSymbol()) {
+    result->set_has_no_interesting_symbols(false);
+  }
+
   if (!map->is_prototype_map()) {
     if (flag == INSERT_TRANSITION &&
         TransitionsAccessor(map).CanHaveMoreTransitions()) {
       result->InitializeDescriptors(*descriptors, *layout_descriptor);
 
-      Handle<Name> name;
       CHECK(maybe_name.ToHandle(&name));
       ConnectTransition(map, result, name, simple_flag);
     } else {

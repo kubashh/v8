@@ -3500,6 +3500,14 @@ bool Map::new_target_is_base() const {
   return NewTargetIsBase::decode(bit_field3());
 }
 
+void Map::set_has_no_interesting_symbols(bool value) {
+  set_bit_field3(HasNoInterestingSymbols::update(bit_field3(), value));
+}
+
+bool Map::has_no_interesting_symbols() const {
+  return HasNoInterestingSymbols::decode(bit_field3());
+}
+
 void Map::set_construction_counter(int value) {
   set_bit_field3(ConstructionCounter::update(bit_field3(), value));
 }
