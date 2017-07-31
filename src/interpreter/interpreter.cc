@@ -195,7 +195,7 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
   }
 
   info()->SetBytecodeArray(bytecodes);
-  info()->SetCode(info()->isolate()->builtins()->InterpreterEntryTrampoline());
+  info()->SetCode(BUILTIN_CODE(info()->isolate(), InterpreterEntryTrampoline));
   return SUCCEEDED;
 }
 
