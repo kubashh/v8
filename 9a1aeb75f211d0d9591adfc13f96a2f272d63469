@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "679d8ea5_b13f56eb",
+        "filename": ".vscode/settings.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "You\u0027ll want to remove this from the CL; remove it with \"git rm\", commit that change, and then re-run \"git cl upload\" to update Gerrit.",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab965c23_425513ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "This description should mention which constructors you\u0027re referring to.",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9089c239_89d69fcd",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "Please mark the old constructor with V8_DEPRECATE_SOON",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa96b193_a1ed99aa",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "No need for the \"explicit\" keyword here, since your constructor takes two arguments.",
+      "range": {
+        "startLine": 2762,
+        "startChar": 4,
+        "endLine": 2762,
+        "endChar": 12
+      },
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b8f4c72_e3b908b3",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "Same as above, this should be deprecated.",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a16ff5fc_eea7c68d",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "And this needn\u0027t be \"explicit\".",
+      "range": {
+        "startLine": 2786,
+        "startChar": 4,
+        "endLine": 2786,
+        "endChar": 12
+      },
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "492f3ddf_7a7cb62a",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9213,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "Rather than duplicating the body of this function, please factor out the common code to a helper function and call it from each of the two constructors.",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfa95adb_00c50d21",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9249,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T21:11:30Z",
+      "side": 1,
+      "message": "Same here, no need for duplication.",
+      "revId": "9a1aeb75f211d0d9591adfc13f96a2f272d63469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
