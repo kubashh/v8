@@ -438,6 +438,8 @@ void Map::MapVerify() {
   SLOW_DCHECK(TransitionsAccessor(this, &no_gc).IsConsistentWithBackPointers());
   SLOW_DCHECK(!FLAG_unbox_double_fields ||
               layout_descriptor()->IsConsistentWithMap(this));
+  CHECK_IMPLIES(has_no_interesting_symbols(), !has_named_interceptor());
+  CHECK_IMPLIES(has_no_interesting_symbols(), !is_dictionary_map());
 }
 
 

@@ -1898,6 +1898,7 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
 
   // Create a new map for the global object.
   Handle<Map> new_map = Map::CopyDropDescriptors(map);
+  new_map->set_has_no_interesting_symbols(false);
   new_map->set_dictionary_map(true);
 
   // Set up the global object as a normalized object.

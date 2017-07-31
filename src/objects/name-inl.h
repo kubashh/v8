@@ -78,6 +78,11 @@ uint32_t Name::Hash() {
   return String::cast(this)->ComputeAndSetHash();
 }
 
+bool Name::IsInterestingSymbol() const {
+  Heap* const heap = GetHeap();
+  return this == heap->to_string_tag_symbol();
+}
+
 bool Name::IsPrivate() {
   return this->IsSymbol() && Symbol::cast(this)->is_private();
 }

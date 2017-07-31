@@ -2288,6 +2288,7 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   map->set_bit_field2(0);
   int bit_field3 = Map::EnumLengthBits::encode(kInvalidEnumCacheSentinel) |
                    Map::OwnsDescriptors::encode(true) |
+                   Map::HasNoInterestingSymbols::encode(true) |
                    Map::ConstructionCounter::encode(Map::kNoSlackTracking);
   map->set_bit_field3(bit_field3);
   map->set_weak_cell_cache(Smi::kZero);
@@ -2328,6 +2329,7 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
   map->set_bit_field2(1 << Map::kIsExtensible);
   int bit_field3 = Map::EnumLengthBits::encode(kInvalidEnumCacheSentinel) |
                    Map::OwnsDescriptors::encode(true) |
+                   Map::HasNoInterestingSymbols::encode(true) |
                    Map::ConstructionCounter::encode(Map::kNoSlackTracking);
   map->set_bit_field3(bit_field3);
   map->set_elements_kind(elements_kind);
@@ -2594,7 +2596,6 @@ bool Heap::CreateInitialMaps() {
     ALLOCATE_VARSIZE_MAP(FIXED_ARRAY_TYPE, script_context_table)
 
     ALLOCATE_VARSIZE_MAP(FIXED_ARRAY_TYPE, native_context)
-    native_context_map()->set_dictionary_map(true);
     native_context_map()->set_visitor_id(kVisitNativeContext);
 
     ALLOCATE_MAP(SHARED_FUNCTION_INFO_TYPE, SharedFunctionInfo::kAlignedSize,

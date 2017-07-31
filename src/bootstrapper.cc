@@ -959,6 +959,7 @@ void Genesis::CreateJSProxyMaps() {
   Handle<Map> proxy_map =
       factory()->NewMap(JS_PROXY_TYPE, JSProxy::kSize, PACKED_ELEMENTS);
   proxy_map->set_dictionary_map(true);
+  proxy_map->set_has_no_interesting_symbols(false);
   native_context()->set_proxy_map(*proxy_map);
 
   Handle<Map> proxy_callable_map = Map::Copy(proxy_map, "callable Proxy");
@@ -1111,6 +1112,8 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
 
   js_global_object_function->initial_map()->set_is_prototype_map(true);
   js_global_object_function->initial_map()->set_dictionary_map(true);
+  js_global_object_function->initial_map()->set_has_no_interesting_symbols(
+      false);
   Handle<JSGlobalObject> global_object =
       factory()->NewJSGlobalObject(js_global_object_function);
 
