@@ -590,14 +590,14 @@ class RuntimeCallTimer final {
   inline RuntimeCallTimer* Stop();
 
  private:
-  inline void Pause(base::TimeTicks now);
-  inline void Resume(base::TimeTicks now);
+  inline void Pause(base::ThreadTicks now);
+  inline void Resume(base::ThreadTicks now);
   inline void CommitTimeToCounter();
-  inline base::TimeTicks Now();
+  inline base::ThreadTicks Now();
 
   RuntimeCallCounter* counter_ = nullptr;
   base::AtomicValue<RuntimeCallTimer*> parent_;
-  base::TimeTicks start_ticks_;
+  base::ThreadTicks start_ticks_;
   base::TimeDelta elapsed_;
 };
 

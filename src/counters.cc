@@ -421,7 +421,7 @@ void RuntimeCallCounter::Add(RuntimeCallCounter* other) {
 }
 
 void RuntimeCallTimer::Snapshot() {
-  base::TimeTicks now = Now();
+  base::ThreadTicks now = Now();
   // Pause only / topmost timer in the timer stack.
   Pause(now);
   // Commit all the timer's elapsed time to the counters.

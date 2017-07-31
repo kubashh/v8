@@ -21,26 +21,26 @@ void RuntimeCallTimer::Start(RuntimeCallCounter* counter,
       v8::tracing::TracingCategoryObserver::ENABLED_BY_SAMPLING) {
     return;
   }
-  base::TimeTicks now = Now();
+  base::ThreadTicks now = Now();
   if (parent) parent->Pause(now);
   Resume(now);
   DCHECK(IsStarted());
 }
 
-void RuntimeCallTimer::Pause(base::TimeTicks now) {
+void RuntimeCallTimer::Pause(base::ThreadTicks now) {
   DCHECK(IsStarted());
   elapsed_ += (now - start_ticks_);
-  start_ticks_ = base::TimeTicks();
+  start_ticks_ = base::ThreadTicks();
 }
 
-void RuntimeCallTimer::Resume(base::TimeTicks now) {
+void RuntimeCallTimer::Resume(base::ThreadTicks now) {
   DCHECK(!IsStarted());
   start_ticks_ = now;
 }
 
 RuntimeCallTimer* RuntimeCallTimer::Stop() {
   if (!IsStarted()) return parent();
-  base::TimeTicks now = Now();
+  base::ThreadTicks now = Now();
   Pause(now);
   counter_->Increment();
   CommitTimeToCounter();
@@ -57,11 +57,11 @@ void RuntimeCallTimer::CommitTimeToCounter() {
   elapsed_ = base::TimeDelta();
 }
 
-bool RuntimeCallTimer::IsStarted() { return start_ticks_ != base::TimeTicks(); }
-
-base::TimeTicks RuntimeCallTimer::Now() {
-  return base::TimeTicks::HighResolutionNow();
+bool RuntimeCallTimer::IsStarted() {
+  return start_ticks_ != base::ThreadTicks();
 }
+
+base::ThreadTicks RuntimeCallTimer::Now() { return base::ThreadTicks::Now(); }
 
 RuntimeCallTimerScope::RuntimeCallTimerScope(
     Isolate* isolate, RuntimeCallStats::CounterId counter_id) {
