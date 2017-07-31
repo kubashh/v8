@@ -1875,11 +1875,17 @@ class PageScavengingItem final : public ScavengingItem {
 
 int Heap::NumberOfScavengeTasks() {
   if (!FLAG_parallel_scavenge) return 1;
+  int target_limit = kMaxScavengerTasks;
+#ifdef V8_TARGET_ARCH_ARM
+  if (!CpuFeatures::IsSupported(ARMv8)) {
+    target_limit = 2;
+  }
+#endif
   const int num_scavenge_tasks =
       static_cast<int>(new_space()->TotalCapacity()) / MB;
   return Max(
       1,
-      Min(Min(num_scavenge_tasks, kMaxScavengerTasks),
+      Min(Min(num_scavenge_tasks, target_limit),
           static_cast<int>(
               V8::GetCurrentPlatform()->NumberOfAvailableBackgroundThreads())));
 }
