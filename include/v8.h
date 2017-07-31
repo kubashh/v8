@@ -2759,6 +2759,7 @@ class V8_EXPORT String : public Name {
   class V8_EXPORT Utf8Value {
    public:
     explicit Utf8Value(Local<v8::Value> obj);
+    explicit Utf8Value(Isolate* isolate, Local<v8::Value> obj);
     ~Utf8Value();
     char* operator*() { return str_; }
     const char* operator*() const { return str_; }
@@ -2782,6 +2783,7 @@ class V8_EXPORT String : public Name {
   class V8_EXPORT Value {
    public:
     explicit Value(Local<v8::Value> obj);
+    explicit Value(Isolate* isolate, Local<v8::Value> obj);
     ~Value();
     uint16_t* operator*() { return str_; }
     const uint16_t* operator*() const { return str_; }
