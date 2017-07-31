@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "215947e6_606c8120",
+        "filename": "test/mjsunit/es6/unicode-character-ranges.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T22:15:58Z",
+      "side": 0,
+      "message": "Please leave the flag here (and in the tests below) until it\u0027s removed entirely. That keeps the tests green even if the flag gets flipped off again.",
+      "revId": "962de532f5848675d8e59ba0e2ccc50146bbda05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c73c7b45_90065234",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-07-31T22:15:58Z",
+      "side": 0,
+      "message": "Same here",
+      "revId": "962de532f5848675d8e59ba0e2ccc50146bbda05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
