@@ -46,5 +46,18 @@ RUNTIME_FUNCTION(Runtime_JSProxyRevoke) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_GetPropertyWithReceiver) {
+  HandleScope scope(isolate);
+
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, holder, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Name, name, 1);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 2);
+
+  LookupIterator it =
+      LookupIterator::PropertyOrElement(isolate, receiver, name, holder);
+  RETURN_RESULT_OR_FAILURE(isolate, Object::GetProperty(&it));
+}
+
 }  // namespace internal
 }  // namespace v8

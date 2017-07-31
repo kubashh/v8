@@ -12501,7 +12501,12 @@ Handle<Cell> Map::GetOrCreatePrototypeChainValidityCell(Handle<Map> map,
   } else {
     maybe_prototype =
         handle(map->GetPrototypeChainRootMap(isolate)->prototype(), isolate);
-    if (!maybe_prototype->IsJSObject()) return Handle<Cell>::null();
+    if (!maybe_prototype->IsJSReceiver()) return Handle<Cell>::null();
+  }
+  if (maybe_prototype->IsJSProxy()) {
+    Handle<Cell> cell = isolate->factory()->NewCell(
+        handle(Smi::FromInt(Map::kPrototypeChainValid), isolate));
+    return cell;
   }
   Handle<JSObject> prototype = Handle<JSObject>::cast(maybe_prototype);
   // Ensure the prototype is registered with its own prototypes so its cell
@@ -12526,11 +12531,16 @@ Handle<Cell> Map::GetOrCreatePrototypeChainValidityCell(Handle<Map> map,
 }
 
 // static
-Handle<WeakCell> Map::GetOrCreatePrototypeWeakCell(Handle<JSObject> prototype,
+Handle<WeakCell> Map::GetOrCreatePrototypeWeakCell(Handle<JSReceiver> prototype,
                                                    Isolate* isolate) {
   DCHECK(!prototype.is_null());
+  if (prototype->IsJSProxy()) {
+    Handle<WeakCell> cell = isolate->factory()->NewWeakCell(prototype);
+    return cell;
+  }
+
   Handle<PrototypeInfo> proto_info =
-      GetOrCreatePrototypeInfo(prototype, isolate);
+      GetOrCreatePrototypeInfo(Handle<JSObject>::cast(prototype), isolate);
   Object* maybe_cell = proto_info->weak_cell();
   // Return existing cell if it's already created.
   if (maybe_cell->IsWeakCell()) {
