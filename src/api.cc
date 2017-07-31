@@ -9206,6 +9206,21 @@ String::Utf8Value::Utf8Value(v8::Local<v8::Value> obj)
   str->WriteUtf8(str_);
 }
 
+String::Utf8Value::Utf8Value(v8::Isolate* isolate, v8::Local<v8::Value> obj)
+    : str_(NULL), length_(0) {
+  if (obj.IsEmpty()) return;
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ENTER_V8_DO_NOT_USE(i_isolate);
+  i::HandleScope scope(i_isolate);
+  Local<Context> context = isolate->GetCurrentContext();
+  TryCatch try_catch(isolate);
+  Local<String> str;
+  if (!obj->ToString(context).ToLocal(&str)) return;
+  i::Handle<i::String> i_str = Utils::OpenHandle(*str);
+  length_ = v8::Utf8Length(*i_str, i_isolate);
+  str_ = i::NewArray<char>(length_ + 1);
+  str->WriteUtf8(str_);
+}
 
 String::Utf8Value::~Utf8Value() {
   i::DeleteArray(str_);
@@ -9227,6 +9242,20 @@ String::Value::Value(v8::Local<v8::Value> obj) : str_(NULL), length_(0) {
   str->Write(str_);
 }
 
+String::Value::Value(v8::Isolate* isolate, v8::Local<v8::Value> obj)
+    : str_(NULL), length_(0) {
+  if (obj.IsEmpty()) return;
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ENTER_V8_DO_NOT_USE(i_isolate);
+  i::HandleScope scope(i_isolate);
+  Local<Context> context = isolate->GetCurrentContext();
+  TryCatch try_catch(isolate);
+  Local<String> str;
+  if (!obj->ToString(context).ToLocal(&str)) return;
+  length_ = str->Length();
+  str_ = i::NewArray<uint16_t>(length_ + 1);
+  str->Write(str_);
+}
 
 String::Value::~Value() {
   i::DeleteArray(str_);
