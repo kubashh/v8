@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20324904_7eab2ce0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-07-31T10:14:50Z",
+      "side": 0,
+      "message": "Moving this one before the parallel phase and getting rid of SCAVENGER_SEMISPACE is the main change here.\n\nAll other changes are just renames to reflect what is actually going on.",
+      "range": {
+        "startLine": 1956,
+        "startChar": 4,
+        "endLine": 1956,
+        "endChar": 37
+      },
+      "revId": "d4c157ee65faae0ebda33d17653fb0d164b4ada1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
