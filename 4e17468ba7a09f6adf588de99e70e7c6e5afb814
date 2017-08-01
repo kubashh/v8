@@ -16,6 +16,24 @@
       "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06f5b266_dbcd987a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-01T14:15:56Z",
+      "side": 1,
+      "message": "No strong opinion from me. The code could be simplified slightly with Select(TaggedIsSmi, { Int32Constant(1) }, { DoesntHaveInstanceType() }).",
+      "parentUuid": "3d2e2305_e8c97b8d",
+      "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
