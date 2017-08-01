@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1b83a0e_396014d2",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1159069
+      },
+      "writtenOn": "2017-08-01T14:29:56Z",
+      "side": 1,
+      "message": "Instead of special_receiver, that handles slow and proxies, could we handle JS_Proxy_Type first, and then jump to slow? (Just a suggestion, might notactually turn out any clearer)\n\nGotoIf(Word32Equal(instance_type, Int32Constant(JS_PROXY_TYPE)), \u0026proxy_get);\nGotoIf(Int32LessThanOrEqual(instance_type,\n                              Int32Constant(LAST_SPECIAL_RECEIVER_TYPE)),\n         \u0026slow);",
+      "revId": "55e9144bb30dd65c044eefbdb5d50c804377b50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fedec552_c5ab448f",
+        "filename": "test/mjsunit/es6/proxies-get.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1159069
+      },
+      "writtenOn": "2017-08-01T14:29:56Z",
+      "side": 1,
+      "message": "Nit: Capitalize C in Callable",
+      "range": {
+        "startLine": 38,
+        "startChar": 28,
+        "endLine": 38,
+        "endChar": 36
+      },
+      "revId": "55e9144bb30dd65c044eefbdb5d50c804377b50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
