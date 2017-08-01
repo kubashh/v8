@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67fd3769_4f0e482c",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T16:42:50Z",
+      "side": 0,
+      "message": "\\o/",
+      "range": {
+        "startLine": 683,
+        "startChar": 19,
+        "endLine": 683,
+        "endChar": 37
+      },
+      "revId": "ffb44ed7b29273b9a7293e1daecf493d40bf0888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578edbfd_005e5bfd",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T16:42:50Z",
+      "side": 0,
+      "message": "nit: Please try to remove that one.",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "ffb44ed7b29273b9a7293e1daecf493d40bf0888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
