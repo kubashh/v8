@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8379e999_c8f45b2b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T11:42:04Z",
+      "side": 1,
+      "message": "nit: Maybe name it |old_size| and add that to the description of the API?",
+      "range": {
+        "startLine": 1195,
+        "startChar": 56,
+        "endLine": 1195,
+        "endChar": 60
+      },
+      "revId": "bd6f175ee823ce50cb1223185264c9ceea634006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e97b40_9f34822c",
+        "filename": "src/heap/invalidated-slots-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T11:42:04Z",
+      "side": 1,
+      "message": "Left over?",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 23
+      },
+      "revId": "bd6f175ee823ce50cb1223185264c9ceea634006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e33085_98c27b8a",
+        "filename": "src/heap/invalidated-slots.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T11:42:04Z",
+      "side": 1,
+      "message": "If you create a method like suggested above, this one could move in there.",
+      "range": {
+        "startLine": 19,
+        "startChar": 19,
+        "endLine": 19,
+        "endChar": 32
+      },
+      "revId": "bd6f175ee823ce50cb1223185264c9ceea634006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c2600c4_3963eb6a",
+        "filename": "src/heap/invalidated-slots.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T11:42:04Z",
+      "side": 1,
+      "message": "Should we put all invalidated_* fields in a struct and have a private method that populates the struct from the iterators?\n\nE.g. having something like\nstruct {\n  Address start;\n  Address end;\n  int size;\n  HeapObjecTt* object;\n} current_invalid_range_;",
+      "range": {
+        "startLine": 42,
+        "startChar": 10,
+        "endLine": 42,
+        "endChar": 28
+      },
+      "revId": "bd6f175ee823ce50cb1223185264c9ceea634006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "776991bf_dd1d7bb2",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-01T11:42:04Z",
+      "side": 1,
+      "message": "maybe just use the internal field here, e.g. invalidated_slots_. Having a getter here makes things look more complicated than they are.",
+      "range": {
+        "startLine": 1306,
+        "startChar": 6,
+        "endLine": 1306,
+        "endChar": 23
+      },
+      "revId": "bd6f175ee823ce50cb1223185264c9ceea634006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
