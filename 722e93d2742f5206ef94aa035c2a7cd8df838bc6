@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "82cd6594_ec0cccd7",
+        "filename": "src/compiler/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2017-08-01T10:26:29Z",
+      "side": 1,
+      "message": "It turns out using D registers when possible has a performance benefit on some cores, OK to leave this as is?",
+      "parentUuid": "8936296c_613f6cb0",
+      "range": {
+        "startLine": 2681,
+        "startChar": 10,
+        "endLine": 2681,
+        "endChar": 21
+      },
+      "revId": "722e93d2742f5206ef94aa035c2a7cd8df838bc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "416abbbe_6f289d42",
         "filename": "src/compiler/arm64/code-generator-arm64.cc",
         "patchSetId": 1
