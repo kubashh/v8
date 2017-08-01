@@ -89,6 +89,8 @@ BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints, allows_lazy_compilation,
                     SharedFunctionInfo::AllowLazyCompilationBit)
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints, uses_arguments,
                     SharedFunctionInfo::UsesArgumentsBit)
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints, has_been_executed,
+                    SharedFunctionInfo::HasBeenExecutedBit)
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints,
                     has_duplicate_parameters,
                     SharedFunctionInfo::HasDuplicateParametersBit)
