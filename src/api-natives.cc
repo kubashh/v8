@@ -709,11 +709,13 @@ Handle<JSFunction> ApiNatives::CreateApiFunction(
   // Mark as needs_access_check if needed.
   if (obj->needs_access_check()) {
     map->set_is_access_check_needed(true);
+    map->set_may_have_interesting_symbols(true);
   }
 
   // Set interceptor information in the map.
   if (!obj->named_property_handler()->IsUndefined(isolate)) {
     map->set_has_named_interceptor();
+    map->set_may_have_interesting_symbols(true);
   }
   if (!obj->indexed_property_handler()->IsUndefined(isolate)) {
     map->set_has_indexed_interceptor();
