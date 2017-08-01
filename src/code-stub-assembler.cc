@@ -1128,6 +1128,19 @@ Node* CodeStubAssembler::DoesntHaveInstanceType(Node* object,
   return Word32NotEqual(LoadInstanceType(object), Int32Constant(instance_type));
 }
 
+Node* CodeStubAssembler::TaggedDoesntHaveInstanceType(Node* any_tagged,
+                                                      InstanceType type) {
+  Label done(this);
+  VARIABLE(var_result, MachineRepresentation::kBit, TaggedIsSmi(any_tagged));
+
+  GotoIf(var_result.value(), &done);
+  var_result.Bind(DoesntHaveInstanceType(any_tagged, type));
+  Goto(&done);
+
+  BIND(&done);
+  return var_result.value();
+}
+
 Node* CodeStubAssembler::LoadProperties(Node* object) {
   return LoadObjectField(object, JSObject::kPropertiesOrHashOffset);
 }
