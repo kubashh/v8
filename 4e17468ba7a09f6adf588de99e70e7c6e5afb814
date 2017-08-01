@@ -34,6 +34,24 @@
       "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e171cdb5_1f7cb525",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-01T14:24:59Z",
+      "side": 1,
+      "message": "I had tried something like that, but ran into issues with Int32Constant and DoesntHaveInstanceType having different representations. I don\u0027t think Int32Constant() is compatible with kRepBit currently.",
+      "parentUuid": "06f5b266_dbcd987a",
+      "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
