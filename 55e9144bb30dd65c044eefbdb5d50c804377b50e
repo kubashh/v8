@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3ee26d6d_48258de1",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-01T20:47:02Z",
+      "side": 1,
+      "message": "I disagree with this suggestion. Let\u0027s keep the fast (non-Proxy) path as fast as possible, and defer the new conditional branch to the {special_receiver} block.",
+      "parentUuid": "fb7af852_cf6c4db3",
+      "revId": "55e9144bb30dd65c044eefbdb5d50c804377b50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fedec552_c5ab448f",
         "filename": "test/mjsunit/es6/proxies-get.js",
         "patchSetId": 10

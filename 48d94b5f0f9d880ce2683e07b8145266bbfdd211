@@ -637,6 +637,30 @@
     },
     {
       "key": {
+        "uuid": "ca752139_1acbb16e",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-01T20:47:02Z",
+      "side": 1,
+      "message": "Ah, my mistake, I got confused about \"Return()\" vs \"return\". Just keep what you have.",
+      "parentUuid": "07892403_00a00002",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 14
+      },
+      "revId": "48d94b5f0f9d880ce2683e07b8145266bbfdd211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e20671c4_1f10cd13",
         "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
         "patchSetId": 8
@@ -1268,6 +1292,30 @@
       "revId": "48d94b5f0f9d880ce2683e07b8145266bbfdd211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3feccaf_11612709",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-01T20:47:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba3b18fe_b4536200",
+      "range": {
+        "startLine": 1132,
+        "startChar": 36,
+        "endLine": 1132,
+        "endChar": 60
+      },
+      "revId": "48d94b5f0f9d880ce2683e07b8145266bbfdd211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

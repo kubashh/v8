@@ -34,6 +34,24 @@
       "revId": "c097bd810d6bd883b452000e5a3539d7b9c7d125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a23d7af9_b99e03e8",
+        "filename": "src/builtins/builtins-proxy-helpers-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-01T20:47:02Z",
+      "side": 1,
+      "message": "As discussed: the problem with jumping to \"return_result\" directly is that \"TryGetOwnProperty\" doesn\u0027t handle all cases. Simply skipping over the checking of {trap_result} in those cases would be incorrect. The best fix is probably to create a runtime function that takes over at exactly the right point in the control flow (as opposed to restarting the entire operation like Runtime::kGetOwnPropertyWithReceiver does).",
+      "parentUuid": "b58acb55_904d7f92",
+      "revId": "c097bd810d6bd883b452000e5a3539d7b9c7d125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
