@@ -52,6 +52,24 @@
       "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1733e6cb_5d2301c5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-01T15:11:39Z",
+      "side": 1,
+      "message": "I guess it works if instead of Int32Constant(), the TaggedIsSmi() node is reused (it doesn\u0027t get re-added to the graph, so I don\u0027t think this should affect generated code... will have to see though)\n\nThe assertion condition looks like this on x64:\n\n```\n0x11f58f41ad27    27  f6c301         testb rbx,0x1\n0x11f58f41ad2a    2a  0f94c2         setzl dl\n0x11f58f41ad2d    2d  0fb6d2         movzxbl rdx,rdx\n0x11f58f41ad30    30  83fa00         cmpl rdx,0x0\n0x11f58f41ad33    33  0f850e000000   jnz 0x11f58f41ad47  (AsyncGeneratorResolve)\n0x11f58f41ad39    39  488b53ff       REX.W movq rdx,[rbx-0x1]\n0x11f58f41ad3d    3d  807a0bd1       cmpb [rdx+0xb],0xd1\n0x11f58f41ad41    41  0f95c2         setnzl dl\n0x11f58f41ad44    44  0fb6d2         movzxbl rdx,rdx\n0x11f58f41ad47    47  83fa00         cmpl rdx,0x0\n0x11f58f41ad4a    4a  0f8442010000   jz 0x11f58f41ae92  (AsyncGeneratorResolve)\n```\n\nI think it should be possible to get code like\n\n```\ntestb rbx,0x1\njnz \u003clater\u003e\nmovq rdx, [rbx-0x1]\ncmpb [rdx+0xb], \u003cinstance_type\u003e\n\u003clater\u003e:\njz \u003cfail_assertion\u003e\n```\n\nbut since it\u0027s debug-only code, I guess the fatness doesn\u0027t matter too much.\n\nIn either case, it looks equivalent to the code the non-Select version was generating.",
+      "parentUuid": "e171cdb5_1f7cb525",
+      "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
