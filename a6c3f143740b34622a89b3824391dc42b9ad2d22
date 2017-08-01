@@ -22,6 +22,30 @@
       "revId": "a6c3f143740b34622a89b3824391dc42b9ad2d22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3248fc6a_3ed5cfbc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4140,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-01T13:19:16Z",
+      "side": 0,
+      "message": "I extracted it into a separate CL. Will rebase as soon as that CL lands.",
+      "parentUuid": "c58412b0_b4bd0ee1",
+      "range": {
+        "startLine": 4140,
+        "startChar": 36,
+        "endLine": 4140,
+        "endChar": 45
+      },
+      "revId": "a6c3f143740b34622a89b3824391dc42b9ad2d22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
