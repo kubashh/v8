@@ -20,6 +20,8 @@
 #include "src/heap/concurrent-marking.h"
 #include "src/heap/gc-tracer.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/invalidated-slots-inl.h"
+#include "src/heap/invalidated-slots.h"
 #include "src/heap/item-parallel-job.h"
 #include "src/heap/local-allocator.h"
 #include "src/heap/mark-compact-inl.h"
@@ -3276,6 +3278,14 @@ void MarkCompactCollector::EvacuateEpilogue() {
   heap()->new_space()->set_age_mark(heap()->new_space()->top());
   // Old space. Deallocate evacuated candidate pages.
   ReleaseEvacuationCandidates();
+#ifdef DEBUG
+  // Old-to-old slot sets must be empty after evacuation.
+  for (Page* p : *heap()->old_space()) {
+    DCHECK_NULL((p->slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
+    DCHECK_NULL((p->typed_slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
+    DCHECK_NULL(p->invalidated_slots());
+  }
+#endif
 }
 
 class Evacuator : public Malloced {
@@ -4137,41 +4147,30 @@ class RememberedSetUpdatingItem : public UpdatingItem {
     // an object concurrently by another task. Hence, we need to update
     // those slots using atomics.
     if (chunk_->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>() != nullptr) {
-      if (chunk_->owner() == heap_->map_space()) {
-        RememberedSet<OLD_TO_NEW>::Iterate(
-            chunk_,
-            [this](Address slot) {
-              return CheckAndUpdateOldToNewSlot<AccessMode::ATOMIC>(slot);
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      } else {
-        RememberedSet<OLD_TO_NEW>::Iterate(
-            chunk_,
-            [this](Address slot) {
-              return CheckAndUpdateOldToNewSlot<AccessMode::NON_ATOMIC>(slot);
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      }
+      RememberedSet<OLD_TO_NEW>::Iterate(
+          chunk_,
+          [this](Address slot) {
+            return CheckAndUpdateOldToNewSlot<AccessMode::NON_ATOMIC>(slot);
+          },
+          SlotSet::PREFREE_EMPTY_BUCKETS);
     }
     if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
         (chunk_->slot_set<OLD_TO_OLD, AccessMode::NON_ATOMIC>() != nullptr)) {
-      if (chunk_->owner() == heap_->map_space()) {
-        RememberedSet<OLD_TO_OLD>::Iterate(
-            chunk_,
-            [](Address slot) {
-              return UpdateSlot<AccessMode::ATOMIC>(
-                  reinterpret_cast<Object**>(slot));
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      } else {
-        RememberedSet<OLD_TO_OLD>::Iterate(
-            chunk_,
-            [](Address slot) {
-              return UpdateSlot<AccessMode::NON_ATOMIC>(
-                  reinterpret_cast<Object**>(slot));
-            },
-            SlotSet::PREFREE_EMPTY_BUCKETS);
-      }
+      InvalidatedSlotsFilter filter(chunk_);
+      RememberedSet<OLD_TO_OLD>::Iterate(
+          chunk_,
+          [&filter](Address slot) {
+            if (!filter.IsValid(slot)) return REMOVE_SLOT;
+            return UpdateSlot<AccessMode::NON_ATOMIC>(
+                reinterpret_cast<Object**>(slot));
+          },
+          SlotSet::PREFREE_EMPTY_BUCKETS);
+    }
+    if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
+        chunk_->invalidated_slots() != nullptr) {
+      // The invalidated slots are not needed after old-to-old slots were
+      // processsed.
+      chunk_->ReleaseInvalidatedSlots();
     }
   }
 
