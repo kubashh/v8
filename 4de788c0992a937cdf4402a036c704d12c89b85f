@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "431de37d_f1e564cb",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-01T16:33:37Z",
+      "side": 1,
+      "message": "I\u0027ll flip this back before landing.",
+      "range": {
+        "startLine": 80,
+        "startChar": 33,
+        "endLine": 80,
+        "endChar": 37
+      },
+      "revId": "4de788c0992a937cdf4402a036c704d12c89b85f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
