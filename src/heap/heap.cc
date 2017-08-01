@@ -3322,7 +3322,7 @@ HeapObject* Heap::CreateFillerObjectAt(Address addr, int size,
     FreeSpace::cast(filler)->relaxed_write_size(size);
   }
   if (mode == ClearRecordedSlots::kYes) {
-    ClearRecordedSlotRange(addr, addr + size);
+    UNREACHABLE();
   }
 
   // At this point, we may be deserializing the heap from a snapshot, and
@@ -6407,8 +6407,8 @@ void Heap::ClearRecordedSlot(HeapObject* object, Object** slot) {
     Address slot_addr = reinterpret_cast<Address>(slot);
     Page* page = Page::FromAddress(slot_addr);
     DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
+    USE(page);
     store_buffer()->DeleteEntry(slot_addr);
-    RememberedSet<OLD_TO_OLD>::Remove(page, slot_addr);
   }
 }
 
@@ -6429,8 +6429,6 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
   if (!page->InNewSpace()) {
     DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
     store_buffer()->DeleteEntry(start, end);
-    RememberedSet<OLD_TO_OLD>::RemoveRange(page, start, end,
-                                           SlotSet::FREE_EMPTY_BUCKETS);
   }
 }
 

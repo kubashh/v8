@@ -1253,7 +1253,6 @@ class InternalizedStringTableCleaner : public ObjectVisitor {
 
   void VisitPointers(HeapObject* host, Object** start, Object** end) override {
     // Visit all HeapObject pointers in [start, end).
-    MarkCompactCollector* collector = heap_->mark_compact_collector();
     Object* the_hole = heap_->the_hole_value();
     for (Object** p = start; p < end; p++) {
       Object* o = *p;
@@ -1267,7 +1266,7 @@ class InternalizedStringTableCleaner : public ObjectVisitor {
         } else {
           // StringTable contains only old space strings.
           DCHECK(!heap_->InNewSpace(o));
-          collector->RecordSlot(table_, p, o);
+          MarkCompactCollector::RecordSlot(table_, p, o);
         }
       }
     }
