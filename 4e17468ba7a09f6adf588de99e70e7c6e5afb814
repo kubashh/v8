@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d2e2305_e8c97b8d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-01T14:02:29Z",
+      "side": 1,
+      "message": "Igor: do you have an opinion on this? Is it worth having this, or better to just remove the assertion (or otherwise move this to a CSA subclass not included in the main v8 library) --- also, is the approach here good, or is there a better/simpler way that I\u0027ve missed?",
+      "revId": "4e17468ba7a09f6adf588de99e70e7c6e5afb814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
