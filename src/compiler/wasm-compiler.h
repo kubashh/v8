@@ -172,6 +172,7 @@ class WasmGraphBuilder {
              wasm::WasmCodePosition position = wasm::kNoCodePosition);
   Node* GrowMemory(Node* input);
   Node* Throw(Node* input);
+  Node* Rethrow();
   Node* Catch(Node* input, wasm::WasmCodePosition position);
   unsigned InputCount(Node* node);
   bool IsPhiWithMerge(Node* phi, Node* merge);

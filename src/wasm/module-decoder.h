@@ -34,7 +34,7 @@ enum SectionCode : int8_t {
   kCodeSectionCode = 10,       // Function code
   kDataSectionCode = 11,       // Data segments
   kNameSectionCode = 12,       // Name section (encoded as a string)
-  kExceptionSectionCode = 13,  // Exception section (encoded as a string)
+  kExceptionSectionCode = 13,  // Exception section
 
   // Helper values
   kFirstSectionInModule = kTypeSectionCode,
@@ -43,7 +43,7 @@ enum SectionCode : int8_t {
 enum NameSectionType : uint8_t { kModule = 0, kFunction = 1, kLocal = 2 };
 
 inline bool IsValidSectionCode(uint8_t byte) {
-  return kTypeSectionCode <= byte && byte <= kDataSectionCode;
+  return kTypeSectionCode <= byte && byte <= kExceptionSectionCode;
 }
 
 const char* SectionName(SectionCode code);
