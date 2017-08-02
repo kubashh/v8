@@ -1613,7 +1613,8 @@ class Isolate {
   friend class v8::Unlocker;
   friend class v8::SnapshotCreator;
   friend class ::TestIsolate;
-  friend v8::StartupData v8::V8::CreateSnapshotDataBlob(const char*);
+  friend v8::StartupData v8::V8::CreateSnapshotDataBlob(
+      const char*, SerializeInternalFieldsCallback);
   friend v8::StartupData v8::V8::WarmUpSnapshotDataBlob(v8::StartupData,
                                                         const char*);
 
