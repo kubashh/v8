@@ -37,6 +37,7 @@ class PartialSerializer : public Serializer {
 
   StartupSerializer* startup_serializer_;
   List<JSObject*> embedder_field_holders_;
+  List<JSObject*> offheap_buffer_holders_;
   v8::SerializeEmbedderFieldsCallback serialize_embedder_fields_;
   GlobalDictionary* rehashable_global_dictionary_;
   // Indicates whether we only serialized hash tables that we can rehash.

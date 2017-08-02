@@ -3473,6 +3473,8 @@ class FixedTypedArrayBase: public FixedArrayBase {
 
   inline int DataSize() const;
 
+  inline int ByteLength() const;
+
  private:
   static inline int ElementSize(InstanceType type);
 
