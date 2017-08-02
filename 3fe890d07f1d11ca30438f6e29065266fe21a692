@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "ebfd8e60_bdb4fc8f",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "461c4633_9f71b61d",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e530a5e9_a2d2c270",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 4
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "5f6f6ca6_949a1a8a",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b5492300_051b951a",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43882ffc_de70294e",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 4
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "I added \"error(pc_)\" because the API for a decoder error (temporarily) changed to require the pc_ argument. I added the \":\" because I think it makes it clearer that the message following is in terms of the opcode.\n\nHowever, someone has reverted from using c++ style error message generation back to the C format style. So this has been changed to match the C format style.",
       "parentUuid": "43882ffc_de70294e",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "627d7c0e_70573213",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "I was mostly wondering why we changed from PROTOTYPE_NOT_FUNCTIONAL to OPCODE_ERROR. Was PROTOTYPE_NOT_FUNCTIONAL specifically referring to exceptions, or would it refer to other prototypes too?",
+      "parentUuid": "6410049e_7f005f9a",
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -177,6 +231,24 @@
     },
     {
       "key": {
+        "uuid": "02f81a6e_dac7cd47",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d6f7726_a6f05d3e",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "117d32d6_6aa37127",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 4
@@ -209,6 +281,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c99e5510_c08df155",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "55b9338d_5675dd35",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -247,6 +337,24 @@
     },
     {
       "key": {
+        "uuid": "7eb698d5_a1da8f70",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "e8de3055_df0304a0",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae392225_9a7491ab",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 4
@@ -261,6 +369,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1714cc1_9db9f2c6",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae392225_9a7491ab",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -299,6 +425,24 @@
     },
     {
       "key": {
+        "uuid": "1b15de96_6c254e95",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5286172a_bc1b95d8",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "593edcfa_aa747a40",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 4
@@ -331,6 +475,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c88f5eb3_1f504f80",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf541344_56879282",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -369,6 +531,24 @@
     },
     {
       "key": {
+        "uuid": "50a2cb8d_bed6cfc2",
+        "filename": "src/wasm/wasm-text.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e29ce567_106e5050",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c360c38_ef6fa849",
         "filename": "test/mjsunit/wasm/exceptions.js",
         "patchSetId": 4
@@ -401,6 +581,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c8aa936_a4292d59",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "27ba509e_ba2a0a24",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -439,6 +637,24 @@
     },
     {
       "key": {
+        "uuid": "081f404d_fcf88abb",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a2bb87ea_803a0271",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "768ad488_29f239c8",
         "filename": "test/mjsunit/wasm/exceptions.js",
         "patchSetId": 4
@@ -471,6 +687,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01b2a90b_f9bf1a39",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0ef0e62f_7d790f53",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -544,6 +778,24 @@
     },
     {
       "key": {
+        "uuid": "19d4e805_b03dd985",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82f26317_63cbfdc2",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e283bd4_ef04a823",
         "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
         "patchSetId": 4
@@ -576,6 +828,24 @@
       "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aea06dbb_8bf40669",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-02T16:27:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "faf2b424_cc2b0eda",
+      "revId": "3fe890d07f1d11ca30438f6e29065266fe21a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
