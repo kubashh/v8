@@ -574,12 +574,11 @@ PipelineStatistics* CreatePipelineStatistics(CompilationInfo* info,
   if (FLAG_trace_turbo) {
     TurboJsonFile json_of(info, std::ios_base::trunc);
     std::unique_ptr<char[]> function_name = info->GetDebugName();
-    int pos = info->parse_info() ? info->shared_info()->start_position() : 0;
+    int pos = info->IsStub() ? 0 : info->shared_info()->start_position();
     json_of << "{\"function\":\"" << function_name.get()
             << "\", \"sourcePosition\":" << pos << ", \"source\":\"";
     Isolate* isolate = info->isolate();
-    Handle<Script> script =
-        info->parse_info() ? info->script() : Handle<Script>::null();
+    Handle<Script> script = info->script();
     if (!script.is_null() && !script->source()->IsUndefined(isolate)) {
       DisallowHeapAllocation no_allocation;
       int start = info->shared_info()->start_position();
@@ -604,11 +603,11 @@ class PipelineCompilationJob final : public CompilationJob {
                          Handle<JSFunction> function)
       // Note that the CompilationInfo is not initialized at the time we pass it
       // to the CompilationJob constructor, but it is not dereferenced there.
-      : CompilationJob(function->GetIsolate(), &info_, "TurboFan"),
+      : CompilationJob(function->GetIsolate(), parse_info, &info_, "TurboFan"),
         parse_info_(parse_info),
         zone_stats_(function->GetIsolate()->allocator()),
-        info_(parse_info_.get()->zone(), parse_info_.get(),
-              function->GetIsolate(), shared_info, function),
+        info_(parse_info_.get()->zone(), function->GetIsolate(),
+              parse_info_->script(), shared_info, function),
         pipeline_statistics_(CreatePipelineStatistics(info(), &zone_stats_)),
         data_(&zone_stats_, info(), pipeline_statistics_.get()),
         pipeline_(&data_),
@@ -765,7 +764,7 @@ class PipelineWasmCompilationJob final : public CompilationJob {
       SourcePositionTable* source_positions,
       ZoneVector<trap_handler::ProtectedInstructionData>* protected_insts,
       wasm::ModuleOrigin wasm_origin)
-      : CompilationJob(info->isolate(), info, "TurboFan",
+      : CompilationJob(info->isolate(), nullptr, info, "TurboFan",
                        State::kReadyToExecute),
         zone_stats_(info->isolate()->allocator()),
         pipeline_statistics_(CreatePipelineStatistics(info, &zone_stats_)),
@@ -1873,7 +1872,7 @@ Handle<Code> Pipeline::GenerateCodeForCodeStub(Isolate* isolate,
                                                Code::Flags flags,
                                                const char* debug_name) {
   CompilationInfo info(CStrVector(debug_name), isolate, graph->zone(), flags);
-  if (isolate->serializer_enabled()) info.PrepareForSerializing();
+  if (isolate->serializer_enabled()) info.MarkAsSerializing();
 
   // Construct a pipeline for scheduling and code generation.
   ZoneStats zone_stats(isolate->allocator());
