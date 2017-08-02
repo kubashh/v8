@@ -272,8 +272,8 @@ void Deserializer::DeserializeEmbedderFields(
   DisallowHeapAllocation no_gc;
   DisallowJavascriptExecution no_js(isolate_);
   DisallowCompilation no_compile(isolate_);
-  DCHECK_NOT_NULL(embedder_fields_deserializer.callback);
   for (int code = source_.Get(); code != kSynchronize; code = source_.Get()) {
+    DCHECK_NOT_NULL(embedder_fields_deserializer.callback);
     HandleScope scope(isolate_);
     int space = code & kSpaceMask;
     DCHECK(space <= kNumberOfSpaces);
@@ -399,6 +399,23 @@ HeapObject* Deserializer::PostProcessNewObject(HeapObject* obj, int space) {
         NativesExternalStringResource::DecodeForDeserialization(
             string->resource()));
     isolate_->heap()->RegisterExternalString(string);
+  } else if (obj->IsJSArrayBuffer()) {
+    JSArrayBuffer* buffer = JSArrayBuffer::cast(obj);
+    Smi* store_index = reinterpret_cast<Smi*>(buffer->backing_store());
+    void* backing_store = off_heap_backing_stores_[store_index->value()];
+    printf("Fixing up buffer, index: %d pointer:%p\n", store_index->value(),
+           backing_store);
+    buffer->set_backing_store(backing_store);
+  } else if (obj->IsFixedTypedArrayBase()) {
+    FixedTypedArrayBase* fta = FixedTypedArrayBase::cast(obj);
+    // Only fixup for the off-heap case.
+    if (fta->base_pointer() == nullptr) {
+      Smi* store_index = reinterpret_cast<Smi*>(fta->external_pointer());
+      void* backing_store = off_heap_backing_stores_[store_index->value()];
+      printf("Fixing up FixedArrayBase, index: %d pointer:%p\n",
+             store_index->value(), backing_store);
+      fta->set_external_pointer(backing_store);
+    }
   }
   if (FLAG_rehash_snapshot && can_rehash_ && !deserializing_user_code()) {
     if (obj->IsString()) {
@@ -870,6 +887,22 @@ bool Deserializer::ReadData(Object** current, Object** limit, int source_space,
         Object* object = current[-1];
         DCHECK(!isolate->heap()->InNewSpace(object));
         for (int i = 0; i < repeats; i++) UnalignedCopy(current++, &object);
+        break;
+      }
+
+      case kOffHeapBackingStore: {
+        int byte_length = source_.GetInt();
+        printf("Derserializer found store with byte_length %d\n", byte_length);
+        byte* backing_store = static_cast<byte*>(
+            isolate->array_buffer_allocator()->AllocateUninitialized(
+                byte_length));
+        if (backing_store == nullptr) {
+          // Panic.
+          printf("Couldn't allocate array buffer :(\n");
+          UNREACHABLE();
+        }
+        source_.CopyRaw(backing_store, byte_length);
+        off_heap_backing_stores_.push_back(backing_store);
         break;
       }
 

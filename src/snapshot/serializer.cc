@@ -21,7 +21,8 @@ Serializer::Serializer(Isolate* isolate)
       code_address_map_(NULL),
       num_maps_(0),
       large_objects_total_size_(0),
-      seen_large_objects_index_(0) {
+      seen_large_objects_index_(0),
+      seen_off_heap_backing_stores_index_(1) {
   // The serializer is meant to be used only to generate initial heap images
   // from a context in which there is only one isolate.
   for (int i = 0; i < kNumberOfPreallocatedSpaces; i++) {
@@ -281,6 +282,11 @@ int Serializer::PutAlignmentPrefix(HeapObject* object) {
   return 0;
 }
 
+SerializerReference Serializer::AllocateOffHeapBackingStore() {
+  return SerializerReference::OffHeapBackingStoreReference(
+      seen_off_heap_backing_stores_index_++);
+}
+
 SerializerReference Serializer::AllocateLargeObject(int size) {
   // Large objects are allocated one-by-one when deserializing. We do not
   // have to keep track of multiple chunks.
@@ -406,6 +412,92 @@ void Serializer::ObjectSerializer::SerializePrologue(AllocationSpace space,
 
   // Serialize the map (first word of the object).
   serializer_->SerializeObject(map, kPlain, kStartOfObject, 0);
+}
+
+void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
+  JSArrayBuffer* buffer = JSArrayBuffer::cast(object_);
+  void* backing_store = buffer->backing_store();
+  // TODO(petermarshall): Byte length can be larger than int32!
+  int32_t byte_length = NumberToInt32(buffer->byte_length());
+  if (byte_length == 0) {
+    SerializeContent();
+    return;
+  }
+
+  if (backing_store == nullptr) {
+    // On-heap case.
+    printf("JAB (on-heap) backing_store: %p\n", backing_store);
+    printf("byte_length: %d\n", byte_length);
+  } else {
+    SerializerReference reference =
+        serializer_->reference_map()->Lookup(backing_store);
+    // Off-heap case.
+    printf("JAB (off-heap) backing_store: %p\n", backing_store);
+    printf("byte_length: %d\n", byte_length);
+
+    if (!reference.is_valid()) {
+      printf("backing store not found, serializing...\n");
+      // Serialize the off-heap backing store.
+      sink_->Put(kOffHeapBackingStore, "Off-heap backing store");
+      sink_->PutInt(byte_length, "length");
+      sink_->PutRaw(static_cast<byte*>(backing_store), byte_length,
+                    "BackingStore");
+      reference = serializer_->AllocateOffHeapBackingStore();
+      // Mark this backing store as already serialized.
+      serializer_->reference_map()->Add(backing_store, reference);
+    } else {
+      printf("backing store already exists!\n");
+    }
+    // 32 bit platforms?
+    int32_t ref =
+        static_cast<int32_t>(reference.off_heap_backing_store_index());
+    buffer->set_backing_store(Smi::FromInt(ref));
+    printf("Backing store set: %p\n", buffer->backing_store());
+  }
+  SerializeContent();
+}
+
+void Serializer::ObjectSerializer::SerializeFixedTypedArray() {
+  FixedTypedArrayBase* fta = FixedTypedArrayBase::cast(object_);
+  void* backing_store = fta->DataPtr();
+  // TODO(petermarshall): Byte length can be larger than int32!
+  int32_t byte_length = fta->ByteLength();
+  if (byte_length == 0) {
+    SerializeContent();
+    return;
+  }
+
+  if (fta->base_pointer() != nullptr) {
+    // On-heap case.
+    printf("FTA (on-heap) EP: %p\n", backing_store);
+    printf("byte_length: %d\n", byte_length);
+  } else {
+    SerializerReference reference =
+        serializer_->reference_map()->Lookup(backing_store);
+    // Off-heap case.
+    printf("FTA (off-heap) EP: %p\n", backing_store);
+    printf("byte_length: %d\n", byte_length);
+
+    if (!reference.is_valid()) {
+      printf("backing store not found, serializing...\n");
+      // Serialize the off-heap backing store.
+      sink_->Put(kOffHeapBackingStore, "Off-heap backing store");
+      sink_->PutInt(byte_length, "length");
+      sink_->PutRaw(static_cast<byte*>(backing_store), byte_length,
+                    "BackingStore");
+      reference = serializer_->AllocateOffHeapBackingStore();
+      // Mark this backing store as already serialized.
+      serializer_->reference_map()->Add(backing_store, reference);
+    } else {
+      printf("backing store already exists!\n");
+    }
+    // 32 bit platforms?
+    int32_t ref =
+        static_cast<int32_t>(reference.off_heap_backing_store_index());
+    fta->set_external_pointer(Smi::FromInt(ref));
+    printf("EP set: %p\n", fta->external_pointer());
+  }
+  SerializeContent();
 }
 
 void Serializer::ObjectSerializer::SerializeExternalString() {
@@ -536,9 +628,14 @@ void Serializer::ObjectSerializer::Serialize() {
     SerializeExternalString();
     return;
   }
-
-  // We cannot serialize typed array objects correctly.
-  DCHECK(!object_->IsJSTypedArray());
+  if (object_->IsJSArrayBuffer()) {
+    SerializeJSArrayBuffer();
+    return;
+  }
+  if (object_->IsFixedTypedArrayBase()) {
+    SerializeFixedTypedArray();
+    return;
+  }
 
   // We don't expect fillers.
   DCHECK(!object_->IsFiller());
