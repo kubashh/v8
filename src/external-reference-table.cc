@@ -343,6 +343,10 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
       "IncrementalMarking::RecordWrite");
   Add(ExternalReference::store_buffer_overflow_function(isolate).address(),
       "StoreBuffer::StoreBufferOverflow");
+
+  Add(ExternalReference::async_generator_has_catch_handler_for_pc(isolate)
+          .address(),
+      "JSAsyncGeneratorObject::HasCatchHandlerForPC()");
 }
 
 #define BUILTIN_LIST_EXTERNAL_REFS(DEF) \

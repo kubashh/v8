@@ -20374,5 +20374,32 @@ ElementsKind JSArrayIterator::ElementsKindForInstanceType(InstanceType type) {
     return kind;
   }
 }
+
+// static
+bool JSAsyncGeneratorObject::HasCatchHandlerForPC(
+    JSAsyncGeneratorObject* suspended_generator) {
+  DisallowHeapAllocation no_allocation_scope;
+
+  int state = suspended_generator->continuation();
+  DCHECK_NE(state, JSAsyncGeneratorObject::kGeneratorExecuting);
+
+  if (state < 1) return false;
+
+  JSFunction* generator_body = suspended_generator->function();
+  HandlerTable* handler_table = nullptr;
+
+  if (generator_body->IsInterpreted()) {
+    handler_table = HandlerTable::cast(
+        generator_body->shared()->bytecode_array()->handler_table());
+  } else {
+    handler_table = HandlerTable::cast(generator_body->code()->handler_table());
+  }
+
+  int pc = Smi::cast(suspended_generator->input_or_debug_pos())->value();
+  HandlerTable::CatchPrediction catch_prediction = HandlerTable::ASYNC_AWAIT;
+  handler_table->LookupRange(pc, nullptr, &catch_prediction);
+  return catch_prediction != HandlerTable::ASYNC_AWAIT;
+}
+
 }  // namespace internal
 }  // namespace v8
