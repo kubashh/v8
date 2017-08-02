@@ -173,6 +173,8 @@ class SerializerDeserializer : public RootVisitor {
   static const int kDeoptimizerEntryFromCode = 0x1e;
   // Used for embedder-provided serialization data for embedder fields.
   static const int kEmbedderFieldsData = 0x1f;
+  // Used for embedder-allocated backing stores for TypedArrays.
+  static const int kOffHeapBackingStore = 0x20;
 
   // 8 hot (recently seen or back-referenced) objects with optional skip.
   static const int kNumberOfHotObjects = 8;
