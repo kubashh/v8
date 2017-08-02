@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cfde1d9_1b3315f5",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 20379,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-02T19:18:30Z",
+      "side": 1,
+      "message": "New attempt at this: do all this work in C++, get proper handler table for optimized code, and reuse existing HandlerTable helpers.\n\nI haven\u0027t run tests yet, but I feel like this probably works.",
+      "revId": "8d718fb245e57671f555b8ab98a579ae7557d406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
