@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97313b03_9c283242",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-02T17:35:06Z",
+      "side": 1,
+      "message": "Paren off here.",
+      "revId": "3a1b00afcadbf301e938ef0e88acf4623e2a15a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c280a2_fa7aa041",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-02T17:35:06Z",
+      "side": 1,
+      "message": "Worth keeping the named version defined in terms of this one? (to keep the message up top).\nThough this has only one use, nm.",
+      "revId": "3a1b00afcadbf301e938ef0e88acf4623e2a15a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
