@@ -208,6 +208,7 @@ class SerializerDeserializer : public RootVisitor {
   static const int kFixedRepeatStart = kFixedRepeat - 1;
 
   // 0xf0..0xff unused.
+  static const int kOffHeapBackingStore = 0xf0;
 
   // ---------- special values ----------
   static const int kAnyOldSpace = -1;
