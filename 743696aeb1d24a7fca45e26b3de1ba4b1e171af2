@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "408499cc_ff9bb8d9",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1224119
+      },
+      "writtenOn": "2017-08-02T22:30:24Z",
+      "side": 1,
+      "message": "You may want to condition this on whether the timer is running in this case, just to be safe (in case it was stopped elsewhere).\n\nI.e. condition on\n\n  isolate-\u003ecounters()-\u003ewasm_execution_time()-\u003eRunning()\n\nAlternatively: Add a StopIfRunning() method to a HistogramTimer class.",
+      "revId": "743696aeb1d24a7fca45e26b3de1ba4b1e171af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
