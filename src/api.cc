@@ -631,7 +631,8 @@ size_t SnapshotCreator::AddTemplate(Local<Template> template_obj) {
 }
 
 StartupData SnapshotCreator::CreateBlob(
-    SnapshotCreator::FunctionCodeHandling function_code_handling) {
+    SnapshotCreator::FunctionCodeHandling function_code_handling,
+    SerializeInternalFieldsCallback callback) {
   SnapshotCreatorData* data = SnapshotCreatorData::cast(data_);
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(data->isolate_);
   DCHECK(!data->created_);
@@ -711,9 +712,9 @@ StartupData SnapshotCreator::CreateBlob(
   bool can_be_rehashed = true;
 
   {
-    // The default snapshot does not support embedder fields.
-    i::PartialSerializer partial_serializer(
-        isolate, &startup_serializer, v8::SerializeInternalFieldsCallback());
+    // Embedder field support is determined by the caller.
+    i::PartialSerializer partial_serializer(isolate, &startup_serializer,
+                                            callback);
     partial_serializer.Serialize(&default_context, false);
     can_be_rehashed = can_be_rehashed && partial_serializer.can_be_rehashed();
     context_snapshots.Add(new i::SnapshotData(&partial_serializer));
@@ -748,7 +749,8 @@ StartupData SnapshotCreator::CreateBlob(
   return result;
 }
 
-StartupData V8::CreateSnapshotDataBlob(const char* embedded_source) {
+StartupData V8::CreateSnapshotDataBlob(
+    const char* embedded_source, SerializeInternalFieldsCallback callback) {
   // Create a new isolate and a new context from scratch, optionally run
   // a script to embed, and serialize to create a snapshot blob.
   StartupData result = {nullptr, 0};
@@ -767,7 +769,7 @@ StartupData V8::CreateSnapshotDataBlob(const char* embedded_source) {
       snapshot_creator.SetDefaultContext(context);
     }
     result = snapshot_creator.CreateBlob(
-        SnapshotCreator::FunctionCodeHandling::kClear);
+        SnapshotCreator::FunctionCodeHandling::kClear, callback);
   }
 
   if (i::FLAG_profile_deserialization) {
