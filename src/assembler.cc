@@ -900,6 +900,11 @@ ExternalReference ExternalReference::get_date_field_function(
   return ExternalReference(Redirect(isolate, FUNCTION_ADDR(JSDate::GetField)));
 }
 
+ExternalReference ExternalReference::async_generator_has_catch_handler_for_pc(
+    Isolate* isolate) {
+  return ExternalReference(Redirect(
+      isolate, FUNCTION_ADDR(JSAsyncGeneratorObject::HasCatchHandlerForPC)));
+}
 
 ExternalReference ExternalReference::get_make_code_young_function(
     Isolate* isolate) {
