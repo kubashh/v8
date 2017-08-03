@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6de050e9_70ba7f58",
+        "filename": "test/mjsunit/es6/proxies-get.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-03T00:24:50Z",
+      "side": 1,
+      "message": "nit: we prefer having binary operators (+, \u0026\u0026, etc) at the end of the line, before the break.",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 6
+      },
+      "revId": "63dbf3f381f9735296b1191360a007bed7dbfbea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
