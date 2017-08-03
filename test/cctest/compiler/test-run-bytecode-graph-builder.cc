@@ -125,7 +125,6 @@ class BytecodeGraphTester {
 
     CompilationInfo compilation_info(parse_info.zone(), function->GetIsolate(),
                                      parse_info.script(), shared, function);
-    compilation_info.SetOptimizing();
     compilation_info.MarkAsDeoptimizationEnabled();
     compilation_info.MarkAsOptimizeFromBytecode();
     Handle<Code> code = Pipeline::GenerateCodeForTesting(&compilation_info);
