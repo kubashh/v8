@@ -94,6 +94,7 @@ class StackHandler BASE_EMBEDDED {
   V(WASM_TO_JS, WasmToJsFrame)                                            \
   V(JS_TO_WASM, JsToWasmFrame)                                            \
   V(WASM_INTERPRETER_ENTRY, WasmInterpreterEntryFrame)                    \
+  V(C_WASM_ENTRY, CWasmEntryFrame)                                        \
   V(INTERPRETED, InterpretedFrame)                                        \
   V(STUB, StubFrame)                                                      \
   V(BUILTIN_CONTINUATION, BuiltinContinuationFrame)                       \
@@ -103,7 +104,6 @@ class StackHandler BASE_EMBEDDED {
   V(ARGUMENTS_ADAPTOR, ArgumentsAdaptorFrame)                             \
   V(BUILTIN, BuiltinFrame)                                                \
   V(BUILTIN_EXIT, BuiltinExitFrame)
-
 
 // Abstract base class for all stack frames.
 class StackFrame BASE_EMBEDDED {
@@ -1074,6 +1074,17 @@ class JsToWasmFrame : public StubFrame {
 
  protected:
   inline explicit JsToWasmFrame(StackFrameIteratorBase* iterator);
+
+ private:
+  friend class StackFrameIteratorBase;
+};
+
+class CWasmEntryFrame : public StubFrame {
+ public:
+  Type type() const override { return C_WASM_ENTRY; }
+
+ protected:
+  inline explicit CWasmEntryFrame(StackFrameIteratorBase* iterator);
 
  private:
   friend class StackFrameIteratorBase;
