@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7642aa3_87864e09",
+        "filename": "test/mjsunit/harmony/do-expressions-arrow-param-scope.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-08-03T07:46:48Z",
+      "side": 1,
+      "message": "Impressive that we get the completion right.",
+      "revId": "50ad6ff2304cfe45116bb827f81c5165e591ca64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
