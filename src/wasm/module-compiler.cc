@@ -273,6 +273,9 @@ void ModuleCompiler::CompileInParallel(ModuleBytesEnv* module_env,
   background_task_manager_.CancelAndWait();
   // Finish all compilation units which have been executed while we waited.
   FinishCompilationUnits(results, thrower);
+  size_t sigs = module_env->module_env.module->signatures.size();
+  size_t used = module_env->module_env.module->function_tables.size() ? module_env->module_env.module->function_tables[0].map.size() : 0;
+  printf("sigs: %zu\nused: %zu\n", sigs, used);
 }
 
 void ModuleCompiler::CompileSequentially(ModuleBytesEnv* module_env,

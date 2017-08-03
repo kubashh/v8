@@ -30,7 +30,7 @@ class V8_EXPORT_PRIVATE SignatureMap {
 
   // Gets the index for a signature, returning {-1} if not found.
   int32_t Find(FunctionSig* sig) const;
-
+  size_t size() const { return map_.size(); }
  private:
   // TODO(wasm): use a hashmap instead of an ordered map?
   struct CompareFunctionSigs {
