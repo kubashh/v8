@@ -93,6 +93,30 @@
       "revId": "96946d574fc55d4801280c34b8156e500a0a1d1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "560f040a_a92b51a7",
+        "filename": "src/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-08-03T13:50:00Z",
+      "side": 1,
+      "message": "Ross clarified this offline, documenting it here:\n\nWe have compilation jobs for eager inner functions (created by CompileUnoptimizedInnerFunctions) and for lazy functions, and this is distinguishing between the two. (Two other types of compilation are the top level scripts and evals above. So in total four.)",
+      "parentUuid": "b942a401_91d66c40",
+      "range": {
+        "startLine": 423,
+        "startChar": 64,
+        "endLine": 423,
+        "endChar": 76
+      },
+      "revId": "96946d574fc55d4801280c34b8156e500a0a1d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
