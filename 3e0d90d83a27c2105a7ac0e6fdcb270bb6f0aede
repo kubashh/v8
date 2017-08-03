@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "406c6a47_64b7b407",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-03T13:47:55Z",
+      "side": 1,
+      "message": "Note that specifying MachineType::Bool as the return type of CallCFunction won\u0027t actually mask the result to sizeof(bool), you will need to mask manually. See https://crbug.com/v8/6455.",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb17d8e_04886d31",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 20396,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-03T13:47:55Z",
+      "side": 1,
+      "message": "Let\u0027s DCHECK(IsJSAsyncGeneratorObject) here since the argument type is completely unchecked when called from CSA.",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c5be67_44a6581b",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 20401,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-03T13:47:55Z",
+      "side": 1,
+      "message": "Please add a comment what `state \u003c 1` means.",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "545ee788_83540d04",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 20415,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-03T13:47:55Z",
+      "side": 1,
+      "message": "Something is triggering an oob read in here: https://luci-logdog.appspot.com/v/?s\u003dchromium%2Fbb%2Ftryserver.v8%2Fv8_linux_dbg_ng_triggered%2F27572%2F%2B%2Frecipes%2Fsteps%2FCheck%2F0%2Flogs%2Fasync-generators-basic%2F0",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf000387_dc6aa377",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 20416,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-03T13:47:55Z",
+      "side": 1,
+      "message": "I\u0027m curious, aren\u0027t we only interested in catch_prediction \u003d\u003d CAUGHT?",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
