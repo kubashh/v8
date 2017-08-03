@@ -184,8 +184,8 @@ void ReportInstantiationFailure(Handle<Script> script, int position,
 //      code.
 class AsmJsCompilationJob final : public CompilationJob {
  public:
-  explicit AsmJsCompilationJob(CompilationInfo* info)
-      : CompilationJob(info->isolate(), info, "AsmJs"),
+  explicit AsmJsCompilationJob(ParseInfo* parse_info, CompilationInfo* info)
+      : CompilationJob(info->isolate(), parse_info, info, "AsmJs"),
         module_(nullptr),
         asm_offsets_(nullptr),
         translate_time_(0),
@@ -293,8 +293,9 @@ CompilationJob::Status AsmJsCompilationJob::FinalizeJobImpl() {
   return SUCCEEDED;
 }
 
-CompilationJob* AsmJs::NewCompilationJob(CompilationInfo* info) {
-  return new AsmJsCompilationJob(info);
+CompilationJob* AsmJs::NewCompilationJob(ParseInfo* parse_info,
+                                         CompilationInfo* compilation_info) {
+  return new AsmJsCompilationJob(parse_info, compilation_info);
 }
 
 MaybeHandle<Object> AsmJs::InstantiateAsmWasm(Isolate* isolate,
