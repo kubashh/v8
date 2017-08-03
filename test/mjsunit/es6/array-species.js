@@ -6,29 +6,6 @@
 
 'use strict';
 
-// Subclasses of Array construct themselves under map, etc
-
-class MyArray extends Array { }
-
-assertEquals(MyArray, new MyArray().map(()=>{}).constructor);
-assertEquals(MyArray, new MyArray().filter(()=>{}).constructor);
-assertEquals(MyArray, new MyArray().slice().constructor);
-assertEquals(MyArray, new MyArray().splice().constructor);
-assertEquals(MyArray, new MyArray().concat([1]).constructor);
-assertEquals(1, new MyArray().concat([1])[0]);
-
-// Subclasses can override @@species to return the another class
-
-class MyOtherArray extends Array {
-  static get [Symbol.species]() { return MyArray; }
-}
-
-assertEquals(MyArray, new MyOtherArray().map(()=>{}).constructor);
-assertEquals(MyArray, new MyOtherArray().filter(()=>{}).constructor);
-assertEquals(MyArray, new MyOtherArray().slice().constructor);
-assertEquals(MyArray, new MyOtherArray().splice().constructor);
-assertEquals(MyArray, new MyOtherArray().concat().constructor);
-
 // Array  methods on non-arrays return arrays
 
 class MyNonArray extends Array {
@@ -37,23 +14,6 @@ class MyNonArray extends Array {
 
 class MyObject { }
 
-assertEquals(MyObject,
-             Array.prototype.map.call(new MyNonArray(), ()=>{}).constructor);
-assertEquals(MyObject,
-             Array.prototype.filter.call(new MyNonArray(), ()=>{}).constructor);
-assertEquals(MyObject,
-             Array.prototype.slice.call(new MyNonArray()).constructor);
-assertEquals(MyObject,
-             Array.prototype.splice.call(new MyNonArray()).constructor);
-assertEquals(MyObject,
-             Array.prototype.concat.call(new MyNonArray()).constructor);
-
-assertEquals(undefined,
-             Array.prototype.map.call(new MyNonArray(), ()=>{}).length);
-assertEquals(undefined,
-             Array.prototype.filter.call(new MyNonArray(), ()=>{}).length);
-assertEquals(undefined,
-             Array.prototype.concat.call(new MyNonArray(), ()=>{}).length);
 // slice and splice actually do explicitly define the length for some reason
 assertEquals(0, Array.prototype.slice.call(new MyNonArray()).length);
 assertEquals(0, Array.prototype.splice.call(new MyNonArray()).length);

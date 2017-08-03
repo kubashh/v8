@@ -179,6 +179,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* Float64Round(Node* x);
   Node* Float64RoundToEven(Node* x);
   Node* Float64Trunc(Node* x);
+  // Select the minimum of the two provided Number values.
+  Node* NumberMax(Node* left, Node* right);
+  // Select the minimum of the two provided Number values.
+  Node* NumberMin(Node* left, Node* right);
 
   // Tag a Word as a Smi value.
   Node* SmiTag(Node* value);
@@ -259,6 +263,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Smi | HeapNumber operations.
   Node* NumberInc(Node* value);
   Node* NumberDec(Node* value);
+  Node* NumberAdd(Node* a, Node* b);
+  Node* NumberSub(Node* a, Node* b);
   void GotoIfNotNumber(Node* value, Label* is_not_number);
   void GotoIfNumber(Node* value, Label* is_number);
 
