@@ -123,8 +123,8 @@ class BytecodeGraphTester {
     Handle<SharedFunctionInfo> shared(function->shared());
     ParseInfo parse_info(shared);
 
-    CompilationInfo compilation_info(parse_info.zone(), &parse_info,
-                                     function->GetIsolate(), shared, function);
+    CompilationInfo compilation_info(parse_info.zone(), function->GetIsolate(),
+                                     parse_info.script(), shared, function);
     compilation_info.SetOptimizing();
     compilation_info.MarkAsDeoptimizationEnabled();
     compilation_info.MarkAsOptimizeFromBytecode();

@@ -401,12 +401,13 @@ void UnoptimizedCompileJob::AnalyzeOnMainThread(Isolate* isolate) {
 
   compile_zone_.reset(new Zone(isolate->allocator(), ZONE_NAME));
   compile_info_.reset(new CompilationInfo(
-      compile_zone_.get(), parse_info_.get(), isolate,
+      compile_zone_.get(), isolate, parse_info_->script(),
       Handle<SharedFunctionInfo>::null(), Handle<JSFunction>::null()));
+  compile_info_->set_literal(parse_info_->literal());
 
   DeferredHandleScope scope(isolate);
   {
-    if (Compiler::Analyze(compile_info_.get())) {
+    if (Compiler::Analyze(parse_info_.get(), isolate)) {
       status_ = Status::kAnalyzed;
     } else {
       status_ = Status::kFailed;
@@ -422,8 +423,8 @@ void UnoptimizedCompileJob::PrepareToCompileOnMainThread(Isolate* isolate) {
   DCHECK(status() == Status::kAnalyzed);
   COMPILER_DISPATCHER_TRACE_SCOPE(tracer_, kPrepareToCompile);
 
-  compile_job_.reset(
-      Compiler::PrepareUnoptimizedCompilationJob(compile_info_.get()));
+  compile_job_.reset(Compiler::PrepareUnoptimizedCompilationJob(
+      parse_info_.get(), compile_info_.get()));
   if (!compile_job_.get()) {
     if (!isolate->has_pending_exception()) isolate->StackOverflow();
     status_ = Status::kFailed;

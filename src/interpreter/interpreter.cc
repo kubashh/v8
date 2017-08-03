@@ -24,7 +24,7 @@ namespace interpreter {
 
 class InterpreterCompilationJob final : public CompilationJob {
  public:
-  explicit InterpreterCompilationJob(CompilationInfo* info);
+  InterpreterCompilationJob(ParseInfo* pare_info, CompilationInfo* info);
 
  protected:
   Status PrepareJobImpl() final;
@@ -143,15 +143,16 @@ bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
 
 }  // namespace
 
-InterpreterCompilationJob::InterpreterCompilationJob(CompilationInfo* info)
-    : CompilationJob(info->isolate(), info, "Ignition"),
+InterpreterCompilationJob::InterpreterCompilationJob(ParseInfo* parse_info,
+                                                     CompilationInfo* info)
+    : CompilationJob(info->isolate(), parse_info, info, "Ignition"),
       generator_(info),
       runtime_call_stats_(info->isolate()->counters()->runtime_call_stats()),
       background_execute_counter_("CompileBackgroundIgnition") {}
 
 InterpreterCompilationJob::Status InterpreterCompilationJob::PrepareJobImpl() {
   // TODO(5203): Move code out of codegen.cc once FCG goes away.
-  CodeGenerator::MakeCodePrologue(info(), "interpreter");
+  CodeGenerator::MakeCodePrologue(parse_info(), info(), "interpreter");
   return SUCCEEDED;
 }
 
@@ -200,8 +201,9 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
   return SUCCEEDED;
 }
 
-CompilationJob* Interpreter::NewCompilationJob(CompilationInfo* info) {
-  return new InterpreterCompilationJob(info);
+CompilationJob* Interpreter::NewCompilationJob(
+    ParseInfo* parse_info, CompilationInfo* compilation_info) {
+  return new InterpreterCompilationJob(parse_info, compilation_info);
 }
 
 bool Interpreter::IsDispatchTableInitialized() {
