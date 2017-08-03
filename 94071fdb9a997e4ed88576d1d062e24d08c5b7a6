@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b9209c2_787ede4d",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-03T15:50:57Z",
+      "side": 1,
+      "message": "Any reason this isn\u0027t a runtime function? That would seem safer to me than having this called directly from an external reference, but maybe there is a reason I\u0027m missing?",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
