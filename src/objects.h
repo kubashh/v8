@@ -4878,6 +4878,10 @@ class JSAsyncGeneratorObject : public JSGeneratorObject {
   // A reference to the Promise of an AwaitExpression.
   DECL_ACCESSORS(awaited_promise, HeapObject)
 
+  // Return true if {suspended_generator}'s PC has a catch handler. This allows
+  // catch prediction to happen from the AsyncGeneratorResumeNext stub.
+  static bool HasCatchHandlerForPC(JSAsyncGeneratorObject* suspended_generator);
+
   // Layout description.
   static const int kQueueOffset = JSGeneratorObject::kSize;
   static const int kAwaitedPromiseOffset = kQueueOffset + kPointerSize;

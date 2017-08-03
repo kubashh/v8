@@ -20389,5 +20389,31 @@ ElementsKind JSArrayIterator::ElementsKindForInstanceType(InstanceType type) {
     return kind;
   }
 }
+
+// static
+bool JSAsyncGeneratorObject::HasCatchHandlerForPC(
+    JSAsyncGeneratorObject* suspended_generator) {
+  DisallowHeapAllocation no_allocation_scope;
+  DCHECK(suspended_generator->IsJSAsyncGeneratorObject());
+
+  int state = suspended_generator->continuation();
+  DCHECK_NE(state, JSAsyncGeneratorObject::kGeneratorExecuting);
+
+  // If state is 0 ("suspendedStart"), there is guaranteed to be no catch
+  // handler. Otherwise, if state is below 0, the generator is closed and will
+  // not reach a catch handler.
+  if (state < 1) return false;
+
+  SharedFunctionInfo* shared = suspended_generator->function()->shared();
+  DCHECK(shared->HasBytecodeArray());
+  HandlerTable* handler_table =
+      HandlerTable::cast(shared->bytecode_array()->handler_table());
+
+  int pc = Smi::cast(suspended_generator->input_or_debug_pos())->value();
+  HandlerTable::CatchPrediction catch_prediction = HandlerTable::ASYNC_AWAIT;
+  handler_table->LookupRange(pc, nullptr, &catch_prediction);
+  return catch_prediction == HandlerTable::CAUGHT;
+}
+
 }  // namespace internal
 }  // namespace v8
