@@ -6,6 +6,7 @@
 #define V8_WASM_FUNCTION_BODY_DECODER_IMPL_H_
 
 #include "src/wasm/decoder.h"
+#include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-opcodes.h"
 
 namespace v8 {
@@ -88,50 +89,31 @@ struct GlobalIndexOperand {
 
 template <bool checked>
 struct BlockTypeOperand {
-  uint32_t arity = 0;
-  const byte* types = nullptr;  // pointer to encoded types for the block.
   unsigned length = 1;
+  ValueType type = kWasmStmt;
+  uint32_t sig_index;
+  FunctionSig* sig = nullptr;
 
   inline BlockTypeOperand(Decoder* decoder, const byte* pc) {
     uint8_t val = decoder->read_u8<checked>(pc + 1, "block type");
-    ValueType type = kWasmStmt;
-    if (decode_local_type(val, &type)) {
-      arity = type == kWasmStmt ? 0 : 1;
-      types = pc + 1;
-    } else {
+    if (!decode_local_type(val, &type)) {
       // Handle multi-value blocks.
       if (!CHECKED_COND(FLAG_experimental_wasm_mv)) {
-        decoder->error(pc + 1, "invalid block arity > 1");
-        return;
-      }
-      if (!CHECKED_COND(val == kMultivalBlock)) {
         decoder->error(pc + 1, "invalid block type");
         return;
       }
-      // Decode and check the types vector of the block.
-      unsigned len = 0;
-      uint32_t count = decoder->read_u32v<checked>(pc + 2, &len, "block arity");
-      // {count} is encoded as {arity-2}, so that a {0} count here corresponds
-      // to a block with 2 values. This makes invalid/redundant encodings
-      // impossible.
-      arity = count + 2;
-      length = 1 + len + arity;
-      types = pc + 1 + 1 + len;
-
-      for (uint32_t i = 0; i < arity; i++) {
-        uint32_t offset = 1 + 1 + len + i;
-        val = decoder->read_u8<checked>(pc + offset, "block type");
-        decode_local_type(val, &type);
-        if (!CHECKED_COND(type != kWasmStmt)) {
-          decoder->error(pc + offset, "invalid block type");
-          return;
-        }
+      int32_t index =
+          decoder->read_i32v<checked>(pc + 1, &length, "block arity");
+      if (!CHECKED_COND(length > 0 && index >= 0)) {
+        decoder->error(pc + 1, "invalid block type index");
+        return;
       }
+      sig_index = static_cast<uint32_t>(index);
     }
   }
 
   // Decode a byte representing a local type. Return {false} if the encoded
-  // byte was invalid or {kMultivalBlock}.
+  // byte was invalid or the start of a type index.
   inline bool decode_local_type(uint8_t val, ValueType* result) {
     switch (static_cast<ValueTypeCode>(val)) {
       case kLocalVoid:
@@ -153,15 +135,29 @@ struct BlockTypeOperand {
         *result = kWasmS128;
         return true;
       default:
-        *result = kWasmStmt;
+        *result = kWasmVar;
         return false;
     }
   }
-  ValueType read_entry(unsigned index) {
-    DCHECK_LT(index, arity);
-    ValueType result;
-    CHECK(decode_local_type(types[index], &result));
-    return result;
+
+  uint32_t in_arity() const {
+    if (type != kWasmVar) return 0;
+    return sig->parameter_count();
+  }
+  uint32_t out_arity() const {
+    if (type == kWasmStmt) return 0;
+    if (type != kWasmVar) return 1;
+    return sig->return_count();
+  }
+  ValueType in_type(unsigned index) {
+    DCHECK_EQ(kWasmVar, type);
+    return sig->GetParam(index);
+  }
+  ValueType out_type(unsigned index) {
+    if (type == kWasmVar) return sig->GetReturn(index);
+    DCHECK_NE(kWasmStmt, type);
+    DCHECK_EQ(0, index);
+    return type;
   }
 };
 
