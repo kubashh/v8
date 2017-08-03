@@ -22,6 +22,29 @@
       "revId": "96946d574fc55d4801280c34b8156e500a0a1d1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38abdd78_6ef82df2",
+        "filename": "src/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-08-03T12:58:36Z",
+      "side": 1,
+      "message": "I\u0027m confused by this + the ParseInfo addition; after your CL, when do we end up in the FUNCTION_TAG case?\n\nI saw that GetLazyCode now sets lazy_compile before compiling, but which is the code path that doesn\u0027t set it (and is not toplevel compiling either)?",
+      "range": {
+        "startLine": 423,
+        "startChar": 64,
+        "endLine": 423,
+        "endChar": 76
+      },
+      "revId": "96946d574fc55d4801280c34b8156e500a0a1d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
