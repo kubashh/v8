@@ -46,6 +46,30 @@
       "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ea2ea4_288f1fdf",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T16:18:51Z",
+      "side": 1,
+      "message": "CEntryStub seems to:\n\n- allow profiling hooks (a positive, I guess)\n- ensure calling convention for host is met, caller-saved regs are saved, etc\n- could be something else I\u0027m missing from a quick glance?\n\nI don\u0027t know that these really matter in this particular case, but I suppose it\u0027s possible. What\u0027s your preference here?",
+      "parentUuid": "6e2f5e96_1fb99be4",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
