@@ -22,6 +22,30 @@
       "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e2f5e96_1fb99be4",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T16:02:07Z",
+      "side": 1,
+      "message": "I think there are a few minor benefits:\n\n✔️ internal mechanism not exposed via --allow-natives-syntax\n✔️ Less overhead (no C entry/exit frames, no messing with Handles, etc)\n\nBut ultimately, I don\u0027t care that much --- if there\u0027s a good safety reason for using CallRuntime, I\u0027ll do that.",
+      "parentUuid": "9b9209c2_787ede4d",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
