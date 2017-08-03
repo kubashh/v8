@@ -801,7 +801,7 @@ class WasmFullDecoder : public WasmDecoder {
             SsaEnv* break_env = ssa_env_;
             PushBlock(break_env);
             SetEnv("block:start", Steal(break_env));
-            SetBlockType(&control_.back(), operand);
+            SetBlockType(&control_.back(), operand, pc_);
             len = 1 + operand.length;
             break;
           }
@@ -831,7 +831,7 @@ class WasmFullDecoder : public WasmDecoder {
             SsaEnv* catch_env = UnreachableEnv();
             PushTry(outer_env, catch_env);
             SetEnv("try_catch:start", try_env);
-            SetBlockType(&control_.back(), operand);
+            SetBlockType(&control_.back(), operand, pc_);
             len = 1 + operand.length;
             break;
           }
@@ -891,7 +891,7 @@ class WasmFullDecoder : public WasmDecoder {
             SetEnv("loop:start", loop_body_env);
             ssa_env_->SetNotMerged();
             PushLoop(finish_try_env);
-            SetBlockType(&control_.back(), operand);
+            SetBlockType(&control_.back(), operand, pc_);
             len = 1 + operand.length;
             break;
           }
@@ -909,7 +909,7 @@ class WasmFullDecoder : public WasmDecoder {
             true_env->control = if_true;
             PushIf(end_env, false_env);
             SetEnv("if:true", true_env);
-            SetBlockType(&control_.back(), operand);
+            SetBlockType(&control_.back(), operand, pc_);
             len = 1 + operand.length;
             break;
           }
@@ -1433,14 +1433,24 @@ class WasmFullDecoder : public WasmDecoder {
     }
   }
 
-  void SetBlockType(Control* c, BlockTypeOperand<true>& operand) {
-    c->merge.arity = operand.arity;
+  void SetBlockType(
+      Control* c, BlockTypeOperand<true>& operand, const byte* pos) {
+    if (operand.type == kWasmVar) {
+      if (!module_ || operand.sig_index >= module_->signatures.size()) {
+        errorf(pos, "block type index %u out of bounds (%d signatures)",
+               operand.sig_index,
+               module_ ? static_cast<int>(module_->signatures.size()) : 0);
+        return;
+      }
+      operand.sig = module_->signatures[operand.sig_index];
+    }
+    c->merge.arity = operand.out_arity();
     if (c->merge.arity == 1) {
-      c->merge.vals.first = {pc_, nullptr, operand.read_entry(0)};
+      c->merge.vals.first = {pc_, nullptr, operand.out_type(0)};
     } else if (c->merge.arity > 1) {
       c->merge.vals.array = zone_->NewArray<Value>(c->merge.arity);
       for (unsigned i = 0; i < c->merge.arity; i++) {
-        c->merge.vals.array[i] = {pc_, nullptr, operand.read_entry(i)};
+        c->merge.vals.array[i] = {pc_, nullptr, operand.out_type(i)};
       }
     }
   }
@@ -2241,8 +2251,8 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
       case kExprTry: {
         BlockTypeOperand<true> operand(&i, i.pc());
         os << "   // @" << i.pc_offset();
-        for (unsigned i = 0; i < operand.arity; i++) {
-          os << " " << WasmOpcodes::TypeName(operand.read_entry(i));
+        for (unsigned i = 0; i < operand.out_arity(); i++) {
+          os << " " << WasmOpcodes::TypeName(operand.out_type(i));
         }
         control_depth++;
         break;
