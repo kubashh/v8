@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "bb7c1894_6bd9b721",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 20415,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-03T14:02:25Z",
+      "side": 1,
+      "message": "I think this is still wrong as discussed on a previous patch-set. Checking generator_body-\u003eIsInterpreted() doesn\u0027t tell you whether the pc in the suspended generator is for the bytecode or optimized code associated with the JSFunction because the generator function could have been optimized or deoptimized between this activation being suspended and resumed.\n\nLooking at JSGeneratorObject::source_position and BytecodeGraphBuilder::VisitSuspendGenerator, it looks like input_or_debug_pos only ever has a BytecodeArray PC, even if the generator was optimized code. As such, I think what you need to do here is just check the bytecode array\u0027s handler table.",
+      "parentUuid": "545ee788_83540d04",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bf000387_dc6aa377",
         "filename": "src/objects.cc",
         "patchSetId": 9
