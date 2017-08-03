@@ -7803,7 +7803,10 @@ class V8_EXPORT V8 {
    * Returns { NULL, 0 } on failure.
    * The caller acquires ownership of the data array in the return value.
    */
-  static StartupData CreateSnapshotDataBlob(const char* embedded_source = NULL);
+  static StartupData CreateSnapshotDataBlob(
+      const char* embedded_source = NULL,
+      SerializeInternalFieldsCallback callback =
+          SerializeInternalFieldsCallback());
 
   /**
    * Bootstrap an isolate and a context from the cold startup blob, run the
@@ -8208,10 +8211,13 @@ class V8_EXPORT SnapshotCreator {
    * This must not be called from within a handle scope.
    * \param function_code_handling whether to include compiled function code
    *        in the snapshot.
+   // TODO(petermarshall): Document param.
    * \returns { nullptr, 0 } on failure, and a startup snapshot on success. The
    *        caller acquires ownership of the data array in the return value.
    */
-  StartupData CreateBlob(FunctionCodeHandling function_code_handling);
+  StartupData CreateBlob(FunctionCodeHandling function_code_handling,
+                         SerializeInternalFieldsCallback callback =
+                             SerializeInternalFieldsCallback());
 
   // Disallow copying and assigning.
   SnapshotCreator(const SnapshotCreator&) = delete;
@@ -8535,7 +8541,9 @@ class V8_EXPORT Context {
   static Local<Context> New(
       Isolate* isolate, ExtensionConfiguration* extensions = NULL,
       MaybeLocal<ObjectTemplate> global_template = MaybeLocal<ObjectTemplate>(),
-      MaybeLocal<Value> global_object = MaybeLocal<Value>());
+      MaybeLocal<Value> global_object = MaybeLocal<Value>(),
+      DeserializeInternalFieldsCallback internal_fields_deserializer =
+          DeserializeInternalFieldsCallback());
 
   /**
    * Create a new context from a (non-default) context snapshot. There

@@ -642,6 +642,93 @@ TEST(CustomSnapshotDataBlob1) {
   isolate1->Dispose();
 }
 
+v8::StartupData SerializeInternalFields(v8::Local<v8::Object> holder, int index,
+                                        void* data);
+void DeserializeInternalFields(v8::Local<v8::Object> holder, int index,
+                               v8::StartupData payload, void* data);
+
+TEST(CustomSnapshotDataBlobWithOnHeapTypedArray) {
+  DisableAlwaysOpt();
+  const char* source1 =
+      "var x = new Uint8Array(8);"
+      "x[0] = 12;"
+      "x[7] = 24;"
+      "var y = new Int16Array([12, 24, 48]);";
+
+  v8::StartupData data1 = v8::V8::CreateSnapshotDataBlob(
+      source1, v8::SerializeInternalFieldsCallback(
+                   SerializeInternalFields, reinterpret_cast<void*>(2016)));
+
+  v8::Isolate::CreateParams params1;
+  params1.snapshot_blob = &data1;
+  params1.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  // Test-appropriate equivalent of v8::Isolate::New.
+  v8::Isolate* isolate1 = TestIsolate::New(params1);
+  {
+    v8::Isolate::Scope i_scope(isolate1);
+    v8::HandleScope h_scope(isolate1);
+    v8::Local<v8::Context> context = v8::Context::New(
+        isolate1, NULL, v8::MaybeLocal<v8::ObjectTemplate>(),
+        v8::MaybeLocal<v8::Value>(),
+        v8::DeserializeInternalFieldsCallback(DeserializeInternalFields,
+                                              reinterpret_cast<void*>(2017)));
+    delete[] data1.data;  // We can dispose of the snapshot blob now.
+    v8::Context::Scope c_scope(context);
+    v8::Maybe<int32_t> result =
+        CompileRun("x[0]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(12, result.FromJust());
+    result = CompileRun("x[7]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(24, result.FromJust());
+    result = CompileRun("y[2]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(48, result.FromJust());
+  }
+  isolate1->Dispose();
+}
+
+TEST(CustomSnapshotDataBlobWithOffHeapTypedArray) {
+  DisableAlwaysOpt();
+  const char* source1 =
+      "var x = new Uint8Array(128);"
+      "x[0] = 12;"
+      "var arr = new Array(17);"
+      "arr[1] = 24;"
+      "var y = new Uint32Array(arr);"
+      "var buffer = new ArrayBuffer(128);"
+      "var z = new Int16Array(buffer);"
+      "z[0] = 48;";
+
+  v8::StartupData data1 = v8::V8::CreateSnapshotDataBlob(
+      source1, v8::SerializeInternalFieldsCallback(
+                   SerializeInternalFields, reinterpret_cast<void*>(2016)));
+
+  v8::Isolate::CreateParams params1;
+  params1.snapshot_blob = &data1;
+  params1.array_buffer_allocator = CcTest::array_buffer_allocator();
+
+  // Test-appropriate equivalent of v8::Isolate::New.
+  v8::Isolate* isolate1 = TestIsolate::New(params1);
+  {
+    v8::Isolate::Scope i_scope(isolate1);
+    v8::HandleScope h_scope(isolate1);
+    v8::Local<v8::Context> context = v8::Context::New(
+        isolate1, NULL, v8::MaybeLocal<v8::ObjectTemplate>(),
+        v8::MaybeLocal<v8::Value>(),
+        v8::DeserializeInternalFieldsCallback(DeserializeInternalFields,
+                                              reinterpret_cast<void*>(2017)));
+    delete[] data1.data;  // We can dispose of the snapshot blob now.
+    v8::Context::Scope c_scope(context);
+    v8::Maybe<int32_t> result =
+        CompileRun("x[0]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(12, result.FromJust());
+    result = CompileRun("y[1]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(24, result.FromJust());
+    result = CompileRun("z[0]")->Int32Value(isolate1->GetCurrentContext());
+    CHECK_EQ(48, result.FromJust());
+  }
+  isolate1->Dispose();
+}
+
 TEST(CustomSnapshotDataBlob2) {
   DisableAlwaysOpt();
   const char* source2 =
@@ -2180,6 +2267,7 @@ v8::StartupData SerializeInternalFields(v8::Local<v8::Object> holder, int index,
       holder->GetAlignedPointerFromInternalField(index));
   int size = sizeof(*embedder_field);
   char* payload = new char[size];
+  DCHECK(embedder_field != nullptr);
   // We simply use memcpy to serialize the content.
   memcpy(payload, embedder_field, size);
   return {payload, size};
