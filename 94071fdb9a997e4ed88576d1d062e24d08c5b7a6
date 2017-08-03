@@ -70,6 +70,30 @@
       "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7adae115_3f507bca",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-03T16:28:40Z",
+      "side": 1,
+      "message": "Personally I would just make this a standard runtime function unless there are really good reasons not to. It\u0027s pretty unusual to use an external reference for runtime type calls, and I am not convinced the two benefits you mention are worth breaking with convention in this case, particularly since the code is not entirely self-contained in this function (e.g., calling out to HandlerTable::LookupRange) and something might change in those later which requires an entry / exit frame to be on the stack.",
+      "parentUuid": "f9ea2ea4_288f1fdf",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
