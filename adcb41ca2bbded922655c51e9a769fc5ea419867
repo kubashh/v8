@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "530555c1_10b58558",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 0,
+      "message": "For non-closed generators, the generator gets resumed, at which point it immediately does the execution_context()-\u003eAsyncReturn() thing. This gives the chance for `finally` blocks to be evaluated.\n\nThe only case there would be an extra `await` is if there\u0027s an extra ReturnStatement in the finally block",
+      "parentUuid": "a878be58_561200c0",
+      "revId": "adcb41ca2bbded922655c51e9a769fc5ea419867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4cb4f18e_660916d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 7

@@ -233,6 +233,24 @@
     },
     {
       "key": {
+        "uuid": "ebd9ad1d_f321e3a3",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd616a78_ba437008",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64e2cd21_089a9fc6",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -247,6 +265,24 @@
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c47489e_bb485730",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e2cd21_089a9fc6",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -285,6 +321,24 @@
     },
     {
       "key": {
+        "uuid": "4601d68d_9a7b7fa5",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a7c25ec_41c59b08",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b7efe77_245b63fa",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -302,6 +356,24 @@
     },
     {
       "key": {
+        "uuid": "3e68cdd9_b5fdd8fe",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done (also changed WordNotEqual to IsNotUndefined for all of these similar assertions, easier to read) -- I\u0027m happy to move this to a separate CL as suggested below",
+      "parentUuid": "0b7efe77_245b63fa",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d772df4c_92cfe539",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -313,6 +385,24 @@
       "writtenOn": "2017-07-27T09:56:31Z",
       "side": 1,
       "message": "Nit: Please assert IsAsyncGenerator(generator) here. Might be worth a helper in CSA (and update other places that check HasInstanceType(o, JS_ASYNC_GENERATOR_OBJECT_TYPE)). The refactoring is fine in another CL to avoid making this one more complicated than required.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0673c1f_e3ed3cfb",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "I\u0027ve done that here, but as noted I\u0027m happy to move this to a separate CL as well",
+      "parentUuid": "d772df4c_92cfe539",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -336,6 +426,24 @@
     },
     {
       "key": {
+        "uuid": "be9419e1_8a16f1be",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "actually, every single caller of Await does exactly this same thing. I\u0027m thinking it makes more sense to get rid of the context initializer lambda entirely.\n\nI\u0027d rather do this in a followup CL where I turn Await into a stub instead of inlining it all the times its done, though, this is already planned.",
+      "parentUuid": "27868b8a_1137c930",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25a60cf8_a1929644",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -347,6 +455,24 @@
       "writtenOn": "2017-07-27T09:56:31Z",
       "side": 1,
       "message": "WDYT about moving the definition of all related closures next to each other in a follow-up? It might make it easier to see their connection / similarities / differences that way. Same for AsyncGenerator{Await,Return}. Ideally in a move-only CL without any other changes.",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143e1dc6_2f160902",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "sounds good to me -- Added to my todo list",
+      "parentUuid": "25a60cf8_a1929644",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -388,6 +514,24 @@
     },
     {
       "key": {
+        "uuid": "49d629b5_96a70b36",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "083da943_b8e1dd0a",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a774404_cf330f24",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -405,6 +549,24 @@
     },
     {
       "key": {
+        "uuid": "332d96e1_e9d6af73",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "I\u0027ve made a note to do this in a followup. Sounds reasonable I suppose. --- I guess the only argument against it is that the AsyncGenerator-ness can be gathered from context",
+      "parentUuid": "1a774404_cf330f24",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e5662b5_ddda1d02",
         "filename": "src/builtins/builtins-async-generator-gen.cc",
         "patchSetId": 7
@@ -416,6 +578,24 @@
       "writtenOn": "2017-07-27T09:56:31Z",
       "side": 1,
       "message": "Couldn\u0027t we replace the entire body with\n\n AsyncGeneratorAwaitResumeClosure(context, value,\n                                  JSAsyncGeneratorObject::kReturn);",
+      "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df35299_d55d50c7",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e5662b5_ddda1d02",
       "revId": "9de8f3dfc7b6affdbd9a361005576beb6b665a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

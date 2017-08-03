@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1c73faed_b8b05bbc",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-03T15:25:31Z",
+      "side": 1,
+      "message": "are there specific ports where we need the extra `Word32NotEqual(asByte, 0)`? It seems like you can get away with `TEST $rax, 0xFF; JNZ \u003ctrue\u003e` safely on intel, maybe on arm/mips as well?",
+      "parentUuid": "406c6a47_64b7b407",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feb17d8e_04886d31",
         "filename": "src/objects.cc",
         "patchSetId": 9
