@@ -142,6 +142,30 @@
       "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "100db73c_f6d0ad92",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-04T12:36:10Z",
+      "side": 1,
+      "message": "Ah, no. This is called whenever .return() requests are resumed, regardless of debug mode or not, though the value is only used in debug mode.\n\nIt sould need to be refactored to only apply to debug code.",
+      "parentUuid": "0a2bcd04_b36b061a",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
