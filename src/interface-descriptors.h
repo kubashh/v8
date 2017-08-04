@@ -50,7 +50,6 @@ class PlatformInterfaceDescriptor;
   V(CallForwardVarargs)                    \
   V(CallWithSpread)                        \
   V(CallWithArrayLike)                     \
-  V(CallConstruct)                         \
   V(CallTrampoline)                        \
   V(ConstructStub)                         \
   V(ConstructVarargs)                      \
@@ -688,11 +687,6 @@ class CallICTrampolineDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kTarget, kActualArgumentsCount, kSlot)
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(CallICTrampolineDescriptor,
                                                CallInterfaceDescriptor)
-};
-
-class CallConstructDescriptor : public CallInterfaceDescriptor {
- public:
-  DECLARE_DESCRIPTOR(CallConstructDescriptor, CallInterfaceDescriptor)
 };
 
 class TransitionElementsKindDescriptor : public CallInterfaceDescriptor {
