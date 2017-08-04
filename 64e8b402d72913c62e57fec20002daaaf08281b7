@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ab143f08_e880dd55",
+        "filename": "src/compilation-info.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T08:50:15Z",
+      "side": 1,
+      "message": "nit: \"[...] stub compilation (or testing).\"",
+      "range": {
+        "startLine": 65,
+        "startChar": 38,
+        "endLine": 65,
+        "endChar": 55
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68282782_0545d80e",
         "filename": "src/compilation-info.h",
         "patchSetId": 6
@@ -18,6 +41,98 @@
         "startChar": 32,
         "endLine": 267,
         "endChar": 38
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "695b3e58_b78847f5",
+        "filename": "src/compiler-dispatcher/unoptimized-compile-job.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T08:50:15Z",
+      "side": 1,
+      "message": "nit: The literal seems to be set in the constructor now, can we remove this explicit setting here?",
+      "range": {
+        "startLine": 406,
+        "startChar": 2,
+        "endLine": 406,
+        "endChar": 57
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bd02615_166c5eea",
+        "filename": "src/compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T08:50:15Z",
+      "side": 1,
+      "message": "question: Maybe I am missing something, but this seems to always return the SFI being passed in on success (or empty handle on failure). Hence the caller already holds the SFI. Why no keep the return type a bool?",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 26
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11eb7aa7_42450152",
+        "filename": "src/compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T08:50:15Z",
+      "side": 1,
+      "message": "Likewise.",
+      "range": {
+        "startLine": 516,
+        "startChar": 0,
+        "endLine": 516,
+        "endChar": 26
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb08e61c_6cbffc54",
+        "filename": "src/compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T08:50:15Z",
+      "side": 1,
+      "message": "nit: This helper method is only used internally, lets be explicit at all call-sites instead of having a default argument.",
+      "range": {
+        "startLine": 991,
+        "startChar": 8,
+        "endLine": 991,
+        "endChar": 42
       },
       "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
