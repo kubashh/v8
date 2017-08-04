@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "97691cb1_873b2e26",
+        "filename": "src/compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T09:33:05Z",
+      "side": 1,
+      "message": "Ack. Thanks for the explanation, overlooked that case. If this is on your radar then I am totally fine with it. Plan of moving SFI allocation for top-level code out SGTM.",
+      "parentUuid": "409b5889_07801b02",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 26
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11eb7aa7_42450152",
         "filename": "src/compiler.cc",
         "patchSetId": 6
@@ -281,6 +305,30 @@
       "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4c8a7a_edaf5139",
+        "filename": "src/compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-04T09:33:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4dd96d28_6c733346",
+      "range": {
+        "startLine": 991,
+        "startChar": 8,
+        "endLine": 991,
+        "endChar": 42
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
