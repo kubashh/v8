@@ -34,7 +34,6 @@ class Node;
   V(ArrayConstructor)                         \
   V(CallApiCallback)                          \
   V(CallApiGetter)                            \
-  V(CallConstruct)                            \
   V(CallIC)                                   \
   V(CEntry)                                   \
   V(CompareIC)                                \
@@ -991,15 +990,6 @@ class JSEntryStub : public PlatformCodeStub {
 
   DEFINE_NULL_CALL_INTERFACE_DESCRIPTOR();
   DEFINE_PLATFORM_CODE_STUB(JSEntry, PlatformCodeStub);
-};
-
-// TODO(bmeurer/mvstanton): Turn CallConstructStub into ConstructICStub.
-class CallConstructStub final : public PlatformCodeStub {
- public:
-  explicit CallConstructStub(Isolate* isolate) : PlatformCodeStub(isolate) {}
-
-  DEFINE_CALL_INTERFACE_DESCRIPTOR(CallConstruct);
-  DEFINE_PLATFORM_CODE_STUB(CallConstruct, PlatformCodeStub);
 };
 
 
