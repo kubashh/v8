@@ -57,7 +57,7 @@ bool IncrementalMarking::BaseRecordWrite(HeapObject* obj, Object* value) {
       value_heap_obj, marking_state(value_heap_obj)));
   DCHECK(!ObjectMarking::IsImpossible<kAtomicity>(obj, marking_state(obj)));
   const bool need_recording =
-      FLAG_concurrent_marking ||
+      FLAG_concurrent_marking || true ||
       ObjectMarking::IsBlack<kAtomicity>(obj, marking_state(obj));
 
   if (need_recording && WhiteToGreyAndPush(value_heap_obj)) {
@@ -563,7 +563,7 @@ void IncrementalMarking::StartMarking() {
 
   heap_->isolate()->compilation_cache()->MarkCompactPrologue();
 
-  if (FLAG_concurrent_marking && !black_allocation_) {
+  if ((FLAG_concurrent_marking || true) && !black_allocation_) {
     StartBlackAllocation();
   }
 
