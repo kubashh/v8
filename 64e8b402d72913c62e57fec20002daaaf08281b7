@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68282782_0545d80e",
+        "filename": "src/compilation-info.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-08-04T08:34:38Z",
+      "side": 1,
+      "message": "Can we add a DCHECK(IsOptimizing()) here for v8:6659?",
+      "range": {
+        "startLine": 267,
+        "startChar": 32,
+        "endLine": 267,
+        "endChar": 38
+      },
+      "revId": "64e8b402d72913c62e57fec20002daaaf08281b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
