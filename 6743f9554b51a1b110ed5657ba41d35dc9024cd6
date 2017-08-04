@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75b46ffb_4e8e34c9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-04T08:43:33Z",
+      "side": 1,
+      "message": "Suggestion: Adding ReturnCallBuiltin to ExitPoint (which calls CSA::{Tail,}CallBuiltin) may be a bit cleaner. Up to you, also fine in a follow-up.",
+      "revId": "6743f9554b51a1b110ed5657ba41d35dc9024cd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
