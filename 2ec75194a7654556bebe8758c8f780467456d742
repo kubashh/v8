@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0c0cc22_1402cd8d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2985,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-04T09:41:55Z",
+      "side": 1,
+      "message": "Rossberg is working the multi-value proposal, so this code will almost certainly need to be adjusted. As such, it\u0027s probably better to run int64 lowering on the graph, as he will need to add logic there to handle multiple int64 returns.",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "295f685c_6c09e7f9",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-04T09:41:55Z",
+      "side": 1,
+      "message": "I think it\u0027s time for some nice abstraction for argument buffers, since we now are doing the opposite in generated code to call into the interpreter. wdyt?",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f093354_5170e782",
+        "filename": "test/mjsunit/wasm/interpreter-mixed.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-04T09:41:55Z",
+      "side": 1,
+      "message": "IIRC you should be able to pass in kSig_i_i directly into addImport (i.e. no need to addType() it first).",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fc942d6_a567c8b5",
+        "filename": "test/mjsunit/wasm/interpreter-mixed.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-04T09:41:55Z",
+      "side": 1,
+      "message": "line break between instructions",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
