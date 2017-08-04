@@ -609,7 +609,7 @@ DEFINE_BOOL(trace_evacuation, false, "report evacuation statistics")
 DEFINE_BOOL(trace_mutator_utilization, false,
             "print mutator utilization, allocation speed, gc speed")
 DEFINE_BOOL(age_code, true, "track un-executed functions to age code")
-DEFINE_BOOL(incremental_marking, true, "use incremental marking")
+DEFINE_BOOL(incremental_marking, false, "use incremental marking")
 DEFINE_BOOL(incremental_marking_wrappers, true,
             "use incremental marking for marking wrappers")
 DEFINE_BOOL(parallel_scavenge, true, "parallel scavenge")
@@ -772,7 +772,7 @@ DEFINE_BOOL(trace_opt, false, "trace lazy optimization")
 DEFINE_BOOL(trace_opt_stats, false, "trace lazy optimization statistics")
 DEFINE_BOOL(trace_file_names, false,
             "include file names in trace-opt/trace-deopt output")
-DEFINE_BOOL(opt, true, "use adaptive optimizations")
+DEFINE_BOOL(opt, false, "use adaptive optimizations")
 DEFINE_BOOL(always_opt, false, "always try to optimize functions")
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
