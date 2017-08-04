@@ -14,9 +14,9 @@ snippet: "
   }
   f();
 "
-frame size: 24
+frame size: 25
 parameter count: 1
-bytecode array length: 623
+bytecode array length: 632
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -76,9 +76,11 @@ bytecodes: [
                 B(Star), R(21),
                 B(CallProperty0), R(21), R(4), U8(9),
                 B(Star), R(22),
+                B(LdaFalse),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(0),
   /*   57 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -109,7 +111,7 @@ bytecodes: [
                 B(Mov), R(3), R(0),
                 B(LdaZero),
                 B(Star), R(6),
-                B(JumpLoop), U8(118), I8(0),
+                B(JumpLoop), U8(121), I8(0),
                 B(Jump), U8(40),
                 B(Star), R(21),
                 B(Ldar), R(closure),
@@ -139,15 +141,15 @@ bytecodes: [
                 B(Star), R(19),
                 B(LdaZero),
                 B(TestEqualStrict), R(6), U8(18),
-                B(JumpIfTrue), U8(199),
+                B(JumpIfTrue), U8(205),
                 B(LdaNamedProperty), R(4), U8(12), U8(19),
                 B(Star), R(8),
                 B(TestUndetectable),
                 B(JumpIfFalse), U8(4),
-                B(Jump), U8(188),
+                B(Jump), U8(194),
                 B(LdaSmi), I8(1),
                 B(TestEqualStrict), R(6), U8(22),
-                B(JumpIfFalse), U8(109),
+                B(JumpIfFalse), U8(112),
                 B(Ldar), R(8),
                 B(TestTypeOf), U8(5),
                 B(JumpIfFalse), U8(4),
@@ -163,9 +165,11 @@ bytecodes: [
                 B(Mov), R(4), R(22),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(21), U8(2),
                 B(Star), R(22),
+                B(LdaTrue),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_caught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(1),
   /*   57 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -191,14 +195,16 @@ bytecodes: [
                 B(Ldar), R(20),
                 B(PushContext), R(21),
                 B(PopContext), R(21),
-                B(Jump), U8(74),
+                B(Jump), U8(77),
                 B(Mov), R(8), R(20),
                 B(Mov), R(4), R(21),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(20), U8(2),
                 B(Star), R(21),
+                B(LdaFalse),
+                B(Star), R(23),
                 B(Mov), R(11), R(20),
                 B(Mov), R(10), R(22),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(20), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(20), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(20), U8(2),
   /*   57 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(20),
@@ -284,12 +290,12 @@ bytecodes: [
 ]
 constant pool: [
   Smi [105],
-  Smi [360],
-  Smi [440],
+  Smi [366],
+  Smi [449],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
-  Smi [47],
+  Smi [50],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
@@ -303,11 +309,11 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [62, 578, 584],
-  [65, 533, 535],
-  [74, 283, 289],
-  [77, 243, 245],
-  [349, 407, 409],
+  [62, 587, 593],
+  [65, 542, 544],
+  [74, 286, 292],
+  [77, 246, 248],
+  [352, 413, 415],
 ]
 
 ---
@@ -317,9 +323,9 @@ snippet: "
   }
   f();
 "
-frame size: 24
+frame size: 25
 parameter count: 1
-bytecode array length: 655
+bytecode array length: 664
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -379,9 +385,11 @@ bytecodes: [
                 B(Star), R(21),
                 B(CallProperty0), R(21), R(4), U8(9),
                 B(Star), R(22),
+                B(LdaFalse),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(0),
   /*   68 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -443,15 +451,15 @@ bytecodes: [
                 B(Star), R(19),
                 B(LdaZero),
                 B(TestEqualStrict), R(6), U8(18),
-                B(JumpIfTrue), U8(199),
+                B(JumpIfTrue), U8(205),
                 B(LdaNamedProperty), R(4), U8(12), U8(19),
                 B(Star), R(8),
                 B(TestUndetectable),
                 B(JumpIfFalse), U8(4),
-                B(Jump), U8(188),
+                B(Jump), U8(194),
                 B(LdaSmi), I8(1),
                 B(TestEqualStrict), R(6), U8(22),
-                B(JumpIfFalse), U8(109),
+                B(JumpIfFalse), U8(112),
                 B(Ldar), R(8),
                 B(TestTypeOf), U8(5),
                 B(JumpIfFalse), U8(4),
@@ -467,9 +475,11 @@ bytecodes: [
                 B(Mov), R(4), R(22),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(21), U8(2),
                 B(Star), R(22),
+                B(LdaTrue),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_caught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(1),
   /*   68 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -495,14 +505,16 @@ bytecodes: [
                 B(Ldar), R(20),
                 B(PushContext), R(21),
                 B(PopContext), R(21),
-                B(Jump), U8(74),
+                B(Jump), U8(77),
                 B(Mov), R(8), R(20),
                 B(Mov), R(4), R(21),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(20), U8(2),
                 B(Star), R(21),
+                B(LdaFalse),
+                B(Star), R(23),
                 B(Mov), R(11), R(20),
                 B(Mov), R(10), R(22),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(20), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(20), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(20), U8(2),
   /*   68 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(20),
@@ -599,12 +611,12 @@ bytecodes: [
 ]
 constant pool: [
   Smi [105],
-  Smi [363],
-  Smi [443],
+  Smi [369],
+  Smi [452],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
-  Smi [47],
+  Smi [50],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
@@ -621,11 +633,11 @@ constant pool: [
   Smi [25],
 ]
 handlers: [
-  [62, 594, 600],
-  [65, 548, 550],
-  [74, 285, 291],
-  [77, 245, 247],
-  [352, 410, 412],
+  [62, 603, 609],
+  [65, 557, 559],
+  [74, 288, 294],
+  [77, 248, 250],
+  [355, 416, 418],
 ]
 
 ---
@@ -638,9 +650,9 @@ snippet: "
   }
   f();
 "
-frame size: 24
+frame size: 25
 parameter count: 1
-bytecode array length: 641
+bytecode array length: 650
 bytecodes: [
                 B(Mov), R(new_target), R(11),
                 B(Ldar), R(new_target),
@@ -700,9 +712,11 @@ bytecodes: [
                 B(Star), R(21),
                 B(CallProperty0), R(21), R(4), U8(9),
                 B(Star), R(22),
+                B(LdaFalse),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(0),
   /*  114 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -741,7 +755,7 @@ bytecodes: [
   /*  103 S> */ B(Jump), U8(8),
                 B(LdaZero),
                 B(Star), R(6),
-                B(JumpLoop), U8(136), I8(0),
+                B(JumpLoop), U8(139), I8(0),
                 B(Jump), U8(40),
                 B(Star), R(21),
                 B(Ldar), R(closure),
@@ -771,15 +785,15 @@ bytecodes: [
                 B(Star), R(19),
                 B(LdaZero),
                 B(TestEqualStrict), R(6), U8(20),
-                B(JumpIfTrue), U8(199),
+                B(JumpIfTrue), U8(205),
                 B(LdaNamedProperty), R(4), U8(12), U8(21),
                 B(Star), R(8),
                 B(TestUndetectable),
                 B(JumpIfFalse), U8(4),
-                B(Jump), U8(188),
+                B(Jump), U8(194),
                 B(LdaSmi), I8(1),
                 B(TestEqualStrict), R(6), U8(24),
-                B(JumpIfFalse), U8(109),
+                B(JumpIfFalse), U8(112),
                 B(Ldar), R(8),
                 B(TestTypeOf), U8(5),
                 B(JumpIfFalse), U8(4),
@@ -795,9 +809,11 @@ bytecodes: [
                 B(Mov), R(4), R(22),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(21), U8(2),
                 B(Star), R(22),
+                B(LdaTrue),
+                B(Star), R(24),
                 B(Mov), R(11), R(21),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_caught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(21), U8(1),
   /*  114 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(21),
@@ -823,14 +839,16 @@ bytecodes: [
                 B(Ldar), R(20),
                 B(PushContext), R(21),
                 B(PopContext), R(21),
-                B(Jump), U8(74),
+                B(Jump), U8(77),
                 B(Mov), R(8), R(20),
                 B(Mov), R(4), R(21),
                 B(InvokeIntrinsic), U8(Runtime::k_Call), R(20), U8(2),
                 B(Star), R(21),
+                B(LdaFalse),
+                B(Star), R(23),
                 B(Mov), R(11), R(20),
                 B(Mov), R(10), R(22),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(20), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(20), U8(4),
                 B(SuspendGenerator), R(11), R(0), U8(20), U8(2),
   /*  114 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(11), R(0), U8(20),
@@ -916,12 +934,12 @@ bytecodes: [
 ]
 constant pool: [
   Smi [105],
-  Smi [378],
-  Smi [458],
+  Smi [384],
+  Smi [467],
   TUPLE2_TYPE,
   SYMBOL_TYPE,
   SYMBOL_TYPE,
-  Smi [47],
+  Smi [50],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
@@ -935,11 +953,11 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [62, 596, 602],
-  [65, 551, 553],
-  [74, 301, 307],
-  [77, 261, 263],
-  [367, 425, 427],
+  [62, 605, 611],
+  [65, 560, 562],
+  [74, 304, 310],
+  [77, 264, 266],
+  [370, 431, 433],
 ]
 
 ---
