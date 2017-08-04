@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33b37d9e_57ecd0d2",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-04T07:48:32Z",
+      "side": 1,
+      "message": "CallRuntime could just be inlined at the only use site. Up to you.",
+      "revId": "c4140236fb6ed7bf94165dd4ac5dbb0a9e3982e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

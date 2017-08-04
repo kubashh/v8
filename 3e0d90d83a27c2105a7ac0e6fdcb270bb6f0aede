@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e20dbdc2_25fa7ac8",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-04T07:48:32Z",
+      "side": 1,
+      "message": "You mean\n\n SelectBooleanConstant(Word32And(result, Int32Constant(0xFF)));\n\nYeah that should work, good point. Anyway, this is a runtime call now :)",
+      "parentUuid": "1c73faed_b8b05bbc",
+      "revId": "3e0d90d83a27c2105a7ac0e6fdcb270bb6f0aede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feb17d8e_04886d31",
         "filename": "src/objects.cc",
         "patchSetId": 9
