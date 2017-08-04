@@ -16,6 +16,52 @@
       "revId": "c4140236fb6ed7bf94165dd4ac5dbb0a9e3982e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff8d6502_5aeabaed",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-04T09:00:23Z",
+      "side": 1,
+      "message": "nit - I\u0027d prefer this is a separate statement above the TailCallBuiltin for clarity (and +1 to just doing the CallRuntime directly to make it clear this calls the runtime, but up to you)",
+      "range": {
+        "startLine": 477,
+        "startChar": 32,
+        "endLine": 477,
+        "endChar": 73
+      },
+      "revId": "c4140236fb6ed7bf94165dd4ac5dbb0a9e3982e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f8b9c4_2f02b4be",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-04T09:00:23Z",
+      "side": 1,
+      "message": "Could you add comments to clarify what the arguments are, i.e.:\n        -\u003eMoveRegister(generator_object_, args[0])  // generator\n        .StoreAccumulatorInRegister(args[1])        // result\n        .LoadTrue()\n        .StoreAccumulatorInRegister(args[2])        // done",
+      "range": {
+        "startLine": 2241,
+        "startChar": 8,
+        "endLine": 2244,
+        "endChar": 43
+      },
+      "revId": "c4140236fb6ed7bf94165dd4ac5dbb0a9e3982e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
