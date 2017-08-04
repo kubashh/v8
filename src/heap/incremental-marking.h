@@ -180,7 +180,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
 #endif
 
 #ifdef V8_CONCURRENT_MARKING
-  static const AccessMode kAtomicity = AccessMode::ATOMIC;
+  static const AccessMode kAtomicity = AccessMode::NON_ATOMIC;
 #else
   static const AccessMode kAtomicity = AccessMode::NON_ATOMIC;
 #endif

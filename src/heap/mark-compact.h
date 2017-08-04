@@ -405,9 +405,6 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
     HeapObject* Pop() {
       HeapObject* result;
-#ifdef V8_CONCURRENT_MARKING
-      if (bailout_.Pop(kMainThread, &result)) return result;
-#endif
       if (shared_.Pop(kMainThread, &result)) return result;
       return nullptr;
     }
