@@ -166,6 +166,30 @@
       "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ee26cf_d33cd16c",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 20394,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-04T12:47:48Z",
+      "side": 1,
+      "message": "I see. Anyway, to avoid complicating this any further I\u0027d be fine with landing the runtime function and either refactoring or changing to CallCFunction later if required.",
+      "parentUuid": "100db73c_f6d0ad92",
+      "range": {
+        "startLine": 20394,
+        "startChar": 29,
+        "endLine": 20394,
+        "endChar": 49
+      },
+      "revId": "94071fdb9a997e4ed88576d1d062e24d08c5b7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
