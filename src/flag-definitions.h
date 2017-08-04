@@ -619,8 +619,7 @@ DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
 #else
 #define V8_CONCURRENT_MARKING_BOOL false
 #endif
-DEFINE_BOOL(concurrent_marking, V8_CONCURRENT_MARKING_BOOL,
-            "use concurrent marking")
+DEFINE_BOOL(concurrent_marking, false, "use concurrent marking")
 DEFINE_BOOL(trace_concurrent_marking, false, "trace concurrent marking")
 DEFINE_BOOL(minor_mc_parallel_marking, true,
             "use parallel marking for the young generation")
