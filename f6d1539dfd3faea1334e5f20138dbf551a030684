@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2d24aef_d7e22256",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 7808,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "We should have renamed this to SerializeEmbedderFieldsCallback like we have done in other places. See for example kEmbedderFieldsInWeakCallback;",
+      "range": {
+        "startLine": 7808,
+        "startChar": 6,
+        "endLine": 7808,
+        "endChar": 37
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c48f5a3_0c86316d",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 8219,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Can we move this to SetDefaultContext? Each context gets its own callback for serialization, so it would be more consistent to put it there.",
+      "range": {
+        "startLine": 8219,
+        "startChar": 25,
+        "endLine": 8219,
+        "endChar": 65
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "301f3826_cebed385",
+        "filename": "src/address-map.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "I would add a line above to make it not look like this is another kind of attached reference.",
+      "range": {
+        "startLine": 177,
+        "startChar": 9,
+        "endLine": 177,
+        "endChar": 26
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8ccb083_5c981bda",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Just making sure, FixedTypedArrays do not need to be registered with the heap?",
+      "range": {
+        "startLine": 420,
+        "startChar": 11,
+        "endLine": 420,
+        "endChar": 31
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7514e639_644cd9aa",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Let\u0027s make this a CHECK_NOT_NULL. UNREACHABLE only works in debug mode.",
+      "range": {
+        "startLine": 901,
+        "startChar": 12,
+        "endLine": 901,
+        "endChar": 25
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab384ece_45a60a7d",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Can we also, in a follow-up, migrate all of these lists to std::vector?",
+      "range": {
+        "startLine": 153,
+        "startChar": 2,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5a12e9e_297ab241",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Let\u0027s do a DCHECK_NE(0, seen_backing_stores_index_) here.",
+      "range": {
+        "startLine": 285,
+        "startChar": 32,
+        "endLine": 285,
+        "endChar": 59
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9ef9307_ce345d73",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "\"larger\"",
+      "range": {
+        "startLine": 440,
+        "startChar": 43,
+        "endLine": 440,
+        "endChar": 48
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3224a2f_42fa1f2b",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "In fact, we can only really serialize integers up to 1\u003c\u003c30. On 64-bit architectures this is less than Smi range.\n\nI think we can drop this DCHECK since PutInt already has a DCHECK for this.",
+      "range": {
+        "startLine": 441,
+        "startChar": 9,
+        "endLine": 441,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe3f7c70_2694e1d9",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Can we have a comment here? Does byte_length \u003d\u003d 0 mean that we have on-heap backing store, or is the TypedArray neutered?\n\nYou could also remove this code and change the condition below to\n\nif (byte_length !\u003d 0 \u0026\u0026 backing_store !\u003d nullptr) ...",
+      "range": {
+        "startLine": 443,
+        "startChar": 6,
+        "endLine": 443,
+        "endChar": 17
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62676ed5_1a6dcc10",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "\"larger\"",
+      "range": {
+        "startLine": 459,
+        "startChar": 43,
+        "endLine": 459,
+        "endChar": 48
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55302ee_e212271e",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Same thing as above.",
+      "range": {
+        "startLine": 462,
+        "startChar": 6,
+        "endLine": 462,
+        "endChar": 17
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f952edf4_648ad998",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Do we need this anywhere?",
+      "range": {
+        "startLine": 345,
+        "startChar": 2,
+        "endLine": 345,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46113cb6_2c062b08",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Let\u0027s just move the definition up instead.",
+      "range": {
+        "startLine": 645,
+        "startChar": 16,
+        "endLine": 645,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80a48b95_eeb550f0",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-04T05:43:52Z",
+      "side": 1,
+      "message": "Can we somehow check that awe are really dealing with on-heap TypedArrays here, and below that they are indeed off-heap? These tests may become useless if we change our rules when to allocate where.\n\nCan we also have tests with neutered typed arrays, DataView, TypedArrays with shared buffer, etc.?",
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
