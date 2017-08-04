@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eac03e2f_9f1aaf28",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2985,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-04T11:05:57Z",
+      "side": 1,
+      "message": "Thanks, that actually makes this code a lot easier. Doing this also for the interpreter entry, in a separate CL: https://chromium-review.googlesource.com/c/602036",
+      "parentUuid": "d0c0cc22_1402cd8d",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "295f685c_6c09e7f9",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-04T09:41:55Z",
       "side": 1,
       "message": "I think it\u0027s time for some nice abstraction for argument buffers, since we now are doing the opposite in generated code to call into the interpreter. wdyt?",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e950b0_8fa521b6",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-04T11:05:57Z",
+      "side": 1,
+      "message": "Without the manual i64 lowering, the code is now compact enough to leave it like this IMO.\nThere are slight differences in each usage anyway:\n- the interpreter entry (TF) stores to the buffer\n- the c wasm entry (TF) loads from the buffer\n- the other side of the interpreter entry loads in C++\n- the code calling the c wasm entry stores from C++\n\nI can place a TODO do introduce a helper for that later.",
+      "parentUuid": "295f685c_6c09e7f9",
       "revId": "2ec75194a7654556bebe8758c8f780467456d742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5d8c39bd_2c987548",
+        "filename": "test/mjsunit/wasm/interpreter-mixed.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-04T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f093354_5170e782",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fc942d6_a567c8b5",
         "filename": "test/mjsunit/wasm/interpreter-mixed.js",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "2ec75194a7654556bebe8758c8f780467456d742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "161c469f_1168f020",
+        "filename": "test/mjsunit/wasm/interpreter-mixed.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-04T11:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fc942d6_a567c8b5",
+      "revId": "2ec75194a7654556bebe8758c8f780467456d742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
