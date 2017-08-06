@@ -1200,6 +1200,78 @@ Reduction JSBuiltinReducer::ReduceArrayShift(Node* node) {
 
 namespace {
 
+// Returns the correct Callable for Array's indexOf based on the receiver's
+// elements kind and isolate. Assumes that |elements_kind| is a fast one.
+Callable GetCallableForArrayIndexOf(ElementsKind elements_kind,
+                                    Isolate* isolate) {
+  switch (elements_kind) {
+    case PACKED_SMI_ELEMENTS:
+    case HOLEY_SMI_ELEMENTS:
+    case PACKED_ELEMENTS:
+    case HOLEY_ELEMENTS:
+      return Builtins::CallableFor(isolate, Builtins::kArrayIndexOfSmiOrObject);
+    case PACKED_DOUBLE_ELEMENTS:
+      return Builtins::CallableFor(isolate,
+                                   Builtins::kArrayIndexOfPackedDoubles);
+    default:
+      DCHECK_EQ(HOLEY_DOUBLE_ELEMENTS, elements_kind);
+      return Builtins::CallableFor(isolate,
+                                   Builtins::kArrayIndexOfHoleyDoubles);
+  }
+}
+
+}  // namespace
+
+// ES6 Array.prototype.indexOf(searchElement[, fromIndex])
+// #sec-array.prototype.indexof
+Reduction JSBuiltinReducer::ReduceArrayIndexOf(Node* node) {
+  Handle<Map> receiver_map;
+  if (!GetMapWitness(node).ToHandle(&receiver_map)) return NoChange();
+
+  if (!IsFastElementsKind(receiver_map->elements_kind())) return NoChange();
+
+  Callable const callable =
+      GetCallableForArrayIndexOf(receiver_map->elements_kind(), isolate());
+  // TODO(vabr) The operator flags should be Operator::kEliminatable, containing
+  // kNoThrow. However, the general version of indexOf can throw. When it is
+  // replaced with the no-throw version with the kEliminatable stub description
+  // (and correspondingly missing control input in the resulting Node), the
+  // nodes depending on the replaced one fail to find the expected control
+  // output, reporting:
+  // # Fatal error in ../../src/compiler/verifier.cc, line 94
+  // # GraphError: node #85:Call[Code:ArrayIndexOf Descriptor:r1s0i6f0t0]r
+  //   does not produce control output used by node #48:Return
+  CallDescriptor const* const desc = Linkage::GetStubCallDescriptor(
+      isolate(), graph()->zone(), callable.descriptor(), 0,
+      CallDescriptor::kNoFlags, Operator::kNoDeopt | Operator::kNoWrite);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  // The stub expects the following arguments: the receiver array, its elements,
+  // the search_element, the array length, and the index to start searching
+  // from.
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Node* elements = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSObjectElements()), receiver,
+      effect, control);
+  Node* search_element = (node->op()->ValueInputCount() >= 3)
+                             ? NodeProperties::GetValueInput(node, 2)
+                             : jsgraph()->UndefinedConstant();
+  Node* length = effect = graph()->NewNode(
+      simplified()->LoadField(
+          AccessBuilder::ForJSArrayLength(receiver_map->elements_kind())),
+      receiver, effect, control);
+  Node* from_index = (node->op()->ValueInputCount() >= 4)
+                         ? NodeProperties::GetValueInput(node, 3)
+                         : jsgraph()->ZeroConstant();
+
+  Node* replacement_node = graph()->NewNode(
+      common()->Call(desc), jsgraph()->HeapConstant(callable.code()), receiver,
+      elements, search_element, length, from_index, effect, control);
+  return Changed(replacement_node);
+}
+
+namespace {
+
 bool HasInstanceTypeWitness(Node* receiver, Node* effect,
                             InstanceType instance_type) {
   ZoneHandleSet<Map> receiver_maps;
@@ -2863,6 +2935,8 @@ Reduction JSBuiltinReducer::Reduce(Node* node) {
       return ReduceArrayPush(node);
     case kArrayShift:
       return ReduceArrayShift(node);
+    case kArrayIndexOf:
+      return ReduceArrayIndexOf(node);
     case kDateNow:
       return ReduceDateNow(node);
     case kDateGetTime:
