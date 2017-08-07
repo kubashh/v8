@@ -37,6 +37,7 @@
 #include <math.h>
 #include <string.h>
 #include <cmath>
+#include <iostream>
 
 #include "src/api.h"
 #include "src/assembler-inl.h"
