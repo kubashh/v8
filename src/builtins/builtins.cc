@@ -38,7 +38,7 @@ struct BuiltinMetadata {
 #define DECL_API(Name, ...) { #Name, Builtins::API, \
                               { FUNCTION_ADDR(Builtin_##Name) }},
 #define DECL_TFJ(Name, Count, ...) { #Name, Builtins::TFJ, \
-                                     { reinterpret_cast<Address>(Count) }},
+                              {.parameter_count = static_cast<int8_t>(Count) }},
 #define DECL_TFC(Name, ...) { #Name, Builtins::TFC, {} },
 #define DECL_TFS(Name, ...) { #Name, Builtins::TFS, {} },
 #define DECL_TFH(Name, ...) { #Name, Builtins::TFH, {} },
