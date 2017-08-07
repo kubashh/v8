@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "549e5935_b2f52c33",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-07T11:32:18Z",
+      "side": 1,
+      "message": "Same comment as below.",
+      "revId": "dc5194b45f4c5bc28e0af9b1aec335916ab4a752",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde35e69_d18c2e5a",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-07T11:32:18Z",
+      "side": 1,
+      "message": "I think it\u0027d be better to just write out these cases. The DCHECK here is also redundant, since it basically checks:\n\nDCHECK(1 \u003c\u003c ElementSizeLog2Of(CONSTANT), sizeof(ctype))\n\nin each of the bodies.",
+      "revId": "dc5194b45f4c5bc28e0af9b1aec335916ab4a752",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
