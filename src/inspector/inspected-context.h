@@ -5,10 +5,13 @@
 #ifndef V8_INSPECTOR_INSPECTEDCONTEXT_H_
 #define V8_INSPECTOR_INSPECTEDCONTEXT_H_
 
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "src/base/macros.h"
+#include "src/inspector/protocol/Forward.h"
+#include "src/inspector/protocol/Runtime.h"
 #include "src/inspector/string-16.h"
 
 #include "include/v8.h"
