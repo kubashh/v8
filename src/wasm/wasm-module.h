@@ -203,10 +203,10 @@ typedef Managed<WasmModule> WasmModuleWrapper;
 struct WasmInstance {
   const WasmModule* module;  // static representation of the module.
   // -- Heap allocated --------------------------------------------------------
-  Handle<Context> context;               // JavaScript native context.
+  Handle<Context> context;  // JavaScript native context.
   std::vector<Handle<FixedArray>> function_tables;  // indirect function tables.
   std::vector<Handle<FixedArray>>
-      signature_tables;                    // indirect signature tables.
+      signature_tables;  // indirect signature tables.
   // TODO(wasm): Remove this vector, since it is only used for testing.
   std::vector<Handle<Code>> function_code;  // code objects for each function.
   // -- raw memory ------------------------------------------------------------
@@ -214,6 +214,8 @@ struct WasmInstance {
   uint32_t mem_size = 0;      // size of the linear memory.
   // -- raw globals -----------------------------------------------------------
   byte* globals_start = nullptr;  // start of the globals area.
+  // -- raw wasm-context ------------------------------------------------------
+  byte* wasm_context_address = nullptr;  // location of the WasmContext.
 
   explicit WasmInstance(const WasmModule* m)
       : module(m),
