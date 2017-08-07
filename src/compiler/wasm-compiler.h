@@ -123,6 +123,18 @@ Handle<Code> CompileWasmInterpreterEntry(Isolate* isolate, uint32_t func_index,
                                          wasm::FunctionSig* sig,
                                          Handle<WasmInstanceObject> instance);
 
+enum CWasmEntryParameters {
+  kCodeObject,
+  kArgumentsBuffer,
+  // marker:
+  kNumParameters
+};
+
+// Compiles a stub with JS linkage, taking parameters as described by
+// {CWasmEntryParameters}. It loads the wasm parameters from the argument
+// buffer and calls the wasm function given as first parameter.
+Handle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig);
+
 // Abstracts details of building TurboFan graph nodes for wasm to separate
 // the wasm decoder from the internal details of TurboFan.
 typedef ZoneVector<Node*> NodeVector;
@@ -221,6 +233,7 @@ class WasmGraphBuilder {
   void BuildWasmToJSWrapper(Handle<JSReceiver> target);
   void BuildWasmInterpreterEntry(uint32_t func_index,
                                  Handle<WasmInstanceObject> instance);
+  void BuildCWasmEntry();
 
   Node* ToJS(Node* node, wasm::ValueType type);
   Node* FromJS(Node* node, Node* context, wasm::ValueType type);
@@ -319,6 +332,7 @@ class WasmGraphBuilder {
   Node* MemBuffer(uint32_t offset);
   void BoundsCheckMem(MachineType memtype, Node* index, uint32_t offset,
                       wasm::WasmCodePosition position);
+  const Operator* GetSafeLoadOperator(int offset, wasm::ValueType type);
   const Operator* GetSafeStoreOperator(int offset, wasm::ValueType type);
   Node* BuildChangeEndiannessStore(Node* node, MachineType type,
                                    wasm::ValueType wasmtype = wasm::kWasmStmt);
