@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b23b0b04_e5a8e255",
+        "filename": "test/unittests/compiler/graph-reducer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-08-07T15:17:25Z",
+      "side": 1,
+      "message": "can you change these to \"opb\" too while you\u0027re here?",
+      "range": {
+        "startLine": 48,
+        "startChar": 60,
+        "endLine": 48,
+        "endChar": 61
+      },
+      "revId": "fc90651bea31a99c6ac5f4f567fa871ecabd0080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
