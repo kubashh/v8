@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ee35a664_b610d861",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-07T11:41:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "549e5935_b2f52c33",
+      "revId": "dc5194b45f4c5bc28e0af9b1aec335916ab4a752",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cde35e69_d18c2e5a",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "dc5194b45f4c5bc28e0af9b1aec335916ab4a752",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9457b4b5_c88687ef",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-07T11:41:33Z",
+      "side": 1,
+      "message": "Done, even though this makes it harder to spot the difference in the four cases IMO.\nThe DCHECK was not really redundant, since it checked that the stuff that WriteUnalignedValue wrote matches the pointer increment in the loop. But the tests will catch as least the case where we increase by less than the amount written.",
+      "parentUuid": "cde35e69_d18c2e5a",
+      "revId": "dc5194b45f4c5bc28e0af9b1aec335916ab4a752",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
