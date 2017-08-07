@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eef5c44d_08e80384",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-07T16:31:43Z",
+      "side": 1,
+      "message": "Nit: Can you split this into\n\nDCHECK_IMPLIES(lookup \u003d\u003d CallOptimization::kHolderFound, !holder.is_null());\nDCHECK_IMPLIES(lookup \u003d\u003d CallOptimization::kHolderNotFound, holder.is_null());",
+      "revId": "12413cf1dafdf5f33e7d634eb92d0dfbf74f78c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
