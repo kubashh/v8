@@ -62,7 +62,7 @@ void CodeStubAssembler::Assert(const NodeGenerator& condition_body,
 #endif
 }
 
-#ifdef DEBUG
+#ifdef ENABLE_SLOW_DCHECKS
 namespace {
 void MaybePrintNodeWithName(CodeStubAssembler* csa, Node* node,
                             const char* node_name) {
@@ -92,6 +92,7 @@ void CodeStubAssembler::Check(const NodeGenerator& condition_body,
   DCHECK_NOT_NULL(condition);
   Branch(condition, &ok, &not_ok);
   BIND(&not_ok);
+#ifdef ENABLE_SLOW_DCHECKS
   if (message != nullptr) {
     char chars[1024];
     Vector<char> buffer(chars);
@@ -112,6 +113,7 @@ void CodeStubAssembler::Check(const NodeGenerator& condition_body,
   MaybePrintNodeWithName(this, extra_node4, extra_node4_name);
   MaybePrintNodeWithName(this, extra_node5, extra_node5_name);
 #endif
+#endif  // ENABLE_SLOW_DCHECKS
 
   DebugBreak();
   Goto(&ok);
