@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24edcf26_d4d7f224",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "No need for this variable (and the associated Handle), you only use it once.",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72453950_8427ca05",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Is it certain that this function has an associated Script?",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1668aabf_41628ada",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Please change this to test that eval_from_shared is a SharedFunctionInfo, rather than testing that it\u0027s not undefined. That makes the cast below safer.\n\nDid you verify that the loop is required to pass the double-eval test you have? I see other places that only seems to do one level of unwrapping of eval_from_shared(), I\u0027m curious if that code is just wrong.",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eb8a210_165074bb",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Same here as above, no need for this variable/handle.",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e97ed21_f45bfd3e",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Are we sure we\u0027ll get to a script name here, even after this? What if we passed the Script on to RunHostImportModuleDynamicallyCallback, and bail out there if the name isn\u0027t a string?",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c23a871_d07b961d",
+        "filename": "test/mjsunit/harmony/module-import-16.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Nit: 80 cols.",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9466b10_f5aab40f",
+        "filename": "test/mjsunit/regress/regress-746909.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "--harmony-dynamic-import, please",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f4e4203_03c48d95",
+        "filename": "test/mjsunit/regress/regress-746909.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-08T21:59:07Z",
+      "side": 1,
+      "message": "Are the outer braces here required?",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
