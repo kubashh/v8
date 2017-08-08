@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a45cb7c_fdfa6c1a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "This should be VALIDATE",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e022ffcb_7786a975",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "This should be CHECK_ERROR",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15bcdcf6_942373c7",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "What happens if decode_local_type fails? What does |result| end up being?",
+      "range": {
+        "startLine": 229,
+        "startChar": 20,
+        "endLine": 229,
+        "endChar": 0
+      },
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f5a2f8a_f04909e4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Does it make sense to have do_validation and Consumer as class-level template parameters?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b81eccb_827363e1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Should this be |ExceptionIndexOperand\u003cdo_validation\u003e|?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92ce9849_fc95a805",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Is the reason for using IMPL macros simply to save some typing, or is there another benefit to it? I find this pattern hard to read, but maybe I\u0027m missing something.",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be804b8_45e8460f",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Can these autos be made const?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516fdeb7_c29b0d8c",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "What do you mean by this TODO?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "088f117e_82639b96",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Did the meaning of this parameter change from the previous version? Why did we change from true to false here?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa313df6_ec7a892a",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-08T21:46:49Z",
+      "side": 1,
+      "message": "Given that these tests were already passing, it seems like we should keep them passing rather than commenting them out.",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
