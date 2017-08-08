@@ -17,9 +17,15 @@ RUNTIME_FUNCTION(Runtime_DynamicImportCall) {
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
   CONVERT_ARG_HANDLE_CHECKED(Object, specifier, 1);
 
-  Handle<Script> script(Script::cast(function->shared()->script()));
-  Handle<String> source_url(String::cast(script->name()));
+  Handle<SharedFunctionInfo> sfi(function->shared());
+  Handle<Script> script(Script::cast(sfi->script()));
 
+  while (!script->eval_from_shared()->IsUndefined(isolate)) {
+    sfi = handle(SharedFunctionInfo::cast(script->eval_from_shared()), isolate);
+    script = handle(Script::cast(sfi->script()), isolate);
+  }
+
+  Handle<String> source_url(String::cast(script->name()));
   RETURN_RESULT_OR_FAILURE(
       isolate,
       isolate->RunHostImportModuleDynamicallyCallback(source_url, specifier));
