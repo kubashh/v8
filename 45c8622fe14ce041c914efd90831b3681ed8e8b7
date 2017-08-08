@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4653c8b_bbfe8ecd",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-08T06:38:12Z",
+      "side": 1,
+      "message": "This syntax is not supported on our windows builders. I think we\u0027ll have to go down the route of adding constructors to the union type instead.",
+      "revId": "45c8622fe14ce041c914efd90831b3681ed8e8b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
