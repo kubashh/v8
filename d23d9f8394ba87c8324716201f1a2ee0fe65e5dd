@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c2f4d659_ac4b348a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-08T23:03:27Z",
+      "side": 1,
+      "message": "I think so, yes. The invariant is that prototype maps have no outgoing transitions. (There can be, however, transitions from a non-prototype map to a prototype map.)",
+      "parentUuid": "152ff682_d63fb819",
+      "range": {
+        "startLine": 718,
+        "startChar": 18,
+        "endLine": 718,
+        "endChar": 44
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab187d5c_e315ce08",
         "filename": "src/objects.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-08-04T13:52:03Z",
       "side": 1,
       "message": "Jakob, can we strengthen this to is_prototype_map() ?",
+      "range": {
+        "startLine": 5222,
+        "startChar": 6,
+        "endLine": 5222,
+        "endChar": 32
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0ff1a1_11068b29",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5222,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-08T23:03:27Z",
+      "side": 1,
+      "message": "Probably? It\u0027s hard to be sure; the implications of calling this method seem pretty far-reaching. However, since transitions between prototype maps aren\u0027t cached, the only possible difference would be for corner cases where the map in question is a leaf in the transition tree. We probably don\u0027t care much about those cases.\n\nMaybe land it as a separate change to be sure?",
+      "parentUuid": "ab187d5c_e315ce08",
       "range": {
         "startLine": 5222,
         "startChar": 6,
