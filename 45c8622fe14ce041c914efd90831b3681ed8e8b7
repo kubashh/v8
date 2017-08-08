@@ -16,6 +16,24 @@
       "revId": "45c8622fe14ce041c914efd90831b3681ed8e8b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455dadf9_f2889eed",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-08T07:14:39Z",
+      "side": 1,
+      "message": "s/windows/v8_linux64_gyp_rel_ng/",
+      "parentUuid": "a4653c8b_bbfe8ecd",
+      "revId": "45c8622fe14ce041c914efd90831b3681ed8e8b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
