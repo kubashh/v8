@@ -146,6 +146,7 @@ class WasmGraphBuilder {
   Node* Uint32Constant(uint32_t value);
   Node* Int32Constant(int32_t value);
   Node* Int64Constant(int64_t value);
+  Node* IntPtrConstant(intptr_t value);
   Node* Float32Constant(float value);
   Node* Float64Constant(double value);
   Node* HeapConstant(Handle<HeapObject> value);
@@ -236,6 +237,13 @@ class WasmGraphBuilder {
 
   void set_effect_ptr(Node** effect) { this->effect_ = effect; }
 
+  Node* LoadMemSize();
+  Node* LoadMemStart();
+
+  void set_mem_size(Node** mem_size) { this->mem_size_ = mem_size; }
+
+  void set_mem_start(Node** mem_start) { this->mem_start_ = mem_start; }
+
   wasm::FunctionSig* GetFunctionSignature() { return sig_; }
 
   void Int64LoweringForTesting();
@@ -270,13 +278,15 @@ class WasmGraphBuilder {
   JSGraph* jsgraph_;
   Node* centry_stub_node_;
   wasm::ModuleEnv* module_ = nullptr;
-  Node* mem_start_ptr_ = nullptr;
-  Node* mem_size_ptr_ = nullptr;
+  Node* mem_start_address_ = nullptr;
+  Node* mem_size_address_ = nullptr;
   NodeVector signature_tables_;
   NodeVector function_tables_;
   NodeVector function_table_sizes_;
   Node** control_ = nullptr;
   Node** effect_ = nullptr;
+  Node** mem_start_ = nullptr;
+  Node** mem_size_ = nullptr;
   Node** cur_buffer_;
   size_t cur_bufsize_;
   Node* def_buffer_[kDefaultBufferSize];
@@ -293,7 +303,6 @@ class WasmGraphBuilder {
   Graph* graph();
 
   Node* String(const char* string);
-  Node* MemSize();
   Node* MemBuffer(uint32_t offset);
   void BoundsCheckMem(MachineType memtype, Node* index, uint32_t offset,
                       wasm::WasmCodePosition position);

@@ -449,28 +449,10 @@ int32_t WasmInstanceObject::GrowMemory(Isolate* isolate,
                                        Handle<WasmInstanceObject> instance,
                                        uint32_t pages) {
   if (pages == 0) return instance->GetMemorySize();
-  if (instance->has_memory_object()) {
-    return WasmMemoryObject::Grow(
-        isolate, handle(instance->memory_object(), isolate), pages);
-  }
-
-  // No other instances to grow, grow just the one.
-  uint32_t old_size = 0;
-  Address old_mem_start = nullptr;
-  Handle<JSArrayBuffer> old_buffer;
-  if (instance->has_memory_buffer()) {
-    old_buffer = handle(instance->memory_buffer(), isolate);
-    old_size = old_buffer->byte_length()->Number();
-    old_mem_start = static_cast<Address>(old_buffer->backing_store());
-  }
-  uint32_t max_pages = instance->GetMaxMemoryPages();
-  Handle<JSArrayBuffer> buffer =
-      GrowMemoryBuffer(isolate, old_buffer, pages, max_pages);
-  if (buffer.is_null()) return -1;
-  SetInstanceMemory(isolate, instance, buffer);
-  UpdateWasmContext(instance->wasm_context(), buffer, old_size, old_mem_start);
-  DCHECK_EQ(0, old_size % WasmModule::kPageSize);
-  return old_size / WasmModule::kPageSize;
+  // We should always have a WasmMemoryObject when a module has memory.
+  CHECK(instance->has_memory_object());
+  return WasmMemoryObject::Grow(
+      isolate, handle(instance->memory_object(), isolate), pages);
 }
 
 uint32_t WasmInstanceObject::GetMaxMemoryPages() {

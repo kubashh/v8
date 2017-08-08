@@ -219,6 +219,14 @@ class WasmDecoder : public Decoder {
       }
       type_list->insert(type_list->end(), count, type);
     }
+
+    // Register mem_size and mem_start types in type_list. These types
+    // are necessary later to merge ssa environments.
+    type_list->insert(type_list->end(), 1,
+                      MachineRepresentation::kWord32);  // mem_size
+    type_list->insert(type_list->end(), 1,
+                      MachineType::PointerRepresentation());  // mem_start
+
     DCHECK(decoder->ok());
     return true;
   }
@@ -227,7 +235,6 @@ class WasmDecoder : public Decoder {
                                           int locals_count, Zone* zone) {
     if (pc >= decoder->end()) return nullptr;
     if (*pc != kExprLoop) return nullptr;
-
     BitVector* assigned = new (zone) BitVector(locals_count, zone);
     int depth = 0;
     // Iteratively process all AST nodes nested inside the loop.
@@ -267,7 +274,9 @@ class WasmDecoder : public Decoder {
   }
 
   inline bool Validate(const byte* pc, LocalIndexOperand<true>& operand) {
-    if (operand.index < total_locals()) {
+    // The - 2 here is to prevent user code to access the last two locals
+    // variables, which are used to store mem_size and mem_start nodes.
+    if (operand.index < total_locals() - 2) {
       if (local_types_) {
         operand.type = local_types_->at(operand.index);
       } else {
@@ -694,7 +703,6 @@ class WasmFullDecoder : public WasmDecoder {
   inline bool build() { return builder_ && ssa_env_->go(); }
 
   void InitSsaEnv() {
-    TFNode* start = nullptr;
     SsaEnv* ssa_env = reinterpret_cast<SsaEnv*>(zone_->New(sizeof(SsaEnv)));
     size_t size = sizeof(TFNode*) * EnvironmentCount();
     ssa_env->state = SsaEnv::kReached;
@@ -702,25 +710,36 @@ class WasmFullDecoder : public WasmDecoder {
         size > 0 ? reinterpret_cast<TFNode**>(zone_->New(size)) : nullptr;
 
     if (builder_) {
-      start = builder_->Start(static_cast<int>(sig_->parameter_count() + 1));
+      TFNode* start =
+          builder_->Start(static_cast<int>(sig_->parameter_count() + 1));
       // Initialize local variables.
       uint32_t index = 0;
       while (index < sig_->parameter_count()) {
         ssa_env->locals[index] = builder_->Param(index);
         index++;
       }
-      while (index < local_type_vec_.size()) {
+      // Do not initialize mem_size and mem_start with wasm default values.
+      size_t locals_count = local_type_vec_.size() - 2;
+      while (index < locals_count) {
         ValueType type = local_type_vec_[index];
         TFNode* node = DefaultValue(type);
-        while (index < local_type_vec_.size() &&
-               local_type_vec_[index] == type) {
+        while (index < locals_count && local_type_vec_[index] == type) {
           // Do a whole run of like-typed locals at a time.
           ssa_env->locals[index++] = node;
         }
       }
+      // Initialize effect and control for LoadMemSize and LoadMemStart.
+      ssa_env->effect = start;
+      ssa_env->control = start;
+      builder_->set_effect_ptr(&ssa_env->effect);
+      builder_->set_control_ptr(&ssa_env->control);
+      // Always load mem_size and mem_start from the WasmContext into the ssa.
+      ssa_env->locals[index++] = builder_->LoadMemSize();
+      ssa_env->locals[index++] = builder_->LoadMemStart();
+    } else {
+      ssa_env->control = nullptr;
+      ssa_env->effect = nullptr;
     }
-    ssa_env->control = start;
-    ssa_env->effect = start;
     SetEnv("initial", ssa_env);
   }
 
@@ -1258,6 +1277,11 @@ class WasmFullDecoder : public WasmDecoder {
               error("grow_memory is not supported for asmjs modules");
             }
             len = 1 + operand.length;
+            // Reload mem_size and mem_start after growing memory.
+            if (builder_ && ssa_env_->locals) {
+              ssa_env_->locals[LocalMemSizeIndex()] = builder_->LoadMemSize();
+              ssa_env_->locals[LocalMemStartIndex()] = builder_->LoadMemStart();
+            }
             break;
           }
           case kExprMemorySize: {
@@ -1822,6 +1846,8 @@ class WasmFullDecoder : public WasmDecoder {
     if (builder_) {
       builder_->set_control_ptr(&env->control);
       builder_->set_effect_ptr(&env->effect);
+      builder_->set_mem_size(&env->locals[LocalMemSizeIndex()]);
+      builder_->set_mem_start(&env->locals[LocalMemStartIndex()]);
     }
   }
 
@@ -1888,7 +1914,8 @@ class WasmFullDecoder : public WasmDecoder {
           to->effect = builder_->EffectPhi(2, effects, merge);
         }
         // Merge SSA values.
-        for (int i = EnvironmentCount() - 1; i >= 0; i--) {
+        int count = EnvironmentCount() - 1;
+        for (int i = count; i >= 0; i--) {
           TFNode* a = to->locals[i];
           TFNode* b = from->locals[i];
           if (a != b) {
@@ -2039,6 +2066,14 @@ class WasmFullDecoder : public WasmDecoder {
   int EnvironmentCount() {
     if (builder_) return static_cast<int>(local_type_vec_.size());
     return 0;  // if we aren't building a graph, don't bother with SSA renaming.
+  }
+
+  int LocalMemSizeIndex() {
+    return EnvironmentCount() - 2;  // mem_size is the second last local.
+  }
+
+  int LocalMemStartIndex() {
+    return EnvironmentCount() - 1;  // mem_start is the last local.
   }
 
   virtual void onFirstError() {
