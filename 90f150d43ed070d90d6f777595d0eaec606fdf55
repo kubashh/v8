@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "aa6af366_f4466622",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-08T22:50:39Z",
+      "side": 1,
+      "message": "I inlined first checks.",
+      "parentUuid": "20dc51a4_adcde7f0",
+      "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e3ab43a7_690b413d",
         "filename": "src/inspector/injected-script.cc",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-08T00:04:42Z",
       "side": 1,
       "message": "Note that Runtime.evaluate should work without Runtime.enable. Is that not the case anymore?",
+      "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65d92c67_370d4cc6",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-08T22:50:39Z",
+      "side": 1,
+      "message": "Fixed separately.",
+      "parentUuid": "e3ab43a7_690b413d",
       "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "430c8c1d_4e436530",
+        "filename": "src/inspector/injected-script.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-08T22:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49b5545b_337e61c2",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 106,
+        "endChar": 31
+      },
+      "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "420c4426_38849c0d",
         "filename": "src/inspector/injected-script.h",
         "patchSetId": 4
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "c528dcb4_6ec4dc64",
+        "filename": "src/inspector/injected-script.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-08T22:50:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "420c4426_38849c0d",
+      "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cb74f11_28c8d1ae",
         "filename": "src/inspector/injected-script.h",
         "patchSetId": 4
@@ -87,6 +165,24 @@
       "writtenOn": "2017-08-08T00:04:42Z",
       "side": 1,
       "message": "Why not unique_ptr\u003cEvaluateCallback\u003e ?",
+      "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29ef9b0f_442dc759",
+        "filename": "src/inspector/injected-script.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-08T22:50:39Z",
+      "side": 1,
+      "message": "I don\u0027t know enough dark magic to make possible find by raw pointer in the set of unique_ptr.",
+      "parentUuid": "4cb74f11_28c8d1ae",
       "revId": "90f150d43ed070d90d6f777595d0eaec606fdf55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
