@@ -16,6 +16,24 @@
       "revId": "12413cf1dafdf5f33e7d634eb92d0dfbf74f78c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48017615_dc3b3cd8",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-08T08:09:33Z",
+      "side": 1,
+      "message": "Done. Please note that the new version no longer checks whether a new (fourth) value has been added to the HolderLookup enum.",
+      "parentUuid": "eef5c44d_08e80384",
+      "revId": "12413cf1dafdf5f33e7d634eb92d0dfbf74f78c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
