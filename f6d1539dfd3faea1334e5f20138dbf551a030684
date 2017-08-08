@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "944a47a0_3427d62a",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 7808,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "There is a typedef for it: https://cs.chromium.org/chromium/src/v8/include/v8.h\n\nBut it looks like *internal is still used in the API and *embedder everywhere else. WDYT?",
+      "parentUuid": "e2d24aef_d7e22256",
+      "range": {
+        "startLine": 7808,
+        "startChar": 6,
+        "endLine": 7808,
+        "endChar": 37
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c48f5a3_0c86316d",
         "filename": "include/v8.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "119df96d_cbaf1a5a",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 8219,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Yes that makes sense to me, as AddContext has a callback as a param, so we would be mirroring that.",
+      "parentUuid": "3c48f5a3_0c86316d",
+      "range": {
+        "startLine": 8219,
+        "startChar": 25,
+        "endLine": 8219,
+        "endChar": 65
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "80094973_dc283a8d",
+        "filename": "src/address-map.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "301f3826_cebed385",
+      "range": {
+        "startLine": 177,
+        "startChar": 9,
+        "endLine": 177,
+        "endChar": 26
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8ccb083_5c981bda",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0decded_46fc7205",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Correct, in the off-heap case, there will always be a JSArrayBuffer that is registered, and in the on-heap case, there is no external allocation to manage so that doesn\u0027t cause any problems.",
+      "parentUuid": "b8ccb083_5c981bda",
+      "range": {
+        "startLine": 420,
+        "startChar": 11,
+        "endLine": 420,
+        "endChar": 31
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "75fc49da_7ac85baa",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7514e639_644cd9aa",
+      "range": {
+        "startLine": 901,
+        "startChar": 12,
+        "endLine": 901,
+        "endChar": 25
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab384ece_45a60a7d",
         "filename": "src/snapshot/deserializer.h",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c94a4879_2848eafa",
+        "filename": "src/snapshot/deserializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Yes, SGTM",
+      "parentUuid": "ab384ece_45a60a7d",
+      "range": {
+        "startLine": 153,
+        "startChar": 2,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "0d41c4a2_aad3c371",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a12e9e_297ab241",
+      "range": {
+        "startLine": 285,
+        "startChar": 32,
+        "endLine": 285,
+        "endChar": 59
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9ef9307_ce345d73",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 9
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "ff20db42_0628ddc8",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9ef9307_ce345d73",
+      "range": {
+        "startLine": 440,
+        "startChar": 43,
+        "endLine": 440,
+        "endChar": 48
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3224a2f_42fa1f2b",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 9
@@ -197,6 +389,30 @@
       "writtenOn": "2017-08-04T05:43:52Z",
       "side": 1,
       "message": "In fact, we can only really serialize integers up to 1\u003c\u003c30. On 64-bit architectures this is less than Smi range.\n\nI think we can drop this DCHECK since PutInt already has a DCHECK for this.",
+      "range": {
+        "startLine": 441,
+        "startChar": 9,
+        "endLine": 441,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f449e56_6b68c607",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "The DCHECK was more about making sure NumberToInt32() doesn\u0027t result in overflow or some weird conversion - I guess it would be better to use a checked conversion of some kind but I\u0027m not sure where that would be, any ideas?",
+      "parentUuid": "f3224a2f_42fa1f2b",
       "range": {
         "startLine": 441,
         "startChar": 9,
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "92d59ed4_16ba8d89",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Actually we don\u0027t need this check, a neutered JSArrayBuffer will have backing_store \u003d\u003d nullptr and byte_length \u003d\u003d 0, and an on-heap TypedArray will have backing_store \u003d\u003d nullptr, but either way we have no backing store to serialize so there is nothing to do but serialize the JSArrayBuffer as is.",
+      "parentUuid": "fe3f7c70_2694e1d9",
+      "range": {
+        "startLine": 443,
+        "startChar": 6,
+        "endLine": 443,
+        "endChar": 17
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62676ed5_1a6dcc10",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 9
@@ -252,6 +492,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02cdd1f6_a3060746",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62676ed5_1a6dcc10",
+      "range": {
+        "startLine": 459,
+        "startChar": 43,
+        "endLine": 459,
+        "endChar": 48
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "1721d2f0_0719308d",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f55302ee_e212271e",
+      "range": {
+        "startLine": 462,
+        "startChar": 6,
+        "endLine": 462,
+        "endChar": 17
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f952edf4_648ad998",
         "filename": "src/snapshot/serializer.h",
         "patchSetId": 9
@@ -298,6 +586,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "570a0248_e9efd516",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "oops, no we don\u0027t.",
+      "parentUuid": "f952edf4_648ad998",
+      "range": {
+        "startLine": 345,
+        "startChar": 2,
+        "endLine": 345,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "268b6304_5fddacf8",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46113cb6_2c062b08",
+      "range": {
+        "startLine": 645,
+        "startChar": 16,
+        "endLine": 645,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80a48b95_eeb550f0",
         "filename": "test/cctest/test-serialize.cc",
         "patchSetId": 9
@@ -338,6 +674,24 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e85579_0914f47a",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-08T14:59:15Z",
+      "side": 1,
+      "message": "Good idea, I\u0027ve added a helper too :)",
+      "parentUuid": "80a48b95_eeb550f0",
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
