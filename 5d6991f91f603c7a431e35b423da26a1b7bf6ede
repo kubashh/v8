@@ -181,6 +181,23 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f306eca_cc9b60c9",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1224119
+      },
+      "writtenOn": "2017-08-09T15:10:35Z",
+      "side": 1,
+      "message": "These doesn\u0027t work because your refactoring has not taken into account changes I have committed for handling exceptions. Are you planning on fixing this before, or after this refactoring is committed?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
