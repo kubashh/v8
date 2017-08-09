@@ -510,6 +510,34 @@ TNode<Smi> CodeStubAssembler::SmiMin(SloppyTNode<Smi> a, SloppyTNode<Smi> b) {
   return SelectTaggedConstant(SmiLessThan(a, b), a, b);
 }
 
+TNode<Object> CodeStubAssembler::NumberMax(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal(this);
+  GotoUnlessNumberLessThan(a, b, &greater_than_equal);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&greater_than_equal);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
+TNode<Object> CodeStubAssembler::NumberMin(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal(this);
+  GotoUnlessNumberLessThan(a, b, &greater_than_equal);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&greater_than_equal);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
 Node* CodeStubAssembler::SmiMod(Node* a, Node* b) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   Label return_result(this, &var_result),
@@ -9232,6 +9260,66 @@ Node* CodeStubAssembler::NumberDec(Node* value) {
     Node* minus_one = Float64Constant(-1.0);
     Node* fdec_result = Float64Add(fdec_value, minus_one);
     var_result.Bind(AllocateHeapNumberWithValue(fdec_result));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberAdd(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fadd_value, MachineRepresentation::kFloat64);
+  Label float_add(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_add);
+  GotoIf(TaggedIsNotSmi(b), &float_add);
+
+  // Try fast Smi addition first.
+  Node* pair =
+      IntPtrAddWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi addition overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_add);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_add);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Add(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberSub(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fsub_value, MachineRepresentation::kFloat64);
+  Label float_sub(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_sub);
+  GotoIf(TaggedIsNotSmi(b), &float_sub);
+
+  // Try fast Smi subtraction first.
+  Node* pair =
+      IntPtrSubWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi subtraction overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_sub);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_sub);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Sub(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
     Goto(&end);
   }
 
