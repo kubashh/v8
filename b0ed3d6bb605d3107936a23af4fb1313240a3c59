@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7dacbfe_2f46e41c",
+        "filename": "src/compiler/js-builtin-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1002541
+      },
+      "writtenOn": "2017-08-09T14:59:14Z",
+      "side": 1,
+      "message": "I\u0027m not sure whether |form_index| is passed as tagged. In the example of [0].indexOf(0) this ends up being the ZeroConstant(), which looks like this in the traced graph:\n#20:NumberConstant[0]()  [Type: Range(0, 0)]\n\nThe code answers \"-1\" to [0].indexOf(0), and mangled |from_index| could explain that.\n\n|length| seems to be passed as:\n#48:LoadField[tagged base, 24, Range(0, 134217726), kRepTaggedSigned|kTypeInt32, NoWriteBarrier](#46:FinishRegion, #47:LoadField, #11:JSStackCheck)  [Type: Range(0, 134217726)]\n\nwhich seems tagged. (Does that match the expectations of simplified()-\u003eLoadField(...)?)",
+      "range": {
+        "startLine": 1269,
+        "startChar": 40,
+        "endLine": 1269,
+        "endChar": 50
+      },
+      "revId": "b0ed3d6bb605d3107936a23af4fb1313240a3c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
