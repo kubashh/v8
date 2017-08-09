@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "70593ce7_c7fb747f",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 7808,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-09T09:11:37Z",
+      "side": 1,
+      "message": "OK, let\u0027s patch chromium to use the *embedder naming and then totally remove *internal naming in a later CL.",
+      "parentUuid": "3aae130e_60139e2e",
+      "range": {
+        "startLine": 7808,
+        "startChar": 6,
+        "endLine": 7808,
+        "endChar": 37
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c48f5a3_0c86316d",
         "filename": "include/v8.h",
         "patchSetId": 9
@@ -470,6 +494,30 @@
       "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b905afec_fdbfa8ce",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-09T09:11:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f99df7a0_ce472db6",
+      "range": {
+        "startLine": 441,
+        "startChar": 9,
+        "endLine": 441,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
