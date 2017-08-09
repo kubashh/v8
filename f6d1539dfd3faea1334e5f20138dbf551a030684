@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3aae130e_60139e2e",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 7808,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-09T07:15:34Z",
+      "side": 1,
+      "message": "We should swap the typedef and after some time remove the *internal version. In a follow up maybe.",
+      "parentUuid": "944a47a0_3427d62a",
+      "range": {
+        "startLine": 7808,
+        "startChar": 6,
+        "endLine": 7808,
+        "endChar": 37
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c48f5a3_0c86316d",
         "filename": "include/v8.h",
         "patchSetId": 9
@@ -425,6 +449,30 @@
     },
     {
       "key": {
+        "uuid": "f99df7a0_ce472db6",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-09T07:15:34Z",
+      "side": 1,
+      "message": "I see. Let\u0027s make this a CHECK and add a comment.",
+      "parentUuid": "8f449e56_6b68c607",
+      "range": {
+        "startLine": 441,
+        "startChar": 9,
+        "endLine": 441,
+        "endChar": 39
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe3f7c70_2694e1d9",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 9
@@ -460,6 +508,30 @@
       "side": 1,
       "message": "Actually we don\u0027t need this check, a neutered JSArrayBuffer will have backing_store \u003d\u003d nullptr and byte_length \u003d\u003d 0, and an on-heap TypedArray will have backing_store \u003d\u003d nullptr, but either way we have no backing store to serialize so there is nothing to do but serialize the JSArrayBuffer as is.",
       "parentUuid": "fe3f7c70_2694e1d9",
+      "range": {
+        "startLine": 443,
+        "startChar": 6,
+        "endLine": 443,
+        "endChar": 17
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2bbede54_9709d25e",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-09T07:15:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "92d59ed4_16ba8d89",
       "range": {
         "startLine": 443,
         "startChar": 6,
