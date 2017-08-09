@@ -104,6 +104,23 @@
     },
     {
       "key": {
+        "uuid": "2c773ef3_47ba5132",
+        "filename": "test/mjsunit/harmony/module-import-16.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-08-09T15:11:27Z",
+      "side": 1,
+      "message": "Please add some tests with Function inside eval and vice versa.",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f93eeba2_3e6d4cab",
         "filename": "test/mjsunit/regress/regress-746909.js",
         "patchSetId": 1
