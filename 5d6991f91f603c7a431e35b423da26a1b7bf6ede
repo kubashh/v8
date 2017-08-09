@@ -198,6 +198,23 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe9ecc30_28ab2699",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-09T16:16:21Z",
+      "side": 1,
+      "message": "In general, I think we should avoid disabling tests.\nIf we do disable this one, it seems like it would be better to disable it in mjsunit.status, along with a TODO + filed issue.\n\nHowever, it sounds like disabling the test obscures a mis-merge, as exceptions changes got lost in the process of things moving into the header?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
