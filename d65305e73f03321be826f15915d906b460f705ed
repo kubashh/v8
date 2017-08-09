@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ac54f4b_ec7e7747",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-08-09T03:14:12Z",
+      "side": 1,
+      "message": "This is now incorrect.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "d65305e73f03321be826f15915d906b460f705ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82deff44_c8a0c0a0",
+        "filename": "test/inspector/runtime/evaluate-async.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-08-09T03:14:12Z",
+      "side": 1,
+      "message": "Rename this one :) Or better, add one which checks that awaitPromise can resolve after  Runtime.disable.",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 35
+      },
+      "revId": "d65305e73f03321be826f15915d906b460f705ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
