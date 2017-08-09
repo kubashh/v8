@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "972e023b_396f9b23",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-09T22:47:37Z",
+      "side": 1,
+      "message": "This CHECK and the next three can be made DCHECKs.\nPrototype maps are guaranteed not to have transitions (they physically can\u0027t; kTransitionsOrPrototypeInfoOffset can only hold the one or the other).",
+      "range": {
+        "startLine": 2893,
+        "startChar": 2,
+        "endLine": 2893,
+        "endChar": 7
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152ff682_d63fb819",
         "filename": "src/ic/ic.cc",
         "patchSetId": 2
@@ -73,6 +96,53 @@
     },
     {
       "key": {
+        "uuid": "7c6fb094_8367a761",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-09T22:47:37Z",
+      "side": 1,
+      "message": "The existing nuking is behind \"if (old_map-\u003eis_prototype_map)\", and this CL maintains that, so that should be safe in any case?\n\nAlso, I think I lied earlier... Looking at the code again, it seems that currently we never have transitions from non-prototype to prototype maps, due to the temporary normalization we do as part of that process (see the PrototypeBenefitsFromNormalization call in JSObject::OptimizeAsPrototype). Another consequence of this is that prototype maps never share their descriptor array with any other map.",
+      "parentUuid": "b6462848_b0fd4275",
+      "range": {
+        "startLine": 718,
+        "startChar": 18,
+        "endLine": 718,
+        "endChar": 44
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b95b6ef1_4c6593a4",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-09T22:47:37Z",
+      "side": 1,
+      "message": "I\u0027m not super happy with this, but the situation (keyed stores causing map transitions on prototypes) is probably rare enough that we don\u0027t care, and I\u0027m not sure what exactly the best behavior would be. Maybe roughly \"if the receiver is a prototype, then use the updated map (after SetObjectProperty) for GetStoreMode, DictionaryElementsInPrototypeChainOnly, and UpdateStoreElement\", but that\u0027s a bit messy to integrate, and it\u0027s difficult to estimate what the impact would be.",
+      "range": {
+        "startLine": 2335,
+        "startChar": 12,
+        "endLine": 2335,
+        "endChar": 56
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab187d5c_e315ce08",
         "filename": "src/objects.cc",
         "patchSetId": 2
@@ -132,6 +202,30 @@
       "side": 1,
       "message": "OK, I\u0027ll strengthen this in a separate CL.",
       "parentUuid": "3b0ff1a1_11068b29",
+      "range": {
+        "startLine": 5222,
+        "startChar": 6,
+        "endLine": 5222,
+        "endChar": 32
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2c1ba32_75edfd5b",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5222,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-09T22:47:37Z",
+      "side": 1,
+      "message": "In light of the other discussion, you can go ahead and strengthen this. It won\u0027t make a difference; this function will always return nullptr for prototype maps anyway.",
+      "parentUuid": "139dcc2d_9e069fcc",
       "range": {
         "startLine": 5222,
         "startChar": 6,
