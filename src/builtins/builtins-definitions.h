@@ -52,6 +52,10 @@ namespace internal {
   /* GC write barrirer */                                                      \
   TFC(RecordWrite, RecordWrite, 1)                                             \
                                                                                \
+  /* Adaptors for CPP/API builtin */                                           \
+  ASM(AdaptorWithExit)                                                         \
+  ASM(AdaptorWithBuiltinExit)                                                  \
+                                                                               \
   /* Calls */                                                                  \
   ASM(ArgumentsAdaptorTrampoline)                                              \
   /* ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList) */              \
