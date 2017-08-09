@@ -20,6 +20,17 @@ namespace internal {
 
 void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
                                 ExitFrameType exit_frame_type) {
+  __ LoadAddress(rbx, ExternalReference(address, masm->isolate()));
+  if (exit_frame_type == BUILTIN_EXIT) {
+    __ Jump(BUILTIN_CODE(masm->isolate(), AdaptorWithBuiltinExit),
+            RelocInfo::CODE_TARGET);
+  } else {
+    __ Jump(BUILTIN_CODE(masm->isolate(), AdaptorWithExit),
+            RelocInfo::CODE_TARGET);
+  }
+}
+
+void Builtins::Generate_AdaptorWithExit(MacroAssembler* masm) {
   // ----------- S t a t e -------------
   //  -- rax                 : number of arguments excluding receiver
   //  -- rdi                 : target
@@ -41,8 +52,8 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
   // ordinary functions).
   __ movp(rsi, FieldOperand(rdi, JSFunction::kContextOffset));
 
-  // JumpToExternalReference expects rax to contain the number of arguments
-  // including the receiver and the extra arguments.
+  // rax contains the number of arguments including the receiver and the extra
+  // arguments.
   const int num_extra_args = 3;
   __ addp(rax, Immediate(num_extra_args + 1));
 
@@ -56,8 +67,49 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
   __ Push(rdx);
   __ PushReturnAddressFrom(kScratchRegister);
 
-  __ JumpToExternalReference(ExternalReference(address, masm->isolate()),
-                             exit_frame_type == BUILTIN_EXIT);
+  CEntryStub ces(masm->isolate(), 1, kDontSaveFPRegs, kArgvOnStack, false);
+  __ jmp(ces.GetCode(), RelocInfo::CODE_TARGET);
+}
+
+void Builtins::Generate_AdaptorWithBuiltinExit(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rax                 : number of arguments excluding receiver
+  //  -- rdi                 : target
+  //  -- rdx                 : new.target
+  //  -- rsp[0]              : return address
+  //  -- rsp[8]              : last argument
+  //  -- ...
+  //  -- rsp[8 * argc]       : first argument
+  //  -- rsp[8 * (argc + 1)] : receiver
+  // -----------------------------------
+  __ AssertFunction(rdi);
+
+  // The logic contained here is mirrored for TurboFan inlining in
+  // JSTypedLowering::ReduceJSCall{Function,Construct}. Keep these in sync.
+
+  // Make sure we operate in the context of the called function (for example
+  // ConstructStubs implemented in C++ will be run in the context of the caller
+  // instead of the callee, due to the way that [[Construct]] is defined for
+  // ordinary functions).
+  __ movp(rsi, FieldOperand(rdi, JSFunction::kContextOffset));
+
+  // rax contains the number of arguments including the receiver and the extra
+  // arguments.
+  const int num_extra_args = 3;
+  __ addp(rax, Immediate(num_extra_args + 1));
+
+  // Unconditionally insert argc, target and new target as extra arguments. They
+  // will be used by stack frame iterators when constructing the stack trace.
+  __ PopReturnAddressTo(kScratchRegister);
+  __ Integer32ToSmi(rax, rax);
+  __ Push(rax);
+  __ SmiToInteger32(rax, rax);
+  __ Push(rdi);
+  __ Push(rdx);
+  __ PushReturnAddressFrom(kScratchRegister);
+
+  CEntryStub ces(masm->isolate(), 1, kDontSaveFPRegs, kArgvOnStack, true);
+  __ jmp(ces.GetCode(), RelocInfo::CODE_TARGET);
 }
 
 static void GenerateTailCallToSharedCode(MacroAssembler* masm) {
