@@ -18,6 +18,17 @@ namespace internal {
 
 void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
                                 ExitFrameType exit_frame_type) {
+  __ mov(ebx, Immediate(ExternalReference(address, masm->isolate())));
+  if (exit_frame_type == BUILTIN_EXIT) {
+    __ Jump(BUILTIN_CODE(masm->isolate(), AdaptorWithBuiltinExit),
+            RelocInfo::CODE_TARGET);
+  } else {
+    __ Jump(BUILTIN_CODE(masm->isolate(), AdaptorWithExit),
+            RelocInfo::CODE_TARGET);
+  }
+}
+
+void Builtins::Generate_AdaptorWithExit(MacroAssembler* masm) {
   // ----------- S t a t e -------------
   //  -- eax                : number of arguments excluding receiver
   //  -- edi                : target
@@ -36,8 +47,8 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
   // ordinary functions).
   __ mov(esi, FieldOperand(edi, JSFunction::kContextOffset));
 
-  // JumpToExternalReference expects eax to contain the number of arguments
-  // including the receiver and the extra arguments.
+  // Eax contains the number of arguments including the receiver and the
+  // extra arguments.
   const int num_extra_args = 3;
   __ add(eax, Immediate(num_extra_args + 1));
 
@@ -50,8 +61,45 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
   __ Push(edx);
   __ PushReturnAddressFrom(ecx);
 
-  __ JumpToExternalReference(ExternalReference(address, masm->isolate()),
-                             exit_frame_type == BUILTIN_EXIT);
+  CEntryStub ces(masm->isolate(), 1, kDontSaveFPRegs, kArgvOnStack, false);
+  __ jmp(ces.GetCode(), RelocInfo::CODE_TARGET);
+}
+
+void Builtins::Generate_AdaptorWithBuiltinExit(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- eax                : number of arguments excluding receiver
+  //  -- edi                : target
+  //  -- edx                : new.target
+  //  -- esp[0]             : return address
+  //  -- esp[4]             : last argument
+  //  -- ...
+  //  -- esp[4 * argc]      : first argument
+  //  -- esp[4 * (argc +1)] : receiver
+  // -----------------------------------
+  __ AssertFunction(edi);
+
+  // Make sure we operate in the context of the called function (for example
+  // ConstructStubs implemented in C++ will be run in the context of the caller
+  // instead of the callee, due to the way that [[Construct]] is defined for
+  // ordinary functions).
+  __ mov(esi, FieldOperand(edi, JSFunction::kContextOffset));
+
+  // Eax contains the number of arguments including the receiver and the
+  // extra arguments.
+  const int num_extra_args = 3;
+  __ add(eax, Immediate(num_extra_args + 1));
+
+  // Insert extra arguments.
+  __ PopReturnAddressTo(ecx);
+  __ SmiTag(eax);
+  __ Push(eax);
+  __ SmiUntag(eax);
+  __ Push(edi);
+  __ Push(edx);
+  __ PushReturnAddressFrom(ecx);
+
+  CEntryStub ces(masm->isolate(), 1, kDontSaveFPRegs, kArgvOnStack, true);
+  __ jmp(ces.GetCode(), RelocInfo::CODE_TARGET);
 }
 
 static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
