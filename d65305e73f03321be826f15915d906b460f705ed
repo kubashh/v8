@@ -45,6 +45,30 @@
       "revId": "d65305e73f03321be826f15915d906b460f705ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5daa6fb_765bd2b2",
+        "filename": "test/inspector/runtime/evaluate-async.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-10T05:45:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82deff44_c8a0c0a0",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 35
+      },
+      "revId": "d65305e73f03321be826f15915d906b460f705ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
