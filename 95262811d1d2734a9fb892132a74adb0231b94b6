@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22c0dbd1_601c5c73",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24edcf26_d4d7f224",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72453950_8427ca05",
         "filename": "src/runtime/runtime-module.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58f6447b_ba6bf7bb",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "I think so. When would this not have a script?",
+      "parentUuid": "72453950_8427ca05",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "73ddbf04_a54b5f10",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Yes, this seems required. The test fails if I change the while to an if",
+      "parentUuid": "1668aabf_41628ada",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2eb8a210_165074bb",
         "filename": "src/runtime/runtime-module.cc",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9765809_45766802",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eb8a210_165074bb",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fe37dac3_6c38a25f",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "A follow up CL will change this to be Undefined | String to account for this",
+      "parentUuid": "2e97ed21_f45bfd3e",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c23a871_d07b961d",
         "filename": "test/mjsunit/harmony/module-import-16.js",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "e7922280_21531dd1",
+        "filename": "test/mjsunit/harmony/module-import-16.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c23a871_d07b961d",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c773ef3_47ba5132",
         "filename": "test/mjsunit/harmony/module-import-16.js",
         "patchSetId": 1
@@ -118,6 +226,24 @@
       "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "435cd251_54f787c7",
+        "filename": "test/mjsunit/harmony/module-import-16.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c773ef3_47ba5132",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +270,30 @@
     },
     {
       "key": {
+        "uuid": "4c7f7c54_804f4726",
+        "filename": "test/mjsunit/regress/regress-746909.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f93eeba2_3e6d4cab",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9466b10_f5aab40f",
         "filename": "test/mjsunit/regress/regress-746909.js",
         "patchSetId": 1
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "561d8136_9091720b",
+        "filename": "test/mjsunit/regress/regress-746909.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9466b10_f5aab40f",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f4e4203_03c48d95",
         "filename": "test/mjsunit/regress/regress-746909.js",
         "patchSetId": 1
@@ -175,6 +343,24 @@
       "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03dc7bb5_97bc6832",
+        "filename": "test/mjsunit/regress/regress-746909.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-10T21:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f4e4203_03c48d95",
+      "revId": "95262811d1d2734a9fb892132a74adb0231b94b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
