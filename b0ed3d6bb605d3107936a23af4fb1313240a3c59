@@ -22,6 +22,30 @@
       "revId": "b0ed3d6bb605d3107936a23af4fb1313240a3c59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e19520b0_c8213c50",
+        "filename": "src/compiler/js-builtin-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-10T05:59:55Z",
+      "side": 1,
+      "message": "Hmm, I\u0027m not a compiler/ expert but AFAIK from_index should be tagged. You can verify easily though by just Print()\u0027ing the input parameters you get within the stub. You can do printf-style debugging in general by using Print within CSA builtins.\n\nYou can also break within the stub and stepi (not a typo) through it in gdb. --print-code and --code-comments as well as the jco macro in gdb is helpful here. You can force early optimization/lowering through %OptimizeFunctionOnNextCall, see e.g. the many uses in test/mjsunit/.\n\nI hope that helps figure out why -1 is returned.",
+      "parentUuid": "b7dacbfe_2f46e41c",
+      "range": {
+        "startLine": 1269,
+        "startChar": 40,
+        "endLine": 1269,
+        "endChar": 50
+      },
+      "revId": "b0ed3d6bb605d3107936a23af4fb1313240a3c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
