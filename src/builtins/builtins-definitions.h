@@ -193,6 +193,8 @@ namespace internal {
   TFS(CopyFastSmiOrObjectElements, kObject)                                    \
   TFC(GrowFastDoubleElements, GrowArrayElements, 1)                            \
   TFC(GrowFastSmiOrObjectElements, GrowArrayElements, 1)                       \
+  TFS(NewFastDoubleElements, kLength)                                          \
+  TFS(NewFastSmiOrObjectElements, kLength)                                     \
   TFC(NewUnmappedArgumentsElements, NewArgumentsElements, 1)                   \
                                                                                \
   /* Debugger */                                                               \

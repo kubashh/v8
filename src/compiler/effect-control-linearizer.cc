@@ -745,6 +745,12 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kArgumentsLength:
       result = LowerArgumentsLength(node);
       break;
+    case IrOpcode::kNewFastDoubleElements:
+      result = LowerNewFastDoubleElements(node);
+      break;
+    case IrOpcode::kNewFastSmiOrObjectElements:
+      result = LowerNewFastSmiOrObjectElements(node);
+      break;
     case IrOpcode::kNewUnmappedArgumentsElements:
       result = LowerNewUnmappedArgumentsElements(node);
       break;
@@ -2133,6 +2139,32 @@ Node* EffectControlLinearizer::LowerArgumentsFrame(Node* node) {
 
   __ Bind(&done);
   return done.PhiAt(0);
+}
+
+Node* EffectControlLinearizer::LowerNewFastDoubleElements(Node* node) {
+  Node* length = node->InputAt(0);
+
+  Callable const callable =
+      Builtins::CallableFor(isolate(), Builtins::kNewFastDoubleElements);
+  Operator::Properties const properties = node->op()->properties();
+  CallDescriptor::Flags const flags = CallDescriptor::kNoFlags;
+  CallDescriptor* desc = Linkage::GetStubCallDescriptor(
+      isolate(), graph()->zone(), callable.descriptor(), 0, flags, properties);
+  return __ Call(desc, __ HeapConstant(callable.code()), length,
+                 __ NoContextConstant());
+}
+
+Node* EffectControlLinearizer::LowerNewFastSmiOrObjectElements(Node* node) {
+  Node* length = node->InputAt(0);
+
+  Callable const callable =
+      Builtins::CallableFor(isolate(), Builtins::kNewFastSmiOrObjectElements);
+  Operator::Properties const properties = node->op()->properties();
+  CallDescriptor::Flags const flags = CallDescriptor::kNoFlags;
+  CallDescriptor* desc = Linkage::GetStubCallDescriptor(
+      isolate(), graph()->zone(), callable.descriptor(), 0, flags, properties);
+  return __ Call(desc, __ HeapConstant(callable.code()), length,
+                 __ NoContextConstant());
 }
 
 Node* EffectControlLinearizer::LowerNewUnmappedArgumentsElements(Node* node) {

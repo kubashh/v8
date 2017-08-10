@@ -91,6 +91,34 @@ TF_BUILTIN(GrowFastSmiOrObjectElements, CodeStubAssembler) {
   TailCallRuntime(Runtime::kGrowArrayElements, context, object, key);
 }
 
+TF_BUILTIN(NewFastDoubleElements, CodeStubAssembler) {
+  Node* length = Parameter(Descriptor::kLength);
+
+  Node* const zero = IntPtrConstant(0);
+  Node* const length_intptr = SmiUntag(length);
+  ElementsKind const elements_kind = PACKED_DOUBLE_ELEMENTS;
+
+  Node* const elements =
+      AllocateFixedArray(elements_kind, length, SMI_PARAMETERS);
+  FillFixedArrayWithValue(elements_kind, elements, zero, length_intptr,
+                          Heap::kTheHoleValueRootIndex);
+  Return(elements);
+}
+
+TF_BUILTIN(NewFastSmiOrObjectElements, CodeStubAssembler) {
+  Node* length = Parameter(Descriptor::kLength);
+
+  Node* const zero = IntPtrConstant(0);
+  Node* const length_intptr = SmiUntag(length);
+  ElementsKind const elements_kind = PACKED_ELEMENTS;
+
+  Node* const elements =
+      AllocateFixedArray(elements_kind, length, SMI_PARAMETERS);
+  FillFixedArrayWithValue(elements_kind, elements, zero, length_intptr,
+                          Heap::kTheHoleValueRootIndex);
+  Return(elements);
+}
+
 TF_BUILTIN(NewUnmappedArgumentsElements, CodeStubAssembler) {
   Node* frame = Parameter(Descriptor::kFrame);
   Node* length = SmiToWord(Parameter(Descriptor::kLength));

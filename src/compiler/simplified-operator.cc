@@ -655,6 +655,21 @@ struct SimplifiedOperatorGlobalCache final {
   };
   ArgumentsFrameOperator kArgumentsFrame;
 
+  struct NewFastDoubleElementsOperator final : public Operator {
+    NewFastDoubleElementsOperator()
+        : Operator(IrOpcode::kNewFastDoubleElements, Operator::kEliminatable,
+                   "NewFastDoubleElements", 1, 1, 1, 1, 1, 0) {}
+  };
+  NewFastDoubleElementsOperator kNewFastDoubleElements;
+
+  struct NewFastSmiOrObjectElementsOperator final : public Operator {
+    NewFastSmiOrObjectElementsOperator()
+        : Operator(IrOpcode::kNewFastSmiOrObjectElements,
+                   Operator::kEliminatable, "NewFastSmiOrObjectElements", 1, 1,
+                   1, 1, 1, 0) {}
+  };
+  NewFastSmiOrObjectElementsOperator kNewFastSmiOrObjectElements;
+
   struct NewUnmappedArgumentsElementsOperator final : public Operator {
     NewUnmappedArgumentsElementsOperator()
         : Operator(IrOpcode::kNewUnmappedArgumentsElements,
@@ -844,6 +859,8 @@ GET_FROM_CACHE(ArrayBufferWasNeutered)
 GET_FROM_CACHE(ArgumentsFrame)
 GET_FROM_CACHE(LookupHashStorageIndex)
 GET_FROM_CACHE(LoadHashMapValue)
+GET_FROM_CACHE(NewFastDoubleElements)
+GET_FROM_CACHE(NewFastSmiOrObjectElements)
 GET_FROM_CACHE(NewUnmappedArgumentsElements)
 #undef GET_FROM_CACHE
 

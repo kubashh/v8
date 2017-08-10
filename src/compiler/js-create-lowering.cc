@@ -624,27 +624,17 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
 
 Reduction JSCreateLowering::ReduceNewArray(Node* node, Node* length,
                                            int capacity,
-                                           Handle<AllocationSite> site) {
+                                           Handle<Map> initial_map,
+                                           PretenureFlag pretenure) {
   DCHECK(node->opcode() == IrOpcode::kJSCreateArray ||
          node->opcode() == IrOpcode::kJSCreateEmptyLiteralArray);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
 
-  // Extract transition and tenuring feedback from the {site} and add
-  // appropriate code dependencies on the {site} if deoptimization is
-  // enabled.
-  PretenureFlag pretenure = site->GetPretenureMode();
-  ElementsKind elements_kind = site->GetElementsKind();
+  // Determine the appropriate elements kind.
+  ElementsKind elements_kind = initial_map->elements_kind();
   DCHECK(IsFastElementsKind(elements_kind));
-  if (NodeProperties::GetType(length)->Max() > 0) {
-    elements_kind = GetHoleyElementsKind(elements_kind);
-  }
-  dependencies()->AssumeTenuringDecision(site);
-  dependencies()->AssumeTransitionStable(site);
-
-  // Retrieve the initial map for the array.
-  Node* js_array_map = jsgraph()->HeapConstant(
-      handle(native_context()->GetInitialJSArrayMap(elements_kind), isolate()));
+  DCHECK(IsHoleyElementsKind(elements_kind));
 
   // Setup elements and properties.
   Node* elements;
@@ -658,11 +648,15 @@ Reduction JSCreateLowering::ReduceNewArray(Node* node, Node* length,
 
   // Perform the allocation of the actual JSArray object.
   AllocationBuilder a(jsgraph(), effect, control);
-  a.Allocate(JSArray::kSize, pretenure);
-  a.Store(AccessBuilder::ForMap(), js_array_map);
+  a.Allocate(initial_map->instance_size(), pretenure);
+  a.Store(AccessBuilder::ForMap(), initial_map);
   a.Store(AccessBuilder::ForJSObjectProperties(), properties);
   a.Store(AccessBuilder::ForJSObjectElements(), elements);
   a.Store(AccessBuilder::ForJSArrayLength(elements_kind), length);
+  for (int i = 0; i < initial_map->GetInObjectProperties(); ++i) {
+    a.Store(AccessBuilder::ForJSObjectInObjectProperty(initial_map, i),
+            jsgraph()->UndefinedConstant());
+  }
   RelaxControls(node);
   a.FinishAndChange(node);
   return Changed(node);
@@ -670,19 +664,15 @@ Reduction JSCreateLowering::ReduceNewArray(Node* node, Node* length,
 
 Reduction JSCreateLowering::ReduceNewArray(Node* node,
                                            std::vector<Node*> values,
-                                           Handle<AllocationSite> site) {
+                                           Handle<Map> initial_map,
+                                           PretenureFlag pretenure) {
   DCHECK_EQ(IrOpcode::kJSCreateArray, node->opcode());
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
 
-  // Extract transition and tenuring feedback from the {site} and add
-  // appropriate code dependencies on the {site} if deoptimization is
-  // enabled.
-  PretenureFlag pretenure = site->GetPretenureMode();
-  ElementsKind elements_kind = site->GetElementsKind();
+  // Determine the appropriate elements kind.
+  ElementsKind elements_kind = initial_map->elements_kind();
   DCHECK(IsFastElementsKind(elements_kind));
-  dependencies()->AssumeTenuringDecision(site);
-  dependencies()->AssumeTransitionStable(site);
 
   // Check {values} based on the {elements_kind}. These checks are guarded
   // by the {elements_kind} feedback on the {site}, so it's safe to just
@@ -705,10 +695,6 @@ Reduction JSCreateLowering::ReduceNewArray(Node* node,
     }
   }
 
-  // Retrieve the initial map for the array.
-  Node* js_array_map = jsgraph()->HeapConstant(
-      handle(native_context()->GetInitialJSArrayMap(elements_kind), isolate()));
-
   // Setup elements, properties and length.
   Node* elements = effect =
       AllocateElements(effect, control, elements_kind, values, pretenure);
@@ -717,11 +703,15 @@ Reduction JSCreateLowering::ReduceNewArray(Node* node,
 
   // Perform the allocation of the actual JSArray object.
   AllocationBuilder a(jsgraph(), effect, control);
-  a.Allocate(JSArray::kSize, pretenure);
-  a.Store(AccessBuilder::ForMap(), js_array_map);
+  a.Allocate(initial_map->instance_size(), pretenure);
+  a.Store(AccessBuilder::ForMap(), initial_map);
   a.Store(AccessBuilder::ForJSObjectProperties(), properties);
   a.Store(AccessBuilder::ForJSObjectElements(), elements);
   a.Store(AccessBuilder::ForJSArrayLength(elements_kind), length);
+  for (int i = 0; i < initial_map->GetInObjectProperties(); ++i) {
+    a.Store(AccessBuilder::ForJSObjectInObjectProperty(initial_map, i),
+            jsgraph()->UndefinedConstant());
+  }
   RelaxControls(node);
   a.FinishAndChange(node);
   return Changed(node);
@@ -792,48 +782,145 @@ Reduction JSCreateLowering::ReduceNewArrayToStubCall(
 Reduction JSCreateLowering::ReduceJSCreateArray(Node* node) {
   DCHECK_EQ(IrOpcode::kJSCreateArray, node->opcode());
   CreateArrayParameters const& p = CreateArrayParametersOf(node->op());
+  int const arity = static_cast<int>(p.arity());
+  Handle<AllocationSite> const site = p.site();
+  PretenureFlag pretenure = NOT_TENURED;
+  Handle<JSFunction> constructor(native_context()->array_function(), isolate());
   Node* target = NodeProperties::GetValueInput(node, 0);
   Node* new_target = NodeProperties::GetValueInput(node, 1);
+  Type* new_target_type = (target == new_target)
+                              ? Type::HeapConstant(constructor, zone())
+                              : NodeProperties::GetType(new_target);
 
-  // TODO(bmeurer): Optimize the subclassing case.
-  if (target != new_target) return NoChange();
+  // Extract original constructor function.
+  if (new_target_type->IsHeapConstant() &&
+      new_target_type->AsHeapConstant()->Value()->IsJSFunction()) {
+    Handle<JSFunction> original_constructor =
+        Handle<JSFunction>::cast(new_target_type->AsHeapConstant()->Value());
+    DCHECK(constructor->IsConstructor());
+    DCHECK(original_constructor->IsConstructor());
 
-  // Check if we have a feedback {site} on the {node}.
-  Handle<AllocationSite> site = p.site();
-  if (!site.is_null()) {
-    // Attempt to inline calls to the Array constructor for the relevant cases
-    // where either no arguments are provided, or exactly one unsigned number
-    // argument is given.
-    if (site->CanInlineCall()) {
-      if (p.arity() == 0) {
+    // Check if we can inline the allocation.
+    if (IsAllocationInlineable(constructor, original_constructor)) {
+      // Force completion of inobject slack tracking before
+      // generating code to finalize the instance size.
+      original_constructor->CompleteInobjectSlackTrackingIfActive();
+      Handle<Map> initial_map(original_constructor->initial_map(), isolate());
+
+      // Add a dependency on the {initial_map} to make sure that this code is
+      // deoptimized whenever the {initial_map} changes.
+      dependencies()->AssumeInitialMapCantChange(initial_map);
+
+      // Check if we have a feedback {site} on the {node}.
+      if (!site.is_null()) {
+        ElementsKind elements_kind = site->GetElementsKind();
+        if (initial_map->elements_kind() != elements_kind) {
+          initial_map = Map::AsElementsKind(initial_map, elements_kind);
+        }
+        pretenure = site->GetPretenureMode();
+
+        dependencies()->AssumeTransitionStable(site);
+        dependencies()->AssumeTenuringDecision(site);
+      }
+
+      if (arity == 0) {
         Node* length = jsgraph()->ZeroConstant();
         int capacity = JSArray::kPreallocatedArrayElements;
-        return ReduceNewArray(node, length, capacity, site);
-      } else if (p.arity() == 1) {
+        return ReduceNewArray(node, length, capacity, initial_map, pretenure);
+      } else if (arity == 1) {
         Node* length = NodeProperties::GetValueInput(node, 2);
         Type* length_type = NodeProperties::GetType(length);
         if (!length_type->Maybe(Type::Number())) {
           // Handle the single argument case, where we know that the value
           // cannot be a valid Array length.
-          return ReduceNewArray(node, {length}, site);
+          switch (initial_map->elements_kind()) {
+            case PACKED_SMI_ELEMENTS:
+            case PACKED_DOUBLE_ELEMENTS:
+              initial_map = Map::AsElementsKind(initial_map, PACKED_ELEMENTS);
+              break;
+            case HOLEY_SMI_ELEMENTS:
+            case HOLEY_DOUBLE_ELEMENTS:
+              initial_map = Map::AsElementsKind(initial_map, HOLEY_ELEMENTS);
+              break;
+            case PACKED_ELEMENTS:
+            case HOLEY_ELEMENTS:
+              break;
+            default:
+              UNREACHABLE();
+          }
+          return ReduceNewArray(node, {length}, initial_map, pretenure);
         }
         if (length_type->Is(Type::SignedSmall()) && length_type->Min() >= 0 &&
             length_type->Max() <= kElementLoopUnrollLimit &&
             length_type->Min() == length_type->Max()) {
+          // Constructing an Array via new Array(N) where N is an unsigned
+          // integer, always creates a holey backing store.
+          if (!IsHoleyElementsKind(initial_map->elements_kind())) {
+            initial_map = Map::AsElementsKind(
+                initial_map,
+                GetHoleyElementsKind(initial_map->elements_kind()));
+          }
           int capacity = static_cast<int>(length_type->Max());
-          return ReduceNewArray(node, length, capacity, site);
+          return ReduceNewArray(node, length, capacity, initial_map, pretenure);
         }
-      } else if (p.arity() <= JSArray::kInitialMaxFastElementArray) {
-        std::vector<Node*> values;
-        values.reserve(p.arity());
-        for (size_t i = 0; i < p.arity(); ++i) {
-          values.push_back(
-              NodeProperties::GetValueInput(node, static_cast<int>(2 + i)));
+
+        if (true) {
+          // TODO(bmeurer): Move this to a helper function.
+          // TODO(bmeurer): Check AllocationSite "CanInlineCall" or a global
+          // protector for the subclasses?
+          Node* effect = NodeProperties::GetEffectInput(node);
+          Node* control = NodeProperties::GetControlInput(node);
+          // TODO(bmeurer): What about the limit?
+          length = effect = graph()->NewNode(
+              simplified()->CheckBounds(), length,
+              jsgraph()->Constant(FixedArray::kMaxRegularLength), effect,
+              control);
+          Node* elements = effect = graph()->NewNode(
+              IsDoubleElementsKind(initial_map->elements_kind())
+                  ? simplified()->NewFastDoubleElements()
+                  : simplified()->NewFastSmiOrObjectElements(),
+              length, effect, control);
+          Node* properties = jsgraph()->EmptyFixedArrayConstant();
+
+          // Constructing an Array via new Array(N) where N is an unsigned
+          // integer, always creates a holey backing store.
+          if (!IsHoleyElementsKind(initial_map->elements_kind())) {
+            initial_map = Map::AsElementsKind(
+                initial_map,
+                GetHoleyElementsKind(initial_map->elements_kind()));
+          }
+
+          // Perform the allocation of the actual JSArray object.
+          AllocationBuilder a(jsgraph(), effect, control);
+          a.Allocate(initial_map->instance_size(), pretenure);
+          a.Store(AccessBuilder::ForMap(), initial_map);
+          a.Store(AccessBuilder::ForJSObjectProperties(), properties);
+          a.Store(AccessBuilder::ForJSObjectElements(), elements);
+          a.Store(AccessBuilder::ForJSArrayLength(initial_map->elements_kind()),
+                  length);
+          for (int i = 0; i < initial_map->GetInObjectProperties(); ++i) {
+            a.Store(AccessBuilder::ForJSObjectInObjectProperty(initial_map, i),
+                    jsgraph()->UndefinedConstant());
+          }
+          RelaxControls(node);
+          a.FinishAndChange(node);
+          return Changed(node);
         }
-        return ReduceNewArray(node, values, site);
+      } else if (arity <= JSArray::kInitialMaxFastElementArray) {
+        if (!site.is_null() && site->CanInlineCall()) {
+          std::vector<Node*> values;
+          values.reserve(p.arity());
+          for (int i = 0; i < arity; ++i) {
+            values.push_back(NodeProperties::GetValueInput(node, 2 + i));
+          }
+          return ReduceNewArray(node, values, initial_map, pretenure);
+        }
       }
     }
   }
+
+  // TODO(bmeurer): Optimize the subclassing case.
+  if (target != new_target) return NoChange();
 
   return ReduceNewArrayToStubCall(node, site);
 }
@@ -931,8 +1018,14 @@ Reduction JSCreateLowering::ReduceJSCreateEmptyLiteralArray(Node* node) {
     if (raw_site->IsAllocationSite()) {
       Handle<AllocationSite> site = Handle<AllocationSite>::cast(raw_site);
       DCHECK(!site->PointsToLiteral());
+      Handle<Map> const initial_map(
+          native_context()->GetInitialJSArrayMap(site->GetElementsKind()),
+          isolate());
+      PretenureFlag const pretenure = site->GetPretenureMode();
+      dependencies()->AssumeTransitionStable(site);
+      dependencies()->AssumeTenuringDecision(site);
       Node* length = jsgraph()->ZeroConstant();
-      return ReduceNewArray(node, length, 0, site);
+      return ReduceNewArray(node, length, 0, initial_map, pretenure);
     }
   }
   return NoChange();

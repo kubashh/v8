@@ -465,6 +465,9 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* ArgumentsLength(int formal_parameter_count,
                                   bool is_rest_length);
 
+  const Operator* NewFastDoubleElements();
+  const Operator* NewFastSmiOrObjectElements();
+
   // new-unmapped-arguments-elements
   const Operator* NewUnmappedArgumentsElements();
 
