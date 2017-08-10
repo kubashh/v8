@@ -3321,6 +3321,8 @@ class BytecodeArray : public FixedArrayBase {
   // Accessors for bytecode's code age.
   inline Age bytecode_age() const;
   inline void set_bytecode_age(Age age);
+  // Atomically increments the bytecode age.
+  void increment_bytecode_age();
 
   // Accessors for the constant pool.
   DECL_ACCESSORS(constant_pool, FixedArray)
