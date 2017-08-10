@@ -841,9 +841,6 @@ class MacroAssembler : public TurboAssembler {
   void JumpIfNotUniqueNameInstanceType(Operand operand, Label* not_unique_name,
                                        Label::Distance distance = Label::kFar);
 
-  void EmitSeqStringSetCharCheck(Register string, Register index,
-                                 Register value, uint32_t encoding_mask);
-
   static int SafepointRegisterStackIndex(Register reg) {
     return SafepointRegisterStackIndex(reg.code());
   }

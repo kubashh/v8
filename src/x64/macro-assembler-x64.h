@@ -844,13 +844,6 @@ class MacroAssembler : public TurboAssembler {
                       SmiOperationConstraints constraints, Label* bailout_label,
                       Label::Distance near_jump = Label::kFar);
 
-  // Negating a smi can give a negative zero or too large positive value.
-  // NOTICE: This operation jumps on success, not failure!
-  void SmiNeg(Register dst,
-              Register src,
-              Label* on_smi_result,
-              Label::Distance near_jump = Label::kFar);
-
   // Adds smi values and return the result as a smi.
   // If dst is src1, then src1 will be destroyed if the operation is
   // successful, otherwise kept intact.
@@ -891,79 +884,6 @@ class MacroAssembler : public TurboAssembler {
               Register src1,
               const Operand& src2);
 
-  // Multiplies smi values and return the result as a smi,
-  // if possible.
-  // If dst is src1, then src1 will be destroyed, even if
-  // the operation is unsuccessful.
-  void SmiMul(Register dst,
-              Register src1,
-              Register src2,
-              Label* on_not_smi_result,
-              Label::Distance near_jump = Label::kFar);
-
-  // Divides one smi by another and returns the quotient.
-  // Clobbers rax and rdx registers.
-  void SmiDiv(Register dst,
-              Register src1,
-              Register src2,
-              Label* on_not_smi_result,
-              Label::Distance near_jump = Label::kFar);
-
-  // Divides one smi by another and returns the remainder.
-  // Clobbers rax and rdx registers.
-  void SmiMod(Register dst,
-              Register src1,
-              Register src2,
-              Label* on_not_smi_result,
-              Label::Distance near_jump = Label::kFar);
-
-  // Bitwise operations.
-  void SmiNot(Register dst, Register src);
-  void SmiAnd(Register dst, Register src1, Register src2);
-  void SmiOr(Register dst, Register src1, Register src2);
-  void SmiXor(Register dst, Register src1, Register src2);
-  void SmiAndConstant(Register dst, Register src1, Smi* constant);
-  void SmiOrConstant(Register dst, Register src1, Smi* constant);
-  void SmiXorConstant(Register dst, Register src1, Smi* constant);
-
-  void SmiShiftLeftConstant(Register dst,
-                            Register src,
-                            int shift_value,
-                            Label* on_not_smi_result = NULL,
-                            Label::Distance near_jump = Label::kFar);
-  void SmiShiftLogicalRightConstant(Register dst,
-                                    Register src,
-                                    int shift_value,
-                                    Label* on_not_smi_result,
-                                    Label::Distance near_jump = Label::kFar);
-  void SmiShiftArithmeticRightConstant(Register dst,
-                                       Register src,
-                                       int shift_value);
-
-  // Shifts a smi value to the left, and returns the result if that is a smi.
-  // Uses and clobbers rcx, so dst may not be rcx.
-  void SmiShiftLeft(Register dst,
-                    Register src1,
-                    Register src2,
-                    Label* on_not_smi_result = NULL,
-                    Label::Distance near_jump = Label::kFar);
-  // Shifts a smi value to the right, shifting in zero bits at the top, and
-  // returns the unsigned interpretation of the result if that is a smi.
-  // Uses and clobbers rcx, so dst may not be rcx.
-  void SmiShiftLogicalRight(Register dst,
-                            Register src1,
-                            Register src2,
-                            Label* on_not_smi_result,
-                            Label::Distance near_jump = Label::kFar);
-  // Shifts a smi value to the right, sign extending the top, and
-  // returns the signed interpretation of the result. That will always
-  // be a valid smi value, since it's numerically smaller than the
-  // original.
-  // Uses and clobbers rcx, so dst may not be rcx.
-  void SmiShiftArithmeticRight(Register dst,
-                               Register src1,
-                               Register src2);
-
   // Specialized operations
 
   // Select the non-smi register of two registers where exactly one is a
@@ -983,20 +903,6 @@ class MacroAssembler : public TurboAssembler {
   // on what is most efficient. If src and dst are different registers,
   // src is always unchanged.
   SmiIndex SmiToIndex(Register dst, Register src, int shift);
-
-  // Converts a positive smi to a negative index.
-  SmiIndex SmiToNegativeIndex(Register dst, Register src, int shift);
-
-  // Add the value of a smi in memory to an int32 register.
-  // Sets flags as a normal add.
-  void AddSmiField(Register dst, const Operand& src);
-
-  // Save away a raw integer with pointer size on the stack as two integers
-  // masquerading as smis so that the garbage collector skips visiting them.
-  void PushRegisterAsTwoSmis(Register src, Register scratch = kScratchRegister);
-  // Reconstruct a raw integer with pointer size from two integers masquerading
-  // as smis on the top of stack.
-  void PopRegisterAsTwoSmis(Register dst, Register scratch = kScratchRegister);
 
   void Test(const Operand& dst, Smi* source);
 
@@ -1020,11 +926,6 @@ class MacroAssembler : public TurboAssembler {
       Register first_object_instance_type, Register second_object_instance_type,
       Register scratch1, Register scratch2, Label* on_fail,
       Label::Distance near_jump = Label::kFar);
-
-  void EmitSeqStringSetCharCheck(Register string,
-                                 Register index,
-                                 Register value,
-                                 uint32_t encoding_mask);
 
   // Checks if the given register or operand is a unique name
   void JumpIfNotUniqueNameInstanceType(Register reg, Label* not_unique_name,

@@ -2480,46 +2480,6 @@ int TurboAssembler::CalculateStackPassedWords(int num_reg_arguments,
 }
 
 
-void MacroAssembler::EmitSeqStringSetCharCheck(Register string, Register index,
-                                               Register value,
-                                               uint32_t encoding_mask) {
-  Label is_object;
-  TestIfSmi(string, r0);
-  Check(ne, kNonObject, cr0);
-
-  LoadP(ip, FieldMemOperand(string, HeapObject::kMapOffset));
-  lbz(ip, FieldMemOperand(ip, Map::kInstanceTypeOffset));
-
-  andi(ip, ip, Operand(kStringRepresentationMask | kStringEncodingMask));
-  cmpi(ip, Operand(encoding_mask));
-  Check(eq, kUnexpectedStringType);
-
-// The index is assumed to be untagged coming in, tag it to compare with the
-// string length without using a temp register, it is restored at the end of
-// this function.
-#if !V8_TARGET_ARCH_PPC64
-  Label index_tag_ok, index_tag_bad;
-  JumpIfNotSmiCandidate(index, r0, &index_tag_bad);
-#endif
-  SmiTag(index, index);
-#if !V8_TARGET_ARCH_PPC64
-  b(&index_tag_ok);
-  bind(&index_tag_bad);
-  Abort(kIndexIsTooLarge);
-  bind(&index_tag_ok);
-#endif
-
-  LoadP(ip, FieldMemOperand(string, String::kLengthOffset));
-  cmp(index, ip);
-  Check(lt, kIndexIsTooLarge);
-
-  DCHECK(Smi::kZero == 0);
-  cmpi(index, Operand::Zero());
-  Check(ge, kIndexIsNegative);
-
-  SmiUntag(index, index);
-}
-
 void TurboAssembler::PrepareCallCFunction(int num_reg_arguments,
                                           int num_double_arguments,
                                           Register scratch) {

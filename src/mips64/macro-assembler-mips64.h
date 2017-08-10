@@ -1161,9 +1161,6 @@ class MacroAssembler : public TurboAssembler {
 
   void PushObject(Handle<Object> handle);
 
-  void PushRegisterAsTwoSmis(Register src, Register scratch = at);
-  void PopRegisterAsTwoSmis(Register dst, Register scratch = at);
-
   void MultiPopReversed(RegList regs);
   void MultiPopReversedFPU(RegList regs);
 

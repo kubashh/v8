@@ -1337,9 +1337,6 @@ class MacroAssembler : public TurboAssembler {
 
   void JumpIfNotUniqueNameInstanceType(Register reg, Label* not_unique_name);
 
-  void EmitSeqStringSetCharCheck(Register string, Register index,
-                                 Register value, uint32_t encoding_mask);
-
   // ---------------------------------------------------------------------------
   // Patching helpers.
 
