@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ad5d1147_9fc339b9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-10T08:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "972e023b_396f9b23",
+      "range": {
+        "startLine": 2893,
+        "startChar": 2,
+        "endLine": 2893,
+        "endChar": 7
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "152ff682_d63fb819",
         "filename": "src/ic/ic.cc",
         "patchSetId": 2
@@ -120,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "c19684b6_32db52b4",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-10T08:18:33Z",
+      "side": 1,
+      "message": "That is a very good invariant. Thanks for checking!",
+      "parentUuid": "7c6fb094_8367a761",
+      "range": {
+        "startLine": 718,
+        "startChar": 18,
+        "endLine": 718,
+        "endChar": 44
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b95b6ef1_4c6593a4",
         "filename": "src/ic/ic.cc",
         "patchSetId": 2
@@ -131,6 +179,30 @@
       "writtenOn": "2017-08-09T22:47:37Z",
       "side": 1,
       "message": "I\u0027m not super happy with this, but the situation (keyed stores causing map transitions on prototypes) is probably rare enough that we don\u0027t care, and I\u0027m not sure what exactly the best behavior would be. Maybe roughly \"if the receiver is a prototype, then use the updated map (after SetObjectProperty) for GetStoreMode, DictionaryElementsInPrototypeChainOnly, and UpdateStoreElement\", but that\u0027s a bit messy to integrate, and it\u0027s difficult to estimate what the impact would be.",
+      "range": {
+        "startLine": 2335,
+        "startChar": 12,
+        "endLine": 2335,
+        "endChar": 56
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72fe4648_88f8b57e",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-10T08:18:33Z",
+      "side": 1,
+      "message": "I agree that this part is getting messy. I think it is because we don\u0027t have a real transition from the old map to the new map (as the old map is abandoned), but this code assumes that there was a transition.\n\nHere is my hand-wavy reasoning of why this check should be ok:\nThe existing code was creating a map transition from the abandoned prototype map (with broken descriptors). That transition was never going to be used because there is no (and will not be) object with the abandoned map. This follows from the one-to-one correspondence between the prototype object and its map, and the fact that there is no incoming transitions to the abandoned prototype map.\n\nSo this check should avoid a redundant transition.",
+      "parentUuid": "b95b6ef1_4c6593a4",
       "range": {
         "startLine": 2335,
         "startChar": 12,
@@ -235,6 +307,30 @@
       "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571bb129_4dcbeac8",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5222,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-10T08:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2c1ba32_75edfd5b",
+      "range": {
+        "startLine": 5222,
+        "startChar": 6,
+        "endLine": 5222,
+        "endChar": 32
+      },
+      "revId": "d23d9f8394ba87c8324716201f1a2ee0fe65e5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
