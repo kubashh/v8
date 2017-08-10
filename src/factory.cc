@@ -1715,10 +1715,10 @@ Handle<PreParsedScopeData> Factory::NewPreParsedScopeData() {
   return result;
 }
 
-Handle<JSObject> Factory::NewExternal(void* value) {
-  Handle<Foreign> foreign = NewForeign(static_cast<Address>(value));
-  Handle<JSObject> external = NewJSObjectFromMap(external_map());
-  external->SetEmbedderField(0, *foreign);
+Handle<External> Factory::NewExternal(void* value) {
+  Handle<External> external =
+      Handle<External>::cast(NewJSObjectFromMap(external_map()));
+  external->set_foreign_address(static_cast<Address>(value));
   return external;
 }
 

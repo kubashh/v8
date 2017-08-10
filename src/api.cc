@@ -6291,14 +6291,13 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
   }
 }
 
-static void* ExternalValue(i::Object* obj) {
+static void* ExternalValue(i::External* obj) {
   // Obscure semantics for undefined, but somehow checked in our unit tests...
   if (!obj->IsSmi() &&
       obj->IsUndefined(i::HeapObject::cast(obj)->GetIsolate())) {
     return NULL;
   }
-  i::Object* foreign = i::JSObject::cast(obj)->GetEmbedderField(0);
-  return i::Foreign::cast(foreign)->foreign_address();
+  return obj->foreign_address();
 }
 
 
@@ -6778,8 +6777,8 @@ Local<External> v8::External::New(Isolate* isolate, void* value) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
   LOG_API(i_isolate, External, New);
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
-  i::Handle<i::JSObject> external = i_isolate->factory()->NewExternal(value);
-  return Utils::ExternalToLocal(external);
+  i::Handle<i::External> external = i_isolate->factory()->NewExternal(value);
+  return Utils::ToLocal(external);
 }
 
 

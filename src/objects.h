@@ -456,6 +456,9 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(WASM_MEMORY_TYPE)                                           \
   V(WASM_MODULE_TYPE)                                           \
   V(WASM_TABLE_TYPE)                                            \
+                                                                \
+  V(EXTERNAL_TYPE)                                              \
+                                                                \
   V(JS_BOUND_FUNCTION_TYPE)                                     \
   V(JS_FUNCTION_TYPE)
 
@@ -811,6 +814,7 @@ enum InstanceType : uint8_t {
   WASM_MEMORY_TYPE,
   WASM_MODULE_TYPE,
   WASM_TABLE_TYPE,
+  EXTERNAL_TYPE,
   JS_BOUND_FUNCTION_TYPE,
   JS_FUNCTION_TYPE,  // LAST_JS_OBJECT_TYPE, LAST_JS_RECEIVER_TYPE
 
@@ -6811,6 +6815,35 @@ class Foreign: public HeapObject {
   DISALLOW_IMPLICIT_CONSTRUCTORS(Foreign);
 };
 
+// Used to back v8::External, instead of having two objects.
+// Separate from Foreign so that it can be a valid JSObject.
+//
+// To avoid modifying the heap visiting logic (and since we cannot guarantee
+// that the pointer provided to v8::External is aligned), split it over two
+// fields.
+//
+// high: low bit masked off (equal to the pointer if it was two-byte-aligned)
+// low: low bit, shifted to the next bit
+class External : public JSObject {
+ public:
+  inline Address foreign_address();
+  inline void set_foreign_address(Address value);
+
+  DECL_CAST(External)
+
+  // Dispatched behavior.
+  DECL_PRINTER(External)
+  DECL_VERIFIER(External)
+
+  // Layout description.
+  static const int kForeignAddressHighOffset = JSObject::kHeaderSize;
+  static const int kForeignAddressLowOffset =
+      kForeignAddressHighOffset + kPointerSize;
+  static const int kSize = kForeignAddressLowOffset + kPointerSize;
+
+ private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(External);
+};
 
 // The JSArray describes JavaScript Arrays
 //  Such an array can be in one of two modes:

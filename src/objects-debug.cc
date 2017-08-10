@@ -1072,6 +1072,14 @@ void JSPromise::JSPromiseVerify() {
         reject_reactions()->IsFixedArray());
 }
 
+void External::ExternalVerify() {
+  CHECK(IsExternal());
+  JSObjectVerify();
+  VerifySmiField(kForeignAddressHighOffset);
+  VerifySmiField(kForeignAddressLowOffset);
+  CHECK(map()->FindRootMap() == GetHeap()->external_map());
+}
+
 template <typename Derived>
 void SmallOrderedHashTable<Derived>::SmallOrderedHashTableVerify() {
   CHECK(IsSmallOrderedHashTable());

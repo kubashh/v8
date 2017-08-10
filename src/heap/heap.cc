@@ -2599,7 +2599,7 @@ bool Heap::CreateInitialMaps() {
                  shared_function_info)
 
     ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kSize, message_object)
-    ALLOCATE_MAP(JS_OBJECT_TYPE, JSObject::kHeaderSize + kPointerSize, external)
+    ALLOCATE_MAP(EXTERNAL_TYPE, External::kSize, external)
     external_map()->set_is_extensible(false);
 #undef ALLOCATE_PRIMITIVE_MAP
 #undef ALLOCATE_VARSIZE_MAP
@@ -3826,6 +3826,7 @@ AllocationResult Heap::CopyJSObject(JSObject* source, AllocationSite* site) {
         map->instance_type() == WASM_MEMORY_TYPE ||
         map->instance_type() == WASM_MODULE_TYPE ||
         map->instance_type() == WASM_TABLE_TYPE ||
+        map->instance_type() == EXTERNAL_TYPE ||
         map->instance_type() == JS_SPECIAL_API_OBJECT_TYPE);
 
   int object_size = map->instance_size();

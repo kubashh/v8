@@ -683,7 +683,7 @@ class V8_EXPORT_PRIVATE Factory final {
   Handle<PreParsedScopeData> NewPreParsedScopeData();
 
   // Create an External object for V8's external API.
-  Handle<JSObject> NewExternal(void* value);
+  Handle<External> NewExternal(void* value);
 
   // The reference to the Code object is stored in self_reference.
   // This allows generated code to reference its own Code object
