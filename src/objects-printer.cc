@@ -572,6 +572,11 @@ void JSRegExp::JSRegExpPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, this);
 }
 
+void External::ExternalPrint(std::ostream& os) {  // NOLINT
+  JSObjectPrintHeader(os, this, "External");
+  os << "\n - foreign address = " << reinterpret_cast<void*>(foreign_address());
+  JSObjectPrintBody(os, this);
+}
 
 void Symbol::SymbolPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Symbol");

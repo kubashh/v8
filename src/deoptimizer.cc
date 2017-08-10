@@ -3911,6 +3911,7 @@ Handle<Object> TranslatedState::MaterializeCapturedObjectAt(
     case WASM_INSTANCE_TYPE:
     case WASM_MEMORY_TYPE:
     case WASM_TABLE_TYPE:
+    case EXTERNAL_TYPE:
       OFStream os(stderr);
       os << "[couldn't handle instance type " << map->instance_type() << "]"
          << std::endl;

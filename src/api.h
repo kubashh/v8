@@ -104,7 +104,7 @@ class RegisteredExtension {
   V(Function, JSReceiver)                      \
   V(Message, JSMessageObject)                  \
   V(Context, Context)                          \
-  V(External, Object)                          \
+  V(External, External)                        \
   V(StackTrace, FixedArray)                    \
   V(StackFrame, StackFrameInfo)                \
   V(Proxy, JSProxy)                            \
@@ -159,6 +159,8 @@ class Utils {
       v8::internal::Handle<v8::internal::JSDataView> obj);
   static inline Local<TypedArray> ToLocal(
       v8::internal::Handle<v8::internal::JSTypedArray> obj);
+  static inline Local<External> ToLocal(
+      v8::internal::Handle<v8::internal::External> obj);
   static inline Local<Uint8Array> ToLocalUint8Array(
       v8::internal::Handle<v8::internal::JSTypedArray> obj);
   static inline Local<Uint8ClampedArray> ToLocalUint8ClampedArray(
@@ -203,8 +205,6 @@ class Utils {
       v8::internal::Handle<v8::internal::FunctionTemplateInfo> obj);
   static inline Local<AccessorSignature> AccessorSignatureToLocal(
       v8::internal::Handle<v8::internal::FunctionTemplateInfo> obj);
-  static inline Local<External> ExternalToLocal(
-      v8::internal::Handle<v8::internal::JSObject> obj);
   static inline Local<NativeWeakMap> NativeWeakMapToLocal(
       v8::internal::Handle<v8::internal::JSWeakMap> obj);
   static inline Local<Function> CallableToLocal(
@@ -308,6 +308,7 @@ MAKE_TO_LOCAL(ToLocal, JSArrayBufferView, ArrayBufferView)
 MAKE_TO_LOCAL(ToLocal, JSDataView, DataView)
 MAKE_TO_LOCAL(ToLocal, JSTypedArray, TypedArray)
 MAKE_TO_LOCAL(ToLocalShared, JSArrayBuffer, SharedArrayBuffer)
+MAKE_TO_LOCAL(ToLocal, External, External)
 
 TYPED_ARRAYS(MAKE_TO_LOCAL_TYPED_ARRAY)
 
@@ -322,7 +323,6 @@ MAKE_TO_LOCAL(StackFrameToLocal, StackFrameInfo, StackFrame)
 MAKE_TO_LOCAL(NumberToLocal, Object, Number)
 MAKE_TO_LOCAL(IntegerToLocal, Object, Integer)
 MAKE_TO_LOCAL(Uint32ToLocal, Object, Uint32)
-MAKE_TO_LOCAL(ExternalToLocal, JSObject, External)
 MAKE_TO_LOCAL(NativeWeakMapToLocal, JSWeakMap, NativeWeakMap)
 MAKE_TO_LOCAL(CallableToLocal, JSReceiver, Function)
 

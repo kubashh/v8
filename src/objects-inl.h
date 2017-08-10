@@ -78,6 +78,7 @@ TYPE_CHECKER(Cell, CELL_TYPE)
 TYPE_CHECKER(Code, CODE_TYPE)
 TYPE_CHECKER(ConstantElementsPair, TUPLE2_TYPE)
 TYPE_CHECKER(CoverageInfo, FIXED_ARRAY_TYPE)
+TYPE_CHECKER(External, EXTERNAL_TYPE)
 TYPE_CHECKER(FixedDoubleArray, FIXED_DOUBLE_ARRAY_TYPE)
 TYPE_CHECKER(Foreign, FOREIGN_TYPE)
 TYPE_CHECKER(FreeSpace, FREE_SPACE_TYPE)
@@ -151,10 +152,6 @@ bool HeapObject::IsJSGeneratorObject() const {
 }
 
 bool HeapObject::IsBoilerplateDescription() const { return IsFixedArray(); }
-
-bool HeapObject::IsExternal() const {
-  return map()->FindRootMap() == GetHeap()->external_map();
-}
 
 #define IS_TYPE_FUNCTION_DEF(type_)                               \
   bool Object::Is##type_() const {                                \
@@ -556,6 +553,7 @@ CAST_ACCESSOR(ContextExtension)
 CAST_ACCESSOR(DeoptimizationInputData)
 CAST_ACCESSOR(DependentCode)
 CAST_ACCESSOR(DescriptorArray)
+CAST_ACCESSOR(External)
 CAST_ACCESSOR(FixedArray)
 CAST_ACCESSOR(FixedArrayBase)
 CAST_ACCESSOR(FixedDoubleArray)
@@ -4875,6 +4873,22 @@ Address Foreign::foreign_address() {
 
 void Foreign::set_foreign_address(Address value) {
   WRITE_INTPTR_FIELD(this, kForeignAddressOffset, OffsetFrom(value));
+}
+
+Address External::foreign_address() {
+  intptr_t high = READ_INTPTR_FIELD(this, kForeignAddressHighOffset);
+  intptr_t low = READ_INTPTR_FIELD(this, kForeignAddressLowOffset);
+  return AddressFrom<Address>(high | (low >> 1));
+}
+
+void External::set_foreign_address(Address value) {
+  intptr_t offset = OffsetFrom(value);
+  intptr_t high = offset & ~static_cast<intptr_t>(1);
+  DCHECK(HAS_SMI_TAG(high));
+  WRITE_INTPTR_FIELD(this, kForeignAddressHighOffset, high);
+  intptr_t low = (offset & 1) << 1;
+  DCHECK(HAS_SMI_TAG(low));
+  WRITE_INTPTR_FIELD(this, kForeignAddressLowOffset, low);
 }
 
 template <class Derived>
