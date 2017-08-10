@@ -520,7 +520,8 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       const VirtualObject* vobject = current->GetVirtualObject(object);
       Variable var;
       if (vobject && !vobject->HasEscaped() &&
-          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var)) {
+          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var) &&
+          NodeProperties::GetType(value)->Is(Type::Any())) {
         current->Set(var, value);
         current->MarkForDeletion();
       } else {
@@ -538,7 +539,8 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       Variable var;
       if (vobject && !vobject->HasEscaped() &&
           OffsetOfElementsAccess(op, index).To(&offset) &&
-          vobject->FieldAt(offset).To(&var)) {
+          vobject->FieldAt(offset).To(&var) &&
+          NodeProperties::GetType(value)->Is(Type::Any())) {
         current->Set(var, value);
         current->MarkForDeletion();
       } else {
@@ -652,8 +654,8 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       }
       break;
     }
-  }  // namespace
-}  // namespace
+  }
+}
 
 }  // namespace
 
