@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27651847_63d12654",
+        "filename": "src/compiler/new-escape-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-10T12:24:59Z",
+      "side": 1,
+      "message": "As discussed offline, this is vacuously true. Just remove this.",
+      "range": {
+        "startLine": 524,
+        "startChar": 10,
+        "endLine": 524,
+        "endChar": 57
+      },
+      "revId": "42b29f9afb63ffb25b99c3de3067c0ffc6851a7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
