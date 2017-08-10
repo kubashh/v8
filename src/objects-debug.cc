@@ -269,6 +269,9 @@ void HeapObject::HeapObjectVerify() {
     case SMALL_ORDERED_HASH_MAP_TYPE:
       SmallOrderedHashMap::cast(this)->SmallOrderedHashTableVerify();
       break;
+    case EXTERNAL_TYPE:
+      External::cast(this)->ExternalVerify();
+      break;
 
 #define MAKE_STRUCT_CASE(NAME, Name, name) \
   case NAME##_TYPE:                        \
@@ -1070,6 +1073,14 @@ void JSPromise::JSPromiseVerify() {
   CHECK(reject_reactions()->IsUndefined(isolate) ||
         reject_reactions()->IsSymbol() || reject_reactions()->IsCallable() ||
         reject_reactions()->IsFixedArray());
+}
+
+void External::ExternalVerify() {
+  CHECK(IsExternal());
+  JSObjectVerify();
+  VerifySmiField(kForeignAddressHighOffset);
+  VerifySmiField(kForeignAddressLowOffset);
+  CHECK(map()->FindRootMap() == GetHeap()->external_map());
 }
 
 template <typename Derived>

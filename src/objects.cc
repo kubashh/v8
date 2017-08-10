@@ -1386,6 +1386,8 @@ int JSObject::GetHeaderSize(InstanceType type) {
       return WasmModuleObject::kSize;
     case WASM_TABLE_TYPE:
       return WasmTableObject::kSize;
+    case EXTERNAL_TYPE:
+      return External::kSize;
     default:
       if (type >= FIRST_ARRAY_ITERATOR_TYPE &&
           type <= LAST_ARRAY_ITERATOR_TYPE) {
@@ -3124,6 +3126,7 @@ VisitorId Map::GetVisitorId(Map* map) {
     case WASM_MEMORY_TYPE:
     case WASM_MODULE_TYPE:
     case WASM_TABLE_TYPE:
+    case EXTERNAL_TYPE:
     case JS_BOUND_FUNCTION_TYPE:
       return has_unboxed_fields ? kVisitJSObject : kVisitJSObjectFast;
     case JS_API_OBJECT_TYPE:

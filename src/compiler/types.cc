@@ -274,6 +274,7 @@ Type::bitset BitsetType::Lub(i::Map* map) {
     case WASM_INSTANCE_TYPE:
     case WASM_MEMORY_TYPE:
     case WASM_TABLE_TYPE:
+    case EXTERNAL_TYPE:
       DCHECK(!map->is_callable());
       DCHECK(!map->is_undetectable());
       return kOtherObject;
