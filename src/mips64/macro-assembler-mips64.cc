@@ -4101,27 +4101,6 @@ void MacroAssembler::PushObject(Handle<Object> handle) {
   push(scratch);
 }
 
-void MacroAssembler::PushRegisterAsTwoSmis(Register src, Register scratch) {
-  DCHECK(!src.is(scratch));
-  mov(scratch, src);
-  dsrl32(src, src, 0);
-  dsll32(src, src, 0);
-  push(src);
-  dsll32(scratch, scratch, 0);
-  push(scratch);
-}
-
-
-void MacroAssembler::PopRegisterAsTwoSmis(Register dst, Register scratch) {
-  DCHECK(!dst.is(scratch));
-  pop(scratch);
-  dsrl32(scratch, scratch, 0);
-  pop(dst);
-  dsrl32(dst, dst, 0);
-  dsll32(dst, dst, 0);
-  or_(dst, dst, scratch);
-}
-
 void MacroAssembler::MaybeDropFrames() {
   // Check whether we need to drop frames to restart a function on the stack.
   ExternalReference restart_fp =

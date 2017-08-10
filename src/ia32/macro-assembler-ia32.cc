@@ -2217,40 +2217,6 @@ void MacroAssembler::JumpIfNotUniqueNameInstanceType(Operand operand,
 }
 
 
-void MacroAssembler::EmitSeqStringSetCharCheck(Register string,
-                                               Register index,
-                                               Register value,
-                                               uint32_t encoding_mask) {
-  Label is_object;
-  JumpIfNotSmi(string, &is_object, Label::kNear);
-  Abort(kNonObject);
-  bind(&is_object);
-
-  push(value);
-  mov(value, FieldOperand(string, HeapObject::kMapOffset));
-  movzx_b(value, FieldOperand(value, Map::kInstanceTypeOffset));
-
-  and_(value, Immediate(kStringRepresentationMask | kStringEncodingMask));
-  cmp(value, Immediate(encoding_mask));
-  pop(value);
-  Check(equal, kUnexpectedStringType);
-
-  // The index is assumed to be untagged coming in, tag it to compare with the
-  // string length without using a temp register, it is restored at the end of
-  // this function.
-  SmiTag(index);
-  Check(no_overflow, kIndexIsTooLarge);
-
-  cmp(index, FieldOperand(string, String::kLengthOffset));
-  Check(less, kIndexIsTooLarge);
-
-  cmp(index, Immediate(Smi::kZero));
-  Check(greater_equal, kIndexIsNegative);
-
-  // Restore the index
-  SmiUntag(index);
-}
-
 void TurboAssembler::PrepareCallCFunction(int num_arguments, Register scratch) {
   int frame_alignment = base::OS::ActivationFrameAlignment();
   if (frame_alignment != 0) {
