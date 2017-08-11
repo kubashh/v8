@@ -106,6 +106,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable ArrayPop(Isolate* isolate);
   static Callable ArrayPush(Isolate* isolate);
   static Callable ArrayShift(Isolate* isolate);
+  static Callable ArrayExtract(Isolate* isolate);
   static Callable FunctionPrototypeBind(Isolate* isolate);
   static Callable TransitionElementsKind(Isolate* isolate, ElementsKind from,
                                          ElementsKind to, bool is_jsarray);
