@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8edd0aa_db55ec3a",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 14894,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-11T08:52:55Z",
+      "side": 1,
+      "message": "Ross, I am moving atomic byte increment to base atomic-utils. I\u0027ll ping once this is done and ready for review.",
+      "range": {
+        "startLine": 14894,
+        "startChar": 5,
+        "endLine": 14894,
+        "endChar": 11
+      },
+      "revId": "08a1d98b695427309fe38f478d9193a9438a5330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
