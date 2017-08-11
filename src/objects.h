@@ -3358,6 +3358,8 @@ class BytecodeArray : public FixedArrayBase {
   // Bytecode aging
   bool IsOld() const;
   void MakeOlder();
+  // Increases the age using atomic compare and swap.
+  void MakeOlderAtomically();
 
   // Clear uninitialized padding space. This ensures that the snapshot content
   // is deterministic.
