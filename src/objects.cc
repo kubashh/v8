@@ -14889,6 +14889,43 @@ void BytecodeArray::CopyBytecodesTo(BytecodeArray* to) {
             from->length());
 }
 
+void BytecodeArray::MakeOlderAtomically() {
+  // Bytecode is aged by the concurrent marker, so we need to use
+  // atomic CAS operation on the word containing the age byte.
+  uintptr_t age_byte_address =
+      reinterpret_cast<uintptr_t>(address() + kBytecodeAgeOffset);
+  // Get the aligned word that contains the byte.
+  uintptr_t word_alignment_mask = static_cast<uintptr_t>(kPointerAlignmentMask);
+  uintptr_t age_word_address = age_byte_address & ~word_alignment_mask;
+  // The word must be completely within the byte code array.
+  DCHECK_LE(age_word_address + kPointerSize,
+            reinterpret_cast<uintptr_t>(address() + Size()));
+  // Get the byte mask and shift amount.
+  uintptr_t age_byte_offset = age_byte_address & word_alignment_mask;
+#if defined(V8_TARGET_BIG_ENDIAN)
+  uintptr_t age_byte_shift = (kPointerSize - 1 - age_byte_offset) * 8u;
+#else
+  uintptr_t age_byte_shift = age_byte_offset * 8u;
+#endif
+  uintptr_t age_byte_mask = static_cast<uintptr_t>(0xFFu) << age_byte_shift;
+
+  uintptr_t* slot = reinterpret_cast<uintptr_t*>(age_word_address);
+  uintptr_t old_word, new_word;
+  uintptr_t old_age, new_age;
+  do {
+    old_word = base::AsAtomicWord::Relaxed_Load(slot);
+    old_age = (old_word & age_byte_mask) >> age_byte_shift;
+    DCHECK_LE(old_age, kLastBytecodeAge);
+    if (old_age == kLastBytecodeAge) break;
+    new_age = old_age + 1;
+    // Set the age byte to the new age.
+    new_word = (old_word & ~age_byte_mask) | (new_age << age_byte_shift);
+  } while (base::AsAtomicWord::Release_CompareAndSwap(slot, old_word,
+                                                      new_word) != old_word);
+  DCHECK_GE(bytecode_age(), kFirstBytecodeAge);
+  DCHECK_LE(bytecode_age(), kLastBytecodeAge);
+}
+
 void BytecodeArray::MakeOlder() {
   Age age = bytecode_age();
   if (age < kLastBytecodeAge) {
