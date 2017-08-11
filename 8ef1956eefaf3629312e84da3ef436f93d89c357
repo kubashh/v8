@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bc382c3_20ac2500",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "Can use JS `const` for these",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "811ebb40_b1a05953",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "nit: use camelCase (e.g. wasmExpression)",
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e775595_a2f5b91d",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "let kPageSize",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 11
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ad047f_f7a40074",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "let i",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b8a17ca_71c456c1",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "might be clearer if you use a const here.",
+      "range": {
+        "startLine": 48,
+        "startChar": 46,
+        "endLine": 48,
+        "endChar": 48
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94f3d9f_ddb09b16",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "let i",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afea9847_5608f9cc",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "Should be i \u003e 0 probably",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 33
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f20827b_12cb847e",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "Why is this looping in reverse?",
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d5f984f_216b2811",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "let i",
+      "range": {
+        "startLine": 65,
+        "startChar": 7,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d8d81d2_aa5b3da3",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-08-11T23:57:52Z",
+      "side": 1,
+      "message": "let i",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
