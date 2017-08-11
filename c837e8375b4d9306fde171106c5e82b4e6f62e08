@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63325519_506a1146",
+        "filename": "src/objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-11T14:41:46Z",
+      "side": 1,
+      "message": "Can we remove the non-atomic version?",
+      "range": {
+        "startLine": 3360,
+        "startChar": 7,
+        "endLine": 3360,
+        "endChar": 16
+      },
+      "revId": "c837e8375b4d9306fde171106c5e82b4e6f62e08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
