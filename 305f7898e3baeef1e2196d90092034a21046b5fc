@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f36872f1_0974a5b9",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-11T20:50:08Z",
+      "side": 1,
+      "message": "Can you also add in gdeepti while you\u0027re in there?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "305f7898e3baeef1e2196d90092034a21046b5fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
