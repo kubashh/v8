@@ -24,26 +24,37 @@ namespace {
 
 // TODO(jgruber): Pack in CallDescriptors::Key.
 struct BuiltinMetadata {
+  BuiltinMetadata(const char* name_, Builtins::Kind kind_, Address cpp_entry_)
+      : name(name_), kind(kind_), kind_specific_data(cpp_entry_) {}
+  BuiltinMetadata(const char* name_, Builtins::Kind kind_,
+                  int8_t parameter_count_)
+      : name(name_), kind(kind_), kind_specific_data(parameter_count_) {}
+  BuiltinMetadata(const char* name_, Builtins::Kind kind_)
+      : name(name_), kind(kind_) {}
   const char* name;
   Builtins::Kind kind;
-  union {
+  union KindSpecificData {
+    KindSpecificData(Address cpp_entry_) : cpp_entry(cpp_entry_) {}
+    KindSpecificData(int8_t parameter_count_)
+        : parameter_count(parameter_count_) {}
+    KindSpecificData() : cpp_entry(0) {}
     Address cpp_entry;       // For CPP and API builtins.
     int8_t parameter_count;  // For TFJ builtins.
   } kind_specific_data;
 };
 
 // clang-format off
-#define DECL_CPP(Name, ...) { #Name, Builtins::CPP, \
-                              { FUNCTION_ADDR(Builtin_##Name) }},
-#define DECL_API(Name, ...) { #Name, Builtins::API, \
-                              { FUNCTION_ADDR(Builtin_##Name) }},
-#define DECL_TFJ(Name, Count, ...) { #Name, Builtins::TFJ, \
-                                     { reinterpret_cast<Address>(Count) }},
-#define DECL_TFC(Name, ...) { #Name, Builtins::TFC, {} },
-#define DECL_TFS(Name, ...) { #Name, Builtins::TFS, {} },
-#define DECL_TFH(Name, ...) { #Name, Builtins::TFH, {} },
-#define DECL_ASM(Name, ...) { #Name, Builtins::ASM, {} },
-#define DECL_DBG(Name, ...) { #Name, Builtins::DBG, {} },
+#define DECL_CPP(Name, ...) BuiltinMetadata(#Name, Builtins::CPP, \
+                              FUNCTION_ADDR(Builtin_##Name)),
+#define DECL_API(Name, ...) BuiltinMetadata(#Name, Builtins::API, \
+                              FUNCTION_ADDR(Builtin_##Name)),
+#define DECL_TFJ(Name, Count, ...) BuiltinMetadata(#Name, Builtins::TFJ, \
+                              static_cast<int8_t>(Count)),
+#define DECL_TFC(Name, ...) BuiltinMetadata(#Name, Builtins::TFC),
+#define DECL_TFS(Name, ...) BuiltinMetadata(#Name, Builtins::TFS),
+#define DECL_TFH(Name, ...) BuiltinMetadata(#Name, Builtins::TFH),
+#define DECL_ASM(Name, ...) BuiltinMetadata(#Name, Builtins::ASM),
+#define DECL_DBG(Name, ...) BuiltinMetadata(#Name, Builtins::DBG),
 const BuiltinMetadata builtin_metadata[] = {
   BUILTIN_LIST(DECL_CPP, DECL_API, DECL_TFJ, DECL_TFC, DECL_TFS, DECL_TFH,
                DECL_ASM, DECL_DBG)
