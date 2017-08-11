@@ -14889,6 +14889,21 @@ void BytecodeArray::CopyBytecodesTo(BytecodeArray* to) {
             from->length());
 }
 
+void BytecodeArray::MakeOlderAtomically() {
+  // The word must be completely within the byte code array.
+  Address age_addr = address() + kBytecodeAgeOffset;
+  DCHECK_LE(reinterpret_cast<uintptr_t>(age_addr) &
+                ~kPointerAlignmentMask + kPointerSize,
+            reinterpret_cast<uintptr_t>(address() + Size()));
+  Age age = bytecode_age();
+  if (age < kLastBytecodeAge) {
+    base::AsAtomic8::Release_CompareAndSwap(age_addr, age, age + 1);
+  }
+
+  DCHECK_GE(bytecode_age(), kFirstBytecodeAge);
+  DCHECK_LE(bytecode_age(), kLastBytecodeAge);
+}
+
 void BytecodeArray::MakeOlder() {
   Age age = bytecode_age();
   if (age < kLastBytecodeAge) {
