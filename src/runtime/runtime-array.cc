@@ -757,6 +757,47 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   return Smi::FromInt(-1);
 }
 
+RUNTIME_FUNCTION(Runtime_ArrayExtract) {
+  HandleScope scope(isolate);
+  DCHECK(isolate->IsFastArrayConstructorPrototypeChainIntact());
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSArray, source, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, begin, Uint32, args[1]);
+  CONVERT_NUMBER_CHECKED(int32_t, count, Int32, args[2]);
+  ElementsKind kind = source->GetElementsKind();
+  if (IsSmiOrObjectElementsKind(kind)) {
+    Handle<JSArray> result = isolate->factory()->NewJSArray(
+        kind, count, count, DONT_INITIALIZE_ARRAY_ELEMENTS, TENURED);
+    FixedArray* source_array = static_cast<FixedArray*>(source->elements());
+    FixedArray* result_array = static_cast<FixedArray*>(result->elements());
+    for (int i = 0; i < count; ++i) {
+      if (source_array->is_the_hole(isolate, i)) {
+        result_array->set_the_hole(isolate, i);
+      } else {
+        result_array->set(i, source_array->get(i));
+      }
+    }
+    return *result;
+  } else if (IsDoubleElementsKind(kind)) {
+    Handle<JSArray> result = isolate->factory()->NewJSArray(
+        kind, count, count, DONT_INITIALIZE_ARRAY_ELEMENTS, TENURED);
+    FixedDoubleArray* source_array =
+        static_cast<FixedDoubleArray*>(source->elements());
+    FixedDoubleArray* result_array =
+        static_cast<FixedDoubleArray*>(result->elements());
+    memcpy(reinterpret_cast<char*>(result_array) +
+               FixedDoubleArray::kHeaderSize - kHeapObjectTag,
+           reinterpret_cast<char*>(source_array) +
+               FixedDoubleArray::kHeaderSize - kHeapObjectTag +
+               begin * kDoubleSize,
+           count * kDoubleSize);
+    return *result;
+  } else {
+    UNIMPLEMENTED();
+  }
+  UNIMPLEMENTED();
+  return Smi::FromInt(0);
+}
 
 RUNTIME_FUNCTION(Runtime_SpreadIterablePrepare) {
   HandleScope scope(isolate);
