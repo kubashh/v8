@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "2537a569_f075b80d",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-08-11T07:32:33Z",
+      "side": 1,
+      "message": "Why not do that in this CL? Do you understand in which situations it is not a string?",
+      "revId": "b687f1c37e1c330ecf75392a54d3523c35a5e921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1228f982_f6ab1b9d",
         "filename": "test/mjsunit/harmony/modules-import-16.js",
         "patchSetId": 3
