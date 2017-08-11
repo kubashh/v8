@@ -240,8 +240,8 @@ ModuleEnv CreateModuleEnvFromRuntimeObject(
   if (compiled_module->has_function_tables()) {
     // TODO(clemensh): For concurrent compilation, these will have to live in a
     // DeferredHandleScope.
-    FixedArray* function_tables = compiled_module->ptr_to_function_tables();
-    FixedArray* signature_tables = compiled_module->ptr_to_signature_tables();
+    Handle<FixedArray> function_tables = compiled_module->function_tables();
+    Handle<FixedArray> signature_tables = compiled_module->signature_tables();
     DCHECK_EQ(function_tables->length(), signature_tables->length());
     DCHECK_EQ(function_tables->length(), module_env.function_tables().size());
     for (uint32_t i = 0, e = static_cast<uint32_t>(
@@ -249,8 +249,8 @@ ModuleEnv CreateModuleEnvFromRuntimeObject(
          i < e; ++i) {
       int index = static_cast<int>(i);
       module_env.SetFunctionTable(
-          i, handle(FixedArray::cast(function_tables->get(index))),
-          handle(FixedArray::cast(signature_tables->get(index))));
+          i, WasmCompiledModule::GetTableValue(*function_tables, index),
+          WasmCompiledModule::GetTableValue(*signature_tables, index));
     }
   }
   return module_env;

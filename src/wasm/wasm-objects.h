@@ -387,6 +387,7 @@ class WasmCompiledModule : public FixedArray {
   MACRO(OBJECT, FixedArray, function_tables)                  \
   MACRO(OBJECT, FixedArray, signature_tables)                 \
   MACRO(CONST_OBJECT, FixedArray, empty_function_tables)      \
+  MACRO(CONST_OBJECT, FixedArray, empty_signature_tables)     \
   MACRO(LARGE_NUMBER, size_t, embedded_mem_start)             \
   MACRO(LARGE_NUMBER, size_t, globals_start)                  \
   MACRO(LARGE_NUMBER, uint32_t, embedded_mem_size)            \
@@ -565,6 +566,11 @@ class WasmCompiledModule : public FixedArray {
   void ReplaceCodeTableForTesting(Handle<FixedArray> testing_table) {
     set_code_table(testing_table);
   }
+
+  static void SetTableValue(Isolate* isolate, Handle<FixedArray> table,
+                            int index, Address value);
+  static void UpdateTableValue(FixedArray* table, int index, Address value);
+  static Address GetTableValue(FixedArray* table, int index);
 
  private:
   void InitId();

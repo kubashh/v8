@@ -3193,7 +3193,8 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
           break;
         }
         case Constant::kInt64:
-          if (RelocInfo::IsWasmPtrReference(src.rmode())) {
+          if (RelocInfo::IsWasmPtrReference(src.rmode()) ||
+              RelocInfo::IsExternalReference(src.rmode())) {
             __ movq(dst, src.ToInt64(), src.rmode());
           } else {
             DCHECK(!RelocInfo::IsWasmSizeReference(src.rmode()));

@@ -2304,8 +2304,14 @@ Node* WasmGraphBuilder::CallIndirect(uint32_t sig_index, Node** args,
   Node* size = function_table_sizes_[table_index];
   Node* in_bounds = graph()->NewNode(machine->Uint32LessThan(), key, size);
   TrapIfFalse(wasm::kTrapFuncInvalid, in_bounds, position);
-  Node* table = function_tables_[table_index];
-  Node* signatures = signature_tables_[table_index];
+  Node* table_address = function_tables_[table_index];
+  Node* table = graph()->NewNode(
+      jsgraph()->machine()->Load(LoadRepresentation::TaggedPointer()),
+      table_address, jsgraph()->IntPtrConstant(0), *effect_, *control_);
+  Node* signatures_address = signature_tables_[table_index];
+  Node* signatures = graph()->NewNode(
+      jsgraph()->machine()->Load(LoadRepresentation::TaggedPointer()),
+      signatures_address, jsgraph()->IntPtrConstant(0), *effect_, *control_);
 
   // Load signature from the table and check.
   // The table is a FixedArray; signatures are encoded as SMIs.
@@ -3041,10 +3047,16 @@ void WasmGraphBuilder::EnsureFunctionTableNodes() {
   DCHECK_EQ(tables_size, module_env_->signature_tables().size());
 
   for (size_t i = 0; i < tables_size; ++i) {
-    auto function_handle = module_env_->function_tables()[i];
-    auto signature_handle = module_env_->signature_tables()[i];
-    function_tables_.push_back(HeapConstant(function_handle));
-    signature_tables_.push_back(HeapConstant(signature_handle));
+    wasm::GlobalHandleAddress function_handle_address =
+        module_env_->function_tables()[i];
+    wasm::GlobalHandleAddress signature_handle_address =
+        module_env_->signature_tables()[i];
+    function_tables_.push_back(jsgraph()->RelocatableIntPtrConstant(
+        reinterpret_cast<intptr_t>(function_handle_address),
+        RelocInfo::EXTERNAL_REFERENCE));
+    signature_tables_.push_back(jsgraph()->RelocatableIntPtrConstant(
+        reinterpret_cast<intptr_t>(signature_handle_address),
+        RelocInfo::EXTERNAL_REFERENCE));
     uint32_t table_size =
         module_env_->module()->function_tables[i].initial_size;
     function_table_sizes_.push_back(jsgraph()->RelocatableInt32Constant(

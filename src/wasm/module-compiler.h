@@ -164,9 +164,9 @@ class ModuleCompiler {
 
  private:
   MaybeHandle<WasmModuleObject> CompileToModuleObjectInternal(
-      ErrorThrower* thrower, const ModuleWireBytes& wire_bytes,
-      Handle<Script> asm_js_script,
-      Vector<const byte> asm_js_offset_table_bytes, Factory* factory);
+      Isolate* isolate, ErrorThrower* thrower,
+      const ModuleWireBytes& wire_bytes, Handle<Script> asm_js_script,
+      Vector<const byte> asm_js_offset_table_bytes);
 
   Isolate* isolate_;
   std::unique_ptr<WasmModule> module_;
