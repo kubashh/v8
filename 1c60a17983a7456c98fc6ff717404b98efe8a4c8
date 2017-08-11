@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6e306e7_2d010868",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-11T14:31:24Z",
+      "side": 1,
+      "message": "A last nit: the \u0027_\u0027 suffixes seems unnecessary to me, and maybe we could use the default constructor here: KindSpecificData() \u003d default;",
+      "revId": "1c60a17983a7456c98fc6ff717404b98efe8a4c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
