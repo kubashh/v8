@@ -26,7 +26,11 @@ namespace {
 struct BuiltinMetadata {
   const char* name;
   Builtins::Kind kind;
-  union {
+  union KindSpecificData {
+    KindSpecificData(Address cpp_entry_) : cpp_entry(cpp_entry_) {}
+    KindSpecificData(int8_t parameter_count_)
+        : parameter_count(parameter_count_) {}
+    KindSpecificData() : cpp_entry(0) {}
     Address cpp_entry;       // For CPP and API builtins.
     int8_t parameter_count;  // For TFJ builtins.
   } kind_specific_data;
@@ -34,11 +38,11 @@ struct BuiltinMetadata {
 
 // clang-format off
 #define DECL_CPP(Name, ...) { #Name, Builtins::CPP, \
-                              { FUNCTION_ADDR(Builtin_##Name) }},
+  BuiltinMetadata::KindSpecificData(FUNCTION_ADDR(Builtin_##Name)).cpp_entry },
 #define DECL_API(Name, ...) { #Name, Builtins::API, \
-                              { FUNCTION_ADDR(Builtin_##Name) }},
+  BuiltinMetadata::KindSpecificData(FUNCTION_ADDR(Builtin_##Name)).cpp_entry },
 #define DECL_TFJ(Name, Count, ...) { #Name, Builtins::TFJ, \
-                                     { reinterpret_cast<Address>(Count) }},
+  BuiltinMetadata::KindSpecificData(static_cast<int8_t>(Count)).cpp_entry },
 #define DECL_TFC(Name, ...) { #Name, Builtins::TFC, {} },
 #define DECL_TFS(Name, ...) { #Name, Builtins::TFS, {} },
 #define DECL_TFH(Name, ...) { #Name, Builtins::TFH, {} },
