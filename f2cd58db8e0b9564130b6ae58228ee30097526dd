@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17d519ff_ab71a572",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-11T15:01:02Z",
+      "side": 1,
+      "message": "Nit: AdaptorWithExitFrame, AdaptorWithBuiltinExitFrame",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31d00f03_9af2767c",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-11T15:01:02Z",
+      "side": 1,
+      "message": "Nit: DCHECK(exit_frame_type \u003d\u003d EXIT);",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ed1b24_b7dba499",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-11T15:01:02Z",
+      "side": 1,
+      "message": "Nit: I found the previous comment clearer, since at this point eax does not yet contain \u0027the number of arguments including the receiver and the extra arguments\u0027. Maybe just replace JumpToExternalReference by CEntryStub.",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "776111b0_513b2c22",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-11T15:01:02Z",
+      "side": 1,
+      "message": "Suggestion: Let\u0027s move generation of these two builtins to a helper function s.t. here we only need to call \n \n AdapterWithExitFrameType(masm, BUILTIN_EXIT);\n\nand don\u0027t have any duplicate code.",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
