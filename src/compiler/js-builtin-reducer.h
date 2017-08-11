@@ -47,6 +47,9 @@ class V8_EXPORT_PRIVATE JSBuiltinReducer final
   Reduction Reduce(Node* node) final;
 
  private:
+  // Used by shared code for Array.indexOf and Array.includes.
+  enum SearchVariant { kIncludes, kIndexOf };
+
   Reduction ReduceArrayIterator(Node* node, IterationKind kind);
   Reduction ReduceTypedArrayIterator(Node* node, IterationKind kind);
   Reduction ReduceArrayIterator(Handle<Map> receiver_map, Node* node,
@@ -57,6 +60,10 @@ class V8_EXPORT_PRIVATE JSBuiltinReducer final
                                         IterationKind kind);
   Reduction ReduceTypedArrayIteratorNext(Handle<Map> iterator_map, Node* node,
                                          IterationKind kind);
+  Reduction ReduceArrayIndexOfIncludes(SearchVariant search_variant,
+                                       Node* node);
+  Reduction ReduceArrayIndexOf(Node* node);
+  Reduction ReduceArrayIncludes(Node* node);
   Reduction ReduceArrayIsArray(Node* node);
   Reduction ReduceArrayPop(Node* node);
   Reduction ReduceArrayPush(Node* node);
