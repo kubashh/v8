@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dfc9196_c3d5b4b1",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-11T21:54:53Z",
+      "side": 0,
+      "message": "Because IsInitializerContext() didn\u0027t distinguish between BINDING and INITIALIZER, the latter can be safely deleted. The subsequent simplification to SetInitializerContextIfNeeded made it easy to replace the usage of that method (and resetting calls to set_context) with the new AssignmentElementScope.",
+      "revId": "f315b32267cd7f064f92376e159b6b2a320a6d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba8a3b37_4c15ea89",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-11T21:54:53Z",
+      "side": 0,
+      "message": "This was equivalent to:\n\n  !(context_ !\u003d ASSIGNMENT)\n\nor\n\n  context_ \u003d\u003d ASSIGNMENT\n\nand thus this whole function was a no-op.",
+      "range": {
+        "startLine": 173,
+        "startChar": 6,
+        "endLine": 173,
+        "endChar": 29
+      },
+      "revId": "f315b32267cd7f064f92376e159b6b2a320a6d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af9f3183_4f959daf",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-11T21:54:53Z",
+      "side": 0,
+      "message": "This code block, duplicated from VisitAssignment, is no longer needed: we always handle this case in VisitAssignment() now.",
+      "revId": "f315b32267cd7f064f92376e159b6b2a320a6d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

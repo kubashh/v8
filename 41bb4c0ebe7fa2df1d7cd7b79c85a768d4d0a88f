@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f84341ff_82325886",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-11T21:54:53Z",
+      "side": 1,
+      "message": "This is a much-simplified version of the logic in SetInitializerContextIfNeeded. I explain below why there\u0027s no need to handle the BINDING case; as for the code that checked whether the AstNode to be visited next was an Assignment, that was not necessary for proper operation. Now that it\u0027s gone, \"ASSIGNMENT_ELEMENT\" seemed a better name for the context than \"ASSIGNMENT_INITIALIZER\".",
+      "revId": "41bb4c0ebe7fa2df1d7cd7b79c85a768d4d0a88f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ed868bc_7122174b",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-11T21:54:53Z",
+      "side": 1,
+      "message": "I moved the two usages of this scope next to the RecurseIntoSubpattern() for clarity; there\u0027s no change in behavior (since the context_ is only examined in subpatterns).",
+      "revId": "41bb4c0ebe7fa2df1d7cd7b79c85a768d4d0a88f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
