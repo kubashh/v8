@@ -232,6 +232,7 @@ void WasmTableObject::grow(Isolate* isolate, uint32_t count) {
   Handle<FixedArray> dispatch_tables(this->dispatch_tables());
   DCHECK_EQ(0, dispatch_tables->length() % 4);
   uint32_t old_size = functions()->length();
+  std::set<GlobalHandleAddress> global_handles_to_destroy;
 
   Zone specialization_zone(isolate->allocator(), ZONE_NAME);
   for (int i = 0; i < dispatch_tables->length(); i += 4) {
@@ -239,23 +240,52 @@ void WasmTableObject::grow(Isolate* isolate, uint32_t count) {
         FixedArray::cast(dispatch_tables->get(i + 2)));
     Handle<FixedArray> old_signature_table(
         FixedArray::cast(dispatch_tables->get(i + 3)));
-    Handle<FixedArray> new_function_table =
-        isolate->factory()->CopyFixedArrayAndGrow(old_function_table, count);
-    Handle<FixedArray> new_signature_table =
-        isolate->factory()->CopyFixedArrayAndGrow(old_signature_table, count);
+    Handle<FixedArray> new_function_table = isolate->global_handles()->Create(
+        *isolate->factory()->CopyFixedArrayAndGrow(old_function_table, count));
+    Handle<FixedArray> new_signature_table = isolate->global_handles()->Create(
+        *isolate->factory()->CopyFixedArrayAndGrow(old_signature_table, count));
 
+    GlobalHandleAddress new_function_table_addr =
+        reinterpret_cast<GlobalHandleAddress>(new_function_table.location());
+    GlobalHandleAddress new_signature_table_addr =
+        reinterpret_cast<GlobalHandleAddress>(new_signature_table.location());
+
+    int table_index = Smi::cast(dispatch_tables->get(i + 1))->value();
     // Update dispatch tables with new function/signature tables
     dispatch_tables->set(i + 2, *new_function_table);
     dispatch_tables->set(i + 3, *new_signature_table);
 
     // Patch the code of the respective instance.
-    CodeSpecialization code_specialization(isolate, &specialization_zone);
-    code_specialization.PatchTableSize(old_size, old_size + count);
-    code_specialization.RelocateObject(old_function_table, new_function_table);
-    code_specialization.RelocateObject(old_signature_table,
-                                       new_signature_table);
-    code_specialization.ApplyToWholeInstance(
-        WasmInstanceObject::cast(dispatch_tables->get(i)));
+    {
+      DisallowHeapAllocation no_gc;
+      CodeSpecialization code_specialization(isolate, &specialization_zone);
+      WasmInstanceObject* instance =
+          WasmInstanceObject::cast(dispatch_tables->get(i));
+      WasmCompiledModule* compiled_module = instance->compiled_module();
+      GlobalHandleAddress old_function_table_addr =
+          WasmCompiledModule::GetTableValue(
+              compiled_module->ptr_to_function_tables(), table_index);
+      GlobalHandleAddress old_signature_table_addr =
+          WasmCompiledModule::GetTableValue(
+              compiled_module->ptr_to_signature_tables(), table_index);
+      code_specialization.PatchTableSize(old_size, old_size + count);
+      code_specialization.RelocatePointer(old_function_table_addr,
+                                          new_function_table_addr);
+      code_specialization.RelocatePointer(old_signature_table_addr,
+                                          new_signature_table_addr);
+      code_specialization.ApplyToWholeInstance(instance);
+      WasmCompiledModule::UpdateTableValue(
+          compiled_module->ptr_to_function_tables(), table_index,
+          new_function_table_addr);
+      WasmCompiledModule::UpdateTableValue(
+          compiled_module->ptr_to_signature_tables(), table_index,
+          new_signature_table_addr);
+      global_handles_to_destroy.insert(old_function_table_addr);
+      global_handles_to_destroy.insert(old_signature_table_addr);
+    }
+  }
+  for (GlobalHandleAddress addr : global_handles_to_destroy) {
+    isolate->global_handles()->Destroy(reinterpret_cast<Object**>(addr));
   }
 }
 
@@ -818,12 +848,18 @@ Handle<WasmCompiledModule> WasmCompiledModule::New(
         isolate->factory()->NewFixedArray(count_as_int, TENURED);
     for (int i = 0; i < count_as_int; ++i) {
       size_t index = static_cast<size_t>(i);
-      sig_tables->set(i, *(module_env.signature_tables()[index]));
-      func_tables->set(i, *(module_env.function_tables()[index]));
+      SetTableValue(isolate, func_tables, i,
+                    module_env.function_tables()[index]);
+      SetTableValue(isolate, sig_tables, i,
+                    module_env.signature_tables()[index]);
     }
     compiled_module->set_signature_tables(sig_tables);
-    compiled_module->set_empty_function_tables(func_tables);
     compiled_module->set_function_tables(func_tables);
+    // TODO(wasm): setting the empties here this way is OK under the assumption
+    // that we compile and then instantiate. It needs rework if we do direct
+    // instantiation.
+    compiled_module->set_empty_signature_tables(sig_tables);
+    compiled_module->set_empty_function_tables(func_tables);
   }
   // TODO(mtrofin): we copy these because the order of finalization isn't
   // reliable, and we need these at Reset (which is called at
@@ -864,6 +900,27 @@ Handle<WasmCompiledModule> WasmCompiledModule::Clone(
   return ret;
 }
 
+void WasmCompiledModule::SetTableValue(Isolate* isolate,
+                                       Handle<FixedArray> table, int index,
+                                       Address value) {
+  Handle<HeapNumber> number = isolate->factory()->NewHeapNumber(
+      static_cast<double>(reinterpret_cast<size_t>(value)), MUTABLE, TENURED);
+  table->set(index, *number);
+}
+
+void WasmCompiledModule::UpdateTableValue(FixedArray* table, int index,
+                                          Address value) {
+  DisallowHeapAllocation no_gc;
+  HeapNumber::cast(table->get(index))
+      ->set_value(static_cast<double>(reinterpret_cast<size_t>(value)));
+}
+
+Address WasmCompiledModule::GetTableValue(FixedArray* table, int index) {
+  DisallowHeapAllocation no_gc;
+  double value = HeapNumber::cast(table->get(index))->value();
+  return reinterpret_cast<Address>(static_cast<size_t>(value));
+}
+
 void WasmCompiledModule::Reset(Isolate* isolate,
                                WasmCompiledModule* compiled_module) {
   DisallowHeapAllocation no_gc;
@@ -898,14 +955,28 @@ void WasmCompiledModule::Reset(Isolate* isolate,
     // Reset function tables.
     if (compiled_module->has_function_tables()) {
       FixedArray* function_tables = compiled_module->ptr_to_function_tables();
+      FixedArray* signature_tables = compiled_module->ptr_to_signature_tables();
       FixedArray* empty_function_tables =
           compiled_module->ptr_to_empty_function_tables();
+      FixedArray* empty_signature_tables =
+          compiled_module->ptr_to_empty_signature_tables();
       if (function_tables != empty_function_tables) {
         DCHECK_EQ(function_tables->length(), empty_function_tables->length());
         for (int i = 0, e = function_tables->length(); i < e; ++i) {
-          code_specialization.RelocateObject(
-              handle(function_tables->get(i), isolate),
-              handle(empty_function_tables->get(i), isolate));
+          GlobalHandleAddress func_addr =
+              WasmCompiledModule::GetTableValue(function_tables, i);
+          GlobalHandleAddress sig_addr =
+              WasmCompiledModule::GetTableValue(signature_tables, i);
+          code_specialization.RelocatePointer(
+              func_addr,
+              WasmCompiledModule::GetTableValue(empty_function_tables, i));
+          code_specialization.RelocatePointer(
+              sig_addr,
+              WasmCompiledModule::GetTableValue(empty_signature_tables, i));
+          isolate->global_handles()->Destroy(
+              reinterpret_cast<Object**>(func_addr));
+          isolate->global_handles()->Destroy(
+              reinterpret_cast<Object**>(sig_addr));
         }
         compiled_module->set_ptr_to_function_tables(empty_function_tables);
       }

@@ -330,13 +330,12 @@ MaybeHandle<WasmModuleObject> ModuleCompiler::CompileToModuleObject(
     ErrorThrower* thrower, const ModuleWireBytes& wire_bytes,
     Handle<Script> asm_js_script,
     Vector<const byte> asm_js_offset_table_bytes) {
-  Factory* factory = isolate_->factory();
 
   TimedHistogramScope wasm_compile_module_time_scope(
       module_->is_wasm() ? counters()->wasm_compile_wasm_module_time()
                          : counters()->wasm_compile_asm_module_time());
-  return CompileToModuleObjectInternal(thrower, wire_bytes, asm_js_script,
-                                       asm_js_offset_table_bytes, factory);
+  return CompileToModuleObjectInternal(
+      isolate_, thrower, wire_bytes, asm_js_script, asm_js_offset_table_bytes);
 }
 
 namespace {
@@ -520,23 +519,30 @@ double MonotonicallyIncreasingTimeInMs() {
          base::Time::kMillisecondsPerSecond;
 }
 
-void SetFunctionTablesToDefault(Factory* factory, wasm::ModuleEnv* module_env) {
+void SetFunctionTablesToDefault(Isolate* isolate, wasm::ModuleEnv* module_env) {
+  Factory* factory = isolate->factory();
   for (uint32_t i = 0,
                 e = static_cast<uint32_t>(module_env->function_tables().size());
        i < e; ++i) {
-    DCHECK(module_env->function_tables()[i].is_null());
-    DCHECK(module_env->signature_tables()[i].is_null());
-    module_env->SetFunctionTable(i, factory->NewFixedArray(1, TENURED),
-                                 factory->NewFixedArray(1, TENURED));
+    DCHECK_NULL(module_env->function_tables()[i]);
+    DCHECK_NULL(module_env->signature_tables()[i]);
+    Handle<FixedArray> func_table =
+        isolate->global_handles()->Create(*factory->NewFixedArray(1, TENURED));
+    Handle<FixedArray> sig_table =
+        isolate->global_handles()->Create(*factory->NewFixedArray(1, TENURED));
+    module_env->SetFunctionTable(
+        i, reinterpret_cast<GlobalHandleAddress>(func_table.location()),
+        reinterpret_cast<GlobalHandleAddress>(sig_table.location()));
   }
 }
 
 }  // namespace
 
 MaybeHandle<WasmModuleObject> ModuleCompiler::CompileToModuleObjectInternal(
-    ErrorThrower* thrower, const ModuleWireBytes& wire_bytes,
-    Handle<Script> asm_js_script, Vector<const byte> asm_js_offset_table_bytes,
-    Factory* factory) {
+    Isolate* isolate, ErrorThrower* thrower, const ModuleWireBytes& wire_bytes,
+    Handle<Script> asm_js_script,
+    Vector<const byte> asm_js_offset_table_bytes) {
+  Factory* factory = isolate->factory();
   // Check whether lazy compilation is enabled for this module.
   bool lazy_compile = compile_lazy(module_.get());
 
@@ -549,7 +555,7 @@ MaybeHandle<WasmModuleObject> ModuleCompiler::CompileToModuleObjectInternal(
 
   ModuleEnv env(module_.get(), init_builtin);
 
-  SetFunctionTablesToDefault(factory, &env);
+  SetFunctionTablesToDefault(isolate, &env);
 
   // The {code_table} array contains import wrappers and functions (which
   // are both included in {functions.size()}, and export wrappers).
@@ -1698,6 +1704,13 @@ void InstanceBuilder::InitializeTables(
       isolate_->factory()->NewFixedArray(function_table_count);
   Handle<FixedArray> new_signature_tables =
       isolate_->factory()->NewFixedArray(function_table_count);
+  Handle<FixedArray> old_function_tables = compiled_module_->function_tables();
+  Handle<FixedArray> old_signature_tables =
+      compiled_module_->signature_tables();
+
+  DCHECK_EQ(old_function_tables->length(), new_function_tables->length());
+  DCHECK_EQ(old_signature_tables->length(), new_signature_tables->length());
+
   for (int index = 0; index < function_table_count; ++index) {
     WasmIndirectFunctionTable& table = module_->function_tables[index];
     TableInstance& table_instance = table_instances_[index];
@@ -1723,26 +1736,31 @@ void InstanceBuilder::InitializeTables(
       }
     }
 
-    new_function_tables->set(static_cast<int>(index),
-                             *table_instance.function_table);
-    new_signature_tables->set(static_cast<int>(index),
-                              *table_instance.signature_table);
-  }
+    Handle<FixedArray> global_func_table =
+        isolate_->global_handles()->Create(*table_instance.function_table);
+    Handle<FixedArray> global_sig_table =
+        isolate_->global_handles()->Create(*table_instance.signature_table);
 
-  FixedArray* old_function_tables = compiled_module_->ptr_to_function_tables();
-  DCHECK_EQ(old_function_tables->length(), new_function_tables->length());
-  for (int i = 0, e = new_function_tables->length(); i < e; ++i) {
-    code_specialization->RelocateObject(
-        handle(old_function_tables->get(i), isolate_),
-        handle(new_function_tables->get(i), isolate_));
-  }
-  FixedArray* old_signature_tables =
-      compiled_module_->ptr_to_signature_tables();
-  DCHECK_EQ(old_signature_tables->length(), new_signature_tables->length());
-  for (int i = 0, e = new_signature_tables->length(); i < e; ++i) {
-    code_specialization->RelocateObject(
-        handle(old_signature_tables->get(i), isolate_),
-        handle(new_signature_tables->get(i), isolate_));
+    GlobalHandleAddress new_func_table_addr =
+        reinterpret_cast<GlobalHandleAddress>(global_func_table.location());
+    GlobalHandleAddress new_sig_table_addr =
+        reinterpret_cast<GlobalHandleAddress>(global_sig_table.location());
+
+    int int_index = static_cast<int>(index);
+    WasmCompiledModule::SetTableValue(isolate_, new_function_tables, int_index,
+                                      new_func_table_addr);
+    WasmCompiledModule::SetTableValue(isolate_, new_signature_tables, int_index,
+                                      new_sig_table_addr);
+
+    GlobalHandleAddress old_func_table_addr =
+        WasmCompiledModule::GetTableValue(*old_function_tables, int_index);
+    GlobalHandleAddress old_sig_table_addr =
+        WasmCompiledModule::GetTableValue(*old_signature_tables, int_index);
+
+    code_specialization->RelocatePointer(old_func_table_addr,
+                                         new_func_table_addr);
+    code_specialization->RelocatePointer(old_sig_table_addr,
+                                         new_sig_table_addr);
   }
 
   compiled_module_->set_function_tables(new_function_tables);
@@ -2041,7 +2059,7 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
     job_->module_env_.reset(new ModuleEnv(module_.get(), illegal_builtin));
     ModuleEnv* module_env = job_->module_env_.get();
 
-    SetFunctionTablesToDefault(factory, module_env);
+    SetFunctionTablesToDefault(job_->isolate_, module_env);
 
     // The {code_table} array contains import wrappers and functions (which
     // are both included in {functions.size()}, and export wrappers.

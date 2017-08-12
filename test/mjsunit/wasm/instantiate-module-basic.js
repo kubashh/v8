@@ -56,72 +56,72 @@ function CheckInstance(instance) {
   assertEquals(kReturnValue, main());
 }
 
-// Official API
-(function BasicJSAPITest() {
-  print('sync module compile...');
-  let module = new WebAssembly.Module(buffer);
-  print('sync module instantiate...');
-  CheckInstance(new WebAssembly.Instance(module));
+// // Official API
+// (function BasicJSAPITest() {
+//   print('sync module compile...');
+//   let module = new WebAssembly.Module(buffer);
+//   print('sync module instantiate...');
+//   CheckInstance(new WebAssembly.Instance(module));
 
-  print('async module compile...');
-  let promise = WebAssembly.compile(buffer);
-  assertPromiseResult(
-      promise, module => CheckInstance(new WebAssembly.Instance(module)));
+//   print('async module compile...');
+//   let promise = WebAssembly.compile(buffer);
+//   assertPromiseResult(
+//       promise, module => CheckInstance(new WebAssembly.Instance(module)));
 
-  print('async instantiate...');
-  let instance_promise = WebAssembly.instantiate(buffer);
-  assertPromiseResult(instance_promise, pair => CheckInstance(pair.instance));
-})();
+//   print('async instantiate...');
+//   let instance_promise = WebAssembly.instantiate(buffer);
+//   assertPromiseResult(instance_promise, pair => CheckInstance(pair.instance));
+// })();
 
-// Check that validate works correctly for a module.
-assertTrue(WebAssembly.validate(buffer));
-assertFalse(WebAssembly.validate(bytes(88, 88, 88, 88, 88, 88, 88, 88)));
+// // Check that validate works correctly for a module.
+// assertTrue(WebAssembly.validate(buffer));
+// assertFalse(WebAssembly.validate(bytes(88, 88, 88, 88, 88, 88, 88, 88)));
 
-// Negative tests.
-(function InvalidModules() {
-  print('InvalidModules...');
-  let invalid_cases = [undefined, 1, '', 'a', {some: 1, obj: 'b'}];
-  let len = invalid_cases.length;
-  for (var i = 0; i < len; ++i) {
-    try {
-      let instance = new WebAssembly.Instance(invalid_cases[i]);
-      assertUnreachable('should not be able to instantiate invalid modules.');
-    } catch (e) {
-      assertContains('Argument 0', e.toString());
-    }
-  }
-})();
+// // Negative tests.
+// (function InvalidModules() {
+//   print('InvalidModules...');
+//   let invalid_cases = [undefined, 1, '', 'a', {some: 1, obj: 'b'}];
+//   let len = invalid_cases.length;
+//   for (var i = 0; i < len; ++i) {
+//     try {
+//       let instance = new WebAssembly.Instance(invalid_cases[i]);
+//       assertUnreachable('should not be able to instantiate invalid modules.');
+//     } catch (e) {
+//       assertContains('Argument 0', e.toString());
+//     }
+//   }
+// })();
 
-// Compile async an invalid blob.
-(function InvalidBinaryAsyncCompilation() {
-  print('InvalidBinaryAsyncCompilation...');
-  let builder = new WasmModuleBuilder();
-  builder.addFunction('f', kSig_i_i).addBody([kExprCallFunction, 0]);
-  let promise = WebAssembly.compile(builder.toBuffer());
-  assertPromiseResult(
-      promise, compiled => assertUnreachable(
-                   'should not be able to compile invalid blob.'),
-      e => assertInstanceof(e, WebAssembly.CompileError));
-})();
+// // Compile async an invalid blob.
+// (function InvalidBinaryAsyncCompilation() {
+//   print('InvalidBinaryAsyncCompilation...');
+//   let builder = new WasmModuleBuilder();
+//   builder.addFunction('f', kSig_i_i).addBody([kExprCallFunction, 0]);
+//   let promise = WebAssembly.compile(builder.toBuffer());
+//   assertPromiseResult(
+//       promise, compiled => assertUnreachable(
+//                    'should not be able to compile invalid blob.'),
+//       e => assertInstanceof(e, WebAssembly.CompileError));
+// })();
 
-// Multiple instances tests.
-(function ManyInstances() {
-  print('ManyInstances...');
-  let compiled_module = new WebAssembly.Module(buffer);
-  let instance_1 = new WebAssembly.Instance(compiled_module);
-  let instance_2 = new WebAssembly.Instance(compiled_module);
-  assertTrue(instance_1 != instance_2);
-})();
+// // Multiple instances tests.
+// (function ManyInstances() {
+//   print('ManyInstances...');
+//   let compiled_module = new WebAssembly.Module(buffer);
+//   let instance_1 = new WebAssembly.Instance(compiled_module);
+//   let instance_2 = new WebAssembly.Instance(compiled_module);
+//   assertTrue(instance_1 != instance_2);
+// })();
 
-(function ManyInstancesAsync() {
-  print('ManyInstancesAsync...');
-  let promise = WebAssembly.compile(buffer);
-  assertPromiseResult(promise, compiled_module => {
-    let instance_1 = new WebAssembly.Instance(compiled_module);
-    let instance_2 = new WebAssembly.Instance(compiled_module);
-    assertTrue(instance_1 != instance_2);
-  });
-})();
+// (function ManyInstancesAsync() {
+//   print('ManyInstancesAsync...');
+//   let promise = WebAssembly.compile(buffer);
+//   assertPromiseResult(promise, compiled_module => {
+//     let instance_1 = new WebAssembly.Instance(compiled_module);
+//     let instance_2 = new WebAssembly.Instance(compiled_module);
+//     assertTrue(instance_1 != instance_2);
+//   });
+// })();
 
 (function InstancesAreIsolatedFromEachother() {
   print('InstancesAreIsolatedFromEachother...');
@@ -175,84 +175,84 @@ assertFalse(WebAssembly.validate(bytes(88, 88, 88, 88, 88, 88, 88, 88)));
   assertEquals(1000, outval_2);
 })();
 
-(function GlobalsArePrivateToTheInstance() {
-  print('GlobalsArePrivateToTheInstance...');
-  var builder = new WasmModuleBuilder();
-  builder.addGlobal(kWasmI32, true);
-  builder.addFunction('read', kSig_i_v)
-      .addBody([kExprGetGlobal, 0])
-      .exportFunc();
+// (function GlobalsArePrivateToTheInstance() {
+//   print('GlobalsArePrivateToTheInstance...');
+//   var builder = new WasmModuleBuilder();
+//   builder.addGlobal(kWasmI32, true);
+//   builder.addFunction('read', kSig_i_v)
+//       .addBody([kExprGetGlobal, 0])
+//       .exportFunc();
 
-  builder.addFunction('write', kSig_v_i)
-      .addBody([kExprGetLocal, 0, kExprSetGlobal, 0])
-      .exportFunc();
+//   builder.addFunction('write', kSig_v_i)
+//       .addBody([kExprGetLocal, 0, kExprSetGlobal, 0])
+//       .exportFunc();
 
-  var module = new WebAssembly.Module(builder.toBuffer());
-  var i1 = new WebAssembly.Instance(module);
-  var i2 = new WebAssembly.Instance(module);
-  i1.exports.write(1);
-  i2.exports.write(2);
-  assertEquals(1, i1.exports.read());
-  assertEquals(2, i2.exports.read());
-})();
+//   var module = new WebAssembly.Module(builder.toBuffer());
+//   var i1 = new WebAssembly.Instance(module);
+//   var i2 = new WebAssembly.Instance(module);
+//   i1.exports.write(1);
+//   i2.exports.write(2);
+//   assertEquals(1, i1.exports.read());
+//   assertEquals(2, i2.exports.read());
+// })();
 
-(function InstanceMemoryIsIsolated() {
-  print('InstanceMemoryIsIsolated...');
-  var builder = new WasmModuleBuilder();
-  builder.addImportedMemory('', 'memory', 1);
+// (function InstanceMemoryIsIsolated() {
+//   print('InstanceMemoryIsIsolated...');
+//   var builder = new WasmModuleBuilder();
+//   builder.addImportedMemory('', 'memory', 1);
 
-  builder.addFunction('f', kSig_i_v)
-      .addBody([kExprI32Const, 0, kExprI32LoadMem, 0, 0])
-      .exportFunc();
+//   builder.addFunction('f', kSig_i_v)
+//       .addBody([kExprI32Const, 0, kExprI32LoadMem, 0, 0])
+//       .exportFunc();
 
-  var mem_1 = new WebAssembly.Memory({initial: 1});
-  var mem_2 = new WebAssembly.Memory({initial: 1});
-  var view_1 = new Int32Array(mem_1.buffer);
-  var view_2 = new Int32Array(mem_2.buffer);
-  view_1[0] = 1;
-  view_2[0] = 1000;
+//   var mem_1 = new WebAssembly.Memory({initial: 1});
+//   var mem_2 = new WebAssembly.Memory({initial: 1});
+//   var view_1 = new Int32Array(mem_1.buffer);
+//   var view_2 = new Int32Array(mem_2.buffer);
+//   view_1[0] = 1;
+//   view_2[0] = 1000;
 
-  var module = new WebAssembly.Module(builder.toBuffer());
-  var i1 = new WebAssembly.Instance(module, {'': {memory: mem_1}});
-  var i2 = new WebAssembly.Instance(module, {'': {memory: mem_2}});
+//   var module = new WebAssembly.Module(builder.toBuffer());
+//   var i1 = new WebAssembly.Instance(module, {'': {memory: mem_1}});
+//   var i2 = new WebAssembly.Instance(module, {'': {memory: mem_2}});
 
-  assertEquals(1, i1.exports.f());
-  assertEquals(1000, i2.exports.f());
-})();
+//   assertEquals(1, i1.exports.f());
+//   assertEquals(1000, i2.exports.f());
+// })();
 
-(function MustBeMemory() {
-  print('MustBeMemory...');
-  var memory = new ArrayBuffer(65536);
-  let builder = new WasmModuleBuilder();
-  builder.addImportedMemory('', 'memory');
+// (function MustBeMemory() {
+//   print('MustBeMemory...');
+//   var memory = new ArrayBuffer(65536);
+//   let builder = new WasmModuleBuilder();
+//   builder.addImportedMemory('', 'memory');
 
-  let module = new WebAssembly.Module(builder.toBuffer());
+//   let module = new WebAssembly.Module(builder.toBuffer());
 
-  assertThrows(
-      () => new WebAssembly.Instance(module, {'': {memory: memory}}),
-      WebAssembly.LinkError);
-})();
+//   assertThrows(
+//       () => new WebAssembly.Instance(module, {'': {memory: memory}}),
+//       WebAssembly.LinkError);
+// })();
 
-(function TestNoMemoryToExport() {
-  let builder = new WasmModuleBuilder();
-  builder.exportMemoryAs('memory');
-  assertThrows(() => builder.instantiate(), WebAssembly.CompileError);
-})();
+// (function TestNoMemoryToExport() {
+//   let builder = new WasmModuleBuilder();
+//   builder.exportMemoryAs('memory');
+//   assertThrows(() => builder.instantiate(), WebAssembly.CompileError);
+// })();
 
-(function TestIterableExports() {
-  print('TestIterableExports...');
-  let builder = new WasmModuleBuilder;
-  builder.addExport('a', builder.addFunction('', kSig_v_v).addBody([]));
-  builder.addExport('b', builder.addFunction('', kSig_v_v).addBody([]));
-  builder.addExport('c', builder.addFunction('', kSig_v_v).addBody([]));
-  builder.addExport('d', builder.addFunction('', kSig_v_v).addBody([]));
-  builder.addExport('e', builder.addGlobal(kWasmI32, false));
+// (function TestIterableExports() {
+//   print('TestIterableExports...');
+//   let builder = new WasmModuleBuilder;
+//   builder.addExport('a', builder.addFunction('', kSig_v_v).addBody([]));
+//   builder.addExport('b', builder.addFunction('', kSig_v_v).addBody([]));
+//   builder.addExport('c', builder.addFunction('', kSig_v_v).addBody([]));
+//   builder.addExport('d', builder.addFunction('', kSig_v_v).addBody([]));
+//   builder.addExport('e', builder.addGlobal(kWasmI32, false));
 
-  let module = new WebAssembly.Module(builder.toBuffer());
-  let instance = new WebAssembly.Instance(module);
+//   let module = new WebAssembly.Module(builder.toBuffer());
+//   let instance = new WebAssembly.Instance(module);
 
-  let exports_count = 0;
-  for (var e in instance.exports) ++exports_count;
+//   let exports_count = 0;
+//   for (var e in instance.exports) ++exports_count;
 
-  assertEquals(5, exports_count);
-})();
+//   assertEquals(5, exports_count);
+// })();

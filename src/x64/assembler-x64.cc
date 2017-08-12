@@ -128,6 +128,11 @@ Address RelocInfo::wasm_memory_reference() {
   return Memory::Address_at(pc_);
 }
 
+Address RelocInfo::global_handle() {
+  DCHECK_EQ(rmode_, GLOBAL_HANDLE);
+  return Memory::Address_at(pc_);
+}
+
 Address RelocInfo::wasm_global_reference() {
   DCHECK(IsWasmGlobalReference(rmode_));
   return Memory::Address_at(pc_);
