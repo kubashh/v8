@@ -80,7 +80,8 @@ InspectorTest.runAsyncTestSuite([
   {
     InspectorTest.logMessage(await Protocol.Runtime.evaluate({
       expression: "({})",
-      awaitPromise: true
+      awaitPromise: true,
+      returnByValue: true
     }));
   },
 
