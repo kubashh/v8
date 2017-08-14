@@ -2406,7 +2406,7 @@ void CodeGenerator::AssembleArchBranch(Instruction* instr, BranchInfo* branch) {
   FlagsCondition condition = branch->condition;
 
   Condition cond = FlagsConditionToCondition(condition, op);
-  if (op == kS390_CmpDouble) {
+  if (op == kS390_CmpFloat || op == kS390_CmpDouble) {
     // check for unordered if necessary
     // Branching to flabel/tlabel according to what's expected by tests
     if (cond == le || cond == eq || cond == lt) {
