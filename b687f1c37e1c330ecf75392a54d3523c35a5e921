@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ef9f6659_d1dab3dc",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-14T20:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba4d1e61_31b768b3",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 63
+      },
+      "revId": "b687f1c37e1c330ecf75392a54d3523c35a5e921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2537a569_f075b80d",
         "filename": "src/runtime/runtime-module.cc",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "bbe85b17_b68cd71a",
+        "filename": "src/runtime/runtime-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-14T20:47:46Z",
+      "side": 1,
+      "message": "This is only if the embedder does not set a script name. A follow up CL will change this API to pass a ScriptRecord which will deal with this case.",
+      "parentUuid": "2537a569_f075b80d",
+      "revId": "b687f1c37e1c330ecf75392a54d3523c35a5e921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1228f982_f6ab1b9d",
         "filename": "test/mjsunit/harmony/modules-import-16.js",
         "patchSetId": 3
@@ -56,6 +98,24 @@
       "revId": "b687f1c37e1c330ecf75392a54d3523c35a5e921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dacb4b4a_6f93ef99",
+        "filename": "test/mjsunit/harmony/modules-import-16.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-14T20:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1228f982_f6ab1b9d",
+      "revId": "b687f1c37e1c330ecf75392a54d3523c35a5e921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
