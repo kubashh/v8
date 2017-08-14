@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "acc9158b_e914ccf2",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bc382c3_20ac2500",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "811ebb40_b1a05953",
         "filename": "test/mjsunit/wasm/atomics.js",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "ab0cb510_8a576e06",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "811ebb40_b1a05953",
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e775595_a2f5b91d",
         "filename": "test/mjsunit/wasm/atomics.js",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2017-08-11T23:57:52Z",
       "side": 1,
       "message": "let kPageSize",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 11
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0365cc40_6d487dee",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Changed to const instead.",
+      "parentUuid": "0e775595_a2f5b91d",
       "range": {
         "startLine": 41,
         "startChar": 2,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "1ab9217d_f66ab535",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27ad047f_f7a40074",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b8a17ca_71c456c1",
         "filename": "test/mjsunit/wasm/atomics.js",
         "patchSetId": 3
@@ -99,6 +189,30 @@
       "writtenOn": "2017-08-11T23:57:52Z",
       "side": 1,
       "message": "might be clearer if you use a const here.",
+      "range": {
+        "startLine": 48,
+        "startChar": 46,
+        "endLine": 48,
+        "endChar": 48
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9223a60b_f9cbc340",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Used a named variable, because any variable max here can be used.",
+      "parentUuid": "8b8a17ca_71c456c1",
       "range": {
         "startLine": 48,
         "startChar": 46,
@@ -174,6 +288,72 @@
     },
     {
       "key": {
+        "uuid": "ababe98c_01e1b65e",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Fixed loop as below.",
+      "parentUuid": "afea9847_5608f9cc",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 33
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82582f91_408b8d2c",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Just left over from the previous test because I was using i32.length % i to test a range of values, fixed to be consistent.",
+      "parentUuid": "9f20827b_12cb847e",
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "859c0bbd_073bc420",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f94f3d9f_ddb09b16",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d5f984f_216b2811",
         "filename": "test/mjsunit/wasm/atomics.js",
         "patchSetId": 3
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "03bd8c62_b30eed0e",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d5f984f_216b2811",
+      "range": {
+        "startLine": 65,
+        "startChar": 7,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d8d81d2_aa5b3da3",
         "filename": "test/mjsunit/wasm/atomics.js",
         "patchSetId": 3
@@ -217,6 +421,30 @@
       "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0ff9816_df9dac2a",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-14T22:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d8d81d2_aa5b3da3",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 8
+      },
+      "revId": "8ef1956eefaf3629312e84da3ef436f93d89c357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
