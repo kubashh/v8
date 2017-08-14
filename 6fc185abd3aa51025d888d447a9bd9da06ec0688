@@ -85,6 +85,24 @@
       "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33efd635_4f3fec85",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-14T14:58:26Z",
+      "side": 1,
+      "message": "Out of interest, why did you analyze this in a debug build? The debug build has a mass of CSA_ASSERTs which will change the generated code substantially.",
+      "parentUuid": "b90cc449_378c65bb",
+      "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
