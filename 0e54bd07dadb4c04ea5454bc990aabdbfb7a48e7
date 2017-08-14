@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1415b394_9237086c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-14T16:03:21Z",
+      "side": 1,
+      "message": "as discussed offline, refreshing is also needed after function calls if in the function call there could be a grow_memory.",
+      "range": {
+        "startLine": 24,
+        "startChar": 23,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "0e54bd07dadb4c04ea5454bc990aabdbfb7a48e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c29cdb6_cfe4bbd8",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-14T16:03:21Z",
+      "side": 1,
+      "message": "I think this code would be more readable if the condition were outside the reinterpret_cast and not inside, especially since nullptr does not need the reinterpret_cast.",
+      "range": {
+        "startLine": 2826,
+        "startChar": 37,
+        "endLine": 2826,
+        "endChar": 64
+      },
+      "revId": "0e54bd07dadb4c04ea5454bc990aabdbfb7a48e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1005cd8_384f45b0",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-14T16:03:21Z",
+      "side": 1,
+      "message": "The code in this condition is nearly the same as in LoadMemSize. I think it could be worth to share code.",
+      "revId": "0e54bd07dadb4c04ea5454bc990aabdbfb7a48e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d923b7c_03733fe1",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-14T16:03:21Z",
+      "side": 1,
+      "message": "Could you add a comment here that LoadMemSize updates the effect_ pointer of the builder and thereby also ssa_env-\u003eeffect?",
+      "revId": "0e54bd07dadb4c04ea5454bc990aabdbfb7a48e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
