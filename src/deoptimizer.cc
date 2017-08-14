@@ -3907,6 +3907,7 @@ Handle<Object> TranslatedState::MaterializeCapturedObjectAt(
     case TUPLE2_TYPE:
     case TUPLE3_TYPE:
     case ASYNC_GENERATOR_REQUEST_TYPE:
+    case SCRIPT_RECORD_TYPE:
     case WASM_MODULE_TYPE:
     case WASM_INSTANCE_TYPE:
     case WASM_MEMORY_TYPE:

@@ -1027,7 +1027,9 @@ class ScriptOrigin {
       Local<Value> source_map_url = Local<Value>(),
       Local<Boolean> resource_is_opaque = Local<Boolean>(),
       Local<Boolean> is_wasm = Local<Boolean>(),
-      Local<Boolean> is_module = Local<Boolean>());
+      Local<Boolean> is_module = Local<Boolean>(),
+      Local<Value> security_nonce = Local<Value>(),
+      bool is_parser_inserted = false);
 
   V8_INLINE Local<Value> ResourceName() const;
   V8_INLINE Local<Integer> ResourceLineOffset() const;
@@ -1035,6 +1037,8 @@ class ScriptOrigin {
   V8_INLINE Local<Integer> ScriptID() const;
   V8_INLINE Local<Value> SourceMapUrl() const;
   V8_INLINE ScriptOriginOptions Options() const { return options_; }
+  V8_INLINE Local<Value> SecurityNonce() const;
+  V8_INLINE bool IsParserInserted() const;
 
  private:
   Local<Value> resource_name_;
@@ -1043,6 +1047,8 @@ class ScriptOrigin {
   ScriptOriginOptions options_;
   Local<Integer> script_id_;
   Local<Value> source_map_url_;
+  Local<Value> security_nonce_;
+  bool is_parser_inserted_;
 };
 
 /**
@@ -1211,6 +1217,38 @@ class V8_EXPORT Script {
   Local<UnboundScript> GetUnboundScript();
 };
 
+/**
+ * This represents additional metadata about a script that is required
+ * for dynamically loading a module from a script.
+ *
+ * This API is experimental and may change significantly.
+ */
+class V8_EXPORT ScriptRecord {
+ public:
+  /**
+   * The name of the script that is set through ScriptOrigin
+   */
+  Local<Value> GetName();
+
+  // TODO(gsathya): Add doc
+  Local<Value> GetSecurityNonce();
+  bool IsParserInserted();
+};
+
+/*
+ * This represents a Sum type of ScriptRecord or Module. This is used
+ * in the HostImportModuleDynamicallyCallback to provide the referrer.
+ *
+ * This API is experimental and may change significantly.
+ */
+class V8_EXPORT ScriptRecordOrModule {
+ public:
+  bool IsModule();
+  Local<Module> GetModule();
+
+  bool IsScriptRecord();
+  Local<ScriptRecord> GetScriptRecord();
+};
 
 /**
  * For compiling scripts.
@@ -6209,7 +6247,8 @@ typedef void (*DeprecatedCallCompletedCallback)();
  * that exception by returning an empty MaybeLocal.
  */
 typedef MaybeLocal<Promise> (*HostImportModuleDynamicallyCallback)(
-    Local<Context> context, Local<String> referrer, Local<String> specifier);
+    Local<Context> context, Local<ScriptRecordOrModule> referrer,
+    Local<String> specifier);
 
 /**
  * PromiseHook with type kInit is called when a new promise is
@@ -9004,8 +9043,8 @@ class Internals {
   static const int kNodeIsIndependentShift = 3;
   static const int kNodeIsActiveShift = 4;
 
-  static const int kJSApiObjectType = 0xbd;
-  static const int kJSObjectType = 0xbe;
+  static const int kJSApiObjectType = 0xbe;
+  static const int kJSObjectType = 0xbf;
   static const int kFirstNonstringType = 0x80;
   static const int kOddballType = 0x82;
   static const int kForeignType = 0x86;
@@ -9528,7 +9567,8 @@ ScriptOrigin::ScriptOrigin(Local<Value> resource_name,
                            Local<Integer> script_id,
                            Local<Value> source_map_url,
                            Local<Boolean> resource_is_opaque,
-                           Local<Boolean> is_wasm, Local<Boolean> is_module)
+                           Local<Boolean> is_wasm, Local<Boolean> is_module,
+                           Local<Value> security_nonce, bool is_parser_inserted)
     : resource_name_(resource_name),
       resource_line_offset_(resource_line_offset),
       resource_column_offset_(resource_column_offset),
@@ -9538,10 +9578,15 @@ ScriptOrigin::ScriptOrigin(Local<Value> resource_name,
                !is_wasm.IsEmpty() && is_wasm->IsTrue(),
                !is_module.IsEmpty() && is_module->IsTrue()),
       script_id_(script_id),
-      source_map_url_(source_map_url) {}
+      source_map_url_(source_map_url),
+      security_nonce_(security_nonce),
+      is_parser_inserted_(is_parser_inserted) {}
 
 Local<Value> ScriptOrigin::ResourceName() const { return resource_name_; }
 
+Local<Value> ScriptOrigin::SecurityNonce() const { return security_nonce_; }
+
+bool ScriptOrigin::IsParserInserted() const { return is_parser_inserted_; }
 
 Local<Integer> ScriptOrigin::ResourceLineOffset() const {
   return resource_line_offset_;

@@ -26937,9 +26937,12 @@ TEST(CorrectEnteredContext) {
 }
 
 v8::MaybeLocal<v8::Promise> HostImportModuleDynamicallyCallbackResolve(
-    Local<Context> context, Local<String> referrer, Local<String> specifier) {
+    Local<Context> context, Local<v8::ScriptRecordOrModule> referrer,
+    Local<String> specifier) {
   CHECK(!referrer.IsEmpty());
-  String::Utf8Value referrer_utf8(referrer);
+  CHECK(referrer->IsScriptRecord());
+  String::Utf8Value referrer_utf8(
+      Local<String>::Cast(referrer->GetScriptRecord()->GetName()));
   CHECK_EQ(0, strcmp("www.google.com", *referrer_utf8));
 
   CHECK(!specifier.IsEmpty());
@@ -26962,12 +26965,16 @@ TEST(DynamicImport) {
   isolate->SetHostImportModuleDynamicallyCallback(
       HostImportModuleDynamicallyCallbackResolve);
 
-  i::Handle<i::String> url(v8::Utils::OpenHandle(*v8_str("www.google.com")));
-  i::Handle<i::Object> specifier(v8::Utils::OpenHandle(*v8_str("index.js")));
-  i::Handle<i::String> result(v8::Utils::OpenHandle(*v8_str("hello world")));
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Factory* factory = i_isolate->factory();
+  i::Handle<i::Script> script = factory->NewScript(factory->empty_string());
+  script->set_name(*factory->NewStringFromAsciiChecked("www.google.com"));
+  i::Handle<i::String> result(v8::Utils::OpenHandle(*v8_str("hello world")));
+  i::Handle<i::Object> specifier(v8::Utils::OpenHandle(*v8_str("index.js")));
+  i::Handle<i::Object> script_record(script->script_record(), i_isolate);
   i::MaybeHandle<i::JSPromise> maybe_promise =
-      i_isolate->RunHostImportModuleDynamicallyCallback(url, specifier);
+      i_isolate->RunHostImportModuleDynamicallyCallback(script_record,
+                                                        specifier);
   i::Handle<i::JSPromise> promise = maybe_promise.ToHandleChecked();
   isolate->RunMicrotasks();
   CHECK(result->Equals(i::String::cast(promise->result())));

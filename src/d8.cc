@@ -682,10 +682,15 @@ class ModuleEmbedderData {
 
  public:
   explicit ModuleEmbedderData(Isolate* isolate)
-      : module_to_directory_map(10, ModuleGlobalHash(isolate)) {}
+      : module_to_specifier_map(10, ModuleGlobalHash(isolate)),
+        module_to_directory_map(10, ModuleGlobalHash(isolate)) {}
 
   // Map from normalized module specifier to Module.
   std::unordered_map<std::string, Global<Module>> specifier_to_module_map;
+  // TODO(gsathya): De dedupe the two maps.
+  // Map from Module to normalized module specifier.
+  std::unordered_map<Global<Module>, std::string, ModuleGlobalHash>
+      module_to_specifier_map;
   // Map from Module to the directory that Module was loaded from.
   std::unordered_map<Global<Module>, std::string, ModuleGlobalHash>
       module_to_directory_map;
@@ -754,6 +759,10 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Context> context,
             .insert(std::make_pair(file_name, Global<Module>(isolate, module)))
             .second);
 
+  CHECK(d->module_to_specifier_map
+            .insert(std::make_pair(Global<Module>(isolate, module), file_name))
+            .second);
+
   std::string dir_name = DirName(file_name);
   CHECK(d->module_to_directory_map
             .insert(std::make_pair(Global<Module>(isolate, module), dir_name))
@@ -775,7 +784,7 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Context> context,
 namespace {
 
 struct DynamicImportData {
-  DynamicImportData(Isolate* isolate_, Local<String> referrer_,
+  DynamicImportData(Isolate* isolate_, Local<ScriptRecordOrModule> referrer_,
                     Local<String> specifier_,
                     Local<Promise::Resolver> resolver_)
       : isolate(isolate_) {
@@ -785,7 +794,7 @@ struct DynamicImportData {
   }
 
   Isolate* isolate;
-  Global<String> referrer;
+  Global<ScriptRecordOrModule> referrer;
   Global<String> specifier;
   Global<Promise::Resolver> resolver;
 };
@@ -793,7 +802,8 @@ struct DynamicImportData {
 }  // namespace
 
 MaybeLocal<Promise> Shell::HostImportModuleDynamically(
-    Local<Context> context, Local<String> referrer, Local<String> specifier) {
+    Local<Context> context, Local<ScriptRecordOrModule> referrer,
+    Local<String> specifier) {
   Isolate* isolate = context->GetIsolate();
 
   MaybeLocal<Promise::Resolver> maybe_resolver =
@@ -815,7 +825,6 @@ void Shell::DoHostImportModuleDynamically(void* import_data) {
   Isolate* isolate(import_data_->isolate);
   HandleScope handle_scope(isolate);
 
-  Local<String> referrer(import_data_->referrer.Get(isolate));
   Local<String> specifier(import_data_->specifier.Get(isolate));
   Local<Promise::Resolver> resolver(import_data_->resolver.Get(isolate));
 
@@ -823,7 +832,20 @@ void Shell::DoHostImportModuleDynamically(void* import_data) {
   Local<Context> realm = data->realms_[data->realm_current_].Get(isolate);
   Context::Scope context_scope(realm);
 
-  std::string source_url = ToSTLString(referrer);
+  Local<ScriptRecordOrModule> referrer_obj(import_data_->referrer.Get(isolate));
+  ModuleEmbedderData* d = GetModuleDataFromContext(realm);
+  std::string source_url;
+  if (referrer_obj->IsScriptRecord()) {
+    Local<String> referrer =
+        Local<String>::Cast(referrer_obj->GetScriptRecord()->GetName());
+    source_url = ToSTLString(referrer);
+  } else {
+    Local<Module> module = referrer_obj->GetModule();
+    auto specifier_it =
+        d->module_to_specifier_map.find(Global<Module>(isolate, module));
+    CHECK(specifier_it != d->module_to_specifier_map.end());
+    source_url = specifier_it->second;
+  }
   std::string dir_name =
       DirName(IsAbsolutePath(source_url)
                   ? source_url
@@ -834,7 +856,6 @@ void Shell::DoHostImportModuleDynamically(void* import_data) {
   TryCatch try_catch(isolate);
   try_catch.SetVerbose(true);
 
-  ModuleEmbedderData* d = GetModuleDataFromContext(realm);
   Local<Module> root_module;
   auto module_it = d->specifier_to_module_map.find(absolute_path);
   if (module_it != d->specifier_to_module_map.end()) {

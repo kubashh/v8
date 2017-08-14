@@ -1241,7 +1241,7 @@ class Isolate {
   void SetHostImportModuleDynamicallyCallback(
       HostImportModuleDynamicallyCallback callback);
   MaybeHandle<JSPromise> RunHostImportModuleDynamicallyCallback(
-      Handle<String> referrer, Handle<Object> specifier);
+      Handle<Object> referrer, Handle<Object> specifier);
 
   void SetRAILMode(RAILMode rail_mode);
 
