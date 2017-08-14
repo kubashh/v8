@@ -60,11 +60,21 @@ using protocol::Maybe;
 class InjectedScript::ProtocolPromiseHandler {
  public:
   static bool add(V8InspectorSessionImpl* session,
-                  v8::Local<v8::Context> context,
-                  v8::Local<v8::Promise> promise,
+                  v8::Local<v8::Context> context, v8::Local<v8::Value> value,
                   const String16& notPromiseError, int executionContextId,
                   const String16& objectGroup, bool returnByValue,
                   bool generatePreview, EvaluateCallback* callback) {
+    v8::Local<v8::Promise::Resolver> resolver;
+    if (!v8::Promise::Resolver::New(context).ToLocal(&resolver)) {
+      callback->sendFailure(Response::InternalError());
+      return false;
+    }
+    if (!resolver->Resolve(context, value).FromMaybe(false)) {
+      callback->sendFailure(Response::InternalError());
+      return false;
+    }
+
+    v8::Local<v8::Promise> promise = resolver->GetPromise();
     V8InspectorImpl* inspector = session->inspector();
     ProtocolPromiseHandler* handler =
         new ProtocolPromiseHandler(session, executionContextId, objectGroup,
@@ -461,10 +471,6 @@ void InjectedScript::addPromiseCallback(
     std::unique_ptr<EvaluateCallback> callback) {
   if (value.IsEmpty()) {
     callback->sendFailure(Response::InternalError());
-    return;
-  }
-  if (!value.ToLocalChecked()->IsPromise()) {
-    callback->sendFailure(Response::Error(notPromiseError));
     return;
   }
   v8::MicrotasksScope microtasksScope(m_context->isolate(),
