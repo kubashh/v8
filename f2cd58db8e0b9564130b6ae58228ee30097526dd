@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b975862c_437e86ed",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-14T03:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d519ff_ab71a572",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31d00f03_9af2767c",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6056a2c_234bdddf",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-14T03:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31d00f03_9af2767c",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a54f84ad_6a2d849a",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-14T03:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84ed1b24_b7dba499",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "776111b0_513b2c22",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6b4ff1a_e8247c0d",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-14T03:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "776111b0_513b2c22",
+      "revId": "f2cd58db8e0b9564130b6ae58228ee30097526dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
