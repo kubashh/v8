@@ -129,20 +129,25 @@ Running test: testRejectedPromiseWithSyntaxError
 
 Running test: testPrimitiveValueInsteadOfPromise
 {
-    error : {
-        code : -32000
-        message : Result of the evaluation is not a promise
-    }
     id : <messageId>
+    result : {
+        result : {
+            type : boolean
+            value : true
+        }
+    }
 }
 
 Running test: testObjectInsteadOfPromise
 {
-    error : {
-        code : -32000
-        message : Result of the evaluation is not a promise
-    }
     id : <messageId>
+    result : {
+        result : {
+            type : object
+            value : {
+            }
+        }
+    }
 }
 
 Running test: testPendingPromise
