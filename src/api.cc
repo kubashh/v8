@@ -2093,6 +2093,45 @@ Local<UnboundScript> Script::GetUnboundScript() {
       i::Handle<i::SharedFunctionInfo>(i::JSFunction::cast(*obj)->shared()));
 }
 
+Local<Value> ScriptRecord::GetName() {
+  i::Handle<i::ScriptRecord> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  if (self->name()->IsUndefined(isolate)) {
+    return v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+  }
+  return ToApiHandle<Value>(i::Handle<i::Object>(self->name(), isolate));
+}
+
+Local<Value> ScriptRecord::GetSecurityNonce() {
+  i::Handle<i::ScriptRecord> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  return ToApiHandle<Value>(i::handle(self->security_nonce(), isolate));
+}
+
+bool ScriptRecord::IsParserInserted() {
+  i::Handle<i::ScriptRecord> self = Utils::OpenHandle(this);
+  return self->is_parser_inserted();
+}
+
+bool ScriptRecordOrModule::IsModule() {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  return self->IsModule();
+}
+
+bool ScriptRecordOrModule::IsScriptRecord() {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  return self->IsScriptRecord();
+}
+
+Local<Module> ScriptRecordOrModule::GetModule() {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  return ToApiHandle<Module>(self);
+}
+
+Local<ScriptRecord> ScriptRecordOrModule::GetScriptRecord() {
+  i::Handle<i::Object> self = Utils::OpenHandle(this);
+  return ToApiHandle<ScriptRecord>(self);
+}
 
 Module::Status Module::GetStatus() const {
   i::Handle<i::Module> self = Utils::OpenHandle(this);
@@ -2513,6 +2552,11 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
   if (!origin.ResourceName().IsEmpty()) {
     script->set_name(*Utils::OpenHandle(*(origin.ResourceName())));
   }
+  if (!origin.SecurityNonce().IsEmpty()) {
+    script->script_record()->set_security_nonce(
+        *Utils::OpenHandle(*(origin.ResourceName())));
+  }
+  script->script_record()->set_is_parser_inserted(origin.IsParserInserted());
   if (!origin.ResourceLineOffset().IsEmpty()) {
     script->set_line_offset(
         static_cast<int>(origin.ResourceLineOffset()->Value()));

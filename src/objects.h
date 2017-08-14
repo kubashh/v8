@@ -158,6 +158,7 @@
 //       - CodeCache
 //       - PrototypeInfo
 //       - Module
+//       - ScriptRecord
 //       - ModuleInfoEntry
 //       - PreParsedScopeData
 //     - WeakCell
@@ -366,6 +367,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(MODULE_TYPE)                                                \
   V(MODULE_INFO_ENTRY_TYPE)                                     \
   V(ASYNC_GENERATOR_REQUEST_TYPE)                               \
+  V(SCRIPT_RECORD_TYPE)                                         \
   V(FIXED_ARRAY_TYPE)                                           \
   V(HASH_TABLE_TYPE)                                            \
   V(FEEDBACK_VECTOR_TYPE)                                       \
@@ -545,6 +547,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(CONTEXT_EXTENSION, ContextExtension, context_extension)                  \
   V(MODULE, Module, module)                                                  \
   V(MODULE_INFO_ENTRY, ModuleInfoEntry, module_info_entry)                   \
+  V(SCRIPT_RECORD, ScriptRecord, script_record)                              \
   V(ASYNC_GENERATOR_REQUEST, AsyncGeneratorRequest, async_generator_request)
 
 // We use the full 8 bits of the instance_type field to encode heap object
@@ -714,6 +717,7 @@ enum InstanceType : uint8_t {
   MODULE_TYPE,
   MODULE_INFO_ENTRY_TYPE,
   ASYNC_GENERATOR_REQUEST_TYPE,
+  SCRIPT_RECORD_TYPE,
   FIXED_ARRAY_TYPE,
   HASH_TABLE_TYPE,
   FEEDBACK_VECTOR_TYPE,

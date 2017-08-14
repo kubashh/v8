@@ -13,6 +13,30 @@
 namespace v8 {
 namespace internal {
 
+class ScriptRecord : public Struct {
+ public:
+  // Contains the script name. This is either a String or Undefined.
+  DECL_ACCESSORS(name, Object)
+  DECL_ACCESSORS(security_nonce, Object)
+  DECL_INT_ACCESSORS(flags)
+
+  DECL_BOOLEAN_ACCESSORS(is_parser_inserted)
+
+  // Dispatched behavior.
+  DECL_PRINTER(ScriptRecord)
+  DECL_VERIFIER(ScriptRecord)
+  DECL_CAST(ScriptRecord)
+
+  // Layout description.
+  static const int kNameOffset = HeapObject::kHeaderSize;
+  static const int kSecurityNonceOffset = kNameOffset + kPointerSize;
+  static const int kFlagsOffset = kSecurityNonceOffset + kPointerSize;
+  static const int kSize = kFlagsOffset + kPointerSize;
+
+  // Flags layout.
+  static const int kParserDispositionBit = 0;
+};
+
 // Script describes a script which has been added to the VM.
 class Script : public Struct {
  public:
@@ -37,8 +61,11 @@ class Script : public Struct {
   // [source]: the script source.
   DECL_ACCESSORS(source, Object)
 
-  // [name]: the script name.
-  DECL_ACCESSORS(name, Object)
+  // [script_record]: the script record contains metadata about the
+  // script.
+  DECL_ACCESSORS(script_record, ScriptRecord)
+  inline Object* name() const;
+  inline void set_name(Object* name);
 
   // [id]: the script id.
   DECL_INT_ACCESSORS(id)
@@ -179,8 +206,8 @@ class Script : public Struct {
   DECL_VERIFIER(Script)
 
   static const int kSourceOffset = HeapObject::kHeaderSize;
-  static const int kNameOffset = kSourceOffset + kPointerSize;
-  static const int kLineOffsetOffset = kNameOffset + kPointerSize;
+  static const int kScriptRecordOffset = kSourceOffset + kPointerSize;
+  static const int kLineOffsetOffset = kScriptRecordOffset + kPointerSize;
   static const int kColumnOffsetOffset = kLineOffsetOffset + kPointerSize;
   static const int kContextOffset = kColumnOffsetOffset + kPointerSize;
   static const int kWrapperOffset = kContextOffset + kPointerSize;

@@ -1505,7 +1505,7 @@ void AllocationMemento::AllocationMementoPrint(std::ostream& os) {  // NOLINT
 void Script::ScriptPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Script");
   os << "\n - source: " << Brief(source());
-  os << "\n - name: " << Brief(name());
+  os << "\n - script_record: " << Brief(script_record());
   os << "\n - line_offset: " << line_offset();
   os << "\n - column_offset: " << column_offset();
   os << "\n - type: " << type();
@@ -1520,6 +1520,13 @@ void Script::ScriptPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
+void ScriptRecord::ScriptRecordPrint(std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "ScriptRecord");
+  os << "\n - name: " << Brief(name());
+  os << "\n - securit_nonce: " << security_nonce();
+  os << "\n - is_parser_inserted: " << is_parser_inserted();
+  os << "\n";
+}
 
 void DebugInfo::DebugInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "DebugInfo");
