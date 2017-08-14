@@ -18,11 +18,15 @@ RUNTIME_FUNCTION(Runtime_DynamicImportCall) {
   CONVERT_ARG_HANDLE_CHECKED(Object, specifier, 1);
 
   Handle<Script> script(Script::cast(function->shared()->script()));
-  Handle<String> source_url(String::cast(script->name()));
+  v8::ScriptOriginOptions options(script->origin_options());
+  Object* referrer = script->script_record();
+  if (options.IsModule()) {
+    referrer = isolate->context()->module();
+  }
 
-  RETURN_RESULT_OR_FAILURE(
-      isolate,
-      isolate->RunHostImportModuleDynamicallyCallback(source_url, specifier));
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           isolate->RunHostImportModuleDynamicallyCallback(
+                               handle(referrer, isolate), specifier));
 }
 
 RUNTIME_FUNCTION(Runtime_GetModuleNamespace) {

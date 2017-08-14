@@ -1132,9 +1132,16 @@ Handle<AccessorInfo> Factory::NewAccessorInfo() {
 Handle<Script> Factory::NewScript(Handle<String> source) {
   // Create and initialize script object.
   Heap* heap = isolate()->heap();
+
+  Handle<ScriptRecord> script_record =
+      Handle<ScriptRecord>::cast(NewStruct(SCRIPT_RECORD_TYPE));
+  script_record->set_name(heap->undefined_value());
+  script_record->set_security_nonce(0);
+  script_record->set_flags(0);
+
   Handle<Script> script = Handle<Script>::cast(NewStruct(SCRIPT_TYPE));
   script->set_source(*source);
-  script->set_name(heap->undefined_value());
+  script->set_script_record(*script_record);
   script->set_id(isolate()->heap()->NextScriptId());
   script->set_line_offset(0);
   script->set_column_offset(0);

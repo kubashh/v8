@@ -15,10 +15,17 @@
 namespace v8 {
 namespace internal {
 
+ACCESSORS(ScriptRecord, name, Object, kNameOffset)
+ACCESSORS(ScriptRecord, security_nonce, Object, kSecurityNonceOffset)
+SMI_ACCESSORS(ScriptRecord, flags, kFlagsOffset)
+BOOL_ACCESSORS(ScriptRecord, flags, is_parser_inserted, kParserDispositionBit)
+
+CAST_ACCESSOR(ScriptRecord)
+
 CAST_ACCESSOR(Script)
 
 ACCESSORS(Script, source, Object, kSourceOffset)
-ACCESSORS(Script, name, Object, kNameOffset)
+ACCESSORS(Script, script_record, ScriptRecord, kScriptRecordOffset)
 SMI_ACCESSORS(Script, id, kIdOffset)
 SMI_ACCESSORS(Script, line_offset, kLineOffsetOffset)
 SMI_ACCESSORS(Script, column_offset, kColumnOffsetOffset)
@@ -76,6 +83,10 @@ bool Script::HasValidSource() {
   }
   return true;
 }
+
+Object* Script::name() const { return script_record()->name(); }
+
+void Script::set_name(Object* name) { script_record()->set_name(name); }
 
 }  // namespace internal
 }  // namespace v8

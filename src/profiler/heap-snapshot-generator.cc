@@ -1240,9 +1240,8 @@ void V8HeapExplorer::ExtractScriptReferences(int entry, Script* script) {
   SetInternalReference(obj, entry,
                        "source", script->source(),
                        Script::kSourceOffset);
-  SetInternalReference(obj, entry,
-                       "name", script->name(),
-                       Script::kNameOffset);
+  SetInternalReference(obj, entry, "script_record", script->script_record(),
+                       Script::kScriptRecordOffset);
   SetInternalReference(obj, entry,
                        "context_data", script->context_data(),
                        Script::kContextOffset);

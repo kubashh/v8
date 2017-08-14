@@ -11,6 +11,7 @@
 #include "src/factory.h"
 #include "src/isolate.h"
 #include "src/list.h"
+#include "src/objects/script.h"
 
 namespace v8 {
 
@@ -111,6 +112,8 @@ class RegisteredExtension {
   V(NativeWeakMap, JSWeakMap)                  \
   V(debug::GeneratorObject, JSGeneratorObject) \
   V(debug::Script, Script)                     \
+  V(ScriptRecord, ScriptRecord)                \
+  V(ScriptRecordOrModule, Object)              \
   V(Promise, JSPromise)
 
 class Utils {
@@ -129,6 +132,8 @@ class Utils {
       v8::internal::Handle<v8::internal::Object> obj);
   static inline Local<Module> ToLocal(
       v8::internal::Handle<v8::internal::Module> obj);
+  static inline Local<ScriptRecord> ToLocal(
+      v8::internal::Handle<v8::internal::ScriptRecord> obj);
   static inline Local<Name> ToLocal(
       v8::internal::Handle<v8::internal::Name> obj);
   static inline Local<String> ToLocal(
@@ -203,6 +208,8 @@ class Utils {
       v8::internal::Handle<v8::internal::FunctionTemplateInfo> obj);
   static inline Local<AccessorSignature> AccessorSignatureToLocal(
       v8::internal::Handle<v8::internal::FunctionTemplateInfo> obj);
+  static inline Local<ScriptRecordOrModule> ScriptRecordOrModuleToLocal(
+      v8::internal::Handle<v8::internal::Object> obj);
   static inline Local<External> ExternalToLocal(
       v8::internal::Handle<v8::internal::JSObject> obj);
   static inline Local<NativeWeakMap> NativeWeakMapToLocal(
@@ -315,6 +322,7 @@ MAKE_TO_LOCAL(ToLocal, FunctionTemplateInfo, FunctionTemplate)
 MAKE_TO_LOCAL(ToLocal, ObjectTemplateInfo, ObjectTemplate)
 MAKE_TO_LOCAL(SignatureToLocal, FunctionTemplateInfo, Signature)
 MAKE_TO_LOCAL(AccessorSignatureToLocal, FunctionTemplateInfo, AccessorSignature)
+MAKE_TO_LOCAL(ScriptRecordOrModuleToLocal, Object, ScriptRecordOrModule)
 MAKE_TO_LOCAL(MessageToLocal, Object, Message)
 MAKE_TO_LOCAL(PromiseToLocal, JSObject, Promise)
 MAKE_TO_LOCAL(StackTraceToLocal, FixedArray, StackTrace)

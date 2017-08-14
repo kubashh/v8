@@ -1426,6 +1426,12 @@ void Script::ScriptVerify() {
   VerifyPointer(line_ends());
 }
 
+void ScriptRecord::ScriptRecordVerify() {
+  CHECK(IsScriptRecord());
+  VerifyPointer(name());
+  VerifySmiField(kSecurityNonceOffset);
+  VerifySmiField(kFlagsOffset);
+}
 
 void NormalizedMapCache::NormalizedMapCacheVerify() {
   FixedArray::cast(this)->FixedArrayVerify();
