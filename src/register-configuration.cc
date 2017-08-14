@@ -122,10 +122,65 @@ static base::LazyInstance<ArchDefaultRegisterConfiguration,
                           RegisterConfigurationInitializer>::type
     kDefaultRegisterConfiguration = LAZY_INSTANCE_INITIALIZER;
 
+class CustomRegisterConfiguration : public RegisterConfiguration {
+ public:
+  CustomRegisterConfiguration(
+      int num_allocatable_general_codes,
+      const int* allocatable_general_register_codes,
+      const char* const* allocatable_general_register_names)
+      : RegisterConfiguration(
+            Register::kNumRegisters, DoubleRegister::kMaxNumRegisters,
+#if V8_TARGET_ARCH_IA32
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_X64
+            num_allocatable_general_codes, kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_ARM
+            kMaxAllocatableGeneralRegisterCount,
+            CpuFeatures::IsSupported(VFP32DREGS)
+                ? kMaxAllocatableDoubleRegisterCount
+                : (ALLOCATABLE_NO_VFP32_DOUBLE_REGISTERS(REGISTER_COUNT) 0),
+#elif V8_TARGET_ARCH_ARM64
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_MIPS
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_MIPS64
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_PPC
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#elif V8_TARGET_ARCH_S390
+            kMaxAllocatableGeneralRegisterCount,
+            kMaxAllocatableDoubleRegisterCount,
+#else
+#error Unsupported target architecture.
+#endif
+            allocatable_general_register_codes,
+#if V8_TARGET_ARCH_ARM
+            CpuFeatures::IsSupported(VFP32DREGS)
+                ? kAllocatableDoubleCodes
+                : kAllocatableNoVFP32DoubleCodes,
+#else
+            kAllocatableDoubleCodes,
+#endif
+            kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE,
+            kGeneralRegisterNames, kFloatRegisterNames, kDoubleRegisterNames,
+            kSimd128RegisterNames) {
+  }
+};
+
 }  // namespace
 
 const RegisterConfiguration* RegisterConfiguration::Default() {
   return &kDefaultRegisterConfiguration.Get();
+}
+
+const RegisterConfiguration* RegisterConfiguration::CustomGeneralRegisters(
+    int num, const int* codes, const char* const* names) {
+  return new CustomRegisterConfiguration(num, codes, names);
 }
 
 RegisterConfiguration::RegisterConfiguration(

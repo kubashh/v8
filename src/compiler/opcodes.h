@@ -506,6 +506,8 @@
   MACHINE_FLOAT64_BINOP_LIST(V) \
   MACHINE_FLOAT64_UNOP_LIST(V)  \
   V(DebugBreak)                 \
+  V(SaveCallerRegisters)        \
+  V(RestoreCallerRegisters)     \
   V(Comment)                    \
   V(Load)                       \
   V(Store)                      \

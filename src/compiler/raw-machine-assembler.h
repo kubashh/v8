@@ -819,6 +819,8 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   void DebugBreak();
   void Unreachable();
   void Comment(const char* msg);
+  void SaveCallerRegisters();
+  void RestoreCallerRegisters();
 
 #if DEBUG
   void Bind(RawMachineLabel* label, AssemblerDebugInfo info);

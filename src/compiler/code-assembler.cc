@@ -326,6 +326,13 @@ void CodeAssembler::ReturnIf(Node* condition, Node* value) {
   Bind(&if_continue);
 }
 
+void CodeAssembler::SaveCallerRegisters() {
+  raw_assembler()->SaveCallerRegisters();
+}
+void CodeAssembler::RestoreCallerRegisters() {
+  raw_assembler()->RestoreCallerRegisters();
+}
+
 void CodeAssembler::DebugBreak() { raw_assembler()->DebugBreak(); }
 
 void CodeAssembler::Unreachable() {

@@ -176,6 +176,14 @@ void RawMachineAssembler::Comment(const char* msg) {
   AddNode(machine()->Comment(msg));
 }
 
+void RawMachineAssembler::SaveCallerRegisters() {
+  AddNode(machine()->SaveCallerRegisters());
+}
+
+void RawMachineAssembler::RestoreCallerRegisters() {
+  AddNode(machine()->RestoreCallerRegisters());
+}
+
 Node* RawMachineAssembler::CallN(CallDescriptor* desc, int input_count,
                                  Node* const* inputs) {
   DCHECK(!desc->NeedsFrameState());

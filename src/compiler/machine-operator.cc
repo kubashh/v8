@@ -655,6 +655,20 @@ struct MachineOperatorGlobalCache {
   };
   DebugBreakOperator kDebugBreak;
 
+  struct SaveCallerRegistersOperator : public Operator {
+    SaveCallerRegistersOperator()
+        : Operator(IrOpcode::kSaveCallerRegisters, Operator::kNoThrow,
+                   "SaveCallerRegisters", 0, 1, 1, 0, 1, 0) {}
+  };
+  SaveCallerRegistersOperator kSaveCallerRegisters;
+
+  struct RestoreCallerRegistersOperator : public Operator {
+    RestoreCallerRegistersOperator()
+        : Operator(IrOpcode::kRestoreCallerRegisters, Operator::kNoThrow,
+                   "RestoreCallerRegisters", 0, 1, 1, 0, 1, 0) {}
+  };
+  RestoreCallerRegistersOperator kRestoreCallerRegisters;
+
   struct UnsafePointerAddOperator final : public Operator {
     UnsafePointerAddOperator()
         : Operator(IrOpcode::kUnsafePointerAdd, Operator::kKontrol,
@@ -818,6 +832,14 @@ const Operator* MachineOperatorBuilder::BitcastWordToTagged() {
 
 const Operator* MachineOperatorBuilder::DebugBreak() {
   return &cache_.kDebugBreak;
+}
+
+const Operator* MachineOperatorBuilder::SaveCallerRegisters() {
+  return &cache_.kSaveCallerRegisters;
+}
+
+const Operator* MachineOperatorBuilder::RestoreCallerRegisters() {
+  return &cache_.kRestoreCallerRegisters;
 }
 
 const Operator* MachineOperatorBuilder::Comment(const char* msg) {

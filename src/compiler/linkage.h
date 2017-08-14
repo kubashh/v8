@@ -10,6 +10,7 @@
 #include "src/compiler/frame.h"
 #include "src/compiler/operator.h"
 #include "src/globals.h"
+#include "src/interface-descriptors.h"
 #include "src/machine-type.h"
 #include "src/reglist.h"
 #include "src/runtime/runtime.h"
@@ -198,7 +199,8 @@ class V8_EXPORT_PRIVATE CallDescriptor final
                  Operator::Properties properties,
                  RegList callee_saved_registers,
                  RegList callee_saved_fp_registers, Flags flags,
-                 const char* debug_name = "")
+                 const char* debug_name = "",
+                 const CallDescriptors::Key key = CallDescriptors::INVALID_KEY)
       : kind_(kind),
         target_type_(target_type),
         target_loc_(target_loc),
@@ -208,8 +210,8 @@ class V8_EXPORT_PRIVATE CallDescriptor final
         callee_saved_registers_(callee_saved_registers),
         callee_saved_fp_registers_(callee_saved_fp_registers),
         flags_(flags),
-        debug_name_(debug_name) {
-  }
+        debug_name_(debug_name),
+        call_interface_descriptor_key_(key) {}
 
   // Returns the kind of this call.
   Kind kind() const { return kind_; }
@@ -301,6 +303,10 @@ class V8_EXPORT_PRIVATE CallDescriptor final
 
   int CalculateFixedFrameSize() const;
 
+  CallDescriptors::Key call_interface_descriptor_key() const {
+    return call_interface_descriptor_key_;
+  }
+
  private:
   friend class Linkage;
 
@@ -314,6 +320,7 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   const RegList callee_saved_fp_registers_;
   const Flags flags_;
   const char* const debug_name_;
+  const CallDescriptors::Key call_interface_descriptor_key_;
 
   DISALLOW_COPY_AND_ASSIGN(CallDescriptor);
 };

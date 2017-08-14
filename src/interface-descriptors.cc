@@ -50,6 +50,8 @@ const char* CallInterfaceDescriptor::DebugName(Isolate* isolate) const {
 #undef DEF_CASE
     case CallDescriptors::NUMBER_OF_DESCRIPTORS:
       break;
+    case CallDescriptors::INVALID_KEY:
+      return "Invalid key";
   }
   return "";
 }
@@ -109,7 +111,7 @@ void RecordWriteDescriptor::InitializePlatformIndependent(
 
 void RecordWriteDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  DefaultInitializePlatformSpecific(data, kParameterCount);
+  RecordWriteInitializePlatformSpecific(data, kParameterCount);
 }
 
 void LoadDescriptor::InitializePlatformIndependent(

@@ -91,7 +91,10 @@ class PlatformInterfaceDescriptor;
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
  public:
-  CallInterfaceDescriptorData() : register_param_count_(-1), param_count_(-1) {}
+  CallInterfaceDescriptorData()
+      : register_param_count_(-1),
+        param_count_(-1),
+        num_allocatable_general_registers_(-1) {}
 
   // A copy of the passed in registers and param_representations is made
   // and owned by the CallInterfaceDescriptorData.
@@ -124,9 +127,33 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
     return platform_specific_descriptor_;
   }
 
+  void InitAllocatableGeneralRegisters(int num, const int* codes,
+                                       const char* const* names) {
+    this->num_allocatable_general_registers_ = num;
+    this->allocatable_general_register_codes_ = codes;
+    this->allocatable_general_register_names_ = names;
+  }
+
+  int num_allocatable_general_registers() const {
+    return num_allocatable_general_registers_;
+  }
+
+  const int* allocatable_general_register_codes() const {
+    return allocatable_general_register_codes_;
+  }
+
+  const char* const* allocatable_general_register_names() const {
+    return allocatable_general_register_names_;
+  }
+
  private:
   int register_param_count_;
   int param_count_;
+
+  int num_allocatable_general_registers_;
+
+  const int* allocatable_general_register_codes_;
+  const char* const* allocatable_general_register_names_;
 
   // The Register params are allocated dynamically by the
   // InterfaceDescriptor, and freed on destruction. This is because static
@@ -147,17 +174,18 @@ class CallDescriptors {
 #define DEF_ENUM(name, ...) name,
     INTERFACE_DESCRIPTOR_LIST(DEF_ENUM)
 #undef DEF_ENUM
-        NUMBER_OF_DESCRIPTORS
+        NUMBER_OF_DESCRIPTORS,
+    INVALID_KEY,
   };
 };
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
  public:
-  CallInterfaceDescriptor() : data_(NULL) {}
+  CallInterfaceDescriptor() : data_(NULL), key_(CallDescriptors::INVALID_KEY) {}
   virtual ~CallInterfaceDescriptor() {}
 
   CallInterfaceDescriptor(Isolate* isolate, CallDescriptors::Key key)
-      : data_(isolate->call_descriptor_data(key)) {}
+      : data_(isolate->call_descriptor_data(key)), key_(key) {}
 
   int GetParameterCount() const { return data()->param_count(); }
 
@@ -183,9 +211,23 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return data()->platform_specific_descriptor();
   }
 
+  int num_allocatable_general_registers() const {
+    return data()->num_allocatable_general_registers();
+  }
+
+  const int* allocatable_general_register_codes() const {
+    return data()->allocatable_general_register_codes();
+  }
+
+  const char* const* allocatable_general_register_names() const {
+    return data()->allocatable_general_register_names();
+  }
+
   static const Register ContextRegister();
 
   const char* DebugName(Isolate* isolate) const;
+
+  CallDescriptors::Key key() const { return key_; }
 
  protected:
   const CallInterfaceDescriptorData* data() const { return data_; }
@@ -216,8 +258,13 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
   static void DefaultInitializePlatformSpecific(
       CallInterfaceDescriptorData* data, int register_parameter_count);
 
+  // For RecordWrite code stub using specific allocatable registers.
+  static void RecordWriteInitializePlatformSpecific(
+      CallInterfaceDescriptorData* data, int register_parameter_count);
+
  private:
   const CallInterfaceDescriptorData* data_;
+  CallDescriptors::Key key_;
 };
 
 #define DECLARE_DESCRIPTOR_WITH_BASE(name, base)           \

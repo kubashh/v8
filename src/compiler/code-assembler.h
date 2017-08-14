@@ -503,6 +503,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   void ReturnIf(Node* condition, Node* value);
 
+  void SaveCallerRegisters();
+  void RestoreCallerRegisters();
   void DebugBreak();
   void Unreachable();
   void Comment(const char* format, ...);

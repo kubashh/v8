@@ -1109,6 +1109,12 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kStateValues:
     case IrOpcode::kObjectState:
       return;
+    case IrOpcode::kSaveCallerRegisters:
+      VisitSaveCallerRegisters(node);
+      return;
+    case IrOpcode::kRestoreCallerRegisters:
+      VisitRestoreCallerRegisters(node);
+      return;
     case IrOpcode::kDebugBreak:
       VisitDebugBreak(node);
       return;
@@ -2750,6 +2756,16 @@ void InstructionSelector::VisitDeoptimize(DeoptimizeKind kind,
 void InstructionSelector::VisitThrow(Node* node) {
   OperandGenerator g(this);
   Emit(kArchThrowTerminator, g.NoOutput());
+}
+
+void InstructionSelector::VisitSaveCallerRegisters(Node* node) {
+  OperandGenerator g(this);
+  Emit(kArchSaveCallerRegisters, g.NoOutput());
+}
+
+void InstructionSelector::VisitRestoreCallerRegisters(Node* node) {
+  OperandGenerator g(this);
+  Emit(kArchRestoreCallerRegisters, g.NoOutput());
 }
 
 void InstructionSelector::VisitDebugBreak(Node* node) {

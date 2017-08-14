@@ -30,6 +30,9 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   // Default RegisterConfigurations for the target architecture.
   static const RegisterConfiguration* Default();
 
+  static const RegisterConfiguration* CustomGeneralRegisters(
+      int num, const int* codes, const char* const* names);
+
   RegisterConfiguration(int num_general_registers, int num_double_registers,
                         int num_allocatable_general_registers,
                         int num_allocatable_double_registers,

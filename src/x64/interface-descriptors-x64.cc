@@ -20,6 +20,43 @@ void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
                                    default_stub_registers);
 }
 
+// First three arguments according to calling convention, rcx for shifting and
+// rax for return value.
+#define RECORD_WRITE_ALLOCATABLE_GENERAL_REGISTERS(V) \
+  V(rdi)                                              \
+  V(rsi)                                              \
+  V(rdx)                                              \
+  V(rcx)                                              \
+  V(rax)
+
+void CallInterfaceDescriptor::RecordWriteInitializePlatformSpecific(
+    CallInterfaceDescriptorData* data, int register_parameter_count) {
+  static const int register_codes[] = {
+#define REGISTER_CODE(R) Register::kCode_##R,
+      RECORD_WRITE_ALLOCATABLE_GENERAL_REGISTERS(REGISTER_CODE)};
+#undef REGISTER_CODE
+
+  static const char* const register_names[] = {
+#define REGISTER_NAME(R) #R,
+      RECORD_WRITE_ALLOCATABLE_GENERAL_REGISTERS(REGISTER_NAME)};
+#undef REGISTER_NAME
+
+  data->InitAllocatableGeneralRegisters(arraysize(register_codes),
+                                        register_codes, register_names);
+
+  // Use the same allocatable registers for passing parameter.
+  const Register default_stub_registers[] = {
+#define REGISTER(R) R,
+      RECORD_WRITE_ALLOCATABLE_GENERAL_REGISTERS(REGISTER)};
+#undef REGISTER
+
+  CHECK_LE(static_cast<size_t>(register_parameter_count),
+           arraysize(default_stub_registers));
+  data->InitializePlatformSpecific(register_parameter_count,
+                                   default_stub_registers);
+}
+#undef RECORD_WRITE_ALLOCATABLE_GENERAL_REGISTERS
+
 const Register FastNewFunctionContextDescriptor::FunctionRegister() {
   return rdi;
 }
