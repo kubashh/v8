@@ -16,6 +16,24 @@
       "revId": "da505b45079659b34b23de3d76da752af5995554",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbcfe2d6_1d492e58",
+        "filename": "src/builtins/builtins-console.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-08-15T17:15:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d63c2ee_f222d8e8",
+      "revId": "da505b45079659b34b23de3d76da752af5995554",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
