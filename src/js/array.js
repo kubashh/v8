@@ -990,7 +990,7 @@ function InnerArraySort(array, length, comparefn) {
     num_non_undefined = SafeRemoveArrayHoles(array);
   }
 
-  QuickSort(array, 0, num_non_undefined);
+  QuickSort(array, 0, MinSimple(num_non_undefined, length));
 
   if (!is_array && (num_non_undefined + 1 < max_prototype_element)) {
     // For compatibility with JSC, we shadow any elements in the prototype
