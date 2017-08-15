@@ -2228,20 +2228,6 @@ void BytecodeGenerator::BuildReturn(int source_position) {
   if (info()->literal()->feedback_vector_spec()->HasTypeProfileSlot()) {
     builder()->CollectTypeProfile(info()->literal()->return_position());
   }
-  if (IsAsyncGeneratorFunction(info()->literal()->kind())) {
-    // Mark the generator as closed if returning from an async generator
-    // function. Note that non-async generators are closed by the
-    // generator-resume builtin.
-
-    // TODO(jarin,caitp) Move the async generator closing to the resume
-    // builtin.
-    RegisterAllocationScope register_scope(this);
-    Register result = register_allocator()->NewRegister();
-    builder()
-        ->StoreAccumulatorInRegister(result)
-        .CallRuntime(Runtime::kInlineGeneratorClose, generator_object_)
-        .LoadAccumulatorWithRegister(result);
-  }
   builder()->SetReturnPosition(source_position, info()->literal());
   builder()->Return();
 }
@@ -2251,19 +2237,11 @@ void BytecodeGenerator::BuildAsyncReturn(int source_position) {
 
   if (IsAsyncGeneratorFunction(info()->literal()->kind())) {
     RegisterList args = register_allocator()->NewRegisterList(3);
-    Register generator = args[0];
-    Register result = args[1];
-    Register done = args[2];
-
-    builder()->StoreAccumulatorInRegister(result);
-    Variable* var_generator_object = closure_scope()->generator_object_var();
-    DCHECK_NOT_NULL(var_generator_object);
-    BuildVariableLoad(var_generator_object, FeedbackSlot::Invalid(),
-                      HoleCheckMode::kElided);
     builder()
-        ->StoreAccumulatorInRegister(generator)
+        ->MoveRegister(generator_object_, args[0])  // generator
+        .StoreAccumulatorInRegister(args[1])        // value
         .LoadTrue()
-        .StoreAccumulatorInRegister(done)
+        .StoreAccumulatorInRegister(args[2])  // done
         .CallRuntime(Runtime::kInlineAsyncGeneratorResolve, args);
   } else {
     DCHECK(IsAsyncFunction(info()->literal()->kind()));
@@ -2602,25 +2580,25 @@ void BytecodeGenerator::VisitYield(Yield* expr) {
   if (!expr->IsInitialYield()) {
     if (IsAsyncGeneratorFunction(function_kind())) {
       // AsyncGenerator yields (with the exception of the initial yield)
-      // delegate to AsyncGeneratorResolve(), implemented via the runtime call
-      // below.
+      // delegate work to the AsyncGeneratorYield stub, which Awaits the operand
+      // and on success, wraps the value in an IteratorResult.
       RegisterAllocationScope register_scope(this);
       RegisterList args = register_allocator()->NewRegisterList(3);
       builder()
-          ->MoveRegister(generator_object_, args[0])
-          .StoreAccumulatorInRegister(args[1])
-          .LoadFalse()
-          .StoreAccumulatorInRegister(args[2])
-          .CallRuntime(Runtime::kInlineAsyncGeneratorResolve, args);
+          ->MoveRegister(generator_object_, args[0])  // generator
+          .StoreAccumulatorInRegister(args[1])        // value
+          .LoadBoolean(catch_prediction() != HandlerTable::ASYNC_AWAIT)
+          .StoreAccumulatorInRegister(args[2])  // is_caught
+          .CallRuntime(Runtime::kInlineAsyncGeneratorYield, args);
     } else {
       // Generator yields (with the exception of the initial yield) wrap the
       // value into IteratorResult.
       RegisterAllocationScope register_scope(this);
       RegisterList args = register_allocator()->NewRegisterList(2);
       builder()
-          ->StoreAccumulatorInRegister(args[0])
+          ->StoreAccumulatorInRegister(args[0])  // value
           .LoadFalse()
-          .StoreAccumulatorInRegister(args[1])
+          .StoreAccumulatorInRegister(args[1])  // done
           .CallRuntime(Runtime::kInlineCreateIterResultObject, args);
     }
   }
@@ -2661,8 +2639,6 @@ void BytecodeGenerator::VisitYield(Yield* expr) {
     builder()->Bind(jump_table, JSGeneratorObject::kReturn);
     builder()->LoadAccumulatorWithRegister(input);
     if (IsAsyncGeneratorFunction(function_kind())) {
-      // Async generator methods will produce the iter result object.
-      BuildAwait(expr->await_return_value_suspend_id());
       execution_control()->AsyncReturnAccumulator();
     } else {
       execution_control()->ReturnAccumulator();
@@ -2926,36 +2902,30 @@ void BytecodeGenerator::BuildAwait(int suspend_id) {
     // Await(operand) and suspend.
     RegisterAllocationScope register_scope(this);
 
-    int await_builtin_context_index;
     RegisterList args;
     if (IsAsyncGeneratorFunction(function_kind())) {
-      await_builtin_context_index =
-          catch_prediction() == HandlerTable::ASYNC_AWAIT
-              ? Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT
-              : Context::ASYNC_GENERATOR_AWAIT_CAUGHT;
-      args = register_allocator()->NewRegisterList(2);
-      builder()
-          ->MoveRegister(generator_object_, args[0])
-          .StoreAccumulatorInRegister(args[1]);
-    } else {
-      await_builtin_context_index =
-          catch_prediction() == HandlerTable::ASYNC_AWAIT
-              ? Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX
-              : Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX;
       args = register_allocator()->NewRegisterList(3);
       builder()
-          ->MoveRegister(generator_object_, args[0])
-          .StoreAccumulatorInRegister(args[1]);
+          ->MoveRegister(generator_object_, args[0])  // generator
+          .StoreAccumulatorInRegister(args[1])        // value
+          .LoadBoolean(catch_prediction() == HandlerTable::CAUGHT)
+          .StoreAccumulatorInRegister(args[2])  // is_caught
+          .CallRuntime(Runtime::kInlineAsyncGeneratorAwait, args);
+    } else {
+      args = register_allocator()->NewRegisterList(4);
+      builder()
+          ->MoveRegister(generator_object_, args[0])  // generator
+          .StoreAccumulatorInRegister(args[1]);       // value
 
-      // AsyncFunction Await builtins require a 3rd parameter to hold the outer
-      // promise.
       Variable* var_promise = closure_scope()->promise_var();
       BuildVariableLoadForAccumulatorValue(var_promise, FeedbackSlot::Invalid(),
                                            HoleCheckMode::kElided);
-      builder()->StoreAccumulatorInRegister(args[2]);
+      builder()
+          ->StoreAccumulatorInRegister(args[2])  // outer_promise
+          .LoadBoolean(catch_prediction() == HandlerTable::CAUGHT)
+          .StoreAccumulatorInRegister(args[3])  // is_caught
+          .CallRuntime(Runtime::kInlineAsyncFunctionAwait, args);
     }
-
-    builder()->CallJSRuntime(await_builtin_context_index, args);
   }
 
   BuildSuspendPoint(suspend_id);
