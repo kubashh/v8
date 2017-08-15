@@ -9,6 +9,8 @@ namespace v8 {
 namespace internal {
 
 using compiler::Node;
+template <class A>
+using TNode = compiler::TNode<A>;
 
 namespace {
 // Describe fields of Context associated with the AsyncIterator unwrap closure.
@@ -19,12 +21,25 @@ class ValueUnwrapContext {
 
 }  // namespace
 
-Node* AsyncBuiltinsAssembler::Await(
-    Node* context, Node* generator, Node* value, Node* outer_promise,
-    int context_length, const ContextInitializer& init_closure_context,
-    int on_resolve_context_index, int on_reject_context_index,
-    bool is_predicted_as_caught) {
-  DCHECK_GE(context_length, Context::MIN_CONTEXT_SLOTS);
+TF_BUILTIN(Await, AsyncBuiltinsAssembler) {
+  Node* const context = Parameter(Descriptor::kContext);
+  Node* const generator = Parameter(Descriptor::kGenerator);
+  Node* const value = Parameter(Descriptor::kValue);
+  Node* const is_caught = Parameter(Descriptor::kIsCaught);
+  Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
+  Node* const on_resolve_shared = Parameter(Descriptor::kOnResolveSharedInfo);
+  Node* const on_reject_shared = Parameter(Descriptor::kOnRejectSharedInfo);
+
+  // First parameter must be a generator object
+  CSA_SLOW_ASSERT(this, TaggedIsGeneratorObject(generator));
+
+  // Catch prediction must be a boolean value
+  CSA_SLOW_ASSERT(this, IsBoolean(is_caught));
+
+  // OnResolveSharedInfo and OnRejectSharedInfo must be SharedFunctionInfo
+  // objects
+  CSA_SLOW_ASSERT(this, IsSharedFunctionInfo(on_resolve_shared));
+  CSA_SLOW_ASSERT(this, IsSharedFunctionInfo(on_reject_shared));
 
   Node* const native_context = LoadNativeContext(context);
 
@@ -56,7 +71,8 @@ Node* AsyncBuiltinsAssembler::Await(
   }
 #endif
 
-  static const int kWrappedPromiseOffset = FixedArray::SizeFor(context_length);
+  static const int kWrappedPromiseOffset =
+      FixedArray::SizeFor(AwaitContext::kLength);
   static const int kThrowawayPromiseOffset =
       kWrappedPromiseOffset + JSPromise::kSizeWithEmbedderFields;
   static const int kResolveClosureOffset =
@@ -69,8 +85,10 @@ Node* AsyncBuiltinsAssembler::Await(
   Node* const closure_context = base;
   {
     // Initialize closure context
-    InitializeFunctionContext(native_context, closure_context, context_length);
-    init_closure_context(closure_context);
+    InitializeFunctionContext(native_context, closure_context,
+                              AwaitContext::kLength);
+    StoreContextElementNoWriteBarrier(closure_context,
+                                      AwaitContext::kGeneratorSlot, generator);
   }
 
   // Let promiseCapability be ! NewPromiseCapability(%Promise%).
@@ -104,14 +122,14 @@ Node* AsyncBuiltinsAssembler::Await(
   {
     // Initialize resolve handler
     InitializeNativeClosure(closure_context, native_context, on_resolve,
-                            on_resolve_context_index);
+                            on_resolve_shared);
   }
 
   Node* const on_reject = InnerAllocate(base, kRejectClosureOffset);
   {
     // Initialize reject handler
     InitializeNativeClosure(closure_context, native_context, on_reject,
-                            on_reject_context_index);
+                            on_reject_shared);
   }
 
   {
@@ -146,7 +164,15 @@ Node* AsyncBuiltinsAssembler::Await(
       CallRuntime(Runtime::kSetProperty, context, on_reject, key,
                   TrueConstant(), SmiConstant(STRICT));
 
-      if (is_predicted_as_caught) PromiseSetHandledHint(value);
+      // If the rejection will be caught syntactically, mark the promise as
+      // handled.
+      Label did_set_handled_if_needed(this);
+      GotoIf(IsFalse(is_caught), &did_set_handled_if_needed);
+
+      PromiseSetHandledHint(value);
+
+      Goto(&did_set_handled_if_needed);
+      BIND(&did_set_handled_if_needed);
     }
 
     Goto(&common);
@@ -166,13 +192,13 @@ Node* AsyncBuiltinsAssembler::Await(
   CallBuiltin(Builtins::kPerformNativePromiseThen, context, wrapped_value,
               on_resolve, on_reject, throwaway);
 
-  return wrapped_value;
+  Return(wrapped_value);
 }
 
 void AsyncBuiltinsAssembler::InitializeNativeClosure(Node* context,
                                                      Node* native_context,
                                                      Node* function,
-                                                     int context_index) {
+                                                     Node* shared_info) {
   Node* const function_map = LoadContextElement(
       native_context, Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
   StoreMapNoWriteBarrier(function, function_map);
@@ -185,8 +211,6 @@ void AsyncBuiltinsAssembler::InitializeNativeClosure(Node* context,
   StoreObjectFieldRoot(function, JSFunction::kPrototypeOrInitialMapOffset,
                        Heap::kTheHoleValueRootIndex);
 
-  Node* shared_info = LoadContextElement(native_context, context_index);
-  CSA_ASSERT(this, IsSharedFunctionInfo(shared_info));
   StoreObjectFieldNoWriteBarrier(
       function, JSFunction::kSharedFunctionInfoOffset, shared_info);
   StoreObjectFieldNoWriteBarrier(function, JSFunction::kContextOffset, context);
@@ -224,6 +248,32 @@ Node* AsyncBuiltinsAssembler::AllocateAsyncIteratorValueUnwrapContext(
   return context;
 }
 
+TNode<BoolT> AsyncBuiltinsAssembler::TaggedIsGeneratorObject(
+    Node* tagged_object) {
+  TNode<BoolT> tagged_is_not_smi = TaggedIsNotSmi(tagged_object);
+  TVARIABLE(BoolT, var_phi, tagged_is_not_smi);
+  Label done(this), if_false(this);
+
+  // If tagged is an Smi, return false
+  GotoIfNot(tagged_is_not_smi, &done);
+
+  TNode<Int32T> instance_type = LoadInstanceType(tagged_object);
+
+  // If instance_type < JS_GENERATOR_OBJECT_TYPE, return false
+  TNode<BoolT> maybe_generator = Int32GreaterThanOrEqual(
+      instance_type, Int32Constant(FIRST_GENERATOR_OBJECT_TYPE));
+  var_phi = maybe_generator;
+  GotoIfNot(maybe_generator, &done);
+
+  // Return instance_type <= JS_ASYNC_GENERATOR_OBJECT_TYPE
+  var_phi = Int32LessThanOrEqual(instance_type,
+                                 Int32Constant(LAST_GENERATOR_OBJECT_TYPE));
+  Goto(&done);
+
+  BIND(&done);
+  return var_phi;
+}
+
 TF_BUILTIN(AsyncIteratorValueUnwrap, AsyncBuiltinsAssembler) {
   Node* const value = Parameter(Descriptor::kValue);
   Node* const context = Parameter(Descriptor::kContext);
@@ -235,6 +285,29 @@ TF_BUILTIN(AsyncIteratorValueUnwrap, AsyncBuiltinsAssembler) {
       CallBuiltin(Builtins::kCreateIterResultObject, context, value, done);
 
   Return(unwrapped_value);
+}
+
+// Convenience helpers:
+Node* AsyncBuiltinsAssembler::Await(Node* context, Node* generator, Node* value,
+                                    Node* outer_promise, Node* is_caught,
+                                    TNode<IntPtrT> on_resolve_context_index,
+                                    TNode<IntPtrT> on_reject_context_index) {
+  Node* native_context = LoadNativeContext(context);
+  Node* on_resolve_shared =
+      LoadContextElement(native_context, on_resolve_context_index);
+  Node* on_reject_shared =
+      LoadContextElement(native_context, on_reject_context_index);
+  return CallBuiltin(Builtins::kAwait, context, generator, value, outer_promise,
+                     is_caught, on_resolve_shared, on_reject_shared);
+}
+
+Node* AsyncBuiltinsAssembler::Await(Node* context, Node* generator, Node* value,
+                                    Node* outer_promise, Node* is_caught,
+                                    int on_resolve_context_index,
+                                    int on_reject_context_index) {
+  return Await(context, generator, value, outer_promise, is_caught,
+               IntPtrConstant(on_resolve_context_index),
+               IntPtrConstant(on_reject_context_index));
 }
 
 }  // namespace internal

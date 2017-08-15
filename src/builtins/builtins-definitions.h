@@ -350,8 +350,9 @@ namespace internal {
   CPP(ArrayBufferPrototypeSlice)                                               \
                                                                                \
   /* AsyncFunction */                                                          \
-  TFJ(AsyncFunctionAwaitCaught, 2, kAwaited, kOuterPromise)                    \
-  TFJ(AsyncFunctionAwaitUncaught, 2, kAwaited, kOuterPromise)                  \
+  TFS(Await, kGenerator, kValue, kOuterPromise, kIsCaught,                     \
+      kOnResolveSharedInfo, kOnRejectSharedInfo)                               \
+  TFS(AsyncFunctionAwait, kGenerator, kValue, kOuterPromise, kIsCaught)        \
   TFJ(AsyncFunctionAwaitRejectClosure, 1, kSentError)                          \
   TFJ(AsyncFunctionAwaitResolveClosure, 1, kSentValue)                         \
   TFJ(AsyncFunctionPromiseCreate, 0)                                           \
@@ -1055,7 +1056,8 @@ namespace internal {
                                                                                \
   TFS(AsyncGeneratorResolve, kGenerator, kValue, kDone)                        \
   TFS(AsyncGeneratorReject, kGenerator, kValue)                                \
-  TFS(AsyncGeneratorReturnProcessor, kGenerator)                               \
+  TFS(AsyncGeneratorYield, kGenerator, kValue, kIsCaught)                      \
+  TFS(AsyncGeneratorReturn, kGenerator, kValue, kIsCaught)                     \
   TFS(AsyncGeneratorResumeNext, kGenerator)                                    \
                                                                                \
   /* AsyncGeneratorFunction( p1, p2, ... pn, body ) */                         \
@@ -1076,12 +1078,13 @@ namespace internal {
                                                                                \
   /* Await (proposal-async-iteration/#await), with resume behaviour */         \
   /* specific to Async Generators. Internal / Not exposed to JS code. */       \
-  TFJ(AsyncGeneratorAwaitCaught, 1, kAwaited)                                  \
-  TFJ(AsyncGeneratorAwaitUncaught, 1, kAwaited)                                \
+  TFS(AsyncGeneratorAwait, kGenerator, kValue, kIsCaught)                      \
   TFJ(AsyncGeneratorAwaitResolveClosure, 1, kValue)                            \
   TFJ(AsyncGeneratorAwaitRejectClosure, 1, kValue)                             \
+  TFJ(AsyncGeneratorYieldResolveClosure, 1, kValue)                            \
+  TFJ(AsyncGeneratorReturnClosedResolveClosure, 1, kValue)                     \
+  TFJ(AsyncGeneratorReturnClosedRejectClosure, 1, kValue)                      \
   TFJ(AsyncGeneratorReturnResolveClosure, 1, kValue)                           \
-  TFJ(AsyncGeneratorReturnRejectClosure, 1, kValue)                            \
                                                                                \
   /* Async-from-Sync Iterator */                                               \
                                                                                \
@@ -1131,11 +1134,9 @@ namespace internal {
   V(AsyncFromSyncIteratorPrototypeNext)              \
   V(AsyncFromSyncIteratorPrototypeReturn)            \
   V(AsyncFromSyncIteratorPrototypeThrow)             \
-  V(AsyncFunctionAwaitCaught)                        \
-  V(AsyncFunctionAwaitUncaught)                      \
+  V(AsyncFunctionAwait)                              \
   V(AsyncGeneratorResolve)                           \
-  V(AsyncGeneratorAwaitCaught)                       \
-  V(AsyncGeneratorAwaitUncaught)                     \
+  V(AsyncGeneratorAwait)                             \
   V(PerformNativePromiseThen)                        \
   V(PromiseAll)                                      \
   V(PromiseConstructor)                              \
