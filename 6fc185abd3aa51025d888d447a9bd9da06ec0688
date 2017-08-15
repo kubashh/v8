@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d49e297_14ba5ea5",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-15T14:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bad798a5_5802fe43",
+      "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "314f3308_cd40cf5f",
         "filename": "src/builtins/builtins-async-gen.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-07T06:42:37Z",
       "side": 1,
       "message": "Please don\u0027t move and change Await in the same CL, the review interface unfortunately can\u0027t handle that well. I\u0027d suggest first making the Await changes (stub conversion etc.) such that the UI still displays a decent diff, and moving the function without any other changes afterwards.\n\nOn a similar note, the commit message mentions several different changes - unless they\u0027re trivial one-liners, it\u0027d be awesome to have these in separate CLs as well.",
+      "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ecf83b8_2e24199e",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-15T14:00:04Z",
+      "side": 1,
+      "message": "I\u0027ve put the TF_AWAIT() back where the old Await method was.\n\nAs for splitting up the CL into different parts, it\u0027s doable, and maybe a good idea. They are pretty trivial/simple changes, but still not one-liners.",
+      "parentUuid": "314f3308_cd40cf5f",
       "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "272c701c_dfee7666",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-15T14:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5c14faa_2bb4ad7a",
+      "revId": "6fc185abd3aa51025d888d447a9bd9da06ec0688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
