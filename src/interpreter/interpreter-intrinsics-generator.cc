@@ -444,6 +444,16 @@ Node* IntrinsicsGenerator::AsyncGeneratorYield(Node* input, Node* arg_count,
   return IntrinsicAsBuiltinCall(input, context, Builtins::kAsyncGeneratorYield);
 }
 
+Node* IntrinsicsGenerator::AsyncFunctionAwait(Node* input, Node* arg_count,
+                                              Node* context) {
+  return IntrinsicAsBuiltinCall(input, context, Builtins::kAsyncFunctionAwait);
+}
+
+Node* IntrinsicsGenerator::AsyncGeneratorAwait(Node* input, Node* arg_count,
+                                               Node* context) {
+  return IntrinsicAsBuiltinCall(input, context, Builtins::kAsyncGeneratorAwait);
+}
+
 void IntrinsicsGenerator::AbortIfArgCountMismatch(int expected, Node* actual) {
   InterpreterAssembler::Label match(assembler_);
   Node* comparison = __ Word32Equal(actual, __ Int32Constant(expected));

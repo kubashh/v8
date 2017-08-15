@@ -109,6 +109,18 @@ RUNTIME_FUNCTION(Runtime_GeneratorGetSourcePosition) {
   return Smi::FromInt(generator->source_position());
 }
 
+RUNTIME_FUNCTION(Runtime_AsyncFunctionAwait) {
+  // Runtime call is implemented in InterpreterIntrinsics and lowered in
+  // JSIntrinsicLowering
+  UNREACHABLE();
+}
+
+RUNTIME_FUNCTION(Runtime_AsyncGeneratorAwait) {
+  // Runtime call is implemented in InterpreterIntrinsics and lowered in
+  // JSIntrinsicLowering
+  UNREACHABLE();
+}
+
 // Return true if {generator}'s PC has a catch handler. This allows
 // catch prediction to happen from the AsyncGeneratorResumeNext stub.
 RUNTIME_FUNCTION(Runtime_AsyncGeneratorHasCatchHandlerForPC) {
