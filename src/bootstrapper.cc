@@ -1465,16 +1465,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
   }
 
   {  // --- A s y n c G e n e r a t o r ---
-    Handle<JSFunction> await_caught =
-        SimpleCreateFunction(isolate, factory->empty_string(),
-                             Builtins::kAsyncGeneratorAwaitCaught, 1, false);
-    native_context()->set_async_generator_await_caught(*await_caught);
-
-    Handle<JSFunction> await_uncaught =
-        SimpleCreateFunction(isolate, factory->empty_string(),
-                             Builtins::kAsyncGeneratorAwaitUncaught, 1, false);
-    native_context()->set_async_generator_await_uncaught(*await_uncaught);
-
     Handle<Code> code(BUILTIN_CODE(isolate, AsyncGeneratorAwaitResolveClosure));
     Handle<SharedFunctionInfo> info =
         factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
@@ -1488,17 +1478,32 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     info->set_length(1);
     native_context()->set_async_generator_await_reject_shared_fun(*info);
 
+    // AsyncGeneratorYield
+    code = BUILTIN_CODE(isolate, AsyncGeneratorYieldResolveClosure);
+    info = factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+    info->set_internal_formal_parameter_count(1);
+    info->set_length(1);
+    native_context()->set_async_generator_yield_resolve_shared_fun(*info);
+
     code = BUILTIN_CODE(isolate, AsyncGeneratorReturnResolveClosure);
     info = factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
     native_context()->set_async_generator_return_resolve_shared_fun(*info);
 
-    code = BUILTIN_CODE(isolate, AsyncGeneratorReturnRejectClosure);
+    code = BUILTIN_CODE(isolate, AsyncGeneratorReturnClosedResolveClosure);
     info = factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
     info->set_internal_formal_parameter_count(1);
     info->set_length(1);
-    native_context()->set_async_generator_return_reject_shared_fun(*info);
+    native_context()->set_async_generator_return_closed_resolve_shared_fun(
+        *info);
+
+    code = BUILTIN_CODE(isolate, AsyncGeneratorReturnClosedRejectClosure);
+    info = factory->NewSharedFunctionInfo(factory->empty_string(), code, false);
+    info->set_internal_formal_parameter_count(1);
+    info->set_length(1);
+    native_context()->set_async_generator_return_closed_reject_shared_fun(
+        *info);
   }
 
   {  // --- A r r a y ---
@@ -3987,20 +3992,6 @@ void Bootstrapper::ExportFromRuntime(Isolate* isolate,
 
     JSFunction::SetPrototype(async_function_constructor,
                              async_function_prototype);
-
-    {
-      Handle<JSFunction> function =
-          SimpleCreateFunction(isolate, factory->empty_string(),
-                               Builtins::kAsyncFunctionAwaitCaught, 2, false);
-      native_context->set_async_function_await_caught(*function);
-    }
-
-    {
-      Handle<JSFunction> function =
-          SimpleCreateFunction(isolate, factory->empty_string(),
-                               Builtins::kAsyncFunctionAwaitUncaught, 2, false);
-      native_context->set_async_function_await_uncaught(*function);
-    }
 
     {
       Handle<Code> code(BUILTIN_CODE(isolate, AsyncFunctionAwaitRejectClosure));
