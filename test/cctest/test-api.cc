@@ -4614,7 +4614,7 @@ THREADED_TEST(ScriptException) {
   v8::MaybeLocal<Value> result = script->Run(env.local());
   CHECK(result.IsEmpty());
   CHECK(try_catch.HasCaught());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(env->GetIsolate(), try_catch.Exception());
   CHECK_EQ(0, strcmp(*exception_value, "panama!"));
 }
 
@@ -5084,7 +5084,8 @@ THREADED_TEST(PropertyAttributes) {
             ->GetPropertyAttributes(context.local(), exception)
             .IsNothing());
   CHECK(try_catch.HasCaught());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(context->GetIsolate(),
+                                    try_catch.Exception());
   CHECK_EQ(0, strcmp("exception", *exception_value));
   try_catch.Reset();
 }
@@ -5548,14 +5549,12 @@ THREADED_TEST(isNumberType) {
   CHECK(!obj->IsUint32());
 }
 
-
-static void CheckUncle(v8::TryCatch* try_catch) {
+static void CheckUncle(v8::Isolate* isolate, v8::TryCatch* try_catch) {
   CHECK(try_catch->HasCaught());
-  String::Utf8Value str_value(try_catch->Exception());
+  String::Utf8Value str_value(isolate, try_catch->Exception());
   CHECK_EQ(0, strcmp(*str_value, "uncle?"));
   try_catch->Reset();
 }
-
 
 THREADED_TEST(ConversionException) {
   LocalContext env;
@@ -5571,35 +5570,35 @@ THREADED_TEST(ConversionException) {
   v8::TryCatch try_catch(isolate);
 
   CHECK(obj->ToString(env.local()).IsEmpty());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->ToNumber(env.local()).IsEmpty());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->ToInteger(env.local()).IsEmpty());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->ToUint32(env.local()).IsEmpty());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->ToInt32(env.local()).IsEmpty());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(v8::Undefined(isolate)->ToObject(env.local()).IsEmpty());
   CHECK(try_catch.HasCaught());
   try_catch.Reset();
 
   CHECK(obj->Int32Value(env.local()).IsNothing());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->Uint32Value(env.local()).IsNothing());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->NumberValue(env.local()).IsNothing());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 
   CHECK(obj->IntegerValue(env.local()).IsNothing());
-  CheckUncle(&try_catch);
+  CheckUncle(isolate, &try_catch);
 }
 
 
@@ -5715,7 +5714,7 @@ TEST(CustomErrorToString) {
 static void check_custom_error_message(v8::Local<v8::Message> message,
                                        v8::Local<v8::Value> data) {
   const char* uncaught_error = "Uncaught MyError: my message";
-  printf("%s\n", *v8::String::Utf8Value(message->Get()));
+  printf("%s\n", *v8::String::Utf8Value(CcTest::isolate(), message->Get()));
   CHECK(message->Get()
             ->Equals(CcTest::isolate()->GetCurrentContext(),
                      v8_str(uncaught_error))
@@ -5858,7 +5857,7 @@ THREADED_TEST(ExternalScriptException) {
   Local<Value> result = CompileRun("ThrowFromC(); throw 'panama';");
   CHECK(result.IsEmpty());
   CHECK(try_catch.HasCaught());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(isolate, try_catch.Exception());
   CHECK_EQ(0, strcmp("konto", *exception_value));
 }
 
@@ -6163,7 +6162,9 @@ TEST(TryCatchNested) {
     v8::TryCatch try_catch(context->GetIsolate());
     TryCatchNested1Helper(5);
     CHECK(try_catch.HasCaught());
-    CHECK_EQ(0, strcmp(*v8::String::Utf8Value(try_catch.Exception()), "E1"));
+    CHECK_EQ(0, strcmp(*v8::String::Utf8Value(context->GetIsolate(),
+                                              try_catch.Exception()),
+                       "E1"));
   }
 
   {
@@ -6171,7 +6172,9 @@ TEST(TryCatchNested) {
     v8::TryCatch try_catch(context->GetIsolate());
     TryCatchNested2Helper(5);
     CHECK(try_catch.HasCaught());
-    CHECK_EQ(0, strcmp(*v8::String::Utf8Value(try_catch.Exception()), "E2"));
+    CHECK_EQ(0, strcmp(*v8::String::Utf8Value(context->GetIsolate(),
+                                              try_catch.Exception()),
+                       "E2"));
   }
 }
 
@@ -6180,9 +6183,10 @@ void TryCatchMixedNestingCheck(v8::TryCatch* try_catch) {
   CHECK(try_catch->HasCaught());
   Local<Message> message = try_catch->Message();
   Local<Value> resource = message->GetScriptOrigin().ResourceName();
-  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(resource), "inner"));
-  CHECK_EQ(0,
-           strcmp(*v8::String::Utf8Value(message->Get()), "Uncaught Error: a"));
+  CHECK_EQ(
+      0, strcmp(*v8::String::Utf8Value(CcTest::isolate(), resource), "inner"));
+  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(CcTest::isolate(), message->Get()),
+                     "Uncaught Error: a"));
   CHECK_EQ(1, message->GetLineNumber(CcTest::isolate()->GetCurrentContext())
                   .FromJust());
   CHECK_EQ(0, message->GetStartColumn(CcTest::isolate()->GetCurrentContext())
@@ -6494,7 +6498,7 @@ THREADED_TEST(DefinePropertyOnAPIAccessor) {
   v8::TryCatch try_catch(isolate);
   CHECK(script_define->Run(context.local()).IsEmpty());
   CHECK(try_catch.HasCaught());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(isolate, try_catch.Exception());
   CHECK_EQ(0,
            strcmp(*exception_value, "TypeError: Cannot redefine property: x"));
 }
@@ -6544,7 +6548,7 @@ THREADED_TEST(DefinePropertyOnDefineGetterSetter) {
   v8::TryCatch try_catch(isolate);
   CHECK(script_define->Run(context.local()).IsEmpty());
   CHECK(try_catch.HasCaught());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(isolate, try_catch.Exception());
   CHECK_EQ(0,
            strcmp(*exception_value, "TypeError: Cannot redefine property: x"));
 }
@@ -6695,7 +6699,7 @@ THREADED_TEST(DontDeleteAPIAccessorsCannotBeOverriden) {
         "Object.defineProperty(obj1, 'x',"
         "{get: function() { return 'func'; }})");
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value(try_catch.Exception());
+    String::Utf8Value exception_value(isolate, try_catch.Exception());
     CHECK_EQ(
         0, strcmp(*exception_value, "TypeError: Cannot redefine property: x"));
   }
@@ -6705,7 +6709,7 @@ THREADED_TEST(DontDeleteAPIAccessorsCannotBeOverriden) {
         "Object.defineProperty(obj2, 'x',"
         "{get: function() { return 'func'; }})");
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value(try_catch.Exception());
+    String::Utf8Value exception_value(isolate, try_catch.Exception());
     CHECK_EQ(
         0, strcmp(*exception_value, "TypeError: Cannot redefine property: x"));
   }
@@ -8630,7 +8634,8 @@ THREADED_TEST(Utf16MissingTrailing) {
 
 THREADED_TEST(Utf16Trailing3Byte) {
   LocalContext context;
-  v8::HandleScope scope(context->GetIsolate());
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::HandleScope scope(isolate);
 
   // Make sure it will go past the buffer, so it will call `WriteUtf16Slow`
   int size = 1024 * 63;
@@ -8643,11 +8648,11 @@ THREADED_TEST(Utf16Trailing3Byte) {
 
   // Now invoke the decoder without last 3 bytes
   v8::Local<v8::String> str =
-      v8::String::NewFromUtf8(
-          context->GetIsolate(), reinterpret_cast<char*>(buffer),
-          v8::NewStringType::kNormal, size).ToLocalChecked();
+      v8::String::NewFromUtf8(isolate, reinterpret_cast<char*>(buffer),
+                              v8::NewStringType::kNormal, size)
+          .ToLocalChecked();
 
-  v8::String::Value value(str);
+  v8::String::Value value(isolate, str);
   CHECK_EQ(value.length(), size / 3);
   CHECK_EQ((*value)[value.length() - 1], 0x2026);
 
@@ -9044,7 +9049,7 @@ TEST(TryCatchFinallyStoresMessageUsingTryCatchHandler) {
              "}");
   CHECK(try_catch.HasCaught());
   CHECK(!try_catch.Message().IsEmpty());
-  String::Utf8Value exception_value(try_catch.Exception());
+  String::Utf8Value exception_value(isolate, try_catch.Exception());
   CHECK_EQ(0, strcmp(*exception_value, "1"));
   try_catch.Reset();
   CompileRun("try {"
@@ -9054,7 +9059,7 @@ TEST(TryCatchFinallyStoresMessageUsingTryCatchHandler) {
              "}");
   CHECK(try_catch.HasCaught());
   CHECK(!try_catch.Message().IsEmpty());
-  String::Utf8Value finally_exception_value(try_catch.Exception());
+  String::Utf8Value finally_exception_value(isolate, try_catch.Exception());
   CHECK_EQ(0, strcmp(*finally_exception_value, "2"));
 }
 
@@ -11248,7 +11253,7 @@ THREADED_TEST(ConstructorForObject) {
     CHECK(!try_catch.HasCaught());
     CHECK(value->IsString());
     String::Utf8Value string_value1(
-        value->ToString(context.local()).ToLocalChecked());
+        isolate, value->ToString(context.local()).ToLocalChecked());
     CHECK_EQ(0, strcmp("tipli", *string_value1));
 
     Local<Value> args2[] = {v8_str("tipli")};
@@ -11260,7 +11265,7 @@ THREADED_TEST(ConstructorForObject) {
     CHECK(!try_catch.HasCaught());
     CHECK(value->IsString());
     String::Utf8Value string_value2(
-        value->ToString(context.local()).ToLocalChecked());
+        isolate, value->ToString(context.local()).ToLocalChecked());
     CHECK_EQ(0, strcmp("tipli", *string_value2));
 
     // Call the Object's constructor with a Boolean.
@@ -11314,7 +11319,7 @@ THREADED_TEST(ConstructorForObject) {
 
     value = CompileRun("new obj2(28)");
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value1(try_catch.Exception());
+    String::Utf8Value exception_value1(isolate, try_catch.Exception());
     CHECK_EQ(0,
              strcmp("TypeError: obj2 is not a constructor", *exception_value1));
     try_catch.Reset();
@@ -11322,7 +11327,7 @@ THREADED_TEST(ConstructorForObject) {
     Local<Value> args[] = {v8_num(29)};
     CHECK(instance->CallAsConstructor(context.local(), 1, args).IsEmpty());
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value2(try_catch.Exception());
+    String::Utf8Value exception_value2(isolate, try_catch.Exception());
     CHECK_EQ(
         0, strcmp("TypeError: object is not a constructor", *exception_value2));
     try_catch.Reset();
@@ -11343,14 +11348,14 @@ THREADED_TEST(ConstructorForObject) {
 
     value = CompileRun("new obj3(22)");
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value1(try_catch.Exception());
+    String::Utf8Value exception_value1(isolate, try_catch.Exception());
     CHECK_EQ(0, strcmp("22", *exception_value1));
     try_catch.Reset();
 
     Local<Value> args[] = {v8_num(23)};
     CHECK(instance->CallAsConstructor(context.local(), 1, args).IsEmpty());
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value2(try_catch.Exception());
+    String::Utf8Value exception_value2(isolate, try_catch.Exception());
     CHECK_EQ(0, strcmp("23", *exception_value2));
     try_catch.Reset();
   }
@@ -11767,7 +11772,7 @@ THREADED_TEST(CallAsFunction) {
     value = CompileRun("obj2(28)");
     CHECK(value.IsEmpty());
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value1(try_catch.Exception());
+    String::Utf8Value exception_value1(isolate, try_catch.Exception());
     // TODO(verwaest): Better message
     CHECK_EQ(0, strcmp("TypeError: obj2 is not a function", *exception_value1));
     try_catch.Reset();
@@ -11778,7 +11783,7 @@ THREADED_TEST(CallAsFunction) {
     CHECK(
         instance->CallAsFunction(context.local(), instance, 1, args).IsEmpty());
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value2(try_catch.Exception());
+    String::Utf8Value exception_value2(isolate, try_catch.Exception());
     CHECK_EQ(0,
              strcmp("TypeError: object is not a function", *exception_value2));
     try_catch.Reset();
@@ -11802,7 +11807,7 @@ THREADED_TEST(CallAsFunction) {
     // Catch the exception which is thrown by call-as-function handler
     value = CompileRun("obj3(22)");
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value1(try_catch.Exception());
+    String::Utf8Value exception_value1(isolate, try_catch.Exception());
     CHECK_EQ(0, strcmp("22", *exception_value1));
     try_catch.Reset();
 
@@ -11810,7 +11815,7 @@ THREADED_TEST(CallAsFunction) {
     CHECK(
         instance->CallAsFunction(context.local(), instance, 1, args).IsEmpty());
     CHECK(try_catch.HasCaught());
-    String::Utf8Value exception_value2(try_catch.Exception());
+    String::Utf8Value exception_value2(isolate, try_catch.Exception());
     CHECK_EQ(0, strcmp("23", *exception_value2));
     try_catch.Reset();
   }
@@ -14858,9 +14863,11 @@ static void CheckTryCatchSourceInfo(v8::Local<v8::Script> script,
   CHECK_EQ(92, message->GetEndPosition());
   CHECK_EQ(2, message->GetStartColumn(context).FromJust());
   CHECK_EQ(3, message->GetEndColumn(context).FromJust());
-  v8::String::Utf8Value line(message->GetSourceLine(context).ToLocalChecked());
+  v8::String::Utf8Value line(CcTest::isolate(),
+                             message->GetSourceLine(context).ToLocalChecked());
   CHECK_EQ(0, strcmp("  throw 'nirk';", *line));
-  v8::String::Utf8Value name(message->GetScriptOrigin().ResourceName());
+  v8::String::Utf8Value name(CcTest::isolate(),
+                             message->GetScriptOrigin().ResourceName());
   CHECK_EQ(0, strcmp(resource_name, *name));
 }
 
@@ -14960,7 +14967,7 @@ THREADED_TEST(CallbackFunctionName) {
             .FromJust());
   v8::Local<v8::Value> value = CompileRun("obj.asdf.name");
   CHECK(value->IsString());
-  v8::String::Utf8Value name(value);
+  v8::String::Utf8Value name(isolate, value);
   CHECK_EQ(0, strcmp("asdf", *name));
 }
 
@@ -14981,7 +14988,8 @@ void CheckIsSymbolAt(v8::Isolate* isolate, v8::Local<v8::Array> properties,
       properties->Get(context, v8::Integer::New(isolate, index))
           .ToLocalChecked();
   CHECK(value->IsSymbol());
-  v8::String::Utf8Value symbol_name(Local<Symbol>::Cast(value)->Name());
+  v8::String::Utf8Value symbol_name(isolate,
+                                    Local<Symbol>::Cast(value)->Name());
   CHECK_EQ(0, strcmp(name, *symbol_name));
 }
 
@@ -14995,7 +15003,7 @@ void CheckStringArray(v8::Isolate* isolate, v8::Local<v8::Array> properties,
     if (names[i] == nullptr) {
       DCHECK(value->IsSymbol());
     } else {
-      v8::String::Utf8Value elm(value);
+      v8::String::Utf8Value elm(isolate, value);
       CHECK_EQ(0, strcmp(names[i], *elm));
     }
   }
@@ -15019,6 +15027,7 @@ void CheckOwnProperties(v8::Isolate* isolate, v8::Local<v8::Value> val,
   CHECK_EQ(elmc, props->Length());
   for (unsigned i = 0; i < elmc; i++) {
     v8::String::Utf8Value elm(
+        isolate,
         props->Get(context, v8::Integer::New(isolate, i)).ToLocalChecked());
     CHECK_EQ(0, strcmp(elmv[i], *elm));
   }
@@ -16980,6 +16989,7 @@ THREADED_TEST(StackTrace) {
             .IsEmpty());
   CHECK(try_catch.HasCaught());
   v8::String::Utf8Value stack(
+      context->GetIsolate(),
       try_catch.StackTrace(context.local()).ToLocalChecked());
   CHECK(strstr(*stack, "at foo (stack-trace-test") != NULL);
 }
@@ -16991,8 +17001,8 @@ void checkStackFrame(const char* expected_script_name,
                      int expected_column, bool is_eval, bool is_constructor,
                      v8::Local<v8::StackFrame> frame) {
   v8::HandleScope scope(CcTest::isolate());
-  v8::String::Utf8Value func_name(frame->GetFunctionName());
-  v8::String::Utf8Value script_name(frame->GetScriptName());
+  v8::String::Utf8Value func_name(CcTest::isolate(), frame->GetFunctionName());
+  v8::String::Utf8Value script_name(CcTest::isolate(), frame->GetScriptName());
   if (*script_name == NULL) {
     // The situation where there is no associated script, like for evals.
     CHECK(expected_script_name == NULL);
@@ -18427,6 +18437,7 @@ TEST(DynamicWithSourceURLInStackTraceString) {
   CompileRunWithOrigin(code.start(), "", 0, 0);
   CHECK(try_catch.HasCaught());
   v8::String::Utf8Value stack(
+      context->GetIsolate(),
       try_catch.StackTrace(context.local()).ToLocalChecked());
   CHECK(strstr(*stack, "at foo (source_url:3:5)") != NULL);
 }
@@ -18451,7 +18462,8 @@ TEST(EvalWithSourceURLInMessageScriptResourceNameOrSourceURL) {
 
   Local<v8::Message> message = try_catch.Message();
   Local<Value> sourceURL = message->GetScriptOrigin().ResourceName();
-  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(sourceURL), "source_url"));
+  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(context->GetIsolate(), sourceURL),
+                     "source_url"));
 }
 
 
@@ -18474,7 +18486,8 @@ TEST(RecursionWithSourceURLInMessageScriptResourceNameOrSourceURL) {
 
   Local<v8::Message> message = try_catch.Message();
   Local<Value> sourceURL = message->GetScriptOrigin().ResourceName();
-  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(sourceURL), "source_url"));
+  CHECK_EQ(0, strcmp(*v8::String::Utf8Value(context->GetIsolate(), sourceURL),
+                     "source_url"));
 }
 
 
@@ -18982,7 +18995,7 @@ THREADED_TEST(SpaghettiStackReThrow) {
       "};"
       "s(o);");
   CHECK(try_catch.HasCaught());
-  v8::String::Utf8Value value(try_catch.Exception());
+  v8::String::Utf8Value value(isolate, try_catch.Exception());
   CHECK_EQ(0, strcmp(*value, "Hey!"));
 }
 
