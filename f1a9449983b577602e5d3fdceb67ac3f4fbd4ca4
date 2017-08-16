@@ -22,6 +22,30 @@
       "revId": "f1a9449983b577602e5d3fdceb67ac3f4fbd4ca4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57b29f1a_434dba79",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-08-16T16:53:05Z",
+      "side": 1,
+      "message": "Reformatted, and the one above.",
+      "parentUuid": "473d70dd_9608c8b9",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 33
+      },
+      "revId": "f1a9449983b577602e5d3fdceb67ac3f4fbd4ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
