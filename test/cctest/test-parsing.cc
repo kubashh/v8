@@ -455,7 +455,7 @@ TEST(PreparsingObjectLiterals) {
     const char* source = "var myo = {if: \"foo\"}; myo.if;";
     v8::Local<v8::Value> result = ParserCacheCompileRun(source);
     CHECK(result->IsString());
-    v8::String::Utf8Value utf8(result);
+    v8::String::Utf8Value utf8(isolate, result);
     CHECK_EQ(0, strcmp("foo", *utf8));
   }
 
@@ -463,7 +463,7 @@ TEST(PreparsingObjectLiterals) {
     const char* source = "var myo = {\"bar\": \"foo\"}; myo[\"bar\"];";
     v8::Local<v8::Value> result = ParserCacheCompileRun(source);
     CHECK(result->IsString());
-    v8::String::Utf8Value utf8(result);
+    v8::String::Utf8Value utf8(isolate, result);
     CHECK_EQ(0, strcmp("foo", *utf8));
   }
 
@@ -471,7 +471,7 @@ TEST(PreparsingObjectLiterals) {
     const char* source = "var myo = {1: \"foo\"}; myo[1];";
     v8::Local<v8::Value> result = ParserCacheCompileRun(source);
     CHECK(result->IsString());
-    v8::String::Utf8Value utf8(result);
+    v8::String::Utf8Value utf8(isolate, result);
     CHECK_EQ(0, strcmp("foo", *utf8));
   }
 }
@@ -1578,10 +1578,11 @@ TEST(StrictOctal) {
   // Test that syntax error caused by octal literal is reported correctly as
   // such (issue 2220).
   v8::V8::Initialize();
-  v8::HandleScope scope(CcTest::isolate());
-  v8::Context::Scope context_scope(
-      v8::Context::New(CcTest::isolate()));
-  v8::TryCatch try_catch(CcTest::isolate());
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+  v8::Context::Scope context_scope(v8::Context::New(isolate));
+
+  v8::TryCatch try_catch(isolate);
   const char* script =
       "\"use strict\";       \n"
       "a = function() {      \n"
@@ -1591,7 +1592,7 @@ TEST(StrictOctal) {
       "};                    \n";
   v8_compile(v8_str(script));
   CHECK(try_catch.HasCaught());
-  v8::String::Utf8Value exception(try_catch.Exception());
+  v8::String::Utf8Value exception(isolate, try_catch.Exception());
   CHECK_EQ(0,
            strcmp("SyntaxError: Octal literals are not allowed in strict mode.",
                   *exception));
