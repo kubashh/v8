@@ -105,7 +105,7 @@ void Accessors::ReconfigureToDataProperty(
     v8::Local<v8::Name> key, v8::Local<v8::Value> val,
     const v8::PropertyCallbackInfo<v8::Boolean>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope stats_scope(
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
       isolate, &RuntimeCallStats::ReconfigureToDataProperty);
   HandleScope scope(isolate);
   Handle<Object> receiver = Utils::OpenHandle(*info.This());
@@ -154,7 +154,8 @@ void Accessors::ArrayLengthGetter(
     v8::Local<v8::Name> name,
     const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::ArrayLengthGetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::ArrayLengthGetter);
   DisallowHeapAllocation no_allocation;
   HandleScope scope(isolate);
   JSArray* holder = JSArray::cast(*Utils::OpenHandle(*info.Holder()));
@@ -166,7 +167,8 @@ void Accessors::ArrayLengthSetter(
     v8::Local<v8::Name> name, v8::Local<v8::Value> val,
     const v8::PropertyCallbackInfo<v8::Boolean>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::ArrayLengthSetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::ArrayLengthSetter);
   HandleScope scope(isolate);
 
   DCHECK(Utils::OpenHandle(*name)->SameValue(isolate->heap()->length_string()));
@@ -284,7 +286,8 @@ void Accessors::StringLengthGetter(
     v8::Local<v8::Name> name,
     const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::StringLengthGetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::StringLengthGetter);
   DisallowHeapAllocation no_allocation;
   HandleScope scope(isolate);
 
@@ -682,8 +685,8 @@ void Accessors::FunctionPrototypeGetter(
     v8::Local<v8::Name> name,
     const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::FunctionPrototypeGetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::FunctionPrototypeGetter);
   HandleScope scope(isolate);
   Handle<JSFunction> function =
       Handle<JSFunction>::cast(Utils::OpenHandle(*info.Holder()));
@@ -695,8 +698,8 @@ void Accessors::FunctionPrototypeSetter(
     v8::Local<v8::Name> name, v8::Local<v8::Value> val,
     const v8::PropertyCallbackInfo<v8::Boolean>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::FunctionPrototypeSetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::FunctionPrototypeSetter);
   HandleScope scope(isolate);
   Handle<Object> value = Utils::OpenHandle(*val);
   Handle<JSFunction> object =
@@ -1053,8 +1056,8 @@ Handle<AccessorInfo> Accessors::FunctionCallerInfo(
 void Accessors::BoundFunctionLengthGetter(
     v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::BoundFunctionLengthGetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::BoundFunctionLengthGetter);
   HandleScope scope(isolate);
   Handle<JSBoundFunction> function =
       Handle<JSBoundFunction>::cast(Utils::OpenHandle(*info.Holder()));
@@ -1089,8 +1092,8 @@ Handle<AccessorInfo> Accessors::BoundFunctionLengthInfo(
 void Accessors::BoundFunctionNameGetter(
     v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::BoundFunctionNameGetter);
+  RuntimeCallTimerScopeWithEnteringBlinkCheck timer(
+      isolate, &RuntimeCallStats::BoundFunctionNameGetter);
   HandleScope scope(isolate);
   Handle<JSBoundFunction> function =
       Handle<JSBoundFunction>::cast(Utils::OpenHandle(*info.Holder()));

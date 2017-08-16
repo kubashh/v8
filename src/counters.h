@@ -940,6 +940,9 @@ class RuntimeCallStats final : public ZoneObject {
   RuntimeCallCounter* current_counter() { return current_counter_.Value(); }
   bool InUse() { return in_use_; }
 
+  bool EnteringBlink() { return entering_blink_; }
+  void SetEnteringBlink(bool value) { entering_blink_ = value; }
+
  private:
   // Top of a stack of active timers.
   base::AtomicValue<RuntimeCallTimer*> current_timer_;
@@ -947,6 +950,7 @@ class RuntimeCallStats final : public ZoneObject {
   base::AtomicValue<RuntimeCallCounter*> current_counter_;
   // Used to track nested tracing scopes.
   bool in_use_;
+  bool entering_blink_;
 };
 
 #define CHANGE_CURRENT_RUNTIME_COUNTER(runtime_call_stats, counter_name) \
@@ -956,6 +960,23 @@ class RuntimeCallStats final : public ZoneObject {
           runtime_call_stats, &RuntimeCallStats::counter_name);          \
     }                                                                    \
   } while (false)
+
+#define SPECULATIVELY_MARK_AS_ENTERING_BLINK(isolate, counter_name)    \
+  if (V8_UNLIKELY(FLAG_runtime_stats)) {                               \
+    isolate->counters()->runtime_call_stats()->SetEnteringBlink(true); \
+  }                                                                    \
+  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::counter_name);
+
+#define CHECK_IF_PREVIOUSLY_MARKED_AS_BLINK_CALLBACK(isolate, counter_name) \
+  if (V8_UNLIKELY(FLAG_runtime_stats)) {                                    \
+    RuntimeCallStats* stats = isolate->counters()->runtime_call_stats();    \
+    if (stats->EnteringBlink()) {                                           \
+      RuntimeCallStats::CorrectCurrentCounterId(                            \
+          stats, &RuntimeCallStats::counter_name);                          \
+      stats->SetEnteringBlink(false);                                       \
+    }                                                                       \
+  }                                                                         \
+  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::counter_name);
 
 #define TRACE_HANDLER_STATS(isolate, counter_name)                          \
   CHANGE_CURRENT_RUNTIME_COUNTER(isolate->counters()->runtime_call_stats(), \
@@ -987,8 +1008,37 @@ class RuntimeCallTimerScope {
     RuntimeCallStats::Enter(stats_, &timer_, counter_id);
   }
 
+  enum EnteringBlinkAction { CheckIfEnteringBlinkMarked };
+  inline RuntimeCallTimerScope(Isolate* isolate,
+                               RuntimeCallStats::CounterId counter_id,
+                               EnteringBlinkAction entering_blink_action);
+
   RuntimeCallStats* stats_ = nullptr;
   RuntimeCallTimer timer_;
+
+  friend class RuntimeCallTimerScopeForBlinkCallback;
+  friend class RuntimeCallTimerScopeWithEnteringBlinkCheck;
+};
+
+class RuntimeCallTimerScopeForBlinkCallback {
+ public:
+  inline RuntimeCallTimerScopeForBlinkCallback(
+      Isolate* isolate, RuntimeCallStats::CounterId counterId);
+  ~RuntimeCallTimerScopeForBlinkCallback() { stats_->SetEnteringBlink(false); }
+
+ private:
+  RuntimeCallTimerScope scope_;
+  RuntimeCallStats* stats_ = nullptr;
+};
+
+class RuntimeCallTimerScopeWithEnteringBlinkCheck {
+ public:
+  inline RuntimeCallTimerScopeWithEnteringBlinkCheck(
+      Isolate* isolate, RuntimeCallStats::CounterId counter_id);
+  ~RuntimeCallTimerScopeWithEnteringBlinkCheck() = default;
+
+ private:
+  RuntimeCallTimerScope scope_;
 };
 
 #define HISTOGRAM_RANGE_LIST(HR)                                              \

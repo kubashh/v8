@@ -82,6 +82,36 @@ RuntimeCallTimerScope::RuntimeCallTimerScope(
   }
 }
 
+RuntimeCallTimerScope::RuntimeCallTimerScope(
+    Isolate* isolate, RuntimeCallStats::CounterId counter_id,
+    RuntimeCallTimerScope::EnteringBlinkAction entering_blink_action) {
+  if (V8_UNLIKELY(FLAG_runtime_stats)) {
+    RuntimeCallStats* stats = isolate->counters()->runtime_call_stats();
+    switch (entering_blink_action) {
+      case CheckIfEnteringBlinkMarked:
+        if (stats->EnteringBlink()) {
+          RuntimeCallStats::CorrectCurrentCounterId(stats, counter_id);
+        } else {
+          Initialize(stats, counter_id);
+        }
+        break;
+    }
+  }
+}
+
+RuntimeCallTimerScopeForBlinkCallback::RuntimeCallTimerScopeForBlinkCallback(
+    Isolate* isolate, RuntimeCallStats::CounterId counterId)
+    : scope_(isolate, counterId) {
+  stats_ = isolate->counters()->runtime_call_stats();
+  stats_->SetEnteringBlink(true);
+}
+
+RuntimeCallTimerScopeWithEnteringBlinkCheck::
+    RuntimeCallTimerScopeWithEnteringBlinkCheck(
+        Isolate* isolate, RuntimeCallStats::CounterId counter_id)
+    : scope_(isolate, counter_id,
+             RuntimeCallTimerScope::CheckIfEnteringBlinkMarked) {}
+
 }  // namespace internal
 }  // namespace v8
 
