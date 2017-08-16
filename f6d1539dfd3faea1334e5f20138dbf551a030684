@@ -379,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "c5b5ea3c_ed081bf6",
+        "filename": "src/snapshot/partial-serializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-16T08:31:28Z",
+      "side": 1,
+      "message": "It was basically because the handler we specified in tests would assume the pointer was real and try to memcpy with the pointer",
+      "parentUuid": "5421cc11_0666b4ac",
+      "range": {
+        "startLine": 147,
+        "startChar": 15,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "f6d1539dfd3faea1334e5f20138dbf551a030684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5a12e9e_297ab241",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 9
