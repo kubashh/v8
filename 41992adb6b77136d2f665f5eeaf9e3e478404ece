@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a904a6e5_745cfb65",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-16T11:40:42Z",
+      "side": 1,
+      "message": "This is redundant, the line below does exactly this.",
+      "range": {
+        "startLine": 118,
+        "startChar": 18,
+        "endLine": 118,
+        "endChar": 32
+      },
+      "revId": "41992adb6b77136d2f665f5eeaf9e3e478404ece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32adf90a_7bbf377f",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-16T11:40:42Z",
+      "side": 1,
+      "message": "Also redundant with the line below.",
+      "range": {
+        "startLine": 122,
+        "startChar": 18,
+        "endLine": 122,
+        "endChar": 26
+      },
+      "revId": "41992adb6b77136d2f665f5eeaf9e3e478404ece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827981d7_d27d0690",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-16T11:40:42Z",
+      "side": 1,
+      "message": "Also redundant.",
+      "range": {
+        "startLine": 126,
+        "startChar": 18,
+        "endLine": 126,
+        "endChar": 26
+      },
+      "revId": "41992adb6b77136d2f665f5eeaf9e3e478404ece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
