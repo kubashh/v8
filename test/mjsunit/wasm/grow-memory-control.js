@@ -170,3 +170,258 @@ print("\n=== grow_memory in indirect calls ===");
   // The caller should always read from grown memory.
   assertEquals(42, instance.exports.main(0));
 })();
+
+
+/* Grow memory in conditional branches. */
+print("\n=== grow_memory in conditional branches ===");
+
+// This test verifies that the effects of growing memory in an if branch
+// affect the result of current_memory when the branch is merged.
+(function TestGrowMemoryInIfBranchNoElse() {
+  print("TestGrowMemoryInIfBranchNoElse ...");
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_i)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 4,              // always grow by 4 pages
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+              kExprEnd,
+              kExprMemorySize, kMemoryZero])   // get the memory size
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Avoid the if branch (not growing memory).
+  assertEquals(1, instance.exports.main(0));
+  // Enter the if branch (growing memory).
+  assertEquals(5, instance.exports.main(1));
+})();
+
+// This test verifies that the effects of growing memory in an if branch are
+// retained when the branch is merged even when an else branch exists.
+(function TestGrowMemoryInIfBranchWithElse() {
+  print("TestGrowMemoryInIfBranchWithElse ...");
+  let offset = 0;
+  let old_value = 21;
+  let new_value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_i)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 4,              // always grow by 4 pages
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+              kExprElse,
+                kExprI32Const, offset,         // put offset on stack
+                kExprI32Const, new_value,      // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprEnd,
+              kExprMemorySize, kMemoryZero])   // get the memory size
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Initialize the memory location with old_value.
+  instance.exports.store(offset, old_value);
+  assertEquals(old_value, instance.exports.load(offset));
+  // Verify that the else branch (not growing) is reachable.
+  assertEquals(1, instance.exports.main(0));
+  assertEquals(new_value, instance.exports.load(offset));
+  // Enter the if branch (growing memory).
+  assertEquals(5, instance.exports.main(1));
+})();
+
+// This test verifies that the effects of growing memory in an else branch
+// affect the result of current_memory when the branch is merged.
+(function TestGrowMemoryInElseBranch() {
+  print("TestGrowMemoryInElseBranch ...");
+  let offset = 0;
+  let old_value = 21;
+  let new_value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_i)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, offset,         // put offset on stack
+                kExprI32Const, new_value,      // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprElse,
+                kExprI32Const, 4,              // always grow by 4 pages
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+              kExprEnd,
+              kExprMemorySize, kMemoryZero])   // get the memory size
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Initialize the memory location with old_value.
+  instance.exports.store(offset, old_value);
+  assertEquals(old_value, instance.exports.load(offset));
+  // Verify that the if branch (not growing) is reachable.
+  assertEquals(1, instance.exports.main(1));
+  assertEquals(new_value, instance.exports.load(offset));
+  // Enter the else branch (growing memory).
+  assertEquals(5, instance.exports.main(0));
+})();
+
+// This test verifies that the effects of growing memory in an if/else
+// branch affect the result of current_memory when the branches are merged.
+(function TestGrowMemoryInBothIfAndElse() {
+  print("TestGrowMemoryInBothIfAndElse ...");
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_i)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 1,              // always grow by 1 page
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+              kExprElse,
+                kExprI32Const, 2,              // always grow by 2 pages
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+              kExprEnd,
+              kExprMemorySize, kMemoryZero])   // get the memory size
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Enter the if branch (growing memory by 1 page).
+  assertEquals(2, instance.exports.main(1));
+  // Enter the else branch (growing memory by 2 pages).
+  assertEquals(4, instance.exports.main(0));
+})();
+
+// This test verifies that the effects of growing memory in an if branch are
+// retained when the branch is merged.
+(function TestGrowMemoryAndStoreInIfBranchNoElse() {
+  print("TestGrowMemoryAndStoreInIfBranchNoElse ...");
+  let offset = 2*kPageSize - 4;
+  let value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_ii)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 1,              // always grow by 1 page
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, value,          // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprEnd,
+              kExprGetLocal, 1,                // get offset parameter
+              kExprI32LoadMem, 0, 0])          // load from grown memory
+    .exportFunc();
+  var instance = builder.instantiate();
+
+  // Avoid the if branch (not growing memory).
+  assertTraps(kTrapMemOutOfBounds, () => instance.exports.main(0, offset));
+  // Enter the if branch (growing memory).
+  assertEquals(value, instance.exports.main(1, offset));
+})();
+
+// This test verifies that the effects of growing memory in an if branch are
+// retained when the branch is merged even when  an else branch exists.
+(function TestGrowMemoryAndStoreInIfBranchWithElse() {
+  print("TestGrowMemoryAndStoreInIfBranchWithElse ...");
+  let offset = 2*kPageSize - 4;
+  let value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_ii)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 1,              // always grow by 1 page
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, value,          // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprElse,
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, value,          // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprEnd,
+              kExprGetLocal, 1,                // get offset parameter
+              kExprI32LoadMem, 0, 0])          // load from grown memory
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Avoid the if branch (not growing memory).
+  assertTraps(kTrapMemOutOfBounds, () => instance.exports.main(0, offset));
+  // Enter the if branch (growing memory).
+  assertEquals(value, instance.exports.main(1, offset));
+})();
+
+// This test verifies that the effects of growing memory in an else branch are
+// retained when the branch is merged.
+(function TestGrowMemoryAndStoreInElseBranch() {
+  print("TestGrowMemoryAndStoreInElseBranch ...");
+  let offset = 2*kPageSize - 4;
+  let value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_ii)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, value,          // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprElse,
+                kExprI32Const, 1,              // always grow by 1 page
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, value,          // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprEnd,
+              kExprGetLocal, 1,                // get offset parameter
+              kExprI32LoadMem, 0, 0])          // load from grown memory
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Avoid the else branch (not growing memory).
+  assertTraps(kTrapMemOutOfBounds, () => instance.exports.main(1, offset));
+  // Enter the else branch (growing memory).
+  assertEquals(value, instance.exports.main(0, offset));
+})();
+
+// This test verifies that the effects of growing memory in an if/else branch
+// are retained when the branch is merged.
+(function TestGrowMemoryAndStoreInBothIfAndElse() {
+  print("TestGrowMemoryAndStoreInBothIfAndElse ...");
+  let offset = 0;
+  let if_value = 21;
+  let else_value = 42;
+  let builder = generateBuilder();
+  builder.addFunction("main", kSig_i_ii)
+    .addBody([kExprGetLocal, 0,                // get condition parameter
+              kExprI32Const, 1,
+              kExprI32Eq,                      // compare it with 1
+              kExprIf, kWasmStmt,              // if it's 1 then enter if
+                kExprI32Const, 1,              // always grow by 1 page
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, if_value,       // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprElse,
+                kExprI32Const, 2,              // always grow by 2 pages
+                kExprGrowMemory, kMemoryZero,  // grow memory
+                kExprDrop,                     // drop the result of grow
+                kExprGetLocal, 1,              // get offset parameter
+                kExprI32Const, else_value,     // put the value on stack
+                kExprI32StoreMem, 0, 0,        // store
+              kExprEnd,
+              kExprGetLocal, 1,                // get offset parameter
+              kExprI32LoadMem, 0, 0])          // load from grown memory
+    .exportFunc();
+  var instance = builder.instantiate();
+  // Enter the if branch (growing memory by 1 page).
+  assertEquals(if_value, instance.exports.main(1, offset));
+  // Enter the else branch (growing memory by 2 pages).
+  assertEquals(else_value, instance.exports.main(0, offset));
+})();
