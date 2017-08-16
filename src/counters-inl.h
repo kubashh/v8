@@ -82,6 +82,35 @@ RuntimeCallTimerScope::RuntimeCallTimerScope(
   }
 }
 
+RuntimeCallTimerScope::RuntimeCallTimerScope(
+    Isolate* isolate, RuntimeCallStats::CounterId counter_id,
+    RuntimeCallTimerScope::CheckEnteringBlink) {
+  if (V8_UNLIKELY(FLAG_runtime_stats)) {
+    CheckEnteringBlinkAndInitialize(isolate->counters()->runtime_call_stats(),
+                                    counter_id);
+  }
+}
+
+RuntimeCallTimerScope::RuntimeCallTimerScope(
+    RuntimeCallStats* stats, RuntimeCallStats::CounterId counter_id,
+    RuntimeCallTimerScope::CheckEnteringBlink) {
+  if (V8_UNLIKELY(FLAG_runtime_stats)) {
+    CheckEnteringBlinkAndInitialize(stats, counter_id);
+  }
+}
+
+RuntimeCallTimerScopeForBlinkCallback::RuntimeCallTimerScopeForBlinkCallback(
+    Isolate* isolate, RuntimeCallStats::CounterId counter_id)
+    : RuntimeCallTimerScope(isolate, counter_id) {
+  if (V8_UNLIKELY(stats_)) stats_->set_entering_blink(true);
+}
+
+RuntimeCallTimerScopeForBlinkCallback::RuntimeCallTimerScopeForBlinkCallback(
+    RuntimeCallStats* stats, RuntimeCallStats::CounterId counter_id)
+    : RuntimeCallTimerScope(stats, counter_id) {
+  if (V8_UNLIKELY(stats_)) stats_->set_entering_blink(true);
+}
+
 }  // namespace internal
 }  // namespace v8
 
