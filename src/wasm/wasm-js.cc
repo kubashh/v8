@@ -22,8 +22,6 @@
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-result.h"
 
-typedef uint8_t byte;
-
 using v8::internal::wasm::ErrorThrower;
 
 namespace v8 {
