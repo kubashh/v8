@@ -22,7 +22,6 @@ namespace internal {
   } while (false)
 
 #define FOR_EACH_CALLBACK_TABLE_MAPPING_1_NAME(F)                  \
-  F(AccessorNameGetterCallback, "get", v8::Value, Object)          \
   F(GenericNamedPropertyQueryCallback, "has", v8::Integer, Object) \
   F(GenericNamedPropertyDeleterCallback, "delete", v8::Boolean, Object)
 
@@ -71,12 +70,28 @@ FOR_EACH_CALLBACK_TABLE_MAPPING_1_INDEX(WRITE_CALL_1_INDEX)
 #undef FOR_EACH_CALLBACK_TABLE_MAPPING_1_INDEX
 #undef WRITE_CALL_1_INDEX
 
+Handle<Object> PropertyCallbackArguments::Call(AccessorNameGetterCallback f,
+                                               Handle<Name> name) {
+  Isolate* isolate = this->isolate();
+  SIDE_EFFECT_CHECK(isolate, f, Object);
+  RuntimeCallTimerScopeForBlinkCallback timer_scope(
+      isolate, &RuntimeCallStats::AccessorNameGetterCallback);
+  VMState<EXTERNAL> state(isolate);
+  ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));
+  PropertyCallbackInfo<v8::Value> info(begin());
+  LOG(isolate, ApiNamedPropertyAccess("interceptor-named-"
+                                      "get",
+                                      holder(), *name));
+  f(v8::Utils::ToLocal(name), info);
+  return GetReturnValue<Object>(isolate);
+}
+
 Handle<Object> PropertyCallbackArguments::Call(
     GenericNamedPropertySetterCallback f, Handle<Name> name,
     Handle<Object> value) {
   Isolate* isolate = this->isolate();
   SIDE_EFFECT_CHECK(isolate, f, Object);
-  RuntimeCallTimerScope timer(
+  RuntimeCallTimerScopeForBlinkCallback timer_scope(
       isolate, &RuntimeCallStats::GenericNamedPropertySetterCallback);
   VMState<EXTERNAL> state(isolate);
   ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));

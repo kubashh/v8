@@ -393,6 +393,24 @@ TEST_F(RuntimeCallStatsTest, RenameTimer) {
   EXPECT_IN_RANGE(50, counter2()->time().InMilliseconds(), 50 + kEpsilonMs);
 }
 
+TEST_F(RuntimeCallStatsTest, EnteringBlink) {
+  {
+    RuntimeCallTimerScopeForBlinkCallback scope(stats(), counter_id());
+    Sleep(10);
+    {
+      RuntimeCallTimerScope scope2(
+          stats(), counter_id2(),
+          RuntimeCallTimerScope::CheckEnteringBlink::Check);
+      Sleep(20);
+    }
+    Sleep(5);
+  }
+  EXPECT_EQ(0, counter()->count());
+  EXPECT_EQ(1, counter2()->count());
+  EXPECT_EQ(0, counter()->time().InMilliseconds());
+  EXPECT_IN_RANGE(35, counter2()->time().InMilliseconds(), 35 + kEpsilonMs);
+}
+
 TEST_F(RuntimeCallStatsTest, BasicPrintAndSnapshot) {
   std::ostringstream out;
   stats()->Print(out);

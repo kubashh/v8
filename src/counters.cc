@@ -433,7 +433,7 @@ void RuntimeCallTimer::Snapshot() {
   Resume(now);
 }
 
-RuntimeCallStats::RuntimeCallStats() : in_use_(false) {
+RuntimeCallStats::RuntimeCallStats() : in_use_(false), entering_blink_(false) {
   static const char* const kNames[] = {
 #define CALL_BUILTIN_COUNTER(name) "GC_" #name,
       FOR_EACH_GC_COUNTER(CALL_BUILTIN_COUNTER)  //
