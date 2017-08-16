@@ -144,9 +144,10 @@ class JsHttpRequestProcessor : public HttpRequestProcessor {
 
 static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if (args.Length() < 1) return;
-  HandleScope scope(args.GetIsolate());
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
   Local<Value> arg = args[0];
-  String::Utf8Value value(arg);
+  String::Utf8Value value(isolate, arg);
   HttpRequestProcessor::Log(*value);
 }
 
@@ -221,7 +222,7 @@ bool JsHttpRequestProcessor::ExecuteScript(Local<String> script) {
   // Compile the script and check for errors.
   Local<Script> compiled_script;
   if (!Script::Compile(context, script).ToLocal(&compiled_script)) {
-    String::Utf8Value error(try_catch.Exception());
+    String::Utf8Value error(GetIsolate(), try_catch.Exception());
     Log(*error);
     // The script failed to compile; bail out.
     return false;
@@ -231,11 +232,12 @@ bool JsHttpRequestProcessor::ExecuteScript(Local<String> script) {
   Local<Value> result;
   if (!compiled_script->Run(context).ToLocal(&result)) {
     // The TryCatch above is still in effect and will have caught the error.
-    String::Utf8Value error(try_catch.Exception());
+    String::Utf8Value error(GetIsolate(), try_catch.Exception());
     Log(*error);
     // Running the script failed; bail out.
     return false;
   }
+
   return true;
 }
 
@@ -295,12 +297,11 @@ bool JsHttpRequestProcessor::Process(HttpRequest* request) {
       v8::Local<v8::Function>::New(GetIsolate(), process_);
   Local<Value> result;
   if (!process->Call(context, context->Global(), argc, argv).ToLocal(&result)) {
-    String::Utf8Value error(try_catch.Exception());
+    String::Utf8Value error(GetIsolate(), try_catch.Exception());
     Log(*error);
     return false;
-  } else {
-    return true;
   }
+  return true;
 }
 
 
