@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dce9e3a_bb0a965a",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-08-17T04:41:49Z",
+      "side": 1,
+      "message": "The --expose-wasm flag is no longer needed, wasm is enabled by default.",
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
