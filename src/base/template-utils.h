@@ -7,30 +7,18 @@
 
 #include <array>
 #include <memory>
+#include <utility>
 
 namespace v8 {
 namespace base {
 
 namespace detail {
 
-// make_array_helper statically iteratively creates the index list 0 .. Size-1.
-// A specialization for the base case (first index is 0) finally constructs the
-// array.
-// TODO(clemensh): Use std::index_sequence once we have C++14 support.
 template <class Function, std::size_t... Indexes>
-struct make_array_helper;
-
-template <class Function, std::size_t... Indexes>
-struct make_array_helper<Function, 0, Indexes...> {
-  constexpr static auto make_array(Function f)
-      -> std::array<decltype(f(std::size_t{0})), sizeof...(Indexes) + 1> {
-    return {{f(0), f(Indexes)...}};
-  }
-};
-
-template <class Function, std::size_t FirstIndex, std::size_t... Indexes>
-struct make_array_helper<Function, FirstIndex, Indexes...>
-    : make_array_helper<Function, FirstIndex - 1, FirstIndex, Indexes...> {};
+constexpr auto make_array_helper(Function f, std::index_sequence<Indexes...>)
+    -> std::array<decltype(f(std::size_t{0})), sizeof...(Indexes)> {
+  return {{f(Indexes)...}};
+}
 
 }  // namespace detail
 
@@ -44,15 +32,7 @@ template <std::size_t Size, class Function>
 constexpr auto make_array(Function f)
     -> std::array<decltype(f(std::size_t{0})), Size> {
   static_assert(Size > 0, "Can only create non-empty arrays");
-  return detail::make_array_helper<Function, Size - 1>::make_array(f);
-}
-
-// base::make_unique<T>: Construct an object of type T and wrap it in a
-// std::unique_ptr.
-// Replacement for C++14's std::make_unique.
-template <typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+  return detail::make_array_helper(f, std::make_index_sequence<Size>{});
 }
 
 // implicit_cast<A>(x) triggers an implicit cast from {x} to type {A}. This is
