@@ -285,7 +285,7 @@ class ModuleDecoder : public Decoder {
     CHECK_NULL(module_);
     SetCounters(isolate->counters());
     module_.reset(new WasmModule(
-        base::make_unique<Zone>(isolate->allocator(), "signatures")));
+        std::make_unique<Zone>(isolate->allocator(), "signatures")));
     module_->initial_pages = 0;
     module_->maximum_pages = 0;
     module_->mem_export = false;
@@ -1371,7 +1371,7 @@ FunctionResult DecodeWasmFunction(Isolate* isolate, Zone* zone,
   ModuleDecoder decoder(function_start, function_end, kWasmOrigin);
   decoder.SetCounters(counters);
   return decoder.DecodeSingleFunction(zone, wire_bytes, module,
-                                      base::make_unique<WasmFunction>());
+                                      std::make_unique<WasmFunction>());
 }
 
 }  // namespace
