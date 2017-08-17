@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7f498363_e838e817",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-17T09:31:30Z",
+      "side": 1,
+      "message": "I\u0027ll leave it here for now as suggested by ahaas in this comment: https://chromium-review.googlesource.com/c/616150/2/test/mjsunit/wasm/grow-memory-in-call.js#5\n\nWhen we are sure it\u0027s not necessary anymore, we can remove the flag from all the test files.",
+      "parentUuid": "8dce9e3a_bb0a965a",
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0c71f68_db91d44f",
         "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "eb51b67555f96d04f3897296e5590575611c6365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239ab2fc_c2a09e4d",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-17T09:31:30Z",
+      "side": 1,
+      "message": "You\u0027re right, I removed it from all the tests.",
+      "parentUuid": "c0c71f68_db91d44f",
+      "range": {
+        "startLine": 33,
+        "startChar": 14,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "1e08f3c0_2001ac12",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-17T09:31:30Z",
+      "side": 1,
+      "message": "Done. I also added variables for deltaPages.",
+      "parentUuid": "788fe24a_2e7607ee",
+      "range": {
+        "startLine": 44,
+        "startChar": 15,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1264a69_fc1f0ee7",
         "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
         "patchSetId": 2
@@ -85,6 +151,30 @@
       "revId": "eb51b67555f96d04f3897296e5590575611c6365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "759e8213_5c363856",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-17T09:31:30Z",
+      "side": 1,
+      "message": "Yes, it was intentional, that\u0027s the reason for not having a valueIf and valueElse. In fact the branch should not be able to store the value. For this test in fact we just want to make sure that the else branch exists. In the next patchset I have added a comment at lines 168, 201 and 234 to explain the reason of the trap. Let me know if it\u0027s better now.",
+      "parentUuid": "c1264a69_fc1f0ee7",
+      "range": {
+        "startLine": 195,
+        "startChar": 16,
+        "endLine": 195,
+        "endChar": 39
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
