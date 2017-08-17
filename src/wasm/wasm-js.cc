@@ -8,6 +8,7 @@
 #include "src/ast/ast.h"
 #include "src/execution.h"
 #include "src/factory.h"
+#include "src/globals.h"
 #include "src/handles.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
@@ -21,8 +22,6 @@
 #include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-result.h"
-
-typedef uint8_t byte;
 
 using v8::internal::wasm::ErrorThrower;
 
