@@ -21,76 +21,123 @@ void* OS::Allocate(const size_t requested, size_t* allocated,
   const size_t msize = RoundUp(requested, AllocateAlignment());
   int prot = GetProtectionFromMemoryPermission(access);
   void* mbase = mmap(hint, msize, prot, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-  if (mbase == MAP_FAILED) return NULL;
+  if (mbase == MAP_FAILED) return nullptr;
   *allocated = msize;
   return mbase;
 }
 
 std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
+  CHECK(false);  // TODO(scottmg): Port, https://crbug.com/731217.
   return std::vector<SharedLibraryAddress>();
 }
 
 void OS::SignalCodeMovingGC() {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
+  CHECK(false);  // TODO(scottmg): Port, https://crbug.com/731217.
 }
 
-VirtualMemory::VirtualMemory() : address_(NULL), size_(0) {}
+VirtualMemory::VirtualMemory() : address_(nullptr), size_(0) {}
 
 VirtualMemory::VirtualMemory(size_t size, void* hint)
-    : address_(ReserveRegion(size, hint)), size_(size) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-}
+    : address_(ReserveRegion(size, hint)), size_(size) {}
 
 VirtualMemory::VirtualMemory(size_t size, size_t alignment, void* hint)
-    : address_(NULL), size_(0) {}
+    : address_(nullptr), size_(0) {
+  DCHECK((alignment % OS::AllocateAlignment()) == 0);
+  hint = AlignedAddress(hint, alignment);
+  size_t request_size =
+      RoundUp(size + alignment, static_cast<intptr_t>(OS::AllocateAlignment()));
+  void* reservation = mmap(hint, request_size, PROT_NONE,
+                           MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
+  if (reservation == MAP_FAILED) return;
 
-VirtualMemory::~VirtualMemory() {}
+  uint8_t* base = static_cast<uint8_t*>(reservation);
+  uint8_t* aligned_base = RoundUp(base, alignment);
+  DCHECK_LE(base, aligned_base);
 
-void VirtualMemory::Reset() {}
+  // Unmap extra memory reserved before and after the desired block.
+  if (aligned_base != base) {
+    size_t prefix_size = static_cast<size_t>(aligned_base - base);
+    OS::Free(base, prefix_size);
+    request_size -= prefix_size;
+  }
 
-bool VirtualMemory::Commit(void* address, size_t size, bool is_executable) {
-  return false;
+  size_t aligned_size = RoundUp(size, OS::AllocateAlignment());
+  DCHECK_LE(aligned_size, request_size);
+
+  if (aligned_size != request_size) {
+    size_t suffix_size = request_size - aligned_size;
+    OS::Free(aligned_base + aligned_size, suffix_size);
+    request_size -= suffix_size;
+  }
+
+  DCHECK(aligned_size == request_size);
+
+  address_ = static_cast<void*>(aligned_base);
+  size_ = aligned_size;
 }
 
-bool VirtualMemory::Uncommit(void* address, size_t size) { return false; }
+VirtualMemory::~VirtualMemory() {
+  if (IsReserved()) {
+    bool result = ReleaseRegion(address(), size());
+    DCHECK(result);
+    USE(result);
+  }
+}
 
-bool VirtualMemory::Guard(void* address) { return false; }
+void VirtualMemory::Reset() {
+  address_ = nullptr;
+  size_ = 0;
+}
+
+bool VirtualMemory::Commit(void* address, size_t size, bool is_executable) {
+  CHECK(InVM(address, size));
+  return CommitRegion(address, size, is_executable);
+}
+
+bool VirtualMemory::Uncommit(void* address, size_t size) {
+  return UncommitRegion(address, size);
+}
+
+bool VirtualMemory::Guard(void* address) {
+  OS::Guard(address, OS::CommitPageSize());
+  return true;
+}
 
 // static
 void* VirtualMemory::ReserveRegion(size_t size, void* hint) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-  return NULL;
+  void* result = mmap(hint, size, PROT_NONE,
+                      MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
+
+  if (result == MAP_FAILED) return nullptr;
+
+  return result;
 }
 
 // static
 bool VirtualMemory::CommitRegion(void* base, size_t size, bool is_executable) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-  return false;
+  int prot = PROT_READ | PROT_WRITE | (is_executable ? PROT_EXEC : 0);
+  return mprotect(base, size, prot) != -1;
 }
 
 // static
 bool VirtualMemory::UncommitRegion(void* base, size_t size) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-  return false;
+  return mprotect(base, size, PROT_NONE) != -1;
 }
 
 // static
 bool VirtualMemory::ReleasePartialRegion(void* base, size_t size,
                                          void* free_start, size_t free_size) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-  return false;
+  return munmap(free_start, free_size) == 0;
 }
 
 // static
 bool VirtualMemory::ReleaseRegion(void* base, size_t size) {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
-  return false;
+  return munmap(base, size) == 0;
 }
 
 // static
 bool VirtualMemory::HasLazyCommits() {
-  CHECK(false);  // TODO(fuchsia): Port, https://crbug.com/731217.
+  // TODO(scottmg): Port, https://crbug.com/731217.
   return false;
 }
 
