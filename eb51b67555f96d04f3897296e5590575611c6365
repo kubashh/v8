@@ -16,6 +16,75 @@
       "revId": "eb51b67555f96d04f3897296e5590575611c6365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c71f68_db91d44f",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-17T07:55:17Z",
+      "side": 1,
+      "message": "I think you can skip these two instructions and just use kExprGetLocal, 0, as the condition. WebAssembly does not have bools, so kExprI32Eq would also just create 1 here. The same is true below.",
+      "range": {
+        "startLine": 33,
+        "startChar": 14,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "788fe24a_2e7607ee",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-17T07:55:17Z",
+      "side": 1,
+      "message": "Nit: Please name constants. The code gets much more readable thereby in my opinion.",
+      "range": {
+        "startLine": 44,
+        "startChar": 15,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1264a69_fc1f0ee7",
+        "filename": "test/mjsunit/wasm/grow-memory-in-branch.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-17T07:55:17Z",
+      "side": 1,
+      "message": "I think the test traps here and not below at the load below if kExprGetLocal, 0, is 0. Is this intentional?",
+      "range": {
+        "startLine": 195,
+        "startChar": 16,
+        "endLine": 195,
+        "endChar": 39
+      },
+      "revId": "eb51b67555f96d04f3897296e5590575611c6365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
