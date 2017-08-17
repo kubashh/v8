@@ -281,12 +281,12 @@ void StreamingDecoder::DecodeModuleHeader::CheckHeader(Decoder* decoder) {
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeModuleHeader::Next(StreamingDecoder* streaming) {
   CheckHeader(streaming->decoder());
-  return base::make_unique<DecodeSectionID>();
+  return std::make_unique<DecodeSectionID>();
 }
 
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeSectionID::Next(StreamingDecoder* streaming) {
-  return base::make_unique<DecodeSectionLength>(id());
+  return std::make_unique<DecodeSectionLength>(id());
 }
 
 std::unique_ptr<StreamingDecoder::DecodingState>
@@ -297,19 +297,19 @@ StreamingDecoder::DecodeSectionLength::NextWithValue(
       Vector<const uint8_t>(buffer(), static_cast<int>(bytes_needed())));
   if (value() == 0) {
     // There is no payload, we go to the next section immediately.
-    return base::make_unique<DecodeSectionID>();
+    return std::make_unique<DecodeSectionID>();
   } else if (section_id() == SectionCode::kCodeSectionCode) {
     // We reached the code section. All functions of the code section are put
     // into the same SectionBuffer.
-    return base::make_unique<DecodeNumberOfFunctions>(buf);
+    return std::make_unique<DecodeNumberOfFunctions>(buf);
   } else {
-    return base::make_unique<DecodeSectionPayload>(buf);
+    return std::make_unique<DecodeSectionPayload>(buf);
   }
 }
 
 std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeSectionPayload::Next(StreamingDecoder* streaming) {
-  return base::make_unique<DecodeSectionID>();
+  return std::make_unique<DecodeSectionID>();
 }
 
 std::unique_ptr<StreamingDecoder::DecodingState>
@@ -321,16 +321,16 @@ StreamingDecoder::DecodeNumberOfFunctions::NextWithValue(
            buffer(), bytes_needed());
   } else {
     streaming->decoder()->error("Invalid code section length");
-    return base::make_unique<DecodeSectionID>();
+    return std::make_unique<DecodeSectionID>();
   }
 
   // {value} is the number of functions.
   if (value() > 0) {
-    return base::make_unique<DecodeFunctionLength>(
+    return std::make_unique<DecodeFunctionLength>(
         section_buffer(), section_buffer()->payload_offset() + bytes_needed(),
         value());
   } else {
-    return base::make_unique<DecodeSectionID>();
+    return std::make_unique<DecodeSectionID>();
   }
 }
 
@@ -342,7 +342,7 @@ StreamingDecoder::DecodeFunctionLength::NextWithValue(
     memcpy(section_buffer_->bytes() + buffer_offset_, buffer(), bytes_needed());
   } else {
     streaming->decoder()->error("Invalid code section length");
-    return base::make_unique<DecodeSectionID>();
+    return std::make_unique<DecodeSectionID>();
   }
 
   // {value} is the length of the function.
@@ -355,7 +355,7 @@ StreamingDecoder::DecodeFunctionLength::NextWithValue(
     return nullptr;
   }
 
-  return base::make_unique<DecodeFunctionBody>(
+  return std::make_unique<DecodeFunctionBody>(
       section_buffer(), buffer_offset() + bytes_needed(), value(),
       num_remaining_functions());
 }
@@ -364,7 +364,7 @@ std::unique_ptr<StreamingDecoder::DecodingState>
 StreamingDecoder::DecodeFunctionBody::Next(StreamingDecoder* streaming) {
   // TODO(ahaas): Start compilation of the function here.
   if (num_remaining_functions() != 0) {
-    return base::make_unique<DecodeFunctionLength>(
+    return std::make_unique<DecodeFunctionLength>(
         section_buffer(), buffer_offset() + size(), num_remaining_functions());
   } else {
     if (buffer_offset() + size() != section_buffer()->length()) {
@@ -376,7 +376,7 @@ StreamingDecoder::DecodeFunctionBody::Next(StreamingDecoder* streaming) {
           "not all code section bytes were used");
       return nullptr;
     }
-    return base::make_unique<DecodeSectionID>();
+    return std::make_unique<DecodeSectionID>();
   }
 }
 
