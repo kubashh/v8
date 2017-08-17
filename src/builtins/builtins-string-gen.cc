@@ -766,10 +766,101 @@ TF_BUILTIN(StringPrototypeConcat, CodeStubAssembler) {
   arguments.PopAndReturn(var_result.value());
 }
 
+void StringBuiltinsAssembler::GenerateStringIndexOf(
+    StringIndexOfVariant variant) {
+  Node* const smi_zero = SmiConstant(0);
+  Node* const intptr_one = IntPtrConstant(1);
+  Node* const argc = Parameter(BuiltinDescriptor::kArgumentsCount);
+  Node* const context = Parameter(BuiltinDescriptor::kContext);
+  CodeStubArguments args(this, ChangeInt32ToIntPtr(argc));
+
+  VARIABLE(var_search, MachineRepresentation::kTagged);
+  VARIABLE(var_position, MachineRepresentation::kTagged);
+  VARIABLE(var_receiver, MachineRepresentation::kTagged, args.GetReceiver());
+
+  auto f_result = [&](Node* result) {
+    if (variant == kIncludes) {
+      result = SelectBooleanConstant(SmiGreaterThanOrEqual(result, smi_zero));
+    }
+    args.PopAndReturn(result);
+  };
+
+  Label argc_1(this), argc_2(this), call_runtime(this), fast_path(this);
+
+  GotoIf(IntPtrEqual(argc, intptr_one), &argc_1);
+  GotoIf(IntPtrGreaterThan(argc, intptr_one), &argc_2);
+
+  Comment("0 Argument case");
+  var_search.Bind(UndefinedConstant());
+  var_position.Bind(UndefinedConstant());
+  Goto(&call_runtime);
+
+  BIND(&argc_1);
+  {
+    Comment("1 Argument case");
+    var_search.Bind(args.AtIndex(0));
+    var_position.Bind(smi_zero);
+    Goto(&fast_path);
+  }
+  BIND(&argc_2);
+  {
+    Comment("2 Argument case");
+    var_search.Bind(args.AtIndex(0));
+    var_position.Bind(args.AtIndex(1));
+    GotoIfNot(TaggedIsSmi(var_position.value()), &call_runtime);
+    Goto(&fast_path);
+  }
+  BIND(&fast_path);
+  {
+    Comment("Check Receiver");
+    Node* const receiver = var_receiver.value();
+    Node* const search = var_search.value();
+    GotoIf(TaggedIsSmi(receiver), &call_runtime);
+    GotoIf(TaggedIsSmi(search), &call_runtime);
+
+    if (variant == kIndexOf) {
+      GotoIfNot(IsString(receiver), &call_runtime);
+      GotoIfNot(IsString(search), &call_runtime);
+      StringIndexOf(receiver, search, var_position.value(), f_result);
+    } else {
+      Label check_search(this), if_nonstring_search(this);
+
+      GotoIf(IsString(receiver), &check_search);
+      GotoIf(IsNullOrUndefined(receiver), &call_runtime);
+
+      var_receiver.Bind(CallBuiltin(Builtins::kToString, context, receiver));
+      Branch(IsString(var_receiver.value()), &check_search, &call_runtime);
+      BIND(&check_search);
+      {
+        GotoIfNot(IsString(search), &if_nonstring_search);
+        f_result(CallBuiltin(Builtins::kStringIndexOf, context,
+                             var_receiver.value(), search,
+                             var_position.value()));
+      }
+      BIND(&if_nonstring_search);
+      {
+        Comment("Search is not a string");
+        GotoIf(IsNullOrUndefined(search), &call_runtime);
+        GotoIf(IsFalse(GetProperty(context, search,
+                                   isolate()->factory()->match_symbol())),
+               &call_runtime);
+        GotoIfNot(IsJSRegExp(search), &call_runtime);
+        ThrowTypeError(context, MessageTemplate::kFirstArgumentNotRegExp,
+                       "String.prototype.includes");
+      }
+    }
+  }
+  BIND(&call_runtime);
+  {
+    Comment("Call Runtime");
+    f_result(CallRuntime(Runtime::kStringIndexOf, context, var_receiver.value(),
+                         var_search.value(), var_position.value()));
+  }
+}
+
 void StringBuiltinsAssembler::StringIndexOf(
-    Node* const subject_string, Node* const subject_instance_type,
-    Node* const search_string, Node* const search_instance_type,
-    Node* const position, std::function<void(Node*)> f_return) {
+    Node* const subject_string, Node* const search_string, Node* const position,
+    std::function<void(Node*)> f_return) {
   CSA_ASSERT(this, IsString(subject_string));
   CSA_ASSERT(this, IsString(search_string));
   CSA_ASSERT(this, TaggedIsSmi(position));
@@ -947,86 +1038,20 @@ TF_BUILTIN(StringIndexOf, StringBuiltinsAssembler) {
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* search_string = Parameter(Descriptor::kSearchString);
   Node* position = Parameter(Descriptor::kPosition);
-
-  Node* instance_type = LoadInstanceType(receiver);
-  Node* search_string_instance_type = LoadInstanceType(search_string);
-
-  StringIndexOf(receiver, instance_type, search_string,
-                search_string_instance_type, position,
+  StringIndexOf(receiver, search_string, position,
                 [this](Node* result) { this->Return(result); });
+}
+
+// ES6 section 21.1.3.7
+// String.prototype.includes ( searchString [ , position ] )
+TF_BUILTIN(StringPrototypeIncludes, StringBuiltinsAssembler) {
+  GenerateStringIndexOf(kIncludes);
 }
 
 // ES6 String.prototype.indexOf(searchString [, position])
 // #sec-string.prototype.indexof
 TF_BUILTIN(StringPrototypeIndexOf, StringBuiltinsAssembler) {
-  VARIABLE(search_string, MachineRepresentation::kTagged);
-  VARIABLE(position, MachineRepresentation::kTagged);
-  Label call_runtime(this), call_runtime_unchecked(this), argc_0(this),
-      no_argc_0(this), argc_1(this), no_argc_1(this), argc_2(this),
-      fast_path(this), return_minus_1(this);
-
-  // TODO(ishell): use constants from Descriptor once the JSFunction linkage
-  // arguments are reordered.
-  Node* argc = Parameter(BuiltinDescriptor::kArgumentsCount);
-  Node* context = Parameter(BuiltinDescriptor::kContext);
-
-  CodeStubArguments arguments(this, ChangeInt32ToIntPtr(argc));
-  Node* receiver = arguments.GetReceiver();
-  // From now on use word-size argc value.
-  argc = arguments.GetLength();
-
-  GotoIf(IntPtrEqual(argc, IntPtrConstant(0)), &argc_0);
-  GotoIf(IntPtrEqual(argc, IntPtrConstant(1)), &argc_1);
-  Goto(&argc_2);
-  BIND(&argc_0);
-  {
-    Comment("0 Argument case");
-    Node* undefined = UndefinedConstant();
-    search_string.Bind(undefined);
-    position.Bind(undefined);
-    Goto(&call_runtime);
-  }
-  BIND(&argc_1);
-  {
-    Comment("1 Argument case");
-    search_string.Bind(arguments.AtIndex(0));
-    position.Bind(SmiConstant(0));
-    Goto(&fast_path);
-  }
-  BIND(&argc_2);
-  {
-    Comment("2 Argument case");
-    search_string.Bind(arguments.AtIndex(0));
-    position.Bind(arguments.AtIndex(1));
-    GotoIfNot(TaggedIsSmi(position.value()), &call_runtime);
-    Goto(&fast_path);
-  }
-
-  BIND(&fast_path);
-  {
-    Comment("Fast Path");
-    GotoIf(TaggedIsSmi(receiver), &call_runtime);
-    Node* needle = search_string.value();
-    GotoIf(TaggedIsSmi(needle), &call_runtime);
-
-    Node* instance_type = LoadInstanceType(receiver);
-    GotoIfNot(IsStringInstanceType(instance_type), &call_runtime);
-
-    Node* needle_instance_type = LoadInstanceType(needle);
-    GotoIfNot(IsStringInstanceType(needle_instance_type), &call_runtime);
-
-    StringIndexOf(
-        receiver, instance_type, needle, needle_instance_type, position.value(),
-        [&arguments](Node* result) { arguments.PopAndReturn(result); });
-  }
-
-  BIND(&call_runtime);
-  {
-    Comment("Call Runtime");
-    Node* result = CallRuntime(Runtime::kStringIndexOf, context, receiver,
-                               search_string.value(), position.value());
-    arguments.PopAndReturn(result);
-  }
+  GenerateStringIndexOf(kIndexOf);
 }
 
 compiler::Node* StringBuiltinsAssembler::IsNullOrUndefined(Node* const value) {
