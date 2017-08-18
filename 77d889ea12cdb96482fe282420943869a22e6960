@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6679240_48e7fb28",
+        "filename": "src/assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-18T17:49:12Z",
+      "side": 1,
+      "message": "I realize these are generic, but it\u0027s probably clearer in terms of intent to call this\nWASM_GLOBAL_HANDLE?",
+      "revId": "77d889ea12cdb96482fe282420943869a22e6960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "250b16c1_0955041b",
+        "filename": "src/wasm/wasm-code-specialization.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-18T17:49:12Z",
+      "side": 1,
+      "message": "Why can\u0027t we use size of pointers_to_relocate instead of the flag above?",
+      "revId": "77d889ea12cdb96482fe282420943869a22e6960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
