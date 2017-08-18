@@ -242,6 +242,20 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
         mode_(mode),
         zone_(gen->zone()) {}
 
+  void SaveRegisters(int num, const Register* registers) {
+    DCHECK(num > 0);
+    for (int i = 0; i < num; ++i) {
+      __ pushq(registers[i]);
+    }
+  }
+
+  void RestoreRegisters(int num, const Register* registers) {
+    DCHECK(num > 0);
+    for (int i = num - 1; i >= 0; --i) {
+      __ popq(registers[i]);
+    }
+  }
+
   void Generate() final {
     if (mode_ > RecordWriteMode::kValueIsPointer) {
       __ JumpIfSmi(value_, exit());
@@ -258,11 +272,14 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
 
 #ifdef V8_CSA_WRITE_BARRIER
     (void)remembered_set_action;
-    // TODO(albertnetymk): Come up with a better way instead of blindly saving
-    // all registers.
-    __ PushCallerSaved(save_fp_mode);
     Callable const callable =
         Builtins::CallableFor(__ isolate(), Builtins::kRecordWrite);
+    int num = callable.descriptor().num_allocatable_general_registers();
+    const Register* registers =
+        callable.descriptor().allocatable_general_registers_array();
+
+    SaveRegisters(num, registers);
+
     Register object_parameter(callable.descriptor().GetRegisterParameter(
         RecordWriteDescriptor::kObject));
     Register slot_parameter(callable.descriptor().GetRegisterParameter(
@@ -280,7 +297,9 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
                    ExternalReference::isolate_address(__ isolate()));
     __ Call(callable.code(), RelocInfo::CODE_TARGET);
 
-    __ PopCallerSaved(save_fp_mode);
+    RestoreRegisters(num, registers);
+
+    (void)save_fp_mode;
 #else
     __ CallStubDelayed(
         new (zone_) RecordWriteStub(nullptr, object_, scratch0_, scratch1_,
@@ -923,6 +942,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       frame_access_state()->SetFrameAccessToFP();
       int const num_parameters = MiscField::decode(instr->opcode());
       __ PrepareCallCFunction(num_parameters);
+      break;
+    }
+    case kArchSaveCallerRegisters: {
+      __ PushCallerSaved(kSaveFPRegs);
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      __ PopCallerSaved(kSaveFPRegs);
       break;
     }
     case kArchPrepareTailCall:

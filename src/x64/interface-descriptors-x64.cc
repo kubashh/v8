@@ -20,6 +20,30 @@ void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
                                    default_stub_registers);
 }
 
+void CallInterfaceDescriptor::RecordWriteInitializePlatformSpecific(
+    CallInterfaceDescriptorData* data, int register_parameter_count) {
+#ifdef _WIN64
+  // First four arguments according to calling convention, and rax for return
+  // value.
+  static const Register allocatable_registers[] = {rcx, rdx, r8, r9, rax};
+#else
+  // First three arguments according to calling convention, rcx for shifting
+  // and rax for return value.
+  static const Register allocatable_registers[] = {rdi, rsi, rdx, rcx, rax};
+#endif
+
+  // Use the same allocatable registers for passing parameter.
+  auto& default_stub_registers = allocatable_registers;
+
+  data->InitAllocatableGeneralRegisters(default_stub_registers,
+                                        arraysize(default_stub_registers));
+
+  CHECK_LE(static_cast<size_t>(register_parameter_count),
+           arraysize(default_stub_registers));
+  data->InitializePlatformSpecific(register_parameter_count,
+                                   default_stub_registers);
+}
+
 const Register FastNewFunctionContextDescriptor::FunctionRegister() {
   return rdi;
 }

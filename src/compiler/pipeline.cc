@@ -1970,8 +1970,20 @@ bool PipelineImpl::ScheduleAndSelectInstructions(Linkage* linkage,
   bool run_verifier = FLAG_turbo_verify_allocation;
 
   // Allocate registers.
-  AllocateRegisters(RegisterConfiguration::Default(), call_descriptor,
-                    run_verifier);
+  {
+    auto registers = call_descriptor->AllocatableRegisters();
+    if (registers != 0) {
+      DCHECK(NumRegs(registers) > 0);
+      const RegisterConfiguration* config =
+          RegisterConfiguration::CustomGeneralRegisters(registers);
+      AllocateRegisters(config, call_descriptor, run_verifier);
+      delete config;
+    } else {
+      AllocateRegisters(RegisterConfiguration::Default(), call_descriptor,
+                        run_verifier);
+    }
+  }
+
   Run<FrameElisionPhase>();
   if (data->compilation_failed()) {
     info()->AbortOptimization(kNotEnoughVirtualRegistersRegalloc);

@@ -64,52 +64,75 @@ STATIC_ASSERT(RegisterConfiguration::kMaxFPRegisters >=
 STATIC_ASSERT(RegisterConfiguration::kMaxFPRegisters >=
               Simd128Register::kMaxNumRegisters);
 
+static int get_num_allocatable_general_registers() {
+  return
+#if V8_TARGET_ARCH_IA32
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_X64
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_ARM
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_ARM64
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_MIPS
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_MIPS64
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_PPC
+      kMaxAllocatableGeneralRegisterCount;
+#elif V8_TARGET_ARCH_S390
+      kMaxAllocatableGeneralRegisterCount;
+#else
+#error Unsupported target architecture.
+#endif
+}
+
+static int get_num_allocatable_double_registers() {
+  return
+#if V8_TARGET_ARCH_IA32
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_X64
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_ARM
+      CpuFeatures::IsSupported(VFP32DREGS)
+          ? kMaxAllocatableDoubleRegisterCount
+          : (ALLOCATABLE_NO_VFP32_DOUBLE_REGISTERS(REGISTER_COUNT) 0);
+#elif V8_TARGET_ARCH_ARM64
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_MIPS
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_MIPS64
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_PPC
+      kMaxAllocatableDoubleRegisterCount;
+#elif V8_TARGET_ARCH_S390
+      kMaxAllocatableDoubleRegisterCount;
+#else
+#error Unsupported target architecture.
+#endif
+}
+
+static const int* get_allocatable_double_codes() {
+  return
+#if V8_TARGET_ARCH_ARM
+      CpuFeatures::IsSupported(VFP32DREGS) ? kAllocatableDoubleCodes
+                                           : kAllocatableNoVFP32DoubleCodes;
+#else
+      kAllocatableDoubleCodes;
+#endif
+}
+
 class ArchDefaultRegisterConfiguration : public RegisterConfiguration {
  public:
   ArchDefaultRegisterConfiguration()
       : RegisterConfiguration(
             Register::kNumRegisters, DoubleRegister::kMaxNumRegisters,
-#if V8_TARGET_ARCH_IA32
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_X64
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_ARM
-            kMaxAllocatableGeneralRegisterCount,
-            CpuFeatures::IsSupported(VFP32DREGS)
-                ? kMaxAllocatableDoubleRegisterCount
-                : (ALLOCATABLE_NO_VFP32_DOUBLE_REGISTERS(REGISTER_COUNT) 0),
-#elif V8_TARGET_ARCH_ARM64
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_MIPS
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_MIPS64
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_PPC
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#elif V8_TARGET_ARCH_S390
-            kMaxAllocatableGeneralRegisterCount,
-            kMaxAllocatableDoubleRegisterCount,
-#else
-#error Unsupported target architecture.
-#endif
-            kAllocatableGeneralCodes,
-#if V8_TARGET_ARCH_ARM
-            CpuFeatures::IsSupported(VFP32DREGS)
-                ? kAllocatableDoubleCodes
-                : kAllocatableNoVFP32DoubleCodes,
-#else
-            kAllocatableDoubleCodes,
-#endif
+            get_num_allocatable_general_registers(),
+            get_num_allocatable_double_registers(), kAllocatableGeneralCodes,
+            get_allocatable_double_codes(),
             kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE,
             kGeneralRegisterNames, kFloatRegisterNames, kDoubleRegisterNames,
-            kSimd128RegisterNames) {
-  }
+            kSimd128RegisterNames) {}
 };
 
 struct RegisterConfigurationInitializer {
@@ -122,10 +145,57 @@ static base::LazyInstance<ArchDefaultRegisterConfiguration,
                           RegisterConfigurationInitializer>::type
     kDefaultRegisterConfiguration = LAZY_INSTANCE_INITIALIZER;
 
+class CustomRegisterConfiguration : public RegisterConfiguration {
+ public:
+  CustomRegisterConfiguration(
+      int num_allocatable_general_registers,
+      const int* allocatable_general_register_codes,
+      const char* const* allocatable_general_register_names)
+      : RegisterConfiguration(
+            Register::kNumRegisters, DoubleRegister::kMaxNumRegisters,
+            num_allocatable_general_registers,
+            get_num_allocatable_double_registers(),
+            allocatable_general_register_codes, get_allocatable_double_codes(),
+            kSimpleFPAliasing ? AliasingKind::OVERLAP : AliasingKind::COMBINE,
+            allocatable_general_register_names, kFloatRegisterNames,
+            kDoubleRegisterNames, kSimd128RegisterNames),
+        allocatable_general_register_codes_(allocatable_general_register_codes),
+        allocatable_general_register_names_(
+            allocatable_general_register_names) {}
+
+  ~CustomRegisterConfiguration() {
+    delete[] allocatable_general_register_codes_;
+    delete[] allocatable_general_register_names_;
+  }
+
+ private:
+  const int* allocatable_general_register_codes_;
+  const char* const* allocatable_general_register_names_;
+};
+
 }  // namespace
 
 const RegisterConfiguration* RegisterConfiguration::Default() {
   return &kDefaultRegisterConfiguration.Get();
+}
+
+const RegisterConfiguration* RegisterConfiguration::CustomGeneralRegisters(
+    RegList registers) {
+  int num = NumRegs(registers);
+  auto codes = new int[num];
+  const char** names = new const char*[num];
+  int counter = 0;
+  for (int i = 0; i < Default()->num_allocatable_general_registers(); ++i) {
+    auto reg = Register::from_code(Default()->GetAllocatableGeneralCode(i));
+    if (reg.bit() & registers) {
+      DCHECK(counter < num);
+      codes[counter] = reg.code();
+      names[counter] = Default()->GetGeneralRegisterName(i);
+      counter++;
+    }
+  }
+
+  return new CustomRegisterConfiguration(num, codes, names);
 }
 
 RegisterConfiguration::RegisterConfiguration(
