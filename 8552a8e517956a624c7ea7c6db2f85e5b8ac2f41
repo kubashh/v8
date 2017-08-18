@@ -19,6 +19,42 @@
     },
     {
       "key": {
+        "uuid": "21d5ad36_12ced77a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "968e5b21_7f35bb76",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e7a93a2_6f84034a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "968e5b21_7f35bb76",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be7702ce_f297c0ad",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 9
@@ -33,6 +69,42 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b2e2b1f_ff0c28e7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be7702ce_f297c0ad",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e3bdbc0_56db6b0b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be7702ce_f297c0ad",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "c16a5a58_8873d401",
+        "filename": "src/js/weak-collection.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Jaro/adam have patches that completely removes this file. I\u0027d rather not make too many changes (that could affect behavior) as part of this CL.",
+      "parentUuid": "8b4ffc8a_8c1d2fea",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d92c33d_5f234ba5",
         "filename": "src/js/weak-collection.js",
         "patchSetId": 9
@@ -70,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "a0dbeea9_97f85cc5",
+        "filename": "src/js/weak-collection.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "9d92c33d_5f234ba5",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29091a55_d5bbd4da",
         "filename": "src/objects-inl.h",
         "patchSetId": 9
@@ -81,6 +189,24 @@
       "writtenOn": "2017-08-18T09:43:11Z",
       "side": 1,
       "message": "Humm you will always have the lower bits unset with this method.\nI haven\u0027t checked the hashing method in Map/Set but that might cause collision issues there, no?\n\nIn any case this is a performance issue, not correctness \u003d\u003e future CL",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e8b7956_75732396",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Map/Set use JSReceiver::GetHash right?",
+      "parentUuid": "29091a55_d5bbd4da",
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "0bcabf64_287f261d",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ad3916b_b7f8f13a",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52c90999_09d64545",
         "filename": "src/objects-inl.h",
         "patchSetId": 9
@@ -118,6 +262,24 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7de4d977_dd3bc3a9",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52c90999_09d64545",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -138,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "6cd88afb_d9c3ec23",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 5615,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "i prefer this style, leaving as such",
+      "parentUuid": "5c678ff5_f4134c66",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e93140a_df072451",
         "filename": "src/objects-inl.h",
         "patchSetId": 9
@@ -152,6 +332,24 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a8bfd3a_4c7489f3",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 5718,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "added todo",
+      "parentUuid": "1e93140a_df072451",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -172,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "e8fd72c0_6b51fa96",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6347,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "sure, added todo for you :P",
+      "parentUuid": "2ee785af_d87bee70",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f39b44b0_d4644aa5",
         "filename": "src/objects.cc",
         "patchSetId": 9
@@ -186,6 +402,24 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "125355da_b4d58910",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6356,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f39b44b0_d4644aa5",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -206,6 +440,24 @@
     },
     {
       "key": {
+        "uuid": "a7cefeaf_f2b92136",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c494f19_0a02ceae",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b423e63_e2508181",
         "filename": "src/runtime/runtime-collections.cc",
         "patchSetId": 9
@@ -220,6 +472,24 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09837843_29d5a5f1",
+        "filename": "src/runtime/runtime-collections.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "this will go away soon once the js builtin is ported, so it\u0027s ok for now",
+      "parentUuid": "4b423e63_e2508181",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -240,6 +510,24 @@
     },
     {
       "key": {
+        "uuid": "9473f2f4_733806f9",
+        "filename": "test/cctest/test-dictionary.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "leaving as such since it\u0027s just a test",
+      "parentUuid": "26a67358_13112977",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24878a14_9e487baa",
         "filename": "test/cctest/test-hashcode.cc",
         "patchSetId": 9
@@ -254,6 +542,24 @@
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d43e367_49616764",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-18T21:14:07Z",
+      "side": 1,
+      "message": "leaving as such since it\u0027s just a test",
+      "parentUuid": "24878a14_9e487baa",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
