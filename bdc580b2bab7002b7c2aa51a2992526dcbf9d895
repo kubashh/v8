@@ -1,0 +1,210 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd910f7e_edea4643",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "Why do you say \"break\" here? Isn\u0027t this just the end of the loop block, similar to the kExprEnd above which is the end of the if block?",
+      "range": {
+        "startLine": 48,
+        "startChar": 51,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "347d5cfb_31029c49",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "I don\u0027t think we need a new instance here. If you think we should have this second instance, then I think you should create the instances within scopes ({}) and declare variables with {let} and not with {var}, because {let} declares a local variable, whereas {var} declares a global variable.",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "701dd1e0_623eacd3",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "I think it would be better to not have the same value for deltaPages and iterations",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2d27025_56b06e19",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "I think it could be good to use different deltaPages outside the loop than inside the loop, so that potential off-by-1 errors get detected easier.",
+      "range": {
+        "startLine": 78,
+        "startChar": 23,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99d09254_a58b8cfe",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "Doesn\u0027t the grow-memory after the loop always force a reload of the wasm context? Would it make sense to have a test without this second grow-memory?",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 23
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c039d42_87aebf58",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "same here about the scopes.",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f289949_6ba70891",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "I think it would be better to use a parameter here instead. Bounds checks could be optimized away when the index is a constant.",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 32
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1af0f4_0735d73c",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "can you use indentation to indicate which which operands belong to which instruction?",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7970e6f9_1b4a4055",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "same here about the indentation",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "125d5eab_bcea122d",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T08:02:18Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
