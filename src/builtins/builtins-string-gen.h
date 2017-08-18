@@ -58,11 +58,11 @@ class StringBuiltinsAssembler : public CodeStubAssembler {
                                      SloppyTNode<Smi> index,
                                      UnicodeEncoding encoding);
 
-  void StringIndexOf(Node* const subject_string,
-                     Node* const subject_instance_type,
-                     Node* const search_string,
-                     Node* const search_instance_type, Node* const position,
-                     std::function<void(Node*)> f_return);
+  enum StringIndexOfVariant { kIncludes, kIndexOf };
+  void GenerateStringIndexOf(StringIndexOfVariant variant);
+
+  void StringIndexOf(Node* const subject_string, Node* const search_string,
+                     Node* const position, std::function<void(Node*)> f_return);
 
   Node* IndexOfDollarChar(Node* const context, Node* const string);
 

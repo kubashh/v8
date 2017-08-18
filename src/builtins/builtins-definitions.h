@@ -922,8 +922,8 @@ namespace internal {
   TFJ(StringPrototypeConcat, SharedFunctionInfo::kDontAdaptArgumentsSentinel)  \
   /* ES6 #sec-string.prototype.endswith */                                     \
   CPP(StringPrototypeEndsWith)                                                 \
-  /* ES6 #sec-string.prototype.includes */                                     \
-  CPP(StringPrototypeIncludes)                                                 \
+  TFJ(StringPrototypeIncludes,                                                 \
+      SharedFunctionInfo::kDontAdaptArgumentsSentinel)                         \
   /* ES6 #sec-string.prototype.indexof */                                      \
   TFJ(StringPrototypeIndexOf, SharedFunctionInfo::kDontAdaptArgumentsSentinel) \
   /* ES6 #sec-string.prototype.lastindexof */                                  \
