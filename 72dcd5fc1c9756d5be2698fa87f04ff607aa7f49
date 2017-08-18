@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dba5e714_c6541a90",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-18T18:00:41Z",
+      "side": 1,
+      "message": "Jaro, I guess it is impossible to check that registers are saved and restored at this level?",
+      "range": {
+        "startLine": 79,
+        "startChar": 27,
+        "endLine": 79,
+        "endChar": 65
+      },
+      "revId": "72dcd5fc1c9756d5be2698fa87f04ff607aa7f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
