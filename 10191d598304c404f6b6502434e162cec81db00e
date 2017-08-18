@@ -22,6 +22,30 @@
       "revId": "10191d598304c404f6b6502434e162cec81db00e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb3d453_c711a081",
+        "filename": "src/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-18T16:12:07Z",
+      "side": 1,
+      "message": "TBH I am not sure, but this is closest to the previous behavior, so I\u0027ll leave it as is out of caution.",
+      "parentUuid": "652ef9c2_189e1302",
+      "range": {
+        "startLine": 1632,
+        "startChar": 10,
+        "endLine": 1632,
+        "endChar": 39
+      },
+      "revId": "10191d598304c404f6b6502434e162cec81db00e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
