@@ -249,8 +249,8 @@ ModuleEnv CreateModuleEnvFromRuntimeObject(
          i < e; ++i) {
       int index = static_cast<int>(i);
       module_env.SetFunctionTable(
-          i, handle(FixedArray::cast(function_tables->get(index))),
-          handle(FixedArray::cast(signature_tables->get(index))));
+          i, WasmCompiledModule::GetTableValue(function_tables, index),
+          WasmCompiledModule::GetTableValue(signature_tables, index));
     }
   }
   return module_env;

@@ -313,6 +313,17 @@ void RelocInfo::update_wasm_memory_reference(
   set_embedded_address(isolate, updated_reference, icache_flush_mode);
 }
 
+void RelocInfo::set_global_handle(Isolate* isolate, Address address,
+                                  ICacheFlushMode icache_flush_mode) {
+  DCHECK_EQ(rmode_, GLOBAL_HANDLE);
+  set_embedded_address(isolate, address, icache_flush_mode);
+}
+
+Address RelocInfo::global_handle() const {
+  DCHECK_EQ(rmode_, GLOBAL_HANDLE);
+  return embedded_address();
+}
+
 void RelocInfo::update_wasm_memory_size(Isolate* isolate, uint32_t old_size,
                                         uint32_t new_size,
                                         ICacheFlushMode icache_flush_mode) {
@@ -710,6 +721,8 @@ const char* RelocInfo::RelocModeName(RelocInfo::Mode rmode) {
       return "wasm function table size reference";
     case WASM_PROTECTED_INSTRUCTION_LANDING:
       return "wasm protected instruction landing";
+    case GLOBAL_HANDLE:
+      return "global handle";
     case NUMBER_OF_MODES:
     case PC_JUMP:
       UNREACHABLE();
@@ -803,6 +816,7 @@ void RelocInfo::Verify(Isolate* isolate) {
     // TODO(eholk): make sure the protected instruction is in range.
     case NONE32:
     case NONE64:
+    case GLOBAL_HANDLE:
       break;
     case NUMBER_OF_MODES:
     case PC_JUMP:
