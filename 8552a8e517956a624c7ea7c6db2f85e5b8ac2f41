@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "968e5b21_7f35bb76",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "How about a slow CSA assert: Word32Not(IsDictionaryMap(LoadMap(object))) ?",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7702ce_f297c0ad",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "How about a slow CSA assert: IsDictionaryMap(LoadMap(object)) ?",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b4ffc8a_8c1d2fea",
+        "filename": "src/js/weak-collection.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "You can just directly inline %GetExistingHash everywhere, Object::GetHash does the right thing for non JSReceivers...",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d92c33d_5f234ba5",
+        "filename": "src/js/weak-collection.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "Could you rename this to %GetOrCreateHash(key) (and maybe just inline it directly)? \nThis is confusing the hell out of me :P",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29091a55_d5bbd4da",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "Humm you will always have the lower bits unset with this method.\nI haven\u0027t checked the hashing method in Map/Set but that might cause collision issues there, no?\n\nIn any case this is a performance issue, not correctness \u003d\u003e future CL",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad3916b_b7f8f13a",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "Please also add the SLOW/DCHECKS here to validate masked_hash:\n\n  DCHECK_EQ(masked_hash \u0026 JSReceiver::kHashMask, masked_hash);",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39b44b0_d4644aa5",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6356,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T09:43:11Z",
+      "side": 1,
+      "message": "future cleanup: remove the Handle here and propagate that back",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
