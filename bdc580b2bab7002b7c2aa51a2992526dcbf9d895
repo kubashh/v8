@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39a347bc_867eaefb",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "I copied the loop code from here: https://chromium.googlesource.com/v8/v8.git/+/7bbea08f669df4f6dee69cd7b0629959ca372a37/test/inspector/debugger/wasm-stepping.js\n\nI changed it with \"end loop\" and added \"end if\" for clarity in the next patch set.",
+      "parentUuid": "dd910f7e_edea4643",
+      "range": {
+        "startLine": 48,
+        "startChar": 51,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "347d5cfb_31029c49",
         "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "559b9742_76f80b33",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "not totally necessary but I wanted the two parts to be independent. So I\u0027m now using scopes and {let} in the whole file.",
+      "parentUuid": "347d5cfb_31029c49",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bc3452f4_5148f466",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "yes, nice suggestion. I now use 1 as deltaPages.",
+      "parentUuid": "701dd1e0_623eacd3",
+      "range": {
+        "startLine": 62,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2d27025_56b06e19",
         "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e222b284_3c67be18",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "In the second patch set I\u0027m using deltaPagesIn and deltaPagesOut.",
+      "parentUuid": "b2d27025_56b06e19",
+      "range": {
+        "startLine": 78,
+        "startChar": 23,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "203d26c7_32112aa4",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "correct, I dropped the grow memory after the loop in TestGrowMemoryInsideAndOutsideLoop and TestGrowMemoryAndStoreInsideAndOutsideLoop",
+      "parentUuid": "99d09254_a58b8cfe",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 23
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c039d42_87aebf58",
         "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
         "patchSetId": 1
@@ -131,6 +251,24 @@
       "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1dc985d_acb907c9",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c039d42_87aebf58",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "0286adc5_56ea6024",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f289949_6ba70891",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 32
+      },
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b1af0f4_0735d73c",
         "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
         "patchSetId": 1
@@ -171,6 +333,24 @@
       "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a5de183_641faa13",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b1af0f4_0735d73c",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -191,6 +371,24 @@
     },
     {
       "key": {
+        "uuid": "dccd0f96_2727553d",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7970e6f9_1b4a4055",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "125d5eab_bcea122d",
         "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
         "patchSetId": 1
@@ -205,6 +403,24 @@
       "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e13e561_73bf082e",
+        "filename": "test/mjsunit/wasm/grow-memory-in-loop.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-08-18T12:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "125d5eab_bcea122d",
+      "revId": "bdc580b2bab7002b7c2aa51a2992526dcbf9d895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
