@@ -968,6 +968,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ PrepareCallCFunction(num_parameters, i.TempRegister(0));
       break;
     }
+    case kArchSaveCallerRegisters: {
+      // TODO(albertnetymk): save caller registers. Empty for now.
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      // TODO(albertnetymk): restore caller registers. Empty for now.
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

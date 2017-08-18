@@ -765,6 +765,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // via the stack pointer.
       UNREACHABLE();
       break;
+    case kArchSaveCallerRegisters: {
+      // TODO(albertnetymk): save caller registers. Empty for now.
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      // TODO(albertnetymk): restore caller registers. Empty for now.
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;
