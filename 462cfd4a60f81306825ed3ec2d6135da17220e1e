@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93ed5064_24aab186",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-18T11:01:33Z",
+      "side": 1,
+      "message": "nit: size_t and also make the offsets in the header kSizetSize.",
+      "range": {
+        "startLine": 682,
+        "startChar": 2,
+        "endLine": 682,
+        "endChar": 10
+      },
+      "revId": "462cfd4a60f81306825ed3ec2d6135da17220e1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
