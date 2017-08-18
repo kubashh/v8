@@ -280,6 +280,8 @@ struct V8_EXPORT_PRIVATE ModuleWireBytes {
   const Vector<const byte> module_bytes_;
 };
 
+typedef Address GlobalHandleAddress;
+
 // Specialization parameters the compiler needs to use when compiling the wasm
 // functions of a module.
 // We currently only produce code specialized to an instance. Even when
@@ -312,15 +314,15 @@ class V8_EXPORT_PRIVATE ModuleEnv {
     globals_start_ = globals_start;
   }
 
-  const std::vector<Handle<FixedArray>>& function_tables() const {
+  const std::vector<GlobalHandleAddress>& function_tables() const {
     return function_tables_;
   }
-  const std::vector<Handle<FixedArray>>& signature_tables() const {
+  const std::vector<GlobalHandleAddress>& signature_tables() const {
     return signature_tables_;
   }
 
-  void SetFunctionTable(uint32_t index, Handle<FixedArray> function_table,
-                        Handle<FixedArray> signature_table) {
+  void SetFunctionTable(uint32_t index, GlobalHandleAddress function_table,
+                        GlobalHandleAddress signature_table) {
     DCHECK(IsValidTable(index));
     DCHECK_EQ(function_tables_.size(), signature_tables_.size());
     function_tables_[index] = function_table;
@@ -372,12 +374,6 @@ class V8_EXPORT_PRIVATE ModuleEnv {
 
   // TODO(mtrofin): this is async compilation-specific. Move this out.
   void ReopenHandles(Isolate* isolate) {
-    for (auto& table : function_tables_) {
-      table = handle(*table, isolate);
-    }
-    for (auto& table : signature_tables_) {
-      table = handle(*table, isolate);
-    }
     for (auto& code : function_code_) {
       code = handle(*code, isolate);
     }
@@ -398,9 +394,9 @@ class V8_EXPORT_PRIVATE ModuleEnv {
   // decoded wasm module.
   WasmModule* module_ = nullptr;
   // indirect function tables.
-  std::vector<Handle<FixedArray>> function_tables_;
+  std::vector<GlobalHandleAddress> function_tables_;
   // indirect signature tables.
-  std::vector<Handle<FixedArray>> signature_tables_;
+  std::vector<GlobalHandleAddress> signature_tables_;
   // a user of the compiler may choose to pre-populate this
   // with code objects to be used instead of the default
   std::vector<Handle<Code>> function_code_;
