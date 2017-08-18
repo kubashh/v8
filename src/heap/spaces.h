@@ -2100,8 +2100,6 @@ class V8_EXPORT_PRIVATE PagedSpace : NON_EXPORTED_BASE(public Space) {
     accounting_stats_.IncreaseCapacity(bytes);
   }
 
-  void AccountAddedPage(Page* page);
-  void AccountRemovedPage(Page* page);
   void RefineAllocatedBytesAfterSweeping(Page* page);
 
   // The dummy page that anchors the linked list of pages.
@@ -2109,7 +2107,8 @@ class V8_EXPORT_PRIVATE PagedSpace : NON_EXPORTED_BASE(public Space) {
 
   Page* InitializePage(MemoryChunk* chunk, Executability executable);
   void ReleasePage(Page* page);
-  void AddPage(Page* page);
+  intptr_t AddPage(Page* page);
+  void RemovePage(Page* page);
   // Remove a page if it has at least |size_in_bytes| bytes available that can
   // be used for allocation.
   Page* RemovePageSafe(int size_in_bytes);
