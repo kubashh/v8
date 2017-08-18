@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "652ef9c2_189e1302",
+        "filename": "src/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-18T15:22:31Z",
+      "side": 1,
+      "message": "Is it necessary to and \"elements-\u003eIsAsmJsWasmFrame(i)\" here? There is an is-asmjs check in GetSourcePosition anyways which comes before is_at_number_conversion is used.",
+      "range": {
+        "startLine": 1632,
+        "startChar": 10,
+        "endLine": 1632,
+        "endChar": 39
+      },
+      "revId": "10191d598304c404f6b6502434e162cec81db00e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
