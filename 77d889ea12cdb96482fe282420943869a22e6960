@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4ac321bf_3d2c3968",
+        "filename": "src/assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-08-18T18:07:56Z",
+      "side": 1,
+      "message": "sgtm. we\u0027ll likely remove it soon, once we\u0027re off the heap *and* once we decontextualize the compiled code.",
+      "parentUuid": "e6679240_48e7fb28",
+      "revId": "77d889ea12cdb96482fe282420943869a22e6960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "250b16c1_0955041b",
         "filename": "src/wasm/wasm-code-specialization.h",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-18T17:49:12Z",
       "side": 1,
       "message": "Why can\u0027t we use size of pointers_to_relocate instead of the flag above?",
+      "revId": "77d889ea12cdb96482fe282420943869a22e6960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2e2b746_5001841f",
+        "filename": "src/wasm/wasm-code-specialization.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-08-18T18:07:56Z",
+      "side": 1,
+      "message": "because cargo-culting. Done.",
+      "parentUuid": "250b16c1_0955041b",
       "revId": "77d889ea12cdb96482fe282420943869a22e6960",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
