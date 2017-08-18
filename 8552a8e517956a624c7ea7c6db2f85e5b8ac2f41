@@ -104,6 +104,74 @@
     },
     {
       "key": {
+        "uuid": "52c90999_09d64545",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "You have to clear out the hash before or-ing it:\n\n value \u003d (value \u0026 kLengthMask) | masked_hash;\n\nUnless the assumption is that we set the hash only once, in which case you should add the following check one line above:\n\n DCHECK_EQ(value \u0026 kLengthMask, value);",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c678ff5_f4134c66",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 5615,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "nit: you can write a single-line return if (...) return ; here",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e93140a_df072451",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 5718,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "nit: handle is no longer needed.",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ee785af_d87bee70",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6347,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "future cleanup:\n\nMaybe it would be a bit cleaner to change GetIdentityHashHelper to bool GetIdentityHashHelper(JSReceiver* object, Object* hash_out) so you don\u0027t have to manually compare against the kNoHashSentinel anymore.",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f39b44b0_d4644aa5",
         "filename": "src/objects.cc",
         "patchSetId": 9
@@ -115,6 +183,74 @@
       "writtenOn": "2017-08-18T09:43:11Z",
       "side": 1,
       "message": "future cleanup: remove the Handle here and propagate that back",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c494f19_0a02ceae",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "if (!hash_obj-\u003eIsUndefined(isolate)) return Smi::cast(hash_obj);",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b423e63_e2508181",
+        "filename": "src/runtime/runtime-collections.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "we should probably rename Object::GetHash to Object::GetExistingHash as well at some point.",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a67358_13112977",
+        "filename": "test/cctest/test-dictionary.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "nit (if you feel like it): \n\n  CHECK(identity_hash-\u003eIsUndefined(isolate));\n\nand other occurrences in the same file.",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24878a14_9e487baa",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T10:58:47Z",
+      "side": 1,
+      "message": "nit: ...-\u003eIsUndefined(isolate));",
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
