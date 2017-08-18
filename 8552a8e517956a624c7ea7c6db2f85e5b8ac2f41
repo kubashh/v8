@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "8f13596b_4a35cee3",
+        "filename": "src/js/weak-collection.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T21:29:12Z",
+      "side": 1,
+      "message": "perfect :)",
+      "parentUuid": "c16a5a58_8873d401",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d92c33d_5f234ba5",
         "filename": "src/js/weak-collection.js",
         "patchSetId": 9
@@ -207,6 +225,24 @@
       "side": 1,
       "message": "Map/Set use JSReceiver::GetHash right?",
       "parentUuid": "29091a55_d5bbd4da",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b10870f_4c10bba9",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T21:29:12Z",
+      "side": 1,
+      "message": "yup",
+      "parentUuid": "9e8b7956_75732396",
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -318,6 +354,24 @@
     },
     {
       "key": {
+        "uuid": "7d7fb722_629a9fcf",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 5615,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T21:29:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6cd88afb_d9c3ec23",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e93140a_df072451",
         "filename": "src/objects-inl.h",
         "patchSetId": 9
@@ -423,6 +477,24 @@
     },
     {
       "key": {
+        "uuid": "f935e1da_168e6413",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6356,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T21:29:12Z",
+      "side": 1,
+      "message": "bastard :P",
+      "parentUuid": "125355da_b4d58910",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c494f19_0a02ceae",
         "filename": "src/objects.cc",
         "patchSetId": 9
@@ -522,6 +594,24 @@
       "side": 1,
       "message": "leaving as such since it\u0027s just a test",
       "parentUuid": "26a67358_13112977",
+      "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5af315d_9e5711b6",
+        "filename": "test/cctest/test-dictionary.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-08-18T21:29:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9473f2f4_733806f9",
       "revId": "8552a8e517956a624c7ea7c6db2f85e5b8ac2f41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
