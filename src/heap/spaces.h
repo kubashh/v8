@@ -679,9 +679,9 @@ class MemoryChunk {
 
   // Byte allocated on the page, which includes all objects on the page
   // and the linear allocation area.
-  base::AtomicNumber<intptr_t> allocated_bytes_;
+  intptr_t allocated_bytes_;
   // Freed memory that was not added to the free list.
-  base::AtomicNumber<intptr_t> wasted_memory_;
+  intptr_t wasted_memory_;
 
   // next_chunk_ holds a pointer of type MemoryChunk
   base::AtomicValue<MemoryChunk*> next_chunk_;
@@ -815,17 +815,17 @@ class Page : public MemoryChunk {
 
   bool is_anchor() { return IsFlagSet(Page::ANCHOR); }
 
-  size_t wasted_memory() { return wasted_memory_.Value(); }
-  void add_wasted_memory(size_t waste) { wasted_memory_.Increment(waste); }
-  size_t allocated_bytes() { return allocated_bytes_.Value(); }
+  size_t wasted_memory() { return wasted_memory_; }
+  void add_wasted_memory(size_t waste) { wasted_memory_ += waste; }
+  size_t allocated_bytes() { return allocated_bytes_; }
   void IncreaseAllocatedBytes(size_t bytes) {
     DCHECK_LE(bytes, area_size());
-    allocated_bytes_.Increment(bytes);
+    allocated_bytes_ += bytes;
   }
   void DecreaseAllocatedBytes(size_t bytes) {
     DCHECK_LE(bytes, area_size());
     DCHECK_GE(allocated_bytes(), bytes);
-    allocated_bytes_.Decrement(bytes);
+    allocated_bytes_ -= bytes;
   }
 
   void ResetAllocatedBytes();
