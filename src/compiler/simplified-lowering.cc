@@ -1502,6 +1502,7 @@ class RepresentationSelector {
       case IrOpcode::kPhi:
         return VisitPhi(node, truncation, lowering);
       case IrOpcode::kCall:
+      case IrOpcode::kCallWithCallerRegisters:
         return VisitCall(node, lowering);
 
       //------------------------------------------------------------------

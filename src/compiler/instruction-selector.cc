@@ -861,6 +861,7 @@ void InstructionSelector::InitializeCallBuffer(Node* call, CallBuffer* buffer,
 bool InstructionSelector::IsSourcePositionUsed(Node* node) {
   return (source_position_mode_ == kAllSourcePositions ||
           node->opcode() == IrOpcode::kCall ||
+          node->opcode() == IrOpcode::kCallWithCallerRegisters ||
           node->opcode() == IrOpcode::kTrapIf ||
           node->opcode() == IrOpcode::kTrapUnless);
 }
@@ -881,6 +882,7 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
         node->opcode() == IrOpcode::kUnalignedStore ||
         node->opcode() == IrOpcode::kCheckedStore ||
         node->opcode() == IrOpcode::kCall ||
+        node->opcode() == IrOpcode::kCallWithCallerRegisters ||
         node->opcode() == IrOpcode::kProtectedLoad ||
         node->opcode() == IrOpcode::kProtectedStore) {
       ++effect_level;
@@ -1095,6 +1097,8 @@ void InstructionSelector::VisitNode(Node* node) {
     }
     case IrOpcode::kCall:
       return VisitCall(node);
+    case IrOpcode::kCallWithCallerRegisters:
+      return VisitCallWithCallerRegisters(node);
     case IrOpcode::kDeoptimizeIf:
       return VisitDeoptimizeIf(node);
     case IrOpcode::kDeoptimizeUnless:
@@ -2588,6 +2592,14 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   call_instr->MarkAsCall();
 }
 
+void InstructionSelector::VisitCallWithCallerRegisters(Node* node,
+                                                       BasicBlock* handler) {
+  OperandGenerator g(this);
+
+  Emit(kArchSaveCallerRegisters, g.NoOutput());
+  VisitCall(node, handler);
+  Emit(kArchRestoreCallerRegisters, g.NoOutput());
+}
 
 void InstructionSelector::VisitTailCall(Node* node) {
   OperandGenerator g(this);

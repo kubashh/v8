@@ -109,7 +109,11 @@ void RecordWriteDescriptor::InitializePlatformIndependent(
 
 void RecordWriteDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
+#if V8_TARGET_ARCH_X64
+  RecordWriteInitializePlatformSpecific(data, kParameterCount);
+#else
   DefaultInitializePlatformSpecific(data, kParameterCount);
+#endif
 }
 
 void LoadDescriptor::InitializePlatformIndependent(

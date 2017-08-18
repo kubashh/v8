@@ -392,6 +392,7 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
                              OutputFrameStateCombine state_combine,
                              const FrameStateFunctionInfo* function_info);
   const Operator* Call(const CallDescriptor* descriptor);
+  const Operator* CallWithCallerRegisters(const CallDescriptor* descriptor);
   const Operator* TailCall(const CallDescriptor* descriptor);
   const Operator* Projection(size_t index);
   const Operator* Retain();

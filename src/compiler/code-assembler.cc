@@ -737,6 +737,14 @@ Node* CodeAssembler::CallCFunction1(MachineType return_type,
                                          arg0);
 }
 
+Node* CodeAssembler::CallCFunction1WithCallerRegisters(MachineType return_type,
+                                                       MachineType arg0_type,
+                                                       Node* function,
+                                                       Node* arg0) {
+  return raw_assembler()->CallCFunction1WithCallerRegisters(
+      return_type, arg0_type, function, arg0);
+}
+
 Node* CodeAssembler::CallCFunction2(MachineType return_type,
                                     MachineType arg0_type,
                                     MachineType arg1_type, Node* function,
@@ -752,6 +760,13 @@ Node* CodeAssembler::CallCFunction3(MachineType return_type,
                                     Node* arg0, Node* arg1, Node* arg2) {
   return raw_assembler()->CallCFunction3(return_type, arg0_type, arg1_type,
                                          arg2_type, function, arg0, arg1, arg2);
+}
+
+Node* CodeAssembler::CallCFunction3WithCallerRegisters(
+    MachineType return_type, MachineType arg0_type, MachineType arg1_type,
+    MachineType arg2_type, Node* function, Node* arg0, Node* arg1, Node* arg2) {
+  return raw_assembler()->CallCFunction3WithCallerRegisters(
+      return_type, arg0_type, arg1_type, arg2_type, function, arg0, arg1, arg2);
 }
 
 Node* CodeAssembler::CallCFunction6(

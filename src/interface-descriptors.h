@@ -87,7 +87,12 @@ class PlatformInterfaceDescriptor;
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
  public:
-  CallInterfaceDescriptorData() : register_param_count_(-1), param_count_(-1) {}
+  CallInterfaceDescriptorData()
+      : register_param_count_(-1),
+        param_count_(-1),
+        allocatable_general_registers_(0),
+        num_allocatable_general_registers_(0),
+        allocatable_general_registers_array_(nullptr) {}
 
   // A copy of the passed in registers and param_representations is made
   // and owned by the CallInterfaceDescriptorData.
@@ -120,9 +125,35 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
     return platform_specific_descriptor_;
   }
 
+  void InitAllocatableGeneralRegisters(const Register* registers, int num) {
+    DCHECK(allocatable_general_registers_ == 0);
+    for (int i = 0; i < num; ++i) {
+      allocatable_general_registers_ |= registers[i].bit();
+    }
+    allocatable_general_registers_array_ = registers;
+    DCHECK(NumRegs(allocatable_general_registers_) == num);
+    num_allocatable_general_registers_ = num;
+  }
+
+  RegList allocatable_general_registers() const {
+    return allocatable_general_registers_;
+  }
+
+  int num_allocatable_general_registers() const {
+    return num_allocatable_general_registers_;
+  }
+
+  const Register* allocatable_general_registers_array() const {
+    return allocatable_general_registers_array_;
+  }
+
  private:
   int register_param_count_;
   int param_count_;
+
+  RegList allocatable_general_registers_;
+  int num_allocatable_general_registers_;
+  const Register* allocatable_general_registers_array_;
 
   // The Register params are allocated dynamically by the
   // InterfaceDescriptor, and freed on destruction. This is because static
@@ -143,7 +174,7 @@ class CallDescriptors {
 #define DEF_ENUM(name, ...) name,
     INTERFACE_DESCRIPTOR_LIST(DEF_ENUM)
 #undef DEF_ENUM
-        NUMBER_OF_DESCRIPTORS
+        NUMBER_OF_DESCRIPTORS,
   };
 };
 
@@ -179,6 +210,18 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return data()->platform_specific_descriptor();
   }
 
+  RegList allocatable_general_registers() const {
+    return data()->allocatable_general_registers();
+  }
+
+  int num_allocatable_general_registers() const {
+    return data()->num_allocatable_general_registers();
+  }
+
+  const Register* allocatable_general_registers_array() const {
+    return data()->allocatable_general_registers_array();
+  }
+
   static const Register ContextRegister();
 
   const char* DebugName(Isolate* isolate) const;
@@ -210,6 +253,10 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
   // It is intended to be used for TurboFan stubs when particular set of
   // registers does not matter.
   static void DefaultInitializePlatformSpecific(
+      CallInterfaceDescriptorData* data, int register_parameter_count);
+
+  // For RecordWrite code stub using specific allocatable registers.
+  static void RecordWriteInitializePlatformSpecific(
       CallInterfaceDescriptorData* data, int register_parameter_count);
 
  private:
