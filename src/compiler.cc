@@ -467,13 +467,13 @@ bool FinalizeUnoptimizedCode(
 }
 
 MUST_USE_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
-    Handle<JSFunction> function, BailoutId osr_ast_id) {
+    Handle<JSFunction> function, BailoutId osr_offset) {
   RuntimeCallTimerScope runtimeTimer(
       function->GetIsolate(),
       &RuntimeCallStats::CompileGetFromOptimizedCodeMap);
   Handle<SharedFunctionInfo> shared(function->shared());
   DisallowHeapAllocation no_gc;
-  if (osr_ast_id.IsNone()) {
+  if (osr_offset.IsNone()) {
     if (function->feedback_vector_cell()->value()->IsFeedbackVector()) {
       FeedbackVector* feedback_vector = function->feedback_vector();
       feedback_vector->EvictOptimizedCodeMarkedForDeoptimization(
@@ -493,7 +493,7 @@ MUST_USE_RESULT MaybeHandle<Code> GetCodeFromOptimizedCodeCache(
 
 void ClearOptimizedCodeCache(CompilationInfo* compilation_info) {
   Handle<JSFunction> function = compilation_info->closure();
-  if (compilation_info->osr_ast_id().IsNone()) {
+  if (compilation_info->osr_offset().IsNone()) {
     Handle<FeedbackVector> vector =
         handle(function->feedback_vector(), function->GetIsolate());
     vector->ClearOptimizedCode();
@@ -517,7 +517,7 @@ void InsertCodeIntoOptimizedCodeCache(CompilationInfo* compilation_info) {
   Handle<JSFunction> function = compilation_info->closure();
   Handle<SharedFunctionInfo> shared(function->shared());
   Handle<Context> native_context(function->context()->native_context());
-  if (compilation_info->osr_ast_id().IsNone()) {
+  if (compilation_info->osr_offset().IsNone()) {
     Handle<FeedbackVector> vector =
         handle(function->feedback_vector(), function->GetIsolate());
     FeedbackVector::SetOptimizedCode(vector, code);
@@ -595,7 +595,7 @@ bool GetOptimizedCodeLater(CompilationJob* job) {
 
 MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
                                    ConcurrencyMode mode,
-                                   BailoutId osr_ast_id = BailoutId::None(),
+                                   BailoutId osr_offset = BailoutId::None(),
                                    JavaScriptFrame* osr_frame = nullptr) {
   Isolate* isolate = function->GetIsolate();
   Handle<SharedFunctionInfo> shared(function->shared(), isolate);
@@ -607,13 +607,13 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   }
 
   Handle<Code> cached_code;
-  if (GetCodeFromOptimizedCodeCache(function, osr_ast_id)
+  if (GetCodeFromOptimizedCodeCache(function, osr_offset)
           .ToHandle(&cached_code)) {
     if (FLAG_trace_opt) {
       PrintF("[found optimized code for ");
       function->ShortPrint();
-      if (!osr_ast_id.IsNone()) {
-        PrintF(" at OSR AST id %d", osr_ast_id.ToInt());
+      if (!osr_offset.IsNone()) {
+        PrintF(" at OSR AST id %d", osr_offset.ToInt());
       }
       PrintF("]\n");
     }
@@ -636,7 +636,7 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   CompilationInfo* compilation_info = job->compilation_info();
   ParseInfo* parse_info = job->parse_info();
 
-  compilation_info->SetOptimizingForOsr(osr_ast_id, osr_frame);
+  compilation_info->SetOptimizingForOsr(osr_offset, osr_frame);
 
   // Do not use TurboFan if we need to be able to set break points.
   if (compilation_info->shared_info()->HasBreakInfo()) {
@@ -1423,11 +1423,11 @@ Handle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForNative(
 }
 
 MaybeHandle<Code> Compiler::GetOptimizedCodeForOSR(Handle<JSFunction> function,
-                                                   BailoutId osr_ast_id,
+                                                   BailoutId osr_offset,
                                                    JavaScriptFrame* osr_frame) {
-  DCHECK(!osr_ast_id.IsNone());
+  DCHECK(!osr_offset.IsNone());
   DCHECK_NOT_NULL(osr_frame);
-  return GetOptimizedCode(function, ConcurrencyMode::kNotConcurrent, osr_ast_id,
+  return GetOptimizedCode(function, ConcurrencyMode::kNotConcurrent, osr_offset,
                           osr_frame);
 }
 
