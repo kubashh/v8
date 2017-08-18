@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d955575_5da10472",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d2fdf16_596cfd0c",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 71,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5d4d69c_679ea6fa",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1336cac2_eb8ceb2a",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 108,
+        "startChar": 2,
+        "endLine": 109,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2bde4d2_b6608661",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 111,
+        "startChar": 2,
+        "endLine": 111,
+        "endChar": 35
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55502f7c_104dddbd",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 130,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41a8984c_911aec5e",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 153,
+        "startChar": 2,
+        "endLine": 155,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caeb6a12_b8e433a8",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 178,
+        "startChar": 2,
+        "endLine": 180,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678af07d_cb6a9f7c",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "I think you meant to move these two lines down, to after the \"AddToSetAndGetHash\" call. Right now they\u0027re pointless dupes of the checks above.",
+      "range": {
+        "startLine": 183,
+        "startChar": 2,
+        "endLine": 184,
+        "endChar": 58
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "356bb61a_de6c3be9",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 204,
+        "startChar": 2,
+        "endLine": 205,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fcb0556_a2ea8c2e",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 207,
+        "startChar": 2,
+        "endLine": 207,
+        "endChar": 35
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2141eea1_2ff975e8",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 227,
+        "startChar": 2,
+        "endLine": 228,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3214bd_0643adb7",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 230,
+        "startChar": 2,
+        "endLine": 230,
+        "endChar": 35
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7473c0_2b4f15a9",
+        "filename": "test/cctest/test-hashcode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-18T02:21:57Z",
+      "side": 1,
+      "message": "This is covered by AddToSetAndGetHash().",
+      "range": {
+        "startLine": 250,
+        "startChar": 2,
+        "endLine": 252,
+        "endChar": 55
+      },
+      "revId": "02cd92a9178aaf9af4303ffeefa0512a9460b900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
