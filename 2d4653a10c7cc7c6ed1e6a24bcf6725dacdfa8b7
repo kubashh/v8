@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5224607_5c3edd1c",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2255,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-19T15:41:07Z",
+      "side": 1,
+      "message": "I am a bit surprised this works, I would expect you would have to build the actual control flow, and do the typeguard only if properties is smi.\n\nIf this works, I am fine with it.",
+      "range": {
+        "startLine": 2250,
+        "startChar": 0,
+        "endLine": 2255,
+        "endChar": 37
+      },
+      "revId": "2d4653a10c7cc7c6ed1e6a24bcf6725dacdfa8b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
