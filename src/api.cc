@@ -6471,6 +6471,9 @@ static i::Handle<ObjectType> CreateEnvironment(
           reinterpret_cast<v8::Isolate*>(isolate));
       proxy_constructor = EnsureConstructor(isolate, *proxy_template);
 
+      i::Handle<i::String> global_name = isolate->factory()->global_string();
+      proxy_constructor->set_class_name(*global_name);
+
       // Set the global template to be the prototype template of
       // global proxy template.
       proxy_constructor->set_prototype_template(
