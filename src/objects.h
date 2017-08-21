@@ -5047,7 +5047,6 @@ class Module : public Struct {
       Handle<Module> module, Handle<String> name, int module_request,
       MessageLocation loc, bool must_resolve, ResolveSet* resolve_set);
 
-  // Helper for ResolveExport.
   static MUST_USE_RESULT MaybeHandle<Cell> ResolveExportUsingStarExports(
       Handle<Module> module, Handle<String> name, MessageLocation loc,
       bool must_resolve, ResolveSet* resolve_set);
@@ -5058,6 +5057,8 @@ class Module : public Struct {
   static MUST_USE_RESULT bool FinishInstantiate(
       Handle<Module> module, ZoneForwardList<Handle<Module>>* stack,
       unsigned* dfs_index, Zone* zone);
+  static void RunInitializationCode(Handle<Module> module);
+
   static MUST_USE_RESULT MaybeHandle<Object> Evaluate(
       Handle<Module> module, ZoneForwardList<Handle<Module>>* stack,
       unsigned* dfs_index);
