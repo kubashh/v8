@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6ce9273_abd932bb",
+        "filename": "src/codegen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-21T10:39:42Z",
+      "side": 1,
+      "message": "Note for a followup CL - this function is only called from interpreter.cc, so I was planning on moving just the AST printing part there and dropping the rest. Let me know if you\u0027d be interested in doing this instead (either in this CL or a followup).",
+      "range": {
+        "startLine": 72,
+        "startChar": 20,
+        "endLine": 72,
+        "endChar": 36
+      },
+      "revId": "630b6d3bfce94cf060fa1e239f2a6e8f0434195b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
