@@ -1137,6 +1137,7 @@ void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n - formal_parameter_count = " << internal_formal_parameter_count();
   os << "\n - expected_nof_properties = " << expected_nof_properties();
   os << "\n - language_mode = " << language_mode();
+  os << "\n - has_been_executed = " << has_been_executed();
   os << "\n - instance class name = ";
   instance_class_name()->Print(os);
   os << " - code = " << Brief(code());

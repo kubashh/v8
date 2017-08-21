@@ -212,6 +212,7 @@ namespace internal {
   F(InterpreterAdvanceBytecodeOffset, 2, 1)
 
 #define FOR_EACH_INTRINSIC_FUNCTION(F)     \
+  F(FirstExecution, 1, 1)                  \
   F(FunctionGetName, 1, 1)                 \
   F(FunctionGetScript, 1, 1)               \
   F(FunctionGetScriptId, 1, 1)             \
