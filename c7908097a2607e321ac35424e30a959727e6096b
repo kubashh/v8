@@ -46,6 +46,30 @@
       "revId": "c7908097a2607e321ac35424e30a959727e6096b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "745f4166_2c4d74cb",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 18410,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-21T22:31:14Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "078ca663_0bfb55f2",
+      "range": {
+        "startLine": 18410,
+        "startChar": 50,
+        "endLine": 18410,
+        "endChar": 65
+      },
+      "revId": "c7908097a2607e321ac35424e30a959727e6096b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
