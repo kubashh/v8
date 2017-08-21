@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5223101b_2a7c66e1",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 18410,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-08-21T21:57:01Z",
+      "side": 1,
+      "message": "what HandleScope?",
+      "range": {
+        "startLine": 18410,
+        "startChar": 50,
+        "endLine": 18410,
+        "endChar": 65
+      },
+      "revId": "c7908097a2607e321ac35424e30a959727e6096b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
