@@ -22,6 +22,30 @@
       "revId": "2d4653a10c7cc7c6ed1e6a24bcf6725dacdfa8b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2ce725_559672dd",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2255,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-21T05:09:13Z",
+      "side": 1,
+      "message": "Ack. Added a test for this as well.",
+      "parentUuid": "b5224607_5c3edd1c",
+      "range": {
+        "startLine": 2250,
+        "startChar": 0,
+        "endLine": 2255,
+        "endChar": 37
+      },
+      "revId": "2d4653a10c7cc7c6ed1e6a24bcf6725dacdfa8b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
