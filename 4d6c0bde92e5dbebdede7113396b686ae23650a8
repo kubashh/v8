@@ -50,6 +50,23 @@
       "revId": "4d6c0bde92e5dbebdede7113396b686ae23650a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ab2353f_406e836f",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T13:38:11Z",
+      "side": 1,
+      "message": "And in case anyone else is wondering about TFS builtins with \u003e 4 parameters, it seems support was recently added in https://codereview.chromium.org/2829093004.",
+      "revId": "4d6c0bde92e5dbebdede7113396b686ae23650a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
