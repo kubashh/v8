@@ -1217,6 +1217,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       frame_access_state()->SetFrameAccessToFP();
       break;
     }
+    case kArchSaveCallerRegisters: {
+      // TODO(albertnetymk): save caller registers. Empty for now.
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      // TODO(albertnetymk): restore caller registers. Empty for now.
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;
