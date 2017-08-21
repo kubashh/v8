@@ -744,6 +744,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       frame_access_state()->SetFrameAccessToFP();
       break;
     }
+    case kArchSaveCallerRegisters: {
+      __ PushCallerSaved(kSaveFPRegs, r0);
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      __ PopCallerSaved(kSaveFPRegs, r0);
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

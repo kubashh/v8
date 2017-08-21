@@ -925,6 +925,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ PrepareCallCFunction(num_parameters);
       break;
     }
+    case kArchSaveCallerRegisters: {
+      __ PushCallerSaved(kSaveFPRegs, rax);
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      __ PopCallerSaved(kSaveFPRegs, rax);
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;

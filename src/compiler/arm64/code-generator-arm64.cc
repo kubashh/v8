@@ -765,6 +765,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // via the stack pointer.
       UNREACHABLE();
       break;
+    case kArchSaveCallerRegisters: {
+      __ PushCallerSaved(kSaveFPRegs, x0);
+      break;
+    }
+    case kArchRestoreCallerRegisters: {
+      __ PopCallerSaved(kSaveFPRegs, x0);
+      break;
+    }
     case kArchPrepareTailCall:
       AssemblePrepareTailCall();
       break;
