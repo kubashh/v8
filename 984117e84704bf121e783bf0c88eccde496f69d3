@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d34b9749_07d0b2dc",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T09:26:42Z",
+      "side": 1,
+      "message": "Let\u0027s put this in an anonymous namespace.",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5d99e8_6c38b361",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T09:26:42Z",
+      "side": 1,
+      "message": "Please document ebx (set by Generate_Adaptor) as well here.",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe206413_4ad04e7c",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T09:26:42Z",
+      "side": 1,
+      "message": "s/rax/eax/",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9aa1592_1077f25d",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T09:26:42Z",
+      "side": 1,
+      "message": "Please add a brief comment making the connection to JumpToExternalReference, and explaining that ebx is loaded by Generate_Adaptor.",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
