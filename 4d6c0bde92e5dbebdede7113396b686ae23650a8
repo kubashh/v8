@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff543d88_bbd6f7ae",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T11:27:04Z",
+      "side": 1,
+      "message": "Nit: These comments don\u0027t seem very useful to me ;)",
+      "revId": "4d6c0bde92e5dbebdede7113396b686ae23650a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85acbb6a_4e17f97d",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T11:27:04Z",
+      "side": 1,
+      "message": "Could we just GotoIf(..., \u0026common)?",
+      "revId": "4d6c0bde92e5dbebdede7113396b686ae23650a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f539a30a_347a5544",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-21T11:27:04Z",
+      "side": 1,
+      "message": "Wow, TNode/TVARIABLE magic, nice. Not sure if I like implicit variable/node conversions but that\u0027s another topic.\n\nAs a suggestion for slight refactoring: I\u0027d load var_phi with IntPtrConstant(0) (or whatever typed alternative exists for the machine false value), and only load IntPtrConstant(1) (\u003d true) if all checks are passed.\n\nThat way we avoid a couple of extra variables and the double-negative (GotoIfNot(tagged_is_not_smi)).",
+      "revId": "4d6c0bde92e5dbebdede7113396b686ae23650a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
