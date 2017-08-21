@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b995d75_56cea885",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1505,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-21T05:34:49Z",
+      "side": 1,
+      "message": "Remove this line, please. The JS compiler phase should never see your node.",
+      "range": {
+        "startLine": 1505,
+        "startChar": 5,
+        "endLine": 1505,
+        "endChar": 51
+      },
+      "revId": "a75cdb0caed46deef5b79580949d8f37da3b7a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc6743b6_2dd1b37d",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-21T05:34:49Z",
+      "side": 1,
+      "message": "Just say UNREACHABLE() here. The normal JavaScript compiler should never see this node.",
+      "range": {
+        "startLine": 854,
+        "startChar": 2,
+        "endLine": 854,
+        "endChar": 21
+      },
+      "revId": "a75cdb0caed46deef5b79580949d8f37da3b7a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
