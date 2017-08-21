@@ -292,6 +292,11 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
       runtime_call_stats_,
       counters[track_unresolved_variables_][parsing_on_main_thread_]);
 
+  base::ElapsedTimer timer;
+  if (FLAG_trace_preparse) {
+    timer.Start();
+  }
+
   DeclarationScope* function_scope = NewFunctionScope(kind);
   function_scope->SetLanguageMode(language_mode);
 
@@ -358,10 +363,22 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
         end_position, GetLastFunctionLiteralId() - func_id);
   }
   if (FLAG_trace_preparse) {
-    PrintF("  [%s]: %i-%i\n",
-           track_unresolved_variables_ ? "Preparse resolution"
-                                       : "Preparse no-resolution",
-           function_scope->start_position(), function_scope->end_position());
+    double ms = timer.Elapsed().InMillisecondsF();
+    const char* reason = track_unresolved_variables_ ? "preparse-resolution"
+                                                     : "preparse-no-resolution";
+    if (function_name.string_) {
+      const AstRawString* fname = function_name.string_;
+      LOG(Isolate::Current(),
+          FunctionEvent(reason, nullptr, script_id(), ms,
+                        function_scope->start_position(),
+                        function_scope->end_position(), fname->raw_data(),
+                        fname->byte_length()));
+    } else {
+      LOG(Isolate::Current(),
+          FunctionEvent(reason, nullptr, script_id(), ms,
+                        function_scope->start_position(),
+                        function_scope->end_position(), nullptr, -1));
+    }
   }
 
   return Expression::Default();
