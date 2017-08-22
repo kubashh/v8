@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1cf33201_8714b68e",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-22T02:55:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d34b9749_07d0b2dc",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d5d99e8_6c38b361",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31c7b1b4_5f275d8a",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-22T02:55:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d5d99e8_6c38b361",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4d938558_a32e228d",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-22T02:55:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe206413_4ad04e7c",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9aa1592_1077f25d",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2017-08-21T09:26:42Z",
       "side": 1,
       "message": "Please add a brief comment making the connection to JumpToExternalReference, and explaining that ebx is loaded by Generate_Adaptor.",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c929d98_ccdcdf5b",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-22T02:55:13Z",
+      "side": 1,
+      "message": "\u003e Please add a brief comment making the connection to JumpToExternalReference, and explaining that ebx is loaded by Generate_Adaptor.\n\nWhat about comment like this?",
+      "parentUuid": "c9aa1592_1077f25d",
       "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
