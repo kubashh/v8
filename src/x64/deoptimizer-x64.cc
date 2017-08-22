@@ -22,7 +22,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   GeneratePrologue();
 
   // Save all general purpose registers before messing with them.
-  const int kNumberOfRegisters = Register::kNumRegisters;
+  const int kNumberOfRegisters = AsmRegister::kNumRegisters;
 
   const int kDoubleRegsSize = kDoubleSize * XMMRegister::kMaxNumRegisters;
   __ subp(rsp, Immediate(kDoubleRegsSize));
@@ -48,7 +48,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   // We push all registers onto the stack, even though we do not need
   // to restore all later.
   for (int i = 0; i < kNumberOfRegisters; i++) {
-    Register r = Register::from_code(i);
+    AsmRegister r = AsmRegister::from_code(i);
     __ pushq(r);
   }
 
@@ -61,7 +61,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   // We use this to keep the value of the fifth argument temporarily.
   // Unfortunately we can't store it directly in r8 (used for passing
   // this on linux), since it is another parameter passing register on windows.
-  Register arg5 = r11;
+  AsmRegister arg5 = r11;
 
   // Get the bailout id from the stack.
   __ movp(arg_reg_3, Operand(rsp, kSavedRegistersAreaSize));
@@ -209,12 +209,12 @@ void Deoptimizer::TableEntryGenerator::Generate() {
 
   // Restore the registers from the stack.
   for (int i = kNumberOfRegisters - 1; i >= 0 ; i--) {
-    Register r = Register::from_code(i);
+    AsmRegister r = AsmRegister::from_code(i);
     // Do not restore rsp, simply pop the value into the next register
     // and overwrite this afterwards.
     if (r.is(rsp)) {
       DCHECK(i > 0);
-      r = Register::from_code(i - 1);
+      r = AsmRegister::from_code(i - 1);
     }
     __ popq(r);
   }

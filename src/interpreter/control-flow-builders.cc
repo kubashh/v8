@@ -117,8 +117,7 @@ void SwitchBuilder::SetCaseTarget(int index, CaseClause* clause) {
   }
 }
 
-
-void TryCatchBuilder::BeginTry(Register context) {
+void TryCatchBuilder::BeginTry(AsmRegister context) {
   builder()->MarkTryBegin(handler_id_, context);
 }
 
@@ -133,8 +132,7 @@ void TryCatchBuilder::EndTry() {
 
 void TryCatchBuilder::EndCatch() { builder()->Bind(&exit_); }
 
-
-void TryFinallyBuilder::BeginTry(Register context) {
+void TryFinallyBuilder::BeginTry(AsmRegister context) {
   builder()->MarkTryBegin(handler_id_, context);
 }
 

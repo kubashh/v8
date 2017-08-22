@@ -14,20 +14,20 @@ namespace internal {
 namespace interpreter {
 
 // static
-Register BytecodeDecoder::DecodeRegisterOperand(const uint8_t* operand_start,
-                                                OperandType operand_type,
-                                                OperandScale operand_scale) {
+AsmRegister BytecodeDecoder::DecodeRegisterOperand(const uint8_t* operand_start,
+                                                   OperandType operand_type,
+                                                   OperandScale operand_scale) {
   DCHECK(Bytecodes::IsRegisterOperandType(operand_type));
   int32_t operand =
       DecodeSignedOperand(operand_start, operand_type, operand_scale);
-  return Register::FromOperand(operand);
+  return AsmRegister::FromOperand(operand);
 }
 
 // static
 RegisterList BytecodeDecoder::DecodeRegisterListOperand(
     const uint8_t* operand_start, uint32_t count, OperandType operand_type,
     OperandScale operand_scale) {
-  Register first_reg =
+  AsmRegister first_reg =
       DecodeRegisterOperand(operand_start, operand_type, operand_scale);
   return RegisterList(first_reg.index(), static_cast<int>(count));
 }
@@ -154,7 +154,7 @@ std::ostream& BytecodeDecoder::Decode(std::ostream& os,
         break;
       case interpreter::OperandType::kReg:
       case interpreter::OperandType::kRegOut: {
-        Register reg =
+        AsmRegister reg =
             DecodeRegisterOperand(operand_start, op_type, operand_scale);
         os << reg.ToString(parameter_count);
         break;

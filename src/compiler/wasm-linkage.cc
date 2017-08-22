@@ -38,7 +38,7 @@ MachineType MachineTypeFor(ValueType type) {
   }
 }
 
-LinkageLocation regloc(Register reg, MachineType type) {
+LinkageLocation regloc(AsmRegister reg, MachineType type) {
   return LinkageLocation::ForRegister(reg.code(), type);
 }
 
@@ -142,7 +142,7 @@ LinkageLocation stackloc(int i, MachineType type) {
 
 // Helper for allocating either an GP or FP reg, or the next stack slot.
 struct Allocator {
-  Allocator(const Register* gp, int gpc, const DoubleRegister* fp, int fpc)
+  Allocator(const AsmRegister* gp, int gpc, const DoubleRegister* fp, int fpc)
       : gp_count(gpc),
         gp_offset(0),
         gp_regs(gp),
@@ -153,7 +153,7 @@ struct Allocator {
 
   int gp_count;
   int gp_offset;
-  const Register* gp_regs;
+  const AsmRegister* gp_regs;
 
   int fp_count;
   int fp_offset;
@@ -210,11 +210,11 @@ struct Allocator {
 struct ParameterRegistersCreateTrait {
   static void Construct(Allocator* allocated_ptr) {
 #ifdef GP_PARAM_REGISTERS
-    static const Register kGPParamRegisters[] = {GP_PARAM_REGISTERS};
+    static const AsmRegister kGPParamRegisters[] = {GP_PARAM_REGISTERS};
     static const int kGPParamRegistersCount =
         static_cast<int>(arraysize(kGPParamRegisters));
 #else
-    static const Register* kGPParamRegisters = nullptr;
+    static const AsmRegister* kGPParamRegisters = nullptr;
     static const int kGPParamRegistersCount = 0;
 #endif
 
@@ -238,11 +238,11 @@ static base::LazyInstance<Allocator, ParameterRegistersCreateTrait>::type
 struct ReturnRegistersCreateTrait {
   static void Construct(Allocator* allocated_ptr) {
 #ifdef GP_RETURN_REGISTERS
-    static const Register kGPReturnRegisters[] = {GP_RETURN_REGISTERS};
+    static const AsmRegister kGPReturnRegisters[] = {GP_RETURN_REGISTERS};
     static const int kGPReturnRegistersCount =
         static_cast<int>(arraysize(kGPReturnRegisters));
 #else
-    static const Register* kGPReturnRegisters = nullptr;
+    static const AsmRegister* kGPReturnRegisters = nullptr;
     static const int kGPReturnRegistersCount = 0;
 #endif
 

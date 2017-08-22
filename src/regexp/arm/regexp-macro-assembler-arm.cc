@@ -1163,15 +1163,13 @@ void RegExpMacroAssemblerARM::SafeCallTarget(Label* name) {
   __ push(lr);
 }
 
-
-void RegExpMacroAssemblerARM::Push(Register source) {
+void RegExpMacroAssemblerARM::Push(AsmRegister source) {
   DCHECK(!source.is(backtrack_stackpointer()));
   __ str(source,
          MemOperand(backtrack_stackpointer(), kPointerSize, NegPreIndex));
 }
 
-
-void RegExpMacroAssemblerARM::Pop(Register target) {
+void RegExpMacroAssemblerARM::Pop(AsmRegister target) {
   DCHECK(!target.is(backtrack_stackpointer()));
   __ ldr(target,
          MemOperand(backtrack_stackpointer(), kPointerSize, PostIndex));
@@ -1201,7 +1199,7 @@ void RegExpMacroAssemblerARM::CheckStackLimit() {
 
 void RegExpMacroAssemblerARM::LoadCurrentCharacterUnchecked(int cp_offset,
                                                             int characters) {
-  Register offset = current_input_offset();
+  AsmRegister offset = current_input_offset();
   if (cp_offset != 0) {
     // r4 is not being used to store the capture start index at this point.
     __ add(r4, current_input_offset(), Operand(cp_offset * char_size()));

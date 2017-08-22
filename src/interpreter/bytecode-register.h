@@ -16,8 +16,9 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-// An interpreter Register which is located in the function's Register file
-// in its stack-frame. Register hold parameters, this, and expression values.
+// An interpreter Register which is located in the function's AsmRegister
+// file in its stack-frame. Register hold parameters, this, and expression
+// values.
 class V8_EXPORT_PRIVATE Register final {
  public:
   explicit Register(int index = kInvalidIndex) : index_(index) {}
@@ -30,7 +31,7 @@ class V8_EXPORT_PRIVATE Register final {
   int ToParameterIndex(int parameter_count) const;
 
   // Returns an invalid register.
-  static Register invalid_value() { return Register(); }
+  static Register invalid_value() { return AsmRegister(); }
 
   // Returns the register for the function's closure object.
   static Register function_closure();
@@ -60,10 +61,10 @@ class V8_EXPORT_PRIVATE Register final {
     return Register(kRegisterFileStartOffset - operand);
   }
 
-  static bool AreContiguous(Register reg1, Register reg2,
-                            Register reg3 = Register(),
-                            Register reg4 = Register(),
-                            Register reg5 = Register());
+  static bool AreContiguous(Register reg1, AsmRegister reg2,
+                            Register reg3 = AsmRegister(),
+                            Register reg4 = AsmRegister(),
+                            Register reg5 = AsmRegister());
 
   std::string ToString(int parameter_count) const;
 
@@ -98,7 +99,8 @@ class V8_EXPORT_PRIVATE Register final {
 
 class RegisterList {
  public:
-  RegisterList() : first_reg_index_(Register().index()), register_count_(0) {}
+  RegisterList()
+      : first_reg_index_(Register().index()), register_count_(0) {}
   RegisterList(int first_reg_index, int register_count)
       : first_reg_index_(first_reg_index), register_count_(register_count) {}
   explicit RegisterList(Register r) : RegisterList(r.index(), 1) {}
@@ -124,7 +126,8 @@ class RegisterList {
   }
 
   const Register last_register() const {
-    return (register_count() == 0) ? Register(0) : (*this)[register_count_ - 1];
+    return (register_count() == 0) ? Register(0)
+                                   : (*this)[register_count_ - 1];
   }
 
   int register_count() const { return register_count_; }

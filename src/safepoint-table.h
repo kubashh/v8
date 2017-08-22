@@ -14,7 +14,7 @@
 namespace v8 {
 namespace internal {
 
-struct Register;
+struct AsmRegister;
 
 class SafepointEntry BASE_EMBEDDED {
  public:
@@ -183,7 +183,7 @@ class Safepoint BASE_EMBEDDED {
       (1 << (SafepointEntry::kDeoptIndexBits)) - 1;
 
   void DefinePointerSlot(int index, Zone* zone) { indexes_->Add(index, zone); }
-  void DefinePointerRegister(Register reg, Zone* zone);
+  void DefinePointerRegister(AsmRegister reg, Zone* zone);
 
  private:
   Safepoint(ZoneList<int>* indexes, ZoneList<int>* registers)

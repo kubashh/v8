@@ -113,8 +113,7 @@ void SafepointTable::PrintBits(std::ostream& os,  // NOLINT
   }
 }
 
-
-void Safepoint::DefinePointerRegister(Register reg, Zone* zone) {
+void Safepoint::DefinePointerRegister(AsmRegister reg, Zone* zone) {
   registers_->Add(reg.code(), zone);
 }
 

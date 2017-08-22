@@ -201,7 +201,7 @@ TEST(InterpreterLoadStoreRegisters) {
   for (int i = 0; i <= kMaxInt8; i++) {
     BytecodeArrayBuilder builder(isolate, zone, 1, i + 1);
 
-    Register reg(i);
+    AsmRegister reg(i);
     builder.LoadTrue()
         .StoreAccumulatorInRegister(reg)
         .LoadFalse()
@@ -289,7 +289,7 @@ TEST(InterpreterShiftOpsSmi) {
         Handle<i::FeedbackMetadata> metadata =
             NewFeedbackMetadata(isolate, &feedback_spec);
 
-        Register reg(0);
+        AsmRegister reg(0);
         int lhs = lhs_inputs[l];
         int rhs = rhs_inputs[r];
         builder.LoadLiteral(Smi::FromInt(lhs))
@@ -327,7 +327,7 @@ TEST(InterpreterBinaryOpsSmi) {
         Handle<i::FeedbackMetadata> metadata =
             NewFeedbackMetadata(isolate, &feedback_spec);
 
-        Register reg(0);
+        AsmRegister reg(0);
         int lhs = lhs_inputs[l];
         int rhs = rhs_inputs[r];
         builder.LoadLiteral(Smi::FromInt(lhs))
@@ -368,7 +368,7 @@ TEST(InterpreterBinaryOpsHeapNumber) {
         Handle<i::FeedbackMetadata> metadata =
             NewFeedbackMetadata(isolate, &feedback_spec);
 
-        Register reg(0);
+        AsmRegister reg(0);
         double lhs = lhs_inputs[l];
         double rhs = rhs_inputs[r];
         builder.LoadLiteral(ast_factory.NewNumber(lhs))
@@ -441,7 +441,7 @@ TEST(InterpreterStringAdd) {
     Handle<i::FeedbackMetadata> metadata =
         NewFeedbackMetadata(isolate, &feedback_spec);
 
-    Register reg(0);
+    AsmRegister reg(0);
     builder.LoadLiteral(test_cases[i].lhs)
         .StoreAccumulatorInRegister(reg)
         .LoadLiteral(test_cases[i].rhs)
@@ -658,7 +658,7 @@ TEST(InterpreterBinaryOpTypeFeedback) {
     Handle<i::FeedbackMetadata> metadata =
         i::NewFeedbackMetadata(isolate, &feedback_spec);
 
-    Register reg(0);
+    AsmRegister reg(0);
     builder.LoadLiteral(test_case.arg1)
         .StoreAccumulatorInRegister(reg)
         .LoadLiteral(test_case.arg2)
@@ -771,7 +771,7 @@ TEST(InterpreterBinaryOpSmiTypeFeedback) {
     Handle<i::FeedbackMetadata> metadata =
         i::NewFeedbackMetadata(isolate, &feedback_spec);
 
-    Register reg(0);
+    AsmRegister reg(0);
     builder.LoadLiteral(test_case.arg1)
         .StoreAccumulatorInRegister(reg)
         .LoadLiteral(Smi::FromInt(test_case.arg2))
@@ -1213,9 +1213,9 @@ TEST(InterpreterStoreKeyedProperty) {
   BytecodeArrayBuilder builder(isolate, zone, 1, 1);
 
   builder.LoadLiteral(name)
-      .StoreAccumulatorInRegister(Register(0))
+      .StoreAccumulatorInRegister(AsmRegister(0))
       .LoadLiteral(Smi::FromInt(999))
-      .StoreKeyedProperty(builder.Receiver(), Register(0), GetIndex(slot),
+      .StoreKeyedProperty(builder.Receiver(), AsmRegister(0), GetIndex(slot),
                           i::SLOPPY)
       .Return();
   ast_factory.Internalize(isolate);
@@ -1269,7 +1269,7 @@ TEST(InterpreterCall) {
   // Check with no args.
   {
     BytecodeArrayBuilder builder(isolate, zone, 1, 1);
-    Register reg = builder.register_allocator()->NewRegister();
+    AsmRegister reg = builder.register_allocator()->NewRegister();
     RegisterList args = builder.register_allocator()->NewRegisterList(1);
     builder.LoadNamedProperty(builder.Receiver(), name, slot_index)
         .StoreAccumulatorInRegister(reg)
@@ -1293,7 +1293,7 @@ TEST(InterpreterCall) {
   // Check that receiver is passed properly.
   {
     BytecodeArrayBuilder builder(isolate, zone, 1, 1);
-    Register reg = builder.register_allocator()->NewRegister();
+    AsmRegister reg = builder.register_allocator()->NewRegister();
     RegisterList args = builder.register_allocator()->NewRegisterList(1);
     builder.LoadNamedProperty(builder.Receiver(), name, slot_index)
         .StoreAccumulatorInRegister(reg)
@@ -1318,7 +1318,7 @@ TEST(InterpreterCall) {
   // Check with two parameters (+ receiver).
   {
     BytecodeArrayBuilder builder(isolate, zone, 1, 4);
-    Register reg = builder.register_allocator()->NewRegister();
+    AsmRegister reg = builder.register_allocator()->NewRegister();
     RegisterList args = builder.register_allocator()->NewRegisterList(3);
 
     builder.LoadNamedProperty(builder.Receiver(), name, slot_index)
@@ -1351,7 +1351,7 @@ TEST(InterpreterCall) {
   // Check with 10 parameters (+ receiver).
   {
     BytecodeArrayBuilder builder(isolate, zone, 1, 12);
-    Register reg = builder.register_allocator()->NewRegister();
+    AsmRegister reg = builder.register_allocator()->NewRegister();
     RegisterList args = builder.register_allocator()->NewRegisterList(11);
 
     builder.LoadNamedProperty(builder.Receiver(), name, slot_index)
@@ -1404,8 +1404,8 @@ TEST(InterpreterCall) {
 }
 
 static BytecodeArrayBuilder& SetRegister(BytecodeArrayBuilder& builder,
-                                         Register reg, int value,
-                                         Register scratch) {
+                                         AsmRegister reg, int value,
+                                         AsmRegister scratch) {
   return builder.StoreAccumulatorInRegister(scratch)
       .LoadLiteral(Smi::FromInt(value))
       .StoreAccumulatorInRegister(reg)
@@ -1413,8 +1413,8 @@ static BytecodeArrayBuilder& SetRegister(BytecodeArrayBuilder& builder,
 }
 
 static BytecodeArrayBuilder& IncrementRegister(BytecodeArrayBuilder& builder,
-                                               Register reg, int value,
-                                               Register scratch,
+                                               AsmRegister reg, int value,
+                                               AsmRegister scratch,
                                                int slot_index) {
   return builder.StoreAccumulatorInRegister(scratch)
       .LoadLiteral(Smi::FromInt(value))
@@ -1437,7 +1437,7 @@ TEST(InterpreterJumps) {
   Handle<i::FeedbackMetadata> metadata =
       NewFeedbackMetadata(isolate, &feedback_spec);
 
-  Register reg(0), scratch(1);
+  AsmRegister reg(0), scratch(1);
   BytecodeLabel label[3];
 
   builder.LoadLiteral(Smi::kZero)
@@ -1476,7 +1476,7 @@ TEST(InterpreterConditionalJumps) {
   Handle<i::FeedbackMetadata> metadata =
       NewFeedbackMetadata(isolate, &feedback_spec);
 
-  Register reg(0), scratch(1);
+  AsmRegister reg(0), scratch(1);
   BytecodeLabel label[2];
   BytecodeLabel done, done1;
 
@@ -1526,7 +1526,7 @@ TEST(InterpreterConditionalJumps2) {
   Handle<i::FeedbackMetadata> metadata =
       NewFeedbackMetadata(isolate, &feedback_spec);
 
-  Register reg(0), scratch(1);
+  AsmRegister reg(0), scratch(1);
   BytecodeLabel label[2];
   BytecodeLabel done, done1;
 
@@ -1572,7 +1572,7 @@ TEST(InterpreterJumpConstantWith16BitOperand) {
   Handle<i::FeedbackMetadata> metadata =
       NewFeedbackMetadata(isolate, &feedback_spec);
 
-  Register reg(0), scratch(256);
+  AsmRegister reg(0), scratch(256);
   BytecodeLabel done, fake;
 
   builder.LoadLiteral(Smi::kZero);
@@ -1627,7 +1627,7 @@ TEST(InterpreterJumpWith32BitOperand) {
   AstValueFactory ast_factory(zone, isolate->ast_string_constants(),
                               isolate->heap()->HashSeed());
   BytecodeArrayBuilder builder(isolate, zone, 1, 1);
-  Register reg(0);
+  AsmRegister reg(0);
   BytecodeLabel done;
 
   builder.LoadLiteral(Smi::kZero);
@@ -1723,7 +1723,7 @@ TEST(InterpreterSmiComparisons) {
         Handle<i::FeedbackMetadata> metadata =
             NewFeedbackMetadata(isolate, &feedback_spec);
 
-        Register r0(0);
+        AsmRegister r0(0);
         builder.LoadLiteral(Smi::FromInt(inputs[i]))
             .StoreAccumulatorInRegister(r0)
             .LoadLiteral(Smi::FromInt(inputs[j]))
@@ -1771,7 +1771,7 @@ TEST(InterpreterHeapNumberComparisons) {
         Handle<i::FeedbackMetadata> metadata =
             NewFeedbackMetadata(isolate, &feedback_spec);
 
-        Register r0(0);
+        AsmRegister r0(0);
         builder.LoadLiteral(ast_factory.NewNumber(inputs[i]))
             .StoreAccumulatorInRegister(r0)
             .LoadLiteral(ast_factory.NewNumber(inputs[j]))
@@ -1819,7 +1819,7 @@ TEST(InterpreterStringComparisons) {
             NewFeedbackMetadata(isolate, &feedback_spec);
 
         BytecodeArrayBuilder builder(isolate, zone, 1, 1);
-        Register r0(0);
+        AsmRegister r0(0);
         builder.LoadLiteral(ast_factory.GetOneByteString(lhs))
             .StoreAccumulatorInRegister(r0)
             .LoadLiteral(ast_factory.GetOneByteString(rhs))
@@ -1850,7 +1850,7 @@ static void LoadStringAndAddSpace(BytecodeArrayBuilder* builder,
                                   AstValueFactory* ast_factory,
                                   const char* cstr,
                                   FeedbackSlot string_add_slot) {
-  Register string_reg = builder->register_allocator()->NewRegister();
+  AsmRegister string_reg = builder->register_allocator()->NewRegister();
 
   (*builder)
       .LoadLiteral(ast_factory->NewString(ast_factory->GetOneByteString(cstr)))
@@ -1903,7 +1903,7 @@ TEST(InterpreterMixedComparisons) {
                 NewFeedbackMetadata(isolate, &feedback_spec);
 
             // lhs is in a register, rhs is in the accumulator.
-            Register lhs_reg = builder.register_allocator()->NewRegister();
+            AsmRegister lhs_reg = builder.register_allocator()->NewRegister();
 
             if (which_side == kRhsIsString) {
               // Comparison with HeapNumber on the lhs and String on the rhs.
@@ -2103,7 +2103,7 @@ TEST(InterpreterInstanceOf) {
     bool expected_value = (i == 0);
     BytecodeArrayBuilder builder(isolate, zone, 1, 1);
 
-    Register r0(0);
+    AsmRegister r0(0);
     size_t case_entry = builder.AllocateDeferredConstantPoolEntry();
     builder.SetDeferredConstantPoolEntry(case_entry, cases[i]);
     builder.LoadConstantPoolEntry(case_entry).StoreAccumulatorInRegister(r0);
@@ -2139,7 +2139,7 @@ TEST(InterpreterTestIn) {
     bool expected_value = (i == 0);
     BytecodeArrayBuilder builder(isolate, zone, 1, 1);
 
-    Register r0(0);
+    AsmRegister r0(0);
     builder.LoadLiteral(ast_factory.GetOneByteString(properties[i]))
         .StoreAccumulatorInRegister(r0);
 
@@ -2167,7 +2167,7 @@ TEST(InterpreterUnaryNot) {
     bool expected_value = ((i & 1) == 1);
     BytecodeArrayBuilder builder(isolate, zone, 1, 0);
 
-    Register r0(0);
+    AsmRegister r0(0);
     builder.LoadFalse();
     for (size_t j = 0; j < i; j++) {
       builder.LogicalNot(ToBooleanMode::kAlreadyBoolean);
@@ -2205,7 +2205,7 @@ TEST(InterpreterUnaryNotNonBoolean) {
   for (size_t i = 0; i < arraysize(object_type_tuples); i++) {
     BytecodeArrayBuilder builder(isolate, zone, 1, 0);
 
-    Register r0(0);
+    AsmRegister r0(0);
     builder.LoadLiteral(object_type_tuples[i].first);
     builder.LogicalNot(ToBooleanMode::kConvertToBoolean);
     builder.Return();
@@ -2277,8 +2277,8 @@ TEST(InterpreterInvokeIntrinsic) {
   BytecodeArrayBuilder builder(isolate, zone, 1, 2);
 
   builder.LoadLiteral(Smi::FromInt(15))
-      .StoreAccumulatorInRegister(Register(0))
-      .CallRuntime(Runtime::kInlineIsArray, Register(0))
+      .StoreAccumulatorInRegister(AsmRegister(0))
+      .CallRuntime(Runtime::kInlineIsArray, AsmRegister(0))
       .Return();
   Handle<BytecodeArray> bytecode_array = builder.ToBytecodeArray(isolate);
 

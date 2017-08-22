@@ -867,7 +867,7 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     Node* context = GetContext();
     Node* slot_index = BytecodeOperandIdx(1);
     Node* feedback_vector = LoadFeedbackVector();
-    Node* function = LoadRegister(Register::function_closure());
+    Node* function = LoadRegister(AsmRegister::function_closure());
 
     BinaryOpAssembler binop_asm(state());
     Node* result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
@@ -882,7 +882,7 @@ class InterpreterBinaryOpAssembler : public InterpreterAssembler {
     Node* context = GetContext();
     Node* slot_index = BytecodeOperandIdx(1);
     Node* feedback_vector = LoadFeedbackVector();
-    Node* function = LoadRegister(Register::function_closure());
+    Node* function = LoadRegister(AsmRegister::function_closure());
 
     BinaryOpAssembler binop_asm(state());
     Node* result = (binop_asm.*generator)(context, lhs, rhs, slot_index,
@@ -1033,7 +1033,7 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
 
     Node* input_feedback =
         SmiOr(var_lhs_type_feedback.value(), var_rhs_type_feedback.value());
-    Node* function = LoadRegister(Register::function_closure());
+    Node* function = LoadRegister(AsmRegister::function_closure());
     UpdateFeedback(SmiOr(result_type, input_feedback), feedback_vector,
                    slot_index, function);
     SetAccumulator(result);
@@ -1065,7 +1065,7 @@ IGNITION_HANDLER(BitwiseAnd, InterpreterBitwiseBinaryOpAssembler) {
 // ShiftLeft <src>
 //
 // Left shifts register <src> by the count specified in the accumulator.
-// Register <src> is converted to an int32 and the accumulator to uint32
+// AsmRegister <src> is converted to an int32 and the accumulator to uint32
 // before the operation. 5 lsb bits from the accumulator are used as count
 // i.e. <src> << (accumulator & 0x1F).
 IGNITION_HANDLER(ShiftLeft, InterpreterBitwiseBinaryOpAssembler) {
@@ -1075,7 +1075,7 @@ IGNITION_HANDLER(ShiftLeft, InterpreterBitwiseBinaryOpAssembler) {
 // ShiftRight <src>
 //
 // Right shifts register <src> by the count specified in the accumulator.
-// Result is sign extended. Register <src> is converted to an int32 and the
+// Result is sign extended. AsmRegister <src> is converted to an int32 and the
 // accumulator to uint32 before the operation. 5 lsb bits from the accumulator
 // are used as count i.e. <src> >> (accumulator & 0x1F).
 IGNITION_HANDLER(ShiftRight, InterpreterBitwiseBinaryOpAssembler) {
@@ -1111,7 +1111,7 @@ IGNITION_HANDLER(BitwiseOrSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1137,7 +1137,7 @@ IGNITION_HANDLER(BitwiseXorSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1163,7 +1163,7 @@ IGNITION_HANDLER(BitwiseAndSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1192,7 +1192,7 @@ IGNITION_HANDLER(ShiftLeftSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1221,7 +1221,7 @@ IGNITION_HANDLER(ShiftRightSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1250,7 +1250,7 @@ IGNITION_HANDLER(ShiftRightLogicalSmi, InterpreterAssembler) {
   Node* result_type = SelectSmiConstant(TaggedIsSmi(result),
                                         BinaryOperationFeedback::kSignedSmall,
                                         BinaryOperationFeedback::kNumber);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(SmiOr(result_type, var_lhs_type_feedback.value()),
                  feedback_vector, slot_index, function);
   SetAccumulator(result);
@@ -1312,7 +1312,7 @@ IGNITION_HANDLER(ToNumber, InterpreterAssembler) {
   // Record the type feedback collected for {object}.
   Node* slot_index = BytecodeOperandIdx(1);
   Node* feedback_vector = LoadFeedbackVector();
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index,
                  function);
 
@@ -1449,7 +1449,7 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
   }
 
   BIND(&end);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index,
                  function);
 
@@ -1574,7 +1574,7 @@ IGNITION_HANDLER(Dec, InterpreterAssembler) {
   }
 
   BIND(&end);
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index,
                  function);
 
@@ -2020,7 +2020,7 @@ class InterpreterCompareOpAssembler : public InterpreterAssembler {
 
     Node* slot_index = BytecodeOperandIdx(1);
     Node* feedback_vector = LoadFeedbackVector();
-    Node* function = LoadRegister(Register::function_closure());
+    Node* function = LoadRegister(AsmRegister::function_closure());
     UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index,
                    function);
     SetAccumulator(result);
@@ -2616,7 +2616,7 @@ IGNITION_HANDLER(CreateRegExpLiteral, InterpreterAssembler) {
   Node* pattern = LoadConstantPoolEntry(index);
   Node* literal_index = BytecodeOperandIdxSmi(1);
   Node* flags = SmiFromWord32(BytecodeOperandFlag(2));
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
   Node* result = constructor_assembler.EmitFastCloneRegExp(
@@ -2631,7 +2631,7 @@ IGNITION_HANDLER(CreateRegExpLiteral, InterpreterAssembler) {
 // CreateArrayLiteral flags <flags> and constant elements in <element_idx>.
 IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
   Node* literal_index = BytecodeOperandIdxSmi(1);
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* context = GetContext();
   Node* bytecode_flags = BytecodeOperandFlag(2);
 
@@ -2668,7 +2668,7 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
 // Creates an empty JSArray literal for literal index <literal_idx>.
 IGNITION_HANDLER(CreateEmptyArrayLiteral, InterpreterAssembler) {
   Node* literal_index = BytecodeOperandIdxSmi(0);
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
   Node* result = constructor_assembler.EmitCreateEmptyArrayLiteral(
@@ -2684,7 +2684,7 @@ IGNITION_HANDLER(CreateEmptyArrayLiteral, InterpreterAssembler) {
 IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
   Node* literal_index = BytecodeOperandIdxSmi(1);
   Node* bytecode_flags = BytecodeOperandFlag(2);
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
 
   // Check if we can do a fast clone or have to call the runtime.
   Label if_fast_clone(this), if_not_fast_clone(this, Label::kDeferred);
@@ -2807,7 +2807,7 @@ IGNITION_HANDLER(CreateCatchContext, InterpreterAssembler) {
 //
 // Creates a new context with number of |slots| for the function closure.
 IGNITION_HANDLER(CreateFunctionContext, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* slots = BytecodeOperandUImm(0);
   Node* context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
@@ -2820,7 +2820,7 @@ IGNITION_HANDLER(CreateFunctionContext, InterpreterAssembler) {
 //
 // Creates a new context with number of |slots| for an eval closure.
 IGNITION_HANDLER(CreateEvalContext, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* slots = BytecodeOperandUImm(0);
   Node* context = GetContext();
   ConstructorBuiltinsAssembler constructor_assembler(state());
@@ -2850,7 +2850,7 @@ IGNITION_HANDLER(CreateWithContext, InterpreterAssembler) {
 //
 // Creates a new mapped arguments object.
 IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* context = GetContext();
 
   Label if_duplicate_parameters(this, Label::kDeferred);
@@ -2893,7 +2893,7 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 // Creates a new unmapped arguments object.
 IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
   Node* context = GetContext();
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   ArgumentsBuiltinsAssembler builtins_assembler(state());
   Node* result =
       builtins_assembler.EmitFastNewStrictArguments(context, closure);
@@ -2905,7 +2905,7 @@ IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
 //
 // Creates a new rest parameter array.
 IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* context = GetContext();
   ArgumentsBuiltinsAssembler builtins_assembler(state());
   Node* result = builtins_assembler.EmitFastNewRestParameter(context, closure);
@@ -3067,7 +3067,7 @@ DEBUG_BREAK_BYTECODE_LIST(DEBUG_BREAK);
 // Increment the execution count for the given slot. Used for block code
 // coverage.
 IGNITION_HANDLER(IncBlockCounter, InterpreterAssembler) {
-  Node* closure = LoadRegister(Register::function_closure());
+  Node* closure = LoadRegister(AsmRegister::function_closure());
   Node* coverage_array_slot = BytecodeOperandIdxSmi(0);
   Node* context = GetContext();
 
@@ -3273,7 +3273,7 @@ IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
   // Bytecode operand 1 should be always 0 (we are always store registers
   // from the beginning).
   CSA_ASSERT(this, WordEqual(BytecodeOperandReg(1),
-                             IntPtrConstant(Register(0).ToOperand())));
+                             IntPtrConstant(AsmRegister(0).ToOperand())));
   // Bytecode operand 2 is the number of registers to store to the generator.
   Node* register_count = ChangeUint32ToWord(BytecodeOperandCount(2));
   ExportRegisterFile(array, register_count);
@@ -3323,7 +3323,7 @@ IGNITION_HANDLER(RestoreGeneratorRegisters, InterpreterAssembler) {
   // Bytecode operand 1 is the start register. It should always be 0, so let's
   // ignore it.
   CSA_ASSERT(this, WordEqual(BytecodeOperandReg(1),
-                             IntPtrConstant(Register(0).ToOperand())));
+                             IntPtrConstant(AsmRegister(0).ToOperand())));
   // Bytecode operand 2 is the number of registers to store to the generator.
   Node* register_count = ChangeUint32ToWord(BytecodeOperandCount(2));
 

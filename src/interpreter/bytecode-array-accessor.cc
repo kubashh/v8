@@ -124,7 +124,7 @@ uint32_t BytecodeArrayAccessor::GetIndexOperand(int operand_index) const {
   return GetUnsignedOperand(operand_index, operand_type);
 }
 
-Register BytecodeArrayAccessor::GetRegisterOperand(int operand_index) const {
+AsmRegister BytecodeArrayAccessor::GetRegisterOperand(int operand_index) const {
   OperandType operand_type =
       Bytecodes::GetOperandType(current_bytecode(), operand_index);
   const uint8_t* operand_start =

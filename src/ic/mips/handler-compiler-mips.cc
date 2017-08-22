@@ -30,10 +30,10 @@ void NamedLoadHandlerCompiler::GenerateLoadViaGetterForDeopt(
   __ Ret();
 }
 
-
 void NamedStoreHandlerCompiler::GenerateStoreViaSetter(
-    MacroAssembler* masm, Handle<Map> map, Register receiver, Register holder,
-    int accessor_index, int expected_arguments, Register scratch) {
+    MacroAssembler* masm, Handle<Map> map, AsmRegister receiver,
+    AsmRegister holder, int accessor_index, int expected_arguments,
+    AsmRegister scratch) {
   // ----------- S t a t e -------------
   //  -- ra    : return address
   // -----------------------------------
@@ -73,9 +73,8 @@ void NamedStoreHandlerCompiler::GenerateStoreViaSetter(
   __ Ret();
 }
 
-
-void PropertyHandlerCompiler::PushVectorAndSlot(Register vector,
-                                                Register slot) {
+void PropertyHandlerCompiler::PushVectorAndSlot(AsmRegister vector,
+                                                AsmRegister slot) {
   MacroAssembler* masm = this->masm();
   STATIC_ASSERT(LoadWithVectorDescriptor::kSlot <
                 LoadWithVectorDescriptor::kVector);
@@ -86,8 +85,8 @@ void PropertyHandlerCompiler::PushVectorAndSlot(Register vector,
   __ Push(slot, vector);
 }
 
-
-void PropertyHandlerCompiler::PopVectorAndSlot(Register vector, Register slot) {
+void PropertyHandlerCompiler::PopVectorAndSlot(AsmRegister vector,
+                                               AsmRegister slot) {
   MacroAssembler* masm = this->masm();
   __ Pop(slot, vector);
 }
@@ -100,8 +99,8 @@ void PropertyHandlerCompiler::DiscardVectorAndSlot() {
 }
 
 void PropertyHandlerCompiler::GenerateDictionaryNegativeLookup(
-    MacroAssembler* masm, Label* miss_label, Register receiver,
-    Handle<Name> name, Register scratch0, Register scratch1) {
+    MacroAssembler* masm, Label* miss_label, AsmRegister receiver,
+    Handle<Name> name, AsmRegister scratch0, AsmRegister scratch1) {
   DCHECK(name->IsUniqueName());
   DCHECK(!receiver.is(scratch0));
   Counters* counters = masm->isolate()->counters();
@@ -114,7 +113,7 @@ void PropertyHandlerCompiler::GenerateDictionaryNegativeLookup(
   (1 << Map::kHasNamedInterceptor) | (1 << Map::kIsAccessCheckNeeded);
 
   // Bail out if the receiver has a named interceptor or requires access checks.
-  Register map = scratch1;
+  AsmRegister map = scratch1;
   __ lw(map, FieldMemOperand(receiver, HeapObject::kMapOffset));
   __ lbu(scratch0, FieldMemOperand(map, Map::kBitFieldOffset));
   __ And(scratch0, scratch0, Operand(kInterceptorOrAccessCheckNeededMask));
@@ -125,12 +124,12 @@ void PropertyHandlerCompiler::GenerateDictionaryNegativeLookup(
   __ Branch(miss_label, lt, scratch0, Operand(FIRST_JS_RECEIVER_TYPE));
 
   // Load properties array.
-  Register properties = scratch0;
+  AsmRegister properties = scratch0;
   __ lw(properties,
         FieldMemOperand(receiver, JSObject::kPropertiesOrHashOffset));
   // Check that the properties array is a dictionary.
   __ lw(map, FieldMemOperand(properties, HeapObject::kMapOffset));
-  Register tmp = properties;
+  AsmRegister tmp = properties;
   __ LoadRoot(tmp, Heap::kHashTableMapRootIndex);
   __ Branch(miss_label, ne, map, Operand(tmp));
 
@@ -149,7 +148,7 @@ void PropertyHandlerCompiler::GenerateDictionaryNegativeLookup(
 // property.
 void PropertyHandlerCompiler::GenerateCheckPropertyCell(
     MacroAssembler* masm, Handle<JSGlobalObject> global, Handle<Name> name,
-    Register scratch, Label* miss) {
+    AsmRegister scratch, Label* miss) {
   Handle<PropertyCell> cell = JSGlobalObject::EnsureEmptyPropertyCell(
       global, name, PropertyCellType::kInvalidated);
   Isolate* isolate = masm->isolate();
@@ -164,8 +163,8 @@ void PropertyHandlerCompiler::GenerateCheckPropertyCell(
 // Generate call to api function.
 void PropertyHandlerCompiler::GenerateApiAccessorCall(
     MacroAssembler* masm, const CallOptimization& optimization,
-    Handle<Map> receiver_map, Register receiver, Register scratch_in,
-    bool is_store, Register store_parameter, Register accessor_holder,
+    Handle<Map> receiver_map, AsmRegister receiver, AsmRegister scratch_in,
+    bool is_store, AsmRegister store_parameter, AsmRegister accessor_holder,
     int accessor_index) {
   DCHECK(!accessor_holder.is(scratch_in));
   DCHECK(!receiver.is(scratch_in));
@@ -179,10 +178,10 @@ void PropertyHandlerCompiler::GenerateApiAccessorCall(
   DCHECK(optimization.is_simple_api_call());
 
   // Abi for CallApiCallbackStub.
-  Register callee = a0;
-  Register data = t0;
-  Register holder = a2;
-  Register api_function_address = a1;
+  AsmRegister callee = a0;
+  AsmRegister data = t0;
+  AsmRegister holder = a2;
+  AsmRegister api_function_address = a1;
 
   // Put callee in place.
   __ LoadAccessor(callee, accessor_holder, accessor_index,
@@ -248,8 +247,8 @@ void NamedStoreHandlerCompiler::GenerateRestoreName(Label* label,
 }
 
 void PropertyHandlerCompiler::GenerateAccessCheck(
-    Handle<WeakCell> native_context_cell, Register scratch1, Register scratch2,
-    Label* miss, bool compare_native_contexts_only) {
+    Handle<WeakCell> native_context_cell, AsmRegister scratch1,
+    AsmRegister scratch2, Label* miss, bool compare_native_contexts_only) {
   Label done;
   // Load current native context.
   __ lw(scratch1, NativeContextMemOperand());
@@ -268,9 +267,9 @@ void PropertyHandlerCompiler::GenerateAccessCheck(
   __ bind(&done);
 }
 
-Register PropertyHandlerCompiler::CheckPrototypes(
-    Register object_reg, Register holder_reg, Register scratch1,
-    Register scratch2, Handle<Name> name, Label* miss) {
+AsmRegister PropertyHandlerCompiler::CheckPrototypes(
+    AsmRegister object_reg, AsmRegister holder_reg, AsmRegister scratch1,
+    AsmRegister scratch2, Handle<Name> name, Label* miss) {
   Handle<Map> receiver_map = map();
 
   // Make sure there's no overlap between holder and object registers.
@@ -289,7 +288,7 @@ Register PropertyHandlerCompiler::CheckPrototypes(
   }
 
   // Keep track of the current object in register reg.
-  Register reg = object_reg;
+  AsmRegister reg = object_reg;
   int depth = 0;
 
   Handle<JSObject> current = Handle<JSObject>::null();
@@ -377,7 +376,7 @@ void NamedStoreHandlerCompiler::ZapStackArgumentsRegisterAliases() {
 Handle<Code> NamedStoreHandlerCompiler::CompileStoreCallback(
     Handle<JSObject> object, Handle<Name> name, Handle<AccessorInfo> callback,
     LanguageMode language_mode) {
-  Register holder_reg = Frontend(name);
+  AsmRegister holder_reg = Frontend(name);
 
   __ Push(receiver(), holder_reg);  // Receiver.
   // If the callback cannot leak, then push the callback directly,
@@ -400,8 +399,7 @@ Handle<Code> NamedStoreHandlerCompiler::CompileStoreCallback(
   return GetCode(kind(), name);
 }
 
-
-Register NamedStoreHandlerCompiler::value() {
+AsmRegister NamedStoreHandlerCompiler::value() {
   return StoreDescriptor::ValueRegister();
 }
 

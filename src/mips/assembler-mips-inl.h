@@ -74,11 +74,7 @@ Operand::Operand(Smi* value) {
   rmode_ = RelocInfo::NONE32;
 }
 
-
-Operand::Operand(Register rm) {
-  rm_ = rm;
-}
-
+Operand::Operand(AsmRegister rm) { rm_ = rm; }
 
 bool Operand::is_reg() const {
   return rm_.is_valid();

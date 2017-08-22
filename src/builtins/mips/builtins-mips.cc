@@ -51,13 +51,14 @@ void Builtins::Generate_Adaptor(MacroAssembler* masm, Address address,
 
 // Load the built-in InternalArray function from the current context.
 static void GenerateLoadInternalArrayFunction(MacroAssembler* masm,
-                                              Register result) {
+                                              AsmRegister result) {
   // Load the InternalArray function from the native context.
   __ LoadNativeContextSlot(Context::INTERNAL_ARRAY_FUNCTION_INDEX, result);
 }
 
 // Load the built-in Array function from the current context.
-static void GenerateLoadArrayFunction(MacroAssembler* masm, Register result) {
+static void GenerateLoadArrayFunction(MacroAssembler* masm,
+                                      AsmRegister result) {
   // Load the Array function from the native context.
   __ LoadNativeContextSlot(Context::ARRAY_FUNCTION_INDEX, result);
 }
@@ -697,7 +698,7 @@ void Builtins::Generate_ConstructedNonConstructable(MacroAssembler* masm) {
 enum IsTagged { kArgcIsSmiTagged, kArgcIsUntaggedInt };
 
 // Clobbers a2; preserves all other registers.
-static void Generate_CheckStackOverflow(MacroAssembler* masm, Register argc,
+static void Generate_CheckStackOverflow(MacroAssembler* masm, AsmRegister argc,
                                         IsTagged argc_is_tagged) {
   // Check the stack for overflow. We are not trying to catch
   // interruptions (e.g. debug break and preemption) here, so the "real stack
@@ -921,9 +922,9 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
 }
 
 static void ReplaceClosureCodeWithOptimizedCode(
-    MacroAssembler* masm, Register optimized_code, Register closure,
-    Register scratch1, Register scratch2, Register scratch3) {
-  Register native_context = scratch1;
+    MacroAssembler* masm, AsmRegister optimized_code, AsmRegister closure,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3) {
+  AsmRegister native_context = scratch1;
 
   // Store code entry in the closure.
   __ sw(optimized_code, FieldMemOperand(closure, JSFunction::kCodeOffset));
@@ -952,8 +953,8 @@ static void ReplaceClosureCodeWithOptimizedCode(
   __ mov(closure, scratch2);
 }
 
-static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch) {
-  Register args_count = scratch;
+static void LeaveInterpreterFrame(MacroAssembler* masm, AsmRegister scratch) {
+  AsmRegister args_count = scratch;
 
   // Get the arguments + receiver count.
   __ lw(args_count,
@@ -970,7 +971,7 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch) {
 
 // Tail-call |function_id| if |smi_entry| == |marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
-                                          Register smi_entry,
+                                          AsmRegister smi_entry,
                                           OptimizationMarker marker,
                                           Runtime::FunctionId function_id) {
   Label no_match;
@@ -980,9 +981,10 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
 }
 
 static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
-                                           Register feedback_vector,
-                                           Register scratch1, Register scratch2,
-                                           Register scratch3) {
+                                           AsmRegister feedback_vector,
+                                           AsmRegister scratch1,
+                                           AsmRegister scratch2,
+                                           AsmRegister scratch3) {
   // ----------- S t a t e -------------
   //  -- a0 : argument count (preserved for callee if needed, and caller)
   //  -- a3 : new target (preserved for callee if needed, and caller)
@@ -994,8 +996,8 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 
   Label optimized_code_slot_is_cell, fallthrough;
 
-  Register closure = a1;
-  Register optimized_code_entry = scratch1;
+  AsmRegister closure = a1;
+  AsmRegister optimized_code_entry = scratch1;
 
   __ lw(optimized_code_entry,
         FieldMemOperand(feedback_vector, FeedbackVector::kOptimizedCodeOffset));
@@ -1092,8 +1094,8 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   ProfileEntryHookStub::MaybeCallEntryHook(masm);
 
-  Register closure = a1;
-  Register feedback_vector = a2;
+  AsmRegister closure = a1;
+  AsmRegister feedback_vector = a2;
 
   // Load the feedback vector from the closure.
   __ lw(feedback_vector,
@@ -1221,8 +1223,10 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ Branch(&bytecode_array_loaded);
 }
 
-static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
-                                        Register scratch1, Register scratch2,
+static void Generate_StackOverflowCheck(MacroAssembler* masm,
+                                        AsmRegister num_args,
+                                        AsmRegister scratch1,
+                                        AsmRegister scratch2,
                                         Label* stack_overflow) {
   // Check the stack for overflow. We are not trying to catch
   // interruptions (e.g. debug break and preemption) here, so the "real stack
@@ -1238,8 +1242,9 @@ static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
 }
 
 static void Generate_InterpreterPushArgs(MacroAssembler* masm,
-                                         Register num_args, Register index,
-                                         Register scratch, Register scratch2) {
+                                         AsmRegister num_args,
+                                         AsmRegister index, AsmRegister scratch,
+                                         AsmRegister scratch2) {
   // Find the address of the last argument.
   __ mov(scratch2, num_args);
   __ sll(scratch2, scratch2, kPointerSizeLog2);
@@ -1433,10 +1438,10 @@ void Builtins::Generate_CheckOptimizationMarker(MacroAssembler* masm) {
   //  -- a3 : new target (preserved for callee)
   //  -- a1 : target function (preserved for callee)
   // -----------------------------------
-  Register closure = a1;
+  AsmRegister closure = a1;
 
   // Get the feedback vector.
-  Register feedback_vector = a2;
+  AsmRegister feedback_vector = a2;
   __ lw(feedback_vector,
         FieldMemOperand(closure, JSFunction::kFeedbackVectorOffset));
   __ lw(feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
@@ -1464,8 +1469,8 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   // First lookup code, maybe we don't need to compile!
   Label gotta_call_runtime;
 
-  Register closure = a1;
-  Register feedback_vector = a2;
+  AsmRegister closure = a1;
+  AsmRegister feedback_vector = a2;
 
   // Do we have a valid feedback vector?
   __ lw(feedback_vector,
@@ -1478,7 +1483,7 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, t0, t3, t1);
 
   // We found no optimized code.
-  Register entry = t0;
+  AsmRegister entry = t0;
   __ lw(entry, FieldMemOperand(closure, JSFunction::kSharedFunctionInfoOffset));
 
   // If SFI points to anything other than CompileLazy, install that.
@@ -1665,9 +1670,9 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
   }
   for (int i = allocatable_register_count - 1; i >= 0; --i) {
     int code = config->GetAllocatableGeneralCode(i);
-    __ Pop(Register::from_code(code));
+    __ Pop(AsmRegister::from_code(code));
     if (java_script_builtin && code == kJavaScriptCallArgCountRegister.code()) {
-      __ SmiUntag(Register::from_code(code));
+      __ SmiUntag(AsmRegister::from_code(code));
     }
   }
   __ lw(fp, MemOperand(
@@ -1814,7 +1819,7 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   // present) instead.
   {
     Label no_arg;
-    Register scratch = t0;
+    AsmRegister scratch = t0;
     __ LoadRoot(a2, Heap::kUndefinedValueRootIndex);
     __ mov(a3, a2);
     // Lsa() cannot be used hare as scratch value used later.
@@ -1917,7 +1922,7 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   // thisArgument (if present) instead.
   {
     Label no_arg;
-    Register scratch = t0;
+    AsmRegister scratch = t0;
     __ LoadRoot(a1, Heap::kUndefinedValueRootIndex);
     __ mov(a2, a1);
     __ mov(a3, a1);
@@ -1969,7 +1974,7 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
   // (if present) instead.
   {
     Label no_arg;
-    Register scratch = t0;
+    AsmRegister scratch = t0;
     __ LoadRoot(a1, Heap::kUndefinedValueRootIndex);
     __ mov(a2, a1);
     // Lsa() cannot be used hare as scratch value used later.

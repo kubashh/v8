@@ -93,7 +93,7 @@ TEST_F(BytecodeAnalysisTest, EmptyBlock) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
+  interpreter::AsmRegister reg_0(0);
 
   builder.Return();
   expected_liveness.emplace_back("...L", "....");
@@ -107,7 +107,7 @@ TEST_F(BytecodeAnalysisTest, SimpleLoad) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
+  interpreter::AsmRegister reg_0(0);
 
   builder.LoadAccumulatorWithRegister(reg_0);
   expected_liveness.emplace_back("L...", "...L");
@@ -124,7 +124,7 @@ TEST_F(BytecodeAnalysisTest, StoreThenLoad) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
+  interpreter::AsmRegister reg_0(0);
 
   builder.StoreAccumulatorInRegister(reg_0);
   expected_liveness.emplace_back("...L", "L...");
@@ -144,9 +144,9 @@ TEST_F(BytecodeAnalysisTest, DiamondLoad) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
-  interpreter::Register reg_1(1);
-  interpreter::Register reg_2(2);
+  interpreter::AsmRegister reg_0(0);
+  interpreter::AsmRegister reg_1(1);
+  interpreter::AsmRegister reg_2(2);
 
   interpreter::BytecodeLabel ld1_label;
   interpreter::BytecodeLabel end_label;
@@ -181,9 +181,9 @@ TEST_F(BytecodeAnalysisTest, DiamondLookupsAndBinds) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
-  interpreter::Register reg_1(1);
-  interpreter::Register reg_2(2);
+  interpreter::AsmRegister reg_0(0);
+  interpreter::AsmRegister reg_1(1);
+  interpreter::AsmRegister reg_2(2);
 
   interpreter::BytecodeLabel ld1_label;
   interpreter::BytecodeLabel end_label;
@@ -228,9 +228,9 @@ TEST_F(BytecodeAnalysisTest, SimpleLoop) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
-  interpreter::Register reg_1(1);
-  interpreter::Register reg_2(2);
+  interpreter::AsmRegister reg_0(0);
+  interpreter::AsmRegister reg_1(1);
+  interpreter::AsmRegister reg_2(2);
 
   // Kill r0.
   builder.StoreAccumulatorInRegister(reg_0);
@@ -276,9 +276,9 @@ TEST_F(BytecodeAnalysisTest, TryCatch) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
-  interpreter::Register reg_1(1);
-  interpreter::Register reg_context(2);
+  interpreter::AsmRegister reg_0(0);
+  interpreter::AsmRegister reg_1(1);
+  interpreter::AsmRegister reg_context(2);
 
   // Kill r0.
   builder.StoreAccumulatorInRegister(reg_0);
@@ -328,7 +328,7 @@ TEST_F(BytecodeAnalysisTest, DiamondInLoop) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
+  interpreter::AsmRegister reg_0(0);
 
   {
     interpreter::LoopBuilder loop_builder(&builder, nullptr, nullptr);
@@ -398,8 +398,8 @@ TEST_F(BytecodeAnalysisTest, KillingLoopInsideLoop) {
   interpreter::BytecodeArrayBuilder builder(isolate(), zone(), 3, 3);
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
-  interpreter::Register reg_0(0);
-  interpreter::Register reg_1(1);
+  interpreter::AsmRegister reg_0(0);
+  interpreter::AsmRegister reg_1(1);
 
   {
     interpreter::LoopBuilder loop_builder(&builder, nullptr, nullptr);

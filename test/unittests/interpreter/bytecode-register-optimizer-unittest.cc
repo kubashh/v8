@@ -18,8 +18,8 @@ class BytecodeRegisterOptimizerTest
  public:
   struct RegisterTransfer {
     Bytecode bytecode;
-    Register input;
-    Register output;
+    AsmRegister input;
+    AsmRegister output;
   };
 
   BytecodeRegisterOptimizerTest() {}
@@ -32,22 +32,22 @@ class BytecodeRegisterOptimizerTest
                                   number_of_parameters, this);
   }
 
-  void EmitLdar(Register input) override {
-    output_.push_back({Bytecode::kLdar, input, Register()});
+  void EmitLdar(AsmRegister input) override {
+    output_.push_back({Bytecode::kLdar, input, AsmRegister()});
   }
-  void EmitStar(Register output) override {
-    output_.push_back({Bytecode::kStar, Register(), output});
+  void EmitStar(AsmRegister output) override {
+    output_.push_back({Bytecode::kStar, AsmRegister(), output});
   }
-  void EmitMov(Register input, Register output) override {
+  void EmitMov(AsmRegister input, AsmRegister output) override {
     output_.push_back({Bytecode::kMov, input, output});
   }
 
   BytecodeRegisterAllocator* allocator() { return register_allocator_; }
   BytecodeRegisterOptimizer* optimizer() { return register_optimizer_; }
 
-  Register NewTemporary() { return allocator()->NewRegister(); }
+  AsmRegister NewTemporary() { return allocator()->NewRegister(); }
 
-  void ReleaseTemporaries(Register reg) {
+  void ReleaseTemporaries(AsmRegister reg) {
     allocator()->ReleaseRegisters(reg.index());
   }
 
@@ -66,7 +66,7 @@ class BytecodeRegisterOptimizerTest
 
 TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForFlush) {
   Initialize(1, 1);
-  Register temp = NewTemporary();
+  AsmRegister temp = NewTemporary();
   optimizer()->DoStar(temp);
   CHECK_EQ(write_count(), 0u);
   optimizer()->Flush();
@@ -77,7 +77,7 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForFlush) {
 
 TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForJump) {
   Initialize(1, 1);
-  Register temp = NewTemporary();
+  AsmRegister temp = NewTemporary();
   optimizer()->DoStar(temp);
   CHECK_EQ(write_count(), 0u);
   optimizer()->PrepareForBytecode<Bytecode::kJump, AccumulatorUse::kNone>();
@@ -86,14 +86,14 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryMaterializedForJump) {
   CHECK_EQ(output()->at(0).output.index(), temp.index());
 }
 
-// Basic Register Optimizations
+// Basic AsmRegister Optimizations
 
 TEST_F(BytecodeRegisterOptimizerTest, TemporaryNotEmitted) {
   Initialize(3, 1);
-  Register parameter = Register::FromParameterIndex(1, 3);
+  AsmRegister parameter = AsmRegister::FromParameterIndex(1, 3);
   optimizer()->DoLdar(parameter);
   CHECK_EQ(write_count(), 0u);
-  Register temp = NewTemporary();
+  AsmRegister temp = NewTemporary();
   optimizer()->DoStar(temp);
   ReleaseTemporaries(temp);
   CHECK_EQ(write_count(), 0u);
@@ -105,8 +105,8 @@ TEST_F(BytecodeRegisterOptimizerTest, TemporaryNotEmitted) {
 TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterUsed) {
   Initialize(3, 1);
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
-  Register temp0 = NewTemporary();
-  Register temp1 = NewTemporary();
+  AsmRegister temp0 = NewTemporary();
+  AsmRegister temp1 = NewTemporary();
   optimizer()->DoStar(temp1);
   CHECK_EQ(write_count(), 0u);
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
@@ -128,8 +128,8 @@ TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterUsed) {
 TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterNotFlushed) {
   Initialize(3, 1);
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
-  Register temp0 = NewTemporary();
-  Register temp1 = NewTemporary();
+  AsmRegister temp0 = NewTemporary();
+  AsmRegister temp1 = NewTemporary();
   optimizer()->DoStar(temp0);
   CHECK_EQ(write_count(), 0u);
   optimizer()->DoStar(temp1);
@@ -143,10 +143,10 @@ TEST_F(BytecodeRegisterOptimizerTest, ReleasedRegisterNotFlushed) {
 
 TEST_F(BytecodeRegisterOptimizerTest, StoresToLocalsImmediate) {
   Initialize(3, 1);
-  Register parameter = Register::FromParameterIndex(1, 3);
+  AsmRegister parameter = AsmRegister::FromParameterIndex(1, 3);
   optimizer()->DoLdar(parameter);
   CHECK_EQ(write_count(), 0u);
-  Register local = Register(0);
+  AsmRegister local = AsmRegister(0);
   optimizer()->DoStar(local);
   CHECK_EQ(write_count(), 1u);
   CHECK_EQ(output()->at(0).bytecode, Bytecode::kMov);
@@ -161,14 +161,14 @@ TEST_F(BytecodeRegisterOptimizerTest, StoresToLocalsImmediate) {
 
 TEST_F(BytecodeRegisterOptimizerTest, SingleTemporaryNotMaterializedForInput) {
   Initialize(3, 1);
-  Register parameter = Register::FromParameterIndex(1, 3);
-  Register temp0 = NewTemporary();
-  Register temp1 = NewTemporary();
+  AsmRegister parameter = AsmRegister::FromParameterIndex(1, 3);
+  AsmRegister temp0 = NewTemporary();
+  AsmRegister temp1 = NewTemporary();
   optimizer()->DoMov(parameter, temp0);
   optimizer()->DoMov(parameter, temp1);
   CHECK_EQ(write_count(), 0u);
 
-  Register reg = optimizer()->GetInputRegister(temp0);
+  AsmRegister reg = optimizer()->GetInputRegister(temp0);
   RegisterList reg_list =
       optimizer()->GetInputRegisterList(RegisterList(temp0.index(), 1));
   CHECK_EQ(write_count(), 0u);
@@ -179,9 +179,9 @@ TEST_F(BytecodeRegisterOptimizerTest, SingleTemporaryNotMaterializedForInput) {
 
 TEST_F(BytecodeRegisterOptimizerTest, RangeOfTemporariesMaterializedForInput) {
   Initialize(3, 1);
-  Register parameter = Register::FromParameterIndex(1, 3);
-  Register temp0 = NewTemporary();
-  Register temp1 = NewTemporary();
+  AsmRegister parameter = AsmRegister::FromParameterIndex(1, 3);
+  AsmRegister temp0 = NewTemporary();
+  AsmRegister temp1 = NewTemporary();
   optimizer()->PrepareForBytecode<Bytecode::kLdaSmi, AccumulatorUse::kWrite>();
   optimizer()->DoStar(temp0);
   optimizer()->DoMov(parameter, temp1);

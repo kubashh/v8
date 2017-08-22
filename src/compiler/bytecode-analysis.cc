@@ -20,7 +20,7 @@ BytecodeLoopAssignments::BytecodeLoopAssignments(int parameter_count,
       bit_vector_(new (zone)
                       BitVector(parameter_count + register_count, zone)) {}
 
-void BytecodeLoopAssignments::Add(interpreter::Register r) {
+void BytecodeLoopAssignments::Add(interpreter::AsmRegister r) {
   if (r.is_parameter()) {
     bit_vector_->Add(r.ToParameterIndex(parameter_count_));
   } else {
@@ -28,15 +28,16 @@ void BytecodeLoopAssignments::Add(interpreter::Register r) {
   }
 }
 
-void BytecodeLoopAssignments::AddList(interpreter::Register r, uint32_t count) {
+void BytecodeLoopAssignments::AddList(interpreter::AsmRegister r,
+                                      uint32_t count) {
   if (r.is_parameter()) {
     for (uint32_t i = 0; i < count; i++) {
-      DCHECK(interpreter::Register(r.index() + i).is_parameter());
+      DCHECK(interpreter::AsmRegister(r.index() + i).is_parameter());
       bit_vector_->Add(r.ToParameterIndex(parameter_count_) + i);
     }
   } else {
     for (uint32_t i = 0; i < count; i++) {
-      DCHECK(!interpreter::Register(r.index() + i).is_parameter());
+      DCHECK(!interpreter::AsmRegister(r.index() + i).is_parameter());
       bit_vector_->Add(parameter_count_ + r.index() + i);
     }
   }
@@ -84,37 +85,37 @@ void UpdateInLiveness(Bytecode bytecode, BytecodeLivenessState& in_liveness,
   for (int i = 0; i < num_operands; ++i) {
     switch (operand_types[i]) {
       case OperandType::kRegOut: {
-        interpreter::Register r = accessor.GetRegisterOperand(i);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i);
         if (!r.is_parameter()) {
           in_liveness.MarkRegisterDead(r.index());
         }
         break;
       }
       case OperandType::kRegOutList: {
-        interpreter::Register r = accessor.GetRegisterOperand(i++);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i++);
         uint32_t reg_count = accessor.GetRegisterCountOperand(i);
         if (!r.is_parameter()) {
           for (uint32_t j = 0; j < reg_count; ++j) {
-            DCHECK(!interpreter::Register(r.index() + j).is_parameter());
+            DCHECK(!interpreter::AsmRegister(r.index() + j).is_parameter());
             in_liveness.MarkRegisterDead(r.index() + j);
           }
         }
         break;
       }
       case OperandType::kRegOutPair: {
-        interpreter::Register r = accessor.GetRegisterOperand(i);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i);
         if (!r.is_parameter()) {
-          DCHECK(!interpreter::Register(r.index() + 1).is_parameter());
+          DCHECK(!interpreter::AsmRegister(r.index() + 1).is_parameter());
           in_liveness.MarkRegisterDead(r.index());
           in_liveness.MarkRegisterDead(r.index() + 1);
         }
         break;
       }
       case OperandType::kRegOutTriple: {
-        interpreter::Register r = accessor.GetRegisterOperand(i);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i);
         if (!r.is_parameter()) {
-          DCHECK(!interpreter::Register(r.index() + 1).is_parameter());
-          DCHECK(!interpreter::Register(r.index() + 2).is_parameter());
+          DCHECK(!interpreter::AsmRegister(r.index() + 1).is_parameter());
+          DCHECK(!interpreter::AsmRegister(r.index() + 2).is_parameter());
           in_liveness.MarkRegisterDead(r.index());
           in_liveness.MarkRegisterDead(r.index() + 1);
           in_liveness.MarkRegisterDead(r.index() + 2);
@@ -133,27 +134,27 @@ void UpdateInLiveness(Bytecode bytecode, BytecodeLivenessState& in_liveness,
   for (int i = 0; i < num_operands; ++i) {
     switch (operand_types[i]) {
       case OperandType::kReg: {
-        interpreter::Register r = accessor.GetRegisterOperand(i);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i);
         if (!r.is_parameter()) {
           in_liveness.MarkRegisterLive(r.index());
         }
         break;
       }
       case OperandType::kRegPair: {
-        interpreter::Register r = accessor.GetRegisterOperand(i);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i);
         if (!r.is_parameter()) {
-          DCHECK(!interpreter::Register(r.index() + 1).is_parameter());
+          DCHECK(!interpreter::AsmRegister(r.index() + 1).is_parameter());
           in_liveness.MarkRegisterLive(r.index());
           in_liveness.MarkRegisterLive(r.index() + 1);
         }
         break;
       }
       case OperandType::kRegList: {
-        interpreter::Register r = accessor.GetRegisterOperand(i++);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i++);
         uint32_t reg_count = accessor.GetRegisterCountOperand(i);
         if (!r.is_parameter()) {
           for (uint32_t j = 0; j < reg_count; ++j) {
-            DCHECK(!interpreter::Register(r.index() + j).is_parameter());
+            DCHECK(!interpreter::AsmRegister(r.index() + j).is_parameter());
             in_liveness.MarkRegisterLive(r.index() + j);
           }
         }
@@ -230,7 +231,7 @@ void UpdateAssignments(Bytecode bytecode, BytecodeLoopAssignments& assignments,
         break;
       }
       case OperandType::kRegOutList: {
-        interpreter::Register r = accessor.GetRegisterOperand(i++);
+        interpreter::AsmRegister r = accessor.GetRegisterOperand(i++);
         uint32_t reg_count = accessor.GetRegisterCountOperand(i);
         assignments.AddList(r, reg_count);
         break;

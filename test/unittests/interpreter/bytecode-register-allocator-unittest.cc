@@ -26,7 +26,7 @@ class BytecodeRegisterAllocatorTest : public TestWithIsolateAndZone {
 
 TEST_F(BytecodeRegisterAllocatorTest, SimpleAllocations) {
   CHECK_EQ(allocator()->maximum_register_count(), 0);
-  Register reg0 = allocator()->NewRegister();
+  AsmRegister reg0 = allocator()->NewRegister();
   CHECK_EQ(reg0.index(), 0);
   CHECK_EQ(allocator()->maximum_register_count(), 1);
   CHECK_EQ(allocator()->next_register_index(), 1);
@@ -38,7 +38,7 @@ TEST_F(BytecodeRegisterAllocatorTest, SimpleAllocations) {
   CHECK_EQ(allocator()->next_register_index(), 0);
 
   reg0 = allocator()->NewRegister();
-  Register reg1 = allocator()->NewRegister();
+  AsmRegister reg1 = allocator()->NewRegister();
   CHECK_EQ(reg0.index(), 0);
   CHECK_EQ(reg1.index(), 1);
   CHECK(allocator()->RegisterIsLive(reg0));
@@ -65,7 +65,7 @@ TEST_F(BytecodeRegisterAllocatorTest, RegisterListAllocations) {
   CHECK_EQ(allocator()->next_register_index(), 3);
   CHECK(allocator()->RegisterIsLive(reg_list[2]));
 
-  Register reg = allocator()->NewRegister();
+  AsmRegister reg = allocator()->NewRegister();
   RegisterList reg_list_2 = allocator()->NewRegisterList(2);
   CHECK_EQ(reg.index(), 3);
   CHECK_EQ(reg_list_2.first_register().index(), 4);
@@ -94,7 +94,7 @@ TEST_F(BytecodeRegisterAllocatorTest, RegisterListAllocations) {
 
 TEST_F(BytecodeRegisterAllocatorTest, GrowableRegisterListAllocations) {
   CHECK_EQ(allocator()->maximum_register_count(), 0);
-  Register reg = allocator()->NewRegister();
+  AsmRegister reg = allocator()->NewRegister();
   CHECK_EQ(reg.index(), 0);
   RegisterList reg_list = allocator()->NewGrowableRegisterList();
   CHECK_EQ(reg_list.register_count(), 0);

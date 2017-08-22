@@ -49,7 +49,7 @@ class OperandGenerator {
                                      GetVReg(node)));
   }
 
-  InstructionOperand DefineAsFixed(Node* node, Register reg) {
+  InstructionOperand DefineAsFixed(Node* node, AsmRegister reg) {
     return Define(node, UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER,
                                            reg.code(), GetVReg(node)));
   }
@@ -127,7 +127,7 @@ class OperandGenerator {
                                         GetVReg(node)));
   }
 
-  InstructionOperand UseFixed(Node* node, Register reg) {
+  InstructionOperand UseFixed(Node* node, AsmRegister reg) {
     return Use(node, UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER,
                                         reg.code(), GetVReg(node)));
   }
@@ -206,7 +206,7 @@ class OperandGenerator {
     return op;
   }
 
-  InstructionOperand TempRegister(Register reg) {
+  InstructionOperand TempRegister(AsmRegister reg) {
     return UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER, reg.code(),
                               InstructionOperand::kInvalidVirtualRegister);
   }

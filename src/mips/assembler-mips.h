@@ -75,7 +75,7 @@ namespace internal {
   V(f16) V(f18) V(f20) V(f22) V(f24)
 // clang-format on
 
-// Register lists.
+// AsmRegister lists.
 // Note that the bit values must match those used in actual instruction
 // encoding.
 const int kNumRegs = 32;
@@ -184,7 +184,7 @@ const int kSafepointRegisterStackIndexMap[kNumRegs] = {kUndefIndex,  // zero_reg
 // the register initialization to depend on the particular initialization
 // order (which appears to be different on OS X, Linux, and Windows for the
 // installed versions of C++ we tried). Using a struct permits C-style
-// "initialization". Also, the Register objects cannot be const as this
+// "initialization". Also, the AsmRegister objects cannot be const as this
 // forces initialization stubs in MSVC, making us dependent on initialization
 // order.
 //
@@ -196,11 +196,10 @@ const int kSafepointRegisterStackIndexMap[kNumRegs] = {kUndefIndex,  // zero_reg
 // mode. This way we get the compile-time error checking in debug mode
 // and best performance in optimized code.
 
-
 // -----------------------------------------------------------------------------
-// Implementation of Register and FPURegister.
+// Implementation of AsmRegister and FPURegister.
 
-struct Register {
+struct AsmRegister {
   static constexpr int kCpRegister = 23;  // cp (s7) is the 23rd register.
 
   enum Code {
@@ -223,14 +222,13 @@ struct Register {
 #error Unknown endianness
 #endif
 
-
-  static Register from_code(int code) {
+  static AsmRegister from_code(int code) {
     DCHECK_LE(0, code);
     DCHECK_GT(kNumRegisters, code);
-    return Register{code};
+    return AsmRegister{code};
   }
   bool is_valid() const { return 0 <= reg_code && reg_code < kNumRegisters; }
-  bool is(Register reg) const { return reg_code == reg.reg_code; }
+  bool is(AsmRegister reg) const { return reg_code == reg.reg_code; }
   int code() const {
     DCHECK(is_valid());
     return reg_code;
@@ -247,14 +245,14 @@ struct Register {
 // s7: context register
 // s3: lithium scratch
 // s4: lithium scratch2
-#define DECLARE_REGISTER(R) constexpr Register R = {Register::kCode_##R};
+#define DECLARE_REGISTER(R) constexpr AsmRegister R = {AsmRegister::kCode_##R};
 GENERAL_REGISTERS(DECLARE_REGISTER)
 #undef DECLARE_REGISTER
-constexpr Register no_reg = {Register::kCode_no_reg};
+constexpr AsmRegister no_reg = {AsmRegister::kCode_no_reg};
 
-int ToNumber(Register reg);
+int ToNumber(AsmRegister reg);
 
-Register ToRegister(int num);
+AsmRegister ToRegister(int num);
 
 constexpr bool kSimpleFPAliasing = true;
 constexpr bool kSimdMaskRegisters = false;
@@ -365,7 +363,7 @@ struct MSARegister {
 // in pairs, starting with the even numbered register. So a double operation
 // on f0 really uses f0 and f1.
 // (Modern mips hardware also supports 32 64-bit registers, via setting
-// (priviledged) Status Register FR bit to 1. This is used by the N32 ABI,
+// (priviledged) Status AsmRegister FR bit to 1. This is used by the N32 ABI,
 // but it is not in common use. Someday we will want to support this in v8.)
 
 // For O32 ABI, Floats and Doubles refer to same set of 32 32-bit registers.
@@ -446,12 +444,12 @@ constexpr Simd128Register w29 = {29};
 constexpr Simd128Register w30 = {30};
 constexpr Simd128Register w31 = {31};
 
-// Register aliases.
+// AsmRegister aliases.
 // cp is assumed to be a callee saved register.
-constexpr Register kRootRegister = s6;
-constexpr Register cp = s7;
-constexpr Register kLithiumScratchReg = s3;
-constexpr Register kLithiumScratchReg2 = s4;
+constexpr AsmRegister kRootRegister = s6;
+constexpr AsmRegister cp = s7;
+constexpr AsmRegister kLithiumScratchReg = s3;
+constexpr AsmRegister kLithiumScratchReg2 = s4;
 constexpr DoubleRegister kLithiumScratchDouble = f30;
 constexpr DoubleRegister kDoubleRegZero = f28;
 // Used on mips32r6 for compare operations.
@@ -530,7 +528,7 @@ class Operand BASE_EMBEDDED {
   static Operand EmbeddedCode(CodeStub* stub);
 
   // Register.
-  INLINE(explicit Operand(Register rm));
+  INLINE(explicit Operand(AsmRegister rm));
 
   // Return true if this is a register operand.
   INLINE(bool is_reg() const);
@@ -556,12 +554,12 @@ class Operand BASE_EMBEDDED {
     return is_heap_object_request_;
   }
 
-  Register rm() const { return rm_; }
+  AsmRegister rm() const { return rm_; }
 
   RelocInfo::Mode rmode() const { return rmode_; }
 
  private:
-  Register rm_;
+  AsmRegister rm_;
   union Value {
     Value() {}
     HeapObjectRequest heap_object_request;  // if is_heap_object_request_
@@ -585,8 +583,8 @@ class MemOperand : public Operand {
     offset_zero = 0
   };
 
-  explicit MemOperand(Register rn, int32_t offset = 0);
-  explicit MemOperand(Register rn, int32_t unit, int32_t multiplier,
+  explicit MemOperand(AsmRegister rn, int32_t offset = 0);
+  explicit MemOperand(AsmRegister rn, int32_t unit, int32_t multiplier,
                       OffsetAddend offset_addend = offset_zero);
   int32_t offset() const { return offset_; }
 
@@ -828,7 +826,7 @@ class Assembler : public AssemblerBase {
   // marking, to avoid conflict with ssnop and ehb instructions.
   void nop(unsigned int type = 0) {
     DCHECK(type < 32);
-    Register nop_rt_reg = (type == 0) ? zero_reg : at;
+    AsmRegister nop_rt_reg = (type == 0) ? zero_reg : at;
     sll(zero_reg, nop_rt_reg, type, true);
   }
 
@@ -844,102 +842,102 @@ class Assembler : public AssemblerBase {
   void balc(int32_t offset);
   inline void balc(Label* L) { balc(shifted_branch_offset26(L)); }
 
-  void beq(Register rs, Register rt, int16_t offset);
-  inline void beq(Register rs, Register rt, Label* L) {
+  void beq(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void beq(AsmRegister rs, AsmRegister rt, Label* L) {
     beq(rs, rt, shifted_branch_offset(L));
   }
-  void bgez(Register rs, int16_t offset);
-  void bgezc(Register rt, int16_t offset);
-  inline void bgezc(Register rt, Label* L) {
+  void bgez(AsmRegister rs, int16_t offset);
+  void bgezc(AsmRegister rt, int16_t offset);
+  inline void bgezc(AsmRegister rt, Label* L) {
     bgezc(rt, shifted_branch_offset(L));
   }
-  void bgeuc(Register rs, Register rt, int16_t offset);
-  inline void bgeuc(Register rs, Register rt, Label* L) {
+  void bgeuc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bgeuc(AsmRegister rs, AsmRegister rt, Label* L) {
     bgeuc(rs, rt, shifted_branch_offset(L));
   }
-  void bgec(Register rs, Register rt, int16_t offset);
-  inline void bgec(Register rs, Register rt, Label* L) {
+  void bgec(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bgec(AsmRegister rs, AsmRegister rt, Label* L) {
     bgec(rs, rt, shifted_branch_offset(L));
   }
-  void bgezal(Register rs, int16_t offset);
-  void bgezalc(Register rt, int16_t offset);
-  inline void bgezalc(Register rt, Label* L) {
+  void bgezal(AsmRegister rs, int16_t offset);
+  void bgezalc(AsmRegister rt, int16_t offset);
+  inline void bgezalc(AsmRegister rt, Label* L) {
     bgezalc(rt, shifted_branch_offset(L));
   }
-  void bgezall(Register rs, int16_t offset);
-  inline void bgezall(Register rs, Label* L) {
+  void bgezall(AsmRegister rs, int16_t offset);
+  inline void bgezall(AsmRegister rs, Label* L) {
     bgezall(rs, branch_offset(L) >> 2);
   }
-  void bgtz(Register rs, int16_t offset);
-  void bgtzc(Register rt, int16_t offset);
-  inline void bgtzc(Register rt, Label* L) {
+  void bgtz(AsmRegister rs, int16_t offset);
+  void bgtzc(AsmRegister rt, int16_t offset);
+  inline void bgtzc(AsmRegister rt, Label* L) {
     bgtzc(rt, shifted_branch_offset(L));
   }
-  void blez(Register rs, int16_t offset);
-  void blezc(Register rt, int16_t offset);
-  inline void blezc(Register rt, Label* L) {
+  void blez(AsmRegister rs, int16_t offset);
+  void blezc(AsmRegister rt, int16_t offset);
+  inline void blezc(AsmRegister rt, Label* L) {
     blezc(rt, shifted_branch_offset(L));
   }
-  void bltz(Register rs, int16_t offset);
-  void bltzc(Register rt, int16_t offset);
-  inline void bltzc(Register rt, Label* L) {
+  void bltz(AsmRegister rs, int16_t offset);
+  void bltzc(AsmRegister rt, int16_t offset);
+  inline void bltzc(AsmRegister rt, Label* L) {
     bltzc(rt, shifted_branch_offset(L));
   }
-  void bltuc(Register rs, Register rt, int16_t offset);
-  inline void bltuc(Register rs, Register rt, Label* L) {
+  void bltuc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bltuc(AsmRegister rs, AsmRegister rt, Label* L) {
     bltuc(rs, rt, shifted_branch_offset(L));
   }
-  void bltc(Register rs, Register rt, int16_t offset);
-  inline void bltc(Register rs, Register rt, Label* L) {
+  void bltc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bltc(AsmRegister rs, AsmRegister rt, Label* L) {
     bltc(rs, rt, shifted_branch_offset(L));
   }
-  void bltzal(Register rs, int16_t offset);
-  void blezalc(Register rt, int16_t offset);
-  inline void blezalc(Register rt, Label* L) {
+  void bltzal(AsmRegister rs, int16_t offset);
+  void blezalc(AsmRegister rt, int16_t offset);
+  inline void blezalc(AsmRegister rt, Label* L) {
     blezalc(rt, shifted_branch_offset(L));
   }
-  void bltzalc(Register rt, int16_t offset);
-  inline void bltzalc(Register rt, Label* L) {
+  void bltzalc(AsmRegister rt, int16_t offset);
+  inline void bltzalc(AsmRegister rt, Label* L) {
     bltzalc(rt, shifted_branch_offset(L));
   }
-  void bgtzalc(Register rt, int16_t offset);
-  inline void bgtzalc(Register rt, Label* L) {
+  void bgtzalc(AsmRegister rt, int16_t offset);
+  inline void bgtzalc(AsmRegister rt, Label* L) {
     bgtzalc(rt, shifted_branch_offset(L));
   }
-  void beqzalc(Register rt, int16_t offset);
-  inline void beqzalc(Register rt, Label* L) {
+  void beqzalc(AsmRegister rt, int16_t offset);
+  inline void beqzalc(AsmRegister rt, Label* L) {
     beqzalc(rt, shifted_branch_offset(L));
   }
-  void beqc(Register rs, Register rt, int16_t offset);
-  inline void beqc(Register rs, Register rt, Label* L) {
+  void beqc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void beqc(AsmRegister rs, AsmRegister rt, Label* L) {
     beqc(rs, rt, shifted_branch_offset(L));
   }
-  void beqzc(Register rs, int32_t offset);
-  inline void beqzc(Register rs, Label* L) {
+  void beqzc(AsmRegister rs, int32_t offset);
+  inline void beqzc(AsmRegister rs, Label* L) {
     beqzc(rs, shifted_branch_offset21(L));
   }
-  void bnezalc(Register rt, int16_t offset);
-  inline void bnezalc(Register rt, Label* L) {
+  void bnezalc(AsmRegister rt, int16_t offset);
+  inline void bnezalc(AsmRegister rt, Label* L) {
     bnezalc(rt, shifted_branch_offset(L));
   }
-  void bnec(Register rs, Register rt, int16_t offset);
-  inline void bnec(Register rs, Register rt, Label* L) {
+  void bnec(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bnec(AsmRegister rs, AsmRegister rt, Label* L) {
     bnec(rs, rt, shifted_branch_offset(L));
   }
-  void bnezc(Register rt, int32_t offset);
-  inline void bnezc(Register rt, Label* L) {
+  void bnezc(AsmRegister rt, int32_t offset);
+  inline void bnezc(AsmRegister rt, Label* L) {
     bnezc(rt, shifted_branch_offset21(L));
   }
-  void bne(Register rs, Register rt, int16_t offset);
-  inline void bne(Register rs, Register rt, Label* L) {
+  void bne(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bne(AsmRegister rs, AsmRegister rt, Label* L) {
     bne(rs, rt, shifted_branch_offset(L));
   }
-  void bovc(Register rs, Register rt, int16_t offset);
-  inline void bovc(Register rs, Register rt, Label* L) {
+  void bovc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bovc(AsmRegister rs, AsmRegister rt, Label* L) {
     bovc(rs, rt, shifted_branch_offset(L));
   }
-  void bnvc(Register rs, Register rt, int16_t offset);
-  inline void bnvc(Register rs, Register rt, Label* L) {
+  void bnvc(AsmRegister rs, AsmRegister rt, int16_t offset);
+  inline void bnvc(AsmRegister rs, AsmRegister rt, Label* L) {
     bnvc(rs, rt, shifted_branch_offset(L));
   }
 
@@ -949,84 +947,83 @@ class Assembler : public AssemblerBase {
   // Jump targets must be in the current 256 MB-aligned region. i.e. 28 bits.
   void j(int32_t target);
   void jal(int32_t target);
-  void jalr(Register rs, Register rd = ra);
-  void jr(Register target);
-  void jic(Register rt, int16_t offset);
-  void jialc(Register rt, int16_t offset);
-
+  void jalr(AsmRegister rs, AsmRegister rd = ra);
+  void jr(AsmRegister target);
+  void jic(AsmRegister rt, int16_t offset);
+  void jialc(AsmRegister rt, int16_t offset);
 
   // -------Data-processing-instructions---------
 
   // Arithmetic.
-  void addu(Register rd, Register rs, Register rt);
-  void subu(Register rd, Register rs, Register rt);
-  void mult(Register rs, Register rt);
-  void multu(Register rs, Register rt);
-  void div(Register rs, Register rt);
-  void divu(Register rs, Register rt);
-  void div(Register rd, Register rs, Register rt);
-  void divu(Register rd, Register rs, Register rt);
-  void mod(Register rd, Register rs, Register rt);
-  void modu(Register rd, Register rs, Register rt);
-  void mul(Register rd, Register rs, Register rt);
-  void muh(Register rd, Register rs, Register rt);
-  void mulu(Register rd, Register rs, Register rt);
-  void muhu(Register rd, Register rs, Register rt);
+  void addu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void subu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void mult(AsmRegister rs, AsmRegister rt);
+  void multu(AsmRegister rs, AsmRegister rt);
+  void div(AsmRegister rs, AsmRegister rt);
+  void divu(AsmRegister rs, AsmRegister rt);
+  void div(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void divu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void mod(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void modu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void mul(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void muh(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void mulu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void muhu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
 
-  void addiu(Register rd, Register rs, int32_t j);
+  void addiu(AsmRegister rd, AsmRegister rs, int32_t j);
 
   // Logical.
-  void and_(Register rd, Register rs, Register rt);
-  void or_(Register rd, Register rs, Register rt);
-  void xor_(Register rd, Register rs, Register rt);
-  void nor(Register rd, Register rs, Register rt);
+  void and_(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void or_(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void xor_(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void nor(AsmRegister rd, AsmRegister rs, AsmRegister rt);
 
-  void andi(Register rd, Register rs, int32_t j);
-  void ori(Register rd, Register rs, int32_t j);
-  void xori(Register rd, Register rs, int32_t j);
-  void lui(Register rd, int32_t j);
-  void aui(Register rs, Register rt, int32_t j);
+  void andi(AsmRegister rd, AsmRegister rs, int32_t j);
+  void ori(AsmRegister rd, AsmRegister rs, int32_t j);
+  void xori(AsmRegister rd, AsmRegister rs, int32_t j);
+  void lui(AsmRegister rd, int32_t j);
+  void aui(AsmRegister rs, AsmRegister rt, int32_t j);
 
   // Shifts.
   // Please note: sll(zero_reg, zero_reg, x) instructions are reserved as nop
   // and may cause problems in normal code. coming_from_nop makes sure this
   // doesn't happen.
-  void sll(Register rd, Register rt, uint16_t sa, bool coming_from_nop = false);
-  void sllv(Register rd, Register rt, Register rs);
-  void srl(Register rd, Register rt, uint16_t sa);
-  void srlv(Register rd, Register rt, Register rs);
-  void sra(Register rt, Register rd, uint16_t sa);
-  void srav(Register rt, Register rd, Register rs);
-  void rotr(Register rd, Register rt, uint16_t sa);
-  void rotrv(Register rd, Register rt, Register rs);
+  void sll(AsmRegister rd, AsmRegister rt, uint16_t sa,
+           bool coming_from_nop = false);
+  void sllv(AsmRegister rd, AsmRegister rt, AsmRegister rs);
+  void srl(AsmRegister rd, AsmRegister rt, uint16_t sa);
+  void srlv(AsmRegister rd, AsmRegister rt, AsmRegister rs);
+  void sra(AsmRegister rt, AsmRegister rd, uint16_t sa);
+  void srav(AsmRegister rt, AsmRegister rd, AsmRegister rs);
+  void rotr(AsmRegister rd, AsmRegister rt, uint16_t sa);
+  void rotrv(AsmRegister rd, AsmRegister rt, AsmRegister rs);
 
   // ------------Memory-instructions-------------
 
-  void lb(Register rd, const MemOperand& rs);
-  void lbu(Register rd, const MemOperand& rs);
-  void lh(Register rd, const MemOperand& rs);
-  void lhu(Register rd, const MemOperand& rs);
-  void lw(Register rd, const MemOperand& rs);
-  void lwl(Register rd, const MemOperand& rs);
-  void lwr(Register rd, const MemOperand& rs);
-  void sb(Register rd, const MemOperand& rs);
-  void sh(Register rd, const MemOperand& rs);
-  void sw(Register rd, const MemOperand& rs);
-  void swl(Register rd, const MemOperand& rs);
-  void swr(Register rd, const MemOperand& rs);
+  void lb(AsmRegister rd, const MemOperand& rs);
+  void lbu(AsmRegister rd, const MemOperand& rs);
+  void lh(AsmRegister rd, const MemOperand& rs);
+  void lhu(AsmRegister rd, const MemOperand& rs);
+  void lw(AsmRegister rd, const MemOperand& rs);
+  void lwl(AsmRegister rd, const MemOperand& rs);
+  void lwr(AsmRegister rd, const MemOperand& rs);
+  void sb(AsmRegister rd, const MemOperand& rs);
+  void sh(AsmRegister rd, const MemOperand& rs);
+  void sw(AsmRegister rd, const MemOperand& rs);
+  void swl(AsmRegister rd, const MemOperand& rs);
+  void swr(AsmRegister rd, const MemOperand& rs);
 
   // ----------Atomic instructions--------------
 
-  void ll(Register rd, const MemOperand& rs);
-  void sc(Register rd, const MemOperand& rs);
+  void ll(AsmRegister rd, const MemOperand& rs);
+  void sc(AsmRegister rd, const MemOperand& rs);
 
   // ---------PC-Relative-instructions-----------
 
-  void addiupc(Register rs, int32_t imm19);
-  void lwpc(Register rs, int32_t offset19);
-  void auipc(Register rs, int16_t imm16);
-  void aluipc(Register rs, int16_t imm16);
-
+  void addiupc(AsmRegister rs, int32_t imm19);
+  void lwpc(AsmRegister rs, int32_t offset19);
+  void auipc(AsmRegister rs, int16_t imm16);
+  void aluipc(AsmRegister rs, int16_t imm16);
 
   // ----------------Prefetch--------------------
 
@@ -1038,39 +1035,39 @@ class Assembler : public AssemblerBase {
   // Break / Trap instructions.
   void break_(uint32_t code, bool break_as_stop = false);
   void stop(const char* msg, uint32_t code = kMaxStopCode);
-  void tge(Register rs, Register rt, uint16_t code);
-  void tgeu(Register rs, Register rt, uint16_t code);
-  void tlt(Register rs, Register rt, uint16_t code);
-  void tltu(Register rs, Register rt, uint16_t code);
-  void teq(Register rs, Register rt, uint16_t code);
-  void tne(Register rs, Register rt, uint16_t code);
+  void tge(AsmRegister rs, AsmRegister rt, uint16_t code);
+  void tgeu(AsmRegister rs, AsmRegister rt, uint16_t code);
+  void tlt(AsmRegister rs, AsmRegister rt, uint16_t code);
+  void tltu(AsmRegister rs, AsmRegister rt, uint16_t code);
+  void teq(AsmRegister rs, AsmRegister rt, uint16_t code);
+  void tne(AsmRegister rs, AsmRegister rt, uint16_t code);
 
   // Memory barrier instruction.
   void sync();
 
   // Move from HI/LO register.
-  void mfhi(Register rd);
-  void mflo(Register rd);
+  void mfhi(AsmRegister rd);
+  void mflo(AsmRegister rd);
 
   // Set on less than.
-  void slt(Register rd, Register rs, Register rt);
-  void sltu(Register rd, Register rs, Register rt);
-  void slti(Register rd, Register rs, int32_t j);
-  void sltiu(Register rd, Register rs, int32_t j);
+  void slt(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void sltu(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void slti(AsmRegister rd, AsmRegister rs, int32_t j);
+  void sltiu(AsmRegister rd, AsmRegister rs, int32_t j);
 
   // Conditional move.
-  void movz(Register rd, Register rs, Register rt);
-  void movn(Register rd, Register rs, Register rt);
-  void movt(Register rd, Register rs, uint16_t cc = 0);
-  void movf(Register rd, Register rs, uint16_t cc = 0);
+  void movz(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void movn(AsmRegister rd, AsmRegister rs, AsmRegister rt);
+  void movt(AsmRegister rd, AsmRegister rs, uint16_t cc = 0);
+  void movf(AsmRegister rd, AsmRegister rs, uint16_t cc = 0);
 
   void sel(SecondaryField fmt, FPURegister fd, FPURegister fs, FPURegister ft);
   void sel_s(FPURegister fd, FPURegister fs, FPURegister ft);
   void sel_d(FPURegister fd, FPURegister fs, FPURegister ft);
-  void seleqz(Register rd, Register rs, Register rt);
+  void seleqz(AsmRegister rd, AsmRegister rs, AsmRegister rt);
   void seleqz(SecondaryField fmt, FPURegister fd, FPURegister fs,
               FPURegister ft);
-  void selnez(Register rd, Register rs, Register rt);
+  void selnez(AsmRegister rd, AsmRegister rs, AsmRegister rt);
   void selnez(SecondaryField fmt, FPURegister fd, FPURegister fs,
               FPURegister ft);
   void seleqz_d(FPURegister fd, FPURegister fs, FPURegister ft);
@@ -1078,24 +1075,24 @@ class Assembler : public AssemblerBase {
   void selnez_d(FPURegister fd, FPURegister fs, FPURegister ft);
   void selnez_s(FPURegister fd, FPURegister fs, FPURegister ft);
 
-  void movz_s(FPURegister fd, FPURegister fs, Register rt);
-  void movz_d(FPURegister fd, FPURegister fs, Register rt);
+  void movz_s(FPURegister fd, FPURegister fs, AsmRegister rt);
+  void movz_d(FPURegister fd, FPURegister fs, AsmRegister rt);
   void movt_s(FPURegister fd, FPURegister fs, uint16_t cc = 0);
   void movt_d(FPURegister fd, FPURegister fs, uint16_t cc = 0);
   void movf_s(FPURegister fd, FPURegister fs, uint16_t cc = 0);
   void movf_d(FPURegister fd, FPURegister fs, uint16_t cc = 0);
-  void movn_s(FPURegister fd, FPURegister fs, Register rt);
-  void movn_d(FPURegister fd, FPURegister fs, Register rt);
+  void movn_s(FPURegister fd, FPURegister fs, AsmRegister rt);
+  void movn_d(FPURegister fd, FPURegister fs, AsmRegister rt);
   // Bit twiddling.
-  void clz(Register rd, Register rs);
-  void ins_(Register rt, Register rs, uint16_t pos, uint16_t size);
-  void ext_(Register rt, Register rs, uint16_t pos, uint16_t size);
-  void bitswap(Register rd, Register rt);
-  void align(Register rd, Register rs, Register rt, uint8_t bp);
+  void clz(AsmRegister rd, AsmRegister rs);
+  void ins_(AsmRegister rt, AsmRegister rs, uint16_t pos, uint16_t size);
+  void ext_(AsmRegister rt, AsmRegister rs, uint16_t pos, uint16_t size);
+  void bitswap(AsmRegister rd, AsmRegister rt);
+  void align(AsmRegister rd, AsmRegister rs, AsmRegister rt, uint8_t bp);
 
-  void wsbh(Register rd, Register rt);
-  void seh(Register rd, Register rt);
-  void seb(Register rd, Register rt);
+  void wsbh(AsmRegister rd, AsmRegister rt);
+  void seh(AsmRegister rd, AsmRegister rt);
+  void seb(AsmRegister rd, AsmRegister rt);
 
   // --------Coprocessor-instructions----------------
 
@@ -1103,14 +1100,14 @@ class Assembler : public AssemblerBase {
   void lwc1(FPURegister fd, const MemOperand& src);
   void swc1(FPURegister fs, const MemOperand& dst);
 
-  void mtc1(Register rt, FPURegister fs);
-  void mthc1(Register rt, FPURegister fs);
+  void mtc1(AsmRegister rt, FPURegister fs);
+  void mthc1(AsmRegister rt, FPURegister fs);
 
-  void mfc1(Register rt, FPURegister fs);
-  void mfhc1(Register rt, FPURegister fs);
+  void mfc1(AsmRegister rt, FPURegister fs);
+  void mfhc1(AsmRegister rt, FPURegister fs);
 
-  void ctc1(Register rt, FPUControlRegister fs);
-  void cfc1(Register rt, FPUControlRegister fs);
+  void ctc1(AsmRegister rt, FPUControlRegister fs);
+  void cfc1(AsmRegister rt, FPUControlRegister fs);
 
   // Arithmetic.
   void add_s(FPURegister fd, FPURegister fs, FPURegister ft);
@@ -1343,9 +1340,9 @@ class Assembler : public AssemblerBase {
   void bmz_v(MSARegister wd, MSARegister ws, MSARegister wt);
   void bsel_v(MSARegister wd, MSARegister ws, MSARegister wt);
 
-  void fill_b(MSARegister wd, Register rs);
-  void fill_h(MSARegister wd, Register rs);
-  void fill_w(MSARegister wd, Register rs);
+  void fill_b(MSARegister wd, AsmRegister rs);
+  void fill_h(MSARegister wd, AsmRegister rs);
+  void fill_w(MSARegister wd, AsmRegister rs);
   void pcnt_b(MSARegister wd, MSARegister ws);
   void pcnt_h(MSARegister wd, MSARegister ws);
   void pcnt_w(MSARegister wd, MSARegister ws);
@@ -1592,14 +1589,14 @@ class Assembler : public AssemblerBase {
   void dpsub_u_h(MSARegister wd, MSARegister ws, MSARegister wt);
   void dpsub_u_w(MSARegister wd, MSARegister ws, MSARegister wt);
   void dpsub_u_d(MSARegister wd, MSARegister ws, MSARegister wt);
-  void sld_b(MSARegister wd, MSARegister ws, Register rt);
-  void sld_h(MSARegister wd, MSARegister ws, Register rt);
-  void sld_w(MSARegister wd, MSARegister ws, Register rt);
-  void sld_d(MSARegister wd, MSARegister ws, Register rt);
-  void splat_b(MSARegister wd, MSARegister ws, Register rt);
-  void splat_h(MSARegister wd, MSARegister ws, Register rt);
-  void splat_w(MSARegister wd, MSARegister ws, Register rt);
-  void splat_d(MSARegister wd, MSARegister ws, Register rt);
+  void sld_b(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void sld_h(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void sld_w(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void sld_d(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void splat_b(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void splat_h(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void splat_w(MSARegister wd, MSARegister ws, AsmRegister rt);
+  void splat_d(MSARegister wd, MSARegister ws, AsmRegister rt);
   void pckev_b(MSARegister wd, MSARegister ws, MSARegister wt);
   void pckev_h(MSARegister wd, MSARegister ws, MSARegister wt);
   void pckev_w(MSARegister wd, MSARegister ws, MSARegister wt);
@@ -1744,22 +1741,22 @@ class Assembler : public AssemblerBase {
   void splati_h(MSARegister wd, MSARegister ws, uint32_t n);
   void splati_w(MSARegister wd, MSARegister ws, uint32_t n);
   void splati_d(MSARegister wd, MSARegister ws, uint32_t n);
-  void copy_s_b(Register rd, MSARegister ws, uint32_t n);
-  void copy_s_h(Register rd, MSARegister ws, uint32_t n);
-  void copy_s_w(Register rd, MSARegister ws, uint32_t n);
-  void copy_u_b(Register rd, MSARegister ws, uint32_t n);
-  void copy_u_h(Register rd, MSARegister ws, uint32_t n);
-  void copy_u_w(Register rd, MSARegister ws, uint32_t n);
-  void insert_b(MSARegister wd, uint32_t n, Register rs);
-  void insert_h(MSARegister wd, uint32_t n, Register rs);
-  void insert_w(MSARegister wd, uint32_t n, Register rs);
+  void copy_s_b(AsmRegister rd, MSARegister ws, uint32_t n);
+  void copy_s_h(AsmRegister rd, MSARegister ws, uint32_t n);
+  void copy_s_w(AsmRegister rd, MSARegister ws, uint32_t n);
+  void copy_u_b(AsmRegister rd, MSARegister ws, uint32_t n);
+  void copy_u_h(AsmRegister rd, MSARegister ws, uint32_t n);
+  void copy_u_w(AsmRegister rd, MSARegister ws, uint32_t n);
+  void insert_b(MSARegister wd, uint32_t n, AsmRegister rs);
+  void insert_h(MSARegister wd, uint32_t n, AsmRegister rs);
+  void insert_w(MSARegister wd, uint32_t n, AsmRegister rs);
   void insve_b(MSARegister wd, uint32_t n, MSARegister ws);
   void insve_h(MSARegister wd, uint32_t n, MSARegister ws);
   void insve_w(MSARegister wd, uint32_t n, MSARegister ws);
   void insve_d(MSARegister wd, uint32_t n, MSARegister ws);
   void move_v(MSARegister wd, MSARegister ws);
-  void ctcmsa(MSAControlRegister cd, Register rs);
-  void cfcmsa(Register rd, MSAControlRegister cs);
+  void ctcmsa(MSAControlRegister cd, AsmRegister rs);
+  void cfcmsa(AsmRegister rd, MSAControlRegister cs);
 
   void slli_b(MSARegister wd, MSARegister ws, uint32_t m);
   void slli_h(MSARegister wd, MSARegister ws, uint32_t m);
@@ -1927,9 +1924,9 @@ class Assembler : public AssemblerBase {
   static bool IsLwRegFpNegOffset(Instr instr);
   static bool IsSwRegFpNegOffset(Instr instr);
 
-  static Register GetRtReg(Instr instr);
-  static Register GetRsReg(Instr instr);
-  static Register GetRdReg(Instr instr);
+  static AsmRegister GetRtReg(Instr instr);
+  static AsmRegister GetRsReg(Instr instr);
+  static AsmRegister GetRdReg(Instr instr);
 
   static uint32_t GetRt(Instr instr);
   static uint32_t GetRtField(Instr instr);
@@ -1984,7 +1981,7 @@ class Assembler : public AssemblerBase {
 
  protected:
   // Load Scaled Address instruction.
-  void lsa(Register rd, Register rt, Register rs, uint8_t sa);
+  void lsa(AsmRegister rd, AsmRegister rt, AsmRegister rs, uint8_t sa);
 
   // Readable constants for base and offset adjustment helper, these indicate if
   // aside from offset, another value like offset + 4 should fit into int16.
@@ -2130,23 +2127,16 @@ class Assembler : public AssemblerBase {
   // We have 3 different kind of encoding layout on MIPS.
   // However due to many different types of objects encoded in the same fields
   // we have quite a few aliases for each mode.
-  // Using the same structure to refer to Register and FPURegister would spare a
-  // few aliases, but mixing both does not look clean to me.
-  // Anyway we could surely implement this differently.
+  // Using the same structure to refer to AsmRegister and FPURegister would
+  // spare a few aliases, but mixing both does not look clean to me. Anyway we
+  // could surely implement this differently.
 
-  void GenInstrRegister(Opcode opcode,
-                        Register rs,
-                        Register rt,
-                        Register rd,
-                        uint16_t sa = 0,
+  void GenInstrRegister(Opcode opcode, AsmRegister rs, AsmRegister rt,
+                        AsmRegister rd, uint16_t sa = 0,
                         SecondaryField func = NULLSF);
 
-  void GenInstrRegister(Opcode opcode,
-                        Register rs,
-                        Register rt,
-                        uint16_t msb,
-                        uint16_t lsb,
-                        SecondaryField func);
+  void GenInstrRegister(Opcode opcode, AsmRegister rs, AsmRegister rt,
+                        uint16_t msb, uint16_t lsb, SecondaryField func);
 
   void GenInstrRegister(Opcode opcode,
                         SecondaryField fmt,
@@ -2162,34 +2152,28 @@ class Assembler : public AssemblerBase {
                         FPURegister fd,
                         SecondaryField func = NULLSF);
 
-  void GenInstrRegister(Opcode opcode,
-                        SecondaryField fmt,
-                        Register rt,
-                        FPURegister fs,
-                        FPURegister fd,
+  void GenInstrRegister(Opcode opcode, SecondaryField fmt, AsmRegister rt,
+                        FPURegister fs, FPURegister fd,
                         SecondaryField func = NULLSF);
 
-  void GenInstrRegister(Opcode opcode,
-                        SecondaryField fmt,
-                        Register rt,
-                        FPUControlRegister fs,
-                        SecondaryField func = NULLSF);
+  void GenInstrRegister(Opcode opcode, SecondaryField fmt, AsmRegister rt,
+                        FPUControlRegister fs, SecondaryField func = NULLSF);
 
   void GenInstrImmediate(
-      Opcode opcode, Register rs, Register rt, int32_t j,
+      Opcode opcode, AsmRegister rs, AsmRegister rt, int32_t j,
       CompactBranchType is_compact_branch = CompactBranchType::NO);
   void GenInstrImmediate(
-      Opcode opcode, Register rs, SecondaryField SF, int32_t j,
+      Opcode opcode, AsmRegister rs, SecondaryField SF, int32_t j,
       CompactBranchType is_compact_branch = CompactBranchType::NO);
   void GenInstrImmediate(
-      Opcode opcode, Register r1, FPURegister r2, int32_t j,
+      Opcode opcode, AsmRegister r1, FPURegister r2, int32_t j,
       CompactBranchType is_compact_branch = CompactBranchType::NO);
-  void GenInstrImmediate(Opcode opcode, Register base, Register rt,
+  void GenInstrImmediate(Opcode opcode, AsmRegister base, AsmRegister rt,
                          int32_t offset9, int bit6, SecondaryField func);
   void GenInstrImmediate(
-      Opcode opcode, Register rs, int32_t offset21,
+      Opcode opcode, AsmRegister rs, int32_t offset21,
       CompactBranchType is_compact_branch = CompactBranchType::NO);
-  void GenInstrImmediate(Opcode opcode, Register rs, uint32_t offset21);
+  void GenInstrImmediate(Opcode opcode, AsmRegister rs, uint32_t offset21);
   void GenInstrImmediate(
       Opcode opcode, int32_t offset26,
       CompactBranchType is_compact_branch = CompactBranchType::NO);
@@ -2225,7 +2209,7 @@ class Assembler : public AssemblerBase {
   void GenInstrMsaVec(SecondaryField operation, MSARegister wt, MSARegister ws,
                       MSARegister wd);
 
-  void GenInstrMsaMI10(SecondaryField operation, int32_t s10, Register rs,
+  void GenInstrMsaMI10(SecondaryField operation, int32_t s10, AsmRegister rs,
                        MSARegister wd);
 
   void GenInstrMsa2R(SecondaryField operation, SecondaryField df,
@@ -2385,7 +2369,7 @@ class UseScratchRegisterScope {
   explicit UseScratchRegisterScope(Assembler* assembler);
   ~UseScratchRegisterScope();
 
-  Register Acquire();
+  AsmRegister Acquire();
   bool hasAvailable() const;
 
  private:

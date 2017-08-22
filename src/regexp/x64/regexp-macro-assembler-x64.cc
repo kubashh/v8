@@ -525,7 +525,7 @@ void RegExpMacroAssemblerX64::CheckBitInTable(
     Handle<ByteArray> table,
     Label* on_bit_set) {
   __ Move(rax, table);
-  Register index = current_character();
+  AsmRegister index = current_character();
   if (mode_ != LATIN1 || kTableMask != String::kMaxOneByteCharCode) {
     __ movp(rbx, current_character());
     __ andp(rbx, Immediate(kTableMask));
@@ -1107,8 +1107,8 @@ void RegExpMacroAssemblerX64::ReadCurrentPositionFromRegister(int reg) {
   }
 }
 
-
-void RegExpMacroAssemblerX64::ReadPositionFromRegister(Register dst, int reg) {
+void RegExpMacroAssemblerX64::ReadPositionFromRegister(AsmRegister dst,
+                                                       int reg) {
   if (kPointerSize == kInt64Size) {
     __ movq(dst, register_location(reg));
   } else {
@@ -1288,8 +1288,7 @@ void RegExpMacroAssemblerX64::SafeReturn() {
   __ ret(0);
 }
 
-
-void RegExpMacroAssemblerX64::Push(Register source) {
+void RegExpMacroAssemblerX64::Push(AsmRegister source) {
   DCHECK(!source.is(backtrack_stackpointer()));
   // Notice: This updates flags, unlike normal Push.
   __ subp(backtrack_stackpointer(), Immediate(kIntSize));
@@ -1328,8 +1327,7 @@ void RegExpMacroAssemblerX64::Push(Label* backtrack_target) {
   MarkPositionForCodeRelativeFixup();
 }
 
-
-void RegExpMacroAssemblerX64::Pop(Register target) {
+void RegExpMacroAssemblerX64::Pop(AsmRegister target) {
   DCHECK(!target.is(backtrack_stackpointer()));
   __ movsxlq(target, Operand(backtrack_stackpointer(), 0));
   // Notice: This updates flags, unlike normal Pop.

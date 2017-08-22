@@ -53,7 +53,7 @@ class MipsOperandConverter final : public InstructionOperandConverter {
     return ToDoubleRegister(op);
   }
 
-  Register InputOrZeroRegister(size_t index) {
+  AsmRegister InputOrZeroRegister(size_t index) {
     if (instr_->InputAt(index)->IsImmediate()) {
       DCHECK((InputInt32(index) == 0));
       return zero_reg;
@@ -170,13 +170,13 @@ class OutOfLineLoadDouble final : public OutOfLineCode {
 
 class OutOfLineLoadInteger final : public OutOfLineCode {
  public:
-  OutOfLineLoadInteger(CodeGenerator* gen, Register result)
+  OutOfLineLoadInteger(CodeGenerator* gen, AsmRegister result)
       : OutOfLineCode(gen), result_(result) {}
 
   void Generate() final { __ mov(result_, zero_reg); }
 
  private:
-  Register const result_;
+  AsmRegister const result_;
 };
 
 
@@ -218,8 +218,9 @@ class OutOfLineRound32 : public OutOfLineCode {
 
 class OutOfLineRecordWrite final : public OutOfLineCode {
  public:
-  OutOfLineRecordWrite(CodeGenerator* gen, Register object, Register index,
-                       Register value, Register scratch0, Register scratch1,
+  OutOfLineRecordWrite(CodeGenerator* gen, AsmRegister object,
+                       AsmRegister index, AsmRegister value,
+                       AsmRegister scratch0, AsmRegister scratch1,
                        RecordWriteMode mode)
       : OutOfLineCode(gen),
         object_(object),
@@ -257,11 +258,11 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
   }
 
  private:
-  Register const object_;
-  Register const index_;
-  Register const value_;
-  Register const scratch0_;
-  Register const scratch1_;
+  AsmRegister const object_;
+  AsmRegister const index_;
+  AsmRegister const value_;
+  AsmRegister const scratch0_;
+  AsmRegister const scratch1_;
   RecordWriteMode const mode_;
   bool must_save_lr_;
   Zone* zone_;
@@ -581,10 +582,10 @@ void CodeGenerator::AssemblePrepareTailCall() {
   frame_access_state()->SetFrameAccessToSP();
 }
 
-void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
-                                                     Register scratch1,
-                                                     Register scratch2,
-                                                     Register scratch3) {
+void CodeGenerator::AssemblePopArgumentsAdaptorFrame(AsmRegister args_reg,
+                                                     AsmRegister scratch1,
+                                                     AsmRegister scratch2,
+                                                     AsmRegister scratch3) {
   DCHECK(!AreAliased(args_reg, scratch1, scratch2, scratch3));
   Label done;
 
@@ -595,7 +596,7 @@ void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
 
   // Load arguments count from current arguments adaptor frame (note, it
   // does not include receiver).
-  Register caller_args_count_reg = scratch1;
+  AsmRegister caller_args_count_reg = scratch1;
   __ lw(caller_args_count_reg,
         MemOperand(fp, ArgumentsAdaptorFrameConstants::kLengthOffset));
   __ SmiUntag(caller_args_count_reg);
@@ -679,7 +680,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchCallJSFunction: {
-      Register func = i.InputRegister(0);
+      AsmRegister func = i.InputRegister(0);
       if (FLAG_debug_code) {
         // Check the function's context matches the context argument.
         __ lw(kScratchReg, FieldMemOperand(func, JSFunction::kContextOffset));
@@ -718,7 +719,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         ExternalReference ref = i.InputExternalReference(0);
         __ CallCFunction(ref, num_parameters);
       } else {
-        Register func = i.InputRegister(0);
+        AsmRegister func = i.InputRegister(0);
         __ CallCFunction(func, num_parameters);
       }
       frame_access_state()->SetFrameAccessToDefault();
@@ -777,11 +778,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArchStoreWithWriteBarrier: {
       RecordWriteMode mode =
           static_cast<RecordWriteMode>(MiscField::decode(instr->opcode()));
-      Register object = i.InputRegister(0);
-      Register index = i.InputRegister(1);
-      Register value = i.InputRegister(2);
-      Register scratch0 = i.TempRegister(0);
-      Register scratch1 = i.TempRegister(1);
+      AsmRegister object = i.InputRegister(0);
+      AsmRegister index = i.InputRegister(1);
+      AsmRegister value = i.InputRegister(2);
+      AsmRegister scratch0 = i.TempRegister(0);
+      AsmRegister scratch1 = i.TempRegister(1);
       auto ool = new (zone()) OutOfLineRecordWrite(this, object, index, value,
                                                    scratch0, scratch1, mode);
       __ Addu(at, object, index);
@@ -795,7 +796,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArchStackSlot: {
       FrameOffset offset =
           frame_access_state()->GetFrameOffset(i.InputInt32(0));
-      Register base_reg = offset.from_stack_pointer() ? sp : fp;
+      AsmRegister base_reg = offset.from_stack_pointer() ? sp : fp;
       __ Addu(i.OutputRegister(), base_reg, Operand(offset.offset()));
       int alignment = i.InputInt32(1);
       DCHECK(alignment == 0 || alignment == 4 || alignment == 8 ||
@@ -958,8 +959,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Clz(i.OutputRegister(), i.InputRegister(0));
       break;
     case kMipsCtz: {
-      Register src = i.InputRegister(0);
-      Register dst = i.OutputRegister();
+      AsmRegister src = i.InputRegister(0);
+      AsmRegister dst = i.OutputRegister();
       if (IsMipsArchVariant(kMips32r6)) {
         // We don't have an instruction to count the number of trailing zeroes.
         // Start by flipping the bits end-for-end so we can count the number of
@@ -1004,8 +1005,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       // algorithm the count for a 64-bit operand can be performed in 29
       // instructions compared to a loop-based algorithm which requires 47
       // instructions.
-      Register src = i.InputRegister(0);
-      Register dst = i.OutputRegister();
+      AsmRegister src = i.InputRegister(0);
+      AsmRegister dst = i.OutputRegister();
       uint32_t B0 = 0x55555555;     // (T)~(T)0/3
       uint32_t B1 = 0x33333333;     // (T)~(T)0/15*3
       uint32_t B2 = 0x0f0f0f0f;     // (T)~(T)0/255*15
@@ -1053,7 +1054,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     case kMipsShlPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsRegister()) {
         __ ShlPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -1065,7 +1066,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
     } break;
     case kMipsShrPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsRegister()) {
         __ ShrPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -1077,7 +1078,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
     } break;
     case kMipsSarPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsRegister()) {
         __ SarPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -2257,7 +2258,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kMipsS1x8AnyTrue:
     case kMipsS1x16AnyTrue: {
       CpuFeatureScope msa_scope(tasm(), MIPS_SIMD);
-      Register dst = i.OutputRegister();
+      AsmRegister dst = i.OutputRegister();
       Label all_false;
 
       __ BranchMSA(&all_false, MSA_BRANCH_V, all_zero,
@@ -2269,7 +2270,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kMipsS1x4AllTrue: {
       CpuFeatureScope msa_scope(tasm(), MIPS_SIMD);
-      Register dst = i.OutputRegister();
+      AsmRegister dst = i.OutputRegister();
       Label all_true;
       __ BranchMSA(&all_true, MSA_BRANCH_W, all_not_zero,
                    i.InputSimd128Register(0), USE_DELAY_SLOT);
@@ -2280,7 +2281,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kMipsS1x8AllTrue: {
       CpuFeatureScope msa_scope(tasm(), MIPS_SIMD);
-      Register dst = i.OutputRegister();
+      AsmRegister dst = i.OutputRegister();
       Label all_true;
       __ BranchMSA(&all_true, MSA_BRANCH_H, all_not_zero,
                    i.InputSimd128Register(0), USE_DELAY_SLOT);
@@ -2291,7 +2292,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kMipsS1x16AllTrue: {
       CpuFeatureScope msa_scope(tasm(), MIPS_SIMD);
-      Register dst = i.OutputRegister();
+      AsmRegister dst = i.OutputRegister();
       Label all_true;
       __ BranchMSA(&all_true, MSA_BRANCH_B, all_not_zero,
                    i.InputSimd128Register(0), USE_DELAY_SLOT);
@@ -2951,7 +2952,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
   // last output of the instruction.
   Label false_value;
   DCHECK_NE(0u, instr->OutputCount());
-  Register result = i.OutputRegister(instr->OutputCount() - 1);
+  AsmRegister result = i.OutputRegister(instr->OutputCount() - 1);
   Condition cc = kNoCondition;
   // MIPS does not have condition code flags, so compare and branch are
   // implemented differently than on the other arch's. The compare operations
@@ -3008,7 +3009,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
     switch (cc) {
       case eq:
       case ne: {
-        Register left = i.InputRegister(0);
+        AsmRegister left = i.InputRegister(0);
         Operand right = i.InputOperand(1);
         if (instr->InputAt(1)->IsImmediate()) {
           if (is_int16(-right.immediate())) {
@@ -3050,7 +3051,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
       } break;
       case lt:
       case ge: {
-        Register left = i.InputRegister(0);
+        AsmRegister left = i.InputRegister(0);
         Operand right = i.InputOperand(1);
         __ Slt(result, left, right);
         if (cc == ge) {
@@ -3059,7 +3060,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
       } break;
       case gt:
       case le: {
-        Register left = i.InputRegister(1);
+        AsmRegister left = i.InputRegister(1);
         Operand right = i.InputOperand(0);
         __ Slt(result, left, right);
         if (cc == le) {
@@ -3068,7 +3069,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
       } break;
       case lo:
       case hs: {
-        Register left = i.InputRegister(0);
+        AsmRegister left = i.InputRegister(0);
         Operand right = i.InputOperand(1);
         __ Sltu(result, left, right);
         if (cc == hs) {
@@ -3077,7 +3078,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
       } break;
       case hi:
       case ls: {
-        Register left = i.InputRegister(1);
+        AsmRegister left = i.InputRegister(1);
         Operand right = i.InputOperand(0);
         __ Sltu(result, left, right);
         if (cc == ls) {
@@ -3137,7 +3138,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
 
 void CodeGenerator::AssembleArchLookupSwitch(Instruction* instr) {
   MipsOperandConverter i(this, instr);
-  Register input = i.InputRegister(0);
+  AsmRegister input = i.InputRegister(0);
   for (size_t index = 2; index < instr->InputCount(); index += 2) {
     __ li(at, Operand(i.InputInt32(index + 0)));
     __ beq(input, at, GetLabel(i.InputRpo(index + 1)));
@@ -3149,7 +3150,7 @@ void CodeGenerator::AssembleArchLookupSwitch(Instruction* instr) {
 
 void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   MipsOperandConverter i(this, instr);
-  Register input = i.InputRegister(0);
+  AsmRegister input = i.InputRegister(0);
   size_t const case_count = instr->InputCount() - 2;
   __ Branch(GetLabel(i.InputRpo(1)), hs, input, Operand(case_count));
   __ GenerateSwitchTable(input, case_count, [&i, this](size_t index) {
@@ -3268,7 +3269,7 @@ void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
     DCHECK_EQ(Constant::kInt32, g.ToConstant(pop).type());
     pop_count += g.ToConstant(pop).ToInt32();
   } else {
-    Register pop_reg = g.ToRegister(pop);
+    AsmRegister pop_reg = g.ToRegister(pop);
     __ sll(pop_reg, pop_reg, kPointerSizeLog2);
     __ Addu(sp, sp, Operand(pop_reg));
   }
@@ -3288,7 +3289,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
   // combinations are possible.
   if (source->IsRegister()) {
     DCHECK(destination->IsRegister() || destination->IsStackSlot());
-    Register src = g.ToRegister(source);
+    AsmRegister src = g.ToRegister(source);
     if (destination->IsRegister()) {
       __ mov(g.ToRegister(destination), src);
     } else {
@@ -3300,14 +3301,14 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
     if (destination->IsRegister()) {
       __ lw(g.ToRegister(destination), src);
     } else {
-      Register temp = kScratchReg;
+      AsmRegister temp = kScratchReg;
       __ lw(temp, src);
       __ sw(temp, g.ToMemOperand(destination));
     }
   } else if (source->IsConstant()) {
     Constant src = g.ToConstant(source);
     if (destination->IsRegister() || destination->IsStackSlot()) {
-      Register dst =
+      AsmRegister dst =
           destination->IsRegister() ? g.ToRegister(destination) : kScratchReg;
       switch (src.type()) {
         case Constant::kInt32:
@@ -3425,10 +3426,10 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
   // combinations are possible.
   if (source->IsRegister()) {
     // Register-register.
-    Register temp = kScratchReg;
-    Register src = g.ToRegister(source);
+    AsmRegister temp = kScratchReg;
+    AsmRegister src = g.ToRegister(source);
     if (destination->IsRegister()) {
-      Register dst = g.ToRegister(destination);
+      AsmRegister dst = g.ToRegister(destination);
       __ Move(temp, src);
       __ Move(src, dst);
       __ Move(dst, temp);
@@ -3441,8 +3442,8 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
     }
   } else if (source->IsStackSlot()) {
     DCHECK(destination->IsStackSlot());
-    Register temp_0 = kScratchReg;
-    Register temp_1 = kCompareReg;
+    AsmRegister temp_0 = kScratchReg;
+    AsmRegister temp_1 = kCompareReg;
     MemOperand src = g.ToMemOperand(source);
     MemOperand dst = g.ToMemOperand(destination);
     __ lw(temp_0, src);
@@ -3477,7 +3478,7 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
     }
   } else if (source->IsFPStackSlot()) {
     DCHECK(destination->IsFPStackSlot());
-    Register temp_0 = kScratchReg;
+    AsmRegister temp_0 = kScratchReg;
     FPURegister temp_1 = kScratchDoubleReg;
     MemOperand src0 = g.ToMemOperand(source);
     MemOperand dst0 = g.ToMemOperand(destination);

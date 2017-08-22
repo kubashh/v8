@@ -18,26 +18,30 @@ class AccessCompilerData {
   AccessCompilerData() {}
 
   bool IsInitialized() const { return load_calling_convention_ != nullptr; }
-  void Initialize(int load_register_count, const Register* load_registers,
-                  int store_register_count, const Register* store_registers) {
-    load_calling_convention_.reset(NewArray<Register>(load_register_count));
+  void Initialize(int load_register_count, const AsmRegister* load_registers,
+                  int store_register_count,
+                  const AsmRegister* store_registers) {
+    load_calling_convention_.reset(NewArray<AsmRegister>(load_register_count));
     for (int i = 0; i < load_register_count; ++i) {
       load_calling_convention_[i] = load_registers[i];
     }
-    store_calling_convention_.reset(NewArray<Register>(store_register_count));
+    store_calling_convention_.reset(
+        NewArray<AsmRegister>(store_register_count));
     for (int i = 0; i < store_register_count; ++i) {
       store_calling_convention_[i] = store_registers[i];
     }
   }
 
-  Register* load_calling_convention() { return load_calling_convention_.get(); }
-  Register* store_calling_convention() {
+  AsmRegister* load_calling_convention() {
+    return load_calling_convention_.get();
+  }
+  AsmRegister* store_calling_convention() {
     return store_calling_convention_.get();
   }
 
  private:
-  std::unique_ptr<Register[]> load_calling_convention_;
-  std::unique_ptr<Register[]> store_calling_convention_;
+  std::unique_ptr<AsmRegister[]> load_calling_convention_;
+  std::unique_ptr<AsmRegister[]> store_calling_convention_;
 
   DISALLOW_COPY_AND_ASSIGN(AccessCompilerData);
 };

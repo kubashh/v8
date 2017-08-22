@@ -21,7 +21,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
 
   // Unlike on ARM we don't save all the registers, just the useful ones.
   // For the rest, there are gaps on the stack, so the offsets remain the same.
-  const int kNumberOfRegisters = Register::kNumRegisters;
+  const int kNumberOfRegisters = AsmRegister::kNumRegisters;
 
   RegList restored_regs = kJSCallerSaved | kCalleeSaved;
   RegList saved_regs = restored_regs | sp.bit() | ra.bit();
@@ -103,7 +103,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   __ lw(a1, MemOperand(v0, Deoptimizer::input_offset()));
 
   // Copy core registers into FrameDescription::registers_[kNumRegisters].
-  DCHECK(Register::kNumRegisters == kNumberOfRegisters);
+  DCHECK(AsmRegister::kNumRegisters == kNumberOfRegisters);
   for (int i = 0; i < kNumberOfRegisters; i++) {
     int offset = (i * kPointerSize) + FrameDescription::registers_offset();
     if ((saved_regs & (1 << i)) != 0) {

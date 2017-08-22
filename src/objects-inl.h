@@ -2845,19 +2845,19 @@ void BytecodeArray::set_parameter_count(int number_of_parameters) {
                   (number_of_parameters << kPointerSizeLog2));
 }
 
-interpreter::Register BytecodeArray::incoming_new_target_or_generator_register()
-    const {
+interpreter::AsmRegister
+BytecodeArray::incoming_new_target_or_generator_register() const {
   int register_operand =
       READ_INT_FIELD(this, kIncomingNewTargetOrGeneratorRegisterOffset);
   if (register_operand == 0) {
-    return interpreter::Register::invalid_value();
+    return interpreter::AsmRegister::invalid_value();
   } else {
-    return interpreter::Register::FromOperand(register_operand);
+    return interpreter::AsmRegister::FromOperand(register_operand);
   }
 }
 
 void BytecodeArray::set_incoming_new_target_or_generator_register(
-    interpreter::Register incoming_new_target_or_generator_register) {
+    interpreter::AsmRegister incoming_new_target_or_generator_register) {
   if (!incoming_new_target_or_generator_register.is_valid()) {
     WRITE_INT_FIELD(this, kIncomingNewTargetOrGeneratorRegisterOffset, 0);
   } else {

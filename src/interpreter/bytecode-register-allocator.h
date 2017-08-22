@@ -20,7 +20,7 @@ class BytecodeRegisterAllocator final {
   class Observer {
    public:
     virtual ~Observer() {}
-    virtual void RegisterAllocateEvent(Register reg) = 0;
+    virtual void RegisterAllocateEvent(AsmRegister reg) = 0;
     virtual void RegisterListAllocateEvent(RegisterList reg_list) = 0;
     virtual void RegisterListFreeEvent(RegisterList reg_list) = 0;
   };
@@ -32,8 +32,8 @@ class BytecodeRegisterAllocator final {
   ~BytecodeRegisterAllocator() {}
 
   // Returns a new register.
-  Register NewRegister() {
-    Register reg(next_register_index_++);
+  AsmRegister NewRegister() {
+    AsmRegister reg(next_register_index_++);
     max_register_count_ = std::max(next_register_index_, max_register_count_);
     if (observer_) {
       observer_->RegisterAllocateEvent(reg);
@@ -63,12 +63,12 @@ class BytecodeRegisterAllocator final {
   //
   // Note: no other new registers must be currently allocated since the register
   // list was originally allocated.
-  Register GrowRegisterList(RegisterList* reg_list) {
-    Register reg(NewRegister());
+  AsmRegister GrowRegisterList(RegisterList* reg_list) {
+    AsmRegister reg(NewRegister());
     reg_list->IncrementRegisterCount();
     // If the following CHECK fails then a register was allocated (and not
     // freed) between the creation of the RegisterList and this call to add a
-    // Register.
+    // AsmRegister.
     CHECK_EQ(reg.index(), reg_list->last_register().index());
     return reg;
   }
@@ -83,7 +83,7 @@ class BytecodeRegisterAllocator final {
   }
 
   // Returns true if the register |reg| is a live register.
-  bool RegisterIsLive(Register reg) const {
+  bool RegisterIsLive(AsmRegister reg) const {
     return reg.index() < next_register_index_;
   }
 

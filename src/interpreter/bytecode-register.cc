@@ -33,57 +33,57 @@ static const int kCallerPCOffsetRegisterIndex =
      InterpreterFrameConstants::kCallerPCOffsetFromFp) /
     kPointerSize;
 
-Register Register::FromParameterIndex(int index, int parameter_count) {
+AsmRegister AsmRegister::FromParameterIndex(int index, int parameter_count) {
   DCHECK_GE(index, 0);
   DCHECK_LT(index, parameter_count);
   int register_index = kLastParamRegisterIndex - parameter_count + index + 1;
   DCHECK_LT(register_index, 0);
-  return Register(register_index);
+  return AsmRegister(register_index);
 }
 
-int Register::ToParameterIndex(int parameter_count) const {
+int AsmRegister::ToParameterIndex(int parameter_count) const {
   DCHECK(is_parameter());
   return index() - kLastParamRegisterIndex + parameter_count - 1;
 }
 
-Register Register::function_closure() {
-  return Register(kFunctionClosureRegisterIndex);
+AsmRegister AsmRegister::function_closure() {
+  return AsmRegister(kFunctionClosureRegisterIndex);
 }
 
-bool Register::is_function_closure() const {
+bool AsmRegister::is_function_closure() const {
   return index() == kFunctionClosureRegisterIndex;
 }
 
-Register Register::current_context() {
-  return Register(kCurrentContextRegisterIndex);
+AsmRegister AsmRegister::current_context() {
+  return AsmRegister(kCurrentContextRegisterIndex);
 }
 
-bool Register::is_current_context() const {
+bool AsmRegister::is_current_context() const {
   return index() == kCurrentContextRegisterIndex;
 }
 
-Register Register::bytecode_array() {
-  return Register(kBytecodeArrayRegisterIndex);
+AsmRegister AsmRegister::bytecode_array() {
+  return AsmRegister(kBytecodeArrayRegisterIndex);
 }
 
-bool Register::is_bytecode_array() const {
+bool AsmRegister::is_bytecode_array() const {
   return index() == kBytecodeArrayRegisterIndex;
 }
 
-Register Register::bytecode_offset() {
-  return Register(kBytecodeOffsetRegisterIndex);
+AsmRegister AsmRegister::bytecode_offset() {
+  return AsmRegister(kBytecodeOffsetRegisterIndex);
 }
 
-bool Register::is_bytecode_offset() const {
+bool AsmRegister::is_bytecode_offset() const {
   return index() == kBytecodeOffsetRegisterIndex;
 }
 
 // static
-Register Register::virtual_accumulator() {
-  return Register(kCallerPCOffsetRegisterIndex);
+AsmRegister AsmRegister::virtual_accumulator() {
+  return AsmRegister(kCallerPCOffsetRegisterIndex);
 }
 
-OperandSize Register::SizeOfOperand() const {
+OperandSize AsmRegister::SizeOfOperand() const {
   int32_t operand = ToOperand();
   if (operand >= kMinInt8 && operand <= kMaxInt8) {
     return OperandSize::kByte;
@@ -94,8 +94,9 @@ OperandSize Register::SizeOfOperand() const {
   }
 }
 
-bool Register::AreContiguous(Register reg1, Register reg2, Register reg3,
-                             Register reg4, Register reg5) {
+bool AsmRegister::AreContiguous(AsmRegister reg1, AsmRegister reg2,
+                                AsmRegister reg3, AsmRegister reg4,
+                                AsmRegister reg5) {
   if (reg1.index() + 1 != reg2.index()) {
     return false;
   }
@@ -111,7 +112,7 @@ bool Register::AreContiguous(Register reg1, Register reg2, Register reg3,
   return true;
 }
 
-std::string Register::ToString(int parameter_count) const {
+std::string AsmRegister::ToString(int parameter_count) const {
   if (is_current_context()) {
     return std::string("<context>");
   } else if (is_function_closure()) {

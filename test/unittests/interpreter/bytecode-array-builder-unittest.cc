@@ -35,9 +35,9 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
   CHECK_EQ(builder.locals_count(), 131);
   CHECK_EQ(builder.fixed_register_count(), 131);
 
-  Register reg(0);
-  Register other(reg.index() + 1);
-  Register wide(128);
+  AsmRegister reg(0);
+  AsmRegister other(reg.index() + 1);
+  AsmRegister wide(128);
   RegisterList reg_list(0, 10);
   RegisterList empty, single(0, 1), pair(0, 2), triple(0, 3);
 
@@ -98,12 +98,12 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
 
   // Emit context operations which operate on the local context.
   builder
-      .LoadContextSlot(Register::current_context(), 1, 0,
+      .LoadContextSlot(AsmRegister::current_context(), 1, 0,
                        BytecodeArrayBuilder::kMutableSlot)
-      .StoreContextSlot(Register::current_context(), 1, 0)
-      .LoadContextSlot(Register::current_context(), 2, 0,
+      .StoreContextSlot(AsmRegister::current_context(), 1, 0)
+      .LoadContextSlot(AsmRegister::current_context(), 2, 0,
                        BytecodeArrayBuilder::kImmutableSlot)
-      .StoreContextSlot(Register::current_context(), 3, 0);
+      .StoreContextSlot(AsmRegister::current_context(), 3, 0);
 
   // Emit load / store property operations.
   builder.LoadNamedProperty(reg, name, 0)
@@ -447,10 +447,10 @@ TEST_F(BytecodeArrayBuilderTest, FrameSizesLookGood) {
       BytecodeRegisterAllocator* allocator(builder.register_allocator());
       for (int i = 0; i < locals; i++) {
         builder.LoadLiteral(Smi::kZero);
-        builder.StoreAccumulatorInRegister(Register(i));
+        builder.StoreAccumulatorInRegister(AsmRegister(i));
       }
       for (int i = 0; i < temps; i++) {
-        Register temp = allocator->NewRegister();
+        AsmRegister temp = allocator->NewRegister();
         builder.LoadLiteral(Smi::kZero);
         builder.StoreAccumulatorInRegister(temp);
         // Ensure temporaries are used so not optimized away by the
@@ -470,11 +470,11 @@ TEST_F(BytecodeArrayBuilderTest, FrameSizesLookGood) {
 TEST_F(BytecodeArrayBuilderTest, RegisterValues) {
   int index = 1;
 
-  Register the_register(index);
+  AsmRegister the_register(index);
   CHECK_EQ(the_register.index(), index);
 
   int actual_operand = the_register.ToOperand();
-  int actual_index = Register::FromOperand(actual_operand).index();
+  int actual_index = AsmRegister::FromOperand(actual_operand).index();
   CHECK_EQ(actual_index, index);
 }
 
@@ -482,8 +482,8 @@ TEST_F(BytecodeArrayBuilderTest, RegisterValues) {
 TEST_F(BytecodeArrayBuilderTest, Parameters) {
   BytecodeArrayBuilder builder(isolate(), zone(), 10, 0);
 
-  Register receiver(builder.Receiver());
-  Register param8(builder.Parameter(8));
+  AsmRegister receiver(builder.Receiver());
+  AsmRegister param8(builder.Parameter(8));
   CHECK_EQ(param8.index() - receiver.index(), 9);
 }
 
@@ -519,7 +519,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 
   BytecodeArrayBuilder builder(isolate(), zone(), 1, 1);
 
-  Register reg(0);
+  AsmRegister reg(0);
   BytecodeLabel far0, far1, far2, far3, far4;
   BytecodeLabel near0, near1, near2, near3, near4;
   BytecodeLabel after_jump0, after_jump1;
@@ -634,7 +634,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 TEST_F(BytecodeArrayBuilderTest, BackwardJumps) {
   BytecodeArrayBuilder builder(isolate(), zone(), 1, 1);
 
-  Register reg(0);
+  AsmRegister reg(0);
 
   BytecodeLabel label0;
   builder.Bind(&label0).JumpLoop(&label0, 0);

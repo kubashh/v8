@@ -27,9 +27,9 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
     virtual ~BytecodeWriter() {}
 
     // Called to emit a register transfer bytecode.
-    virtual void EmitLdar(Register input) = 0;
-    virtual void EmitStar(Register output) = 0;
-    virtual void EmitMov(Register input, Register output) = 0;
+    virtual void EmitLdar(AsmRegister input) = 0;
+    virtual void EmitStar(AsmRegister output) = 0;
+    virtual void EmitMov(AsmRegister input, AsmRegister output) = 0;
 
    private:
     DISALLOW_COPY_AND_ASSIGN(BytecodeWriter);
@@ -42,17 +42,17 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   virtual ~BytecodeRegisterOptimizer() {}
 
   // Perform explicit register transfer operations.
-  void DoLdar(Register input) {
+  void DoLdar(AsmRegister input) {
     // TODO(rmcilroy): Avoid treating accumulator loads as clobbering the
     // accumulator until the value is actually materialized in the accumulator.
     RegisterInfo* input_info = GetRegisterInfo(input);
     RegisterTransfer(input_info, accumulator_info_);
   }
-  void DoStar(Register output) {
+  void DoStar(AsmRegister output) {
     RegisterInfo* output_info = GetRegisterInfo(output);
     RegisterTransfer(accumulator_info_, output_info);
   }
-  void DoMov(Register input, Register output) {
+  void DoMov(AsmRegister input, AsmRegister output) {
     RegisterInfo* input_info = GetRegisterInfo(input);
     RegisterInfo* output_info = GetRegisterInfo(output);
     RegisterTransfer(input_info, output_info);
@@ -94,13 +94,13 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   }
 
   // Prepares |reg| for being used as an output operand.
-  void PrepareOutputRegister(Register reg);
+  void PrepareOutputRegister(AsmRegister reg);
 
   // Prepares registers in |reg_list| for being used as an output operand.
   void PrepareOutputRegisterList(RegisterList reg_list);
 
   // Returns an equivalent register to |reg| to be used as an input operand.
-  Register GetInputRegister(Register reg);
+  AsmRegister GetInputRegister(AsmRegister reg);
 
   // Returns an equivalent register list to |reg_list| to be used as an input
   // operand.
@@ -114,7 +114,7 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   class RegisterInfo;
 
   // BytecodeRegisterAllocator::Observer interface.
-  void RegisterAllocateEvent(Register reg) override;
+  void RegisterAllocateEvent(AsmRegister reg) override;
   void RegisterListAllocateEvent(RegisterList reg_list) override;
   void RegisterListFreeEvent(RegisterList reg) override;
 
@@ -135,43 +135,43 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   bool EnsureAllRegistersAreFlushed() const;
 
   // Methods for finding and creating metadata for each register.
-  RegisterInfo* GetRegisterInfo(Register reg) {
+  RegisterInfo* GetRegisterInfo(AsmRegister reg) {
     size_t index = GetRegisterInfoTableIndex(reg);
     DCHECK_LT(index, register_info_table_.size());
     return register_info_table_[index];
   }
-  RegisterInfo* GetOrCreateRegisterInfo(Register reg) {
+  RegisterInfo* GetOrCreateRegisterInfo(AsmRegister reg) {
     size_t index = GetRegisterInfoTableIndex(reg);
     return index < register_info_table_.size() ? register_info_table_[index]
                                                : NewRegisterInfo(reg);
   }
-  RegisterInfo* NewRegisterInfo(Register reg) {
+  RegisterInfo* NewRegisterInfo(AsmRegister reg) {
     size_t index = GetRegisterInfoTableIndex(reg);
     DCHECK_GE(index, register_info_table_.size());
     GrowRegisterMap(reg);
     return register_info_table_[index];
   }
 
-  void GrowRegisterMap(Register reg);
+  void GrowRegisterMap(AsmRegister reg);
 
-  bool RegisterIsTemporary(Register reg) const {
+  bool RegisterIsTemporary(AsmRegister reg) const {
     return reg >= temporary_base_;
   }
 
-  bool RegisterIsObservable(Register reg) const {
+  bool RegisterIsObservable(AsmRegister reg) const {
     return reg != accumulator_ && !RegisterIsTemporary(reg);
   }
 
-  static Register OperandToRegister(uint32_t operand) {
-    return Register::FromOperand(static_cast<int32_t>(operand));
+  static AsmRegister OperandToRegister(uint32_t operand) {
+    return AsmRegister::FromOperand(static_cast<int32_t>(operand));
   }
 
-  size_t GetRegisterInfoTableIndex(Register reg) const {
+  size_t GetRegisterInfoTableIndex(AsmRegister reg) const {
     return static_cast<size_t>(reg.index() + register_info_table_offset_);
   }
 
-  Register RegisterFromRegisterInfoTableIndex(size_t index) const {
-    return Register(static_cast<int>(index) - register_info_table_offset_);
+  AsmRegister RegisterFromRegisterInfoTableIndex(size_t index) const {
+    return AsmRegister(static_cast<int>(index) - register_info_table_offset_);
   }
 
   uint32_t NextEquivalenceId() {
@@ -185,9 +185,9 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
 
   Zone* zone() { return zone_; }
 
-  const Register accumulator_;
+  const AsmRegister accumulator_;
   RegisterInfo* accumulator_info_;
-  const Register temporary_base_;
+  const AsmRegister temporary_base_;
   int max_register_index_;
 
   // Direct mapping to register info.

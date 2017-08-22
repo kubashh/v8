@@ -113,7 +113,7 @@ TEST_F(EhFrameWriterTest, IncreaseOffset) {
 }
 
 TEST_F(EhFrameWriterTest, SetRegister) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
 
   EhFrameWriter writer(zone());
   writer.Initialize();
@@ -130,7 +130,7 @@ TEST_F(EhFrameWriterTest, SetRegister) {
 }
 
 TEST_F(EhFrameWriterTest, SetRegisterAndOffset) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
   static const uint32_t kOffset = 0x0badc0de;
 
   EhFrameWriter writer(zone());
@@ -300,7 +300,7 @@ TEST_F(EhFrameWriterTest, PcOffsetEncoding32bitDelta) {
 }
 
 TEST_F(EhFrameWriterTest, SaveRegisterUnsignedOffset) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
   static const int kOffset =
       EhFrameConstants::kDataAlignmentFactor > 0 ? 12344 : -12344;
 
@@ -319,7 +319,7 @@ TEST_F(EhFrameWriterTest, SaveRegisterUnsignedOffset) {
 }
 
 TEST_F(EhFrameWriterTest, SaveRegisterSignedOffset) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
   static const int kOffset =
       EhFrameConstants::kDataAlignmentFactor < 0 ? 12344 : -12344;
 
@@ -342,7 +342,7 @@ TEST_F(EhFrameWriterTest, SaveRegisterSignedOffset) {
 }
 
 TEST_F(EhFrameWriterTest, RegisterNotModified) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
 
   EhFrameWriter writer(zone());
   writer.Initialize();
@@ -359,7 +359,7 @@ TEST_F(EhFrameWriterTest, RegisterNotModified) {
 }
 
 TEST_F(EhFrameWriterTest, RegisterFollowsInitialRule) {
-  Register test_register = Register::from_code(kTestRegisterCode);
+  AsmRegister test_register = AsmRegister::from_code(kTestRegisterCode);
 
   EhFrameWriter writer(zone());
   writer.Initialize();

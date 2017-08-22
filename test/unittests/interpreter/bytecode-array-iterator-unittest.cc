@@ -30,11 +30,12 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
   Smi* zero = Smi::kZero;
   Smi* smi_0 = Smi::FromInt(64);
   Smi* smi_1 = Smi::FromInt(-65536);
-  Register reg_0(0);
-  Register reg_1(1);
+  AsmRegister reg_0(0);
+  AsmRegister reg_1(1);
   RegisterList pair(0, 2);
   RegisterList triple(0, 3);
-  Register param = Register::FromParameterIndex(2, builder.parameter_count());
+  AsmRegister param =
+      AsmRegister::FromParameterIndex(2, builder.parameter_count());
   const AstRawString* name = ast_factory.GetOneByteString("abc");
   uint32_t name_index = 2;
   uint32_t feedback_slot = 97;

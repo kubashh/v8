@@ -15,7 +15,7 @@ const uint32_t BytecodeRegisterOptimizer::kInvalidEquivalenceId = kMaxUInt32;
 // register is materialized in the bytecode stream.
 class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
  public:
-  RegisterInfo(Register reg, uint32_t equivalence_id, bool materialized,
+  RegisterInfo(AsmRegister reg, uint32_t equivalence_id, bool materialized,
                bool allocated)
       : register_(reg),
         equivalence_id_(equivalence_id),
@@ -46,7 +46,7 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   // materialized and not register |reg|. The materialized equivalent
   // will be this register if it is materialized. Returns nullptr if
   // no materialized equivalent exists.
-  RegisterInfo* GetMaterializedEquivalentOtherThan(Register reg);
+  RegisterInfo* GetMaterializedEquivalentOtherThan(AsmRegister reg);
 
   // Get a member of this register's equivalence set that is intended
   // to be materialized in place of this register (which is currently
@@ -57,12 +57,12 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   RegisterInfo* GetEquivalentToMaterialize();
 
   // Marks all temporary registers of the equivalence set as unmaterialized.
-  void MarkTemporariesAsUnmaterialized(Register temporary_base);
+  void MarkTemporariesAsUnmaterialized(AsmRegister temporary_base);
 
   // Get an equivalent register. Returns this if none exists.
   RegisterInfo* GetEquivalent();
 
-  Register register_value() const { return register_; }
+  AsmRegister register_value() const { return register_; }
   bool materialized() const { return materialized_; }
   void set_materialized(bool materialized) { materialized_ = materialized; }
   bool allocated() const { return allocated_; }
@@ -76,7 +76,7 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   void set_needs_flush(bool needs_flush) { needs_flush_ = needs_flush; }
 
  private:
-  Register register_;
+  AsmRegister register_;
   uint32_t equivalence_id_;
   bool materialized_;
   bool allocated_;
@@ -165,7 +165,7 @@ BytecodeRegisterOptimizer::RegisterInfo::GetMaterializedEquivalent() {
 
 BytecodeRegisterOptimizer::RegisterInfo*
 BytecodeRegisterOptimizer::RegisterInfo::GetMaterializedEquivalentOtherThan(
-    Register reg) {
+    AsmRegister reg) {
   RegisterInfo* visitor = this;
   do {
     if (visitor->materialized() && visitor->register_value() != reg) {
@@ -197,7 +197,7 @@ BytecodeRegisterOptimizer::RegisterInfo::GetEquivalentToMaterialize() {
 }
 
 void BytecodeRegisterOptimizer::RegisterInfo::MarkTemporariesAsUnmaterialized(
-    Register temporary_base) {
+    AsmRegister temporary_base) {
   DCHECK(this->register_value() < temporary_base);
   DCHECK(this->materialized());
   RegisterInfo* visitor = this->next_;
@@ -218,7 +218,7 @@ BytecodeRegisterOptimizer::BytecodeRegisterOptimizer(
     Zone* zone, BytecodeRegisterAllocator* register_allocator,
     int fixed_registers_count, int parameter_count,
     BytecodeWriter* bytecode_writer)
-    : accumulator_(Register::virtual_accumulator()),
+    : accumulator_(AsmRegister::virtual_accumulator()),
       temporary_base_(fixed_registers_count),
       max_register_index_(fixed_registers_count - 1),
       register_info_table_(zone),
@@ -234,7 +234,7 @@ BytecodeRegisterOptimizer::BytecodeRegisterOptimizer(
   // There is at least one parameter, which is the JS receiver.
   DCHECK(parameter_count != 0);
   register_info_table_offset_ =
-      -Register::FromParameterIndex(0, parameter_count).index();
+      -AsmRegister::FromParameterIndex(0, parameter_count).index();
 
   // Initialize register map for parameters, locals, and the
   // accumulator.
@@ -311,8 +311,8 @@ void BytecodeRegisterOptimizer::Flush() {
 
 void BytecodeRegisterOptimizer::OutputRegisterTransfer(
     RegisterInfo* input_info, RegisterInfo* output_info) {
-  Register input = input_info->register_value();
-  Register output = output_info->register_value();
+  AsmRegister input = input_info->register_value();
+  AsmRegister output = output_info->register_value();
   DCHECK_NE(input.index(), output.index());
 
   if (input == accumulator_) {
@@ -413,7 +413,7 @@ void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
   }
 }
 
-void BytecodeRegisterOptimizer::PrepareOutputRegister(Register reg) {
+void BytecodeRegisterOptimizer::PrepareOutputRegister(AsmRegister reg) {
   RegisterInfo* reg_info = GetRegisterInfo(reg);
   if (reg_info->materialized()) {
     CreateMaterializedEquivalent(reg_info);
@@ -427,12 +427,12 @@ void BytecodeRegisterOptimizer::PrepareOutputRegisterList(
     RegisterList reg_list) {
   int start_index = reg_list.first_register().index();
   for (int i = 0; i < reg_list.register_count(); ++i) {
-    Register current(start_index + i);
+    AsmRegister current(start_index + i);
     PrepareOutputRegister(current);
   }
 }
 
-Register BytecodeRegisterOptimizer::GetInputRegister(Register reg) {
+AsmRegister BytecodeRegisterOptimizer::GetInputRegister(AsmRegister reg) {
   RegisterInfo* reg_info = GetRegisterInfo(reg);
   if (reg_info->materialized()) {
     return reg;
@@ -447,12 +447,12 @@ RegisterList BytecodeRegisterOptimizer::GetInputRegisterList(
     RegisterList reg_list) {
   if (reg_list.register_count() == 1) {
     // If there is only a single register, treat it as a normal input register.
-    Register reg(GetInputRegister(reg_list.first_register()));
+    AsmRegister reg(GetInputRegister(reg_list.first_register()));
     return RegisterList(reg.index(), 1);
   } else {
     int start_index = reg_list.first_register().index();
     for (int i = 0; i < reg_list.register_count(); ++i) {
-      Register current(start_index + i);
+      AsmRegister current(start_index + i);
       RegisterInfo* input_info = GetRegisterInfo(current);
       Materialize(input_info);
     }
@@ -460,7 +460,7 @@ RegisterList BytecodeRegisterOptimizer::GetInputRegisterList(
   }
 }
 
-void BytecodeRegisterOptimizer::GrowRegisterMap(Register reg) {
+void BytecodeRegisterOptimizer::GrowRegisterMap(AsmRegister reg) {
   DCHECK(RegisterIsTemporary(reg));
   size_t index = GetRegisterInfoTableIndex(reg);
   if (index >= register_info_table_.size()) {
@@ -482,7 +482,7 @@ void BytecodeRegisterOptimizer::AllocateRegister(RegisterInfo* info) {
   }
 }
 
-void BytecodeRegisterOptimizer::RegisterAllocateEvent(Register reg) {
+void BytecodeRegisterOptimizer::RegisterAllocateEvent(AsmRegister reg) {
   AllocateRegister(GetOrCreateRegisterInfo(reg));
 }
 
@@ -490,9 +490,9 @@ void BytecodeRegisterOptimizer::RegisterListAllocateEvent(
     RegisterList reg_list) {
   if (reg_list.register_count() != 0) {
     int first_index = reg_list.first_register().index();
-    GrowRegisterMap(Register(first_index + reg_list.register_count() - 1));
+    GrowRegisterMap(AsmRegister(first_index + reg_list.register_count() - 1));
     for (int i = 0; i < reg_list.register_count(); i++) {
-      AllocateRegister(GetRegisterInfo(Register(first_index + i)));
+      AllocateRegister(GetRegisterInfo(AsmRegister(first_index + i)));
     }
   }
 }
@@ -500,7 +500,7 @@ void BytecodeRegisterOptimizer::RegisterListAllocateEvent(
 void BytecodeRegisterOptimizer::RegisterListFreeEvent(RegisterList reg_list) {
   int first_index = reg_list.first_register().index();
   for (int i = 0; i < reg_list.register_count(); i++) {
-    GetRegisterInfo(Register(first_index + i))->set_allocated(false);
+    GetRegisterInfo(AsmRegister(first_index + i))->set_allocated(false);
   }
 }
 

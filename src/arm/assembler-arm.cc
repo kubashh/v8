@@ -367,8 +367,7 @@ Operand::Operand(Handle<HeapObject> handle) {
   rmode_ = RelocInfo::EMBEDDED_OBJECT;
 }
 
-
-Operand::Operand(Register rm, ShiftOp shift_op, int shift_imm) {
+Operand::Operand(AsmRegister rm, ShiftOp shift_op, int shift_imm) {
   DCHECK(is_uint5(shift_imm));
 
   rm_ = rm;
@@ -388,8 +387,7 @@ Operand::Operand(Register rm, ShiftOp shift_op, int shift_imm) {
   }
 }
 
-
-Operand::Operand(Register rm, ShiftOp shift_op, Register rs) {
+Operand::Operand(AsmRegister rm, ShiftOp shift_op, AsmRegister rs) {
   DCHECK(shift_op != RRX);
   rm_ = rm;
   rs_ = no_reg;
@@ -413,7 +411,7 @@ Operand Operand::EmbeddedCode(CodeStub* stub) {
   return result;
 }
 
-MemOperand::MemOperand(Register rn, int32_t offset, AddrMode am) {
+MemOperand::MemOperand(AsmRegister rn, int32_t offset, AddrMode am) {
   rn_ = rn;
   rm_ = no_reg;
   offset_ = offset;
@@ -427,8 +425,7 @@ MemOperand::MemOperand(Register rn, int32_t offset, AddrMode am) {
   }
 }
 
-
-MemOperand::MemOperand(Register rn, Register rm, AddrMode am) {
+MemOperand::MemOperand(AsmRegister rn, AsmRegister rm, AddrMode am) {
   rn_ = rn;
   rm_ = rm;
   shift_op_ = LSL;
@@ -436,9 +433,8 @@ MemOperand::MemOperand(Register rn, Register rm, AddrMode am) {
   am_ = am;
 }
 
-
-MemOperand::MemOperand(Register rn, Register rm,
-                       ShiftOp shift_op, int shift_imm, AddrMode am) {
+MemOperand::MemOperand(AsmRegister rn, AsmRegister rm, ShiftOp shift_op,
+                       int shift_imm, AddrMode am) {
   DCHECK(is_uint5(shift_imm));
   rn_ = rn;
   rm_ = rm;
@@ -447,16 +443,14 @@ MemOperand::MemOperand(Register rn, Register rm,
   am_ = am;
 }
 
-
-NeonMemOperand::NeonMemOperand(Register rn, AddrMode am, int align) {
+NeonMemOperand::NeonMemOperand(AsmRegister rn, AddrMode am, int align) {
   DCHECK((am == Offset) || (am == PostIndex));
   rn_ = rn;
   rm_ = (am == Offset) ? pc : sp;
   SetAlignment(align);
 }
 
-
-NeonMemOperand::NeonMemOperand(Register rn, Register rm, int align) {
+NeonMemOperand::NeonMemOperand(AsmRegister rn, AsmRegister rm, int align) {
   rn_ = rn;
   rm_ = rm;
   SetAlignment(align);
@@ -508,17 +502,18 @@ void Assembler::AllocateAndInstallRequestedHeapObjects(Isolate* isolate) {
 // str(r, MemOperand(sp, 4, NegPreIndex), al) instruction (aka push(r))
 // register r is not encoded.
 const Instr kPushRegPattern =
-    al | B26 | 4 | NegPreIndex | Register::kCode_sp * B16;
+    al | B26 | 4 | NegPreIndex | AsmRegister::kCode_sp * B16;
 // ldr(r, MemOperand(sp, 4, PostIndex), al) instruction (aka pop(r))
 // register r is not encoded.
 const Instr kPopRegPattern =
-    al | B26 | L | 4 | PostIndex | Register::kCode_sp * B16;
+    al | B26 | L | 4 | PostIndex | AsmRegister::kCode_sp * B16;
 // ldr rd, [pc, #offset]
 const Instr kLdrPCImmedMask = 15 * B24 | 7 * B20 | 15 * B16;
-const Instr kLdrPCImmedPattern = 5 * B24 | L | Register::kCode_pc * B16;
+const Instr kLdrPCImmedPattern = 5 * B24 | L | AsmRegister::kCode_pc * B16;
 // vldr dd, [pc, #offset]
 const Instr kVldrDPCMask = 15 * B24 | 3 * B20 | 15 * B16 | 15 * B8;
-const Instr kVldrDPCPattern = 13 * B24 | L | Register::kCode_pc * B16 | 11 * B8;
+const Instr kVldrDPCPattern =
+    13 * B24 | L | AsmRegister::kCode_pc * B16 | 11 * B8;
 // blxcc rm
 const Instr kBlxRegMask =
     15 * B24 | 15 * B20 | 15 * B16 | 15 * B12 | 15 * B8 | 15 * B4;
@@ -545,13 +540,13 @@ const Instr kAndBicFlip = 0xe * B21;
 
 // A mask for the Rd register for push, pop, ldr, str instructions.
 const Instr kLdrRegFpOffsetPattern =
-    al | B26 | L | Offset | Register::kCode_fp * B16;
+    al | B26 | L | Offset | AsmRegister::kCode_fp * B16;
 const Instr kStrRegFpOffsetPattern =
-    al | B26 | Offset | Register::kCode_fp * B16;
+    al | B26 | Offset | AsmRegister::kCode_fp * B16;
 const Instr kLdrRegFpNegOffsetPattern =
-    al | B26 | L | NegOffset | Register::kCode_fp * B16;
+    al | B26 | L | NegOffset | AsmRegister::kCode_fp * B16;
 const Instr kStrRegFpNegOffsetPattern =
-    al | B26 | NegOffset | Register::kCode_fp * B16;
+    al | B26 | NegOffset | AsmRegister::kCode_fp * B16;
 const Instr kLdrStrInstrTypeMask = 0xffff0000;
 
 Assembler::Assembler(IsolateData isolate_data, void* buffer, int buffer_size)
@@ -570,7 +565,7 @@ Assembler::Assembler(IsolateData isolate_data, void* buffer, int buffer_size)
   first_const_pool_64_use_ = -1;
   last_bound_pos_ = 0;
   if (CpuFeatures::IsSupported(VFP32DREGS)) {
-    // Register objects tend to be abstracted and survive between scopes, so
+    // AsmRegister objects tend to be abstracted and survive between scopes, so
     // it's awkward to use CpuFeatures::VFP32DREGS with CpuFeatureScope. To make
     // its use consistent with other features, we always enable it if we can.
     EnableCpuFeature(VFP32DREGS);
@@ -720,23 +715,20 @@ Instr Assembler::SetAddRegisterImmediateOffset(Instr instr, int offset) {
   return (instr & ~kOff12Mask) | offset;
 }
 
-
-Register Assembler::GetRd(Instr instr) {
-  Register reg;
+AsmRegister Assembler::GetRd(Instr instr) {
+  AsmRegister reg;
   reg.reg_code = Instruction::RdValue(instr);
   return reg;
 }
 
-
-Register Assembler::GetRn(Instr instr) {
-  Register reg;
+AsmRegister Assembler::GetRn(Instr instr) {
+  AsmRegister reg;
   reg.reg_code = Instruction::RnValue(instr);
   return reg;
 }
 
-
-Register Assembler::GetRm(Instr instr) {
-  Register reg;
+AsmRegister Assembler::GetRm(Instr instr) {
+  AsmRegister reg;
   reg.reg_code = Instruction::RmValue(instr);
   return reg;
 }
@@ -817,8 +809,7 @@ bool Assembler::IsCmpImmediate(Instr instr) {
       (I | CMP | S);
 }
 
-
-Register Assembler::GetCmpImmediateRegister(Instr instr) {
+AsmRegister Assembler::GetCmpImmediateRegister(Instr instr) {
   DCHECK(IsCmpImmediate(instr));
   return GetRn(instr);
 }
@@ -877,8 +868,8 @@ void Assembler::target_at_put(int pos, int target_pos) {
     // nops encoding the destination register. See mov_label_offset.
 
     // Extract the destination register from the first nop instructions.
-    Register dst =
-        Register::from_code(Instruction::RmValue(instr_at(pos + kInstrSize)));
+    AsmRegister dst = AsmRegister::from_code(
+        Instruction::RmValue(instr_at(pos + kInstrSize)));
     // In addition to the 24-bit label chain link, we expect to find one nop for
     // ARMv7 and above, or two nops for ARMv6. See mov_label_offset.
     DCHECK(IsNop(instr_at(pos + kInstrSize), dst.code()));
@@ -1173,7 +1164,7 @@ int Operand::InstructionsRequired(const Assembler* assembler,
   }
 }
 
-void Assembler::Move32BitImmediate(Register rd, const Operand& x,
+void Assembler::Move32BitImmediate(AsmRegister rd, const Operand& x,
                                    Condition cond) {
   if (UseMovImmediateLoad(x, this)) {
     // UseMovImmediateLoad should return false when we need to output
@@ -1182,7 +1173,7 @@ void Assembler::Move32BitImmediate(Register rd, const Operand& x,
     DCHECK(!x.MustOutputRelocInfo(this));
     UseScratchRegisterScope temps(this);
     // Re-use the destination register as a scratch if possible.
-    Register target = !rd.is(pc) ? rd : temps.Acquire();
+    AsmRegister target = !rd.is(pc) ? rd : temps.Acquire();
     if (CpuFeatures::IsSupported(ARMv7)) {
       uint32_t imm32 = static_cast<uint32_t>(x.immediate());
       CpuFeatureScope scope(this, ARMv7);
@@ -1205,7 +1196,7 @@ void Assembler::Move32BitImmediate(Register rd, const Operand& x,
   }
 }
 
-void Assembler::AddrMode1(Instr instr, Register rd, Register rn,
+void Assembler::AddrMode1(Instr instr, AsmRegister rd, AsmRegister rn,
                           const Operand& x) {
   CheckBuffer();
   uint32_t opcode = instr & kOpCodeMask;
@@ -1239,7 +1230,7 @@ void Assembler::AddrMode1(Instr instr, Register rd, Register rn,
       // use it.
       UseScratchRegisterScope temps(this);
       // Re-use the destination register if possible.
-      Register scratch =
+      AsmRegister scratch =
           (rd.is_valid() && !rd.is(rn) && !rd.is(pc)) ? rd : temps.Acquire();
       mov(scratch, x, LeaveCC, cond);
       AddrMode1(instr, rd, rn, Operand(scratch));
@@ -1286,7 +1277,7 @@ bool Assembler::AddrMode1TryEncodeOperand(Instr* instr, const Operand& x) {
   return true;
 }
 
-void Assembler::AddrMode2(Instr instr, Register rd, const MemOperand& x) {
+void Assembler::AddrMode2(Instr instr, AsmRegister rd, const MemOperand& x) {
   DCHECK((instr & ~(kCondMask | B | L)) == B26);
   int am = x.am_;
   if (!x.rm_.is_valid()) {
@@ -1302,7 +1293,7 @@ void Assembler::AddrMode2(Instr instr, Register rd, const MemOperand& x) {
       UseScratchRegisterScope temps(this);
       // Allow re-using rd for load instructions if possible.
       bool is_load = (instr & L) == L;
-      Register scratch =
+      AsmRegister scratch =
           (is_load && !rd.is(x.rn_) && !rd.is(pc)) ? rd : temps.Acquire();
       mov(scratch, Operand(x.offset_), LeaveCC,
           Instruction::ConditionField(instr));
@@ -1312,7 +1303,7 @@ void Assembler::AddrMode2(Instr instr, Register rd, const MemOperand& x) {
     DCHECK(offset_12 >= 0);  // no masking needed
     instr |= offset_12;
   } else {
-    // Register offset (shift_imm_ and shift_op_ are 0) or scaled
+    // AsmRegister offset (shift_imm_ and shift_op_ are 0) or scaled
     // register offset the constructors make sure than both shift_imm_
     // and shift_op_ are initialized.
     DCHECK(!x.rm_.is(pc));
@@ -1322,7 +1313,7 @@ void Assembler::AddrMode2(Instr instr, Register rd, const MemOperand& x) {
   emit(instr | am | x.rn_.code()*B16 | rd.code()*B12);
 }
 
-void Assembler::AddrMode3(Instr instr, Register rd, const MemOperand& x) {
+void Assembler::AddrMode3(Instr instr, AsmRegister rd, const MemOperand& x) {
   DCHECK((instr & ~(kCondMask | L | S6 | H)) == (B4 | B7));
   DCHECK(x.rn_.is_valid());
   int am = x.am_;
@@ -1339,7 +1330,7 @@ void Assembler::AddrMode3(Instr instr, Register rd, const MemOperand& x) {
       // register.
       UseScratchRegisterScope temps(this);
       // Allow re-using rd for load instructions if possible.
-      Register scratch =
+      AsmRegister scratch =
           (is_load && !rd.is(x.rn_) && !rd.is(pc)) ? rd : temps.Acquire();
       mov(scratch, Operand(x.offset_), LeaveCC,
           Instruction::ConditionField(instr));
@@ -1353,14 +1344,14 @@ void Assembler::AddrMode3(Instr instr, Register rd, const MemOperand& x) {
     // to a scratch register.
     UseScratchRegisterScope temps(this);
     // Allow re-using rd for load instructions if possible.
-    Register scratch =
+    AsmRegister scratch =
         (is_load && !rd.is(x.rn_) && !rd.is(pc)) ? rd : temps.Acquire();
     mov(scratch, Operand(x.rm_, x.shift_op_, x.shift_imm_), LeaveCC,
         Instruction::ConditionField(instr));
     AddrMode3(instr, rd, MemOperand(x.rn_, scratch, x.am_));
     return;
   } else {
-    // Register offset.
+    // AsmRegister offset.
     DCHECK((am & (P|W)) == P || !x.rm_.is(pc));  // no pc index with writeback
     instr |= x.rm_.code();
   }
@@ -1368,7 +1359,7 @@ void Assembler::AddrMode3(Instr instr, Register rd, const MemOperand& x) {
   emit(instr | am | x.rn_.code()*B16 | rd.code()*B12);
 }
 
-void Assembler::AddrMode4(Instr instr, Register rn, RegList rl) {
+void Assembler::AddrMode4(Instr instr, AsmRegister rn, RegList rl) {
   DCHECK((instr & ~(kCondMask | P | U | W | L)) == B27);
   DCHECK(rl != 0);
   DCHECK(!rn.is(pc));
@@ -1452,12 +1443,12 @@ void Assembler::blx(int branch_offset) {
   emit(kSpecialCondition | B27 | B25 | h | (imm24 & kImm24Mask));
 }
 
-void Assembler::blx(Register target, Condition cond) {
+void Assembler::blx(AsmRegister target, Condition cond) {
   DCHECK(!target.is(pc));
   emit(cond | B24 | B21 | 15*B16 | 15*B12 | 15*B8 | BLX | target.code());
 }
 
-void Assembler::bx(Register target, Condition cond) {
+void Assembler::bx(AsmRegister target, Condition cond) {
   DCHECK(!target.is(pc));  // use of pc is actually allowed, but discouraged
   emit(cond | B24 | B21 | 15*B16 | 15*B12 | 15*B8 | BX | target.code());
 }
@@ -1483,117 +1474,109 @@ void Assembler::blx(Label* L) {
 
 // Data-processing instructions.
 
-void Assembler::and_(Register dst, Register src1, const Operand& src2,
+void Assembler::and_(AsmRegister dst, AsmRegister src1, const Operand& src2,
                      SBit s, Condition cond) {
   AddrMode1(cond | AND | s, dst, src1, src2);
 }
 
-
-void Assembler::eor(Register dst, Register src1, const Operand& src2,
+void Assembler::eor(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | EOR | s, dst, src1, src2);
 }
 
-
-void Assembler::sub(Register dst, Register src1, const Operand& src2,
+void Assembler::sub(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | SUB | s, dst, src1, src2);
 }
 
-void Assembler::sub(Register dst, Register src1, Register src2, SBit s,
+void Assembler::sub(AsmRegister dst, AsmRegister src1, AsmRegister src2, SBit s,
                     Condition cond) {
   sub(dst, src1, Operand(src2), s, cond);
 }
 
-void Assembler::rsb(Register dst, Register src1, const Operand& src2,
+void Assembler::rsb(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | RSB | s, dst, src1, src2);
 }
 
-
-void Assembler::add(Register dst, Register src1, const Operand& src2,
+void Assembler::add(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | ADD | s, dst, src1, src2);
 }
 
-void Assembler::add(Register dst, Register src1, Register src2, SBit s,
+void Assembler::add(AsmRegister dst, AsmRegister src1, AsmRegister src2, SBit s,
                     Condition cond) {
   add(dst, src1, Operand(src2), s, cond);
 }
 
-void Assembler::adc(Register dst, Register src1, const Operand& src2,
+void Assembler::adc(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | ADC | s, dst, src1, src2);
 }
 
-
-void Assembler::sbc(Register dst, Register src1, const Operand& src2,
+void Assembler::sbc(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | SBC | s, dst, src1, src2);
 }
 
-
-void Assembler::rsc(Register dst, Register src1, const Operand& src2,
+void Assembler::rsc(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | RSC | s, dst, src1, src2);
 }
 
-
-void Assembler::tst(Register src1, const Operand& src2, Condition cond) {
+void Assembler::tst(AsmRegister src1, const Operand& src2, Condition cond) {
   AddrMode1(cond | TST | S, no_reg, src1, src2);
 }
 
-void Assembler::tst(Register src1, Register src2, Condition cond) {
+void Assembler::tst(AsmRegister src1, AsmRegister src2, Condition cond) {
   tst(src1, Operand(src2), cond);
 }
 
-void Assembler::teq(Register src1, const Operand& src2, Condition cond) {
+void Assembler::teq(AsmRegister src1, const Operand& src2, Condition cond) {
   AddrMode1(cond | TEQ | S, no_reg, src1, src2);
 }
 
-
-void Assembler::cmp(Register src1, const Operand& src2, Condition cond) {
+void Assembler::cmp(AsmRegister src1, const Operand& src2, Condition cond) {
   AddrMode1(cond | CMP | S, no_reg, src1, src2);
 }
 
-void Assembler::cmp(Register src1, Register src2, Condition cond) {
+void Assembler::cmp(AsmRegister src1, AsmRegister src2, Condition cond) {
   cmp(src1, Operand(src2), cond);
 }
 
-void Assembler::cmp_raw_immediate(
-    Register src, int raw_immediate, Condition cond) {
+void Assembler::cmp_raw_immediate(AsmRegister src, int raw_immediate,
+                                  Condition cond) {
   DCHECK(is_uint12(raw_immediate));
   emit(cond | I | CMP | S | src.code() << 16 | raw_immediate);
 }
 
-
-void Assembler::cmn(Register src1, const Operand& src2, Condition cond) {
+void Assembler::cmn(AsmRegister src1, const Operand& src2, Condition cond) {
   AddrMode1(cond | CMN | S, no_reg, src1, src2);
 }
 
-
-void Assembler::orr(Register dst, Register src1, const Operand& src2,
+void Assembler::orr(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | ORR | s, dst, src1, src2);
 }
 
-void Assembler::orr(Register dst, Register src1, Register src2, SBit s,
+void Assembler::orr(AsmRegister dst, AsmRegister src1, AsmRegister src2, SBit s,
                     Condition cond) {
   orr(dst, src1, Operand(src2), s, cond);
 }
 
-void Assembler::mov(Register dst, const Operand& src, SBit s, Condition cond) {
+void Assembler::mov(AsmRegister dst, const Operand& src, SBit s,
+                    Condition cond) {
   // Don't allow nop instructions in the form mov rn, rn to be generated using
   // the mov instruction. They must be generated using nop(int/NopMarkerTypes).
   DCHECK(!(src.IsRegister() && src.rm().is(dst) && s == LeaveCC && cond == al));
   AddrMode1(cond | MOV | s, dst, no_reg, src);
 }
 
-void Assembler::mov(Register dst, Register src, SBit s, Condition cond) {
+void Assembler::mov(AsmRegister dst, AsmRegister src, SBit s, Condition cond) {
   mov(dst, Operand(src), s, cond);
 }
 
-void Assembler::mov_label_offset(Register dst, Label* label) {
+void Assembler::mov_label_offset(AsmRegister dst, Label* label) {
   if (label->is_bound()) {
     mov(dst, Operand(label->pos() + (Code::kHeaderSize - kHeapObjectTag)));
   } else {
@@ -1631,31 +1614,28 @@ void Assembler::mov_label_offset(Register dst, Label* label) {
   }
 }
 
-
-void Assembler::movw(Register reg, uint32_t immediate, Condition cond) {
+void Assembler::movw(AsmRegister reg, uint32_t immediate, Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   emit(cond | 0x30*B20 | reg.code()*B12 | EncodeMovwImmediate(immediate));
 }
 
-
-void Assembler::movt(Register reg, uint32_t immediate, Condition cond) {
+void Assembler::movt(AsmRegister reg, uint32_t immediate, Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   emit(cond | 0x34*B20 | reg.code()*B12 | EncodeMovwImmediate(immediate));
 }
 
-
-void Assembler::bic(Register dst, Register src1, const Operand& src2,
+void Assembler::bic(AsmRegister dst, AsmRegister src1, const Operand& src2,
                     SBit s, Condition cond) {
   AddrMode1(cond | BIC | s, dst, src1, src2);
 }
 
-
-void Assembler::mvn(Register dst, const Operand& src, SBit s, Condition cond) {
+void Assembler::mvn(AsmRegister dst, const Operand& src, SBit s,
+                    Condition cond) {
   AddrMode1(cond | MVN | s, dst, no_reg, src);
 }
 
-void Assembler::asr(Register dst, Register src1, const Operand& src2, SBit s,
-                    Condition cond) {
+void Assembler::asr(AsmRegister dst, AsmRegister src1, const Operand& src2,
+                    SBit s, Condition cond) {
   if (src2.IsRegister()) {
     mov(dst, Operand(src1, ASR, src2.rm()), s, cond);
   } else {
@@ -1663,8 +1643,8 @@ void Assembler::asr(Register dst, Register src1, const Operand& src2, SBit s,
   }
 }
 
-void Assembler::lsl(Register dst, Register src1, const Operand& src2, SBit s,
-                    Condition cond) {
+void Assembler::lsl(AsmRegister dst, AsmRegister src1, const Operand& src2,
+                    SBit s, Condition cond) {
   if (src2.IsRegister()) {
     mov(dst, Operand(src1, LSL, src2.rm()), s, cond);
   } else {
@@ -1672,8 +1652,8 @@ void Assembler::lsl(Register dst, Register src1, const Operand& src2, SBit s,
   }
 }
 
-void Assembler::lsr(Register dst, Register src1, const Operand& src2, SBit s,
-                    Condition cond) {
+void Assembler::lsr(AsmRegister dst, AsmRegister src1, const Operand& src2,
+                    SBit s, Condition cond) {
   if (src2.IsRegister()) {
     mov(dst, Operand(src1, LSR, src2.rm()), s, cond);
   } else {
@@ -1682,24 +1662,22 @@ void Assembler::lsr(Register dst, Register src1, const Operand& src2, SBit s,
 }
 
 // Multiply instructions.
-void Assembler::mla(Register dst, Register src1, Register src2, Register srcA,
-                    SBit s, Condition cond) {
+void Assembler::mla(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                    AsmRegister srcA, SBit s, Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc) && !srcA.is(pc));
   emit(cond | A | s | dst.code()*B16 | srcA.code()*B12 |
        src2.code()*B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::mls(Register dst, Register src1, Register src2, Register srcA,
-                    Condition cond) {
+void Assembler::mls(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                    AsmRegister srcA, Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc) && !srcA.is(pc));
   DCHECK(IsEnabled(ARMv7));
   emit(cond | B22 | B21 | dst.code()*B16 | srcA.code()*B12 |
        src2.code()*B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::sdiv(Register dst, Register src1, Register src2,
+void Assembler::sdiv(AsmRegister dst, AsmRegister src1, AsmRegister src2,
                      Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(IsEnabled(SUDIV));
@@ -1707,8 +1685,7 @@ void Assembler::sdiv(Register dst, Register src1, Register src2,
        src2.code()*B8 | B4 | src1.code());
 }
 
-
-void Assembler::udiv(Register dst, Register src1, Register src2,
+void Assembler::udiv(AsmRegister dst, AsmRegister src1, AsmRegister src2,
                      Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(IsEnabled(SUDIV));
@@ -1716,76 +1693,53 @@ void Assembler::udiv(Register dst, Register src1, Register src2,
        src2.code() * B8 | B4 | src1.code());
 }
 
-
-void Assembler::mul(Register dst, Register src1, Register src2, SBit s,
+void Assembler::mul(AsmRegister dst, AsmRegister src1, AsmRegister src2, SBit s,
                     Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc));
   // dst goes in bits 16-19 for this instruction!
   emit(cond | s | dst.code() * B16 | src2.code() * B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::smmla(Register dst, Register src1, Register src2, Register srcA,
-                      Condition cond) {
+void Assembler::smmla(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                      AsmRegister srcA, Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc) && !srcA.is(pc));
   emit(cond | B26 | B25 | B24 | B22 | B20 | dst.code() * B16 |
        srcA.code() * B12 | src2.code() * B8 | B4 | src1.code());
 }
 
-
-void Assembler::smmul(Register dst, Register src1, Register src2,
+void Assembler::smmul(AsmRegister dst, AsmRegister src1, AsmRegister src2,
                       Condition cond) {
   DCHECK(!dst.is(pc) && !src1.is(pc) && !src2.is(pc));
   emit(cond | B26 | B25 | B24 | B22 | B20 | dst.code() * B16 | 0xf * B12 |
        src2.code() * B8 | B4 | src1.code());
 }
 
-
-void Assembler::smlal(Register dstL,
-                      Register dstH,
-                      Register src1,
-                      Register src2,
-                      SBit s,
-                      Condition cond) {
+void Assembler::smlal(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+                      AsmRegister src2, SBit s, Condition cond) {
   DCHECK(!dstL.is(pc) && !dstH.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(!dstL.is(dstH));
   emit(cond | B23 | B22 | A | s | dstH.code()*B16 | dstL.code()*B12 |
        src2.code()*B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::smull(Register dstL,
-                      Register dstH,
-                      Register src1,
-                      Register src2,
-                      SBit s,
-                      Condition cond) {
+void Assembler::smull(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+                      AsmRegister src2, SBit s, Condition cond) {
   DCHECK(!dstL.is(pc) && !dstH.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(!dstL.is(dstH));
   emit(cond | B23 | B22 | s | dstH.code()*B16 | dstL.code()*B12 |
        src2.code()*B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::umlal(Register dstL,
-                      Register dstH,
-                      Register src1,
-                      Register src2,
-                      SBit s,
-                      Condition cond) {
+void Assembler::umlal(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+                      AsmRegister src2, SBit s, Condition cond) {
   DCHECK(!dstL.is(pc) && !dstH.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(!dstL.is(dstH));
   emit(cond | B23 | A | s | dstH.code()*B16 | dstL.code()*B12 |
        src2.code()*B8 | B7 | B4 | src1.code());
 }
 
-
-void Assembler::umull(Register dstL,
-                      Register dstH,
-                      Register src1,
-                      Register src2,
-                      SBit s,
-                      Condition cond) {
+void Assembler::umull(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+                      AsmRegister src2, SBit s, Condition cond) {
   DCHECK(!dstL.is(pc) && !dstH.is(pc) && !src1.is(pc) && !src2.is(pc));
   DCHECK(!dstL.is(dstH));
   emit(cond | B23 | s | dstH.code()*B16 | dstL.code()*B12 |
@@ -1794,7 +1748,7 @@ void Assembler::umull(Register dstL,
 
 
 // Miscellaneous arithmetic instructions.
-void Assembler::clz(Register dst, Register src, Condition cond) {
+void Assembler::clz(AsmRegister dst, AsmRegister src, Condition cond) {
   DCHECK(!dst.is(pc) && !src.is(pc));
   emit(cond | B24 | B22 | B21 | 15*B16 | dst.code()*B12 |
        15*B8 | CLZ | src.code());
@@ -1804,9 +1758,7 @@ void Assembler::clz(Register dst, Register src, Condition cond) {
 // Saturating instructions.
 
 // Unsigned saturate.
-void Assembler::usat(Register dst,
-                     int satpos,
-                     const Operand& src,
+void Assembler::usat(AsmRegister dst, int satpos, const Operand& src,
                      Condition cond) {
   DCHECK(!dst.is(pc) && !src.rm_.is(pc));
   DCHECK((satpos >= 0) && (satpos <= 31));
@@ -1829,10 +1781,7 @@ void Assembler::usat(Register dst,
 // Extracts #width adjacent bits from position #lsb in a register, and
 // writes them to the low bits of a destination register.
 //   ubfx dst, src, #lsb, #width
-void Assembler::ubfx(Register dst,
-                     Register src,
-                     int lsb,
-                     int width,
+void Assembler::ubfx(AsmRegister dst, AsmRegister src, int lsb, int width,
                      Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   DCHECK(!dst.is(pc) && !src.is(pc));
@@ -1848,10 +1797,7 @@ void Assembler::ubfx(Register dst,
 // writes them to the low bits of a destination register. The extracted
 // value is sign extended to fill the destination register.
 //   sbfx dst, src, #lsb, #width
-void Assembler::sbfx(Register dst,
-                     Register src,
-                     int lsb,
-                     int width,
+void Assembler::sbfx(AsmRegister dst, AsmRegister src, int lsb, int width,
                      Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   DCHECK(!dst.is(pc) && !src.is(pc));
@@ -1866,7 +1812,7 @@ void Assembler::sbfx(Register dst,
 // Sets #width adjacent bits at position #lsb in the destination register
 // to zero, preserving the value of the other bits.
 //   bfc dst, #lsb, #width
-void Assembler::bfc(Register dst, int lsb, int width, Condition cond) {
+void Assembler::bfc(AsmRegister dst, int lsb, int width, Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   DCHECK(!dst.is(pc));
   DCHECK((lsb >= 0) && (lsb <= 31));
@@ -1880,10 +1826,7 @@ void Assembler::bfc(Register dst, int lsb, int width, Condition cond) {
 // Inserts #width adjacent bits from the low bits of the source register
 // into position #lsb of the destination register.
 //   bfi dst, src, #lsb, #width
-void Assembler::bfi(Register dst,
-                    Register src,
-                    int lsb,
-                    int width,
+void Assembler::bfi(AsmRegister dst, AsmRegister src, int lsb, int width,
                     Condition cond) {
   DCHECK(IsEnabled(ARMv7));
   DCHECK(!dst.is(pc) && !src.is(pc));
@@ -1894,11 +1837,8 @@ void Assembler::bfi(Register dst,
        src.code());
 }
 
-
-void Assembler::pkhbt(Register dst,
-                      Register src1,
-                      const Operand& src2,
-                      Condition cond ) {
+void Assembler::pkhbt(AsmRegister dst, AsmRegister src1, const Operand& src2,
+                      Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.125.
   // cond(31-28) | 01101000(27-20) | Rn(19-16) |
   // Rd(15-12) | imm5(11-7) | 0(6) | 01(5-4) | Rm(3-0)
@@ -1912,10 +1852,7 @@ void Assembler::pkhbt(Register dst,
        src2.shift_imm_*B7 | B4 | src2.rm().code());
 }
 
-
-void Assembler::pkhtb(Register dst,
-                      Register src1,
-                      const Operand& src2,
+void Assembler::pkhtb(AsmRegister dst, AsmRegister src1, const Operand& src2,
                       Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.125.
   // cond(31-28) | 01101000(27-20) | Rn(19-16) |
@@ -1931,8 +1868,8 @@ void Assembler::pkhtb(Register dst,
        asr*B7 | B6 | B4 | src2.rm().code());
 }
 
-
-void Assembler::sxtb(Register dst, Register src, int rotate, Condition cond) {
+void Assembler::sxtb(AsmRegister dst, AsmRegister src, int rotate,
+                     Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.233.
   // cond(31-28) | 01101010(27-20) | 1111(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -1943,9 +1880,8 @@ void Assembler::sxtb(Register dst, Register src, int rotate, Condition cond) {
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src.code());
 }
 
-
-void Assembler::sxtab(Register dst, Register src1, Register src2, int rotate,
-                      Condition cond) {
+void Assembler::sxtab(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                      int rotate, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.233.
   // cond(31-28) | 01101010(27-20) | Rn(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -1957,8 +1893,8 @@ void Assembler::sxtab(Register dst, Register src1, Register src2, int rotate,
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src2.code());
 }
 
-
-void Assembler::sxth(Register dst, Register src, int rotate, Condition cond) {
+void Assembler::sxth(AsmRegister dst, AsmRegister src, int rotate,
+                     Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.235.
   // cond(31-28) | 01101011(27-20) | 1111(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -1969,9 +1905,8 @@ void Assembler::sxth(Register dst, Register src, int rotate, Condition cond) {
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src.code());
 }
 
-
-void Assembler::sxtah(Register dst, Register src1, Register src2, int rotate,
-                      Condition cond) {
+void Assembler::sxtah(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                      int rotate, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.235.
   // cond(31-28) | 01101011(27-20) | Rn(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -1983,8 +1918,8 @@ void Assembler::sxtah(Register dst, Register src1, Register src2, int rotate,
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src2.code());
 }
 
-
-void Assembler::uxtb(Register dst, Register src, int rotate, Condition cond) {
+void Assembler::uxtb(AsmRegister dst, AsmRegister src, int rotate,
+                     Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.274.
   // cond(31-28) | 01101110(27-20) | 1111(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -1995,9 +1930,8 @@ void Assembler::uxtb(Register dst, Register src, int rotate, Condition cond) {
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src.code());
 }
 
-
-void Assembler::uxtab(Register dst, Register src1, Register src2, int rotate,
-                      Condition cond) {
+void Assembler::uxtab(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                      int rotate, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.271.
   // cond(31-28) | 01101110(27-20) | Rn(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -2009,8 +1943,8 @@ void Assembler::uxtab(Register dst, Register src1, Register src2, int rotate,
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src2.code());
 }
 
-
-void Assembler::uxtb16(Register dst, Register src, int rotate, Condition cond) {
+void Assembler::uxtb16(AsmRegister dst, AsmRegister src, int rotate,
+                       Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.275.
   // cond(31-28) | 01101100(27-20) | 1111(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -2021,8 +1955,8 @@ void Assembler::uxtb16(Register dst, Register src, int rotate, Condition cond) {
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src.code());
 }
 
-
-void Assembler::uxth(Register dst, Register src, int rotate, Condition cond) {
+void Assembler::uxth(AsmRegister dst, AsmRegister src, int rotate,
+                     Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.276.
   // cond(31-28) | 01101111(27-20) | 1111(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -2033,9 +1967,8 @@ void Assembler::uxth(Register dst, Register src, int rotate, Condition cond) {
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src.code());
 }
 
-
-void Assembler::uxtah(Register dst, Register src1, Register src2, int rotate,
-                      Condition cond) {
+void Assembler::uxtah(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+                      int rotate, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.273.
   // cond(31-28) | 01101111(27-20) | Rn(19-16) |
   // Rd(15-12) | rotate(11-10) | 00(9-8)| 0111(7-4) | Rm(3-0)
@@ -2047,8 +1980,7 @@ void Assembler::uxtah(Register dst, Register src1, Register src2, int rotate,
        ((rotate >> 1) & 0xC) * B8 | 7 * B4 | src2.code());
 }
 
-
-void Assembler::rbit(Register dst, Register src, Condition cond) {
+void Assembler::rbit(AsmRegister dst, AsmRegister src, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.144.
   // cond(31-28) | 011011111111(27-16) | Rd(15-12) | 11110011(11-4) | Rm(3-0)
   DCHECK(IsEnabled(ARMv7));
@@ -2059,7 +1991,7 @@ void Assembler::rbit(Register dst, Register src, Condition cond) {
 
 
 // Status register access instructions.
-void Assembler::mrs(Register dst, SRegister s, Condition cond) {
+void Assembler::mrs(AsmRegister dst, SRegister s, Condition cond) {
   DCHECK(!dst.is(pc));
   emit(cond | B24 | s | 15*B16 | dst.code()*B12);
 }
@@ -2077,7 +2009,7 @@ void Assembler::msr(SRegisterFieldMask fields, const Operand& src,
     if (src.MustOutputRelocInfo(this) ||
         !FitsShifter(src.immediate(), &rotate_imm, &immed_8, NULL)) {
       UseScratchRegisterScope temps(this);
-      Register scratch = temps.Acquire();
+      AsmRegister scratch = temps.Acquire();
       // Immediate operand cannot be encoded, load it first to a scratch
       // register.
       Move32BitImmediate(scratch, src);
@@ -2094,48 +2026,40 @@ void Assembler::msr(SRegisterFieldMask fields, const Operand& src,
 
 
 // Load/Store instructions.
-void Assembler::ldr(Register dst, const MemOperand& src, Condition cond) {
+void Assembler::ldr(AsmRegister dst, const MemOperand& src, Condition cond) {
   AddrMode2(cond | B26 | L, dst, src);
 }
 
-
-void Assembler::str(Register src, const MemOperand& dst, Condition cond) {
+void Assembler::str(AsmRegister src, const MemOperand& dst, Condition cond) {
   AddrMode2(cond | B26, src, dst);
 }
 
-
-void Assembler::ldrb(Register dst, const MemOperand& src, Condition cond) {
+void Assembler::ldrb(AsmRegister dst, const MemOperand& src, Condition cond) {
   AddrMode2(cond | B26 | B | L, dst, src);
 }
 
-
-void Assembler::strb(Register src, const MemOperand& dst, Condition cond) {
+void Assembler::strb(AsmRegister src, const MemOperand& dst, Condition cond) {
   AddrMode2(cond | B26 | B, src, dst);
 }
 
-
-void Assembler::ldrh(Register dst, const MemOperand& src, Condition cond) {
+void Assembler::ldrh(AsmRegister dst, const MemOperand& src, Condition cond) {
   AddrMode3(cond | L | B7 | H | B4, dst, src);
 }
 
-
-void Assembler::strh(Register src, const MemOperand& dst, Condition cond) {
+void Assembler::strh(AsmRegister src, const MemOperand& dst, Condition cond) {
   AddrMode3(cond | B7 | H | B4, src, dst);
 }
 
-
-void Assembler::ldrsb(Register dst, const MemOperand& src, Condition cond) {
+void Assembler::ldrsb(AsmRegister dst, const MemOperand& src, Condition cond) {
   AddrMode3(cond | L | B7 | S6 | B4, dst, src);
 }
 
-
-void Assembler::ldrsh(Register dst, const MemOperand& src, Condition cond) {
+void Assembler::ldrsh(AsmRegister dst, const MemOperand& src, Condition cond) {
   AddrMode3(cond | L | B7 | S6 | H | B4, dst, src);
 }
 
-
-void Assembler::ldrd(Register dst1, Register dst2,
-                     const MemOperand& src, Condition cond) {
+void Assembler::ldrd(AsmRegister dst1, AsmRegister dst2, const MemOperand& src,
+                     Condition cond) {
   DCHECK(src.rm().is(no_reg));
   DCHECK(!dst1.is(lr));  // r14.
   DCHECK_EQ(0, dst1.code() % 2);
@@ -2143,9 +2067,8 @@ void Assembler::ldrd(Register dst1, Register dst2,
   AddrMode3(cond | B7 | B6 | B4, dst1, src);
 }
 
-
-void Assembler::strd(Register src1, Register src2,
-                     const MemOperand& dst, Condition cond) {
+void Assembler::strd(AsmRegister src1, AsmRegister src2, const MemOperand& dst,
+                     Condition cond) {
   DCHECK(dst.rm().is(no_reg));
   DCHECK(!src1.is(lr));  // r14.
   DCHECK_EQ(0, src1.code() % 2);
@@ -2154,13 +2077,13 @@ void Assembler::strd(Register src1, Register src2,
 }
 
 // Load/Store exclusive instructions.
-void Assembler::ldrex(Register dst, Register src, Condition cond) {
+void Assembler::ldrex(AsmRegister dst, AsmRegister src, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.75.
   // cond(31-28) | 00011001(27-20) | Rn(19-16) | Rt(15-12) | 111110011111(11-0)
   emit(cond | B24 | B23 | B20 | src.code() * B16 | dst.code() * B12 | 0xf9f);
 }
 
-void Assembler::strex(Register src1, Register src2, Register dst,
+void Assembler::strex(AsmRegister src1, AsmRegister src2, AsmRegister dst,
                       Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.212.
   // cond(31-28) | 00011000(27-20) | Rn(19-16) | Rd(15-12) | 11111001(11-4) |
@@ -2169,14 +2092,14 @@ void Assembler::strex(Register src1, Register src2, Register dst,
        src2.code());
 }
 
-void Assembler::ldrexb(Register dst, Register src, Condition cond) {
+void Assembler::ldrexb(AsmRegister dst, AsmRegister src, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.76.
   // cond(31-28) | 00011101(27-20) | Rn(19-16) | Rt(15-12) | 111110011111(11-0)
   emit(cond | B24 | B23 | B22 | B20 | src.code() * B16 | dst.code() * B12 |
        0xf9f);
 }
 
-void Assembler::strexb(Register src1, Register src2, Register dst,
+void Assembler::strexb(AsmRegister src1, AsmRegister src2, AsmRegister dst,
                        Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.213.
   // cond(31-28) | 00011100(27-20) | Rn(19-16) | Rd(15-12) | 11111001(11-4) |
@@ -2185,14 +2108,14 @@ void Assembler::strexb(Register src1, Register src2, Register dst,
        0xf9 * B4 | src2.code());
 }
 
-void Assembler::ldrexh(Register dst, Register src, Condition cond) {
+void Assembler::ldrexh(AsmRegister dst, AsmRegister src, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.78.
   // cond(31-28) | 00011111(27-20) | Rn(19-16) | Rt(15-12) | 111110011111(11-0)
   emit(cond | B24 | B23 | B22 | B21 | B20 | src.code() * B16 |
        dst.code() * B12 | 0xf9f);
 }
 
-void Assembler::strexh(Register src1, Register src2, Register dst,
+void Assembler::strexh(AsmRegister src1, AsmRegister src2, AsmRegister dst,
                        Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.215.
   // cond(31-28) | 00011110(27-20) | Rn(19-16) | Rd(15-12) | 11111001(11-4) |
@@ -2221,9 +2144,7 @@ void Assembler::pld(const MemOperand& address) {
 
 
 // Load/Store multiple instructions.
-void Assembler::ldm(BlockAddrMode am,
-                    Register base,
-                    RegList dst,
+void Assembler::ldm(BlockAddrMode am, AsmRegister base, RegList dst,
                     Condition cond) {
   // ABI stack constraint: ldmxx base, {..sp..}  base != sp  is not restartable.
   DCHECK(base.is(sp) || (dst & sp.bit()) == 0);
@@ -2241,10 +2162,7 @@ void Assembler::ldm(BlockAddrMode am,
   }
 }
 
-
-void Assembler::stm(BlockAddrMode am,
-                    Register base,
-                    RegList src,
+void Assembler::stm(BlockAddrMode am, AsmRegister base, RegList src,
                     Condition cond) {
   AddrMode4(cond | B27 | am, base, src);
 }
@@ -2342,38 +2260,28 @@ void Assembler::cdp2(Coprocessor coproc, int opcode_1, CRegister crd,
   cdp(coproc, opcode_1, crd, crn, crm, opcode_2, kSpecialCondition);
 }
 
-
-void Assembler::mcr(Coprocessor coproc,
-                    int opcode_1,
-                    Register rd,
-                    CRegister crn,
-                    CRegister crm,
-                    int opcode_2,
+void Assembler::mcr(Coprocessor coproc, int opcode_1, AsmRegister rd,
+                    CRegister crn, CRegister crm, int opcode_2,
                     Condition cond) {
   DCHECK(is_uint3(opcode_1) && is_uint3(opcode_2));
   emit(cond | B27 | B26 | B25 | (opcode_1 & 7)*B21 | crn.code()*B16 |
        rd.code()*B12 | coproc*B8 | (opcode_2 & 7)*B5 | B4 | crm.code());
 }
 
-void Assembler::mcr2(Coprocessor coproc, int opcode_1, Register rd,
+void Assembler::mcr2(Coprocessor coproc, int opcode_1, AsmRegister rd,
                      CRegister crn, CRegister crm, int opcode_2) {
   mcr(coproc, opcode_1, rd, crn, crm, opcode_2, kSpecialCondition);
 }
 
-
-void Assembler::mrc(Coprocessor coproc,
-                    int opcode_1,
-                    Register rd,
-                    CRegister crn,
-                    CRegister crm,
-                    int opcode_2,
+void Assembler::mrc(Coprocessor coproc, int opcode_1, AsmRegister rd,
+                    CRegister crn, CRegister crm, int opcode_2,
                     Condition cond) {
   DCHECK(is_uint3(opcode_1) && is_uint3(opcode_2));
   emit(cond | B27 | B26 | B25 | (opcode_1 & 7)*B21 | L | crn.code()*B16 |
        rd.code()*B12 | coproc*B8 | (opcode_2 & 7)*B5 | B4 | crm.code());
 }
 
-void Assembler::mrc2(Coprocessor coproc, int opcode_1, Register rd,
+void Assembler::mrc2(Coprocessor coproc, int opcode_1, AsmRegister rd,
                      CRegister crn, CRegister crm, int opcode_2) {
   mrc(coproc, opcode_1, rd, crn, crm, opcode_2, kSpecialCondition);
 }
@@ -2387,13 +2295,8 @@ void Assembler::ldc(Coprocessor coproc,
   AddrMode5(cond | B27 | B26 | l | L | coproc * B8, crd, src);
 }
 
-
-void Assembler::ldc(Coprocessor coproc,
-                    CRegister crd,
-                    Register rn,
-                    int option,
-                    LFlag l,
-                    Condition cond) {
+void Assembler::ldc(Coprocessor coproc, CRegister crd, AsmRegister rn,
+                    int option, LFlag l, Condition cond) {
   // Unindexed addressing.
   DCHECK(is_uint8(option));
   emit(cond | B27 | B26 | U | l | L | rn.code()*B16 | crd.code()*B12 |
@@ -2405,18 +2308,16 @@ void Assembler::ldc2(Coprocessor coproc, CRegister crd, const MemOperand& src,
   ldc(coproc, crd, src, l, kSpecialCondition);
 }
 
-void Assembler::ldc2(Coprocessor coproc, CRegister crd, Register rn, int option,
-                     LFlag l) {
+void Assembler::ldc2(Coprocessor coproc, CRegister crd, AsmRegister rn,
+                     int option, LFlag l) {
   ldc(coproc, crd, rn, option, l, kSpecialCondition);
 }
 
 
 // Support for VFP.
 
-void Assembler::vldr(const DwVfpRegister dst,
-                     const Register base,
-                     int offset,
-                     const Condition cond) {
+void Assembler::vldr(const DwVfpRegister dst, const AsmRegister base,
+                     int offset, const Condition cond) {
   // Ddst = MEM(Rbase + offset).
   // Instruction details available in ARM DDI 0406C.b, A8-924.
   // cond(31-28) | 1101(27-24)| U(23) | D(22) | 01(21-20) | Rbase(19-16) |
@@ -2437,7 +2338,7 @@ void Assembler::vldr(const DwVfpRegister dst,
          0xB*B8 | ((offset / 4) & 255));
   } else {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     // Larger offsets must be handled by computing the correct address in a
     // scratch register.
     DCHECK(!base.is(scratch));
@@ -2459,7 +2360,7 @@ void Assembler::vldr(const DwVfpRegister dst,
   DCHECK(operand.am_ == Offset);
   if (operand.rm().is_valid()) {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     add(scratch, operand.rn(),
         Operand(operand.rm(), operand.shift_op_, operand.shift_imm_));
     vldr(dst, scratch, 0, cond);
@@ -2468,11 +2369,8 @@ void Assembler::vldr(const DwVfpRegister dst,
   }
 }
 
-
-void Assembler::vldr(const SwVfpRegister dst,
-                     const Register base,
-                     int offset,
-                     const Condition cond) {
+void Assembler::vldr(const SwVfpRegister dst, const AsmRegister base,
+                     int offset, const Condition cond) {
   // Sdst = MEM(Rbase + offset).
   // Instruction details available in ARM DDI 0406A, A8-628.
   // cond(31-28) | 1101(27-24)| U001(23-20) | Rbase(19-16) |
@@ -2493,7 +2391,7 @@ void Assembler::vldr(const SwVfpRegister dst,
     // Larger offsets must be handled by computing the correct address in a
     // scratch register.
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     DCHECK(!base.is(scratch));
     if (u == 1) {
       add(scratch, base, Operand(offset));
@@ -2512,7 +2410,7 @@ void Assembler::vldr(const SwVfpRegister dst,
   DCHECK(operand.am_ == Offset);
   if (operand.rm().is_valid()) {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     add(scratch, operand.rn(),
         Operand(operand.rm(), operand.shift_op_, operand.shift_imm_));
     vldr(dst, scratch, 0, cond);
@@ -2521,11 +2419,8 @@ void Assembler::vldr(const SwVfpRegister dst,
   }
 }
 
-
-void Assembler::vstr(const DwVfpRegister src,
-                     const Register base,
-                     int offset,
-                     const Condition cond) {
+void Assembler::vstr(const DwVfpRegister src, const AsmRegister base,
+                     int offset, const Condition cond) {
   // MEM(Rbase + offset) = Dsrc.
   // Instruction details available in ARM DDI 0406C.b, A8-1082.
   // cond(31-28) | 1101(27-24)| U(23) | D(22) | 00(21-20) | Rbase(19-16) |
@@ -2548,7 +2443,7 @@ void Assembler::vstr(const DwVfpRegister src,
     // Larger offsets must be handled by computing the correct address in the a
     // scratch register.
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     DCHECK(!base.is(scratch));
     if (u == 1) {
       add(scratch, base, Operand(offset));
@@ -2568,7 +2463,7 @@ void Assembler::vstr(const DwVfpRegister src,
   DCHECK(operand.am_ == Offset);
   if (operand.rm().is_valid()) {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     add(scratch, operand.rn(),
         Operand(operand.rm(), operand.shift_op_, operand.shift_imm_));
     vstr(src, scratch, 0, cond);
@@ -2577,11 +2472,8 @@ void Assembler::vstr(const DwVfpRegister src,
   }
 }
 
-
-void Assembler::vstr(const SwVfpRegister src,
-                     const Register base,
-                     int offset,
-                     const Condition cond) {
+void Assembler::vstr(const SwVfpRegister src, const AsmRegister base,
+                     int offset, const Condition cond) {
   // MEM(Rbase + offset) = SSrc.
   // Instruction details available in ARM DDI 0406A, A8-786.
   // cond(31-28) | 1101(27-24)| U000(23-20) | Rbase(19-16) |
@@ -2602,7 +2494,7 @@ void Assembler::vstr(const SwVfpRegister src,
     // Larger offsets must be handled by computing the correct address in a
     // scratch register.
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     DCHECK(!base.is(scratch));
     if (u == 1) {
       add(scratch, base, Operand(offset));
@@ -2621,7 +2513,7 @@ void Assembler::vstr(const SwVfpRegister src,
   DCHECK(operand.am_ == Offset);
   if (operand.rm().is_valid()) {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     add(scratch, operand.rn(),
         Operand(operand.rm(), operand.shift_op_, operand.shift_imm_));
     vstr(src, scratch, 0, cond);
@@ -2630,7 +2522,7 @@ void Assembler::vstr(const SwVfpRegister src,
   }
 }
 
-void Assembler::vldm(BlockAddrMode am, Register base, DwVfpRegister first,
+void Assembler::vldm(BlockAddrMode am, AsmRegister base, DwVfpRegister first,
                      DwVfpRegister last, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8-922.
   // cond(31-28) | 110(27-25)| PUDW1(24-20) | Rbase(19-16) |
@@ -2648,7 +2540,7 @@ void Assembler::vldm(BlockAddrMode am, Register base, DwVfpRegister first,
        0xB*B8 | count*2);
 }
 
-void Assembler::vstm(BlockAddrMode am, Register base, DwVfpRegister first,
+void Assembler::vstm(BlockAddrMode am, AsmRegister base, DwVfpRegister first,
                      DwVfpRegister last, Condition cond) {
   // Instruction details available in ARM DDI 0406C.b, A8-1080.
   // cond(31-28) | 110(27-25)| PUDW0(24-20) | Rbase(19-16) |
@@ -2666,7 +2558,7 @@ void Assembler::vstm(BlockAddrMode am, Register base, DwVfpRegister first,
        0xB*B8 | count*2);
 }
 
-void Assembler::vldm(BlockAddrMode am, Register base, SwVfpRegister first,
+void Assembler::vldm(BlockAddrMode am, AsmRegister base, SwVfpRegister first,
                      SwVfpRegister last, Condition cond) {
   // Instruction details available in ARM DDI 0406A, A8-626.
   // cond(31-28) | 110(27-25)| PUDW1(24-20) | Rbase(19-16) |
@@ -2682,7 +2574,7 @@ void Assembler::vldm(BlockAddrMode am, Register base, SwVfpRegister first,
        0xA*B8 | count);
 }
 
-void Assembler::vstm(BlockAddrMode am, Register base, SwVfpRegister first,
+void Assembler::vstm(BlockAddrMode am, AsmRegister base, SwVfpRegister first,
                      SwVfpRegister last, Condition cond) {
   // Instruction details available in ARM DDI 0406A, A8-784.
   // cond(31-28) | 110(27-25)| PUDW0(24-20) | Rbase(19-16) |
@@ -2769,14 +2661,14 @@ void Assembler::vmov(const SwVfpRegister dst, Float32 imm) {
     emit(al | 0x1D * B23 | d * B22 | 0x3 * B20 | vd * B12 | 0x5 * B9 | enc);
   } else {
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     mov(scratch, Operand(imm.get_bits()));
     vmov(dst, scratch);
   }
 }
 
 void Assembler::vmov(const DwVfpRegister dst, Double imm,
-                     const Register extra_scratch) {
+                     const AsmRegister extra_scratch) {
   DCHECK(VfpRegisterIsAvailable(dst));
   uint32_t enc;
   if (CpuFeatures::IsSupported(VFPv3) && FitsVmovFPImmediate(imm, &enc)) {
@@ -2814,7 +2706,7 @@ void Assembler::vmov(const DwVfpRegister dst, Double imm,
     uint32_t lo, hi;
     DoubleAsTwoUInt32(imm, &lo, &hi);
     UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
 
     if (lo == hi) {
       // Move the low and high parts of the double to a D register in one
@@ -2872,10 +2764,8 @@ void Assembler::vmov(const DwVfpRegister dst,
        vm);
 }
 
-void Assembler::vmov(const DwVfpRegister dst,
-                     const VmovIndex index,
-                     const Register src,
-                     const Condition cond) {
+void Assembler::vmov(const DwVfpRegister dst, const VmovIndex index,
+                     const AsmRegister src, const Condition cond) {
   // Dd[index] = Rt
   // Instruction details available in ARM DDI 0406C.b, A8-940.
   // cond(31-28) | 1110(27-24) | 0(23) | opc1=0index(22-21) | 0(20) |
@@ -2888,11 +2778,8 @@ void Assembler::vmov(const DwVfpRegister dst,
        d*B7 | B4);
 }
 
-
-void Assembler::vmov(const Register dst,
-                     const VmovIndex index,
-                     const DwVfpRegister src,
-                     const Condition cond) {
+void Assembler::vmov(const AsmRegister dst, const VmovIndex index,
+                     const DwVfpRegister src, const Condition cond) {
   // Dd[index] = Rt
   // Instruction details available in ARM DDI 0406C.b, A8.8.342.
   // cond(31-28) | 1110(27-24) | U=0(23) | opc1=0index(22-21) | 1(20) |
@@ -2905,11 +2792,8 @@ void Assembler::vmov(const Register dst,
        0xB*B8 | n*B7 | B4);
 }
 
-
-void Assembler::vmov(const DwVfpRegister dst,
-                     const Register src1,
-                     const Register src2,
-                     const Condition cond) {
+void Assembler::vmov(const DwVfpRegister dst, const AsmRegister src1,
+                     const AsmRegister src2, const Condition cond) {
   // Dm = <Rt,Rt2>.
   // Instruction details available in ARM DDI 0406C.b, A8-948.
   // cond(31-28) | 1100(27-24)| 010(23-21) | op=0(20) | Rt2(19-16) |
@@ -2922,11 +2806,8 @@ void Assembler::vmov(const DwVfpRegister dst,
        src1.code()*B12 | 0xB*B8 | m*B5 | B4 | vm);
 }
 
-
-void Assembler::vmov(const Register dst1,
-                     const Register dst2,
-                     const DwVfpRegister src,
-                     const Condition cond) {
+void Assembler::vmov(const AsmRegister dst1, const AsmRegister dst2,
+                     const DwVfpRegister src, const Condition cond) {
   // <Rt,Rt2> = Dm.
   // Instruction details available in ARM DDI 0406C.b, A8-948.
   // cond(31-28) | 1100(27-24)| 010(23-21) | op=1(20) | Rt2(19-16) |
@@ -2939,9 +2820,7 @@ void Assembler::vmov(const Register dst1,
        dst1.code()*B12 | 0xB*B8 | m*B5 | B4 | vm);
 }
 
-
-void Assembler::vmov(const SwVfpRegister dst,
-                     const Register src,
+void Assembler::vmov(const SwVfpRegister dst, const AsmRegister src,
                      const Condition cond) {
   // Sn = Rt.
   // Instruction details available in ARM DDI 0406A, A8-642.
@@ -2953,9 +2832,7 @@ void Assembler::vmov(const SwVfpRegister dst,
   emit(cond | 0xE*B24 | sn*B16 | src.code()*B12 | 0xA*B8 | n*B7 | B4);
 }
 
-
-void Assembler::vmov(const Register dst,
-                     const SwVfpRegister src,
+void Assembler::vmov(const AsmRegister dst, const SwVfpRegister src,
                      const Condition cond) {
   // Rt = Sn.
   // Instruction details available in ARM DDI 0406A, A8-642.
@@ -3693,16 +3570,14 @@ void Assembler::vsqrt(const SwVfpRegister dst, const SwVfpRegister src,
        0x3 * B6 | m * B5 | vm);
 }
 
-
-void Assembler::vmsr(Register dst, Condition cond) {
+void Assembler::vmsr(AsmRegister dst, Condition cond) {
   // Instruction details available in ARM DDI 0406A, A8-652.
   // cond(31-28) | 1110 (27-24) | 1110(23-20)| 0001 (19-16) |
   // Rt(15-12) | 1010 (11-8) | 0(7) | 00 (6-5) | 1(4) | 0000(3-0)
   emit(cond | 0xE * B24 | 0xE * B20 | B16 | dst.code() * B12 | 0xA * B8 | B4);
 }
 
-
-void Assembler::vmrs(Register dst, Condition cond) {
+void Assembler::vmrs(AsmRegister dst, Condition cond) {
   // Instruction details available in ARM DDI 0406A, A8-652.
   // cond(31-28) | 1110 (27-24) | 1111(23-20)| 0001 (19-16) |
   // Rt(15-12) | 1010 (11-8) | 0(7) | 00 (6-5) | 1(4) | 0000(3-0)
@@ -3935,7 +3810,7 @@ static int EncodeScalar(NeonDataType dt, int index) {
 }
 
 void Assembler::vmov(NeonDataType dt, DwVfpRegister dst, int index,
-                     Register src) {
+                     AsmRegister src) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.940.
   // vmov ARM core register to scalar.
   DCHECK(dt == NeonS32 || dt == NeonU32 || IsEnabled(NEON));
@@ -3946,7 +3821,7 @@ void Assembler::vmov(NeonDataType dt, DwVfpRegister dst, int index,
        opc1_opc2);
 }
 
-void Assembler::vmov(NeonDataType dt, Register dst, DwVfpRegister src,
+void Assembler::vmov(NeonDataType dt, AsmRegister dst, DwVfpRegister src,
                      int index) {
   // Instruction details available in ARM DDI 0406C.b, A8.8.942.
   // vmov Arm scalar to core register.
@@ -3965,7 +3840,7 @@ void Assembler::vmov(QwNeonRegister dst, QwNeonRegister src) {
   vorr(dst, src, src);
 }
 
-void Assembler::vdup(NeonSize size, QwNeonRegister dst, Register src) {
+void Assembler::vdup(NeonSize size, QwNeonRegister dst, AsmRegister src) {
   DCHECK(IsEnabled(NEON));
   // Instruction details available in ARM DDI 0406C.b, A8-886.
   int B = 0, E = 0;
@@ -5443,12 +5318,12 @@ UseScratchRegisterScope::~UseScratchRegisterScope() {
   *available_ = old_available_;
 }
 
-Register UseScratchRegisterScope::Acquire() {
+AsmRegister UseScratchRegisterScope::Acquire() {
   DCHECK(available_ != nullptr);
   DCHECK(*available_ != 0);
   int index = static_cast<int>(base::bits::CountTrailingZeros32(*available_));
   *available_ &= ~(1UL << index);
-  return Register::from_code(index);
+  return AsmRegister::from_code(index);
 }
 
 }  // namespace internal

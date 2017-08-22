@@ -23,7 +23,7 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-#define R(i) static_cast<uint32_t>(Register(i).ToOperand())
+#define R(i) static_cast<uint32_t>(AsmRegister(i).ToOperand())
 
 class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
  public:
@@ -118,10 +118,10 @@ TEST_F(BytecodeArrayWriterUnittest, SimpleExample) {
   Write(Bytecode::kLdaSmi, 127, {55, true});
   CHECK_EQ(bytecodes()->size(), 3u);
 
-  Write(Bytecode::kStar, Register(20).ToOperand());
+  Write(Bytecode::kStar, AsmRegister(20).ToOperand());
   CHECK_EQ(bytecodes()->size(), 5u);
 
-  Write(Bytecode::kLdar, Register(200).ToOperand());
+  Write(Bytecode::kLdar, AsmRegister(200).ToOperand());
   CHECK_EQ(bytecodes()->size(), 9u);
 
   Write(Bytecode::kReturn, {70, true});
@@ -268,12 +268,12 @@ TEST_F(BytecodeArrayWriterUnittest, ElideNoneffectfulBytecodes) {
 
   Write(Bytecode::kStackCheck, {10, false});
   Write(Bytecode::kLdaSmi, 127, {55, true});  // Should be elided.
-  Write(Bytecode::kLdar, Register(20).ToOperand());
-  Write(Bytecode::kStar, Register(20).ToOperand());
-  Write(Bytecode::kLdar, Register(20).ToOperand());  // Should be elided.
+  Write(Bytecode::kLdar, AsmRegister(20).ToOperand());
+  Write(Bytecode::kStar, AsmRegister(20).ToOperand());
+  Write(Bytecode::kLdar, AsmRegister(20).ToOperand());  // Should be elided.
   Write(Bytecode::kCreateMappedArguments);
   Write(Bytecode::kLdaSmi, 127, {60, false});  // Not elided due to source info.
-  Write(Bytecode::kLdar, Register(20).ToOperand(), {70, true});
+  Write(Bytecode::kLdar, AsmRegister(20).ToOperand(), {70, true});
   Write(Bytecode::kReturn, {75, true});
 
   CHECK_EQ(bytecodes()->size(), arraysize(expected_bytes));

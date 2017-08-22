@@ -647,7 +647,7 @@ static void Test_RunInt32SubWithRet(int retreg) {
 // Separate tests for parallelization.
 #define TEST_INT32_SUB_WITH_RET(x)                     \
   TEST(Run_Int32Sub_all_allocatable_pairs_##x) {       \
-    if (x < Register::kNumRegisters &&                 \
+    if (x < AsmRegister::kNumRegisters &&              \
         GetRegConfig()->IsAllocatableGeneralCode(x)) { \
       Test_RunInt32SubWithRet(x);                      \
     }                                                  \
@@ -746,7 +746,7 @@ static int32_t Compute_Int32_WeightedSum(CallDescriptor* desc, int32_t* input) {
 
 static void Test_Int32_WeightedSum_of_size(int count) {
   Int32Signature sig(count);
-  for (int p0 = 0; p0 < Register::kNumRegisters; p0++) {
+  for (int p0 = 0; p0 < AsmRegister::kNumRegisters; p0++) {
     if (GetRegConfig()->IsAllocatableGeneralCode(p0)) {
       v8::internal::AccountingAllocator allocator;
       Zone zone(&allocator, ZONE_NAME);

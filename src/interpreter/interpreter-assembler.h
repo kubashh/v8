@@ -90,13 +90,13 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
                                      compiler::Node* register_count);
 
   // Loads from and stores to the interpreter register file.
-  compiler::Node* LoadRegister(Register reg);
+  compiler::Node* LoadRegister(AsmRegister reg);
   compiler::Node* LoadRegister(compiler::Node* reg_index);
-  compiler::Node* LoadAndUntagRegister(Register reg);
-  compiler::Node* StoreRegister(compiler::Node* value, Register reg);
+  compiler::Node* LoadAndUntagRegister(AsmRegister reg);
+  compiler::Node* StoreRegister(compiler::Node* value, AsmRegister reg);
   compiler::Node* StoreRegister(compiler::Node* value,
                                 compiler::Node* reg_index);
-  compiler::Node* StoreAndTagRegister(compiler::Node* value, Register reg);
+  compiler::Node* StoreAndTagRegister(compiler::Node* value, AsmRegister reg);
 
   // Returns the next consecutive register.
   compiler::Node* NextRegister(compiler::Node* reg_index);

@@ -21,16 +21,16 @@ void PropertyAccessCompiler::GenerateTailCall(MacroAssembler* masm,
 
 void PropertyAccessCompiler::InitializePlatformSpecific(
     AccessCompilerData* data) {
-  Register receiver = LoadDescriptor::ReceiverRegister();
-  Register name = LoadDescriptor::NameRegister();
+  AsmRegister receiver = LoadDescriptor::ReceiverRegister();
+  AsmRegister name = LoadDescriptor::NameRegister();
 
   // Load calling convention.
   // receiver, name, scratch1, scratch2, scratch3.
-  Register load_registers[] = {receiver, name, r3, r0, r4};
+  AsmRegister load_registers[] = {receiver, name, r3, r0, r4};
 
   // Store calling convention.
   // receiver, name, scratch1, scratch2.
-  Register store_registers[] = {receiver, name, r3, r4};
+  AsmRegister store_registers[] = {receiver, name, r3, r4};
 
   data->Initialize(arraysize(load_registers), load_registers,
                    arraysize(store_registers), store_registers);

@@ -193,13 +193,13 @@ class NoCurrentFrameScope {
 // callee.
 class ParameterCount BASE_EMBEDDED {
  public:
-  explicit ParameterCount(Register reg) : reg_(reg), immediate_(0) {}
+  explicit ParameterCount(AsmRegister reg) : reg_(reg), immediate_(0) {}
   explicit ParameterCount(int imm) : reg_(no_reg), immediate_(imm) {}
 
   bool is_reg() const { return !reg_.is(no_reg); }
   bool is_immediate() const { return !is_reg(); }
 
-  Register reg() const {
+  AsmRegister reg() const {
     DCHECK(is_reg());
     return reg_;
   }
@@ -209,7 +209,7 @@ class ParameterCount BASE_EMBEDDED {
   }
 
  private:
-  const Register reg_;
+  const AsmRegister reg_;
   const int immediate_;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(ParameterCount);

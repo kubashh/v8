@@ -121,19 +121,20 @@ class BytecodeGraphBuilder {
   Node** EnsureInputBufferSize(int size);
 
   Node* const* GetCallArgumentsFromRegister(Node* callee, Node* receiver,
-                                            interpreter::Register first_arg,
+                                            interpreter::AsmRegister first_arg,
                                             int arg_count);
   Node* ProcessCallArguments(const Operator* call_op, Node* const* args,
                              int arg_count);
   Node* ProcessCallArguments(const Operator* call_op, Node* callee,
-                             interpreter::Register receiver, size_t reg_count);
+                             interpreter::AsmRegister receiver,
+                             size_t reg_count);
   Node* const* GetConstructArgumentsFromRegister(
-      Node* target, Node* new_target, interpreter::Register first_arg,
+      Node* target, Node* new_target, interpreter::AsmRegister first_arg,
       int arg_count);
   Node* ProcessConstructArguments(const Operator* op, Node* const* args,
                                   int arg_count);
   Node* ProcessCallRuntimeArguments(const Operator* call_runtime_op,
-                                    interpreter::Register receiver,
+                                    interpreter::AsmRegister receiver,
                                     size_t reg_count);
 
   // Prepare information for eager deoptimization. This information is carried

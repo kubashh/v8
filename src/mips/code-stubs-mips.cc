@@ -38,31 +38,25 @@ void ArrayNArgumentsConstructorStub::Generate(MacroAssembler* masm) {
 
 static void EmitIdenticalObjectComparison(MacroAssembler* masm, Label* slow,
                                           Condition cc);
-static void EmitSmiNonsmiComparison(MacroAssembler* masm,
-                                    Register lhs,
-                                    Register rhs,
-                                    Label* rhs_not_nan,
-                                    Label* slow,
-                                    bool strict);
+static void EmitSmiNonsmiComparison(MacroAssembler* masm, AsmRegister lhs,
+                                    AsmRegister rhs, Label* rhs_not_nan,
+                                    Label* slow, bool strict);
 static void EmitStrictTwoHeapObjectCompare(MacroAssembler* masm,
-                                           Register lhs,
-                                           Register rhs);
-
+                                           AsmRegister lhs, AsmRegister rhs);
 
 void DoubleToIStub::Generate(MacroAssembler* masm) {
   Label out_of_range, only_low, negate, done;
-  Register input_reg = source();
-  Register result_reg = destination();
+  AsmRegister input_reg = source();
+  AsmRegister result_reg = destination();
 
   int double_offset = offset();
   // Account for saved regs if input is sp.
   if (input_reg.is(sp)) double_offset += 3 * kPointerSize;
 
-  Register scratch =
-      GetRegisterThatIsNotOneOf(input_reg, result_reg);
-  Register scratch2 =
+  AsmRegister scratch = GetRegisterThatIsNotOneOf(input_reg, result_reg);
+  AsmRegister scratch2 =
       GetRegisterThatIsNotOneOf(input_reg, result_reg, scratch);
-  Register scratch3 =
+  AsmRegister scratch3 =
       GetRegisterThatIsNotOneOf(input_reg, result_reg, scratch, scratch2);
   DoubleRegister double_scratch = kLithiumScratchDouble;
 
@@ -99,13 +93,13 @@ void DoubleToIStub::Generate(MacroAssembler* masm) {
   }
 
   // Load the double value and perform a manual truncation.
-  Register input_high = scratch2;
-  Register input_low = scratch3;
+  AsmRegister input_high = scratch2;
+  AsmRegister input_low = scratch3;
 
   __ lw(input_low,
-      MemOperand(input_reg, double_offset + Register::kMantissaOffset));
+        MemOperand(input_reg, double_offset + AsmRegister::kMantissaOffset));
   __ lw(input_high,
-      MemOperand(input_reg, double_offset + Register::kExponentOffset));
+        MemOperand(input_reg, double_offset + AsmRegister::kExponentOffset));
 
   Label normal_exponent, restore_sign;
   // Extract the biased exponent in result.
@@ -136,7 +130,7 @@ void DoubleToIStub::Generate(MacroAssembler* masm) {
   __ Addu(scratch, result_reg, Operand(kShiftBase + HeapNumber::kMantissaBits));
 
   // Save the sign.
-  Register sign = result_reg;
+  AsmRegister sign = result_reg;
   result_reg = no_reg;
   __ And(sign, input_high, Operand(HeapNumber::kSignMask));
 
@@ -196,7 +190,7 @@ static void EmitIdenticalObjectComparison(MacroAssembler* masm, Label* slow,
                                           Condition cc) {
   Label not_identical;
   Label heap_number, return_equal;
-  Register exp_mask_reg = t5;
+  AsmRegister exp_mask_reg = t5;
 
   __ Branch(&not_identical, ne, a0, Operand(a1));
 
@@ -293,12 +287,9 @@ static void EmitIdenticalObjectComparison(MacroAssembler* masm, Label* slow,
   __ bind(&not_identical);
 }
 
-
-static void EmitSmiNonsmiComparison(MacroAssembler* masm,
-                                    Register lhs,
-                                    Register rhs,
-                                    Label* both_loaded_as_doubles,
-                                    Label* slow,
+static void EmitSmiNonsmiComparison(MacroAssembler* masm, AsmRegister lhs,
+                                    AsmRegister rhs,
+                                    Label* both_loaded_as_doubles, Label* slow,
                                     bool strict) {
   DCHECK((lhs.is(a0) && rhs.is(a1)) ||
          (lhs.is(a1) && rhs.is(a0)));
@@ -352,51 +343,46 @@ static void EmitSmiNonsmiComparison(MacroAssembler* masm,
   // Fall through to both_loaded_as_doubles.
 }
 
-
 static void EmitStrictTwoHeapObjectCompare(MacroAssembler* masm,
-                                           Register lhs,
-                                           Register rhs) {
-    // If either operand is a JS object or an oddball value, then they are
-    // not equal since their pointers are different.
-    // There is no test for undetectability in strict equality.
-    STATIC_ASSERT(LAST_TYPE == LAST_JS_RECEIVER_TYPE);
-    Label first_non_object;
-    // Get the type of the first operand into a2 and compare it with
-    // FIRST_JS_RECEIVER_TYPE.
-    __ GetObjectType(lhs, a2, a2);
-    __ Branch(&first_non_object, less, a2, Operand(FIRST_JS_RECEIVER_TYPE));
+                                           AsmRegister lhs, AsmRegister rhs) {
+  // If either operand is a JS object or an oddball value, then they are
+  // not equal since their pointers are different.
+  // There is no test for undetectability in strict equality.
+  STATIC_ASSERT(LAST_TYPE == LAST_JS_RECEIVER_TYPE);
+  Label first_non_object;
+  // Get the type of the first operand into a2 and compare it with
+  // FIRST_JS_RECEIVER_TYPE.
+  __ GetObjectType(lhs, a2, a2);
+  __ Branch(&first_non_object, less, a2, Operand(FIRST_JS_RECEIVER_TYPE));
 
-    // Return non-zero.
-    Label return_not_equal;
-    __ bind(&return_not_equal);
-    __ Ret(USE_DELAY_SLOT);
-    __ li(v0, Operand(1));
+  // Return non-zero.
+  Label return_not_equal;
+  __ bind(&return_not_equal);
+  __ Ret(USE_DELAY_SLOT);
+  __ li(v0, Operand(1));
 
-    __ bind(&first_non_object);
-    // Check for oddballs: true, false, null, undefined.
-    __ Branch(&return_not_equal, eq, a2, Operand(ODDBALL_TYPE));
+  __ bind(&first_non_object);
+  // Check for oddballs: true, false, null, undefined.
+  __ Branch(&return_not_equal, eq, a2, Operand(ODDBALL_TYPE));
 
-    __ GetObjectType(rhs, a3, a3);
-    __ Branch(&return_not_equal, greater, a3, Operand(FIRST_JS_RECEIVER_TYPE));
+  __ GetObjectType(rhs, a3, a3);
+  __ Branch(&return_not_equal, greater, a3, Operand(FIRST_JS_RECEIVER_TYPE));
 
-    // Check for oddballs: true, false, null, undefined.
-    __ Branch(&return_not_equal, eq, a3, Operand(ODDBALL_TYPE));
+  // Check for oddballs: true, false, null, undefined.
+  __ Branch(&return_not_equal, eq, a3, Operand(ODDBALL_TYPE));
 
-    // Now that we have the types we might as well check for
-    // internalized-internalized.
-    STATIC_ASSERT(kInternalizedTag == 0 && kStringTag == 0);
-    __ Or(a2, a2, Operand(a3));
-    __ And(at, a2, Operand(kIsNotStringMask | kIsNotInternalizedMask));
-    __ Branch(&return_not_equal, eq, at, Operand(zero_reg));
+  // Now that we have the types we might as well check for
+  // internalized-internalized.
+  STATIC_ASSERT(kInternalizedTag == 0 && kStringTag == 0);
+  __ Or(a2, a2, Operand(a3));
+  __ And(at, a2, Operand(kIsNotStringMask | kIsNotInternalizedMask));
+  __ Branch(&return_not_equal, eq, at, Operand(zero_reg));
 }
 
-
-static void EmitCheckForTwoHeapNumbers(MacroAssembler* masm,
-                                       Register lhs,
-                                       Register rhs,
+static void EmitCheckForTwoHeapNumbers(MacroAssembler* masm, AsmRegister lhs,
+                                       AsmRegister rhs,
                                        Label* both_loaded_as_doubles,
-                                       Label* not_heap_numbers,
-                                       Label* slow) {
+                                       Label* not_heap_numbers, Label* slow) {
   __ GetObjectType(lhs, a3, a2);
   __ Branch(not_heap_numbers, ne, a2, Operand(HEAP_NUMBER_TYPE));
   __ lw(a2, FieldMemOperand(rhs, HeapObject::kMapOffset));
@@ -414,7 +400,8 @@ static void EmitCheckForTwoHeapNumbers(MacroAssembler* masm,
 
 // Fast negative check for internalized-to-internalized equality.
 static void EmitCheckForInternalizedStringsOrObjects(MacroAssembler* masm,
-                                                     Register lhs, Register rhs,
+                                                     AsmRegister lhs,
+                                                     AsmRegister rhs,
                                                      Label* possible_strings,
                                                      Label* runtime_call) {
   DCHECK((lhs.is(a0) && rhs.is(a1)) ||
@@ -475,9 +462,8 @@ static void EmitCheckForInternalizedStringsOrObjects(MacroAssembler* masm,
   __ li(v0, Operand(EQUAL));  // In delay slot.
 }
 
-
-static void CompareICStub_CheckInputType(MacroAssembler* masm, Register input,
-                                         Register scratch,
+static void CompareICStub_CheckInputType(MacroAssembler* masm,
+                                         AsmRegister input, AsmRegister scratch,
                                          CompareICState::State expected,
                                          Label* fail) {
   Label ok;
@@ -498,8 +484,8 @@ static void CompareICStub_CheckInputType(MacroAssembler* masm, Register input,
 // On exit a0 is 0, positive or negative to indicate the result of
 // the comparison.
 void CompareICStub::GenerateGeneric(MacroAssembler* masm) {
-  Register lhs = a1;
-  Register rhs = a0;
+  AsmRegister lhs = a1;
+  AsmRegister rhs = a0;
   Condition cc = GetCondition();
 
   Label miss;
@@ -707,7 +693,7 @@ void StoreBufferOverflowStub::Generate(MacroAssembler* masm) {
   }
   const int argument_count = 1;
   const int fp_argument_count = 0;
-  const Register scratch = a1;
+  const AsmRegister scratch = a1;
 
   AllowExternalCallThatCantCauseGC scope(masm);
   __ PrepareCallCFunction(argument_count, fp_argument_count, scratch);
@@ -725,15 +711,15 @@ void StoreBufferOverflowStub::Generate(MacroAssembler* masm) {
 
 
 void MathPowStub::Generate(MacroAssembler* masm) {
-  const Register exponent = MathPowTaggedDescriptor::exponent();
+  const AsmRegister exponent = MathPowTaggedDescriptor::exponent();
   DCHECK(exponent.is(a2));
   const DoubleRegister double_base = f2;
   const DoubleRegister double_exponent = f4;
   const DoubleRegister double_result = f0;
   const DoubleRegister double_scratch = f6;
   const FPURegister single_scratch = f8;
-  const Register scratch = t5;
-  const Register scratch2 = t3;
+  const AsmRegister scratch = t5;
+  const AsmRegister scratch2 = t3;
 
   Label call_runtime, done, int_exponent;
   if (exponent_type() == TAGGED) {
@@ -1019,7 +1005,7 @@ void CEntryStub::Generate(MacroAssembler* masm) {
   // v0:v1: result
   // sp: stack pointer
   // fp: frame pointer
-  Register argc;
+  AsmRegister argc;
   if (argv_in_register()) {
     // We don't want to pop arguments so set argc to no_reg.
     argc = no_reg;
@@ -1238,9 +1224,9 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
 }
 
 void StringHelper::GenerateFlatOneByteStringEquals(
-    MacroAssembler* masm, Register left, Register right, Register scratch1,
-    Register scratch2, Register scratch3) {
-  Register length = scratch1;
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3) {
+  AsmRegister length = scratch1;
 
   // Compare lengths.
   Label strings_not_equal, check_zero_length;
@@ -1272,19 +1258,19 @@ void StringHelper::GenerateFlatOneByteStringEquals(
   __ li(v0, Operand(Smi::FromInt(EQUAL)));
 }
 
-
 void StringHelper::GenerateCompareFlatOneByteStrings(
-    MacroAssembler* masm, Register left, Register right, Register scratch1,
-    Register scratch2, Register scratch3, Register scratch4) {
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3,
+    AsmRegister scratch4) {
   Label result_not_equal, compare_lengths;
   // Find minimum length and length difference.
   __ lw(scratch1, FieldMemOperand(left, String::kLengthOffset));
   __ lw(scratch2, FieldMemOperand(right, String::kLengthOffset));
   __ Subu(scratch3, scratch1, Operand(scratch2));
-  Register length_delta = scratch3;
+  AsmRegister length_delta = scratch3;
   __ slt(scratch4, scratch2, scratch1);
   __ Movn(scratch1, scratch2, scratch4);
-  Register min_length = scratch1;
+  AsmRegister min_length = scratch1;
   STATIC_ASSERT(kSmiTag == 0);
   __ Branch(&compare_lengths, eq, min_length, Operand(zero_reg));
 
@@ -1312,11 +1298,10 @@ void StringHelper::GenerateCompareFlatOneByteStrings(
   __ Ret();
 }
 
-
 void StringHelper::GenerateOneByteCharsCompareLoop(
-    MacroAssembler* masm, Register left, Register right, Register length,
-    Register scratch1, Register scratch2, Register scratch3,
-    Label* chars_not_equal) {
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister length, AsmRegister scratch1, AsmRegister scratch2,
+    AsmRegister scratch3, Label* chars_not_equal) {
   // Change index to run from -length to -1 by adding length to string
   // start. This means that loop ends when index reaches zero, which
   // doesn't need an additional compare.
@@ -1326,8 +1311,7 @@ void StringHelper::GenerateOneByteCharsCompareLoop(
   __ Addu(left, left, Operand(scratch1));
   __ Addu(right, right, Operand(scratch1));
   __ Subu(length, zero_reg, length);
-  Register index = length;  // index = -length;
-
+  AsmRegister index = length;  // index = -length;
 
   // Compare loop.
   Label loop;
@@ -1483,10 +1467,10 @@ void CompareICStub::GenerateInternalizedStrings(MacroAssembler* masm) {
   Label miss;
 
   // Registers containing left and right operands respectively.
-  Register left = a1;
-  Register right = a0;
-  Register tmp1 = a2;
-  Register tmp2 = a3;
+  AsmRegister left = a1;
+  AsmRegister right = a0;
+  AsmRegister tmp1 = a2;
+  AsmRegister tmp2 = a3;
 
   // Check that both operands are heap objects.
   __ JumpIfEitherSmi(left, right, &miss);
@@ -1524,10 +1508,10 @@ void CompareICStub::GenerateUniqueNames(MacroAssembler* masm) {
   Label miss;
 
   // Registers containing left and right operands respectively.
-  Register left = a1;
-  Register right = a0;
-  Register tmp1 = a2;
-  Register tmp2 = a3;
+  AsmRegister left = a1;
+  AsmRegister right = a0;
+  AsmRegister tmp1 = a2;
+  AsmRegister tmp2 = a3;
 
   // Check that both operands are heap objects.
   __ JumpIfEitherSmi(left, right, &miss);
@@ -1569,13 +1553,13 @@ void CompareICStub::GenerateStrings(MacroAssembler* masm) {
   bool equality = Token::IsEqualityOp(op());
 
   // Registers containing left and right operands respectively.
-  Register left = a1;
-  Register right = a0;
-  Register tmp1 = a2;
-  Register tmp2 = a3;
-  Register tmp3 = t0;
-  Register tmp4 = t1;
-  Register tmp5 = t2;
+  AsmRegister left = a1;
+  AsmRegister right = a0;
+  AsmRegister tmp1 = a2;
+  AsmRegister tmp2 = a3;
+  AsmRegister tmp3 = t0;
+  AsmRegister tmp4 = t1;
+  AsmRegister tmp5 = t2;
 
   // Check that both operands are heap objects.
   __ JumpIfEitherSmi(left, right, &miss);
@@ -1749,9 +1733,7 @@ void DirectCEntryStub::Generate(MacroAssembler* masm) {
   __ Jump(t9);
 }
 
-
-void DirectCEntryStub::GenerateCall(MacroAssembler* masm,
-                                    Register target) {
+void DirectCEntryStub::GenerateCall(MacroAssembler* masm, AsmRegister target) {
   intptr_t loc =
       reinterpret_cast<intptr_t>(GetCode().location());
   __ Move(t9, target);
@@ -1759,14 +1741,9 @@ void DirectCEntryStub::GenerateCall(MacroAssembler* masm,
   __ Call(at);
 }
 
-
-void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
-                                                      Label* miss,
-                                                      Label* done,
-                                                      Register receiver,
-                                                      Register properties,
-                                                      Handle<Name> name,
-                                                      Register scratch0) {
+void NameDictionaryLookupStub::GenerateNegativeLookup(
+    MacroAssembler* masm, Label* miss, Label* done, AsmRegister receiver,
+    AsmRegister properties, Handle<Name> name, AsmRegister scratch0) {
   DCHECK(name->IsUniqueName());
   // If names of slots in range from 1 to kProbes - 1 for the hash value are
   // not equal to the name and kProbes-th slot is not used (its name is the
@@ -1776,7 +1753,7 @@ void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
   for (int i = 0; i < kInlinedProbes; i++) {
     // scratch0 points to properties hash.
     // Compute the masked index: (hash + i + i * i) & mask.
-    Register index = scratch0;
+    AsmRegister index = scratch0;
     // Capacity is smi 2^n.
     __ lw(index, FieldMemOperand(properties, kCapacityOffset));
     __ Subu(index, index, Operand(1));
@@ -1787,10 +1764,10 @@ void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
     STATIC_ASSERT(NameDictionary::kEntrySize == 3);
     __ Lsa(index, index, index, 1);
 
-    Register entity_name = scratch0;
+    AsmRegister entity_name = scratch0;
     // Having undefined at this place means the name is not contained.
     STATIC_ASSERT(kSmiTagSize == 1);
-    Register tmp = properties;
+    AsmRegister tmp = properties;
     __ Lsa(tmp, properties, index, 1);
     __ lw(entity_name, FieldMemOperand(tmp, kElementsStartOffset));
 
@@ -1847,14 +1824,14 @@ void NameDictionaryLookupStub::Generate(MacroAssembler* masm) {
   // Returns:
   //  result_ is zero if lookup failed, non zero otherwise.
 
-  Register result = v0;
-  Register dictionary = a0;
-  Register key = a1;
-  Register index = a2;
-  Register mask = a3;
-  Register hash = t0;
-  Register undefined = t1;
-  Register entry_key = t2;
+  AsmRegister result = v0;
+  AsmRegister dictionary = a0;
+  AsmRegister key = a1;
+  AsmRegister index = a2;
+  AsmRegister mask = a3;
+  AsmRegister hash = t0;
+  AsmRegister undefined = t1;
+  AsmRegister entry_key = t2;
 
   Label in_dictionary, maybe_in_dictionary, not_in_dictionary;
 
@@ -2019,7 +1996,7 @@ void RecordWriteStub::InformIncrementalMarker(MacroAssembler* masm) {
   regs_.SaveCallerSaveRegisters(masm, save_fp_regs_mode());
   int argument_count = 3;
   __ PrepareCallCFunction(argument_count, regs_.scratch0());
-  Register address =
+  AsmRegister address =
       a0.is(regs_.address()) ? regs_.scratch0() : regs_.address();
   DCHECK(!address.is(regs_.object()));
   DCHECK(!address.is(a0));
@@ -2475,7 +2452,7 @@ static int AddressOffset(ExternalReference ref0, ExternalReference ref1) {
 // - space to be unwound on exit (includes the call JS arguments space and
 // the additional space allocated for the fast call).
 static void CallApiFunctionAndReturn(
-    MacroAssembler* masm, Register function_address,
+    MacroAssembler* masm, AsmRegister function_address,
     ExternalReference thunk_ref, int stack_space, int32_t stack_space_offset,
     MemOperand return_value_operand, MemOperand* context_restore_operand) {
   Isolate* isolate = masm->isolate();
@@ -2614,11 +2591,11 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
   //  -- sp[argc * 4]        : receiver
   // -----------------------------------
 
-  Register callee = a0;
-  Register call_data = t0;
-  Register holder = a2;
-  Register api_function_address = a1;
-  Register context = cp;
+  AsmRegister callee = a0;
+  AsmRegister call_data = t0;
+  AsmRegister holder = a2;
+  AsmRegister api_function_address = a1;
+  AsmRegister context = cp;
 
   typedef FunctionCallbackArguments FCA;
 
@@ -2642,7 +2619,7 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
     __ lw(context, FieldMemOperand(callee, JSFunction::kContextOffset));
   }
 
-  Register scratch = call_data;
+  AsmRegister scratch = call_data;
   __ LoadRoot(scratch, Heap::kUndefinedValueRootIndex);
   // Push return value and default return value.
   __ Push(scratch, scratch);
@@ -2710,13 +2687,13 @@ void CallApiGetterStub::Generate(MacroAssembler* masm) {
   STATIC_ASSERT(PropertyCallbackArguments::kThisIndex == 6);
   STATIC_ASSERT(PropertyCallbackArguments::kArgsLength == 7);
 
-  Register receiver = ApiGetterDescriptor::ReceiverRegister();
-  Register holder = ApiGetterDescriptor::HolderRegister();
-  Register callback = ApiGetterDescriptor::CallbackRegister();
-  Register scratch = t0;
+  AsmRegister receiver = ApiGetterDescriptor::ReceiverRegister();
+  AsmRegister holder = ApiGetterDescriptor::HolderRegister();
+  AsmRegister callback = ApiGetterDescriptor::CallbackRegister();
+  AsmRegister scratch = t0;
   DCHECK(!AreAliased(receiver, holder, callback, scratch));
 
-  Register api_function_address = a2;
+  AsmRegister api_function_address = a2;
 
   // Here and below +1 is for name() pushed after the args_ array.
   typedef PropertyCallbackArguments PCA;

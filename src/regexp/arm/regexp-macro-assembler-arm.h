@@ -99,7 +99,7 @@ class RegExpMacroAssemblerARM: public NativeRegExpMacroAssembler {
   static const int kFramePointer = 0;
 
   // Above the frame pointer - Stored registers and stack passed parameters.
-  // Register 4..11.
+  // AsmRegister 4..11.
   static const int kStoredRegisters = kFramePointer;
   // Return address (stored from link register, read into pc on return).
   static const int kReturnAddress = kStoredRegisters + 8 * kPointerSize;
@@ -111,7 +111,7 @@ class RegExpMacroAssemblerARM: public NativeRegExpMacroAssembler {
   static const int kIsolate = kDirectCall + kPointerSize;
 
   // Below the frame pointer.
-  // Register parameters stored by setup code.
+  // AsmRegister parameters stored by setup code.
   static const int kInputEnd = kFramePointer - kPointerSize;
   static const int kInputStart = kInputEnd - kPointerSize;
   static const int kStartIndex = kInputStart - kPointerSize;
@@ -145,26 +145,26 @@ class RegExpMacroAssemblerARM: public NativeRegExpMacroAssembler {
   // The ebp-relative location of a regexp register.
   MemOperand register_location(int register_index);
 
-  // Register holding the current input position as negative offset from
+  // AsmRegister holding the current input position as negative offset from
   // the end of the string.
-  inline Register current_input_offset() { return r6; }
+  inline AsmRegister current_input_offset() { return r6; }
 
   // The register containing the current character after LoadCurrentCharacter.
-  inline Register current_character() { return r7; }
+  inline AsmRegister current_character() { return r7; }
 
-  // Register holding address of the end of the input string.
-  inline Register end_of_input_address() { return r10; }
+  // AsmRegister holding address of the end of the input string.
+  inline AsmRegister end_of_input_address() { return r10; }
 
-  // Register holding the frame address. Local variables, parameters and
+  // AsmRegister holding the frame address. Local variables, parameters and
   // regexp registers are addressed relative to this.
-  inline Register frame_pointer() { return fp; }
+  inline AsmRegister frame_pointer() { return fp; }
 
   // The register containing the backtrack stack top. Provides a meaningful
   // name to the register.
-  inline Register backtrack_stackpointer() { return r8; }
+  inline AsmRegister backtrack_stackpointer() { return r8; }
 
-  // Register holding pointer to the current code object.
-  inline Register code_pointer() { return r5; }
+  // AsmRegister holding pointer to the current code object.
+  inline AsmRegister code_pointer() { return r5; }
 
   // Byte size of chars in the string to match (decided by the Mode argument)
   inline int char_size() { return static_cast<int>(mode_); }
@@ -181,11 +181,11 @@ class RegExpMacroAssemblerARM: public NativeRegExpMacroAssembler {
 
   // Pushes the value of a register on the backtrack stack. Decrements the
   // stack pointer by a word size and stores the register's value there.
-  inline void Push(Register source);
+  inline void Push(AsmRegister source);
 
   // Pops a value from the backtrack stack. Reads the word at the stack pointer
   // and increments it by a word size.
-  inline void Pop(Register target);
+  inline void Pop(AsmRegister target);
 
   Isolate* isolate() const { return masm_->isolate(); }
 

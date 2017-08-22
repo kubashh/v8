@@ -33,10 +33,10 @@ MemCopyUint8Function CreateMemCopyUint8Function(Isolate* isolate,
   MacroAssembler masm(isolate, buffer, static_cast<int>(actual_size),
                       CodeObjectRequired::kNo);
 
-  Register dest = r0;
-  Register src = r1;
-  Register chars = r2;
-  Register temp1 = r3;
+  AsmRegister dest = r0;
+  AsmRegister src = r1;
+  AsmRegister chars = r2;
+  AsmRegister temp1 = r3;
   Label less_4;
 
   if (CpuFeatures::IsSupported(NEON)) {
@@ -144,7 +144,7 @@ MemCopyUint8Function CreateMemCopyUint8Function(Isolate* isolate,
     __ str(temp1, MemOperand(dest, 4, PostIndex));
   } else {
     UseScratchRegisterScope temps(&masm);
-    Register temp2 = temps.Acquire();
+    AsmRegister temp2 = temps.Acquire();
     Label loop;
 
     __ bic(temp2, chars, Operand(0x3), SetCC);
@@ -192,12 +192,12 @@ MemCopyUint16Uint8Function CreateMemCopyUint16Uint8Function(
   MacroAssembler masm(isolate, buffer, static_cast<int>(actual_size),
                       CodeObjectRequired::kNo);
 
-  Register dest = r0;
-  Register src = r1;
-  Register chars = r2;
+  AsmRegister dest = r0;
+  AsmRegister src = r1;
+  AsmRegister chars = r2;
   if (CpuFeatures::IsSupported(NEON)) {
     CpuFeatureScope scope(&masm, NEON);
-    Register temp = r3;
+    AsmRegister temp = r3;
     Label loop;
 
     __ bic(temp, chars, Operand(0x7));
@@ -222,10 +222,10 @@ MemCopyUint16Uint8Function CreateMemCopyUint16Uint8Function(
   } else {
     UseScratchRegisterScope temps(&masm);
 
-    Register temp1 = r3;
-    Register temp2 = temps.Acquire();
-    Register temp3 = lr;
-    Register temp4 = r4;
+    AsmRegister temp1 = r3;
+    AsmRegister temp2 = temps.Acquire();
+    AsmRegister temp3 = lr;
+    AsmRegister temp4 = r4;
     Label loop;
     Label not_two;
 
@@ -303,10 +303,8 @@ UnaryMathFunctionWithIsolate CreateSqrtFunction(Isolate* isolate) {
 
 #define __ ACCESS_MASM(masm)
 
-void StringCharLoadGenerator::Generate(MacroAssembler* masm,
-                                       Register string,
-                                       Register index,
-                                       Register result,
+void StringCharLoadGenerator::Generate(MacroAssembler* masm, AsmRegister string,
+                                       AsmRegister index, AsmRegister result,
                                        Label* call_runtime) {
   Label indirect_string_loaded;
   __ bind(&indirect_string_loaded);

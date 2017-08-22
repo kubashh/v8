@@ -193,7 +193,7 @@ class V8_EXPORT_PRIVATE TryCatchBuilder final : public ControlFlowBuilder {
         handler_id_(builder->NewHandlerEntry()),
         catch_prediction_(catch_prediction) {}
 
-  void BeginTry(Register context);
+  void BeginTry(AsmRegister context);
   void EndTry();
   void EndCatch();
 
@@ -215,7 +215,7 @@ class V8_EXPORT_PRIVATE TryFinallyBuilder final : public ControlFlowBuilder {
         catch_prediction_(catch_prediction),
         finalization_sites_(builder->zone()) {}
 
-  void BeginTry(Register context);
+  void BeginTry(AsmRegister context);
   void LeaveTry();
   void EndTry();
   void BeginHandler();

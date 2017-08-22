@@ -94,18 +94,18 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   // if it's a valid register. The loaded value is placed in the
   // accumulator.
   void VisitKeyedSuperPropertyLoad(Property* property,
-                                   Register opt_receiver_out);
+                                   AsmRegister opt_receiver_out);
 
   // Visit a named super property load. The optional
   // |opt_receiver_out| register will have the receiver stored to it
   // if it's a valid register. The loaded value is placed in the
   // accumulator.
   void VisitNamedSuperPropertyLoad(Property* property,
-                                   Register opt_receiver_out);
+                                   AsmRegister opt_receiver_out);
 
-  void VisitPropertyLoad(Register obj, Property* expr);
-  void VisitPropertyLoadForRegister(Register obj, Property* expr,
-                                    Register destination);
+  void VisitPropertyLoad(AsmRegister obj, Property* expr);
+  void VisitPropertyLoadForRegister(AsmRegister obj, Property* expr,
+                                    AsmRegister destination);
 
   void BuildVariableLoad(Variable* variable, FeedbackSlot slot,
                          HoleCheckMode hole_check_mode,
@@ -128,7 +128,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   // Build jump to targets[value], where
   // start_index <= value < start_index + size.
-  void BuildIndexedJump(Register value, size_t start_index, size_t size,
+  void BuildIndexedJump(AsmRegister value, size_t start_index, size_t size,
                         ZoneVector<BytecodeLabel>& targets);
 
   void BuildNewLocalActivationContext();
@@ -151,20 +151,21 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void VisitArgumentsObject(Variable* variable);
   void VisitRestArgumentsArray(Variable* rest);
   void VisitCallSuper(Call* call);
-  void VisitClassLiteralProperties(ClassLiteral* expr, Register constructor,
-                                   Register prototype);
-  void BuildClassLiteralNameProperty(ClassLiteral* expr, Register constructor);
+  void VisitClassLiteralProperties(ClassLiteral* expr, AsmRegister constructor,
+                                   AsmRegister prototype);
+  void BuildClassLiteralNameProperty(ClassLiteral* expr,
+                                     AsmRegister constructor);
   void BuildClassLiteral(ClassLiteral* expr);
   void VisitNewTargetVariable(Variable* variable);
   void VisitThisFunctionVariable(Variable* variable);
   void BuildGeneratorObjectVariableInitialization();
   void VisitBlockDeclarationsAndStatements(Block* stmt);
   void VisitFunctionClosureForContext();
-  void VisitSetHomeObject(Register value, Register home_object,
+  void VisitSetHomeObject(AsmRegister value, AsmRegister home_object,
                           LiteralProperty* property, int slot_number = 0);
-  void VisitObjectLiteralAccessor(Register home_object,
+  void VisitObjectLiteralAccessor(AsmRegister home_object,
                                   ObjectLiteralProperty* property,
-                                  Register value_out);
+                                  AsmRegister value_out);
   void VisitForInAssignment(Expression* expr, FeedbackSlot slot);
   void VisitModuleNamespaceImports();
 
@@ -185,7 +186,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void BuildPushUndefinedIntoRegisterList(RegisterList* reg_list);
 
-  void BuildLoadPropertyKey(LiteralProperty* property, Register out_reg);
+  void BuildLoadPropertyKey(LiteralProperty* property, AsmRegister out_reg);
 
   int AllocateBlockCoverageSlotIfEnabled(AstNode* node, SourceRangeKind kind);
   void BuildIncrementBlockCoverageCounterIfEnabled(AstNode* node,
@@ -200,8 +201,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   // specifies the type of the result of the visited expression.
   TypeHint VisitForAccumulatorValue(Expression* expr);
   void VisitForAccumulatorValueOrTheHole(Expression* expr);
-  MUST_USE_RESULT Register VisitForRegisterValue(Expression* expr);
-  INLINE(void VisitForRegisterValue(Expression* expr, Register destination));
+  MUST_USE_RESULT AsmRegister VisitForRegisterValue(Expression* expr);
+  INLINE(void VisitForRegisterValue(Expression* expr, AsmRegister destination));
   void VisitAndPushIntoRegisterList(Expression* expr, RegisterList* reg_list);
   void VisitForEffect(Expression* expr);
   void VisitForTest(Expression* expr, BytecodeLabels* then_labels,
@@ -209,7 +210,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void VisitInSameTestExecutionScope(Expression* expr);
 
-  Register GetRegisterForLocalVariable(Variable* variable);
+  AsmRegister GetRegisterForLocalVariable(Variable* variable);
 
   // Returns the runtime function id for a store to super for the function's
   // language mode.
@@ -221,7 +222,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
                                            : ToBooleanMode::kConvertToBoolean;
   }
 
-  inline Register generator_object() const;
+  inline AsmRegister generator_object() const;
 
   inline BytecodeArrayBuilder* builder() const { return builder_; }
   inline Zone* zone() const { return zone_; }
@@ -285,10 +286,10 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   ContextScope* execution_context_;
   ExpressionResultScope* execution_result_;
 
-  Register incoming_new_target_or_generator_;
+  AsmRegister incoming_new_target_or_generator_;
 
   BytecodeJumpTable* generator_jump_table_;
-  Register generator_state_;
+  AsmRegister generator_state_;
   int loop_depth_;
 
   HandlerTable::CatchPrediction catch_prediction_;

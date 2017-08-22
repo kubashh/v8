@@ -1565,7 +1565,7 @@ bool Heap::PerformGarbageCollection(
       tracer()->CurrentOldGenerationAllocationThroughputInBytesPerMillisecond();
   size_t old_gen_size = PromotedSpaceSizeOfObjects();
   if (collector == MARK_COMPACTOR) {
-    // Register the amount of external allocated memory.
+    // AsmRegister the amount of external allocated memory.
     external_memory_at_last_mark_compact_ = external_memory_;
     external_memory_limit_ = external_memory_ + kExternalAllocationSoftLimit;
     SetOldGenerationAllocationLimit(old_gen_size, gc_speed, mutator_speed);
@@ -3298,7 +3298,7 @@ AllocationResult Heap::AllocateBytecodeArray(int length,
   instance->set_frame_size(frame_size);
   instance->set_parameter_count(parameter_count);
   instance->set_incoming_new_target_or_generator_register(
-      interpreter::Register::invalid_value());
+      interpreter::AsmRegister::invalid_value());
   instance->set_interrupt_budget(interpreter::Interpreter::InterruptBudget());
   instance->set_osr_loop_nesting_level(0);
   instance->set_bytecode_age(BytecodeArray::kNoAgeBytecodeAge);
@@ -4596,7 +4596,7 @@ void Heap::NotifyObjectLayoutChange(HeapObject* object, int size,
     incremental_marking()->MarkBlackAndPush(object);
     if (InOldSpace(object) && incremental_marking()->IsCompacting()) {
       // The concurrent marker might have recorded slots for the object.
-      // Register this object as invalidated to filter out the slots.
+      // AsmRegister this object as invalidated to filter out the slots.
       MemoryChunk* chunk = MemoryChunk::FromAddress(object->address());
       chunk->RegisterObjectWithInvalidatedSlots(object, size);
     }

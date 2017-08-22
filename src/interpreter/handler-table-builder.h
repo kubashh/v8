@@ -40,14 +40,14 @@ class V8_EXPORT_PRIVATE HandlerTableBuilder final BASE_EMBEDDED {
   void SetTryRegionEnd(int handler_id, size_t offset);
   void SetHandlerTarget(int handler_id, size_t offset);
   void SetPrediction(int handler_id, HandlerTable::CatchPrediction prediction);
-  void SetContextRegister(int handler_id, Register reg);
+  void SetContextRegister(int handler_id, AsmRegister reg);
 
  private:
   struct Entry {
     size_t offset_start;   // Bytecode offset starting try-region.
     size_t offset_end;     // Bytecode offset ending try-region.
     size_t offset_target;  // Bytecode offset of handler target.
-    Register context;      // Register holding context for handler.
+    AsmRegister context;   // AsmRegister holding context for handler.
                            // Optimistic prediction for handler.
     HandlerTable::CatchPrediction catch_prediction_;
   };

@@ -24,8 +24,8 @@ class V8_EXPORT_PRIVATE BytecodeLoopAssignments {
  public:
   BytecodeLoopAssignments(int parameter_count, int register_count, Zone* zone);
 
-  void Add(interpreter::Register r);
-  void AddList(interpreter::Register r, uint32_t count);
+  void Add(interpreter::AsmRegister r);
+  void AddList(interpreter::AsmRegister r, uint32_t count);
   void Union(const BytecodeLoopAssignments& other);
 
   bool ContainsParameter(int index) const;

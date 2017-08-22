@@ -56,9 +56,9 @@ Handle<Code> PropertyHandlerCompiler::GetCode(Code::Kind kind,
 
 #define __ ACCESS_MASM(masm())
 
-Register NamedLoadHandlerCompiler::FrontendHeader(Register object_reg,
-                                                  Handle<Name> name,
-                                                  Label* miss) {
+AsmRegister NamedLoadHandlerCompiler::FrontendHeader(AsmRegister object_reg,
+                                                     Handle<Name> name,
+                                                     Label* miss) {
   if (map()->IsPrimitiveMap() || map()->IsJSGlobalProxyMap()) {
     // If the receiver is a global proxy and if we get to this point then
     // the compile-time (current) native context has access to global proxy's
@@ -81,9 +81,9 @@ Register NamedLoadHandlerCompiler::FrontendHeader(Register object_reg,
 
 // Frontend for store uses the name register. It has to be restored before a
 // miss.
-Register NamedStoreHandlerCompiler::FrontendHeader(Register object_reg,
-                                                   Handle<Name> name,
-                                                   Label* miss) {
+AsmRegister NamedStoreHandlerCompiler::FrontendHeader(AsmRegister object_reg,
+                                                      Handle<Name> name,
+                                                      Label* miss) {
   if (map()->IsJSGlobalProxyMap()) {
     Handle<Context> native_context = isolate()->native_context();
     Handle<WeakCell> weak_cell(native_context->self_weak_cell(), isolate());
@@ -94,13 +94,12 @@ Register NamedStoreHandlerCompiler::FrontendHeader(Register object_reg,
                          miss);
 }
 
-
-Register PropertyHandlerCompiler::Frontend(Handle<Name> name) {
+AsmRegister PropertyHandlerCompiler::Frontend(Handle<Name> name) {
   Label miss;
   if (IC::ShouldPushPopSlotAndVector(kind())) {
     PushVectorAndSlot();
   }
-  Register reg = FrontendHeader(receiver(), name, &miss);
+  AsmRegister reg = FrontendHeader(receiver(), name, &miss);
   FrontendFooter(name, &miss);
   // The footer consumes the vector and slot from the stack if miss occurs.
   if (IC::ShouldPushPopSlotAndVector(kind())) {
@@ -116,7 +115,7 @@ Handle<Code> NamedLoadHandlerCompiler::CompileLoadCallback(
   if (V8_UNLIKELY(FLAG_runtime_stats)) {
     GenerateTailCall(masm(), slow_stub);
   }
-  Register holder = Frontend(name);
+  AsmRegister holder = Frontend(name);
   GenerateApiAccessorCall(masm(), call_optimization, map(), receiver(),
                           scratch2(), false, no_reg, holder, accessor_index);
   return GetCode(kind(), name);
@@ -125,7 +124,7 @@ Handle<Code> NamedLoadHandlerCompiler::CompileLoadCallback(
 Handle<Code> NamedStoreHandlerCompiler::CompileStoreViaSetter(
     Handle<JSObject> object, Handle<Name> name, int accessor_index,
     int expected_arguments) {
-  Register holder = Frontend(name);
+  AsmRegister holder = Frontend(name);
   GenerateStoreViaSetter(masm(), map(), receiver(), holder, accessor_index,
                          expected_arguments, scratch2());
 
@@ -139,7 +138,7 @@ Handle<Code> NamedStoreHandlerCompiler::CompileStoreCallback(
   if (V8_UNLIKELY(FLAG_runtime_stats)) {
     GenerateTailCall(masm(), slow_stub);
   }
-  Register holder = Frontend(name);
+  AsmRegister holder = Frontend(name);
   if (Descriptor::kPassLastArgsOnStack) {
     __ LoadParameterFromStack<Descriptor>(value(), Descriptor::kValue);
   }

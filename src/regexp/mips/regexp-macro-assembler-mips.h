@@ -113,7 +113,7 @@ class RegExpMacroAssemblerMIPS: public NativeRegExpMacroAssembler {
   static const int kIsolate = kDirectCall + kPointerSize;
 
   // Below the frame pointer.
-  // Register parameters stored by setup code.
+  // AsmRegister parameters stored by setup code.
   static const int kInputEnd = kFramePointer - kPointerSize;
   static const int kInputStart = kInputEnd - kPointerSize;
   static const int kStartIndex = kInputStart - kPointerSize;
@@ -140,58 +140,54 @@ class RegExpMacroAssemblerMIPS: public NativeRegExpMacroAssembler {
 
 
   // Generate a call to CheckStackGuardState.
-  void CallCheckStackGuardState(Register scratch);
+  void CallCheckStackGuardState(AsmRegister scratch);
 
   // The ebp-relative location of a regexp register.
   MemOperand register_location(int register_index);
 
-  // Register holding the current input position as negative offset from
+  // AsmRegister holding the current input position as negative offset from
   // the end of the string.
-  inline Register current_input_offset() { return t2; }
+  inline AsmRegister current_input_offset() { return t2; }
 
   // The register containing the current character after LoadCurrentCharacter.
-  inline Register current_character() { return t3; }
+  inline AsmRegister current_character() { return t3; }
 
-  // Register holding address of the end of the input string.
-  inline Register end_of_input_address() { return t6; }
+  // AsmRegister holding address of the end of the input string.
+  inline AsmRegister end_of_input_address() { return t6; }
 
-  // Register holding the frame address. Local variables, parameters and
+  // AsmRegister holding the frame address. Local variables, parameters and
   // regexp registers are addressed relative to this.
-  inline Register frame_pointer() { return fp; }
+  inline AsmRegister frame_pointer() { return fp; }
 
   // The register containing the backtrack stack top. Provides a meaningful
   // name to the register.
-  inline Register backtrack_stackpointer() { return t4; }
+  inline AsmRegister backtrack_stackpointer() { return t4; }
 
-  // Register holding pointer to the current code object.
-  inline Register code_pointer() { return t1; }
+  // AsmRegister holding pointer to the current code object.
+  inline AsmRegister code_pointer() { return t1; }
 
   // Byte size of chars in the string to match (decided by the Mode argument).
   inline int char_size() { return static_cast<int>(mode_); }
 
   // Equivalent to a conditional branch to the label, unless the label
   // is NULL, in which case it is a conditional Backtrack.
-  void BranchOrBacktrack(Label* to,
-                         Condition condition,
-                         Register rs,
+  void BranchOrBacktrack(Label* to, Condition condition, AsmRegister rs,
                          const Operand& rt);
 
   // Call and return internally in the generated code in a way that
   // is GC-safe (i.e., doesn't leave absolute code addresses on the stack)
-  inline void SafeCall(Label* to,
-                       Condition cond,
-                       Register rs,
+  inline void SafeCall(Label* to, Condition cond, AsmRegister rs,
                        const Operand& rt);
   inline void SafeReturn();
   inline void SafeCallTarget(Label* name);
 
   // Pushes the value of a register on the backtrack stack. Decrements the
   // stack pointer by a word size and stores the register's value there.
-  inline void Push(Register source);
+  inline void Push(AsmRegister source);
 
   // Pops a value from the backtrack stack. Reads the word at the stack pointer
   // and increments it by a word size.
-  inline void Pop(Register target);
+  inline void Pop(AsmRegister target);
 
   Isolate* isolate() const { return masm_->isolate(); }
 

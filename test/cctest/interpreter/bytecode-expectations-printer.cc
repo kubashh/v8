@@ -156,7 +156,7 @@ void BytecodeExpectationsPrinter::PrintBytecodeOperand(
   }
 
   if (Bytecodes::IsRegisterOperandType(op_type)) {
-    Register register_value = bytecode_iterator.GetRegisterOperand(op_index);
+    AsmRegister register_value = bytecode_iterator.GetRegisterOperand(op_index);
     stream << 'R';
     if (op_size != OperandSize::kByte) stream << size_tag;
     if (register_value.is_current_context()) {

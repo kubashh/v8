@@ -34,7 +34,7 @@ Handle<HandlerTable> HandlerTableBuilder::ToHandlerTable(Isolate* isolate) {
 
 int HandlerTableBuilder::NewHandlerEntry() {
   int handler_id = static_cast<int>(entries_.size());
-  Entry entry = {0, 0, 0, Register(), HandlerTable::UNCAUGHT};
+  Entry entry = {0, 0, 0, AsmRegister(), HandlerTable::UNCAUGHT};
   entries_.push_back(entry);
   return handler_id;
 }
@@ -62,8 +62,7 @@ void HandlerTableBuilder::SetPrediction(
   entries_[handler_id].catch_prediction_ = prediction;
 }
 
-
-void HandlerTableBuilder::SetContextRegister(int handler_id, Register reg) {
+void HandlerTableBuilder::SetContextRegister(int handler_id, AsmRegister reg) {
   entries_[handler_id].context = reg;
 }
 

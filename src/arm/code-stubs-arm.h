@@ -13,20 +13,20 @@ class StringHelper : public AllStatic {
  public:
   // Compares two flat one-byte strings and returns result in r0.
   static void GenerateCompareFlatOneByteStrings(
-      MacroAssembler* masm, Register left, Register right, Register scratch1,
-      Register scratch2, Register scratch3, Register scratch4);
+      MacroAssembler* masm, AsmRegister left, AsmRegister right,
+      AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3,
+      AsmRegister scratch4);
 
   // Compares two flat one-byte strings for equality and returns result in r0.
-  static void GenerateFlatOneByteStringEquals(MacroAssembler* masm,
-                                              Register left, Register right,
-                                              Register scratch1,
-                                              Register scratch2,
-                                              Register scratch3);
+  static void GenerateFlatOneByteStringEquals(
+      MacroAssembler* masm, AsmRegister left, AsmRegister right,
+      AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3);
 
  private:
   static void GenerateOneByteCharsCompareLoop(
-      MacroAssembler* masm, Register left, Register right, Register length,
-      Register scratch1, Register scratch2, Label* chars_not_equal);
+      MacroAssembler* masm, AsmRegister left, AsmRegister right,
+      AsmRegister length, AsmRegister scratch1, AsmRegister scratch2,
+      Label* chars_not_equal);
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(StringHelper);
 };
@@ -34,10 +34,8 @@ class StringHelper : public AllStatic {
 
 class RecordWriteStub: public PlatformCodeStub {
  public:
-  RecordWriteStub(Isolate* isolate,
-                  Register object,
-                  Register value,
-                  Register address,
+  RecordWriteStub(Isolate* isolate, AsmRegister object, AsmRegister value,
+                  AsmRegister address,
                   RememberedSetAction remembered_set_action,
                   SaveFPRegsMode fp_mode)
       : PlatformCodeStub(isolate),
@@ -124,12 +122,9 @@ class RecordWriteStub: public PlatformCodeStub {
   // the caller.
   class RegisterAllocation {
    public:
-    RegisterAllocation(Register object,
-                       Register address,
-                       Register scratch0)
-        : object_(object),
-          address_(address),
-          scratch0_(scratch0) {
+    RegisterAllocation(AsmRegister object, AsmRegister address,
+                       AsmRegister scratch0)
+        : object_(object), address_(address), scratch0_(scratch0) {
       DCHECK(!AreAliased(scratch0, object, address, no_reg));
       scratch1_ = GetRegisterThatIsNotOneOf(object_, address_, scratch0_);
     }
@@ -163,16 +158,16 @@ class RecordWriteStub: public PlatformCodeStub {
       masm->ldm(ia_w, sp, (kCallerSaved | lr.bit()) & ~scratch1_.bit());
     }
 
-    inline Register object() { return object_; }
-    inline Register address() { return address_; }
-    inline Register scratch0() { return scratch0_; }
-    inline Register scratch1() { return scratch1_; }
+    inline AsmRegister object() { return object_; }
+    inline AsmRegister address() { return address_; }
+    inline AsmRegister scratch0() { return scratch0_; }
+    inline AsmRegister scratch1() { return scratch1_; }
 
    private:
-    Register object_;
-    Register address_;
-    Register scratch0_;
-    Register scratch1_;
+    AsmRegister object_;
+    AsmRegister address_;
+    AsmRegister scratch0_;
+    AsmRegister scratch1_;
 
     friend class RecordWriteStub;
   };
@@ -194,16 +189,16 @@ class RecordWriteStub: public PlatformCodeStub {
 
   void Activate(Code* code) override;
 
-  Register object() const {
-    return Register::from_code(ObjectBits::decode(minor_key_));
+  AsmRegister object() const {
+    return AsmRegister::from_code(ObjectBits::decode(minor_key_));
   }
 
-  Register value() const {
-    return Register::from_code(ValueBits::decode(minor_key_));
+  AsmRegister value() const {
+    return AsmRegister::from_code(ValueBits::decode(minor_key_));
   }
 
-  Register address() const {
-    return Register::from_code(AddressBits::decode(minor_key_));
+  AsmRegister address() const {
+    return AsmRegister::from_code(AddressBits::decode(minor_key_));
   }
 
   RememberedSetAction remembered_set_action() const {
@@ -235,7 +230,7 @@ class RecordWriteStub: public PlatformCodeStub {
 class DirectCEntryStub: public PlatformCodeStub {
  public:
   explicit DirectCEntryStub(Isolate* isolate) : PlatformCodeStub(isolate) {}
-  void GenerateCall(MacroAssembler* masm, Register target);
+  void GenerateCall(MacroAssembler* masm, AsmRegister target);
 
  private:
   bool NeedsImmovableCode() override { return true; }
@@ -254,13 +249,10 @@ class NameDictionaryLookupStub: public PlatformCodeStub {
     minor_key_ = LookupModeBits::encode(mode);
   }
 
-  static void GenerateNegativeLookup(MacroAssembler* masm,
-                                     Label* miss,
-                                     Label* done,
-                                     Register receiver,
-                                     Register properties,
-                                     Handle<Name> name,
-                                     Register scratch0);
+  static void GenerateNegativeLookup(MacroAssembler* masm, Label* miss,
+                                     Label* done, AsmRegister receiver,
+                                     AsmRegister properties, Handle<Name> name,
+                                     AsmRegister scratch0);
 
   bool SometimesSetsUpAFrame() override { return false; }
 

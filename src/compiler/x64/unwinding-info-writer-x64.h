@@ -56,10 +56,10 @@ class UnwindingInfoWriter {
 
   class BlockInitialState : public ZoneObject {
    public:
-    BlockInitialState(Register reg, int offset, bool tracking_fp)
+    BlockInitialState(AsmRegister reg, int offset, bool tracking_fp)
         : register_(reg), offset_(offset), tracking_fp_(tracking_fp) {}
 
-    Register register_;
+    AsmRegister register_;
     int offset_;
     bool tracking_fp_;
   };

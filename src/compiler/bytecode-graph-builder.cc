@@ -26,7 +26,7 @@ class BytecodeGraphBuilder::Environment : public ZoneObject {
  public:
   Environment(BytecodeGraphBuilder* builder, int register_count,
               int parameter_count,
-              interpreter::Register incoming_new_target_or_generator,
+              interpreter::AsmRegister incoming_new_target_or_generator,
               Node* control_dependency);
 
   // Specifies whether environment binding methods should attach frame state
@@ -38,14 +38,14 @@ class BytecodeGraphBuilder::Environment : public ZoneObject {
   int register_count() const { return register_count_; }
 
   Node* LookupAccumulator() const;
-  Node* LookupRegister(interpreter::Register the_register) const;
+  Node* LookupRegister(interpreter::AsmRegister the_register) const;
 
   void BindAccumulator(Node* node,
                        FrameStateAttachmentMode mode = kDontAttachFrameState);
-  void BindRegister(interpreter::Register the_register, Node* node,
+  void BindRegister(interpreter::AsmRegister the_register, Node* node,
                     FrameStateAttachmentMode mode = kDontAttachFrameState);
   void BindRegistersToProjections(
-      interpreter::Register first_reg, Node* node,
+      interpreter::AsmRegister first_reg, Node* node,
       FrameStateAttachmentMode mode = kDontAttachFrameState);
   void RecordAfterState(Node* node,
                         FrameStateAttachmentMode mode = kDontAttachFrameState);
@@ -88,7 +88,7 @@ class BytecodeGraphBuilder::Environment : public ZoneObject {
   Node* GetStateValuesFromCache(Node** values, int count,
                                 const BitVector* liveness, int liveness_offset);
 
-  int RegisterToValuesIndex(interpreter::Register the_register) const;
+  int RegisterToValuesIndex(interpreter::AsmRegister the_register) const;
 
   Zone* zone() const { return builder_->local_zone(); }
   Graph* graph() const { return builder_->graph(); }
@@ -129,7 +129,7 @@ struct BytecodeGraphBuilder::SubEnvironment final {
 // - Need to resolve closure parameter treatment.
 BytecodeGraphBuilder::Environment::Environment(
     BytecodeGraphBuilder* builder, int register_count, int parameter_count,
-    interpreter::Register incoming_new_target_or_generator,
+    interpreter::AsmRegister incoming_new_target_or_generator,
     Node* control_dependency)
     : builder_(builder),
       register_count_(register_count),
@@ -195,9 +195,8 @@ BytecodeGraphBuilder::Environment::Environment(
   values_ = other->values_;
 }
 
-
 int BytecodeGraphBuilder::Environment::RegisterToValuesIndex(
-    interpreter::Register the_register) const {
+    interpreter::AsmRegister the_register) const {
   if (the_register.is_parameter()) {
     return the_register.ToParameterIndex(parameter_count());
   } else {
@@ -209,9 +208,8 @@ Node* BytecodeGraphBuilder::Environment::LookupAccumulator() const {
   return values()->at(accumulator_base_);
 }
 
-
 Node* BytecodeGraphBuilder::Environment::LookupRegister(
-    interpreter::Register the_register) const {
+    interpreter::AsmRegister the_register) const {
   if (the_register.is_current_context()) {
     return Context();
   } else if (the_register.is_function_closure()) {
@@ -231,7 +229,7 @@ void BytecodeGraphBuilder::Environment::BindAccumulator(
 }
 
 void BytecodeGraphBuilder::Environment::BindRegister(
-    interpreter::Register the_register, Node* node,
+    interpreter::AsmRegister the_register, Node* node,
     FrameStateAttachmentMode mode) {
   int values_index = RegisterToValuesIndex(the_register);
   if (mode == FrameStateAttachmentMode::kAttachFrameState) {
@@ -242,7 +240,7 @@ void BytecodeGraphBuilder::Environment::BindRegister(
 }
 
 void BytecodeGraphBuilder::Environment::BindRegistersToProjections(
-    interpreter::Register first_reg, Node* node,
+    interpreter::AsmRegister first_reg, Node* node,
     FrameStateAttachmentMode mode) {
   int values_index = RegisterToValuesIndex(first_reg);
   if (mode == FrameStateAttachmentMode::kAttachFrameState) {
@@ -1437,7 +1435,7 @@ void BytecodeGraphBuilder::VisitCreateEvalContext() {
 }
 
 void BytecodeGraphBuilder::VisitCreateCatchContext() {
-  interpreter::Register reg = bytecode_iterator().GetRegisterOperand(0);
+  interpreter::AsmRegister reg = bytecode_iterator().GetRegisterOperand(0);
   Node* exception = environment()->LookupRegister(reg);
   Handle<String> name =
       Handle<String>::cast(bytecode_iterator().GetConstantForIndexOperand(1));
@@ -1547,7 +1545,7 @@ void BytecodeGraphBuilder::VisitCreateEmptyObjectLiteral() {
 }
 
 Node* const* BytecodeGraphBuilder::GetCallArgumentsFromRegister(
-    Node* callee, Node* receiver, interpreter::Register first_arg,
+    Node* callee, Node* receiver, interpreter::AsmRegister first_arg,
     int arg_count) {
   // The arity of the Call node -- includes the callee, receiver and function
   // arguments.
@@ -1562,7 +1560,7 @@ Node* const* BytecodeGraphBuilder::GetCallArgumentsFromRegister(
   int arg_base = first_arg.index();
   for (int i = 0; i < arg_count; ++i) {
     all[2 + i] =
-        environment()->LookupRegister(interpreter::Register(arg_base + i));
+        environment()->LookupRegister(interpreter::AsmRegister(arg_base + i));
   }
 
   return all;
@@ -1574,14 +1572,14 @@ Node* BytecodeGraphBuilder::ProcessCallArguments(const Operator* call_op,
   return MakeNode(call_op, arg_count, args, false);
 }
 
-Node* BytecodeGraphBuilder::ProcessCallArguments(const Operator* call_op,
-                                                 Node* callee,
-                                                 interpreter::Register receiver,
-                                                 size_t reg_count) {
+Node* BytecodeGraphBuilder::ProcessCallArguments(
+    const Operator* call_op, Node* callee, interpreter::AsmRegister receiver,
+    size_t reg_count) {
   Node* receiver_node = environment()->LookupRegister(receiver);
   // The receiver is followed by the arguments in the consecutive registers.
   DCHECK_GE(reg_count, 1);
-  interpreter::Register first_arg = interpreter::Register(receiver.index() + 1);
+  interpreter::AsmRegister first_arg =
+      interpreter::AsmRegister(receiver.index() + 1);
   int arg_count = static_cast<int>(reg_count) - 1;
 
   Node* const* call_args =
@@ -1619,12 +1617,13 @@ void BytecodeGraphBuilder::BuildCallVarArgs(ConvertReceiverMode receiver_mode) {
             receiver_mode);
   Node* callee =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
-  interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister first_reg =
+      bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
   int const slot_id = bytecode_iterator().GetIndexOperand(3);
 
   Node* receiver_node;
-  interpreter::Register first_arg;
+  interpreter::AsmRegister first_arg;
   int arg_count;
 
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
@@ -1638,7 +1637,7 @@ void BytecodeGraphBuilder::BuildCallVarArgs(ConvertReceiverMode receiver_mode) {
     // consecutive registers.
     DCHECK_GE(reg_count, 1);
     receiver_node = environment()->LookupRegister(first_reg);
-    first_arg = interpreter::Register(first_reg.index() + 1);
+    first_arg = interpreter::AsmRegister(first_reg.index() + 1);
     arg_count = static_cast<int>(reg_count) - 1;
   }
 
@@ -1732,10 +1731,11 @@ void BytecodeGraphBuilder::VisitCallWithSpread() {
   PrepareEagerCheckpoint();
   Node* callee =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
-  interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister receiver = bytecode_iterator().GetRegisterOperand(1);
   Node* receiver_node = environment()->LookupRegister(receiver);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
-  interpreter::Register first_arg = interpreter::Register(receiver.index() + 1);
+  interpreter::AsmRegister first_arg =
+      interpreter::AsmRegister(receiver.index() + 1);
   int arg_count = static_cast<int>(reg_count) - 1;
   Node* const* args =
       GetCallArgumentsFromRegister(callee, receiver_node, first_arg, arg_count);
@@ -1760,7 +1760,7 @@ void BytecodeGraphBuilder::VisitCallJSRuntime() {
   PrepareEagerCheckpoint();
   Node* callee =
       BuildLoadNativeContextField(bytecode_iterator().GetIndexOperand(0));
-  interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister receiver = bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
 
   // Create node to perform the JS runtime call.
@@ -1770,7 +1770,7 @@ void BytecodeGraphBuilder::VisitCallJSRuntime() {
 }
 
 Node* BytecodeGraphBuilder::ProcessCallRuntimeArguments(
-    const Operator* call_runtime_op, interpreter::Register receiver,
+    const Operator* call_runtime_op, interpreter::AsmRegister receiver,
     size_t reg_count) {
   int arg_count = static_cast<int>(reg_count);
   // arity is args.
@@ -1779,7 +1779,7 @@ Node* BytecodeGraphBuilder::ProcessCallRuntimeArguments(
   int first_arg_index = receiver.index();
   for (int i = 0; i < static_cast<int>(reg_count); ++i) {
     all[i] = environment()->LookupRegister(
-        interpreter::Register(first_arg_index + i));
+        interpreter::AsmRegister(first_arg_index + i));
   }
   Node* value = MakeNode(call_runtime_op, arity, all, false);
   return value;
@@ -1788,7 +1788,7 @@ Node* BytecodeGraphBuilder::ProcessCallRuntimeArguments(
 void BytecodeGraphBuilder::VisitCallRuntime() {
   PrepareEagerCheckpoint();
   Runtime::FunctionId functionId = bytecode_iterator().GetRuntimeIdOperand(0);
-  interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister receiver = bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
 
   // Create node to perform the runtime call.
@@ -1800,9 +1800,9 @@ void BytecodeGraphBuilder::VisitCallRuntime() {
 void BytecodeGraphBuilder::VisitCallRuntimeForPair() {
   PrepareEagerCheckpoint();
   Runtime::FunctionId functionId = bytecode_iterator().GetRuntimeIdOperand(0);
-  interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister receiver = bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
-  interpreter::Register first_return =
+  interpreter::AsmRegister first_return =
       bytecode_iterator().GetRegisterOperand(3);
 
   // Create node to perform the runtime call.
@@ -1813,7 +1813,7 @@ void BytecodeGraphBuilder::VisitCallRuntimeForPair() {
 }
 
 Node* const* BytecodeGraphBuilder::GetConstructArgumentsFromRegister(
-    Node* target, Node* new_target, interpreter::Register first_arg,
+    Node* target, Node* new_target, interpreter::AsmRegister first_arg,
     int arg_count) {
   // arity is args + callee and new target.
   int arity = arg_count + 2;
@@ -1822,7 +1822,7 @@ Node* const* BytecodeGraphBuilder::GetConstructArgumentsFromRegister(
   int first_arg_index = first_arg.index();
   for (int i = 0; i < arg_count; ++i) {
     all[1 + i] = environment()->LookupRegister(
-        interpreter::Register(first_arg_index + i));
+        interpreter::AsmRegister(first_arg_index + i));
   }
   all[arity - 1] = new_target;
   return all;
@@ -1836,8 +1836,10 @@ Node* BytecodeGraphBuilder::ProcessConstructArguments(const Operator* op,
 
 void BytecodeGraphBuilder::VisitConstruct() {
   PrepareEagerCheckpoint();
-  interpreter::Register callee_reg = bytecode_iterator().GetRegisterOperand(0);
-  interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister callee_reg =
+      bytecode_iterator().GetRegisterOperand(0);
+  interpreter::AsmRegister first_reg =
+      bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
   int const slot_id = bytecode_iterator().GetIndexOperand(3);
   VectorSlotPair feedback = CreateVectorSlotPair(slot_id);
@@ -1864,8 +1866,10 @@ void BytecodeGraphBuilder::VisitConstruct() {
 
 void BytecodeGraphBuilder::VisitConstructWithSpread() {
   PrepareEagerCheckpoint();
-  interpreter::Register callee_reg = bytecode_iterator().GetRegisterOperand(0);
-  interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister callee_reg =
+      bytecode_iterator().GetRegisterOperand(0);
+  interpreter::AsmRegister first_reg =
+      bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
   int const slot_id = bytecode_iterator().GetIndexOperand(3);
   VectorSlotPair feedback = CreateVectorSlotPair(slot_id);
@@ -1893,7 +1897,7 @@ void BytecodeGraphBuilder::VisitConstructWithSpread() {
 void BytecodeGraphBuilder::VisitInvokeIntrinsic() {
   PrepareEagerCheckpoint();
   Runtime::FunctionId functionId = bytecode_iterator().GetIntrinsicIdOperand(0);
-  interpreter::Register receiver = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister receiver = bytecode_iterator().GetRegisterOperand(1);
   size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
 
   // Create node to perform the runtime call. Turbofan will take care of the
@@ -2546,9 +2550,9 @@ void BytecodeGraphBuilder::VisitForInNext() {
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(1));
   int catch_reg_pair_index = bytecode_iterator().GetRegisterOperand(2).index();
   Node* cache_type = environment()->LookupRegister(
-      interpreter::Register(catch_reg_pair_index));
+      interpreter::AsmRegister(catch_reg_pair_index));
   Node* cache_array = environment()->LookupRegister(
-      interpreter::Register(catch_reg_pair_index + 1));
+      interpreter::AsmRegister(catch_reg_pair_index + 1));
 
   Node* value = NewNode(javascript()->ForInNext(), receiver, cache_array,
                         cache_type, index);
@@ -2568,7 +2572,8 @@ void BytecodeGraphBuilder::VisitForInStep() {
 void BytecodeGraphBuilder::VisitSuspendGenerator() {
   Node* generator = environment()->LookupRegister(
       bytecode_iterator().GetRegisterOperand(0));
-  interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister first_reg =
+      bytecode_iterator().GetRegisterOperand(1);
   // We assume we are storing a range starting from index 0.
   CHECK_EQ(0, first_reg.index());
   int register_count =
@@ -2590,7 +2595,7 @@ void BytecodeGraphBuilder::VisitSuspendGenerator() {
   value_inputs[2] = offset;
   for (int i = 0; i < register_count; ++i) {
     value_inputs[3 + i] =
-        environment()->LookupRegister(interpreter::Register(i));
+        environment()->LookupRegister(interpreter::AsmRegister(i));
   }
 
   MakeNode(javascript()->GeneratorStore(register_count), value_input_count,
@@ -2610,7 +2615,8 @@ void BytecodeGraphBuilder::VisitRestoreGeneratorState() {
 void BytecodeGraphBuilder::VisitRestoreGeneratorRegisters() {
   Node* generator =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
-  interpreter::Register first_reg = bytecode_iterator().GetRegisterOperand(1);
+  interpreter::AsmRegister first_reg =
+      bytecode_iterator().GetRegisterOperand(1);
   // We assume we are restoring registers starting fromm index 0.
   CHECK_EQ(0, first_reg.index());
   int register_count =
@@ -2620,7 +2626,7 @@ void BytecodeGraphBuilder::VisitRestoreGeneratorRegisters() {
   // InterpreterAssembler::ExportRegisterFile.
   for (int i = 0; i < register_count; ++i) {
     Node* value = NewNode(javascript()->GeneratorRestoreRegister(i), generator);
-    environment()->BindRegister(interpreter::Register(i), value);
+    environment()->BindRegister(interpreter::AsmRegister(i), value);
   }
 }
 
@@ -3028,7 +3034,7 @@ Node* BytecodeGraphBuilder::MakeNode(const Operator* op, int value_input_count,
     if (!result->op()->HasProperty(Operator::kNoThrow) && inside_handler) {
       int handler_offset = exception_handlers_.top().handler_offset_;
       int context_index = exception_handlers_.top().context_register_;
-      interpreter::Register context_register(context_index);
+      interpreter::AsmRegister context_register(context_index);
       Environment* success_env = environment()->Copy();
       const Operator* op = common()->IfException();
       Node* effect = environment()->GetEffectDependency();

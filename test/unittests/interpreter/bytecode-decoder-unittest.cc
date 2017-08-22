@@ -50,8 +50,8 @@ TEST(BytecodeDecoder, DecodeBytecodeAndOperands) {
        5,
        0,
        "   CallRuntime [IsDate], r0-r0"},
-      {{B(Ldar),
-        static_cast<uint8_t>(Register::FromParameterIndex(2, 3).ToOperand())},
+      {{B(Ldar), static_cast<uint8_t>(
+                     AsmRegister::FromParameterIndex(2, 3).ToOperand())},
        2,
        3,
        "            Ldar a1"},

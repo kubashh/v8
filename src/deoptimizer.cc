@@ -657,7 +657,7 @@ void Deoptimizer::DoComputeOutputFrames() {
     // Read caller's PC, caller's FP and caller's constant pool values
     // from input frame. Compute caller's frame top address.
 
-    Register fp_reg = JavaScriptFrame::fp_register();
+    AsmRegister fp_reg = JavaScriptFrame::fp_register();
     stack_fp_ = input_->GetRegister(fp_reg.code());
 
     caller_frame_top_ = stack_fp_ + ComputeInputFrameAboveFpFixedSize();
@@ -885,7 +885,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
   intptr_t fp_value = top_address + output_offset;
   output_frame->SetFp(fp_value);
   if (is_topmost) {
-    Register fp_reg = InterpretedFrame::fp_register();
+    AsmRegister fp_reg = InterpretedFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
   }
   DebugPrintOutputSlot(value, frame_index, output_offset, "caller's fp\n");
@@ -1021,7 +1021,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
         reinterpret_cast<intptr_t>(dispatch_builtin->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
     if (is_topmost) {
-      Register constant_pool_reg =
+      AsmRegister constant_pool_reg =
           InterpretedFrame::constant_pool_pointer_register();
       output_frame->SetRegister(constant_pool_reg.code(), constant_pool_value);
     }
@@ -1032,7 +1032,7 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
   // safety we use Smi(0) instead of the potential {arguments_marker} here.
   if (is_topmost) {
     intptr_t context_value = reinterpret_cast<intptr_t>(Smi::kZero);
-    Register context_reg = JavaScriptFrame::context_register();
+    AsmRegister context_reg = JavaScriptFrame::context_register();
     output_frame->SetRegister(context_reg.code(), context_value);
     // Set the continuation for the topmost frame.
     Code* continuation = builtins->builtin(Builtins::kNotifyDeoptimized);
@@ -1251,7 +1251,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   intptr_t fp_value = top_address + output_offset;
   output_frame->SetFp(fp_value);
   if (is_topmost) {
-    Register fp_reg = JavaScriptFrame::fp_register();
+    AsmRegister fp_reg = JavaScriptFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
   }
   DebugPrintOutputSlot(value, frame_index, output_offset, "caller's fp\n");
@@ -1310,7 +1310,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   if (is_topmost) {
     // Ensure the result is restored back when we return to the stub.
     output_offset -= kPointerSize;
-    Register result_reg = kReturnRegister0;
+    AsmRegister result_reg = kReturnRegister0;
     value = input_->GetRegister(result_reg.code());
     output_frame->SetFrameSlot(output_offset, value);
     DebugPrintOutputSlot(value, frame_index, output_offset, "subcall result\n");
@@ -1337,7 +1337,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
         reinterpret_cast<intptr_t>(construct_stub->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
     if (is_topmost) {
-      Register constant_pool_reg =
+      AsmRegister constant_pool_reg =
           JavaScriptFrame::constant_pool_pointer_register();
       output_frame->SetRegister(constant_pool_reg.code(), fp_value);
     }
@@ -1348,7 +1348,7 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   // safety we use Smi(0) instead of the potential {arguments_marker} here.
   if (is_topmost) {
     intptr_t context_value = reinterpret_cast<intptr_t>(Smi::kZero);
-    Register context_reg = JavaScriptFrame::context_register();
+    AsmRegister context_reg = JavaScriptFrame::context_register();
     output_frame->SetRegister(context_reg.code(), context_value);
   }
 
@@ -1440,7 +1440,7 @@ void Deoptimizer::DoComputeAccessorStubFrame(TranslatedFrame* translated_frame,
   intptr_t fp_value = top_address + output_offset;
   output_frame->SetFp(fp_value);
   if (is_topmost) {
-    Register fp_reg = JavaScriptFrame::fp_register();
+    AsmRegister fp_reg = JavaScriptFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
   }
   DebugPrintOutputSlot(value, frame_index, output_offset, "caller's fp\n");
@@ -1494,7 +1494,7 @@ void Deoptimizer::DoComputeAccessorStubFrame(TranslatedFrame* translated_frame,
   if (should_preserve_result) {
     // Ensure the result is restored back when we return to the stub.
     output_offset -= kPointerSize;
-    Register result_reg = kReturnRegister0;
+    AsmRegister result_reg = kReturnRegister0;
     value = input_->GetRegister(result_reg.code());
     output_frame->SetFrameSlot(output_offset, value);
     DebugPrintOutputSlot(value, frame_index, output_offset,
@@ -1522,7 +1522,7 @@ void Deoptimizer::DoComputeAccessorStubFrame(TranslatedFrame* translated_frame,
         reinterpret_cast<intptr_t>(accessor_stub->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
     if (is_topmost) {
-      Register constant_pool_reg =
+      AsmRegister constant_pool_reg =
           JavaScriptFrame::constant_pool_pointer_register();
       output_frame->SetRegister(constant_pool_reg.code(), fp_value);
     }
@@ -1533,7 +1533,7 @@ void Deoptimizer::DoComputeAccessorStubFrame(TranslatedFrame* translated_frame,
   // safety we use Smi(0) instead of the potential {arguments_marker} here.
   if (is_topmost) {
     intptr_t context_value = reinterpret_cast<intptr_t>(Smi::kZero);
-    Register context_reg = JavaScriptFrame::context_register();
+    AsmRegister context_reg = JavaScriptFrame::context_register();
     output_frame->SetRegister(context_reg.code(), context_value);
   }
 
@@ -1684,7 +1684,7 @@ void Deoptimizer::DoComputeBuiltinContinuation(
 
   intptr_t value;
 
-  Register result_reg = kReturnRegister0;
+  AsmRegister result_reg = kReturnRegister0;
   if (must_handle_result) {
     value = input_->GetRegister(result_reg.code());
   } else {
@@ -1813,7 +1813,7 @@ void Deoptimizer::DoComputeBuiltinContinuation(
 
   // Ensure the frame pointer register points to the callee's frame. The builtin
   // will build its own frame once we continue to it.
-  Register fp_reg = JavaScriptFrame::fp_register();
+  AsmRegister fp_reg = JavaScriptFrame::fp_register();
   output_frame->SetRegister(fp_reg.code(), output_[frame_index - 1]->GetFp());
 
   Code* continue_to_builtin =
@@ -2015,7 +2015,7 @@ FrameDescription::FrameDescription(uint32_t frame_size, int parameter_count)
       context_(kZapUint32),
       constant_pool_(kZapUint32) {
   // Zap all the registers.
-  for (int r = 0; r < Register::kNumRegisters; r++) {
+  for (int r = 0; r < AsmRegister::kNumRegisters; r++) {
     // TODO(jbramley): It isn't safe to use kZapUint32 here. If the register
     // isn't used before the next safepoint, the GC will try to scan it as a
     // tagged value. kZapUint32 looks like a valid tagged pointer, but it isn't.
@@ -2143,26 +2143,22 @@ void Translation::DuplicateObject(int object_index) {
   buffer_->Add(object_index);
 }
 
-
-void Translation::StoreRegister(Register reg) {
+void Translation::StoreRegister(AsmRegister reg) {
   buffer_->Add(REGISTER);
   buffer_->Add(reg.code());
 }
 
-
-void Translation::StoreInt32Register(Register reg) {
+void Translation::StoreInt32Register(AsmRegister reg) {
   buffer_->Add(INT32_REGISTER);
   buffer_->Add(reg.code());
 }
 
-
-void Translation::StoreUint32Register(Register reg) {
+void Translation::StoreUint32Register(AsmRegister reg) {
   buffer_->Add(UINT32_REGISTER);
   buffer_->Add(reg.code());
 }
 
-
-void Translation::StoreBoolRegister(Register reg) {
+void Translation::StoreBoolRegister(AsmRegister reg) {
   buffer_->Add(BOOL_REGISTER);
   buffer_->Add(reg.code());
 }

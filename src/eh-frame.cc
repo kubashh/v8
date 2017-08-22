@@ -22,7 +22,7 @@ void EhFrameWriter::WriteReturnAddressRegisterCode() { UNIMPLEMENTED(); }
 
 void EhFrameWriter::WriteInitialStateInCie() { UNIMPLEMENTED(); }
 
-int EhFrameWriter::RegisterToDwarfCode(Register) {
+int EhFrameWriter::RegisterToDwarfCode(AsmRegister) {
   UNIMPLEMENTED();
   return -1;
 }
@@ -281,7 +281,7 @@ void EhFrameWriter::SetBaseAddressOffset(int base_offset) {
   base_offset_ = base_offset;
 }
 
-void EhFrameWriter::SetBaseAddressRegister(Register base_register) {
+void EhFrameWriter::SetBaseAddressRegister(AsmRegister base_register) {
   DCHECK(writer_state_ == InternalState::kInitialized);
   int code = RegisterToDwarfCode(base_register);
   WriteOpcode(EhFrameConstants::DwarfOpcodes::kDefCfaRegister);
@@ -289,7 +289,7 @@ void EhFrameWriter::SetBaseAddressRegister(Register base_register) {
   base_register_ = base_register;
 }
 
-void EhFrameWriter::SetBaseAddressRegisterAndOffset(Register base_register,
+void EhFrameWriter::SetBaseAddressRegisterAndOffset(AsmRegister base_register,
                                                     int base_offset) {
   DCHECK(writer_state_ == InternalState::kInitialized);
   DCHECK_GE(base_offset, 0);
@@ -318,13 +318,13 @@ void EhFrameWriter::RecordRegisterSavedToStack(int register_code, int offset) {
   }
 }
 
-void EhFrameWriter::RecordRegisterNotModified(Register name) {
+void EhFrameWriter::RecordRegisterNotModified(AsmRegister name) {
   DCHECK(writer_state_ == InternalState::kInitialized);
   WriteOpcode(EhFrameConstants::DwarfOpcodes::kSameValue);
   WriteULeb128(RegisterToDwarfCode(name));
 }
 
-void EhFrameWriter::RecordRegisterFollowsInitialRule(Register name) {
+void EhFrameWriter::RecordRegisterFollowsInitialRule(AsmRegister name) {
   DCHECK(writer_state_ == InternalState::kInitialized);
   int code = RegisterToDwarfCode(name);
   DCHECK_LE(code, EhFrameConstants::kFollowInitialRuleMask);

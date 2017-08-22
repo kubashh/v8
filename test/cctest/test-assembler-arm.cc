@@ -3983,7 +3983,7 @@ TEST(use_scratch_register_scope) {
     UseScratchRegisterScope temps(&assm);
     CHECK_EQ(*assm.GetScratchRegisterList(), ip.bit());
 
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     CHECK_EQ(scratch.code(), ip.code());
     CHECK_EQ(*assm.GetScratchRegisterList(), 0);
   }

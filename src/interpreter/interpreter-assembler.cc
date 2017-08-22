@@ -59,7 +59,7 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
   // Save the bytecode offset immediately if bytecode will make a call along the
   // critical path.
   if (Bytecodes::MakesCallAlongCriticalPath(bytecode)) {
-    StoreAndTagRegister(BytecodeOffset(), Register::bytecode_offset());
+    StoreAndTagRegister(BytecodeOffset(), AsmRegister::bytecode_offset());
   }
 }
 
@@ -86,7 +86,7 @@ Node* InterpreterAssembler::BytecodeOffset() {
   if (Bytecodes::MakesCallAlongCriticalPath(bytecode_) && made_call_ &&
       (bytecode_offset_.value() ==
        Parameter(InterpreterDispatchDescriptor::kBytecodeOffset))) {
-    bytecode_offset_.Bind(LoadAndUntagRegister(Register::bytecode_offset()));
+    bytecode_offset_.Bind(LoadAndUntagRegister(AsmRegister::bytecode_offset()));
   }
   return bytecode_offset_.value();
 }
@@ -95,7 +95,7 @@ Node* InterpreterAssembler::BytecodeArrayTaggedPointer() {
   // Force a re-load of the bytecode array after every call in case the debugger
   // has been activated.
   if (!bytecode_array_valid_) {
-    bytecode_array_.Bind(LoadRegister(Register::bytecode_array()));
+    bytecode_array_.Bind(LoadRegister(AsmRegister::bytecode_array()));
     bytecode_array_valid_ = true;
   }
   return bytecode_array_.value();
@@ -128,11 +128,11 @@ void InterpreterAssembler::SetAccumulator(Node* value) {
 }
 
 Node* InterpreterAssembler::GetContext() {
-  return LoadRegister(Register::current_context());
+  return LoadRegister(AsmRegister::current_context());
 }
 
 void InterpreterAssembler::SetContext(Node* value) {
-  StoreRegister(value, Register::current_context());
+  StoreRegister(value, AsmRegister::current_context());
 }
 
 Node* InterpreterAssembler::GetContextAtDepth(Node* context, Node* depth) {
@@ -209,7 +209,7 @@ Node* InterpreterAssembler::RegisterFrameOffset(Node* index) {
   return TimesPointerSize(index);
 }
 
-Node* InterpreterAssembler::LoadRegister(Register reg) {
+Node* InterpreterAssembler::LoadRegister(AsmRegister reg) {
   return Load(MachineType::AnyTagged(), GetInterpretedFramePointer(),
               IntPtrConstant(reg.ToOperand() << kPointerSizeLog2));
 }
@@ -219,12 +219,12 @@ Node* InterpreterAssembler::LoadRegister(Node* reg_index) {
               RegisterFrameOffset(reg_index));
 }
 
-Node* InterpreterAssembler::LoadAndUntagRegister(Register reg) {
+Node* InterpreterAssembler::LoadAndUntagRegister(AsmRegister reg) {
   return LoadAndUntagSmi(GetInterpretedFramePointer(), reg.ToOperand()
                                                            << kPointerSizeLog2);
 }
 
-Node* InterpreterAssembler::StoreRegister(Node* value, Register reg) {
+Node* InterpreterAssembler::StoreRegister(Node* value, AsmRegister reg) {
   return StoreNoWriteBarrier(
       MachineRepresentation::kTagged, GetInterpretedFramePointer(),
       IntPtrConstant(reg.ToOperand() << kPointerSizeLog2), value);
@@ -237,13 +237,13 @@ Node* InterpreterAssembler::StoreRegister(Node* value, Node* reg_index) {
 }
 
 Node* InterpreterAssembler::StoreAndTagRegister(compiler::Node* value,
-                                                Register reg) {
+                                                AsmRegister reg) {
   int offset = reg.ToOperand() << kPointerSizeLog2;
   return StoreAndTagSmi(GetInterpretedFramePointer(), offset, value);
 }
 
 Node* InterpreterAssembler::NextRegister(Node* reg_index) {
-  // Register indexes are negative, so the next index is minus one.
+  // AsmRegister indexes are negative, so the next index is minus one.
   return IntPtrAdd(reg_index, IntPtrConstant(-1));
 }
 
@@ -516,7 +516,7 @@ Node* InterpreterAssembler::LoadAndUntagConstantPoolEntry(Node* index) {
 }
 
 Node* InterpreterAssembler::LoadFeedbackVector() {
-  Node* function = LoadRegister(Register::function_closure());
+  Node* function = LoadRegister(AsmRegister::function_closure());
   Node* cell = LoadObjectField(function, JSFunction::kFeedbackVectorOffset);
   Node* vector = LoadObjectField(cell, Cell::kValueOffset);
   return vector;
@@ -529,7 +529,7 @@ void InterpreterAssembler::CallPrologue() {
     // there are multiple calls in the bytecode handler, you need to spill
     // before each of them, unless SaveBytecodeOffset has explicitly been called
     // in a path that dominates _all_ of those calls (which we don't track).
-    StoreAndTagRegister(BytecodeOffset(), Register::bytecode_offset());
+    StoreAndTagRegister(BytecodeOffset(), AsmRegister::bytecode_offset());
   }
 
   if (FLAG_debug_code && !disable_stack_check_across_call_) {
@@ -1389,7 +1389,8 @@ Node* InterpreterAssembler::ExportRegisterFile(Node* array,
     Node* index = var_index.value();
     GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
 
-    Node* reg_index = IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
+    Node* reg_index =
+        IntPtrSub(IntPtrConstant(AsmRegister(0).ToOperand()), index);
     Node* value = LoadRegister(reg_index);
 
     StoreFixedArrayElement(array, index, value);
@@ -1422,7 +1423,8 @@ Node* InterpreterAssembler::ImportRegisterFile(Node* array,
 
     Node* value = LoadFixedArrayElement(array, index);
 
-    Node* reg_index = IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
+    Node* reg_index =
+        IntPtrSub(IntPtrConstant(AsmRegister(0).ToOperand()), index);
     StoreRegister(value, reg_index);
 
     StoreFixedArrayElement(array, index, StaleRegisterConstant());

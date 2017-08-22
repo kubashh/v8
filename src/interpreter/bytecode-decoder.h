@@ -18,9 +18,9 @@ namespace interpreter {
 class V8_EXPORT_PRIVATE BytecodeDecoder final {
  public:
   // Decodes a register operand in a byte array.
-  static Register DecodeRegisterOperand(const uint8_t* operand_start,
-                                        OperandType operand_type,
-                                        OperandScale operand_scale);
+  static AsmRegister DecodeRegisterOperand(const uint8_t* operand_start,
+                                           OperandType operand_type,
+                                           OperandScale operand_scale);
 
   // Decodes a register list operand in a byte array.
   static RegisterList DecodeRegisterListOperand(const uint8_t* operand_start,

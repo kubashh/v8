@@ -1085,7 +1085,7 @@ bool RegExpMacroAssemblerMIPS::CanReadUnaligned() {
 
 // Private methods:
 
-void RegExpMacroAssemblerMIPS::CallCheckStackGuardState(Register scratch) {
+void RegExpMacroAssemblerMIPS::CallCheckStackGuardState(AsmRegister scratch) {
   int stack_alignment = base::OS::ActivationFrameAlignment();
 
   // Align the stack pointer and save the original sp value on the stack.
@@ -1187,10 +1187,8 @@ void RegExpMacroAssemblerMIPS::CheckPosition(int cp_offset,
   }
 }
 
-
-void RegExpMacroAssemblerMIPS::BranchOrBacktrack(Label* to,
-                                                 Condition condition,
-                                                 Register rs,
+void RegExpMacroAssemblerMIPS::BranchOrBacktrack(Label* to, Condition condition,
+                                                 AsmRegister rs,
                                                  const Operand& rt) {
   if (condition == al) {  // Unconditional.
     if (to == NULL) {
@@ -1207,11 +1205,8 @@ void RegExpMacroAssemblerMIPS::BranchOrBacktrack(Label* to,
   __ Branch(to, condition, rs, rt);
 }
 
-
-void RegExpMacroAssemblerMIPS::SafeCall(Label* to,
-                                        Condition cond,
-                                        Register rs,
-                                        const Operand& rt) {
+void RegExpMacroAssemblerMIPS::SafeCall(Label* to, Condition cond,
+                                        AsmRegister rs, const Operand& rt) {
   __ BranchAndLink(to, cond, rs, rt);
 }
 
@@ -1229,8 +1224,7 @@ void RegExpMacroAssemblerMIPS::SafeCallTarget(Label* name) {
   __ push(ra);
 }
 
-
-void RegExpMacroAssemblerMIPS::Push(Register source) {
+void RegExpMacroAssemblerMIPS::Push(AsmRegister source) {
   DCHECK(!source.is(backtrack_stackpointer()));
   __ Addu(backtrack_stackpointer(),
           backtrack_stackpointer(),
@@ -1238,8 +1232,7 @@ void RegExpMacroAssemblerMIPS::Push(Register source) {
   __ sw(source, MemOperand(backtrack_stackpointer()));
 }
 
-
-void RegExpMacroAssemblerMIPS::Pop(Register target) {
+void RegExpMacroAssemblerMIPS::Pop(AsmRegister target) {
   DCHECK(!target.is(backtrack_stackpointer()));
   __ lw(target, MemOperand(backtrack_stackpointer()));
   __ Addu(backtrack_stackpointer(), backtrack_stackpointer(), kPointerSize);
@@ -1268,7 +1261,7 @@ void RegExpMacroAssemblerMIPS::CheckStackLimit() {
 
 void RegExpMacroAssemblerMIPS::LoadCurrentCharacterUnchecked(int cp_offset,
                                                              int characters) {
-  Register offset = current_input_offset();
+  AsmRegister offset = current_input_offset();
   if (cp_offset != 0) {
     // t7 is not being used to store the capture start index at this point.
     __ Addu(t7, current_input_offset(), Operand(cp_offset * char_size()));

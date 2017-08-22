@@ -83,7 +83,7 @@ void PatchInlinedSmiCode(Isolate* isolate, Address address,
   //   Branch <target>, ne, at, Operand(zero_reg)
   // and vice-versa to be disabled again.
   CodePatcher patcher(isolate, patch_address, 2);
-  Register reg = Register::from_code(Assembler::GetRs(instr_at_patch));
+  AsmRegister reg = AsmRegister::from_code(Assembler::GetRs(instr_at_patch));
   if (check == ENABLE_INLINED_SMI_CHECK) {
     DCHECK(Assembler::IsAndImmediate(instr_at_patch));
     DCHECK_EQ(0u, Assembler::GetImmediate16(instr_at_patch));

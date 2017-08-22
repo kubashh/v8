@@ -19,17 +19,17 @@ TEST(OperandConversion, Registers) {
   int step = register_count / 7;
   for (int i = 0; i < register_count; i += step) {
     if (i <= kMaxInt8) {
-      uint32_t operand0 = Register(i).ToOperand();
-      Register reg0 = Register::FromOperand(operand0);
+      uint32_t operand0 = AsmRegister(i).ToOperand();
+      AsmRegister reg0 = AsmRegister::FromOperand(operand0);
       CHECK_EQ(i, reg0.index());
     }
 
-    uint32_t operand1 = Register(i).ToOperand();
-    Register reg1 = Register::FromOperand(operand1);
+    uint32_t operand1 = AsmRegister(i).ToOperand();
+    AsmRegister reg1 = AsmRegister::FromOperand(operand1);
     CHECK_EQ(i, reg1.index());
 
-    uint32_t operand2 = Register(i).ToOperand();
-    Register reg2 = Register::FromOperand(operand2);
+    uint32_t operand2 = AsmRegister(i).ToOperand();
+    AsmRegister reg2 = AsmRegister::FromOperand(operand2);
     CHECK_EQ(i, reg2.index());
   }
 }
@@ -41,9 +41,9 @@ TEST(OperandConversion, Parameters) {
   for (size_t p = 0; p < count; p++) {
     int parameter_count = parameter_counts[p];
     for (int i = 0; i < parameter_count; i++) {
-      Register r = Register::FromParameterIndex(i, parameter_count);
+      AsmRegister r = AsmRegister::FromParameterIndex(i, parameter_count);
       uint32_t operand_value = r.ToOperand();
-      Register s = Register::FromOperand(operand_value);
+      AsmRegister s = AsmRegister::FromOperand(operand_value);
       CHECK_EQ(i, s.ToParameterIndex(parameter_count));
     }
   }
@@ -58,7 +58,7 @@ TEST(OperandConversion, RegistersParametersNoOverlap) {
   std::vector<uint8_t> operand_count(range);
 
   for (int i = 0; i < register_count; i += 1) {
-    Register r = Register(i);
+    AsmRegister r = AsmRegister(i);
     int32_t operand = r.ToOperand();
     uint8_t index = static_cast<uint8_t>(operand);
     CHECK_LT(index, operand_count.size());
@@ -67,7 +67,7 @@ TEST(OperandConversion, RegistersParametersNoOverlap) {
   }
 
   for (int i = 0; i < parameter_count; i += 1) {
-    Register r = Register::FromParameterIndex(i, parameter_count);
+    AsmRegister r = AsmRegister::FromParameterIndex(i, parameter_count);
     uint32_t operand = r.ToOperand();
     uint8_t index = static_cast<uint8_t>(operand);
     CHECK_LT(index, operand_count.size());

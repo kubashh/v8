@@ -198,14 +198,14 @@ class RegExpMacroAssemblerX64: public NativeRegExpMacroAssembler {
   Operand register_location(int register_index);
 
   // The register containing the current character after LoadCurrentCharacter.
-  inline Register current_character() { return rdx; }
+  inline AsmRegister current_character() { return rdx; }
 
   // The register containing the backtrack stack top. Provides a meaningful
   // name to the register.
-  inline Register backtrack_stackpointer() { return rcx; }
+  inline AsmRegister backtrack_stackpointer() { return rcx; }
 
   // The registers containing a self pointer to this code's Code object.
-  inline Register code_object_pointer() { return r8; }
+  inline AsmRegister code_object_pointer() { return r8; }
 
   // Byte size of chars in the string to match (decided by the Mode argument)
   inline int char_size() { return static_cast<int>(mode_); }
@@ -228,7 +228,7 @@ class RegExpMacroAssemblerX64: public NativeRegExpMacroAssembler {
 
   // Pushes the value of a register on the backtrack stack. Decrements the
   // stack pointer (rcx) by a word size and stores the register's value there.
-  inline void Push(Register source);
+  inline void Push(AsmRegister source);
 
   // Pushes a value on the backtrack stack. Decrements the stack pointer (rcx)
   // by a word size and stores the value there.
@@ -241,13 +241,13 @@ class RegExpMacroAssemblerX64: public NativeRegExpMacroAssembler {
 
   // Pops a value from the backtrack stack. Reads the word at the stack pointer
   // (rcx) and increments it by a word size.
-  inline void Pop(Register target);
+  inline void Pop(AsmRegister target);
 
   // Drops the top value from the backtrack stack without reading it.
   // Increments the stack pointer (rcx) by a word size.
   inline void Drop();
 
-  inline void ReadPositionFromRegister(Register dst, int reg);
+  inline void ReadPositionFromRegister(AsmRegister dst, int reg);
 
   Isolate* isolate() const { return masm_.isolate(); }
 
