@@ -22,6 +22,30 @@
       "revId": "6c4236800fdce84020b0192b0371cc53a2e8159c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a110955b_21185772",
+        "filename": "src/builtins/builtins-function-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-22T08:16:36Z",
+      "side": 1,
+      "message": "Yep, it defaults to UPDATE_WRITE_BARRIER.",
+      "parentUuid": "9fb815af_02b170f0",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 39
+      },
+      "revId": "6c4236800fdce84020b0192b0371cc53a2e8159c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
