@@ -13,46 +13,6 @@ namespace internal {
 
 const int kMaxKeyedPolymorphism = 4;
 
-
-class ICUtility : public AllStatic {
- public:
-  // Clear the inline cache to initial state.
-  static void Clear(Isolate* isolate, Address address, Address constant_pool);
-};
-
-
-class CompareICState {
- public:
-  // The type/state lattice is defined by the following inequations:
-  //   UNINITIALIZED < ...
-  //   ... < GENERIC
-  //   SMI < NUMBER
-  //   INTERNALIZED_STRING < STRING
-  //   INTERNALIZED_STRING < UNIQUE_NAME
-  //   KNOWN_RECEIVER < RECEIVER
-  enum State {
-    UNINITIALIZED,
-    BOOLEAN,
-    SMI,
-    NUMBER,
-    STRING,
-    INTERNALIZED_STRING,
-    UNIQUE_NAME,     // Symbol or InternalizedString
-    RECEIVER,        // JSReceiver
-    KNOWN_RECEIVER,  // JSReceiver with specific map (faster check)
-    GENERIC
-  };
-
-  static State NewInputState(State old_state, Handle<Object> value);
-
-  static const char* GetStateName(CompareICState::State state);
-
-  static State TargetState(Isolate* isolate, State old_state, State old_left,
-                           State old_right, Token::Value op,
-                           bool has_inlined_smi_code, Handle<Object> x,
-                           Handle<Object> y);
-};
-
 }  // namespace internal
 }  // namespace v8
 

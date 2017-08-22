@@ -46,9 +46,6 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable FrameDropperTrampoline(Isolate* isolate);
   static Callable HandleDebuggerStatement(Isolate* isolate);
 
-  static Callable CompareIC(Isolate* isolate, Token::Value op);
-  static Callable CompareNilIC(Isolate* isolate, NilValue nil_value);
-
   static Callable BinaryOperation(Isolate* isolate, Token::Value op);
 
   static Callable ApiGetter(Isolate* isolate);
