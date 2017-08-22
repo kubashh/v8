@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "205c5c27_e5a3e5ce",
+        "filename": "src/ic/ic-state.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done. Sounds good, moved it into the \"v8::internal::IC\" class.",
+      "parentUuid": "805f9034_41c338ad",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a90229f_c96ae207",
         "filename": "src/ic/ic.cc",
         "patchSetId": 1
@@ -63,6 +87,24 @@
       "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1e3f5fa_c1c04406",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a90229f_c96ae207",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "884dc514_c9d40e64",
+        "filename": "src/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bae770f9_de3e9b93",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a64a3fea_ad88171c",
         "filename": "src/log.h",
         "patchSetId": 1
@@ -97,6 +157,24 @@
       "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0ee074b_39e94c28",
+        "filename": "src/log.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a64a3fea_ad88171c",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "1ccf0719_5d4c52e7",
+        "filename": "tools/ic-explorer.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67d786fd_e57f51b2",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02019826_5a5168ff",
         "filename": "tools/ic-processor.js",
         "patchSetId": 1
@@ -131,6 +227,24 @@
       "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f03b6b1_cea7822e",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02019826_5a5168ff",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +265,24 @@
     },
     {
       "key": {
+        "uuid": "5c7e1f66_a156c5f4",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d62064_bbcbc82b",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d8a0030_df06c5cf",
         "filename": "tools/ic-processor.js",
         "patchSetId": 1
@@ -168,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "eb17bc37_0f1b6ca5",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d8a0030_df06c5cf",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83e26c8b_ece7fbb3",
         "filename": "tools/ic-processor.js",
         "patchSetId": 1
@@ -182,6 +332,24 @@
       "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a26558c_1c5f871c",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T14:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83e26c8b_ece7fbb3",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
