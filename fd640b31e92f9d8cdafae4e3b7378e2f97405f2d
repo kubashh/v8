@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc920ded_602c593a",
+        "filename": "test/mjsunit/regress/regress-6700.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-22T08:09:22Z",
+      "side": 1,
+      "message": "nit: could you write this number as hex, so that the shift is more understandable?",
+      "range": {
+        "startLine": 38,
+        "startChar": 28,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "fd640b31e92f9d8cdafae4e3b7378e2f97405f2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
