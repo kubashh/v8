@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92322555_edbe1395",
+        "filename": "src/ic/ic-state.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-22T12:11:39Z",
+      "side": 1,
+      "message": "This is the only declaration remaining in this file. Please advise on where to move it if you think we should delete this file.",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
