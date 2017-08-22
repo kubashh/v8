@@ -22,6 +22,166 @@
       "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "805f9034_41c338ad",
+        "filename": "src/ic/ic-state.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "All the usages are in ic.cc so think that ic.h is a good place.",
+      "parentUuid": "92322555_edbe1395",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a90229f_c96ae207",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Maybe just drop \"if (nexus)\" and \"else\" part in favor of\n  DCHECK_NOT_NULL(nexus);",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bae770f9_de3e9b93",
+        "filename": "src/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Can be removed.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a64a3fea_ad88171c",
+        "filename": "src/log.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "It is still necessary?",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67d786fd_e57f51b2",
+        "filename": "tools/ic-explorer.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Can be removed.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02019826_5a5168ff",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54d62064_bbcbc82b",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d8a0030_df06c5cf",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e26c8b_ece7fbb3",
+        "filename": "tools/ic-processor.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-22T12:28:41Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1d8f2e3a04b462c1c9feb78f2a4ece30977e3b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
