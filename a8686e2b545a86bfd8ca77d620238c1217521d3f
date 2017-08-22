@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59a34597_7602eb16",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-22T07:51:43Z",
+      "side": 1,
+      "message": "preciseCoverageDetailed",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ada98b8_46d66263",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-22T07:51:43Z",
+      "side": 1,
+      "message": "detailed.fromMaybe",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb0a680_a9dc0470",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-22T07:51:43Z",
+      "side": 1,
+      "message": "While we\u0027re here, could you remove this outdated TODO for me? Thanks :)",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
