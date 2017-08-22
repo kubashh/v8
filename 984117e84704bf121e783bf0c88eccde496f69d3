@@ -139,6 +139,24 @@
       "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7477c683_dfa784f1",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-22T05:38:40Z",
+      "side": 1,
+      "message": "Thanks, that lgtm (modulo capitalization of Adaptor).",
+      "parentUuid": "2c929d98_ccdcdf5b",
+      "revId": "984117e84704bf121e783bf0c88eccde496f69d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
