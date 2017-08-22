@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a22f0ce4_080c9d7e",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-22T08:45:00Z",
+      "side": 1,
+      "message": "Yep. Another one of these copypasta mistakes.",
+      "parentUuid": "59a34597_7602eb16",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ada98b8_46d66263",
         "filename": "src/inspector/v8-profiler-agent-impl.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-22T07:51:43Z",
       "side": 1,
       "message": "detailed.fromMaybe",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afe6204c_cca1db73",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-22T08:45:00Z",
+      "side": 1,
+      "message": "hehe. realized this mistake when I added tests.",
+      "parentUuid": "7ada98b8_46d66263",
       "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d549283b_3c256083",
+        "filename": "src/inspector/v8-profiler-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-22T08:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eb0a680_a9dc0470",
+      "revId": "a8686e2b545a86bfd8ca77d620238c1217521d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
