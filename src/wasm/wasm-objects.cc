@@ -330,19 +330,31 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
   if (old_pages > maximum_pages || pages > maximum_pages - old_pages) {
     return Handle<JSArrayBuffer>::null();
   }
+  size_t new_size =
+      static_cast<size_t>(old_pages + pages) * WasmModule::kPageSize;
 
   // TODO(gdeepti): Change the protection here instead of allocating a new
   // buffer before guard regions are turned on, see issue #5886.
   const bool enable_guard_regions = old_buffer.is_null()
                                         ? EnableGuardRegions()
                                         : old_buffer->has_guard_region();
-  size_t new_size =
-      static_cast<size_t>(old_pages + pages) * WasmModule::kPageSize;
-  Handle<JSArrayBuffer> new_buffer =
-      NewArrayBuffer(isolate, new_size, enable_guard_regions);
-  if (new_buffer.is_null()) return new_buffer;
-  Address new_mem_start = static_cast<Address>(new_buffer->backing_store());
-  memcpy(new_mem_start, old_mem_start, old_size);
+  Handle<JSArrayBuffer> new_buffer;
+  if (enable_guard_regions) {
+    isolate->array_buffer_allocator()->SetProtection(
+        old_mem_start + old_size, new_size - old_size,
+        v8::ArrayBuffer::Allocator::Protection::kReadWrite);
+    reinterpret_cast<v8::Isolate*>(isolate)
+        ->AdjustAmountOfExternalAllocatedMemory(new_size - old_size);
+    new_buffer = SetupArrayBuffer(
+        isolate, old_buffer->allocation_base(), old_buffer->allocation_length(),
+        old_buffer->backing_store(), new_size, old_buffer->is_external(),
+        old_buffer->has_guard_region());
+  } else {
+    new_buffer = NewArrayBuffer(isolate, new_size, enable_guard_regions);
+    if (new_buffer.is_null()) return new_buffer;
+    Address new_mem_start = static_cast<Address>(new_buffer->backing_store());
+    memcpy(new_mem_start, old_mem_start, old_size);
+  }
   return new_buffer;
 }
 
