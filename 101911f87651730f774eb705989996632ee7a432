@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12f71da3_d326347e",
+        "filename": "src/snapshot/serializer-common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-23T13:17:39Z",
+      "side": 1,
+      "message": "Nit: I prefer sizeof(value) since it makes bugs less likely if the type of value happens to change. Likewise at similar spots.",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "948b563f_9cb299fc",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-23T13:17:39Z",
+      "side": 1,
+      "message": "Let\u0027s keep this consistent with https://cs.chromium.org/chromium/src/v8/src/snapshot/snapshot.h?l\u003d100\u0026rcl\u003d20961d2635086f3c5bee27f2c72ccf0975003d96, which says kInt32Size.",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0cea100_1854340d",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-23T13:17:39Z",
+      "side": 1,
+      "message": "Likewise here.",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6ba736_691ad0f4",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-23T13:17:39Z",
+      "side": 1,
+      "message": "And here (this one could be a correctness bug). Actually, `rehashability` should be an int32_t, no? Otherwise we can end up with random garbage contents if sizeof(int32_t) !\u003d sizeof(int).\n\nI\u0027m beginning to wonder if the writes in Snapshot::CreateSnapshotBlob aren\u0027t potentially buggy on 64-bit platforms with different byte orders..",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
