@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9381b81e_a52025f0",
+        "filename": "src/objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3761,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-08-23T06:04:19Z",
+      "side": 0,
+      "message": "Does that mean we can remove all uses of ExtraICState? We still have a bunch of code stubs that for example stores Code::LOAD_IC as extra IC state. Is this no longer used? If yes, can we remove this?\n\nWe would need a new way to mark placeholder builtins in setup-builtins-internal.cc though, but we could introduce a new code kind for placeholders too.",
+      "range": {
+        "startLine": 3761,
+        "startChar": 22,
+        "endLine": 3761,
+        "endChar": 36
+      },
+      "revId": "313f8d3fcb71b66fcc3e3028bb87505c053e1f90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
