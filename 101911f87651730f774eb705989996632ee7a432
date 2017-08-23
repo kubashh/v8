@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8228524e_c48368f5",
+        "filename": "src/snapshot/serializer-common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-23T14:37:17Z",
+      "side": 1,
+      "message": "Fair enough",
+      "parentUuid": "12f71da3_d326347e",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "948b563f_9cb299fc",
         "filename": "src/snapshot/snapshot-common.cc",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "cdc319cd_8e1446cc",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-23T14:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "948b563f_9cb299fc",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0cea100_1854340d",
         "filename": "src/snapshot/snapshot-common.cc",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "101911f87651730f774eb705989996632ee7a432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "691d184b_c054466c",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-23T14:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0cea100_1854340d",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -85,6 +139,24 @@
       "revId": "101911f87651730f774eb705989996632ee7a432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d87544f8_32a54978",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-08-23T14:37:17Z",
+      "side": 1,
+      "message": "Done - all the reads and writes into/from the actual data used fixed-sized types",
+      "parentUuid": "f8e39311_5ad05b06",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
