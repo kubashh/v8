@@ -79,11 +79,12 @@ class Snapshot : public AllStatic {
 #endif  // DEBUG
 
  private:
-  static int ExtractNumContexts(const v8::StartupData* data);
+  static size_t ExtractNumContexts(const v8::StartupData* data);
+  static size_t ExtractContextOffset(const v8::StartupData* data, size_t index);
   static bool ExtractRehashability(const v8::StartupData* data);
   static Vector<const byte> ExtractStartupData(const v8::StartupData* data);
   static Vector<const byte> ExtractContextData(const v8::StartupData* data,
-                                               int index);
+                                               size_t index);
 
   // Snapshot blob layout:
   // [0] number of contexts N
@@ -102,11 +103,11 @@ class Snapshot : public AllStatic {
   static const int kFirstContextOffsetOffset =
       kRehashabilityOffset + kInt32Size;
 
-  static int StartupSnapshotOffset(int num_contexts) {
+  static size_t StartupSnapshotOffset(size_t num_contexts) {
     return kFirstContextOffsetOffset + num_contexts * kInt32Size;
   }
 
-  static int ContextSnapshotOffsetOffset(int index) {
+  static size_t ContextSnapshotOffsetOffset(size_t index) {
     return kFirstContextOffsetOffset + index * kInt32Size;
   }
 
