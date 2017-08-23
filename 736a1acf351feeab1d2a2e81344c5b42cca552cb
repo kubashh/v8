@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1e8457d_8ec5ddf0",
+        "filename": "src/wasm/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-23T17:32:44Z",
+      "side": 1,
+      "message": "I actually haven\u0027t done much work inside the \"wasm\" component and don\u0027t think I am ready to become an owner of that. I think my ownership should be limited to the \"asmjs\" component.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "736a1acf351feeab1d2a2e81344c5b42cca552cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
