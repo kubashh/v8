@@ -276,16 +276,16 @@ class SerializedData {
 
  protected:
   void SetHeaderValue(int offset, uint32_t value) {
-    memcpy(data_ + offset, &value, sizeof(value));
+    memcpy(data_ + offset, &value, kUInt32Size);
   }
 
   uint32_t GetHeaderValue(int offset) const {
     uint32_t value;
-    memcpy(&value, data_ + offset, sizeof(value));
+    memcpy(&value, data_ + offset, kUInt32Size);
     return value;
   }
 
-  void AllocateData(int size);
+  void AllocateData(size_t size);
 
   static uint32_t ComputeMagicNumber(Isolate* isolate) {
     return ComputeMagicNumber(ExternalReferenceTable::instance(isolate));
