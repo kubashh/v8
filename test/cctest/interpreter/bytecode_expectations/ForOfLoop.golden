@@ -1239,9 +1239,9 @@ snippet: "
   }
   f([1, 2, 3]);
 "
-frame size: 24
+frame size: 25
 parameter count: 2
-bytecode array length: 505
+bytecode array length: 508
 bytecodes: [
                 B(Ldar), R(2),
                 B(JumpIfUndefined), U8(25),
@@ -1299,7 +1299,7 @@ bytecodes: [
                 B(JumpIfFalse), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(5), U8(1),
                 B(LdaNamedProperty), R(5), U8(4), U8(8),
-                B(JumpIfToBooleanTrue), U8(72),
+                B(JumpIfToBooleanTrue), U8(75),
                 B(LdaNamedProperty), R(5), U8(5), U8(10),
                 B(Star), R(7),
                 B(LdaSmi), I8(2),
@@ -1307,10 +1307,12 @@ bytecodes: [
                 B(Mov), R(7), R(3),
   /*   26 E> */ B(StackCheck),
                 B(Mov), R(3), R(0),
-  /*   45 S> */ B(Mov), R(2), R(21),
+  /*   45 S> */ B(LdaFalse),
+                B(Star), R(24),
+                B(Mov), R(2), R(21),
                 B(Mov), R(0), R(22),
                 B(Mov), R(10), R(23),
-                B(CallJSRuntime), U8(%async_function_await_uncaught), R(21), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncFunctionAwait), R(21), U8(4),
                 B(SuspendGenerator), R(2), R(0), U8(21), U8(0),
   /*   54 S> */ B(Return),
                 B(RestoreGeneratorRegisters), R(2), R(0), U8(21),
@@ -1327,7 +1329,7 @@ bytecodes: [
                 B(ReThrow),
                 B(LdaZero),
                 B(Star), R(6),
-                B(JumpLoop), U8(118), I8(0),
+                B(JumpLoop), U8(121), I8(0),
                 B(Jump), U8(40),
                 B(Star), R(21),
                 B(Ldar), R(closure),
@@ -1466,7 +1468,7 @@ bytecodes: [
 constant pool: [
   Smi [85],
   SYMBOL_TYPE,
-  Smi [85],
+  Smi [88],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["next"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
@@ -1480,10 +1482,10 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [64, 460, 466],
-  [67, 415, 417],
-  [73, 260, 266],
-  [76, 220, 222],
-  [326, 336, 338],
+  [64, 463, 469],
+  [67, 418, 420],
+  [73, 263, 269],
+  [76, 223, 225],
+  [329, 339, 341],
 ]
 

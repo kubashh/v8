@@ -2626,7 +2626,7 @@ void BytecodeGenerator::VisitYield(Yield* expr) {
       builder()
           ->StoreAccumulatorInRegister(args[0])  // value
           .LoadFalse()
-          .StoreAccumulatorInRegister(args[1])   // done
+          .StoreAccumulatorInRegister(args[1])  // done
           .CallRuntime(Runtime::kInlineCreateIterResultObject, args);
     }
   }
@@ -2930,36 +2930,30 @@ void BytecodeGenerator::BuildAwait(int suspend_id) {
     // Await(operand) and suspend.
     RegisterAllocationScope register_scope(this);
 
-    int await_builtin_context_index;
     RegisterList args;
     if (IsAsyncGeneratorFunction(function_kind())) {
-      await_builtin_context_index =
-          catch_prediction() == HandlerTable::ASYNC_AWAIT
-              ? Context::ASYNC_GENERATOR_AWAIT_UNCAUGHT
-              : Context::ASYNC_GENERATOR_AWAIT_CAUGHT;
-      args = register_allocator()->NewRegisterList(2);
-      builder()
-          ->MoveRegister(generator_object(), args[0])
-          .StoreAccumulatorInRegister(args[1]);
-    } else {
-      await_builtin_context_index =
-          catch_prediction() == HandlerTable::ASYNC_AWAIT
-              ? Context::ASYNC_FUNCTION_AWAIT_UNCAUGHT_INDEX
-              : Context::ASYNC_FUNCTION_AWAIT_CAUGHT_INDEX;
       args = register_allocator()->NewRegisterList(3);
       builder()
-          ->MoveRegister(generator_object(), args[0])
-          .StoreAccumulatorInRegister(args[1]);
+          ->MoveRegister(generator_object(), args[0])  // generator
+          .StoreAccumulatorInRegister(args[1])         // value
+          .LoadBoolean(catch_prediction() == HandlerTable::CAUGHT)
+          .StoreAccumulatorInRegister(args[2])  // is_caught
+          .CallRuntime(Runtime::kInlineAsyncGeneratorAwait, args);
+    } else {
+      args = register_allocator()->NewRegisterList(4);
+      builder()
+          ->MoveRegister(generator_object(), args[0])  // generator
+          .StoreAccumulatorInRegister(args[1]);        // value
 
-      // AsyncFunction Await builtins require a 3rd parameter to hold the outer
-      // promise.
       Variable* var_promise = closure_scope()->promise_var();
       BuildVariableLoadForAccumulatorValue(var_promise, FeedbackSlot::Invalid(),
                                            HoleCheckMode::kElided);
-      builder()->StoreAccumulatorInRegister(args[2]);
+      builder()
+          ->StoreAccumulatorInRegister(args[2])  // outer_promise
+          .LoadBoolean(catch_prediction() == HandlerTable::CAUGHT)
+          .StoreAccumulatorInRegister(args[3])  // is_caught
+          .CallRuntime(Runtime::kInlineAsyncFunctionAwait, args);
     }
-
-    builder()->CallJSRuntime(await_builtin_context_index, args);
   }
 
   BuildSuspendPoint(suspend_id);

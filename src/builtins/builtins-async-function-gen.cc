@@ -26,18 +26,6 @@ class AsyncFunctionBuiltinsAssembler : public AsyncBuiltinsAssembler {
       JSGeneratorObject::ResumeMode resume_mode);
 };
 
-namespace {
-
-// Describe fields of Context associated with AsyncFunctionAwait resume
-// closures.
-// TODO(jgruber): Refactor to reuse code for upcoming async-generators.
-class AwaitContext {
- public:
-  enum Fields { kGeneratorSlot = Context::MIN_CONTEXT_SLOTS, kLength };
-};
-
-}  // anonymous namespace
-
 void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwaitResumeClosure(
     Node* context, Node* sent_value,
     JSGeneratorObject::ResumeMode resume_mode) {
@@ -97,16 +85,12 @@ TF_BUILTIN(AsyncFunctionAwaitResolveClosure, AsyncFunctionBuiltinsAssembler) {
 // The 'awaited' parameter is the value; the generator stands in
 // for the asyncContext, and .promise is the larger promise under
 // construction by the enclosing async function.
-void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
-    Node* const context, Node* const generator, Node* const awaited,
-    Node* const outer_promise, const bool is_predicted_as_caught) {
-  CSA_SLOW_ASSERT(this, HasInstanceType(generator, JS_GENERATOR_OBJECT_TYPE));
-  CSA_SLOW_ASSERT(this, HasInstanceType(outer_promise, JS_PROMISE_TYPE));
-
-  ContextInitializer init_closure_context = [&](Node* context) {
-    StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
-                                      generator);
-  };
+TF_BUILTIN(AsyncFunctionAwait, AsyncFunctionBuiltinsAssembler) {
+  Node* const generator = Parameter(Descriptor::kGenerator);
+  Node* const value = Parameter(Descriptor::kValue);
+  Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
+  Node* const is_caught = Parameter(Descriptor::kIsCaught);
+  Node* const context = Parameter(Descriptor::kContext);
 
   // TODO(jgruber): AsyncBuiltinsAssembler::Await currently does not reuse
   // the awaited promise if it is already a promise. Reuse is non-spec compliant
@@ -114,45 +98,13 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
   // performance boost.
   // TODO(jgruber): Use a faster specialized version of
   // InternalPerformPromiseThen.
-
-  Await(context, generator, awaited, outer_promise, AwaitContext::kLength,
-        init_closure_context, Context::ASYNC_FUNCTION_AWAIT_RESOLVE_SHARED_FUN,
-        Context::ASYNC_FUNCTION_AWAIT_REJECT_SHARED_FUN,
-        is_predicted_as_caught);
+  Await(context, generator, value, outer_promise, is_caught,
+        Context::ASYNC_FUNCTION_AWAIT_RESOLVE_SHARED_FUN,
+        Context::ASYNC_FUNCTION_AWAIT_REJECT_SHARED_FUN);
 
   // Return outer promise to avoid adding an load of the outer promise before
   // suspending in BytecodeGenerator.
   Return(outer_promise);
-}
-
-// Called by the parser from the desugaring of 'await' when catch
-// prediction indicates that there is a locally surrounding catch block.
-TF_BUILTIN(AsyncFunctionAwaitCaught, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 2);
-  Node* const generator = Parameter(Descriptor::kReceiver);
-  Node* const awaited = Parameter(Descriptor::kAwaited);
-  Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
-  Node* const context = Parameter(Descriptor::kContext);
-
-  static const bool kIsPredictedAsCaught = true;
-
-  AsyncFunctionAwait(context, generator, awaited, outer_promise,
-                     kIsPredictedAsCaught);
-}
-
-// Called by the parser from the desugaring of 'await' when catch
-// prediction indicates no locally surrounding catch block.
-TF_BUILTIN(AsyncFunctionAwaitUncaught, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 2);
-  Node* const generator = Parameter(Descriptor::kReceiver);
-  Node* const awaited = Parameter(Descriptor::kAwaited);
-  Node* const outer_promise = Parameter(Descriptor::kOuterPromise);
-  Node* const context = Parameter(Descriptor::kContext);
-
-  static const bool kIsPredictedAsCaught = false;
-
-  AsyncFunctionAwait(context, generator, awaited, outer_promise,
-                     kIsPredictedAsCaught);
 }
 
 TF_BUILTIN(AsyncFunctionPromiseCreate, AsyncFunctionBuiltinsAssembler) {
