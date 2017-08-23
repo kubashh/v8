@@ -57,10 +57,10 @@ const char* ExternalReferenceEncoder::NameOfAddress(Isolate* isolate,
       maybe_index.FromJust());
 }
 
-void SerializedData::AllocateData(int size) {
+void SerializedData::AllocateData(size_t size) {
   DCHECK(!owns_data_);
   data_ = NewArray<byte>(size);
-  size_ = size;
+  size_ = static_cast<int>(size);
   owns_data_ = true;
   DCHECK(IsAligned(reinterpret_cast<intptr_t>(data_), kPointerAlignment));
 }

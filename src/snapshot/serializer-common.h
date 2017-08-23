@@ -285,7 +285,7 @@ class SerializedData {
     return value;
   }
 
-  void AllocateData(int size);
+  void AllocateData(size_t size);
 
   static uint32_t ComputeMagicNumber(Isolate* isolate) {
     return ComputeMagicNumber(ExternalReferenceTable::instance(isolate));
