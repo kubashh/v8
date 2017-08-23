@@ -3550,6 +3550,7 @@ TEST(DeferredHandles) {
 
 TEST(IncrementalMarkingStepMakesBigProgressWithLargeObjects) {
   if (!FLAG_incremental_marking) return;
+  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   CompileRun("function f(n) {"
