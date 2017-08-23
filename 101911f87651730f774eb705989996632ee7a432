@@ -67,6 +67,24 @@
       "revId": "101911f87651730f774eb705989996632ee7a432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e39311_5ad05b06",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-23T13:35:25Z",
+      "side": 1,
+      "message": "Opened https://crbug.com/v8/6747",
+      "parentUuid": "1c6ba736_691ad0f4",
+      "revId": "101911f87651730f774eb705989996632ee7a432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
