@@ -46,6 +46,30 @@
       "revId": "313f8d3fcb71b66fcc3e3028bb87505c053e1f90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b7ee20f_54c06b1a",
+        "filename": "src/objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3761,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-23T07:42:48Z",
+      "side": 0,
+      "message": "Agreed. Lets do that in a separate CL and land this one as is.",
+      "parentUuid": "c2fcf3f2_1ac31e5d",
+      "range": {
+        "startLine": 3761,
+        "startChar": 22,
+        "endLine": 3761,
+        "endChar": 36
+      },
+      "revId": "313f8d3fcb71b66fcc3e3028bb87505c053e1f90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
