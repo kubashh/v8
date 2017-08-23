@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a943ed3a_bdc1eecf",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-23T15:56:49Z",
+      "side": 0,
+      "message": "I\u0027ve restored the comments.",
+      "parentUuid": "83f5ee9d_a4666653",
+      "revId": "8b29c3ef0c25b5c99706578f69fb5d1c5c33eb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62e5fbce_7b315210",
         "filename": "src/builtins/builtins-async-gen.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "8b29c3ef0c25b5c99706578f69fb5d1c5c33eb29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b87a65_ef57e437",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-08-23T15:56:49Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "62e5fbce_7b315210",
+      "revId": "8b29c3ef0c25b5c99706578f69fb5d1c5c33eb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
