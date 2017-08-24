@@ -99,6 +99,32 @@ static const Register saved_regs[] = {REG(eax), REG(ecx), REG(edx)};
 
 static const int kNumberOfSavedRegs = sizeof(saved_regs) / sizeof(Register);
 
+int TurboAssembler::PushCallerSavedReturnCount(SaveFPRegsMode fp_mode,
+                                               Register exclusion1,
+                                               Register exclusion2,
+                                               Register exclusion3) {
+  int count = 0;
+  for (int i = 0; i < kNumberOfSavedRegs; i++) {
+    Register reg = saved_regs[i];
+    if (!reg.is(exclusion1) && !reg.is(exclusion2) && !reg.is(exclusion3)) {
+      push(reg);
+      count++;
+    }
+  }
+
+  if (fp_mode == kSaveFPRegs) {
+    sub(esp, Immediate(kDoubleSize * (XMMRegister::kMaxNumRegisters - 1)));
+    // Save all XMM registers except XMM0.
+    for (int i = XMMRegister::kMaxNumRegisters - 1; i > 0; i--) {
+      XMMRegister reg = XMMRegister::from_code(i);
+      movsd(Operand(esp, (i - 1) * kDoubleSize), reg);
+    }
+    count += XMMRegister::kMaxNumRegisters - 1;
+  }
+
+  return count;
+}
+
 void TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode,
                                      Register exclusion1, Register exclusion2,
                                      Register exclusion3) {

@@ -362,6 +362,10 @@ class TurboAssembler : public Assembler {
   void MultiPush(RegList regs);
   void MultiPushFPU(RegList regs);
 
+  int PushCallerSavedReturnCount(SaveFPRegsMode fp_mode,
+                                 Register exclusion1 = no_reg,
+                                 Register exclusion2 = no_reg,
+                                 Register exclusion3 = no_reg);
   void PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1 = no_reg,
                        Register exclusion2 = no_reg,
                        Register exclusion3 = no_reg);

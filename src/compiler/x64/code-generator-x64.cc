@@ -944,7 +944,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArchSaveCallerRegisters: {
       // kReturnRegister0 should have been saved before entering the stub.
-      __ PushCallerSaved(kSaveFPRegs, kReturnRegister0);
+      int count = __ PushCallerSavedReturnCount(kSaveFPRegs, kReturnRegister0);
+      frame_access_state()->IncreaseSPDelta(count);
       break;
     }
     case kArchRestoreCallerRegisters: {

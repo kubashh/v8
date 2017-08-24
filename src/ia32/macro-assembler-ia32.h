@@ -299,6 +299,10 @@ class TurboAssembler : public Assembler {
   // These functions do not arrange the registers in any particular order so
   // they are not useful for calls that can cause a GC.  The caller can
   // exclude up to 3 registers that do not need to be saved and restored.
+  int PushCallerSavedReturnCount(SaveFPRegsMode fp_mode,
+                                 Register exclusion1 = no_reg,
+                                 Register exclusion2 = no_reg,
+                                 Register exclusion3 = no_reg);
   void PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1 = no_reg,
                        Register exclusion2 = no_reg,
                        Register exclusion3 = no_reg);

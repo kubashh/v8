@@ -575,6 +575,31 @@ static const Register saved_regs[] = {
 
 static const int kNumberOfSavedRegs = sizeof(saved_regs) / sizeof(Register);
 
+int TurboAssembler::PushCallerSavedReturnCount(SaveFPRegsMode fp_mode,
+                                               Register exclusion1,
+                                               Register exclusion2,
+                                               Register exclusion3) {
+  int count = 0;
+  for (int i = 0; i < kNumberOfSavedRegs; i++) {
+    Register reg = saved_regs[i];
+    if (!reg.is(exclusion1) && !reg.is(exclusion2) && !reg.is(exclusion3)) {
+      pushq(reg);
+      count++;
+    }
+  }
+
+  if (fp_mode == kSaveFPRegs) {
+    subp(rsp, Immediate(kDoubleSize * XMMRegister::kMaxNumRegisters));
+    for (int i = 0; i < XMMRegister::kMaxNumRegisters; i++) {
+      XMMRegister reg = XMMRegister::from_code(i);
+      Movsd(Operand(rsp, i * kDoubleSize), reg);
+    }
+    count += XMMRegister::kMaxNumRegisters;
+  }
+
+  return count;
+}
+
 void TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode,
                                      Register exclusion1, Register exclusion2,
                                      Register exclusion3) {
