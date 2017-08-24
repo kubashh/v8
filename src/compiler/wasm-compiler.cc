@@ -190,6 +190,10 @@ Node* WasmGraphBuilder::Int64Constant(int64_t value) {
   return jsgraph()->Int64Constant(value);
 }
 
+Node* WasmGraphBuilder::IntPtrConstant(intptr_t value) {
+  return jsgraph()->IntPtrConstant(value);
+}
+
 void WasmGraphBuilder::StackCheck(wasm::WasmCodePosition position,
                                   Node** effect, Node** control) {
   if (FLAG_wasm_no_stack_checks) return;
@@ -2811,28 +2815,60 @@ void WasmGraphBuilder::BuildWasmInterpreterEntry(
   }
 }
 
-Node* WasmGraphBuilder::MemBuffer(uint32_t offset) {
-  // Load mem_start from the memory_context location at runtime.
-  if (!mem_start_ptr_) {
+// This function is used by WasmFullDecoder to create a node that loads the
+// mem_size variable from the WasmContext. It should not be used directly by
+// the WasmGraphBuilder. The WasmGraphBuilder should directly use mem_size_,
+// which will always contain the correct node (stored in the SsaEnv).
+Node* WasmGraphBuilder::LoadMemSize() {
+  if (!mem_size_address_) {
     // In cctests, patching is not supported, in that case it is necessary to
     // emit the correct wasm_context_address in the first place.
     uintptr_t wasm_context_address = reinterpret_cast<uintptr_t>(
-        module_->instance ? module_->instance->wasm_context_address : nullptr);
-    mem_start_ptr_ = jsgraph()->RelocatableIntPtrConstant(
+        module_ && module_->instance ? module_->instance->wasm_context_address
+                                     : nullptr);
+    mem_size_address_ = jsgraph()->RelocatableIntPtrConstant(
+        static_cast<uintptr_t>(wasm_context_address +
+                               offsetof(WasmContext, mem_size)),
+        RelocInfo::WASM_CONTEXT_REFERENCE);
+  }
+
+  Node* mem_size = graph()->NewNode(
+      jsgraph()->machine()->Load(MachineType::Uint32()), mem_size_address_,
+      jsgraph()->Int32Constant(0), *effect_, *control_);
+  *effect_ = mem_size;
+  return mem_size;
+}
+
+// This function is used by WasmFullDecoder to create a node that loads the
+// mem_start variable from the WasmContext. It should not be used directly by
+// the WasmGraphBuilder. The WasmGraphBuilder should directly use mem_start_,
+// which will always contain the correct node (stored in the SsaEnv).
+Node* WasmGraphBuilder::LoadMemStart() {
+  if (!mem_start_address_) {
+    // In cctests, patching is not supported, in that case it is necessary to
+    // emit the correct wasm_context_address in the first place.
+    uintptr_t wasm_context_address = reinterpret_cast<uintptr_t>(
+        module_ && module_->instance ? module_->instance->wasm_context_address
+                                     : nullptr);
+    mem_start_address_ = jsgraph()->RelocatableIntPtrConstant(
         static_cast<uintptr_t>(wasm_context_address +
                                offsetof(WasmContext, mem_start)),
         RelocInfo::WASM_CONTEXT_REFERENCE);
   }
 
   Node* mem_buffer = graph()->NewNode(
-      jsgraph()->machine()->Load(MachineType::UintPtr()), mem_start_ptr_,
+      jsgraph()->machine()->Load(MachineType::UintPtr()), mem_start_address_,
       jsgraph()->Int32Constant(0), *effect_, *control_);
   *effect_ = mem_buffer;
+  return mem_buffer;
+}
 
-  if (offset == 0) return mem_buffer;
+Node* WasmGraphBuilder::MemBuffer(uint32_t offset) {
+  DCHECK_NOT_NULL(*mem_start_);
+  if (offset == 0) return *mem_start_;
 
   Node* mem_buffer_offset =
-      graph()->NewNode(jsgraph()->machine()->IntAdd(), mem_buffer,
+      graph()->NewNode(jsgraph()->machine()->IntAdd(), *mem_start_,
                        jsgraph()->IntPtrConstant(offset));
   return mem_buffer_offset;
 }
@@ -2840,30 +2876,10 @@ Node* WasmGraphBuilder::MemBuffer(uint32_t offset) {
 Node* WasmGraphBuilder::CurrentMemoryPages() {
   // CurrentMemoryPages can not be called from asm.js.
   DCHECK_EQ(wasm::kWasmOrigin, module_->module->origin());
-  SetNeedsStackCheck();
-  Node* call = BuildCallToRuntime(Runtime::kWasmMemorySize, nullptr, 0);
-  Node* result = BuildChangeSmiToInt32(call);
-  return result;
-}
-
-Node* WasmGraphBuilder::MemSize() {
-  // Load mem_size from the memory_context location at runtime.
-  if (!mem_size_ptr_) {
-    // In cctests, patching is not supported, in that case it is necessary to
-    // emit the correct wasm_context_address in the first place.
-    uintptr_t wasm_context_address = reinterpret_cast<uintptr_t>(
-        module_->instance ? module_->instance->wasm_context_address : nullptr);
-    mem_size_ptr_ = jsgraph()->RelocatableIntPtrConstant(
-        static_cast<uintptr_t>(wasm_context_address +
-                               offsetof(WasmContext, mem_size)),
-        RelocInfo::WASM_CONTEXT_REFERENCE);
-  }
-
-  Node* mem_size = graph()->NewNode(
-      jsgraph()->machine()->Load(MachineType::Uint32()), mem_size_ptr_,
-      jsgraph()->Int32Constant(0), *effect_, *control_);
-  *effect_ = mem_size;
-  return mem_size;
+  DCHECK_NOT_NULL(*mem_size_);
+  return graph()->NewNode(
+      jsgraph()->machine()->Uint32Div(), *mem_size_,
+      jsgraph()->Uint32Constant(wasm::WasmModule::kPageSize), *control_);
 }
 
 void WasmGraphBuilder::EnsureFunctionTableNodes() {
@@ -3007,11 +3023,11 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
                                       uint32_t offset,
                                       wasm::WasmCodePosition position) {
   if (FLAG_wasm_no_bounds_checks) return;
+  DCHECK_NOT_NULL(*mem_size_);
   uint32_t size =
       module_ && module_->instance ? module_->instance->mem_size : 0;
   byte memsize = wasm::WasmOpcodes::MemSize(memtype);
 
-  Node* mem_size_node = nullptr;
   size_t effective_size;
   if (size <= offset || size < (static_cast<uint64_t>(offset) + memsize)) {
     // Two checks are needed in the case where the offset is statically
@@ -3029,10 +3045,9 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
     }
     size_t effective_offset = (offset - 1) + memsize;
 
-    mem_size_node = MemSize();
     Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(),
                                   jsgraph()->IntPtrConstant(effective_offset),
-                                  mem_size_node);
+                                  *mem_size_);
     TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
     // For offset > effective size, this relies on check above to fail and
     // effective size can be negative, relies on wrap around.
@@ -3051,13 +3066,8 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
     }
   }
 
-  // Prevent double loading the MemSize.
-  if (!mem_size_node) {
-    mem_size_node = MemSize();
-  }
-
   Node* effective_size_node =
-      graph()->NewNode(jsgraph()->machine()->Int32Sub(), mem_size_node,
+      graph()->NewNode(jsgraph()->machine()->Int32Sub(), *mem_size_,
                        jsgraph()->Int32Constant(offset + memsize - 1));
 
   Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(), index,
@@ -3174,9 +3184,11 @@ Node* WasmGraphBuilder::StoreMem(MachineType memtype, Node* index,
 Node* WasmGraphBuilder::BuildAsmjsLoadMem(MachineType type, Node* index) {
   // TODO(turbofan): fold bounds checks for constant asm.js loads.
   // asm.js semantics use CheckedLoad (i.e. OOB reads return 0ish).
+  DCHECK_NOT_NULL(*mem_size_);
+  DCHECK_NOT_NULL(*mem_start_);
   const Operator* op = jsgraph()->machine()->CheckedLoad(type);
   Node* load =
-      graph()->NewNode(op, MemBuffer(0), index, MemSize(), *effect_, *control_);
+      graph()->NewNode(op, *mem_start_, index, *mem_size_, *effect_, *control_);
   *effect_ = load;
   return load;
 }
@@ -3185,9 +3197,11 @@ Node* WasmGraphBuilder::BuildAsmjsStoreMem(MachineType type, Node* index,
                                            Node* val) {
   // TODO(turbofan): fold bounds checks for constant asm.js stores.
   // asm.js semantics use CheckedStore (i.e. ignore OOB writes).
+  DCHECK_NOT_NULL(*mem_size_);
+  DCHECK_NOT_NULL(*mem_start_);
   const Operator* op =
       jsgraph()->machine()->CheckedStore(type.representation());
-  Node* store = graph()->NewNode(op, MemBuffer(0), index, MemSize(), val,
+  Node* store = graph()->NewNode(op, *mem_start_, index, *mem_size_, val,
                                  *effect_, *control_);
   *effect_ = store;
   return val;

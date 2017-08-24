@@ -399,21 +399,43 @@ TEST(WasmGetLocalsAndStack) {
   // entries + 3x<count, type>).
   SetBreakpoint(runner, runner.function_index(), 7, 7);
 
+  uint32_t mem_size = 0u;
+
+#if defined(V8_HOST_ARCH_32_BIT)
+  uint32_t mem_start = reinterpret_cast<uint32_t>(nullptr);
+#elif defined(V8_HOST_ARCH_64_BIT)
+  uint64_t mem_start = reinterpret_cast<uint64_t>(nullptr);
+#else
+#error Host architecture is neither 32-bit nor 64-bit.
+#endif
+
   CollectValuesBreakHandler break_handler(
       isolate,
       {
-          // params + locals          stack
-          {wasmVec(7, 0L, 0.f, 0.), wasmVec()},          // 0: i64.const[17]
-          {wasmVec(7, 0L, 0.f, 0.), wasmVec(17L)},       // 1: set_local[1]
-          {wasmVec(7, 17L, 0.f, 0.), wasmVec()},         // 2: get_local[0]
-          {wasmVec(7, 17L, 0.f, 0.), wasmVec(7)},        // 3: f32.convert_s
-          {wasmVec(7, 17L, 0.f, 0.), wasmVec(7.f)},      // 4: set_local[2]
-          {wasmVec(7, 17L, 7.f, 0.), wasmVec()},         // 5: get_local[1]
-          {wasmVec(7, 17L, 7.f, 0.), wasmVec(17L)},      // 6: f64.convert_s
-          {wasmVec(7, 17L, 7.f, 0.), wasmVec(17.)},      // 7: f64.const[2]
-          {wasmVec(7, 17L, 7.f, 0.), wasmVec(17., 2.)},  // 8: f64.div
-          {wasmVec(7, 17L, 7.f, 0.), wasmVec(8.5)},      // 9: set_local[3]
-          {wasmVec(7, 17L, 7.f, 8.5), wasmVec()},        // 10: end
+          // params + locals + context                      stack
+
+          // 0: i64.const[17]
+          {wasmVec(7, 0L, 0.f, 0., mem_size, mem_start), wasmVec()},
+          // 1: set_local[1]
+          {wasmVec(7, 0L, 0.f, 0., mem_size, mem_start), wasmVec(17L)},
+          // 2: get_local[0]
+          {wasmVec(7, 17L, 0.f, 0., mem_size, mem_start), wasmVec()},
+          // 3: f32.convert_s
+          {wasmVec(7, 17L, 0.f, 0., mem_size, mem_start), wasmVec(7)},
+          // 4: set_local[2]
+          {wasmVec(7, 17L, 0.f, 0., mem_size, mem_start), wasmVec(7.f)},
+          // 5: get_local[1]
+          {wasmVec(7, 17L, 7.f, 0., mem_size, mem_start), wasmVec()},
+          // 6: f64.convert_s
+          {wasmVec(7, 17L, 7.f, 0., mem_size, mem_start), wasmVec(17L)},
+          // 7: f64.const[2]
+          {wasmVec(7, 17L, 7.f, 0., mem_size, mem_start), wasmVec(17.)},
+          // 8: f64.div
+          {wasmVec(7, 17L, 7.f, 0., mem_size, mem_start), wasmVec(17., 2.)},
+          // 9: set_local[3]
+          {wasmVec(7, 17L, 7.f, 0., mem_size, mem_start), wasmVec(8.5)},
+          // 10: end
+          {wasmVec(7, 17L, 7.f, 8.5, mem_size, mem_start), wasmVec()},
       });
 
   Handle<Object> global(isolate->context()->global_object(), isolate);
