@@ -9167,6 +9167,7 @@ Handle<Map> Map::CopyReplaceDescriptors(
     }
   } else {
     result->InitializeDescriptors(*descriptors, *layout_descriptor);
+    map->deprecate();
   }
 #if V8_TRACE_MAPS
   if (FLAG_trace_maps &&
