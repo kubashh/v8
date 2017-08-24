@@ -325,35 +325,39 @@ void MemoryAllocator::TearDown() {
   code_range_ = nullptr;
 }
 
-class MemoryAllocator::Unmapper::UnmapFreeMemoryTask : public CancelableTask {
+class MemoryAllocator::Unmapper::UnmapFreeMemoryTask final
+    : public CancelableTask {
  public:
-  explicit UnmapFreeMemoryTask(Isolate* isolate, Unmapper* unmapper)
-      : CancelableTask(isolate), unmapper_(unmapper) {}
+  explicit UnmapFreeMemoryTask(Isolate* isolate, Unmapper* unmapper,
+                               Unmapper::FreeMode free_mode)
+      : CancelableTask(isolate), unmapper_(unmapper), free_mode_(free_mode) {}
 
  private:
-  void RunInternal() override {
-    unmapper_->PerformFreeMemoryOnQueuedChunks<FreeMode::kUncommitPooled>();
+  void RunInternal() final {
+    unmapper_->PerformFreeMemoryOnQueuedChunks(free_mode_);
     unmapper_->pending_unmapping_tasks_semaphore_.Signal();
   }
 
   Unmapper* const unmapper_;
+  const Unmapper::FreeMode free_mode_;
   DISALLOW_COPY_AND_ASSIGN(UnmapFreeMemoryTask);
 };
 
-void MemoryAllocator::Unmapper::FreeQueuedChunks() {
+void MemoryAllocator::Unmapper::FreeQueuedChunks(Unmapper::FreeMode free_mode) {
   ReconsiderDelayedChunks();
   if (heap_->use_tasks() && FLAG_concurrent_sweeping) {
     if (concurrent_unmapping_tasks_active_ >= kMaxUnmapperTasks) {
       // kMaxUnmapperTasks are already running. Avoid creating any more.
       return;
     }
-    UnmapFreeMemoryTask* task = new UnmapFreeMemoryTask(heap_->isolate(), this);
+    UnmapFreeMemoryTask* task =
+        new UnmapFreeMemoryTask(heap_->isolate(), this, free_mode);
     DCHECK_LT(concurrent_unmapping_tasks_active_, kMaxUnmapperTasks);
     task_ids_[concurrent_unmapping_tasks_active_++] = task->id();
     V8::GetCurrentPlatform()->CallOnBackgroundThread(
         task, v8::Platform::kShortRunningTask);
   } else {
-    PerformFreeMemoryOnQueuedChunks<FreeMode::kUncommitPooled>();
+    PerformFreeMemoryOnQueuedChunks(free_mode);
   }
 }
 
@@ -367,8 +371,8 @@ void MemoryAllocator::Unmapper::WaitUntilCompleted() {
   }
 }
 
-template <MemoryAllocator::Unmapper::FreeMode mode>
-void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedChunks() {
+void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedChunks(
+    MemoryAllocator::Unmapper::FreeMode mode) {
   MemoryChunk* chunk = nullptr;
   // Regular chunks.
   while ((chunk = GetMemoryChunkSafe<kRegular>()) != nullptr) {
@@ -394,7 +398,7 @@ void MemoryAllocator::Unmapper::TearDown() {
   CHECK_EQ(0, concurrent_unmapping_tasks_active_);
   ReconsiderDelayedChunks();
   CHECK(delayed_regular_chunks_.empty());
-  PerformFreeMemoryOnQueuedChunks<FreeMode::kReleasePooled>();
+  PerformFreeMemoryOnQueuedChunks(FreeMode::kReleasePooled);
   for (int i = 0; i < kNumberOfChunkQueues; i++) {
     DCHECK(chunks_[i].empty());
   }
@@ -2254,7 +2258,8 @@ bool SemiSpace::Uncommit() {
   anchor()->set_prev_page(anchor());
   AccountUncommitted(current_capacity_);
   committed_ = false;
-  heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
+  heap()->memory_allocator()->unmapper()->FreeQueuedChunks(
+      MemoryAllocator::Unmapper::kUncommitPooled);
   return true;
 }
 
@@ -2334,7 +2339,8 @@ bool SemiSpace::ShrinkTo(size_t new_capacity) {
       delta_pages--;
     }
     AccountUncommitted(delta);
-    heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
+    heap()->memory_allocator()->unmapper()->FreeQueuedChunks(
+        MemoryAllocator::Unmapper::kUncommitPooled);
   }
   current_capacity_ = new_capacity;
   return true;

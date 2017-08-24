@@ -58,7 +58,7 @@ TEST_F(SequentialUnmapperTest, UnmapOnTeardownAfterAlreadyFreeingPooled) {
   EXPECT_EQ(0, msync(start_address, page_size, MS_SYNC));
   allocator()->Free<MemoryAllocator::kPooledAndQueue>(page);
   EXPECT_EQ(0, msync(start_address, page_size, MS_SYNC));
-  unmapper()->FreeQueuedChunks();
+  unmapper()->FreeQueuedChunks(MemoryAllocator::Unmapper::kUncommitPooled);
   EXPECT_EQ(0, msync(start_address, page_size, MS_SYNC));
   unmapper()->TearDown();
   EXPECT_EQ(-1, msync(start_address, page_size, MS_SYNC));
@@ -81,6 +81,36 @@ TEST_F(SequentialUnmapperTest, UnmapOnTeardown) {
 }
 
 #endif  // __linux__
+
+TEST_F(SequentialUnmapperTest, ReleasePooledAfterUncommit) {
+  Page* page =
+      allocator()->AllocatePage(MemoryAllocator::PageAreaSize(OLD_SPACE),
+                                static_cast<PagedSpace*>(heap()->old_space()),
+                                Executability::NOT_EXECUTABLE);
+  EXPECT_NE(nullptr, page);
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+  allocator()->Free<MemoryAllocator::kPooledAndQueue>(page);
+  // Page is not yet pooled as it requires uncommitting.
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+  unmapper()->FreeQueuedChunks(MemoryAllocator::Unmapper::kUncommitPooled);
+  EXPECT_EQ(1u, unmapper()->pooled_pages());
+  unmapper()->FreeQueuedChunks(MemoryAllocator::Unmapper::kReleasePooled);
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+}
+
+TEST_F(SequentialUnmapperTest, ReleasePooled) {
+  Page* page =
+      allocator()->AllocatePage(MemoryAllocator::PageAreaSize(OLD_SPACE),
+                                static_cast<PagedSpace*>(heap()->old_space()),
+                                Executability::NOT_EXECUTABLE);
+  EXPECT_NE(nullptr, page);
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+  allocator()->Free<MemoryAllocator::kPooledAndQueue>(page);
+  // Page is not yet pooled as it requires uncommitting.
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+  unmapper()->FreeQueuedChunks(MemoryAllocator::Unmapper::kReleasePooled);
+  EXPECT_EQ(0u, unmapper()->pooled_pages());
+}
 
 }  // namespace internal
 }  // namespace v8
