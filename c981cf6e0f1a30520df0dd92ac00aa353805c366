@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1843d9cf_76fe39e0",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2017-08-24T04:49:55Z",
+      "side": 1,
+      "message": "r1 contains the target at this point and is not pushed to stack yet. So we load the entry point to r5 instead.",
+      "range": {
+        "startLine": 31,
+        "startChar": 9,
+        "endLine": 31,
+        "endChar": 11
+      },
+      "revId": "c981cf6e0f1a30520df0dd92ac00aa353805c366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
