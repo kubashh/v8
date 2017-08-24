@@ -771,8 +771,10 @@ void MarkCompactCollector::EnsureSweepingCompleted() {
   }
 #endif
 
-  if (heap()->memory_allocator()->unmapper()->has_delayed_chunks())
-    heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
+  if (heap()->memory_allocator()->unmapper()->has_delayed_chunks()) {
+    heap()->memory_allocator()->unmapper()->FreeQueuedChunks(
+        MemoryAllocator::Unmapper::kUncommitPooled);
+  }
 }
 
 bool MarkCompactCollector::Sweeper::AreSweeperTasksRunning() {
@@ -1077,6 +1079,14 @@ void MarkCompactCollector::Finish() {
   }
 
   heap_->incremental_marking()->ClearIdleMarkingDelayCounter();
+
+  // Give pages that are queued to be freed back to the OS. We free the chunks
+  // after all other phases since some of them still requires access to page
+  // headers, e.g., pointers updating.
+  heap()->memory_allocator()->unmapper()->FreeQueuedChunks(
+      heap()->ShouldReduceMemory()
+          ? MemoryAllocator::Unmapper::kReleasePooled
+          : MemoryAllocator::Unmapper::kUncommitPooled);
 }
 
 
@@ -2599,7 +2609,8 @@ void MinorMarkCompactCollector::Evacuate() {
   }
 
   // Give pages that are queued to be freed back to the OS.
-  heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
+  heap()->memory_allocator()->unmapper()->FreeQueuedChunks(
+      MemoryAllocator::Unmapper::kUncommitPooled);
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_EVACUATE_CLEAN_UP);
@@ -3911,12 +3922,6 @@ void MarkCompactCollector::Evacuate() {
     }
   }
 
-  // Give pages that are queued to be freed back to the OS. Note that filtering
-  // slots only handles old space (for unboxed doubles), and thus map space can
-  // still contain stale pointers. We only free the chunks after pointer updates
-  // to still have access to page headers.
-  heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
-
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_EVACUATE_CLEAN_UP);
 
@@ -4449,7 +4454,6 @@ void MarkCompactCollector::ReleaseEvacuationCandidates() {
   }
   old_space_evacuation_pages_.clear();
   compacting_ = false;
-  heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
 }
 
 int MarkCompactCollector::Sweeper::ParallelSweepSpace(AllocationSpace identity,

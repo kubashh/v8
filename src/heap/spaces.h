@@ -1157,6 +1157,11 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
    public:
     class UnmapFreeMemoryTask;
 
+    enum FreeMode {
+      kUncommitPooled,
+      kReleasePooled,
+    };
+
     Unmapper(Heap* heap, MemoryAllocator* allocator)
         : heap_(heap),
           allocator_(allocator),
@@ -1192,11 +1197,13 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
       return chunk;
     }
 
-    void FreeQueuedChunks();
+    void FreeQueuedChunks(FreeMode free_mode);
     void WaitUntilCompleted();
     void TearDown();
 
-    bool has_delayed_chunks() { return delayed_regular_chunks_.size() > 0; }
+    bool has_delayed_chunks() const {
+      return delayed_regular_chunks_.size() > 0;
+    }
 
    private:
     static const int kReservedQueueingSlots = 64;
@@ -1208,11 +1215,6 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
       kNonRegular,  // Large chunks and executable chunks.
       kPooled,      // Pooled chunks, already uncommited and ready for reuse.
       kNumberOfChunkQueues,
-    };
-
-    enum class FreeMode {
-      kUncommitPooled,
-      kReleasePooled,
     };
 
     template <ChunkQueueType type>
@@ -1236,8 +1238,7 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
     }
 
     void ReconsiderDelayedChunks();
-    template <FreeMode mode>
-    void PerformFreeMemoryOnQueuedChunks();
+    void PerformFreeMemoryOnQueuedChunks(FreeMode mode);
 
     Heap* const heap_;
     MemoryAllocator* const allocator_;
