@@ -305,26 +305,15 @@ const int kLastChunkTagBits = 1;
 const int kLastChunkTagMask = 1;
 const int kLastChunkTag = 1;
 
-void RelocInfo::update_wasm_memory_reference(
+void RelocInfo::update_wasm_context_reference(
     Isolate* isolate, Address old_base, Address new_base,
     ICacheFlushMode icache_flush_mode) {
-  DCHECK(IsWasmMemoryReference(rmode_));
-  Address updated_reference = new_base + (wasm_memory_reference() - old_base);
+  DCHECK(IsWasmContextReference(rmode_));
+  Address updated_reference = new_base + (wasm_context_reference() - old_base);
   // The reference is not checked here but at runtime. Validity of references
   // may change over time.
-  unchecked_update_wasm_memory_reference(isolate, updated_reference,
-                                         icache_flush_mode);
-}
-
-void RelocInfo::update_wasm_memory_size(Isolate* isolate, uint32_t old_size,
-                                        uint32_t new_size,
-                                        ICacheFlushMode icache_flush_mode) {
-  DCHECK(IsWasmMemorySizeReference(rmode_));
-  uint32_t current_size_reference = wasm_memory_size_reference();
-  uint32_t updated_size_reference =
-      new_size + (current_size_reference - old_size);
-  unchecked_update_wasm_size(isolate, updated_size_reference,
-                             icache_flush_mode);
+  unchecked_update_wasm_context_reference(isolate, updated_reference,
+                                          icache_flush_mode);
 }
 
 void RelocInfo::update_wasm_global_reference(
@@ -335,8 +324,8 @@ void RelocInfo::update_wasm_global_reference(
   DCHECK_LE(old_base, wasm_global_reference());
   updated_reference = new_base + (wasm_global_reference() - old_base);
   DCHECK_LE(new_base, updated_reference);
-  unchecked_update_wasm_memory_reference(isolate, updated_reference,
-                                         icache_flush_mode);
+  unchecked_update_wasm_context_reference(isolate, updated_reference,
+                                          icache_flush_mode);
 }
 
 void RelocInfo::update_wasm_function_table_size_reference(
@@ -692,10 +681,8 @@ const char* RelocInfo::RelocModeName(RelocInfo::Mode rmode) {
       return "debug break slot at tail call";
     case CODE_AGE_SEQUENCE:
       return "code age sequence";
-    case WASM_MEMORY_REFERENCE:
-      return "wasm memory reference";
-    case WASM_MEMORY_SIZE_REFERENCE:
-      return "wasm memory size reference";
+    case WASM_CONTEXT_REFERENCE:
+      return "wasm context reference";
     case WASM_GLOBAL_REFERENCE:
       return "wasm global value reference";
     case WASM_FUNCTION_TABLE_SIZE_REFERENCE:
@@ -790,8 +777,7 @@ void RelocInfo::Verify(Isolate* isolate) {
     case DEBUG_BREAK_SLOT_AT_RETURN:
     case DEBUG_BREAK_SLOT_AT_CALL:
     case DEBUG_BREAK_SLOT_AT_TAIL_CALL:
-    case WASM_MEMORY_REFERENCE:
-    case WASM_MEMORY_SIZE_REFERENCE:
+    case WASM_CONTEXT_REFERENCE:
     case WASM_GLOBAL_REFERENCE:
     case WASM_FUNCTION_TABLE_SIZE_REFERENCE:
     case WASM_PROTECTED_INSTRUCTION_LANDING:

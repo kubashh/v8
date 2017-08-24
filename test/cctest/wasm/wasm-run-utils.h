@@ -101,6 +101,7 @@ class TestingModule : public ModuleEnv {
     CHECK_NULL(instance->mem_start);
     CHECK_EQ(0, instance->mem_size);
     DCHECK(!instance_object_->has_memory_buffer());
+    DCHECK(!instance_object_->has_memory_object());
     module_.has_memory = true;
     bool enable_guard_regions = EnableGuardRegions() && module_.is_wasm();
     uint32_t alloc_size =
@@ -113,6 +114,16 @@ class TestingModule : public ModuleEnv {
     CHECK(size == 0 || instance->mem_start);
     memset(instance->mem_start, 0, size);
     instance->mem_size = size;
+    Handle<WasmMemoryObject> memory_object = WasmMemoryObject::New(
+        isolate_, new_buffer,
+        (module_.max_mem_pages != 0) ? module_.max_mem_pages : -1);
+    instance_object_->set_memory_object(*memory_object);
+    WasmMemoryObject::AddInstance(isolate_, memory_object, instance_object_);
+    instance->wasm_context_address =
+        reinterpret_cast<byte*>(instance_object_->wasm_context());
+    // Update the WasmContext.
+    instance_object_->wasm_context()->mem_start = instance->mem_start;
+    instance_object_->wasm_context()->mem_size = instance->mem_size;
     return instance->mem_start;
   }
 
@@ -186,6 +197,9 @@ class TestingModule : public ModuleEnv {
 
   void SetMaxMemPages(uint32_t max_mem_pages) {
     module_.max_mem_pages = max_mem_pages;
+    if (instance_object_->has_memory_object()) {
+      instance_object_->memory_object()->set_maximum_pages(max_mem_pages);
+    }
   }
 
   uint32_t AddFunction(FunctionSig* sig, Handle<Code> code, const char* name) {

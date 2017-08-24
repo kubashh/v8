@@ -2812,20 +2812,29 @@ void WasmGraphBuilder::BuildWasmInterpreterEntry(
 }
 
 Node* WasmGraphBuilder::MemBuffer(uint32_t offset) {
-  DCHECK_NOT_NULL(module_);
-  uintptr_t mem_start = reinterpret_cast<uintptr_t>(
-      module_->instance ? module_->instance->mem_start : nullptr);
-  if (offset == 0) {
-    if (!mem_buffer_) {
-      mem_buffer_ = jsgraph()->RelocatableIntPtrConstant(
-          mem_start, RelocInfo::WASM_MEMORY_REFERENCE);
-    }
-    return mem_buffer_;
-  } else {
-    return jsgraph()->RelocatableIntPtrConstant(
-        static_cast<uintptr_t>(mem_start + offset),
-        RelocInfo::WASM_MEMORY_REFERENCE);
+  // Load mem_start from the memory_context location at runtime.
+  if (!mem_start_ptr_) {
+    // In cctests, patching is not supported, in that case it is necessary to
+    // emit the correct wasm_context_address in the first place.
+    uintptr_t wasm_context_address = reinterpret_cast<uintptr_t>(
+        module_->instance ? module_->instance->wasm_context_address : nullptr);
+    mem_start_ptr_ = jsgraph()->RelocatableIntPtrConstant(
+        static_cast<uintptr_t>(wasm_context_address +
+                               offsetof(WasmContext, mem_start)),
+        RelocInfo::WASM_CONTEXT_REFERENCE);
   }
+
+  Node* mem_buffer = graph()->NewNode(
+      jsgraph()->machine()->Load(MachineType::UintPtr()), mem_start_ptr_,
+      jsgraph()->Int32Constant(0), *effect_, *control_);
+  *effect_ = mem_buffer;
+
+  if (offset == 0) return mem_buffer;
+
+  Node* mem_buffer_offset =
+      graph()->NewNode(jsgraph()->machine()->IntAdd(), mem_buffer,
+                       jsgraph()->IntPtrConstant(offset));
+  return mem_buffer_offset;
 }
 
 Node* WasmGraphBuilder::CurrentMemoryPages() {
@@ -2838,12 +2847,23 @@ Node* WasmGraphBuilder::CurrentMemoryPages() {
 }
 
 Node* WasmGraphBuilder::MemSize() {
-  DCHECK_NOT_NULL(module_);
-  if (mem_size_) return mem_size_;
-  uint32_t size = module_->instance ? module_->instance->mem_size : 0;
-  mem_size_ = jsgraph()->RelocatableInt32Constant(
-      size, RelocInfo::WASM_MEMORY_SIZE_REFERENCE);
-  return mem_size_;
+  // Load mem_size from the memory_context location at runtime.
+  if (!mem_size_ptr_) {
+    // In cctests, patching is not supported, in that case it is necessary to
+    // emit the correct wasm_context_address in the first place.
+    uintptr_t wasm_context_address = reinterpret_cast<uintptr_t>(
+        module_->instance ? module_->instance->wasm_context_address : nullptr);
+    mem_size_ptr_ = jsgraph()->RelocatableIntPtrConstant(
+        static_cast<uintptr_t>(wasm_context_address +
+                               offsetof(WasmContext, mem_size)),
+        RelocInfo::WASM_CONTEXT_REFERENCE);
+  }
+
+  Node* mem_size = graph()->NewNode(
+      jsgraph()->machine()->Load(MachineType::Uint32()), mem_size_ptr_,
+      jsgraph()->Int32Constant(0), *effect_, *control_);
+  *effect_ = mem_size;
+  return mem_size;
 }
 
 void WasmGraphBuilder::EnsureFunctionTableNodes() {
@@ -2991,6 +3011,7 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
       module_ && module_->instance ? module_->instance->mem_size : 0;
   byte memsize = wasm::WasmOpcodes::MemSize(memtype);
 
+  Node* mem_size_node = nullptr;
   size_t effective_size;
   if (size <= offset || size < (static_cast<uint64_t>(offset) + memsize)) {
     // Two checks are needed in the case where the offset is statically
@@ -3008,11 +3029,10 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
     }
     size_t effective_offset = (offset - 1) + memsize;
 
+    mem_size_node = MemSize();
     Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(),
                                   jsgraph()->IntPtrConstant(effective_offset),
-                                  jsgraph()->RelocatableInt32Constant(
-                                      static_cast<uint32_t>(size),
-                                      RelocInfo::WASM_MEMORY_SIZE_REFERENCE));
+                                  mem_size_node);
     TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
     // For offset > effective size, this relies on check above to fail and
     // effective size can be negative, relies on wrap around.
@@ -3031,10 +3051,17 @@ void WasmGraphBuilder::BoundsCheckMem(MachineType memtype, Node* index,
     }
   }
 
+  // Prevent double loading the MemSize.
+  if (!mem_size_node) {
+    mem_size_node = MemSize();
+  }
+
+  Node* effective_size_node =
+      graph()->NewNode(jsgraph()->machine()->Int32Sub(), mem_size_node,
+                       jsgraph()->Int32Constant(offset + memsize - 1));
+
   Node* cond = graph()->NewNode(jsgraph()->machine()->Uint32LessThan(), index,
-                                jsgraph()->RelocatableInt32Constant(
-                                    static_cast<uint32_t>(effective_size),
-                                    RelocInfo::WASM_MEMORY_SIZE_REFERENCE));
+                                effective_size_node);
   TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
 }
 
