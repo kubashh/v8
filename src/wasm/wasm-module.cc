@@ -799,8 +799,9 @@ MaybeHandle<WasmModuleObject> wasm::SyncCompileTranslatedAsmJs(
   // Transfer ownership to the {WasmModuleWrapper} generated in
   // {CompileToModuleObject}.
   Handle<Code> centry_stub = CEntryStub(isolate, 1).GetCode();
-  ModuleCompiler compiler(isolate, std::move(result.val), centry_stub);
-  return compiler.CompileToModuleObject(thrower, bytes, asm_js_script,
+  ModuleCompiler compiler(isolate, result.val.get(), centry_stub);
+  return compiler.CompileToModuleObject(thrower, std::move(result.val), bytes,
+                                        asm_js_script,
                                         asm_js_offset_table_bytes);
 }
 
@@ -822,9 +823,9 @@ MaybeHandle<WasmModuleObject> wasm::SyncCompile(Isolate* isolate,
   // Transfer ownership to the {WasmModuleWrapper} generated in
   // {CompileToModuleObject}.
   Handle<Code> centry_stub = CEntryStub(isolate, 1).GetCode();
-  ModuleCompiler compiler(isolate, std::move(result.val), centry_stub);
-  return compiler.CompileToModuleObject(thrower, bytes, Handle<Script>(),
-                                        Vector<const byte>());
+  ModuleCompiler compiler(isolate, result.val.get(), centry_stub);
+  return compiler.CompileToModuleObject(thrower, std::move(result.val), bytes,
+                                        Handle<Script>(), Vector<const byte>());
 }
 
 MaybeHandle<WasmInstanceObject> wasm::SyncInstantiate(
@@ -905,6 +906,14 @@ void wasm::AsyncCompile(Isolate* isolate, Handle<JSPromise> promise,
     return;
   }
 
+  if (FLAG_wasm_test_streaming) {
+    std::shared_ptr<StreamingDecoder> stream =
+        isolate->wasm_compilation_manager()->StartStreamingCompilation(
+            isolate, handle(isolate->context()), promise);
+    stream->OnBytesReceived(bytes.module_bytes());
+    stream->Finish();
+    return;
+  }
   // Make a copy of the wire bytes in case the user program changes them
   // during asynchronous compilation.
   std::unique_ptr<byte[]> copy(new byte[bytes.length()]);
