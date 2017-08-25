@@ -74,6 +74,7 @@ class V8StackTraceImpl : public V8StackTrace {
   std::unique_ptr<StringBuffer> toString() const override;
 
   bool isEqualIgnoringTopFrame(V8StackTraceImpl* stackTrace) const;
+  bool isPrefix(V8StackTraceImpl* stackTrace) const;
 
  private:
   V8StackTraceImpl(std::vector<std::shared_ptr<StackFrame>> frames,

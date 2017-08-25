@@ -254,14 +254,35 @@ bool V8StackTraceImpl::isEqualIgnoringTopFrame(
 
   current.next();
   target.next();
-  while (!current.done() && !target.done()) {
+  for (; !current.done() && !target.done(); current.next(), target.next()) {
     if (!current.frame()->isEqual(target.frame())) {
       return false;
     }
-    current.next();
-    target.next();
   }
   return current.done() == target.done();
+}
+
+bool V8StackTraceImpl::isPrefix(V8StackTraceImpl* stackTrace) const {
+  int currentLength = 0;
+  for (StackFrameIterator it(this); !it.done(); it.next()) {
+    ++currentLength;
+  }
+  int targetLength = 0;
+  for (StackFrameIterator it(stackTrace); !it.done(); it.next()) {
+    ++targetLength;
+  }
+  if (currentLength > targetLength) return false;
+  StackFrameIterator target(stackTrace);
+  for (int i = 0; i < targetLength - currentLength; ++i) {
+    target.next();
+  }
+  StackFrameIterator current(this);
+  for (; !current.done() && !target.done(); current.next(), target.next()) {
+    if (!current.frame()->isEqual(target.frame())) {
+      return false;
+    }
+  }
+  return true;
 }
 
 V8StackTraceImpl::StackFrameIterator::StackFrameIterator(
