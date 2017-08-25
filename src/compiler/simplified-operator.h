@@ -215,6 +215,7 @@ enum class NumberOperationHint : uint8_t {
   kSigned32,           // Inputs were Signed32, output was Number.
   kNumber,             // Inputs were Number, output was Number.
   kNumberOrOddball,    // Inputs were Number or Oddball, output was Number.
+  kLast = kNumberOrOddball
 };
 
 size_t hash_value(NumberOperationHint);

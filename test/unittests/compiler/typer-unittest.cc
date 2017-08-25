@@ -157,6 +157,11 @@ class TyperTest : public TypedGraphTest {
     return subtype;
   }
 
+  NumberOperationHint RandomNumberOperationHint() {
+    int last = static_cast<int>(NumberOperationHint::kLast);
+    return static_cast<NumberOperationHint>(rng_->NextInt(last + 1));
+  }
+
   // Careful, this function runs O(max_width^5) trials.
   template <class BinaryFunction>
   void TestBinaryArithOpCloseToZero(const Operator* op, BinaryFunction opfun,
@@ -249,6 +254,8 @@ class TyperTest : public TypedGraphTest {
 
   typedef std::function<Type*(Type*)> UnaryTyper;
   typedef std::function<Type*(Type*, Type*)> BinaryTyper;
+  typedef std::function<Type*(NumberOperationHint, Type*, Type*)>
+      SpeculativeBinaryTyper;
 
   void TestUnaryMonotonicity(UnaryTyper typer, Type* upper1 = Type::Any()) {
     Type* type1 = Type::Intersect(types_.Fuzz(), upper1, zone());
@@ -272,6 +279,20 @@ class TyperTest : public TypedGraphTest {
     Type* subtype1 = RandomSubtype(type1);
     Type* subtype2 = RandomSubtype(type2);
     Type* subtype = typer(subtype1, subtype2);
+
+    EXPECT_TRUE(subtype->Is(type));
+  }
+
+  void TestSpeculativeBinaryMonotonicity(SpeculativeBinaryTyper typer) {
+    Type* type1 = types_.Fuzz();
+    Type* type2 = types_.Fuzz();
+
+    NumberOperationHint hint = RandomNumberOperationHint();
+    Type* type = typer(hint, type1, type2);
+
+    Type* subtype1 = RandomSubtype(type1);
+    Type* subtype2 = RandomSubtype(type2);
+    Type* subtype = typer(hint, subtype1, subtype2);
 
     EXPECT_TRUE(subtype->Is(type));
   }
@@ -568,15 +589,16 @@ SIMPLIFIED_NUMBER_UNOP_LIST(TEST_MONOTONICITY)
 SIMPLIFIED_NUMBER_BINOP_LIST(TEST_MONOTONICITY)
 #undef TEST_MONOTONICITY
 
-// SIMPLIFIED BINOPs without input restriction
-#define TEST_MONOTONICITY(name)                         \
-  TEST_F(TyperTest, Monotonicity_Operation_##name) {    \
-    BinaryTyper typer = [&](Type* type1, Type* type2) { \
-      return operation_typer_.name(type1, type2);       \
-    };                                                  \
-    for (int i = 0; i < kRepetitions; ++i) {            \
-      TestBinaryMonotonicity(typer);                    \
-    }                                                   \
+// SIMPLIFIED SPECULATIVE BINOPs without input restriction
+#define TEST_MONOTONICITY(name)                                               \
+  TEST_F(TyperTest, Monotonicity_Operation_##name) {                          \
+    SpeculativeBinaryTyper typer = [&](NumberOperationHint hint, Type* type1, \
+                                       Type* type2) {                         \
+      return operation_typer_.name(hint, type1, type2);                       \
+    };                                                                        \
+    for (int i = 0; i < kRepetitions; ++i) {                                  \
+      TestSpeculativeBinaryMonotonicity(typer);                               \
+    }                                                                         \
   }
 SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(TEST_MONOTONICITY)
 #undef TEST_MONOTONICITY

@@ -7,6 +7,7 @@
 
 #include "src/base/flags.h"
 #include "src/compiler/opcodes.h"
+#include "src/compiler/simplified-operator.h"
 
 namespace v8 {
 namespace internal {
@@ -45,6 +46,10 @@ class V8_EXPORT_PRIVATE OperationTyper {
 // Number binary operators.
 #define DECLARE_METHOD(Name) Type* Name(Type* lhs, Type* rhs);
   SIMPLIFIED_NUMBER_BINOP_LIST(DECLARE_METHOD)
+#undef DECLARE_METHOD
+
+#define DECLARE_METHOD(Name) \
+  Type* Name(NumberOperationHint hint, Type* lhs, Type* rhs);
   SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(DECLARE_METHOD)
 #undef DECLARE_METHOD
 
