@@ -503,6 +503,14 @@ function TestSortOnNonExtensible() {
 }
 TestSortOnNonExtensible();
 
+function TestSortOnTypedArray() {
+  var array = new Int8Array([10,9,8,7,6,5,4,3,2,1]);
+  Object.defineProperty(array, "length", {value: 5});
+  Array.prototype.sort.call(array);
+  assertEquals(array, new Int8Array([10,6,7,8,9,5,4,3,2,1]));
+}
+TestSortOnTypedArray();
+
 
 // Test special prototypes
 (function testSortSpecialPrototypes() {
