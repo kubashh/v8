@@ -5060,6 +5060,10 @@ RegExpNode* UnanchoredAdvance(RegExpCompiler* compiler,
 
 void AddUnicodeCaseEquivalents(ZoneList<CharacterRange>* ranges, Zone* zone) {
 #ifdef V8_INTL_SUPPORT
+  // Micro-optimization to avoid passing large ranges to UnicodeSet::closeOver.
+  // See also https://crbug.com/v8/6727.
+  if (ranges->length() == 1 && ranges->at(0).IsEverything(kNonBmpEnd)) return;
+
   // Use ICU to compute the case fold closure over the ranges.
   icu::UnicodeSet set;
   for (int i = 0; i < ranges->length(); i++) {
