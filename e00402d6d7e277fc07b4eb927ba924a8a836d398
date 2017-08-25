@@ -22,6 +22,30 @@
       "revId": "e00402d6d7e277fc07b4eb927ba924a8a836d398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f203bb_a4f30616",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-25T08:57:05Z",
+      "side": 1,
+      "message": "Yep, there would be no need to copy.",
+      "parentUuid": "0d37bce5_fbb71cfa",
+      "range": {
+        "startLine": 596,
+        "startChar": 11,
+        "endLine": 596,
+        "endChar": 13
+      },
+      "revId": "e00402d6d7e277fc07b4eb927ba924a8a836d398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
