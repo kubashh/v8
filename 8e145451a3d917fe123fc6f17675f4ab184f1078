@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cd3c8fd1_ddbb5dcc",
+        "filename": "src/counters-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-08-25T17:37:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c9c77ff0_d76ae572",
+      "revId": "8e145451a3d917fe123fc6f17675f4ab184f1078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b5e1cc8_7b278bfa",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "8e145451a3d917fe123fc6f17675f4ab184f1078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968871ff_422c07eb",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-08-25T17:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b5e1cc8_7b278bfa",
+      "range": {
+        "startLine": 64,
+        "startChar": 9,
+        "endLine": 64,
+        "endChar": 17
+      },
+      "revId": "8e145451a3d917fe123fc6f17675f4ab184f1078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
