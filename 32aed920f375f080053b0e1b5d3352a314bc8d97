@@ -22,6 +22,30 @@
       "revId": "32aed920f375f080053b0e1b5d3352a314bc8d97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3f48e7d_1d09162e",
+        "filename": "src/compiler/bytecode-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-08-25T08:13:28Z",
+      "side": 1,
+      "message": "Bytecode analysis traverses the bytecode in reverse, so this is meant to be \u003c (I\u0027ll add a comment)",
+      "parentUuid": "a7fe724d_f74e010d",
+      "range": {
+        "startLine": 277,
+        "startChar": 32,
+        "endLine": 277,
+        "endChar": 33
+      },
+      "revId": "32aed920f375f080053b0e1b5d3352a314bc8d97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
