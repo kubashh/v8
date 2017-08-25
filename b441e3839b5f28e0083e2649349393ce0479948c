@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "857a6149_e8835e11",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-25T21:00:35Z",
+      "side": 1,
+      "message": "Maybe check there\u0027s room before we fill it?",
+      "revId": "b441e3839b5f28e0083e2649349393ce0479948c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
