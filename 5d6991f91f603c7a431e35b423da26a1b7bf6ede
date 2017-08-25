@@ -59,6 +59,74 @@
     },
     {
       "key": {
+        "uuid": "3c0614b6_fb98269b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "Consumer isn\u0027t an exact fit for the name. What about \"DecoderTraits\"? Also, can we have the expected members of DecoderTraits defined in a comment for documentation?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20e87f0a_db79f279",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "s/Value/AbstractValue/ ?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "865e01c0_d8f4c082",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "s/MergeValues/AbstractMerge/g ?\n\nAnd a comment for documentation.",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bddcc7f3_54f5e134",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "perhaps TEMPLATIZED?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f5a2f8a_f04909e4",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -70,6 +138,23 @@
       "writtenOn": "2017-08-08T21:46:49Z",
       "side": 1,
       "message": "Does it make sense to have do_validation and Consumer as class-level template parameters?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44038189_11fdb318",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "s/do_validation/validate/g",
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -93,6 +178,40 @@
     },
     {
       "key": {
+        "uuid": "20775a26_134e7084",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "Can we typedef Value\u003cConsumer\u003e (actually Value\u003cDecoderTraits\u003e) to be DValue or similar? (also for the operands).",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4460798_600c9bf4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "I think it\u0027s better not provide a default implementation of these methods, since this turns what would be a compile error into a runtime error.",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92ce9849_fc95a805",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 6
@@ -110,6 +229,23 @@
         "endLine": 93,
         "endChar": 6
       },
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "298f4d13_e4d5ec10",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-25T18:29:22Z",
+      "side": 1,
+      "message": "Definitely would benefit from a typedef of Control\u003cConsumer\u003e and Value\u003cConsumer\u003e.",
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
