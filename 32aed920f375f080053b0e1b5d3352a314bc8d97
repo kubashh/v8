@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7fe724d_f74e010d",
+        "filename": "src/compiler/bytecode-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-25T07:58:00Z",
+      "side": 1,
+      "message": "I am confused, shouldn\u0027t this be \"\u003e\" instead?",
+      "range": {
+        "startLine": 277,
+        "startChar": 32,
+        "endLine": 277,
+        "endChar": 33
+      },
+      "revId": "32aed920f375f080053b0e1b5d3352a314bc8d97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
