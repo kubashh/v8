@@ -428,13 +428,14 @@ class RepresentationSelector {
       SIMPLIFIED_NUMBER_BINOP_LIST(DECLARE_CASE)
 #undef DECLARE_CASE
 
-#define DECLARE_CASE(Name)                                                \
-  case IrOpcode::k##Name: {                                               \
-    new_type =                                                            \
-        Type::Intersect(op_typer_.Name(FeedbackTypeOf(node->InputAt(0)),  \
-                                       FeedbackTypeOf(node->InputAt(1))), \
-                        info->restriction_type(), graph_zone());          \
-    break;                                                                \
+#define DECLARE_CASE(Name)                                                     \
+  case IrOpcode::k##Name: {                                                    \
+    NumberOperationHint hint = NumberOperationHintOf(node->op());              \
+    new_type =                                                                 \
+        Type::Intersect(op_typer_.Name(hint, FeedbackTypeOf(node->InputAt(0)), \
+                                       FeedbackTypeOf(node->InputAt(1))),      \
+                        info->restriction_type(), graph_zone());               \
+    break;                                                                     \
   }
       SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(DECLARE_CASE)
 #undef DECLARE_CASE
@@ -1257,6 +1258,8 @@ class RepresentationSelector {
 
   void VisitSpeculativeAdditiveOp(Node* node, Truncation truncation,
                                   SimplifiedLowering* lowering) {
+    Type* left_upper = GetUpperBound(node->InputAt(0));
+    Type* right_upper = GetUpperBound(node->InputAt(1));
     // ToNumber(x) can throw if x is either a Receiver or a Symbol, so we can
     // only eliminate an unused speculative number operation if we know that
     // the inputs are PlainPrimitive, which excludes everything that's might
@@ -1264,18 +1267,24 @@ class RepresentationSelector {
     // allowed to perform a number addition if neither input is a String, even
     // if the value is never used, so we further limit to NumberOrOddball in
     // order to explicitly exclude String inputs.
-    if (BothInputsAre(node, Type::NumberOrOddball())) {
+    if (left_upper->Is(Type::NumberOrOddball()) &&
+        right_upper->Is(Type::NumberOrOddball())) {
       if (truncation.IsUnused()) return VisitUnused(node);
     }
 
-    if (BothInputsAre(node, type_cache_.kAdditiveSafeIntegerOrMinusZero) &&
-        (GetUpperBound(node)->Is(Type::Signed32()) ||
-         GetUpperBound(node)->Is(Type::Unsigned32()) ||
-         truncation.IsUsedAsWord32())) {
-      // => Int32Add/Sub
-      VisitWord32TruncatingBinop(node);
-      if (lower()) ChangeToPureOp(node, Int32Op(node));
-      return;
+    if (left_upper->Is(type_cache_.kAdditiveSafeIntegerOrMinusZero) &&
+        right_upper->Is(type_cache_.kAdditiveSafeIntegerOrMinusZero)) {
+      // If we know how to interpret the result or if the users only care
+      // about the low 32-bits, we can truncate to Word32 do a wrapping
+      // addition.
+      if (GetUpperBound(node)->Is(Type::Signed32()) ||
+          GetUpperBound(node)->Is(Type::Unsigned32()) ||
+          truncation.IsUsedAsWord32()) {
+        // => Int32Add/Sub
+        VisitWord32TruncatingBinop(node);
+        if (lower()) ChangeToPureOp(node, Int32Op(node));
+        return;
+      }
     }
 
     // Try to use type feedback.
@@ -1286,12 +1295,12 @@ class RepresentationSelector {
       Type* left_feedback_type = TypeOf(node->InputAt(0));
       Type* right_feedback_type = TypeOf(node->InputAt(1));
       // Handle the case when no int32 checks on inputs are necessary (but
-      // an overflow check is needed on the output).
-      // TODO(jarin) We should not look at the upper bound because the typer
-      // could have already baked in some feedback into the upper bound.
-      if (BothInputsAre(node, Type::Signed32()) ||
-          (BothInputsAre(node, Type::Signed32OrMinusZero()) &&
-           GetUpperBound(node)->Is(type_cache_.kSafeInteger))) {
+      // an overflow check is needed on the output). Note that we do not
+      // have to do any check if only one side is minus zero.
+      if (left_upper->Is(Type::Signed32OrMinusZero()) &&
+          right_upper->Is(Type::Signed32OrMinusZero()) &&
+          (left_upper->Is(Type::Signed32()) ||
+           right_upper->Is(Type::Signed32()))) {
         VisitBinop(node, UseInfo::TruncatingWord32(),
                    MachineRepresentation::kWord32, Type::Signed32());
       } else {

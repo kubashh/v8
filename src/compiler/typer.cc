@@ -103,6 +103,11 @@ class Typer::Visitor : public Reducer {
   case IrOpcode::k##x:  \
     return UpdateType(node, TypeBinaryOp(node, x));
       SIMPLIFIED_NUMBER_BINOP_LIST(DECLARE_CASE)
+#undef DECLARE_CASE
+
+#define DECLARE_CASE(x) \
+  case IrOpcode::k##x:  \
+    return UpdateType(node, TypeSpeculativeBinaryOp(node, x));
       SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(DECLARE_CASE)
 #undef DECLARE_CASE
 
@@ -169,6 +174,11 @@ class Typer::Visitor : public Reducer {
   case IrOpcode::k##x:  \
     return TypeBinaryOp(node, x);
       SIMPLIFIED_NUMBER_BINOP_LIST(DECLARE_CASE)
+#undef DECLARE_CASE
+
+#define DECLARE_CASE(x) \
+  case IrOpcode::k##x:  \
+    return TypeSpeculativeBinaryOp(node, x);
       SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(DECLARE_CASE)
 #undef DECLARE_CASE
 
@@ -250,9 +260,12 @@ class Typer::Visitor : public Reducer {
 
   typedef Type* (*UnaryTyperFun)(Type*, Typer* t);
   typedef Type* (*BinaryTyperFun)(Type*, Type*, Typer* t);
+  typedef Type* (*SpeculativeBinaryTyperFun)(NumberOperationHint hint, Type*,
+                                             Type*, Typer* t);
 
   Type* TypeUnaryOp(Node* node, UnaryTyperFun);
   Type* TypeBinaryOp(Node* node, BinaryTyperFun);
+  Type* TypeSpeculativeBinaryOp(Node* node, SpeculativeBinaryTyperFun);
 
   enum ComparisonOutcomeFlags {
     kComparisonTrue = 1,
@@ -284,6 +297,12 @@ class Typer::Visitor : public Reducer {
     return t->operation_typer_.Name(lhs, rhs);        \
   }
   SIMPLIFIED_NUMBER_BINOP_LIST(DECLARE_METHOD)
+#undef DECLARE_METHOD
+#define DECLARE_METHOD(Name)                                        \
+  static Type* Name(NumberOperationHint hint, Type* lhs, Type* rhs, \
+                    Typer* t) {                                     \
+    return t->operation_typer_.Name(hint, lhs, rhs);                \
+  }
   SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(DECLARE_METHOD)
 #undef DECLARE_METHOD
 
@@ -388,7 +407,6 @@ Type* Typer::Visitor::TypeUnaryOp(Node* node, UnaryTyperFun f) {
   return input->IsInhabited() ? f(input, typer_) : Type::None();
 }
 
-
 Type* Typer::Visitor::TypeBinaryOp(Node* node, BinaryTyperFun f) {
   Type* left = Operand(node, 0);
   Type* right = Operand(node, 1);
@@ -396,6 +414,14 @@ Type* Typer::Visitor::TypeBinaryOp(Node* node, BinaryTyperFun f) {
                                                      : Type::None();
 }
 
+Type* Typer::Visitor::TypeSpeculativeBinaryOp(Node* node,
+                                              SpeculativeBinaryTyperFun f) {
+  Type* left = Operand(node, 0);
+  Type* right = Operand(node, 1);
+  return left->IsInhabited() && right->IsInhabited()
+             ? f(NumberOperationHintOf(node->op()), left, right, typer_)
+             : Type::None();
+}
 
 Typer::Visitor::ComparisonOutcome Typer::Visitor::Invert(
     ComparisonOutcome outcome, Typer* t) {

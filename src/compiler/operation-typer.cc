@@ -599,6 +599,38 @@ Type* OperationTyper::NumberSubtract(Type* lhs, Type* rhs) {
   return type;
 }
 
+Type* OperationTyper::SpeculativeNumberAdd(NumberOperationHint hint, Type* lhs,
+                                           Type* rhs) {
+  lhs = SpeculativeToNumber(lhs);
+  rhs = SpeculativeToNumber(rhs);
+  Type* result = NumberAdd(lhs, rhs);
+  // If we have a Smi or Int32 feedback, we will truncate or we will check the
+  // inputs. In either case the result will be in the safe integer
+  // range. This needs to be in sync with
+  // SimplifiedLowering::VisitSpeculativeAdditiveOp.
+  if (hint == NumberOperationHint::kSignedSmall ||
+      hint == NumberOperationHint::kSigned32) {
+    result = Type::Intersect(result, cache_.kAdditiveSafeInteger, zone());
+  }
+  return result;
+}
+
+Type* OperationTyper::SpeculativeNumberSubtract(NumberOperationHint hint,
+                                                Type* lhs, Type* rhs) {
+  lhs = SpeculativeToNumber(lhs);
+  rhs = SpeculativeToNumber(rhs);
+  Type* result = NumberSubtract(lhs, rhs);
+  // If we have a Smi or Int32 feedback, we will truncate or we will check the
+  // inputs. In either case the result will be in the safe integer
+  // range. This needs to be in sync with
+  // SimplifiedLowering::VisitSpeculativeAdditiveOp.
+  if (hint == NumberOperationHint::kSignedSmall ||
+      hint == NumberOperationHint::kSigned32) {
+    result = Type::Intersect(result, cache_.kAdditiveSafeInteger, zone());
+  }
+  return result;
+}
+
 Type* OperationTyper::NumberMultiply(Type* lhs, Type* rhs) {
   DCHECK(lhs->Is(Type::Number()));
   DCHECK(rhs->Is(Type::Number()));
@@ -968,14 +1000,13 @@ Type* OperationTyper::NumberPow(Type* lhs, Type* rhs) {
   return Type::Number();
 }
 
-#define SPECULATIVE_NUMBER_BINOP(Name)                            \
-  Type* OperationTyper::Speculative##Name(Type* lhs, Type* rhs) { \
-    lhs = SpeculativeToNumber(lhs);                               \
-    rhs = SpeculativeToNumber(rhs);                               \
-    return Name(lhs, rhs);                                        \
+#define SPECULATIVE_NUMBER_BINOP(Name)                                         \
+  Type* OperationTyper::Speculative##Name(NumberOperationHint hint, Type* lhs, \
+                                          Type* rhs) {                         \
+    lhs = SpeculativeToNumber(lhs);                                            \
+    rhs = SpeculativeToNumber(rhs);                                            \
+    return Name(lhs, rhs);                                                     \
   }
-SPECULATIVE_NUMBER_BINOP(NumberAdd)
-SPECULATIVE_NUMBER_BINOP(NumberSubtract)
 SPECULATIVE_NUMBER_BINOP(NumberMultiply)
 SPECULATIVE_NUMBER_BINOP(NumberDivide)
 SPECULATIVE_NUMBER_BINOP(NumberModulus)
