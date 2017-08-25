@@ -1,0 +1,36 @@
+Tests Debugger.continueToLocation with targetCallFrames
+is deeper.
+
+Running test: testSyncStack
+#test()
+
+function test() {
+  #callCallback(foo);
+}
+
+function foo() {
+#}
+
+
+
+Running test: testAsyncStack
+
+
+(anonymous) (expr.js:0:0)
+testAsync (test.js:13:2)
+(anonymous) (expr.js:0:0)
+
+function testAsync() {
+  #callCallbackAsync(foo);
+  foo();
+
+foo (test.js:10:0)
+-- setTimeout --
+callCallbackAsync (test.js:18:2)
+testAsync (test.js:13:2)
+(anonymous) (expr.js:0:0)
+
+function foo() {
+#}
+
+

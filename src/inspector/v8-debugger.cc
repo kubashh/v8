@@ -358,6 +358,10 @@ bool V8Debugger::shouldContinueToCurrentLocation() {
     return m_continueToLocationStack->isEqualIgnoringTopFrame(
         currentStack.get());
   }
+  if (m_continueToLocationTargetCallFrames ==
+      protocol::Debugger::ContinueToLocation::TargetCallFramesEnum::Deeper) {
+    return m_continueToLocationStack->isPrefix(currentStack.get());
+  }
   return true;
 }
 
