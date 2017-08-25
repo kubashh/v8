@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d37bce5_fbb71cfa",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-25T08:54:53Z",
+      "side": 1,
+      "message": "Is reference intended?",
+      "range": {
+        "startLine": 596,
+        "startChar": 11,
+        "endLine": 596,
+        "endChar": 13
+      },
+      "revId": "e00402d6d7e277fc07b4eb927ba924a8a836d398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
