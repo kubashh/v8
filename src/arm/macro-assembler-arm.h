@@ -407,9 +407,11 @@ class TurboAssembler : public Assembler {
   // values to location, restoring [d0..(d15|d31)].
   void RestoreFPRegs(Register location, Register scratch);
 
-  void PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1 = no_reg,
-                       Register exclusion2 = no_reg,
-                       Register exclusion3 = no_reg);
+  // Push caller saved registers on the stack, and return the number of bytes
+  // stack pointer is adjusted.
+  int PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1 = no_reg,
+                      Register exclusion2 = no_reg,
+                      Register exclusion3 = no_reg);
   void PopCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1 = no_reg,
                       Register exclusion2 = no_reg,
                       Register exclusion3 = no_reg);
