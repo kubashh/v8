@@ -99,26 +99,32 @@ static const Register saved_regs[] = {REG(eax), REG(ecx), REG(edx)};
 
 static const int kNumberOfSavedRegs = sizeof(saved_regs) / sizeof(Register);
 
-void TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode,
-                                     Register exclusion1, Register exclusion2,
-                                     Register exclusion3) {
+int TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1,
+                                    Register exclusion2, Register exclusion3) {
   // We don't allow a GC during a store buffer overflow so there is no need to
   // store the registers in any particular way, but we do have to store and
   // restore them.
+  int bytes = 0;
   for (int i = 0; i < kNumberOfSavedRegs; i++) {
     Register reg = saved_regs[i];
     if (!reg.is(exclusion1) && !reg.is(exclusion2) && !reg.is(exclusion3)) {
       push(reg);
+      bytes += kInt32Size;
     }
   }
+
   if (fp_mode == kSaveFPRegs) {
-    sub(esp, Immediate(kDoubleSize * (XMMRegister::kMaxNumRegisters - 1)));
+    int delta = kDoubleSize * (XMMRegister::kMaxNumRegisters - 1);
+    sub(esp, Immediate(delta));
     // Save all XMM registers except XMM0.
     for (int i = XMMRegister::kMaxNumRegisters - 1; i > 0; i--) {
       XMMRegister reg = XMMRegister::from_code(i);
       movsd(Operand(esp, (i - 1) * kDoubleSize), reg);
     }
+    bytes += delta;
   }
+
+  return bytes;
 }
 
 void TurboAssembler::PopCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1,
