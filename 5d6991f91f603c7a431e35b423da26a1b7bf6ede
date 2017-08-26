@@ -189,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "4a2d1e5a_1c2197b4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Oh, now I see why you want to add \"Abstract\". Done :)",
+      "parentUuid": "3996f78f_005c2a82",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "865e01c0_d8f4c082",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -224,6 +242,24 @@
     },
     {
       "key": {
+        "uuid": "da6b25d1_26e41832",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d62dda94_c35c9c07",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bddcc7f3_54f5e134",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -241,6 +277,24 @@
     },
     {
       "key": {
+        "uuid": "f7928ee5_a3edef83",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "This template is gone now.",
+      "parentUuid": "bddcc7f3_54f5e134",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f5a2f8a_f04909e4",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -252,6 +306,24 @@
       "writtenOn": "2017-08-08T21:46:49Z",
       "side": 1,
       "message": "Does it make sense to have do_validation and Consumer as class-level template parameters?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1cb7a92_916b389c",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. I thought it\u0027s not possible without using template template parameters (sic), but I found another solution.",
+      "parentUuid": "9f5a2f8a_f04909e4",
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -345,6 +417,24 @@
     },
     {
       "key": {
+        "uuid": "99936b53_168a603f",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20775a26_134e7084",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4460798_600c9bf4",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -359,6 +449,24 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99c5a2e9_5a140fc0",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4460798_600c9bf4",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -385,6 +493,30 @@
     },
     {
       "key": {
+        "uuid": "e2e62d56_819cdc5e",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Yes, it defined a templatized function with the templatized decoder as first argument. After the refactoring to have the functions not templatized any more, this is not required any more and I removed the macro.",
+      "parentUuid": "92ce9849_fc95a805",
+      "range": {
+        "startLine": 93,
+        "startChar": 2,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "298f4d13_e4d5ec10",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 6
@@ -399,6 +531,24 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8be3f2a_492c25a7",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "298f4d13_e4d5ec10",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -419,6 +569,24 @@
     },
     {
       "key": {
+        "uuid": "bd636f91_02ba3209",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "{old} is modified below, and {val} is automatically const.",
+      "parentUuid": "4be804b8_45e8460f",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "516fdeb7_c29b0d8c",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 6
@@ -430,6 +598,24 @@
       "writtenOn": "2017-08-08T21:46:49Z",
       "side": 1,
       "message": "What do you mean by this TODO?",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74e91674_e0b5e412",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "This was copied over. I want to remove the variable named \"first\", as it\u0027s redundant.",
+      "parentUuid": "516fdeb7_c29b0d8c",
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -450,6 +636,24 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d32eb96_eaa0ba0f",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-26T20:58:45Z",
+      "side": 1,
+      "message": "Oh, this is a drive-by fix. When we generate text for a wasm function (for debugging), we know that this function is valid.",
+      "parentUuid": "088f117e_82639b96",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
