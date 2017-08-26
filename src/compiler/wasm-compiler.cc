@@ -3769,8 +3769,7 @@ Node* WasmGraphBuilder::Simd8x16ShuffleOp(const uint8_t shuffle[16],
   V(I32AtomicOr16U, Or, Uint16)   \
   V(I32AtomicXor16U, Xor, Uint16)
 
-Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode,
-                                 const NodeVector& inputs,
+Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
                                  wasm::WasmCodePosition position) {
   Node* node;
   switch (opcode) {
