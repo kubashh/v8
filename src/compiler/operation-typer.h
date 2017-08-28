@@ -7,6 +7,7 @@
 
 #include "src/base/flags.h"
 #include "src/compiler/opcodes.h"
+#include "src/compiler/simplified-operator.h"
 
 namespace v8 {
 namespace internal {
