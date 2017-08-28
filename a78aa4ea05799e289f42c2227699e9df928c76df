@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "33f04599_1a20c3b6",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1229957
+      },
+      "writtenOn": "2017-08-28T11:53:09Z",
+      "side": 1,
+      "message": "`PushCallerSaved` saves both general and floating point registers, which may have different size, but both are divisible by pointer size, AFAIK.",
+      "parentUuid": "465956d9_9f6f6ba8",
+      "range": {
+        "startLine": 748,
+        "startChar": 44,
+        "endLine": 748,
+        "endChar": 64
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4eefa2c_bfbd7d7e",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 3
@@ -59,6 +83,30 @@
       "writtenOn": "2017-08-28T08:49:22Z",
       "side": 1,
       "message": "You should also clear the SP delta here, no?",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c42c910_ff07bded",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1229957
+      },
+      "writtenOn": "2017-08-28T11:53:09Z",
+      "side": 1,
+      "message": "In the case for `kArchCallCFunction`, SP delta is cleared. `kArchRestoreCallerRegisters` always follows `kArchCallCFunction`.",
+      "parentUuid": "e4eefa2c_bfbd7d7e",
       "range": {
         "startLine": 753,
         "startChar": 6,
