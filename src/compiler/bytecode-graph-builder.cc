@@ -476,7 +476,8 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
     Zone* local_zone, Handle<SharedFunctionInfo> shared_info,
     Handle<FeedbackVector> feedback_vector, BailoutId osr_offset,
     JSGraph* jsgraph, CallFrequency invocation_frequency,
-    SourcePositionTable* source_positions, int inlining_id,
+    SourcePositionTable* source_positions, Handle<Context> native_context,
+    CompilationDependencies* dependencies, int inlining_id,
     JSTypeHintLowering::Flags flags, bool stack_check)
     : local_zone_(local_zone),
       jsgraph_(jsgraph),
@@ -485,7 +486,8 @@ BytecodeGraphBuilder::BytecodeGraphBuilder(
       exception_handler_table_(
           handle(HandlerTable::cast(bytecode_array()->handler_table()))),
       feedback_vector_(feedback_vector),
-      type_hint_lowering_(jsgraph, feedback_vector, flags),
+      type_hint_lowering_(jsgraph, feedback_vector, native_context,
+                          dependencies, flags),
       frame_state_function_info_(common()->CreateFrameStateFunctionInfo(
           FrameStateType::kInterpretedFunction,
           bytecode_array()->parameter_count(),
@@ -1255,15 +1257,20 @@ void BytecodeGraphBuilder::VisitLdaNamedProperty() {
   const Operator* op = javascript()->LoadNamed(name, feedback);
 
   Node* node = nullptr;
-  if (Node* simplified =
-          TryBuildSimplifiedLoadNamed(op, object, feedback.slot())) {
-    if (environment() == nullptr) return;
-    node = simplified;
+  Environment::FrameStateAttachmentMode should_attach_frame_state;
+  JSTypeHintLowering::LoweringResult lowering =
+      TryBuildSimplifiedLoadNamed(op, object, feedback.slot());
+  if (lowering.IsSideEffectFree()) {
+    node = lowering.value();
+    should_attach_frame_state = Environment::kDontAttachFrameState;
+  } else if (lowering.IsExit()) {
+    return;
   } else {
+    DCHECK(!lowering.Changed());
     node = NewNode(op, object);
+    should_attach_frame_state = Environment::kAttachFrameState;
   }
-
-  environment()->BindAccumulator(node, Environment::kAttachFrameState);
+  environment()->BindAccumulator(node, should_attach_frame_state);
 }
 
 void BytecodeGraphBuilder::VisitLdaKeyedProperty() {
@@ -2871,18 +2878,17 @@ Node* BytecodeGraphBuilder::TryBuildSimplifiedConstruct(const Operator* op,
   return nullptr;
 }
 
-Node* BytecodeGraphBuilder::TryBuildSimplifiedLoadNamed(const Operator* op,
-                                                        Node* receiver,
-                                                        FeedbackSlot slot) {
+JSTypeHintLowering::LoweringResult
+BytecodeGraphBuilder::TryBuildSimplifiedLoadNamed(const Operator* op,
+                                                  Node* receiver,
+                                                  FeedbackSlot slot) {
   Node* effect = environment()->GetEffectDependency();
   Node* control = environment()->GetControlDependency();
-  Reduction early_reduction = type_hint_lowering().ReduceLoadNamedOperation(
-      op, receiver, effect, control, slot);
-  if (early_reduction.Changed()) {
-    ApplyEarlyReduction(early_reduction);
-    return early_reduction.replacement();
-  }
-  return nullptr;
+  JSTypeHintLowering::LoweringResult early_reduction =
+      type_hint_lowering().ReduceLoadNamedOperation(op, receiver, effect,
+                                                    control, slot);
+  ApplyEarlyReduction(early_reduction);
+  return early_reduction;
 }
 
 Node* BytecodeGraphBuilder::TryBuildSimplifiedLoadKeyed(const Operator* op,
@@ -2938,6 +2944,22 @@ void BytecodeGraphBuilder::ApplyEarlyReduction(Reduction reduction) {
   }
   if (IrOpcode::IsGraphTerminator(node->opcode())) {
     MergeControlToLeaveFunction(node);
+  }
+}
+
+void BytecodeGraphBuilder::ApplyEarlyReduction(
+    JSTypeHintLowering::LoweringResult reduction) {
+  if (reduction.IsExit()) {
+    MergeControlToLeaveFunction(reduction.control());
+  } else if (reduction.IsSideEffectFree()) {
+    environment()->UpdateEffectDependency(reduction.effect());
+    environment()->UpdateControlDependency(reduction.control());
+  } else {
+    DCHECK(!reduction.Changed());
+    // At the moment, we assume side-effect free reduction. To support
+    // side-effects, we would have to invalidate the eager frame state,
+    // so that deoptimization does not repeat the side effect.
+    // Also note that the early reductions do not support lazy deoptimization.
   }
 }
 

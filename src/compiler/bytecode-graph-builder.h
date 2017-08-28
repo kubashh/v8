@@ -16,6 +16,9 @@
 
 namespace v8 {
 namespace internal {
+
+class CompilationDependencies;
+
 namespace compiler {
 
 class Reduction;
@@ -29,7 +32,8 @@ class BytecodeGraphBuilder {
       Zone* local_zone, Handle<SharedFunctionInfo> shared,
       Handle<FeedbackVector> feedback_vector, BailoutId osr_offset,
       JSGraph* jsgraph, CallFrequency invocation_frequency,
-      SourcePositionTable* source_positions,
+      SourcePositionTable* source_positions, Handle<Context> native_context,
+      CompilationDependencies* dependencies,
       int inlining_id = SourcePosition::kNotInlined,
       JSTypeHintLowering::Flags flags = JSTypeHintLowering::kNoFlags,
       bool stack_check = true);
@@ -189,8 +193,8 @@ class BytecodeGraphBuilder {
                                int arg_count, FeedbackSlot slot);
   Node* TryBuildSimplifiedConstruct(const Operator* op, Node* const* args,
                                     int arg_count, FeedbackSlot slot);
-  Node* TryBuildSimplifiedLoadNamed(const Operator* op, Node* receiver,
-                                    FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadNamed(
+      const Operator* op, Node* receiver, FeedbackSlot slot);
   Node* TryBuildSimplifiedLoadKeyed(const Operator* op, Node* receiver,
                                     Node* key, FeedbackSlot slot);
   Node* TryBuildSimplifiedStoreNamed(const Operator* op, Node* receiver,
@@ -200,6 +204,7 @@ class BytecodeGraphBuilder {
 
   // Applies the given early reduction onto the current environment.
   void ApplyEarlyReduction(Reduction reduction);
+  void ApplyEarlyReduction(JSTypeHintLowering::LoweringResult reduction);
 
   // Check the context chain for extensions, for lookup fast paths.
   Environment* CheckContextExtensions(uint32_t depth);
