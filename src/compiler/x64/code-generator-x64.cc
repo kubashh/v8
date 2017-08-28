@@ -944,12 +944,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArchSaveCallerRegisters: {
       // kReturnRegister0 should have been saved before entering the stub.
-      __ PushCallerSaved(kSaveFPRegs, kReturnRegister0);
+      int bytes = __ PushCallerSaved(kSaveFPRegs, kReturnRegister0);
+      DCHECK(bytes % kPointerSize == 0);
+      frame_access_state()->IncreaseSPDelta(bytes / kPointerSize);
       break;
     }
     case kArchRestoreCallerRegisters: {
       // Don't overwrite the returned value.
       __ PopCallerSaved(kSaveFPRegs, kReturnRegister0);
+      DCHECK(frame_access_state()->sp_delta() == 0);
       break;
     }
     case kArchPrepareTailCall:
