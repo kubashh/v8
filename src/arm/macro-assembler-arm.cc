@@ -30,9 +30,9 @@ MacroAssembler::MacroAssembler(Isolate* isolate, void* buffer, int size,
                                CodeObjectRequired create_code_object)
     : TurboAssembler(isolate, buffer, size, create_code_object) {}
 
-void TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode,
-                                     Register exclusion1, Register exclusion2,
-                                     Register exclusion3) {
+int TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1,
+                                    Register exclusion2, Register exclusion3) {
+  int bytes = 0;
   RegList exclusions = 0;
   if (!exclusion1.is(no_reg)) {
     exclusions |= exclusion1.bit();
@@ -44,11 +44,18 @@ void TurboAssembler::PushCallerSaved(SaveFPRegsMode fp_mode,
     }
   }
 
-  stm(db_w, sp, (kCallerSaved | lr.bit()) & ~exclusions);
+  RegList list = (kCallerSaved | lr.bit()) & ~exclusions;
+  stm(db_w, sp, list);
+
+  int reg_size_in_bytes = 4;
+  bytes += NumRegs(list) * reg_size_in_bytes;
 
   if (fp_mode == kSaveFPRegs) {
     SaveFPRegs(sp, lr);
+    bytes += DwVfpRegister::NumRegisters() * DwVfpRegister::kSizeInBytes;
   }
+
+  return bytes;
 }
 
 void TurboAssembler::PopCallerSaved(SaveFPRegsMode fp_mode, Register exclusion1,
