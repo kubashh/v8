@@ -93,7 +93,7 @@ class IC {
                             Handle<Object> handler);
   // Configure the vector for POLYMORPHIC.
   void ConfigureVectorState(Handle<Name> name, MapHandles const& maps,
-                            List<Handle<Object>>* handlers);
+                            std::vector<Handle<Object>>* handlers);
 
   char TransitionMarkFromState(IC::State state);
   void TraceIC(const char* type, Handle<Object> name);
@@ -314,7 +314,7 @@ class KeyedLoadIC : public LoadIC {
   Handle<Object> LoadElementHandler(Handle<Map> receiver_map);
 
   void LoadElementPolymorphicHandlers(MapHandles* receiver_maps,
-                                      List<Handle<Object>>* handlers);
+                                      std::vector<Handle<Object>>* handlers);
 };
 
 
@@ -403,7 +403,7 @@ class KeyedStoreIC : public StoreIC {
                                      KeyedAccessStoreMode store_mode);
 
   void StoreElementPolymorphicHandlers(MapHandles* receiver_maps,
-                                       List<Handle<Object>>* handlers,
+                                       std::vector<Handle<Object>>* handlers,
                                        KeyedAccessStoreMode store_mode);
 
   friend class IC;

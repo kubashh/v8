@@ -24,7 +24,7 @@ class V8_EXPORT_PRIVATE FlagList {
   //
   // The caller is responsible for disposing the list, as well
   // as every element of it.
-  static List<const char*>* argv();
+  static std::vector<const char*>* argv();
 
   // Set the flag values by parsing the command line. If remove_flags is
   // set, the flags and associated values are removed from (argc,
