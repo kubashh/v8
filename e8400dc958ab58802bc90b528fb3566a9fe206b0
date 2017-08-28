@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8d07395_f1c956ba",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-28T16:54:33Z",
+      "side": 1,
+      "message": "Nit: How about\n\nType* result \u003d SpeculativeNumberAdd(lhs, rhs);\n// ...\nreturn Type::Intersect(result, cache_.kSafeInteger, zone());\n\ninstead?",
+      "revId": "e8400dc958ab58802bc90b528fb3566a9fe206b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93cc7e01_2160e6db",
+        "filename": "src/compiler/operation-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-28T16:54:33Z",
+      "side": 1,
+      "message": "Nit: How about\n\nType* result \u003d SpeculativeNumberSubtract(lhs, rhs);\n// ...\nreturn Type::Intersect(result, cache_.kSafeInteger, zone());\n\ninstead?",
+      "revId": "e8400dc958ab58802bc90b528fb3566a9fe206b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "989f0c8b_3ec0c016",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-08-28T16:54:33Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be a DCHECK? Or can we have SafeIntegerAdd/Subtract with non-SignedSmall/Signed32 feedback?",
+      "revId": "e8400dc958ab58802bc90b528fb3566a9fe206b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
