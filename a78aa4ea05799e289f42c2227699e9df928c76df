@@ -116,6 +116,30 @@
       "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5356cfb_f4dba04a",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-28T12:45:48Z",
+      "side": 1,
+      "message": "Right, that is a bit worrisome that sp delta is out of sync here, but I think it should be ok.\n\nCould you at least DCHECK that the delta is 0 here?",
+      "parentUuid": "5c42c910_ff07bded",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
