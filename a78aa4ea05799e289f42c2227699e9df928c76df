@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3538de20_e2f0ffa4",
+        "filename": "src/arm/macro-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-28T08:49:22Z",
+      "side": 1,
+      "message": "Should not this be counted in words? (As far as I can see, it would not work for byte sizes that are not divisible by pointer size.)",
+      "range": {
+        "startLine": 410,
+        "startChar": 0,
+        "endLine": 411,
+        "endChar": 31
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "465956d9_9f6f6ba8",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-28T08:49:22Z",
+      "side": 1,
+      "message": "You should check that bytes is divisible by pointer size (or make PushCallerSaved return number of words).",
+      "range": {
+        "startLine": 748,
+        "startChar": 44,
+        "endLine": 748,
+        "endChar": 64
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4eefa2c_bfbd7d7e",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-28T08:49:22Z",
+      "side": 1,
+      "message": "You should also clear the SP delta here, no?",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
