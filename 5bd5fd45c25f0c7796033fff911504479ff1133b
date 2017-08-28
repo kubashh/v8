@@ -22,6 +22,30 @@
       "revId": "5bd5fd45c25f0c7796033fff911504479ff1133b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e1fa772_a9eafa12",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-28T14:21:35Z",
+      "side": 0,
+      "message": "Done. Added the {kNoMaximumFlag} in this CL, left the renaming for a follow-up.",
+      "parentUuid": "32f02132_6d81b2c2",
+      "range": {
+        "startLine": 387,
+        "startChar": 22,
+        "endLine": 387,
+        "endChar": 43
+      },
+      "revId": "5bd5fd45c25f0c7796033fff911504479ff1133b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
