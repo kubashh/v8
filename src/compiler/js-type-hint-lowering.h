@@ -14,6 +14,7 @@ namespace v8 {
 namespace internal {
 
 // Forward declarations.
+class CompilationDependencies;
 class FeedbackNexus;
 class FeedbackSlot;
 
@@ -47,47 +48,95 @@ class JSTypeHintLowering {
   typedef base::Flags<Flag> Flags;
 
   JSTypeHintLowering(JSGraph* jsgraph, Handle<FeedbackVector> feedback_vector,
-                     Flags flags);
+                     Handle<Context> native_context,
+                     CompilationDependencies* dependencies, Flags flags);
+
+  class LoweringResult {
+   public:
+    Node* value() const { return value_; }
+    Node* effect() const { return effect_; }
+    Node* control() const { return control_; }
+
+    bool Changed() const { return kind_ != LoweringResultKind::kNoChange; }
+    bool IsExit() const { return kind_ == LoweringResultKind::kExit; }
+    bool IsSideEffectFree() const {
+      return kind_ == LoweringResultKind::kSideEffectFree;
+    }
+
+    static LoweringResult SideEffectFree(Node* value, Node* effect,
+                                         Node* control) {
+      DCHECK_NOT_NULL(effect);
+      DCHECK_NOT_NULL(control);
+      return LoweringResult(LoweringResultKind::kSideEffectFree, value, effect,
+                            control);
+    }
+
+    static LoweringResult NoChange() {
+      return LoweringResult(LoweringResultKind::kNoChange, nullptr, nullptr,
+                            nullptr);
+    }
+
+    static LoweringResult Exit(Node* control) {
+      return LoweringResult(LoweringResultKind::kExit, nullptr, nullptr,
+                            control);
+    }
+
+   private:
+    enum class LoweringResultKind { kNoChange, kSideEffectFree, kExit };
+
+    LoweringResult(LoweringResultKind kind, Node* value, Node* effect,
+                   Node* control)
+        : kind_(kind), value_(value), effect_(effect), control_(control) {}
+
+    LoweringResultKind kind_;
+    Node* value_;
+    Node* effect_;
+    Node* control_;
+  };
 
   // Potential reduction of binary (arithmetic, logical, shift and relational
   // comparison) operations.
-  Reduction ReduceBinaryOperation(const Operator* op, Node* left, Node* right,
-                                  Node* effect, Node* control,
-                                  FeedbackSlot slot) const;
+  LoweringResult ReduceBinaryOperation(const Operator* op, Node* left,
+                                       Node* right, Node* effect, Node* control,
+                                       FeedbackSlot slot) const;
 
   // Potential reduction to ForInNext operations
-  Reduction ReduceForInNextOperation(Node* receiver, Node* cache_array,
-                                     Node* cache_type, Node* index,
-                                     Node* effect, Node* control,
-                                     FeedbackSlot slot) const;
+  LoweringResult ReduceForInNextOperation(Node* receiver, Node* cache_array,
+                                          Node* cache_type, Node* index,
+                                          Node* effect, Node* control,
+                                          FeedbackSlot slot) const;
 
   // Potential reduction to ToNumber operations
-  Reduction ReduceToNumberOperation(Node* value, Node* effect, Node* control,
-                                    FeedbackSlot slot) const;
+  LoweringResult ReduceToNumberOperation(Node* value, Node* effect,
+                                         Node* control,
+                                         FeedbackSlot slot) const;
 
   // Potential reduction of call operations.
-  Reduction ReduceCallOperation(const Operator* op, Node* const* args,
-                                int arg_count, Node* effect, Node* control,
-                                FeedbackSlot slot) const;
-
-  // Potential reduction of construct operations.
-  Reduction ReduceConstructOperation(const Operator* op, Node* const* args,
+  LoweringResult ReduceCallOperation(const Operator* op, Node* const* args,
                                      int arg_count, Node* effect, Node* control,
                                      FeedbackSlot slot) const;
 
+  // Potential reduction of construct operations.
+  LoweringResult ReduceConstructOperation(const Operator* op, Node* const* args,
+                                          int arg_count, Node* effect,
+                                          Node* control,
+                                          FeedbackSlot slot) const;
   // Potential reduction of property access operations.
-  Reduction ReduceLoadNamedOperation(const Operator* op, Node* obj,
-                                     Node* effect, Node* control,
-                                     FeedbackSlot slot) const;
-  Reduction ReduceLoadKeyedOperation(const Operator* op, Node* obj, Node* key,
-                                     Node* effect, Node* control,
-                                     FeedbackSlot slot) const;
-  Reduction ReduceStoreNamedOperation(const Operator* op, Node* obj, Node* val,
-                                      Node* effect, Node* control,
-                                      FeedbackSlot slot) const;
-  Reduction ReduceStoreKeyedOperation(const Operator* op, Node* obj, Node* key,
-                                      Node* val, Node* effect, Node* control,
-                                      FeedbackSlot slot) const;
+  LoweringResult ReduceLoadNamedOperation(const Operator* op, Node* obj,
+                                          Node* effect, Node* control,
+                                          FeedbackSlot slot) const;
+  LoweringResult ReduceLoadKeyedOperation(const Operator* op, Node* obj,
+                                          Node* key, Node* effect,
+                                          Node* control,
+                                          FeedbackSlot slot) const;
+  LoweringResult ReduceStoreNamedOperation(const Operator* op, Node* obj,
+                                           Node* val, Node* effect,
+                                           Node* control,
+                                           FeedbackSlot slot) const;
+  LoweringResult ReduceStoreKeyedOperation(const Operator* op, Node* obj,
+                                           Node* key, Node* val, Node* effect,
+                                           Node* control,
+                                           FeedbackSlot slot) const;
 
  private:
   friend class JSSpeculativeBinopBuilder;
@@ -99,10 +148,17 @@ class JSTypeHintLowering {
   const Handle<FeedbackVector>& feedback_vector() const {
     return feedback_vector_;
   }
+  Graph* graph() const;
+
+  Handle<Context> native_context() const { return native_context_; }
+  CompilationDependencies* dependencies() const { return dependencies_; }
 
   JSGraph* jsgraph_;
   Flags const flags_;
   Handle<FeedbackVector> feedback_vector_;
+
+  Handle<Context> native_context_;
+  CompilationDependencies* dependencies_;
 
   DISALLOW_COPY_AND_ASSIGN(JSTypeHintLowering);
 };
