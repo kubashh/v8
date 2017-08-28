@@ -140,6 +140,30 @@
       "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "220c9d56_7b4213c9",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-28T13:01:41Z",
+      "side": 1,
+      "message": "Actually, could kArchCallCFunction somehow set the SP delta to the right value? I would feel much more comfortable if the delta was kept in sync (as far as I remember, linux perf integration makes use of the delta to produce the right stack unwinding info - that could be broken by this CL).",
+      "parentUuid": "f5356cfb_f4dba04a",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
