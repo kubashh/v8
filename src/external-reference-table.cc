@@ -169,8 +169,8 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
   Add(ExternalReference::allocation_sites_list_address(isolate).address(),
       "Heap::allocation_sites_list_address()");
   Add(ExternalReference::address_of_uint32_bias().address(), "uint32_bias");
-  Add(ExternalReference::is_profiling_address(isolate).address(),
-      "Isolate::is_profiling");
+  Add(ExternalReference::use_slow_api_callbacks_address(isolate).address(),
+      "FLAGS_use_slow_api_callbacks");
   Add(ExternalReference::scheduled_exception_address(isolate).address(),
       "Isolate::scheduled_exception");
   Add(ExternalReference::invoke_function_callback(isolate).address(),
