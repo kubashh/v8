@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc5b340b_272ad4c4",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-08-28T17:22:36Z",
+      "side": 1,
+      "message": "The CL says we set the mem_size to 0, but this here is 16. Is that intended? Why 16?",
+      "revId": "89f839e5d0f1e1d27c637618f5763d702c9f5afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
