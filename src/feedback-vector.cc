@@ -689,9 +689,9 @@ void FeedbackNexus::ConfigureMonomorphic(Handle<Name> name,
   }
 }
 
-void FeedbackNexus::ConfigurePolymorphic(Handle<Name> name,
-                                         MapHandles const& maps,
-                                         List<Handle<Object>>* handlers) {
+void FeedbackNexus::ConfigurePolymorphic(
+    Handle<Name> name, MapHandles const& maps,
+    std::vector<Handle<Object>>* handlers) {
   int receiver_count = static_cast<int>(maps.size());
   DCHECK(receiver_count > 1);
   Handle<FixedArray> array;
@@ -782,7 +782,7 @@ MaybeHandle<Object> FeedbackNexus::FindHandlerForMap(Handle<Map> map) const {
   return MaybeHandle<Code>();
 }
 
-bool FeedbackNexus::FindHandlers(List<Handle<Object>>* code_list,
+bool FeedbackNexus::FindHandlers(std::vector<Handle<Object>>* code_list,
                                  int length) const {
   Object* feedback = GetFeedback();
   Isolate* isolate = GetIsolate();
@@ -801,7 +801,7 @@ bool FeedbackNexus::FindHandlers(List<Handle<Object>>* code_list,
       if (!cell->cleared()) {
         Object* code = array->get(i + increment - 1);
         DCHECK(IC::IsHandler(code));
-        code_list->Add(handle(code, isolate));
+        code_list->push_back(handle(code, isolate));
         count++;
       }
     }
@@ -810,7 +810,7 @@ bool FeedbackNexus::FindHandlers(List<Handle<Object>>* code_list,
     if (!cell->cleared()) {
       Object* code = GetFeedbackExtra();
       DCHECK(IC::IsHandler(code));
-      code_list->Add(handle(code, isolate));
+      code_list->push_back(handle(code, isolate));
       count++;
     }
   }
@@ -836,15 +836,14 @@ Name* KeyedStoreICNexus::FindFirstName() const {
 KeyedAccessStoreMode KeyedStoreICNexus::GetKeyedAccessStoreMode() const {
   KeyedAccessStoreMode mode = STANDARD_STORE;
   MapHandles maps;
-  List<Handle<Object>> handlers;
+  std::vector<Handle<Object>> handlers;
 
   if (GetKeyType() == PROPERTY) return mode;
 
   ExtractMaps(&maps);
   FindHandlers(&handlers, static_cast<int>(maps.size()));
-  for (int i = 0; i < handlers.length(); i++) {
+  for (const Handle<Object>& maybe_code_handler : handlers) {
     // The first handler that isn't the slow handler will have the bits we need.
-    Handle<Object> maybe_code_handler = handlers.at(i);
     Handle<Code> handler;
     if (maybe_code_handler->IsTuple3()) {
       // Elements transition.

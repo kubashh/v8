@@ -554,7 +554,7 @@ class FeedbackNexus {
   virtual InlineCacheState StateFromFeedback() const = 0;
   virtual int ExtractMaps(MapHandles* maps) const;
   virtual MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const;
-  virtual bool FindHandlers(List<Handle<Object>>* code_list,
+  virtual bool FindHandlers(std::vector<Handle<Object>>* code_list,
                             int length = -1) const;
   virtual Name* FindFirstName() const { return NULL; }
 
@@ -577,7 +577,7 @@ class FeedbackNexus {
                             Handle<Object> handler);
 
   void ConfigurePolymorphic(Handle<Name> name, MapHandles const& maps,
-                            List<Handle<Object>>* handlers);
+                            std::vector<Handle<Object>>* handlers);
 
  protected:
   inline void SetFeedback(Object* feedback,
@@ -620,7 +620,7 @@ class CallICNexus final : public FeedbackNexus {
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
     return MaybeHandle<Code>();
   }
-  bool FindHandlers(List<Handle<Object>>* code_list,
+  bool FindHandlers(std::vector<Handle<Object>>* code_list,
                     int length = -1) const final {
     return length == 0;
   }
@@ -666,7 +666,7 @@ class LoadGlobalICNexus : public FeedbackNexus {
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
     return MaybeHandle<Code>();
   }
-  bool FindHandlers(List<Handle<Object>>* code_list,
+  bool FindHandlers(std::vector<Handle<Object>>* code_list,
                     int length = -1) const final {
     return length == 0;
   }
@@ -759,7 +759,7 @@ class BinaryOpICNexus final : public FeedbackNexus {
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
     return MaybeHandle<Code>();
   }
-  bool FindHandlers(List<Handle<Object>>* code_list,
+  bool FindHandlers(std::vector<Handle<Object>>* code_list,
                     int length = -1) const final {
     return length == 0;
   }
@@ -786,7 +786,7 @@ class CompareICNexus final : public FeedbackNexus {
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
     return MaybeHandle<Code>();
   }
-  bool FindHandlers(List<Handle<Object>>* code_list,
+  bool FindHandlers(std::vector<Handle<Object>>* code_list,
                     int length = -1) const final {
     return length == 0;
   }
@@ -805,7 +805,7 @@ class ForInICNexus final : public FeedbackNexus {
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
     return MaybeHandle<Code>();
   }
-  bool FindHandlers(List<Handle<Object>>* code_list,
+  bool FindHandlers(std::vector<Handle<Object>>* code_list,
                     int length = -1) const final {
     return length == 0;
   }
