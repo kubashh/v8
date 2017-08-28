@@ -303,6 +303,10 @@ DEFINE_BOOL(optimize_for_size, false,
             "Enables optimizations which favor memory size over execution "
             "speed")
 
+DEFINE_BOOL(literals_opt, true,
+            "Enables several literals optimizations: storing boilerplates on "
+            "second run, optimized bytecodes for empty literals")
+
 DEFINE_VALUE_IMPLICATION(optimize_for_size, max_semi_space_size, 1)
 
 // Flags for data representation optimizations

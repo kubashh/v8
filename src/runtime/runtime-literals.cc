@@ -475,6 +475,8 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
     // Eagerly create AllocationSites for literals that contain an Array.
     bool needs_initial_allocation_site =
         (flags & AggregateLiteral::kNeedsInitialAllocationSite) != 0;
+    // Disable lazy boilerplates.
+    if (!FLAG_literals_opt) needs_initial_allocation_site = false;
     // TODO(cbruni): Even in the case where we need an initial allocation site
     // we could still create the boilerplate lazily to save memory.
     if (!needs_initial_allocation_site &&
