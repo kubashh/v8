@@ -101,7 +101,6 @@ namespace internal {
   V(ThisFunction)               \
   V(SuperPropertyReference)     \
   V(SuperCallReference)         \
-  V(CaseClause)                 \
   V(EmptyParentheses)           \
   V(GetIterator)                \
   V(DoExpression)               \
@@ -841,16 +840,14 @@ class WithStatement final : public Statement {
   Statement* statement_;
 };
 
-
-class CaseClause final : public Expression {
+class CaseClause final : public ZoneObject {
  public:
   bool is_default() const { return label_ == NULL; }
   Expression* label() const {
-    CHECK(!is_default());
+    DCHECK(!is_default());
     return label_;
   }
   void set_label(Expression* e) { label_ = e; }
-  Label* body_target() { return &body_target_; }
   ZoneList<Statement*>* statements() const { return statements_; }
 
   void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
@@ -861,11 +858,10 @@ class CaseClause final : public Expression {
  private:
   friend class AstNodeFactory;
 
-  CaseClause(Expression* label, ZoneList<Statement*>* statements, int pos);
+  CaseClause(Expression* label, ZoneList<Statement*>* statements);
 
   FeedbackSlot feedback_slot_;
   Expression* label_;
-  Label body_target_;
   ZoneList<Statement*>* statements_;
 };
 
@@ -3266,9 +3262,9 @@ class AstNodeFactory final BASE_EMBEDDED {
         SloppyBlockFunctionStatement(NewEmptyStatement(kNoSourcePosition));
   }
 
-  CaseClause* NewCaseClause(Expression* label, ZoneList<Statement*>* statements,
-                            int pos) {
-    return new (zone_) CaseClause(label, statements, pos);
+  CaseClause* NewCaseClause(Expression* label,
+                            ZoneList<Statement*>* statements) {
+    return new (zone_) CaseClause(label, statements);
   }
 
   Literal* NewStringLiteral(const AstRawString* string, int pos) {
