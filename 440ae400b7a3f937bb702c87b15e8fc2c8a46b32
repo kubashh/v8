@@ -22,6 +22,30 @@
       "revId": "440ae400b7a3f937bb702c87b15e8fc2c8a46b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c094f7_8548d1f1",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T09:21:16Z",
+      "side": 1,
+      "message": "We currently always validate while building the graph. This can easily be refactored later, if this changes. I think for simplicity, we should keep this constant here instead of introducing another template.",
+      "parentUuid": "170779af_362118da",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "440ae400b7a3f937bb702c87b15e8fc2c8a46b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

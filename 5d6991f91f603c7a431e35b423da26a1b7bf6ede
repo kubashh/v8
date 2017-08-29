@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "aab1a130_e103664c",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T09:21:16Z",
+      "side": 1,
+      "message": "Agreed. I could also imagine being it named \"Backend\".\nWe discussed a bit more, and decided to go for \"Interface\" for now.",
+      "parentUuid": "7f67501e_d82988ea",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20e87f0a_db79f279",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -778,6 +796,24 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f750015_9703f5c2",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T09:21:16Z",
+      "side": 1,
+      "message": "Not yet, but will do this today. I will land this CL once I get LGTM anyway, because it needs a rebase every few hours, and I want to get it out ASAP.",
+      "parentUuid": "3b1b94ac_73945cf8",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
