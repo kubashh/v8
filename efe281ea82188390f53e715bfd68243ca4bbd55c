@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "452e1d12_20b3040e",
+        "filename": "src/collector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "Just\n  rit-\u003eDispose();\nto avoid unnecessary copying.",
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6873e63f_c98e1166",
+        "filename": "src/collector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "const Vector\u003cT\u003e\u0026",
+      "range": {
+        "startLine": 91,
+        "startChar": 9,
+        "endLine": 91,
+        "endChar": 18
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b93a958_750cd0be",
+        "filename": "src/collector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5879a0a8_714e0353",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "We already have a MapHandles typedef. I\u0027d suggest to introduce ObjectHandles typedef.",
+      "range": {
+        "startLine": 557,
+        "startChar": 28,
+        "endLine": 557,
+        "endChar": 55
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90697baf_962a3154",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "size_t to avoid signed-unsigned сomparison at line 798.",
+      "range": {
+        "startLine": 782,
+        "startChar": 2,
+        "endLine": 782,
+        "endChar": 5
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baab01ef_8f04bce5",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "size_t",
+      "range": {
+        "startLine": 1060,
+        "startChar": 2,
+        "endLine": 1060,
+        "endChar": 5
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8700be91_4e2e1d34",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "handlers[handler_to_overwrite]",
+      "range": {
+        "startLine": 561,
+        "startChar": 6,
+        "endLine": 561,
+        "endChar": 39
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee2ce30b_6d833d32",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "handlers[0]",
+      "range": {
+        "startLine": 1285,
+        "startChar": 25,
+        "endLine": 1285,
+        "endChar": 39
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94e81dfe_cec6beac",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1970,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-08-29T09:27:23Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1970,
+        "startChar": 25,
+        "endLine": 1970,
+        "endChar": 39
+      },
+      "revId": "efe281ea82188390f53e715bfd68243ca4bbd55c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
