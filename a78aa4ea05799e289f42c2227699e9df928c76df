@@ -164,6 +164,54 @@
       "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e6920b_9f244874",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1229957
+      },
+      "writtenOn": "2017-08-29T10:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5356cfb_f4dba04a",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79718af4_387c4292",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1229957
+      },
+      "writtenOn": "2017-08-29T10:51:36Z",
+      "side": 1,
+      "message": "I have added a few DCHECKS to ensure `kArchSaveCallerRegisters` is called before `kArchCallCFunction` when compiler code stubs using restricted register allocation config.",
+      "parentUuid": "220c9d56_7b4213c9",
+      "range": {
+        "startLine": 753,
+        "startChar": 6,
+        "endLine": 753,
+        "endChar": 55
+      },
+      "revId": "a78aa4ea05799e289f42c2227699e9df928c76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
