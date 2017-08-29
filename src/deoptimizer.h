@@ -642,7 +642,7 @@ class RegisterValues {
   static_assert(sizeof(Float32) == kFloatSize, "size mismatch");
   static_assert(sizeof(Float64) == kDoubleSize, "size mismatch");
 
-  intptr_t registers_[Register::kNumRegisters];
+  intptr_t registers_[AsmRegister::kNumRegisters];
   Float32 float_registers_[FloatRegister::kMaxNumRegisters];
   Float64 double_registers_[DoubleRegister::kMaxNumRegisters];
 };
@@ -910,10 +910,10 @@ class Translation BASE_EMBEDDED {
   void ArgumentsLength(bool is_rest);
   void BeginCapturedObject(int length);
   void DuplicateObject(int object_index);
-  void StoreRegister(Register reg);
-  void StoreInt32Register(Register reg);
-  void StoreUint32Register(Register reg);
-  void StoreBoolRegister(Register reg);
+  void StoreRegister(AsmRegister reg);
+  void StoreInt32Register(AsmRegister reg);
+  void StoreUint32Register(AsmRegister reg);
+  void StoreBoolRegister(AsmRegister reg);
   void StoreFloatRegister(FloatRegister reg);
   void StoreDoubleRegister(DoubleRegister reg);
   void StoreStackSlot(int index);

@@ -442,9 +442,9 @@ class LocationOperand : public InstructionOperand {
     return static_cast<int64_t>(value_) >> IndexField::kShift;
   }
 
-  Register GetRegister() const {
+  AsmRegister GetRegister() const {
     DCHECK(IsRegister());
-    return Register::from_code(register_code());
+    return AsmRegister::from_code(register_code());
   }
 
   FloatRegister GetFloatRegister() const {

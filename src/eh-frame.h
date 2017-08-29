@@ -86,24 +86,25 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
   //
   // The <base_offset> must be positive or 0.
   //
-  void SetBaseAddressRegister(Register base_register);
+  void SetBaseAddressRegister(AsmRegister base_register);
   void SetBaseAddressOffset(int base_offset);
   void IncreaseBaseAddressOffset(int base_delta) {
     SetBaseAddressOffset(base_offset_ + base_delta);
   }
-  void SetBaseAddressRegisterAndOffset(Register base_register, int base_offset);
+  void SetBaseAddressRegisterAndOffset(AsmRegister base_register,
+                                       int base_offset);
 
-  // Register saved at location <base_address> + <offset>.
+  // AsmRegister saved at location <base_address> + <offset>.
   // The <offset> must be a multiple of EhFrameConstants::kDataAlignment.
-  void RecordRegisterSavedToStack(Register name, int offset) {
+  void RecordRegisterSavedToStack(AsmRegister name, int offset) {
     RecordRegisterSavedToStack(RegisterToDwarfCode(name), offset);
   }
 
   // The register has not been modified from the previous frame.
-  void RecordRegisterNotModified(Register name);
+  void RecordRegisterNotModified(AsmRegister name);
 
   // The register follows the rule defined in the CIE.
-  void RecordRegisterFollowsInitialRule(Register name);
+  void RecordRegisterFollowsInitialRule(AsmRegister name);
 
   void Finish(int code_size);
 
@@ -115,7 +116,7 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
   void GetEhFrame(CodeDesc* desc);
 
   int last_pc_offset() const { return last_pc_offset_; }
-  Register base_register() const { return base_register_; }
+  AsmRegister base_register() const { return base_register_; }
   int base_offset() const { return base_offset_; }
 
  private:
@@ -182,7 +183,7 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
 
   // Platform specific functions implemented in eh-frame-<arch>.cc
 
-  static int RegisterToDwarfCode(Register name);
+  static int RegisterToDwarfCode(AsmRegister name);
 
   // Write directives to build the initial state in the CIE.
   void WriteInitialStateInCie();
@@ -193,7 +194,7 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
   int cie_size_;
   int last_pc_offset_;
   InternalState writer_state_;
-  Register base_register_;
+  AsmRegister base_register_;
   int base_offset_;
   ZoneVector<byte> eh_frame_buffer_;
 

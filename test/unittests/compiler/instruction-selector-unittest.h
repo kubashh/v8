@@ -226,7 +226,7 @@ class InstructionSelectorTest : public TestWithContext,
 
     int ToVreg(const Node* node) const;
 
-    bool IsFixed(const InstructionOperand* operand, Register reg) const;
+    bool IsFixed(const InstructionOperand* operand, AsmRegister reg) const;
     bool IsSameAsFirst(const InstructionOperand* operand) const;
     bool IsUsedAtStart(const InstructionOperand* operand) const;
 

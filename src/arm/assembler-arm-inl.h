@@ -200,8 +200,7 @@ Operand::Operand(Smi* value) {
   rmode_ = RelocInfo::NONE32;
 }
 
-
-Operand::Operand(Register rm) {
+Operand::Operand(AsmRegister rm) {
   rm_ = rm;
   rs_ = no_reg;
   shift_op_ = LSL;

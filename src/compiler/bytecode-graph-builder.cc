@@ -195,7 +195,6 @@ BytecodeGraphBuilder::Environment::Environment(
   values_ = other->values_;
 }
 
-
 int BytecodeGraphBuilder::Environment::RegisterToValuesIndex(
     interpreter::Register the_register) const {
   if (the_register.is_parameter()) {
@@ -208,7 +207,6 @@ int BytecodeGraphBuilder::Environment::RegisterToValuesIndex(
 Node* BytecodeGraphBuilder::Environment::LookupAccumulator() const {
   return values()->at(accumulator_base_);
 }
-
 
 Node* BytecodeGraphBuilder::Environment::LookupRegister(
     interpreter::Register the_register) const {

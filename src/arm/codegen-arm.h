@@ -16,10 +16,8 @@ class StringCharLoadGenerator : public AllStatic {
   // Generates the code for handling different string types and loading the
   // indexed character into |result|.  We expect |index| as untagged input and
   // |result| as untagged output.
-  static void Generate(MacroAssembler* masm,
-                       Register string,
-                       Register index,
-                       Register result,
+  static void Generate(MacroAssembler* masm, AsmRegister string,
+                       AsmRegister index, AsmRegister result,
                        Label* call_runtime);
 
  private:

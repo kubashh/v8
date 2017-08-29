@@ -97,7 +97,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   // and owned by the CallInterfaceDescriptorData.
 
   void InitializePlatformSpecific(
-      int register_parameter_count, const Register* registers,
+      int register_parameter_count, const AsmRegister* registers,
       PlatformInterfaceDescriptor* platform_descriptor = NULL);
 
   // if machine_types is null, then an array of size
@@ -117,14 +117,16 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
 
   int param_count() const { return param_count_; }
   int register_param_count() const { return register_param_count_; }
-  Register register_param(int index) const { return register_params_[index]; }
-  Register* register_params() const { return register_params_.get(); }
+  AsmRegister register_param(int index) const {
+    return register_params_[index];
+  }
+  AsmRegister* register_params() const { return register_params_.get(); }
   MachineType param_type(int index) const { return machine_types_[index]; }
   PlatformInterfaceDescriptor* platform_specific_descriptor() const {
     return platform_specific_descriptor_;
   }
 
-  void RestrictAllocatableRegisters(const Register* registers, int num) {
+  void RestrictAllocatableRegisters(const AsmRegister* registers, int num) {
     DCHECK(allocatable_registers_ == 0);
     for (int i = 0; i < num; ++i) {
       allocatable_registers_ |= registers[i].bit();
@@ -142,11 +144,11 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   // allocator. Currently, it's only used by RecordWrite code stub.
   RegList allocatable_registers_;
 
-  // The Register params are allocated dynamically by the
+  // The AsmRegister params are allocated dynamically by the
   // InterfaceDescriptor, and freed on destruction. This is because static
   // arrays of Registers cause creation of runtime static initializers
   // which we don't want.
-  std::unique_ptr<Register[]> register_params_;
+  std::unique_ptr<AsmRegister[]> register_params_;
   std::unique_ptr<MachineType[]> machine_types_;
 
   PlatformInterfaceDescriptor* platform_specific_descriptor_;
@@ -183,7 +185,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return data()->param_count() - data()->register_param_count();
   }
 
-  Register GetRegisterParameter(int index) const {
+  AsmRegister GetRegisterParameter(int index) const {
     return data()->register_param(index);
   }
 
@@ -201,7 +203,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     return data()->allocatable_registers();
   }
 
-  static const Register ContextRegister();
+  static const AsmRegister ContextRegister();
 
   const char* DebugName(Isolate* isolate) const;
 
@@ -323,8 +325,8 @@ static const int kMaxBuiltinRegisterParams = 5;
   }                                                                           \
   void InitializePlatformSpecific(CallInterfaceDescriptorData* data)          \
       override {                                                              \
-    Register registers[] = {TargetRegister(), NewTargetRegister(),            \
-                            ArgumentsCountRegister()};                        \
+    AsmRegister registers[] = {TargetRegister(), NewTargetRegister(),         \
+                               ArgumentsCountRegister()};                     \
     data->InitializePlatformSpecific(arraysize(registers), registers);        \
   }                                                                           \
                                                                               \
@@ -361,9 +363,9 @@ class LoadDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadDescriptor,
                                                CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
-  static const Register NameRegister();
-  static const Register SlotRegister();
+  static const AsmRegister ReceiverRegister();
+  static const AsmRegister NameRegister();
+  static const AsmRegister SlotRegister();
 };
 
 // LoadFieldDescriptor is used by the shared handler that loads a field from an
@@ -374,8 +376,8 @@ class LoadFieldDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadFieldDescriptor,
                                                CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
-  static const Register SmiHandlerRegister();
+  static const AsmRegister ReceiverRegister();
+  static const AsmRegister SmiHandlerRegister();
 };
 
 class LoadGlobalDescriptor : public CallInterfaceDescriptor {
@@ -384,11 +386,11 @@ class LoadGlobalDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadGlobalDescriptor,
                                                CallInterfaceDescriptor)
 
-  static const Register NameRegister() {
+  static const AsmRegister NameRegister() {
     return LoadDescriptor::NameRegister();
   }
 
-  static const Register SlotRegister() {
+  static const AsmRegister SlotRegister() {
     return LoadDescriptor::SlotRegister();
   }
 };
@@ -399,10 +401,10 @@ class StoreDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(StoreDescriptor,
                                                CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
-  static const Register NameRegister();
-  static const Register ValueRegister();
-  static const Register SlotRegister();
+  static const AsmRegister ReceiverRegister();
+  static const AsmRegister NameRegister();
+  static const AsmRegister ValueRegister();
+  static const AsmRegister SlotRegister();
 
 #if V8_TARGET_ARCH_IA32
   static const bool kPassLastArgsOnStack = true;
@@ -420,9 +422,9 @@ class StoreTransitionDescriptor : public StoreDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(StoreTransitionDescriptor,
                                                StoreDescriptor)
 
-  static const Register MapRegister();
-  static const Register SlotRegister();
-  static const Register VectorRegister();
+  static const AsmRegister MapRegister();
+  static const AsmRegister SlotRegister();
+  static const AsmRegister VectorRegister();
 
   // Pass value, slot and vector through the stack.
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
@@ -440,8 +442,8 @@ class StoreNamedTransitionDescriptor : public StoreTransitionDescriptor {
   static const int kStackArgumentsCount =
       StoreTransitionDescriptor::kStackArgumentsCount + 1;
 
-  static const Register NameRegister() { return no_reg; }
-  static const Register FieldOffsetRegister() {
+  static const AsmRegister NameRegister() { return no_reg; }
+  static const AsmRegister FieldOffsetRegister() {
     return StoreTransitionDescriptor::NameRegister();
   }
 };
@@ -452,7 +454,7 @@ class StoreWithVectorDescriptor : public StoreDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(StoreWithVectorDescriptor,
                                                StoreDescriptor)
 
-  static const Register VectorRegister();
+  static const AsmRegister VectorRegister();
 
   // Pass value, slot and vector through the stack.
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
@@ -464,7 +466,7 @@ class LoadWithVectorDescriptor : public LoadDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadWithVectorDescriptor,
                                                LoadDescriptor)
 
-  static const Register VectorRegister();
+  static const AsmRegister VectorRegister();
 };
 
 class LoadICProtoArrayDescriptor : public LoadWithVectorDescriptor {
@@ -473,7 +475,7 @@ class LoadICProtoArrayDescriptor : public LoadWithVectorDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadICProtoArrayDescriptor,
                                                LoadWithVectorDescriptor)
 
-  static const Register HandlerRegister();
+  static const AsmRegister HandlerRegister();
 };
 
 class LoadGlobalWithVectorDescriptor : public LoadGlobalDescriptor {
@@ -482,7 +484,7 @@ class LoadGlobalWithVectorDescriptor : public LoadGlobalDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(LoadGlobalWithVectorDescriptor,
                                                LoadGlobalDescriptor)
 
-  static const Register VectorRegister() {
+  static const AsmRegister VectorRegister() {
     return LoadWithVectorDescriptor::VectorRegister();
   }
 };
@@ -499,23 +501,23 @@ class FastNewFunctionContextDescriptor : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(FastNewFunctionContextDescriptor,
                                                CallInterfaceDescriptor)
 
-  static const Register FunctionRegister();
-  static const Register SlotsRegister();
+  static const AsmRegister FunctionRegister();
+  static const AsmRegister SlotsRegister();
 };
 
 class FastNewObjectDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kTarget, kNewTarget)
   DECLARE_DESCRIPTOR(FastNewObjectDescriptor, CallInterfaceDescriptor)
-  static const Register TargetRegister();
-  static const Register NewTargetRegister();
+  static const AsmRegister TargetRegister();
+  static const AsmRegister NewTargetRegister();
 };
 
 class FastNewArgumentsDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kFunction)
   DECLARE_DESCRIPTOR(FastNewArgumentsDescriptor, CallInterfaceDescriptor)
-  static const Register TargetRegister();
+  static const AsmRegister TargetRegister();
 };
 
 class RecordWriteDescriptor final : public CallInterfaceDescriptor {
@@ -530,7 +532,7 @@ class TypeConversionDescriptor final : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kArgument)
   DECLARE_DESCRIPTOR(TypeConversionDescriptor, CallInterfaceDescriptor)
 
-  static const Register ArgumentRegister();
+  static const AsmRegister ArgumentRegister();
 };
 
 class TypeConversionStackParameterDescriptor final
@@ -690,9 +692,9 @@ class BuiltinDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kNewTarget, kArgumentsCount)
   DECLARE_DESCRIPTOR_WITH_CUSTOM_FUNCTION_TYPE(BuiltinDescriptor,
                                                CallInterfaceDescriptor)
-  static const Register ArgumentsCountRegister();
-  static const Register NewTargetRegister();
-  static const Register TargetRegister();
+  static const AsmRegister ArgumentsCountRegister();
+  static const AsmRegister NewTargetRegister();
+  static const AsmRegister TargetRegister();
 };
 
 class IteratingArrayBuiltinDescriptor : public BuiltinDescriptor {
@@ -771,8 +773,8 @@ class StringCompareDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kLeft, kRight)
   DECLARE_DESCRIPTOR(StringCompareDescriptor, CallInterfaceDescriptor)
 
-  static const Register LeftRegister();
-  static const Register RightRegister();
+  static const AsmRegister LeftRegister();
+  static const AsmRegister RightRegister();
 };
 
 class SubStringDescriptor : public CallInterfaceDescriptor {
@@ -802,9 +804,9 @@ class ApiGetterDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kReceiver, kHolder, kCallback)
   DECLARE_DESCRIPTOR(ApiGetterDescriptor, CallInterfaceDescriptor)
 
-  static const Register ReceiverRegister();
-  static const Register HolderRegister();
-  static const Register CallbackRegister();
+  static const AsmRegister ReceiverRegister();
+  static const AsmRegister HolderRegister();
+  static const AsmRegister CallbackRegister();
 };
 
 class MathPowTaggedDescriptor : public CallInterfaceDescriptor {
@@ -812,7 +814,7 @@ class MathPowTaggedDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kExponent)
   DECLARE_DESCRIPTOR(MathPowTaggedDescriptor, CallInterfaceDescriptor)
 
-  static const Register exponent();
+  static const AsmRegister exponent();
 };
 
 class MathPowIntegerDescriptor : public CallInterfaceDescriptor {
@@ -820,7 +822,7 @@ class MathPowIntegerDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kExponent)
   DECLARE_DESCRIPTOR(MathPowIntegerDescriptor, CallInterfaceDescriptor)
 
-  static const Register exponent();
+  static const AsmRegister exponent();
 };
 
 // TODO(turbofan): We should probably rename this to GrowFastElementsDescriptor.
@@ -829,8 +831,8 @@ class GrowArrayElementsDescriptor : public CallInterfaceDescriptor {
   DEFINE_PARAMETERS(kObject, kKey)
   DECLARE_DESCRIPTOR(GrowArrayElementsDescriptor, CallInterfaceDescriptor)
 
-  static const Register ObjectRegister();
-  static const Register KeyRegister();
+  static const AsmRegister ObjectRegister();
+  static const AsmRegister KeyRegister();
 };
 
 class NewArgumentsElementsDescriptor final : public CallInterfaceDescriptor {

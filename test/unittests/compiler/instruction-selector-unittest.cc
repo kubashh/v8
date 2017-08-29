@@ -119,9 +119,8 @@ int InstructionSelectorTest::Stream::ToVreg(const Node* node) const {
   return i->second;
 }
 
-
 bool InstructionSelectorTest::Stream::IsFixed(const InstructionOperand* operand,
-                                              Register reg) const {
+                                              AsmRegister reg) const {
   if (!operand->IsUnallocated()) return false;
   const UnallocatedOperand* unallocated = UnallocatedOperand::cast(operand);
   if (!unallocated->HasFixedRegisterPolicy()) return false;

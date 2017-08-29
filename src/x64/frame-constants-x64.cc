@@ -14,9 +14,9 @@
 namespace v8 {
 namespace internal {
 
-Register JavaScriptFrame::fp_register() { return rbp; }
-Register JavaScriptFrame::context_register() { return rsi; }
-Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
+AsmRegister JavaScriptFrame::fp_register() { return rbp; }
+AsmRegister JavaScriptFrame::context_register() { return rsi; }
+AsmRegister JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
 
 }  // namespace internal
 }  // namespace v8

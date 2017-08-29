@@ -360,7 +360,7 @@ class CodeStubDescriptor {
   void Initialize(Address deoptimization_handler = NULL,
                   int hint_stack_parameter_count = -1,
                   StubFunctionMode function_mode = NOT_JS_FUNCTION_STUB_MODE);
-  void Initialize(Register stack_parameter_count,
+  void Initialize(AsmRegister stack_parameter_count,
                   Address deoptimization_handler = NULL,
                   int hint_stack_parameter_count = -1,
                   StubFunctionMode function_mode = NOT_JS_FUNCTION_STUB_MODE);
@@ -389,7 +389,7 @@ class CodeStubDescriptor {
     return call_descriptor().GetParameterCount();
   }
 
-  Register GetRegisterParameter(int index) const {
+  AsmRegister GetRegisterParameter(int index) const {
     return call_descriptor().GetRegisterParameter(index);
   }
 
@@ -420,7 +420,7 @@ class CodeStubDescriptor {
   }
 
   int hint_stack_parameter_count() const { return hint_stack_parameter_count_; }
-  Register stack_parameter_count() const { return stack_parameter_count_; }
+  AsmRegister stack_parameter_count() const { return stack_parameter_count_; }
   StubFunctionMode function_mode() const { return function_mode_; }
   Address deoptimization_handler() const { return deoptimization_handler_; }
 
@@ -431,7 +431,7 @@ class CodeStubDescriptor {
 
   Isolate* isolate_;
   CallInterfaceDescriptor call_descriptor_;
-  Register stack_parameter_count_;
+  AsmRegister stack_parameter_count_;
   // If hint_stack_parameter_count_ > 0, the code stub can optimize the
   // return sequence. Default value is -1, which means it is ignored.
   int hint_stack_parameter_count_;
@@ -841,7 +841,7 @@ enum EmbedMode {
 
 class DoubleToIStub : public PlatformCodeStub {
  public:
-  DoubleToIStub(Isolate* isolate, Register source, Register destination,
+  DoubleToIStub(Isolate* isolate, AsmRegister source, AsmRegister destination,
                 int offset, bool is_truncating, bool skip_fastpath = false)
       : PlatformCodeStub(isolate) {
     minor_key_ = SourceRegisterBits::encode(source.code()) |
@@ -855,18 +855,18 @@ class DoubleToIStub : public PlatformCodeStub {
   bool SometimesSetsUpAFrame() override { return false; }
 
  private:
-  Register source() const {
-    return Register::from_code(SourceRegisterBits::decode(minor_key_));
+  AsmRegister source() const {
+    return AsmRegister::from_code(SourceRegisterBits::decode(minor_key_));
   }
-  Register destination() const {
-    return Register::from_code(DestinationRegisterBits::decode(minor_key_));
+  AsmRegister destination() const {
+    return AsmRegister::from_code(DestinationRegisterBits::decode(minor_key_));
   }
   bool is_truncating() const { return IsTruncatingBits::decode(minor_key_); }
   bool skip_fastpath() const { return SkipFastPathBits::decode(minor_key_); }
   int offset() const { return OffsetBits::decode(minor_key_); }
 
   static const int kBitsPerRegisterNumber = 6;
-  STATIC_ASSERT((1L << kBitsPerRegisterNumber) >= Register::kNumRegisters);
+  STATIC_ASSERT((1L << kBitsPerRegisterNumber) >= AsmRegister::kNumRegisters);
   class SourceRegisterBits:
       public BitField<int, 0, kBitsPerRegisterNumber> {};  // NOLINT
   class DestinationRegisterBits:

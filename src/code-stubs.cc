@@ -65,8 +65,7 @@ void CodeStubDescriptor::Initialize(Address deoptimization_handler,
   function_mode_ = function_mode;
 }
 
-
-void CodeStubDescriptor::Initialize(Register stack_parameter_count,
+void CodeStubDescriptor::Initialize(AsmRegister stack_parameter_count,
                                     Address deoptimization_handler,
                                     int hint_stack_parameter_count,
                                     StubFunctionMode function_mode) {

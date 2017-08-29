@@ -22,7 +22,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   GeneratePrologue();
 
   // Save all general purpose registers before messing with them.
-  const int kNumberOfRegisters = Register::kNumRegisters;
+  const int kNumberOfRegisters = AsmRegister::kNumRegisters;
 
   // Everything but pc, lr and ip which will be saved but not restored.
   RegList restored_regs = kJSCallerSaved | kCalleeSaved | ip.bit();
@@ -39,7 +39,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
     CpuFeatureScope scope(masm(), VFP32DREGS,
                           CpuFeatureScope::kDontCheckSupported);
     UseScratchRegisterScope temps(masm());
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
 
     // Check CPU flags for number of registers, setting the Z condition flag.
     __ CheckFor32DRegs(scratch);
@@ -61,7 +61,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
 
   {
     UseScratchRegisterScope temps(masm());
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     __ mov(scratch, Operand(ExternalReference(
                         IsolateAddressId::kCEntryFPAddress, isolate())));
     __ str(fp, MemOperand(scratch));
@@ -107,7 +107,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   __ ldr(r1, MemOperand(r0, Deoptimizer::input_offset()));
 
   // Copy core registers into FrameDescription::registers_[kNumRegisters].
-  DCHECK(Register::kNumRegisters == kNumberOfRegisters);
+  DCHECK(AsmRegister::kNumRegisters == kNumberOfRegisters);
   for (int i = 0; i < kNumberOfRegisters; i++) {
     int offset = (i * kPointerSize) + FrameDescription::registers_offset();
     __ ldr(r2, MemOperand(sp, i * kPointerSize));
@@ -234,7 +234,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   __ Drop(3);
   {
     UseScratchRegisterScope temps(masm());
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
     __ pop(scratch);  // get continuation, leave pc on stack
     __ pop(lr);
     __ Jump(scratch);
@@ -252,7 +252,7 @@ void Deoptimizer::TableEntryGenerator::GeneratePrologue() {
   // need two instructions.
   STATIC_ASSERT((kMaxNumberOfEntries - 1) <= 0xffff);
   UseScratchRegisterScope temps(masm());
-  Register scratch = temps.Acquire();
+  AsmRegister scratch = temps.Acquire();
   if (CpuFeatures::IsSupported(ARMv7)) {
     CpuFeatureScope scope(masm(), ARMv7);
     Label done;
