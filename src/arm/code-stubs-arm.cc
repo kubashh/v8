@@ -43,18 +43,18 @@ void ArrayNArgumentsConstructorStub::Generate(MacroAssembler* masm) {
 
 void DoubleToIStub::Generate(MacroAssembler* masm) {
   Label out_of_range, only_low, negate, done;
-  Register input_reg = source();
-  Register result_reg = destination();
+  AsmRegister input_reg = source();
+  AsmRegister result_reg = destination();
   DCHECK(is_truncating());
 
   int double_offset = offset();
   // Account for saved regs if input is sp.
   if (input_reg.is(sp)) double_offset += 3 * kPointerSize;
 
-  Register scratch = GetRegisterThatIsNotOneOf(input_reg, result_reg);
-  Register scratch_low =
+  AsmRegister scratch = GetRegisterThatIsNotOneOf(input_reg, result_reg);
+  AsmRegister scratch_low =
       GetRegisterThatIsNotOneOf(input_reg, result_reg, scratch);
-  Register scratch_high =
+  AsmRegister scratch_high =
       GetRegisterThatIsNotOneOf(input_reg, result_reg, scratch, scratch_low);
   LowDwVfpRegister double_scratch = kScratchDoubleReg;
 
@@ -152,7 +152,7 @@ void StoreBufferOverflowStub::Generate(MacroAssembler* masm) {
   // restore them.
   __ stm(db_w, sp, kCallerSaved | lr.bit());
 
-  const Register scratch = r1;
+  const AsmRegister scratch = r1;
 
   if (save_doubles()) {
     __ SaveFPRegs(sp, scratch);
@@ -173,15 +173,15 @@ void StoreBufferOverflowStub::Generate(MacroAssembler* masm) {
 }
 
 void MathPowStub::Generate(MacroAssembler* masm) {
-  const Register exponent = MathPowTaggedDescriptor::exponent();
+  const AsmRegister exponent = MathPowTaggedDescriptor::exponent();
   DCHECK(exponent.is(r2));
   const LowDwVfpRegister double_base = d0;
   const LowDwVfpRegister double_exponent = d1;
   const LowDwVfpRegister double_result = d2;
   const LowDwVfpRegister double_scratch = d3;
   const SwVfpRegister single_scratch = s6;
-  const Register scratch = r9;
-  const Register scratch2 = r4;
+  const AsmRegister scratch = r9;
+  const AsmRegister scratch2 = r4;
 
   Label call_runtime, done, int_exponent;
   if (exponent_type() == TAGGED) {
@@ -410,7 +410,7 @@ void CEntryStub::Generate(MacroAssembler* masm) {
   // r0:r1: result
   // sp: stack pointer
   // fp: frame pointer
-  Register argc;
+  AsmRegister argc;
   if (argv_in_register()) {
     // We don't want to pop arguments so set argc to no_reg.
     argc = no_reg;
@@ -518,14 +518,14 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
   __ ldr(r5, MemOperand(r5));
   {
     UseScratchRegisterScope temps(masm);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
 
     // Push a bad frame pointer to fail if it is used.
     __ mov(scratch, Operand(-1));
     __ stm(db_w, sp, r5.bit() | r6.bit() | r7.bit() | scratch.bit());
   }
 
-  Register scratch = r6;
+  AsmRegister scratch = r6;
 
   // Set up frame pointer for the frame to be pushed.
   __ add(fp, sp, Operand(-EntryFrameConstants::kCallerFPOffset));
@@ -632,9 +632,9 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
 }
 
 void StringHelper::GenerateFlatOneByteStringEquals(
-    MacroAssembler* masm, Register left, Register right, Register scratch1,
-    Register scratch2, Register scratch3) {
-  Register length = scratch1;
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3) {
+  AsmRegister length = scratch1;
 
   // Compare lengths.
   Label strings_not_equal, check_zero_length;
@@ -665,18 +665,18 @@ void StringHelper::GenerateFlatOneByteStringEquals(
   __ Ret();
 }
 
-
 void StringHelper::GenerateCompareFlatOneByteStrings(
-    MacroAssembler* masm, Register left, Register right, Register scratch1,
-    Register scratch2, Register scratch3, Register scratch4) {
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3,
+    AsmRegister scratch4) {
   Label result_not_equal, compare_lengths;
   // Find minimum length and length difference.
   __ ldr(scratch1, FieldMemOperand(left, String::kLengthOffset));
   __ ldr(scratch2, FieldMemOperand(right, String::kLengthOffset));
   __ sub(scratch3, scratch1, Operand(scratch2), SetCC);
-  Register length_delta = scratch3;
+  AsmRegister length_delta = scratch3;
   __ mov(scratch1, scratch2, LeaveCC, gt);
-  Register min_length = scratch1;
+  AsmRegister min_length = scratch1;
   STATIC_ASSERT(kSmiTag == 0);
   __ cmp(min_length, Operand::Zero());
   __ b(eq, &compare_lengths);
@@ -698,10 +698,10 @@ void StringHelper::GenerateCompareFlatOneByteStrings(
   __ Ret();
 }
 
-
 void StringHelper::GenerateOneByteCharsCompareLoop(
-    MacroAssembler* masm, Register left, Register right, Register length,
-    Register scratch1, Register scratch2, Label* chars_not_equal) {
+    MacroAssembler* masm, AsmRegister left, AsmRegister right,
+    AsmRegister length, AsmRegister scratch1, AsmRegister scratch2,
+    Label* chars_not_equal) {
   // Change index to run from -length to -1 by adding length to string
   // start. This means that loop ends when index reaches zero, which
   // doesn't need an additional compare.
@@ -711,7 +711,7 @@ void StringHelper::GenerateOneByteCharsCompareLoop(
   __ add(left, left, Operand(scratch1));
   __ add(right, right, Operand(scratch1));
   __ rsb(length, length, Operand::Zero());
-  Register index = length;  // index = -length;
+  AsmRegister index = length;  // index = -length;
 
   // Compare loop.
   Label loop;
@@ -733,9 +733,7 @@ void DirectCEntryStub::Generate(MacroAssembler* masm) {
   __ ldr(pc, MemOperand(sp, 0));
 }
 
-
-void DirectCEntryStub::GenerateCall(MacroAssembler* masm,
-                                    Register target) {
+void DirectCEntryStub::GenerateCall(MacroAssembler* masm, AsmRegister target) {
   intptr_t code =
       reinterpret_cast<intptr_t>(GetCode().location());
   __ Move(ip, target);
@@ -743,14 +741,9 @@ void DirectCEntryStub::GenerateCall(MacroAssembler* masm,
   __ blx(lr);  // Call the stub.
 }
 
-
-void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
-                                                      Label* miss,
-                                                      Label* done,
-                                                      Register receiver,
-                                                      Register properties,
-                                                      Handle<Name> name,
-                                                      Register scratch0) {
+void NameDictionaryLookupStub::GenerateNegativeLookup(
+    MacroAssembler* masm, Label* miss, Label* done, AsmRegister receiver,
+    AsmRegister properties, Handle<Name> name, AsmRegister scratch0) {
   DCHECK(name->IsUniqueName());
   // If names of slots in range from 1 to kProbes - 1 for the hash value are
   // not equal to the name and kProbes-th slot is not used (its name is the
@@ -760,7 +753,7 @@ void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
   for (int i = 0; i < kInlinedProbes; i++) {
     // scratch0 points to properties hash.
     // Compute the masked index: (hash + i + i * i) & mask.
-    Register index = scratch0;
+    AsmRegister index = scratch0;
     // Capacity is smi 2^n.
     __ ldr(index, FieldMemOperand(properties, kCapacityOffset));
     __ sub(index, index, Operand(1));
@@ -771,10 +764,10 @@ void NameDictionaryLookupStub::GenerateNegativeLookup(MacroAssembler* masm,
     STATIC_ASSERT(NameDictionary::kEntrySize == 3);
     __ add(index, index, Operand(index, LSL, 1));  // index *= 3.
 
-    Register entity_name = scratch0;
+    AsmRegister entity_name = scratch0;
     // Having undefined at this place means the name is not contained.
     STATIC_ASSERT(kSmiTagSize == 1);
-    Register tmp = properties;
+    AsmRegister tmp = properties;
     __ add(tmp, properties, Operand(index, LSL, 1));
     __ ldr(entity_name, FieldMemOperand(tmp, kElementsStartOffset));
 
@@ -834,14 +827,14 @@ void NameDictionaryLookupStub::Generate(MacroAssembler* masm) {
   // Returns:
   //  result_ is zero if lookup failed, non zero otherwise.
 
-  Register result = r0;
-  Register dictionary = r0;
-  Register key = r1;
-  Register index = r2;
-  Register mask = r3;
-  Register hash = r4;
-  Register undefined = r5;
-  Register entry_key = r6;
+  AsmRegister result = r0;
+  AsmRegister dictionary = r0;
+  AsmRegister key = r1;
+  AsmRegister index = r2;
+  AsmRegister mask = r3;
+  AsmRegister hash = r4;
+  AsmRegister undefined = r5;
+  AsmRegister entry_key = r6;
 
   Label in_dictionary, maybe_in_dictionary, not_in_dictionary;
 
@@ -1003,7 +996,7 @@ void RecordWriteStub::InformIncrementalMarker(MacroAssembler* masm) {
   regs_.SaveCallerSaveRegisters(masm, save_fp_regs_mode());
   int argument_count = 3;
   __ PrepareCallCFunction(argument_count);
-  Register address =
+  AsmRegister address =
       r0.is(regs_.address()) ? regs_.scratch0() : regs_.address();
   DCHECK(!address.is(regs_.object()));
   DCHECK(!address.is(r0));
@@ -1157,7 +1150,7 @@ void ProfileEntryHookStub::Generate(MacroAssembler* masm) {
 
   {
     UseScratchRegisterScope temps(masm);
-    Register scratch = temps.Acquire();
+    AsmRegister scratch = temps.Acquire();
 
 #if V8_HOST_ARCH_ARM
     int32_t entry_hook =
@@ -1469,7 +1462,7 @@ static int AddressOffset(ExternalReference ref0, ExternalReference ref1) {
 // - space to be unwound on exit (includes the call JS arguments space and
 // the additional space allocated for the fast call).
 static void CallApiFunctionAndReturn(MacroAssembler* masm,
-                                     Register function_address,
+                                     AsmRegister function_address,
                                      ExternalReference thunk_ref,
                                      int stack_space,
                                      MemOperand* stack_space_operand,
@@ -1611,11 +1604,11 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
   //  -- sp[(argc + 1) * 4]  : accessor_holder
   // -----------------------------------
 
-  Register callee = r0;
-  Register call_data = r4;
-  Register holder = r2;
-  Register api_function_address = r1;
-  Register context = cp;
+  AsmRegister callee = r0;
+  AsmRegister call_data = r4;
+  AsmRegister holder = r2;
+  AsmRegister api_function_address = r1;
+  AsmRegister context = cp;
 
   typedef FunctionCallbackArguments FCA;
 
@@ -1641,8 +1634,8 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
   // call data
   __ push(call_data);
 
-  Register scratch0 = call_data;
-  Register scratch1 = r5;
+  AsmRegister scratch0 = call_data;
+  AsmRegister scratch1 = r5;
   __ LoadRoot(scratch0, Heap::kUndefinedValueRootIndex);
   // return value
   __ push(scratch0);
@@ -1669,7 +1662,7 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
     // -----------------------------------------------------------
 
     // load context from accessor_holder
-    Register accessor_holder = context;
+    AsmRegister accessor_holder = context;
     __ ldr(accessor_holder,
            MemOperand(sp, (FCA::kArgsLength + 1 + argc()) * kPointerSize));
     // Look for the constructor if |accessor_holder| is not a function.
@@ -1745,13 +1738,13 @@ void CallApiGetterStub::Generate(MacroAssembler* masm) {
   STATIC_ASSERT(PropertyCallbackArguments::kThisIndex == 6);
   STATIC_ASSERT(PropertyCallbackArguments::kArgsLength == 7);
 
-  Register receiver = ApiGetterDescriptor::ReceiverRegister();
-  Register holder = ApiGetterDescriptor::HolderRegister();
-  Register callback = ApiGetterDescriptor::CallbackRegister();
-  Register scratch = r4;
+  AsmRegister receiver = ApiGetterDescriptor::ReceiverRegister();
+  AsmRegister holder = ApiGetterDescriptor::HolderRegister();
+  AsmRegister callback = ApiGetterDescriptor::CallbackRegister();
+  AsmRegister scratch = r4;
   DCHECK(!AreAliased(receiver, holder, callback, scratch));
 
-  Register api_function_address = r2;
+  AsmRegister api_function_address = r2;
 
   __ push(receiver);
   // Push data from AccessorInfo.

@@ -3293,8 +3293,8 @@ class BytecodeArray : public FixedArrayBase {
   inline int parameter_count() const;
   inline void set_parameter_count(int number_of_parameters);
 
-  // Register used to pass the incoming new.target or generator object from the
-  // fucntion call.
+  // AsmRegister used to pass the incoming new.target or generator object from
+  // the fucntion call.
   inline interpreter::Register incoming_new_target_or_generator_register()
       const;
   inline void set_incoming_new_target_or_generator_register(

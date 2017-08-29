@@ -105,7 +105,7 @@ const int kNumSafepointRegisters = 16;
 // the register initialization to depend on the particular initialization
 // order (which appears to be different on OS X, Linux, and Windows for the
 // installed versions of C++ we tried). Using a struct permits C-style
-// "initialization". Also, the Register objects cannot be const as this
+// "initialization". Also, the AsmRegister objects cannot be const as this
 // forces initialization stubs in MSVC, making us dependent on initialization
 // order.
 //
@@ -117,7 +117,7 @@ const int kNumSafepointRegisters = 16;
 // mode. This way we get the compile-time error checking in debug mode
 // and best performance in optimized code.
 //
-struct Register {
+struct AsmRegister {
   enum Code {
 #define REGISTER_CODE(R) kCode_##R,
     GENERAL_REGISTERS(REGISTER_CODE)
@@ -128,14 +128,14 @@ struct Register {
 
   static constexpr int kNumRegisters = Code::kAfterLast;
 
-  static Register from_code(int code) {
+  static AsmRegister from_code(int code) {
     DCHECK(code >= 0);
     DCHECK(code < kNumRegisters);
-    Register r = {code};
+    AsmRegister r = {code};
     return r;
   }
   bool is_valid() const { return 0 <= reg_code && reg_code < kNumRegisters; }
-  bool is(Register reg) const { return reg_code == reg.reg_code; }
+  bool is(AsmRegister reg) const { return reg_code == reg.reg_code; }
   int code() const {
     DCHECK(is_valid());
     return reg_code;
@@ -158,23 +158,23 @@ struct Register {
   int reg_code;
 };
 
-#define DECLARE_REGISTER(R) constexpr Register R = {Register::kCode_##R};
+#define DECLARE_REGISTER(R) constexpr AsmRegister R = {AsmRegister::kCode_##R};
 GENERAL_REGISTERS(DECLARE_REGISTER)
 #undef DECLARE_REGISTER
-constexpr Register no_reg = {Register::kCode_no_reg};
+constexpr AsmRegister no_reg = {AsmRegister::kCode_no_reg};
 
 #ifdef _WIN64
   // Windows calling convention
-constexpr Register arg_reg_1 = {Register::kCode_rcx};
-constexpr Register arg_reg_2 = {Register::kCode_rdx};
-constexpr Register arg_reg_3 = {Register::kCode_r8};
-constexpr Register arg_reg_4 = {Register::kCode_r9};
+constexpr AsmRegister arg_reg_1 = {AsmRegister::kCode_rcx};
+constexpr AsmRegister arg_reg_2 = {AsmRegister::kCode_rdx};
+constexpr AsmRegister arg_reg_3 = {AsmRegister::kCode_r8};
+constexpr AsmRegister arg_reg_4 = {AsmRegister::kCode_r9};
 #else
   // AMD64 calling convention
-constexpr Register arg_reg_1 = {Register::kCode_rdi};
-constexpr Register arg_reg_2 = {Register::kCode_rsi};
-constexpr Register arg_reg_3 = {Register::kCode_rdx};
-constexpr Register arg_reg_4 = {Register::kCode_rcx};
+constexpr AsmRegister arg_reg_1 = {AsmRegister::kCode_rdi};
+constexpr AsmRegister arg_reg_2 = {AsmRegister::kCode_rsi};
+constexpr AsmRegister arg_reg_3 = {AsmRegister::kCode_rdx};
+constexpr AsmRegister arg_reg_4 = {AsmRegister::kCode_rcx};
 #endif  // _WIN64
 
 
@@ -381,18 +381,13 @@ enum ScaleFactor {
 class Operand BASE_EMBEDDED {
  public:
   // [base + disp/r]
-  Operand(Register base, int32_t disp);
+  Operand(AsmRegister base, int32_t disp);
 
   // [base + index*scale + disp/r]
-  Operand(Register base,
-          Register index,
-          ScaleFactor scale,
-          int32_t disp);
+  Operand(AsmRegister base, AsmRegister index, ScaleFactor scale, int32_t disp);
 
   // [index*scale + disp/r]
-  Operand(Register index,
-          ScaleFactor scale,
-          int32_t disp);
+  Operand(AsmRegister index, ScaleFactor scale, int32_t disp);
 
   // Offset from existing memory operand.
   // Offset is added to existing displacement as 32-bit signed values and
@@ -404,7 +399,7 @@ class Operand BASE_EMBEDDED {
 
   // Checks whether either base or index register is the given register.
   // Does not check the "reg" part of the Operand.
-  bool AddressUsesRegister(Register reg) const;
+  bool AddressUsesRegister(AsmRegister reg) const;
 
   // Queries related to the size of the generated instruction.
   // Whether the generated instruction will have a REX prefix.
@@ -422,10 +417,10 @@ class Operand BASE_EMBEDDED {
   // Set the ModR/M byte without an encoded 'reg' register. The
   // register is encoded later as part of the emit_operand operation.
   // set_modrm can be called before or after set_sib and set_disp*.
-  inline void set_modrm(int mod, Register rm);
+  inline void set_modrm(int mod, AsmRegister rm);
 
   // Set the SIB byte if one is needed. Sets the length to 2 rather than 1.
-  inline void set_sib(ScaleFactor scale, Register index, Register base);
+  inline void set_sib(ScaleFactor scale, AsmRegister index, AsmRegister base);
 
   // Adds operand displacement fields (offsets added to the memory address).
   // Needs to be called after set_sib, not before it.
@@ -674,25 +669,25 @@ class Assembler : public AssemblerBase {
   // Push a 32 bit integer, and guarantee that it is actually pushed as a
   // 32 bit value, the normal push will optimize the 8 bit case.
   void pushq_imm32(int32_t imm32);
-  void pushq(Register src);
+  void pushq(AsmRegister src);
   void pushq(const Operand& src);
 
-  void popq(Register dst);
+  void popq(AsmRegister dst);
   void popq(const Operand& dst);
 
   void enter(Immediate size);
   void leave();
 
   // Moves
-  void movb(Register dst, const Operand& src);
-  void movb(Register dst, Immediate imm);
-  void movb(const Operand& dst, Register src);
+  void movb(AsmRegister dst, const Operand& src);
+  void movb(AsmRegister dst, Immediate imm);
+  void movb(const Operand& dst, AsmRegister src);
   void movb(const Operand& dst, Immediate imm);
 
   // Move the low 16 bits of a 64-bit register value to a 16-bit
   // memory location.
-  void movw(Register dst, const Operand& src);
-  void movw(const Operand& dst, Register src);
+  void movw(AsmRegister dst, const Operand& src);
+  void movw(const Operand& dst, AsmRegister src);
   void movw(const Operand& dst, Immediate imm);
 
   // Move the offset of the label location relative to the current
@@ -700,7 +695,7 @@ class Assembler : public AssemblerBase {
   void movl(const Operand& dst, Label* src);
 
   // Loads a pointer into a register with a relocation mode.
-  void movp(Register dst, void* ptr, RelocInfo::Mode rmode);
+  void movp(AsmRegister dst, void* ptr, RelocInfo::Mode rmode);
 
   // Load a heap number into a register.
   // The heap number will not be allocated and embedded into the code right
@@ -709,24 +704,24 @@ class Assembler : public AssemblerBase {
   // patched by replacing the dummy with the actual object. The RelocInfo for
   // the embedded object gets already recorded correctly when emitting the dummy
   // move.
-  void movp_heap_number(Register dst, double value);
+  void movp_heap_number(AsmRegister dst, double value);
 
   // Loads a 64-bit immediate into a register.
-  void movq(Register dst, int64_t value,
+  void movq(AsmRegister dst, int64_t value,
             RelocInfo::Mode rmode = RelocInfo::NONE64);
-  void movq(Register dst, uint64_t value,
+  void movq(AsmRegister dst, uint64_t value,
             RelocInfo::Mode rmode = RelocInfo::NONE64);
 
-  void movsxbl(Register dst, Register src);
-  void movsxbl(Register dst, const Operand& src);
-  void movsxbq(Register dst, Register src);
-  void movsxbq(Register dst, const Operand& src);
-  void movsxwl(Register dst, Register src);
-  void movsxwl(Register dst, const Operand& src);
-  void movsxwq(Register dst, Register src);
-  void movsxwq(Register dst, const Operand& src);
-  void movsxlq(Register dst, Register src);
-  void movsxlq(Register dst, const Operand& src);
+  void movsxbl(AsmRegister dst, AsmRegister src);
+  void movsxbl(AsmRegister dst, const Operand& src);
+  void movsxbq(AsmRegister dst, AsmRegister src);
+  void movsxbq(AsmRegister dst, const Operand& src);
+  void movsxwl(AsmRegister dst, AsmRegister src);
+  void movsxwl(AsmRegister dst, const Operand& src);
+  void movsxwq(AsmRegister dst, AsmRegister src);
+  void movsxwq(AsmRegister dst, const Operand& src);
+  void movsxlq(AsmRegister dst, AsmRegister src);
+  void movsxlq(AsmRegister dst, const Operand& src);
 
   // Repeated moves.
 
@@ -741,26 +736,26 @@ class Assembler : public AssemblerBase {
   void load_rax(ExternalReference ext);
 
   // Conditional moves.
-  void cmovq(Condition cc, Register dst, Register src);
-  void cmovq(Condition cc, Register dst, const Operand& src);
-  void cmovl(Condition cc, Register dst, Register src);
-  void cmovl(Condition cc, Register dst, const Operand& src);
+  void cmovq(Condition cc, AsmRegister dst, AsmRegister src);
+  void cmovq(Condition cc, AsmRegister dst, const Operand& src);
+  void cmovl(Condition cc, AsmRegister dst, AsmRegister src);
+  void cmovl(Condition cc, AsmRegister dst, const Operand& src);
 
-  void cmpb(Register dst, Immediate src) {
+  void cmpb(AsmRegister dst, Immediate src) {
     immediate_arithmetic_op_8(0x7, dst, src);
   }
 
   void cmpb_al(Immediate src);
 
-  void cmpb(Register dst, Register src) {
+  void cmpb(AsmRegister dst, AsmRegister src) {
     arithmetic_op_8(0x3A, dst, src);
   }
 
-  void cmpb(Register dst, const Operand& src) {
+  void cmpb(AsmRegister dst, const Operand& src) {
     arithmetic_op_8(0x3A, dst, src);
   }
 
-  void cmpb(const Operand& dst, Register src) {
+  void cmpb(const Operand& dst, AsmRegister src) {
     arithmetic_op_8(0x38, src, dst);
   }
 
@@ -772,41 +767,41 @@ class Assembler : public AssemblerBase {
     immediate_arithmetic_op_16(0x7, dst, src);
   }
 
-  void cmpw(Register dst, Immediate src) {
+  void cmpw(AsmRegister dst, Immediate src) {
     immediate_arithmetic_op_16(0x7, dst, src);
   }
 
-  void cmpw(Register dst, const Operand& src) {
+  void cmpw(AsmRegister dst, const Operand& src) {
     arithmetic_op_16(0x3B, dst, src);
   }
 
-  void cmpw(Register dst, Register src) {
+  void cmpw(AsmRegister dst, AsmRegister src) {
     arithmetic_op_16(0x3B, dst, src);
   }
 
-  void cmpw(const Operand& dst, Register src) {
+  void cmpw(const Operand& dst, AsmRegister src) {
     arithmetic_op_16(0x39, src, dst);
   }
 
-  void testb(Register reg, const Operand& op) { testb(op, reg); }
+  void testb(AsmRegister reg, const Operand& op) { testb(op, reg); }
 
-  void testw(Register reg, const Operand& op) { testw(op, reg); }
+  void testw(AsmRegister reg, const Operand& op) { testw(op, reg); }
 
-  void andb(Register dst, Immediate src) {
+  void andb(AsmRegister dst, Immediate src) {
     immediate_arithmetic_op_8(0x4, dst, src);
   }
 
-  void decb(Register dst);
+  void decb(AsmRegister dst);
   void decb(const Operand& dst);
 
   // Lock prefix.
   void lock();
 
-  void xchgb(Register reg, const Operand& op);
-  void xchgw(Register reg, const Operand& op);
+  void xchgb(AsmRegister reg, const Operand& op);
+  void xchgw(AsmRegister reg, const Operand& op);
 
-  void cmpxchgb(const Operand& dst, Register src);
-  void cmpxchgw(const Operand& dst, Register src);
+  void cmpxchgb(const Operand& dst, AsmRegister src);
+  void cmpxchgw(const Operand& dst, AsmRegister src);
 
   // Sign-extends rax into rdx:rax.
   void cqo();
@@ -814,84 +809,86 @@ class Assembler : public AssemblerBase {
   void cdq();
 
   // Multiply eax by src, put the result in edx:eax.
-  void mull(Register src);
+  void mull(AsmRegister src);
   void mull(const Operand& src);
   // Multiply rax by src, put the result in rdx:rax.
-  void mulq(Register src);
+  void mulq(AsmRegister src);
 
-#define DECLARE_SHIFT_INSTRUCTION(instruction, subcode)                       \
-  void instruction##p(Register dst, Immediate imm8) {                         \
-    shift(dst, imm8, subcode, kPointerSize);                                  \
-  }                                                                           \
-                                                                              \
-  void instruction##l(Register dst, Immediate imm8) {                         \
-    shift(dst, imm8, subcode, kInt32Size);                                    \
-  }                                                                           \
-                                                                              \
-  void instruction##q(Register dst, Immediate imm8) {                         \
-    shift(dst, imm8, subcode, kInt64Size);                                    \
-  }                                                                           \
-                                                                              \
-  void instruction##p(Operand dst, Immediate imm8) {                          \
-    shift(dst, imm8, subcode, kPointerSize);                                  \
-  }                                                                           \
-                                                                              \
-  void instruction##l(Operand dst, Immediate imm8) {                          \
-    shift(dst, imm8, subcode, kInt32Size);                                    \
-  }                                                                           \
-                                                                              \
-  void instruction##q(Operand dst, Immediate imm8) {                          \
-    shift(dst, imm8, subcode, kInt64Size);                                    \
-  }                                                                           \
-                                                                              \
-  void instruction##p_cl(Register dst) { shift(dst, subcode, kPointerSize); } \
-                                                                              \
-  void instruction##l_cl(Register dst) { shift(dst, subcode, kInt32Size); }   \
-                                                                              \
-  void instruction##q_cl(Register dst) { shift(dst, subcode, kInt64Size); }   \
-                                                                              \
-  void instruction##p_cl(Operand dst) { shift(dst, subcode, kPointerSize); }  \
-                                                                              \
-  void instruction##l_cl(Operand dst) { shift(dst, subcode, kInt32Size); }    \
-                                                                              \
+#define DECLARE_SHIFT_INSTRUCTION(instruction, subcode)                        \
+  void instruction##p(AsmRegister dst, Immediate imm8) {                       \
+    shift(dst, imm8, subcode, kPointerSize);                                   \
+  }                                                                            \
+                                                                               \
+  void instruction##l(AsmRegister dst, Immediate imm8) {                       \
+    shift(dst, imm8, subcode, kInt32Size);                                     \
+  }                                                                            \
+                                                                               \
+  void instruction##q(AsmRegister dst, Immediate imm8) {                       \
+    shift(dst, imm8, subcode, kInt64Size);                                     \
+  }                                                                            \
+                                                                               \
+  void instruction##p(Operand dst, Immediate imm8) {                           \
+    shift(dst, imm8, subcode, kPointerSize);                                   \
+  }                                                                            \
+                                                                               \
+  void instruction##l(Operand dst, Immediate imm8) {                           \
+    shift(dst, imm8, subcode, kInt32Size);                                     \
+  }                                                                            \
+                                                                               \
+  void instruction##q(Operand dst, Immediate imm8) {                           \
+    shift(dst, imm8, subcode, kInt64Size);                                     \
+  }                                                                            \
+                                                                               \
+  void instruction##p_cl(AsmRegister dst) {                                    \
+    shift(dst, subcode, kPointerSize);                                         \
+  }                                                                            \
+                                                                               \
+  void instruction##l_cl(AsmRegister dst) { shift(dst, subcode, kInt32Size); } \
+                                                                               \
+  void instruction##q_cl(AsmRegister dst) { shift(dst, subcode, kInt64Size); } \
+                                                                               \
+  void instruction##p_cl(Operand dst) { shift(dst, subcode, kPointerSize); }   \
+                                                                               \
+  void instruction##l_cl(Operand dst) { shift(dst, subcode, kInt32Size); }     \
+                                                                               \
   void instruction##q_cl(Operand dst) { shift(dst, subcode, kInt64Size); }
   SHIFT_INSTRUCTION_LIST(DECLARE_SHIFT_INSTRUCTION)
 #undef DECLARE_SHIFT_INSTRUCTION
 
   // Shifts dst:src left by cl bits, affecting only dst.
-  void shld(Register dst, Register src);
+  void shld(AsmRegister dst, AsmRegister src);
 
   // Shifts src:dst right by cl bits, affecting only dst.
-  void shrd(Register dst, Register src);
+  void shrd(AsmRegister dst, AsmRegister src);
 
   void store_rax(void* dst, RelocInfo::Mode mode);
   void store_rax(ExternalReference ref);
 
-  void subb(Register dst, Immediate src) {
+  void subb(AsmRegister dst, Immediate src) {
     immediate_arithmetic_op_8(0x5, dst, src);
   }
 
-  void testb(Register dst, Register src);
-  void testb(Register reg, Immediate mask);
+  void testb(AsmRegister dst, AsmRegister src);
+  void testb(AsmRegister reg, Immediate mask);
   void testb(const Operand& op, Immediate mask);
-  void testb(const Operand& op, Register reg);
+  void testb(const Operand& op, AsmRegister reg);
 
-  void testw(Register dst, Register src);
-  void testw(Register reg, Immediate mask);
+  void testw(AsmRegister dst, AsmRegister src);
+  void testw(AsmRegister reg, Immediate mask);
   void testw(const Operand& op, Immediate mask);
-  void testw(const Operand& op, Register reg);
+  void testw(const Operand& op, AsmRegister reg);
 
   // Bit operations.
-  void bt(const Operand& dst, Register src);
-  void bts(const Operand& dst, Register src);
-  void bsrq(Register dst, Register src);
-  void bsrq(Register dst, const Operand& src);
-  void bsrl(Register dst, Register src);
-  void bsrl(Register dst, const Operand& src);
-  void bsfq(Register dst, Register src);
-  void bsfq(Register dst, const Operand& src);
-  void bsfl(Register dst, Register src);
-  void bsfl(Register dst, const Operand& src);
+  void bt(const Operand& dst, AsmRegister src);
+  void bts(const Operand& dst, AsmRegister src);
+  void bsrq(AsmRegister dst, AsmRegister src);
+  void bsrq(AsmRegister dst, const Operand& src);
+  void bsrl(AsmRegister dst, AsmRegister src);
+  void bsrl(AsmRegister dst, const Operand& src);
+  void bsfq(AsmRegister dst, AsmRegister src);
+  void bsfq(AsmRegister dst, const Operand& src);
+  void bsfl(AsmRegister dst, AsmRegister src);
+  void bsfl(AsmRegister dst, const Operand& src);
 
   // Miscellaneous
   void clc();
@@ -902,7 +899,7 @@ class Assembler : public AssemblerBase {
   void nop();
   void ret(int imm16);
   void ud2();
-  void setcc(Condition cc, Register reg);
+  void setcc(Condition cc, AsmRegister reg);
 
   void pshufw(XMMRegister dst, XMMRegister src, uint8_t shuffle);
   void pshufw(XMMRegister dst, const Operand& src, uint8_t shuffle);
@@ -939,7 +936,7 @@ class Assembler : public AssemblerBase {
   void call(Address target);
 
   // Call near absolute indirect, address in register
-  void call(Register adr);
+  void call(AsmRegister adr);
 
   // Jumps
   // Jump short or near relative.
@@ -949,7 +946,7 @@ class Assembler : public AssemblerBase {
   void jmp(Handle<Code> target, RelocInfo::Mode rmode);
 
   // Jump near absolute indirect (r64)
-  void jmp(Register adr);
+  void jmp(AsmRegister adr);
   void jmp(const Operand& src);
 
   // Conditional jumps
@@ -1062,10 +1059,10 @@ class Assembler : public AssemblerBase {
   void movss(const Operand& dst, XMMRegister src);
   void shufps(XMMRegister dst, XMMRegister src, byte imm8);
 
-  void cvttss2si(Register dst, const Operand& src);
-  void cvttss2si(Register dst, XMMRegister src);
+  void cvttss2si(AsmRegister dst, const Operand& src);
+  void cvttss2si(AsmRegister dst, XMMRegister src);
   void cvtlsi2ss(XMMRegister dst, const Operand& src);
-  void cvtlsi2ss(XMMRegister dst, Register src);
+  void cvtlsi2ss(XMMRegister dst, AsmRegister src);
 
   void andps(XMMRegister dst, XMMRegister src);
   void andps(XMMRegister dst, const Operand& src);
@@ -1083,7 +1080,7 @@ class Assembler : public AssemblerBase {
   void divps(XMMRegister dst, XMMRegister src);
   void divps(XMMRegister dst, const Operand& src);
 
-  void movmskps(Register dst, XMMRegister src);
+  void movmskps(AsmRegister dst, XMMRegister src);
 
   void vinstr(byte op, XMMRegister dst, XMMRegister src1, XMMRegister src2,
               SIMDPrefix pp, LeadingOpcode m, VexW w);
@@ -1170,11 +1167,11 @@ class Assembler : public AssemblerBase {
   SSE4_INSTRUCTION_LIST(DECLARE_SSE34_AVX_INSTRUCTION)
 #undef DECLARE_SSE34_AVX_INSTRUCTION
 
-  void movd(XMMRegister dst, Register src);
+  void movd(XMMRegister dst, AsmRegister src);
   void movd(XMMRegister dst, const Operand& src);
-  void movd(Register dst, XMMRegister src);
-  void movq(XMMRegister dst, Register src);
-  void movq(Register dst, XMMRegister src);
+  void movd(AsmRegister dst, XMMRegister src);
+  void movq(XMMRegister dst, AsmRegister src);
+  void movq(AsmRegister dst, XMMRegister src);
   void movq(XMMRegister dst, XMMRegister src);
 
   // Don't use this unless it's important to keep the
@@ -1205,30 +1202,29 @@ class Assembler : public AssemblerBase {
   void psraw(XMMRegister reg, byte imm8);
   void psrad(XMMRegister reg, byte imm8);
 
-  void cvttsd2si(Register dst, const Operand& src);
-  void cvttsd2si(Register dst, XMMRegister src);
-  void cvttss2siq(Register dst, XMMRegister src);
-  void cvttss2siq(Register dst, const Operand& src);
-  void cvttsd2siq(Register dst, XMMRegister src);
-  void cvttsd2siq(Register dst, const Operand& src);
+  void cvttsd2si(AsmRegister dst, const Operand& src);
+  void cvttsd2si(AsmRegister dst, XMMRegister src);
+  void cvttss2siq(AsmRegister dst, XMMRegister src);
+  void cvttss2siq(AsmRegister dst, const Operand& src);
+  void cvttsd2siq(AsmRegister dst, XMMRegister src);
+  void cvttsd2siq(AsmRegister dst, const Operand& src);
 
   void cvtlsi2sd(XMMRegister dst, const Operand& src);
-  void cvtlsi2sd(XMMRegister dst, Register src);
+  void cvtlsi2sd(XMMRegister dst, AsmRegister src);
 
   void cvtqsi2ss(XMMRegister dst, const Operand& src);
-  void cvtqsi2ss(XMMRegister dst, Register src);
+  void cvtqsi2ss(XMMRegister dst, AsmRegister src);
 
   void cvtqsi2sd(XMMRegister dst, const Operand& src);
-  void cvtqsi2sd(XMMRegister dst, Register src);
-
+  void cvtqsi2sd(XMMRegister dst, AsmRegister src);
 
   void cvtss2sd(XMMRegister dst, XMMRegister src);
   void cvtss2sd(XMMRegister dst, const Operand& src);
   void cvtsd2ss(XMMRegister dst, XMMRegister src);
   void cvtsd2ss(XMMRegister dst, const Operand& src);
 
-  void cvtsd2si(Register dst, XMMRegister src);
-  void cvtsd2siq(Register dst, XMMRegister src);
+  void cvtsd2si(AsmRegister dst, XMMRegister src);
+  void cvtsd2siq(AsmRegister dst, XMMRegister src);
 
   void addsd(XMMRegister dst, XMMRegister src);
   void addsd(XMMRegister dst, const Operand& src);
@@ -1257,7 +1253,7 @@ class Assembler : public AssemblerBase {
   void ucomisd(XMMRegister dst, const Operand& src);
   void cmpltsd(XMMRegister dst, XMMRegister src);
 
-  void movmskpd(Register dst, XMMRegister src);
+  void movmskpd(AsmRegister dst, XMMRegister src);
 
   void punpckldq(XMMRegister dst, XMMRegister src);
   void punpckldq(XMMRegister dst, const Operand& src);
@@ -1265,18 +1261,18 @@ class Assembler : public AssemblerBase {
 
   // SSE 4.1 instruction
   void insertps(XMMRegister dst, XMMRegister src, byte imm8);
-  void extractps(Register dst, XMMRegister src, byte imm8);
-  void pextrb(Register dst, XMMRegister src, int8_t imm8);
+  void extractps(AsmRegister dst, XMMRegister src, byte imm8);
+  void pextrb(AsmRegister dst, XMMRegister src, int8_t imm8);
   void pextrb(const Operand& dst, XMMRegister src, int8_t imm8);
-  void pextrw(Register dst, XMMRegister src, int8_t imm8);
+  void pextrw(AsmRegister dst, XMMRegister src, int8_t imm8);
   void pextrw(const Operand& dst, XMMRegister src, int8_t imm8);
-  void pextrd(Register dst, XMMRegister src, int8_t imm8);
+  void pextrd(AsmRegister dst, XMMRegister src, int8_t imm8);
   void pextrd(const Operand& dst, XMMRegister src, int8_t imm8);
-  void pinsrb(XMMRegister dst, Register src, int8_t imm8);
+  void pinsrb(XMMRegister dst, AsmRegister src, int8_t imm8);
   void pinsrb(XMMRegister dst, const Operand& src, int8_t imm8);
-  void pinsrw(XMMRegister dst, Register src, int8_t imm8);
+  void pinsrw(XMMRegister dst, AsmRegister src, int8_t imm8);
   void pinsrw(XMMRegister dst, const Operand& src, int8_t imm8);
-  void pinsrd(XMMRegister dst, Register src, int8_t imm8);
+  void pinsrd(XMMRegister dst, AsmRegister src, int8_t imm8);
   void pinsrd(XMMRegister dst, const Operand& src, int8_t imm8);
 
   void roundss(XMMRegister dst, XMMRegister src, RoundingMode mode);
@@ -1476,12 +1472,12 @@ class Assembler : public AssemblerBase {
   void vfmass(byte op, XMMRegister dst, XMMRegister src1, XMMRegister src2);
   void vfmass(byte op, XMMRegister dst, XMMRegister src1, const Operand& src2);
 
-  void vmovd(XMMRegister dst, Register src);
+  void vmovd(XMMRegister dst, AsmRegister src);
   void vmovd(XMMRegister dst, const Operand& src);
-  void vmovd(Register dst, XMMRegister src);
-  void vmovq(XMMRegister dst, Register src);
+  void vmovd(AsmRegister dst, XMMRegister src);
+  void vmovq(XMMRegister dst, AsmRegister src);
   void vmovq(XMMRegister dst, const Operand& src);
-  void vmovq(Register dst, XMMRegister src);
+  void vmovq(AsmRegister dst, XMMRegister src);
 
   void vmovsd(XMMRegister dst, XMMRegister src1, XMMRegister src2) {
     vsd(0x10, dst, src1, src2);
@@ -1546,67 +1542,67 @@ class Assembler : public AssemblerBase {
   void vcvtss2sd(XMMRegister dst, XMMRegister src1, const Operand& src2) {
     vinstr(0x5a, dst, src1, src2, kF3, k0F, kWIG);
   }
-  void vcvtlsi2sd(XMMRegister dst, XMMRegister src1, Register src2) {
+  void vcvtlsi2sd(XMMRegister dst, XMMRegister src1, AsmRegister src2) {
     XMMRegister isrc2 = {src2.code()};
     vinstr(0x2a, dst, src1, isrc2, kF2, k0F, kW0);
   }
   void vcvtlsi2sd(XMMRegister dst, XMMRegister src1, const Operand& src2) {
     vinstr(0x2a, dst, src1, src2, kF2, k0F, kW0);
   }
-  void vcvtlsi2ss(XMMRegister dst, XMMRegister src1, Register src2) {
+  void vcvtlsi2ss(XMMRegister dst, XMMRegister src1, AsmRegister src2) {
     XMMRegister isrc2 = {src2.code()};
     vinstr(0x2a, dst, src1, isrc2, kF3, k0F, kW0);
   }
   void vcvtlsi2ss(XMMRegister dst, XMMRegister src1, const Operand& src2) {
     vinstr(0x2a, dst, src1, src2, kF3, k0F, kW0);
   }
-  void vcvtqsi2ss(XMMRegister dst, XMMRegister src1, Register src2) {
+  void vcvtqsi2ss(XMMRegister dst, XMMRegister src1, AsmRegister src2) {
     XMMRegister isrc2 = {src2.code()};
     vinstr(0x2a, dst, src1, isrc2, kF3, k0F, kW1);
   }
   void vcvtqsi2ss(XMMRegister dst, XMMRegister src1, const Operand& src2) {
     vinstr(0x2a, dst, src1, src2, kF3, k0F, kW1);
   }
-  void vcvtqsi2sd(XMMRegister dst, XMMRegister src1, Register src2) {
+  void vcvtqsi2sd(XMMRegister dst, XMMRegister src1, AsmRegister src2) {
     XMMRegister isrc2 = {src2.code()};
     vinstr(0x2a, dst, src1, isrc2, kF2, k0F, kW1);
   }
   void vcvtqsi2sd(XMMRegister dst, XMMRegister src1, const Operand& src2) {
     vinstr(0x2a, dst, src1, src2, kF2, k0F, kW1);
   }
-  void vcvttss2si(Register dst, XMMRegister src) {
+  void vcvttss2si(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF3, k0F, kW0);
   }
-  void vcvttss2si(Register dst, const Operand& src) {
+  void vcvttss2si(AsmRegister dst, const Operand& src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF3, k0F, kW0);
   }
-  void vcvttsd2si(Register dst, XMMRegister src) {
+  void vcvttsd2si(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF2, k0F, kW0);
   }
-  void vcvttsd2si(Register dst, const Operand& src) {
+  void vcvttsd2si(AsmRegister dst, const Operand& src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF2, k0F, kW0);
   }
-  void vcvttss2siq(Register dst, XMMRegister src) {
+  void vcvttss2siq(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF3, k0F, kW1);
   }
-  void vcvttss2siq(Register dst, const Operand& src) {
+  void vcvttss2siq(AsmRegister dst, const Operand& src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF3, k0F, kW1);
   }
-  void vcvttsd2siq(Register dst, XMMRegister src) {
+  void vcvttsd2siq(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF2, k0F, kW1);
   }
-  void vcvttsd2siq(Register dst, const Operand& src) {
+  void vcvttsd2siq(AsmRegister dst, const Operand& src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2c, idst, xmm0, src, kF2, k0F, kW1);
   }
-  void vcvtsd2si(Register dst, XMMRegister src) {
+  void vcvtsd2si(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vinstr(0x2d, idst, xmm0, src, kF2, k0F, kW0);
   }
@@ -1663,11 +1659,11 @@ class Assembler : public AssemblerBase {
   void vmovupd(const Operand& dst, XMMRegister src) {
     vpd(0x11, src, xmm0, dst);
   }
-  void vmovmskps(Register dst, XMMRegister src) {
+  void vmovmskps(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vps(0x50, idst, xmm0, src);
   }
-  void vmovmskpd(Register dst, XMMRegister src) {
+  void vmovmskpd(AsmRegister dst, XMMRegister src) {
     XMMRegister idst = {dst.code()};
     vpd(0x50, idst, xmm0, src);
   }
@@ -1746,7 +1742,7 @@ class Assembler : public AssemblerBase {
     vinstr(0x72, iop, dst, src, k66, k0F, kWIG);
     emit(imm8);
   }
-  void vpextrb(Register dst, XMMRegister src, int8_t imm8) {
+  void vpextrb(AsmRegister dst, XMMRegister src, int8_t imm8) {
     XMMRegister idst = {dst.code()};
     vinstr(0x14, src, xmm0, idst, k66, k0F3A, kW0);
     emit(imm8);
@@ -1755,7 +1751,7 @@ class Assembler : public AssemblerBase {
     vinstr(0x14, src, xmm0, dst, k66, k0F3A, kW0);
     emit(imm8);
   }
-  void vpextrw(Register dst, XMMRegister src, int8_t imm8) {
+  void vpextrw(AsmRegister dst, XMMRegister src, int8_t imm8) {
     XMMRegister idst = {dst.code()};
     vinstr(0xc5, idst, xmm0, src, k66, k0F, kW0);
     emit(imm8);
@@ -1764,7 +1760,7 @@ class Assembler : public AssemblerBase {
     vinstr(0x15, src, xmm0, dst, k66, k0F3A, kW0);
     emit(imm8);
   }
-  void vpextrd(Register dst, XMMRegister src, int8_t imm8) {
+  void vpextrd(AsmRegister dst, XMMRegister src, int8_t imm8) {
     XMMRegister idst = {dst.code()};
     vinstr(0x16, src, xmm0, idst, k66, k0F3A, kW0);
     emit(imm8);
@@ -1773,7 +1769,8 @@ class Assembler : public AssemblerBase {
     vinstr(0x16, src, xmm0, dst, k66, k0F3A, kW0);
     emit(imm8);
   }
-  void vpinsrb(XMMRegister dst, XMMRegister src1, Register src2, int8_t imm8) {
+  void vpinsrb(XMMRegister dst, XMMRegister src1, AsmRegister src2,
+               int8_t imm8) {
     XMMRegister isrc = {src2.code()};
     vinstr(0x20, dst, src1, isrc, k66, k0F3A, kW0);
     emit(imm8);
@@ -1783,7 +1780,8 @@ class Assembler : public AssemblerBase {
     vinstr(0x20, dst, src1, src2, k66, k0F3A, kW0);
     emit(imm8);
   }
-  void vpinsrw(XMMRegister dst, XMMRegister src1, Register src2, int8_t imm8) {
+  void vpinsrw(XMMRegister dst, XMMRegister src1, AsmRegister src2,
+               int8_t imm8) {
     XMMRegister isrc = {src2.code()};
     vinstr(0xc4, dst, src1, isrc, k66, k0F, kW0);
     emit(imm8);
@@ -1793,7 +1791,8 @@ class Assembler : public AssemblerBase {
     vinstr(0xc4, dst, src1, src2, k66, k0F, kW0);
     emit(imm8);
   }
-  void vpinsrd(XMMRegister dst, XMMRegister src1, Register src2, int8_t imm8) {
+  void vpinsrd(XMMRegister dst, XMMRegister src1, AsmRegister src2,
+               int8_t imm8) {
     XMMRegister isrc = {src2.code()};
     vinstr(0x22, dst, src1, isrc, k66, k0F3A, kW0);
     emit(imm8);
@@ -1814,181 +1813,181 @@ class Assembler : public AssemblerBase {
   void vpd(byte op, XMMRegister dst, XMMRegister src1, const Operand& src2);
 
   // BMI instruction
-  void andnq(Register dst, Register src1, Register src2) {
+  void andnq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi1q(0xf2, dst, src1, src2);
   }
-  void andnq(Register dst, Register src1, const Operand& src2) {
+  void andnq(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi1q(0xf2, dst, src1, src2);
   }
-  void andnl(Register dst, Register src1, Register src2) {
+  void andnl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi1l(0xf2, dst, src1, src2);
   }
-  void andnl(Register dst, Register src1, const Operand& src2) {
+  void andnl(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi1l(0xf2, dst, src1, src2);
   }
-  void bextrq(Register dst, Register src1, Register src2) {
+  void bextrq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi1q(0xf7, dst, src2, src1);
   }
-  void bextrq(Register dst, const Operand& src1, Register src2) {
+  void bextrq(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi1q(0xf7, dst, src2, src1);
   }
-  void bextrl(Register dst, Register src1, Register src2) {
+  void bextrl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi1l(0xf7, dst, src2, src1);
   }
-  void bextrl(Register dst, const Operand& src1, Register src2) {
+  void bextrl(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi1l(0xf7, dst, src2, src1);
   }
-  void blsiq(Register dst, Register src) {
-    Register ireg = {3};
+  void blsiq(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {3};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsiq(Register dst, const Operand& src) {
-    Register ireg = {3};
+  void blsiq(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {3};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsil(Register dst, Register src) {
-    Register ireg = {3};
+  void blsil(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {3};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void blsil(Register dst, const Operand& src) {
-    Register ireg = {3};
+  void blsil(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {3};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void blsmskq(Register dst, Register src) {
-    Register ireg = {2};
+  void blsmskq(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {2};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsmskq(Register dst, const Operand& src) {
-    Register ireg = {2};
+  void blsmskq(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {2};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsmskl(Register dst, Register src) {
-    Register ireg = {2};
+  void blsmskl(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {2};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void blsmskl(Register dst, const Operand& src) {
-    Register ireg = {2};
+  void blsmskl(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {2};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void blsrq(Register dst, Register src) {
-    Register ireg = {1};
+  void blsrq(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {1};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsrq(Register dst, const Operand& src) {
-    Register ireg = {1};
+  void blsrq(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {1};
     bmi1q(0xf3, ireg, dst, src);
   }
-  void blsrl(Register dst, Register src) {
-    Register ireg = {1};
+  void blsrl(AsmRegister dst, AsmRegister src) {
+    AsmRegister ireg = {1};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void blsrl(Register dst, const Operand& src) {
-    Register ireg = {1};
+  void blsrl(AsmRegister dst, const Operand& src) {
+    AsmRegister ireg = {1};
     bmi1l(0xf3, ireg, dst, src);
   }
-  void tzcntq(Register dst, Register src);
-  void tzcntq(Register dst, const Operand& src);
-  void tzcntl(Register dst, Register src);
-  void tzcntl(Register dst, const Operand& src);
+  void tzcntq(AsmRegister dst, AsmRegister src);
+  void tzcntq(AsmRegister dst, const Operand& src);
+  void tzcntl(AsmRegister dst, AsmRegister src);
+  void tzcntl(AsmRegister dst, const Operand& src);
 
-  void lzcntq(Register dst, Register src);
-  void lzcntq(Register dst, const Operand& src);
-  void lzcntl(Register dst, Register src);
-  void lzcntl(Register dst, const Operand& src);
+  void lzcntq(AsmRegister dst, AsmRegister src);
+  void lzcntq(AsmRegister dst, const Operand& src);
+  void lzcntl(AsmRegister dst, AsmRegister src);
+  void lzcntl(AsmRegister dst, const Operand& src);
 
-  void popcntq(Register dst, Register src);
-  void popcntq(Register dst, const Operand& src);
-  void popcntl(Register dst, Register src);
-  void popcntl(Register dst, const Operand& src);
+  void popcntq(AsmRegister dst, AsmRegister src);
+  void popcntq(AsmRegister dst, const Operand& src);
+  void popcntl(AsmRegister dst, AsmRegister src);
+  void popcntl(AsmRegister dst, const Operand& src);
 
-  void bzhiq(Register dst, Register src1, Register src2) {
+  void bzhiq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(kNone, 0xf5, dst, src2, src1);
   }
-  void bzhiq(Register dst, const Operand& src1, Register src2) {
+  void bzhiq(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2q(kNone, 0xf5, dst, src2, src1);
   }
-  void bzhil(Register dst, Register src1, Register src2) {
+  void bzhil(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(kNone, 0xf5, dst, src2, src1);
   }
-  void bzhil(Register dst, const Operand& src1, Register src2) {
+  void bzhil(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2l(kNone, 0xf5, dst, src2, src1);
   }
-  void mulxq(Register dst1, Register dst2, Register src) {
+  void mulxq(AsmRegister dst1, AsmRegister dst2, AsmRegister src) {
     bmi2q(kF2, 0xf6, dst1, dst2, src);
   }
-  void mulxq(Register dst1, Register dst2, const Operand& src) {
+  void mulxq(AsmRegister dst1, AsmRegister dst2, const Operand& src) {
     bmi2q(kF2, 0xf6, dst1, dst2, src);
   }
-  void mulxl(Register dst1, Register dst2, Register src) {
+  void mulxl(AsmRegister dst1, AsmRegister dst2, AsmRegister src) {
     bmi2l(kF2, 0xf6, dst1, dst2, src);
   }
-  void mulxl(Register dst1, Register dst2, const Operand& src) {
+  void mulxl(AsmRegister dst1, AsmRegister dst2, const Operand& src) {
     bmi2l(kF2, 0xf6, dst1, dst2, src);
   }
-  void pdepq(Register dst, Register src1, Register src2) {
+  void pdepq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(kF2, 0xf5, dst, src1, src2);
   }
-  void pdepq(Register dst, Register src1, const Operand& src2) {
+  void pdepq(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi2q(kF2, 0xf5, dst, src1, src2);
   }
-  void pdepl(Register dst, Register src1, Register src2) {
+  void pdepl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(kF2, 0xf5, dst, src1, src2);
   }
-  void pdepl(Register dst, Register src1, const Operand& src2) {
+  void pdepl(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi2l(kF2, 0xf5, dst, src1, src2);
   }
-  void pextq(Register dst, Register src1, Register src2) {
+  void pextq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(kF3, 0xf5, dst, src1, src2);
   }
-  void pextq(Register dst, Register src1, const Operand& src2) {
+  void pextq(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi2q(kF3, 0xf5, dst, src1, src2);
   }
-  void pextl(Register dst, Register src1, Register src2) {
+  void pextl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(kF3, 0xf5, dst, src1, src2);
   }
-  void pextl(Register dst, Register src1, const Operand& src2) {
+  void pextl(AsmRegister dst, AsmRegister src1, const Operand& src2) {
     bmi2l(kF3, 0xf5, dst, src1, src2);
   }
-  void sarxq(Register dst, Register src1, Register src2) {
+  void sarxq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(kF3, 0xf7, dst, src2, src1);
   }
-  void sarxq(Register dst, const Operand& src1, Register src2) {
+  void sarxq(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2q(kF3, 0xf7, dst, src2, src1);
   }
-  void sarxl(Register dst, Register src1, Register src2) {
+  void sarxl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(kF3, 0xf7, dst, src2, src1);
   }
-  void sarxl(Register dst, const Operand& src1, Register src2) {
+  void sarxl(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2l(kF3, 0xf7, dst, src2, src1);
   }
-  void shlxq(Register dst, Register src1, Register src2) {
+  void shlxq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(k66, 0xf7, dst, src2, src1);
   }
-  void shlxq(Register dst, const Operand& src1, Register src2) {
+  void shlxq(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2q(k66, 0xf7, dst, src2, src1);
   }
-  void shlxl(Register dst, Register src1, Register src2) {
+  void shlxl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(k66, 0xf7, dst, src2, src1);
   }
-  void shlxl(Register dst, const Operand& src1, Register src2) {
+  void shlxl(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2l(k66, 0xf7, dst, src2, src1);
   }
-  void shrxq(Register dst, Register src1, Register src2) {
+  void shrxq(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2q(kF2, 0xf7, dst, src2, src1);
   }
-  void shrxq(Register dst, const Operand& src1, Register src2) {
+  void shrxq(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2q(kF2, 0xf7, dst, src2, src1);
   }
-  void shrxl(Register dst, Register src1, Register src2) {
+  void shrxl(AsmRegister dst, AsmRegister src1, AsmRegister src2) {
     bmi2l(kF2, 0xf7, dst, src2, src1);
   }
-  void shrxl(Register dst, const Operand& src1, Register src2) {
+  void shrxl(AsmRegister dst, const Operand& src1, AsmRegister src2) {
     bmi2l(kF2, 0xf7, dst, src2, src1);
   }
-  void rorxq(Register dst, Register src, byte imm8);
-  void rorxq(Register dst, const Operand& src, byte imm8);
-  void rorxl(Register dst, Register src, byte imm8);
-  void rorxl(Register dst, const Operand& src, byte imm8);
+  void rorxq(AsmRegister dst, AsmRegister src, byte imm8);
+  void rorxq(AsmRegister dst, const Operand& src, byte imm8);
+  void rorxl(AsmRegister dst, AsmRegister src, byte imm8);
+  void rorxl(AsmRegister dst, const Operand& src, byte imm8);
 
   // Check the code size generated from label to here.
   int SizeOfCodeGeneratedSince(Label* label) {
@@ -2072,23 +2071,23 @@ class Assembler : public AssemblerBase {
   // the top bit of both register codes.
   // High bit of reg goes to REX.R, high bit of rm_reg goes to REX.B.
   // REX.W is set.
-  inline void emit_rex_64(XMMRegister reg, Register rm_reg);
-  inline void emit_rex_64(Register reg, XMMRegister rm_reg);
-  inline void emit_rex_64(Register reg, Register rm_reg);
+  inline void emit_rex_64(XMMRegister reg, AsmRegister rm_reg);
+  inline void emit_rex_64(AsmRegister reg, XMMRegister rm_reg);
+  inline void emit_rex_64(AsmRegister reg, AsmRegister rm_reg);
 
   // Emits a REX prefix that encodes a 64-bit operand size and
   // the top bit of the destination, index, and base register codes.
   // The high bit of reg is used for REX.R, the high bit of op's base
   // register is used for REX.B, and the high bit of op's index register
   // is used for REX.X.  REX.W is set.
-  inline void emit_rex_64(Register reg, const Operand& op);
+  inline void emit_rex_64(AsmRegister reg, const Operand& op);
   inline void emit_rex_64(XMMRegister reg, const Operand& op);
 
   // Emits a REX prefix that encodes a 64-bit operand size and
   // the top bit of the register code.
   // The high bit of register is used for REX.B.
   // REX.W is set and REX.R and REX.X are clear.
-  inline void emit_rex_64(Register rm_reg);
+  inline void emit_rex_64(AsmRegister rm_reg);
 
   // Emits a REX prefix that encodes a 64-bit operand size and
   // the top bit of the index and base register codes.
@@ -2102,16 +2101,16 @@ class Assembler : public AssemblerBase {
 
   // High bit of reg goes to REX.R, high bit of rm_reg goes to REX.B.
   // REX.W is clear.
-  inline void emit_rex_32(Register reg, Register rm_reg);
+  inline void emit_rex_32(AsmRegister reg, AsmRegister rm_reg);
 
   // The high bit of reg is used for REX.R, the high bit of op's base
   // register is used for REX.B, and the high bit of op's index register
   // is used for REX.X.  REX.W is cleared.
-  inline void emit_rex_32(Register reg, const Operand& op);
+  inline void emit_rex_32(AsmRegister reg, const Operand& op);
 
   // High bit of rm_reg goes to REX.B.
   // REX.W, REX.R and REX.X are clear.
-  inline void emit_rex_32(Register rm_reg);
+  inline void emit_rex_32(AsmRegister rm_reg);
 
   // High bit of base goes to REX.B and high bit of index to REX.X.
   // REX.W and REX.R are clear.
@@ -2119,33 +2118,33 @@ class Assembler : public AssemblerBase {
 
   // High bit of reg goes to REX.R, high bit of rm_reg goes to REX.B.
   // REX.W is cleared.  If no REX bits are set, no byte is emitted.
-  inline void emit_optional_rex_32(Register reg, Register rm_reg);
+  inline void emit_optional_rex_32(AsmRegister reg, AsmRegister rm_reg);
 
   // The high bit of reg is used for REX.R, the high bit of op's base
   // register is used for REX.B, and the high bit of op's index register
   // is used for REX.X.  REX.W is cleared.  If no REX bits are set, nothing
   // is emitted.
-  inline void emit_optional_rex_32(Register reg, const Operand& op);
+  inline void emit_optional_rex_32(AsmRegister reg, const Operand& op);
 
-  // As for emit_optional_rex_32(Register, Register), except that
+  // As for emit_optional_rex_32(AsmRegister, AsmRegister), except that
   // the registers are XMM registers.
   inline void emit_optional_rex_32(XMMRegister reg, XMMRegister base);
 
-  // As for emit_optional_rex_32(Register, Register), except that
+  // As for emit_optional_rex_32(AsmRegister, AsmRegister), except that
   // one of the registers is an XMM registers.
-  inline void emit_optional_rex_32(XMMRegister reg, Register base);
+  inline void emit_optional_rex_32(XMMRegister reg, AsmRegister base);
 
-  // As for emit_optional_rex_32(Register, Register), except that
+  // As for emit_optional_rex_32(AsmRegister, AsmRegister), except that
   // one of the registers is an XMM registers.
-  inline void emit_optional_rex_32(Register reg, XMMRegister base);
+  inline void emit_optional_rex_32(AsmRegister reg, XMMRegister base);
 
-  // As for emit_optional_rex_32(Register, const Operand&), except that
+  // As for emit_optional_rex_32(AsmRegister, const Operand&), except that
   // the register is an XMM register.
   inline void emit_optional_rex_32(XMMRegister reg, const Operand& op);
 
-  // Optionally do as emit_rex_32(Register) if the register number has
+  // Optionally do as emit_rex_32(AsmRegister) if the register number has
   // the high bit set.
-  inline void emit_optional_rex_32(Register rm_reg);
+  inline void emit_optional_rex_32(AsmRegister rm_reg);
   inline void emit_optional_rex_32(XMMRegister rm_reg);
 
   // Optionally do as emit_rex_32(const Operand&) if the operand register
@@ -2193,13 +2192,13 @@ class Assembler : public AssemblerBase {
   inline void emit_vex_prefix(XMMRegister reg, XMMRegister v, XMMRegister rm,
                               VectorLength l, SIMDPrefix pp, LeadingOpcode m,
                               VexW w);
-  inline void emit_vex_prefix(Register reg, Register v, Register rm,
+  inline void emit_vex_prefix(AsmRegister reg, AsmRegister v, AsmRegister rm,
                               VectorLength l, SIMDPrefix pp, LeadingOpcode m,
                               VexW w);
   inline void emit_vex_prefix(XMMRegister reg, XMMRegister v, const Operand& rm,
                               VectorLength l, SIMDPrefix pp, LeadingOpcode m,
                               VexW w);
-  inline void emit_vex_prefix(Register reg, Register v, const Operand& rm,
+  inline void emit_vex_prefix(AsmRegister reg, AsmRegister v, const Operand& rm,
                               VectorLength l, SIMDPrefix pp, LeadingOpcode m,
                               VexW w);
 
@@ -2207,7 +2206,7 @@ class Assembler : public AssemblerBase {
   // 1- or 4-byte offset for a memory operand.  Also encodes
   // the second operand of the operation, a register or operation
   // subcode, into the reg field of the ModR/M byte.
-  void emit_operand(Register reg, const Operand& adr) {
+  void emit_operand(AsmRegister reg, const Operand& adr) {
     emit_operand(reg.low_bits(), adr);
   }
 
@@ -2217,13 +2216,13 @@ class Assembler : public AssemblerBase {
   void emit_operand(int rm, const Operand& adr);
 
   // Emit a ModR/M byte with registers coded in the reg and rm_reg fields.
-  void emit_modrm(Register reg, Register rm_reg) {
+  void emit_modrm(AsmRegister reg, AsmRegister rm_reg) {
     emit(0xC0 | reg.low_bits() << 3 | rm_reg.low_bits());
   }
 
   // Emit a ModR/M byte with an operation subcode in the reg field and
   // a register in the rm_reg field.
-  void emit_modrm(int code, Register rm_reg) {
+  void emit_modrm(int code, AsmRegister rm_reg) {
     DCHECK(is_uint3(code));
     emit(0xC0 | code << 3 | rm_reg.low_bits());
   }
@@ -2234,43 +2233,36 @@ class Assembler : public AssemblerBase {
   // The first argument is the reg field, the second argument is the r/m field.
   void emit_sse_operand(XMMRegister dst, XMMRegister src);
   void emit_sse_operand(XMMRegister reg, const Operand& adr);
-  void emit_sse_operand(Register reg, const Operand& adr);
-  void emit_sse_operand(XMMRegister dst, Register src);
-  void emit_sse_operand(Register dst, XMMRegister src);
+  void emit_sse_operand(AsmRegister reg, const Operand& adr);
+  void emit_sse_operand(XMMRegister dst, AsmRegister src);
+  void emit_sse_operand(AsmRegister dst, XMMRegister src);
   void emit_sse_operand(XMMRegister dst);
 
   // Emit machine code for one of the operations ADD, ADC, SUB, SBC,
   // AND, OR, XOR, or CMP.  The encodings of these operations are all
   // similar, differing just in the opcode or in the reg field of the
   // ModR/M byte.
-  void arithmetic_op_8(byte opcode, Register reg, Register rm_reg);
-  void arithmetic_op_8(byte opcode, Register reg, const Operand& rm_reg);
-  void arithmetic_op_16(byte opcode, Register reg, Register rm_reg);
-  void arithmetic_op_16(byte opcode, Register reg, const Operand& rm_reg);
+  void arithmetic_op_8(byte opcode, AsmRegister reg, AsmRegister rm_reg);
+  void arithmetic_op_8(byte opcode, AsmRegister reg, const Operand& rm_reg);
+  void arithmetic_op_16(byte opcode, AsmRegister reg, AsmRegister rm_reg);
+  void arithmetic_op_16(byte opcode, AsmRegister reg, const Operand& rm_reg);
   // Operate on operands/registers with pointer size, 32-bit or 64-bit size.
-  void arithmetic_op(byte opcode, Register reg, Register rm_reg, int size);
-  void arithmetic_op(byte opcode,
-                     Register reg,
-                     const Operand& rm_reg,
+  void arithmetic_op(byte opcode, AsmRegister reg, AsmRegister rm_reg,
+                     int size);
+  void arithmetic_op(byte opcode, AsmRegister reg, const Operand& rm_reg,
                      int size);
   // Operate on a byte in memory or register.
-  void immediate_arithmetic_op_8(byte subcode,
-                                 Register dst,
-                                 Immediate src);
+  void immediate_arithmetic_op_8(byte subcode, AsmRegister dst, Immediate src);
   void immediate_arithmetic_op_8(byte subcode,
                                  const Operand& dst,
                                  Immediate src);
   // Operate on a word in memory or register.
-  void immediate_arithmetic_op_16(byte subcode,
-                                  Register dst,
-                                  Immediate src);
+  void immediate_arithmetic_op_16(byte subcode, AsmRegister dst, Immediate src);
   void immediate_arithmetic_op_16(byte subcode,
                                   const Operand& dst,
                                   Immediate src);
   // Operate on operands/registers with pointer size, 32-bit or 64-bit size.
-  void immediate_arithmetic_op(byte subcode,
-                               Register dst,
-                               Immediate src,
+  void immediate_arithmetic_op(byte subcode, AsmRegister dst, Immediate src,
                                int size);
   void immediate_arithmetic_op(byte subcode,
                                const Operand& dst,
@@ -2279,9 +2271,9 @@ class Assembler : public AssemblerBase {
 
   // Emit machine code for a shift operation.
   void shift(Operand dst, Immediate shift_amount, int subcode, int size);
-  void shift(Register dst, Immediate shift_amount, int subcode, int size);
+  void shift(AsmRegister dst, Immediate shift_amount, int subcode, int size);
   // Shift dst by cl % 64 bits.
-  void shift(Register dst, int subcode, int size);
+  void shift(AsmRegister dst, int subcode, int size);
   void shift(Operand dst, int subcode, int size);
 
   void emit_farith(int b1, int b2, int i);
@@ -2294,19 +2286,19 @@ class Assembler : public AssemblerBase {
   void RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data = 0);
 
   // Arithmetics
-  void emit_add(Register dst, Register src, int size) {
+  void emit_add(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x03, dst, src, size);
   }
 
-  void emit_add(Register dst, Immediate src, int size) {
+  void emit_add(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x0, dst, src, size);
   }
 
-  void emit_add(Register dst, const Operand& src, int size) {
+  void emit_add(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x03, dst, src, size);
   }
 
-  void emit_add(const Operand& dst, Register src, int size) {
+  void emit_add(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x1, src, dst, size);
   }
 
@@ -2314,19 +2306,19 @@ class Assembler : public AssemblerBase {
     immediate_arithmetic_op(0x0, dst, src, size);
   }
 
-  void emit_and(Register dst, Register src, int size) {
+  void emit_and(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x23, dst, src, size);
   }
 
-  void emit_and(Register dst, const Operand& src, int size) {
+  void emit_and(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x23, dst, src, size);
   }
 
-  void emit_and(const Operand& dst, Register src, int size) {
+  void emit_and(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x21, src, dst, size);
   }
 
-  void emit_and(Register dst, Immediate src, int size) {
+  void emit_and(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x4, dst, src, size);
   }
 
@@ -2334,19 +2326,19 @@ class Assembler : public AssemblerBase {
     immediate_arithmetic_op(0x4, dst, src, size);
   }
 
-  void emit_cmp(Register dst, Register src, int size) {
+  void emit_cmp(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x3B, dst, src, size);
   }
 
-  void emit_cmp(Register dst, const Operand& src, int size) {
+  void emit_cmp(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x3B, dst, src, size);
   }
 
-  void emit_cmp(const Operand& dst, Register src, int size) {
+  void emit_cmp(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x39, src, dst, size);
   }
 
-  void emit_cmp(Register dst, Immediate src, int size) {
+  void emit_cmp(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x7, dst, src, size);
   }
 
@@ -2357,61 +2349,61 @@ class Assembler : public AssemblerBase {
   // Compare {al,ax,eax,rax} with src.  If equal, set ZF and write dst into
   // src. Otherwise clear ZF and write src into {al,ax,eax,rax}.  This
   // operation is only atomic if prefixed by the lock instruction.
-  void emit_cmpxchg(const Operand& dst, Register src, int size);
+  void emit_cmpxchg(const Operand& dst, AsmRegister src, int size);
 
-  void emit_dec(Register dst, int size);
+  void emit_dec(AsmRegister dst, int size);
   void emit_dec(const Operand& dst, int size);
 
   // Divide rdx:rax by src.  Quotient in rax, remainder in rdx when size is 64.
   // Divide edx:eax by lower 32 bits of src.  Quotient in eax, remainder in edx
   // when size is 32.
-  void emit_idiv(Register src, int size);
-  void emit_div(Register src, int size);
+  void emit_idiv(AsmRegister src, int size);
+  void emit_div(AsmRegister src, int size);
 
   // Signed multiply instructions.
   // rdx:rax = rax * src when size is 64 or edx:eax = eax * src when size is 32.
-  void emit_imul(Register src, int size);
+  void emit_imul(AsmRegister src, int size);
   void emit_imul(const Operand& src, int size);
-  void emit_imul(Register dst, Register src, int size);
-  void emit_imul(Register dst, const Operand& src, int size);
-  void emit_imul(Register dst, Register src, Immediate imm, int size);
-  void emit_imul(Register dst, const Operand& src, Immediate imm, int size);
+  void emit_imul(AsmRegister dst, AsmRegister src, int size);
+  void emit_imul(AsmRegister dst, const Operand& src, int size);
+  void emit_imul(AsmRegister dst, AsmRegister src, Immediate imm, int size);
+  void emit_imul(AsmRegister dst, const Operand& src, Immediate imm, int size);
 
-  void emit_inc(Register dst, int size);
+  void emit_inc(AsmRegister dst, int size);
   void emit_inc(const Operand& dst, int size);
 
-  void emit_lea(Register dst, const Operand& src, int size);
+  void emit_lea(AsmRegister dst, const Operand& src, int size);
 
-  void emit_mov(Register dst, const Operand& src, int size);
-  void emit_mov(Register dst, Register src, int size);
-  void emit_mov(const Operand& dst, Register src, int size);
-  void emit_mov(Register dst, Immediate value, int size);
+  void emit_mov(AsmRegister dst, const Operand& src, int size);
+  void emit_mov(AsmRegister dst, AsmRegister src, int size);
+  void emit_mov(const Operand& dst, AsmRegister src, int size);
+  void emit_mov(AsmRegister dst, Immediate value, int size);
   void emit_mov(const Operand& dst, Immediate value, int size);
 
-  void emit_movzxb(Register dst, const Operand& src, int size);
-  void emit_movzxb(Register dst, Register src, int size);
-  void emit_movzxw(Register dst, const Operand& src, int size);
-  void emit_movzxw(Register dst, Register src, int size);
+  void emit_movzxb(AsmRegister dst, const Operand& src, int size);
+  void emit_movzxb(AsmRegister dst, AsmRegister src, int size);
+  void emit_movzxw(AsmRegister dst, const Operand& src, int size);
+  void emit_movzxw(AsmRegister dst, AsmRegister src, int size);
 
-  void emit_neg(Register dst, int size);
+  void emit_neg(AsmRegister dst, int size);
   void emit_neg(const Operand& dst, int size);
 
-  void emit_not(Register dst, int size);
+  void emit_not(AsmRegister dst, int size);
   void emit_not(const Operand& dst, int size);
 
-  void emit_or(Register dst, Register src, int size) {
+  void emit_or(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x0B, dst, src, size);
   }
 
-  void emit_or(Register dst, const Operand& src, int size) {
+  void emit_or(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x0B, dst, src, size);
   }
 
-  void emit_or(const Operand& dst, Register src, int size) {
+  void emit_or(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x9, src, dst, size);
   }
 
-  void emit_or(Register dst, Immediate src, int size) {
+  void emit_or(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x1, dst, src, size);
   }
 
@@ -2421,23 +2413,23 @@ class Assembler : public AssemblerBase {
 
   void emit_repmovs(int size);
 
-  void emit_sbb(Register dst, Register src, int size) {
+  void emit_sbb(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x1b, dst, src, size);
   }
 
-  void emit_sub(Register dst, Register src, int size) {
+  void emit_sub(AsmRegister dst, AsmRegister src, int size) {
     arithmetic_op(0x2B, dst, src, size);
   }
 
-  void emit_sub(Register dst, Immediate src, int size) {
+  void emit_sub(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x5, dst, src, size);
   }
 
-  void emit_sub(Register dst, const Operand& src, int size) {
+  void emit_sub(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x2B, dst, src, size);
   }
 
-  void emit_sub(const Operand& dst, Register src, int size) {
+  void emit_sub(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x29, src, dst, size);
   }
 
@@ -2445,18 +2437,18 @@ class Assembler : public AssemblerBase {
     immediate_arithmetic_op(0x5, dst, src, size);
   }
 
-  void emit_test(Register dst, Register src, int size);
-  void emit_test(Register reg, Immediate mask, int size);
-  void emit_test(const Operand& op, Register reg, int size);
+  void emit_test(AsmRegister dst, AsmRegister src, int size);
+  void emit_test(AsmRegister reg, Immediate mask, int size);
+  void emit_test(const Operand& op, AsmRegister reg, int size);
   void emit_test(const Operand& op, Immediate mask, int size);
-  void emit_test(Register reg, const Operand& op, int size) {
+  void emit_test(AsmRegister reg, const Operand& op, int size) {
     return emit_test(op, reg, size);
   }
 
-  void emit_xchg(Register dst, Register src, int size);
-  void emit_xchg(Register dst, const Operand& src, int size);
+  void emit_xchg(AsmRegister dst, AsmRegister src, int size);
+  void emit_xchg(AsmRegister dst, const Operand& src, int size);
 
-  void emit_xor(Register dst, Register src, int size) {
+  void emit_xor(AsmRegister dst, AsmRegister src, int size) {
     if (size == kInt64Size && dst.code() == src.code()) {
     // 32 bit operations zero the top 32 bits of 64 bit registers. Therefore
     // there is no need to make this a 64 bit operation.
@@ -2466,11 +2458,11 @@ class Assembler : public AssemblerBase {
     }
   }
 
-  void emit_xor(Register dst, const Operand& src, int size) {
+  void emit_xor(AsmRegister dst, const Operand& src, int size) {
     arithmetic_op(0x33, dst, src, size);
   }
 
-  void emit_xor(Register dst, Immediate src, int size) {
+  void emit_xor(AsmRegister dst, Immediate src, int size) {
     immediate_arithmetic_op(0x6, dst, src, size);
   }
 
@@ -2478,20 +2470,22 @@ class Assembler : public AssemblerBase {
     immediate_arithmetic_op(0x6, dst, src, size);
   }
 
-  void emit_xor(const Operand& dst, Register src, int size) {
+  void emit_xor(const Operand& dst, AsmRegister src, int size) {
     arithmetic_op(0x31, src, dst, size);
   }
 
   // Most BMI instructions are similar.
-  void bmi1q(byte op, Register reg, Register vreg, Register rm);
-  void bmi1q(byte op, Register reg, Register vreg, const Operand& rm);
-  void bmi1l(byte op, Register reg, Register vreg, Register rm);
-  void bmi1l(byte op, Register reg, Register vreg, const Operand& rm);
-  void bmi2q(SIMDPrefix pp, byte op, Register reg, Register vreg, Register rm);
-  void bmi2q(SIMDPrefix pp, byte op, Register reg, Register vreg,
+  void bmi1q(byte op, AsmRegister reg, AsmRegister vreg, AsmRegister rm);
+  void bmi1q(byte op, AsmRegister reg, AsmRegister vreg, const Operand& rm);
+  void bmi1l(byte op, AsmRegister reg, AsmRegister vreg, AsmRegister rm);
+  void bmi1l(byte op, AsmRegister reg, AsmRegister vreg, const Operand& rm);
+  void bmi2q(SIMDPrefix pp, byte op, AsmRegister reg, AsmRegister vreg,
+             AsmRegister rm);
+  void bmi2q(SIMDPrefix pp, byte op, AsmRegister reg, AsmRegister vreg,
              const Operand& rm);
-  void bmi2l(SIMDPrefix pp, byte op, Register reg, Register vreg, Register rm);
-  void bmi2l(SIMDPrefix pp, byte op, Register reg, Register vreg,
+  void bmi2l(SIMDPrefix pp, byte op, AsmRegister reg, AsmRegister vreg,
+             AsmRegister rm);
+  void bmi2l(SIMDPrefix pp, byte op, AsmRegister reg, AsmRegister vreg,
              const Operand& rm);
 
   // record the position of jmp/jcc instruction

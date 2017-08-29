@@ -90,13 +90,14 @@ void Builtins::Generate_AdaptorWithBuiltinExitFrame(MacroAssembler* masm) {
 
 // Load the built-in InternalArray function from the current context.
 static void GenerateLoadInternalArrayFunction(MacroAssembler* masm,
-                                              Register result) {
+                                              AsmRegister result) {
   // Load the InternalArray function from the current native context.
   __ LoadNativeContextSlot(Context::INTERNAL_ARRAY_FUNCTION_INDEX, result);
 }
 
 // Load the built-in Array function from the current context.
-static void GenerateLoadArrayFunction(MacroAssembler* masm, Register result) {
+static void GenerateLoadArrayFunction(MacroAssembler* masm,
+                                      AsmRegister result) {
   // Load the Array function from the current native context.
   __ LoadNativeContextSlot(Context::ARRAY_FUNCTION_INDEX, result);
 }
@@ -476,7 +477,7 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   //  -- sp[...]: constructor arguments
   // -----------------------------------
 
-  Register scratch = r2;
+  AsmRegister scratch = r2;
 
   // Enter a construct frame.
   {
@@ -755,7 +756,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
 
   Label prepare_step_in_if_stepping, prepare_step_in_suspended_generator;
   Label stepping_prepared;
-  Register scratch = r5;
+  AsmRegister scratch = r5;
 
   // Flood function if we are stepping.
   ExternalReference debug_hook =
@@ -858,7 +859,7 @@ void Builtins::Generate_ConstructedNonConstructable(MacroAssembler* masm) {
 enum IsTagged { kArgcIsSmiTagged, kArgcIsUntaggedInt };
 
 // Clobbers r2; preserves all other registers.
-static void Generate_CheckStackOverflow(MacroAssembler* masm, Register argc,
+static void Generate_CheckStackOverflow(MacroAssembler* masm, AsmRegister argc,
                                         IsTagged argc_is_tagged) {
   // Check the stack for overflow. We are not trying to catch
   // interruptions (e.g. debug break and preemption) here, so the "real stack
@@ -970,9 +971,9 @@ void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
 }
 
 static void ReplaceClosureCodeWithOptimizedCode(
-    MacroAssembler* masm, Register optimized_code, Register closure,
-    Register scratch1, Register scratch2, Register scratch3) {
-  Register native_context = scratch1;
+    MacroAssembler* masm, AsmRegister optimized_code, AsmRegister closure,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3) {
+  AsmRegister native_context = scratch1;
 
   // Store code entry in the closure.
   __ str(optimized_code, FieldMemOperand(closure, JSFunction::kCodeOffset));
@@ -1001,8 +1002,8 @@ static void ReplaceClosureCodeWithOptimizedCode(
   __ mov(closure, scratch2);
 }
 
-static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch) {
-  Register args_count = scratch;
+static void LeaveInterpreterFrame(MacroAssembler* masm, AsmRegister scratch) {
+  AsmRegister args_count = scratch;
 
   // Get the arguments + receiver count.
   __ ldr(args_count,
@@ -1019,7 +1020,7 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch) {
 
 // Tail-call |function_id| if |smi_entry| == |marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
-                                          Register smi_entry,
+                                          AsmRegister smi_entry,
                                           OptimizationMarker marker,
                                           Runtime::FunctionId function_id) {
   Label no_match;
@@ -1030,9 +1031,10 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
 }
 
 static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
-                                           Register feedback_vector,
-                                           Register scratch1, Register scratch2,
-                                           Register scratch3) {
+                                           AsmRegister feedback_vector,
+                                           AsmRegister scratch1,
+                                           AsmRegister scratch2,
+                                           AsmRegister scratch3) {
   // ----------- S t a t e -------------
   //  -- r0 : argument count (preserved for callee if needed, and caller)
   //  -- r3 : new target (preserved for callee if needed, and caller)
@@ -1044,8 +1046,8 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 
   Label optimized_code_slot_is_cell, fallthrough;
 
-  Register closure = r1;
-  Register optimized_code_entry = scratch1;
+  AsmRegister closure = r1;
+  AsmRegister optimized_code_entry = scratch1;
 
   __ ldr(
       optimized_code_entry,
@@ -1131,11 +1133,12 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 
 // Advance the current bytecode offset. This simulates what all bytecode
 // handlers do upon completion of the underlying operation.
-static void AdvanceBytecodeOffset(MacroAssembler* masm, Register bytecode_array,
-                                  Register bytecode_offset, Register scratch1,
-                                  Register scratch2) {
-  Register bytecode_size_table = scratch1;
-  Register bytecode = scratch2;
+static void AdvanceBytecodeOffset(MacroAssembler* masm,
+                                  AsmRegister bytecode_array,
+                                  AsmRegister bytecode_offset,
+                                  AsmRegister scratch1, AsmRegister scratch2) {
+  AsmRegister bytecode_size_table = scratch1;
+  AsmRegister bytecode = scratch2;
   DCHECK(!AreAliased(bytecode_array, bytecode_offset, bytecode_size_table,
                      bytecode));
 
@@ -1193,8 +1196,8 @@ static void AdvanceBytecodeOffset(MacroAssembler* masm, Register bytecode_array,
 void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   ProfileEntryHookStub::MaybeCallEntryHook(masm);
 
-  Register closure = r1;
-  Register feedback_vector = r2;
+  AsmRegister closure = r1;
+  AsmRegister feedback_vector = r2;
 
   // Load the feedback vector from the closure.
   __ ldr(feedback_vector,
@@ -1334,8 +1337,9 @@ void Builtins::Generate_InterpreterExitTrampoline(MacroAssembler* masm) {
   __ Jump(lr);
 }
 
-static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
-                                        Register scratch,
+static void Generate_StackOverflowCheck(MacroAssembler* masm,
+                                        AsmRegister num_args,
+                                        AsmRegister scratch,
                                         Label* stack_overflow) {
   // Check the stack for overflow. We are not trying to catch
   // interruptions (e.g. debug break and preemption) here, so the "real stack
@@ -1350,8 +1354,9 @@ static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
 }
 
 static void Generate_InterpreterPushArgs(MacroAssembler* masm,
-                                         Register num_args, Register index,
-                                         Register limit, Register scratch) {
+                                         AsmRegister num_args,
+                                         AsmRegister index, AsmRegister limit,
+                                         AsmRegister scratch) {
   // Find the address of the last argument.
   __ mov(limit, num_args);
   __ mov(limit, Operand(limit, LSL, kPointerSizeLog2));
@@ -1511,7 +1516,7 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ ldrb(r1, MemOperand(kInterpreterBytecodeArrayRegister,
                          kInterpreterBytecodeOffsetRegister));
   UseScratchRegisterScope temps(masm);
-  Register scratch = temps.Acquire();
+  AsmRegister scratch = temps.Acquire();
   __ ldr(scratch, MemOperand(kInterpreterDispatchTableRegister, r1, LSL,
                              kPointerSizeLog2));
   __ Jump(scratch);
@@ -1546,10 +1551,10 @@ void Builtins::Generate_CheckOptimizationMarker(MacroAssembler* masm) {
   //  -- r3 : new target (preserved for callee)
   //  -- r1 : target function (preserved for callee)
   // -----------------------------------
-  Register closure = r1;
+  AsmRegister closure = r1;
 
   // Get the feedback vector.
-  Register feedback_vector = r2;
+  AsmRegister feedback_vector = r2;
   __ ldr(feedback_vector,
          FieldMemOperand(closure, JSFunction::kFeedbackVectorOffset));
   __ ldr(feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
@@ -1576,8 +1581,8 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   // First lookup code, maybe we don't need to compile!
   Label gotta_call_runtime;
 
-  Register closure = r1;
-  Register feedback_vector = r2;
+  AsmRegister closure = r1;
+  AsmRegister feedback_vector = r2;
 
   // Do we have a valid feedback vector?
   __ ldr(feedback_vector,
@@ -1590,7 +1595,7 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, r4, r6, r5);
 
   // We found no optimized code.
-  Register entry = r4;
+  AsmRegister entry = r4;
   __ ldr(entry,
          FieldMemOperand(closure, JSFunction::kSharedFunctionInfoOffset));
 
@@ -1714,16 +1719,16 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
   }
   for (int i = allocatable_register_count - 1; i >= 0; --i) {
     int code = config->GetAllocatableGeneralCode(i);
-    __ Pop(Register::from_code(code));
+    __ Pop(AsmRegister::from_code(code));
     if (java_script_builtin && code == kJavaScriptCallArgCountRegister.code()) {
-      __ SmiUntag(Register::from_code(code));
+      __ SmiUntag(AsmRegister::from_code(code));
     }
   }
   __ ldr(fp, MemOperand(
                  sp, BuiltinContinuationFrameConstants::kFixedFrameSizeFromFp));
 
   UseScratchRegisterScope temps(masm);
-  Register scratch = temps.Acquire();
+  AsmRegister scratch = temps.Acquire();
   __ Pop(scratch);
   __ add(sp, sp,
          Operand(BuiltinContinuationFrameConstants::kFixedFrameSizeFromFp));
@@ -1932,7 +1937,7 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   // r0: actual number of arguments
   // r1: callable
   {
-    Register scratch = r3;
+    AsmRegister scratch = r3;
     Label loop;
     // Calculate the copy start address (destination). Copy end address is sp.
     __ add(r2, sp, Operand(r0, LSL, kPointerSizeLog2));
@@ -2076,7 +2081,7 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   // -----------------------------------
   __ AssertFixedArray(r2);
 
-  Register scratch = r8;
+  AsmRegister scratch = r8;
 
   // Check for stack overflow.
   {
@@ -2128,7 +2133,7 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
   //  -- r2 : start index (to support rest parameters)
   // -----------------------------------
 
-  Register scratch = r6;
+  AsmRegister scratch = r6;
 
   // Check if new.target has a [[Construct]] internal method.
   if (mode == CallOrConstructMode::kConstruct) {
@@ -2349,7 +2354,7 @@ void Generate_PushBoundArguments(MacroAssembler* masm) {
       __ bind(&done);
     }
 
-    Register scratch = r6;
+    AsmRegister scratch = r6;
 
     // Relocate arguments down the stack.
     {
@@ -2611,7 +2616,7 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   __ cmp(r2, Operand(SharedFunctionInfo::kDontAdaptArgumentsSentinel));
   __ b(eq, &dont_adapt_arguments);
 
-  Register scratch = r5;
+  AsmRegister scratch = r5;
 
   {  // Enough parameters: actual >= expected
     __ bind(&enough);

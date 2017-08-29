@@ -536,7 +536,7 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     Generate_CheckStackOverflow(masm, kRaxIsUntaggedInt);
 
     // Copy arguments to the stack in a loop.
-    // Register rbx points to array of pointers to handle locations.
+    // AsmRegister rbx points to array of pointers to handle locations.
     // Push the values of these handles.
     Label loop, entry;
     __ Set(rcx, 0);  // Set loop variable to 0.
@@ -694,9 +694,9 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
 }
 
 static void ReplaceClosureCodeWithOptimizedCode(
-    MacroAssembler* masm, Register optimized_code, Register closure,
-    Register scratch1, Register scratch2, Register scratch3) {
-  Register native_context = scratch1;
+    MacroAssembler* masm, AsmRegister optimized_code, AsmRegister closure,
+    AsmRegister scratch1, AsmRegister scratch2, AsmRegister scratch3) {
+  AsmRegister native_context = scratch1;
 
   // Store the optimized code in the closure.
   __ movp(FieldOperand(closure, JSFunction::kCodeOffset), optimized_code);
@@ -723,10 +723,10 @@ static void ReplaceClosureCodeWithOptimizedCode(
   __ movp(closure, scratch3);
 }
 
-static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
-                                  Register scratch2) {
-  Register args_count = scratch1;
-  Register return_pc = scratch2;
+static void LeaveInterpreterFrame(MacroAssembler* masm, AsmRegister scratch1,
+                                  AsmRegister scratch2) {
+  AsmRegister args_count = scratch1;
+  AsmRegister return_pc = scratch2;
 
   // Get the arguments + receiver count.
   __ movp(args_count,
@@ -745,7 +745,7 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
 
 // Tail-call |function_id| if |smi_entry| == |marker|
 static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
-                                          Register smi_entry,
+                                          AsmRegister smi_entry,
                                           OptimizationMarker marker,
                                           Runtime::FunctionId function_id) {
   Label no_match;
@@ -756,9 +756,10 @@ static void TailCallRuntimeIfMarkerEquals(MacroAssembler* masm,
 }
 
 static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
-                                           Register feedback_vector,
-                                           Register scratch1, Register scratch2,
-                                           Register scratch3) {
+                                           AsmRegister feedback_vector,
+                                           AsmRegister scratch1,
+                                           AsmRegister scratch2,
+                                           AsmRegister scratch3) {
   // ----------- S t a t e -------------
   //  -- rax : argument count (preserved for callee if needed, and caller)
   //  -- rdx : new target (preserved for callee if needed, and caller)
@@ -770,8 +771,8 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 
   Label optimized_code_slot_is_cell, fallthrough;
 
-  Register closure = rdi;
-  Register optimized_code_entry = scratch1;
+  AsmRegister closure = rdi;
+  AsmRegister optimized_code_entry = scratch1;
 
   __ movp(optimized_code_entry,
           FieldOperand(feedback_vector, FeedbackVector::kOptimizedCodeOffset));
@@ -855,11 +856,12 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 
 // Advance the current bytecode offset. This simulates what all bytecode
 // handlers do upon completion of the underlying operation.
-static void AdvanceBytecodeOffset(MacroAssembler* masm, Register bytecode_array,
-                                  Register bytecode_offset, Register scratch1,
-                                  Register scratch2) {
-  Register bytecode_size_table = scratch1;
-  Register bytecode = scratch2;
+static void AdvanceBytecodeOffset(MacroAssembler* masm,
+                                  AsmRegister bytecode_array,
+                                  AsmRegister bytecode_offset,
+                                  AsmRegister scratch1, AsmRegister scratch2) {
+  AsmRegister bytecode_size_table = scratch1;
+  AsmRegister bytecode = scratch2;
   DCHECK(!AreAliased(bytecode_array, bytecode_offset, bytecode_size_table,
                      bytecode));
 
@@ -914,8 +916,8 @@ static void AdvanceBytecodeOffset(MacroAssembler* masm, Register bytecode_array,
 void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   ProfileEntryHookStub::MaybeCallEntryHook(masm);
 
-  Register closure = rdi;
-  Register feedback_vector = rbx;
+  AsmRegister closure = rdi;
+  AsmRegister feedback_vector = rbx;
 
   // Load the feedback vector from the closure.
   __ movp(feedback_vector,
@@ -1066,7 +1068,7 @@ void Builtins::Generate_InterpreterExitTrampoline(MacroAssembler* masm) {
 }
 
 static void Generate_StackOverflowCheck(
-    MacroAssembler* masm, Register num_args, Register scratch,
+    MacroAssembler* masm, AsmRegister num_args, AsmRegister scratch,
     Label* stack_overflow,
     Label::Distance stack_overflow_distance = Label::kFar) {
   // Check the stack for overflow. We are not trying to catch
@@ -1085,9 +1087,9 @@ static void Generate_StackOverflowCheck(
 }
 
 static void Generate_InterpreterPushArgs(MacroAssembler* masm,
-                                         Register num_args,
-                                         Register start_address,
-                                         Register scratch) {
+                                         AsmRegister num_args,
+                                         AsmRegister start_address,
+                                         AsmRegister scratch) {
   // Find the address of the last argument.
   __ Move(scratch, num_args);
   __ shlp(scratch, Immediate(kPointerSizeLog2));
@@ -1304,10 +1306,10 @@ void Builtins::Generate_CheckOptimizationMarker(MacroAssembler* masm) {
   //  -- rdx : new target (preserved for callee)
   //  -- rdi : target function (preserved for callee)
   // -----------------------------------
-  Register closure = rdi;
+  AsmRegister closure = rdi;
 
   // Get the feedback vector.
-  Register feedback_vector = rbx;
+  AsmRegister feedback_vector = rbx;
   __ movp(feedback_vector,
           FieldOperand(closure, JSFunction::kFeedbackVectorOffset));
   __ movp(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
@@ -1334,8 +1336,8 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   // First lookup code, maybe we don't need to compile!
   Label gotta_call_runtime;
 
-  Register closure = rdi;
-  Register feedback_vector = rbx;
+  AsmRegister closure = rdi;
+  AsmRegister feedback_vector = rbx;
 
   // Do we have a valid feedback vector?
   __ movp(feedback_vector,
@@ -1348,7 +1350,7 @@ void Builtins::Generate_CompileLazy(MacroAssembler* masm) {
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, rcx, r14, r15);
 
   // We found no optimized code.
-  Register entry = rcx;
+  AsmRegister entry = rcx;
   __ movp(entry, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
 
   // If SFI points to anything other than CompileLazy, install that.
@@ -1472,9 +1474,10 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
   }
   for (int i = allocatable_register_count - 1; i >= 0; --i) {
     int code = config->GetAllocatableGeneralCode(i);
-    __ popq(Register::from_code(code));
+    __ popq(AsmRegister::from_code(code));
     if (java_script_builtin && code == kJavaScriptCallArgCountRegister.code()) {
-      __ SmiToInteger32(Register::from_code(code), Register::from_code(code));
+      __ SmiToInteger32(AsmRegister::from_code(code),
+                        AsmRegister::from_code(code));
     }
   }
   __ movq(
@@ -2886,7 +2889,7 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     // Save all parameter registers (see wasm-linkage.cc). They might be
     // overwritten in the runtime call below. We don't have any callee-saved
     // registers in wasm, so no need to store anything else.
-    constexpr Register gp_regs[]{rax, rbx, rcx, rdx, rsi, rdi};
+    constexpr AsmRegister gp_regs[]{rax, rbx, rcx, rdx, rsi, rdi};
     constexpr XMMRegister xmm_regs[]{xmm1, xmm2, xmm3, xmm4, xmm5, xmm6};
 
     for (auto reg : gp_regs) {

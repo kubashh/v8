@@ -48,19 +48,19 @@ class PropertyAccessCompiler BASE_EMBEDDED {
   Isolate* isolate() const { return isolate_; }
   Factory* factory() const { return isolate()->factory(); }
 
-  Register receiver() const { return registers_[0]; }
-  Register name() const { return registers_[1]; }
-  Register slot() const;
-  Register vector() const;
-  Register scratch1() const { return registers_[2]; }
-  Register scratch2() const { return registers_[3]; }
+  AsmRegister receiver() const { return registers_[0]; }
+  AsmRegister name() const { return registers_[1]; }
+  AsmRegister slot() const;
+  AsmRegister vector() const;
+  AsmRegister scratch1() const { return registers_[2]; }
+  AsmRegister scratch2() const { return registers_[3]; }
 
-  Register* registers_;
+  AsmRegister* registers_;
 
   static void GenerateTailCall(MacroAssembler* masm, Handle<Code> code);
 
  private:
-  static Register* GetCallingConvention(Isolate* isolate, Code::Kind kind);
+  static AsmRegister* GetCallingConvention(Isolate* isolate, Code::Kind kind);
   static void InitializePlatformSpecific(AccessCompilerData* data);
 
   Code::Kind kind_;

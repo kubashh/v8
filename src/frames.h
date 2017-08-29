@@ -749,9 +749,9 @@ class JavaScriptFrame : public StandardFrame {
       int* data, HandlerTable::CatchPrediction* prediction);
 
   // Architecture-specific register description.
-  static Register fp_register();
-  static Register context_register();
-  static Register constant_pool_pointer_register();
+  static AsmRegister fp_register();
+  static AsmRegister context_register();
+  static AsmRegister constant_pool_pointer_register();
 
   static JavaScriptFrame* cast(StackFrame* frame) {
     DCHECK(frame->is_java_script());

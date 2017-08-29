@@ -27,7 +27,7 @@ class InstructionOperandConverter {
 
   // -- Instruction operand accesses with conversions --------------------------
 
-  Register InputRegister(size_t index) {
+  AsmRegister InputRegister(size_t index) {
     return ToRegister(instr_->InputAt(index));
   }
 
@@ -97,11 +97,11 @@ class InstructionOperandConverter {
     return ToRpoNumber(instr_->InputAt(index));
   }
 
-  Register OutputRegister(size_t index = 0) {
+  AsmRegister OutputRegister(size_t index = 0) {
     return ToRegister(instr_->OutputAt(index));
   }
 
-  Register TempRegister(size_t index) {
+  AsmRegister TempRegister(size_t index) {
     return ToRegister(instr_->TempAt(index));
   }
 
@@ -127,7 +127,7 @@ class InstructionOperandConverter {
     return ToConstant(op).ToRpoNumber();
   }
 
-  Register ToRegister(InstructionOperand* op) {
+  AsmRegister ToRegister(InstructionOperand* op) {
     return LocationOperand::cast(op)->GetRegister();
   }
 

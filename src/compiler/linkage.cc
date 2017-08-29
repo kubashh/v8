@@ -20,7 +20,7 @@ namespace compiler {
 
 namespace {
 
-LinkageLocation regloc(Register reg, MachineType type) {
+LinkageLocation regloc(AsmRegister reg, MachineType type) {
   return LinkageLocation::ForRegister(reg.code(), type);
 }
 
@@ -367,7 +367,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
   for (int i = 0; i < js_parameter_count; i++) {
     if (i < register_parameter_count) {
       // The first parameters go in registers.
-      Register reg = descriptor.GetRegisterParameter(i);
+      AsmRegister reg = descriptor.GetRegisterParameter(i);
       MachineType type = descriptor.GetParameterType(i);
       locations.AddParam(regloc(reg, type));
     } else {
@@ -438,7 +438,7 @@ CallDescriptor* Linkage::GetBytecodeDispatchCallDescriptor(
   for (int i = 0; i < parameter_count; i++) {
     if (i < register_parameter_count) {
       // The first parameters go in registers.
-      Register reg = descriptor.GetRegisterParameter(i);
+      AsmRegister reg = descriptor.GetRegisterParameter(i);
       MachineType type = descriptor.GetParameterType(i);
       locations.AddParam(regloc(reg, type));
     } else {

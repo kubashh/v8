@@ -18,7 +18,7 @@ static const int kMaxAllocatableDoubleRegisterCount =
     ALLOCATABLE_DOUBLE_REGISTERS(REGISTER_COUNT)0;
 
 static const int kAllocatableGeneralCodes[] = {
-#define REGISTER_CODE(R) Register::kCode_##R,
+#define REGISTER_CODE(R) AsmRegister::kCode_##R,
     ALLOCATABLE_GENERAL_REGISTERS(REGISTER_CODE)};
 #undef REGISTER_CODE
 
@@ -56,7 +56,7 @@ static const char* const kSimd128RegisterNames[] = {
 };
 
 STATIC_ASSERT(RegisterConfiguration::kMaxGeneralRegisters >=
-              Register::kNumRegisters);
+              AsmRegister::kNumRegisters);
 STATIC_ASSERT(RegisterConfiguration::kMaxFPRegisters >=
               FloatRegister::kMaxNumRegisters);
 STATIC_ASSERT(RegisterConfiguration::kMaxFPRegisters >=
@@ -126,7 +126,7 @@ class ArchDefaultRegisterConfiguration : public RegisterConfiguration {
  public:
   ArchDefaultRegisterConfiguration()
       : RegisterConfiguration(
-            Register::kNumRegisters, DoubleRegister::kMaxNumRegisters,
+            AsmRegister::kNumRegisters, DoubleRegister::kMaxNumRegisters,
             get_num_allocatable_general_registers(),
             get_num_allocatable_double_registers(), kAllocatableGeneralCodes,
             get_allocatable_double_codes(),
@@ -155,7 +155,7 @@ class RestrictedRegisterConfiguration : public RegisterConfiguration {
       std::unique_ptr<int[]> allocatable_general_register_codes,
       std::unique_ptr<char const* []> allocatable_general_register_names)
       : RegisterConfiguration(
-            Register::kNumRegisters, DoubleRegister::kMaxNumRegisters,
+            AsmRegister::kNumRegisters, DoubleRegister::kMaxNumRegisters,
             num_allocatable_general_registers,
             get_num_allocatable_double_registers(),
             allocatable_general_register_codes.get(),
@@ -200,7 +200,7 @@ const RegisterConfiguration* RegisterConfiguration::RestrictGeneralRegisters(
   std::unique_ptr<char const* []> names { new char const*[num] };
   int counter = 0;
   for (int i = 0; i < Default()->num_allocatable_general_registers(); ++i) {
-    auto reg = Register::from_code(Default()->GetAllocatableGeneralCode(i));
+    auto reg = AsmRegister::from_code(Default()->GetAllocatableGeneralCode(i));
     if (reg.bit() & registers) {
       DCHECK(counter < num);
       codes[counter] = reg.code();

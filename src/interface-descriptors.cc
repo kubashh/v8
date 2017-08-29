@@ -7,15 +7,14 @@
 namespace v8 {
 namespace internal {
 
-
 void CallInterfaceDescriptorData::InitializePlatformSpecific(
-    int register_parameter_count, const Register* registers,
+    int register_parameter_count, const AsmRegister* registers,
     PlatformInterfaceDescriptor* platform_descriptor) {
   platform_specific_descriptor_ = platform_descriptor;
   register_param_count_ = register_parameter_count;
 
   // InterfaceDescriptor owns a copy of the registers array.
-  register_params_.reset(NewArray<Register>(register_parameter_count));
+  register_params_.reset(NewArray<AsmRegister>(register_parameter_count));
   for (int i = 0; i < register_parameter_count; i++) {
     register_params_[i] = registers[i];
   }
@@ -70,31 +69,31 @@ void FastNewFunctionContextDescriptor::InitializePlatformIndependent(
 
 void FastNewFunctionContextDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {FunctionRegister(), SlotsRegister()};
+  AsmRegister registers[] = {FunctionRegister(), SlotsRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
 void FastNewObjectDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {TargetRegister(), NewTargetRegister()};
+  AsmRegister registers[] = {TargetRegister(), NewTargetRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-const Register FastNewObjectDescriptor::TargetRegister() {
+const AsmRegister FastNewObjectDescriptor::TargetRegister() {
   return kJSFunctionRegister;
 }
 
-const Register FastNewObjectDescriptor::NewTargetRegister() {
+const AsmRegister FastNewObjectDescriptor::NewTargetRegister() {
   return kJavaScriptCallNewTargetRegister;
 }
 
 void FastNewArgumentsDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {TargetRegister()};
+  AsmRegister registers[] = {TargetRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-const Register FastNewArgumentsDescriptor::TargetRegister() {
+const AsmRegister FastNewArgumentsDescriptor::TargetRegister() {
   return kJSFunctionRegister;
 }
 
@@ -119,7 +118,8 @@ void LoadDescriptor::InitializePlatformIndependent(
 
 void LoadDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), NameRegister(),
+                             SlotRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -134,7 +134,7 @@ void LoadFieldDescriptor::InitializePlatformIndependent(
 
 void LoadFieldDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), SmiHandlerRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), SmiHandlerRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -149,7 +149,7 @@ void LoadGlobalDescriptor::InitializePlatformIndependent(
 
 void LoadGlobalDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {NameRegister(), SlotRegister()};
+  AsmRegister registers[] = {NameRegister(), SlotRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -165,7 +165,7 @@ void LoadGlobalWithVectorDescriptor::InitializePlatformIndependent(
 
 void LoadGlobalWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {NameRegister(), SlotRegister(), VectorRegister()};
+  AsmRegister registers[] = {NameRegister(), SlotRegister(), VectorRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -181,8 +181,8 @@ void StoreDescriptor::InitializePlatformIndependent(
 
 void StoreDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
-                          SlotRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), NameRegister(),
+                             ValueRegister(), SlotRegister()};
 
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
@@ -190,7 +190,7 @@ void StoreDescriptor::InitializePlatformSpecific(
 
 void StoreTransitionDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {
+  AsmRegister registers[] = {
       ReceiverRegister(), NameRegister(), MapRegister(),
       ValueRegister(),    SlotRegister(), VectorRegister(),
   };
@@ -223,7 +223,7 @@ void StoreNamedTransitionDescriptor::InitializePlatformIndependent(
 
 void StoreNamedTransitionDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {
+  AsmRegister registers[] = {
       ReceiverRegister(), FieldOffsetRegister(), MapRegister(),
       ValueRegister(),    SlotRegister(),        VectorRegister(),
       NameRegister(),
@@ -263,13 +263,13 @@ void StringCharCodeAtDescriptor::InitializePlatformSpecific(
 
 void StringCompareDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {LeftRegister(), RightRegister()};
+  AsmRegister registers[] = {LeftRegister(), RightRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
 void TypeConversionDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ArgumentRegister()};
+  AsmRegister registers[] = {ArgumentRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -285,23 +285,23 @@ void TypeConversionStackParameterDescriptor::InitializePlatformIndependent(
 
 void MathPowTaggedDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {exponent()};
+  AsmRegister registers[] = {exponent()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
 void MathPowIntegerDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {exponent()};
+  AsmRegister registers[] = {exponent()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-const Register LoadFieldDescriptor::ReceiverRegister() {
+const AsmRegister LoadFieldDescriptor::ReceiverRegister() {
   // Reuse the register from the LoadDescriptor, since given the
   // LoadFieldDescriptor's usage, it doesn't matter exactly which registers are
   // used to pass parameters in.
   return LoadDescriptor::ReceiverRegister();
 }
-const Register LoadFieldDescriptor::SmiHandlerRegister() {
+const AsmRegister LoadFieldDescriptor::SmiHandlerRegister() {
   // Reuse the register from the LoadDescriptor, since given the
   // LoadFieldDescriptor's usage, it doesn't matter exactly which registers are
   // used to pass parameters in.
@@ -320,8 +320,8 @@ void LoadWithVectorDescriptor::InitializePlatformIndependent(
 
 void LoadWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister(),
-                          VectorRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), NameRegister(), SlotRegister(),
+                             VectorRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -338,8 +338,8 @@ void LoadICProtoArrayDescriptor::InitializePlatformIndependent(
 
 void LoadICProtoArrayDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), SlotRegister(),
-                          VectorRegister(), HandlerRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), NameRegister(), SlotRegister(),
+                             VectorRegister(), HandlerRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -356,20 +356,20 @@ void StoreWithVectorDescriptor::InitializePlatformIndependent(
 
 void StoreWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
-                          SlotRegister(), VectorRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), NameRegister(),
+                             ValueRegister(), SlotRegister(), VectorRegister()};
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
 }
 
-const Register ApiGetterDescriptor::ReceiverRegister() {
+const AsmRegister ApiGetterDescriptor::ReceiverRegister() {
   return LoadDescriptor::ReceiverRegister();
 }
 
 void ApiGetterDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ReceiverRegister(), HolderRegister(),
-                          CallbackRegister()};
+  AsmRegister registers[] = {ReceiverRegister(), HolderRegister(),
+                             CallbackRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -380,7 +380,7 @@ void ContextOnlyDescriptor::InitializePlatformSpecific(
 
 void GrowArrayElementsDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {ObjectRegister(), KeyRegister()};
+  AsmRegister registers[] = {ObjectRegister(), KeyRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
@@ -535,19 +535,19 @@ void BuiltinDescriptor::InitializePlatformIndependent(
 
 void BuiltinDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  Register registers[] = {TargetRegister(), NewTargetRegister(),
-                          ArgumentsCountRegister()};
+  AsmRegister registers[] = {TargetRegister(), NewTargetRegister(),
+                             ArgumentsCountRegister()};
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
-const Register BuiltinDescriptor::ArgumentsCountRegister() {
+const AsmRegister BuiltinDescriptor::ArgumentsCountRegister() {
   return kJavaScriptCallArgCountRegister;
 }
-const Register BuiltinDescriptor::NewTargetRegister() {
+const AsmRegister BuiltinDescriptor::NewTargetRegister() {
   return kJavaScriptCallNewTargetRegister;
 }
 
-const Register BuiltinDescriptor::TargetRegister() {
+const AsmRegister BuiltinDescriptor::TargetRegister() {
   return kJSFunctionRegister;
 }
 
