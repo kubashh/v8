@@ -2532,6 +2532,12 @@ void InstructionSelector::VisitConstant(Node* node) {
 
 void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   OperandGenerator g(this);
+  bool has_extra_registers =
+      linkage()->GetIncomingDescriptor()->HasRestrictedAllocatableRegisters();
+
+  if (has_extra_registers) {
+    Emit(kArchSaveCallerRegisters, g.NoOutput());
+  }
   const CallDescriptor* descriptor = CallDescriptorOf(node->op());
 
   FrameStateDescriptor* frame_state_descriptor = nullptr;
@@ -2591,8 +2597,13 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   Instruction* call_instr =
       Emit(opcode, output_count, outputs, buffer.instruction_args.size(),
            &buffer.instruction_args.front());
-  if (instruction_selection_failed()) return;
-  call_instr->MarkAsCall();
+  if (!instruction_selection_failed()) {
+    call_instr->MarkAsCall();
+  }
+
+  if (has_extra_registers) {
+    Emit(kArchRestoreCallerRegisters, g.NoOutput());
+  }
 }
 
 void InstructionSelector::VisitCallWithCallerSavedRegisters(
