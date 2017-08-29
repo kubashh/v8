@@ -944,12 +944,20 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArchSaveCallerRegisters: {
       // kReturnRegister0 should have been saved before entering the stub.
-      __ PushCallerSaved(kSaveFPRegs, kReturnRegister0);
+      int bytes = __ PushCallerSaved(kSaveFPRegs, kReturnRegister0);
+      DCHECK(bytes % kPointerSize == 0);
+      frame_access_state()->IncreaseSPDelta(bytes / kPointerSize);
+      DCHECK(!caller_registers_saved_);
+      caller_registers_saved_ = true;
       break;
     }
     case kArchRestoreCallerRegisters: {
       // Don't overwrite the returned value.
-      __ PopCallerSaved(kSaveFPRegs, kReturnRegister0);
+      int bytes = __ PopCallerSaved(kSaveFPRegs, kReturnRegister0);
+      DCHECK(frame_access_state()->sp_delta() == bytes / kPointerSize);
+      frame_access_state()->ClearSPDelta();
+      DCHECK(caller_registers_saved_);
+      caller_registers_saved_ = false;
       break;
     }
     case kArchPrepareTailCall:
@@ -966,6 +974,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       frame_access_state()->SetFrameAccessToDefault();
       frame_access_state()->ClearSPDelta();
+      // If we are compiling a code stub using restricted register
+      // configuration, we need to make sure we have saved caller registers
+      // (from kArchSaveCallerRegisters).
+      if (linkage()
+              ->GetIncomingDescriptor()
+              ->HasRestrictedAllocatableRegisters()) {
+        DCHECK(caller_registers_saved_);
+        // Need to re-sync SP delta introduced in kArchSaveCallerRegisters.
+        int bytes = __ SPDelta(kSaveFPRegs, kReturnRegister0);
+        frame_access_state()->IncreaseSPDelta(bytes / kPointerSize);
+      } else {
+        DCHECK(!caller_registers_saved_);
+      }
       break;
     }
     case kArchJmp:
