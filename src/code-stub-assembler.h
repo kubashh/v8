@@ -695,6 +695,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void InitializeJSObjectBody(Node* object, Node* map, Node* size,
                               int start_offset = JSObject::kHeaderSize);
 
+  Node* AllocateStruct(Node* map);
+  void InitializeStructBody(Node* object, Node* map, Node* size,
+                            int start_offset = JSObject::kHeaderSize);
   // Allocate a JSArray without elements and initialize the header fields.
   Node* AllocateUninitializedJSArrayWithoutElements(ElementsKind kind,
                                                     Node* array_map,
