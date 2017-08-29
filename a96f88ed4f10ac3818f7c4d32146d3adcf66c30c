@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5389eee3_b54051be",
+        "filename": "src/arm/macro-assembler-arm.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-29T14:26:29Z",
+      "side": 1,
+      "message": "Nit: comment is missing.",
+      "range": {
+        "startLine": 415,
+        "startChar": 7,
+        "endLine": 415,
+        "endChar": 21
+      },
+      "revId": "a96f88ed4f10ac3818f7c4d32146d3adcf66c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1f0eca6_6b33eb19",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-29T14:26:29Z",
+      "side": 1,
+      "message": "How about asserting that the SPDelta is zero at this point?",
+      "range": {
+        "startLine": 949,
+        "startChar": 6,
+        "endLine": 949,
+        "endChar": 24
+      },
+      "revId": "a96f88ed4f10ac3818f7c4d32146d3adcf66c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7a133c_939cfea0",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-29T14:26:29Z",
+      "side": 1,
+      "message": "How about frame_access_state()-\u003eIncreaseSPDelta(-(bytes / kPointerSize)), which more symmetric with the SaveCallerRegisters.",
+      "range": {
+        "startLine": 958,
+        "startChar": 6,
+        "endLine": 958,
+        "endChar": 43
+      },
+      "revId": "a96f88ed4f10ac3818f7c4d32146d3adcf66c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32a78c8f_3060c462",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-29T14:26:29Z",
+      "side": 1,
+      "message": "Can please you write a comment explaining why we have to clear SP delta here? (why we cannot decrement it).",
+      "range": {
+        "startLine": 976,
+        "startChar": 28,
+        "endLine": 976,
+        "endChar": 40
+      },
+      "revId": "a96f88ed4f10ac3818f7c4d32146d3adcf66c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dfe0503_501cad81",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-29T14:26:29Z",
+      "side": 1,
+      "message": "Please rename to something more descriptive.",
+      "range": {
+        "startLine": 985,
+        "startChar": 23,
+        "endLine": 985,
+        "endChar": 30
+      },
+      "revId": "a96f88ed4f10ac3818f7c4d32146d3adcf66c30c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
