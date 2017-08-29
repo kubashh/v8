@@ -16,6 +16,24 @@
       "revId": "89f839e5d0f1e1d27c637618f5763d702c9f5afd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e6ecb81_a813bdbe",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-08-29T05:59:00Z",
+      "side": 1,
+      "message": "This was the original default value, and several tests rely on this value, e.g. also the fuzzers.",
+      "parentUuid": "bc5b340b_272ad4c4",
+      "revId": "89f839e5d0f1e1d27c637618f5763d702c9f5afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
