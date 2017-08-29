@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcccfb97_0a35df8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T11:18:53Z",
+      "side": 1,
+      "message": "This is not quite precise. It\u0027s not checked inside that method, but later, when specializing the code objects.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "05970fcc6a18f9e142c4c9f2e48329ea888b26c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
