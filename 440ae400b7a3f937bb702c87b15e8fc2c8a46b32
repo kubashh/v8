@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "170779af_362118da",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-29T00:45:14Z",
+      "side": 1,
+      "message": "The true here means WasmGraphBuildingConsumer always does validation, correct?\n\nDoes it make sense to keep do_validation as a parameter, or would that just be unnecessary over-generalization?",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "440ae400b7a3f937bb702c87b15e8fc2c8a46b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

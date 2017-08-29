@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "7f67501e_d82988ea",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-29T00:45:14Z",
+      "side": 1,
+      "message": "As parameters to AbstractValue and AbstractMerge, DecoderTraits or maybe DecoderTypes makes sense to me, since these only provide the types used to build these data structures. For the WasmFullDecoder, I think the name should imply action, since it carries the implementation of the various functions called by the decoder. Consumer or Visitor both sound good to me there, but I could see something like DecoderActions make sense there too.",
+      "parentUuid": "45f9b5b2_fdf0a63a",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20e87f0a_db79f279",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 6
@@ -327,6 +345,24 @@
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06afbe19_fa5039f4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-29T00:45:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1cb7a92_916b389c",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -622,6 +658,24 @@
     },
     {
       "key": {
+        "uuid": "74768a45_8712075a",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-29T00:45:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "74e91674_e0b5e412",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "088f117e_82639b96",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 6
@@ -703,6 +757,24 @@
       "side": 1,
       "message": "At the last rebase, I tried to merge your changes, but failed at first go. I think I did not fully understand the logic yet. There is also this comment which made the code not look final anyway:\n// TODO(karlschimpf): Why not use EndControl ()? (currently fails)\n              FallThruTo(c);\n\nAfter rebasing to the current master, I will check again whether I get this test to pass. Otherwise, I propose to fix this in a follow-up CL.",
       "parentUuid": "9f306eca_cc9b60c9",
+      "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b1b94ac_73945cf8",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-08-29T00:45:14Z",
+      "side": 1,
+      "message": "Have you had a chance yet to see if this passes?\n\nThis is still lots of work-in-progress code, but overall I think it\u0027s better to keep the tests that already work working and update them as needed. Some of these will be changed as we update the exception code to match what we\u0027re deciding on the spec.",
+      "parentUuid": "f2d3a5fa_72cdbe29",
       "revId": "5d6991f91f603c7a431e35b423da26a1b7bf6ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
