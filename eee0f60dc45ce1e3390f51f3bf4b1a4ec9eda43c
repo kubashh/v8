@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6333e63d_dd180f58",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-29T09:31:29Z",
+      "side": 1,
+      "message": "Dead code?",
+      "revId": "eee0f60dc45ce1e3390f51f3bf4b1a4ec9eda43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89071923_00366c50",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-08-29T09:31:29Z",
+      "side": 1,
+      "message": "Can you remove this TODO and the commented out code?\n\nWe don\u0027t use EndControl() because we set the current environment above, and EndControl() kill()s the SSA environment.",
+      "revId": "eee0f60dc45ce1e3390f51f3bf4b1a4ec9eda43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
