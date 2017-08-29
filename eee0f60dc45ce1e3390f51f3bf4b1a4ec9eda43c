@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3db3281e_ff4e7a46",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T09:39:34Z",
+      "side": 1,
+      "message": "Good catch, thanks!",
+      "parentUuid": "6333e63d_dd180f58",
+      "revId": "eee0f60dc45ce1e3390f51f3bf4b1a4ec9eda43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89071923_00366c50",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "eee0f60dc45ce1e3390f51f3bf4b1a4ec9eda43c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fa10d6b_43ee0926",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-08-29T09:39:34Z",
+      "side": 1,
+      "message": "This is the one unfinished location, which is the reason for the one commented-out test case. I changed the comment to \"TODO(clemensh): Make this work again\" ;)",
+      "parentUuid": "89071923_00366c50",
+      "revId": "eee0f60dc45ce1e3390f51f3bf4b1a4ec9eda43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
