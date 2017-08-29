@@ -7,7 +7,6 @@
 load("test/mjsunit/wasm/wasm-constants.js");
 load("test/mjsunit/wasm/wasm-module-builder.js");
 
-
 function genGrowMemoryBuilder() {
   var builder = new WasmModuleBuilder();
   builder.addFunction("grow_memory", kSig_i_i)
