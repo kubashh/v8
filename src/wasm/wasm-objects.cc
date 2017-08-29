@@ -285,26 +285,21 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
 void SetInstanceMemory(Isolate* isolate, Handle<WasmInstanceObject> instance,
                        Handle<JSArrayBuffer> buffer) {
   instance->set_memory_buffer(*buffer);
-  WasmCompiledModule::SetSpecializationMemInfoFrom(
-      isolate->factory(), handle(instance->compiled_module()), buffer);
   if (instance->has_debug_info()) {
     instance->debug_info()->UpdateMemory(*buffer);
   }
 }
 
-void UncheckedUpdateInstanceMemory(Isolate* isolate,
-                                   Handle<WasmInstanceObject> instance,
-                                   Address old_mem_start, uint32_t old_size) {
-  DCHECK(instance->has_memory_buffer());
-  Handle<JSArrayBuffer> mem_buffer(instance->memory_buffer());
-  uint32_t new_size = mem_buffer->byte_length()->Number();
-  Address new_mem_start = static_cast<Address>(mem_buffer->backing_store());
+void UpdateWasmContext(WasmContext* wasm_context, Handle<JSArrayBuffer> buffer,
+                       uint32_t old_mem_size, Address old_mem_start) {
+  // Verify that the values we will change are actually the ones we expect.
+  DCHECK_EQ(wasm_context->mem_start, old_mem_start);
+  DCHECK_EQ(wasm_context->mem_size, old_mem_size);
+  uint32_t new_mem_size = buffer->byte_length()->Number();
+  Address new_mem_start = static_cast<Address>(buffer->backing_store());
   DCHECK_NOT_NULL(new_mem_start);
-  Zone specialization_zone(isolate->allocator(), ZONE_NAME);
-  CodeSpecialization code_specialization(isolate, &specialization_zone);
-  code_specialization.RelocateMemoryReferences(old_mem_start, old_size,
-                                               new_mem_start, new_size);
-  code_specialization.ApplyToWholeInstance(*instance);
+  wasm_context->mem_start = new_mem_start;
+  wasm_context->mem_size = new_mem_size;
 }
 
 }  // namespace
@@ -316,13 +311,19 @@ Handle<WasmMemoryObject> WasmMemoryObject::New(Isolate* isolate,
       isolate->native_context()->wasm_memory_constructor());
   auto memory_obj = Handle<WasmMemoryObject>::cast(
       isolate->factory()->NewJSObject(memory_ctor, TENURED));
+  auto wasm_context = Managed<WasmContext>::New(isolate, new WasmContext());
   if (buffer.is_null()) {
     const bool enable_guard_regions = EnableGuardRegions();
     buffer = SetupArrayBuffer(isolate, nullptr, 0, nullptr, 0, false,
                               enable_guard_regions);
+  } else {
+    CHECK(buffer->byte_length()->ToUint32(&wasm_context->get()->mem_size));
+    wasm_context->get()->mem_start =
+        static_cast<Address>(buffer->backing_store());
   }
   memory_obj->set_array_buffer(*buffer);
   memory_obj->set_maximum_pages(maximum);
+  memory_obj->set_wasm_context(*wasm_context);
   return memory_obj;
 }
 
@@ -385,16 +386,18 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   new_buffer = GrowMemoryBuffer(isolate, old_buffer, pages, max_pages);
   if (new_buffer.is_null()) return -1;
 
+  UpdateWasmContext(memory_object->wasm_context()->get(), new_buffer, old_size,
+                    static_cast<Address>(old_buffer->backing_store()));
+
   if (memory_object->has_instances()) {
-    Address old_mem_start = static_cast<Address>(old_buffer->backing_store());
     Handle<WeakFixedArray> instances(memory_object->instances(), isolate);
+    // Verify that the values we will change are actually the ones we expect.
     for (int i = 0; i < instances->Length(); i++) {
       Object* elem = instances->Get(i);
       if (!elem->IsWasmInstanceObject()) continue;
       Handle<WasmInstanceObject> instance(WasmInstanceObject::cast(elem),
                                           isolate);
       SetInstanceMemory(isolate, instance, new_buffer);
-      UncheckedUpdateInstanceMemory(isolate, instance, old_mem_start, old_size);
     }
   }
 
@@ -408,6 +411,10 @@ WasmModuleObject* WasmInstanceObject::module_object() {
 }
 
 WasmModule* WasmInstanceObject::module() { return compiled_module()->module(); }
+
+WasmContext* WasmInstanceObject::wasm_context() {
+  return memory_object()->wasm_context()->get();
+}
 
 Handle<WasmDebugInfo> WasmInstanceObject::GetOrCreateDebugInfo(
     Handle<WasmInstanceObject> instance) {
@@ -461,7 +468,7 @@ int32_t WasmInstanceObject::GrowMemory(Isolate* isolate,
       GrowMemoryBuffer(isolate, old_buffer, pages, max_pages);
   if (buffer.is_null()) return -1;
   SetInstanceMemory(isolate, instance, buffer);
-  UncheckedUpdateInstanceMemory(isolate, instance, old_mem_start, old_size);
+  UpdateWasmContext(instance->wasm_context(), buffer, old_size, old_mem_start);
   DCHECK_EQ(0, old_size % WasmModule::kPageSize);
   return old_size / WasmModule::kPageSize;
 }
@@ -807,17 +814,13 @@ Handle<WasmCompiledModule> WasmCompiledModule::Clone(
   ret->reset_weak_next_instance();
   ret->reset_weak_prev_instance();
   ret->reset_weak_exported_functions();
-  if (ret->has_embedded_mem_start()) {
-    WasmCompiledModule::recreate_embedded_mem_start(ret, isolate->factory(),
-                                                    ret->embedded_mem_start());
+  if (ret->has_embedded_context()) {
+    WasmCompiledModule::recreate_embedded_context(ret, isolate->factory(),
+                                                  ret->embedded_context());
   }
   if (ret->has_globals_start()) {
     WasmCompiledModule::recreate_globals_start(ret, isolate->factory(),
                                                ret->globals_start());
-  }
-  if (ret->has_embedded_mem_size()) {
-    WasmCompiledModule::recreate_embedded_mem_size(ret, isolate->factory(),
-                                                   ret->embedded_mem_size());
   }
   return ret;
 }
@@ -829,21 +832,16 @@ void WasmCompiledModule::Reset(Isolate* isolate,
   Object* undefined = *isolate->factory()->undefined_value();
   Object* fct_obj = compiled_module->ptr_to_code_table();
   if (fct_obj != nullptr && fct_obj != undefined) {
-    uint32_t old_mem_size = compiled_module->mem_size();
-    // We use default_mem_size throughout, as the mem size of an uninstantiated
-    // module, because if we can statically prove a memory access is over
-    // bounds, we'll codegen a trap. See {WasmGraphBuilder::BoundsCheckMem}
-    uint32_t default_mem_size = compiled_module->default_mem_size();
-    Address old_mem_start = compiled_module->GetEmbeddedMemStartOrNull();
-
     // Patch code to update memory references, global references, and function
     // table references.
     Zone specialization_zone(isolate->allocator(), ZONE_NAME);
     CodeSpecialization code_specialization(isolate, &specialization_zone);
 
-    if (old_mem_size > 0 && old_mem_start != nullptr) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   nullptr, default_mem_size);
+    Address old_wasm_context_address =
+        compiled_module->GetEmbeddedContextOrNull();
+    if (old_wasm_context_address != nullptr) {
+      code_specialization.RelocateWasmContextReferences(
+          old_wasm_context_address, nullptr);
     }
 
     if (compiled_module->has_globals_start()) {
@@ -894,7 +892,7 @@ void WasmCompiledModule::Reset(Isolate* isolate,
       }
     }
   }
-  compiled_module->ResetSpecializationMemInfoIfNeeded();
+  compiled_module->ResetSpecializationContextInfoIfNeeded();
 }
 
 void WasmCompiledModule::InitId() {
@@ -905,29 +903,23 @@ void WasmCompiledModule::InitId() {
 #endif
 }
 
-void WasmCompiledModule::ResetSpecializationMemInfoIfNeeded() {
+void WasmCompiledModule::ResetSpecializationContextInfoIfNeeded() {
   DisallowHeapAllocation no_gc;
-  if (has_embedded_mem_start()) {
-    set_embedded_mem_size(default_mem_size());
-    set_embedded_mem_start(0);
+  if (has_embedded_context()) {
+    set_embedded_context(0);
   }
 }
 
-void WasmCompiledModule::SetSpecializationMemInfoFrom(
+void WasmCompiledModule::SetSpecializationWasmContextInfo(
     Factory* factory, Handle<WasmCompiledModule> compiled_module,
-    Handle<JSArrayBuffer> buffer) {
-  DCHECK(!buffer.is_null());
-  size_t start_address = reinterpret_cast<size_t>(buffer->backing_store());
-  uint32_t size = static_cast<uint32_t>(buffer->byte_length()->Number());
-  if (!compiled_module->has_embedded_mem_start()) {
-    DCHECK(!compiled_module->has_embedded_mem_size());
-    WasmCompiledModule::recreate_embedded_mem_start(compiled_module, factory,
-                                                    start_address);
-    WasmCompiledModule::recreate_embedded_mem_size(compiled_module, factory,
-                                                   size);
+    WasmContext* wasm_context) {
+  DCHECK_NOT_NULL(wasm_context);
+  if (!compiled_module->has_embedded_context()) {
+    WasmCompiledModule::recreate_embedded_context(
+        compiled_module, factory, reinterpret_cast<size_t>(wasm_context));
   } else {
-    compiled_module->set_embedded_mem_start(start_address);
-    compiled_module->set_embedded_mem_size(size);
+    compiled_module->set_embedded_context(
+        reinterpret_cast<size_t>(wasm_context));
   }
 }
 
@@ -1025,11 +1017,6 @@ void WasmCompiledModule::ReinitializeAfterDeserialization(
   WasmSharedModuleData::ReinitializeAfterDeserialization(isolate, shared);
   WasmCompiledModule::Reset(isolate, *compiled_module);
   DCHECK(WasmSharedModuleData::IsWasmSharedModuleData(*shared));
-}
-
-uint32_t WasmCompiledModule::mem_size() const {
-  DCHECK(has_embedded_mem_size() == has_embedded_mem_start());
-  return has_embedded_mem_start() ? embedded_mem_size() : default_mem_size();
 }
 
 uint32_t WasmCompiledModule::default_mem_size() const {

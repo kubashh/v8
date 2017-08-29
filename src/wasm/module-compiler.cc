@@ -332,6 +332,7 @@ MaybeHandle<WasmModuleObject> ModuleCompiler::CompileToModuleObject(
   temp_instance.context = isolate_->native_context();
   temp_instance.mem_size = WasmModule::kPageSize * module_->min_mem_pages;
   temp_instance.mem_start = nullptr;
+  temp_instance.wasm_context_address = nullptr;
   temp_instance.globals_start = nullptr;
 
   // Initialize the indirect tables with placeholders.
@@ -963,25 +964,48 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   // Initialize memory.
   //--------------------------------------------------------------------------
+  Address mem_start = nullptr;
+  uint32_t mem_size = 0;
   if (!memory_.is_null()) {
-    Address mem_start = static_cast<Address>(memory_->backing_store());
-    uint32_t mem_size;
+    mem_start = static_cast<Address>(memory_->backing_store());
     CHECK(memory_->byte_length()->ToUint32(&mem_size));
     LoadDataSegments(mem_start, mem_size);
 
-    uint32_t old_mem_size = compiled_module_->mem_size();
-    Address old_mem_start = compiled_module_->GetEmbeddedMemStartOrNull();
-    // We might get instantiated again with the same memory. No patching
-    // needed in this case.
-    if (old_mem_start != mem_start || old_mem_size != mem_size) {
-      code_specialization.RelocateMemoryReferences(old_mem_start, old_mem_size,
-                                                   mem_start, mem_size);
-    }
     // Just like with globals, we need to keep both the JSArrayBuffer
     // and save the start pointer.
     instance->set_memory_buffer(*memory_);
-    WasmCompiledModule::SetSpecializationMemInfoFrom(factory, compiled_module_,
-                                                     memory_);
+  }
+
+  //--------------------------------------------------------------------------
+  // Create a memory object to have a WasmContext.
+  //--------------------------------------------------------------------------
+  if (module_->has_memory) {
+    if (!instance->has_memory_object()) {
+      Handle<WasmMemoryObject> memory_object = WasmMemoryObject::New(
+          isolate_,
+          instance->has_memory_buffer() ? handle(instance->memory_buffer())
+                                        : Handle<JSArrayBuffer>::null(),
+          module_->max_mem_pages != 0 ? module_->max_mem_pages : -1);
+      instance->set_memory_object(*memory_object);
+    }
+
+    // Store mem_size and mem_start in the wasm_context.
+    instance->wasm_context()->mem_start = mem_start;
+    instance->wasm_context()->mem_size = mem_size;
+
+    // We might get instantiated again with the same context address. No
+    // patching needed in this case.
+    Address old_wasm_context_address =
+        compiled_module_->GetEmbeddedContextOrNull();
+    Address new_wasm_context_address =
+        reinterpret_cast<Address>(instance->wasm_context());
+    if (old_wasm_context_address != new_wasm_context_address) {
+      code_specialization.RelocateWasmContextReferences(
+          old_wasm_context_address, new_wasm_context_address);
+    }
+
+    WasmCompiledModule::SetSpecializationWasmContextInfo(
+        factory, compiled_module_, instance->wasm_context());
   }
 
   //--------------------------------------------------------------------------
@@ -1653,23 +1677,12 @@ void InstanceBuilder::ProcessExports(
         break;
       }
       case kExternalMemory: {
-        // Export the memory as a WebAssembly.Memory object.
-        Handle<WasmMemoryObject> memory_object;
-        if (!instance->has_memory_object()) {
-          // If there was no imported WebAssembly.Memory object, create one.
-          memory_object = WasmMemoryObject::New(
-              isolate_,
-              (instance->has_memory_buffer())
-                  ? handle(instance->memory_buffer())
-                  : Handle<JSArrayBuffer>::null(),
-              (module_->max_mem_pages != 0) ? module_->max_mem_pages : -1);
-          instance->set_memory_object(*memory_object);
-        } else {
-          memory_object =
-              Handle<WasmMemoryObject>(instance->memory_object(), isolate_);
-        }
-
-        desc.set_value(memory_object);
+        // Export the memory as a WebAssembly.Memory object. A WasmMemoryObject
+        // should also be created when the module has memory, since we create or
+        // import it when building an WasmInstanceObject.
+        DCHECK(instance->has_memory_object());
+        desc.set_value(
+            Handle<WasmMemoryObject>(instance->memory_object(), isolate_));
         break;
       }
       case kExternalGlobal: {

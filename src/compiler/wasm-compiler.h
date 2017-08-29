@@ -270,8 +270,8 @@ class WasmGraphBuilder {
   JSGraph* jsgraph_;
   Node* centry_stub_node_;
   wasm::ModuleEnv* module_ = nullptr;
-  Node* mem_buffer_ = nullptr;
-  Node* mem_size_ = nullptr;
+  Node* mem_start_ptr_ = nullptr;
+  Node* mem_size_ptr_ = nullptr;
   NodeVector signature_tables_;
   NodeVector function_tables_;
   NodeVector function_table_sizes_;

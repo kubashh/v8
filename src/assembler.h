@@ -327,11 +327,10 @@ class RelocInfo {
     CODE_TARGET,
     EMBEDDED_OBJECT,
     // Wasm entries are to relocate pointers into the wasm memory embedded in
-    // wasm code. Everything after WASM_MEMORY_REFERENCE (inclusive) is not
+    // wasm code. Everything after WASM_CONTEXT_REFERENCE (inclusive) is not
     // GC'ed.
-    WASM_MEMORY_REFERENCE,
+    WASM_CONTEXT_REFERENCE,
     WASM_GLOBAL_REFERENCE,
-    WASM_MEMORY_SIZE_REFERENCE,
     WASM_FUNCTION_TABLE_SIZE_REFERENCE,
     WASM_PROTECTED_INSTRUCTION_LANDING,
     CELL,
@@ -452,11 +451,8 @@ class RelocInfo {
   static inline bool IsCodeAgeSequence(Mode mode) {
     return mode == CODE_AGE_SEQUENCE;
   }
-  static inline bool IsWasmMemoryReference(Mode mode) {
-    return mode == WASM_MEMORY_REFERENCE;
-  }
-  static inline bool IsWasmMemorySizeReference(Mode mode) {
-    return mode == WASM_MEMORY_SIZE_REFERENCE;
+  static inline bool IsWasmContextReference(Mode mode) {
+    return mode == WASM_CONTEXT_REFERENCE;
   }
   static inline bool IsWasmGlobalReference(Mode mode) {
     return mode == WASM_GLOBAL_REFERENCE;
@@ -465,16 +461,14 @@ class RelocInfo {
     return mode == WASM_FUNCTION_TABLE_SIZE_REFERENCE;
   }
   static inline bool IsWasmReference(Mode mode) {
-    return mode == WASM_MEMORY_REFERENCE || mode == WASM_GLOBAL_REFERENCE ||
-           mode == WASM_MEMORY_SIZE_REFERENCE ||
+    return mode == WASM_CONTEXT_REFERENCE || mode == WASM_GLOBAL_REFERENCE ||
            mode == WASM_FUNCTION_TABLE_SIZE_REFERENCE;
   }
   static inline bool IsWasmSizeReference(Mode mode) {
-    return mode == WASM_MEMORY_SIZE_REFERENCE ||
-           mode == WASM_FUNCTION_TABLE_SIZE_REFERENCE;
+    return mode == WASM_FUNCTION_TABLE_SIZE_REFERENCE;
   }
   static inline bool IsWasmPtrReference(Mode mode) {
-    return mode == WASM_MEMORY_REFERENCE || mode == WASM_GLOBAL_REFERENCE;
+    return mode == WASM_CONTEXT_REFERENCE || mode == WASM_GLOBAL_REFERENCE;
   }
   static inline bool IsWasmProtectedLanding(Mode mode) {
     return mode == WASM_PROTECTED_INSTRUCTION_LANDING;
@@ -505,15 +499,11 @@ class RelocInfo {
   // constant pool, otherwise the pointer is embedded in the instruction stream.
   bool IsInConstantPool();
 
-  Address wasm_memory_reference();
+  Address wasm_context_reference();
   Address wasm_global_reference();
   uint32_t wasm_function_table_size_reference();
-  uint32_t wasm_memory_size_reference();
-  void update_wasm_memory_reference(
+  void update_wasm_context_reference(
       Isolate* isolate, Address old_base, Address new_base,
-      ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
-  void update_wasm_memory_size(
-      Isolate* isolate, uint32_t old_size, uint32_t new_size,
       ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
   void update_wasm_global_reference(
       Isolate* isolate, Address old_base, Address new_base,
@@ -626,8 +616,9 @@ class RelocInfo {
   static const int kApplyMask;  // Modes affected by apply.  Depends on arch.
 
  private:
-  void unchecked_update_wasm_memory_reference(Isolate* isolate, Address address,
-                                              ICacheFlushMode flush_mode);
+  void unchecked_update_wasm_context_reference(Isolate* isolate,
+                                               Address address,
+                                               ICacheFlushMode flush_mode);
   void unchecked_update_wasm_size(Isolate* isolate, uint32_t size,
                                   ICacheFlushMode flush_mode);
 

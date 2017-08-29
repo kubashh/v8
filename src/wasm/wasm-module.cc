@@ -1018,13 +1018,12 @@ void LazyCompilationOrchestrator::CompileFunction(
     code_specialization.RelocateGlobals(nullptr, globals_start);
   }
   if (instance->has_memory_buffer()) {
-    Address mem_start =
-        reinterpret_cast<Address>(instance->memory_buffer()->backing_store());
-    int mem_size = instance->memory_buffer()->byte_length()->Number();
-    DCHECK_IMPLIES(mem_start == nullptr, mem_size == 0);
-    if (mem_start != nullptr) {
-      code_specialization.RelocateMemoryReferences(nullptr, 0, mem_start,
-                                                   mem_size);
+    DCHECK(instance->has_memory_object());
+    Address wasm_context_address =
+        reinterpret_cast<Address>(instance->wasm_context());
+    if (wasm_context_address != nullptr) {
+      code_specialization.RelocateWasmContextReferences(nullptr,
+                                                        wasm_context_address);
     }
   }
   code_specialization.RelocateDirectCalls(instance);

@@ -176,14 +176,9 @@ bool RelocInfo::IsInConstantPool() {
   return instr->IsLdrLiteralX();
 }
 
-Address RelocInfo::wasm_memory_reference() {
-  DCHECK(IsWasmMemoryReference(rmode_));
+Address RelocInfo::wasm_context_reference() {
+  DCHECK(IsWasmContextReference(rmode_));
   return Memory::Address_at(Assembler::target_pointer_address_at(pc_));
-}
-
-uint32_t RelocInfo::wasm_memory_size_reference() {
-  DCHECK(IsWasmMemorySizeReference(rmode_));
-  return Memory::uint32_at(Assembler::target_pointer_address_at(pc_));
 }
 
 Address RelocInfo::wasm_global_reference() {
@@ -196,7 +191,7 @@ uint32_t RelocInfo::wasm_function_table_size_reference() {
   return Memory::uint32_at(Assembler::target_pointer_address_at(pc_));
 }
 
-void RelocInfo::unchecked_update_wasm_memory_reference(
+void RelocInfo::unchecked_update_wasm_context_reference(
     Isolate* isolate, Address address, ICacheFlushMode flush_mode) {
   Assembler::set_target_address_at(isolate, pc_, host_, address, flush_mode);
 }
