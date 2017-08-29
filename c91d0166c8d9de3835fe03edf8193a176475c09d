@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97ca6e38_f29ba0f6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-29T06:46:32Z",
+      "side": 1,
+      "message": "I wonder why structs should always be kPretenured.. It places additional stress on the GC; and promise capabilities don\u0027t seem long-lived (or are they?). I\u0027d suggest preserving the usual pattern of passing in AllocationFlags here, and keeping them in new space for promise capabilities.",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06be12a6_de2233de",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-29T06:46:32Z",
+      "side": 1,
+      "message": "WDYT about reusing and renaming InitializeJSObjectBody instead? Maybe just to InitializeObjectBody?",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07150a4b_37fed83c",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-29T06:46:32Z",
+      "side": 1,
+      "message": "Nit: Please move this above AllocateJSObjectFromMap to match the .cc file. Also, if we do end up keeping InitializeStructBody, we\u0027ll need to change the default value for start_offset :)",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e37cae_a4dbdac9",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-29T06:46:32Z",
+      "side": 1,
+      "message": "Nit: Please alpha-sort",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
