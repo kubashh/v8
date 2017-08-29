@@ -181,8 +181,10 @@ class CodeGenerator final : public GapResolver::Assembler {
   void AssemblePrepareTailCall();
 
   // Generates code to pop current frame if it is an arguments adaptor frame.
-  void AssemblePopArgumentsAdaptorFrame(Register args_reg, Register scratch1,
-                                        Register scratch2, Register scratch3);
+  void AssemblePopArgumentsAdaptorFrame(AsmRegister args_reg,
+                                        AsmRegister scratch1,
+                                        AsmRegister scratch2,
+                                        AsmRegister scratch3);
 
   enum PushTypeFlag {
     kImmediatePush = 0x1,

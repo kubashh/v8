@@ -325,7 +325,7 @@ void CodeGenerator::RecordSafepoint(ReferenceMap* references,
       if (index < stackSlotToSpillSlotDelta) continue;
       safepoint.DefinePointerSlot(index, zone());
     } else if (operand.IsRegister() && (kind & Safepoint::kWithRegisters)) {
-      Register reg = LocationOperand::cast(operand).GetRegister();
+      AsmRegister reg = LocationOperand::cast(operand).GetRegister();
       safepoint.DefinePointerRegister(reg, zone());
     }
   }

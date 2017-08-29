@@ -139,7 +139,7 @@ LinkageLocation stackloc(int i, MachineType type) {
 
 // Helper for allocating either an GP or FP reg, or the next stack slot.
 struct Allocator {
-  constexpr Allocator(const Register* gp, int gpc, const DoubleRegister* fp,
+  constexpr Allocator(const AsmRegister* gp, int gpc, const DoubleRegister* fp,
                       int fpc)
       : gp_count(gpc),
         gp_offset(0),
@@ -151,7 +151,7 @@ struct Allocator {
 
   int gp_count;
   int gp_offset;
-  const Register* gp_regs;
+  const AsmRegister* gp_regs;
 
   int fp_count;
   int fp_offset;
@@ -206,9 +206,9 @@ struct Allocator {
   }
 };
 
-static constexpr Register kGPReturnRegisters[] = {GP_RETURN_REGISTERS};
+static constexpr AsmRegister kGPReturnRegisters[] = {GP_RETURN_REGISTERS};
 static constexpr DoubleRegister kFPReturnRegisters[] = {FP_RETURN_REGISTERS};
-static constexpr Register kGPParamRegisters[] = {GP_PARAM_REGISTERS};
+static constexpr AsmRegister kGPParamRegisters[] = {GP_PARAM_REGISTERS};
 static constexpr DoubleRegister kFPParamRegisters[] = {FP_PARAM_REGISTERS};
 static constexpr Allocator return_registers(kGPReturnRegisters,
                                             arraysize(kGPReturnRegisters),

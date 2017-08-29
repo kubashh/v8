@@ -91,7 +91,7 @@ namespace internal {
 // leave it alone. Adjust the value of kR9Available accordingly:
 const int kR9Available = 1;  // 1 if available to us, 0 if reserved
 
-// Register list in load/store instructions
+// AsmRegister list in load/store instructions
 // Note that the bit values must match those used in actual instruction encoding
 const int kNumRegs = 16;
 
@@ -149,7 +149,7 @@ const int kNumSafepointSavedRegisters = kNumJSCallerSaved + kNumCalleeSaved;
 // the register initialization to depend on the particular initialization
 // order (which appears to be different on OS X, Linux, and Windows for the
 // installed versions of C++ we tried). Using a struct permits C-style
-// "initialization". Also, the Register objects cannot be const as this
+// "initialization". Also, the AsmRegister objects cannot be const as this
 // forces initialization stubs in MSVC, making us dependent on initialization
 // order.
 //
@@ -161,7 +161,7 @@ const int kNumSafepointSavedRegisters = kNumJSCallerSaved + kNumCalleeSaved;
 // mode. This way we get the compile-time error checking in debug mode
 // and best performance in optimized code.
 
-struct Register {
+struct AsmRegister {
   enum Code {
 #define REGISTER_CODE(R) kCode_##R,
     GENERAL_REGISTERS(REGISTER_CODE)
@@ -172,14 +172,14 @@ struct Register {
 
   static constexpr int kNumRegisters = Code::kAfterLast;
 
-  static Register from_code(int code) {
+  static AsmRegister from_code(int code) {
     DCHECK(code >= 0);
     DCHECK(code < kNumRegisters);
-    Register r = {code};
+    AsmRegister r = {code};
     return r;
   }
   bool is_valid() const { return 0 <= reg_code && reg_code < kNumRegisters; }
-  bool is(Register reg) const { return reg_code == reg.reg_code; }
+  bool is(AsmRegister reg) const { return reg_code == reg.reg_code; }
   int code() const {
     DCHECK(is_valid());
     return reg_code;
@@ -199,10 +199,10 @@ struct Register {
 
 // r7: context register
 // r9: lithium scratch
-#define DECLARE_REGISTER(R) constexpr Register R = {Register::kCode_##R};
+#define DECLARE_REGISTER(R) constexpr AsmRegister R = {AsmRegister::kCode_##R};
 GENERAL_REGISTERS(DECLARE_REGISTER)
 #undef DECLARE_REGISTER
-constexpr Register no_reg = {Register::kCode_no_reg};
+constexpr AsmRegister no_reg = {AsmRegister::kCode_no_reg};
 
 constexpr bool kSimpleFPAliasing = false;
 constexpr bool kSimdMaskRegisters = false;
@@ -560,24 +560,24 @@ class Operand BASE_EMBEDDED {
   INLINE(explicit Operand(Smi* value));
 
   // rm
-  INLINE(explicit Operand(Register rm));
+  INLINE(explicit Operand(AsmRegister rm));
 
   // rm <shift_op> shift_imm
-  explicit Operand(Register rm, ShiftOp shift_op, int shift_imm);
-  INLINE(static Operand SmiUntag(Register rm)) {
+  explicit Operand(AsmRegister rm, ShiftOp shift_op, int shift_imm);
+  INLINE(static Operand SmiUntag(AsmRegister rm)) {
     return Operand(rm, ASR, kSmiTagSize);
   }
-  INLINE(static Operand PointerOffsetFromSmiKey(Register key)) {
+  INLINE(static Operand PointerOffsetFromSmiKey(AsmRegister key)) {
     STATIC_ASSERT(kSmiTag == 0 && kSmiTagSize < kPointerSizeLog2);
     return Operand(key, LSL, kPointerSizeLog2 - kSmiTagSize);
   }
-  INLINE(static Operand DoubleOffsetFromSmiKey(Register key)) {
+  INLINE(static Operand DoubleOffsetFromSmiKey(AsmRegister key)) {
     STATIC_ASSERT(kSmiTag == 0 && kSmiTagSize < kDoubleSizeLog2);
     return Operand(key, LSL, kDoubleSizeLog2 - kSmiTagSize);
   }
 
   // rm <shift_op> rs
-  explicit Operand(Register rm, ShiftOp shift_op, Register rs);
+  explicit Operand(AsmRegister rm, ShiftOp shift_op, AsmRegister rs);
 
   static Operand EmbeddedNumber(double number);  // Smi or HeapNumber.
   static Operand EmbeddedCode(CodeStub* stub);
@@ -633,14 +633,14 @@ class Operand BASE_EMBEDDED {
     return is_heap_object_request_;
   }
 
-  Register rm() const { return rm_; }
-  Register rs() const { return rs_; }
+  AsmRegister rm() const { return rm_; }
+  AsmRegister rs() const { return rs_; }
   ShiftOp shift_op() const { return shift_op_; }
 
 
  private:
-  Register rm_;
-  Register rs_;
+  AsmRegister rm_;
+  AsmRegister rs_;
   ShiftOp shift_op_;
   int shift_imm_;                // valid if rm_ != no_reg && rs_ == no_reg
   union Value {
@@ -664,20 +664,20 @@ class MemOperand BASE_EMBEDDED {
   // offset is any signed 32-bit value; offset is first loaded to a scratch
   // register if it does not fit the addressing mode (12-bit unsigned and sign
   // bit)
-  explicit MemOperand(Register rn, int32_t offset = 0, AddrMode am = Offset);
+  explicit MemOperand(AsmRegister rn, int32_t offset = 0, AddrMode am = Offset);
 
   // [rn +/- rm]          Offset/NegOffset
   // [rn +/- rm]!         PreIndex/NegPreIndex
   // [rn], +/- rm         PostIndex/NegPostIndex
-  explicit MemOperand(Register rn, Register rm, AddrMode am = Offset);
+  explicit MemOperand(AsmRegister rn, AsmRegister rm, AddrMode am = Offset);
 
   // [rn +/- rm <shift_op> shift_imm]      Offset/NegOffset
   // [rn +/- rm <shift_op> shift_imm]!     PreIndex/NegPreIndex
   // [rn], +/- rm <shift_op> shift_imm     PostIndex/NegPostIndex
-  explicit MemOperand(Register rn, Register rm,
+  explicit MemOperand(AsmRegister rn, AsmRegister rm,
                       ShiftOp shift_op, int shift_imm, AddrMode am = Offset);
-  INLINE(static MemOperand PointerAddressFromSmiKey(Register array,
-                                                    Register key,
+  INLINE(static MemOperand PointerAddressFromSmiKey(AsmRegister array,
+                                                    AsmRegister key,
                                                     AddrMode am = Offset)) {
     STATIC_ASSERT(kSmiTag == 0 && kSmiTagSize < kPointerSizeLog2);
     return MemOperand(array, key, LSL, kPointerSizeLog2 - kSmiTagSize, am);
@@ -693,8 +693,8 @@ class MemOperand BASE_EMBEDDED {
       return offset_;
   }
 
-  Register rn() const { return rn_; }
-  Register rm() const { return rm_; }
+  AsmRegister rn() const { return rn_; }
+  AsmRegister rm() const { return rm_; }
   AddrMode am() const { return am_; }
 
   bool OffsetIsUint12Encodable() const {
@@ -702,8 +702,8 @@ class MemOperand BASE_EMBEDDED {
   }
 
  private:
-  Register rn_;  // base
-  Register rm_;  // register offset
+  AsmRegister rn_;  // base
+  AsmRegister rm_;  // register offset
   int32_t offset_;  // valid if rm_ == no_reg
   ShiftOp shift_op_;
   int shift_imm_;  // valid if rm_ != no_reg && rs_ == no_reg
@@ -719,20 +719,20 @@ class NeonMemOperand BASE_EMBEDDED {
  public:
   // [rn {:align}]       Offset
   // [rn {:align}]!      PostIndex
-  explicit NeonMemOperand(Register rn, AddrMode am = Offset, int align = 0);
+  explicit NeonMemOperand(AsmRegister rn, AddrMode am = Offset, int align = 0);
 
   // [rn {:align}], rm   PostIndex
-  explicit NeonMemOperand(Register rn, Register rm, int align = 0);
+  explicit NeonMemOperand(AsmRegister rn, AsmRegister rm, int align = 0);
 
-  Register rn() const { return rn_; }
-  Register rm() const { return rm_; }
+  AsmRegister rn() const { return rn_; }
+  AsmRegister rm() const { return rm_; }
   int align() const { return align_; }
 
  private:
   void SetAlignment(int align);
 
-  Register rn_;  // base
-  Register rm_;  // register increment
+  AsmRegister rn_;  // base
+  AsmRegister rm_;  // register increment
   int align_;
 };
 
@@ -885,8 +885,8 @@ class Assembler : public AssemblerBase {
   void b(int branch_offset, Condition cond = al);
   void bl(int branch_offset, Condition cond = al);
   void blx(int branch_offset);  // v5 and above
-  void blx(Register target, Condition cond = al);  // v5 and above
-  void bx(Register target, Condition cond = al);  // v5 and above, plus v4t
+  void blx(AsmRegister target, Condition cond = al);  // v5 and above
+  void bx(AsmRegister target, Condition cond = al);  // v5 and above, plus v4t
 
   // Convenience branch instructions using labels
   void b(Label* L, Condition cond = al);
@@ -897,117 +897,122 @@ class Assembler : public AssemblerBase {
 
   // Data-processing instructions
 
-  void and_(Register dst, Register src1, const Operand& src2,
+  void and_(AsmRegister dst, AsmRegister src1, const Operand& src2,
             SBit s = LeaveCC, Condition cond = al);
 
-  void eor(Register dst, Register src1, const Operand& src2,
+  void eor(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void sub(Register dst, Register src1, const Operand& src2,
+  void sub(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
-  void sub(Register dst, Register src1, Register src2,
-           SBit s = LeaveCC, Condition cond = al);
-
-  void rsb(Register dst, Register src1, const Operand& src2,
+  void sub(AsmRegister dst, AsmRegister src1, AsmRegister src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void add(Register dst, Register src1, const Operand& src2,
-           SBit s = LeaveCC, Condition cond = al);
-  void add(Register dst, Register src1, Register src2,
+  void rsb(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void adc(Register dst, Register src1, const Operand& src2,
+  void add(AsmRegister dst, AsmRegister src1, const Operand& src2,
+           SBit s = LeaveCC, Condition cond = al);
+  void add(AsmRegister dst, AsmRegister src1, AsmRegister src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void sbc(Register dst, Register src1, const Operand& src2,
+  void adc(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void rsc(Register dst, Register src1, const Operand& src2,
+  void sbc(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void tst(Register src1, const Operand& src2, Condition cond = al);
-  void tst(Register src1, Register src2, Condition cond = al);
-
-  void teq(Register src1, const Operand& src2, Condition cond = al);
-
-  void cmp(Register src1, const Operand& src2, Condition cond = al);
-  void cmp(Register src1, Register src2, Condition cond = al);
-
-  void cmp_raw_immediate(Register src1, int raw_immediate, Condition cond = al);
-
-  void cmn(Register src1, const Operand& src2, Condition cond = al);
-
-  void orr(Register dst, Register src1, const Operand& src2,
-           SBit s = LeaveCC, Condition cond = al);
-  void orr(Register dst, Register src1, Register src2,
+  void rsc(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void mov(Register dst, const Operand& src,
+  void tst(AsmRegister src1, const Operand& src2, Condition cond = al);
+  void tst(AsmRegister src1, AsmRegister src2, Condition cond = al);
+
+  void teq(AsmRegister src1, const Operand& src2, Condition cond = al);
+
+  void cmp(AsmRegister src1, const Operand& src2, Condition cond = al);
+  void cmp(AsmRegister src1, AsmRegister src2, Condition cond = al);
+
+  void cmp_raw_immediate(AsmRegister src1, int raw_immediate,
+                         Condition cond = al);
+
+  void cmn(AsmRegister src1, const Operand& src2, Condition cond = al);
+
+  void orr(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
-  void mov(Register dst, Register src, SBit s = LeaveCC, Condition cond = al);
+  void orr(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+           SBit s = LeaveCC, Condition cond = al);
+
+  void mov(AsmRegister dst, const Operand& src,
+           SBit s = LeaveCC, Condition cond = al);
+  void mov(AsmRegister dst, AsmRegister src, SBit s = LeaveCC,
+           Condition cond = al);
 
   // Load the position of the label relative to the generated code object
   // pointer in a register.
-  void mov_label_offset(Register dst, Label* label);
+  void mov_label_offset(AsmRegister dst, Label* label);
 
   // ARMv7 instructions for loading a 32 bit immediate in two instructions.
   // The constant for movw and movt should be in the range 0-0xffff.
-  void movw(Register reg, uint32_t immediate, Condition cond = al);
-  void movt(Register reg, uint32_t immediate, Condition cond = al);
+  void movw(AsmRegister reg, uint32_t immediate, Condition cond = al);
+  void movt(AsmRegister reg, uint32_t immediate, Condition cond = al);
 
-  void bic(Register dst, Register src1, const Operand& src2,
+  void bic(AsmRegister dst, AsmRegister src1, const Operand& src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void mvn(Register dst, const Operand& src,
+  void mvn(AsmRegister dst, const Operand& src,
            SBit s = LeaveCC, Condition cond = al);
 
   // Shift instructions
 
-  void asr(Register dst, Register src1, const Operand& src2, SBit s = LeaveCC,
-           Condition cond = al);
+  void asr(AsmRegister dst, AsmRegister src1, const Operand& src2,
+           SBit s = LeaveCC, Condition cond = al);
 
-  void lsl(Register dst, Register src1, const Operand& src2, SBit s = LeaveCC,
-           Condition cond = al);
+  void lsl(AsmRegister dst, AsmRegister src1, const Operand& src2,
+           SBit s = LeaveCC, Condition cond = al);
 
-  void lsr(Register dst, Register src1, const Operand& src2, SBit s = LeaveCC,
-           Condition cond = al);
+  void lsr(AsmRegister dst, AsmRegister src1, const Operand& src2,
+           SBit s = LeaveCC, Condition cond = al);
 
   // Multiply instructions
 
-  void mla(Register dst, Register src1, Register src2, Register srcA,
-           SBit s = LeaveCC, Condition cond = al);
+  void mla(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+           AsmRegister srcA, SBit s = LeaveCC, Condition cond = al);
 
-  void mls(Register dst, Register src1, Register src2, Register srcA,
-           Condition cond = al);
+  void mls(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+           AsmRegister srcA, Condition cond = al);
 
-  void sdiv(Register dst, Register src1, Register src2,
+  void sdiv(AsmRegister dst, AsmRegister src1, AsmRegister src2,
             Condition cond = al);
 
-  void udiv(Register dst, Register src1, Register src2, Condition cond = al);
+  void udiv(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+            Condition cond = al);
 
-  void mul(Register dst, Register src1, Register src2,
+  void mul(AsmRegister dst, AsmRegister src1, AsmRegister src2,
            SBit s = LeaveCC, Condition cond = al);
 
-  void smmla(Register dst, Register src1, Register src2, Register srcA,
+  void smmla(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+             AsmRegister srcA, Condition cond = al);
+
+  void smmul(AsmRegister dst, AsmRegister src1, AsmRegister src2,
              Condition cond = al);
 
-  void smmul(Register dst, Register src1, Register src2, Condition cond = al);
+  void smlal(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+             AsmRegister src2, SBit s = LeaveCC, Condition cond = al);
 
-  void smlal(Register dstL, Register dstH, Register src1, Register src2,
-             SBit s = LeaveCC, Condition cond = al);
+  void smull(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+             AsmRegister src2, SBit s = LeaveCC, Condition cond = al);
 
-  void smull(Register dstL, Register dstH, Register src1, Register src2,
-             SBit s = LeaveCC, Condition cond = al);
+  void umlal(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+             AsmRegister src2, SBit s = LeaveCC, Condition cond = al);
 
-  void umlal(Register dstL, Register dstH, Register src1, Register src2,
-             SBit s = LeaveCC, Condition cond = al);
-
-  void umull(Register dstL, Register dstH, Register src1, Register src2,
-             SBit s = LeaveCC, Condition cond = al);
+  void umull(AsmRegister dstL, AsmRegister dstH, AsmRegister src1,
+             AsmRegister src2, SBit s = LeaveCC, Condition cond = al);
 
   // Miscellaneous arithmetic instructions
 
-  void clz(Register dst, Register src, Condition cond = al);  // v5 and above
+  // v5 and above:
+  void clz(AsmRegister dst, AsmRegister src, Condition cond = al);
 
   // Saturating instructions. v6 and above.
 
@@ -1019,87 +1024,99 @@ class Assembler : public AssemblerBase {
   //   usat dst, #satpos, src, lsl #sh
   //   usat dst, #satpos, src, asr #sh
   //
-  // Register dst will contain:
+  // AsmRegister dst will contain:
   //
   //   0,                 if s < 0
   //   (1 << satpos) - 1, if s > ((1 << satpos) - 1)
   //   s,                 otherwise
   //
   // where s is the contents of src after shifting (if used.)
-  void usat(Register dst, int satpos, const Operand& src, Condition cond = al);
+  void usat(AsmRegister dst, int satpos, const Operand& src,
+            Condition cond = al);
 
   // Bitfield manipulation instructions. v7 and above.
 
-  void ubfx(Register dst, Register src, int lsb, int width,
+  void ubfx(AsmRegister dst, AsmRegister src, int lsb, int width,
             Condition cond = al);
 
-  void sbfx(Register dst, Register src, int lsb, int width,
+  void sbfx(AsmRegister dst, AsmRegister src, int lsb, int width,
             Condition cond = al);
 
-  void bfc(Register dst, int lsb, int width, Condition cond = al);
+  void bfc(AsmRegister dst, int lsb, int width, Condition cond = al);
 
-  void bfi(Register dst, Register src, int lsb, int width,
+  void bfi(AsmRegister dst, AsmRegister src, int lsb, int width,
            Condition cond = al);
 
-  void pkhbt(Register dst, Register src1, const Operand& src2,
+  void pkhbt(AsmRegister dst, AsmRegister src1, const Operand& src2,
              Condition cond = al);
 
-  void pkhtb(Register dst, Register src1, const Operand& src2,
+  void pkhtb(AsmRegister dst, AsmRegister src1, const Operand& src2,
              Condition cond = al);
 
-  void sxtb(Register dst, Register src, int rotate = 0, Condition cond = al);
-  void sxtab(Register dst, Register src1, Register src2, int rotate = 0,
-             Condition cond = al);
-  void sxth(Register dst, Register src, int rotate = 0, Condition cond = al);
-  void sxtah(Register dst, Register src1, Register src2, int rotate = 0,
-             Condition cond = al);
+  void sxtb(AsmRegister dst, AsmRegister src, int rotate = 0,
+            Condition cond = al);
+  void sxtab(AsmRegister dst, AsmRegister src1, AsmRegister rc2,
+             int rotate = 0, Condition cond = al);
+  void sxth(AsmRegister dst, AsmRegister src, int rotate = 0,
+            Condition cond = al);
+  void sxtah(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+             int rotate = 0, Condition cond = al);
 
-  void uxtb(Register dst, Register src, int rotate = 0, Condition cond = al);
-  void uxtab(Register dst, Register src1, Register src2, int rotate = 0,
-             Condition cond = al);
-  void uxtb16(Register dst, Register src, int rotate = 0, Condition cond = al);
-  void uxth(Register dst, Register src, int rotate = 0, Condition cond = al);
-  void uxtah(Register dst, Register src1, Register src2, int rotate = 0,
-             Condition cond = al);
+  void uxtb(AsmRegister dst, AsmRegister src, int rotate = 0,
+            Condition cond = al);
+  void uxtab(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+             int rotate = 0, Condition cond = al);
+  void uxtb16(AsmRegister dst, AsmRegister src, int rotate = 0,
+              Condition cond = al);
+  void uxth(AsmRegister dst, AsmRegister src, int rotate = 0,
+            Condition cond = al);
+  void uxtah(AsmRegister dst, AsmRegister src1, AsmRegister src2,
+             int rotate = 0, Condition cond = al);
 
   // Reverse the bits in a register.
-  void rbit(Register dst, Register src, Condition cond = al);
+  void rbit(AsmRegister dst, AsmRegister src, Condition cond = al);
 
   // Status register access instructions
 
-  void mrs(Register dst, SRegister s, Condition cond = al);
-  void msr(SRegisterFieldMask fields, const Operand& src, Condition cond = al);
+  void mrs(AsmRegister dst, SRegister s, Condition cond = al);
+  void msr(SRegisterFieldMask fields, const Operand& src,
+           Condition cond = al);
 
   // Load/Store instructions
-  void ldr(Register dst, const MemOperand& src, Condition cond = al);
-  void str(Register src, const MemOperand& dst, Condition cond = al);
-  void ldrb(Register dst, const MemOperand& src, Condition cond = al);
-  void strb(Register src, const MemOperand& dst, Condition cond = al);
-  void ldrh(Register dst, const MemOperand& src, Condition cond = al);
-  void strh(Register src, const MemOperand& dst, Condition cond = al);
-  void ldrsb(Register dst, const MemOperand& src, Condition cond = al);
-  void ldrsh(Register dst, const MemOperand& src, Condition cond = al);
-  void ldrd(Register dst1,
-            Register dst2,
+  void ldr(AsmRegister dst, const MemOperand& src, Condition cond = al);
+  void str(AsmRegister src, const MemOperand& dst, Condition cond = al);
+  void ldrb(AsmRegister dst, const MemOperand& src, Condition cond = al);
+  void strb(AsmRegister src, const MemOperand& dst, Condition cond = al);
+  void ldrh(AsmRegister dst, const MemOperand& src, Condition cond = al);
+  void strh(AsmRegister src, const MemOperand& dst, Condition cond = al);
+  void ldrsb(AsmRegister dst, const MemOperand& src, Condition cond = al);
+  void ldrsh(AsmRegister dst, const MemOperand& src, Condition cond = al);
+  void ldrd(AsmRegister dst1,
+            AsmRegister dst2,
             const MemOperand& src, Condition cond = al);
-  void strd(Register src1,
-            Register src2,
+  void strd(AsmRegister src1,
+            AsmRegister src2,
             const MemOperand& dst, Condition cond = al);
 
   // Load/Store exclusive instructions
-  void ldrex(Register dst, Register src, Condition cond = al);
-  void strex(Register src1, Register src2, Register dst, Condition cond = al);
-  void ldrexb(Register dst, Register src, Condition cond = al);
-  void strexb(Register src1, Register src2, Register dst, Condition cond = al);
-  void ldrexh(Register dst, Register src, Condition cond = al);
-  void strexh(Register src1, Register src2, Register dst, Condition cond = al);
+  void ldrex(AsmRegister dst, AsmRegister src, Condition cond = al);
+  void strex(AsmRegister src1, AsmRegister src2, AsmRegister dst,
+             Condition cond = al);
+  void ldrexb(AsmRegister dst, AsmRegister src, Condition cond = al);
+  void strexb(AsmRegister src1, AsmRegister src2, AsmRegister dst,
+              Condition cond = al);
+  void ldrexh(AsmRegister dst, AsmRegister src, Condition cond = al);
+  void strexh(AsmRegister src1, AsmRegister src2, AsmRegister dst,
+              Condition cond = al);
 
   // Preload instructions
   void pld(const MemOperand& address);
 
   // Load/Store multiple instructions
-  void ldm(BlockAddrMode am, Register base, RegList dst, Condition cond = al);
-  void stm(BlockAddrMode am, Register base, RegList src, Condition cond = al);
+  void ldm(BlockAddrMode am, AsmRegister base, RegList dst,
+           Condition cond = al);
+  void stm(BlockAddrMode am, AsmRegister base, RegList src,
+           Condition cond = al);
 
   // Exception-generating instructions and debugging support
   void stop(const char* msg,
@@ -1126,36 +1143,36 @@ class Assembler : public AssemblerBase {
             int opcode_2);  // v5 and above
 
   void mcr(Coprocessor coproc, int opcode_1,
-           Register rd, CRegister crn, CRegister crm,
+           AsmRegister rd, CRegister crn, CRegister crm,
            int opcode_2 = 0, Condition cond = al);
 
   void mcr2(Coprocessor coproc, int opcode_1,
-            Register rd, CRegister crn, CRegister crm,
+            AsmRegister rd, CRegister crn, CRegister crm,
             int opcode_2 = 0);  // v5 and above
 
   void mrc(Coprocessor coproc, int opcode_1,
-           Register rd, CRegister crn, CRegister crm,
+           AsmRegister rd, CRegister crn, CRegister crm,
            int opcode_2 = 0, Condition cond = al);
 
   void mrc2(Coprocessor coproc, int opcode_1,
-            Register rd, CRegister crn, CRegister crm,
+            AsmRegister rd, CRegister crn, CRegister crm,
             int opcode_2 = 0);  // v5 and above
 
   void ldc(Coprocessor coproc, CRegister crd, const MemOperand& src,
            LFlag l = Short, Condition cond = al);
-  void ldc(Coprocessor coproc, CRegister crd, Register base, int option,
+  void ldc(Coprocessor coproc, CRegister crd, AsmRegister base, int option,
            LFlag l = Short, Condition cond = al);
 
   void ldc2(Coprocessor coproc, CRegister crd, const MemOperand& src,
             LFlag l = Short);  // v5 and above
-  void ldc2(Coprocessor coproc, CRegister crd, Register base, int option,
+  void ldc2(Coprocessor coproc, CRegister crd, AsmRegister base, int option,
             LFlag l = Short);  // v5 and above
 
   // Support for VFP.
   // All these APIs support S0 to S31 and D0 to D31.
 
   void vldr(const DwVfpRegister dst,
-            const Register base,
+            const AsmRegister base,
             int offset,
             const Condition cond = al);
   void vldr(const DwVfpRegister dst,
@@ -1163,7 +1180,7 @@ class Assembler : public AssemblerBase {
             const Condition cond = al);
 
   void vldr(const SwVfpRegister dst,
-            const Register base,
+            const AsmRegister base,
             int offset,
             const Condition cond = al);
   void vldr(const SwVfpRegister dst,
@@ -1171,7 +1188,7 @@ class Assembler : public AssemblerBase {
             const Condition cond = al);
 
   void vstr(const DwVfpRegister src,
-            const Register base,
+            const AsmRegister base,
             int offset,
             const Condition cond = al);
   void vstr(const DwVfpRegister src,
@@ -1179,7 +1196,7 @@ class Assembler : public AssemblerBase {
             const Condition cond = al);
 
   void vstr(const SwVfpRegister src,
-            const Register base,
+            const AsmRegister base,
             int offset,
             const Condition cond = al);
   void vstr(const SwVfpRegister src,
@@ -1187,25 +1204,25 @@ class Assembler : public AssemblerBase {
             const Condition cond = al);
 
   void vldm(BlockAddrMode am,
-            Register base,
+            AsmRegister base,
             DwVfpRegister first,
             DwVfpRegister last,
             Condition cond = al);
 
   void vstm(BlockAddrMode am,
-            Register base,
+            AsmRegister base,
             DwVfpRegister first,
             DwVfpRegister last,
             Condition cond = al);
 
   void vldm(BlockAddrMode am,
-            Register base,
+            AsmRegister base,
             SwVfpRegister first,
             SwVfpRegister last,
             Condition cond = al);
 
   void vstm(BlockAddrMode am,
-            Register base,
+            AsmRegister base,
             SwVfpRegister first,
             SwVfpRegister last,
             Condition cond = al);
@@ -1213,7 +1230,7 @@ class Assembler : public AssemblerBase {
   void vmov(const SwVfpRegister dst, Float32 imm);
   void vmov(const DwVfpRegister dst,
             Double imm,
-            const Register extra_scratch = no_reg);
+            const AsmRegister extra_scratch = no_reg);
   void vmov(const SwVfpRegister dst,
             const SwVfpRegister src,
             const Condition cond = al);
@@ -1224,24 +1241,24 @@ class Assembler : public AssemblerBase {
   // scalar register vmov's.
   void vmov(const DwVfpRegister dst,
             const VmovIndex index,
-            const Register src,
+            const AsmRegister src,
             const Condition cond = al);
-  void vmov(const Register dst,
+  void vmov(const AsmRegister dst,
             const VmovIndex index,
             const DwVfpRegister src,
             const Condition cond = al);
   void vmov(const DwVfpRegister dst,
-            const Register src1,
-            const Register src2,
+            const AsmRegister src1,
+            const AsmRegister src2,
             const Condition cond = al);
-  void vmov(const Register dst1,
-            const Register dst2,
+  void vmov(const AsmRegister dst1,
+            const AsmRegister dst2,
             const DwVfpRegister src,
             const Condition cond = al);
   void vmov(const SwVfpRegister dst,
-            const Register src,
+            const AsmRegister src,
             const Condition cond = al);
-  void vmov(const Register dst,
+  void vmov(const AsmRegister dst,
             const SwVfpRegister src,
             const Condition cond = al);
   void vcvt_f64_s32(const DwVfpRegister dst,
@@ -1288,8 +1305,8 @@ class Assembler : public AssemblerBase {
                     int fraction_bits,
                     const Condition cond = al);
 
-  void vmrs(const Register dst, const Condition cond = al);
-  void vmsr(const Register dst, const Condition cond = al);
+  void vmrs(const AsmRegister dst, const Condition cond = al);
+  void vmsr(const AsmRegister dst, const Condition cond = al);
 
   void vneg(const DwVfpRegister dst,
             const DwVfpRegister src,
@@ -1406,11 +1423,11 @@ class Assembler : public AssemblerBase {
   void vqmovn(NeonDataType dt, DwVfpRegister dst, QwNeonRegister src);
 
   // Only unconditional core <-> scalar moves are currently supported.
-  void vmov(NeonDataType dt, DwVfpRegister dst, int index, Register src);
-  void vmov(NeonDataType dt, Register dst, DwVfpRegister src, int index);
+  void vmov(NeonDataType dt, DwVfpRegister dst, int index, AsmRegister src);
+  void vmov(NeonDataType dt, AsmRegister dst, DwVfpRegister src, int index);
 
   void vmov(QwNeonRegister dst, QwNeonRegister src);
-  void vdup(NeonSize size, QwNeonRegister dst, Register src);
+  void vdup(NeonSize size, QwNeonRegister dst, AsmRegister src);
   void vdup(NeonSize size, QwNeonRegister dst, DwVfpRegister src, int index);
   void vdup(NeonSize size, DwVfpRegister dst, DwVfpRegister src, int index);
 
@@ -1513,11 +1530,11 @@ class Assembler : public AssemblerBase {
 
   void nop(int type = 0);   // 0 is the default non-marking type.
 
-  void push(Register src, Condition cond = al) {
+  void push(AsmRegister src, Condition cond = al) {
     str(src, MemOperand(sp, 4, NegPreIndex), cond);
   }
 
-  void pop(Register dst, Condition cond = al) {
+  void pop(AsmRegister dst, Condition cond = al) {
     ldr(dst, MemOperand(sp, 4, PostIndex), cond);
   }
 
@@ -1662,9 +1679,9 @@ class Assembler : public AssemblerBase {
   static Instr SetStrRegisterImmediateOffset(Instr instr, int offset);
   static bool IsAddRegisterImmediate(Instr instr);
   static Instr SetAddRegisterImmediateOffset(Instr instr, int offset);
-  static Register GetRd(Instr instr);
-  static Register GetRn(Instr instr);
-  static Register GetRm(Instr instr);
+  static AsmRegister GetRd(Instr instr);
+  static AsmRegister GetRn(Instr instr);
+  static AsmRegister GetRm(Instr instr);
   static bool IsPush(Instr instr);
   static bool IsPop(Instr instr);
   static bool IsStrRegFpOffset(Instr instr);
@@ -1678,7 +1695,7 @@ class Assembler : public AssemblerBase {
   static bool IsTstImmediate(Instr instr);
   static bool IsCmpRegister(Instr instr);
   static bool IsCmpImmediate(Instr instr);
-  static Register GetCmpImmediateRegister(Instr instr);
+  static AsmRegister GetCmpImmediateRegister(Instr instr);
   static int GetCmpImmediateRawImmediate(Instr instr);
   static bool IsNop(Instr instr, int type = NON_MARKING_NOP);
   static bool IsMovImmed(Instr instr);
@@ -1876,10 +1893,11 @@ class Assembler : public AssemblerBase {
   void GrowBuffer();
 
   // 32-bit immediate values
-  void Move32BitImmediate(Register rd, const Operand& x, Condition cond = al);
+  void Move32BitImmediate(AsmRegister rd, const Operand& x,
+                          Condition cond = al);
 
   // Instruction generation
-  void AddrMode1(Instr instr, Register rd, Register rn, const Operand& x);
+  void AddrMode1(Instr instr, AsmRegister rd, AsmRegister rn, const Operand& x);
   // Attempt to encode operand |x| for instruction |instr| and return true on
   // success. The result will be encoded in |instr| directly. This method may
   // change the opcode if deemed beneficial, for instance, MOV may be turned
@@ -1887,9 +1905,9 @@ class Assembler : public AssemblerBase {
   // may fail is that the operand is an immediate that cannot be encoded.
   bool AddrMode1TryEncodeOperand(Instr* instr, const Operand& x);
 
-  void AddrMode2(Instr instr, Register rd, const MemOperand& x);
-  void AddrMode3(Instr instr, Register rd, const MemOperand& x);
-  void AddrMode4(Instr instr, Register rn, RegList rl);
+  void AddrMode2(Instr instr, AsmRegister rd, const MemOperand& x);
+  void AddrMode3(Instr instr, AsmRegister rd, const MemOperand& x);
+  void AddrMode4(Instr instr, AsmRegister rn, RegList rl);
   void AddrMode5(Instr instr, CRegister crd, const MemOperand& x);
 
   // Labels
@@ -1954,7 +1972,7 @@ class UseScratchRegisterScope {
   ~UseScratchRegisterScope();
 
   // Take a register from the list and return it.
-  Register Acquire();
+  AsmRegister Acquire();
 
  private:
   // Currently available scratch registers.

@@ -46,10 +46,8 @@ UnaryMathFunctionWithIsolate CreateSqrtFunction(Isolate* isolate) {
 
 #define __ ACCESS_MASM(masm)
 
-void StringCharLoadGenerator::Generate(MacroAssembler* masm,
-                                       Register string,
-                                       Register index,
-                                       Register result,
+void StringCharLoadGenerator::Generate(MacroAssembler* masm, AsmRegister string,
+                                       AsmRegister index, AsmRegister result,
                                        Label* call_runtime) {
   Label indirect_string_loaded;
   __ bind(&indirect_string_loaded);

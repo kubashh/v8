@@ -15,8 +15,8 @@ void PropertyAccessCompiler::TailCallBuiltin(MacroAssembler* masm,
   GenerateTailCall(masm, code);
 }
 
-Register* PropertyAccessCompiler::GetCallingConvention(Isolate* isolate,
-                                                       Code::Kind kind) {
+AsmRegister* PropertyAccessCompiler::GetCallingConvention(Isolate* isolate,
+                                                          Code::Kind kind) {
   AccessCompilerData* data = isolate->access_compiler_data();
   if (!data->IsInitialized()) {
     InitializePlatformSpecific(data);
@@ -28,8 +28,7 @@ Register* PropertyAccessCompiler::GetCallingConvention(Isolate* isolate,
   return data->store_calling_convention();
 }
 
-
-Register PropertyAccessCompiler::slot() const {
+AsmRegister PropertyAccessCompiler::slot() const {
   if (kind() == Code::LOAD_IC || kind() == Code::KEYED_LOAD_IC) {
     return LoadDescriptor::SlotRegister();
   }
@@ -37,8 +36,7 @@ Register PropertyAccessCompiler::slot() const {
   return StoreWithVectorDescriptor::SlotRegister();
 }
 
-
-Register PropertyAccessCompiler::vector() const {
+AsmRegister PropertyAccessCompiler::vector() const {
   if (kind() == Code::LOAD_IC || kind() == Code::KEYED_LOAD_IC) {
     return LoadWithVectorDescriptor::VectorRegister();
   }

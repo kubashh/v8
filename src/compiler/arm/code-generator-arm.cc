@@ -171,20 +171,21 @@ class OutOfLineLoadDouble final : public OutOfLineCode {
 
 class OutOfLineLoadInteger final : public OutOfLineCode {
  public:
-  OutOfLineLoadInteger(CodeGenerator* gen, Register result)
+  OutOfLineLoadInteger(CodeGenerator* gen, AsmRegister result)
       : OutOfLineCode(gen), result_(result) {}
 
   void Generate() final { __ mov(result_, Operand::Zero()); }
 
  private:
-  Register const result_;
+  AsmRegister const result_;
 };
 
 
 class OutOfLineRecordWrite final : public OutOfLineCode {
  public:
-  OutOfLineRecordWrite(CodeGenerator* gen, Register object, Register index,
-                       Register value, Register scratch0, Register scratch1,
+  OutOfLineRecordWrite(CodeGenerator* gen, AsmRegister object,
+                       AsmRegister index, AsmRegister value,
+                       AsmRegister scratch0, AsmRegister scratch1,
                        RecordWriteMode mode,
                        UnwindingInfoWriter* unwinding_info_writer)
       : OutOfLineCode(gen),
@@ -199,9 +200,9 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
         unwinding_info_writer_(unwinding_info_writer),
         zone_(gen->zone()) {}
 
-  OutOfLineRecordWrite(CodeGenerator* gen, Register object, int32_t index,
-                       Register value, Register scratch0, Register scratch1,
-                       RecordWriteMode mode,
+  OutOfLineRecordWrite(CodeGenerator* gen, AsmRegister object, int32_t index,
+                       AsmRegister value, AsmRegister scratch0,
+                       AsmRegister scratch1, RecordWriteMode mode,
                        UnwindingInfoWriter* unwinding_info_writer)
       : OutOfLineCode(gen),
         object_(object),
@@ -248,12 +249,12 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
   }
 
  private:
-  Register const object_;
-  Register const index_;
+  AsmRegister const object_;
+  AsmRegister const index_;
   int32_t const index_immediate_;  // Valid if index_.is(no_reg).
-  Register const value_;
-  Register const scratch0_;
-  Register const scratch1_;
+  AsmRegister const value_;
+  AsmRegister const scratch0_;
+  AsmRegister const scratch1_;
   RecordWriteMode const mode_;
   bool must_save_lr_;
   UnwindingInfoWriter* const unwinding_info_writer_;
@@ -541,10 +542,10 @@ void CodeGenerator::AssemblePrepareTailCall() {
   frame_access_state()->SetFrameAccessToSP();
 }
 
-void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
-                                                     Register scratch1,
-                                                     Register scratch2,
-                                                     Register scratch3) {
+void CodeGenerator::AssemblePopArgumentsAdaptorFrame(AsmRegister args_reg,
+                                                     AsmRegister scratch1,
+                                                     AsmRegister scratch2,
+                                                     AsmRegister scratch3) {
   DCHECK(!AreAliased(args_reg, scratch1, scratch2, scratch3));
   Label done;
 
@@ -556,7 +557,7 @@ void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
 
   // Load arguments count from current arguments adaptor frame (note, it
   // does not include receiver).
-  Register caller_args_count_reg = scratch1;
+  AsmRegister caller_args_count_reg = scratch1;
   __ ldr(caller_args_count_reg,
          MemOperand(fp, ArgumentsAdaptorFrameConstants::kLengthOffset));
   __ SmiUntag(caller_args_count_reg);
@@ -571,7 +572,7 @@ namespace {
 
 void FlushPendingPushRegisters(TurboAssembler* tasm,
                                FrameAccessState* frame_access_state,
-                               ZoneVector<Register>* pending_pushes) {
+                               ZoneVector<AsmRegister>* pending_pushes) {
   switch (pending_pushes->size()) {
     case 0:
       break;
@@ -595,7 +596,7 @@ void FlushPendingPushRegisters(TurboAssembler* tasm,
 
 void AdjustStackPointerForTailCall(
     TurboAssembler* tasm, FrameAccessState* state, int new_slot_above_sp,
-    ZoneVector<Register>* pending_pushes = nullptr,
+    ZoneVector<AsmRegister>* pending_pushes = nullptr,
     bool allow_shrinkage = true) {
   int current_sp_offset = state->GetSPToFPSlotCount() +
                           StandardFrameConstants::kFixedSlotCountAboveFp;
@@ -626,7 +627,7 @@ void CodeGenerator::AssembleTailCallBeforeGap(Instruction* instr,
       (LocationOperand::cast(pushes.back()->destination()).index() + 1 ==
        first_unused_stack_slot)) {
     ArmOperandConverter g(this, instr);
-    ZoneVector<Register> pending_pushes(zone());
+    ZoneVector<AsmRegister> pending_pushes(zone());
     for (auto move : pushes) {
       LocationOperand destination_location(
           LocationOperand::cast(move->destination()));
@@ -720,7 +721,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchCallJSFunction: {
-      Register func = i.InputRegister(0);
+      AsmRegister func = i.InputRegister(0);
       if (FLAG_debug_code) {
         // Check the function's context matches the context argument.
         __ ldr(kScratchReg, FieldMemOperand(func, JSFunction::kContextOffset));
@@ -761,7 +762,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         ExternalReference ref = i.InputExternalReference(0);
         __ CallCFunction(ref, num_parameters);
       } else {
-        Register func = i.InputRegister(0);
+        AsmRegister func = i.InputRegister(0);
         __ CallCFunction(func, num_parameters);
       }
       frame_access_state()->SetFrameAccessToDefault();
@@ -842,10 +843,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArchStoreWithWriteBarrier: {
       RecordWriteMode mode =
           static_cast<RecordWriteMode>(MiscField::decode(instr->opcode()));
-      Register object = i.InputRegister(0);
-      Register value = i.InputRegister(2);
-      Register scratch0 = i.TempRegister(0);
-      Register scratch1 = i.TempRegister(1);
+      AsmRegister object = i.InputRegister(0);
+      AsmRegister value = i.InputRegister(2);
+      AsmRegister scratch0 = i.TempRegister(0);
+      AsmRegister scratch1 = i.TempRegister(1);
       OutOfLineRecordWrite* ool;
 
       AddressingMode addressing_mode =
@@ -858,7 +859,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ str(value, MemOperand(object, index));
       } else {
         DCHECK_EQ(kMode_Offset_RR, addressing_mode);
-        Register index(i.InputRegister(1));
+        AsmRegister index(i.InputRegister(1));
         ool = new (zone())
             OutOfLineRecordWrite(this, object, index, value, scratch0, scratch1,
                                  mode, &unwinding_info_writer_);
@@ -873,7 +874,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArchStackSlot: {
       FrameOffset offset =
           frame_access_state()->GetFrameOffset(i.InputInt32(0));
-      Register base;
+      AsmRegister base;
       if (offset.from_stack_pointer()) {
         base = sp;
       } else {
@@ -1143,7 +1144,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
              i.OutputRegister(1));
       break;
     case kArmLslPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsImmediate()) {
         __ LslPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -1155,7 +1156,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmLsrPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsImmediate()) {
         __ LsrPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -1167,7 +1168,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmAsrPair: {
-      Register second_output =
+      AsmRegister second_output =
           instr->OutputCount() >= 2 ? i.OutputRegister(1) : i.TempRegister(0);
       if (instr->InputAt(2)->IsImmediate()) {
         __ AsrPair(i.OutputRegister(0), second_output, i.InputRegister(0),
@@ -2675,7 +2676,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
   // Materialize a full 32-bit 1 or 0 value. The result register is always the
   // last output of the instruction.
   DCHECK_NE(0u, instr->OutputCount());
-  Register reg = i.OutputRegister(instr->OutputCount() - 1);
+  AsmRegister reg = i.OutputRegister(instr->OutputCount() - 1);
   Condition cc = FlagsConditionToCondition(condition);
   __ mov(reg, Operand(0));
   __ mov(reg, Operand(1), LeaveCC, cc);
@@ -2684,7 +2685,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
 
 void CodeGenerator::AssembleArchLookupSwitch(Instruction* instr) {
   ArmOperandConverter i(this, instr);
-  Register input = i.InputRegister(0);
+  AsmRegister input = i.InputRegister(0);
   for (size_t index = 2; index < instr->InputCount(); index += 2) {
     __ cmp(input, Operand(i.InputInt32(index + 0)));
     __ b(eq, GetLabel(i.InputRpo(index + 1)));
@@ -2695,7 +2696,7 @@ void CodeGenerator::AssembleArchLookupSwitch(Instruction* instr) {
 
 void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   ArmOperandConverter i(this, instr);
-  Register input = i.InputRegister(0);
+  AsmRegister input = i.InputRegister(0);
   size_t const case_count = instr->InputCount() - 2;
   // Ensure to emit the constant pool first if necessary.
   __ CheckConstPool(true, true);
@@ -2889,7 +2890,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
   // combinations are possible.
   if (source->IsRegister()) {
     DCHECK(destination->IsRegister() || destination->IsStackSlot());
-    Register src = g.ToRegister(source);
+    AsmRegister src = g.ToRegister(source);
     if (destination->IsRegister()) {
       __ mov(g.ToRegister(destination), src);
     } else {
@@ -2901,14 +2902,14 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
     if (destination->IsRegister()) {
       __ ldr(g.ToRegister(destination), src);
     } else {
-      Register temp = kScratchReg;
+      AsmRegister temp = kScratchReg;
       __ ldr(temp, src);
       __ str(temp, g.ToMemOperand(destination));
     }
   } else if (source->IsConstant()) {
     Constant src = g.ToConstant(source);
     if (destination->IsRegister() || destination->IsStackSlot()) {
-      Register dst =
+      AsmRegister dst =
           destination->IsRegister() ? g.ToRegister(destination) : kScratchReg;
       switch (src.type()) {
         case Constant::kInt32:
@@ -2948,7 +2949,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
     } else if (src.type() == Constant::kFloat32) {
       if (destination->IsFloatStackSlot()) {
         MemOperand dst = g.ToMemOperand(destination);
-        Register temp = kScratchReg;
+        AsmRegister temp = kScratchReg;
         __ mov(temp, Operand(bit_cast<int32_t>(src.ToFloat32())));
         __ str(temp, dst);
       } else {
@@ -3053,10 +3054,10 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
   // combinations are possible.
   if (source->IsRegister()) {
     // Register-register.
-    Register temp = kScratchReg;
-    Register src = g.ToRegister(source);
+    AsmRegister temp = kScratchReg;
+    AsmRegister src = g.ToRegister(source);
     if (destination->IsRegister()) {
-      Register dst = g.ToRegister(destination);
+      AsmRegister dst = g.ToRegister(destination);
       __ Move(temp, src);
       __ Move(src, dst);
       __ Move(dst, temp);
@@ -3069,7 +3070,7 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
     }
   } else if (source->IsStackSlot()) {
     DCHECK(destination->IsStackSlot());
-    Register temp_0 = kScratchReg;
+    AsmRegister temp_0 = kScratchReg;
     SwVfpRegister temp_1 = kScratchDoubleReg.low();
     MemOperand src = g.ToMemOperand(source);
     MemOperand dst = g.ToMemOperand(destination);
@@ -3125,7 +3126,7 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
     }
   } else if (source->IsFPStackSlot()) {
     DCHECK(destination->IsFPStackSlot());
-    Register temp_0 = kScratchReg;
+    AsmRegister temp_0 = kScratchReg;
     LowDwVfpRegister temp_1 = kScratchDoubleReg;
     MemOperand src0 = g.ToMemOperand(source);
     MemOperand dst0 = g.ToMemOperand(destination);

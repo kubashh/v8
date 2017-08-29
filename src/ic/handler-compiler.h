@@ -23,8 +23,8 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
 
   virtual ~PropertyHandlerCompiler() {}
 
-  virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss) {
+  virtual AsmRegister FrontendHeader(AsmRegister object_reg, Handle<Name> name,
+                                     Label* miss) {
     UNREACHABLE();
   }
 
@@ -32,25 +32,23 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
 
   // Frontend loads from receiver(), returns holder register which may be
   // different.
-  Register Frontend(Handle<Name> name);
+  AsmRegister Frontend(Handle<Name> name);
 
   // When FLAG_vector_ics is true, handlers that have the possibility of missing
   // will need to save and pass these to miss handlers.
   void PushVectorAndSlot() { PushVectorAndSlot(vector(), slot()); }
-  void PushVectorAndSlot(Register vector, Register slot);
+  void PushVectorAndSlot(AsmRegister vector, AsmRegister slot);
   void PopVectorAndSlot() { PopVectorAndSlot(vector(), slot()); }
-  void PopVectorAndSlot(Register vector, Register slot);
+  void PopVectorAndSlot(AsmRegister vector, AsmRegister slot);
 
   void DiscardVectorAndSlot();
 
   // TODO(verwaest): Make non-static.
-  static void GenerateApiAccessorCall(MacroAssembler* masm,
-                                      const CallOptimization& optimization,
-                                      Handle<Map> receiver_map,
-                                      Register receiver, Register scratch,
-                                      bool is_store, Register store_parameter,
-                                      Register accessor_holder,
-                                      int accessor_index);
+  static void GenerateApiAccessorCall(
+      MacroAssembler* masm, const CallOptimization& optimization,
+      Handle<Map> receiver_map, AsmRegister receiver, AsmRegister scratch,
+      bool is_store, AsmRegister store_parameter, AsmRegister accessor_holder,
+      int accessor_index);
 
   // Helper function used to check that the dictionary doesn't contain
   // the property. This function may return false negatives, so miss_label
@@ -59,16 +57,16 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
   // Name must be unique and receiver must be a heap object.
   static void GenerateDictionaryNegativeLookup(MacroAssembler* masm,
                                                Label* miss_label,
-                                               Register receiver,
-                                               Handle<Name> name, Register r0,
-                                               Register r1);
+                                               AsmRegister receiver,
+                                               Handle<Name> name,
+                                               AsmRegister r0, AsmRegister r1);
 
   // Generate code to check that a global property cell is empty. Create
   // the property cell at compilation time if no cell exists for the
   // property.
   static void GenerateCheckPropertyCell(MacroAssembler* masm,
                                         Handle<JSGlobalObject> global,
-                                        Handle<Name> name, Register scratch,
+                                        Handle<Name> name, AsmRegister scratch,
                                         Label* miss);
 
   // Generates check that current native context has the same access rights
@@ -80,8 +78,8 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
   // passed if the execution-time native context is equal to contents of
   // |native_context_cell| or security tokens of both contexts are equal.
   void GenerateAccessCheck(Handle<WeakCell> native_context_cell,
-                           Register scratch1, Register scratch2, Label* miss,
-                           bool compare_native_contexts_only);
+                           AsmRegister scratch1, AsmRegister scratch2,
+                           Label* miss, bool compare_native_contexts_only);
 
   // Generates code that verifies that the property holder has not changed
   // (checking maps of objects in the prototype chain for fast and global
@@ -95,9 +93,9 @@ class PropertyHandlerCompiler : public PropertyAccessCompiler {
   // register is only clobbered if it the same as the holder register. The
   // function returns a register containing the holder - either object_reg or
   // holder_reg.
-  Register CheckPrototypes(Register object_reg, Register holder_reg,
-                           Register scratch1, Register scratch2,
-                           Handle<Name> name, Label* miss);
+  AsmRegister CheckPrototypes(AsmRegister object_reg, AsmRegister holder_reg,
+                              AsmRegister scratch1, AsmRegister scratch2,
+                              Handle<Name> name, Label* miss);
 
   Handle<Code> GetCode(Code::Kind kind, Handle<Name> name);
   Handle<Map> map() const { return map_; }
@@ -124,13 +122,13 @@ class NamedLoadHandlerCompiler : public PropertyHandlerCompiler {
   static void GenerateLoadViaGetterForDeopt(MacroAssembler* masm);
 
  protected:
-  virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss);
+  virtual AsmRegister FrontendHeader(AsmRegister object_reg, Handle<Name> name,
+                                     Label* miss);
 
   virtual void FrontendFooter(Handle<Name> name, Label* miss);
 
  private:
-  Register scratch3() { return registers_[4]; }
+  AsmRegister scratch3() { return registers_[4]; }
 };
 
 
@@ -164,9 +162,9 @@ class NamedStoreHandlerCompiler : public PropertyHandlerCompiler {
                                      int expected_arguments);
 
   static void GenerateStoreViaSetter(MacroAssembler* masm, Handle<Map> map,
-                                     Register receiver, Register holder,
+                                     AsmRegister receiver, AsmRegister holder,
                                      int accessor_index, int expected_arguments,
-                                     Register scratch);
+                                     AsmRegister scratch);
 
   static void GenerateStoreViaSetterForDeopt(MacroAssembler* masm) {
     GenerateStoreViaSetter(masm, Handle<Map>::null(), no_reg, no_reg, -1, -1,
@@ -174,14 +172,14 @@ class NamedStoreHandlerCompiler : public PropertyHandlerCompiler {
   }
 
  protected:
-  virtual Register FrontendHeader(Register object_reg, Handle<Name> name,
-                                  Label* miss);
+  virtual AsmRegister FrontendHeader(AsmRegister object_reg, Handle<Name> name,
+                                     Label* miss);
 
   virtual void FrontendFooter(Handle<Name> name, Label* miss);
   void GenerateRestoreName(Label* label, Handle<Name> name);
 
  private:
-  static Register value();
+  static AsmRegister value();
 };
 
 }  // namespace internal

@@ -44,8 +44,8 @@ using namespace v8::internal;
 #define __ assm.
 
 ConvertDToIFunc MakeConvertDToIFuncTrampoline(Isolate* isolate,
-                                              Register source_reg,
-                                              Register destination_reg) {
+                                              AsmRegister source_reg,
+                                              AsmRegister destination_reg) {
   // Allocate an executable page of memory.
   size_t actual_size;
   byte* buffer = static_cast<byte*>(v8::base::OS::Allocate(
@@ -80,8 +80,8 @@ ConvertDToIFunc MakeConvertDToIFuncTrampoline(Isolate* isolate,
   // Save registers make sure they don't get clobbered.
   int reg_num = 0;
   for (; reg_num < config->num_allocatable_general_registers(); ++reg_num) {
-    Register reg =
-        Register::from_code(config->GetAllocatableGeneralCode(reg_num));
+    AsmRegister reg =
+        AsmRegister::from_code(config->GetAllocatableGeneralCode(reg_num));
     if (!reg.is(rsp) && !reg.is(rbp) && !reg.is(destination_reg)) {
       __ pushq(reg);
     }
@@ -98,8 +98,8 @@ ConvertDToIFunc MakeConvertDToIFuncTrampoline(Isolate* isolate,
 
   // Make sure no registers have been unexpectedly clobbered
   for (--reg_num; reg_num >= 0; --reg_num) {
-    Register reg =
-        Register::from_code(config->GetAllocatableGeneralCode(reg_num));
+    AsmRegister reg =
+        AsmRegister::from_code(config->GetAllocatableGeneralCode(reg_num));
     if (!reg.is(rsp) && !reg.is(rbp) && !reg.is(destination_reg)) {
       __ cmpq(reg, MemOperand(rsp, 0));
       __ Assert(equal, kRegisterWasClobbered);
@@ -144,11 +144,11 @@ TEST(ConvertDToI) {
   RunAllTruncationTests(&ConvertDToICVersion);
 #endif
 
-  Register source_registers[] = {rsp, rax, rbx, rcx, rdx, rsi, rdi, r8, r9};
-  Register dest_registers[] = {rax, rbx, rcx, rdx, rsi, rdi, r8, r9};
+  AsmRegister source_registers[] = {rsp, rax, rbx, rcx, rdx, rsi, rdi, r8, r9};
+  AsmRegister dest_registers[] = {rax, rbx, rcx, rdx, rsi, rdi, r8, r9};
 
-  for (size_t s = 0; s < sizeof(source_registers) / sizeof(Register); s++) {
-    for (size_t d = 0; d < sizeof(dest_registers) / sizeof(Register); d++) {
+  for (size_t s = 0; s < sizeof(source_registers) / sizeof(AsmRegister); s++) {
+    for (size_t d = 0; d < sizeof(dest_registers) / sizeof(AsmRegister); d++) {
       RunAllTruncationTests(
           MakeConvertDToIFuncTrampoline(isolate,
                                         source_registers[s],

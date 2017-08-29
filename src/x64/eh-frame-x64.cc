@@ -22,18 +22,18 @@ void EhFrameWriter::WriteReturnAddressRegisterCode() {
 
 void EhFrameWriter::WriteInitialStateInCie() {
   SetBaseAddressRegisterAndOffset(rsp, kPointerSize);
-  // x64 rip (r16) has no Register instance associated.
+  // x64 rip (r16) has no AsmRegister instance associated.
   RecordRegisterSavedToStack(kRipDwarfCode, -kPointerSize);
 }
 
 // static
-int EhFrameWriter::RegisterToDwarfCode(Register name) {
+int EhFrameWriter::RegisterToDwarfCode(AsmRegister name) {
   switch (name.code()) {
-    case Register::kCode_rbp:
+    case AsmRegister::kCode_rbp:
       return kRbpDwarfCode;
-    case Register::kCode_rsp:
+    case AsmRegister::kCode_rsp:
       return kRspDwarfCode;
-    case Register::kCode_rax:
+    case AsmRegister::kCode_rax:
       return kRaxDwarfCode;
     default:
       UNIMPLEMENTED();

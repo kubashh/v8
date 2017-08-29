@@ -60,11 +60,11 @@ typedef uint64_t (*F4)(uint64_t* x, uint64_t* y);
 typedef uint64_t (*F5)(uint64_t x);
 
 #ifdef _WIN64
-static const Register arg1 = rcx;
-static const Register arg2 = rdx;
+static const AsmRegister arg1 = rcx;
+static const AsmRegister arg2 = rdx;
 #else
-static const Register arg1 = rdi;
-static const Register arg2 = rsi;
+static const AsmRegister arg1 = rdi;
+static const AsmRegister arg2 = rsi;
 #endif
 
 #define __ assm.
