@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "8d977ec9_0253a9dc",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-30T07:39:23Z",
+      "side": 1,
+      "message": "After chatting with a couple of people, the history behind the unconditional OLD_SPACE struct allocation is unclear. But it doesn\u0027t seem to make sense anymore now that we have plenty of short-lived structs. \n\nmlippautz@ will change AllocateStruct (https://crbug.com/v8/6771), and please also add an AllocationFlag here. Nice find!",
+      "parentUuid": "63b95336_89fbc9b8",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06be12a6_de2233de",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -68,6 +86,24 @@
       "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f2a9d9e_7167072d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-30T07:39:23Z",
+      "side": 1,
+      "message": "Ah I see, thanks for the explanation, makes sense. Let\u0027s keep InitializeStructBody.",
+      "parentUuid": "2b5bfac2_3e2230b2",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +154,24 @@
       "side": 1,
       "message": "For future ref, can you point to this in the style guide? I can\u0027t seem to find this in the style guide.",
       "parentUuid": "ee9c5940_be35e451",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7f4c76d_c999d1e5",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-08-30T07:39:23Z",
+      "side": 1,
+      "message": "It\u0027s not in any style guide, at least not as far as I\u0027m aware. IMHO it just makes the code organization nicer. I don\u0027t feel too strongly about it though :)",
+      "parentUuid": "6cc17330_75381c8d",
       "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
