@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ac08f99_9fa3fba2",
+        "filename": "src/heap/barrier.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-30T10:42:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we NotifyAll only on this condition?",
+      "range": {
+        "startLine": 51,
+        "startChar": 17,
+        "endLine": 51,
+        "endChar": 35
+      },
+      "revId": "188ea0759d72baa7e88508bd522a2664312c088e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65a3a6fe_d77e5dc6",
+        "filename": "src/heap/barrier.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-08-30T10:42:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be lock protected?",
+      "range": {
+        "startLine": 61,
+        "startChar": 29,
+        "endLine": 61,
+        "endChar": 34
+      },
+      "revId": "188ea0759d72baa7e88508bd522a2664312c088e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
