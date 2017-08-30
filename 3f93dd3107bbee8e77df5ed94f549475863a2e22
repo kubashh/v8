@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1793f154_ebfd04e5",
+        "filename": "src/heap/barrier.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-08-30T09:50:41Z",
+      "side": 1,
+      "message": "fyi: This is a diff between the barrier that was used within Scavenger.\n\nNot having \"done_ ||\" is fine as long as we use the pattern\n  while (!Done()) {\n    Wait();\n  }\nwhich we always did on ToT so far.",
+      "range": {
+        "startLine": 51,
+        "startChar": 8,
+        "endLine": 51,
+        "endChar": 13
+      },
+      "revId": "3f93dd3107bbee8e77df5ed94f549475863a2e22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
