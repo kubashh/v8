@@ -74,6 +74,8 @@
 #include "src/value-serializer.h"
 #include "src/version.h"
 #include "src/vm-state-inl.h"
+#include "src/wasm/compilation-manager.h"
+#include "src/wasm/streaming-decoder.h"
 #include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-result.h"
@@ -7806,11 +7808,18 @@ WasmModuleObjectBuilderStreaming::WasmModuleObjectBuilderStreaming(
     : isolate_(isolate) {
   MaybeLocal<Promise::Resolver> maybe_promise =
       Promise::Resolver::New(isolate->GetCurrentContext());
-  Local<Promise::Resolver> promise;
-  if (maybe_promise.ToLocal(&promise)) {
-    promise_.Reset(isolate, promise->GetPromise());
+  Local<Promise::Resolver> resolver;
+  if (maybe_promise.ToLocal(&resolver)) {
+    promise_.Reset(isolate, resolver->GetPromise());
   } else {
     UNREACHABLE();
+  }
+  if (i::FLAG_wasm_streaming) {
+    i::Handle<i::JSPromise> promise = Utils::OpenHandle(*GetPromise());
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+    streaming_decoder_ =
+        i_isolate->wasm_compilation_manager()->StartStreamingCompilation(
+            i_isolate, handle(i_isolate->context()), promise);
   }
 }
 
@@ -7820,34 +7829,47 @@ Local<Promise> WasmModuleObjectBuilderStreaming::GetPromise() {
 
 void WasmModuleObjectBuilderStreaming::OnBytesReceived(const uint8_t* bytes,
                                                        size_t size) {
-  std::unique_ptr<uint8_t[]> cloned_bytes(new uint8_t[size]);
-  memcpy(cloned_bytes.get(), bytes, size);
-  received_buffers_.push_back(
-      Buffer(std::unique_ptr<const uint8_t[]>(
-                 const_cast<const uint8_t*>(cloned_bytes.release())),
-             size));
-  total_size_ += size;
+  if (i::FLAG_wasm_streaming) {
+    streaming_decoder_->OnBytesReceived(i::Vector<const uint8_t>(bytes, size));
+  } else {
+    std::unique_ptr<uint8_t[]> cloned_bytes(new uint8_t[size]);
+    memcpy(cloned_bytes.get(), bytes, size);
+    received_buffers_.push_back(
+        Buffer(std::unique_ptr<const uint8_t[]>(
+                   const_cast<const uint8_t*>(cloned_bytes.release())),
+               size));
+    total_size_ += size;
+  }
 }
 
 void WasmModuleObjectBuilderStreaming::Finish() {
-  std::unique_ptr<uint8_t[]> wire_bytes(new uint8_t[total_size_]);
-  uint8_t* insert_at = wire_bytes.get();
+  if (i::FLAG_wasm_streaming) {
+    streaming_decoder_->Finish();
+  } else {
+    std::unique_ptr<uint8_t[]> wire_bytes(new uint8_t[total_size_]);
+    uint8_t* insert_at = wire_bytes.get();
 
-  for (size_t i = 0; i < received_buffers_.size(); ++i) {
-    const Buffer& buff = received_buffers_[i];
-    memcpy(insert_at, buff.first.get(), buff.second);
-    insert_at += buff.second;
+    for (size_t i = 0; i < received_buffers_.size(); ++i) {
+      const Buffer& buff = received_buffers_[i];
+      memcpy(insert_at, buff.first.get(), buff.second);
+      insert_at += buff.second;
+    }
+    // AsyncCompile makes its own copy of the wire bytes. This inefficiency
+    // will be resolved when we move to true streaming compilation.
+    i::wasm::AsyncCompile(reinterpret_cast<i::Isolate*>(isolate_),
+                          Utils::OpenHandle(*promise_.Get(isolate_)),
+                          {wire_bytes.get(), wire_bytes.get() + total_size_});
   }
-  // AsyncCompile makes its own copy of the wire bytes. This inefficiency
-  // will be resolved when we move to true streaming compilation.
-  i::wasm::AsyncCompile(reinterpret_cast<i::Isolate*>(isolate_),
-                        Utils::OpenHandle(*promise_.Get(isolate_)),
-                        {wire_bytes.get(), wire_bytes.get() + total_size_});
 }
 
 void WasmModuleObjectBuilderStreaming::Abort(Local<Value> exception) {
-  Local<Promise::Resolver> resolver =
-      promise_.Get(isolate_).As<Promise::Resolver>();
+  Local<Promise> promise = GetPromise();
+  // The promise has already been resolved, e.g. because of a compilation
+  // error.
+  if (promise->State() != v8::Promise::kPending) return;
+  if (i::FLAG_wasm_streaming) streaming_decoder_->Abort();
+
+  Local<Promise::Resolver> resolver = promise.As<Promise::Resolver>();
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate_);
   i::HandleScope scope(i_isolate);
   Local<Context> context = Utils::ToLocal(handle(i_isolate->context()));
