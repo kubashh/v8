@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f729a7b_a3092331",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3002,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-30T09:23:21Z",
+      "side": 1,
+      "message": "nit: s/frame state/checkpoint/",
+      "range": {
+        "startLine": 3002,
+        "startChar": 59,
+        "endLine": 3002,
+        "endChar": 70
+      },
+      "revId": "5452085632eb1ef91fefc251f2b55609bef35751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b939e2b_bfc6512c",
+        "filename": "src/compiler/bytecode-graph-builder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-30T09:23:21Z",
+      "side": 1,
+      "message": "nit: This part of the comment no longer applies, lets adapt it.",
+      "range": {
+        "startLine": 185,
+        "startChar": 63,
+        "endLine": 186,
+        "endChar": 78
+      },
+      "revId": "5452085632eb1ef91fefc251f2b55609bef35751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc4f3eab_298c095d",
+        "filename": "src/compiler/js-type-hint-lowering.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-30T09:23:21Z",
+      "side": 1,
+      "message": "nit: This part of the comment not longer applies. Lets either adapt it or have a comment explaining {LoweringResult} below.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 41
+      },
+      "revId": "5452085632eb1ef91fefc251f2b55609bef35751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e4131c3_64b269a5",
+        "filename": "src/compiler/js-type-hint-lowering.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-08-30T09:23:21Z",
+      "side": 1,
+      "message": "nit: Lets either add a short paragraph here explaining the rough semantics of {LoweringResult} or adapt the paragraph above {JSTypeHintLowering} according.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 22
+      },
+      "revId": "5452085632eb1ef91fefc251f2b55609bef35751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
