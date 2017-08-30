@@ -363,8 +363,7 @@
   V(ObjectIsUndetectable)           \
   V(ArgumentsFrame)                 \
   V(ArgumentsLength)                \
-  V(NewMappedArgumentsElements)     \
-  V(NewUnmappedArgumentsElements)   \
+  V(NewArgumentsElements)           \
   V(ArrayBufferWasNeutered)         \
   V(EnsureWritableFastElements)     \
   V(MaybeGrowFastElements)          \

@@ -530,7 +530,9 @@ size_t InstructionSelector::AddOperandToStateValueDescriptor(
 
   switch (input->opcode()) {
     case IrOpcode::kArgumentsElementsState: {
-      values->PushArgumentsElements(IsRestOf(input->op()));
+      ArgumentsElementsParameters p =
+          ArgumentsElementsParametersOf(input->op());
+      values->PushArgumentsElements(p.is_rest(), p.mapped_count());
       // The elements backing store of an arguments object participates in the
       // duplicate object counting, but can itself never appear duplicated.
       DCHECK_EQ(StateObjectDeduplicator::kNotDuplicated,
