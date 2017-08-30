@@ -106,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "6cc17330_75381c8d",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-08-30T05:20:04Z",
+      "side": 1,
+      "message": "For future ref, can you point to this in the style guide? I can\u0027t seem to find this in the style guide.",
+      "parentUuid": "ee9c5940_be35e451",
+      "revId": "c91d0166c8d9de3835fe03edf8193a176475c09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5e37cae_a4dbdac9",
         "filename": "src/objects-inl.h",
         "patchSetId": 3
