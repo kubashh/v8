@@ -15,6 +15,7 @@
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/isolate-inl.h"
+#include "src/property-descriptor.h"
 
 namespace v8 {
 namespace internal {
@@ -226,12 +227,15 @@ void DebugEvaluate::ContextBuilder::UpdateValues() {
 void DebugEvaluate::ContextBuilder::MaterializeArgumentsObject(
     Handle<JSObject> target, Handle<JSFunction> function) {
   // Do not materialize the arguments object for eval or top-level code.
-  // Skip if "arguments" is already taken.
   if (function->shared()->is_toplevel()) return;
-  Maybe<bool> maybe = JSReceiver::HasOwnProperty(
-      target, isolate_->factory()->arguments_string());
+
+  // Skip if "arguments" is already taken and wasn't optimized out (which is
+  // indicated by it having an undefined value at this point).
+  PropertyDescriptor desc;
+  Maybe<bool> maybe = JSReceiver::GetOwnPropertyDescriptor(
+      isolate_, target, isolate_->factory()->arguments_string(), &desc);
   DCHECK(maybe.IsJust());
-  if (maybe.FromJust()) return;
+  if (maybe.FromJust() && !desc.value()->IsUndefined(isolate_)) return;
 
   // FunctionGetArguments can't throw an exception.
   Handle<JSObject> arguments = Accessors::FunctionGetArguments(function);

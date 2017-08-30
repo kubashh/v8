@@ -2006,6 +2006,10 @@ Type* Typer::Visitor::TypeArgumentsFrame(Node* node) {
   return Type::ExternalPointer();
 }
 
+Type* Typer::Visitor::TypeNewMappedArgumentsElements(Node* node) {
+  return Type::OtherInternal();
+}
+
 Type* Typer::Visitor::TypeNewUnmappedArgumentsElements(Node* node) {
   return Type::OtherInternal();
 }
