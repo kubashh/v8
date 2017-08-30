@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b9da663_a3d99a60",
+        "filename": "src/compiler/escape-analysis.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-08-30T12:34:38Z",
+      "side": 1,
+      "message": "Perhaps it would be better to factor the graph building into a separate function?",
+      "range": {
+        "startLine": 660,
+        "startChar": 0,
+        "endLine": 681,
+        "endChar": 11
+      },
+      "revId": "80c6167aca05aca27e4b8a9930b70ba662c257f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
