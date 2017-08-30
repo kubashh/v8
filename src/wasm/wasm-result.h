@@ -11,8 +11,8 @@
 #include "src/base/compiler-specific.h"
 #include "src/utils.h"
 
-#include "src/handles.h"
 #include "src/globals.h"
+#include "src/handles.h"
 
 namespace v8 {
 namespace internal {

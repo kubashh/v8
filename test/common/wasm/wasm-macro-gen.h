@@ -5,6 +5,7 @@
 #ifndef V8_WASM_MACRO_GEN_H_
 #define V8_WASM_MACRO_GEN_H_
 
+#include "src/wasm/module-decoder.h"
 #include "src/wasm/wasm-opcodes.h"
 
 #include "src/zone/zone-containers.h"

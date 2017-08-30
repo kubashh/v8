@@ -14,12 +14,18 @@ Error.prepareStackTrace = function(error, frames) {
 
 function testTrapLocations(instance, expected_stack_length) {
   function testWasmTrap(value, reason, position) {
+    let function_name = arguments.callee.name;
     try {
       instance.exports.main(value);
       fail('expected wasm exception');
     } catch (e) {
       assertEquals(kTrapMsgs[reason], e.message, 'trap reason');
-      assertEquals(expected_stack_length, e.stack.length, 'number of frames');
+      // Check that the current function is at frame index 1 in the stack trace.
+      assertTrue(
+          e.stack.some((line, index) => {
+            return line.toString().startsWith(function_name) && index == 1;
+          }),
+          'number of frames');
       assertEquals(0, e.stack[0].getLineNumber(), 'wasmFunctionIndex');
       assertEquals(position, e.stack[0].getPosition(), 'position');
     }
