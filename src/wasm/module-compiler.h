@@ -13,6 +13,8 @@
 #include "src/compiler/wasm-compiler.h"
 #include "src/isolate.h"
 
+#include "src/wasm/module-decoder.h"
+#include "src/wasm/streaming-decoder.h"
 #include "src/wasm/wasm-code-specialization.h"
 #include "src/wasm/wasm-objects.h"
 
@@ -23,18 +25,14 @@ namespace wasm {
 // A class compiling an entire module.
 class ModuleCompiler {
  public:
-  // The ModuleCompiler takes ownership of the {WasmModule}.
-  // In {CompileToModuleObject}, it will transfer ownership to the generated
-  // {WasmModuleWrapper}. If this method is not called, ownership may be
-  // reclaimed by explicitely releasing the {module_} field.
-  ModuleCompiler(Isolate* isolate, std::unique_ptr<WasmModule> module,
+  ModuleCompiler(Isolate* isolate, WasmModule* module,
                  Handle<Code> centry_stub);
 
   // The actual runnable task that performs compilations in the background.
   class CompilationTask : public CancelableTask {
    public:
     ModuleCompiler* compiler_;
-    explicit CompilationTask(ModuleCompiler* helper);
+    explicit CompilationTask(ModuleCompiler* compiler);
 
     void RunInternal() override;
   };
@@ -71,6 +69,8 @@ class ModuleCompiler {
       }
       units_.clear();
     }
+
+    void Clear() { units_.clear(); }
 
    private:
     ModuleCompiler* compiler_;
@@ -136,6 +136,8 @@ class ModuleCompiler {
   size_t FinishCompilationUnits(std::vector<Handle<Code>>& results,
                                 ErrorThrower* thrower);
 
+  bool IsFinisherRunning() const { return finisher_is_running_; }
+
   void SetFinisherIsRunning(bool value);
 
   MaybeHandle<Code> FinishCompilationUnit(ErrorThrower* thrower,
@@ -156,20 +158,19 @@ class ModuleCompiler {
                             ErrorThrower* thrower);
 
   MaybeHandle<WasmModuleObject> CompileToModuleObject(
-      ErrorThrower* thrower, const ModuleWireBytes& wire_bytes,
-      Handle<Script> asm_js_script,
+      ErrorThrower* thrower, std::unique_ptr<WasmModule> module,
+      const ModuleWireBytes& wire_bytes, Handle<Script> asm_js_script,
       Vector<const byte> asm_js_offset_table_bytes);
-
-  std::unique_ptr<WasmModule> ReleaseModule() { return std::move(module_); }
 
  private:
   MaybeHandle<WasmModuleObject> CompileToModuleObjectInternal(
       Isolate* isolate, ErrorThrower* thrower,
-      const ModuleWireBytes& wire_bytes, Handle<Script> asm_js_script,
+      std::unique_ptr<WasmModule> module, const ModuleWireBytes& wire_bytes,
+      Handle<Script> asm_js_script,
       Vector<const byte> asm_js_offset_table_bytes);
 
   Isolate* isolate_;
-  std::unique_ptr<WasmModule> module_;
+  WasmModule* module_;
   const std::shared_ptr<Counters> async_counters_;
   std::vector<std::unique_ptr<compiler::WasmCompilationUnit>>
       compilation_units_;
@@ -322,6 +323,10 @@ class AsyncCompileJob {
 
   void Start();
 
+  std::shared_ptr<StreamingDecoder> CreateStream();
+
+  void Abort();
+
   ~AsyncCompileJob();
 
  private:
@@ -338,6 +343,37 @@ class AsyncCompileJob {
   class FinishCompile;
   class CompileWrappers;
   class FinishModule;
+  class AbortCompilation;
+
+  const std::shared_ptr<Counters>& async_counters() const {
+    return async_counters_;
+  }
+  Counters* counters() const { return async_counters().get(); }
+
+  void ReopenHandlesInDeferredScope();
+
+  void AsyncCompileFailed(ErrorThrower& thrower);
+
+  void AsyncCompileSucceeded(Handle<Object> result);
+
+  template <typename Step, typename... Args>
+  void DoSync(Args&&... args);
+
+  void StartForegroundTask();
+
+  void StartBackgroundTask();
+
+  void RestartBackgroundTasks();
+
+  template <typename Step, typename... Args>
+  void DoAsync(Args&&... args);
+
+  template <typename Step, typename... Args>
+  void NextStep(Args&&... args);
+
+  Isolate* isolate() { return isolate_; }
+
+  friend class AsyncStreamingProcessor;
 
   Isolate* isolate_;
   const std::shared_ptr<Counters> async_counters_;
@@ -348,6 +384,7 @@ class AsyncCompileJob {
   std::unique_ptr<ModuleCompiler> compiler_;
   std::unique_ptr<compiler::ModuleEnv> module_env_;
   GlobalHandleLifetimeManager globals_manager_;
+  std::unique_ptr<WasmModule> module_;
 
   std::vector<DeferredHandles*> deferred_handles_;
   Handle<WasmModuleObject> module_object_;
@@ -357,29 +394,64 @@ class AsyncCompileJob {
   size_t outstanding_units_ = 0;
   std::unique_ptr<CompileStep> step_;
   CancelableTaskManager background_task_manager_;
-#if DEBUG
+  // The number of background tasks which stopped executing within a step.
+  base::AtomicNumber<size_t> stopped_tasks_{0};
+
+  // For normal async compilation the AsyncCompileJob is the only finisher. For
+  // streaming compilation also the AsyncStreamingProcessor has to finish before
+  // compilation can be finished.
+  base::AtomicNumber<int32_t> required_finishers_{1};
+
+  // Returns true for the last finisher which finishes, see the comment on
+  // {required_finishers_}.
+  bool ShouldFinish() {
+    bool result = required_finishers_.Decrement(1) == 0;
+    return result;
+  }
+
   // Counts the number of pending foreground tasks.
   int32_t num_pending_foreground_tasks_ = 0;
-#endif
 
-  const std::shared_ptr<Counters>& async_counters() const {
-    return async_counters_;
-  }
-  Counters* counters() const { return async_counters().get(); }
+  // The AsyncCompileJob owns the StreamingDecoder because the StreamingDecoder
+  // contains data which is needed by the AsyncCompileJob for streaming
+  // compilation. The AsyncCompileJob does not actively use the
+  // StreamingDecoder.
+  std::shared_ptr<StreamingDecoder> stream_;
+};
 
-  void AsyncCompileFailed(ErrorThrower& thrower);
+class AsyncStreamingProcessor : public StreamingProcessor {
+ private:
+  template <typename T>
+  bool FinishAsyncCompileJobWithError(Result<T> result);
 
-  void AsyncCompileSucceeded(Handle<Object> result);
+ public:
+  explicit AsyncStreamingProcessor(AsyncCompileJob* job);
 
-  template <typename Task, typename... Args>
-  void DoSync(Args&&... args);
+  bool ProcessModuleHeader(Vector<const uint8_t> bytes,
+                           uint32_t offset) override;
 
-  void StartForegroundTask();
+  bool ProcessSection(SectionCode section_code, Vector<const uint8_t> bytes,
+                      uint32_t offset) override;
 
-  void StartBackgroundTask();
+  bool StartCodeSection(size_t functions_count, uint32_t offset) override;
 
-  template <typename Task, typename... Args>
-  void DoAsync(Args&&... args);
+  bool ProcessFunctionBody(Vector<const uint8_t> bytes,
+                           uint32_t offset) override;
+
+  void FinishChunk() override;
+
+  void Error(DecodeResult result) override;
+
+  void FinishStream(std::unique_ptr<uint8_t[]> bytes, size_t length) override;
+
+  void Abort() override;
+
+ private:
+  ModuleDecoder decoder_;
+  AsyncCompileJob* job_;
+  std::unique_ptr<ModuleCompiler::CompilationUnitBuilder>
+      compilation_unit_builder_;
+  uint32_t next_function_ = 0;
 };
 
 }  // namespace wasm

@@ -7,28 +7,63 @@
 
 #include <vector>
 #include "src/isolate.h"
-#include "src/wasm/decoder.h"
+#include "src/wasm/module-decoder.h"
 #include "src/wasm/wasm-objects.h"
 
 namespace v8 {
 namespace internal {
 namespace wasm {
 
+// This class is an interface for the StreamingDecoder to start the processing
+// of the incoming module bytes.
+class V8_EXPORT_PRIVATE StreamingProcessor {
+ public:
+  virtual ~StreamingProcessor() = default;
+  // Process the first 8 bytes of a WebAssembly module.
+  virtual bool ProcessModuleHeader(Vector<const uint8_t> bytes,
+                                   uint32_t offset) = 0;
+  // Process all sections but the code section.
+  virtual bool ProcessSection(SectionCode section_code,
+                              Vector<const uint8_t> bytes, uint32_t offset) = 0;
+  // Process number of functions.
+  virtual bool StartCodeSection(size_t num_functions, uint32_t offset) = 0;
+  // Process a function body.
+  virtual bool ProcessFunctionBody(Vector<const uint8_t> bytes,
+                                   uint32_t offset) = 0;
+  // Report the end of a chunk.
+  virtual void FinishChunk() = 0;
+  // Report an error detected in the StreamingDecoder.
+  virtual void Error(DecodeResult result) = 0;
+  // Finish the processing of the stream. If the stream was successful, all
+  // received bytes are passed by parameter. If there has been an error, an
+  // empty array is passed.
+  virtual void FinishStream(std::unique_ptr<uint8_t[]> bytes,
+                            size_t length) = 0;
+  // Abort the stream.
+  virtual void Abort() = 0;
+};
+
 // The StreamingDecoder takes a sequence of byte arrays, each received by a call
 // of {OnBytesReceived}, and extracts the bytes which belong to section payloads
 // and function bodies.
 class V8_EXPORT_PRIVATE StreamingDecoder {
  public:
-  explicit StreamingDecoder(Isolate* isolate);
+  explicit StreamingDecoder(std::unique_ptr<StreamingProcessor> processor);
 
   // The buffer passed into OnBytesReceived is owned by the caller.
   void OnBytesReceived(Vector<const uint8_t> bytes);
 
-  // Finishes the stream and returns compiled WasmModuleObject.
-  MaybeHandle<WasmModuleObject> Finish();
+  // Finishes the stream.
+  void Finish();
 
-  // Finishes the streaming and returns true if no error was detected.
-  bool FinishForTesting();
+  // Abort the stream.
+  void Abort();
+
+  // Notify the StreamingDecoder that there has been an compilation error.
+  void NotifyError() {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    ok_ = false;
+  }
 
  private:
   // The SectionBuffer is the data object for the content of a single section.
@@ -39,21 +74,33 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
     // id: The section id.
     // payload_length: The length of the payload.
     // length_bytes: The section length, as it is encoded in the module bytes.
-    SectionBuffer(uint8_t id, size_t payload_length,
+    SectionBuffer(uint32_t module_offset, uint8_t id, size_t payload_length,
                   Vector<const uint8_t> length_bytes)
         :  // ID + length + payload
+          module_offset_(module_offset),
           length_(1 + length_bytes.length() + payload_length),
           bytes_(new uint8_t[length_]),
           payload_offset_(1 + length_bytes.length()) {
       bytes_[0] = id;
       memcpy(bytes_.get() + 1, &length_bytes.first(), length_bytes.length());
     }
+
+    SectionCode section_code() const {
+      return static_cast<SectionCode>(bytes_[0]);
+    }
+
+    uint32_t module_offset() const { return module_offset_; }
     uint8_t* bytes() const { return bytes_.get(); }
     size_t length() const { return length_; }
     size_t payload_offset() const { return payload_offset_; }
     size_t payload_length() const { return length_ - payload_offset_; }
+    Vector<const uint8_t> payload() const {
+      return Vector<const uint8_t>(bytes() + payload_offset(),
+                                   payload_length());
+    }
 
    private:
+    uint32_t module_offset_;
     size_t length_;
     std::unique_ptr<uint8_t[]> bytes_;
     size_t payload_offset_;
@@ -127,19 +174,79 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
   class DecodeFunctionBody;
 
   // Creates a buffer for the next section of the module.
-  SectionBuffer* CreateNewBuffer(uint8_t id, size_t length,
+  SectionBuffer* CreateNewBuffer(uint32_t module_offset, uint8_t id,
+                                 size_t length,
                                  Vector<const uint8_t> length_bytes) {
-    section_buffers_.emplace_back(new SectionBuffer(id, length, length_bytes));
+    section_buffers_.emplace_back(
+        new SectionBuffer(module_offset, id, length, length_bytes));
     return section_buffers_.back().get();
   }
 
-  Decoder* decoder() { return &decoder_; }
+  std::unique_ptr<DecodingState> EnterErrorState() {
+    return std::unique_ptr<DecodingState>(nullptr);
+  }
 
-  Isolate* isolate_;
+  std::unique_ptr<DecodingState> Error(DecodeResult result) {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    if (ok_) processor_->Error(std::move(result));
+    ok_ = false;
+    return std::unique_ptr<DecodingState>(nullptr);
+  }
+
+  std::unique_ptr<DecodingState> Error(std::string message) {
+    DecodeResult result(nullptr);
+    result.error(module_offset_ - 1, std::move(message));
+    return Error(std::move(result));
+  }
+
+  bool ProcessModuleHeader() {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    if (!ok_) return ok_;
+    ok_ &= processor_->ProcessModuleHeader(
+        Vector<const uint8_t>(state_->buffer(),
+                              static_cast<int>(state_->size())),
+        0);
+    return ok_;
+  }
+
+  bool ProcessSection(SectionBuffer* buffer) {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    if (!ok_) return ok_;
+    ok_ &= processor_->ProcessSection(
+        buffer->section_code(), buffer->payload(),
+        buffer->module_offset() +
+            static_cast<uint32_t>(buffer->payload_offset()));
+    return ok_;
+  }
+
+  bool StartCodeSection(size_t num_functions) {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    if (!ok_) return ok_;
+    ok_ &= processor_->StartCodeSection(num_functions, module_offset() - 1);
+    return ok_;
+  }
+
+  bool ProcessFunctionBody(Vector<const uint8_t> bytes,
+                           uint32_t module_offset) {
+    base::LockGuard<base::Mutex> guard(&processor_mutex_);
+    if (!ok_) return ok_;
+    ok_ &= processor_->ProcessFunctionBody(bytes, module_offset);
+    return ok_;
+  }
+
+  bool ok() const { return ok_; }
+
+  uint32_t module_offset() const { return module_offset_; }
+
+  std::unique_ptr<StreamingProcessor> processor_;
+  // Access to the processor is protected by a mutex to prevent a data race
+  // between the stream decoding initiated by the embedder and potential
+  // feedback from the AsyncCompileJob, e.g. through NotifyError().
+  base::Mutex processor_mutex_;
+  bool ok_ = true;
   std::unique_ptr<DecodingState> state_;
-  // The decoder is an instance variable because we use it for error handling.
-  Decoder decoder_;
   std::vector<std::unique_ptr<SectionBuffer>> section_buffers_;
+  uint32_t module_offset_ = 0;
   size_t total_size_ = 0;
 
   DISALLOW_COPY_AND_ASSIGN(StreamingDecoder);
