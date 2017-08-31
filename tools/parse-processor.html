@@ -1,0 +1,277 @@
+<html>
+<!--
+Copyright 2016 the V8 project authors. All rights reserved.  Use of this source
+code is governed by a BSD-style license that can be found in the LICENSE file.
+-->
+
+<head>
+<style>
+  html {
+    font-family: monospace;
+  }
+
+  .funktion {
+    height: 18px;
+    position: absolute;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .parse {
+    background-color: red;
+    border: 1px red solid;
+  }
+
+  .preparse {
+    background-color: orange;
+    border: 1px orange solid;
+  }
+
+  .resolution {
+    background-color: green;
+    border: 1px green solid;
+  }
+
+  .execution {
+    background-color: black;
+    border-left: 2px black solid;
+    z-index: -1;
+  }
+
+  .script {
+    margin-top: 1em;
+    overflow: visible;
+  }
+  .script h3 {
+    height: 20px;
+    margin-bottom: 0.5em;
+    white-space: nowrap;
+  }
+
+</style>
+<script src="./splaytree.js" type="text/javascript"></script>
+<script src="./codemap.js" type="text/javascript"></script>
+<script src="./csvparser.js" type="text/javascript"></script>
+<script src="./consarray.js" type="text/javascript"></script>
+<script src="./profile.js" type="text/javascript"></script>
+<script src="./profile_view.js" type="text/javascript"></script>
+<script src="./logreader.js" type="text/javascript"></script>
+<script src="./parse-processor.js" type="text/javascript"></script>
+<script src="./SourceMap.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+"use strict"
+google.charts.load('current', {packages: ['line']});
+
+
+function $(query) {
+  return document.querySelector(query);
+}
+
+
+function loadFile() {
+  let files = $('#uploadInput').files;
+
+  let file = files[0];
+  let reader = new FileReader();
+
+  reader.onload = function(evt) {
+    const kTimerName = 'parse log file';
+    console.time(kTimerName);
+    let parseProcessor = new ParseProcessor();
+    parseProcessor.processString(this.result);
+    console.timeEnd(kTimerName);
+    renderParseResults(parseProcessor);
+    document.parseProcessor = parseProcessor;
+  }
+  reader.readAsText(file);
+}
+
+function escapeHtml(unsafe) {
+  if (!unsafe) return "";
+  return unsafe.toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function handleOnLoad() {
+  document.querySelector("#uploadInput").focus();
+}
+
+function createNode(tag, classNames) {
+  let node = document.createElement(tag);
+  if (classNames) {
+    if (Array.isArray(classNames)) {
+      node.classList.add(...classNames);
+    } else {
+      node.className = classNames;
+    }
+  }
+  return node;
+}
+
+function div() {
+  return createNode('div', ...arguments);
+}
+
+function h1(string) {
+  let node = createNode('h1');
+  node.appendChild(text(string));
+  return node;
+}
+
+function h3(string, ...args) {
+  let node = createNode('h3', ...args);
+  if (string) node.appendChild(text(string));
+  return node;
+}
+
+function a(href, string, ...args) {
+  let link = createNode('a', ...args);
+  link.href = href;
+  if (string) link.appendChild(text(string));
+  return link;
+}
+
+function text(string) {
+  return document.createTextNode(string);
+}
+
+function renderParseResults(parseProcessor) {
+  let result = $('#result');
+  // clear out all existing result pages;
+  result.innerHTML = '';
+  const start = parseProcessor.firstEvent;
+  const end = parseProcessor.lastEvent;
+
+  renderScript(result, parseProcessor.totalScript, start, end);
+  parseProcessor.scripts.forEach(script =>
+     Promise.resolve().then(() => renderScript(result, script, start, end)));
+  console.log('starting to add graphs');
+}
+
+const kTimeFactor = 10;
+const kHeight = 20;
+const kFunktionTopOffset = 50;
+
+function renderScript(result, script, start, end) {
+  if (script.isEmpty() || script.lastParseEvent == 0) return;
+
+  let scriptDiv = div('script');
+  scriptDiv.script = script;
+
+  let scriptTitle = h3();
+  if (script.file) scriptTitle.appendChild(a(script.file, script.file));
+  scriptTitle.appendChild(text(' id=' + script.id));
+  scriptDiv.appendChild(scriptTitle);
+  let summary = createNode('pre');
+  summary.appendChild(text(script.summary));
+  scriptDiv.appendChild(summary);
+
+  appendGraph(script, scriptDiv, start, end);
+  result.appendChild(scriptDiv);
+
+}
+
+function addParseStep(parent, funktion, name, shift) {
+  let start = funktion[name + 'Timestamp'] - shift;
+  let width = funktion[name + 'Time'];
+  if (name == 'execution') width = 0.00001; 
+  if (!start || !width) return;
+
+  let fnDiv = div(['funktion', name]);
+  fnDiv.funktion = funktion;
+  fnDiv.appendChild(text(funktion.name));
+
+  let style = fnDiv.style;
+  style.left = (start * kTimeFactor) + 'px';
+  style.width = (width * kTimeFactor) + 'px';
+  style.top = (funktion.nestingLevel * kHeight + kFunktionTopOffset) + 'px';
+
+  parent.appendChild(fnDiv);
+}
+
+const kMaxX = 1000;
+const kMaxY = 200;
+const kMaxTime = 30*1000;
+const kTimeIncrement = 20;
+const kLabelHeight = 15;
+const kLabelMargin = 20;
+const kGraphHeight = kMaxY - kLabelHeight;
+
+
+function appendGraph(script, parentNode, start, end) {
+  const timerLabel = 'graph script=' + script.id;
+  // TODO(cbruni): add support for network events
+  const series = [
+      ['firstParseEvent', '#AAA', true],
+      ['parse', '#3366CC'],
+      ['preparse', '#DC3912'],
+      ['resolution', '#88BB00'],
+      ['execution', '#DD4477'],
+  ];
+
+  console.time(timerLabel);
+  let data = new google.visualization.DataTable();
+  data.addColumn('number', 'Time');
+  let metrics = series.map(each => each[0]);
+  metrics.forEach(name => data.addColumn('number', name));
+  const maxTime = Math.min(kMaxTime, end);
+  data.addRows(
+      script.getAccumulatedTimeMetrics(metrics, 0, maxTime, kTimeIncrement));
+
+  let options = {
+    // title: 'Parse Metrics',
+    // curveType: 'function',
+    legend: { position: 'bottom' },
+    explorer: {},
+    hAxis: {
+      format: '#,###ms'
+    },
+    vAxis: { 
+      title: 'Bytes Processed',
+      format: 'short',
+      viewWindowMode:'explicit',
+      // Manually set the view window max to the total bytes +1% to properly render
+      // the top of the graph.
+      viewWindow: {
+        max: script.bytesTotal * 1.01,
+      }
+    },
+    chartArea: { top: 0, left: 0 },
+    height: 400,
+    width: 800
+  };
+  let graphNode = document.createElement('div', 'chart');
+  parentNode.appendChild(graphNode);
+  let chart = new google.charts.Line(graphNode);
+  chart.draw(data, google.charts.Line.convertOptions(options));
+  console.timeEnd(timerLabel);
+}
+
+
+</script>
+</head>
+
+<body onload="handleOnLoad()">
+  <h1>BEHOLD, THIS IS PARSEROR!</h1>
+
+  <h2>Usage</h2> Run your script with <code>--trace-parse</code> and/or <code>--trace-preparse</code> and upload <code>v8.log</code> on this page:<br/>
+  <code>/path/to/d8 --trace-parse --trace-preparse --log your_script.js</code>
+
+  <h2>Data</h2>
+  <form name="fileForm">
+    <p>
+      <input id="uploadInput" type="file" name="files" onchange="loadFile();"> trace entries: <span id="count">0</span>
+    </p>
+  </form>
+
+  <h2>Result</h2>
+  <div id="result">
+  </div>
+</body>
+
+</html>

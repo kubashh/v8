@@ -42,6 +42,7 @@ void Log::Initialize(const char* log_file_name) {
 
   // If we're logging anything, we need to open the log file.
   if (Log::InitLogAtStart()) {
+    PrintF("logfile=%s\n", log_file_name);
     if (strcmp(log_file_name, kLogToConsole) == 0) {
       OpenStdout();
     } else if (strcmp(log_file_name, kLogToTemporaryFile) == 0) {
