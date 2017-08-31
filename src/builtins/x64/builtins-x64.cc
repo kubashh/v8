@@ -853,6 +853,15 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // is optimized code or an optimization marker, call that instead.
   MaybeTailCallOptimizedCodeSlot(masm, feedback_vector, rcx, r14, r15);
 
+  // Get the bytecode array from the function object (or from the DebugInfo if
+  // it is present) and load it into kInterpreterBytecodeArrayRegister.
+  Label first_execution, continue_first_execution;
+  __ movp(rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
+  __ testl(FieldOperand(rax, SharedFunctionInfo::kCompilerHints2Offset),
+           Immediate(SharedFunctionInfo::HasBeenExecutedBit::kMask));
+  __ j(zero, &first_execution);
+  __ bind(&continue_first_execution);
+
   // Open a frame scope to indicate that there is a frame on the stack.  The
   // MANUAL indicates that the scope shouldn't actually generate code to set up
   // the frame (that is done below).
@@ -865,7 +874,6 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // Get the bytecode array from the function object (or from the DebugInfo if
   // it is present) and load it into kInterpreterBytecodeArrayRegister.
   Label maybe_load_debug_bytecode_array, bytecode_array_loaded;
-  __ movp(rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
   __ movp(kInterpreterBytecodeArrayRegister,
           FieldOperand(rax, SharedFunctionInfo::kFunctionDataOffset));
   __ JumpIfNotSmi(FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset),
@@ -969,6 +977,34 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ movp(kInterpreterBytecodeArrayRegister,
           FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  // TODO(cbruni):
+  __ bind(&first_execution);
+  {
+    {
+      FrameScope frame(masm, StackFrame::INTERNAL);
+      Comment(masm, "first execute push");
+      __ Push(rdi);
+      __ Push(rdx);
+      __ Push(rsi);
+      __ Push(rbp);
+      __ Push(rbx);
+      __ Push(rcx);
+
+      // Push sfi
+      __ Push(rax);  // sfi is the first arguments
+      __ CallRuntime(Runtime::kFirstExecution, 1);
+
+      __ Pop(rcx);
+      __ Pop(rbx);
+      __ Pop(rbp);
+      __ Pop(rsi);
+      __ Pop(rdx);
+      __ Pop(rdi);
+    }
+    __ RecordComment("first execute cont");
+    __ jmp(&continue_first_execution);
+  }
 }
 
 static void Generate_StackOverflowCheck(

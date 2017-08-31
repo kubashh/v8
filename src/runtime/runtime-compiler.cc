@@ -23,6 +23,11 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
 
+  base::ElapsedTimer timer;
+  if (FLAG_trace_lazy) {
+    timer.Start();
+  }
+
 #ifdef DEBUG
   if (FLAG_trace_lazy && !function->shared()->is_compiled()) {
     PrintF("[unoptimized: ");
@@ -30,7 +35,6 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
     PrintF("]\n");
   }
 #endif
-
   StackLimitCheck check(isolate);
   if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
     return isolate->StackOverflow();
@@ -39,6 +43,17 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
     return isolate->heap()->exception();
   }
   DCHECK(function->is_compiled());
+
+  if (FLAG_trace_lazy) {
+    double ms = timer.Elapsed().InMillisecondsF();
+    SharedFunctionInfo* sfi = function->shared();
+    Script* script = nullptr;
+    if (sfi->script()->IsScript()) script = Script::cast(sfi->script());
+    LOG(isolate,
+        FunctionEvent("compile-lazy", script, -1, ms, sfi->start_position(),
+                      sfi->end_position(), sfi->name()));
+  }
+
   return function->code();
 }
 
