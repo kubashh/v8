@@ -708,7 +708,7 @@ void WasmSharedModuleData::ReinitializeAfterDeserialization(
   }
 
   Handle<wasm::WasmModuleWrapper> module_wrapper =
-      wasm::WasmModuleWrapper::New(isolate, module);
+      wasm::WasmModuleWrapper::From(isolate, module);
 
   shared->set(kModuleWrapperIndex, *module_wrapper);
   DCHECK(WasmSharedModuleData::IsWasmSharedModuleData(*shared));
@@ -838,9 +838,7 @@ void WasmSharedModuleData::PrepareForLazyCompilation(
     Handle<WasmSharedModuleData> shared) {
   if (shared->has_lazy_compilation_orchestrator()) return;
   Isolate* isolate = shared->GetIsolate();
-  auto* orch = new wasm::LazyCompilationOrchestrator();
-  Handle<Managed<wasm::LazyCompilationOrchestrator>> orch_handle =
-      Managed<wasm::LazyCompilationOrchestrator>::New(isolate, orch);
+  auto orch_handle = Managed<wasm::LazyCompilationOrchestrator>::New(isolate);
   shared->set_lazy_compilation_orchestrator(*orch_handle);
 }
 
