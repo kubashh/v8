@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79125011_5c70a567",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1122985
+      },
+      "writtenOn": "2017-08-31T12:30:50Z",
+      "side": 1,
+      "message": "nit: s/indeeded/indeed/",
+      "range": {
+        "startLine": 317,
+        "startChar": 26,
+        "endLine": 317,
+        "endChar": 34
+      },
+      "revId": "9f464c4476390b9ffc8650ced1449b4ec5237bf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
