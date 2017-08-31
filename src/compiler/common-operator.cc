@@ -347,6 +347,31 @@ ZoneVector<MachineType> const* MachineTypesOf(Operator const* op) {
   return OpParameter<TypedObjectStateInfo>(op).machine_types();
 }
 
+bool operator==(ArgumentsElementsParameters const& lhs,
+                ArgumentsElementsParameters const& rhs) {
+  return lhs.is_rest() == rhs.is_rest() &&
+         lhs.mapped_count() == rhs.mapped_count();
+}
+
+bool operator!=(ArgumentsElementsParameters const& lhs,
+                ArgumentsElementsParameters const& rhs) {
+  return !(lhs == rhs);
+}
+
+size_t hash_value(ArgumentsElementsParameters const& p) {
+  return base::hash_combine(p.is_rest(), p.mapped_count());
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         ArgumentsElementsParameters const& p) {
+  return os << "rest:" << p.is_rest() << "|mapped:" << p.mapped_count();
+}
+
+ArgumentsElementsParameters ArgumentsElementsParametersOf(Operator const* op) {
+  DCHECK_EQ(IrOpcode::kArgumentsElementsState, op->opcode());
+  return OpParameter<ArgumentsElementsParameters>(op);
+}
+
 #define COMMON_CACHED_OP_LIST(V)                                              \
   V(Dead, Operator::kFoldable, 0, 0, 0, 1, 1, 1)                              \
   V(IfTrue, Operator::kKontrol, 0, 0, 1, 0, 0, 1)                             \
@@ -1235,11 +1260,13 @@ const Operator* CommonOperatorBuilder::TypedStateValues(
       TypedStateValueInfo(types, bitmask));            // parameters
 }
 
-const Operator* CommonOperatorBuilder::ArgumentsElementsState(bool is_rest) {
-  return new (zone()) Operator1<bool>(                     // --
-      IrOpcode::kArgumentsElementsState, Operator::kPure,  // opcode
-      "ArgumentsElementsState",                            // name
-      0, 0, 0, 1, 0, 0, is_rest);                          // counts
+const Operator* CommonOperatorBuilder::ArgumentsElementsState(
+    bool is_rest, int mapped_count) {
+  return new (zone()) Operator1<ArgumentsElementsParameters>(  // --
+      IrOpcode::kArgumentsElementsState, Operator::kPure,      // opcode
+      "ArgumentsElementsState",                                // name
+      0, 0, 0, 1, 0, 0,                                        // counts
+      ArgumentsElementsParameters(is_rest, mapped_count));     // parameters
 }
 
 const Operator* CommonOperatorBuilder::ArgumentsLengthState(bool is_rest) {
@@ -1250,8 +1277,7 @@ const Operator* CommonOperatorBuilder::ArgumentsLengthState(bool is_rest) {
 }
 
 bool IsRestOf(Operator const* op) {
-  DCHECK(op->opcode() == IrOpcode::kArgumentsElementsState ||
-         op->opcode() == IrOpcode::kArgumentsLengthState);
+  DCHECK(op->opcode() == IrOpcode::kArgumentsLengthState);
   return OpParameter<bool>(op);
 }
 

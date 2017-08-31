@@ -311,9 +311,39 @@ SparseInputMask SparseInputMaskOf(Operator const*);
 ZoneVector<MachineType> const* MachineTypesOf(Operator const*)
     WARN_UNUSED_RESULT;
 
-// The ArgumentsElementsState and ArgumentsLengthState can either describe an
-// unmapped arguments backing store or the backing store of the rest parameters.
-// IsRestOf(op) is true in the second case.
+// The ArgumentsElementsState can describe the layout for backing stores of
+// arguments objects of various types:
+//  - rest parameters:    {is_rest() == true && mapped_count() == 0}
+//  - unmapped arguments: {is_rest() == false && mapped_count() == 0}
+//  - mapped arguments:   {is_rest() == false} and {mapped_count()} the number
+//                        of arguments for which a context mapping exists.
+class ArgumentsElementsParameters final {
+ public:
+  ArgumentsElementsParameters(bool is_rest, int mapped_count)
+      : is_rest_(is_rest), mapped_count_(mapped_count) {}
+
+  bool is_rest() const { return is_rest_; }
+  int mapped_count() const { return mapped_count_; }
+
+ private:
+  bool is_rest_;
+  int mapped_count_;
+};
+
+bool operator==(ArgumentsElementsParameters const& lhs,
+                ArgumentsElementsParameters const& rhs);
+bool operator!=(ArgumentsElementsParameters const& lhs,
+                ArgumentsElementsParameters const& rhs);
+
+std::ostream& operator<<(std::ostream&, ArgumentsElementsParameters const&);
+
+size_t hash_value(ArgumentsElementsParameters const& p);
+
+ArgumentsElementsParameters ArgumentsElementsParametersOf(Operator const*)
+    WARN_UNUSED_RESULT;
+
+// The ArgumentsLengthState only requires the {is_rest} parameter part of the
+// above {ArgumentsElementsParamter}. See description above.
 bool IsRestOf(Operator const*);
 
 uint32_t ObjectIdOf(Operator const*);
@@ -383,7 +413,7 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
   const Operator* StateValues(int arguments, SparseInputMask bitmask);
   const Operator* TypedStateValues(const ZoneVector<MachineType>* types,
                                    SparseInputMask bitmask);
-  const Operator* ArgumentsElementsState(bool is_rest);
+  const Operator* ArgumentsElementsState(bool is_rest, int mapped_count);
   const Operator* ArgumentsLengthState(bool is_rest);
   const Operator* ObjectState(int object_id, int pointer_slots);
   const Operator* TypedObjectState(int object_id,

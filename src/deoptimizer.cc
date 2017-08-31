@@ -2121,10 +2121,10 @@ void Translation::BeginInterpretedFrame(BailoutId bytecode_offset,
   buffer_->Add(height);
 }
 
-
-void Translation::ArgumentsElements(bool is_rest) {
+void Translation::ArgumentsElements(bool is_rest, int mapped_count) {
   buffer_->Add(ARGUMENTS_ELEMENTS);
   buffer_->Add(is_rest);
+  buffer_->Add(mapped_count);
 }
 
 void Translation::ArgumentsLength(bool is_rest) {
@@ -2229,6 +2229,7 @@ int Translation::NumberOfOperandsFor(Opcode opcode) {
     case GETTER_STUB_FRAME:
     case SETTER_STUB_FRAME:
     case DUPLICATED_OBJECT:
+    case ARGUMENTS_LENGTH:
     case CAPTURED_OBJECT:
     case REGISTER:
     case INT32_REGISTER:
@@ -2246,15 +2247,13 @@ int Translation::NumberOfOperandsFor(Opcode opcode) {
       return 1;
     case BEGIN:
     case ARGUMENTS_ADAPTOR_FRAME:
+    case ARGUMENTS_ELEMENTS:
       return 2;
     case INTERPRETED_FRAME:
     case CONSTRUCT_STUB_FRAME:
     case BUILTIN_CONTINUATION_FRAME:
     case JAVA_SCRIPT_BUILTIN_CONTINUATION_FRAME:
       return 3;
-    case ARGUMENTS_ELEMENTS:
-    case ARGUMENTS_LENGTH:
-      return 1;
   }
   FATAL("Unexpected translation type");
   return -1;
@@ -3049,7 +3048,7 @@ Address TranslatedState::ComputeArgumentsPosition(Address input_frame_pointer,
 // created on-the-fly based on dynamic information in the optimized frame.
 void TranslatedState::CreateArgumentsElementsTranslatedValues(
     int frame_index, Address input_frame_pointer, bool is_rest,
-    FILE* trace_file) {
+    int mapped_count, FILE* trace_file) {
   TranslatedFrame& frame = frames_[frame_index];
 
   int length;
@@ -3060,8 +3059,9 @@ void TranslatedState::CreateArgumentsElementsTranslatedValues(
   int value_index = static_cast<int>(frame.values_.size());
   if (trace_file != nullptr) {
     PrintF(trace_file,
-           "arguments elements object #%d (is_rest = %d, length = %d)",
-           object_index, is_rest, length);
+           "arguments elements object #%d (is_rest = %d, mapped_count = %d, "
+           "length = %d)",
+           object_index, is_rest, mapped_count, length);
   }
   object_positions_.push_back({frame_index, value_index});
   frame.Add(TranslatedValue::NewDeferredObject(
@@ -3071,7 +3071,12 @@ void TranslatedState::CreateArgumentsElementsTranslatedValues(
       TranslatedValue::NewTagged(this, isolate_->heap()->fixed_array_map()));
   frame.Add(TranslatedValue::NewInt32(this, length));
 
-  for (int i = length - 1; i >= 0; --i) {
+  int number_of_holes = Min(mapped_count, length);
+  for (int i = 0; i < number_of_holes; ++i) {
+    frame.Add(
+        TranslatedValue::NewTagged(this, isolate_->heap()->the_hole_value()));
+  }
+  for (int i = length - number_of_holes - 1; i >= 0; --i) {
     Address argument_slot = arguments_frame +
                             CommonFrameConstants::kFixedFrameSizeAboveFp +
                             i * kPointerSize;
@@ -3125,8 +3130,9 @@ int TranslatedState::CreateNextTranslatedValue(
 
     case Translation::ARGUMENTS_ELEMENTS: {
       bool is_rest = iterator->Next();
+      int mapped_count = iterator->Next();
       CreateArgumentsElementsTranslatedValues(frame_index, fp, is_rest,
-                                              trace_file);
+                                              mapped_count, trace_file);
       return 0;
     }
 

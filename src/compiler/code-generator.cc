@@ -729,7 +729,7 @@ void CodeGenerator::TranslateStateValueDescriptor(
     }
   } else if (desc->IsArgumentsElements()) {
     if (translation != nullptr) {
-      translation->ArgumentsElements(desc->is_rest());
+      translation->ArgumentsElements(desc->is_rest(), desc->mapped_count());
     }
   } else if (desc->IsArgumentsLength()) {
     if (translation != nullptr) {

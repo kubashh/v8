@@ -1123,16 +1123,18 @@ class StateValueDescriptor {
   StateValueDescriptor()
       : kind_(StateValueKind::kPlain), type_(MachineType::AnyTagged()) {}
 
-  static StateValueDescriptor ArgumentsElements(bool is_rest) {
+  static StateValueDescriptor ArgumentsElements(bool is_rest,
+                                                int mapped_count) {
     StateValueDescriptor descr(StateValueKind::kArgumentsElements,
                                MachineType::AnyTagged());
-    descr.is_rest_ = is_rest;
+    descr.bitfield_ = ArgumentsIsRestField::encode(is_rest) |
+                      ArgumentsMappedCountField::encode(mapped_count);
     return descr;
   }
   static StateValueDescriptor ArgumentsLength(bool is_rest) {
     StateValueDescriptor descr(StateValueKind::kArgumentsLength,
                                MachineType::AnyTagged());
-    descr.is_rest_ = is_rest;
+    descr.bitfield_ = ArgumentsIsRestField::encode(is_rest);
     return descr;
   }
   static StateValueDescriptor Plain(MachineType type) {
@@ -1171,10 +1173,14 @@ class StateValueDescriptor {
            kind_ == StateValueKind::kNested);
     return id_;
   }
-  int is_rest() const {
+  bool is_rest() const {
     DCHECK(kind_ == StateValueKind::kArgumentsElements ||
            kind_ == StateValueKind::kArgumentsLength);
-    return is_rest_;
+    return ArgumentsIsRestField::decode(bitfield_);
+  }
+  int mapped_count() const {
+    DCHECK(kind_ == StateValueKind::kArgumentsElements);
+    return ArgumentsMappedCountField::decode(bitfield_);
   }
 
  private:
@@ -1185,8 +1191,11 @@ class StateValueDescriptor {
   MachineType type_;
   union {
     size_t id_;
-    bool is_rest_;
+    int bitfield_;
   };
+
+  class ArgumentsMappedCountField : public BitField<int, 0, 31> {};
+  class ArgumentsIsRestField : public BitField<bool, 31, 1> {};
 };
 
 class StateValueList {
@@ -1245,8 +1254,9 @@ class StateValueList {
     nested_.push_back(nested);
     return nested;
   }
-  void PushArgumentsElements(bool is_rest) {
-    fields_.push_back(StateValueDescriptor::ArgumentsElements(is_rest));
+  void PushArgumentsElements(bool is_rest, int mapped_count) {
+    fields_.push_back(
+        StateValueDescriptor::ArgumentsElements(is_rest, mapped_count));
   }
   void PushArgumentsLength(bool is_rest) {
     fields_.push_back(StateValueDescriptor::ArgumentsLength(is_rest));
