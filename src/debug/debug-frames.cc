@@ -154,9 +154,6 @@ void FrameInspector::MaterializeStackLocals(Handle<JSObject> target,
 void FrameInspector::MaterializeStackLocals(Handle<JSObject> target,
                                             Handle<JSFunction> function,
                                             bool materialize_arguments_object) {
-  // Do not materialize the arguments object for eval or top-level code.
-  if (function->shared()->is_toplevel()) materialize_arguments_object = false;
-
   Handle<SharedFunctionInfo> shared(function->shared());
   Handle<ScopeInfo> scope_info(shared->scope_info());
   MaterializeStackLocals(target, scope_info, materialize_arguments_object);

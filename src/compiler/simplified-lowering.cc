@@ -2734,8 +2734,7 @@ class RepresentationSelector {
                   MachineRepresentation::kTaggedSigned);
         return;
       }
-      case IrOpcode::kNewMappedArgumentsElements:
-      case IrOpcode::kNewUnmappedArgumentsElements: {
+      case IrOpcode::kNewArgumentsElements: {
         VisitBinop(node, UseInfo::PointerInt(), UseInfo::TaggedSigned(),
                    MachineRepresentation::kTaggedPointer);
         return;

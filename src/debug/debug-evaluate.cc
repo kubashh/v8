@@ -157,8 +157,10 @@ DebugEvaluate::ContextBuilder::ContextBuilder(Isolate* isolate,
       Handle<StringSet> non_locals = it.GetNonLocals();
       MaterializeReceiver(materialized, local_context, local_function,
                           non_locals);
+      // Do not materialize the arguments object for eval or top-level code.
+      bool materialize_arguments = !local_function->shared()->is_toplevel();
       frame_inspector.MaterializeStackLocals(materialized, local_function,
-                                             true);
+                                             materialize_arguments);
       ContextChainElement context_chain_element;
       context_chain_element.scope_info = it.CurrentScopeInfo();
       context_chain_element.materialized_object = materialized;
