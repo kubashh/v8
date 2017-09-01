@@ -491,11 +491,11 @@ bool in_bounds(uint32_t offset, uint32_t size, uint32_t upper) {
 using WasmInstanceMap =
     IdentityMap<Handle<WasmInstanceObject>, FreeStoreAllocationPolicy>;
 
-Handle<Code> UnwrapOrCompileImportWrapper(
+Handle<Code> UnwrapForeignExportOrCompileImportWrapper(
     Isolate* isolate, int index, FunctionSig* sig, Handle<JSReceiver> target,
     Handle<String> module_name, MaybeHandle<String> import_name,
     ModuleOrigin origin, WasmInstanceMap* imported_instances) {
-  WasmFunction* other_func = GetWasmFunctionForImportWrapper(isolate, target);
+  WasmFunction* other_func = GetWasmFunctionForExportOrNull(isolate, target);
   if (other_func) {
     if (!sig->Equals(other_func->sig)) return Handle<Code>::null();
     // Signature matched. Unwrap the import wrapper and return the raw wasm
@@ -504,7 +504,7 @@ Handle<Code> UnwrapOrCompileImportWrapper(
     Handle<WasmInstanceObject> imported_instance(
         Handle<WasmExportedFunction>::cast(target)->instance(), isolate);
     imported_instances->Set(imported_instance, imported_instance);
-    return UnwrapImportWrapper(target);
+    return UnwrapExportWrapper(Handle<JSFunction>::cast(target));
   }
   // No wasm function or being debugged. Compile a new wrapper for the new
   // signature.
@@ -1335,7 +1335,7 @@ int InstanceBuilder::ProcessImports(Handle<FixedArray> code_table,
           return -1;
         }
 
-        Handle<Code> import_wrapper = UnwrapOrCompileImportWrapper(
+        Handle<Code> import_wrapper = UnwrapForeignExportOrCompileImportWrapper(
             isolate_, index, module_->functions[import.index].sig,
             Handle<JSReceiver>::cast(value), module_name, import_name,
             module_->origin(), &imported_wasm_instances);
@@ -1404,7 +1404,7 @@ int InstanceBuilder::ProcessImports(Handle<FixedArray> code_table,
           Handle<Object> val(table_instance.js_wrappers->get(i), isolate_);
           if (!val->IsJSFunction()) continue;
           WasmFunction* function =
-              GetWasmFunctionForImportWrapper(isolate_, val);
+              GetWasmFunctionForExportOrNull(isolate_, val);
           if (function == nullptr) {
             thrower_->LinkError("table import %d[%d] is not a wasm function",
                                 index, i);
@@ -1412,7 +1412,8 @@ int InstanceBuilder::ProcessImports(Handle<FixedArray> code_table,
           }
           int sig_index = table.map.FindOrInsert(function->sig);
           table_instance.signature_table->set(i, Smi::FromInt(sig_index));
-          table_instance.function_table->set(i, *UnwrapImportWrapper(val));
+          table_instance.function_table->set(
+              i, *UnwrapExportWrapper(Handle<JSFunction>::cast(val)));
         }
 
         num_imported_tables++;
