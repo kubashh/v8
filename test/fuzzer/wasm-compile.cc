@@ -23,20 +23,10 @@
 
 typedef uint8_t byte;
 
-#if __clang__
-// TODO(mostynb@opera.com): remove the using statements and these pragmas.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wheader-hygiene"
-#endif
-
-using namespace v8::internal;
-using namespace v8::internal::wasm;
-using namespace v8::internal::wasm::fuzzer;
-
-#if __clang__
-// TODO(mostynb@opera.com): remove the using statements and these pragmas.
-#pragma clang diagnostic pop
-#endif
+namespace v8 {
+namespace internal {
+namespace wasm {
+namespace fuzzer {
 
 namespace {
 
@@ -346,3 +336,8 @@ class WasmCompileFuzzer : public WasmExecutionFuzzer {
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   return WasmCompileFuzzer().FuzzWasmModule(data, size);
 }
+
+}  // namespace fuzzer
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8

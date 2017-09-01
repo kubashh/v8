@@ -16,20 +16,10 @@
 
 #define WASM_CODE_FUZZER_HASH_SEED 83
 
-#if __clang__
-// TODO(mostynb@opera.com): remove the using statements and these pragmas.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wheader-hygiene"
-#endif
-
-using namespace v8::internal;
-using namespace v8::internal::wasm;
-using namespace v8::internal::wasm::fuzzer;
-
-#if __clang__
-// TODO(mostynb@opera.com): remove the using statements and these pragmas.
-#pragma clang diagnostic pop
-#endif
+namespace v8 {
+namespace internal {
+namespace wasm {
+namespace fuzzer {
 
 static const char* kNameString = "name";
 static const size_t kNameStringLength = 4;
@@ -220,3 +210,8 @@ int WasmExecutionFuzzer::FuzzWasmModule(
   }
   return 0;
 }
+
+}  // namespace fuzzer
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8
