@@ -16,6 +16,24 @@
       "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23eece6f_51b4ff49",
+        "filename": "src/managed.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-01T12:49:36Z",
+      "side": 1,
+      "message": "This is in line with std::make_unique (or our own base::make_unique).\nBut this is only a minor refactoring, and nothing depends on it, so I am also fine with just skipping it...",
+      "parentUuid": "51672941_9f15fc89",
+      "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
