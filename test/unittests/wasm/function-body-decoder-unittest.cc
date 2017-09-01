@@ -2657,7 +2657,8 @@ TEST_F(LocalDeclDecoderTest, NoLocals) {
   BodyLocalDecls decls(zone());
   bool result = DecodeLocalDecls(&decls, data, data + sizeof(data));
   EXPECT_TRUE(result);
-  EXPECT_TRUE(decls.type_list.empty());
+  // mem_size and mem_start are always appended to type_list.
+  EXPECT_EQ(2u, decls.type_list.size());
 }
 
 TEST_F(LocalDeclDecoderTest, OneLocal) {
@@ -2668,7 +2669,8 @@ TEST_F(LocalDeclDecoderTest, OneLocal) {
     BodyLocalDecls decls(zone());
     bool result = DecodeLocalDecls(&decls, data, data + sizeof(data));
     EXPECT_TRUE(result);
-    EXPECT_EQ(1u, decls.type_list.size());
+    // mem_size and mem_start are always appended to type_list.
+    EXPECT_EQ(2u + 1u, decls.type_list.size());
 
     TypesOfLocals map = decls.type_list;
     EXPECT_EQ(type, map[0]);
@@ -2684,10 +2686,11 @@ TEST_F(LocalDeclDecoderTest, FiveLocals) {
     bool result = DecodeLocalDecls(&decls, data, data + sizeof(data));
     EXPECT_TRUE(result);
     EXPECT_EQ(sizeof(data), decls.encoded_size);
-    EXPECT_EQ(5u, decls.type_list.size());
+    // mem_size and mem_start are always appended to type_list.
+    EXPECT_EQ(2u + 5u, decls.type_list.size());
 
     TypesOfLocals map = decls.type_list;
-    EXPECT_EQ(5u, map.size());
+    EXPECT_EQ(2u + 5u, map.size());
     ExpectRun(map, 0, type, 5);
   }
 }
@@ -2703,7 +2706,8 @@ TEST_F(LocalDeclDecoderTest, MixedLocals) {
           bool result = DecodeLocalDecls(&decls, data, data + sizeof(data));
           EXPECT_TRUE(result);
           EXPECT_EQ(sizeof(data), decls.encoded_size);
-          EXPECT_EQ(static_cast<uint32_t>(a + b + c + d),
+          // mem_size and mem_start are always appended to type_list.
+          EXPECT_EQ(static_cast<uint32_t>(2u + a + b + c + d),
                     decls.type_list.size());
 
           TypesOfLocals map = decls.type_list;
@@ -2732,7 +2736,8 @@ TEST_F(LocalDeclDecoderTest, UseEncoder) {
   BodyLocalDecls decls(zone());
   bool result = DecodeLocalDecls(&decls, data, end);
   EXPECT_TRUE(result);
-  EXPECT_EQ(5u + 1337u + 212u, decls.type_list.size());
+  // mem_size and mem_start are always appended to type_list.
+  EXPECT_EQ(2u + 5u + 1337u + 212u, decls.type_list.size());
 
   TypesOfLocals map = decls.type_list;
   size_t pos = 0;
