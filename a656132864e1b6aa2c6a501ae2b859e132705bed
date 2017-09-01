@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51672941_9f15fc89",
+        "filename": "src/managed.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-01T11:37:51Z",
+      "side": 1,
+      "message": "Something seems weird about this embedded magic. Even though it saves a line of code and makes the ownership more explicit, I think it\u0027s better to keep the allocations at the call sites separate. (e.g. it is surprising that calling SomeClass\u003cMyType\u003e::New() should allocate a new MyType, even if it is managed.)",
+      "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
