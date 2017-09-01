@@ -16,6 +16,9 @@
 
 namespace v8 {
 namespace internal {
+
+class CompilationDependencies;
+
 namespace compiler {
 
 class Reduction;
@@ -29,7 +32,8 @@ class BytecodeGraphBuilder {
       Zone* local_zone, Handle<SharedFunctionInfo> shared,
       Handle<FeedbackVector> feedback_vector, BailoutId osr_offset,
       JSGraph* jsgraph, CallFrequency invocation_frequency,
-      SourcePositionTable* source_positions,
+      SourcePositionTable* source_positions, Handle<Context> native_context,
+      CompilationDependencies* dependencies,
       int inlining_id = SourcePosition::kNotInlined,
       JSTypeHintLowering::Flags flags = JSTypeHintLowering::kNoFlags,
       bool stack_check = true);
@@ -178,31 +182,34 @@ class BytecodeGraphBuilder {
   void BuildHoleCheckAndThrow(Node* condition, Runtime::FunctionId runtime_id,
                               Node* name = nullptr);
 
-  // Optional early lowering to the simplified operator level. Returns the node
-  // representing the lowered operation or {nullptr} if no lowering available.
-  // Note that the result has already been wired into the environment just like
+  // Optional early lowering to the simplified operator level.  Note that
+  // the result has already been wired into the environment just like
   // any other invocation of {NewNode} would do.
-  Node* TryBuildSimplifiedBinaryOp(const Operator* op, Node* left, Node* right,
-                                   FeedbackSlot slot);
-  Node* TryBuildSimplifiedForInNext(Node* receiver, Node* cache_array,
-                                    Node* cache_type, Node* index,
-                                    FeedbackSlot slot);
-  Node* TryBuildSimplifiedToNumber(Node* input, FeedbackSlot slot);
-  Node* TryBuildSimplifiedCall(const Operator* op, Node* const* args,
-                               int arg_count, FeedbackSlot slot);
-  Node* TryBuildSimplifiedConstruct(const Operator* op, Node* const* args,
-                                    int arg_count, FeedbackSlot slot);
-  Node* TryBuildSimplifiedLoadNamed(const Operator* op, Node* receiver,
-                                    FeedbackSlot slot);
-  Node* TryBuildSimplifiedLoadKeyed(const Operator* op, Node* receiver,
-                                    Node* key, FeedbackSlot slot);
-  Node* TryBuildSimplifiedStoreNamed(const Operator* op, Node* receiver,
-                                     Node* value, FeedbackSlot slot);
-  Node* TryBuildSimplifiedStoreKeyed(const Operator* op, Node* receiver,
-                                     Node* key, Node* value, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedBinaryOp(
+      const Operator* op, Node* left, Node* right, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedForInNext(
+      Node* receiver, Node* cache_array, Node* cache_type, Node* index,
+      FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedToNumber(
+      Node* input, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedCall(const Operator* op,
+                                                            Node* const* args,
+                                                            int arg_count,
+                                                            FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedConstruct(
+      const Operator* op, Node* const* args, int arg_count, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadNamed(
+      const Operator* op, Node* receiver, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedLoadKeyed(
+      const Operator* op, Node* receiver, Node* key, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedStoreNamed(
+      const Operator* op, Node* receiver, Node* value, FeedbackSlot slot);
+  JSTypeHintLowering::LoweringResult TryBuildSimplifiedStoreKeyed(
+      const Operator* op, Node* receiver, Node* key, Node* value,
+      FeedbackSlot slot);
 
   // Applies the given early reduction onto the current environment.
-  void ApplyEarlyReduction(Reduction reduction);
+  void ApplyEarlyReduction(JSTypeHintLowering::LoweringResult reduction);
 
   // Check the context chain for extensions, for lookup fast paths.
   Environment* CheckContextExtensions(uint32_t depth);
