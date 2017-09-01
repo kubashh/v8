@@ -22,6 +22,30 @@
       "revId": "3892bb9a6edee1e14775d3e189cc7261d56f6213",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51033c12_456e6303",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-01T13:37:48Z",
+      "side": 1,
+      "message": "Done. Good idea!",
+      "parentUuid": "caa0391b_0a8723b7",
+      "range": {
+        "startLine": 316,
+        "startChar": 3,
+        "endLine": 319,
+        "endChar": 74
+      },
+      "revId": "3892bb9a6edee1e14775d3e189cc7261d56f6213",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
