@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab5fa91b_22a03a38",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-09-04T07:02:13Z",
+      "side": 1,
+      "message": "This comment is great, thank you!",
+      "range": {
+        "startLine": 314,
+        "startChar": 2,
+        "endLine": 332,
+        "endChar": 74
+      },
+      "revId": "c64197b9088f7b966fe3a5b7ccbb04bc0f9117a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "555d023d_e10987e6",
+        "filename": "src/compiler/escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-09-04T07:02:13Z",
+      "side": 1,
+      "message": "It\u0027s a pity we can\u0027t put a DCHECK here that mapped_count is the number of formal paramters when it\u0027s not 0. But off-thread, I guess we have no choice. Perhaps a comment documenting this global invariant could be helpful though.",
+      "range": {
+        "startLine": 225,
+        "startChar": 35,
+        "endLine": 227,
+        "endChar": 79
+      },
+      "revId": "c64197b9088f7b966fe3a5b7ccbb04bc0f9117a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
