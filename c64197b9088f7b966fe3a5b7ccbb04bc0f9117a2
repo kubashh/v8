@@ -45,6 +45,30 @@
       "revId": "c64197b9088f7b966fe3a5b7ccbb04bc0f9117a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "981ac2df_7b45d1f8",
+        "filename": "src/compiler/escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-04T13:33:09Z",
+      "side": 1,
+      "message": "Done. Actually, the DCHECK you mentioned is possible. Added DCHECK plus comment.",
+      "parentUuid": "555d023d_e10987e6",
+      "range": {
+        "startLine": 225,
+        "startChar": 35,
+        "endLine": 227,
+        "endChar": 79
+      },
+      "revId": "c64197b9088f7b966fe3a5b7ccbb04bc0f9117a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
