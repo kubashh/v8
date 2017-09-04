@@ -13,6 +13,7 @@
 #include "src/elements.h"
 #include "src/isolate-inl.h"
 #include "src/messages.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/runtime/runtime.h"
 
 namespace v8 {
@@ -104,10 +105,388 @@ RUNTIME_FUNCTION(Runtime_HomeObjectSymbol) {
   return isolate->heap()->home_object_symbol();
 }
 
-static MaybeHandle<Object> DefineClass(Isolate* isolate,
-                                       Handle<Object> super_class,
-                                       Handle<JSFunction> constructor,
-                                       int start_position, int end_position) {
+namespace {
+
+enum PropertiesKind {
+  kStaticProperties,
+  kInstanceProperties,
+};
+
+Object* GetValue(Isolate* isolate, Object* key,
+                 ClassBoilerplate::MethodKind method_kind, Arguments& args,
+                 Object* index, Object* home_object) {
+  DisallowHeapAllocation no_gc;
+  int int_index = Smi::ToInt(index);
+  if (int_index <= 0) {
+    DCHECK(key == isolate->heap()->class_start_position_symbol() ||
+           key == isolate->heap()->class_end_position_symbol());
+    return Smi::FromInt(-int_index);
+  }
+
+  // Class constructor and prototype values do not require post processing.
+  if (int_index < ClassBoilerplate::kFirstDynamicArgumentIndex) {
+    return args[int_index];
+  }
+
+  Handle<JSFunction> method = args.at<JSFunction>(int_index);
+
+  if (method->shared()->needs_home_object()) {
+    const int kHomeObjectPropertyIndex = 2;
+    CHECK_EQ(
+        method->map()->instance_descriptors()->GetKey(kHomeObjectPropertyIndex),
+        isolate->heap()->home_object_symbol());
+
+    FieldIndex field_index =
+        FieldIndex::ForDescriptor(method->map(), kHomeObjectPropertyIndex);
+    method->RawFastPropertyAtPut(field_index, home_object);
+  }
+
+  if (!method->shared()->has_shared_name()) {
+    AllowHeapAllocation allow_gc;
+    // Name* name = ToName(key);
+    Handle<Object> key_handle(key, isolate);
+    Handle<Name> name;
+    if (key->IsSmi()) {
+      name = isolate->factory()->NumberToString(key_handle);
+    } else {
+      name = Handle<Name>::cast(key_handle);
+    }
+    // TODO(ishell): propagate possible failure to Runtime_DefineClass.
+    Handle<String> prefix;
+    switch (method_kind) {
+      case ClassBoilerplate::kNormal:
+        prefix = isolate->factory()->empty_string();
+        break;
+      case ClassBoilerplate::kGetter:
+        prefix = isolate->factory()->get_string();
+        break;
+      case ClassBoilerplate::kSetter:
+        prefix = isolate->factory()->set_string();
+        break;
+    }
+    CHECK(JSFunction::SetName(method, name, prefix));
+  }
+  return *method;
+}
+
+Handle<FixedArray> ShallowCopyDictionaryTemplate(
+    Isolate* isolate, Handle<FixedArray> dictionary_template) {
+  if (*dictionary_template ==
+      isolate->heap()->empty_slow_element_dictionary()) {
+    return dictionary_template;
+  }
+
+  Handle<Map> dictionary_map(dictionary_template->map(), isolate);
+  Handle<NameDictionary> dictionary =
+      Handle<NameDictionary>::cast(isolate->factory()->CopyFixedArrayWithMap(
+          dictionary_template, dictionary_map));
+  // Clone all AccessorPairs in the dictionary.
+  int capacity = dictionary->Capacity();
+  for (int i = 0; i < capacity; i++) {
+    Object* value = dictionary->ValueAt(i);
+    if (value->IsAccessorPair()) {
+      Handle<AccessorPair> pair(AccessorPair::cast(value), isolate);
+      pair = AccessorPair::Copy(pair);
+      dictionary->ValueAtPut(i, *pair);
+    }
+  }
+  return dictionary;
+}
+
+template <typename Dictionary>
+void SubstituteValues(Isolate* isolate, Handle<Dictionary> dictionary,
+                      Handle<JSObject> receiver, Arguments& args,
+                      bool* install_name_accessor = nullptr) {
+  Handle<Name> name_string = isolate->factory()->name_string();
+
+  // Replace all indices with proper methods.
+  int capacity = dictionary->Capacity();
+  for (int i = 0; i < capacity; i++) {
+    Object* name = dictionary->KeyAt(i);
+    if (!Dictionary::IsKey(isolate, name)) continue;
+    if (install_name_accessor) {
+      *install_name_accessor = *install_name_accessor && (name != *name_string);
+    }
+    Object* value = dictionary->ValueAt(i);
+    if (value->IsAccessorPair()) {
+      AccessorPair* pair = AccessorPair::cast(value);
+      Object* tmp = pair->getter();
+      if (tmp->IsSmi()) {
+        tmp = GetValue(isolate, name, ClassBoilerplate::kGetter, args, tmp,
+                       *receiver);
+        pair->set_getter(tmp);
+      }
+      tmp = pair->setter();
+      if (tmp->IsSmi()) {
+        tmp = GetValue(isolate, name, ClassBoilerplate::kSetter, args, tmp,
+                       *receiver);
+        pair->set_setter(tmp);
+      }
+    } else if (value->IsSmi()) {
+      value = GetValue(isolate, name, ClassBoilerplate::kNormal, args, value,
+                       *receiver);
+      dictionary->ValueAtPut(i, value);
+    }
+  }
+}
+
+void AddDescriptorsByTemplate(
+    Isolate* isolate, Handle<Map> map,
+    Handle<DescriptorArray> descriptors_template,
+    Handle<SeededNumberDictionary> elements_dictionary_template,
+    Handle<JSObject> receiver, Arguments& args) {
+  int nof_descriptors = descriptors_template->number_of_descriptors();
+
+  Handle<DescriptorArray> descriptors =
+      DescriptorArray::Allocate(isolate, nof_descriptors, 0);
+  Handle<SeededNumberDictionary> elements_dictionary =
+      Handle<SeededNumberDictionary>::cast(
+          ShallowCopyDictionaryTemplate(isolate, elements_dictionary_template));
+
+  for (int i = 0; i < nof_descriptors; i++) {
+    Object* value = descriptors_template->GetValue(i);
+    if (value->IsAccessorPair()) {
+      Handle<AccessorPair> pair =
+          AccessorPair::Copy(handle(AccessorPair::cast(value), isolate));
+      value = *pair;
+    }
+    DisallowHeapAllocation no_gc;
+    Name* name = descriptors_template->GetKey(i);
+    DCHECK(name->IsUniqueName());
+    PropertyDetails details = descriptors_template->GetDetails(i);
+    if (details.location() == kDescriptor) {
+      if (details.kind() == kData) {
+        DCHECK(value->IsSmi());
+        value = GetValue(isolate, name, ClassBoilerplate::kNormal, args, value,
+                         *receiver);
+      } else {
+        DCHECK_EQ(kAccessor, details.kind());
+        if (value->IsAccessorPair()) {
+          AccessorPair* pair = AccessorPair::cast(value);
+          Object* tmp = pair->getter();
+          if (tmp->IsSmi()) {
+            pair->set_getter(GetValue(isolate, name, ClassBoilerplate::kGetter,
+                                      args, tmp, *receiver));
+          }
+          tmp = pair->setter();
+          if (tmp->IsSmi()) {
+            pair->set_setter(GetValue(isolate, name, ClassBoilerplate::kSetter,
+                                      args, tmp, *receiver));
+          }
+        }
+      }
+    } else {
+      DCHECK_EQ(kField, details.location());
+      DCHECK(!details.representation().IsDouble());
+    }
+    descriptors->Set(i, name, value, details);
+  }
+
+  map->InitializeDescriptors(*descriptors,
+                             LayoutDescriptor::FastPointerLayout());
+
+  // Commit the changes.
+  receiver->set_map(*map);
+  if (elements_dictionary->NumberOfElements()) {
+    SubstituteValues<SeededNumberDictionary>(isolate, elements_dictionary,
+                                             receiver, args);
+    receiver->map()->set_elements_kind(DICTIONARY_ELEMENTS);
+    receiver->set_elements(*elements_dictionary);
+  }
+}
+
+void AddDescriptorsByTemplate(
+    Isolate* isolate, Handle<Map> map,
+    Handle<NameDictionary> properties_dictionary_template,
+    Handle<SeededNumberDictionary> elements_dictionary_template,
+    Handle<FixedArray> computed_properties, Handle<JSObject> receiver,
+    bool install_name_accessor, Arguments& args) {
+  int nof_computed_properties_length = computed_properties->length();
+
+  // Shallow-copy properties template.
+  Handle<NameDictionary> properties_dictionary = Handle<NameDictionary>::cast(
+      ShallowCopyDictionaryTemplate(isolate, properties_dictionary_template));
+  Handle<SeededNumberDictionary> elements_dictionary =
+      Handle<SeededNumberDictionary>::cast(
+          ShallowCopyDictionaryTemplate(isolate, elements_dictionary_template));
+
+  // Merge computed properties with properties and elements dictionary
+  // templates.
+  for (int i = 0; i < nof_computed_properties_length;
+       i += ClassBoilerplate::kComputedEntrySize) {
+    int flags = Smi::ToInt(
+        computed_properties->get(i + ClassBoilerplate::kComputedNameIndex));
+    ClassBoilerplate::MethodKind method_kind =
+        ClassBoilerplate::ComputedEntryShort::MethodKindBits::decode(flags);
+    int key_index =
+        ClassBoilerplate::ComputedEntryShort::NameIndexBits::decode(flags);
+    Object* value = Smi::FromInt(key_index + 1);  // Value follows name.
+
+    int enumeration_index = -1;
+    Handle<Object> key = args.at<Object>(key_index);
+    DCHECK(key->IsName());
+    uint32_t element;
+    Handle<Name> name = Handle<Name>::cast(key);
+    if (name->AsArrayIndex(&element)) {
+      ClassBoilerplate::AddComputedEntryToDictionary<SeededNumberDictionary>(
+          isolate, elements_dictionary, element, key_index, enumeration_index,
+          method_kind, value);
+
+    } else {
+      enumeration_index = Smi::ToInt(computed_properties->get(
+          i + ClassBoilerplate::kComputedEnumerationOrderValueIndex));
+      name = isolate->factory()->InternalizeName(name);
+      ClassBoilerplate::AddComputedEntryToDictionary<NameDictionary>(
+          isolate, properties_dictionary, name, key_index, enumeration_index,
+          method_kind, value);
+    }
+  }
+
+  // Replace all indices with proper methods.
+  SubstituteValues<NameDictionary>(isolate, properties_dictionary, receiver,
+                                   args, &install_name_accessor);
+  if (install_name_accessor) {
+    Handle<String> name = isolate->factory()->name_string();
+    PropertyAttributes attribs =
+        static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY);
+    Handle<AccessorInfo> name_accessor =
+        Accessors::FunctionNameInfo(isolate, attribs);
+    DCHECK_EQ(*name, name_accessor->name());
+    PropertyDetails details(kAccessor, attribs, PropertyCellType::kNoCell);
+    properties_dictionary = NameDictionary::Add(properties_dictionary, name,
+                                                name_accessor, details);
+  }
+
+  // Commit the changes.
+  receiver->set_map(*map);
+  receiver->set_raw_properties_or_hash(*properties_dictionary);
+  if (elements_dictionary->NumberOfElements()) {
+    SubstituteValues<SeededNumberDictionary>(isolate, elements_dictionary,
+                                             receiver, args);
+    receiver->map()->set_elements_kind(DICTIONARY_ELEMENTS);
+    receiver->set_elements(*elements_dictionary);
+  }
+}
+
+Handle<JSObject> CreateClassPrototype(Isolate* isolate,
+                                      Handle<Object> prototype_parent,
+                                      Handle<JSFunction> constructor) {
+  Factory* factory = isolate->factory();
+
+  // Reserve in-object space for "constructor" property.
+  const int kInobjectFields = 0;  // 1;
+
+  Handle<Map> map = factory->NewMap(
+      JS_OBJECT_TYPE, JSObject::kHeaderSize + kInobjectFields * kPointerSize);
+  map->set_is_prototype_map(true);
+  map->SetInObjectProperties(kInobjectFields);
+  Map::SetPrototype(map, prototype_parent);
+  map->SetConstructor(*constructor);
+  Map::SetShouldBeFastPrototypeMap(map, true, isolate);
+  Handle<JSObject> prototype = factory->NewJSObjectFromMap(map);
+  constructor->set_prototype_or_initial_map(*prototype);
+  return prototype;
+}
+
+void InitClassPrototype(Isolate* isolate,
+                        Handle<ClassBoilerplate> class_boilerplate,
+                        Handle<JSObject> prototype,
+                        Handle<JSFunction> constructor, Arguments& args) {
+  Handle<Map> map(prototype->map(), isolate);
+
+  Handle<FixedArray> computed_properties(
+      class_boilerplate->instance_computed_properties(), isolate);
+  Handle<SeededNumberDictionary> elements_dictionary_template(
+      SeededNumberDictionary::cast(
+          class_boilerplate->instance_elements_template()),
+      isolate);
+
+  if (computed_properties->length() == 0) {
+    Handle<DescriptorArray> descriptors_template(
+        DescriptorArray::cast(
+            class_boilerplate->instance_properties_template()),
+        isolate);
+    // The size of the prototype object is known at this point.
+    // So we can create it now and then add the rest instance methods to the
+    // map.
+    AddDescriptorsByTemplate(isolate, map, descriptors_template,
+                             elements_dictionary_template, prototype, args);
+  } else {
+    Handle<NameDictionary> properties_dictionary_template(
+        NameDictionary::cast(class_boilerplate->instance_properties_template()),
+        isolate);
+
+    map->set_dictionary_map(true);
+    map->set_migration_target(false);
+    map->set_may_have_interesting_symbols(true);
+    //  map->set_construction_counter(Map::kNoSlackTracking);
+    prototype->set_raw_properties_or_hash(
+        *isolate->factory()->empty_property_dictionary());
+
+    // We care about name property only for class constructor.
+    const bool install_name_accessor = false;
+
+    AddDescriptorsByTemplate(isolate, map, properties_dictionary_template,
+                             elements_dictionary_template, computed_properties,
+                             prototype, install_name_accessor, args);
+  }
+}
+
+void InitClassConstructor(Isolate* isolate,
+                          Handle<ClassBoilerplate> class_boilerplate,
+                          Handle<Object> constructor_parent,
+                          Handle<JSFunction> constructor, Arguments& args) {
+  Handle<Map> map(constructor->map(), isolate);
+  map = Map::CopyDropDescriptors(map);
+  DCHECK(map->is_prototype_map());
+  Map::SetShouldBeFastPrototypeMap(map, true, isolate);
+
+  if (!constructor_parent.is_null()) {
+    // Set map's prototype without triggering JSObject::OptimizeAsPrototype()
+    // for parent class.
+    // map->set_prototype(*constructor_parent);
+    Map::SetPrototype(map, constructor_parent);
+  }
+
+  Handle<SeededNumberDictionary> elements_dictionary_template(
+      SeededNumberDictionary::cast(
+          class_boilerplate->static_elements_template()),
+      isolate);
+  Handle<FixedArray> computed_properties(
+      class_boilerplate->static_computed_properties(), isolate);
+
+  if (computed_properties->length() == 0) {
+    Handle<DescriptorArray> descriptors_template(
+        DescriptorArray::cast(class_boilerplate->static_properties_template()),
+        isolate);
+
+    AddDescriptorsByTemplate(isolate, map, descriptors_template,
+                             elements_dictionary_template, constructor, args);
+  } else {
+    Handle<NameDictionary> properties_dictionary_template(
+        NameDictionary::cast(class_boilerplate->static_properties_template()),
+        isolate);
+
+    map->set_dictionary_map(true);
+    map->InitializeDescriptors(isolate->heap()->empty_descriptor_array(),
+                               LayoutDescriptor::FastPointerLayout());
+    map->set_migration_target(false);
+    map->set_may_have_interesting_symbols(true);
+
+    bool install_name_accessor =
+        class_boilerplate->install_class_name_accessor() != 0;
+
+    AddDescriptorsByTemplate(isolate, map, properties_dictionary_template,
+                             elements_dictionary_template, computed_properties,
+                             constructor, install_name_accessor, args);
+  }
+}
+
+MaybeHandle<Object> DefineClass(Isolate* isolate,
+                                Handle<ClassBoilerplate> class_boilerplate,
+                                Handle<Object> super_class,
+                                Handle<JSFunction> constructor,
+                                Arguments& args) {
   Handle<Object> prototype_parent;
   Handle<Object> constructor_parent;
 
@@ -132,7 +511,10 @@ static MaybeHandle<Object> DefineClass(Isolate* isolate,
                                   prototype_parent),
             Object);
       }
-      constructor_parent = super_class;
+      // Create new handle to avoid |constructor_parent| corruption because of
+      // |super_class| handle value overwriting via storing to
+      // args[ClassBoilerplate::kPrototypeArgumentIndex] below.
+      constructor_parent = handle(*super_class, isolate);
     } else {
       THROW_NEW_ERROR(isolate,
                       NewTypeError(MessageTemplate::kExtendsValueNotConstructor,
@@ -141,59 +523,30 @@ static MaybeHandle<Object> DefineClass(Isolate* isolate,
     }
   }
 
-  Handle<Map> map =
-      isolate->factory()->NewMap(JS_OBJECT_TYPE, JSObject::kHeaderSize);
-  map->set_is_prototype_map(true);
-  Map::SetPrototype(map, prototype_parent);
-  map->SetConstructor(*constructor);
-  Handle<JSObject> prototype = isolate->factory()->NewJSObjectFromMap(map);
+  Handle<JSObject> prototype =
+      CreateClassPrototype(isolate, prototype_parent, constructor);
+  DCHECK_EQ(*constructor, args[ClassBoilerplate::kConstructorArgumentIndex]);
+  args[ClassBoilerplate::kPrototypeArgumentIndex] = *prototype;
 
-  JSFunction::SetPrototype(constructor, prototype);
-  PropertyAttributes attribs =
-      static_cast<PropertyAttributes>(DONT_ENUM | DONT_DELETE | READ_ONLY);
-  RETURN_ON_EXCEPTION(isolate,
-                      JSObject::SetOwnPropertyIgnoreAttributes(
-                          constructor, isolate->factory()->prototype_string(),
-                          prototype, attribs),
-                      Object);
+  InitClassConstructor(isolate, class_boilerplate, constructor_parent,
+                       constructor, args);
 
-  if (!constructor_parent.is_null()) {
-    MAYBE_RETURN_NULL(JSObject::SetPrototype(constructor, constructor_parent,
-                                             false, Object::THROW_ON_ERROR));
-  }
-
-  JSObject::AddProperty(prototype, isolate->factory()->constructor_string(),
-                        constructor, DONT_ENUM);
-
-  // Install private properties that are used to construct the FunctionToString.
-  RETURN_ON_EXCEPTION(
-      isolate,
-      Object::SetProperty(
-          constructor, isolate->factory()->class_start_position_symbol(),
-          handle(Smi::FromInt(start_position), isolate), STRICT),
-      Object);
-  RETURN_ON_EXCEPTION(
-      isolate, Object::SetProperty(
-                   constructor, isolate->factory()->class_end_position_symbol(),
-                   handle(Smi::FromInt(end_position), isolate), STRICT),
-      Object);
-
-  // Caller already has access to constructor, so return the prototype.
-  return prototype;
+  InitClassPrototype(isolate, class_boilerplate, prototype, constructor, args);
+  return constructor;
 }
 
+}  // namespace
 
 RUNTIME_FUNCTION(Runtime_DefineClass) {
   HandleScope scope(isolate);
-  DCHECK_EQ(4, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(Object, super_class, 0);
+  DCHECK_LE(ClassBoilerplate::kFirstDynamicArgumentIndex, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(ClassBoilerplate, class_boilerplate, 0);
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, constructor, 1);
-  CONVERT_SMI_ARG_CHECKED(start_position, 2);
-  CONVERT_SMI_ARG_CHECKED(end_position, 3);
+  CONVERT_ARG_HANDLE_CHECKED(Object, super_class, 2);
 
   RETURN_RESULT_OR_FAILURE(
-      isolate, DefineClass(isolate, super_class, constructor, start_position,
-                           end_position));
+      isolate,
+      DefineClass(isolate, class_boilerplate, super_class, constructor, args));
 }
 
 namespace {

@@ -72,6 +72,7 @@ class DescriptorArray : public FixedArray {
   inline Object** GetDescriptorStartSlot(int descriptor_number);
   inline Object** GetDescriptorEndSlot(int descriptor_number);
   inline PropertyDetails GetDetails(int descriptor_number);
+  inline void SetDetails(int descriptor_number, PropertyDetails details);
   inline int GetFieldIndex(int descriptor_number);
   inline FieldType* GetFieldType(int descriptor_number);
 
