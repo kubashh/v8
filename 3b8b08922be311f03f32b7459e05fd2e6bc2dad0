@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af564b6c_8e0b60e1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-04T10:16:39Z",
+      "side": 1,
+      "message": "We should also rename this to \"import_code\", as it\u0027s not necessarily a wrapper.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 21,
+        "endLine": 1338,
+        "endChar": 35
+      },
+      "revId": "3b8b08922be311f03f32b7459e05fd2e6bc2dad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "964cb171_433bbc34",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-04T10:16:39Z",
+      "side": 1,
+      "message": "Nit: While you are here, can you please change this to isolate-\u003efactory()-\u003enull_value(), to avoid creating an additional handle?",
+      "range": {
+        "startLine": 450,
+        "startChar": 25,
+        "endLine": 450,
+        "endChar": 62
+      },
+      "revId": "3b8b08922be311f03f32b7459e05fd2e6bc2dad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
