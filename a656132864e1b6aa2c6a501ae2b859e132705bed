@@ -52,6 +52,24 @@
       "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a113f79_0d071c6f",
+        "filename": "src/managed.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T10:59:16Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "a5df381a_970f6b34",
+      "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
