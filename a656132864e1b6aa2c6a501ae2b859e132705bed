@@ -34,6 +34,24 @@
       "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5df381a_970f6b34",
+        "filename": "src/managed.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-04T10:13:59Z",
+      "side": 1,
+      "message": "What if we name it \"Managed::Allocate\"?",
+      "parentUuid": "23eece6f_51b4ff49",
+      "revId": "a656132864e1b6aa2c6a501ae2b859e132705bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
