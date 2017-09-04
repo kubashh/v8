@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bf5ef52_142cad06",
+        "filename": "src/compiler/js-type-hint-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-04T12:51:27Z",
+      "side": 1,
+      "message": "Drive-by - could you do this with this CL please (you can pass through local_zone from BytecodeGraphBuilder to JSTypeHintLowering constructor I think).",
+      "range": {
+        "startLine": 357,
+        "startChar": 2,
+        "endLine": 357,
+        "endChar": 43
+      },
+      "revId": "428d2e9ed29e9669a1fc1a5585949bdcbd478c4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
