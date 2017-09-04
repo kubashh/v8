@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "91a1b248_f5235438",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T10:58:41Z",
+      "side": 1,
+      "message": "s/Foreign//g",
+      "revId": "3b8b08922be311f03f32b7459e05fd2e6bc2dad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af564b6c_8e0b60e1",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 1
@@ -42,6 +59,23 @@
         "endLine": 450,
         "endChar": 62
       },
+      "revId": "3b8b08922be311f03f32b7459e05fd2e6bc2dad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc5e34d_ef53fcb7",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T10:58:41Z",
+      "side": 1,
+      "message": "s/OrNull//g\n\nIt\u0027s a personal preference, but even though \"OrNull\" adds information, it is often redundant information.",
       "revId": "3b8b08922be311f03f32b7459e05fd2e6bc2dad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
