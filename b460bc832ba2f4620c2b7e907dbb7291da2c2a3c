@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7ff2771_dc4fa1c2",
+        "filename": "src/api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7832,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T15:03:18Z",
+      "side": 1,
+      "message": "I think this would be better if the flag check was hidden in the implementation; i.e. we always call wasm_compilation_manager()-\u003eStartStreamingCompilation(), etc.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a890b89c_4fcdf0ce",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T15:03:18Z",
+      "side": 1,
+      "message": "wasm_stream_compilation?\n\n(to be consistent with the async compile flag).",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e616a58_a1d4b9b9",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T15:03:18Z",
+      "side": 1,
+      "message": "Looks like this one is dead.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6417a39b_fb67d1fb",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T15:03:18Z",
+      "side": 1,
+      "message": "Is there more than one implementation of the stream processor?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e59c42_cc001041",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-09-04T15:03:18Z",
+      "side": 1,
+      "message": "I think we should employ the PIMPL (pointer to implementation) pattern to hide the private stuff in the CC file.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
