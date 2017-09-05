@@ -759,10 +759,9 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
 // Advance the current bytecode offset. This simulates what all bytecode
 // handlers do upon completion of the underlying operation.
 static void AdvanceBytecodeOffset(MacroAssembler* masm, Register bytecode_array,
-                                  Register bytecode_offset, Register scratch1,
-                                  Register scratch2) {
+                                  Register bytecode_offset, Register bytecode,
+                                  Register scratch1) {
   Register bytecode_size_table = scratch1;
-  Register bytecode = scratch2;
   DCHECK(!AreAliased(bytecode_array, bytecode_offset, bytecode_size_table,
                      bytecode));
 
@@ -940,10 +939,22 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
          Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
   __ SmiUntag(kInterpreterBytecodeOffsetRegister);
 
+  // Check if we should return.
+  Label do_return;
+  __ movzx_b(ebx, Operand(kInterpreterBytecodeArrayRegister,
+                          kInterpreterBytecodeOffsetRegister, times_1, 0));
+  __ cmpb(ebx, Immediate(static_cast<int>(interpreter::Bytecode::kReturn)));
+  __ j(equal, &do_return, Label::kNear);
+
   // Advance to the next bytecode and dispatch.
   AdvanceBytecodeOffset(masm, kInterpreterBytecodeArrayRegister,
                         kInterpreterBytecodeOffsetRegister, ebx, edx);
   __ jmp(&do_dispatch);
+
+  __ bind(&do_return);
+  // The return value is in eax.
+  LeaveInterpreterFrame(masm, ebx, ecx);
+  __ ret(0);
 
   // Load debug copy of the bytecode array if it exists.
   // kInterpreterBytecodeArrayRegister is already loaded with
@@ -961,11 +972,6 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ jmp(&bytecode_array_loaded);
 }
 
-void Builtins::Generate_InterpreterExitTrampoline(MacroAssembler* masm) {
-  // The return value is in eax.
-  LeaveInterpreterFrame(masm, ebx, ecx);
-  __ ret(0);
-}
 
 static void Generate_StackOverflowCheck(MacroAssembler* masm, Register num_args,
                                         Register scratch1, Register scratch2,
@@ -1285,6 +1291,10 @@ void Builtins::Generate_InterpreterEnterBytecodeAdvance(MacroAssembler* masm) {
   __ mov(kInterpreterBytecodeOffsetRegister,
          Operand(ebp, InterpreterFrameConstants::kBytecodeOffsetFromFp));
   __ SmiUntag(kInterpreterBytecodeOffsetRegister);
+
+  // Load the current bytecode
+  __ movzx_b(ebx, Operand(kInterpreterBytecodeArrayRegister,
+                          kInterpreterBytecodeOffsetRegister, times_1, 0));
 
   // Advance to the next bytecode.
   AdvanceBytecodeOffset(masm, kInterpreterBytecodeArrayRegister,
