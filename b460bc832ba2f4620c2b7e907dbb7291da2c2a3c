@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ce482866_4d7138ca",
+        "filename": "src/api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7811,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "This code is weird. It should just be \"resolver \u003d maybe_promise.ToLocalChecked()\". And maybe_promise should be maybe_resolver.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7ff2771_dc4fa1c2",
         "filename": "src/api.cc",
         "patchSetId": 9
@@ -13,6 +30,23 @@
       "writtenOn": "2017-09-04T15:03:18Z",
       "side": 1,
       "message": "I think this would be better if the flag check was hidden in the implementation; i.e. we always call wasm_compilation_manager()-\u003eStartStreamingCompilation(), etc.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "256e7eae_fc209300",
+        "filename": "src/api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7834,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Nit: To reduce nesting, you could just place a return in the if-block (also below).",
       "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +70,320 @@
     },
     {
       "key": {
+        "uuid": "3d9bdc46_dfd538ba",
+        "filename": "src/wasm/compilation-manager.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Nit: since the map entry is erased afterwards anyway, you can \"std::move(item-\u003esecond)\" to avoid ref-counter increment and decrement.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96e91a93_67976c0e",
+        "filename": "src/wasm/compilation-manager.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Is this comment still correct? It will only release it\u0027s own shared_ptr, right?",
+      "range": {
+        "startLine": 32,
+        "startChar": 57,
+        "endLine": 32,
+        "endChar": 79
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92706c1c_cb45c7ee",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "You can even shorten this to \"DCHECK_NULL(stream_)\" (std::shared_ptr defines comparison operators against std::nullptr_t).",
+      "range": {
+        "startLine": 1965,
+        "startChar": 2,
+        "endLine": 1965,
+        "endChar": 28
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a741a1d8_d7215b3d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Here you are using that comparison operator, but here, you can even use \"if (stream_) ...\"",
+      "range": {
+        "startLine": 1977,
+        "startChar": 6,
+        "endLine": 1977,
+        "endChar": 24
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b75b8be_3a4e2cd9",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Does it make sense to always restart *all* background tasks? Shouldn\u0027t this be limited by the amount of available work?\n\nAnd a side node: I still find it confusing that we are counting the number of stopped tasks, and not running tasks...",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e41455d6_d1795ff1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "No need to move here.",
+      "range": {
+        "startLine": 2135,
+        "startChar": 16,
+        "endLine": 2135,
+        "endChar": 26
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5611507_aa3a54ad",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "We should move this to the end of the file, and also undef TRACE_CHAIN, TRACE_COMPILE and TRACE_STREAMING.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "210de61c_d450b56d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Can you add a comment explaining when {job_-\u003ecompiler_} will (not) be set?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046d634c_75d4b26f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "No need for \".get()\".",
+      "range": {
+        "startLine": 2442,
+        "startChar": 21,
+        "endLine": 2442,
+        "endChar": 27
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b026955_3d9b2e0a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2464,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Style comment: Wouldn\u0027t it be easier to write\n  if (!...DecodeModuleHeader()) {\n    return FinishAsyncCompileJobWithError(...);\n  }\n  return true;",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c71c000d_69fd2d39",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Same style comment here.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "101d8950_8df9e279",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Please document why we have to increase this here.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "345d89a3_62204d9d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2537,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Can\u0027t we pull this increment out of (\u003d after) the if?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b878995_241c7f30",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2544,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "\"!\u003d nullptr\" can (and should IMO) be omitted.",
+      "range": {
+        "startLine": 2544,
+        "startChar": 31,
+        "endLine": 2544,
+        "endChar": 42
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e95d19b_4a9877fb",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "... or just omit that name completely ;)",
+      "range": {
+        "startLine": 35,
+        "startChar": 45,
+        "endLine": 35,
+        "endChar": 53
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a75a85b_eb15017a",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "I think it makes sense to have this as a static method. This would avoid the need to pass the WasmModule once as a raw pointer and once as a std::unique_ptr.\nI made this static in a separate CL: https://chromium-review.googlesource.com/650386\nThis should make the implementation easier here.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e616a58_a1d4b9b9",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 9
@@ -47,6 +395,321 @@
       "writtenOn": "2017-09-04T15:03:18Z",
       "side": 1,
       "message": "Looks like this one is dead.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7b4138d_8b26299b",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Please document the relation between DoSync / DoAsync and NextStep.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "995a1ba7_86d55b69",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Maybe \"outstanding\" instead of \"required\"?",
+      "range": {
+        "startLine": 403,
+        "startChar": 30,
+        "endLine": 403,
+        "endChar": 38
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d8be2fb_6645dfe9",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "The name does not reflect that this also modifies a field. Maybe just \"Finish\", with WARN_UNUSED_RESULT?",
+      "range": {
+        "startLine": 407,
+        "startChar": 7,
+        "endLine": 407,
+        "endChar": 19
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784b5775_38730b77",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "I don\u0027t see the value of this assignment. Either store just the decremented value in a local variable, or just write everything in one line.",
+      "range": {
+        "startLine": 408,
+        "startChar": 4,
+        "endLine": 408,
+        "endChar": 15
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d4d1c6_1902e3c0",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Redundant.",
+      "range": {
+        "startLine": 423,
+        "startChar": 1,
+        "endLine": 423,
+        "endChar": 8
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a60018c_21518067",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Since we are only interested in the error stored in the result, it should be enough to pass a ResultBase here (no template required then).",
+      "range": {
+        "startLine": 425,
+        "startChar": 38,
+        "endLine": 425,
+        "endChar": 54
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f1e75f4_e8e61a60",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Please document that this always returns false.",
+      "range": {
+        "startLine": 425,
+        "startChar": 2,
+        "endLine": 425,
+        "endChar": 6
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d8027a_26293fdd",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "{ok()} must be false here, so just write false (also below, whenever you know for sure that it\u0027s false).",
+      "range": {
+        "startLine": 302,
+        "startChar": 25,
+        "endLine": 302,
+        "endChar": 29
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d8a795_ce50499e",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Why is this now needed here? Can we remove this step somewhere else then?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d640ff_97ed67ec",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Is this reset needed? errorf already does something similar.\nIf it is needed, please add a comment.",
+      "range": {
+        "startLine": 729,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 38
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9e25eb0_6fb581a7",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Sounds like a TODO? Maybe even open a bug?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5dbb54b_f54ba77d",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "You like that better than the previous \"nullptr\"? You could even put this in one line with just \"nullptr\" ;)",
+      "range": {
+        "startLine": 301,
+        "startChar": 11,
+        "endLine": 301,
+        "endChar": 50
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ccddb0_1e0c7914",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Isn\u0027t this identical to \"return nullptr\"?",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 39
+      },
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02eae233_819b07f8",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "This looks like something can easily go wrong, since we skip processing the whole code section if it is empty. Can\u0027t we change the order of the ifs and always go to DecodeNumberOfFunctions (which would fail for an empty code section)?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a775a874_a7a6bd71",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Please mention somewhere what the bool return type of all the methods means.",
       "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -81,6 +744,46 @@
       "writtenOn": "2017-09-04T15:03:18Z",
       "side": 1,
       "message": "I think we should employ the PIMPL (pointer to implementation) pattern to hide the private stuff in the CC file.",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c942b881_d0f889fd",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Hm, this method is confusing as it does nothing. Can\u0027t we just inline it everywhere?",
+      "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57f3a988_e5f6fef8",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-05T13:03:47Z",
+      "side": 1,
+      "message": "Again, I would prefer to put \"false\" here (and below).",
+      "range": {
+        "startLine": 214,
+        "startChar": 21,
+        "endLine": 214,
+        "endChar": 24
+      },
       "revId": "b460bc832ba2f4620c2b7e907dbb7291da2c2a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
