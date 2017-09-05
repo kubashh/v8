@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d2c414a_74582c59",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-09-05T14:17:33Z",
+      "side": 1,
+      "message": "We should update this comment and its arch-siblings to indicate that returns can also come from the Return bytecode.",
+      "range": {
+        "startLine": 1010,
+        "startChar": 5,
+        "endLine": 1010,
+        "endChar": 8
+      },
+      "revId": "fe63539bdfc0ec49442e213936ddea19e61077b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
