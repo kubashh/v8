@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "563d389d_e19baa0a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-09-06T14:22:13Z",
+      "side": 1,
+      "message": "Interesting, haven\u0027t seen std::distance before.",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f5a7038_a251c82f",
+        "filename": "src/gdb-jit.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1593,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-09-06T14:22:13Z",
+      "side": 1,
+      "message": "Again, not sure if relevant but doesn\u0027t this invert old logic?",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b78ed995_66599d7f",
+        "filename": "src/gdb-jit.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-09-06T14:22:13Z",
+      "side": 1,
+      "message": "Not sure if it matters, but `return 0` would translate to `return false`.",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
