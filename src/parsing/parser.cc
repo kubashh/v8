@@ -478,7 +478,8 @@ Expression* Parser::NewV8Intrinsic(const AstRawString* name,
 Parser::Parser(ParseInfo* info)
     : ParserBase<Parser>(info->zone(), &scanner_, info->stack_limit(),
                          info->extension(), info->GetOrCreateAstValueFactory(),
-                         info->runtime_call_stats(), true),
+                         info->runtime_call_stats(), info->script()->id(),
+                         true),
       scanner_(info->unicode_cache()),
       reusable_preparser_(nullptr),
       mode_(PARSE_EAGERLY),  // Lazy mode must be set explicitly.
@@ -601,16 +602,9 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
 
   if (FLAG_trace_parse && result != nullptr) {
     double ms = timer.Elapsed().InMillisecondsF();
-    if (info->is_eval()) {
-      PrintF("[parsing eval");
-    } else if (info->script()->name()->IsString()) {
-      String* name = String::cast(info->script()->name());
-      std::unique_ptr<char[]> name_chars = name->ToCString();
-      PrintF("[parsing script: %s", name_chars.get());
-    } else {
-      PrintF("[parsing script");
-    }
-    PrintF(" - took %0.3f ms]\n", ms);
+    const char* event_name = info->is_eval() ? "parse-eval" : "parse-script";
+    Script* script = *info->script();
+    LOG(script->GetIsolate(), FunctionEvent(event_name, script, -1, ms));
   }
   if (produce_cached_parse_data() && result != nullptr) {
     *info->cached_data() = logger.GetScriptData();
@@ -765,8 +759,12 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
     double ms = timer.Elapsed().InMillisecondsF();
     // We need to make sure that the debug-name is available.
     ast_value_factory()->Internalize(isolate);
-    std::unique_ptr<char[]> name_chars = result->debug_name()->ToCString();
-    PrintF("[parsing function: %s - took %0.3f ms]\n", name_chars.get(), ms);
+    DeclarationScope* function_scope = result->scope();
+    Script* script = *info->script();
+    LOG(script->GetIsolate(),
+        FunctionEvent("parse-function", script, -1, ms,
+                      function_scope->start_position(),
+                      function_scope->end_position(), *result->debug_name()));
   }
   return result;
 }
@@ -2551,6 +2549,11 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
           ? &RuntimeCallStats::ParseFunctionLiteral
           : &RuntimeCallStats::ParseBackgroundFunctionLiteral);
 
+  base::ElapsedTimer timer;
+  if (FLAG_trace_preparse) {
+    timer.Start();
+  }
+
   // Determine whether we can still lazy parse the inner function.
   // The preconditions are:
   // - Lazy compilation has to be enabled.
@@ -2651,12 +2654,16 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
 
     DCHECK_EQ(should_preparse, temp_zoned_);
     if (V8_UNLIKELY(FLAG_trace_preparse)) {
-      PrintF("  [%s]: %i-%i %.*s\n",
-             should_preparse ? (is_top_level ? "Preparse no-resolution"
-                                             : "Preparse resolution")
-                             : "Full parse",
-             scope->start_position(), scope->end_position(),
-             function_name->byte_length(), function_name->raw_data());
+      double ms = timer.Elapsed().InMillisecondsF();
+      const char* reason = should_preparse
+                               ? (is_top_level ? "preparse-no-resolution"
+                                               : "preparse-resolution")
+                               : "parse-full";
+      LOG(Isolate::Current(),
+          FunctionEvent(reason, nullptr, script_id(), ms,
+                        scope->start_position(), scope->end_position(),
+                        function_name->raw_data(),
+                        function_name->byte_length()));
     }
     if (V8_UNLIKELY(FLAG_runtime_stats)) {
       if (should_preparse) {
@@ -2784,7 +2791,8 @@ Parser::LazyParsingResult Parser::SkipFunction(
 
   PreParser::PreParseResult result = reusable_preparser()->PreParseFunction(
       function_name, kind, function_type, function_scope, parsing_module_,
-      is_inner_function, may_abort, use_counts_, produced_preparsed_scope_data);
+      is_inner_function, may_abort, use_counts_, produced_preparsed_scope_data,
+      this->script_id());
 
   // Return immediately if pre-parser decided to abort parsing.
   if (result == PreParser::kPreParseAbort) return kLazyParsingAborted;

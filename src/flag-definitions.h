@@ -1035,8 +1035,6 @@ DEFINE_BOOL(trace_module_status, false,
 DEFINE_BOOL(trace_normalization, false,
             "prints when objects are turned into dictionaries.")
 
-// runtime.cc
-DEFINE_BOOL(trace_lazy, false, "trace lazy compilation")
 
 // spaces.cc
 DEFINE_BOOL(collect_heap_spill_statistics, false,
@@ -1066,6 +1064,9 @@ DEFINE_BOOL(trace_wasm_instances, false,
 //
 #undef FLAG
 #define FLAG FLAG_FULL
+
+// runtime.cc
+DEFINE_BOOL(trace_lazy, false, "trace lazy compilation")
 
 // log.cc
 DEFINE_BOOL(log, false,
