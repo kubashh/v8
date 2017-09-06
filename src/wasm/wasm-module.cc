@@ -250,7 +250,8 @@ Handle<JSArrayBuffer> SetupArrayBuffer(Isolate* isolate, void* allocation_base,
                                        bool is_external,
                                        bool enable_guard_regions,
                                        SharedFlag shared) {
-  Handle<JSArrayBuffer> buffer = isolate->factory()->NewJSArrayBuffer(shared);
+  Handle<JSArrayBuffer> buffer =
+      isolate->factory()->NewJSArrayBuffer(shared, TENURED);
   DCHECK_GE(kMaxInt, size);
   if (shared == SharedFlag::kShared) DCHECK(FLAG_experimental_wasm_threads);
   JSArrayBuffer::Setup(buffer, isolate, is_external, allocation_base,
@@ -487,7 +488,7 @@ void DetachWebAssemblyMemoryBuffer(Isolate* isolate,
   if (!is_external) {
     buffer->set_is_external(true);
     isolate->heap()->UnregisterArrayBuffer(*buffer);
-    if (free_memory) {
+    if (free_memory && !buffer->has_guard_region()) {
       // We need to free the memory before neutering the buffer because
       // FreeBackingStore reads buffer->allocation_base(), which is nulled out
       // by Neuter. This means there is a dangling pointer until we neuter the

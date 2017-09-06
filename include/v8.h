@@ -4363,7 +4363,7 @@ class V8_EXPORT ArrayBuffer : public Object {
      * is committed.
      */
     // TODO(eholk): make this pure virtual once blink implements this.
-    virtual void SetProtection(void* data, size_t length,
+    virtual bool SetProtection(void* data, size_t length,
                                Protection protection);
 
     /**
