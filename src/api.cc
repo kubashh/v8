@@ -481,8 +481,7 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
   virtual void Free(void* data, size_t) { free(data); }
 
   virtual void* Reserve(size_t length) {
-    return base::VirtualMemory::ReserveRegion(length,
-                                              base::OS::GetRandomMmapAddr());
+    return base::OS::ReserveRegion(length, base::OS::GetRandomMmapAddr());
   }
 
   virtual void Free(void* data, size_t length,
@@ -492,7 +491,7 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
         return Free(data, length);
       }
       case v8::ArrayBuffer::Allocator::AllocationMode::kReservation: {
-        base::VirtualMemory::ReleaseRegion(data, length);
+        base::OS::ReleaseRegion(data, length);
         return;
       }
     }
@@ -503,12 +502,12 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
       v8::ArrayBuffer::Allocator::Protection protection) {
     switch (protection) {
       case v8::ArrayBuffer::Allocator::Protection::kNoAccess: {
-        base::VirtualMemory::UncommitRegion(data, length);
+        base::OS::UncommitRegion(data, length);
         return;
       }
       case v8::ArrayBuffer::Allocator::Protection::kReadWrite: {
         const bool is_executable = false;
-        base::VirtualMemory::CommitRegion(data, length, is_executable);
+        base::OS::CommitRegion(data, length, is_executable);
         return;
       }
     }
