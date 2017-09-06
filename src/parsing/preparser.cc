@@ -122,12 +122,13 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     FunctionLiteral::FunctionType function_type,
     DeclarationScope* function_scope, bool parsing_module,
     bool is_inner_function, bool may_abort, int* use_counts,
-    ProducedPreParsedScopeData** produced_preparsed_scope_data) {
+    ProducedPreParsedScopeData** produced_preparsed_scope_data, int script_id) {
   DCHECK_EQ(FUNCTION_SCOPE, function_scope->scope_type());
   parsing_module_ = parsing_module;
   use_counts_ = use_counts;
   DCHECK(!track_unresolved_variables_);
   track_unresolved_variables_ = is_inner_function;
+  set_script_id(script_id);
 #ifdef DEBUG
   function_scope->set_is_being_lazily_parsed(true);
 #endif
@@ -279,6 +280,11 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
       runtime_call_stats_,
       counters[track_unresolved_variables_][parsing_on_main_thread_]);
 
+  base::ElapsedTimer timer;
+  if (FLAG_trace_preparse) {
+    timer.Start();
+  }
+
   DeclarationScope* function_scope = NewFunctionScope(kind);
   function_scope->SetLanguageMode(language_mode);
 
@@ -345,10 +351,22 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
         end_position, GetLastFunctionLiteralId() - func_id);
   }
   if (FLAG_trace_preparse) {
-    PrintF("  [%s]: %i-%i\n",
-           track_unresolved_variables_ ? "Preparse resolution"
-                                       : "Preparse no-resolution",
-           function_scope->start_position(), function_scope->end_position());
+    double ms = timer.Elapsed().InMillisecondsF();
+    const char* reason = track_unresolved_variables_ ? "preparse-resolution"
+                                                     : "preparse-no-resolution";
+    if (function_name.string_) {
+      const AstRawString* fname = function_name.string_;
+      LOG(Isolate::Current(),
+          FunctionEvent(reason, nullptr, script_id(), ms,
+                        function_scope->start_position(),
+                        function_scope->end_position(), fname->raw_data(),
+                        fname->byte_length()));
+    } else {
+      LOG(Isolate::Current(),
+          FunctionEvent(reason, nullptr, script_id(), ms,
+                        function_scope->start_position(),
+                        function_scope->end_position(), nullptr, -1));
+    }
   }
 
   return Expression::Default();
