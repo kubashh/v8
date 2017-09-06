@@ -94,9 +94,9 @@ class ArrayBufferAllocatorBase : public v8::ArrayBuffer::Allocator {
     }
   }
 
-  void SetProtection(void* data, size_t length,
+  bool SetProtection(void* data, size_t length,
                      Protection protection) override {
-    allocator_->SetProtection(data, length, protection);
+    return allocator_->SetProtection(data, length, protection);
   }
 };
 

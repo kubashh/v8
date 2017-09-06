@@ -40,8 +40,10 @@ class MockArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
   void* Reserve(size_t length) override { return nullptr; }
   void Free(void* data, size_t length, AllocationMode mode) override {}
   void Free(void* p, size_t) override {}
-  void SetProtection(void* data, size_t length,
-                     Protection protection) override {}
+  bool SetProtection(void* data, size_t length,
+                     Protection protection) override {
+    return false;
+  }
 };
 
 static int DumpHeapConstants(const char* argv0) {

@@ -1897,8 +1897,10 @@ class OOMArrayBufferAllocator : public ArrayBuffer::Allocator {
   void* Reserve(size_t length) override { return nullptr; }
   void Free(void* data, size_t length, AllocationMode mode) override {}
   void Free(void*, size_t) override {}
-  void SetProtection(void* data, size_t length,
-                     Protection protection) override {}
+  bool SetProtection(void* data, size_t length,
+                     Protection protection) override {
+    return false;
+  }
 };
 
 TEST_F(ValueSerializerTest, DecodeArrayBufferOOM) {
