@@ -150,6 +150,8 @@ bool HeapObject::IsJSGeneratorObject() const {
 
 bool HeapObject::IsBoilerplateDescription() const { return IsFixedArray(); }
 
+bool HeapObject::IsClassBoilerplate() const { return IsFixedArray(); }
+
 bool HeapObject::IsExternal() const {
   return map()->FindRootMap() == GetHeap()->external_map();
 }
@@ -2297,6 +2299,12 @@ PropertyDetails DescriptorArray::GetDetails(int descriptor_number) {
   DCHECK(descriptor_number < number_of_descriptors());
   Object* details = get(ToDetailsIndex(descriptor_number));
   return PropertyDetails(Smi::cast(details));
+}
+
+void DescriptorArray::SetDetails(int descriptor_number,
+                                 PropertyDetails details) {
+  DCHECK(descriptor_number < number_of_descriptors());
+  set(ToDetailsIndex(descriptor_number), details.AsSmi());
 }
 
 int DescriptorArray::GetFieldIndex(int descriptor_number) {
