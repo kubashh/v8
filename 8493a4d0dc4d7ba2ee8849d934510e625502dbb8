@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94073dfa_c5cca1ae",
+        "filename": "src/api-arguments.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-06T08:07:34Z",
+      "side": 1,
+      "message": "Can we use DISALLOW_COPY_AND_ASSIGN(PropertyCallbackArguments) instead?",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 13
+      },
+      "revId": "8493a4d0dc4d7ba2ee8849d934510e625502dbb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
