@@ -327,20 +327,34 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
   if (old_pages > maximum_pages || pages > maximum_pages - old_pages) {
     return Handle<JSArrayBuffer>::null();
   }
-
-  // TODO(gdeepti): Change the protection here instead of allocating a new
-  // buffer before guard regions are turned on, see issue #5886.
+  size_t new_size =
+      static_cast<size_t>(old_pages + pages) * WasmModule::kPageSize;
   const bool enable_guard_regions = old_buffer.is_null()
                                         ? wasm::EnableGuardRegions()
                                         : old_buffer->has_guard_region();
-  size_t new_size =
-      static_cast<size_t>(old_pages + pages) * WasmModule::kPageSize;
-  Handle<JSArrayBuffer> new_buffer =
-      wasm::NewArrayBuffer(isolate, new_size, enable_guard_regions);
-  if (new_buffer.is_null()) return new_buffer;
-  Address new_mem_start = static_cast<Address>(new_buffer->backing_store());
-  memcpy(new_mem_start, old_mem_start, old_size);
-  return new_buffer;
+
+  if (enable_guard_regions && old_size != 0) {
+    DCHECK(old_buffer->backing_store() != nullptr);
+    if (new_size > FLAG_wasm_max_mem_pages * WasmModule::kPageSize ||
+        new_size > kMaxInt) {
+      return Handle<JSArrayBuffer>::null();
+    }
+    isolate->array_buffer_allocator()->SetProtection(
+        old_mem_start, new_size,
+        v8::ArrayBuffer::Allocator::Protection::kReadWrite);
+    reinterpret_cast<v8::Isolate*>(isolate)
+        ->AdjustAmountOfExternalAllocatedMemory(pages * WasmModule::kPageSize);
+    Handle<Object> length_obj = isolate->factory()->NewNumberFromSize(new_size);
+    old_buffer->set_byte_length(*length_obj);
+    return old_buffer;
+  } else {
+    Handle<JSArrayBuffer> new_buffer;
+    new_buffer = wasm::NewArrayBuffer(isolate, new_size, enable_guard_regions);
+    if (new_buffer.is_null() || old_size == 0) return new_buffer;
+    Address new_mem_start = static_cast<Address>(new_buffer->backing_store());
+    memcpy(new_mem_start, old_mem_start, old_size);
+    return new_buffer;
+  }
 }
 
 // May GC, because SetSpecializationMemInfoFrom may GC
@@ -442,7 +456,23 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   } else {
     maximum_pages = FLAG_wasm_max_mem_pages;
   }
-  new_buffer = GrowMemoryBuffer(isolate, old_buffer, pages, maximum_pages);
+
+  const bool enable_guard_regions = old_buffer.is_null()
+                                        ? wasm::EnableGuardRegions()
+                                        : old_buffer->has_guard_region();
+  if (enable_guard_regions && old_size != 0) {
+    new_buffer = GrowMemoryBuffer(isolate, old_buffer, pages, maximum_pages);
+    if (new_buffer.is_null()) return -1;
+    // When guard pages are enabled, protection is adjusted on the same buffer
+    // so a new buffer is attached to the same backing store as the buffer will
+    // be detached when Memory.Grow is called.
+    new_buffer = wasm::SetupArrayBuffer(
+        isolate, old_buffer->allocation_base(), old_buffer->allocation_length(),
+        old_buffer->backing_store(), old_size + pages * WasmModule::kPageSize,
+        old_buffer->is_external(), old_buffer->has_guard_region());
+  } else {
+    new_buffer = GrowMemoryBuffer(isolate, old_buffer, pages, maximum_pages);
+  }
   if (new_buffer.is_null()) return -1;
 
   if (memory_object->has_instances()) {

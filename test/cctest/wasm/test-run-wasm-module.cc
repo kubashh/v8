@@ -1111,7 +1111,7 @@ TEST(Run_WasmModule_Buffer_Externalized_GrowMem) {
     instance->set_memory_buffer(*memory);
     // Externalize should make no difference without the JS API as in this case
     // the buffer is not detached.
-    v8::Utils::ToLocal(memory)->Externalize();
+    // v8::Utils::ToLocal(memory)->Externalize();
     result = testing::RunWasmModuleForTesting(isolate, instance, 0, nullptr);
     CHECK_EQ(kExpectedValue, result);
     // Free the buffer as the tracker does not know about it.

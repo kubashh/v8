@@ -463,7 +463,7 @@ void v8::ArrayBuffer::Allocator::Free(void* data, size_t length,
   }
 }
 
-void v8::ArrayBuffer::Allocator::SetProtection(
+bool v8::ArrayBuffer::Allocator::SetProtection(
     void* data, size_t length,
     v8::ArrayBuffer::Allocator::Protection protection) {
   UNIMPLEMENTED();
@@ -498,19 +498,20 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
     }
   }
 
-  virtual void SetProtection(
+  virtual bool SetProtection(
       void* data, size_t length,
       v8::ArrayBuffer::Allocator::Protection protection) {
     switch (protection) {
       case v8::ArrayBuffer::Allocator::Protection::kNoAccess: {
-        base::VirtualMemory::UncommitRegion(data, length);
-        return;
+        base::OS::Guard(data, length);
+        return true;
       }
       case v8::ArrayBuffer::Allocator::Protection::kReadWrite: {
-        const bool is_executable = false;
-        base::VirtualMemory::CommitRegion(data, length, is_executable);
-        return;
+        base::OS::Unprotect(data, length);
+        return true;
       }
+      default:
+        return false;
     }
   }
 };
