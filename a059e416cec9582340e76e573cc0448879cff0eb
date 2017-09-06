@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1fd51ee7_42bf0c93",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-09-06T14:43:43Z",
+      "side": 1,
+      "message": "Yeah, pretty cool. I could also just change this function to return an iterator instead but it seems more self-contained this way.",
+      "parentUuid": "563d389d_e19baa0a",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f5a7038_a251c82f",
         "filename": "src/gdb-jit.cc",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2c93683b_2474874e",
+        "filename": "src/gdb-jit.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1593,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-09-06T14:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f5a7038_a251c82f",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b78ed995_66599d7f",
         "filename": "src/gdb-jit.cc",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5c5ed5f_5bb98838",
+        "filename": "src/gdb-jit.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-09-06T14:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b78ed995_66599d7f",
+      "revId": "a059e416cec9582340e76e573cc0448879cff0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
