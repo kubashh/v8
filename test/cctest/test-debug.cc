@@ -6519,6 +6519,7 @@ TEST(DebugCoverage) {
 }
 
 TEST(BuiltinsExceptionPrediction) {
+  FLAG_lazy_deserialization = false;  // We need to inspect all builtins here.
   v8::Isolate* isolate = CcTest::isolate();
   v8::HandleScope handle_scope(isolate);
   v8::Context::New(isolate);
