@@ -323,17 +323,10 @@ RUNTIME_FUNCTION(Runtime_EstimateNumberOfElements) {
   }
 }
 
+namespace {
 
-// Returns an array that tells you where in the [0, length) interval an array
-// might have elements.  Can either return an array of keys (positive integers
-// or undefined) or a number representing the positive length of an interval
-// starting at index 0.
-// Intervals can span over some keys that are not in the object.
-RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(2, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, array, 0);
-  CONVERT_NUMBER_CHECKED(uint32_t, length, Uint32, args[1]);
+Object* GetArrayKeysCore(Handle<JSObject> array, uint32_t length) {
+  Isolate* isolate = array->GetIsolate();
   ElementsKind kind = array->GetElementsKind();
 
   if (IsFastElementsKind(kind) || IsFixedTypedArrayElementsKind(kind)) {
@@ -354,15 +347,12 @@ RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
                              ALL_PROPERTIES);
   for (PrototypeIterator iter(isolate, array, kStartAtReceiver);
        !iter.IsAtEnd(); iter.Advance()) {
-    if (PrototypeIterator::GetCurrent(iter)->IsJSProxy() ||
-        PrototypeIterator::GetCurrent<JSObject>(iter)
-            ->HasIndexedInterceptor()) {
-      // Bail out if we find a proxy or interceptor, likely not worth
-      // collecting keys in that case.
+    Handle<JSReceiver> current(PrototypeIterator::GetCurrent<JSReceiver>(iter));
+    if (current->HasComplexKeys()) {
       return *isolate->factory()->NewNumberFromUint(length);
     }
-    Handle<JSObject> current = PrototypeIterator::GetCurrent<JSObject>(iter);
-    accumulator.CollectOwnElementIndices(array, current);
+    accumulator.CollectOwnElementIndices(array,
+                                         Handle<JSObject>::cast(current));
   }
   // Erase any keys >= length.
   Handle<FixedArray> keys =
@@ -379,6 +369,54 @@ RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
   }
 
   return *isolate->factory()->NewJSArrayWithElements(keys);
+}
+
+}  // namespace
+
+// Returns an array that tells you where in the [0, length) interval an array
+// might have elements.  Can either return an array of keys (positive integers
+// or undefined) or a number representing the positive length of an interval
+// starting at index 0.
+// Intervals can span over some keys that are not in the object.
+RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, array, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, length, Uint32, args[1]);
+  return GetArrayKeysCore(array, length);
+}
+
+RUNTIME_FUNCTION(Runtime_TrySliceSimpleNonFastElements) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, object, 0);
+  CONVERT_SMI_ARG_CHECKED(first, 1);
+  CONVERT_SMI_ARG_CHECKED(count, 2);
+  uint32_t length = first + count;
+
+  // Only handle elements kinds that have a ElementsAccessor Slice
+  // implementation.
+  ElementsKind kind = object->GetElementsKind();
+  if (!IsFastElementsKind(kind) && !IsDictionaryElementsKind(kind) &&
+      !IsSloppyArgumentsElementsKind(kind)) {
+    return Smi::FromInt(0);
+  }
+
+  // This "fastish" path must make sure the destination array is a JSArray.
+  if (!object->IsJSArray() || !isolate->IsArraySpeciesLookupChainIntact() ||
+      !JSArray::cast(*object)->HasArrayPrototype(isolate)) {
+    return Smi::FromInt(0);
+  }
+
+  // This "fastish" path must also ensure that elements are simple (no
+  // geters/setters), no elements on prototype chain.
+  if (!JSObject::PrototypeHasNoElements(isolate, *object) ||
+      object->HasComplexKeys()) {
+    return Smi::FromInt(0);
+  }
+
+  ElementsAccessor* accessor = object->GetElementsAccessor();
+  return *accessor->Slice(object, first, length);
 }
 
 RUNTIME_FUNCTION(Runtime_NewArray) {
@@ -517,15 +555,7 @@ RUNTIME_FUNCTION(Runtime_HasComplexElements) {
   CONVERT_ARG_HANDLE_CHECKED(JSObject, array, 0);
   for (PrototypeIterator iter(isolate, array, kStartAtReceiver);
        !iter.IsAtEnd(); iter.Advance()) {
-    if (PrototypeIterator::GetCurrent(iter)->IsJSProxy()) {
-      return isolate->heap()->true_value();
-    }
-    Handle<JSObject> current = PrototypeIterator::GetCurrent<JSObject>(iter);
-    if (current->HasIndexedInterceptor()) {
-      return isolate->heap()->true_value();
-    }
-    if (!current->HasDictionaryElements()) continue;
-    if (current->element_dictionary()->HasComplexElements()) {
+    if (PrototypeIterator::GetCurrent<JSReceiver>(iter)->HasComplexKeys()) {
       return isolate->heap()->true_value();
     }
   }
@@ -757,6 +787,47 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   return Smi::FromInt(-1);
 }
 
+RUNTIME_FUNCTION(Runtime_ArrayExtract) {
+  HandleScope scope(isolate);
+  DCHECK(isolate->IsFastArrayConstructorPrototypeChainIntact());
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSArray, source, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, begin, Uint32, args[1]);
+  CONVERT_NUMBER_CHECKED(int32_t, count, Int32, args[2]);
+  ElementsKind kind = source->GetElementsKind();
+  if (IsSmiOrObjectElementsKind(kind)) {
+    Handle<JSArray> result = isolate->factory()->NewJSArray(
+        kind, count, count, DONT_INITIALIZE_ARRAY_ELEMENTS, TENURED);
+    FixedArray* source_array = static_cast<FixedArray*>(source->elements());
+    FixedArray* result_array = static_cast<FixedArray*>(result->elements());
+    for (int i = 0; i < count; ++i) {
+      if (source_array->is_the_hole(isolate, i)) {
+        result_array->set_the_hole(isolate, i);
+      } else {
+        result_array->set(i, source_array->get(i));
+      }
+    }
+    return *result;
+  } else if (IsDoubleElementsKind(kind)) {
+    Handle<JSArray> result = isolate->factory()->NewJSArray(
+        kind, count, count, DONT_INITIALIZE_ARRAY_ELEMENTS, TENURED);
+    FixedDoubleArray* source_array =
+        static_cast<FixedDoubleArray*>(source->elements());
+    FixedDoubleArray* result_array =
+        static_cast<FixedDoubleArray*>(result->elements());
+    memcpy(reinterpret_cast<char*>(result_array) +
+               FixedDoubleArray::kHeaderSize - kHeapObjectTag,
+           reinterpret_cast<char*>(source_array) +
+               FixedDoubleArray::kHeaderSize - kHeapObjectTag +
+               begin * kDoubleSize,
+           count * kDoubleSize);
+    return *result;
+  } else {
+    UNIMPLEMENTED();
+  }
+  UNIMPLEMENTED();
+  return Smi::FromInt(0);
+}
 
 RUNTIME_FUNCTION(Runtime_SpreadIterablePrepare) {
   HandleScope scope(isolate);
