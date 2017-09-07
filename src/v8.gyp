@@ -969,7 +969,6 @@
         'field-index-inl.h',
         'field-type.cc',
         'field-type.h',
-        'find-and-replace-pattern.h',
         'fixed-dtoa.cc',
         'fixed-dtoa.h',
         'flag-definitions.h',
