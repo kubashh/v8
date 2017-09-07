@@ -1890,6 +1890,7 @@
         'base/sys-info.h',
         'base/template-utils.h',
         'base/timezone-cache.h',
+        'base/tsan.h',
         'base/utils/random-number-generator.cc',
         'base/utils/random-number-generator.h',
       ],
