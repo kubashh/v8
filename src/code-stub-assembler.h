@@ -190,6 +190,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Float64T> Float64Round(SloppyTNode<Float64T> x);
   TNode<Float64T> Float64RoundToEven(SloppyTNode<Float64T> x);
   TNode<Float64T> Float64Trunc(SloppyTNode<Float64T> x);
+  // Select the minimum of the two provided Number values.
+  TNode<Object> NumberMax(SloppyTNode<Object> left, SloppyTNode<Object> right);
+  // Select the minimum of the two provided Number values.
+  TNode<Object> NumberMin(SloppyTNode<Object> left, SloppyTNode<Object> right);
 
   // Tag a Word as a Smi value.
   TNode<Smi> SmiTag(SloppyTNode<IntPtrT> value);
@@ -270,6 +274,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Smi | HeapNumber operations.
   Node* NumberInc(Node* value);
   Node* NumberDec(Node* value);
+  Node* NumberAdd(Node* a, Node* b);
+  Node* NumberSub(Node* a, Node* b);
   void GotoIfNotNumber(Node* value, Label* is_not_number);
   void GotoIfNumber(Node* value, Label* is_number);
 
@@ -394,6 +400,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void BranchIfFastJSArray(Node* object, Node* context,
                            FastJSArrayAccessMode mode, Label* if_true,
                            Label* if_false);
+  void BranchIfFastJSArrayForCopy(Node* object, Node* context, Label* if_true,
+                                  Label* if_false);
 
   // Load value from current frame by given offset in bytes.
   Node* LoadFromFrame(int offset, MachineType rep = MachineType::AnyTagged());
@@ -930,6 +938,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsWeakCell(Node* object);
   Node* IsUndetectableMap(Node* map);
   Node* IsArrayProtectorCellInvalid();
+  Node* IsSpeciesProtectorCellInvalid();
 
   // True iff |object| is a Smi or a HeapNumber.
   Node* IsNumber(Node* object);

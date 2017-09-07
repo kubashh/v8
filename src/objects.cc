@@ -19463,6 +19463,16 @@ bool JSReceiver::HasProxyInPrototype(Isolate* isolate) {
   return false;
 }
 
+bool JSReceiver::HasComplexKeys() {
+  if (IsJSProxy()) return true;
+  JSObject* this_object = JSObject::cast(this);
+  if (this_object->HasIndexedInterceptor()) {
+    return true;
+  }
+  if (!this_object->HasDictionaryElements()) return false;
+  return this_object->element_dictionary()->HasComplexElements();
+}
+
 MaybeHandle<Object> JSModuleNamespace::GetExport(Handle<String> name) {
   Isolate* isolate = name->GetIsolate();
 

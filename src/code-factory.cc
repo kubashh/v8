@@ -415,6 +415,12 @@ Callable CodeFactory::ArrayShift(Isolate* isolate) {
 }
 
 // static
+Callable CodeFactory::ArrayExtract(Isolate* isolate) {
+  return Callable(BUILTIN_CODE(isolate, FastArrayExtract),
+                  FastArrayExtractDescriptor(isolate));
+}
+
+// static
 Callable CodeFactory::ArrayPush(Isolate* isolate) {
   return Callable(BUILTIN_CODE(isolate, ArrayPush), BuiltinDescriptor(isolate));
 }
