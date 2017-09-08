@@ -215,9 +215,9 @@ RUNTIME_FUNCTION(Runtime_OptimizeFunctionOnNextCall) {
 
   // The following condition was lifted from the DCHECK inside
   // JSFunction::MarkForOptimization().
+  // TODO(mvstanton): fix this monster.
   if (!(function->shared()->allows_lazy_compilation() ||
-        (function->code()->kind() == Code::FUNCTION &&
-         !function->shared()->optimization_disabled()))) {
+        (false && !function->shared()->optimization_disabled()))) {
     return isolate->heap()->undefined_value();
   }
 

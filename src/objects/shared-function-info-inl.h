@@ -217,19 +217,11 @@ void SharedFunctionInfo::set_code(Code* value, WriteBarrierMode mode) {
 }
 
 void SharedFunctionInfo::ReplaceCode(Code* value) {
-#ifdef DEBUG
-  Code::VerifyRecompiledCode(code(), value);
-#endif  // DEBUG
-
   set_code(value);
 }
 
 bool SharedFunctionInfo::IsInterpreted() const {
   return code()->is_interpreter_trampoline_builtin();
-}
-
-bool SharedFunctionInfo::HasBaselineCode() const {
-  return code()->kind() == Code::FUNCTION;
 }
 
 ScopeInfo* SharedFunctionInfo::scope_info() const {
