@@ -685,32 +685,9 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
 
   // Make sure the map hasn't changed during the iteration
   Node* orig_map = jsgraph()->HeapConstant(receiver_map);
-  Node* array_map = effect =
-      graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
-                       receiver, effect, control);
-  Node* check_map =
-      graph()->NewNode(simplified()->ReferenceEqual(), array_map, orig_map);
-  effect =
-      graph()->NewNode(simplified()->CheckIf(), check_map, effect, control);
+  WireInMapCheck(orig_map, receiver, &effect, control);
 
-  // Make sure that the access is still in bounds, since the callback could have
-  // changed the array's size.
-  Node* length = graph()->NewNode(
-      simplified()->LoadField(AccessBuilder::ForJSArrayLength(PACKED_ELEMENTS)),
-      receiver, effect, control);
-  k = effect =
-      graph()->NewNode(simplified()->CheckBounds(), k, length, effect, control);
-
-  // Reload the elements pointer before calling the callback, since the previous
-  // callback might have resized the array causing the elements buffer to be
-  // re-allocated.
-  Node* elements = graph()->NewNode(
-      simplified()->LoadField(AccessBuilder::ForJSObjectElements()), receiver,
-      effect, control);
-
-  Node* element = graph()->NewNode(
-      simplified()->LoadElement(AccessBuilder::ForFixedArrayElement()),
-      elements, k, effect, control);
+  Node* element = SafeLoadElement(receiver, control, &effect, &k);
 
   Node* next_k =
       graph()->NewNode(simplified()->NumberAdd(), k, jsgraph()->Constant(1));
@@ -847,15 +824,7 @@ Reduction JSCallReducer::ReduceArrayMap(Handle<JSFunction> function,
   Node* orig_map = jsgraph()->HeapConstant(receiver_map);
 
   // Make sure the map hasn't changed before we construct the output array.
-  {
-    Node* array_map = effect =
-        graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
-                         receiver, effect, control);
-    Node* check_map =
-        graph()->NewNode(simplified()->ReferenceEqual(), array_map, orig_map);
-    effect =
-        graph()->NewNode(simplified()->CheckIf(), check_map, effect, control);
-  }
+  WireInMapCheck(orig_map, receiver, &effect, control);
 
   Node* original_length = graph()->NewNode(
       simplified()->LoadField(AccessBuilder::ForJSArrayLength(PACKED_ELEMENTS)),
@@ -917,32 +886,9 @@ Reduction JSCallReducer::ReduceArrayMap(Handle<JSFunction> function,
       graph()->NewNode(common()->Checkpoint(), frame_state, effect, control);
 
   // Make sure the map hasn't changed during the iteration
-  Node* array_map = effect =
-      graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
-                       receiver, effect, control);
-  Node* check_map =
-      graph()->NewNode(simplified()->ReferenceEqual(), array_map, orig_map);
-  effect =
-      graph()->NewNode(simplified()->CheckIf(), check_map, effect, control);
+  WireInMapCheck(orig_map, receiver, &effect, control);
 
-  // Make sure that the access is still in bounds, since the callback could have
-  // changed the array's size.
-  Node* length = graph()->NewNode(
-      simplified()->LoadField(AccessBuilder::ForJSArrayLength(PACKED_ELEMENTS)),
-      receiver, effect, control);
-  k = effect =
-      graph()->NewNode(simplified()->CheckBounds(), k, length, effect, control);
-
-  // Reload the elements pointer before calling the callback, since the previous
-  // callback might have resized the array causing the elements buffer to be
-  // re-allocated.
-  Node* elements = graph()->NewNode(
-      simplified()->LoadField(AccessBuilder::ForJSObjectElements()), receiver,
-      effect, control);
-
-  Node* element = graph()->NewNode(
-      simplified()->LoadElement(AccessBuilder::ForFixedArrayElement()),
-      elements, k, effect, control);
+  Node* element = SafeLoadElement(receiver, control, &effect, &k);
 
   Node* next_k =
       graph()->NewNode(simplified()->NumberAdd(), k, jsgraph()->OneConstant());
@@ -1006,6 +952,233 @@ Reduction JSCallReducer::ReduceArrayMap(Handle<JSFunction> function,
 
   ReplaceWithValue(node, a, effect, control);
   return Replace(a);
+}
+
+void JSCallReducer::WireInMapCheck(Node* orig_map, Node* receiver,
+                                   Node** effect, Node* control) {
+  Node* array_map = *effect =
+      graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
+                       receiver, *effect, control);
+  Node* check_map =
+      graph()->NewNode(simplified()->ReferenceEqual(), array_map, orig_map);
+  *effect =
+      graph()->NewNode(simplified()->CheckIf(), check_map, *effect, control);
+}
+
+Node* JSCallReducer::SafeLoadElement(Node* receiver, Node* control,
+                                     Node** effect, Node** k) {
+  // Make sure that the access is still in bounds, since the callback could have
+  // changed the array's size.
+  Node* length = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSArrayLength(PACKED_ELEMENTS)),
+      receiver, *effect, control);
+  *k = *effect = graph()->NewNode(simplified()->CheckBounds(), *k, length,
+                                  *effect, control);
+
+  // Reload the elements pointer before calling the callback, since the previous
+  // callback might have resized the array causing the elements buffer to be
+  // re-allocated.
+  Node* elements = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSObjectElements()), receiver,
+      *effect, control);
+
+  Node* element = graph()->NewNode(
+      simplified()->LoadElement(AccessBuilder::ForFixedArrayElement()),
+      elements, *k, *effect, control);
+  return element;
+}
+
+Reduction JSCallReducer::ReduceArrayFilter(Handle<JSFunction> function,
+                                           Node* node) {
+  if (!FLAG_turbo_inline_array_builtins) return NoChange();
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  Node* outer_frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* context = NodeProperties::GetContextInput(node);
+  CallParameters const& p = CallParametersOf(node->op());
+  // Try to determine the {receiver} map.
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Node* fncallback = node->op()->ValueInputCount() > 2
+                         ? NodeProperties::GetValueInput(node, 2)
+                         : jsgraph()->UndefinedConstant();
+  Node* this_arg = node->op()->ValueInputCount() > 3
+                       ? NodeProperties::GetValueInput(node, 3)
+                       : jsgraph()->UndefinedConstant();
+  ZoneHandleSet<Map> receiver_maps;
+  NodeProperties::InferReceiverMapsResult result =
+      NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
+  if (result != NodeProperties::kReliableReceiverMaps) {
+    return NoChange();
+  }
+  if (receiver_maps.size() != 1) return NoChange();
+  Handle<Map> receiver_map(receiver_maps[0]);
+  ElementsKind kind = receiver_map->elements_kind();
+
+  // TODO(danno): Handle holey Smi and Object fast elements kinds and double
+  // packed.
+  if (!IsFastPackedElementsKind(kind) || IsDoubleElementsKind(kind)) {
+    return NoChange();
+  }
+
+  // TODO(danno): map can throw. Hook up exceptional edges.
+  if (NodeProperties::IsExceptionalCall(node)) return NoChange();
+  // We want the input to be a generic Array.
+  const int map_index = Context::ArrayMapIndex(kind);
+  Handle<JSFunction> handle_constructor(
+      JSFunction::cast(
+          Map::cast(native_context()->get(map_index))->GetConstructor()),
+      isolate());
+  Node* array_constructor = jsgraph()->HeapConstant(handle_constructor);
+  if (receiver_map->prototype() !=
+      native_context()->get(Context::INITIAL_ARRAY_PROTOTYPE_INDEX)) {
+    return NoChange();
+  }
+
+  // And ensure that any changes to the Array species constructor cause deopt.
+  if (!isolate()->IsArraySpeciesLookupChainIntact()) return NoChange();
+
+  dependencies()->AssumePropertyCell(factory()->species_protector());
+
+  Node* k = jsgraph()->ZeroConstant();
+  Node* to = jsgraph()->ZeroConstant();
+  Node* orig_map = jsgraph()->HeapConstant(receiver_map);
+
+  // Make sure the map hasn't changed before we construct the output array.
+  WireInMapCheck(orig_map, receiver, &effect, control);
+
+  Node* original_length = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSArrayLength(PACKED_ELEMENTS)),
+      receiver, effect, control);
+
+  // This array should be PACKED_SMI_ELEMENTS because of the zero length.
+  // TODO(mvstanton) : should I go ahead and transition it?
+  Node* a = control = effect = graph()->NewNode(
+      javascript()->CreateArray(1, Handle<AllocationSite>::null()),
+      array_constructor, array_constructor, jsgraph()->ZeroConstant(), context,
+      outer_frame_state, effect, control);
+
+  Node* loop = control = graph()->NewNode(common()->Loop(2), control, control);
+  Node* eloop = effect =
+      graph()->NewNode(common()->EffectPhi(2), effect, effect, loop);
+  Node* vloop = k = graph()->NewNode(
+      common()->Phi(MachineRepresentation::kTagged, 2), k, k, loop);
+  Node* v_to_loop = to = graph()->NewNode(
+      common()->Phi(MachineRepresentation::kTaggedSigned, 2), to, to, loop);
+
+  control = loop;
+  effect = eloop;
+
+  Node* continue_test =
+      graph()->NewNode(simplified()->NumberLessThan(), k, original_length);
+  Node* continue_branch = graph()->NewNode(common()->Branch(BranchHint::kTrue),
+                                           continue_test, control);
+
+  Node* if_true = graph()->NewNode(common()->IfTrue(), continue_branch);
+  Node* if_false = graph()->NewNode(common()->IfFalse(), continue_branch);
+  control = if_true;
+
+  std::vector<Node*> checkpoint_params(
+      {receiver, fncallback, this_arg, a, k, original_length, to});
+  const int stack_parameters = static_cast<int>(checkpoint_params.size());
+
+  Node* frame_state = CreateJavaScriptBuiltinContinuationFrameState(
+      jsgraph(), function, Builtins::kArrayFilterLoopEagerDeoptContinuation,
+      node->InputAt(0), context, &checkpoint_params[0], stack_parameters,
+      outer_frame_state, ContinuationFrameStateMode::EAGER);
+
+  effect =
+      graph()->NewNode(common()->Checkpoint(), frame_state, effect, control);
+
+  // Make sure the map hasn't changed during the iteration.
+  WireInMapCheck(orig_map, receiver, &effect, control);
+
+  Node* element = SafeLoadElement(receiver, control, &effect, &k);
+
+  Node* next_k =
+      graph()->NewNode(simplified()->NumberAdd(), k, jsgraph()->OneConstant());
+
+  // This frame state is dealt with by hand in
+  // ArrayMapLoopLazyDeoptContinuation.
+  frame_state = CreateJavaScriptBuiltinContinuationFrameState(
+      jsgraph(), function, Builtins::kArrayFilterLoopLazyDeoptContinuation,
+      node->InputAt(0), context, &checkpoint_params[0], stack_parameters,
+      outer_frame_state, ContinuationFrameStateMode::LAZY);
+
+  Node* callback_value = control = effect = graph()->NewNode(
+      javascript()->Call(5, p.frequency()), fncallback, this_arg, element, k,
+      receiver, context, frame_state, effect, control);
+
+  // We have to coerce callback_value to boolean, and only store the element in
+  // a if it's true.
+  to = DoFilterPostCallbackWork(kind, context, &control, &effect, a, to,
+                                element, callback_value);
+  k = next_k;
+
+  loop->ReplaceInput(1, control);
+  vloop->ReplaceInput(1, k);
+  v_to_loop->ReplaceInput(1, to);
+  eloop->ReplaceInput(1, effect);
+
+  control = if_false;
+  effect = eloop;
+
+  ReplaceWithValue(node, a, effect, control);
+  return Replace(a);
+}
+
+Node* JSCallReducer::DoFilterPostCallbackWork(ElementsKind kind, Node* context,
+                                              Node** control, Node** effect,
+                                              Node* a, Node* to, Node* element,
+                                              Node* callback_value) {
+  Node* boolean_result = graph()->NewNode(
+      javascript()->ToBoolean(ToBooleanHint::kAny), callback_value, context);
+
+  Node* check_boolean_result =
+      graph()->NewNode(simplified()->ReferenceEqual(), boolean_result,
+                       jsgraph()->TrueConstant());
+  Node* boolean_branch = graph()->NewNode(common()->Branch(BranchHint::kTrue),
+                                          check_boolean_result, *control);
+
+  Node* if_true = graph()->NewNode(common()->IfTrue(), boolean_branch);
+  Node* etrue = *effect;
+  Node* vtrue;
+  {
+    // Load the elements backing store of the {receiver}.
+    Node* elements = etrue = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForJSObjectElements()), a, etrue,
+        if_true);
+
+    // We know that {to} is in Unsigned31 range here, being smaller than
+    // {original_length} at all times.
+    to = graph()->NewNode(common()->TypeGuard(Type::Unsigned31()), to, if_true);
+
+    GrowFastElementsFlags flags = GrowFastElementsFlag::kArrayObject;
+    // TODO(mvstanton): Make sure{flags} is correct when we handle{a} as a
+    // double output array.
+    DCHECK(!IsDoubleElementsKind(kind));
+    elements = etrue =
+        graph()->NewNode(simplified()->MaybeGrowFastElements(flags), a,
+                         elements, to, to, etrue, if_true);
+
+    // Append the value to the {elements}.
+    etrue = graph()->NewNode(
+        simplified()->StoreElement(AccessBuilder::ForFixedArrayElement(kind)),
+        elements, to, element, etrue, if_true);
+
+    vtrue = graph()->NewNode(simplified()->NumberAdd(), to,
+                             jsgraph()->OneConstant());
+  }
+
+  Node* if_false = graph()->NewNode(common()->IfFalse(), boolean_branch);
+  Node* efalse = *effect;
+  Node* vfalse = to;
+
+  *control = graph()->NewNode(common()->Merge(2), if_true, if_false);
+  *effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, *control);
+  to = graph()->NewNode(common()->Phi(MachineRepresentation::kTaggedSigned, 2),
+                        vtrue, vfalse, *control);
+  return to;
 }
 
 Reduction JSCallReducer::ReduceCallApiFunction(
@@ -1375,6 +1548,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
           return ReduceArrayForEach(function, node);
         case Builtins::kArrayMap:
           return ReduceArrayMap(function, node);
+        case Builtins::kArrayFilter:
+          return ReduceArrayFilter(function, node);
         case Builtins::kReturnReceiver:
           return ReduceReturnReceiver(node);
         default:
