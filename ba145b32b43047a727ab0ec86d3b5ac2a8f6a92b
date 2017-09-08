@@ -46,6 +46,30 @@
       "revId": "ba145b32b43047a727ab0ec86d3b5ac2a8f6a92b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cedb15e_f23b8ec9",
+        "filename": "src/arm64/macro-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-08T13:32:21Z",
+      "side": 0,
+      "message": "I see. I don\u0027t think PopStackHandler pops two registers (I think the Drop is a drop of zero, since StackHandlerConstants::kSize - kXRegSize \u003d\u003d 1 word - 1 word \u003d\u003d 0 if I calculate it correctly (otherwise I\u0027m a bit confused as to where the extra element popped by PopStackHandler is actually pushed).\n\nI guess this makes sense, but please add some comments before the code in JSEntryStub stating what this is doing.",
+      "parentUuid": "a9a24c57_46b21475",
+      "range": {
+        "startLine": 1878,
+        "startChar": 0,
+        "endLine": 1884,
+        "endChar": 25
+      },
+      "revId": "ba145b32b43047a727ab0ec86d3b5ac2a8f6a92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

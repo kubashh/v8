@@ -93,6 +93,30 @@
       "revId": "3ab9640f7ff0ccacb21a26c45d9b8f6b13a31a0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10303502_100f9c94",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-08T13:32:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a76717a_d4de2692",
+      "range": {
+        "startLine": 1648,
+        "startChar": 4,
+        "endLine": 1648,
+        "endChar": 61
+      },
+      "revId": "3ab9640f7ff0ccacb21a26c45d9b8f6b13a31a0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
