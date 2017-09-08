@@ -194,7 +194,8 @@ DEFINE_IMPLICATION(es_staging, harmony)
   V(harmony_function_sent, "harmony function.sent")                   \
   V(harmony_do_expressions, "harmony do-expressions")                 \
   V(harmony_class_fields, "harmony public fields in class literals")  \
-  V(harmony_promise_finally, "harmony Promise.prototype.finally")
+  V(harmony_promise_finally, "harmony Promise.prototype.finally")     \
+  V(harmony_bigint, "harmony arbitary precision integers")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_INPROGRESS(V)                    \

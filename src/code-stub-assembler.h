@@ -893,6 +893,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsZeroOrFixedArray(Node* object);
   Node* IsHashTable(Node* object);
   Node* IsHeapNumber(Node* object);
+  Node* IsBigInt(Node* object);
   Node* IsIndirectStringInstanceType(Node* instance_type);
   Node* IsJSArrayBuffer(Node* object);
   Node* IsJSArrayInstanceType(Node* instance_type);
@@ -936,6 +937,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsString(Node* object);
   Node* IsSymbolInstanceType(Node* instance_type);
   Node* IsSymbol(Node* object);
+  Node* IsBigIntInstanceType(Node* instance_type);
   Node* IsUnseededNumberDictionary(Node* object);
   Node* IsWeakCell(Node* object);
   Node* IsUndetectableMap(Node* map);
