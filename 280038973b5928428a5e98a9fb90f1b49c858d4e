@@ -22,6 +22,30 @@
       "revId": "280038973b5928428a5e98a9fb90f1b49c858d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37c4f9e3_2ad6a07a",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T13:42:18Z",
+      "side": 1,
+      "message": "Yeah, I guess it can easily be added back it it\u0027s required later. Removing it.",
+      "parentUuid": "5f51faf3_2713bd59",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 70
+      },
+      "revId": "280038973b5928428a5e98a9fb90f1b49c858d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
