@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2565efb3_3398e35a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T18:22:34Z",
+      "side": 1,
+      "message": "bigint_loop",
+      "range": {
+        "startLine": 1956,
+        "startChar": 12,
+        "endLine": 1956,
+        "endChar": 22
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35938c15_4bd69358",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T18:22:34Z",
+      "side": 1,
+      "message": "IsBigInt(value)",
+      "range": {
+        "startLine": 1024,
+        "startChar": 11,
+        "endLine": 1024,
+        "endChar": 46
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb663e8a_50b290aa",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3827,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T18:22:34Z",
+      "side": 1,
+      "message": "Since there is only one BigIntMap, comparing map equality would be faster than loading the instance type (just like \"IsSymbolMap\" in line 3818).",
+      "range": {
+        "startLine": 3826,
+        "startChar": 9,
+        "endLine": 3827,
+        "endChar": 1
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "374e8fdc_e10c2893",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 8832,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T18:22:34Z",
+      "side": 1,
+      "message": "SmiConstant() has an overloaded version that doesn\u0027t require an explicit Smi::FromInt().",
+      "range": {
+        "startLine": 8832,
+        "startChar": 49,
+        "endLine": 8832,
+        "endChar": 62
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6905f85_62e142e2",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T18:22:34Z",
+      "side": 1,
+      "message": "nit: \"arbitrary\" (or just call them \"BigInt proposal\" -- what\u0027s \"harmony\"?)",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 37
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
