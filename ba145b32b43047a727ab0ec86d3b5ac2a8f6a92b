@@ -22,6 +22,30 @@
       "revId": "ba145b32b43047a727ab0ec86d3b5ac2a8f6a92b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9a24c57_46b21475",
+        "filename": "src/arm64/macro-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 1182309
+      },
+      "writtenOn": "2017-09-08T10:30:37Z",
+      "side": 0,
+      "message": "We can\u0027t push/pop single registers any more, so we\u0027re inlining any lightly used macro assembler function that does this, in order to get an opportunity to merge a nearby push/pop in a subsequent patch. The alternative is pushing extra padding registers, which we\u0027d like to avoid where possible.\n\nLooking at this more closely, I think PopStackHandler() could be kept, as it effectively pops two registers, but having PopStackHandler() with no PushStackHandler() may be confusing.",
+      "parentUuid": "552a8986_f8fc6179",
+      "range": {
+        "startLine": 1878,
+        "startChar": 0,
+        "endLine": 1884,
+        "endChar": 25
+      },
+      "revId": "ba145b32b43047a727ab0ec86d3b5ac2a8f6a92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
