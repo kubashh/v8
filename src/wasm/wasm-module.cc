@@ -250,7 +250,8 @@ Handle<JSArrayBuffer> SetupArrayBuffer(Isolate* isolate, void* allocation_base,
                                        bool is_external,
                                        bool enable_guard_regions,
                                        SharedFlag shared) {
-  Handle<JSArrayBuffer> buffer = isolate->factory()->NewJSArrayBuffer(shared);
+  Handle<JSArrayBuffer> buffer =
+      isolate->factory()->NewJSArrayBuffer(shared, TENURED);
   DCHECK_GE(kMaxInt, size);
   if (shared == SharedFlag::kShared) DCHECK(FLAG_experimental_wasm_threads);
   JSArrayBuffer::Setup(buffer, isolate, is_external, allocation_base,
@@ -493,6 +494,7 @@ void DetachWebAssemblyMemoryBuffer(Isolate* isolate,
       // by Neuter. This means there is a dangling pointer until we neuter the
       // buffer. Since there is no way for the user to directly call
       // FreeBackingStore, we can ensure this is safe.
+      printf("\nfree memory");
       buffer->FreeBackingStore();
     }
   }
