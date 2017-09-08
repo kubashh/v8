@@ -15688,6 +15688,7 @@ template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::Print() {
   OFStream os(stdout);
   Print(os);
+  os << std::endl;
 }
 #endif
 

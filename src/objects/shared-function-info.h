@@ -507,6 +507,8 @@ class SharedFunctionInfo : public HeapObject {
   DEFINE_BIT_FIELDS(DEBUGGER_HINTS_BIT_FIELDS)
 #undef DEBUGGER_HINTS_BIT_FIELDS
 
+  inline bool needs_home_object() const;
+
  private:
   // [raw_name]: Function name string or kNoSharedNameSentinel.
   DECL_ACCESSORS(raw_name, Object)
@@ -516,7 +518,9 @@ class SharedFunctionInfo : public HeapObject {
   // Indicates that this function uses a super property (or an eval that may
   // use a super property).
   // This is needed to set up the [[HomeObject]] on the function instance.
-  DECL_BOOLEAN_ACCESSORS(needs_home_object)
+  //  inline bool needs_home_object() const;
+  inline void set_needs_home_object(bool value);
+  //  DECL_BOOLEAN_ACCESSORS(needs_home_object)
 
   friend class Factory;
   friend class V8HeapExplorer;

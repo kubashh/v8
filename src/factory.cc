@@ -3043,6 +3043,7 @@ Handle<Map> Factory::CreateClassFunctionMap(Handle<JSFunction> empty_function) {
   Handle<Map> map = NewMap(JS_FUNCTION_TYPE, JSFunction::kSize);
   SetClassFunctionInstanceDescriptor(map);
   map->set_is_constructor(true);
+  map->set_is_prototype_map(true);
   map->set_is_callable();
   Map::SetPrototype(map, empty_function);
   return map;
