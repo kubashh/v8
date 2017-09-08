@@ -229,7 +229,7 @@ LogReader.prototype.processLog_ = function(lines) {
       var fields = this.csvParser_.parseLine(line);
       this.dispatchLogRow_(fields);
     } catch (e) {
-      this.printError('line ' + (this.lineNum_ + 1) + ': ' + (e.message || e));
+      this.printError('line ' + (this.lineNum_ + 1) + ': ' + (e.message || e) + "\n" + e.stack);
     }
   }
 };

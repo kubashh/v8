@@ -58,6 +58,7 @@ INT_ACCESSORS(SharedFunctionInfo, start_position_and_type,
 INT_ACCESSORS(SharedFunctionInfo, function_token_position,
               kFunctionTokenPositionOffset)
 INT_ACCESSORS(SharedFunctionInfo, compiler_hints, kCompilerHintsOffset)
+INT_ACCESSORS(SharedFunctionInfo, compiler_hints2, kCompilerHints2Offset)
 
 bool SharedFunctionInfo::has_shared_name() const {
   return raw_name() != kNoSharedNameSentinel;
@@ -86,6 +87,8 @@ BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints, allows_lazy_compilation,
                     SharedFunctionInfo::AllowLazyCompilationBit)
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints, uses_arguments,
                     SharedFunctionInfo::UsesArgumentsBit)
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints2, has_been_executed,
+                    SharedFunctionInfo::HasBeenExecutedBit)
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, compiler_hints,
                     has_duplicate_parameters,
                     SharedFunctionInfo::HasDuplicateParametersBit)

@@ -53,6 +53,8 @@ class BlockingCompilationJob : public CompilationJob {
 
   Status FinalizeJobImpl() override { return SUCCEEDED; }
 
+  const char* name() const final { return "blocking-compilation"; }
+
  private:
   Handle<SharedFunctionInfo> shared_;
   ParseInfo parse_info_;
