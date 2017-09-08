@@ -400,9 +400,6 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
   compiled_code_ = FindOptimizedCode();
 #if DEBUG
   DCHECK(compiled_code_ != NULL);
-  if (type == EAGER || type == SOFT || type == LAZY) {
-    DCHECK(compiled_code_->kind() != Code::FUNCTION);
-  }
 #endif
 
   DCHECK(function->IsJSFunction());
