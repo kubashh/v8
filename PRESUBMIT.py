@@ -279,6 +279,7 @@ def _CommonChecks(input_api, output_api):
       _CheckNoInlineHeaderIncludesInNormalHeaders(input_api, output_api))
   results.extend(_CheckMissingFiles(input_api, output_api))
   results.extend(_CheckJSONFiles(input_api, output_api))
+  results.extend(_CheckMacroUndefs(input_api, output_api))
   return results
 
 
@@ -335,6 +336,77 @@ def _CheckJSONFiles(input_api, output_api):
             'JSON validation failed for %s. Error:\n%s' % (f.LocalPath(), e))
 
   return [output_api.PresubmitError(r) for r in results]
+
+
+def _CheckMacroUndefs(input_api, output_api):
+  """
+  Checks that each #define in a .cc file is eventually followed by an #undef.
+  """
+  def FilterFile(affected_file):
+    # Skip header files, as they often define type lists which are used in
+    # other files.
+    black_list = (r'.+\.h',) + input_api.DEFAULT_BLACK_LIST
+    return input_api.FilterSourceFile(affected_file, black_list=black_list)
+
+  define_pattern = input_api.re.compile(r'#define (\w+)')
+  undef_pattern = input_api.re.compile(r'#undef (\w+)')
+  errors = []
+  # Count the nesting of #if directives, to detect conditional defines.
+  in_if = 0
+  for f in input_api.AffectedFiles(
+      file_filter=FilterFile, include_deletes=False):
+    if (not any(define_pattern.match(line) or undef_pattern.match(line)
+                for line_num, line in f.ChangedContents())):
+      # No changes to macros in this file. Skip the check.
+      continue
+
+    # Constants used as values in the {defined_macros} dict.
+    conditional = 1
+    unconditional = 2
+    # Map names of defined macros to either {conditional} or {unconditional}.
+    defined_macros = dict()
+    defined = lambda x: x in defined_macros
+    cond_def = lambda x: defined(x) and defined_macros[x] == conditional
+    uncond_def = lambda x: defined(x) and defined_macros[x] == unconditional
+    line_nr = 0
+    with open(f.LocalPath()) as fh:
+      for line in fh:
+        line_nr += 1
+        if line.startswith('#if'):
+          in_if += 1
+        if in_if > 0 and line.startswith('#endif'):
+          in_if -= 1
+
+        define_match = define_pattern.match(line)
+        if define_match:
+          name = define_match.group(1)
+          if cond_def(name) or (uncond_def(name) and not in_if):
+            errors.append('{}:{}: Macro named \'{}\' is already defined.'
+                          .format(f.LocalPath(), line_nr, name))
+          defined_macros[name] = conditional if in_if else unconditional
+
+        undef_match = undef_pattern.match(line)
+        if undef_match:
+          name = undef_match.group(1)
+          if not defined(name):
+            errors.append('{}:{}: Macro named \'{}\' was not defined before.'
+                          .format(f.LocalPath(), line_nr, name))
+          elif in_if and uncond_def(name):
+            defined_macros[name] = conditional
+          else:
+            # Unconditionally undef'ed, or conditional definition conditionally
+            # undef'ed. In the latter case, we just assume that the ifs match.
+            defined_macros.pop(name)
+    for name in defined_macros:
+      errors.append('{}:{}: Macro missing #undef: {}'
+                    .format(f.LocalPath(), line_nr, name))
+
+  if errors:
+    return [output_api.PresubmitPromptOrNotify(
+        'Detected mismatches in #define / #undef in the file(s) where you '
+        'modified preprocessor macros.',
+        errors)]
+  return []
 
 
 def CheckChangeOnUpload(input_api, output_api):
