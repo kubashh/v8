@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dddb7538_d9a793f8",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "I think these using declarations can just be removed.\nIf not, they should be moved inside the namespace(s) below.",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86eb2281_6e2fc9f8",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "In order to guarantee this, you would have to make the class final.",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2e63c92_bc48785a",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "There is only one queue.",
+      "range": {
+        "startLine": 91,
+        "startChar": 34,
+        "endLine": 91,
+        "endChar": 79
+      },
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "780e85ba_ef3f92fb",
+        "filename": "test/common/wasm/wasm-macro-gen.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "Can we move this include to the individual test cc files that require it?",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f80048e_9c9a6395",
+        "filename": "test/mjsunit/wasm/trap-location.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "I don\u0027t get this change. Did you want to add this as additional check?\nThe error message \u0027number of frames\u0027 does not seem to match.\nAlso, the \u0027e.stack.some\u0027 seems overkill. Why not just look at e.stack[1]?",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e149ed_a2ac4c53",
+        "filename": "test/unittests/wasm/control-transfer-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "Why did you add this? The file is unchanged otherwise.",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f16341a_6f115e93",
+        "filename": "test/unittests/wasm/wasm-macro-gen-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T14:14:50Z",
+      "side": 1,
+      "message": "Same question as above.",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
