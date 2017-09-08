@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f51faf3_2713bd59",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-08T12:58:58Z",
+      "side": 1,
+      "message": "nit: Can this be removed? Or is there a reason to keep it? In case we should leave a TODO explaining this commented out code.",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 70
+      },
+      "revId": "280038973b5928428a5e98a9fb90f1b49c858d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
