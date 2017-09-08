@@ -237,11 +237,17 @@ class WasmSectionIterator {
   }
 };
 
+}  // namespace
+
 // The main logic for decoding the bytes of a module.
-class ModuleDecoder : public Decoder {
+class ModuleDecoderImpl : public Decoder {
  public:
-  ModuleDecoder(const byte* module_start, const byte* module_end,
-                ModuleOrigin origin)
+  explicit ModuleDecoderImpl(ModuleOrigin origin)
+      : Decoder(nullptr, nullptr),
+        origin_(FLAG_assume_asmjs_origin ? kAsmJsOrigin : origin) {}
+
+  ModuleDecoderImpl(const byte* module_start, const byte* module_end,
+                    ModuleOrigin origin)
       : Decoder(module_start, module_end),
         origin_(FLAG_assume_asmjs_origin ? kAsmJsOrigin : origin) {
     if (end_ < start_) {
@@ -292,8 +298,8 @@ class ModuleDecoder : public Decoder {
     module_->set_origin(origin_);
   }
 
-  void DecodeModuleHeader(Vector<const uint8_t> bytes, uint8_t offset) {
-    if (failed()) return;
+  bool DecodeModuleHeader(Vector<const uint8_t> bytes, uint8_t offset) {
+    if (failed()) return ok();
     Reset(bytes, offset);
 
     const byte* pos = pc_;
@@ -316,17 +322,20 @@ class ModuleDecoder : public Decoder {
                BYTES(kWasmVersion), BYTES(magic_version));
       }
     }
+    return ok();
   }
 
-  void DecodeSection(SectionCode section_code, Vector<const uint8_t> bytes,
+  bool DecodeSection(SectionCode section_code, Vector<const uint8_t> bytes,
                      uint32_t offset, bool verify_functions = true) {
-    if (failed()) return;
+    if (failed()) return ok();
     Reset(bytes, offset);
+    TRACE("Section: %s\n", SectionName(section_code));
+    TRACE("Decode Section %p - %p\n", bytes.begin(), bytes.end());
 
     // Check if the section is out-of-order.
     if (section_code < next_section_) {
       errorf(pc(), "unexpected section: %s", SectionName(section_code));
-      return;
+      return ok();
     }
 
     switch (section_code) {
@@ -337,10 +346,10 @@ class ModuleDecoder : public Decoder {
         // before the code section. Hence, treat it as a special case.
         if (++number_of_exception_sections > 1) {
           errorf(pc(), "Multiple exception sections not allowed");
-          return;
+          return ok();
         } else if (next_section_ >= kCodeSectionCode) {
           errorf(pc(), "Exception section must appear before the code section");
-          return;
+          return ok();
         }
         break;
       default:
@@ -397,7 +406,7 @@ class ModuleDecoder : public Decoder {
         break;
       default:
         errorf(pc(), "unexpected section: %s", SectionName(section_code));
-        return;
+        return ok();
     }
 
     if (pc() != bytes.end()) {
@@ -407,6 +416,7 @@ class ModuleDecoder : public Decoder {
              "(%zu bytes expected, %zu decoded)",
              msg, bytes.size(), static_cast<size_t>(pc() - bytes.begin()));
     }
+    return ok();
   }
 
   void DecodeTypeSection() {
@@ -561,6 +571,7 @@ class ModuleDecoder : public Decoder {
       WasmGlobal* global = &module_->globals.back();
       DecodeGlobalInModule(module_.get(), i + imported_globals, global);
     }
+    if (ok()) CalculateGlobalOffsets(module_.get());
   }
 
   void DecodeExportSection() {
@@ -701,26 +712,38 @@ class ModuleDecoder : public Decoder {
   }
 
   void DecodeCodeSection(bool verify_functions) {
-    const byte* pos = pc_;
+    uint32_t pos = pc_offset();
     uint32_t functions_count = consume_u32v("functions count");
-    if (functions_count != module_->num_declared_functions) {
-      errorf(pos, "function body count %u mismatch (%u expected)",
-             functions_count, module_->num_declared_functions);
-    }
-    for (uint32_t i = 0; i < functions_count; ++i) {
+    CheckFunctionsCount(functions_count, pos);
+    for (uint32_t i = 0; ok() && i < functions_count; ++i) {
       uint32_t size = consume_u32v("body size");
       uint32_t offset = pc_offset();
       consume_bytes(size, "function body");
       if (failed()) break;
-      WasmFunction* function =
-          &module_->functions[i + module_->num_imported_functions];
-      function->code = {offset, size};
-      if (verify_functions) {
-        ModuleWireBytes bytes(start_, end_);
-        VerifyFunctionBody(module_->signature_zone->allocator(),
-                           i + module_->num_imported_functions, bytes,
-                           module_.get(), function);
-      }
+      DecodeFunctionBody(i, size, offset, verify_functions);
+    }
+  }
+
+  bool CheckFunctionsCount(uint32_t functions_count, uint32_t offset) {
+    if (functions_count != module_->num_declared_functions) {
+      Reset(nullptr, nullptr, offset);
+      errorf(nullptr, "function body count %u mismatch (%u expected)",
+             functions_count, module_->num_declared_functions);
+      return false;
+    }
+    return true;
+  }
+
+  void DecodeFunctionBody(uint32_t index, uint32_t length, uint32_t offset,
+                          bool verify_functions) {
+    WasmFunction* function =
+        &module_->functions[index + module_->num_imported_functions];
+    function->code = {offset, length};
+    if (verify_functions) {
+      ModuleWireBytes bytes(start_, end_);
+      VerifyFunctionBody(module_->signature_zone->allocator(),
+                         index + module_->num_imported_functions, bytes,
+                         module_.get(), function);
     }
   }
 
@@ -881,6 +904,8 @@ class ModuleDecoder : public Decoder {
     return consume_init_expr(nullptr, kWasmStmt);
   }
 
+  WasmModule* module() { return module_.get(); }
+
   bool IsWasm() { return origin_ == kWasmOrigin; }
 
   Counters* GetCounters() {
@@ -902,7 +927,7 @@ class ModuleDecoder : public Decoder {
   // We store next_section_ as uint8_t instead of SectionCode so that we can
   // increment it. This static_assert should make sure that SectionCode does not
   // get bigger than uint8_t accidentially.
-  static_assert(sizeof(ModuleDecoder::next_section_) == sizeof(SectionCode),
+  static_assert(sizeof(ModuleDecoderImpl::next_section_) == sizeof(SectionCode),
                 "type mismatch");
   Result<bool> intermediate_result_;
   ModuleOrigin origin_;
@@ -1301,7 +1326,7 @@ ModuleResult DecodeWasmModule(Isolate* isolate, const byte* module_start,
   size_counter->AddSample(static_cast<int>(size));
   // Signatures are stored in zone memory, which have the same lifetime
   // as the {module}.
-  ModuleDecoder decoder(module_start, module_end, origin);
+  ModuleDecoderImpl decoder(module_start, module_end, origin);
   ModuleResult result = decoder.DecodeModule(isolate, verify_functions);
   // TODO(bradnelson): Improve histogram handling of size_t.
   // TODO(titzer): this isn't accurate, since it doesn't count the data
@@ -1318,7 +1343,39 @@ ModuleResult DecodeWasmModule(Isolate* isolate, const byte* module_start,
   return result;
 }
 
-}  // namespace
+ModuleDecoder::~ModuleDecoder() { delete impl_; }
+
+WasmModule* ModuleDecoder::module() { return impl_->module(); }
+
+void ModuleDecoder::StartDecoding(Isolate* isolate, ModuleOrigin origin) {
+  impl_ = new ModuleDecoderImpl(origin);
+  impl_->StartDecoding(isolate);
+}
+
+bool ModuleDecoder::DecodeModuleHeader(Vector<const uint8_t> bytes,
+                                       uint32_t offset) {
+  return impl_->DecodeModuleHeader(bytes, offset);
+}
+
+bool ModuleDecoder::DecodeSection(SectionCode section_code,
+                                  Vector<const uint8_t> bytes, uint32_t offset,
+                                  bool verify_functions) {
+  return impl_->DecodeSection(section_code, bytes, offset, verify_functions);
+}
+
+void ModuleDecoder::DecodeFunctionBody(uint32_t index, uint32_t length,
+                                       uint32_t offset, bool verify_functions) {
+  impl_->DecodeFunctionBody(index, length, offset, verify_functions);
+}
+
+bool ModuleDecoder::CheckFunctionsCount(uint32_t functions_count,
+                                        uint32_t offset) {
+  return impl_->CheckFunctionsCount(functions_count, offset);
+}
+
+ModuleResult ModuleDecoder::FinishDecoding(bool verify_functions) {
+  return impl_->FinishDecoding(verify_functions);
+}
 
 ModuleResult SyncDecodeWasmModule(Isolate* isolate, const byte* module_start,
                                   const byte* module_end, bool verify_functions,
@@ -1337,13 +1394,13 @@ ModuleResult AsyncDecodeWasmModule(
 
 FunctionSig* DecodeWasmSignatureForTesting(Zone* zone, const byte* start,
                                            const byte* end) {
-  ModuleDecoder decoder(start, end, kWasmOrigin);
+  ModuleDecoderImpl decoder(start, end, kWasmOrigin);
   return decoder.DecodeFunctionSignature(zone, start);
 }
 
 WasmInitExpr DecodeWasmInitExprForTesting(const byte* start, const byte* end) {
   AccountingAllocator allocator;
-  ModuleDecoder decoder(start, end, kWasmOrigin);
+  ModuleDecoderImpl decoder(start, end, kWasmOrigin);
   return decoder.DecodeInitExpr(start);
 }
 
@@ -1360,7 +1417,7 @@ FunctionResult DecodeWasmFunction(Isolate* isolate, Zone* zone,
     return FunctionResult::Error("start > end");
   if (size > kV8MaxWasmFunctionSize)
     return FunctionResult::Error("size > maximum function size: %zu", size);
-  ModuleDecoder decoder(function_start, function_end, kWasmOrigin);
+  ModuleDecoderImpl decoder(function_start, function_end, kWasmOrigin);
   decoder.SetCounters(counters);
   return decoder.DecodeSingleFunction(zone, wire_bytes, module,
                                       base::make_unique<WasmFunction>());
