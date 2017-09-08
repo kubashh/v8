@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1e8699b_385a7950",
+        "filename": "src/arm64/code-stubs-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-08T09:31:33Z",
+      "side": 1,
+      "message": "Could you add back the comment so it\u0027s clear the undef is for new.target",
+      "range": {
+        "startLine": 1839,
+        "startChar": 2,
+        "endLine": 1839,
+        "endChar": 4
+      },
+      "revId": "3ab9640f7ff0ccacb21a26c45d9b8f6b13a31a0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c1f0a86_e6801221",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-08T09:31:33Z",
+      "side": 1,
+      "message": "This is clever, but I\u0027m not so keen on having to maintain these flags over the all the instructions from here to l1681 - it would be easy to introduce an instruction which clobbbered the flags accidentally. Could you restructure the code to have the Cmp above the sequence of tests, e.g., something like:\n\n__ Cbz(argc, \u0026no_args);\n\n// At least one argument. Load two arguments, though we may only use one\n// (for the one arg case).\n__ Ldp(scratch2, scratch1,\n           MemOperand(fp, StandardFrameConstants::kCallerSPOffset));\n\n__ Cmp(argc, 2);\n__ B(gt, \u0026three_args);\n\n// One or two arguments.\n// If there is one argument (flags are lt), scratch2 contains that argument,\n// and scratch1 must be undefined.\n__ CmovX(scratch1, scratch2, lt);\n__ CmovX(scratch2, undef, lt);\n...\n\n(with an extra register for the SmiTagged argc of course)",
+      "range": {
+        "startLine": 1648,
+        "startChar": 4,
+        "endLine": 1648,
+        "endChar": 61
+      },
+      "revId": "3ab9640f7ff0ccacb21a26c45d9b8f6b13a31a0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
