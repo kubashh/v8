@@ -182,6 +182,30 @@
     },
     {
       "key": {
+        "uuid": "419cbf92_4063334b",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T23:18:03Z",
+      "side": 1,
+      "message": "Maybe we should do s/harmony/esnext/ (or something) in this entire file. Maybe that should be a separate cleanup though ;-)",
+      "parentUuid": "401474c4_c93a41af",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 37
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5cb864eb_90232891",
         "filename": "src/heap/heap.cc",
         "patchSetId": 9
@@ -199,6 +223,24 @@
     },
     {
       "key": {
+        "uuid": "51f5e3e5_9436e1f5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T23:18:03Z",
+      "side": 1,
+      "message": "Don\u0027t bother; this code will need to be changed anyway. BigInts will have variable size (which we will have to pass to this function).",
+      "parentUuid": "5cb864eb_90232891",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3dc3cf6_fc7e9955",
         "filename": "src/objects-debug.cc",
         "patchSetId": 9
@@ -213,6 +255,24 @@
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12dc9c43_d7307181",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-08T23:18:03Z",
+      "side": 1,
+      "message": "Don\u0027t bother, the value won\u0027t be a Smi for very long, and as soon as it\u0027s binary data there\u0027s nothing to verify.\n\nUnrelatedly, the \"CHECK(IsFoo())\" calls in all the \"Foo::FooVerify()\" methods around here are pretty pointless (the big switch above only calls this for BigInts anyway), but I guess we might as well be consistent in our paranoia.",
+      "parentUuid": "f3dc3cf6_fc7e9955",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
