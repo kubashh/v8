@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ce3e69a_5456cc09",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3010,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T07:49:03Z",
+      "side": 1,
+      "message": "\"auto*\" would read nicer here IMO.",
+      "range": {
+        "startLine": 3010,
+        "startChar": 2,
+        "endLine": 3010,
+        "endChar": 6
+      },
+      "revId": "d73f300c889e39d9380606e5836327d54cd70ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415b44df_7b45dc42",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3022,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-08T07:49:03Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "d73f300c889e39d9380606e5836327d54cd70ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
