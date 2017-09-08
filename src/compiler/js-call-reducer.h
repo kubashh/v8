@@ -71,6 +71,7 @@ class JSCallReducer final : public AdvancedReducer {
   Reduction ReduceReflectGetPrototypeOf(Node* node);
   Reduction ReduceArrayForEach(Handle<JSFunction> function, Node* node);
   Reduction ReduceArrayMap(Handle<JSFunction> function, Node* node);
+  Reduction ReduceArrayFilter(Handle<JSFunction> function, Node* node);
   Reduction ReduceCallOrConstructWithArrayLikeOrSpread(
       Node* node, int arity, CallFrequency const& frequency,
       VectorSlotPair const& feedback);
@@ -83,6 +84,21 @@ class JSCallReducer final : public AdvancedReducer {
   Reduction ReduceReturnReceiver(Node* node);
 
   Reduction ReduceSoftDeoptimize(Node* node, DeoptimizeReason reason);
+
+  // Returns the updated {to} node, and updates control and effect along the
+  // way.
+  Node* DoFilterPostCallbackWork(ElementsKind kind, Node* context,
+                                 Node* frame_state, Node** control,
+                                 Node** effect, Node* a, Node* to,
+                                 Node* element, Node* callback_value);
+
+  // Creates a map check for {receiver} against {orig_map}.  Updates {effect}.
+  void WireInMapCheck(Node* orig_map, Node* receiver, Node** effect,
+                      Node* control);
+
+  // Load receiver[k], first bounding k by receiver array length.
+  // k is thusly changed, and the effect is changed as well.
+  Node* SafeLoadElement(Node* receiver, Node* control, Node** effect, Node** k);
 
   Graph* graph() const;
   JSGraph* jsgraph() const { return jsgraph_; }
