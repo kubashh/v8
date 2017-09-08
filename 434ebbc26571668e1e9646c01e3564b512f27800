@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "a197b73b_e5c19163",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-09-08T22:30:06Z",
+      "side": 1,
+      "message": "All of these load the Map multiple times, right? Can you refactor this to switch on the map or instance type directly?",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35938c15_4bd69358",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 9
@@ -36,6 +53,30 @@
       "writtenOn": "2017-09-08T18:22:34Z",
       "side": 1,
       "message": "IsBigInt(value)",
+      "range": {
+        "startLine": 1024,
+        "startChar": 11,
+        "endLine": 1024,
+        "endChar": 46
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9450bc2_2efb0df4",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-09-08T22:30:06Z",
+      "side": 1,
+      "message": "That would load the map again.. Might be better to have IsBigIntMap(value_map)",
+      "parentUuid": "35938c15_4bd69358",
       "range": {
         "startLine": 1024,
         "startChar": 11,
@@ -111,6 +152,64 @@
         "endLine": 198,
         "endChar": 37
       },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "401474c4_c93a41af",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-09-08T22:30:06Z",
+      "side": 1,
+      "message": "harmony was the codename for ES6.. I guess we\u0027ve just kept it for new ESNext features as well.",
+      "parentUuid": "c6905f85_62e142e2",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 37
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cb864eb_90232891",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-09-08T22:30:06Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to pass in the value to be set as a parameter as well? Right now kValue has garbage right after allocation.",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3dc3cf6_fc7e9955",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-09-08T22:30:06Z",
+      "side": 1,
+      "message": "Should we check if value is Smi?",
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
