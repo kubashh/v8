@@ -1571,6 +1571,51 @@ TF_BUILTIN(ArrayFilterLoopContinuation, ArrayBuiltinCodeStubAssembler) {
       &ArrayBuiltinCodeStubAssembler::NullPostLoopAction);
 }
 
+TF_BUILTIN(ArrayFilterLoopEagerDeoptContinuation,
+           ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+  Node* to = Parameter(Descriptor::kTo);
+
+  Callable stub(
+      Builtins::CallableFor(isolate(), Builtins::kArrayFilterLoopContinuation));
+  Return(CallStub(stub, context, receiver, callbackfn, this_arg, array,
+                  receiver, initial_k, len, to));
+}
+
+TF_BUILTIN(ArrayFilterLoopLazyDeoptContinuation,
+           ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+  Node* to = Parameter(Descriptor::kTo);
+  Node* result = Parameter(Descriptor::kResult);
+
+  // This custom lazy deopt point is right after the callback. map() needs
+  // to pick up at the next step, which is setting the callback result in
+  // the output array. After incrementing k, we can glide into the loop
+  // continuation builtin.
+
+  // iii. Perform ? CreateDataPropertyOrThrow(A, Pk, mappedValue).
+  CallRuntime(Runtime::kCreateDataProperty, context, array, initial_k, result);
+  // Then we have to increment k before going on.
+  initial_k = NumberInc(initial_k);
+
+  Callable stub(
+      Builtins::CallableFor(isolate(), Builtins::kArrayFilterLoopContinuation));
+  Return(CallStub(stub, context, receiver, callbackfn, this_arg, array,
+                  receiver, initial_k, len, to));
+}
+
 TF_BUILTIN(ArrayFilter, ArrayBuiltinCodeStubAssembler) {
   Node* argc =
       ChangeInt32ToIntPtr(Parameter(BuiltinDescriptor::kArgumentsCount));
