@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2484c7d_ff47b930",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: This part of the comment doesn\u0027t apply to \"filter\".",
+      "range": {
+        "startLine": 1603,
+        "startChar": 63,
+        "endLine": 1605,
+        "endChar": 22
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f034681_9fb8cf44",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Likewise, spec reference is for \"map\", not \"filter\".",
+      "range": {
+        "startLine": 1608,
+        "startChar": 2,
+        "endLine": 1608,
+        "endChar": 66
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93c1043f_41b0035a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Lets move the helpers down so that they don\u0027t hide in between the reduction methods.",
+      "range": {
+        "startLine": 756,
+        "startChar": 20,
+        "endLine": 756,
+        "endChar": 49
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "930e57d4_5d1ed5a5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 769,
+        "startChar": 20,
+        "endLine": 769,
+        "endChar": 52
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b09e101e_a18c577c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Lets move the helpers down so that they don\u0027t hide in between the reduction methods.",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 34
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba18bc4b_e900b737",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 968,
+        "startChar": 21,
+        "endLine": 968,
+        "endChar": 36
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb73598_a9376375",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Comment doesn\u0027t seem to apply to \"filter\".",
+      "range": {
+        "startLine": 1113,
+        "startChar": 5,
+        "endLine": 1113,
+        "endChar": 38
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d3e000_f3b64233",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T16:01:09Z",
+      "side": 1,
+      "message": "nit: Lets elaborate in this comment that we are intentionally hijacking the \"Builtins::kArrayFilterLoopLazyDeoptContinuation\" as an eager entry point in this case and that this is safe because re-evaluating a [ToBoolean] coercion is safe.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 0,
+        "endLine": 1131,
+        "endChar": 70
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
