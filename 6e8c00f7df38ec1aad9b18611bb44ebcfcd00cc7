@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "601f01c8_03800a35",
+        "filename": "src/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 0,
+      "message": "I\u0027ll make a follow-up CL right away. I tried real quick, and the CL started getting bigger. I think I can do it, making the type() method pure virtual and eliminating the JAVA_SCRIPT_FRAME type.",
+      "parentUuid": "05c69fcd_bcbfde6d",
+      "range": {
+        "startLine": 456,
+        "startChar": 17,
+        "endLine": 456,
+        "endChar": 28
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35f19c4c_2f88c46c",
         "filename": "src/objects-debug.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-11T05:34:48Z",
       "side": 0,
       "message": "Awesome to finally get rid of this :D",
+      "range": {
+        "startLine": 1657,
+        "startChar": 11,
+        "endLine": 1657,
+        "endChar": 31
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9bc59ff_11c37d5f",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 0,
+      "message": "Yeah!",
+      "parentUuid": "35f19c4c_2f88c46c",
       "range": {
         "startLine": 1657,
         "startChar": 11,
@@ -68,6 +116,30 @@
       "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e74b504_a3d66464",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "731f7184_4eacd5db",
+      "range": {
+        "startLine": 219,
+        "startChar": 25,
+        "endLine": 219,
+        "endChar": 36
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

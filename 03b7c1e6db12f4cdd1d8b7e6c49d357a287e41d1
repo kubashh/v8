@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "728f55ea_734b9a2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44900cd8_e75b4160",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 3
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1289397f_95decc1e",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-11T09:22:09Z",
       "side": 1,
       "message": "nit: Now that there is no predicate here anymore, we can just remove the \"#if DEBUG\" because DCHECK will take care of that.",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 9
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6de85aa0_88e99848",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Oh right, thanks :)",
+      "parentUuid": "1289397f_95decc1e",
       "range": {
         "startLine": 401,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2d8c1c28_0c1af026",
+        "filename": "src/objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3726,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a272a24_a0bc7972",
+      "range": {
+        "startLine": 3726,
+        "startChar": 17,
+        "endLine": 3726,
+        "endChar": 39
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b36e85ba_5b934adf",
         "filename": "src/objects.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81da3ae_cbaa658d",
+        "filename": "src/objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4033,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b36e85ba_5b934adf",
+      "range": {
+        "startLine": 4033,
+        "startChar": 8,
+        "endLine": 4033,
+        "endChar": 49
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "da9da6f4_a377f08b",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb29e064_86a5f6cf",
+      "range": {
+        "startLine": 220,
+        "startChar": 8,
+        "endLine": 220,
+        "endChar": 63
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1837e5b_69c86402",
         "filename": "test/unittests/compiler-dispatcher/unoptimized-compile-job-unittest.cc",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d5e5e34_8b0be0d2",
+        "filename": "test/unittests/compiler-dispatcher/unoptimized-compile-job-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-11T14:19:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1837e5b_69c86402",
+      "range": {
+        "startLine": 356,
+        "startChar": 5,
+        "endLine": 356,
+        "endChar": 50
+      },
+      "revId": "03b7c1e6db12f4cdd1d8b7e6c49d357a287e41d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
