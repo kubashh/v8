@@ -202,6 +202,30 @@
     },
     {
       "key": {
+        "uuid": "8f62a29d_1903d63f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3827,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-11T16:56:57Z",
+      "side": 1,
+      "message": "I\u0027m not sure we\u0027ll have multiple maps; but let\u0027s not bikeshed, this is fine for now.",
+      "parentUuid": "fed154f0_350576ce",
+      "range": {
+        "startLine": 3826,
+        "startChar": 9,
+        "endLine": 3827,
+        "endChar": 1
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "374e8fdc_e10c2893",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 9
@@ -341,6 +365,30 @@
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beaf9e30_34be0054",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-11T16:56:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "862f28a3_3750baee",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 37
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
