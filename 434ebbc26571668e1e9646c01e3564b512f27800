@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bcf70196_a31fa02e",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2565efb3_3398e35a",
+      "range": {
+        "startLine": 1956,
+        "startChar": 12,
+        "endLine": 1956,
+        "endChar": 22
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a197b73b_e5c19163",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 9
@@ -36,6 +60,24 @@
       "writtenOn": "2017-09-08T22:30:06Z",
       "side": 1,
       "message": "All of these load the Map multiple times, right? Can you refactor this to switch on the map or instance type directly?",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4f821a8_6c50f4c3",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Yes they do, but it\u0027s nicer to read this way and (according to Jaro who wrote this function) the overhead is most likely negligible.",
+      "parentUuid": "a197b73b_e5c19163",
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "b754a9ad_e5a4629b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Changed to IsBigInt(value), see the other comments.",
+      "parentUuid": "e9450bc2_2efb0df4",
+      "range": {
+        "startLine": 1024,
+        "startChar": 11,
+        "endLine": 1024,
+        "endChar": 46
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb663e8a_50b290aa",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 9
@@ -100,6 +166,30 @@
       "writtenOn": "2017-09-08T18:22:34Z",
       "side": 1,
       "message": "Since there is only one BigIntMap, comparing map equality would be faster than loading the instance type (just like \"IsSymbolMap\" in line 3818).",
+      "range": {
+        "startLine": 3826,
+        "startChar": 9,
+        "endLine": 3827,
+        "endChar": 1
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed154f0_350576ce",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3827,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Right, I wrote it this way because we\u0027ll eventually have multiple maps.",
+      "parentUuid": "cb663e8a_50b290aa",
       "range": {
         "startLine": 3826,
         "startChar": 9,
@@ -132,6 +222,30 @@
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1321026d_7e08d29e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 8832,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "374e8fdc_e10c2893",
+      "range": {
+        "startLine": 8832,
+        "startChar": 49,
+        "endLine": 8832,
+        "endChar": 62
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -194,6 +308,30 @@
       "side": 1,
       "message": "Maybe we should do s/harmony/esnext/ (or something) in this entire file. Maybe that should be a separate cleanup though ;-)",
       "parentUuid": "401474c4_c93a41af",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 37
+      },
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "862f28a3_3750baee",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Fixed the typo. More than happy to get rid of the \"harmony\" name if others agree (separately).",
+      "parentUuid": "419cbf92_4063334b",
       "range": {
         "startLine": 198,
         "startChar": 29,
@@ -290,6 +428,24 @@
       "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d44a2889_b8644285",
+        "filename": "src/objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-11T09:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ba71a60_90c91d1d",
+      "revId": "434ebbc26571668e1e9646c01e3564b512f27800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
