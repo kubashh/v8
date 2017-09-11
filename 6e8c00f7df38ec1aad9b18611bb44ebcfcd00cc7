@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05c69fcd_bcbfde6d",
+        "filename": "src/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-11T05:34:48Z",
+      "side": 0,
+      "message": "Can we make JavaScriptFrame pure virtual now? It\u0027s either OptimizedFrame or InterpretedFrame, but I don\u0027t think we can ever have an instance of JavaScriptFrame anymore.",
+      "range": {
+        "startLine": 456,
+        "startChar": 17,
+        "endLine": 456,
+        "endChar": 28
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f19c4c_2f88c46c",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-11T05:34:48Z",
+      "side": 0,
+      "message": "Awesome to finally get rid of this :D",
+      "range": {
+        "startLine": 1657,
+        "startChar": 11,
+        "endLine": 1657,
+        "endChar": 31
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
