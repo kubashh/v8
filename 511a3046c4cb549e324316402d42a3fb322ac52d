@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5574057a_9d03234b",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-09-11T22:29:36Z",
+      "side": 1,
+      "message": "Why drop this?",
+      "revId": "511a3046c4cb549e324316402d42a3fb322ac52d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
