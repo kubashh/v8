@@ -45,6 +45,29 @@
       "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "731f7184_4eacd5db",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T09:22:09Z",
+      "side": 0,
+      "message": "nit: Lets leave a TODO here to use \"set_code\" directly everywhere (similar to what we are doing for JSFunction::ReplaceCode as well).",
+      "range": {
+        "startLine": 219,
+        "startChar": 25,
+        "endLine": 219,
+        "endChar": 36
+      },
+      "revId": "6e8c00f7df38ec1aad9b18611bb44ebcfcd00cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
