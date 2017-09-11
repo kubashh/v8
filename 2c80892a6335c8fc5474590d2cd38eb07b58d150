@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b80eaa9_d056fe85",
+        "filename": "test/mjsunit/regress/wasm/regression-763697.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-11T12:27:38Z",
+      "side": 1,
+      "message": "Redundant comma",
+      "range": {
+        "startLine": 13,
+        "startChar": 26,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "2c80892a6335c8fc5474590d2cd38eb07b58d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9685e952_63345473",
+        "filename": "test/mjsunit/regress/wasm/regression-763697.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-11T12:27:38Z",
+      "side": 1,
+      "message": "Missing semicolon",
+      "range": {
+        "startLine": 15,
+        "startChar": 32,
+        "endLine": 15,
+        "endChar": 33
+      },
+      "revId": "2c80892a6335c8fc5474590d2cd38eb07b58d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
