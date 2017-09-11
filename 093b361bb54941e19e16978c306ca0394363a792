@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2b9b3f2e_d19466d4",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-11T21:13:18Z",
+      "side": 1,
+      "message": "IIRC, this was added to fix breaking JS Spec tests in this bug - https://bugs.chromium.org/p/v8/issues/detail?id\u003d6546\n\nRefactored to isolate allocate/detach only when called through the JS API.",
+      "parentUuid": "87f29abe_22e8d7ce",
+      "revId": "093b361bb54941e19e16978c306ca0394363a792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c9ba09df_36fed6d2",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 14
@@ -33,6 +51,24 @@
       "revId": "093b361bb54941e19e16978c306ca0394363a792",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2970ea41_cacb63d6",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-11T21:13:18Z",
+      "side": 1,
+      "message": "Oops, removed. :)",
+      "parentUuid": "c9ba09df_36fed6d2",
+      "revId": "093b361bb54941e19e16978c306ca0394363a792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
