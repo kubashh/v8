@@ -209,6 +209,7 @@ Type::bitset BitsetType::Lub(i::Map* map) {
       return kOtherObject;
     case JS_ARRAY_TYPE:
       return kArray;
+    case BIGINT_TYPE:
     case JS_VALUE_TYPE:
     case JS_MESSAGE_OBJECT_TYPE:
     case JS_DATE_TYPE:

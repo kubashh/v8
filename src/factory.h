@@ -9,6 +9,7 @@
 #include "src/globals.h"
 #include "src/isolate.h"
 #include "src/messages.h"
+#include "src/objects/bigint.h"
 #include "src/objects/descriptor-array.h"
 #include "src/objects/dictionary.h"
 #include "src/objects/scope-info.h"
@@ -472,6 +473,8 @@ class V8_EXPORT_PRIVATE Factory final {
   // Creates heap number object with not yet set value field.
   Handle<HeapNumber> NewHeapNumber(MutableMode mode,
                                    PretenureFlag pretenure = NOT_TENURED);
+
+  Handle<BigInt> NewBigInt(PretenureFlag pretenure = NOT_TENURED);
 
   Handle<JSWeakMap> NewJSWeakMap();
 
