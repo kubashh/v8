@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40729c96_51082df6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-09-11T19:16:49Z",
+      "side": 0,
+      "message": "It looks like this code basically moved to SetupNewBufferWithSameBackingStore. Why doesn\u0027t that new function need to be called here? Is it because grow_memory(0) isn\u0027t supposed to detach the buffer?",
+      "revId": "62649c8e7e9ee3017b6c69da2639b7b6d950e90e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

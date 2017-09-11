@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87f29abe_22e8d7ce",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-09-11T19:16:49Z",
+      "side": 1,
+      "message": "Does this make any of the Wasm JS Spec tests pass that were broken before?",
+      "revId": "093b361bb54941e19e16978c306ca0394363a792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ba09df_36fed6d2",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-09-11T19:16:49Z",
+      "side": 1,
+      "message": "nit: remove this :)",
+      "revId": "093b361bb54941e19e16978c306ca0394363a792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
