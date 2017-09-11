@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9ee77d5_65ee3108",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T12:17:26Z",
+      "side": 1,
+      "message": "This makes BigInt values (which should be primitive values in the JS-sense IIUC) look like \"objects\" (in the \"JSReceiver\" sense). As a stop-gap we should be able to make them kOtherInternal until we have a proper type in the type-system for them.",
+      "range": {
+        "startLine": 212,
+        "startChar": 9,
+        "endLine": 212,
+        "endChar": 20
+      },
+      "revId": "64b96618be86edb57524daf9538583a847eb8054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf3facf_ffcde183",
+        "filename": "src/factory.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T12:17:26Z",
+      "side": 1,
+      "message": "nit: Forward declaration of \"class BigInt\" should suffice here.",
+      "range": {
+        "startLine": 12,
+        "startChar": 22,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "64b96618be86edb57524daf9538583a847eb8054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02d8af1_168c5aa0",
+        "filename": "src/runtime/runtime-bigint.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T12:17:26Z",
+      "side": 1,
+      "message": "nit: Should get by with \"SealHandleScope shs(isolate)\" here.",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 13
+      },
+      "revId": "64b96618be86edb57524daf9538583a847eb8054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71998374_d48bf50b",
+        "filename": "src/runtime/runtime-bigint.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-11T12:17:26Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 13
+      },
+      "revId": "64b96618be86edb57524daf9538583a847eb8054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
