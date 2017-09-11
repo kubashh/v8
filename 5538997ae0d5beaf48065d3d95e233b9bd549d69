@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4b8cfe61_47604861",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-09-11T11:58:20Z",
+      "side": 1,
+      "message": "Maybe still also keep black_list\u003dinput_api.DEFAULT_BLACK_LIST\n\nI don\u0027t know what\u0027s in it, but in the new code we don\u0027t have it anymore...",
+      "parentUuid": "fbc6ee8a_3db51c7f",
+      "range": {
+        "startLine": 348,
+        "startChar": 4,
+        "endLine": 349,
+        "endChar": 75
+      },
+      "revId": "5538997ae0d5beaf48065d3d95e233b9bd549d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c9b07b2f_5c094516",
         "filename": "PRESUBMIT.py",
         "patchSetId": 4
@@ -93,6 +117,30 @@
       "revId": "5538997ae0d5beaf48065d3d95e233b9bd549d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e634a2c7_edbefd9b",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-09-11T11:58:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "825ae744_2545b5f3",
+      "range": {
+        "startLine": 357,
+        "startChar": 38,
+        "endLine": 357,
+        "endChar": 56
+      },
+      "revId": "5538997ae0d5beaf48065d3d95e233b9bd549d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
