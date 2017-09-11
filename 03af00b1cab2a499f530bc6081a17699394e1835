@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d702bd15_5d98815e",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-11T10:35:23Z",
+      "side": 1,
+      "message": "Added this TODO now, which references the bug.",
+      "revId": "03af00b1cab2a499f530bc6081a17699394e1835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
