@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78e8abe6_c991abb3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-12T13:10:39Z",
+      "side": 1,
+      "message": "Can you document why the AsyncCompileJob needs to stay alive while rejecting the promise?",
+      "revId": "473086cc02165407fed51a3690a19c9fbafc66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2825c47a_79887d27",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-12T13:10:39Z",
+      "side": 1,
+      "message": "Same here, or just refer to the \"documentation above\".",
+      "revId": "473086cc02165407fed51a3690a19c9fbafc66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e67861_fc8bd4cb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-12T13:10:39Z",
+      "side": 1,
+      "message": "I am wondering if this condition can be detected without being specified explicitly. Isn\u0027t the return value of {InitializeCompilationUnits} zero if no functions have been added yet?\nAlso, shouldn\u0027t {ExecuteAndFinishCompilationUnits} get the minimum of that return value and {num_background_tasks}?\nIf this is all doable, then is looks like we don\u0027t need the {start_compilation_} variable any more, the right thing would happen automatically.",
+      "revId": "473086cc02165407fed51a3690a19c9fbafc66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00d9189c_b50bca5b",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-12T13:10:39Z",
+      "side": 1,
+      "message": "Seems redundant.",
+      "revId": "473086cc02165407fed51a3690a19c9fbafc66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "093eadce_d4a3a66f",
+        "filename": "src/wasm/wasm-result.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-12T13:10:39Z",
+      "side": 1,
+      "message": "Please add a newline after the constructor.",
+      "revId": "473086cc02165407fed51a3690a19c9fbafc66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
