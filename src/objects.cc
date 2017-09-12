@@ -1105,10 +1105,14 @@ MaybeHandle<Object> JSProxy::GetProperty(Isolate* isolate,
       Object::GetMethod(Handle<JSReceiver>::cast(handler), trap_name), Object);
   // 7. If trap is undefined, then
   if (trap->IsUndefined(isolate)) {
+    bool success;
     // 7.a Return target.[[Get]](P, Receiver).
-    LookupIterator it =
-        LookupIterator::PropertyOrElement(isolate, receiver, name, target);
-    MaybeHandle<Object> result = Object::GetProperty(&it);
+    LookupIterator it = LookupIterator::PropertyOrElement(
+        isolate, receiver, name, &success, target);
+    if (!success) return MaybeHandle<Object>();
+    Handle<Object> result;
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, result, Object::GetProperty(&it),
+                               Object);
     *was_found = it.IsFound();
     return result;
   }
