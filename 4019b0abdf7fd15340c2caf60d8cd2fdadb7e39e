@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "957c45c1_dfa9b3b4",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "doh!",
+      "parentUuid": "b2484c7d_ff47b930",
+      "range": {
+        "startLine": 1603,
+        "startChar": 63,
+        "endLine": 1605,
+        "endChar": 22
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f034681_9fb8cf44",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-11T16:01:09Z",
       "side": 1,
       "message": "nit: Likewise, spec reference is for \"map\", not \"filter\".",
+      "range": {
+        "startLine": 1608,
+        "startChar": 2,
+        "endLine": 1608,
+        "endChar": 66
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b3e8660_ad854139",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Thanks...addressing this got me to see that I need to store with {to}, and increment {to} as well. Nits can be awesome...like pulling on a thread in your sweater, until you come undone.",
+      "parentUuid": "5f034681_9fb8cf44",
       "range": {
         "startLine": 1608,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "80dcdf5a_90a2c09a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93c1043f_41b0035a",
+      "range": {
+        "startLine": 756,
+        "startChar": 20,
+        "endLine": 756,
+        "endChar": 49
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "930e57d4_5d1ed5a5",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733d8c58_31efdfed",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "930e57d4_5d1ed5a5",
+      "range": {
+        "startLine": 769,
+        "startChar": 20,
+        "endLine": 769,
+        "endChar": 52
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "00a94f9f_6285d40f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b09e101e_a18c577c",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 34
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba18bc4b_e900b737",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "385358dd_cd45eca7",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba18bc4b_e900b737",
+      "range": {
+        "startLine": 968,
+        "startChar": 21,
+        "endLine": 968,
+        "endChar": 36
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "ee0f1148_609ed176",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bb73598_a9376375",
+      "range": {
+        "startLine": 1113,
+        "startChar": 5,
+        "endLine": 1113,
+        "endChar": 38
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8d3e000_f3b64233",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 5
@@ -183,6 +351,30 @@
       "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af77247a_a1acc408",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-09-12T12:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d3e000_f3b64233",
+      "range": {
+        "startLine": 1130,
+        "startChar": 0,
+        "endLine": 1131,
+        "endChar": 70
+      },
+      "revId": "4019b0abdf7fd15340c2caf60d8cd2fdadb7e39e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
