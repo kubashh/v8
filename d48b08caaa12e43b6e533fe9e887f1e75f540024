@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8de2e7bf_9f522f1a",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "redundant change?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff54bfa7_e51c5784",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "Do we really need this flag - it looks like we\u0027re just using it in mjsunit tests. Wouldn\u0027t just passing --wasm-stream-compilation there be sufficient?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a3ff27_170c31e8",
+        "filename": "src/wasm/compilation-manager.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "rename \"CreateStream\" to \"CreateStreamingDecoder\", it\u0027s not a \"stream\" that\u0027s being created.",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f92e3e7_d771c3d0",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "CreateStreamingDecoder, or something like that - you\u0027re not creating a Stream.",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b4cf875_5c54a46c",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "remove \"normal\", it complicates the message (because then I wonder \"what\u0027s non-normal async compilation\"? but all you mean to say is that for async we do this, for streaming we do that.)",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a26dcbb_bf4d9fc2",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "is AsyncStreamingProcessor final?\n\nalso, is there any other derivation of StreamingProcessor?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8086bd9_b39f5fb7",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "these are OnError, OnAbort... the caller signals those events to the processor, right?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb364725_a80ffb9a",
+        "filename": "src/wasm/module-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "is this a const member, non-const return?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae67c130_0a65c727",
+        "filename": "src/wasm/module-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "you can type impl_ as unique_ptr, and then avoid having a dtor.",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f62ea8cd_b6ddc5ea",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "As it reads now, the comment says that calling Finish on a StreamingDecoder does something to the stream. That\u0027s not the case, correct? Rather, it is a signal from the caller that the stream has ended and no more bytes may be expected.\n\nYou could call it \"OnFinish\", \"OnAbort\", \"OnError\" etc, to clarify these are signaling APIs.",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6c06ef2_cf2b01fb",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-12T16:08:51Z",
+      "side": 1,
+      "message": "this isn\u0027t a stream, it\u0027s a streaming_decoder",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
