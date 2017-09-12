@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7714425f_5fdfbbf8",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dddb7538_d9a793f8",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86eb2281_6e2fc9f8",
         "filename": "test/cctest/wasm/test-streaming-compilation.cc",
         "patchSetId": 12
@@ -39,6 +57,30 @@
       "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f76ec8e_1a3ea6c3",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86eb2281_6e2fc9f8",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "cb724bc5_d5ce9487",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2e63c92_bc48785a",
+      "range": {
+        "startLine": 91,
+        "startChar": 34,
+        "endLine": 91,
+        "endChar": 79
+      },
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "780e85ba_ef3f92fb",
         "filename": "test/common/wasm/wasm-macro-gen.h",
         "patchSetId": 12
@@ -76,6 +142,24 @@
       "writtenOn": "2017-09-08T14:14:50Z",
       "side": 1,
       "message": "Can we move this include to the individual test cc files that require it?",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "228faa2e_b2547a02",
+        "filename": "test/common/wasm/wasm-macro-gen.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "actually I moved the definition of kWasmMagic and kWasmVersion to wasm-opcodes.h. It fits there better anyways, and wasm-opcodes.h is already included here.",
+      "parentUuid": "780e85ba_ef3f92fb",
       "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "16353ef0_0c04bee0",
+        "filename": "test/mjsunit/wasm/trap-location.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "Indeed, checking e.stack[1] is sufficient. The original problem was that the stack trace is different between the sync and async compilation. Therefore I decided that I just check the size up to the current function. I guess for some reason I got this complicated version into my head. I just check e.stack[1] now.",
+      "parentUuid": "2f80048e_9c9a6395",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24e149ed_a2ac4c53",
         "filename": "test/unittests/wasm/control-transfer-unittest.cc",
         "patchSetId": 12
@@ -116,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "563fbd6a_6ce5aa58",
+        "filename": "test/unittests/wasm/control-transfer-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "I removed it again.",
+      "parentUuid": "24e149ed_a2ac4c53",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f16341a_6f115e93",
         "filename": "test/unittests/wasm/wasm-macro-gen-unittest.cc",
         "patchSetId": 12
@@ -130,6 +250,24 @@
       "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15403e95_e6ad434d",
+        "filename": "test/unittests/wasm/wasm-macro-gen-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-12T07:42:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f16341a_6f115e93",
+      "revId": "9773aa0f3a8b162d80fd98252ef6ca9df88e6465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
