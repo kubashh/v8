@@ -83,6 +83,9 @@
 
     # Enable concurrent marking.
     'v8_enable_concurrent_marking%': 0,
+
+    # Controls the threshold for on-heap/off-heap Typed Arrays.
+    'v8_typed_array_max_size_in_heap%': 64,
   },
   'target_defaults': {
     'conditions': [
@@ -91,6 +94,9 @@
       }],
       ['v8_promise_internal_field_count!=0', {
         'defines': ['V8_PROMISE_INTERNAL_FIELD_COUNT','v8_promise_internal_field_count'],
+      }],
+      ['v8_typed_array_max_size_in_heap!=0', {
+        'defines': ['V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP','v8_typed_array_max_size_in_heap'],
       }],
       ['v8_enable_gdbjit==1', {
         'defines': ['ENABLE_GDB_JIT_INTERFACE',],
