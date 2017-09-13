@@ -984,6 +984,7 @@ template <class C> inline bool Is(Object* obj);
   V(Callable)                             \
   V(CallHandlerInfo)                      \
   V(Cell)                                 \
+  V(ClassBoilerplate)                     \
   V(Code)                                 \
   V(CodeCacheHashTable)                   \
   V(CompilationCacheTable)                \
