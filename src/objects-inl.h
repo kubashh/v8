@@ -4722,6 +4722,17 @@ bool Map::is_access_check_needed() {
   return ((1 << kIsAccessCheckNeeded) & bit_field()) != 0;
 }
 
+void Map::set_has_been_printed(bool value) {
+  if (value) {
+    set_bit_field(bit_field() | (1 << kHasBeenPrinted));
+  } else {
+    set_bit_field(bit_field() & ~(1 << kHasBeenPrinted));
+  }
+}
+
+bool Map::has_been_printed() {
+  return ((1 << kHasBeenPrinted) & bit_field()) != 0;
+}
 
 void Map::set_is_extensible(bool value) {
   if (value) {

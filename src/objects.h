@@ -6279,6 +6279,10 @@ class Map: public HeapObject {
   inline bool is_extensible();
   inline void set_is_prototype_map(bool value);
   inline bool is_prototype_map() const;
+#ifdef TRACE_MAPS
+  inline bool has_been_printed();
+  inline void set_has_been_printed(bool value);
+#endif
 
   inline void set_elements_kind(ElementsKind elements_kind);
   inline ElementsKind elements_kind();
@@ -6713,7 +6717,7 @@ class Map: public HeapObject {
   static const int kIsUndetectable = 4;
   static const int kIsAccessCheckNeeded = 5;
   static const int kIsConstructor = 6;
-  // Bit 7 is free.
+  static const int kHasBeenPrinted = 7;
 
   // Bit positions for bit field 2
   static const int kIsExtensible = 0;
@@ -6750,6 +6754,7 @@ class Map: public HeapObject {
 #if TRACE_MAPS
   static void TraceTransition(const char* what, Map* from, Map* to, Name* name);
   static void TraceAllTransitions(Map* map);
+  void TraceMapPrintDetails();
 #endif
 
   static inline Handle<Map> AddMissingTransitionsForTesting(
