@@ -304,16 +304,19 @@ class BitField64 : public BitFieldBase<T, shift, size, uint64_t> { };
 //   V(CdeBits, int, 5, _)
 //   V(DefBits, MutableMode, 1, _)
 //
-// DEFINE_BIT_FIELDS(MAP_BIT_FIELD1)
+// DEFINE_BIT_FIELDS(0, MAP_BIT_FIELD1)
 // or
-// DEFINE_BIT_FIELDS_64(MAP_BIT_FIELD1)
+// DEFINE_BIT_FIELDS_64(0, MAP_BIT_FIELD1)
 //
 #define DEFINE_BIT_FIELD_RANGE_TYPE(Name, Type, Size, _) \
   k##Name##Start, k##Name##End = k##Name##Start + Size - 1,
 
-#define DEFINE_BIT_RANGES(LIST_MACRO)                    \
-  struct LIST_MACRO##_Ranges {                           \
-    enum { LIST_MACRO(DEFINE_BIT_FIELD_RANGE_TYPE, _) }; \
+#define DEFINE_BIT_RANGES(StartBit, LIST_MACRO)  \
+  struct LIST_MACRO##_Ranges {                   \
+    enum {                                       \
+      kLIST_MACRO##Start = StartBit - 1,         \
+      LIST_MACRO(DEFINE_BIT_FIELD_RANGE_TYPE, _) \
+    };                                           \
   };
 
 #define DEFINE_BIT_FIELD_TYPE(Name, Type, Size, RangesName) \
@@ -322,12 +325,12 @@ class BitField64 : public BitFieldBase<T, shift, size, uint64_t> { };
 #define DEFINE_BIT_FIELD_64_TYPE(Name, Type, Size, RangesName) \
   typedef BitField64<Type, RangesName::k##Name##Start, Size> Name;
 
-#define DEFINE_BIT_FIELDS(LIST_MACRO) \
-  DEFINE_BIT_RANGES(LIST_MACRO)       \
+#define DEFINE_BIT_FIELDS(StartBit, LIST_MACRO) \
+  DEFINE_BIT_RANGES(StartBit, LIST_MACRO)       \
   LIST_MACRO(DEFINE_BIT_FIELD_TYPE, LIST_MACRO##_Ranges)
 
-#define DEFINE_BIT_FIELDS_64(LIST_MACRO) \
-  DEFINE_BIT_RANGES(LIST_MACRO)          \
+#define DEFINE_BIT_FIELDS_64(StartBit, LIST_MACRO) \
+  DEFINE_BIT_RANGES(StartBit, LIST_MACRO)          \
   LIST_MACRO(DEFINE_BIT_FIELD_64_TYPE, LIST_MACRO##_Ranges)
 
 // ----------------------------------------------------------------------------
