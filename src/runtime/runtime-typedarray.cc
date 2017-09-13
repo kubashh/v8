@@ -167,7 +167,7 @@ RUNTIME_FUNCTION(Runtime_TypedArrayMaxSizeInHeap) {
   DCHECK_EQ(0, args.length());
   DCHECK_OBJECT_SIZE(FLAG_typed_array_max_size_in_heap +
                      FixedTypedArrayBase::kDataOffset);
-  return Smi::FromInt(FLAG_typed_array_max_size_in_heap);
+  return Smi::FromInt(V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP);
 }
 
 

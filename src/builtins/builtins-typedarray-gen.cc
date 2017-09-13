@@ -199,9 +199,9 @@ TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
 
   Node* fixed_typed_map = LoadMapForType(holder);
   GotoIf(TaggedIsNotSmi(byte_length), &allocate_off_heap);
-  GotoIf(SmiGreaterThan(byte_length,
-                        SmiConstant(FLAG_typed_array_max_size_in_heap)),
-         &allocate_off_heap);
+  GotoIf(
+      SmiGreaterThan(byte_length, SmiConstant(V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP)),
+      &allocate_off_heap);
   Goto(&allocate_on_heap);
 
   BIND(&allocate_on_heap);
