@@ -152,6 +152,7 @@ TEST(JSObjectBasic) {
 
   // Create several objects to complete the tracking.
   for (int i = 1; i < Map::kGenerousAllocationCount; i++) {
+    PrintF("%i\n", i);
     CHECK(initial_map->IsInobjectSlackTrackingInProgress());
     Handle<JSObject> tmp = RunI<JSObject>(new_A_script);
     CHECK_EQ(initial_map->IsInobjectSlackTrackingInProgress(),
