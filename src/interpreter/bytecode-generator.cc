@@ -18,6 +18,7 @@
 #include "src/interpreter/control-flow-builders.h"
 #include "src/objects-inl.h"
 #include "src/objects/debug-objects.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/token.h"
 
@@ -786,6 +787,7 @@ BytecodeGenerator::BytecodeGenerator(CompilationInfo* info)
       native_function_literals_(0, info->zone()),
       object_literals_(0, info->zone()),
       array_literals_(0, info->zone()),
+      class_literals_(0, info->zone()),
       execution_control_(nullptr),
       execution_context_(nullptr),
       execution_result_(nullptr),
@@ -876,6 +878,14 @@ void BytecodeGenerator::AllocateDeferredConstants(Isolate* isolate) {
     Handle<ConstantElementsPair> constant_elements =
         array_literal->GetOrBuildConstantElements(isolate);
     builder()->SetDeferredConstantPoolEntry(literal.second, constant_elements);
+  }
+
+  // Build class literal boilerplates.
+  for (std::pair<ClassLiteral*, size_t> literal : class_literals_) {
+    ClassLiteral* class_literal = literal.first;
+    Handle<ClassBoilerplate> class_boilerplate =
+        ClassBoilerplate::BuildClassBoilerplate(isolate, class_literal);
+    builder()->SetDeferredConstantPoolEntry(literal.second, class_boilerplate);
   }
 }
 
@@ -1707,33 +1717,39 @@ void BytecodeGenerator::VisitFunctionLiteral(FunctionLiteral* expr) {
 }
 
 void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr) {
+  size_t class_boilerplate_entry =
+      builder()->AllocateDeferredConstantPoolEntry();
+  class_literals_.push_back(std::make_pair(expr, class_boilerplate_entry));
+
   VisitDeclarations(expr->scope()->declarations());
-  Register constructor = VisitForRegisterValue(expr->constructor());
+
+  int dynamic_arguments_count = 0;
+  for (int i = 0; i < expr->properties()->length(); i++) {
+    ClassLiteral::Property* property = expr->properties()->at(i);
+    if (property->is_computed_name()) {
+      ++dynamic_arguments_count;
+    }
+    ++dynamic_arguments_count;
+  }
+
   {
     RegisterAllocationScope register_scope(this);
-    RegisterList args = register_allocator()->NewRegisterList(4);
+    RegisterList args = register_allocator()->NewRegisterList(
+        ClassBoilerplate::kFirstDynamicArgumentIndex + dynamic_arguments_count);
     VisitForAccumulatorValueOrTheHole(expr->extends());
+    builder()->StoreAccumulatorInRegister(args[2]);
+
+    VisitFunctionLiteral(expr->constructor());
+    builder()->StoreAccumulatorInRegister(args[1]);
+
+    VisitClassLiteralProperties(expr, args);
+
     builder()
-        ->StoreAccumulatorInRegister(args[0])
-        .MoveRegister(constructor, args[1])
-        .LoadLiteral(Smi::FromInt(expr->start_position()))
-        .StoreAccumulatorInRegister(args[2])
-        .LoadLiteral(Smi::FromInt(expr->end_position()))
-        .StoreAccumulatorInRegister(args[3])
+        ->LoadConstantPoolEntry(class_boilerplate_entry)
+        .StoreAccumulatorInRegister(args[0])
         .CallRuntime(Runtime::kDefineClass, args);
   }
-  Register prototype = register_allocator()->NewRegister();
-  builder()->StoreAccumulatorInRegister(prototype);
 
-  if (FunctionLiteral::NeedsHomeObject(expr->constructor())) {
-    // Prototype is already in the accumulator.
-    builder()->StoreHomeObjectProperty(
-        constructor, feedback_index(expr->HomeObjectSlot()), language_mode());
-  }
-
-  VisitClassLiteralProperties(expr, constructor, prototype);
-  BuildClassLiteralNameProperty(expr, constructor);
-  builder()->CallRuntime(Runtime::kToFastProperties, constructor);
   // Assign to class variable.
   if (expr->class_variable_proxy() != nullptr) {
     VariableProxy* proxy = expr->class_variable_proxy();
@@ -1757,92 +1773,33 @@ void BytecodeGenerator::VisitClassLiteral(ClassLiteral* expr) {
 }
 
 void BytecodeGenerator::VisitClassLiteralProperties(ClassLiteral* expr,
-                                                    Register constructor,
-                                                    Register prototype) {
-  RegisterAllocationScope register_scope(this);
-  RegisterList args = register_allocator()->NewRegisterList(4);
-  Register receiver = args[0], key = args[1], value = args[2], attr = args[3];
+                                                    const RegisterList& args) {
+  int dynamic_argument_index = 0;
 
-  bool attr_assigned = false;
-  Register old_receiver = Register::invalid_value();
-
-  // Create nodes to store method values into the literal.
+  // Create computed names and method values nodes to store into the literal.
   for (int i = 0; i < expr->properties()->length(); i++) {
     ClassLiteral::Property* property = expr->properties()->at(i);
-
-    // Set-up receiver.
-    Register new_receiver = property->is_static() ? constructor : prototype;
-    if (new_receiver != old_receiver) {
-      builder()->MoveRegister(new_receiver, receiver);
-      old_receiver = new_receiver;
-    }
-
-    BuildLoadPropertyKey(property, key);
-    if (property->is_static() && property->is_computed_name()) {
-      // The static prototype property is read only. We handle the non computed
-      // property name case in the parser. Since this is the only case where we
-      // need to check for an own read only property we special case this so we
-      // do not need to do this for every property.
-      BytecodeLabel done;
-      builder()
-          ->LoadLiteral(ast_string_constants()->prototype_string())
-          .CompareOperation(Token::Value::EQ_STRICT, key)
-          .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done)
-          .CallRuntime(Runtime::kThrowStaticPrototypeError)
-          .Bind(&done);
-    }
-
-    VisitForRegisterValue(property->value(), value);
-    VisitSetHomeObject(value, receiver, property);
-
-    if (!attr_assigned) {
-      builder()
-          ->LoadLiteral(Smi::FromInt(DONT_ENUM))
-          .StoreAccumulatorInRegister(attr);
-      attr_assigned = true;
-    }
-
-    switch (property->kind()) {
-      case ClassLiteral::Property::METHOD: {
-        DataPropertyInLiteralFlags flags = DataPropertyInLiteralFlag::kDontEnum;
-        if (property->NeedsSetFunctionName()) {
-          flags |= DataPropertyInLiteralFlag::kSetFunctionName;
-        }
-
-        FeedbackSlot slot = property->GetStoreDataPropertySlot();
-        DCHECK(!slot.IsInvalid());
-
+    if (property->is_computed_name()) {
+      Register key = args[ClassBoilerplate::kFirstDynamicArgumentIndex +
+                          dynamic_argument_index++];
+      BuildLoadPropertyKey(property, key);
+      if (property->is_static()) {
+        // The static prototype property is read only. We handle the non
+        // computed property name case in the parser. Since this is the only
+        // case where we need to check for an own read only property we special
+        // case this so we do not need to do this for every property.
+        BytecodeLabel done;
         builder()
-            ->LoadAccumulatorWithRegister(value)
-            .StoreDataPropertyInLiteral(receiver, key, flags,
-                                        feedback_index(slot));
-        break;
-      }
-      case ClassLiteral::Property::GETTER: {
-        builder()->CallRuntime(Runtime::kDefineGetterPropertyUnchecked, args);
-        break;
-      }
-      case ClassLiteral::Property::SETTER: {
-        builder()->CallRuntime(Runtime::kDefineSetterPropertyUnchecked, args);
-        break;
-      }
-      case ClassLiteral::Property::FIELD: {
-        UNREACHABLE();
-        break;
+            ->LoadLiteral(ast_string_constants()->prototype_string())
+            .CompareOperation(Token::Value::EQ_STRICT, key)
+            .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done)
+            .CallRuntime(Runtime::kThrowStaticPrototypeError)
+            .Bind(&done);
       }
     }
-  }
-}
-
-void BytecodeGenerator::BuildClassLiteralNameProperty(ClassLiteral* expr,
-                                                      Register literal) {
-  if (!expr->has_name_static_property() &&
-      expr->constructor()->has_shared_name()) {
-    Runtime::FunctionId runtime_id =
-        expr->has_static_computed_names()
-            ? Runtime::kInstallClassNameAccessorWithCheck
-            : Runtime::kInstallClassNameAccessor;
-    builder()->CallRuntime(runtime_id, literal);
+    Register value = args[ClassBoilerplate::kFirstDynamicArgumentIndex +
+                          dynamic_argument_index++];
+    VisitForRegisterValue(property->value(), value);
   }
 }
 

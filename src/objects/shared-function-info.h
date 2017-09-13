@@ -461,7 +461,7 @@ class SharedFunctionInfo : public HeapObject {
   V(IsTopLevelBit, bool, 1, _)                   \
   V(StartPositionBits, int, 30, _)
 
-  DEFINE_BIT_FIELDS(START_POSITION_AND_TYPE_BIT_FIELDS)
+  DEFINE_BIT_FIELDS(0, START_POSITION_AND_TYPE_BIT_FIELDS)
 #undef START_POSITION_AND_TYPE_BIT_FIELDS
 
 // Bit positions in |compiler_hints|.
@@ -479,7 +479,7 @@ class SharedFunctionInfo : public HeapObject {
   V(FunctionMapIndexBits, int, 5, _)       \
   V(DisabledOptimizationReasonBits, BailoutReason, 7, _)
 
-  DEFINE_BIT_FIELDS(COMPILER_HINTS_BIT_FIELDS)
+  DEFINE_BIT_FIELDS(0, COMPILER_HINTS_BIT_FIELDS)
 #undef COMPILER_HINTS_BIT_FIELDS
 
   // Bailout reasons must fit in the DisabledOptimizationReason bitfield.
@@ -503,8 +503,13 @@ class SharedFunctionInfo : public HeapObject {
   V(ComputedDebugIsBlackboxedBit, bool, 1, _)  \
   V(HasReportedBinaryCoverageBit, bool, 1, _)
 
-  DEFINE_BIT_FIELDS(DEBUGGER_HINTS_BIT_FIELDS)
+  DEFINE_BIT_FIELDS(0, DEBUGGER_HINTS_BIT_FIELDS)
 #undef DEBUGGER_HINTS_BIT_FIELDS
+
+  // Indicates that this function uses a super property (or an eval that may
+  // use a super property).
+  // This is needed to set up the [[HomeObject]] on the function instance.
+  inline bool needs_home_object() const;
 
  private:
   // [raw_name]: Function name string or kNoSharedNameSentinel.
@@ -512,10 +517,7 @@ class SharedFunctionInfo : public HeapObject {
 
   inline void set_kind(FunctionKind kind);
 
-  // Indicates that this function uses a super property (or an eval that may
-  // use a super property).
-  // This is needed to set up the [[HomeObject]] on the function instance.
-  DECL_BOOLEAN_ACCESSORS(needs_home_object)
+  inline void set_needs_home_object(bool value);
 
   friend class Factory;
   friend class V8HeapExplorer;
