@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f8ffab0_1766ea76",
+        "filename": "gypfiles/features.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-09-13T17:34:34Z",
+      "side": 1,
+      "message": "Since this is unconditional, I think it should move to line 168 and be added to the existing list of defines...",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 13
+      },
+      "revId": "3ea32a51d1ec66068063aa623a03a1086afa18f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0c6afc8_8f4acd8f",
+        "filename": "gypfiles/features.gypi",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-09-13T17:34:34Z",
+      "side": 1,
+      "message": "Hmm, not sure if this is going to work like this. Probably also the example above is wrong... I thought the list of defines resolves to separate macros. If you want a defines with a right hand side you have to specify it within the string like:\n\u0027defines\u0027: [\u0027V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP\u003d\u003c(v8_typed_array_max_size_in_heap)\u0027]\n\nExample:\nhttps://cs.chromium.org/chromium/src/v8/gypfiles/standalone.gypi?q\u003dstandalone.gypi\u0026sq\u003dpackage:chromium\u0026l\u003d1151",
+      "range": {
+        "startLine": 99,
+        "startChar": 54,
+        "endLine": 99,
+        "endChar": 87
+      },
+      "revId": "3ea32a51d1ec66068063aa623a03a1086afa18f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
