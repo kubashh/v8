@@ -4,6 +4,7 @@
 
 #include "src/objects.h"
 
+#include <inttypes.h>
 #include <cmath>
 #include <iomanip>
 #include <memory>
@@ -6110,7 +6111,11 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 
 #if V8_TRACE_MAPS
   if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: SlowToFast from= %p to= %p reason= %s ]\n",
+    old_map->TraceMapPrintDetails();
+    new_map->TraceMapPrintDetails();
+    PrintF("[TraceMaps: SlowToFast time=%10" PRId64
+           " from=%p to=%p reason=%s ]\n",
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(*old_map), reinterpret_cast<void*>(*new_map),
            reason);
   }
@@ -8892,6 +8897,9 @@ Handle<Map> Map::RawCopy(Handle<Map> map, int instance_size) {
     new_bit_field3 = IsUnstable::update(new_bit_field3, false);
   }
   result->set_bit_field3(new_bit_field3);
+#ifdef TRACE_MAPS
+  result->set_has_been_printed(false);
+#endif
   return result;
 }
 
@@ -8952,7 +8960,11 @@ Handle<Map> Map::Normalize(Handle<Map> fast_map, PropertyNormalizationMode mode,
     }
 #if V8_TRACE_MAPS
     if (FLAG_trace_maps) {
-      PrintF("[TraceMaps: Normalize from= %p to= %p reason= %s ]\n",
+      fast_map->TraceMapPrintDetails();
+      new_map->TraceMapPrintDetails();
+      PrintF("[TraceMaps: Normalize time=%10" PRId64
+             " from=%p to=%p reason=%s ]\n",
+             base::TimeTicks::HighResolutionNow().ToInternalValue(),
              reinterpret_cast<void*>(*fast_map),
              reinterpret_cast<void*>(*new_map), reason);
     }
@@ -9127,7 +9139,10 @@ Handle<Map> Map::ShareDescriptor(Handle<Map> map,
 // static
 void Map::TraceTransition(const char* what, Map* from, Map* to, Name* name) {
   if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: %s from= %p to= %p name= ", what,
+    from->TraceMapPrintDetails();
+    to->TraceMapPrintDetails();
+    PrintF("[TraceMaps: %s time=%10" PRId64 " from=%p to=%p name=", what,
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(from), reinterpret_cast<void*>(to));
     name->NameShortPrint();
     PrintF(" ]\n");
@@ -9146,6 +9161,15 @@ void Map::TraceAllTransitions(Map* map) {
     Map::TraceTransition("Transition", map, target, key);
     Map::TraceAllTransitions(target);
   }
+}
+
+void Map::TraceMapPrintDetails() {
+  if (has_been_printed()) return;
+  set_has_been_printed(true);
+  PrintF("[TraceMaps: MapDetailsBegin time=%10" PRId64 " ]\n",
+         base::TimeTicks::HighResolutionNow().ToInternalValue());
+  Print();
+  PrintF("[TraceMaps: MapDetailsEnd]\n");
 }
 
 #endif  // V8_TRACE_MAPS
@@ -9221,7 +9245,11 @@ Handle<Map> Map::CopyReplaceDescriptors(
       (map->is_prototype_map() ||
        !(flag == INSERT_TRANSITION &&
          TransitionsAccessor(map).CanHaveMoreTransitions()))) {
-    PrintF("[TraceMaps: ReplaceDescriptors from= %p to= %p reason= %s ]\n",
+    map->TraceMapPrintDetails();
+    result->TraceMapPrintDetails();
+    PrintF("[TraceMaps: ReplaceDescriptors time=%10" PRId64
+           " from=%p to=%p reason=%s ]\n",
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*result),
            reason);
   }
@@ -9418,7 +9446,11 @@ Handle<Map> Map::CopyForTransition(Handle<Map> map, const char* reason) {
 
 #if V8_TRACE_MAPS
   if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: CopyForTransition from= %p to= %p reason= %s ]\n",
+    map->TraceMapPrintDetails();
+    new_map->TraceMapPrintDetails();
+    PrintF("[TraceMaps: CopyForTransition time=%10" PRId64
+           " from=%p to=%p reason=%s ]\n",
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*new_map),
            reason);
   }
@@ -12893,7 +12925,9 @@ void JSFunction::SetInitialMap(Handle<JSFunction> function, Handle<Map> map,
   map->SetConstructor(*function);
 #if V8_TRACE_MAPS
   if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: InitialMap map= %p SFI= %d_%s ]\n",
+    map->TraceMapPrintDetails();
+    PrintF("[TraceMaps: InitialMap time=%10" PRId64 " map=%p SFI=%d_%s ]\n",
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(*map), function->shared()->unique_id(),
            function->shared()->DebugName()->ToCString().get());
   }
