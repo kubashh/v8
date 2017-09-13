@@ -159,10 +159,9 @@ def _CheckNoInlineHeaderIncludesInNormalHeaders(input_api, output_api):
   included by other inline headers or compilation units only."""
   file_inclusion_pattern = r'(?!.+-inl\.h).+\.h'
   include_directive_pattern = input_api.re.compile(r'#include ".+-inl.h"')
-  include_warning = (
-    'You might be including an inline header (e.g. foo-inl.h) within a\n'
-    'normal header (e.g. bar.h) file.  Can you avoid introducing the\n'
-    '#include?  The commit queue will not block on this warning.')
+  include_error = (
+    'You are including an inline header (e.g. foo-inl.h) within a normal\n'
+    'header (e.g. bar.h) file.  This violates layering of dependencies.')
 
   def FilterFile(affected_file):
     black_list = (_EXCLUDED_PATHS +
@@ -181,7 +180,7 @@ def _CheckNoInlineHeaderIncludesInNormalHeaders(input_api, output_api):
           '%s:%d\n    %s' % (local_path, line_number, line.strip()))
 
   if problems:
-    return [output_api.PresubmitPromptOrNotify(include_warning, problems)]
+    return [output_api.PresubmitError(include_error, problems)]
   else:
     return []
 
