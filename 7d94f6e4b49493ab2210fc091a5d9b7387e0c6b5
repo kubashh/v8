@@ -22,6 +22,30 @@
       "revId": "7d94f6e4b49493ab2210fc091a5d9b7387e0c6b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ff77df0_20191bc4",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-14T09:43:19Z",
+      "side": 1,
+      "message": "Done. Added a TODO in that regard. Note that there are _no_ broken files ATM though. There is the \"tools/check-inline-includes.sh\" script available which in fact does run over the entire code-base. Unfortunately that is a shell script and probably no suitable for CI usage.",
+      "parentUuid": "2aa80a97_9e8a154c",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 71
+      },
+      "revId": "7d94f6e4b49493ab2210fc091a5d9b7387e0c6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
