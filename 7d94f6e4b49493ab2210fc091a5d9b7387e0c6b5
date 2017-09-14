@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aa80a97_9e8a154c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-09-14T08:09:35Z",
+      "side": 1,
+      "message": "Please add a TODO for making this check available for CI as well under tools/presubmit.py. This is cumbersome atm, so I won\u0027t make it a requirement. But note, that right now, some files might still be broken without this check detecting it...",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 71
+      },
+      "revId": "7d94f6e4b49493ab2210fc091a5d9b7387e0c6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
