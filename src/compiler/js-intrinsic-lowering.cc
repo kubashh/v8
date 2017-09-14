@@ -384,7 +384,7 @@ Reduction JSIntrinsicLowering::ReduceMaxSmi(Node* node) {
 }
 
 Reduction JSIntrinsicLowering::ReduceTypedArrayMaxSizeInHeap(Node* node) {
-  Node* value = jsgraph()->Constant(FLAG_typed_array_max_size_in_heap);
+  Node* value = jsgraph()->Constant(V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP);
   ReplaceWithValue(node, value);
   return Replace(value);
 }
