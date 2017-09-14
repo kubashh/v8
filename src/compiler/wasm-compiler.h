@@ -264,7 +264,9 @@ class WasmGraphBuilder {
                      wasm::WasmCodePosition position);
 
   void BuildJSToWasmWrapper(Handle<Code> wasm_code);
-  bool BuildWasmToJSWrapper(Handle<JSReceiver> target,
+  Node* FetchAtIndex(int index, Handle<FixedArray> global_js_imports_table,
+                     Node* load_table);
+  void BuildWasmToJSWrapper(Handle<JSReceiver> target,
                             Handle<FixedArray> global_js_imports_table,
                             int index);
   void BuildWasmInterpreterEntry(uint32_t func_index,

@@ -1307,7 +1307,7 @@ int InstanceBuilder::ProcessImports(Handle<FixedArray> code_table,
   int num_imported_functions = 0;
   int num_imported_tables = 0;
   Handle<FixedArray> func_table = isolate_->factory()->NewFixedArray(
-      static_cast<int>(module_->import_table.size()), TENURED);
+      3 * static_cast<int>(module_->import_table.size()) + 1, TENURED);
   Handle<FixedArray> js_imports_table =
       isolate_->global_handles()->Create(*func_table);
   GlobalHandles::MakeWeak(
@@ -1315,6 +1315,7 @@ int InstanceBuilder::ProcessImports(Handle<FixedArray> code_table,
       js_imports_table.location(), &FunctionTableFinalizer,
       v8::WeakCallbackType::kFinalizer);
   instance->set_js_imports_table(*func_table);
+  js_imports_table->set(0, *isolate_->native_context());
   WasmInstanceMap imported_wasm_instances(isolate_->heap());
   for (int index = 0; index < static_cast<int>(module_->import_table.size());
        ++index) {

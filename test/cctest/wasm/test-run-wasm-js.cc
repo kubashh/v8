@@ -137,7 +137,7 @@ TEST(Run_CallJS_Add_jswrapped) {
   WasmRunner<int, int> r(kExecuteCompiled);
   TestSignatures sigs;
   Handle<FixedArray> js_imports_table =
-      r.main_isolate()->factory()->NewFixedArray(2, TENURED);
+      r.main_isolate()->factory()->NewFixedArray(2 * 3 + 1, TENURED);
   uint32_t js_index = r.builder().AddJsFunction(
       sigs.i_i(), "(function(a) { return a + 99; })", js_imports_table);
   BUILD(r, WASM_CALL_FUNCTION(js_index, WASM_GET_LOCAL(0)));
@@ -161,7 +161,7 @@ void RunJSSelectTest(int which) {
 
     WasmRunner<void> r(kExecuteCompiled);
     Handle<FixedArray> js_imports_table =
-        scope.isolate()->factory()->NewFixedArray(2, TENURED);
+        scope.isolate()->factory()->NewFixedArray(2 * 3 + 1, TENURED);
     uint32_t js_index =
         AddJSSelector(&r.builder(), &sig, which, js_imports_table);
 
@@ -422,7 +422,8 @@ void RunJSSelectAlignTest(int num_args, int num_params) {
   // Call different select JS functions.
   for (int which = 0; which < num_params; which++) {
     WasmRunner<void> r(kExecuteCompiled);
-    Handle<FixedArray> js_imports_table = factory->NewFixedArray(2, TENURED);
+    Handle<FixedArray> js_imports_table =
+        factory->NewFixedArray(2 * 3 + 1, TENURED);
     uint32_t js_index =
         AddJSSelector(&r.builder(), &sig, which, js_imports_table);
     CHECK_EQ(predicted_js_index, js_index);
