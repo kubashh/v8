@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "313a9774_fd47cca2",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "Add TODO for deduplication of closure creation? At the AST level? In that case you could turn these into DCHECKs; only for getter/setter you need to check whether the matching other component is there...",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b20f0a22_4ed91956",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "{ kData/kField, ... }",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09d1adf8_e0712ca8",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "I think you can deduce enumeration order value from NameIndex (offset by whatever\u0027s preallocated in the dict not coming from the class definition).",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "321df54e_250979a1",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "Mmh, this is scary since on the outside you rely on this not GCing.",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daee0a74_0d19a76b",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we set this based on the actual names?",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eee3039f_cf74ffd2",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-14T15:05:06Z",
+      "side": 1,
+      "message": "isolate-\u003eheap()-\u003eempty..",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
