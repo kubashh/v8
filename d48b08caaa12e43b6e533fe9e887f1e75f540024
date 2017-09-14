@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "380033a5_0b55857d",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "I don\u0027t know which header file I changed, but the code does not compile anymore without this include.",
+      "parentUuid": "8de2e7bf_9f522f1a",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff54bfa7_e51c5784",
         "filename": "src/flag-definitions.h",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-12T16:08:51Z",
       "side": 1,
       "message": "Do we really need this flag - it looks like we\u0027re just using it in mjsunit tests. Wouldn\u0027t just passing --wasm-stream-compilation there be sufficient?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4be4612_03d1a4e6",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "With this flag async compilation goes through the streaming compilation pipeline. Thereby we can compile wasm code in mjsunit tests and then run the generated code, even without implementing streaming compilation in d8. However, in general we want to have a seperate async compilation pipeline for now.",
+      "parentUuid": "ff54bfa7_e51c5784",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "b4b75de2_d71414dd",
+        "filename": "src/wasm/compilation-manager.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8a3ff27_170c31e8",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f92e3e7_d771c3d0",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 14
@@ -67,6 +121,24 @@
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "045390cb_c1d3cdf4",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f92e3e7_d771c3d0",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "db64caf3_56c16e71",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b4cf875_5c54a46c",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a26dcbb_bf4d9fc2",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 14
@@ -98,6 +188,24 @@
       "writtenOn": "2017-09-12T16:08:51Z",
       "side": 1,
       "message": "is AsyncStreamingProcessor final?\n\nalso, is there any other derivation of StreamingProcessor?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d4f735c_fa30e107",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Is there any value in marking it as final?\nThere is another StreamingProcessor in the unittests.",
+      "parentUuid": "7a26dcbb_bf4d9fc2",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "f1412995_2f308282",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Are you referring to some naming scheme? These functions are called when the streaming decoder detects an error, or when the embedder aborts a stream.",
+      "parentUuid": "c8086bd9_b39f5fb7",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb364725_a80ffb9a",
         "filename": "src/wasm/module-decoder.h",
         "patchSetId": 14
@@ -132,6 +258,24 @@
       "writtenOn": "2017-09-12T16:08:51Z",
       "side": 1,
       "message": "is this a const member, non-const return?",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e033c5ec_8c32e15a",
+        "filename": "src/wasm/module-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "indeed. I changed it to \nWasmModule* module() const;",
+      "parentUuid": "eb364725_a80ffb9a",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "4b2fd864_cc2228b3",
+        "filename": "src/wasm/module-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae67c130_0a65c727",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f62ea8cd_b6ddc5ea",
         "filename": "src/wasm/streaming-decoder.h",
         "patchSetId": 14
@@ -166,6 +328,24 @@
       "writtenOn": "2017-09-12T16:08:51Z",
       "side": 1,
       "message": "As it reads now, the comment says that calling Finish on a StreamingDecoder does something to the stream. That\u0027s not the case, correct? Rather, it is a signal from the caller that the stream has ended and no more bytes may be expected.\n\nYou could call it \"OnFinish\", \"OnAbort\", \"OnError\" etc, to clarify these are signaling APIs.",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c456da7_0de893b3",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "These are the same names that we use in the API, and I think they should be the same here, also because they have the same purpose. I can remove the comment though if you think it is misleading. It is quite obvious anyways what you expect from this function.",
+      "parentUuid": "f62ea8cd_b6ddc5ea",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -186,6 +366,24 @@
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c08c550d_1ef90ca7",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T13:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6c06ef2_cf2b01fb",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
