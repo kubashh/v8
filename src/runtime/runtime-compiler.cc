@@ -30,7 +30,6 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
     PrintF("]\n");
   }
 #endif
-
   StackLimitCheck check(isolate);
   if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
     return isolate->StackOverflow();
@@ -39,6 +38,7 @@ RUNTIME_FUNCTION(Runtime_CompileLazy) {
     return isolate->heap()->exception();
   }
   DCHECK(function->is_compiled());
+
   return function->code();
 }
 

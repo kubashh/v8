@@ -28,6 +28,19 @@ RUNTIME_FUNCTION(Runtime_FunctionGetName) {
   }
 }
 
+RUNTIME_FUNCTION(Runtime_FirstExecution) {
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(SharedFunctionInfo, sfi, 0);
+  Script* script = nullptr;
+  if (sfi->script()->IsScript()) script = Script::cast(sfi->script());
+  // Do not dump the script's filename for performance reasons.
+  LOG(isolate,
+      FunctionEvent("first-execution", nullptr, script->id(), 0,
+                    sfi->start_position(), sfi->end_position(), sfi->name()));
+  sfi->set_has_been_executed(true);
+  return *sfi;
+}
+
 // TODO(5530): Remove once uses in debug.js are gone.
 RUNTIME_FUNCTION(Runtime_FunctionGetScript) {
   HandleScope scope(isolate);
