@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "caeb6ca9_ae3a56b1",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T17:36:44Z",
+      "side": 1,
+      "message": "I removed the include to src/wasm/wasm-module.h in the wasm-module-builder.h and therefore had to include src/flags.h here. I think this is preferable.",
+      "parentUuid": "81829dee_de44cce7",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff54bfa7_e51c5784",
         "filename": "src/flag-definitions.h",
         "patchSetId": 14
@@ -266,6 +284,24 @@
     },
     {
       "key": {
+        "uuid": "208a0853_11083533",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T17:36:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c9f2fcc_2446f659",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8086bd9_b39f5fb7",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 14
@@ -316,6 +352,24 @@
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f96d0f66_0145c544",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-14T17:36:44Z",
+      "side": 1,
+      "message": "I added the \"On\" now and did some more renaming.",
+      "parentUuid": "3a84b171_3bc1c8ae",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
