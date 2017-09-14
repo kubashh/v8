@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83352f64_8d3a046a",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-14T16:46:30Z",
+      "side": 1,
+      "message": "While this invariant holds most of the time (in particular, at the end of any operation), I don\u0027t think we can enforce this here: BigInts with MSD\u003d\u003dzero can exist temporarily while other allocations happen. A simple example is a function that allocates two zero-initialized BigInts (e.g. for its result, and a temp value) before it starts filling in their digits.\n\nI see two alternatives, if you don\u0027t want to just drop the check:\n(1) Check or ensure this property whenever BigInts are \"handed over to the system\" (i.e. when functions like \"Add\" return their result). This is obviously brittle because we might forget a place. We could extend coverage by adding DCHECKs to places consuming BigInts.\n(2) In Debug mode, have another bit in the bitfield to indicate \"this BigInt is fully initialized\", and make that bit part of the implication condition here. This has the obvious drawback of wasting a bit.",
+      "range": {
+        "startLine": 1220,
+        "startChar": 2,
+        "endLine": 1220,
+        "endChar": 77
+      },
+      "revId": "33cc9c5a4d020887596c62845083727fcedefdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
