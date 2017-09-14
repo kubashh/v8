@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "81829dee_de44cce7",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-14T15:25:24Z",
+      "side": 1,
+      "message": "Huh. Hmm... don\u0027t mean to add more work, but it would be good to understand what happened here, especially because the included file is surprising. Have we moved some flags as part of this change? (doesn\u0027t appear so); or is the include structure whacky now? Or has one of the other includes lost the flags.h maybe?",
+      "parentUuid": "380033a5_0b55857d",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff54bfa7_e51c5784",
         "filename": "src/flag-definitions.h",
         "patchSetId": 14
@@ -69,6 +87,24 @@
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8369ce40_5ce9fa17",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-14T15:25:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d4be4612_03d1a4e6",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -212,6 +248,24 @@
     },
     {
       "key": {
+        "uuid": "0c9f2fcc_2446f659",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-14T15:25:24Z",
+      "side": 1,
+      "message": "Marking AsyncStreamingProcessor final helps the reader - all calls made from AsyncStreamingProcessor to its virtuals land in AsyncStreamingProcessor or base - but not in a derived type. It\u0027s just design documentation. It\u0027s also fine if StreamingProcessor has another subclass, that\u0027s not affected.\n\nAnyway, just a nit.",
+      "parentUuid": "2d4f735c_fa30e107",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8086bd9_b39f5fb7",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 14
@@ -241,6 +295,24 @@
       "side": 1,
       "message": "Are you referring to some naming scheme? These functions are called when the streaming decoder detects an error, or when the embedder aborts a stream.",
       "parentUuid": "c8086bd9_b39f5fb7",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a84b171_3bc1c8ae",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-14T15:25:24Z",
+      "side": 1,
+      "message": "I\u0027m referring to the naming scheme. I think prefixing with \"On\" better indicates to the reader that these are callbacks for events occurring outside this object, to which the object is told to react.",
+      "parentUuid": "f1412995_2f308282",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -346,6 +418,24 @@
       "side": 1,
       "message": "These are the same names that we use in the API, and I think they should be the same here, also because they have the same purpose. I can remove the comment though if you think it is misleading. It is quite obvious anyways what you expect from this function.",
       "parentUuid": "f62ea8cd_b6ddc5ea",
+      "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42b0f18a_fb8e6eec",
+        "filename": "src/wasm/streaming-decoder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-14T15:25:24Z",
+      "side": 1,
+      "message": "Well, we have OnBytesReceived just above, so all together, the API would read more consistently with the \"On\" prefix. Granted, it\u0027s not very hard to dig in and see what happens, but the point of readability is to remove cognitive burdens from the reader. Even if they are small, they can accumulate in \"death by 1000 paper cuts\" :)",
+      "parentUuid": "5c456da7_0de893b3",
       "revId": "d48b08caaa12e43b6e533fe9e887f1e75f540024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
