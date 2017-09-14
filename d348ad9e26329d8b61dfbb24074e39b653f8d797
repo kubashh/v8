@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70e2e54b_b031eec7",
+        "filename": "src/allocation.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-09-14T15:41:42Z",
+      "side": 1,
+      "message": "Nit: nullptr here and below.",
+      "range": {
+        "startLine": 102,
+        "startChar": 42,
+        "endLine": 102,
+        "endChar": 46
+      },
+      "revId": "d348ad9e26329d8b61dfbb24074e39b653f8d797",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82ada034_ba872ce5",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-09-14T15:41:42Z",
+      "side": 1,
+      "message": "Nit: how about calling this ReserveRegion, ReserveRegionAligned, ReserveAlignedRegion (to be consistent with other functions)?",
+      "range": {
+        "startLine": 200,
+        "startChar": 15,
+        "endLine": 200,
+        "endChar": 22
+      },
+      "revId": "d348ad9e26329d8b61dfbb24074e39b653f8d797",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
