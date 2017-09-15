@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12781a0e_89b1083b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "It would be nice if it would be possible to pass start_offset here in order to avoid double initialization of fields up to JSGeneratorObject::kSize.",
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "893db2a4_fbe5cc42",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "Idea for a follow-up cleanup: it looks like StoreFieldsNoWriteBarrier can be removed in favor of InitializeFieldsWithRoot.",
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fa6aaf6_00e679a2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "Word32BinaryNot",
+      "range": {
+        "startLine": 2381,
+        "startChar": 19,
+        "endLine": 2381,
+        "endChar": 28
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71427937_6a5d7228",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2382,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2382,
+        "startChar": 19,
+        "endLine": 2382,
+        "endChar": 28
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34eeb780_7a646dd0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2422,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "How about moving this assert to InitializeJSObjectBody() to catch potential misuses.",
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35144111_98f9f5e3",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "InitializeJSObjectBodyNoSlackTracking to make it clear.",
+      "range": {
+        "startLine": 2430,
+        "startChar": 24,
+        "endLine": 2430,
+        "endChar": 47
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db6dd1f7_d25c8404",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "No",
+      "range": {
+        "startLine": 2448,
+        "startChar": 11,
+        "endLine": 2448,
+        "endChar": 13
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97603bad_2e49e3f6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2469,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "Initialize",
+      "range": {
+        "startLine": 2469,
+        "startChar": 13,
+        "endLine": 2469,
+        "endChar": 23
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a745bdc7_e8beceb3",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2473,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:18:12Z",
+      "side": 1,
+      "message": "Initialize",
+      "range": {
+        "startLine": 2473,
+        "startChar": 13,
+        "endLine": 2473,
+        "endChar": 23
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
