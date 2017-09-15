@@ -547,8 +547,8 @@ class MachineRepresentationChecker {
                 default:
                   CheckValueInputRepresentationIs(
                       node, 2, inferrer_->GetRepresentation(node));
+                  break;
               }
-              break;
             }
             break;
           }
