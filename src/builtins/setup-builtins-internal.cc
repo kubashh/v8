@@ -42,8 +42,6 @@ void PostBuildProfileAndTracing(Isolate* isolate, Code* code,
 typedef void (*MacroAssemblerGenerator)(MacroAssembler*);
 typedef void (*CodeAssemblerGenerator)(compiler::CodeAssemblerState*);
 
-static const ExtraICState kPlaceholderState = 1;
-
 Handle<Code> BuildPlaceholder(Isolate* isolate) {
   HandleScope scope(isolate);
   const size_t buffer_size = 1 * KB;
@@ -56,8 +54,7 @@ Handle<Code> BuildPlaceholder(Isolate* isolate) {
   }
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
-  const Code::Flags kPlaceholderFlags =
-      Code::ComputeFlags(Code::BUILTIN, kPlaceholderState);
+  const Code::Flags kPlaceholderFlags = Code::ComputeFlags(Code::C_WASM_ENTRY);
   Handle<Code> code =
       isolate->factory()->NewCode(desc, kPlaceholderFlags, masm.CodeObject());
   return scope.CloseAndEscape(code);
@@ -172,8 +169,7 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
   DisallowHeapAllocation no_gc;
   static const int kRelocMask = RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
                                 RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
-  const Code::Flags kPlaceholderFlags =
-      Code::ComputeFlags(Code::BUILTIN, kPlaceholderState);
+  const Code::Flags kPlaceholderFlags = Code::ComputeFlags(Code::C_WASM_ENTRY);
   HeapIterator iterator(isolate->heap());
   while (HeapObject* obj = iterator.next()) {
     if (!obj->IsCode()) continue;
@@ -254,13 +250,13 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
                                       CallDescriptors::Name, kBuiltinFlags, \
                                       #Name, 1);                            \
   AddBuiltin(builtins, index++, code);
-#define BUILD_TFH(Name, Kind, Extra, InterfaceDescriptor)                    \
-  { InterfaceDescriptor##Descriptor descriptor(isolate); }                   \
-  /* Return size for IC builtins/handlers is always 1. */                    \
-  code = BuildWithCodeStubAssemblerCS(isolate, &Builtins::Generate_##Name,   \
-                                      CallDescriptors::InterfaceDescriptor,  \
-                                      Code::ComputeFlags(Code::Kind, Extra), \
-                                      #Name, 1);                             \
+#define BUILD_TFH(Name, Kind, InterfaceDescriptor)                            \
+  { InterfaceDescriptor##Descriptor descriptor(isolate); }                    \
+  /* Return size for IC builtins/handlers is always 1. */                     \
+  code =                                                                      \
+      BuildWithCodeStubAssemblerCS(isolate, &Builtins::Generate_##Name,       \
+                                   CallDescriptors::InterfaceDescriptor,      \
+                                   Code::ComputeFlags(Code::Kind), #Name, 1); \
   AddBuiltin(builtins, index++, code);
 #define BUILD_ASM(Name)                                              \
   code = BuildWithMacroAssembler(isolate, Builtins::Generate_##Name, \

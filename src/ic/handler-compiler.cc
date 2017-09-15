@@ -15,18 +15,9 @@
 namespace v8 {
 namespace internal {
 
-Handle<Code> PropertyHandlerCompiler::Find(Handle<Name> name,
-                                           Handle<Map> stub_holder,
-                                           Code::Kind kind) {
-  Code::Flags flags = Code::ComputeHandlerFlags(kind);
-  Code* code = stub_holder->LookupInCodeCache(*name, flags);
-  if (code == nullptr) return Handle<Code>();
-  return handle(code);
-}
-
 Handle<Code> PropertyHandlerCompiler::GetCode(Code::Kind kind,
                                               Handle<Name> name) {
-  Code::Flags flags = Code::ComputeHandlerFlags(kind);
+  Code::Flags flags = Code::ComputeFlags(Code::HANDLER);
 
   // Create code object in the heap.
   CodeDesc desc;

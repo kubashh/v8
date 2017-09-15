@@ -446,8 +446,6 @@ bool HeapObject::IsNormalizedMapCache() const {
 
 bool HeapObject::IsCompilationCacheTable() const { return IsHashTable(); }
 
-bool HeapObject::IsCodeCacheHashTable() const { return IsHashTable(); }
-
 bool HeapObject::IsMapCache() const { return IsHashTable(); }
 
 bool HeapObject::IsObjectHashTable() const { return IsHashTable(); }
@@ -3926,25 +3924,14 @@ Address Code::constant_pool() {
   return constant_pool;
 }
 
-Code::Flags Code::ComputeFlags(Kind kind, ExtraICState extra_ic_state) {
+Code::Flags Code::ComputeFlags(Kind kind) {
   // Compute the bit mask.
-  unsigned int bits =
-      KindField::encode(kind) | ExtraICStateField::encode(extra_ic_state);
+  unsigned int bits = KindField::encode(kind);
   return static_cast<Flags>(bits);
 }
 
-Code::Flags Code::ComputeHandlerFlags(Kind handler_kind) {
-  return ComputeFlags(Code::HANDLER, handler_kind);
-}
-
-
 Code::Kind Code::ExtractKindFromFlags(Flags flags) {
   return KindField::decode(flags);
-}
-
-
-ExtraICState Code::ExtractExtraICStateFromFlags(Flags flags) {
-  return ExtraICStateField::decode(flags);
 }
 
 
@@ -4228,7 +4215,6 @@ void Map::SetBackPointer(Object* value, WriteBarrierMode mode) {
   set_constructor_or_backpointer(value, mode);
 }
 
-ACCESSORS(Map, code_cache, FixedArray, kCodeCacheOffset)
 ACCESSORS(Map, dependent_code, DependentCode, kDependentCodeOffset)
 ACCESSORS(Map, weak_cell_cache, Object, kWeakCellCacheOffset)
 ACCESSORS(Map, constructor_or_backpointer, Object,
@@ -5906,15 +5892,6 @@ template <int entrysize>
 Handle<Object> WeakHashTableShape<entrysize>::AsHandle(Isolate* isolate,
                                                        Handle<Object> key) {
   return key;
-}
-
-
-void Map::ClearCodeCache(Heap* heap) {
-  // No write barrier is needed since empty_fixed_array is not in new space.
-  // Please note this function is used during marking:
-  //  - MarkCompactCollector::MarkUnmarkedObject
-  //  - IncrementalMarking::Step
-  WRITE_FIELD(this, kCodeCacheOffset, heap->empty_fixed_array());
 }
 
 

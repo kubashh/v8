@@ -89,7 +89,6 @@
 //           - StringTable
 //           - StringSet
 //           - CompilationCacheTable
-//           - CodeCacheHashTable
 //           - MapCache
 //         - OrderedHashTable
 //           - OrderedHashSet
@@ -262,11 +261,6 @@ enum DescriptorFlag {
   ALL_DESCRIPTORS,
   OWN_DESCRIPTORS
 };
-
-// ICs store extra state in a Code object. The default extra state is
-// kNoExtraICState.
-typedef int ExtraICState;
-static const ExtraICState kNoExtraICState = 0;
 
 // Instance size sentinel for objects of variable size.
 const int kVariableSizeSentinel = 0;
@@ -985,7 +979,6 @@ template <class C> inline bool Is(Object* obj);
   V(CallHandlerInfo)                      \
   V(Cell)                                 \
   V(Code)                                 \
-  V(CodeCacheHashTable)                   \
   V(CompilationCacheTable)                \
   V(ConsString)                           \
   V(ConstantElementsPair)                 \
@@ -3689,8 +3682,6 @@ class Code: public HeapObject {
 #if defined(OBJECT_PRINT) || defined(ENABLE_DISASSEMBLER)
   // Printing
   static const char* ICState2String(InlineCacheState state);
-  static void PrintExtraICState(std::ostream& os,  // NOLINT
-                                Kind kind, ExtraICState extra);
 #endif  // defined(OBJECT_PRINT) || defined(ENABLE_DISASSEMBLER)
 
 #ifdef ENABLE_DISASSEMBLER
@@ -3851,13 +3842,9 @@ class Code: public HeapObject {
   inline void clear_padding();
 
   // Flags operations.
-  static inline Flags ComputeFlags(
-      Kind kind, ExtraICState extra_ic_state = kNoExtraICState);
-
-  static inline Flags ComputeHandlerFlags(Kind handler_kind);
+  static inline Flags ComputeFlags(Kind kind);
 
   static inline Kind ExtractKindFromFlags(Flags flags);
-  static inline ExtraICState ExtractExtraICStateFromFlags(Flags flags);
 
   // Convert a target address into a code object.
   static inline Code* GetCodeFromTargetAddress(Address address);
@@ -4024,10 +4011,6 @@ class Code: public HeapObject {
   class HasUnwindingInfoField : public BitField<bool, 0, 1> {};
   class KindField : public BitField<Kind, HasUnwindingInfoField::kNext, 5> {};
   STATIC_ASSERT(NUMBER_OF_KINDS <= KindField::kMax);
-  class ExtraICStateField
-      : public BitField<ExtraICState, KindField::kNext,
-                        PlatformSmiTagging::kSmiValueSize - KindField::kNext> {
-  };
 
   // KindSpecificFlags1 layout (STUB, BUILTIN and OPTIMIZED_FUNCTION)
   static const int kStackSlotsFirstBit = 0;

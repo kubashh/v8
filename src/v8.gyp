@@ -1163,8 +1163,6 @@
         'objects/bigint-inl.h',
         'objects/bigint.cc',
         'objects/bigint.h',
-        'objects/code-cache.h',
-        'objects/code-cache-inl.h',
         'objects/compilation-cache.h',
         'objects/compilation-cache-inl.h',
         'objects/debug-objects-inl.h',
