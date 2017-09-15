@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc9fd5d_015ad9fb",
+        "filename": "src/transitions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:52:51Z",
+      "side": 1,
+      "message": "StoreHandler::IsStoreTransition(raw_transitions_) ?",
+      "revId": "2eb16b148ca8e1b8ea597b325dc4e3ba28b90bda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da58382_af60765c",
+        "filename": "src/transitions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-15T13:52:51Z",
+      "side": 1,
+      "message": "StoreHandler::IsStoreTransition().",
+      "revId": "2eb16b148ca8e1b8ea597b325dc4e3ba28b90bda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
