@@ -153,17 +153,9 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
   {
     // For holey JSArrays we need to check that the array prototype chain
     // protector is intact and our prototype is the Array.prototype actually.
-    Node* arguments_list_prototype = LoadMapPrototype(arguments_list_map);
-    Node* initial_array_prototype = LoadContextElement(
-        native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
-    GotoIfNot(WordEqual(arguments_list_prototype, initial_array_prototype),
+    GotoIfNot(IsPrototypeOriginalArrayConstructor(context, arguments_list_map),
               &if_runtime);
-    Node* protector_cell = LoadRoot(Heap::kArrayProtectorRootIndex);
-    DCHECK(isolate()->heap()->array_protector()->IsPropertyCell());
-    Branch(
-        WordEqual(LoadObjectField(protector_cell, PropertyCell::kValueOffset),
-                  SmiConstant(Isolate::kProtectorValid)),
-        &if_done, &if_runtime);
+    Branch(IsArrayProtectorCellInvalid(), &if_runtime, &if_done);
   }
 
   BIND(&if_arguments);

@@ -529,6 +529,34 @@ TNode<Smi> CodeStubAssembler::SmiMin(SloppyTNode<Smi> a, SloppyTNode<Smi> b) {
   return SelectTaggedConstant(SmiLessThan(a, b), a, b);
 }
 
+TNode<Object> CodeStubAssembler::NumberMax(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal(this);
+  GotoIfNumberGreaterThanOrEqual(a, b, &greater_than_equal);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&greater_than_equal);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
+TNode<Object> CodeStubAssembler::NumberMin(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal(this);
+  GotoIfNumberGreaterThanOrEqual(a, b, &greater_than_equal);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&greater_than_equal);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
 Node* CodeStubAssembler::SmiMod(Node* a, Node* b) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   Label return_result(this, &var_result),
@@ -795,21 +823,25 @@ void CodeStubAssembler::BranchIfFastJSArray(
   GotoIf(TaggedIsSmi(object), if_false);
 
   Node* map = LoadMap(object);
-
-  // Bailout if instance type is not JS_ARRAY_TYPE.
-  GotoIf(Word32NotEqual(LoadMapInstanceType(map), Int32Constant(JS_ARRAY_TYPE)),
-         if_false);
-
-  Node* elements_kind = LoadMapElementsKind(map);
+  GotoIfNot(IsJSArrayMap(map), if_false);
 
   // Bailout if receiver has slow elements.
+  Node* elements_kind = LoadMapElementsKind(map);
   GotoIfNot(IsFastElementsKind(elements_kind), if_false);
 
-  // Check prototype chain if receiver does not have packed elements.
-  if (mode == FastJSArrayAccessMode::INBOUNDS_READ) {
-    GotoIfNot(IsHoleyFastElementsKind(elements_kind), if_true);
-  }
-  BranchIfPrototypesHaveNoElements(map, if_true, if_false);
+  // Check prototype chain if receiver does not have packed elements
+  GotoIfNot(IsPrototypeOriginalArrayConstructor(context, map), if_false);
+
+  Branch(IsArrayProtectorCellInvalid(), if_false, if_true);
+}
+
+void CodeStubAssembler::BranchIfFastJSArrayForCopy(Node* object, Node* context,
+                                                   Label* if_true,
+                                                   Label* if_false) {
+  GotoIf(IsSpeciesProtectorCellInvalid(), if_false);
+
+  BranchIfFastJSArray(object, context, FastJSArrayAccessMode::INBOUNDS_READ,
+                      if_true, if_false);
 }
 
 Node* CodeStubAssembler::AllocateRaw(Node* size_in_bytes, AllocationFlags flags,
@@ -3576,6 +3608,22 @@ Node* CodeStubAssembler::IsArrayProtectorCellInvalid() {
   Node* cell = LoadRoot(Heap::kArrayProtectorRootIndex);
   Node* cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
   return WordEqual(cell_value, invalid);
+}
+
+Node* CodeStubAssembler::IsSpeciesProtectorCellInvalid() {
+  Node* invalid = SmiConstant(Isolate::kProtectorInvalid);
+  Node* cell = LoadRoot(Heap::kSpeciesProtectorRootIndex);
+  Node* cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
+  return WordEqual(cell_value, invalid);
+}
+
+Node* CodeStubAssembler::IsPrototypeOriginalArrayConstructor(Node* context,
+                                                             Node* map) {
+  Node* const native_context = LoadNativeContext(context);
+  Node* const initial_array_prototype = LoadContextElement(
+      native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
+  Node* proto = LoadMapPrototype(map);
+  return WordEqual(proto, initial_array_prototype);
 }
 
 Node* CodeStubAssembler::IsCallable(Node* object) {
@@ -9423,7 +9471,8 @@ Node* CodeStubAssembler::InstanceOf(Node* object, Node* callable,
 Node* CodeStubAssembler::NumberInc(Node* value) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   VARIABLE(var_finc_value, MachineRepresentation::kFloat64);
-  Label if_issmi(this), if_isnotsmi(this), do_finc(this), end(this);
+  Label if_issmi(this), if_isnotsmi(this, Label::kDeferred),
+      do_finc(this, Label::kDeferred), end(this);
   Branch(TaggedIsSmi(value), &if_issmi, &if_isnotsmi);
 
   BIND(&if_issmi);
@@ -9474,7 +9523,8 @@ Node* CodeStubAssembler::NumberInc(Node* value) {
 Node* CodeStubAssembler::NumberDec(Node* value) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   VARIABLE(var_fdec_value, MachineRepresentation::kFloat64);
-  Label if_issmi(this), if_isnotsmi(this), do_fdec(this), end(this);
+  Label if_issmi(this), if_isnotsmi(this, Label::kDeferred),
+      do_fdec(this, Label::kDeferred), end(this);
   Branch(TaggedIsSmi(value), &if_issmi, &if_isnotsmi);
 
   BIND(&if_issmi);
@@ -9515,6 +9565,66 @@ Node* CodeStubAssembler::NumberDec(Node* value) {
     Node* minus_one = Float64Constant(-1.0);
     Node* fdec_result = Float64Add(fdec_value, minus_one);
     var_result.Bind(AllocateHeapNumberWithValue(fdec_result));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberAdd(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fadd_value, MachineRepresentation::kFloat64);
+  Label float_add(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_add);
+  GotoIf(TaggedIsNotSmi(b), &float_add);
+
+  // Try fast Smi addition first.
+  Node* pair =
+      IntPtrAddWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi addition overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_add);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_add);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Add(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberSub(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fsub_value, MachineRepresentation::kFloat64);
+  Label float_sub(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_sub);
+  GotoIf(TaggedIsNotSmi(b), &float_sub);
+
+  // Try fast Smi subtraction first.
+  Node* pair =
+      IntPtrSubWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi subtraction overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_sub);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_sub);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Sub(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
     Goto(&end);
   }
 
