@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "948144d3_fe017868",
+        "filename": "src/allocation.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-09-15T00:19:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70e2e54b_b031eec7",
+      "range": {
+        "startLine": 102,
+        "startChar": 42,
+        "endLine": 102,
+        "endChar": 46
+      },
+      "revId": "d348ad9e26329d8b61dfbb24074e39b653f8d797",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82ada034_ba872ce5",
         "filename": "src/base/platform/platform.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "d348ad9e26329d8b61dfbb24074e39b653f8d797",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d21bad3_bc9e4b14",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-09-15T00:19:34Z",
+      "side": 1,
+      "message": "Good idea. Renamed ReserveAlignedRegion. I also changed the ordering, so ReserveRegion comes first.",
+      "parentUuid": "82ada034_ba872ce5",
+      "range": {
+        "startLine": 200,
+        "startChar": 15,
+        "endLine": 200,
+        "endChar": 22
+      },
+      "revId": "d348ad9e26329d8b61dfbb24074e39b653f8d797",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
