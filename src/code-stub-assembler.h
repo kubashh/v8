@@ -90,6 +90,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   typedef base::Flags<AllocationFlag> AllocationFlags;
 
   enum ParameterMode { SMI_PARAMETERS, INTPTR_PARAMETERS };
+
   // On 32-bit platforms, there is a slight performance advantage to doing all
   // of the array offset/index arithmetic with SMIs, since it's possible
   // to save a few tag/untag operations without paying an extra expense when
@@ -491,6 +492,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Object> LoadMapConstructor(SloppyTNode<Map> map);
   // Load the EnumLength of a Map.
   Node* LoadMapEnumLength(SloppyTNode<Map> map);
+  // Load the back-pointer of a Map.
+  Node* LoadMapBackPointer(SloppyTNode<Map> map);
 
   // This is only used on a newly allocated PropertyArray which
   // doesn't have an existing hash.
@@ -692,15 +695,24 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* AllocateStruct(Node* map, AllocationFlags flags = kNone);
   void InitializeStructBody(Node* object, Node* map, Node* size,
                             int start_offset = Struct::kHeaderSize);
+
+  Node* AllocateJSObjectFromMapWithSlackTracking(Node* context, Node* map,
+                                                 Node* properties = nullptr,
+                                                 Node* elements = nullptr,
+                                                 AllocationFlags flags = kNone);
   Node* AllocateJSObjectFromMap(Node* map, Node* properties = nullptr,
                                 Node* elements = nullptr,
-                                AllocationFlags flags = kNone);
+                                AllocationFlags flags = kNone,
+                                Node* context = nullptr);
 
   void InitializeJSObjectFromMap(Node* object, Node* map, Node* size,
                                  Node* properties = nullptr,
-                                 Node* elements = nullptr);
+                                 Node* elements = nullptr,
+                                 Node* context = nullptr);
 
-  void InitializeJSObjectBody(Node* object, Node* map, Node* size,
+  void InitializeJSObjectBodyWithSlackTracking(Node* context, Node* object,
+                                               Node* map, Node* instance_size);
+  void InitializeJSObjectBody(Node* object, Node* map, Node* instance_size,
                               int start_offset = JSObject::kHeaderSize);
 
   // Allocate a JSArray without elements and initialize the header fields.
@@ -1479,11 +1491,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   // Create a new AllocationSite and install it into a feedback vector.
   Node* CreateAllocationSiteInFeedbackVector(Node* feedback_vector, Node* slot);
-
-  // Given a recently allocated object {object}, with map {initial_map},
-  // initialize remaining fields appropriately to comply with slack tracking.
-  void HandleSlackTracking(Node* context, Node* object, Node* initial_map,
-                           int start_offset);
 
   enum class IndexAdvanceMode { kPre, kPost };
 
