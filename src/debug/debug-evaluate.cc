@@ -325,7 +325,7 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(Call)                            \
   V(MaxSmi)                          \
   V(NewObject)                       \
-  V(FinalizeInstanceSize)            \
+  V(CompleteInobjectSlackTracking)   \
   V(HasInPrototypeChain)             \
   V(StringMaxLength)
 

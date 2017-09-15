@@ -1394,6 +1394,13 @@ Node* CodeStubAssembler::LoadMapEnumLength(SloppyTNode<Map> map) {
   return DecodeWordFromWord32<Map::EnumLengthBits>(bit_field3);
 }
 
+Node* CodeStubAssembler::LoadMapBackPointer(SloppyTNode<Map> map) {
+  Node* object = LoadObjectField(map, Map::kConstructorOrBackPointerOffset);
+  return Select(IsMap(object), [=] { return object; },
+                [=] { return UndefinedConstant(); },
+                MachineRepresentation::kTagged);
+}
+
 Node* CodeStubAssembler::LoadNameHashField(Node* name) {
   CSA_ASSERT(this, IsName(name));
   return LoadObjectField(name, Name::kHashFieldOffset, MachineType::Uint32());
@@ -2360,20 +2367,33 @@ void CodeStubAssembler::InitializeStructBody(Node* object, Node* map,
   StoreFieldsNoWriteBarrier(start_address, end_address, filler);
 }
 
+Node* CodeStubAssembler::AllocateJSObjectFromMapWithSlackTracking(
+    Node* context, Node* map, Node* properties, Node* elements,
+    AllocationFlags flags) {
+  return AllocateJSObjectFromMap(map, properties, elements, flags, context);
+}
+
 Node* CodeStubAssembler::AllocateJSObjectFromMap(Node* map, Node* properties,
                                                  Node* elements,
-                                                 AllocationFlags flags) {
+                                                 AllocationFlags flags,
+                                                 Node* context) {
   CSA_ASSERT(this, IsMap(map));
-  Node* size = TimesPointerSize(LoadMapInstanceSize(map));
-  Node* object = AllocateInNewSpace(size, flags);
+  CSA_ASSERT(this, Word32Not(IsJSFunctionMap(map)));
+  CSA_ASSERT(this, Word32Not(InstanceTypeEqual(LoadMapInstanceType(map),
+                                               JS_GLOBAL_OBJECT_TYPE)));
+  Node* instance_size = TimesPointerSize(LoadMapInstanceSize(map));
+  Node* object = AllocateInNewSpace(instance_size, flags);
   StoreMapNoWriteBarrier(object, map);
-  InitializeJSObjectFromMap(object, map, size, properties, elements);
+  InitializeJSObjectFromMap(object, map, instance_size, properties, elements,
+                            context);
   return object;
 }
 
 void CodeStubAssembler::InitializeJSObjectFromMap(Node* object, Node* map,
-                                                  Node* size, Node* properties,
-                                                  Node* elements) {
+                                                  Node* instance_size,
+                                                  Node* properties,
+                                                  Node* elements,
+                                                  Node* context) {
   CSA_SLOW_ASSERT(this, IsMap(map));
   // This helper assumes that the object is in new-space, as guarded by the
   // check in AllocatedJSObjectFromMap.
@@ -2395,22 +2415,77 @@ void CodeStubAssembler::InitializeJSObjectFromMap(Node* object, Node* map,
     CSA_ASSERT(this, IsFixedArray(elements));
     StoreObjectFieldNoWriteBarrier(object, JSObject::kElementsOffset, elements);
   }
-  InitializeJSObjectBody(object, map, size, JSObject::kHeaderSize);
+  // We perform slack tracking if a valid context is passed in.
+  if (context == nullptr) {
+    STATIC_ASSERT(Map::kNoSlackTracking == 0);
+    CSA_ASSERT(this,
+               IsClearWord32<Map::ConstructionCounter>(LoadMapBitField3(map)));
+    InitializeJSObjectBody(object, map, instance_size);
+  } else {
+    InitializeJSObjectBodyWithSlackTracking(object, map, instance_size,
+                                            context);
+  }
 }
 
 void CodeStubAssembler::InitializeJSObjectBody(Node* object, Node* map,
-                                               Node* size, int start_offset) {
+                                               Node* instance_size,
+                                               int start_offset) {
+  InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), instance_size,
+                           Heap::kUndefinedValueRootIndex);
+}
+
+void CodeStubAssembler::InitializeJSObjectBodyWithSlackTracking(
+    Node* object, Node* map, Node* instance_size, Node* context) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // TODO(cbruni): activate in-object slack tracking machinery.
   Comment("InitializeJSObjectBody");
-  Node* filler = LoadRoot(Heap::kUndefinedValueRootIndex);
-  // Calculate the untagged field addresses.
-  object = BitcastTaggedToWord(object);
-  Node* start_address =
-      IntPtrAdd(object, IntPtrConstant(start_offset - kHeapObjectTag));
-  Node* end_address =
-      IntPtrSub(IntPtrAdd(object, size), IntPtrConstant(kHeapObjectTag));
-  StoreFieldsNoWriteBarrier(start_address, end_address, filler);
+
+  // Perform in-object slack tracking if requested.
+  int start_offset = JSObject::kHeaderSize;
+  Node* bit_field3 = LoadMapBitField3(map);
+  Label end(this), slack_tracking(this), complete(this, Label::kDeferred);
+  STATIC_ASSERT(Map::kNoSlackTracking == 0);
+  GotoIf(IsSetWord32<Map::ConstructionCounter>(bit_field3), &slack_tracking);
+  Comment("no slack tracking");
+  InitializeJSObjectBody(object, map, instance_size);
+  Goto(&end);
+
+  BIND(&slack_tracking);
+  {
+    Comment("Decrease construction counter");
+    // Slack tracking is only done on initial maps.
+    CSA_ASSERT(this, IsUndefined(LoadMapBackPointer(map)));
+    STATIC_ASSERT(Map::ConstructionCounter::kNext == 32);
+    Node* new_bit_field3 = Int32Sub(
+        bit_field3, Int32Constant(1 << Map::ConstructionCounter::kShift));
+    StoreObjectFieldNoWriteBarrier(map, Map::kBitField3Offset, new_bit_field3,
+                                   MachineRepresentation::kWord32);
+    STATIC_ASSERT(Map::kSlackTrackingCounterEnd == 1);
+
+    Node* unused_fields = LoadObjectField(map, Map::kUnusedPropertyFieldsOffset,
+                                          MachineType::Uint8());
+    Node* used_size = IntPtrSub(
+        instance_size, TimesPointerSize(ChangeUint32ToWord(unused_fields)));
+
+    Comment("initialize filler fields");
+    InitializeFieldsWithRoot(object, used_size, instance_size,
+                             Heap::kOnePointerFillerMapRootIndex);
+
+    Comment("initialize undefined fields");
+    InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), used_size,
+                             Heap::kUndefinedValueRootIndex);
+
+    GotoIf(IsClearWord32<Map::ConstructionCounter>(new_bit_field3), &complete);
+    Goto(&end);
+  }
+
+  // Finalize the instance size.
+  BIND(&complete);
+  {
+    CallRuntime(Runtime::kCompleteInobjectSlackTracking, context, map);
+    Goto(&end);
+  }
+
+  BIND(&end);
 }
 
 void CodeStubAssembler::StoreFieldsNoWriteBarrier(Node* start_address,
@@ -3665,7 +3740,7 @@ Node* CodeStubAssembler::IsNullOrJSReceiver(Node* object) {
 }
 
 Node* CodeStubAssembler::IsJSGlobalProxyInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(JS_GLOBAL_PROXY_TYPE));
+  return InstanceTypeEqual(instance_type, JS_GLOBAL_PROXY_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSObjectInstanceType(Node* instance_type) {
@@ -4006,7 +4081,6 @@ Node* CodeStubAssembler::StringFromCharCode(Node* code) {
     // Load the isolate wide single character string cache.
     Node* cache = LoadRoot(Heap::kSingleCharacterStringCacheRootIndex);
     Node* code_index = ChangeUint32ToWord(code);
-
     // Check if we have an entry for the {code} in the single character string
     // cache already.
     Label if_entryisundefined(this, Label::kDeferred),
@@ -7333,79 +7407,6 @@ Node* CodeStubAssembler::CreateWeakCellInFeedbackVector(Node* feedback_vector,
   return cell;
 }
 
-void CodeStubAssembler::HandleSlackTracking(Node* context, Node* object,
-                                            Node* initial_map,
-                                            int start_offset) {
-  Node* instance_size_words = ChangeUint32ToWord(LoadObjectField(
-      initial_map, Map::kInstanceSizeOffset, MachineType::Uint8()));
-  Node* instance_size = TimesPointerSize(instance_size_words);
-
-  // Perform in-object slack tracking if requested.
-  Node* bit_field3 = LoadMapBitField3(initial_map);
-  Label end(this), slack_tracking(this), finalize(this, Label::kDeferred);
-  STATIC_ASSERT(Map::kNoSlackTracking == 0);
-  GotoIf(IsSetWord32<Map::ConstructionCounter>(bit_field3), &slack_tracking);
-
-  // Initialize remaining fields.
-  {
-    Comment("no slack tracking");
-    InitializeFieldsWithRoot(object, IntPtrConstant(start_offset),
-                             instance_size, Heap::kUndefinedValueRootIndex);
-    Goto(&end);
-  }
-
-  {
-    BIND(&slack_tracking);
-
-    // Decrease generous allocation count.
-    STATIC_ASSERT(Map::ConstructionCounter::kNext == 32);
-    Comment("update allocation count");
-    Node* new_bit_field3 = Int32Sub(
-        bit_field3, Int32Constant(1 << Map::ConstructionCounter::kShift));
-    StoreObjectFieldNoWriteBarrier(initial_map, Map::kBitField3Offset,
-                                   new_bit_field3,
-                                   MachineRepresentation::kWord32);
-    GotoIf(IsClearWord32<Map::ConstructionCounter>(new_bit_field3), &finalize);
-
-    Node* unused_fields = LoadObjectField(
-        initial_map, Map::kUnusedPropertyFieldsOffset, MachineType::Uint8());
-    Node* used_size = IntPtrSub(
-        instance_size, TimesPointerSize(ChangeUint32ToWord(unused_fields)));
-
-    Comment("initialize filler fields (no finalize)");
-    InitializeFieldsWithRoot(object, used_size, instance_size,
-                             Heap::kOnePointerFillerMapRootIndex);
-
-    Comment("initialize undefined fields (no finalize)");
-    InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), used_size,
-                             Heap::kUndefinedValueRootIndex);
-    Goto(&end);
-  }
-
-  {
-    // Finalize the instance size.
-    BIND(&finalize);
-
-    Node* unused_fields = LoadObjectField(
-        initial_map, Map::kUnusedPropertyFieldsOffset, MachineType::Uint8());
-    Node* used_size = IntPtrSub(
-        instance_size, TimesPointerSize(ChangeUint32ToWord(unused_fields)));
-
-    Comment("initialize filler fields (finalize)");
-    InitializeFieldsWithRoot(object, used_size, instance_size,
-                             Heap::kOnePointerFillerMapRootIndex);
-
-    Comment("initialize undefined fields (finalize)");
-    InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), used_size,
-                             Heap::kUndefinedValueRootIndex);
-
-    CallRuntime(Runtime::kFinalizeInstanceSize, context, initial_map);
-    Goto(&end);
-  }
-
-  BIND(&end);
-}
-
 Node* CodeStubAssembler::BuildFastLoop(
     const CodeStubAssembler::VariableList& vars, Node* start_index,
     Node* end_index, const FastLoopBody& body, int increment,
@@ -7516,6 +7517,7 @@ void CodeStubAssembler::InitializeFieldsWithRoot(
   CSA_SLOW_ASSERT(this, TaggedIsNotSmi(object));
   start_offset = IntPtrAdd(start_offset, IntPtrConstant(-kHeapObjectTag));
   end_offset = IntPtrAdd(end_offset, IntPtrConstant(-kHeapObjectTag));
+  CSA_SLOW_ASSERT(this, IntPtrLessThanOrEqual(start_offset, end_offset));
   Node* root_value = LoadRoot(root_index);
   BuildFastLoop(end_offset, start_offset,
                 [this, object, root_value](Node* current) {

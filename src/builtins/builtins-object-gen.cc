@@ -666,20 +666,17 @@ TF_BUILTIN(CreateGeneratorObject, ObjectBuiltinsAssembler) {
   FillFixedArrayWithValue(HOLEY_ELEMENTS, register_file, IntPtrConstant(0),
                           size, Heap::kUndefinedValueRootIndex);
 
-  Node* const result = AllocateJSObjectFromMap(maybe_map);
+  Node* const result =
+      AllocateJSObjectFromMapWithSlackTracking(context, maybe_map);
 
-  StoreObjectFieldNoWriteBarrier(result, JSGeneratorObject::kFunctionOffset,
-                                 closure);
-  StoreObjectFieldNoWriteBarrier(result, JSGeneratorObject::kContextOffset,
-                                 context);
-  StoreObjectFieldNoWriteBarrier(result, JSGeneratorObject::kReceiverOffset,
-                                 receiver);
-  StoreObjectFieldNoWriteBarrier(result, JSGeneratorObject::kRegisterFileOffset,
-                                 register_file);
+  StoreObjectField(result, JSGeneratorObject::kFunctionOffset, closure);
+  StoreObjectField(result, JSGeneratorObject::kContextOffset, context);
+  StoreObjectField(result, JSGeneratorObject::kReceiverOffset, receiver);
+  StoreObjectField(result, JSGeneratorObject::kRegisterFileOffset,
+                   register_file);
   Node* executing = SmiConstant(JSGeneratorObject::kGeneratorExecuting);
   StoreObjectFieldNoWriteBarrier(result, JSGeneratorObject::kContinuationOffset,
                                  executing);
-  HandleSlackTracking(context, result, maybe_map, JSGeneratorObject::kSize);
   Return(result);
 
   BIND(&runtime);
