@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efe8f88a_0af00ad8",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-15T18:22:21Z",
+      "side": 0,
+      "message": "how about deleting the flag too?",
+      "range": {
+        "startLine": 320,
+        "startChar": 6,
+        "endLine": 320,
+        "endChar": 36
+      },
+      "revId": "7742e534a8cd6ab8405053c6f2d4827bdca8b9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376966ff_9d647b7b",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-15T18:22:21Z",
+      "side": 0,
+      "message": "Please also delete the corresponding declaration from objects.h.",
+      "range": {
+        "startLine": 6042,
+        "startChar": 17,
+        "endLine": 6042,
+        "endChar": 35
+      },
+      "revId": "7742e534a8cd6ab8405053c6f2d4827bdca8b9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14830ab5_f79848df",
+        "filename": "src/v8.gyp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-15T18:22:21Z",
+      "side": 0,
+      "message": "please also apply these changes to BUILD.gn.",
+      "range": {
+        "startLine": 1166,
+        "startChar": 9,
+        "endLine": 1166,
+        "endChar": 29
+      },
+      "revId": "7742e534a8cd6ab8405053c6f2d4827bdca8b9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5629fd5e_e2dc1d85",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-15T18:22:21Z",
+      "side": 0,
+      "message": "Please also apply this change to test/cctest/cctest.gyp.",
+      "range": {
+        "startLine": 122,
+        "startChar": 5,
+        "endLine": 122,
+        "endChar": 23
+      },
+      "revId": "7742e534a8cd6ab8405053c6f2d4827bdca8b9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
