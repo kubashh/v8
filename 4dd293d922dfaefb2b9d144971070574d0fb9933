@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd33a02e_435eb8fc",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1144260
+      },
+      "writtenOn": "2017-09-16T03:22:06Z",
+      "side": 1,
+      "message": "Looks like this needs to be void OS::Guard(...) based on failing roll here: https://chromium-review.googlesource.com/c/chromium/src/+/669540\n\nI can help set up compile (or compile and test) bots for Fuchsia for v8 if that would be useful, since there\u0027s a compile bot on the CQ now for Chromium.",
+      "revId": "4dd293d922dfaefb2b9d144971070574d0fb9933",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
