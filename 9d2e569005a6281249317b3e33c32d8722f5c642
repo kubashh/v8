@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "280a2933_8a1e8ac0",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-17T18:17:56Z",
+      "side": 1,
+      "message": "While this works, this is certainly a hack, and I would welcome either a comment or an entirely new code kind.",
+      "range": {
+        "startLine": 57,
+        "startChar": 65,
+        "endLine": 57,
+        "endChar": 77
+      },
+      "revId": "9d2e569005a6281249317b3e33c32d8722f5c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "149f4526_7a1783d5",
         "filename": "src/ic/handler-compiler.cc",
         "patchSetId": 1
