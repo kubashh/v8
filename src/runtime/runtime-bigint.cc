@@ -17,8 +17,6 @@ RUNTIME_FUNCTION(Runtime_BigInt) {
   DCHECK_EQ(1, args.length());
   CONVERT_SMI_ARG_CHECKED(value, 0);
 
-  // For the moment, this is the only way to create a BigInt.
-
   // Since we currently don't want ClusterFuzz to generate BigInts, we always
   // throw here if the --harmony-bigint flag is disabled. (All --harmony-* flags
   // are blacklisted for ClusterFuzz.)
