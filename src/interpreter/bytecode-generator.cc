@@ -1901,7 +1901,7 @@ void BytecodeGenerator::VisitRegExpLiteral(RegExpLiteral* expr) {
 void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
   // Fast path for the empty object literal which doesn't need an
   // AllocationSite.
-  if (expr->IsEmptyObjectLiteral()) {
+  if (FLAG_literals_opt && expr->IsEmptyObjectLiteral()) {
     DCHECK(expr->IsFastCloningSupported());
     builder()->CreateEmptyObjectLiteral();
     return;
@@ -2109,7 +2109,7 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
 void BytecodeGenerator::VisitArrayLiteral(ArrayLiteral* expr) {
   // Deep-copy the literal boilerplate.
   int literal_index = feedback_index(expr->literal_slot());
-  if (expr->is_empty()) {
+  if (FLAG_literals_opt && expr->is_empty()) {
     // Empty array literal fast-path.
     DCHECK(expr->IsFastCloningSupported());
     builder()->CreateEmptyArrayLiteral(literal_index);
