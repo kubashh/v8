@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20dc025e_212ce912",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T21:34:08Z",
+      "side": 1,
+      "message": "This signature change prepares addressing the TODO below (line 275).",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 11
+      },
+      "revId": "bf732d04a5a45394aa0a8cbdbd8f3904906cf213",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
