@@ -31,7 +31,7 @@ void PreInitializeLiteralSite(Handle<FeedbackVector> vector,
 
 Handle<Object> InnerCreateBoilerplate(Isolate* isolate,
                                       Handle<FixedArray> compile_time_value,
-                                      PretenureFlag pretenure_flag);
+                                      PretenureFlag pretenure_flag, bool print);
 
 enum DeepCopyHints { kNoHints = 0, kObjectIsShallow = 1 };
 
@@ -180,13 +180,8 @@ MaybeHandle<JSObject> JSObjectWalkVisitor<ContextObject>::StructureWalk(
     }
     case FAST_SLOPPY_ARGUMENTS_ELEMENTS:
     case SLOW_SLOPPY_ARGUMENTS_ELEMENTS:
-      UNIMPLEMENTED();
-      break;
     case FAST_STRING_WRAPPER_ELEMENTS:
     case SLOW_STRING_WRAPPER_ELEMENTS:
-      UNREACHABLE();
-      break;
-
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) case TYPE##_ELEMENTS:
 
       TYPED_ARRAYS(TYPED_ARRAY_CASE)
@@ -239,6 +234,7 @@ class AllocationSiteCreationContext : public AllocationSiteContext {
       // We are creating the top level AllocationSite as opposed to a nested
       // AllocationSite.
       InitializeTraversal(isolate()->factory()->NewAllocationSite());
+      PrintF("AllocationSite\n");
       scope_site = Handle<AllocationSite>(*top(), isolate());
       if (FLAG_trace_creation_allocation_sites) {
         PrintF("*** Creating top level AllocationSite %p\n",
@@ -247,6 +243,7 @@ class AllocationSiteCreationContext : public AllocationSiteContext {
     } else {
       DCHECK(!current().is_null());
       scope_site = isolate()->factory()->NewAllocationSite();
+      PrintF("AllocationSite\n");
       if (FLAG_trace_creation_allocation_sites) {
         PrintF("Creating nested site (top, current, new) (%p, %p, %p)\n",
                static_cast<void*>(*top()), static_cast<void*>(*current()),
@@ -308,7 +305,8 @@ MaybeHandle<JSObject> DeepCopy(Handle<JSObject> object,
 struct ObjectBoilerplate {
   static Handle<JSObject> Create(Isolate* isolate,
                                  Handle<HeapObject> description, int flags,
-                                 PretenureFlag pretenure_flag) {
+                                 PretenureFlag pretenure_flag,
+                                 bool print = false) {
     Handle<Context> native_context = isolate->native_context();
     Handle<BoilerplateDescription> boilerplate_description =
         Handle<BoilerplateDescription>::cast(description);
@@ -349,8 +347,8 @@ struct ObjectBoilerplate {
         // The value contains the CompileTimeValue with the boilerplate
         // properties of a simple object or array literal.
         Handle<FixedArray> compile_time_value = Handle<FixedArray>::cast(value);
-        value =
-            InnerCreateBoilerplate(isolate, compile_time_value, pretenure_flag);
+        value = InnerCreateBoilerplate(isolate, compile_time_value,
+                                       pretenure_flag, print);
       }
       uint32_t element_index = 0;
       if (key->ToArrayIndex(&element_index)) {
@@ -376,6 +374,8 @@ struct ObjectBoilerplate {
                                   boilerplate->map()->unused_property_fields(),
                                   "FastLiteral");
     }
+    if (print) PrintF("Object length=%i\n", length);
+
     return boilerplate;
   }
 };
@@ -383,7 +383,8 @@ struct ObjectBoilerplate {
 struct ArrayBoilerplate {
   static Handle<JSObject> Create(Isolate* isolate,
                                  Handle<HeapObject> description, int flags,
-                                 PretenureFlag pretenure_flag) {
+                                 PretenureFlag pretenure_flag,
+                                 bool print = false) {
     Handle<ConstantElementsPair> elements =
         Handle<ConstantElementsPair>::cast(description);
     // Create the JSArray.
@@ -424,12 +425,13 @@ struct ArrayBoilerplate {
                 Handle<FixedArray> compile_time_value(
                     FixedArray::cast(fixed_array_values->get(i)));
                 Handle<Object> result = InnerCreateBoilerplate(
-                    isolate, compile_time_value, pretenure_flag);
+                    isolate, compile_time_value, pretenure_flag, print);
                 fixed_array_values_copy->set(i, *result);
               }
             });
       }
     }
+    if (print) PrintF("Array length=%i\n", copied_elements_values->length());
 
     return isolate->factory()->NewJSArrayWithElements(
         copied_elements_values, constant_elements_kind,
@@ -439,14 +441,17 @@ struct ArrayBoilerplate {
 
 Handle<Object> InnerCreateBoilerplate(Isolate* isolate,
                                       Handle<FixedArray> compile_time_value,
-                                      PretenureFlag pretenure_flag) {
+                                      PretenureFlag pretenure_flag,
+                                      bool print) {
   Handle<HeapObject> elements =
       CompileTimeValue::GetElements(compile_time_value);
   int flags = CompileTimeValue::GetLiteralTypeFlags(compile_time_value);
   if (flags == CompileTimeValue::kArrayLiteralFlag) {
-    return ArrayBoilerplate::Create(isolate, elements, flags, pretenure_flag);
+    return ArrayBoilerplate::Create(isolate, elements, flags, pretenure_flag,
+                                    print);
   }
-  return ObjectBoilerplate::Create(isolate, elements, flags, pretenure_flag);
+  return ObjectBoilerplate::Create(isolate, elements, flags, pretenure_flag,
+                                   print);
 }
 
 template <typename Boilerplate>
@@ -477,7 +482,7 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
         (flags & AggregateLiteral::kNeedsInitialAllocationSite) != 0;
     // TODO(cbruni): Even in the case where we need an initial allocation site
     // we could still create the boilerplate lazily to save memory.
-    if (!needs_initial_allocation_site &&
+    if (FLAG_literals_opt && !needs_initial_allocation_site &&
         IsUninitializedLiteralSite(*literal_site)) {
       PreInitializeLiteralSite(vector, literals_slot);
       boilerplate =
@@ -491,8 +496,8 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
     } else {
       PretenureFlag pretenure_flag =
           isolate->heap()->InNewSpace(*vector) ? NOT_TENURED : TENURED;
-      boilerplate =
-          Boilerplate::Create(isolate, description, flags, pretenure_flag);
+      boilerplate = Boilerplate::Create(isolate, description, flags,
+                                        pretenure_flag, true);
     }
     // Install AllocationSite objects.
     AllocationSiteCreationContext creation_context(isolate);
