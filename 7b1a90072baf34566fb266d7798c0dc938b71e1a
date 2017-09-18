@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b82b52db_93acfec7",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Done. (Added links.)",
+      "parentUuid": "c0d2afe9_dbb18634",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b7c1d42_a49abc0c",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd53234f_e812acf1",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "We could do that simplification here, but for multiplication, the existing digit_add helper is more suitable, because there we will have three additions per iteration and every single one of them can overflow:\n\n  old accumulator digit (up to max digit value)\n+ high part of previous round (up to nearly max digit value)\n+ low part of current round (up to max digit value)\n+ carry (up to 3)\n\u003d new accumulator digit\n\nWe could model that with the modification you suggest, but it would require a sprinkling of \"new_carry +\u003d carry;\" between any two of them.\n\nAlso, while the explicit \"digit_t new_carry \u003d 0\" consumes a line of code, I find it easier to read and less error-prone.",
+      "parentUuid": "1b7c1d42_a49abc0c",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "f8d16e74_a87c6df1",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49fe1753_51aff0e2",
+      "range": {
+        "startLine": 200,
+        "startChar": 12,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e98c0e27_4d04d7f7",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "5341cee3_8fb22511",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e98c0e27_4d04d7f7",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75ca0a60_921b0ce1",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -90,6 +168,24 @@
       "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c484a09a_5206ac3b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75ca0a60_921b0ce1",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "144d41c5_9dcfe087",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Indeed. Done.",
+      "parentUuid": "b01efbe9_8c8ce5b3",
+      "range": {
+        "startLine": 226,
+        "startChar": 9,
+        "endLine": 226,
+        "endChar": 23
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8436ba34_e159dfe6",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "66b19ca7_14fc079b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "As long as we have \"carry +\u003d ...\" (see other discussion), {carry} must be initialized upon entry.",
+      "parentUuid": "8436ba34_e159dfe6",
+      "range": {
+        "startLine": 305,
+        "startChar": 28,
+        "endLine": 305,
+        "endChar": 39
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccbb0b16_0e2e1437",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "aaac5eee_5396dc91",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Yes, I think this is worth it. It generates very nice machine code (using the carry bit instead of a full second register), should be quite a bit faster than the branch-based fallback.\n\nThe encapsulation is also very intentional, not just to increase readability at call sites, but also to allow us to experiment with different implementations of the primitives (if/when we feel that we want to). For example, if we end up having to support non-Clang compilers for a long time, we could benchmark whether using half-digit chunks and shifts/masks is faster than branching.",
+      "parentUuid": "ccbb0b16_0e2e1437",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26b36405_3172b688",
         "filename": "src/objects/bigint.h",
         "patchSetId": 1
@@ -170,6 +332,24 @@
       "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "812f6ed6_343f55c1",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-18T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b36405_3172b688",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
