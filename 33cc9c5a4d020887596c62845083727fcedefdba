@@ -22,6 +22,30 @@
       "revId": "33cc9c5a4d020887596c62845083727fcedefdba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29fcb81d_d63c7d89",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T13:17:10Z",
+      "side": 1,
+      "message": "Yes, good point. Do you think we\u0027ll end up with such functions?\n\nIf yes, then I\u0027d prefer something like (1).",
+      "parentUuid": "83352f64_8d3a046a",
+      "range": {
+        "startLine": 1220,
+        "startChar": 2,
+        "endLine": 1220,
+        "endChar": 77
+      },
+      "revId": "33cc9c5a4d020887596c62845083727fcedefdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
