@@ -233,6 +233,7 @@ class AsmJsParser {
   inline bool Check(AsmJsScanner::token_t token) {
     if (scanner_.Token() == token) {
       scanner_.Next();
+      heap_access_shift_position_ = kNoHeapAccessShift;
       return true;
     } else {
       return false;

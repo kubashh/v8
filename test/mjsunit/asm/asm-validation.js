@@ -162,6 +162,54 @@ function assertValidAsm(func) {
   assertEquals(123, m.foo());
 })();
 
+(function TestModuleHeapExpressionInParens() {
+  function Module(stdlib, ffi, heap) {
+    "use asm";
+    var m32 = new stdlib.Int32Array(heap);
+    function foo(x) {
+      x = x | 0;
+      return m32[((x >> 2))] | 0;
+    }
+    return { foo: foo };
+  }
+  var heap = new ArrayBuffer(1024);
+  var m = Module(this, {}, heap);
+  assertValidAsm(Module);
+  assertEquals(0, m.foo(4));
+})();
+
+(function TestModuleHeapIndexInParens() {
+  function Module(stdlib, ffi, heap) {
+    "use asm";
+    var m32 = new stdlib.Int32Array(heap);
+    function foo(x) {
+      x = x | 0;
+      return m32[((x)) >> 2] | 0;
+    }
+    return { foo: foo };
+  }
+  var heap = new ArrayBuffer(1024);
+  var m = Module(this, {}, heap);
+  assertValidAsm(Module);
+  assertEquals(0, m.foo(4));
+})();
+
+(function TestModuleHeapBadShiftInParens() {
+  function Module(stdlib, ffi, heap) {
+    "use asm";
+    var m32 = new stdlib.Int32Array(heap);
+    function foo(x) {
+      x = x | 0;
+      return m32[((x >> 2)|0)] | 0;
+    }
+    return { foo: foo };
+  }
+  var heap = new ArrayBuffer(1024);
+  var m = Module(this, {}, heap);
+  assertFalse(%IsAsmWasmCode(Module));
+  assertEquals(0, m.foo(4));
+})();
+
 (function TestModuleWith5() {
   function Module(a, b, c, d, e) {
     "use asm";

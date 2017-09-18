@@ -41,12 +41,15 @@ namespace wasm {
 #define FAIL(msg) FAIL_AND_RETURN(, msg)
 #define FAILn(msg) FAIL_AND_RETURN(nullptr, msg)
 
-#define EXPECT_TOKEN_OR_RETURN(ret, token)      \
-  do {                                          \
-    if (scanner_.Token() != token) {            \
-      FAIL_AND_RETURN(ret, "Unexpected token"); \
-    }                                           \
-    scanner_.Next();                            \
+#define EXPECT_TOKEN_OR_RETURN(ret, token)              \
+  do {                                                  \
+    if (scanner_.Token() != token) {                    \
+      FAIL_AND_RETURN(ret, "Unexpected token");         \
+    }                                                   \
+    scanner_.Next();                                    \
+    if (token != ')') {                                 \
+      heap_access_shift_position_ = kNoHeapAccessShift; \
+    }                                                   \
   } while (false)
 
 #define EXPECT_TOKEN(token) EXPECT_TOKEN_OR_RETURN(, token)
@@ -1782,7 +1785,6 @@ AsmType* AsmJsParser::AdditiveExpression() {
 AsmType* AsmJsParser::ShiftExpression() {
   AsmType* a = nullptr;
   RECURSEn(a = AdditiveExpression());
-  heap_access_shift_position_ = kNoHeapAccessShift;
   // TODO(bradnelson): Implement backtracking to avoid emitting code
   // for the x >>> 0 case (similar to what's there for |0).
   for (;;) {
@@ -2384,6 +2386,7 @@ void AsmJsParser::ValidateHeapAccess() {
       info->type->IsA(AsmType::Uint8Array())) {
     RECURSE(index_type = Expression(nullptr));
   } else {
+    heap_access_shift_position_ = kNoHeapAccessShift;
     RECURSE(index_type = ShiftExpression());
     if (heap_access_shift_position_ == kNoHeapAccessShift) {
       FAIL("Expected shift of word size");
@@ -2492,4 +2495,13 @@ void AsmJsParser::GatherCases(ZoneVector<int32_t>* cases) {
 }  // namespace internal
 }  // namespace v8
 
+#undef EXPECT_TOKEN
+#undef EXPECT_TOKEN_OR_RETURN
+#undef EXPECT_TOKENn
+#undef FAIL
+#undef FAIL_AND_RETURN
+#undef FAILn
 #undef RECURSE
+#undef RECURSE_OR_RETURN
+#undef RECURSEn
+#undef TOK
