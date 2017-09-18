@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0d2afe9_dbb18634",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "Do the V8 AUTHORS and LICENSE files already subsume the Dart/Go ones?",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7c1d42_a49abc0c",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "The second add will never increase new_carry, right?\n\nCan\u0027t we simply do something like the following:\n\nDCHECK(0 \u003c\u003d carry \u003c\u003d 1);\nsum \u003d digit_add(x-\u003edigit(i), carry, \u0026carry);\nsum \u003d digit_add(sum, y-\u003edigit(i), \u0026carry);\nDCHECK(0 \u003c\u003d carry \u003c\u003d 1);\n\nwhere digit_add is changed such that it sets the carry to 1 rather than increase it by 1.\n\n(If the first digit_add overflows, then the second one cannot overflow.)\n\n(Analogous for borrow in the other function.)",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49fe1753_51aff0e2",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "Nit: \"difference\" like above, or both \"diff\"",
+      "range": {
+        "startLine": 200,
+        "startChar": 12,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e98c0e27_4d04d7f7",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "This assumes more than the DCHECK in line 180 asserts. I think the assumption is AbsoluteCompare(x, y) \u003e\u003d 0. Can you change the DCHECK or add a SLOW_DCHECK that checks this?",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75ca0a60_921b0ce1",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "Have you thought of copying everything \"at once\", using something like memcpy?",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b01efbe9_8c8ce5b3",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "This seems unnecessary.",
+      "range": {
+        "startLine": 226,
+        "startChar": 9,
+        "endLine": 226,
+        "endChar": 23
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8436ba34_e159dfe6",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "I think this is irrelevant as far as digit_add/sub is concerned.",
+      "range": {
+        "startLine": 305,
+        "startChar": 28,
+        "endLine": 305,
+        "endChar": 39
+      },
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccbb0b16_0e2e1437",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "Do you think this optimization is worth it? I don\u0027t have an intuition here.",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b36405_3172b688",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-18T12:57:58Z",
+      "side": 1,
+      "message": "Please add a comment explaining the return value.",
+      "revId": "7b1a90072baf34566fb266d7798c0dc938b71e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
