@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea00b269_648dbff6",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-19T05:27:44Z",
+      "side": 1,
+      "message": "This should be 0 so that the function\u0027s length property has value 0.",
+      "range": {
+        "startLine": 4352,
+        "startChar": 60,
+        "endLine": 4352,
+        "endChar": 61
+      },
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d938f17c_b6d546de",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4355,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-19T05:27:44Z",
+      "side": 1,
+      "message": "Why not false?",
+      "range": {
+        "startLine": 4355,
+        "startChar": 27,
+        "endLine": 4355,
+        "endChar": 31
+      },
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6152d253_ca27a401",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-19T05:27:44Z",
+      "side": 1,
+      "message": "This makes me wonder: do we ever need the 0-initializing factory function NewBigInt(n) for n !\u003d 0?",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61058fef_64c65301",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-19T05:27:44Z",
+      "side": 1,
+      "message": "Nit: I\u0027d prefer doing UNIMPLEMENTED() here and below.",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16272adf_cf7eb68b",
+        "filename": "test/mjsunit/harmony/bigint.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-19T05:27:44Z",
+      "side": 1,
+      "message": "Please add some tests of .valueOf and also of wrapped BigInts.\n\nE.g. Object(zero).valueOf() \u003d\u003d\u003d another_zero",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
