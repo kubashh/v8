@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "60d71950_ff01c9f3",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313a9774_fd47cca2",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b20f0a22_4ed91956",
         "filename": "src/objects/literal-objects.h",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "e161278e_1cfe29ca",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b20f0a22_4ed91956",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09d1adf8_e0712ca8",
         "filename": "src/objects/literal-objects.h",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2017-09-14T15:05:06Z",
       "side": 1,
       "message": "I think you can deduce enumeration order value from NameIndex (offset by whatever\u0027s preallocated in the dict not coming from the class definition).",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93b0e4a9_14a65516",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "Indeed! In order to simplify things I had to change the way we encode class positions but it works now.",
+      "parentUuid": "09d1adf8_e0712ca8",
       "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "bf52e292_3553423e",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "Ouch! Thank you! That was a temporary thing that I forgot to clean up.",
+      "parentUuid": "321df54e_250979a1",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "daee0a74_0d19a76b",
         "filename": "src/runtime/runtime-classes.cc",
         "patchSetId": 6
@@ -81,6 +153,24 @@
       "writtenOn": "2017-09-14T15:05:06Z",
       "side": 1,
       "message": "Shouldn\u0027t we set this based on the actual names?",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79ba50ea_efe073c6",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "IFAICT we track this only for fast mode maps. And these there lines is what we do in Map::CopyNormalized().",
+      "parentUuid": "daee0a74_0d19a76b",
       "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -101,6 +191,24 @@
       "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a390f230_0cde42bc",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-19T13:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eee3039f_cf74ffd2",
+      "revId": "bf8cd53960a48dc65c6306bba59df62e7b2e8344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
