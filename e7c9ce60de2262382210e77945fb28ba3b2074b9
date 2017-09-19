@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d45d3036_f49ece88",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "Will address in a future CL",
+      "parentUuid": "6b1bea38_d56c0a2e",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2d55aa_394dd71e",
         "filename": "src/unicode.cc",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784dee44_b671c322",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "Will address in a future CL",
+      "parentUuid": "ba2d55aa_394dd71e",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "42eb65d1_cd5b9460",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b39c68b9_f7b157f9",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a45d6758_12b8a440",
         "filename": "src/unicode.cc",
         "patchSetId": 10
@@ -67,6 +121,24 @@
       "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc4cf6b_c7b57dc9",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "As discussed offline -\u003e not doing this",
+      "parentUuid": "a45d6758_12b8a440",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "efe46924_c70522bb",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddb39fa2_ceb1ed32",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4918fc0b_79749f00",
         "filename": "src/unicode.cc",
         "patchSetId": 10
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "09a0f322_b692cb4d",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "Done-ish, see below",
+      "parentUuid": "4918fc0b_79749f00",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90753e9a_57c1fa73",
         "filename": "src/unicode.cc",
         "patchSetId": 10
@@ -118,6 +226,24 @@
       "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ebe7438_5ce79807",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-19T14:08:55Z",
+      "side": 1,
+      "message": "First cannot be \u003e 4 here; added a comment \u0026 DCHECK above:\n\n      // If the lead byte was bigger than 0xf4 (payload: 4), it\u0027s not a start of\n      // any valid character, and this is detected by NonASCIISequenceLength.\n      DCHECK_LE(lead_payload, 0x4);",
+      "parentUuid": "90753e9a_57c1fa73",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
