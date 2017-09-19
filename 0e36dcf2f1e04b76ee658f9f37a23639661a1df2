@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e3b13789_e655a7f2",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-19T18:24:18Z",
+      "side": 1,
+      "message": "Done.\n\nI\u0027ve modeled this after Number.p.toString, which has length \u003d\u003d 1; but you have a point, the BigInt proposal currently does not specify this. I\u0027ve opened https://github.com/tc39/proposal-bigint/issues/85 to get clarification.",
+      "parentUuid": "ea00b269_648dbff6",
+      "range": {
+        "startLine": 4352,
+        "startChar": 60,
+        "endLine": 4352,
+        "endChar": 61
+      },
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d938f17c_b6d546de",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cd304c1e_1b3b58c7",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4355,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-19T18:24:18Z",
+      "side": 1,
+      "message": "Consistency with other .valueOf() builtins. My understanding (which could be wrong) is that ASM/TF* builtins care, CPP builtins don\u0027t (as long as they use the args.atOrUndefined helper). BigInt.p.valueOf is a CPP builtin in this CL, but I think we might want to move it to CSA in the future, just like the other primitive valueOf functions, so I was basically preparing that. I can change it to {false} until then.",
+      "parentUuid": "d938f17c_b6d546de",
+      "range": {
+        "startLine": 4355,
+        "startChar": 27,
+        "endLine": 4355,
+        "endChar": 31
+      },
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6152d253_ca27a401",
         "filename": "src/builtins/builtins-bigint.cc",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc2332f_07127bb1",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-19T18:24:18Z",
+      "side": 1,
+      "message": "ParseInt and Multiply will use it; not sure yet whether those will be the only cases.\nOf course we can refactor the code to only have the \"raw\" factory function and do initialization, if needed, at call sites. Would you prefer that?",
+      "parentUuid": "6152d253_ca27a401",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "03da4748_2f21f865",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-19T18:24:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61058fef_64c65301",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16272adf_cf7eb68b",
         "filename": "test/mjsunit/harmony/bigint.js",
         "patchSetId": 2
@@ -96,6 +180,24 @@
       "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68bc18e5_61ef3207",
+        "filename": "test/mjsunit/harmony/bigint.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-09-19T18:24:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16272adf_cf7eb68b",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
