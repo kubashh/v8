@@ -278,6 +278,25 @@ uchar Utf8::CalculateValue(const byte* str, size_t max_length, size_t* cursor) {
   UNREACHABLE();
 }
 
+/*
+Overlong sequence detection: Since the Blink's TextCodecUTF8 rejects multi-byte
+characters which could be expressed with less bytes, we must too.
+
+Each continuation byte (10xxxxxx) carries 6 bits of payload. The lead bytes of
+1, 2, 3 and 4-byte characters are 0xxxxxxx, 110xxxxx, 1110xxxx and 11110xxx, and
+carry 7, 5, 4, and 3 bits of payload, respectively.
+
+Thus, a two-byte character can contain 11 bits of payload, a three-byte
+character 16, and a four-byte character 21.
+
+If we encounter a two-byte character which contains 7 bits or less, a three-byte
+character which contains 11 bits or less, or a four-byte character which
+contains 16 bits (or less), we reject the character and generate a kBadChar for
+each of the bytes. This is because Blink handles overlong sequences by rejecting
+the first byte of the character (returning kBadChar); thus the rest are lonely
+continuation bytes and generate a kBadChar each.
+*/
+
 uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
   DCHECK_NOT_NULL(buffer);
 
@@ -304,7 +323,8 @@ uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
       return kIncomplete;
     } else {
       // No buffer, and not the start of a 1-byte char (handled at the
-      // beginning), and not the start of a 2..4 byte char? Bad char.
+      // beginning), and not the start of a 2..4 byte char (or the start of an
+      // overlong / invalid sequence)? Bad char.
       *buffer = 0;
       return kBadChar;
     }
@@ -331,6 +351,39 @@ uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
     // How many bytes (excluding this one) do we still expect?
     uint8_t bytes_expected = *buffer >> 28;
     uint8_t bytes_left = (*buffer >> 24) & 0x0f;
+
+    if (bytes_expected == 3 && bytes_left == 2) {
+      uint8_t first = *buffer & (0x7f >> bytes_expected);
+      DCHECK(first <= 0xf);
+      if (first == 0 && next < 0xa0) {
+        // 0xa0 = 0b10100000 (payload: 100000). Overlong sequence: 0 bits from
+        // the first byte, at most 5 from the second byte, and at most 6 from
+        // the third -> in total at most 11.
+
+        *buffer = next;
+        return kBadChar;
+      } else if (first == 0xd && next > 0x9f) {
+        // The resulting code point would be on a range which is reserved for
+        // UTF-16 surrogate halves.
+        *buffer = next;
+        return kBadChar;
+      }
+    } else if (bytes_expected == 4 && bytes_left == 3) {
+      uint8_t first = *buffer & (0x7f >> bytes_expected);
+      if (first == 0 && next < 0x90) {
+        // 0x90 = 10010000 (payload 10000). Overlong sequence: 0 bits from the
+        // first byte, at most 4 from the second byte, at most 12 from the third
+        // and fourth bytes -> in total at most 16.
+        *buffer = next;
+        return kBadChar;
+      } else if (first == 4 && next > 0x8f) {
+        // Invalid code point; value greater than 0b100001111000000000000
+        // (0x10ffff).
+        *buffer = next;
+        return kBadChar;
+      }
+    }
+
     bytes_left--;
     // Update the value.
     uint32_t value = ((*buffer & 0xffffff) << 6) | (next & 0x3F);
@@ -338,10 +391,15 @@ uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
       *buffer = (bytes_expected << 28 | bytes_left << 24 | value);
       return kIncomplete;
     } else {
-      *buffer = 0;
+#ifdef DEBUG
+      // Check that overlong sequences were already detected.
       bool sequence_was_too_long = (bytes_expected == 2 && value < 0x80) ||
-                                   (bytes_expected == 3 && value < 0x800);
-      return sequence_was_too_long ? kBadChar : value;
+                                   (bytes_expected == 3 && value < 0x800) ||
+                                   (bytes_expected == 4 && value < 0x8000);
+      DCHECK(!sequence_was_too_long);
+#endif
+      *buffer = 0;
+      return value;
     }
   } else {
     // Within a character, but not a continuation character? Then the
