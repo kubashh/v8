@@ -293,15 +293,15 @@ TEST(Breakpoint_I32And_disable) {
 TEST(GrowMemory) {
   {
     WasmRunner<int32_t, uint32_t> r(kExecuteInterpreted);
-    r.builder().AddMemory(WasmModule::kPageSize);
     r.builder().SetMaxMemPages(10);
+    r.builder().AddMemory(WasmModule::kPageSize);
     BUILD(r, WASM_GROW_MEMORY(WASM_GET_LOCAL(0)));
     CHECK_EQ(1, r.Call(1));
   }
   {
     WasmRunner<int32_t, uint32_t> r(kExecuteInterpreted);
-    r.builder().AddMemory(WasmModule::kPageSize);
     r.builder().SetMaxMemPages(10);
+    r.builder().AddMemory(WasmModule::kPageSize);
     BUILD(r, WASM_GROW_MEMORY(WASM_GET_LOCAL(0)));
     CHECK_EQ(-1, r.Call(11));
   }

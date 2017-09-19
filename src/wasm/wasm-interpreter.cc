@@ -630,17 +630,10 @@ inline int32_t ExecuteGrowMemory(uint32_t delta_pages,
   // object's view.
   uint32_t cached_size = mem_info->mem_size;
   byte* cached_start = mem_info->mem_start;
-  uint32_t instance_size =
-      instance->compiled_module()->has_embedded_mem_size()
-          ? instance->compiled_module()->embedded_mem_size()
-          : 0;
-  byte* instance_start =
-      instance->compiled_module()->has_embedded_mem_start()
-          ? reinterpret_cast<byte*>(
-                instance->compiled_module()->embedded_mem_start())
-          : nullptr;
-  DCHECK_EQ(cached_size, instance_size);
-  DCHECK_EQ(cached_start, instance_start);
+  uint32_t instance_size = instance->wasm_context()->mem_size;
+  byte* instance_start = instance->wasm_context()->mem_start;
+  CHECK_EQ(cached_size, instance_size);
+  CHECK_EQ(cached_start, instance_start);
 #endif
   return ret;
 }
