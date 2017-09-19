@@ -123,7 +123,7 @@ Handle<BigInt> BigInt::BitwiseOr(Handle<BigInt> x, Handle<BigInt> y) {
   UNIMPLEMENTED();  // TODO(jkummerow): Implement.
 }
 
-Handle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
+MaybeHandle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
   // TODO(jkummerow): Support non-power-of-two radixes.
   if (!base::bits::IsPowerOfTwo(radix)) radix = 16;
   return ToStringBasePowerOfTwo(bigint, radix);
@@ -225,9 +225,9 @@ int BigInt::AbsoluteCompare(Handle<BigInt> x, Handle<BigInt> y) {
 Handle<BigInt> BigInt::Copy(Handle<BigInt> source) {
   int length = source->length();
   Handle<BigInt> result = source->GetIsolate()->factory()->NewBigIntRaw(length);
-  memcpy(result->address() + HeapObject::kHeaderSize,
-         source->address() + HeapObject::kHeaderSize,
-         SizeFor(length) - HeapObject::kHeaderSize);
+  memcpy(result->address() + kBitfieldOffset,
+         source->address() + kBitfieldOffset,
+         SizeFor(length) - kBitfieldOffset);
   return result;
 }
 
@@ -248,9 +248,10 @@ void BigInt::RightTrim() {
 
 static const char kConversionChars[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
-// TODO(jkummerow): Add more tests for this when it is exposed on
-// BigInt.prototype.
-Handle<String> BigInt::ToStringBasePowerOfTwo(Handle<BigInt> x, int radix) {
+// TODO(jkummerow): Add more tests for this when we have a way to construct
+// multi-digit BigInts.
+MaybeHandle<String> BigInt::ToStringBasePowerOfTwo(Handle<BigInt> x,
+                                                   int radix) {
   STATIC_ASSERT(base::bits::IsPowerOfTwo(kDigitBits));
   DCHECK(base::bits::IsPowerOfTwo(radix));
   DCHECK(radix >= 2 && radix <= 32);
