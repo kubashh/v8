@@ -150,9 +150,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void VisitArgumentsObject(Variable* variable);
   void VisitRestArgumentsArray(Variable* rest);
   void VisitCallSuper(Call* call);
-  void VisitClassLiteralProperties(ClassLiteral* expr, Register constructor,
-                                   Register prototype);
-  void BuildClassLiteralNameProperty(ClassLiteral* expr, Register constructor);
+  void VisitClassLiteralProperties(ClassLiteral* expr,
+                                   const RegisterList& args);
   void BuildClassLiteral(ClassLiteral* expr);
   void VisitNewTargetVariable(Variable* variable);
   void VisitThisFunctionVariable(Variable* variable);
@@ -279,6 +278,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
       native_function_literals_;
   ZoneVector<std::pair<ObjectLiteral*, size_t>> object_literals_;
   ZoneVector<std::pair<ArrayLiteral*, size_t>> array_literals_;
+  ZoneVector<std::pair<ClassLiteral*, size_t>> class_literals_;
 
   ControlScope* execution_control_;
   ContextScope* execution_context_;
