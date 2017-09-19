@@ -78,6 +78,17 @@ struct pass_value_or_ref {
                                          decay_t, const decay_t&>::type;
 };
 
+template <typename T>
+struct has_output_operator {
+  template <typename U>
+  static auto __check_operator(U u)
+      -> decltype(*(std::ostream*)nullptr << *u, uint8_t{0});
+  static uint16_t __check_operator(...);
+
+  using ptr_t = typename std::add_pointer<T>::type;
+  static constexpr bool value = sizeof(__check_operator(ptr_t{nullptr})) == 1;
+};
+
 }  // namespace base
 }  // namespace v8
 
