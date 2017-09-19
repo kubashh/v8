@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b1bea38_d56c0a2e",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "future hardening:\n \n DCHECK_LE(kind, 4);\n\nSince NonASCIISequenceLength only returns 0 \u003c\u003d value \u003c\u003d 4",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba2d55aa_394dd71e",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "separate hardening: \n\n uint8_t character_info \u003d  kind \u003c\u003c 28 | (kind - 1) \u003c\u003c 24;\n DECHECK_EQ(character_info \u0026 mask, 0);\n *buffer \u003d character_info | (next \u0026 mask)",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39c68b9_f7b157f9",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "Could you add a comment that the 2-byte overlong case is handled by only looking at the lead byte?",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a45d6758_12b8a440",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "You could fold these tests into a single one:\n\n uint8_t character_info \u003d *buffer \u0026 character_info_mask;\n \n uint8_t character_info_3_byte_2_pending \u003d ((3 \u003c\u003c 28) | (2 \u003c\u003c 24));\n if (character_info \u003d\u003d character_info_3_byte_2_pending) ... \n\n\nOn the other hand, you\u0027ll probably get this inlined in clang anyway ;)",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb39fa2_ceb1ed32",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "Maybe add this comment: \n// Check that there can be at least 12 bits payload.1\n\nAnd could you rename {first} \u003d\u003e {lead_payload}?",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4918fc0b_79749f00",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "DCHECK_LE(lead_payload, 0x07)\n// Check that there can be at least 17 bits payload.",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90753e9a_57c1fa73",
+        "filename": "src/unicode.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-09-19T13:46:14Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be  first \u003e\u003d 4 ?",
+      "revId": "e7c9ce60de2262382210e77945fb28ba3b2074b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
