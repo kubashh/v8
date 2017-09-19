@@ -80,6 +80,10 @@ TEST(LoggingTest, CompareWithDifferentSignedness) {
   CHECK_BOTH(IMPLIES, i32, i64);
   CHECK_BOTH(IMPLIES, u32, i64);
   CHECK_BOTH(IMPLIES, !u32, !i64);
+
+  // Check that the values are output correctly on error.
+  ASSERT_DEATH_IF_SUPPORTED(([&] { CHECK_GT(i32, u64); })(),
+                            "Check failed: i32 > u64 \\(10 vs. 40\\)");
 }
 
 TEST(LoggingTest, CompareWithReferenceType) {
@@ -93,6 +97,74 @@ TEST(LoggingTest, CompareWithReferenceType) {
   CHECK_BOTH(LT, *&i32, u64);
   CHECK_BOTH(IMPLIES, *&i32, i64);
   CHECK_BOTH(IMPLIES, *&i32, u64);
+
+  // Check that the values are output correctly on error.
+  ASSERT_DEATH_IF_SUPPORTED(([&] { CHECK_GT(*&i32, u64); })(),
+                            "Check failed: \\*&i32 > u64 \\(10 vs. 40\\)");
+}
+
+enum TestEnum1 { ONE, TWO };
+enum TestEnum2 : uint16_t { FOO = 14, BAR = 5 };
+enum class TestEnum3 { A, B };
+enum class TestEnum4 : uint8_t { FIRST, SECOND };
+
+TEST(LoggingTest, CompareEnumTypes) {
+  // All these checks should compile (!) and succeed.
+  CHECK_BOTH(EQ, ONE, ONE);
+  CHECK_BOTH(LT, ONE, TWO);
+  CHECK_BOTH(EQ, BAR, 5);
+  CHECK_BOTH(LT, BAR, FOO);
+  CHECK_BOTH(EQ, TestEnum3::A, TestEnum3::A);
+  CHECK_BOTH(LT, TestEnum3::A, TestEnum3::B);
+  CHECK_BOTH(EQ, TestEnum4::FIRST, TestEnum4::FIRST);
+  CHECK_BOTH(LT, TestEnum4::FIRST, TestEnum4::SECOND);
+}
+
+class TestClass1 {
+ public:
+  bool operator==(const TestClass1&) const { return true; }
+  bool operator!=(const TestClass1&) const { return false; }
+};
+class TestClass2 {
+ public:
+  explicit TestClass2(int val) : val_(val) {}
+  bool operator<(const TestClass2& other) const { return val_ < other.val_; }
+  int val() const { return val_; }
+
+ private:
+  int val_;
+};
+std::ostream& operator<<(std::ostream& str, const TestClass2& val) {
+  return str << "TestClass2(" << val.val() << ")";
+}
+
+TEST(LoggingTest, CompareClassTypes) {
+  // All these checks should compile (!) and succeed.
+  CHECK_BOTH(EQ, TestClass1{}, TestClass1{});
+  CHECK_BOTH(LT, TestClass2{2}, TestClass2{7});
+
+  // Check that the values are output correctly on error.
+  ASSERT_DEATH_IF_SUPPORTED(
+      ([&] { CHECK_NE(TestClass1{}, TestClass1{}); })(),
+      "Check failed: TestClass1\\{\\} != TestClass1\\{\\} "
+      "\\(<unprintable> vs. <unprintable>\\)");
+  ASSERT_DEATH_IF_SUPPORTED(
+      ([&] { CHECK_LT(TestClass2{4}, TestClass2{3}); })(),
+      "Check failed: TestClass2\\{4\\} < TestClass2\\{3\\} "
+      "\\(TestClass2\\(4\\) vs. TestClass2\\(3\\)\\)");
+}
+
+TEST(LoggingDeathTest, OutputEnumValues) {
+  ASSERT_DEATH_IF_SUPPORTED(([&] { CHECK_EQ(ONE, TWO); })(),
+                            "Check failed: ONE == TWO \\(0 vs. 1\\)");
+  ASSERT_DEATH_IF_SUPPORTED(([&] { CHECK_NE(BAR, 2 + 3); })(),
+                            "Check failed: BAR != 2 \\+ 3 \\(5 vs. 5\\)");
+  ASSERT_DEATH_IF_SUPPORTED(
+      ([&] { CHECK_EQ(TestEnum3::A, TestEnum3::B); })(),
+      "Check failed: TestEnum3::A == TestEnum3::B \\(0 vs. 1\\)");
+  ASSERT_DEATH_IF_SUPPORTED(
+      ([&] { CHECK_GE(TestEnum4::FIRST, TestEnum4::SECOND); })(),
+      "Check failed: TestEnum4::FIRST >= TestEnum4::SECOND \\(0 vs. 1\\)");
 }
 
 TEST(LoggingDeathTest, FatalKills) {
