@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f6180a3_6ab26ab1",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98ef4ead_3c1bd1ac",
+      "range": {
+        "startLine": 694,
+        "startChar": 29,
+        "endLine": 694,
+        "endChar": 52
+      },
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebfcac38_fef0939d",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "578d8e77_40f14ed2",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebfcac38_fef0939d",
+      "range": {
+        "startLine": 698,
+        "startChar": 29,
+        "endLine": 698,
+        "endChar": 57
+      },
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25f2dd3d_1cf56c02",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501ee53b_e91216c2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25f2dd3d_1cf56c02",
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "cc9f40ec_09916979",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0604a512_56ea1ff8",
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "724c4096_b9359386",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -96,6 +180,24 @@
       "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9744918f_327dfde1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "As discusses offline, the JSToWasmWrappers are compiled at module compile time (except for the start function wrapper and the wrappers for the function table elements which are compiled at instantiation time). At compile time the context_address_ is still nullptr, since the memory object is generated at instance build time.",
+      "parentUuid": "724c4096_b9359386",
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "dea561c5_7f6366d8",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d013bc5_a912fa28",
+      "range": {
+        "startLine": 633,
+        "startChar": 11,
+        "endLine": 633,
+        "endChar": 24
+      },
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6517d89e_875d7cb0",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 2
@@ -136,6 +262,24 @@
       "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13c62d6e_ab40ed59",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T15:55:10Z",
+      "side": 1,
+      "message": "makes sense :)",
+      "parentUuid": "6517d89e_875d7cb0",
+      "revId": "7f7ce51e9864d3d4cb038483a88b8bab6ee1d784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
