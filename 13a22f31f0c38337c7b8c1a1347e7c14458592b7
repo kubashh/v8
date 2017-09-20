@@ -91,6 +91,24 @@
       "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e91a0131_a3468bd0",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-20T15:50:42Z",
+      "side": 1,
+      "message": "Oh, because growing would now have added memory to the first one, which gets us to the place I described (and that the CL fixes)\n\nIt seems like the \u0027grow\u0027 case is a special case of what I\u0027m describing, no? Deepti, mind having 2 tests - one for the observed issue, one for the root cause/fix? (because today they may be connected, but that may not always be the case)",
+      "parentUuid": "a029160e_76f9368c",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
