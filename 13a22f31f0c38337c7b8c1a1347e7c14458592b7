@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f945721_df907c0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-20T06:39:23Z",
+      "side": 1,
+      "message": "spurious space after the period.",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0db0886_b2126c12",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-20T06:39:23Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to check this here. RelocateMemoryReferences will just record the values. Then, if the values are the same, no relocation (for these reloc modes) will happen. See: https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-code-specialization.cc?q\u003drelocatemem\u0026sq\u003dpackage:chromium\u0026l\u003d173",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8456568f_0103a88d",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-09-20T06:39:23Z",
+      "side": 1,
+      "message": "Not sure I follow this test. Wouldn\u0027t we want 2 instances, where the first one is given memory, and the second one isn\u0027t, and yet the second one can write the memory of the first?",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
