@@ -22,6 +22,30 @@
       "revId": "16335577e4d998ae2a729ac53a59454953a6b46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1224e75_1140163a",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1159449
+      },
+      "writtenOn": "2017-09-20T13:22:02Z",
+      "side": 1,
+      "message": "Hi, in master (6.3) the code is slightly different\n\n    BUILD(StoreMem, mem_type, index.node, operand.offset, operand.alignment,\n          value.node, decoder-\u003eposition(), type);\n\nthe merge to 6.2 didn\u0027t apply cleanly, after resolving the conflict the merge tool didn\u0027t run the presubmit check, thats why missed it. I\u0027ve uploaded CL https://chromium-review.googlesource.com/c/v8/v8/+/675044 to fix this.\nThanks.",
+      "parentUuid": "b76e60fa_2bd495e6",
+      "range": {
+        "startLine": 327,
+        "startChar": 0,
+        "endLine": 327,
+        "endChar": 83
+      },
+      "revId": "16335577e4d998ae2a729ac53a59454953a6b46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
