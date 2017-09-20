@@ -436,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "2f3718d7_453ec26c",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3066,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-20T17:08:11Z",
+      "side": 1,
+      "message": "I confirm this is still a problem for TF, basically it uses the wrong type and it wraps at 32 bit even tough it shouldn\u0027t. I\u0027m using IntPtrConstant again in the next patch set.",
+      "parentUuid": "ab246a12_f5f0c90c",
+      "range": {
+        "startLine": 3066,
+        "startChar": 34,
+        "endLine": 3066,
+        "endChar": 48
+      },
+      "revId": "7dcb0107f5ee96c1c2b9500c2a33c9c88d2db518",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59335583_831faec1",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 1
