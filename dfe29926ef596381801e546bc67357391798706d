@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9b23259_b766a0ac",
+        "filename": "test/mjsunit/harmony/bigint.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-20T01:56:54Z",
+      "side": 1,
+      "message": "Nit: .valueOf",
+      "revId": "dfe29926ef596381801e546bc67357391798706d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

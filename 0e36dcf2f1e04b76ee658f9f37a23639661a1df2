@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c23aec47_fcd8a1d6",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-20T01:56:54Z",
+      "side": 1,
+      "message": "It\u0027s specified in ES section 17 for all builtin functions unless otherwise mentioned:\n\n\"Every built-in function object, including constructors, has a length property whose value is an integer. Unless otherwise specified, this value is equal to the largest number of named arguments shown in the subclause headings for the function description. Optional parameters (which are indicated with brackets: [ ]) or rest parameters (which are shown using the form «...name») are not included in the default argument count.\"",
+      "parentUuid": "e3b13789_e655a7f2",
+      "range": {
+        "startLine": 4352,
+        "startChar": 60,
+        "endLine": 4352,
+        "endChar": 61
+      },
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d938f17c_b6d546de",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 2
@@ -125,6 +149,24 @@
       "side": 1,
       "message": "ParseInt and Multiply will use it; not sure yet whether those will be the only cases.\nOf course we can refactor the code to only have the \"raw\" factory function and do initialization, if needed, at call sites. Would you prefer that?",
       "parentUuid": "6152d253_ca27a401",
+      "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "63f74a5b_7bc285e3",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-09-20T01:56:54Z",
+      "side": 1,
+      "message": "Let\u0027s leave it as is for now.",
+      "parentUuid": "5dc2332f_07127bb1",
       "revId": "0e36dcf2f1e04b76ee658f9f37a23639661a1df2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
