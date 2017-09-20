@@ -50,6 +50,47 @@
       "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a029160e_76f9368c",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-20T07:21:10Z",
+      "side": 1,
+      "message": "No. The original problem found by the fuzzer was the following:\n1) You have a compiled module with initial memory of size 0.\n2) You instantiate the compiled module.\n3) You grow the memory of the instance, and then access the memory. This works perfectly fine.\n4) You instantiate the compiled module a second time.\n5) You grow the memory of the second instance.\n6) Any memory access on the second instance crashes now.\n\nEnrico added several tests recently to make sure that instances don\u0027t share their memory unintentionally.",
+      "parentUuid": "8456568f_0103a88d",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d90cdb9_0cb2adff",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-20T07:21:10Z",
+      "side": 1,
+      "message": "Was the bug also triggered with \u00271\u0027 as the initial memory size?",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 19
+      },
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
