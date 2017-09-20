@@ -470,7 +470,9 @@ void MinorMarkCompactCollector::SetUp() {}
 void MarkCompactCollector::TearDown() {
   AbortCompaction();
   AbortWeakObjects();
-  marking_worklist()->TearDown();
+  if (incremental_marking()->IsMarking()) {
+    marking_worklist()->Clear();
+  }
 }
 
 void MinorMarkCompactCollector::TearDown() {}
