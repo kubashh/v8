@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a86877d8_2654411f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-20T18:07:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f945721_df907c0a",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0db0886_b2126c12",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17a8825d_1d449072",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-20T18:07:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0db0886_b2126c12",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +142,48 @@
       "side": 1,
       "message": "Oh, because growing would now have added memory to the first one, which gets us to the place I described (and that the CL fixes)\n\nIt seems like the \u0027grow\u0027 case is a special case of what I\u0027m describing, no? Deepti, mind having 2 tests - one for the observed issue, one for the root cause/fix? (because today they may be connected, but that may not always be the case)",
       "parentUuid": "a029160e_76f9368c",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36de4280_fd04fee7",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-20T18:07:01Z",
+      "side": 1,
+      "message": "The instances here do not share memory unintentionally, the two instances have their own private JSArrayBuffers for memory, but the address/size patching for the second instance is incorrect. What actually happens here is - \n\n1. First module is compiled, instantiated, grow_memory is called - everything works as expected. During grow, the embedded_mem_start, embedded_mem_size is set on the compiled module\n2. The compiled module is cloned for the second instance, but on instantiate, the relocations are not fixed up as the memory associated with the module is null, so the code has stale values of memory references from the previous instance that are not patched on instantiate. What should happen is the code for the cloned module should be reset using the embedded_mem_start, and embedded_mem_size with relocations as fixed in module-compiler.cc\n3. On the second grow, the memory, and size references are updated with the correct delta, but the wrong starting values because of the previous point, and we end up with invalid size, and address references. \n\nIf the second instance is instantiated with it\u0027s own memory, then this works as expected, because memory_ is not null, and the correct relocations are done on instantiate, so this is the actual issue - i.e. two instances with no memory share the module, functions have memory references, and when relocations are performed on the second grow, the references are invalid because the code it started off with had incorrect references. Mircea, let me know if there\u0027s a side-effect that I have missed, and I can add a test for that.",
+      "parentUuid": "e91a0131_a3468bd0",
+      "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b104d35_c83215ea",
+        "filename": "test/mjsunit/regress/wasm/regression-763439.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-09-20T18:07:01Z",
+      "side": 1,
+      "message": "No, see point above about root cause, the bug is only triggered when instances share a module with 0 initial memory, as they start off with stale references in the cloned compiled module. The buffer, etc., are private to the instances, the references are incorrect.",
+      "parentUuid": "4d90cdb9_0cb2adff",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 19
+      },
       "revId": "13a22f31f0c38337c7b8c1a1347e7c14458592b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
