@@ -3391,6 +3391,19 @@ bool Map::is_access_check_needed() const {
   return ((1 << kIsAccessCheckNeeded) & bit_field()) != 0;
 }
 
+#ifdef V8_TRACE_MAPS
+void Map::set_has_been_printed(bool value) {
+  if (value) {
+    set_bit_field(bit_field() | (1 << kHasBeenPrinted));
+  } else {
+    set_bit_field(bit_field() & ~(1 << kHasBeenPrinted));
+  }
+}
+
+bool Map::has_been_printed() const {
+  return ((1 << kHasBeenPrinted) & bit_field()) != 0;
+}
+#endif
 
 void Map::set_is_extensible(bool value) {
   if (value) {
