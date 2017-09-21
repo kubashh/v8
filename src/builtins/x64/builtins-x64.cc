@@ -1437,18 +1437,20 @@ void Builtins::Generate_DeserializeLazy(MacroAssembler* masm) {
     __ movp(FieldOperand(shared, SharedFunctionInfo::kCodeOffset),
             target_builtin);
     __ movp(r14, target_builtin);  // Write barrier clobbers r14 below.
+    __ pushq(target_builtin);
     __ RecordWriteField(shared, SharedFunctionInfo::kCodeOffset, r14, r15,
                         kDontSaveFPRegs, OMIT_REMEMBERED_SET, OMIT_SMI_CHECK);
 
     // And second to the target function.
-
+    __ popq(target_builtin);
     __ movp(FieldOperand(target, JSFunction::kCodeOffset), target_builtin);
     __ movp(r14, target_builtin);  // Write barrier clobbers r14 below.
+    __ pushq(target_builtin);
     __ RecordWriteField(target, JSFunction::kCodeOffset, r14, r15,
                         kDontSaveFPRegs, OMIT_REMEMBERED_SET, OMIT_SMI_CHECK);
 
     // All copying is done. Jump to the deserialized code object.
-
+    __ popq(target_builtin);
     __ leap(target_builtin, FieldOperand(target_builtin, Code::kHeaderSize));
     __ jmp(target_builtin);
   }
