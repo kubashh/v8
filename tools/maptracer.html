@@ -1,0 +1,1400 @@
+<html>
+  <!--
+  Copyright 2016 the V8 project authors. All rights reserved.  Use of this source
+  code is governed by a BSD-style license that can be found in the LICENSE file.
+  -->
+<head>
+<meta charset="UTF-8">
+<style>
+html {
+  font-family: sans-serif;
+}
+#timeline {
+  position: relative;
+  height: 300px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+#timelineChunks {
+  height: 300px;
+  position: absolute;
+  margin-right: 100px;
+}
+#timelineCanvas { 
+  height: 300px;
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+.chunk {
+  width: 8px;
+  position: absolute;
+  background-size: cover;
+  image-rendering: pixelated;
+  bottom: 0px;
+}
+#timelineOverviewCanvas, #timelineOverview {
+  width: 700px;
+  height: 50px;
+  position: relative;
+}
+#timelineOverview {
+  margin-bottom: 10px;
+}
+#timelineOverviewIndicator {
+  border: 1px solid black;
+  border-bottom-width: 10px;
+  background-color: rgba(128, 128, 128, 0.3);
+  height: 98%;
+  position: absolute;
+  top: 0px;
+  cursor: ew-resize;
+}
+#mapDetails {
+  font-family: monospace;
+  white-space: pre;
+}
+#transitionView {
+  overflow-x: scroll;
+  white-space: nowrap;
+  min-height: 50px;
+  padding: 50px 0 0 0;
+  width: 100%;
+}
+.map {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: black;
+  border: 4px solid white;
+  font-size: 10px;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  vertical-align: top;
+  margin-top: -12px;
+  /* raise z-index */
+  position: relative;
+}
+.map.selected {
+  border-color: black;
+}
+.transitions { 
+  display: inline-block;
+  margin-left: -15px;
+}
+.transition {
+  min-height: 55px;
+}
+/* Show a border for all but the first transition */ 
+.transition:nth-of-type(2),
+.transition:nth-last-of-type(n+2) {
+  border-left: 2px solid;
+}
+/* special case for 2 transitions */
+.transition:nth-last-of-type(1) {
+  border-left: none;
+}
+
+/* Make the transition edged a bit longer to join the vertical border */
+.transition:nth-of-type(2) .transitionEdge,
+.transition:nth-last-of-type(n+2) .transitionEdge {
+  margin-left: 0px;
+  padding-left: 15px;
+}
+
+.transitionEdge {
+  height: 2px;
+  width: 80px;
+  display: inline-block;
+  margin: 0 0 2px 15px;
+  background-color: black;
+  vertical-align: top;
+}
+.transitionLabel {
+  color: black;
+  transform: rotate(-15deg);
+  transform-origin: top left;
+  margin-top: -10px;
+  font-size: 10px;
+  white-space: normal;
+  word-break: break-all;
+  background-color: rgba(255,255,255,0.5);
+}
+.red {
+  background-color: red;
+}
+.green {
+  background-color: green;
+}
+.yellow {
+  background-color: yellow;
+  color: black;
+}
+.blue {
+  background-color: blue;
+}
+.orange {
+  background-color: orange;
+}
+.violet {
+  background-color: violet;
+  color: black;
+}
+.showSubtransitions {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 10px solid black; 
+  cursor: zoom-in;
+  margin: 2px 0 0 4px;
+}
+</style>
+<script type="text/javascript">
+"use strict"
+// =========================================================================
+
+var isLocked = false;
+
+class State {
+  constructor() {
+    this._nofChunks = 400;
+    this._map = undefined;
+    this._timeline = undefined;
+    this._chunks = undefined;
+    this._view = new View(this);
+    this._navigation = new Navigation(this, this.view);
+  }
+  get timeline() { return this._timeline }
+  set timeline(value) { 
+    this._timeline = value;
+    this.updateChunks();
+    this.view.updateTimeline();
+  }
+  get chunks() { return this._chunks }
+  get nofChunks() { return this._nofChunks }
+  set nofChunks(count) {
+    this._nofChunks = count;
+    this.updateChunks();
+    this.view.updateTimeline();
+  }
+  get view() { return this._view }
+  get navigation() { return this._navigation }
+  get map() { return this._map }
+  set map(value) { 
+    this._map = value;
+    this._navigation.updateUrl();
+    this.view.updateMapDetails();
+    this.view.redraw();
+  }
+
+  updateChunks() {
+    this._chunks = this._timeline.chunks(this._nofChunks);
+  }
+  get entries() {
+    if (!this.map) return {};
+    return {
+      map: this.map.id,
+      time: this.map.time
+    }
+  }
+}
+
+// =========================================================================
+// DOM Helper
+function $(id) {
+  return document.getElementById(id)
+}
+
+function removeAllChildren(node) {
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
+
+function selectOption(select, match) {
+  var options = select.options;
+  for (var i = 0; i < options.length; i++) {
+    if (match(i, options[i])) {
+      select.selectedIndex = i;
+      return;
+    }
+  }
+}
+
+function div(classes) {
+  let node = document.createElement('div');
+  if (classes !== void 0) {
+    if (typeof classes == "string") {
+      node.classList.add(classes);
+    } else {
+      classes.forEach(cls => node.classList.add(cls));
+    }
+  }
+  return node;
+}
+
+function define(prototype, name, fn) {
+  Object.defineProperty(prototype, name, {value:fn, enumerable:false});
+}
+
+define(Array.prototype, "max", function(fn) {
+  if (this.length == 0) return undefined;
+  if (fn == undefined) fn = (each) => each;
+  let max = fn(this[0]);
+  for (let i = 1; i < this.length; i++) {
+    max = Math.max(max, fn(this[i]));
+  }
+  return max;
+})
+define(Array.prototype, "histogram", function(mapFn) {
+  let histogram = [];
+  for (let i = 0; i < this.length; i++) {
+    let value = this[i];
+    let index = Math.round(mapFn(value))
+    let bucket = histogram[index];
+    if (bucket !== undefined) {
+      bucket.push(value);
+    } else {
+      histogram[index] = [value];
+    }
+  }
+  for (let i = 0; i < histogram.length; i++) {
+    histogram[i] = histogram[i] || [];
+  }
+  return histogram
+});
+define(Array.prototype, "first", function() { return this[0] })
+define(Array.prototype, "last", function() { return this[this.length - 1] })
+
+// =========================================================================
+// EventHandlers
+function handleBodyLoad() {
+  $('uploadInput').focus();
+  document.state = new State();
+}
+
+function handleLoadFile() {
+  var files = document.getElementById("uploadInput").files;
+  var file = files[0];
+  var reader = new FileReader();
+
+  reader.onload = function(evt) {
+    handleLoadText(this.result);
+  }
+  reader.readAsText(file);
+}
+
+function handleLoadText(text) {
+  document.state.timeline = new InputReader(text).read();
+}
+
+function handleChunkMouseMove(event) {
+  if (isLocked) return false;
+  let chunk = this.chunk;
+  if (!chunk) return;
+  let y = this.offsetHeight - event.layerY;
+  let relativeIndex = Math.round(y / this.offsetHeight  * chunk.size());
+  let map = chunk.at(relativeIndex);
+  document.state.map = map;
+}
+
+function handleChunkClick(event) {
+  isLocked = !isLocked;
+}
+
+function handleKeyDown(event) {
+  let nav = document.state.navigation;
+  switch(event.keyCode) { 
+    case 38: // up arrow
+      if (event.shiftKey) {
+        nav.selectPrevEdge();
+      } else {
+        nav.moveInChunk(-1);
+      }
+      return;
+    case 40: // down arrow
+      if (event.shiftKey) {
+        nav.selectNextEdge();
+      } else {
+        nav.moveInChunk(1);
+      }
+      return;
+    case 37: // left arrow
+      nav.moveInChunks(false);
+      return;
+    case 39: // right arrow
+      nav.moveInChunks(true);
+      return;
+  };
+  switch(String.fromCharCode(event.charCode)) {
+    case "+": 
+      nav.increaseTimelineResolution();
+      break;
+    case "-":
+      nav.decreaseTimelineResolution();
+      break;
+  }
+};
+document.onkeydown = handleKeyDown;
+
+function handleTimelineIndicatorMove(event) {
+  if (event.buttons == 0) return;
+  let timelineTotalWidth = $("timelineCanvas").offsetWidth;
+  let factor = $("timelineOverview").offsetWidth / timelineTotalWidth;
+  $("timeline").scrollLeft += event.movementX / factor;
+}
+
+// =========================================================================
+ const kChunkOffset = 10;
+
+class Navigation {
+  constructor(state, view) {
+    this.state = state;
+    this.view = view;
+  }
+  get map() { return this.state.map }
+  set map(value) { this.state.map = value }
+  get chunks() { return this.state.chunks }
+
+  increaseTimelineResolution() {
+    this.state.nofChunks *= 1.5; 
+  }
+
+  decreaseTimelineResolution() {
+    this.state.nofChunks /= 1.5; 
+  }
+
+  selectNextEdge() {
+    if (!this.map) return;
+    if (this.map.children.length != 1) return;
+    this.map = this.map.children[0].to;
+  }
+
+  selectPrevEdge() {
+    if (!this.map) return;
+    if (!this.map.parent()) return;
+    this.map = this.map.parent();
+  }
+
+  selectDefaultMap() {
+      this.map = this.chunks[0].at(0);
+  }
+  moveInChunks(next) {
+    if (!this.map) return this.selectDefaultMap();
+    let chunkIndex = this.map.chunkIndex(this.chunks);
+    let chunk = this.chunks[chunkIndex];
+    let index = chunk.indexOf(this.map);
+    if (next) { 
+      chunk = chunk.next(this.chunks);
+    } else {
+      chunk = chunk.prev(this.chunks);
+    }
+    if (!chunk) return;
+    index = Math.min(index, chunk.size()-1);
+    this.map = chunk.at(index);
+  }
+
+  moveInChunk(delta) {
+    if (!this.map) return this.selectDefaultMap();
+    let chunkIndex = this.map.chunkIndex(this.chunks)
+    let chunk = this.chunks[chunkIndex];
+    let index = chunk.indexOf(this.map) - delta;
+    let map;
+    if (index < 0) {
+      map = chunk.next(this.chunks).first();
+    } else if (index >= chunk.size()) { 
+      map = chunk.prev(this.chunks).last()
+    } else {
+      map = chunk.at(index);
+    }
+    this.map = map;
+  }
+
+  updateUrl() {
+    let state = this.state.entries;
+    let params = "?";
+    for (let [key, value] of Object.entries(state)) {
+      params += encodeURIComponent(key) + "="
+          + encodeURIComponent(value) + "&";
+    }
+    window.history.pushState(state, "", params);
+  }
+}
+
+class View {
+  constructor(state) {
+    this.state = state;
+    setInterval(this.updateOverviewWindow, 50);
+    this.backgroundCanvas = document.createElement("canvas");
+    this.transitionView = new TransitionView(state, $("transitionView"));
+  }
+  get chunks() { return this.state.chunks }
+  get timeline() { return this.state.timeline }
+  get map() { return this.state.map }
+
+  updateMapDetails() {
+    let details = "";
+    if (this.map) {
+      details += "ID: " + this.map.id;
+      details += "\n" + this.map.description.join("\n")
+    }
+    $("mapDetails").innerText = details;
+    this.transitionView.update(this.map);
+  }
+
+  updateTimeline() {
+    let chunksNode = $("timelineChunks");
+    removeAllChildren(div);
+    let chunks = this.chunks; 
+    let max = chunks.max(each => each.size());
+    for (let i = 0; i < chunks.length; i++) {
+      let chunk = chunks[i];
+      let node = div();
+      node.className = "chunk";
+      node.style.left = (i * kChunkOffset) + "px";
+      let height = (chunk.size() / max * 200);
+      node.style.height = height + "px";
+      chunk.height = height;
+      node.chunk = chunk;
+      node.addEventListener("mousemove", handleChunkMouseMove);
+      node.addEventListener("click", handleChunkClick);
+      this.setTimelineChunkBackground(chunk, node);
+      chunksNode.appendChild(node);
+    }
+    this.drawOverview();
+    this.drawHistograms();
+    this.redraw();
+  }
+
+  setTimelineChunkBackground(chunk, node) {
+    // Render the types of transitions as bar charts
+    const kHeight = Math.min(200, chunk.height);
+    const kWidth = 1;
+    this.backgroundCanvas.width = kWidth;
+    this.backgroundCanvas.height = kHeight;
+    let ctx = this.backgroundCanvas.getContext("2d");
+    ctx.clearRect(0, 0, kWidth, kHeight);
+    let y = 0;
+    let total = chunk.size();
+    let type, count;
+    for ([type, count] of chunk.getTransitionBreakdown()) {
+        ctx.fillStyle = transitionTypeToColor(type);
+        let height = count / total * kHeight;
+        ctx.fillRect(0, y, kWidth, y + height);
+        y += height;
+    }
+
+    let imageData = this.backgroundCanvas.toDataURL("image/png");
+    node.style.backgroundImage = "url(" + imageData + ")";
+
+  }
+
+  updateOverviewWindow() {
+    let indicator = $("timelineOverviewIndicator");
+    let totalIndicatorWidth = $("timelineOverview").offsetWidth;
+    let div = $("timeline");
+    let timelineTotalWidth = $("timelineCanvas").offsetWidth;
+    let factor = $("timelineOverview").offsetWidth / timelineTotalWidth;
+    let width = div.offsetWidth * factor;
+    let left = div.scrollLeft * factor;
+    indicator.style.width = width + "px";
+    indicator.style.left = left + "px";
+  }
+
+  drawOverview() { 
+    let canvas= $("timelineOverviewCanvas");
+    let ctx = canvas.getContext("2d");
+
+    let chunks = this.state.timeline.chunkSizes(canvas.width * 2);
+    let max = chunks.max();
+
+    const height = 50;
+    ctx.clearRect(0, 0, canvas.width, height);
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "gray";
+    ctx.beginPath();
+    ctx.moveTo(0,height);
+    for (let i = 0; i < chunks.length; i++) {
+      ctx.lineTo(i/2, height - chunks[i]/ max * height);
+    }
+    ctx.lineTo(chunks.length, height);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  drawHistograms() {
+    $("mapsDepthHistogram").histogram = this.timeline.depthHistogram();
+    $("mapsFanOutHistogram").histogram = this.timeline.fanOutHistogram();
+  }
+
+  drawMapsDepthHistogram() {
+    let canvas = $("mapsDepthCanvas");
+    let histogram = this.timeline.depthHistogram();
+    this.drawHistogram(canvas, histogram, true);
+  }
+
+  drawMapsFanOutHistogram() {
+    let canvas = $("mapsFanOutCanvas");
+    let histogram = this.timeline.fanOutHistogram();
+    this.drawHistogram(canvas, histogram, true, true);
+  }
+
+  drawHistogram(canvas, histogram, logScaleX=false, logScaleY=false) {
+    let ctx = canvas.getContext("2d");
+    let yMax = histogram.max(each => each.length);
+    if (logScaleY) yMax = Math.log(yMax);
+    let xMax = histogram.length;
+    if (logScaleX) xMax = Math.log(xMax);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(0,canvas.height);
+    for (let i = 0; i < histogram.length; i++) {
+      let x = i;
+      if (logScaleX) x = Math.log(x);
+      x = x / xMax * canvas.width;
+      let bucketLength = histogram[i].length;
+      if (logScaleY) bucketLength = Math.log(bucketLength);
+      let y = (1 - bucketLength / yMax) * canvas.height;
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.closePath;
+    ctx.stroke();
+    ctx.fill();
+  }
+
+  redraw() {
+    let canvas= $("timelineCanvas");
+    canvas.width = (this.chunks.length+1) * kChunkOffset;
+    canvas.height = 300;
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, 300);
+    if (!this.state.map) return;
+    this.drawEdges(ctx);
+  }
+
+  markMap(ctx, map) {
+    let [x, y] = map.position(this.state.chunks);
+    ctx.beginPath();
+    map.setStyle(ctx);
+    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.fillStyle = "white";
+    ctx.arc(x, y, 2, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  markSelectedMap(ctx, map) {
+    let [x, y] = map.position(this.state.chunks);
+    ctx.beginPath();
+    map.setStyle(ctx);
+    ctx.arc(x, y, 6, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+
+  drawEdges(ctx) {
+    // Draw the trace of maps in reverse order to make sure the outgoing transitions of
+    // previous maps aren't drawn over.
+    const kMaxOutgoingEdges = 100;
+    let nofEdges = 0;
+    let stack = [];
+    let current = this.state.map;
+    while (current && nofEdges < kMaxOutgoingEdges) {
+      nofEdges += current.children.length;
+      stack.push(current);
+      current = current.parent();
+    }
+    ctx.save();
+    this.drawOutgoingEdges(ctx, this.state.map, 3);
+    ctx.restore();
+
+    let labelOffset = 15;
+    let xPrev = 0;
+    while (current = stack.pop()) {
+      if (current.edge) {
+        current.edge.setStyle(ctx);
+        let [xTo, yTo] = this.drawEdge(ctx, current.edge, true, labelOffset);
+        if (xTo == xPrev) { 
+          labelOffset += 8;
+        } else {
+          labelOffset = 15
+        }
+        xPrev = xTo;
+      }
+      this.markMap(ctx, current);
+      current = current.parent();
+      ctx.save();
+      // this.drawOutgoingEdges(ctx, current, 1);
+      ctx.restore();
+    }
+    // Mark selected map
+    this.markSelectedMap(ctx, this.state.map);
+  }
+
+  drawEdge(ctx, edge, showLabel=true, labelOffset=20) {
+    if (!edge.from || !edge.to) return [-1, -1];
+    let [xFrom, yFrom] = edge.from.position(this.chunks);
+    let [xTo, yTo] = edge.to.position(this.chunks);
+    let sameChunk = xTo == xFrom;
+    if (sameChunk) labelOffset += 8;
+
+    ctx.beginPath();
+    ctx.moveTo(xFrom, yFrom);
+    let offsetX = 20;
+    let offsetY = 20;
+    let midX = xFrom + (xTo- xFrom) / 2;
+    let midY = (yFrom + yTo) / 2 - 100;
+    if (!sameChunk) {
+      ctx.quadraticCurveTo(midX, midY, xTo, yTo);
+    } else {
+      ctx.lineTo(xTo, yTo);
+    }
+    if (!showLabel) {
+      ctx.stroke();
+    } else {
+      let centerX, centerY;
+      if (!sameChunk) {
+      centerX = (xFrom/2 + midX + xTo/2)/2;
+      centerY = (yFrom/2 + midY + yTo/2)/2;
+      } else {
+        centerX = xTo;
+        centerY = yTo;
+      }
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX + offsetX, centerY - labelOffset);
+      ctx.stroke();
+      ctx.textAlign = "left";
+      ctx.fillText(edge.toString(), centerX + offsetX + 2, centerY - labelOffset)
+    }
+    return [xTo, yTo];
+  }
+
+  drawOutgoingEdges(ctx, map, max=10, depth=0) {
+    if (!map) return;
+    if (depth >= max) return;
+    ctx.globalAlpha = 0.5 - depth * (0.3/max);
+    ctx.strokeStyle = "#666";
+
+    const limit = Math.min(map.children.length, 100)
+    for (let i = 0; i < limit; i++) {
+      let edge = map.children[i];
+      this.drawEdge(ctx, edge, true);
+      this.drawOutgoingEdges(ctx, edge.to, max, depth+1);
+    }
+  }
+}
+
+
+class TransitionView {
+  constructor(state, node) {
+    this.state = state;
+    this.container = node;
+    this.currentNode = node;
+    this.currentMap = undefined;
+  }
+
+  selectMap(map) {
+    this.currentMap = map;
+    this.state.map = map;
+  }
+
+  update(map) {
+    if (this.currentMap === map) return;
+    this.currentMap = map;
+    // Hide the container to avoid any layouts.
+    this.container.style.display = "none";
+    removeAllChildren(this.container);
+    this.currentNode = this.container;
+    if (map !== void 0) {
+      let parents = map.getParents();
+      if (parents.length > 0) {
+        this.addTransitionTo(parents.pop());
+        parents.reverse().forEach(each => this.addTransitionTo(each));
+      }
+      let selectedNode = this.addSubtransitions(map);
+      selectedNode.classList.add("selected");
+      setTimeout(() => selectedNode.scrollIntoView({
+        behavior: "smooth", block: "nearest", inline: "nearest"
+      }), 1);
+    }
+    this.container.style.display = ""
+  }
+
+  createMapNode(map) {
+    let classes = ["map"];
+    if (map.edge) classes.push(map.edge.getColor());
+    let node = div(classes);
+    node.map = map;
+    node.addEventListener("click", () => this.selectMap(map));
+    if (map.children.length > 1) {
+      node.innerText = map.children.length;
+      let showSubtree = div("showSubtransitions");
+      showSubtree.addEventListener("click", () => this.toggleSubtree(node));
+      node.appendChild(showSubtree);
+    } else if (map.children.length == 0) {
+      node.innerHTML = "&#x25CF;"
+    }
+    this.currentNode.appendChild(node);
+    return node;
+  }
+
+  addSubtransitions(map) {
+    let mapNode = this.addTransitionTo(map);
+    // Draw outgoing linear transition line.
+    let current = map;
+    while (current.children.length == 1) {
+      current = current.children[0].to;
+      this.addTransitionTo(current);
+    }
+    return mapNode;
+  }
+
+  createTransitionEdge(map) {
+    let classes = ["transitionEdge", map.edge.getColor()];
+    let edge = div(classes);
+    let labelNode = div("transitionLabel");
+    labelNode.innerText = map.edge.toString();
+    edge.appendChild(labelNode);
+    return edge;
+  }
+
+  addTransitionTo(map) {
+    // entry[ branch[ entry[...], entry[...], ...]];
+
+    let transition = div("transition");
+    
+    if (map.edge) {
+      transition.appendChild(this.createTransitionEdge(map));
+    }
+    let mapNode = this.createMapNode(map);
+    transition.appendChild(mapNode);
+
+    let subtree = div("transitions");
+    transition.appendChild(subtree);
+
+    this.currentNode.appendChild(transition);
+    this.currentNode = subtree;
+
+    return mapNode;
+
+  }
+
+  toggleSubtree(node) {
+    let map = node.map;
+    let transitionsNode = node.parentElement.querySelector(".transitions");
+    let subtransitionNodes  =  transitionsNode.children;
+    if (subtransitionNodes.length <= 1) {
+      // Add subtransitions excepth the one that's already shown.
+      let visibleTransitionMap = subtransitionNodes.length == 1 ?
+            transitionsNode.querySelector(".map").map : void 0;
+      map.children.forEach(edge => { 
+        if (edge.to != visibleTransitionMap) {
+          this.currentNode = transitionsNode;
+          this.addSubtransitions(edge.to);
+        }
+      });
+    } else {
+      // remove all but the first (currently selected) subtransition
+      for (let i = subtransitionNodes.length-1; i > 0; i--) {
+        transitionsNode.removeChild(subtransitionNodes[i]);
+      }
+    }
+  }
+}
+
+// =========================================================================
+// Classes
+class InputReader {
+  constructor(text) {
+    this.lines = text.split("\n");
+    this.index = 0;
+    this.timeline = new Timeline();
+  }
+  hasMore() { return this.index < this.lines.length }
+  next() { this.index++ }
+  current() { return this.lines[this.index] }
+  lineMatches(suffix) {
+    return this.current().startsWith("[TraceMaps: " + suffix);
+  }
+  read() {
+    try {
+      while(this.hasMore()) {
+        if (this.lineMatches("MapDetailsBegin")) {
+          this.readMapDetails();
+        } else if (this.lineMatches("")) {
+          this.readEdge();
+        } else {
+          this.next();
+        }
+      }
+    } catch(e) {
+      // Support partial input files which might break parsing at any
+      // point.
+      console.log(e);
+    }
+    return this.timeline;
+  }
+
+  extractValue(prefix) {
+    let line = this.current();
+    let start = line.indexOf(prefix);
+    if (start < 0) throw "Could not find token";
+    let end = line.indexOf(" ", start+1);
+    return line.substring(start+prefix.length, end);
+  }
+
+  extractUpTo(suffix) {
+    let line = this.current();
+    let end = line.indexOf(suffix);
+    return line.substring(0, end);
+  }
+
+  readMapDetails() {
+    let time = Number(this.extractValue("time="));
+    this.next();
+    const id = this.extractUpTo(":");
+    this.next();
+    const start = this.index;
+    let details = [];
+    while (!this.lineMatches("MapDetailsEnd")) { 
+      let line = this.current();
+      details.push(line);
+      this.next();
+    };
+    const end = this.index;
+    this.next();
+    let map = new V8Map(id, time, details);
+    this.timeline.push(map);
+  }
+
+  readEdge() {
+    let edge = new Edge();
+    let line = this.current().split(" ");
+    edge.type = line[1];
+    for (let i = 2; i < line.length-1; i++) {
+      let pair = line[i].split("=");
+      let key = pair[0];
+      if (key == "map") {
+        key = "to";
+      } else if (key == "SFI") {
+       let parts = pair[1].split("_");
+       edge.SFI = parts[0];
+       edge.reason = parts.slice(1).join("_");
+       continue;
+      }
+      edge[key] = pair[1];
+    }
+    edge.time = Number(edge.time);
+    edge.finishSetup();
+    this.next();
+  }
+}
+
+class V8Map {
+  constructor(id, time, description) {
+    if (!id) throw Errror("Invalid ID");
+    this.id = id;
+    this.time = time;
+    if (!(time > 0)) throw Error("Invalid time");
+    this.description = description;
+    this.edge = undefined;
+    this.children = [];
+    this.depth = 0;
+    V8Map.set(id, this);
+  }
+  parent() {
+    if (this.edge === undefined) return undefined;
+    return this.edge.from;
+  }
+  edgeTo(to, reason, time, data) {
+    new Edge(from, to, reason, time, data);
+  }
+  addEdge(edge) {
+    this.children.push(edge);
+  }
+  setStyle(ctx) {
+    ctx.fillStyle = this.edge && this.edge.from  ? "black" : "green";
+  }
+  chunkIndex(chunks) {
+    // Did anybody say O(n)?
+    for (let i = 0; i < chunks.length; i++) {
+      let chunk = chunks[i];
+      if (chunk.isEmpty()) continue;
+      if (chunk.last().time < this.time) continue;
+      return i;
+    }
+    return -1;
+  }
+  position(chunks) {
+    let index = this.chunkIndex(chunks);
+    let xFrom = (index + 0.5) * kChunkOffset;
+    let yFrom = 300 - chunks[index].yOffset(this);
+    return [xFrom, yFrom];
+  }
+  transitions() {
+    let transitions = Object.create(null);
+    let current = this;
+    while (current) {
+      let edge = current.edge;
+      if (edge && edge.isTransition()) {
+        transitions[edge.name] =  edge;
+      }
+      current = current.parent()
+    }
+    return transitions;
+  }
+  getType() {
+    return this.edge === void 0 ? "new" : this.edge.type;
+  }
+  getParents() {
+    let parents = [];
+    let current = this.parent();
+    while (current) {
+      parents.push(current);
+      current = current.parent();
+    }
+    return parents;
+  }
+}
+
+V8Map.get = function(id) {
+  if (!this.cache) {
+    this.cache = new Map();
+  }
+  return this.cache.get(id);
+}
+
+V8Map.set = function(id, map) {
+  if (!this.cache) {
+    this.cache = new Map();
+  }
+  // if (this.get(id)) console.log("Overriding Map: "+id);
+  this.cache.set(id, map);
+}
+
+class Edge {
+  constructor() {
+    this.type = "";
+    this.from = undefined;
+    this.to = undefined;
+    this.reason = undefined;
+    this.time = undefined;
+  }
+  finishSetup() {
+    if (this.from) {
+      this.from = V8Map.get(this.from);
+      if (this.from) this.from.addEdge(this);
+    }
+    if (this.to) {
+      this.to = V8Map.get(this.to);
+      if (this.to) {
+        this.to.edge = this;
+        if (this.from) this.to.depth = this.from.depth + 1;
+      }
+    }
+  }
+  chunkIndex(chunks) {
+    // Did anybody say O(n)?
+    for (let i = 0; i < chunks.length; i++) {
+      let chunk = chunks[i];
+      if (chunk.isEmpty()) continue;
+      if (chunk.last().time < this.time) continue;
+      return i;
+    }
+    return -1;
+  }
+  parentEdge() { 
+    if (!this.from) return undefined;
+    return this.from.edge;
+  }
+  chainLength() {
+    let length = 0;
+    let prev = this;
+    while (prev) { 
+      prev = this.parent;
+      length++;
+    }
+    return length;
+  }
+  isTransition() { return this.type == "Transition" }
+  isFastToSlow() { return this.type == "Normalize" }
+  isSlowToFast() { return this.type == "SlowToFast" }
+  isInitial() { return this.type == "InitialMap" }
+  isReplaceDescriptors() { return this.type == "ReplaceDescriptors" }
+  isCopyAsPrototype() { return this.reason == "CopyAsPrototype" }
+  isOptimizeAsPrototype() { return this.reason == "OptimizeAsPrototype" }
+  setStyle(ctx) {
+    let color = this.getColor();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+  }
+  getColor() {
+    return transitionTypeToColor(this.type);
+  }
+  symbol() {
+    if (this.isTransition()) return "+";
+    if (this.isFastToSlow()) return "⊡";
+    if (this.isSlowToFast()) return "⊛";
+    if (this.isReplaceDescriptors()) return "∥";
+    return "";
+  }
+  toString() {
+    let s = this.symbol();
+    if (this.isTransition()) return s + this.name;
+    if (this.isFastToSlow()) return s + this.reason;
+    if (this.isCopyAsPrototype()) return s + "Copy as Prototype";
+    if (this.isOptimizeAsPrototype()) {
+      return s + "Optimize as Prototype";
+    }
+    return this.type + " " + (this.reason ? this.reason : "") + " " 
+    + (this.name ? this.name : "")
+  }
+}
+
+function transitionTypeToColor(type) {
+  switch(type) {
+    case "new": return "green";
+    case "Normalize": return "violet";
+    case "SlowToFast": return "orange";
+    case "InitialMap": return "yellow";
+    case "Transition": return "black";
+    case "ReplaceDescriptors": return "red";
+  }
+  return "black";
+}
+
+
+
+class Timeline {
+  constructor() {
+    this.values = [];
+    this.transitions = new Map();
+  }
+  push(map) {
+    let time = map.time;
+    if (!this.isEmpty() && this.last().time > time) {
+      // Invalid insertion order, might happen without --single-process,
+      // finding insertion point.
+      let insertionPoint = this.find(time);
+      this.values.splice(insertionPoint, map);
+    } else {
+      this.values.push(map);
+    }
+    if (map.from && map.from.isTransition()) {
+      let edge = map.from;
+      let list = this.transitions.get(edge.name);
+      if (list === undefined) {
+        this.transitions.set(edge.name, [edge]);
+      } else {
+        list.push(edge);
+      }
+    }
+  }
+  at(index) { return this.values[index] }
+
+  isEmpty() { return this.size() == 0 }
+  size() { return this.values.length }
+  first() { return this.values.first() }
+  last() { return this.values.last() }
+  timeSize() { return this.last().time - this.first().time }
+  chunkSizes(count) {
+    const increment = this.timeSize() / count;
+    let current = this.first().time + increment;
+    let index = 0;
+    let indices = [];
+    const last = this.last().time;
+    for (let i = 0; i < count; i++) {
+      let nextIndex = this.find(current, index);
+      indices.push(nextIndex - index);
+      index = nextIndex
+      current += increment;
+    }
+    return indices;
+  }
+  chunks(count) {
+    let chunks = this.chunkSizes(count);
+    let lastIndex = 0;
+    let i = 0;
+    for (; i < chunks.length; i++) {
+      let size = chunks[i];
+      chunks[i] = new Chunk(i, this.values.slice(lastIndex, lastIndex + size));
+      lastIndex += size;
+    }
+    return chunks;
+  }
+  range(start, end) {
+    const first = this.find(start);
+    if (first < 0) return [];
+    const last = this.find(end, first);
+    return this.values.slice(first, last);
+  }
+  find(time, offset=0) {
+    return this.basicFind(each => {return each.time - time}, offset);
+  }
+  basicFind(cmp, offset=0) {
+    let min = offset;
+    let max = this.size();
+
+    while (min < max) {
+      let mid = min + Math.floor((max - min) / 2);
+      let result = cmp(this.at(mid));
+      if (result > 0) {
+        max = mid-1;
+      } else {
+        min = mid+1;
+      }
+    }
+    return min;
+  }
+  depthHistogram() {
+    return this.values.histogram(each => each.depth);
+  }
+  fanOutHistogram() {
+    return this.values.histogram(each => each.children.length);
+  }
+}
+
+
+class Chunk {
+  constructor(index, items) {
+    this.index = index;
+    this.items = items.reverse();
+    this.height = 0;
+  }
+  
+  isEmpty() { return this.items.length == 0; }
+  
+  last() { return this.at(0); }
+  
+  first() { return this.at(this.size() - 1); }
+  
+  at(index) { return this.items[index]; }
+  
+  size() { return this.items.length; }
+  
+  yOffset(map) { 
+    return (this.indexOf(map) + 0.5) / this.size() * this.height;
+  }
+  
+  indexOf(map) { return this.items.indexOf(map); }
+  
+  next(chunks) {
+    return this.findChunk(chunks, 1);
+  }
+  
+  prev(chunks) {
+    return this.findChunk(chunks, -1);
+  }
+
+  findChunk(chunks, delta) {
+    let i = this.index + delta;
+    let chunk = chunks[i];
+    while (chunk && chunk.size() == 0) { 
+      i += delta;
+      chunk = chunks[i]
+    }
+    return chunk;
+  }
+
+  getTransitionBreakdown() {
+    return BreakDown(this.items, map => map.getType())
+  }
+}
+
+function BreakDown(list, map_fn) {
+  if (map_fn === void 0) {
+    map_fn = each => each;
+  }
+  let breakdown = {__proto__:null};
+  list.forEach(each=> {
+    let type = map_fn(each);
+    let v = breakdown[type];
+    breakdown[type] = (v | 0) + 1
+  });
+  return Object.entries(breakdown)
+    .sort((a,b) => a[1] - b[1]);
+}
+
+// ShadowDom elements =========================================================
+customElements.define('x-histogram', class extends HTMLElement {
+  constructor() {
+    super();
+    let shadowRoot = this.attachShadow({mode: 'open'});
+    const t = document.querySelector('#x-histogram-template');
+    const instance = t.content.cloneNode(true);
+    shadowRoot.appendChild(instance);
+    this._histogram = undefined;
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.canvas.addEventListener('mousemove', event => this.handleCanvasMove(event));
+  }
+  setBoolAttribute(name, value) {
+    if (value) {
+      this.setAttribute(name, "");
+    } else {
+      this.deleteAttribute(name);
+    }
+  }
+  static get observedAttributes() {
+    return ['title', 'xlog', 'ylog', 'xlabel', 'ylabel'];
+  }
+  $(query) { return this.shadowRoot.querySelector(query) }
+  get h1() { return this.$("h2") }
+  get canvas() { return this.$("canvas") }
+  get xLabelDiv() { return this.$("#xLabel") }
+  get yLabelDiv() { return this.$("#yLabel") }
+
+  get histogram() {
+    return this._histogram;
+  }
+  set histogram(array) {
+    this._histogram = array;
+    if (this._histogram) {
+      this.yMax = this._histogram.max(each => each.length);
+      this.xMax = this._histogram.length;
+    }
+    this.draw();
+  }
+
+  get title() { return this.getAttribute("title") }
+  set title(string) { this.setAttribute("title", string) }
+
+  get xLabel() { return this.getAttribute("xlabel") }
+  set xLabel(string) { this.setAttribute("xlabel", string)}
+
+  get yLabel() { return this.getAttribute("ylabel") }
+  set yLabel(string) { this.setAttribute("ylabel", string)}
+
+  get xLog() { return this.hasAttribute("xlog") }
+  set xLog(value) { this.setBoolAttribute("xlog", value) }
+  get yLog() { return this.hasAttribute("ylog") }
+  set yLog(value) { this.setBoolAttribute("ylog", value) }
+
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(name);
+    if (name == "title") {
+      this.h1.innerText = newValue;
+      return;
+    }
+    if (name == "ylabel") {
+      this.yLabelDiv.innerText = newValue;
+      return;
+    }
+    if (name == "xlabel") {
+      this.xLabelDiv.innerText = newValue;
+      return;
+    }
+    this.draw();
+  }
+
+  handleCanvasMove(event) {
+    this.mouseX = event.offsetX;
+    this.mouseY = event.offsetY;
+    this.draw();
+  }
+  xPosition(i) {
+    let x = i;
+    if (this.xLog) x = Math.log(x);
+    return x / this.xMax * this.canvas.width;
+  }
+  yPosition(i) {
+    let bucketLength = this.histogram[i].length;
+    if (this.yLog) {
+      return (1 - Math.log(bucketLength) / Math.log(this.yMax)) * this.drawHeight + 10;
+    } else {
+     return (1 - bucketLength / this.yMax) * this.drawHeight + 10;
+    }
+  }
+
+  get drawHeight() { return this.canvas.height - 10 }
+
+  draw() {
+    if (!this.histogram) return;
+    let width = this.canvas.width;
+    let height = this.drawHeight;
+    let ctx = this.canvas.getContext("2d");
+    if (this.xLog) yMax = Math.log(yMax);
+    let xMax = this.histogram.length;
+    if (this.yLog) xMax = Math.log(xMax);
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(0, height);
+    for (let i = 0; i < this.histogram.length; i++) {
+      ctx.lineTo(this.xPosition(i), this.yPosition(i));
+    }
+    ctx.lineTo(width, height);
+    ctx.closePath;
+    ctx.stroke();
+    ctx.fill();
+    if (!this.mouseX) return;
+    ctx.beginPath();
+    let index = Math.round(this.mouseX);
+    let yBucket = this.histogram[index];
+    let y = this.yPosition(index);
+    if (this.yLog) y = Math.log(y);
+    ctx.moveTo(0, y);
+    ctx.lineTo(width-40, y);
+    ctx.moveTo(this.mouseX, 0);
+    ctx.lineTo(this.mouseX, height);
+    ctx.stroke();
+    ctx.textAlign = "left";
+    ctx.fillText(yBucket.length, width-30, y);
+  }
+});
+
+</script>
+</head>
+<template id="x-histogram-template">
+  <style>
+    #yLabel {
+      transform: rotate(90deg);
+    }
+    canvas, #yLabel, #info { float: left; }
+    #xLabel { clear: both }
+  </style>
+  <h2></h2>
+  <div id="yLabel"></div>
+  <canvas height=50></canvas>
+  <div id="info">
+  </div>
+  <div id="xLabel"></div>
+</template>
+
+<body onload="handleBodyLoad(event)" onkeypress="handleKeyDown(event)">
+  <h2>Data</h2>
+  <form name="fileForm">
+    <p>
+      <input id="uploadInput" type="file" name="files"  onchange="handleLoadFile();">
+    </p>
+  </form>
+
+  <div id="timeline">
+    <div id=timelineChunks></div>
+    <canvas id="timelineCanvas" ></canvas>
+  </div>
+  <div id="timelineOverview"
+      onmousemove="handleTimelineIndicatorMove(event)" >
+    <canvas id="timelineOverviewCanvas" width="700" height="50" ></canvas>
+    <div id="timelineOverviewIndicator"></div>
+  </div>
+
+  <h2>Transitions</h2>
+  <div id="transitionView">
+  </div>
+  <br/>
+
+  <h2>Selected Map</h2>
+  <div id="mapDetails"></div>
+  
+  <x-histogram id="mapsDepthHistogram" 
+      title="Maps Depth" xlabel="depth" ylabel="nof"></x-histogram>
+  <x-histogram id="mapsFanOutHistogram" xlabel="fan-out" 
+      title="Maps Fan-out" ylabel="nof"></x-histogram>
+</body>
+</html>
