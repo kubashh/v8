@@ -108,6 +108,7 @@ enum class ObjectType {
 #undef ENUM_STRUCT_ELEMENT
 
 class AccessCheckNeeded;
+class ClassBoilerplate;
 class CodeCacheHashTable;
 class CompilationCacheTable;
 class Constructor;

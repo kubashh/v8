@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/snapshot/partial-serializer.h"
+#include "src/snapshot/serializer-inl.h"
 #include "src/snapshot/startup-serializer.h"
 
 #include "src/api.h"

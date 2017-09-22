@@ -6,6 +6,7 @@
 
 #include "src/api.h"
 #include "src/objects-inl.h"
+#include "src/snapshot/serializer-inl.h"
 #include "src/v8threads.h"
 
 namespace v8 {
@@ -23,7 +24,6 @@ StartupSerializer::StartupSerializer(
 }
 
 StartupSerializer::~StartupSerializer() {
-  RestoreExternalReferenceRedirectors(accessor_infos_);
   OutputStatistics("StartupSerializer");
 }
 
@@ -58,13 +58,7 @@ void StartupSerializer::SerializeObject(HeapObject* obj, HowToCode how_to_code,
 
   FlushSkip(skip);
 
-  if (isolate_->external_reference_redirector() && obj->IsAccessorInfo()) {
-    // Wipe external reference redirects in the accessor info.
-    AccessorInfo* info = AccessorInfo::cast(obj);
-    Address original_address = Foreign::cast(info->getter())->foreign_address();
-    Foreign::cast(info->js_getter())->set_foreign_address(original_address);
-    accessor_infos_.push_back(info);
-  } else if (obj->IsScript() && Script::cast(obj)->IsUserJavaScript()) {
+  if (obj->IsScript() && Script::cast(obj)->IsUserJavaScript()) {
     Script::cast(obj)->set_context_data(
         isolate_->heap()->uninitialized_symbol());
   } else if (obj->IsSharedFunctionInfo()) {

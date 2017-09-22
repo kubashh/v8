@@ -9,6 +9,7 @@
 #include "src/heap/heap-inl.h"
 #include "src/macro-assembler.h"
 #include "src/snapshot/natives.h"
+#include "src/snapshot/serializer-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -47,6 +48,7 @@ Serializer::Serializer(Isolate* isolate)
 }
 
 Serializer::~Serializer() {
+  RestoreExternalReferenceRedirectors(accessor_infos_);
   if (code_address_map_ != NULL) delete code_address_map_;
 #ifdef OBJECT_PRINT
   if (instance_type_count_ != NULL) {

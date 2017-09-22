@@ -13,6 +13,8 @@
 namespace v8 {
 namespace internal {
 
+class ClassLiteral;
+
 // BoilerplateDescription is a list of properties consisting of name value
 // pairs. In addition to the properties, it provides the projected number
 // of properties in the backing store. This number includes properties with
@@ -54,6 +56,67 @@ class ConstantElementsPair : public Tuple2 {
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ConstantElementsPair);
+};
+
+class ClassBoilerplate : public FixedArray {
+ public:
+  enum ValueKind { kData, kGetter, kSetter };
+
+  struct ComputedEntryFlags {
+#define COMPUTED_ENTRY_BIT_FIELDS(V, _) \
+  V(ValueKindBits, ValueKind, 2, _)     \
+  V(KeyIndexBits, unsigned, 29, _)
+    DEFINE_BIT_FIELDS(COMPUTED_ENTRY_BIT_FIELDS)
+#undef COMPUTED_ENTRY_BIT_FIELDS
+  };
+
+  enum DefineClassArgumentsIndices {
+    kConstructorArgumentIndex = 1,
+    kPrototypeArgumentIndex = 2,
+    kFirstDynamicArgumentIndex = 3,
+  };
+
+  static const int kDefaultClassPropertiesCount = 6;
+  static const int kDefaultPrototypePropertiesCount = 1;
+
+  static const int kMaxDefaultPropertiesCount =
+      Max(kDefaultClassPropertiesCount, kDefaultPrototypePropertiesCount);
+
+  DECL_CAST(ClassBoilerplate)
+
+  DECL_INT_ACCESSORS(install_class_name_accessor)
+  DECL_ACCESSORS(static_properties_template, Object)
+  DECL_ACCESSORS(static_elements_template, Object)
+  DECL_ACCESSORS(static_computed_properties, FixedArray)
+  DECL_ACCESSORS(instance_properties_template, Object)
+  DECL_ACCESSORS(instance_elements_template, Object)
+  DECL_ACCESSORS(instance_computed_properties, FixedArray)
+
+  static void AddToPropertiesTemplate(Isolate* isolate,
+                                      Handle<NameDictionary> dictionary,
+                                      Handle<Name> name, int key_index,
+                                      ValueKind value_kind, Object* value);
+
+  static void AddToElementsTemplate(Isolate* isolate,
+                                    Handle<SeededNumberDictionary> dictionary,
+                                    uint32_t key, int key_index,
+                                    ValueKind value_kind, Object* value);
+
+  static Handle<ClassBoilerplate> BuildClassBoilerplate(Isolate* isolate,
+                                                        ClassLiteral* expr);
+
+  enum {
+    kInstallClassNameAccessorIndex,
+    kClassPropertiesTemplateIndex,
+    kClassElementsTemplateIndex,
+    kClassComputedPropertiesIndex,
+    kPrototypePropertiesTemplateIndex,
+    kPrototypeElementsTemplateIndex,
+    kPrototypeComputedPropertiesIndex,
+    kBoileplateLength  // last element
+  };
+
+  static const int kFullComputedEntrySize = 2;
 };
 
 }  // namespace internal
