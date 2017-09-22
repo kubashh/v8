@@ -12,6 +12,7 @@
 #include "src/macro-assembler.h"
 #include "src/objects-inl.h"
 #include "src/snapshot/object-deserializer.h"
+#include "src/snapshot/serializer-inl.h"
 #include "src/snapshot/snapshot.h"
 #include "src/version.h"
 #include "src/visitors.h"
