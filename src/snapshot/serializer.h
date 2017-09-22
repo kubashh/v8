@@ -156,6 +156,9 @@ class Serializer : public SerializerDeserializer {
   };
 
   void SerializeDeferredObjects();
+
+  inline void HandleExternalReferenceRedirections(HeapObject* obj);
+
   virtual void SerializeObject(HeapObject* o, HowToCode how_to_code,
                                WhereToPoint where_to_point, int skip) = 0;
 
@@ -243,6 +246,8 @@ class Serializer : public SerializerDeserializer {
   RootIndexMap root_index_map_;
   CodeAddressMap* code_address_map_ = nullptr;
   std::vector<byte> code_buffer_;
+  // To handle redirected external references.
+  std::vector<AccessorInfo*> accessor_infos_;
   std::vector<HeapObject*> deferred_objects_;  // To handle stack overflow.
   int recursion_depth_ = 0;
   AllocatorT allocator_;
@@ -265,23 +270,11 @@ class Serializer : public SerializerDeserializer {
 template <class AllocatorT>
 class Serializer<AllocatorT>::ObjectSerializer : public ObjectVisitor {
  public:
-  ObjectSerializer(Serializer* serializer, HeapObject* obj,
-                   SnapshotByteSink* sink, HowToCode how_to_code,
-                   WhereToPoint where_to_point)
-      : serializer_(serializer),
-        object_(obj),
-        sink_(sink),
-        reference_representation_(how_to_code + where_to_point),
-        bytes_processed_so_far_(0) {
-#ifdef DEBUG
-    serializer_->PushStack(obj);
-#endif  // DEBUG
-  }
-  ~ObjectSerializer() override {
-#ifdef DEBUG
-    serializer_->PopStack();
-#endif  // DEBUG
-  }
+  inline ObjectSerializer(Serializer* serializer, HeapObject* obj,
+                          SnapshotByteSink* sink, HowToCode how_to_code,
+                          WhereToPoint where_to_point);
+  inline ~ObjectSerializer() override;
+
   void Serialize();
   void SerializeObject();
   void SerializeDeferred();
