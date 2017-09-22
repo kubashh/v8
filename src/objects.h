@@ -174,6 +174,7 @@ namespace v8 {
 namespace internal {
 
 struct InliningPosition;
+class PropertyDescriptorObject;
 
 enum KeyedAccessStoreMode {
   STANDARD_STORE,
@@ -1071,6 +1072,7 @@ template <class C> inline bool Is(Object* obj);
   V(PreParsedScopeData)                   \
   V(PropertyArray)                        \
   V(PropertyCell)                         \
+  V(PropertyDescriptorObject)             \
   V(RegExpMatchInfo)                      \
   V(ScopeInfo)                            \
   V(ScriptContextTable)                   \
@@ -7132,7 +7134,6 @@ class BooleanBit : public AllStatic {
     return value;
   }
 };
-
 
 }  // NOLINT, false-positive due to second-order macros.
 }  // NOLINT, false-positive due to second-order macros.
