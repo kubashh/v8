@@ -1381,7 +1381,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     SimpleInstallFunction(object_function, factory->assign_string(),
                           Builtins::kObjectAssign, 2, false);
     SimpleInstallFunction(object_function, "getOwnPropertyDescriptor",
-                          Builtins::kObjectGetOwnPropertyDescriptor, 2, false);
+                          Builtins::kObjectGetOwnPropertyDescriptor, 2, true);
     SimpleInstallFunction(object_function,
                           factory->getOwnPropertyDescriptors_string(),
                           Builtins::kObjectGetOwnPropertyDescriptors, 1, false);
