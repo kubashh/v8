@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "898e6c8c_e8b16a43",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-09-23T08:03:11Z",
+      "side": 1,
+      "message": "How about replacing the DCHECK with:\nif (top() \u003c top_on_previous_step_) {\n  // Generated code decreased the top() pointer to do folded allocations.\n  DCHECK_EQ(Page::FromAddress(top()), Page::FromAddress(top_on_previous_step_));\n  top_on_previous_step_ \u003d top();\n}",
+      "range": {
+        "startLine": 372,
+        "startChar": 2,
+        "endLine": 372,
+        "endChar": 8
+      },
+      "revId": "4f434db305e08aa66589ce2af33ab30ec23a45c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b1ab81d_f6792f5d",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 3
