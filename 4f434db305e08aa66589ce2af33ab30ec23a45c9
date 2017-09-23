@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b1ab81d_f6792f5d",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-09-23T07:58:18Z",
+      "side": 1,
+      "message": "This happens during GC, so the allocation observers should be paused.",
+      "range": {
+        "startLine": 1711,
+        "startChar": 8,
+        "endLine": 1711,
+        "endChar": 29
+      },
+      "revId": "4f434db305e08aa66589ce2af33ab30ec23a45c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
