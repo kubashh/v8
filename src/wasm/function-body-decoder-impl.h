@@ -155,51 +155,31 @@ struct GlobalIndexOperand {
 
 template <bool validate>
 struct BlockTypeOperand {
-  uint32_t arity = 0;
-  const byte* types = nullptr;  // pointer to encoded types for the block.
   unsigned length = 1;
+  ValueType type = kWasmStmt;
+  uint32_t sig_index;
+  FunctionSig* sig = nullptr;
 
   inline BlockTypeOperand(Decoder* decoder, const byte* pc) {
     uint8_t val = decoder->read_u8<validate>(pc + 1, "block type");
-    ValueType type = kWasmStmt;
-    if (decode_local_type(val, &type)) {
-      arity = type == kWasmStmt ? 0 : 1;
-      types = pc + 1;
-    } else {
+    if (!decode_local_type(val, &type)) {
       // Handle multi-value blocks.
       if (!VALIDATE(FLAG_experimental_wasm_mv)) {
-        decoder->error(pc + 1, "invalid block arity > 1");
-        return;
-      }
-      if (!VALIDATE(val == kMultivalBlock)) {
         decoder->error(pc + 1, "invalid block type");
         return;
       }
-      // Decode and check the types vector of the block.
-      unsigned len = 0;
-      uint32_t count =
-          decoder->read_u32v<validate>(pc + 2, &len, "block arity");
-      // {count} is encoded as {arity-2}, so that a {0} count here corresponds
-      // to a block with 2 values. This makes invalid/redundant encodings
-      // impossible.
-      arity = count + 2;
-      length = 1 + len + arity;
-      types = pc + 1 + 1 + len;
-
-      for (uint32_t i = 0; i < arity; i++) {
-        uint32_t offset = 1 + 1 + len + i;
-        val = decoder->read_u8<validate>(pc + offset, "block type");
-        decode_local_type(val, &type);
-        if (!VALIDATE(type != kWasmStmt)) {
-          decoder->error(pc + offset, "invalid block type");
-          return;
-        }
+      int32_t index =
+          decoder->read_i32v<validate>(pc + 1, &length, "block arity");
+      if (!VALIDATE(length > 0 && index >= 0)) {
+        decoder->error(pc + 1, "invalid block type index");
+        return;
       }
+      sig_index = static_cast<uint32_t>(index);
     }
   }
 
   // Decode a byte representing a local type. Return {false} if the encoded
-  // byte was invalid or {kMultivalBlock}.
+  // byte was invalid or the start of a type index.
   inline bool decode_local_type(uint8_t val, ValueType* result) {
     switch (static_cast<ValueTypeCode>(val)) {
       case kLocalVoid:
@@ -221,18 +201,29 @@ struct BlockTypeOperand {
         *result = kWasmS128;
         return true;
       default:
-        *result = kWasmStmt;
+        *result = kWasmVar;
         return false;
     }
   }
 
-  ValueType read_entry(unsigned index) {
-    DCHECK_LT(index, arity);
-    ValueType result;
-    bool success = decode_local_type(types[index], &result);
-    DCHECK(success);
-    USE(success);
-    return result;
+  size_t in_arity() const {
+    if (type != kWasmVar) return 0;
+    return sig->parameter_count();
+  }
+  size_t out_arity() const {
+    if (type == kWasmStmt) return 0;
+    if (type != kWasmVar) return 1;
+    return sig->return_count();
+  }
+  ValueType in_type(unsigned index) {
+    DCHECK_EQ(kWasmVar, type);
+    return sig->GetParam(index);
+  }
+  ValueType out_type(unsigned index) {
+    if (type == kWasmVar) return sig->GetReturn(index);
+    DCHECK_NE(kWasmStmt, type);
+    DCHECK_EQ(0, index);
+    return type;
   }
 };
 
@@ -1229,7 +1220,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           case kExprBlock: {
             BlockTypeOperand<validate> operand(this, this->pc_);
             auto* block = PushBlock();
-            SetBlockType(block, operand);
+            SetBlockType(block, operand, this->pc_);
             len = 1 + operand.length;
             interface_.Block(this, block);
             break;
@@ -1261,7 +1252,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             CHECK_PROTOTYPE_OPCODE(eh);
             BlockTypeOperand<validate> operand(this, this->pc_);
             auto* try_block = PushTry();
-            SetBlockType(try_block, operand);
+            SetBlockType(try_block, operand, this->pc_);
             len = 1 + operand.length;
             interface_.Try(this, try_block);
             break;
@@ -1306,7 +1297,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             BlockTypeOperand<validate> operand(this, this->pc_);
             // The continue environment is the inner environment.
             auto* block = PushLoop();
-            SetBlockType(&control_.back(), operand);
+            SetBlockType(&control_.back(), operand, this->pc_);
             len = 1 + operand.length;
             interface_.Loop(this, block);
             break;
@@ -1316,7 +1307,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             BlockTypeOperand<validate> operand(this, this->pc_);
             auto cond = Pop(0, kWasmI32);
             auto* if_block = PushIf();
-            SetBlockType(if_block, operand);
+            SetBlockType(if_block, operand, this->pc_);
             interface_.If(this, cond, if_block);
             len = 1 + operand.length;
             break;
@@ -1781,14 +1772,27 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     interface_.EndControl(this, current);
   }
 
-  void SetBlockType(Control* c, BlockTypeOperand<validate>& operand) {
-    c->merge.arity = operand.arity;
+  void SetBlockType(
+      Control* c, BlockTypeOperand<validate>& operand, const byte* pos) {
+    if (operand.type == kWasmVar) {
+      if (!this->module_ ||
+          operand.sig_index >= this->module_->signatures.size()) {
+        this->errorf(pos, "block type index %u out of bounds (%d signatures)",
+                     operand.sig_index,
+                     this->module_
+                         ? static_cast<int>(this->module_->signatures.size())
+                         : 0);
+        return;
+      }
+      operand.sig = this->module_->signatures[operand.sig_index];
+    }
+    c->merge.arity = operand.out_arity();
     if (c->merge.arity == 1) {
-      c->merge.vals.first = Value::New(this->pc_, operand.read_entry(0));
+      c->merge.vals.first = Value::New(this->pc_, operand.out_type(0));
     } else if (c->merge.arity > 1) {
       c->merge.vals.array = zone_->NewArray<Value>(c->merge.arity);
       for (unsigned i = 0; i < c->merge.arity; i++) {
-        c->merge.vals.array[i] = Value::New(this->pc_, operand.read_entry(i));
+        c->merge.vals.array[i] = Value::New(this->pc_, operand.out_type(i));
       }
     }
   }
