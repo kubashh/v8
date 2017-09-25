@@ -11,6 +11,7 @@
 
 namespace v8 {
 namespace base {
+namespace functional_unittest {
 
 TEST(FunctionalTest, HashBool) {
   hash<bool> h, h1, h2;
@@ -130,8 +131,6 @@ TYPED_TEST(FunctionalTest, BitEqualToImpliesSameBitHash) {
 }
 
 
-namespace {
-
 struct Foo {
   int x;
   double y;
@@ -139,8 +138,6 @@ struct Foo {
 
 
 size_t hash_value(Foo const& v) { return hash_combine(v.x, v.y); }
-
-}  // namespace
 
 
 TEST(FunctionalTest, HashUsesArgumentDependentLookup) {
@@ -192,5 +189,6 @@ TEST(FunctionalTest, BitHashDoubleDifferentForZeroAndMinusZero) {
   EXPECT_NE(h(0.0), h(-0.0));
 }
 
+}  // namespace functional_unittest
 }  // namespace base
 }  // namespace v8
