@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee3a49e0_f4555b58",
+        "filename": "src/objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 7136,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 0,
+      "message": "Spurious change.",
+      "revId": "669c2cfe298fe3ab08ffadaef0382247356408a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

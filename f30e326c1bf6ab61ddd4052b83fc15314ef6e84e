@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1253f27_7ff0693e",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "Not needed.",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3e902bd_6c4814a2",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "Just GetOptionalArgumentValue(0)",
+      "range": {
+        "startLine": 706,
+        "startChar": 19,
+        "endLine": 706,
+        "endChar": 37
+      },
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31cc7c1b_30ed98aa",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "GetOptionalArgumentValue(1)",
+      "range": {
+        "startLine": 708,
+        "startChar": 19,
+        "endLine": 708,
+        "endChar": 37
+      },
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a5c8537_1b926d38",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "// 4. Return FromPropertyDescriptor(desc).",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e1961f_0779d51f",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "kValueOffset",
+      "range": {
+        "startLine": 835,
+        "startChar": 8,
+        "endLine": 835,
+        "endChar": 76
+      },
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52aebed2_4a108427",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "kGetOffset",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbd49b5c_fb1e1310",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "kSetOffset",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3b83c27_832af959",
+        "filename": "src/objects/property-descriptor-object.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "Please remove this empty file.",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31d48503_8c32298a",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-25T08:01:46Z",
+      "side": 1,
+      "message": "This comment does not belong here anymore.",
+      "revId": "f30e326c1bf6ab61ddd4052b83fc15314ef6e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
