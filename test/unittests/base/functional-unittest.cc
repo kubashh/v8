@@ -11,6 +11,7 @@
 
 namespace v8 {
 namespace base {
+namespace functional_unittest {
 
 TEST(FunctionalTest, HashBool) {
   hash<bool> h, h1, h2;
@@ -192,5 +193,6 @@ TEST(FunctionalTest, BitHashDoubleDifferentForZeroAndMinusZero) {
   EXPECT_NE(h(0.0), h(-0.0));
 }
 
+}  // namespace functional_unittest
 }  // namespace base
 }  // namespace v8
