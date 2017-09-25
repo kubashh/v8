@@ -374,8 +374,8 @@ class BitField64 : public BitFieldBase<T, shift, size, uint64_t> { };
   DEFINE_BIT_RANGES(LIST_MACRO)       \
   LIST_MACRO(DEFINE_BIT_FIELD_TYPE, LIST_MACRO##_Ranges)
 
-#define DEFINE_BIT_FIELDS_64(LIST_MACRO) \
-  DEFINE_BIT_RANGES(LIST_MACRO)          \
+#define DEFINE_BIT_FIELDS_64(StartBit, LIST_MACRO) \
+  DEFINE_BIT_RANGES(StartBit, LIST_MACRO)          \
   LIST_MACRO(DEFINE_BIT_FIELD_64_TYPE, LIST_MACRO##_Ranges)
 
 // ----------------------------------------------------------------------------
