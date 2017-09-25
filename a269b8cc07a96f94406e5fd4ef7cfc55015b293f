@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f63fd182_2c4f04f9",
+        "filename": "src/snapshot/serializer-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-25T10:02:02Z",
+      "side": 1,
+      "message": "We only expect this in the startup serializer and the code serializer. Can we only do this in these two serializers, in StartupSerializer::SerializeObject, and CodeSerializer::SerializeObject?",
+      "range": {
+        "startLine": 38,
+        "startChar": 15,
+        "endLine": 38,
+        "endChar": 50
+      },
+      "revId": "a269b8cc07a96f94406e5fd4ef7cfc55015b293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
