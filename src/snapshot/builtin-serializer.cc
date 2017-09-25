@@ -5,6 +5,7 @@
 #include "src/snapshot/builtin-serializer.h"
 
 #include "src/objects-inl.h"
+#include "src/snapshot/serializer-inl.h"
 #include "src/snapshot/startup-serializer.h"
 
 namespace v8 {

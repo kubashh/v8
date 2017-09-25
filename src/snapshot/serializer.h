@@ -156,6 +156,9 @@ class Serializer : public SerializerDeserializer {
   };
 
   void SerializeDeferredObjects();
+
+  inline void HandleExternalReferenceRedirections(HeapObject* obj);
+
   virtual void SerializeObject(HeapObject* o, HowToCode how_to_code,
                                WhereToPoint where_to_point, int skip) = 0;
 
@@ -243,6 +246,8 @@ class Serializer : public SerializerDeserializer {
   RootIndexMap root_index_map_;
   CodeAddressMap* code_address_map_ = nullptr;
   std::vector<byte> code_buffer_;
+  // To handle redirected external references.
+  std::vector<AccessorInfo*> accessor_infos_;
   std::vector<HeapObject*> deferred_objects_;  // To handle stack overflow.
   int recursion_depth_ = 0;
   AllocatorT allocator_;
@@ -277,11 +282,13 @@ class Serializer<AllocatorT>::ObjectSerializer : public ObjectVisitor {
     serializer_->PushStack(obj);
 #endif  // DEBUG
   }
+
   ~ObjectSerializer() override {
 #ifdef DEBUG
     serializer_->PopStack();
 #endif  // DEBUG
   }
+
   void Serialize();
   void SerializeObject();
   void SerializeDeferred();
