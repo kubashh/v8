@@ -1455,7 +1455,8 @@ class ThreadImpl {
   }
 
   template <typename ctype, typename mtype>
-  bool ExecuteLoad(Decoder* decoder, InterpreterCode* code, pc_t pc, int& len) {
+  bool ExecuteLoad(Decoder* decoder, InterpreterCode* code, pc_t pc, int& len,
+                   MachineRepresentation rep) {
     MemoryAccessOperand<false> operand(decoder, code->at(pc), sizeof(ctype));
     uint32_t index = Pop().to<uint32_t>();
     if (!BoundsCheck<mtype>(cached_instance_info_->mem_size, operand.offset,
@@ -1468,12 +1469,19 @@ class ThreadImpl {
 
     Push(result);
     len = 1 + operand.length;
+
+    if (FLAG_wasm_trace_memory) {
+      TraceMemoryOperation(kWasmInterpreted, false, rep, operand.offset + index,
+                           code->function->func_index, static_cast<int>(pc),
+                           cached_instance_info_->mem_start);
+    }
+
     return true;
   }
 
   template <typename ctype, typename mtype>
-  bool ExecuteStore(Decoder* decoder, InterpreterCode* code, pc_t pc,
-                    int& len) {
+  bool ExecuteStore(Decoder* decoder, InterpreterCode* code, pc_t pc, int& len,
+                    MachineRepresentation rep) {
     MemoryAccessOperand<false> operand(decoder, code->at(pc), sizeof(ctype));
     WasmValue val = Pop();
 
@@ -1492,6 +1500,13 @@ class ThreadImpl {
     } else if (std::is_same<double, ctype>::value) {
       possible_nondeterminism_ |= std::isnan(val.to<double>());
     }
+
+    if (FLAG_wasm_trace_memory) {
+      TraceMemoryOperation(kWasmInterpreted, true, rep, operand.offset + index,
+                           code->function->func_index, static_cast<int>(pc),
+                           cached_instance_info_->mem_start);
+    }
+
     return true;
   }
 
@@ -1813,43 +1828,47 @@ class ThreadImpl {
           break;
         }
 
-#define LOAD_CASE(name, ctype, mtype)                                \
-  case kExpr##name: {                                                \
-    if (!ExecuteLoad<ctype, mtype>(&decoder, code, pc, len)) return; \
-    break;                                                           \
+#define LOAD_CASE(name, ctype, mtype, rep)                      \
+  case kExpr##name: {                                           \
+    if (!ExecuteLoad<ctype, mtype>(&decoder, code, pc, len,     \
+                                   MachineRepresentation::rep)) \
+      return;                                                   \
+    break;                                                      \
   }
 
-          LOAD_CASE(I32LoadMem8S, int32_t, int8_t);
-          LOAD_CASE(I32LoadMem8U, int32_t, uint8_t);
-          LOAD_CASE(I32LoadMem16S, int32_t, int16_t);
-          LOAD_CASE(I32LoadMem16U, int32_t, uint16_t);
-          LOAD_CASE(I64LoadMem8S, int64_t, int8_t);
-          LOAD_CASE(I64LoadMem8U, int64_t, uint8_t);
-          LOAD_CASE(I64LoadMem16S, int64_t, int16_t);
-          LOAD_CASE(I64LoadMem16U, int64_t, uint16_t);
-          LOAD_CASE(I64LoadMem32S, int64_t, int32_t);
-          LOAD_CASE(I64LoadMem32U, int64_t, uint32_t);
-          LOAD_CASE(I32LoadMem, int32_t, int32_t);
-          LOAD_CASE(I64LoadMem, int64_t, int64_t);
-          LOAD_CASE(F32LoadMem, float, float);
-          LOAD_CASE(F64LoadMem, double, double);
+          LOAD_CASE(I32LoadMem8S, int32_t, int8_t, kWord8);
+          LOAD_CASE(I32LoadMem8U, int32_t, uint8_t, kWord8);
+          LOAD_CASE(I32LoadMem16S, int32_t, int16_t, kWord16);
+          LOAD_CASE(I32LoadMem16U, int32_t, uint16_t, kWord16);
+          LOAD_CASE(I64LoadMem8S, int64_t, int8_t, kWord8);
+          LOAD_CASE(I64LoadMem8U, int64_t, uint8_t, kWord16);
+          LOAD_CASE(I64LoadMem16S, int64_t, int16_t, kWord16);
+          LOAD_CASE(I64LoadMem16U, int64_t, uint16_t, kWord16);
+          LOAD_CASE(I64LoadMem32S, int64_t, int32_t, kWord32);
+          LOAD_CASE(I64LoadMem32U, int64_t, uint32_t, kWord32);
+          LOAD_CASE(I32LoadMem, int32_t, int32_t, kWord32);
+          LOAD_CASE(I64LoadMem, int64_t, int64_t, kWord64);
+          LOAD_CASE(F32LoadMem, float, float, kFloat32);
+          LOAD_CASE(F64LoadMem, double, double, kFloat64);
 #undef LOAD_CASE
 
-#define STORE_CASE(name, ctype, mtype)                                \
-  case kExpr##name: {                                                 \
-    if (!ExecuteStore<ctype, mtype>(&decoder, code, pc, len)) return; \
-    break;                                                            \
+#define STORE_CASE(name, ctype, mtype, rep)                      \
+  case kExpr##name: {                                            \
+    if (!ExecuteStore<ctype, mtype>(&decoder, code, pc, len,     \
+                                    MachineRepresentation::rep)) \
+      return;                                                    \
+    break;                                                       \
   }
 
-          STORE_CASE(I32StoreMem8, int32_t, int8_t);
-          STORE_CASE(I32StoreMem16, int32_t, int16_t);
-          STORE_CASE(I64StoreMem8, int64_t, int8_t);
-          STORE_CASE(I64StoreMem16, int64_t, int16_t);
-          STORE_CASE(I64StoreMem32, int64_t, int32_t);
-          STORE_CASE(I32StoreMem, int32_t, int32_t);
-          STORE_CASE(I64StoreMem, int64_t, int64_t);
-          STORE_CASE(F32StoreMem, float, float);
-          STORE_CASE(F64StoreMem, double, double);
+          STORE_CASE(I32StoreMem8, int32_t, int8_t, kWord8);
+          STORE_CASE(I32StoreMem16, int32_t, int16_t, kWord16);
+          STORE_CASE(I64StoreMem8, int64_t, int8_t, kWord8);
+          STORE_CASE(I64StoreMem16, int64_t, int16_t, kWord16);
+          STORE_CASE(I64StoreMem32, int64_t, int32_t, kWord32);
+          STORE_CASE(I32StoreMem, int32_t, int32_t, kWord32);
+          STORE_CASE(I64StoreMem, int64_t, int64_t, kWord64);
+          STORE_CASE(F32StoreMem, float, float, kFloat32);
+          STORE_CASE(F64StoreMem, double, double, kFloat64);
 #undef STORE_CASE
 
 #define ASMJS_LOAD_CASE(name, ctype, mtype, defval)                       \

@@ -458,6 +458,12 @@ void ResolvePromise(Isolate* isolate, Handle<Context> context,
 void RejectPromise(Isolate* isolate, Handle<Context> context,
                    ErrorThrower& thrower, Handle<JSPromise> promise);
 
+enum ExecutionEngine { kWasmCompiled, kWasmInterpreted };
+// Triggered by --wasm-trace-memory; used for debugging.
+void TraceMemoryOperation(ExecutionEngine, bool is_store, MachineRepresentation,
+                          uint32_t addr, int func_index, int position,
+                          uint8_t* mem_start);
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8
