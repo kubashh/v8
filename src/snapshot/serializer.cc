@@ -7,6 +7,7 @@
 #include "src/assembler-inl.h"
 #include "src/objects/map.h"
 #include "src/snapshot/natives.h"
+#include "src/snapshot/serializer-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -34,6 +35,7 @@ Serializer<AllocatorT>::Serializer(Isolate* isolate)
 
 template <class AllocatorT>
 Serializer<AllocatorT>::~Serializer() {
+  RestoreExternalReferenceRedirectors(accessor_infos_);
   if (code_address_map_ != NULL) delete code_address_map_;
 #ifdef OBJECT_PRINT
   if (instance_type_count_ != NULL) {

@@ -80,7 +80,7 @@ namespace internal {
   F(ThrowSuperNotCalled, 0, 1)               \
   F(ThrowNotSuperConstructor, 2, 1)          \
   F(HomeObjectSymbol, 0, 1)                  \
-  F(DefineClass, 4, 1)                       \
+  F(DefineClass, -1 /* >= 3 */, 1)           \
   F(InstallClassNameAccessor, 1, 1)          \
   F(InstallClassNameAccessorWithCheck, 1, 1) \
   F(LoadFromSuper, 3, 1)                     \

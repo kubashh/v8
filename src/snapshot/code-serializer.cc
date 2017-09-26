@@ -12,6 +12,7 @@
 #include "src/macro-assembler.h"
 #include "src/objects-inl.h"
 #include "src/snapshot/object-deserializer.h"
+#include "src/snapshot/serializer-inl.h"
 #include "src/snapshot/snapshot.h"
 #include "src/version.h"
 #include "src/visitors.h"
@@ -73,6 +74,8 @@ void CodeSerializer::SerializeObject(HeapObject* obj, HowToCode how_to_code,
   if (SerializeBackReference(obj, how_to_code, where_to_point, skip)) return;
 
   FlushSkip(skip);
+
+  HandleExternalReferenceRedirections(obj);
 
   if (obj->IsCode()) {
     Code* code_object = Code::cast(obj);
