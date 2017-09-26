@@ -313,7 +313,8 @@ uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
   if (*buffer == 0) {
     // We're at the start of a new character.
     uint32_t kind = NonASCIISequenceLength(next);
-    if (kind >= 2 && kind <= 4) {
+    CHECK_LE(kind, 4);
+    if (kind >= 2) {
       // Start of 2..4 byte character, and no buffer.
 
       // The mask for the lower bits depends on the kind, and is
@@ -324,7 +325,9 @@ uchar Utf8::ValueOfIncremental(byte next, Utf8IncrementalBuffer* buffer) {
       // Store the kind in the top nibble, and kind - 1 (i.e., remaining bytes)
       // in 2nd nibble, and the value  in the bottom three. The 2nd nibble is
       // intended as a counter about how many bytes are still needed.
-      *buffer = kind << 28 | (kind - 1) << 24 | (next & mask);
+      uint32_t character_info = kind << 28 | (kind - 1) << 24;
+      DCHECK_EQ(character_info & mask, 0);
+      *buffer = character_info | (next & mask);
       return kIncomplete;
     } else {
       // No buffer, and not the start of a 1-byte char (handled at the
