@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "abbcc795_f9d4eaad",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-26T11:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2c79fc9_b448e255",
+      "range": {
+        "startLine": 1735,
+        "startChar": 0,
+        "endLine": 1742,
+        "endChar": 3
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "110a2ffa_e99f06fd",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 15
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-26T04:31:49Z",
       "side": 1,
       "message": "Could you pull the for loop out and directly call VisitClassLiteralPropertyKey / VisitClassLiteralPropertyValue passing the register directly, then DCHECK that we have the expected number of args after (ideally calling some helper function which is also called by runtime-classes to ensure that the runtime expects the same number of arguments as passed by the interpreter).",
+      "range": {
+        "startLine": 1754,
+        "startChar": 4,
+        "endLine": 1754,
+        "endChar": 31
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7147018_bd41f15c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-26T11:32:20Z",
+      "side": 1,
+      "message": "I inlined the VisitClassLiteralProperties, switched to growable register list and indeed the code looks much better now.\nIn order to implement such a DCHECK I had to propagate the number of arguments to the runtime through the ClassBoilerplate object.\nDone.",
+      "parentUuid": "110a2ffa_e99f06fd",
       "range": {
         "startLine": 1754,
         "startChar": 4,
@@ -68,6 +116,30 @@
       "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91674521_e1da35ff",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-09-26T11:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5981ad04_8932e3ca",
+      "range": {
+        "startLine": 1758,
+        "startChar": 9,
+        "endLine": 1758,
+        "endChar": 35
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
