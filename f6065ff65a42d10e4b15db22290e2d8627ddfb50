@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d32fea74_eb1e2b9a",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-26T07:29:55Z",
+      "side": 1,
+      "message": "Would kProduceFullCodeCache be more concise? (But I don\u0027t have strong opinions about this - your call.)",
+      "range": {
+        "startLine": 1439,
+        "startChar": 4,
+        "endLine": 1439,
+        "endChar": 31
+      },
+      "revId": "f6065ff65a42d10e4b15db22290e2d8627ddfb50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3555d46d_6359df02",
+        "filename": "src/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-26T07:29:55Z",
+      "side": 1,
+      "message": "This function name is quite misleading, as it doesn\u0027t produce a code cache. ShouldProduceCodeCache?",
+      "range": {
+        "startLine": 1283,
+        "startChar": 38,
+        "endLine": 1283,
+        "endChar": 54
+      },
+      "revId": "f6065ff65a42d10e4b15db22290e2d8627ddfb50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
