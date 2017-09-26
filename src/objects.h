@@ -2205,6 +2205,8 @@ class JSReceiver: public HeapObject {
 
   bool HasProxyInPrototype(Isolate* isolate);
 
+  bool HasComplexKeys();
+
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSReceiver);
 };
