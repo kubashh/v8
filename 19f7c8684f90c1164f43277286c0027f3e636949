@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2c79fc9_b448e255",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-26T04:31:49Z",
+      "side": 1,
+      "message": "How about just using a GrowableRegisterList rather than having to pre-compute?",
+      "range": {
+        "startLine": 1735,
+        "startChar": 0,
+        "endLine": 1742,
+        "endChar": 3
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "110a2ffa_e99f06fd",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-26T04:31:49Z",
+      "side": 1,
+      "message": "Could you pull the for loop out and directly call VisitClassLiteralPropertyKey / VisitClassLiteralPropertyValue passing the register directly, then DCHECK that we have the expected number of args after (ideally calling some helper function which is also called by runtime-classes to ensure that the runtime expects the same number of arguments as passed by the interpreter).",
+      "range": {
+        "startLine": 1754,
+        "startChar": 4,
+        "endLine": 1754,
+        "endChar": 31
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5981ad04_8932e3ca",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-09-26T04:31:49Z",
+      "side": 1,
+      "message": "nit - move this above the argument visits",
+      "range": {
+        "startLine": 1758,
+        "startChar": 9,
+        "endLine": 1758,
+        "endChar": 35
+      },
+      "revId": "19f7c8684f90c1164f43277286c0027f3e636949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
