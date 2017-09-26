@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "105c78f0_0b7503d5",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "Should we not test here that this value is 0? There should not be any reloc info anymore for loads and stores.",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046373bd_927297b6",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "No need to use this comment style here.",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc602814_a63272a8",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "I think we should make all \"CHECK_GE(2, xxx)\" more tight in this file. Shouldn\u0027t there be no reloc info anymore for memory accesses?",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54e41564_e11e2c76",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "Stale comment I guess",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec43eb07_9a01fe72",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these values already been set in WasmMemoryObject::New?",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2044a03_46293d3e",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "further up in test/cctest/wasm/test-run-wasm-interpreter.cc you add memory now after SetMaxMemPages. Is the code in this \u0027if\u0027 even reachable ever? Are the changes in test/cctest/wasm/test-run-wasm-interpreter.cc actually even needed now?",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aa28003_ce0b4e3e",
+        "filename": "test/mjsunit/wasm/memory-external-call.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "What is the meaning of import_sig \u003d false? Some lines up import_sig is actually a signature, not a boolean.",
+      "range": {
+        "startLine": 58,
+        "startChar": 57,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f9571b_0d2b06ce",
+        "filename": "test/mjsunit/wasm/memory-external-call.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-26T16:57:54Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
