@@ -12,6 +12,15 @@
 namespace v8 {
 namespace base {
 
+// See if this builds on windows outside the functional_unittest sub-namespace.
+TYPED_TEST(FunctionalTest, HashValueArrayUsesHashRange) {
+  TypeParam values[128];
+  this->rng()->NextBytes(&values, sizeof(values));
+  EXPECT_EQ(hash_range(values, values + arraysize(values)), hash_value(values));
+}
+
+namespace functional_unittest {
+
 TEST(FunctionalTest, HashBool) {
   hash<bool> h, h1, h2;
   EXPECT_EQ(h1(true), h2(true));
@@ -97,13 +106,6 @@ TYPED_TEST(FunctionalTest, HashIsOkish) {
 }
 
 
-TYPED_TEST(FunctionalTest, HashValueArrayUsesHashRange) {
-  TypeParam values[128];
-  this->rng()->NextBytes(&values, sizeof(values));
-  EXPECT_EQ(hash_range(values, values + arraysize(values)), hash_value(values));
-}
-
-
 TYPED_TEST(FunctionalTest, BitEqualTo) {
   bit_equal_to<TypeParam> pred;
   for (size_t i = 0; i < 128; ++i) {
@@ -130,8 +132,6 @@ TYPED_TEST(FunctionalTest, BitEqualToImpliesSameBitHash) {
 }
 
 
-namespace {
-
 struct Foo {
   int x;
   double y;
@@ -139,8 +139,6 @@ struct Foo {
 
 
 size_t hash_value(Foo const& v) { return hash_combine(v.x, v.y); }
-
-}  // namespace
 
 
 TEST(FunctionalTest, HashUsesArgumentDependentLookup) {
@@ -192,5 +190,6 @@ TEST(FunctionalTest, BitHashDoubleDifferentForZeroAndMinusZero) {
   EXPECT_NE(h(0.0), h(-0.0));
 }
 
+}  // namespace functional_unittest
 }  // namespace base
 }  // namespace v8
