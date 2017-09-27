@@ -208,6 +208,29 @@
     },
     {
       "key": {
+        "uuid": "33245b10_a7ba4e1f",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T14:52:16Z",
+      "side": 1,
+      "message": "Could this decoder parameter also be removed?",
+      "range": {
+        "startLine": 139,
+        "startChar": 26,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c0ee83e_07041f31",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 8
@@ -270,6 +293,23 @@
       "writtenOn": "2017-09-27T14:51:11Z",
       "side": 1,
       "message": "This line is redundant.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60d7716_f4ab7456",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T14:52:16Z",
+      "side": 1,
+      "message": "I think these two assignments should be done in WasmMemoryObject::New.",
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -350,6 +390,23 @@
     },
     {
       "key": {
+        "uuid": "0824cf90_24c8c8e1",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T14:52:16Z",
+      "side": 1,
+      "message": "Could this be a DCHECK?",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8dac4fa0_5f439f54",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 8
@@ -361,6 +418,23 @@
       "writtenOn": "2017-09-27T14:51:11Z",
       "side": 1,
       "message": "The style guide recommends against else after return.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d01472_12db7b73",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T14:52:16Z",
+      "side": 1,
+      "message": "Same here",
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -401,6 +475,23 @@
         "endLine": 631,
         "endChar": 10
       },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d5f65cb_c3fe772e",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T14:52:16Z",
+      "side": 1,
+      "message": "Does the ModuleEnv even need mem_start and mem_size now? Can you add a TODO that we should investigate this?",
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
