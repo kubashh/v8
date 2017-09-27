@@ -185,6 +185,12 @@ class ModuleCompiler {
 
 class JSToWasmWrapperCache {
  public:
+  JSToWasmWrapperCache() : context_address_(nullptr) {}
+
+  void SetContextAddress(Address context_address) {
+    context_address_ = context_address;
+  }
+
   Handle<Code> CloneOrCompileJSToWasmWrapper(Isolate* isolate,
                                              wasm::WasmModule* module,
                                              Handle<Code> wasm_code,
@@ -194,6 +200,7 @@ class JSToWasmWrapperCache {
   // sig_map_ maps signatures to an index in code_cache_.
   wasm::SignatureMap sig_map_;
   std::vector<Handle<Code>> code_cache_;
+  Address context_address_;
 };
 
 // A helper class to simplify instantiating a module from a compiled module.

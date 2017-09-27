@@ -225,18 +225,26 @@ compiler::ModuleEnv CreateModuleEnvFromCompiledModule(
 
   std::vector<Handle<Code>> empty_code;
 
+  uintptr_t mem_start = 0;
+  uint32_t mem_size = 0;
+  Address context_address = compiled_module->GetEmbeddedContextOrNull();
+  if (context_address) {
+    WasmContext* context = reinterpret_cast<WasmContext*>(context_address);
+    mem_start = reinterpret_cast<uintptr_t>(context->mem_start);
+    mem_size = context->mem_size;
+  }
+
   compiler::ModuleEnv result = {
-      module,                                             // --
-      function_tables,                                    // --
-      signature_tables,                                   // --
-      signature_maps,                                     // --
-      empty_code,                                         // --
-      BUILTIN_CODE(isolate, WasmCompileLazy),             // --
-      reinterpret_cast<uintptr_t>(                        // --
-          compiled_module->GetEmbeddedMemStartOrNull()),  // --
-      compiled_module->GetEmbeddedMemSizeOrZero(),        // --
-      reinterpret_cast<uintptr_t>(                        // --
-          compiled_module->GetGlobalsStartOrNull())       // --
+      module,                                        // --
+      function_tables,                               // --
+      signature_tables,                              // --
+      signature_maps,                                // --
+      empty_code,                                    // --
+      BUILTIN_CODE(isolate, WasmCompileLazy),        // --
+      mem_start,                                     // --
+      mem_size,                                      // --
+      reinterpret_cast<uintptr_t>(                   // --
+          compiled_module->GetGlobalsStartOrNull())  // --
   };
   return result;
 }
