@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6da8a0c_92104520",
+        "filename": "gypfiles/win/msvs_dependencies.isolate",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2017-09-27T17:09:34Z",
+      "side": 1,
+      "message": "Update this comment to say 2015/2017 runtimes",
+      "revId": "d6c58f144ca23149f9bfddeb790cc00b18c28ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
