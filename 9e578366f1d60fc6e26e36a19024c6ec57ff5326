@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "52456d31_73019435",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "105c78f0_0b7503d5",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "046373bd_927297b6",
         "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d06d35_1c4208b3",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "046373bd_927297b6",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "8c378f54_4fe6c1e9",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc602814_a63272a8",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54e41564_e11e2c76",
         "filename": "test/cctest/wasm/test-run-wasm-module.cc",
         "patchSetId": 6
@@ -67,6 +121,24 @@
       "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5673ed1_c65929b6",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "I removed the \"creating a memory object\" because we already have it, but the externalize and grow still happens. I rephrased it to \"Fake the Embedder flow by externalizing the memory object, and grow.\"",
+      "parentUuid": "54e41564_e11e2c76",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "c503667d_9264f824",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "Correct. I dropped these three lines.",
+      "parentUuid": "ec43eb07_9a01fe72",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2044a03_46293d3e",
         "filename": "test/cctest/wasm/wasm-run-utils.h",
         "patchSetId": 6
@@ -101,6 +191,24 @@
       "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d3c1779_d438004d",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "I agree the changes in test/cctest/wasm/test-run-wasm-interpreter.cc are not needed with this modification. I dropped the changes there.",
+      "parentUuid": "a2044a03_46293d3e",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "aa6959b0_49d27be9",
+        "filename": "test/mjsunit/wasm/memory-external-call.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "as discussed offline I changed this to \"import_sig \u003d undefined\" to make clear that we don\u0027t want to specify a signature for the import function.",
+      "parentUuid": "9aa28003_ce0b4e3e",
+      "range": {
+        "startLine": 58,
+        "startChar": 57,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35f9571b_0d2b06ce",
         "filename": "test/mjsunit/wasm/memory-external-call.js",
         "patchSetId": 6
@@ -141,6 +273,24 @@
       "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91000838_3f3cbe1a",
+        "filename": "test/mjsunit/wasm/memory-external-call.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T07:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35f9571b_0d2b06ce",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
