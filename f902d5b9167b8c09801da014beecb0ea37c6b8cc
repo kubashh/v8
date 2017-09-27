@@ -1,0 +1,585 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64a2885d_321199af",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Two concerns here:\na) AFAICT this is the first wasm-specific thing in int64-lowering. We should try to keep it code-kind-agnostic.\nb) we also use Int64Lowering for interpreter entry and other stubs, where we might need to also lower the first parameter.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c212b0a7_3030bae2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "I have never seen IntAdd, and don\u0027t even find it in machine-operator.h. What\u0027s its semantics? Is this basically an IntPtrAdd?",
+      "range": {
+        "startLine": 3220,
+        "startChar": 45,
+        "endLine": 3220,
+        "endChar": 51
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9255b0d2_9cf08bfb",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Can you move this right after LoadMemStart? The functions are very similar, and it makes sense to have them together IMO.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d78b1e3a_6eff3ffa",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "nit: the type already sais that this is a node, you can skip this suffix.",
+      "range": {
+        "startLine": 3434,
+        "startChar": 22,
+        "endLine": 3434,
+        "endChar": 27
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a46d181d_da3cdeea",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "This does not work. Did you copy this from somewhere? String::ToCString returns a unique_ptr\u003cchar[]\u003e, so it will be deallocated right after this statement.\nI am wondering whether it is worth passing module_name and import_name just for this profiling call here. Maybe remove it for now, just pass anything (\"wasm\" or empty string), and we will fix this later or never :)",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34624923_2c9ab863",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "this should be \"instances\", not \"modules\".",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 15
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4955cc8_c2616ec4",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "constexpr",
+      "range": {
+        "startLine": 540,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 5
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd76bdf1_39e1c954",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "mem_size and mem_start are part of the env, so you should add 2 to env_count. If you still need the number of locals afterwards, just introduce another local.\nuint32_t num_locals \u003d ...\nuint32_t env_count \u003d num_locals + 2;",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f0bce4_746ad2ba",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "You can use your constant here.",
+      "range": {
+        "startLine": 112,
+        "startChar": 47,
+        "endLine": 112,
+        "endChar": 48
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03bccf1a_bb9858a7",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Can you rephrase this? Something like \"Parameters are shifted by 1 because of the wasm_context\".",
+      "range": {
+        "startLine": 113,
+        "startChar": 35,
+        "endLine": 113,
+        "endChar": 78
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c0ee83e_07041f31",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Nit: I prefer early exits: if (!... || !...) return;",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23fec0b5_f0777e64",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Thanks for this TODO! 👍",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6fb2b65_5c8ef017",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Another candidate for an early exit.\nMaybe assign this condition to \"bool needs_wasm_to_wasm_wrapper\", then \"if !needs_wasm_to_wasm_wrapper) return wasm_code;\"",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a6a860_edc2c8d5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "This line is redundant.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14445658_14cba108",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "What\u0027s the contract of this method? Must it be called before using the cache? Can we assert this then?",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c0b4412_87fb5859",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Just add \"\u003d nullptr\" here, and remove the default constructor.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e86c35_583ac2dc",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "You could additionally DCHECK_NOT_NULL(new_context).",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a5aaef_9ef14a33",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "What do you mean by this? Under which conditions can we skip the patching?",
+      "range": {
+        "startLine": 129,
+        "startChar": 17,
+        "endLine": 129,
+        "endChar": 30
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dac4fa0_5f439f54",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "The style guide recommends against else after return.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "860ff3ea_30f01a1c",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cbb9bbe_de5edeaa",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Please make this a DCHECK_EQ. There is some reason for this, I think it has to do with classification of bugs in clusterfuzz or something.\n(note that it\u0027s guarded by \"#ifdef DEBUG\" anyway)",
+      "range": {
+        "startLine": 631,
+        "startChar": 2,
+        "endLine": 631,
+        "endChar": 10
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65d0ae6d_d4261e5c",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Hm, I think passing arguments just to DCHECK them does not make too much sense. Can we move these DCHECKs to the (one) caller?",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69bebefc_5d0eadb0",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "You can use Managed::Allocate here.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fbacd06_a8d97393",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Why do we only update the context in the else branch?",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "782ef74c_1c6ef642",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "This should not be necessary. The code will be patched with a valid context before being reused anyway.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "716a2305_0f2c026d",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "I guess that the mem_start field is used more often than mem_size typically. We should place it first then, such that we can use a smaller instruction (without offset) to load this field.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dfee899_2f1245cc",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Typo: This",
+      "range": {
+        "startLine": 296,
+        "startChar": 67,
+        "endLine": 296,
+        "endChar": 72
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "301516a2_524cbe64",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "I think this whold embedded_context management can be removed. We needed this for mem_start and mem_size in order to know how to patch the code after de-serialization. With the context, everything related to this can be removed IIANM.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4477fea_ba4330fc",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "As noted elsewhere: These methods can probably be removed (ResetSpecializationContextInfoIfNeeded and SetSpecializationContextInfoFrom).",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "271169ca_38b529ab",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "I think this test (and the others you modified) should just be removed. Checking that we don\u0027t accidentally embed a context reference does not seem to make too much sense.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0b8c0a8_0c8602eb",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-09-27T14:51:11Z",
+      "side": 1,
+      "message": "Can we always get the context_address_ by doing {instance_object_-\u003ewasm_context()}? If so, we should remove this field.",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
