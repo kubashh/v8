@@ -177,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "646d2d58_9f399969",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-27T12:47:12Z",
+      "side": 1,
+      "message": "I realized that this is actually needed in some case. When we create the new memory object we create a new WasmContext, but we don\u0027t set the mem_size and mem_start value in the memory object. I\u0027ll re-introduce this in the next PS.",
+      "parentUuid": "c503667d_9264f824",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2044a03_46293d3e",
         "filename": "test/cctest/wasm/wasm-run-utils.h",
         "patchSetId": 6
