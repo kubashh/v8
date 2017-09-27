@@ -195,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "d7faf996_be5c0030",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T13:07:50Z",
+      "side": 1,
+      "message": "Why do we not set mem_size and mem_start when we create a memory object? It seems to be the right place for these assignments.",
+      "parentUuid": "646d2d58_9f399969",
+      "revId": "9e578366f1d60fc6e26e36a19024c6ec57ff5326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2044a03_46293d3e",
         "filename": "test/cctest/wasm/wasm-run-utils.h",
         "patchSetId": 6

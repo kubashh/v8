@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb871562_456777b1",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-27T13:07:50Z",
+      "side": 1,
+      "message": "nit: You could just return the new node instead of introducing the mem_buffer_offset variable.",
+      "revId": "e2096d609739676b2e3da566ea6b9f987fe4ddd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
