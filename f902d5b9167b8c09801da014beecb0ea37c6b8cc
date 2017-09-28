@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b1ba4ead_bd8c7209",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "As discussed offline, this would need to pass more information here, since the signature does not include the WasmContext. As agreed, I\u0027ll add a TODO here to try to make the code non-wasm specific.",
+      "parentUuid": "64a2885d_321199af",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c212b0a7_3030bae2",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "087a463d_de1d5c6b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "IntAdd comes from here: https://cs.chromium.org/chromium/src/v8/src/compiler/machine-operator.h?q\u003dmachine-operator.h\u0026sq\u003dpackage:chromium\u0026l\u003d654\n\nand it basically does this:\n\nreturn Is32() ? Prefix##32##Suffix() : Prefix##64##Suffix();\n\nIn MachineOperatorBuilder I\u0027ve only found UnsafePointerAdd, but didn\u0027t want to use it, so Michi pointed out the existence of IntAdd.",
+      "parentUuid": "c212b0a7_3030bae2",
+      "range": {
+        "startLine": 3220,
+        "startChar": 45,
+        "endLine": 3220,
+        "endChar": 51
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9255b0d2_9cf08bfb",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -56,6 +98,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11095858_5ed9c176",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9255b0d2_9cf08bfb",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "42d37090_96768d70",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "good point",
+      "parentUuid": "d78b1e3a_6eff3ffa",
+      "range": {
+        "startLine": 3434,
+        "startChar": 22,
+        "endLine": 3434,
+        "endChar": 27
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a46d181d_da3cdeea",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 8
@@ -96,6 +180,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739e69cd_af3570ab",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "yep, copied it from CompileWasmToJsWrapper ( https://cs.chromium.org/chromium/src/v8/src/compiler/wasm-compiler.cc?q\u003dwasm-compiler.cc\u0026sq\u003dpackage:chromium\u0026dr\u0026l\u003d4229 )\n\nI changed it as discussed offline.",
+      "parentUuid": "a46d181d_da3cdeea",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "bdee67c0_2ebf0b06",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34624923_2c9ab863",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 15
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4955cc8_c2616ec4",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 8
@@ -145,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "fc386abc_3c78d847",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4955cc8_c2616ec4",
+      "range": {
+        "startLine": 540,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 5
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd76bdf1_39e1c954",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 8
@@ -159,6 +309,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f706232_8863e4c4",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd76bdf1_39e1c954",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "18d0eb18_5f6948ea",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42f0bce4_746ad2ba",
+      "range": {
+        "startLine": 112,
+        "startChar": 47,
+        "endLine": 112,
+        "endChar": 48
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03bccf1a_bb9858a7",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 8
@@ -205,6 +397,30 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca552256_602ccef4",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03bccf1a_bb9858a7",
+      "range": {
+        "startLine": 113,
+        "startChar": 35,
+        "endLine": 113,
+        "endChar": 78
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -231,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "4c2c6ba5_6efd9160",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33245b10_a7ba4e1f",
+      "range": {
+        "startLine": 139,
+        "startChar": 26,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c0ee83e_07041f31",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 8
@@ -245,6 +485,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0626a4cf_4ec817c2",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c0ee83e_07041f31",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -282,6 +540,24 @@
     },
     {
       "key": {
+        "uuid": "691b321c_d1aa9beb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6fb2b65_5c8ef017",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68a6a860_edc2c8d5",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 8
@@ -296,6 +572,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cf8c109_549f375a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "nice catch :)",
+      "parentUuid": "68a6a860_edc2c8d5",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -316,6 +610,24 @@
     },
     {
       "key": {
+        "uuid": "d8b7c342_f114355a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c60d7716_f4ab7456",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14445658_14cba108",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 8
@@ -330,6 +642,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dad15ae_7fbc548a",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "I added a DCHECK to check that the cache is empty in SetContextAddress. This also makes unnecessary to patch the context address in CloneOrCompileJSToWasmWrapper, since we know that the context address is always the same.",
+      "parentUuid": "14445658_14cba108",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -350,6 +680,24 @@
     },
     {
       "key": {
+        "uuid": "6476a71e_837ea875",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c0b4412_87fb5859",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52e86c35_583ac2dc",
         "filename": "src/wasm/wasm-code-specialization.cc",
         "patchSetId": 8
@@ -364,6 +712,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647b6d7f_ff41f3e5",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52e86c35_583ac2dc",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -390,6 +756,30 @@
     },
     {
       "key": {
+        "uuid": "00650830_7897bf9e",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "As discussed offline, I now use if(new_wasm_context_address) as condition, and I added an early return if no patch is needed.",
+      "parentUuid": "e6a5aaef_9ef14a33",
+      "range": {
+        "startLine": 129,
+        "startChar": 17,
+        "endLine": 129,
+        "endChar": 30
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0824cf90_24c8c8e1",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 8
@@ -404,6 +794,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bed9b5e_f69b533c",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "GetMemSize and GetMemStart are called by the WasmInterpreter constructor without checking if the instance has memory, so this is still needed here.",
+      "parentUuid": "0824cf90_24c8c8e1",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -424,6 +832,24 @@
     },
     {
       "key": {
+        "uuid": "ab68901e_ec327f67",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dac4fa0_5f439f54",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8d01472_12db7b73",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 8
@@ -441,6 +867,24 @@
     },
     {
       "key": {
+        "uuid": "e4dcf7c5_5ebf3d65",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d01472_12db7b73",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "860ff3ea_30f01a1c",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 8
@@ -455,6 +899,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65d933a_11f2c8d2",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "860ff3ea_30f01a1c",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -481,6 +943,30 @@
     },
     {
       "key": {
+        "uuid": "dc4b2197_59ba88c9",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cbb9bbe_de5edeaa",
+      "range": {
+        "startLine": 631,
+        "startChar": 2,
+        "endLine": 631,
+        "endChar": 10
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d5f65cb_c3fe772e",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 8
@@ -495,6 +981,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f6c270_aa4d9c83",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "mem_start and mem_size are removed from ModuleEnv in the forthcoming patch set, thanks.",
+      "parentUuid": "9d5f65cb_c3fe772e",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -515,6 +1019,24 @@
     },
     {
       "key": {
+        "uuid": "c812b7b0_6ce8bc90",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65d0ae6d_d4261e5c",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69bebefc_5d0eadb0",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 8
@@ -529,6 +1051,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ada1a0d_b4dd95f6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69bebefc_5d0eadb0",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -549,6 +1089,24 @@
     },
     {
       "key": {
+        "uuid": "d442d6c1_e91cccf2",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "I now update it (with 0, nullptr) in the if branch also",
+      "parentUuid": "4fbacd06_a8d97393",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "782ef74c_1c6ef642",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 8
@@ -566,6 +1124,24 @@
     },
     {
       "key": {
+        "uuid": "59575d9e_89537dfe",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "correct, I removed it",
+      "parentUuid": "782ef74c_1c6ef642",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "716a2305_0f2c026d",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 8
@@ -580,6 +1156,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce72a3e3_d5a6fb4c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Good point, I swapped them.",
+      "parentUuid": "716a2305_0f2c026d",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -606,6 +1200,30 @@
     },
     {
       "key": {
+        "uuid": "b6f0d22d_37e95d0a",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dfee899_2f1245cc",
+      "range": {
+        "startLine": 296,
+        "startChar": 67,
+        "endLine": 296,
+        "endChar": 72
+      },
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "301516a2_524cbe64",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 8
@@ -620,6 +1238,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8147eee9_3b23ccc1",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "301516a2_524cbe64",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -640,6 +1276,24 @@
     },
     {
       "key": {
+        "uuid": "5030d929_f09b5391",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "good point, removed :)",
+      "parentUuid": "f4477fea_ba4330fc",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "271169ca_38b529ab",
         "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
         "patchSetId": 8
@@ -657,6 +1311,24 @@
     },
     {
       "key": {
+        "uuid": "1fa63431_396718c9",
+        "filename": "test/cctest/wasm/test-run-wasm-asmjs.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "uhm.. yes, so I removed from line 209 till the end of the file.",
+      "parentUuid": "271169ca_38b529ab",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0b8c0a8_0c8602eb",
         "filename": "test/cctest/wasm/wasm-run-utils.cc",
         "patchSetId": 8
@@ -671,6 +1343,24 @@
       "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3efeead1_5d494862",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1229013
+      },
+      "writtenOn": "2017-09-28T12:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0b8c0a8_0c8602eb",
+      "revId": "f902d5b9167b8c09801da014beecb0ea37c6b8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
