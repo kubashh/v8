@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b8038a8_7bb7361c",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-28T08:51:47Z",
+      "side": 1,
+      "message": "As discussed offline, will just mark invalid as BUILTIN as well, and update all builtins whether or not they were already valid.",
+      "parentUuid": "280a2933_8a1e8ac0",
+      "range": {
+        "startLine": 57,
+        "startChar": 65,
+        "endLine": 57,
+        "endChar": 77
+      },
+      "revId": "9d2e569005a6281249317b3e33c32d8722f5c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "149f4526_7a1783d5",
         "filename": "src/ic/handler-compiler.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "9d2e569005a6281249317b3e33c32d8722f5c642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2561ecf6_03a23a0a",
+        "filename": "src/ic/handler-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-09-28T08:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "149f4526_7a1783d5",
+      "range": {
+        "startLine": 20,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "9d2e569005a6281249317b3e33c32d8722f5c642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
