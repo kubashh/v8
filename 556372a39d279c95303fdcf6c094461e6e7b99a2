@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9f85fb0b_00d8dda0",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-28T04:43:22Z",
+      "side": 1,
+      "message": "Yes. Thanks. I reverted this part to debug something and forgot to put it back.",
+      "parentUuid": "c27d00fa_c5a87c52",
+      "range": {
+        "startLine": 1072,
+        "startChar": 2,
+        "endLine": 1084,
+        "endChar": 15
+      },
+      "revId": "556372a39d279c95303fdcf6c094461e6e7b99a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d4aedfc5_26ac33e6",
         "filename": "src/debug/liveedit.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-27T15:29:34Z",
       "side": 1,
       "message": "How is this different from the original code? The previous version reads better.",
+      "range": {
+        "startLine": 1087,
+        "startChar": 0,
+        "endLine": 1093,
+        "endChar": 16
+      },
+      "revId": "556372a39d279c95303fdcf6c094461e6e7b99a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bce6c866_55eb4ad7",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-09-28T04:43:22Z",
+      "side": 1,
+      "message": "I removed JSFunction::Inlines, since it is only used here.",
+      "parentUuid": "d4aedfc5_26ac33e6",
       "range": {
         "startLine": 1087,
         "startChar": 0,
