@@ -226,17 +226,14 @@ compiler::ModuleEnv CreateModuleEnvFromCompiledModule(
   std::vector<Handle<Code>> empty_code;
 
   compiler::ModuleEnv result = {
-      module,                                             // --
-      function_tables,                                    // --
-      signature_tables,                                   // --
-      signature_maps,                                     // --
-      empty_code,                                         // --
-      BUILTIN_CODE(isolate, WasmCompileLazy),             // --
-      reinterpret_cast<uintptr_t>(                        // --
-          compiled_module->GetEmbeddedMemStartOrNull()),  // --
-      compiled_module->GetEmbeddedMemSizeOrZero(),        // --
-      reinterpret_cast<uintptr_t>(                        // --
-          compiled_module->GetGlobalsStartOrNull())       // --
+      module,                                        // --
+      function_tables,                               // --
+      signature_tables,                              // --
+      signature_maps,                                // --
+      empty_code,                                    // --
+      BUILTIN_CODE(isolate, WasmCompileLazy),        // --
+      reinterpret_cast<uintptr_t>(                   // --
+          compiled_module->GetGlobalsStartOrNull())  // --
   };
   return result;
 }
