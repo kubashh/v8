@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e502469f_3593e79c",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-09-28T13:49:41Z",
+      "side": 1,
+      "message": "nit: remove this #ifdef, as it only contains DCHECKs anyways.",
+      "revId": "cba40d491fe338e0e41548a316084f192e7bc35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
