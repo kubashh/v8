@@ -398,11 +398,12 @@ Handle<Code> NamedStoreHandlerCompiler::CompileStoreCallback(
   __ TailCallRuntime(Runtime::kStoreCallbackProperty);
 
   // Return the generated code.
-  return GetCode(kind(), name);
+  return GetCode(name);
 }
+c
 
-
-Register NamedStoreHandlerCompiler::value() {
+    Register
+    NamedStoreHandlerCompiler::value() {
   return StoreDescriptor::ValueRegister();
 }
 
