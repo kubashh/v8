@@ -153,17 +153,9 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
   {
     // For holey JSArrays we need to check that the array prototype chain
     // protector is intact and our prototype is the Array.prototype actually.
-    Node* arguments_list_prototype = LoadMapPrototype(arguments_list_map);
-    Node* initial_array_prototype = LoadContextElement(
-        native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
-    GotoIfNot(WordEqual(arguments_list_prototype, initial_array_prototype),
+    GotoIfNot(IsPrototypeOriginalArrayConstructor(context, arguments_list_map),
               &if_runtime);
-    Node* protector_cell = LoadRoot(Heap::kArrayProtectorRootIndex);
-    DCHECK(isolate()->heap()->array_protector()->IsPropertyCell());
-    Branch(
-        WordEqual(LoadObjectField(protector_cell, PropertyCell::kValueOffset),
-                  SmiConstant(Isolate::kProtectorValid)),
-        &if_done, &if_runtime);
+    Branch(IsArrayProtectorCellInvalid(), &if_runtime, &if_done);
   }
 
   BIND(&if_arguments);
@@ -230,47 +222,26 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
 void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
     Node* target, Node* new_target, Node* elements, Node* length,
     Node* args_count, Node* context, Node* kind) {
-  Label if_holey_double(this), if_packed_double(this), if_done(this);
-
-  const ElementsKind new_kind = PACKED_ELEMENTS;
-  const ParameterMode mode = INTPTR_PARAMETERS;
-  const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
   Node* intptr_length = ChangeInt32ToIntPtr(length);
 
   // Allocate a new FixedArray of Objects.
+  const ElementsKind new_kind = PACKED_ELEMENTS;
+  const ParameterMode mode = INTPTR_PARAMETERS;
+  const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
   Node* new_elements =
       AllocateFixedArray(new_kind, intptr_length, mode,
                          CodeStubAssembler::kAllowLargeObjectAllocation);
-  Branch(Word32Equal(kind, Int32Constant(HOLEY_DOUBLE_ELEMENTS)),
-         &if_holey_double, &if_packed_double);
+  CopyFixedArrayElements(PACKED_DOUBLE_ELEMENTS, elements, new_kind,
+                         new_elements, intptr_length, intptr_length,
+                         barrier_mode);
 
-  BIND(&if_holey_double);
-  {
-    // Fill the FixedArray with pointers to HeapObjects.
-    CopyFixedArrayElements(HOLEY_DOUBLE_ELEMENTS, elements, new_kind,
-                           new_elements, intptr_length, intptr_length,
-                           barrier_mode);
-    Goto(&if_done);
-  }
-
-  BIND(&if_packed_double);
-  {
-    CopyFixedArrayElements(PACKED_DOUBLE_ELEMENTS, elements, new_kind,
-                           new_elements, intptr_length, intptr_length,
-                           barrier_mode);
-    Goto(&if_done);
-  }
-
-  BIND(&if_done);
-  {
-    if (new_target == nullptr) {
-      Callable callable = CodeFactory::CallVarargs(isolate());
-      TailCallStub(callable, context, target, args_count, new_elements, length);
-    } else {
-      Callable callable = CodeFactory::ConstructVarargs(isolate());
-      TailCallStub(callable, context, target, new_target, args_count,
-                   new_elements, length);
-    }
+  if (new_target == nullptr) {
+    Callable callable = CodeFactory::CallVarargs(isolate());
+    TailCallStub(callable, context, target, args_count, new_elements, length);
+  } else {
+    Callable callable = CodeFactory::ConstructVarargs(isolate());
+    TailCallStub(callable, context, target, new_target, args_count,
+                 new_elements, length);
   }
 }
 
@@ -285,13 +256,9 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
   Node* spread_map = LoadMap(spread);
   GotoIfNot(IsJSArrayMap(spread_map), &if_runtime);
 
-  Node* native_context = LoadNativeContext(context);
-
   // Check that we have the original ArrayPrototype.
-  Node* prototype = LoadMapPrototype(spread_map);
-  Node* array_prototype = LoadContextElement(
-      native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);
-  GotoIfNot(WordEqual(prototype, array_prototype), &if_runtime);
+  GotoIfNot(IsPrototypeOriginalArrayConstructor(context, spread_map),
+            &if_runtime);
 
   // Check that the ArrayPrototype hasn't been modified in a way that would
   // affect iteration.
@@ -303,6 +270,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
       &if_runtime);
 
   // Check that the map of the initial array iterator hasn't changed.
+  Node* native_context = LoadNativeContext(context);
   Node* arr_it_proto_map = LoadMap(LoadContextElement(
       native_context, Context::INITIAL_ARRAY_ITERATOR_PROTOTYPE_INDEX));
   Node* initial_map = LoadContextElement(
