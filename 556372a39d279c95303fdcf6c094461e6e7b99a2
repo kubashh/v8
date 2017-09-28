@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a5d15ad0_746f1f23",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-28T12:10:34Z",
+      "side": 1,
+      "message": "question: Is it possible to remove this GC now that the heap is no longer being iterated? Or is there some other reason the heap needs to be iterable?",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 74
+      },
+      "revId": "556372a39d279c95303fdcf6c094461e6e7b99a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c27d00fa_c5a87c52",
         "filename": "src/debug/debug.cc",
         "patchSetId": 1
