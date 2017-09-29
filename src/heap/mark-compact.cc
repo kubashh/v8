@@ -984,9 +984,6 @@ void MarkCompactCollector::Prepare() {
   // them here.
   heap()->memory_allocator()->unmapper()->WaitUntilCompleted();
 
-  heap()->concurrent_marking()->EnsureCompleted();
-  heap()->concurrent_marking()->FlushLiveBytes(non_atomic_marking_state());
-
 #ifdef VERIFY_HEAP
   heap()->old_space()->VerifyLiveBytes();
   heap()->map_space()->VerifyLiveBytes();
@@ -1029,6 +1026,10 @@ void MarkCompactCollector::Prepare() {
     VerifyMarkbitsAreClean();
   }
 #endif
+
+  if (FLAG_concurrent_marking) {
+    heap_->concurrent_marking()->RescheduleTasksIfNeeded();
+  }
 }
 
 
@@ -1171,7 +1172,6 @@ class MarkCompactCollector::RootMarkingVisitor final : public RootVisitor {
     if (!(*p)->IsHeapObject()) return;
 
     collector_->MarkRootObject(root, HeapObject::cast(*p));
-    collector_->EmptyMarkingWorklist();
   }
 
   MarkCompactCollector* const collector_;
@@ -1824,8 +1824,8 @@ void MarkCompactCollector::EmptyMarkingWorklist() {
     DCHECK(!object->IsFiller());
     DCHECK(object->IsHeapObject());
     DCHECK(heap()->Contains(object));
-    DCHECK(!(non_atomic_marking_state()->IsWhite(object)));
-
+    DCHECK(!(atomic_marking_state()->IsWhite(object)));
+    atomic_marking_state()->GreyToBlack(object);
     Map* map = object->map();
     MarkObject(object, map);
     visitor.Visit(map, object);
@@ -2544,6 +2544,7 @@ void MarkCompactCollector::MarkLiveObjects() {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_ROOTS);
     CustomRootBodyMarkingVisitor custom_root_body_visitor(this);
     MarkRoots(&root_visitor, &custom_root_body_visitor);
+    EmptyMarkingWorklist();
   }
 
   {
@@ -2595,6 +2596,10 @@ void MarkCompactCollector::MarkLiveObjects() {
       }
     }
   }
+
+  // Finalize concurrent marking.
+  heap()->concurrent_marking()->EnsureCompleted();
+  heap()->concurrent_marking()->FlushLiveBytes(non_atomic_marking_state());
 }
 
 
