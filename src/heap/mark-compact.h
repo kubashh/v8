@@ -474,6 +474,7 @@ struct WeakObjects {
 // Collector for young and old generation.
 class MarkCompactCollector final : public MarkCompactCollectorBase {
  public:
+  using AtomicMarkingState = MajorAtomicMarkingState;
   using NonAtomicMarkingState = MajorNonAtomicMarkingState;
 
   static const int kMainThread = 0;
@@ -655,6 +656,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
     kClearMarkbits,
   };
 
+  AtomicMarkingState* atomic_marking_state() { return &atomic_marking_state_; }
+
   NonAtomicMarkingState* non_atomic_marking_state() {
     return &non_atomic_marking_state_;
   }
@@ -671,6 +674,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // Prepares for GC by resetting relocation info in old and map spaces and
   // choosing spaces to compact.
   void Prepare();
+
+  void FinishMarking();
 
   bool StartCompaction();
 
@@ -908,6 +913,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   Sweeper sweeper_;
 
+  AtomicMarkingState atomic_marking_state_;
   NonAtomicMarkingState non_atomic_marking_state_;
 
   friend class FullEvacuator;
