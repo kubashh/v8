@@ -1384,6 +1384,8 @@
         'strtod.h',
         'ic/stub-cache.cc',
         'ic/stub-cache.h',
+        'tracing/memory-tracing.cc',
+        'tracing/memory-tracing.h',
         'tracing/trace-event.cc',
         'tracing/trace-event.h',
         'tracing/traced-value.cc',

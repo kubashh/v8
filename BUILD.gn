@@ -2002,6 +2002,8 @@ v8_source_set("v8_base") {
     "src/string-stream.h",
     "src/strtod.cc",
     "src/strtod.h",
+    "src/tracing/memory-tracing.cc",
+    "src/tracing/memory-tracing.h",
     "src/tracing/trace-event.cc",
     "src/tracing/trace-event.h",
     "src/tracing/traced-value.cc",
