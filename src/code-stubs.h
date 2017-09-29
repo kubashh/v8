@@ -190,11 +190,6 @@ class CodeStub : public ZoneObject {
   virtual Major MajorKey() const = 0;
   uint32_t MinorKey() const { return minor_key_; }
 
-  // BinaryOpStub needs to override this.
-  virtual Code::Kind GetCodeKind() const;
-
-  Code::Flags GetCodeFlags() const;
-
   friend std::ostream& operator<<(std::ostream& os, const CodeStub& s) {
     s.PrintName(os);
     return os;
@@ -243,19 +238,6 @@ class CodeStub : public ZoneObject {
   // Activate newly generated stub. Is called after
   // registering stub in the stub cache.
   virtual void Activate(Code* code) { }
-
-  // Add the code to a specialized cache, specific to an individual
-  // stub type. Please note, this method must add the code object to a
-  // roots object, otherwise we will remove the code during GC.
-  virtual void AddToSpecialCache(Handle<Code> new_object) { }
-
-  // Find code in a specialized cache, work is delegated to the specific stub.
-  virtual bool FindCodeInSpecialCache(Code** code_out) {
-    return false;
-  }
-
-  // If a stub uses a special cache override this.
-  virtual bool UseSpecialCache() { return false; }
 
   // We use this dispatch to statically instantiate the correct code stub for
   // the given stub key and call the passed function with that code stub.
@@ -485,8 +467,6 @@ class StringLengthStub : public TurboFanCodeStub {
  public:
   explicit StringLengthStub(Isolate* isolate) : TurboFanCodeStub(isolate) {}
 
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
-
   DEFINE_CALL_INTERFACE_DESCRIPTOR(LoadWithVector);
   DEFINE_TURBOFAN_CODE_STUB(StringLength, TurboFanCodeStub);
 };
@@ -494,8 +474,6 @@ class StringLengthStub : public TurboFanCodeStub {
 class StoreInterceptorStub : public TurboFanCodeStub {
  public:
   explicit StoreInterceptorStub(Isolate* isolate) : TurboFanCodeStub(isolate) {}
-
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
 
   DEFINE_CALL_INTERFACE_DESCRIPTOR(StoreWithVector);
   DEFINE_TURBOFAN_CODE_STUB(StoreInterceptor, TurboFanCodeStub);
@@ -536,8 +514,6 @@ class LoadIndexedInterceptorStub : public TurboFanCodeStub {
  public:
   explicit LoadIndexedInterceptorStub(Isolate* isolate)
       : TurboFanCodeStub(isolate) {}
-
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
 
   DEFINE_CALL_INTERFACE_DESCRIPTOR(LoadWithVector);
   DEFINE_TURBOFAN_CODE_STUB(LoadIndexedInterceptor, TurboFanCodeStub);
@@ -646,8 +622,6 @@ class KeyedLoadSloppyArgumentsStub : public TurboFanCodeStub {
   explicit KeyedLoadSloppyArgumentsStub(Isolate* isolate)
       : TurboFanCodeStub(isolate) {}
 
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
-
  protected:
   DEFINE_CALL_INTERFACE_DESCRIPTOR(LoadWithVector);
   DEFINE_TURBOFAN_CODE_STUB(KeyedLoadSloppyArguments, TurboFanCodeStub);
@@ -663,8 +637,6 @@ class KeyedStoreSloppyArgumentsStub : public TurboFanCodeStub {
       : TurboFanCodeStub(isolate) {
     minor_key_ = CommonStoreModeBits::encode(mode);
   }
-
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
 
  protected:
   DEFINE_CALL_INTERFACE_DESCRIPTOR(StoreWithVector);
@@ -882,8 +854,6 @@ class ScriptContextFieldStub : public TurboFanCodeStub {
                  SlotIndexBits::encode(lookup_result->slot_index);
   }
 
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
-
   int context_index() const { return ContextIndexBits::decode(minor_key_); }
 
   int slot_index() const { return SlotIndexBits::decode(minor_key_); }
@@ -948,8 +918,6 @@ class StoreFastElementStub : public TurboFanCodeStub {
   KeyedAccessStoreMode store_mode() const {
     return CommonStoreModeBits::decode(minor_key_);
   }
-
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
 
  private:
   class ElementsKindBits
@@ -1091,8 +1059,6 @@ class StoreSlowElementStub : public TurboFanCodeStub {
     minor_key_ = CommonStoreModeBits::encode(mode);
   }
 
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
-
  private:
   DEFINE_CALL_INTERFACE_DESCRIPTOR(StoreWithVector);
   DEFINE_TURBOFAN_CODE_STUB(StoreSlowElement, TurboFanCodeStub);
@@ -1115,8 +1081,6 @@ class ElementsTransitionAndStoreStub : public TurboFanCodeStub {
   KeyedAccessStoreMode store_mode() const {
     return CommonStoreModeBits::decode(minor_key_);
   }
-
-  Code::Kind GetCodeKind() const override { return Code::HANDLER; }
 
  private:
   class FromBits
