@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6a5eaaa_9bcccf70",
+        "filename": "test/debugger/debug/debug-break-microtask.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-09-29T07:45:21Z",
+      "side": 1,
+      "message": "Nit: Funny indentation, how about using arrow fns?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 10
+      },
+      "revId": "10b891023af09a9fc575353b2443f9b23c905cbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
