@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4ed7a9a_a92e8514",
+        "filename": "AUTHORS",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-09-29T09:40:58Z",
+      "side": 1,
+      "message": "Can you move this up a couple of lines so that the list stays alphabetical?",
+      "range": {
+        "startLine": 138,
+        "startChar": 5,
+        "endLine": 138,
+        "endChar": 9
+      },
+      "revId": "3ae73e5e4e3fc5f649421673d1bed53600899608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
