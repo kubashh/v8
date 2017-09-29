@@ -351,14 +351,6 @@ TF_STUB(AllocateHeapNumberStub, CodeStubAssembler) {
   Return(result);
 }
 
-// TODO(ishell): move to builtins-handler-gen.
-TF_STUB(StringLengthStub, CodeStubAssembler) {
-  Node* value = Parameter(Descriptor::kReceiver);
-  Node* string = LoadJSValueValue(value);
-  Node* result = LoadStringLength(string);
-  Return(result);
-}
-
 TF_STUB(TransitionElementsKindStub, CodeStubAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* object = Parameter(Descriptor::kObject);
