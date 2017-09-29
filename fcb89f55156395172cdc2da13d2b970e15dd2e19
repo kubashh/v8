@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a6f031e_9e3f320a",
+        "filename": "src/unicode.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-09-29T19:02:50Z",
+      "side": 1,
+      "message": "This comment uses capital letter O instead of `0` for some reason",
+      "revId": "fcb89f55156395172cdc2da13d2b970e15dd2e19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
