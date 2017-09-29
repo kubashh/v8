@@ -930,7 +930,6 @@ void IncrementalMarking::Stop() {
   if (IsMarking()) {
     PatchIncrementalMarkingRecordWriteStubs(heap_,
                                             RecordWriteStub::STORE_BUFFER_ONLY);
-    DeactivateIncrementalWriteBarrier();
   }
   heap_->isolate()->stack_guard()->ClearGC();
   SetState(STOPPED);

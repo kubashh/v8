@@ -292,6 +292,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     marking_worklist_ = marking_worklist;
   }
 
+  void DeactivateIncrementalWriteBarrier();
+
  private:
   class Observer : public AllocationObserver {
    public:
@@ -324,7 +326,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
 
   static void DeactivateIncrementalWriteBarrierForSpace(PagedSpace* space);
   static void DeactivateIncrementalWriteBarrierForSpace(NewSpace* space);
-  void DeactivateIncrementalWriteBarrier();
 
   static void SetOldSpacePageFlags(MemoryChunk* chunk, bool is_marking,
                                    bool is_compacting);
