@@ -175,10 +175,16 @@ MODES = {
   },
 }
 
-GC_STRESS_FLAGS = ["--gc-interval=500", "--stress-compaction",
-                   "--concurrent-recompilation-queue-length=64",
-                   "--concurrent-recompilation-delay=500",
+GC_INTERVALL = random.choice(xrange(300, 700))
+QUEUE_LENGTH = random.choice(xrange(32, 127))
+C_DELAY = random.choice(xrange(200, 900))
+
+GC_STRESS_FLAGS = ["--gc-interval=%d" % GC_INTERVALL, "--stress-compaction",
+                   "--concurrent-recompilation-queue-length=%d" % QUEUE_LENGTH,
+                   "--concurrent-recompilation-delay=%d" % C_DELAY,
                    "--concurrent-recompilation"]
+
+print 'Using GC flags %s' % GC_STRESS_FLAGS
 
 SUPPORTED_ARCHS = ["android_arm",
                    "android_arm64",
@@ -871,12 +877,21 @@ def Execute(arch, mode, args, options, suites):
       # Duplicate test for random seed stress mode.
       def iter_seed_flags():
         for i in range(0, options.random_seed_stress_count):
+          _GC_INTERVALL = random.choice(xrange(300, 700))
+          _QUEUE_LENGTH = random.choice(xrange(32, 127))
+          _C_DELAY = random.choice(xrange(200, 900))
+
+          GC_STRESS_FLAGS = [
+                   "--gc-interval=%d" % _GC_INTERVALL, "--stress-compaction",
+                   "--concurrent-recompilation-queue-length=%d" % _QUEUE_LENGTH,
+                   "--concurrent-recompilation-delay=%d" % _C_DELAY,
+                   "--concurrent-recompilation"]
           # Use given random seed for all runs (set by default in execution.py)
           # or a new random seed if none is specified.
           if options.random_seed:
-            yield []
+            yield GC_STRESS_FLAGS
           else:
-            yield ["--random-seed=%d" % RandomSeed()]
+            yield ["--random-seed=%d" % RandomSeed()] + GC_STRESS_FLAGS
       s.tests = [
         t.CopyAddingFlags(t.variant, flags)
         for t in variant_tests
