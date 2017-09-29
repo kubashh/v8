@@ -3720,12 +3720,9 @@ class Code: public HeapObject {
 
   inline int relocation_size() const;
 
-  // [flags]: Various code flags.
-  inline Flags flags() const;
-  inline void set_flags(Flags flags);
-
   // [flags]: Access to specific code flags.
   inline Kind kind() const;
+  inline void set_kind(Kind kind);
 
   inline bool is_stub() const;
   inline bool is_optimized_code() const;
@@ -3819,11 +3816,6 @@ class Code: public HeapObject {
   // Clear uninitialized padding space. This ensures that the snapshot content
   // is deterministic.
   inline void clear_padding();
-
-  // Flags operations.
-  static inline Flags ComputeFlags(Kind kind);
-
-  static inline Kind ExtractKindFromFlags(Flags flags);
 
   // Convert a target address into a code object.
   static inline Code* GetCodeFromTargetAddress(Address address);
