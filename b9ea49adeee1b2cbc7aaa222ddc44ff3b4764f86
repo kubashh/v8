@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb779066_25e0a385",
+        "filename": "src/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-29T11:36:27Z",
+      "side": 1,
+      "message": "question: Aren\u0027t there bits in the \"flags\" field of the code object now that are not properly initialized? If that is the case then I have the feeling we need to explicitly clear them for the serializer, otherwise the snapshot is not deterministic. This is similar to the {clear_padding} we are doing further down in this function.",
+      "range": {
+        "startLine": 1793,
+        "startChar": 2,
+        "endLine": 1793,
+        "endChar": 22
+      },
+      "revId": "b9ea49adeee1b2cbc7aaa222ddc44ff3b4764f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87774792_76a413ee",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-29T11:36:27Z",
+      "side": 1,
+      "message": "nit: s/flags/kind/, also the description is out of date.",
+      "range": {
+        "startLine": 3723,
+        "startChar": 6,
+        "endLine": 3723,
+        "endChar": 11
+      },
+      "revId": "b9ea49adeee1b2cbc7aaa222ddc44ff3b4764f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e970161_fd8d1880",
+        "filename": "test/cctest/test-accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-29T11:36:27Z",
+      "side": 1,
+      "message": "nit: s/CreateCodeKind/CreateCodeWithKind/",
+      "range": {
+        "startLine": 109,
+        "startChar": 13,
+        "endLine": 109,
+        "endChar": 27
+      },
+      "revId": "b9ea49adeee1b2cbc7aaa222ddc44ff3b4764f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
