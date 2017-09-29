@@ -3692,7 +3692,15 @@ void Code::set_flags(Code::Flags flags) {
   WRITE_INT_FIELD(this, kFlagsOffset, flags);
 }
 
-Code::Kind Code::kind() const { return ExtractKindFromFlags(flags()); }
+Code::Kind Code::kind() const {
+  return KindField::decode(READ_UINT32_FIELD(this, kFlagsOffset));
+}
+
+void Code::set_kind(Kind kind) {
+  uint32_t previous = READ_UINT32_FIELD(this, kFlagsOffset);
+  uint32_t updated_value = KindField::update(previous, kind);
+  WRITE_UINT32_FIELD(this, kFlagsOffset, updated_value);
+}
 
 // For initialization.
 void Code::set_raw_kind_specific_flags1(int value) {
@@ -3905,17 +3913,6 @@ Address Code::constant_pool() {
   }
   return constant_pool;
 }
-
-Code::Flags Code::ComputeFlags(Kind kind) {
-  // Compute the bit mask.
-  unsigned int bits = KindField::encode(kind);
-  return static_cast<Flags>(bits);
-}
-
-Code::Kind Code::ExtractKindFromFlags(Flags flags) {
-  return KindField::decode(flags);
-}
-
 
 Code* Code::GetCodeFromTargetAddress(Address address) {
   HeapObject* code = HeapObject::FromAddress(address - Code::kHeaderSize);

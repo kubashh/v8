@@ -54,15 +54,14 @@ Handle<Code> BuildPlaceholder(Isolate* isolate) {
   }
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
-  const Code::Flags kBuiltinFlags = Code::ComputeFlags(Code::BUILTIN);
   Handle<Code> code =
-      isolate->factory()->NewCode(desc, kBuiltinFlags, masm.CodeObject());
+      isolate->factory()->NewCode(desc, Code::BUILTIN, masm.CodeObject());
   return scope.CloseAndEscape(code);
 }
 
 Code* BuildWithMacroAssembler(Isolate* isolate,
                               MacroAssemblerGenerator generator,
-                              Code::Flags flags, const char* s_name) {
+                              Code::Kind kind, const char* s_name) {
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
   // to code targets without dereferencing their handles.
@@ -75,13 +74,13 @@ Code* BuildWithMacroAssembler(Isolate* isolate,
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
   Handle<Code> code =
-      isolate->factory()->NewCode(desc, flags, masm.CodeObject());
+      isolate->factory()->NewCode(desc, kind, masm.CodeObject());
   PostBuildProfileAndTracing(isolate, *code, s_name);
   return *code;
 }
 
 Code* BuildAdaptor(Isolate* isolate, Address builtin_address,
-                   Builtins::ExitFrameType exit_frame_type, Code::Flags flags,
+                   Builtins::ExitFrameType exit_frame_type, Code::Kind kind,
                    const char* name) {
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
@@ -95,7 +94,7 @@ Code* BuildAdaptor(Isolate* isolate, Address builtin_address,
   CodeDesc desc;
   masm.GetCode(isolate, &desc);
   Handle<Code> code =
-      isolate->factory()->NewCode(desc, flags, masm.CodeObject());
+      isolate->factory()->NewCode(desc, kind, masm.CodeObject());
   PostBuildProfileAndTracing(isolate, *code, name);
   return *code;
 }
@@ -103,7 +102,7 @@ Code* BuildAdaptor(Isolate* isolate, Address builtin_address,
 // Builder for builtins implemented in TurboFan with JS linkage.
 Code* BuildWithCodeStubAssemblerJS(Isolate* isolate,
                                    CodeAssemblerGenerator generator, int argc,
-                                   Code::Flags flags, const char* name) {
+                                   Code::Kind kind, const char* name) {
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
   // to code targets without dereferencing their handles.
@@ -111,7 +110,7 @@ Code* BuildWithCodeStubAssemblerJS(Isolate* isolate,
   Zone zone(isolate->allocator(), ZONE_NAME);
   const int argc_with_recv =
       (argc == SharedFunctionInfo::kDontAdaptArgumentsSentinel) ? 0 : argc + 1;
-  compiler::CodeAssemblerState state(isolate, &zone, argc_with_recv, flags,
+  compiler::CodeAssemblerState state(isolate, &zone, argc_with_recv, kind,
                                      name);
   generator(&state);
   Handle<Code> code = compiler::CodeAssembler::GenerateCode(&state);
@@ -123,7 +122,7 @@ Code* BuildWithCodeStubAssemblerJS(Isolate* isolate,
 Code* BuildWithCodeStubAssemblerCS(Isolate* isolate,
                                    CodeAssemblerGenerator generator,
                                    CallDescriptors::Key interface_descriptor,
-                                   Code::Flags flags, const char* name,
+                                   Code::Kind kind, const char* name,
                                    int result_size) {
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
@@ -135,7 +134,7 @@ Code* BuildWithCodeStubAssemblerCS(Isolate* isolate,
   CallInterfaceDescriptor descriptor(isolate, interface_descriptor);
   // Ensure descriptor is already initialized.
   DCHECK_LE(0, descriptor.GetRegisterParameterCount());
-  compiler::CodeAssemblerState state(isolate, &zone, descriptor, flags, name,
+  compiler::CodeAssemblerState state(isolate, &zone, descriptor, kind, name,
                                      result_size);
   generator(&state);
   Handle<Code> code = compiler::CodeAssembler::GenerateCode(&state);
@@ -213,30 +212,29 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   HandleScope scope(isolate);
 
   int index = 0;
-  const Code::Flags kBuiltinFlags = Code::ComputeFlags(Code::BUILTIN);
   Code* code;
 #define BUILD_CPP(Name)                                              \
   code = BuildAdaptor(isolate, FUNCTION_ADDR(Builtin_##Name),        \
-                      Builtins::BUILTIN_EXIT, kBuiltinFlags, #Name); \
+                      Builtins::BUILTIN_EXIT, Code::BUILTIN, #Name); \
   AddBuiltin(builtins, index++, code);
 #define BUILD_API(Name)                                                       \
   code = BuildAdaptor(isolate, FUNCTION_ADDR(Builtin_##Name), Builtins::EXIT, \
-                      kBuiltinFlags, #Name);                                  \
+                      Code::BUILTIN, #Name);                                  \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFJ(Name, Argc, ...)                                         \
   code = BuildWithCodeStubAssemblerJS(isolate, &Builtins::Generate_##Name, \
-                                      Argc, kBuiltinFlags, #Name);         \
+                                      Argc, Code::BUILTIN, #Name);         \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFC(Name, InterfaceDescriptor, result_size)                   \
   { InterfaceDescriptor##Descriptor descriptor(isolate); }                  \
   code = BuildWithCodeStubAssemblerCS(isolate, &Builtins::Generate_##Name,  \
                                       CallDescriptors::InterfaceDescriptor, \
-                                      kBuiltinFlags, #Name, result_size);   \
+                                      Code::BUILTIN, #Name, result_size);   \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFS(Name, ...)                                                \
   /* Return size for generic TF builtins (stub linkage) is always 1. */     \
   code = BuildWithCodeStubAssemblerCS(isolate, &Builtins::Generate_##Name,  \
-                                      CallDescriptors::Name, kBuiltinFlags, \
+                                      CallDescriptors::Name, Code::BUILTIN, \
                                       #Name, 1);                            \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFH(Name, InterfaceDescriptor)                                \
@@ -244,11 +242,11 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   /* Return size for IC builtins/handlers is always 1. */                   \
   code = BuildWithCodeStubAssemblerCS(isolate, &Builtins::Generate_##Name,  \
                                       CallDescriptors::InterfaceDescriptor, \
-                                      kBuiltinFlags, #Name, 1);             \
+                                      Code::BUILTIN, #Name, 1);             \
   AddBuiltin(builtins, index++, code);
 #define BUILD_ASM(Name)                                              \
   code = BuildWithMacroAssembler(isolate, Builtins::Generate_##Name, \
-                                 kBuiltinFlags, #Name);              \
+                                 Code::BUILTIN, #Name);              \
   AddBuiltin(builtins, index++, code);
 
   BUILTIN_LIST(BUILD_CPP, BUILD_API, BUILD_TFJ, BUILD_TFC, BUILD_TFS, BUILD_TFH,
