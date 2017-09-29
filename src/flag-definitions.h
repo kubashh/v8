@@ -199,7 +199,6 @@ DEFINE_IMPLICATION(es_staging, harmony)
 // Features that are complete (but still behind --harmony/es-staging flag).
 #define HARMONY_STAGED_BASE(V)                                          \
   V(harmony_function_tostring, "harmony Function.prototype.toString")   \
-  V(harmony_regexp_named_captures, "harmony regexp named captures")     \
   V(harmony_regexp_property, "harmony Unicode regexp property classes") \
   V(harmony_restrict_constructor_return,                                \
     "harmony disallow non undefined primitive return value from class " \
@@ -229,7 +228,8 @@ DEFINE_IMPLICATION(es_staging, harmony)
   V(harmony_async_iteration, "harmony async iteration")                  \
   V(harmony_template_escapes,                                            \
     "harmony invalid escapes in tagged template literals")               \
-  V(harmony_promise_finally, "harmony Promise.prototype.finally")
+  V(harmony_promise_finally, "harmony Promise.prototype.finally")        \
+  V(harmony_regexp_named_captures, "harmony regexp named captures")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_SHIPPING(V) \
