@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18b7cdd1_d55f7dfd",
+        "filename": "src/objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-09-29T13:16:07Z",
+      "side": 1,
+      "message": "nit: Please elaborate in this comment why we do this (for posterity). We could even move it down close to {clear_padding} in line 3821 to make the connection clear. Also please capitalize the comment.",
+      "range": {
+        "startLine": 3723,
+        "startChar": 5,
+        "endLine": 3723,
+        "endChar": 32
+      },
+      "revId": "f80737494bac42717fbcbca5930dfc60802b93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
