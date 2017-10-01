@@ -3835,9 +3835,9 @@ class UpdatingItem : public ItemParallelJob::Item {
   virtual void Process() = 0;
 };
 
-class PointersUpatingTask : public ItemParallelJob::Task {
+class PointersUpdatingTask : public ItemParallelJob::Task {
  public:
-  explicit PointersUpatingTask(Isolate* isolate)
+  explicit PointersUpdatingTask(Isolate* isolate)
       : ItemParallelJob::Task(isolate) {}
 
   void RunInParallel() override {
@@ -4182,7 +4182,7 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
       &updating_job, RememberedSetUpdatingMode::ALL);
   const int num_tasks = Max(to_space_tasks, remembered_set_tasks);
   for (int i = 0; i < num_tasks; i++) {
-    updating_job.AddTask(new PointersUpatingTask(isolate()));
+    updating_job.AddTask(new PointersUpdatingTask(isolate()));
   }
 
   {
@@ -4225,7 +4225,7 @@ void MinorMarkCompactCollector::UpdatePointersAfterEvacuation() {
       &updating_job, RememberedSetUpdatingMode::OLD_TO_NEW_ONLY);
   const int num_tasks = Max(to_space_tasks, remembered_set_tasks);
   for (int i = 0; i < num_tasks; i++) {
-    updating_job.AddTask(new PointersUpatingTask(isolate()));
+    updating_job.AddTask(new PointersUpdatingTask(isolate()));
   }
 
   {
