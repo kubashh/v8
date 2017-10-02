@@ -22,6 +22,30 @@
       "revId": "329f694678a51db8328d53c42087c8a210cc5c2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39bbda2e_5f99f37e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T09:25:58Z",
+      "side": 0,
+      "message": "I am not sure about this one. I see that not processing the marking work list here will leave us with a list in size of the roots, which can be bad.\n\nAlso, FLAG_concurrent_marking is on per default, so that would be default behavior.\n\nMaybe we need to check the global pool here for scheduling concurrent tasks and process the marking work list otherwise?",
+      "parentUuid": "eda09e87_68c408a9",
+      "range": {
+        "startLine": 1174,
+        "startChar": 16,
+        "endLine": 1174,
+        "endChar": 37
+      },
+      "revId": "329f694678a51db8328d53c42087c8a210cc5c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

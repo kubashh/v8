@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1d613bcd_c89f5a37",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T09:25:58Z",
+      "side": 1,
+      "message": "Done. Create a Deactivate() method that is now used from MC.",
+      "parentUuid": "18de1d24_01e4db5e",
+      "range": {
+        "startLine": 931,
+        "startChar": 4,
+        "endLine": 931,
+        "endChar": 43
+      },
+      "revId": "4d2831bb80d8a9a3f2c61d683b1c8c62e2f2b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5e54cfe_5db879ef",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "4d2831bb80d8a9a3f2c61d683b1c8c62e2f2b2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a737ddd_65794f95",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T09:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5e54cfe_5db879ef",
+      "range": {
+        "startLine": 1836,
+        "startChar": 1,
+        "endLine": 1836,
+        "endChar": 40
+      },
+      "revId": "4d2831bb80d8a9a3f2c61d683b1c8c62e2f2b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6c8208c1_4eac4406",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T09:25:58Z",
+      "side": 1,
+      "message": "Done. We only process concurrently until weak handling. We can always improve this later on.",
+      "parentUuid": "afb1c7bf_77591420",
+      "range": {
+        "startLine": 1841,
+        "startChar": 27,
+        "endLine": 1841,
+        "endChar": 50
+      },
+      "revId": "4d2831bb80d8a9a3f2c61d683b1c8c62e2f2b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9380841_b2223457",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2017-09-29T16:48:27Z",
       "side": 1,
       "message": "Shouldn\u0027t this be guarded by !FLAG_concurrent_marking?",
+      "range": {
+        "startLine": 2550,
+        "startChar": 4,
+        "endLine": 2550,
+        "endChar": 24
+      },
+      "revId": "4d2831bb80d8a9a3f2c61d683b1c8c62e2f2b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4116785e_b0caef1b",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T09:25:58Z",
+      "side": 1,
+      "message": "Reworked this section to have a main marking section. Calling the processing function is cheap if we don\u0027t have any objects so I\u0027d rather leave the call unconditionally there.",
+      "parentUuid": "f9380841_b2223457",
       "range": {
         "startLine": 2550,
         "startChar": 4,
