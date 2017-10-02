@@ -655,6 +655,9 @@ class ManualGCScope {
 class TestPlatform : public v8::Platform {
  public:
   // v8::Platform implementation.
+  void* GetRandomMmapAddr() override {
+    return old_platform_->GetRandomMmapAddr();
+  }
   void OnCriticalMemoryPressure() override {
     old_platform_->OnCriticalMemoryPressure();
   }
