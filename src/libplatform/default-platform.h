@@ -48,6 +48,7 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   void SetTracingController(v8::TracingController* tracing_controller);
 
   // v8::Platform implementation.
+  void* GetRandomMmapAddr() override;
   size_t NumberOfAvailableBackgroundThreads() override;
   void CallOnBackgroundThread(Task* task,
                               ExpectedRuntime expected_runtime) override;
