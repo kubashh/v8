@@ -22,6 +22,30 @@
       "revId": "631489bd3913c24b7d2a47496d6d9866ea453dbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7259b4e_383dc897",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-10-02T22:27:29Z",
+      "side": 0,
+      "message": "Yes, JSArrayBuffer::FreeBackingStore uses the allocation_length instead.\n\nhttps://cs.chromium.org/chromium/src/v8/src/objects.cc?q\u003dArrayBuffer::Free\u0026sq\u003dpackage:chromium\u0026l\u003d18720",
+      "parentUuid": "e0eeb877_c1e002c9",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 43
+      },
+      "revId": "631489bd3913c24b7d2a47496d6d9866ea453dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
