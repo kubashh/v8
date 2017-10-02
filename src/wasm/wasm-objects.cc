@@ -334,7 +334,15 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
     reinterpret_cast<v8::Isolate*>(isolate)
         ->AdjustAmountOfExternalAllocatedMemory(pages * WasmModule::kPageSize);
     Handle<Object> length_obj = isolate->factory()->NewNumberFromSize(new_size);
+    // Unregister and re-register the buffer so that ArrayBufferTracker's
+    // internal accounting stays up to date.
+    if (!old_buffer->is_external()) {
+      isolate->heap()->UnregisterArrayBuffer(*old_buffer);
+    }
     old_buffer->set_byte_length(*length_obj);
+    if (!old_buffer->is_external()) {
+      isolate->heap()->RegisterNewArrayBuffer(*old_buffer);
+    }
     return old_buffer;
   } else {
     Handle<JSArrayBuffer> new_buffer;
