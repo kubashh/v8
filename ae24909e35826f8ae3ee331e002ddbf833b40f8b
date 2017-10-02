@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7918b9d2_52974e0a",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5688,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-02T20:31:20Z",
+      "side": 1,
+      "message": "nit: \"target\"",
+      "range": {
+        "startLine": 5688,
+        "startChar": 55,
+        "endLine": 5688,
+        "endChar": 61
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63496d02_9aaeb154",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-02T20:31:20Z",
+      "side": 1,
+      "message": "Why does GetName need this check, but GetLength below does not?",
+      "range": {
+        "startLine": 5696,
+        "startChar": 2,
+        "endLine": 5696,
+        "endChar": 56
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c95d21b_84c81189",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5703,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-02T20:31:20Z",
+      "side": 1,
+      "message": "nit: \"omit\"",
+      "range": {
+        "startLine": 5703,
+        "startChar": 15,
+        "endLine": 5703,
+        "endChar": 20
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60ecf0e2_352be16f",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5715,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-02T20:31:20Z",
+      "side": 1,
+      "message": "I don\u0027t see how this avoids overflow. On 64-bit, Smi::kMaxValue \u003d\u003d kMaxInt, so even if this check passes, adding even just 1 below could overflow. I think you want something like:\n\n  int length \u003d function-\u003ebound_arguments()-\u003elength();\n  if (V8_LIKELY(Smi::kMaxValue - nof_bound_arguments \u003e length)) {\n    nof_bound_arguments +\u003d length;\n  } else {\n    // Any error-handling code? Maybe \"nof_bound_arguments \u003d Smi::kMaxValue\"?\n  }",
+      "range": {
+        "startLine": 5715,
+        "startChar": 18,
+        "endLine": 5715,
+        "endChar": 54
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
