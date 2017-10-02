@@ -742,27 +742,32 @@ void V8Debugger::asyncTaskCreatedForStack(void* task, void* parentTask) {
 
 void V8Debugger::asyncTaskScheduled(const StringView& taskName, void* task,
                                     bool recurring) {
+  if (!task) return;
   asyncTaskScheduledForStack(toString16(taskName), task, recurring);
   asyncTaskCandidateForStepping(task);
 }
 
 void V8Debugger::asyncTaskCanceled(void* task) {
+  if (!task) return;
   asyncTaskCanceledForStack(task);
   asyncTaskCanceledForStepping(task);
 }
 
 void V8Debugger::asyncTaskStarted(void* task) {
+  if (!task) return;
   asyncTaskStartedForStack(task);
   asyncTaskStartedForStepping(task);
 }
 
 void V8Debugger::asyncTaskFinished(void* task) {
+  if (!task) return;
   asyncTaskFinishedForStack(task);
   asyncTaskFinishedForStepping(task);
 }
 
 void V8Debugger::asyncTaskScheduledForStack(const String16& taskName,
                                             void* task, bool recurring) {
+  if (!task) return;
   if (!m_maxAsyncCallStackDepth) return;
   v8::HandleScope scope(m_isolate);
   std::shared_ptr<AsyncStackTrace> asyncStack =

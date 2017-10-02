@@ -1,0 +1,13 @@
+Checks no break on asyncTaskStarted(0)
+Call asyncTaskStarted(0) and check no break after..
+Should be evaluation result (not a paused event):
+{
+    id : <messageId>
+    result : {
+        result : {
+            description : 0
+            type : number
+            value : 0
+        }
+    }
+}
