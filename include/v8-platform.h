@@ -133,6 +133,12 @@ class Platform {
   virtual ~Platform() = default;
 
   /**
+   * Returns a randomized address, suitable for a memory allocation with ASLR.
+   * The address will be aligned to the host OS page size.
+   */
+  virtual void* GetRandomMmapAddr() { return nullptr; }
+
+  /**
    * Enables the embedder to respond in cases where V8 can't allocate large
    * blocks of memory. V8 retries the failed allocation once after calling this
    * method. On success, execution continues; otherwise V8 exits with a fatal
