@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab4ec8a2_dc4cacb7",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2017-10-02T23:51:25Z",
+      "side": 1,
+      "message": "Can you clarify what the internal accounting that needs to stay up to date? Not sure if I\u0027m missing anything here, but the problem I see is that we AdjustAmountOfExternalAllocatedMemory for the difference in pages, Unregister adjusts for -old_length, register then adjusts for new_length (\u003d old_length + pages), so we adjust twice for the difference in pages. I think it would be more intuitive to have an interface to the tracker that adjusts the length (byte_length, and memory adjustment above) instead of registering/unregistering here.",
+      "range": {
+        "startLine": 338,
+        "startChar": 39,
+        "endLine": 338,
+        "endChar": 43
+      },
+      "revId": "fcf8c487804953b27aceea2f623dd74995dde36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
