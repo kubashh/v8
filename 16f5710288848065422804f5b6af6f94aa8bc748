@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5be50b5d_b506187e",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-10-02T21:30:26Z",
+      "side": 1,
+      "message": "Let\u0027s move these checks to V8InspectorImpl.",
+      "revId": "16f5710288848065422804f5b6af6f94aa8bc748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
