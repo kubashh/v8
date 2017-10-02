@@ -673,6 +673,9 @@ class InspectorExtension : public IsolateData::SetupGlobalTask {
         ToV8String(isolate, "markObjectAsNotInspectable"),
         v8::FunctionTemplate::New(
             isolate, &InspectorExtension::MarkObjectAsNotInspectable));
+    inspector->Set(ToV8String(isolate, "asyncTaskStarted"),
+                   v8::FunctionTemplate::New(
+                       isolate, &InspectorExtension::AsyncTaskStarted));
     global->Set(ToV8String(isolate, "inspector"), inspector);
   }
 
@@ -811,6 +814,18 @@ class InspectorExtension : public IsolateData::SetupGlobalTask {
         ->SetPrivate(isolate->GetCurrentContext(), notInspectablePrivate,
                      v8::True(isolate))
         .ToChecked();
+  }
+
+  static void AsyncTaskStarted(
+      const v8::FunctionCallbackInfo<v8::Value>& args) {
+    if (args.Length() != 1 || !args[0]->IsInt32()) {
+      fprintf(stderr, "Internal error: asyncTaskStarted(int32).");
+      Exit();
+    }
+    int async_id = args[0].As<v8::Int32>()->Value();
+    v8::Local<v8::Context> context = args.GetIsolate()->GetCurrentContext();
+    IsolateData* data = IsolateData::FromContext(context);
+    data->AsyncTaskStarted(reinterpret_cast<void*>(async_id));
   }
 };
 
