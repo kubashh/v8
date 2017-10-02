@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0eeb877_c1e002c9",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-02T20:54:41Z",
+      "side": 0,
+      "message": "How is the Free() going to work with array buffers that contain guard pages and are registered with the GC? Are we just free\u0027ing the whole reservation?",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 43
+      },
+      "revId": "631489bd3913c24b7d2a47496d6d9866ea453dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
