@@ -320,7 +320,9 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
   const bool enable_guard_regions = old_buffer.is_null()
                                         ? wasm::EnableGuardRegions()
                                         : old_buffer->has_guard_region();
-  size_t new_size =
+  const size_t size_increase =
+      static_cast<size_t>(pages) * WasmModule::kPageSize;
+  const size_t new_size =
       static_cast<size_t>(old_pages + pages) * WasmModule::kPageSize;
   if (enable_guard_regions && old_size != 0) {
     DCHECK_NOT_NULL(old_buffer->backing_store());
@@ -334,7 +336,13 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
     reinterpret_cast<v8::Isolate*>(isolate)
         ->AdjustAmountOfExternalAllocatedMemory(pages * WasmModule::kPageSize);
     Handle<Object> length_obj = isolate->factory()->NewNumberFromSize(new_size);
+    // Unregister and re-register the buffer so that ArrayBufferTracker's
+    // internal accounting stays up to date.
     old_buffer->set_byte_length(*length_obj);
+    if (!old_buffer->is_external()) {
+      isolate->heap()->TrackIncreasedArrayBufferSize(*old_buffer,
+                                                     size_increase);
+    }
     return old_buffer;
   } else {
     Handle<JSArrayBuffer> new_buffer;
