@@ -163,15 +163,72 @@ bool BigInt::Equal(BigInt* x, BigInt* y) {
 }
 
 Handle<BigInt> BigInt::BitwiseAnd(Handle<BigInt> x, Handle<BigInt> y) {
-  UNIMPLEMENTED();  // TODO(jkummerow): Implement.
+  Handle<BigInt> result;
+  if (!x->sign() && !y->sign()) {
+    result = AbsoluteAnd(x, y);
+  } else if (x->sign() && y->sign()) {
+    int result_length = Max(x->length(), y->length()) + 1;
+    // (-x) & (-y) == ~(x-1) & ~(y-1) == ~((x-1) | (y-1))
+    // == -(((x-1) | (y-1)) + 1)
+    result = AbsoluteSubOne(x, result_length);
+    result = AbsoluteOr(result, AbsoluteSubOne(y, y->length()), *result);
+    result = AbsoluteAddOne(result, true, *result);
+  } else {
+    DCHECK(x->sign() != y->sign());
+    // Assume that x is the positive BigInt.
+    if (x->sign()) std::swap(x, y);
+    // x & (-y) == x & ~(y-1) == x &~ (y-1)
+    result = AbsoluteAndNot(x, AbsoluteSubOne(y, y->length()));
+  }
+  result->RightTrim();
+  return result;
 }
 
 Handle<BigInt> BigInt::BitwiseXor(Handle<BigInt> x, Handle<BigInt> y) {
-  UNIMPLEMENTED();  // TODO(jkummerow): Implement.
+  Handle<BigInt> result;
+  if (!x->sign() && !y->sign()) {
+    result = AbsoluteXor(x, y);
+  } else if (x->sign() && y->sign()) {
+    int result_length = Max(x->length(), y->length());
+    // (-x) ^ (-y) == ~(x-1) ^ ~(y-1) == (x-1) ^ (y-1)
+    result = AbsoluteSubOne(x, result_length);
+    result = AbsoluteXor(result, AbsoluteSubOne(y, y->length()), *result);
+  } else {
+    DCHECK(x->sign() != y->sign());
+    int result_length = Max(x->length(), y->length()) + 1;
+    // Assume that x is the positive BigInt.
+    if (x->sign()) std::swap(x, y);
+    // x ^ (-y) == x ^ ~(y-1) == ~(x ^ (y-1)) == -((x ^ (y-1)) + 1)
+    result = AbsoluteSubOne(y, result_length);
+    result = AbsoluteXor(result, x, *result);
+    result = AbsoluteAddOne(result, true, *result);
+  }
+  result->RightTrim();
+  return result;
 }
 
 Handle<BigInt> BigInt::BitwiseOr(Handle<BigInt> x, Handle<BigInt> y) {
-  UNIMPLEMENTED();  // TODO(jkummerow): Implement.
+  Handle<BigInt> result;
+  int result_length = Max(x->length(), y->length());
+  if (!x->sign() && !y->sign()) {
+    result = AbsoluteOr(x, y);
+  } else if (x->sign() && y->sign()) {
+    // (-x) | (-y) == ~(x-1) | ~(y-1) == ~((x-1) & (y-1))
+    // == -(((x-1) & (y-1)) + 1)
+    result = AbsoluteSubOne(x, result_length);
+    result = AbsoluteAnd(result, AbsoluteSubOne(y, y->length()), *result);
+    result = AbsoluteAddOne(result, true, *result);
+  } else {
+    DCHECK(x->sign() != y->sign());
+    // Assume that x is the positive BigInt.
+    if (x->sign()) std::swap(x, y);
+    // x | (-y) == x | ~(y-1) == ~((y-1) &~ x) == -(((y-1) &~ x) + 1)
+    result = AbsoluteSubOne(y, result_length);
+    result = AbsoluteAndNot(result, x, *result);
+    result = AbsoluteAddOne(result, true, *result);
+  }
+  result->RightTrim();
+  return result;
 }
 
 MaybeHandle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
@@ -264,6 +321,165 @@ Handle<BigInt> BigInt::AbsoluteSub(Handle<BigInt> x, Handle<BigInt> y,
   return result;
 }
 
+// Adds 1 to the absolute value of {x} and sets the result's sign to {sign}.
+// {result_storage} is optional; if present, it will be used to store the
+// result, otherwise a new BigInt will be allocated for the result.
+// {result_storage} and {x} may refer to the same BigInt for in-place
+// modification.
+Handle<BigInt> BigInt::AbsoluteAddOne(Handle<BigInt> x, bool sign,
+                                      BigInt* result_storage) {
+  int input_length = x->length();
+  int result_length = input_length;
+  // Overflow cannot happen if there is any digit that's not at maximum.
+  bool can_overflow = true;
+  for (int i = 0; i < input_length; i++) {
+    if (!digit_ismax(x->digit(i))) {
+      can_overflow = false;
+      break;
+    }
+  }
+  if (can_overflow) result_length++;
+  Isolate* isolate = x->GetIsolate();
+  Handle<BigInt> result(result_storage, isolate);
+  DCHECK(*result == result_storage);
+  if (result_storage == nullptr) {
+    result = isolate->factory()->NewBigIntRaw(result_length);
+  } else {
+    DCHECK(result->length() >= result_length);
+  }
+  digit_t carry = 1;
+  for (int i = 0; i < input_length; i++) {
+    digit_t new_carry = 0;
+    result->set_digit(i, digit_add(x->digit(i), carry, &new_carry));
+    carry = new_carry;
+  }
+  if (result_length > input_length) {
+    result->set_digit(result_length - 1, carry);
+  } else {
+    DCHECK(carry == 0);
+  }
+  result->set_sign(sign);
+  return result;
+}
+
+// Subtracts 1 from the absolute value of {x}. {x} must not be zero.
+// Allocates a new BigInt of length {result_length} for the result;
+// {result_length} must be at least as large as {x->length()}.
+Handle<BigInt> BigInt::AbsoluteSubOne(Handle<BigInt> x, int result_length) {
+  DCHECK(!x->is_zero());
+  DCHECK(result_length >= x->length());
+  Handle<BigInt> result =
+      x->GetIsolate()->factory()->NewBigIntRaw(result_length);
+  int length = x->length();
+  digit_t borrow = 1;
+  for (int i = 0; i < length; i++) {
+    digit_t new_borrow = 0;
+    result->set_digit(i, digit_sub(x->digit(i), borrow, &new_borrow));
+    borrow = new_borrow;
+  }
+  DCHECK(borrow == 0);
+  for (int i = length; i < result_length; i++) {
+    result->set_digit(i, borrow);
+  }
+  return result;
+}
+
+// Helper for Absolute{And,AndNot,Or,Xor}.
+// Performs the given binary {op} on {op_length} digit pairs of {x} and {y},
+// then copies {x}'s digits up to index {copy_x_length} into the result.
+// Any result digits beyond {copy_x_length} will be zeroed out.
+// If {result_storage} is non-nullptr, it will be used for the result,
+// otherwise a new BigInt (of length {copy_x_length} will be allocated.
+// {result_storage} may alias {x} or {y} for in-place modification.
+// Example:
+//                                          <-- op_length -->
+//                             <------ copy_x_length ------->
+//                 <------- result_storage->length() ------->
+//              y:                   [ y3 ][ y2 ][ y1 ][ y0 ]
+//              x:       [ x5 ][ x4 ][ x3 ][ x2 ][ x1 ][ x0 ]
+//                                |     |     |     |     |
+//                                |     |   (op)  (op)  (op)
+//                                |     |     |     |     |
+//                                v     v     v     v     v
+// result_storage: [  0 ][  0 ][ x4 ][ x3 ][ r2 ][ r1 ][ r0 ]
+inline Handle<BigInt> BigInt::AbsoluteBitwiseOp(
+    Handle<BigInt> x, Handle<BigInt> y, BigInt* result_storage, int op_length,
+    int copy_x_length, std::function<digit_t(digit_t, digit_t)> op) {
+  DCHECK(y->length() >= op_length);
+  DCHECK(copy_x_length >= op_length);
+  DCHECK(x->length() >= copy_x_length);
+  DCHECK_IMPLIES(result_storage != nullptr,
+                 result_storage->length() >= copy_x_length);
+  Isolate* isolate = x->GetIsolate();
+  Handle<BigInt> result(result_storage, isolate);
+  int result_length = copy_x_length;
+  if (result_storage == nullptr) {
+    result = isolate->factory()->NewBigIntRaw(result_length);
+  } else {
+    result_length = result_storage->length();
+  }
+  for (int i = 0; i < op_length; i++) {
+    result->set_digit(i, op(x->digit(i), y->digit(i)));
+  }
+  for (int i = op_length; i < copy_x_length; i++) {
+    result->set_digit(i, x->digit(i));
+  }
+  for (int i = copy_x_length; i < result_length; i++) {
+    result->set_digit(i, 0);
+  }
+  return result;
+}
+
+// If {result_storage} is non-nullptr, it will be used for the result,
+// otherwise a new BigInt of appropriate length will be allocated.
+// {result_storage} may alias {x} or {y} for in-place modification.
+Handle<BigInt> BigInt::AbsoluteAnd(Handle<BigInt> x, Handle<BigInt> y,
+                                   BigInt* result_storage) {
+  int x_length = x->length();
+  int y_length = y->length();
+  int input_length = Min(x_length, y_length);
+  return AbsoluteBitwiseOp(x, y, result_storage, input_length, input_length,
+                           [](digit_t a, digit_t b) { return a & b; });
+}
+
+// If {result_storage} is non-nullptr, it will be used for the result,
+// otherwise a new BigInt of appropriate length will be allocated.
+// {result_storage} may alias {x} or {y} for in-place modification.
+Handle<BigInt> BigInt::AbsoluteAndNot(Handle<BigInt> x, Handle<BigInt> y,
+                                      BigInt* result_storage) {
+  int x_length = x->length();
+  int y_length = y->length();
+  int op_length = Min(x_length, y_length);
+  return AbsoluteBitwiseOp(x, y, result_storage, op_length, x_length,
+                           [](digit_t a, digit_t b) { return a & ~b; });
+}
+
+// If {result_storage} is non-nullptr, it will be used for the result,
+// otherwise a new BigInt of appropriate length will be allocated.
+// {result_storage} may alias {x} or {y} for in-place modification.
+Handle<BigInt> BigInt::AbsoluteOr(Handle<BigInt> x, Handle<BigInt> y,
+                                  BigInt* result_storage) {
+  int x_length = x->length();
+  int y_length = y->length();
+  if (x_length < y_length) return AbsoluteOr(y, x, result_storage);
+  return AbsoluteBitwiseOp(x, y, result_storage, y_length, x_length,
+                           [](digit_t a, digit_t b) { return a | b; });
+}
+
+// If {result_storage} is non-nullptr, it will be used for the result,
+// otherwise a new BigInt of appropriate length will be allocated.
+// {result_storage} may alias {x} or {y} for in-place modification.
+Handle<BigInt> BigInt::AbsoluteXor(Handle<BigInt> x, Handle<BigInt> y,
+                                   BigInt* result_storage) {
+  int x_length = x->length();
+  int y_length = y->length();
+  if (x_length < y_length) return AbsoluteXor(y, x, result_storage);
+  return AbsoluteBitwiseOp(x, y, result_storage, y_length, x_length,
+                           [](digit_t a, digit_t b) { return a ^ b; });
+}
+
+// Returns a positive value if abs(x) > abs(y), a negative value if
+// abs(x) < abs(y), or zero if abs(x) == abs(y).
 int BigInt::AbsoluteCompare(Handle<BigInt> x, Handle<BigInt> y) {
   int diff = x->length() - y->length();
   if (diff != 0) return diff;
