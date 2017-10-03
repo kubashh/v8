@@ -33,6 +33,9 @@ class ArrayBufferTracker : public AllStatic {
   // access to the tracker by taking the page lock for the corresponding page.
   inline static void RegisterNew(Heap* heap, JSArrayBuffer* buffer);
   inline static void Unregister(Heap* heap, JSArrayBuffer* buffer);
+  inline static void IncreaseArrayBufferSize(Heap* heap,
+                                             const JSArrayBuffer* buffer,
+                                             size_t delta);
 
   // Frees all backing store pointers for dead JSArrayBuffers in new space.
   // Does not take any locks and can only be called during Scavenge.
@@ -73,6 +76,7 @@ class LocalArrayBufferTracker {
 
   inline void Add(JSArrayBuffer* buffer, size_t length);
   inline void Remove(JSArrayBuffer* buffer, size_t length);
+  inline void IncreaseRetainedSize(size_t delta);
 
   // Frees up array buffers.
   //
