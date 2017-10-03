@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "356a2c41_df5b2728",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-03T23:16:27Z",
+      "side": 0,
+      "message": "Moved to .cc file for consistency with other function comments.",
+      "range": {
+        "startLine": 103,
+        "startChar": 2,
+        "endLine": 103,
+        "endChar": 69
+      },
+      "revId": "f701d99ba93d28ecbf8771ed818f371dc092e841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
