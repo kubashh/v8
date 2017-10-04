@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7523a5b0_e3525474",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-04T00:12:20Z",
+      "side": 1,
+      "message": "This argument seems over-general, which confused me on the first read through (especially since your example in the comment above uses a copy_x_length that no actual op would use).\n\nWhat about removing op_length and copy_x_length and instead passing in a bool (or an enum!) saying whether to copy the high digits of the longer input? That\u0027d also let you do all the length handling in here, making the callers one-liners.",
+      "range": {
+        "startLine": 407,
+        "startChar": 8,
+        "endLine": 407,
+        "endChar": 21
+      },
+      "revId": "a478efb1593c3c25acb7f01ac320a96c83225448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
