@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7420b3d1_43c68fba",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5688,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-04T09:02:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7918b9d2_52974e0a",
+      "range": {
+        "startLine": 5688,
+        "startChar": 55,
+        "endLine": 5688,
+        "endChar": 61
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63496d02_9aaeb154",
         "filename": "src/objects.cc",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-02T20:31:20Z",
       "side": 1,
       "message": "Why does GetName need this check, but GetLength below does not?",
+      "range": {
+        "startLine": 5696,
+        "startChar": 2,
+        "endLine": 5696,
+        "endChar": 56
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7840a31_375145c0",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-04T09:02:57Z",
+      "side": 1,
+      "message": "There is no direct API exposed to access the length on bound functions, while there is for the name. Actually this should just go through the usual path and do a full property lookup to deal with cached names / lengths.",
+      "parentUuid": "63496d02_9aaeb154",
       "range": {
         "startLine": 5696,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ee634ed1_7e364ebc",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5703,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-04T09:02:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c95d21b_84c81189",
+      "range": {
+        "startLine": 5703,
+        "startChar": 15,
+        "endLine": 5703,
+        "endChar": 20
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60ecf0e2_352be16f",
         "filename": "src/objects.cc",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f929f49_442ada0f",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5715,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-04T09:02:57Z",
+      "side": 1,
+      "message": "ugh, right..",
+      "parentUuid": "60ecf0e2_352be16f",
+      "range": {
+        "startLine": 5715,
+        "startChar": 18,
+        "endLine": 5715,
+        "endChar": 54
+      },
+      "revId": "ae24909e35826f8ae3ee331e002ddbf833b40f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
