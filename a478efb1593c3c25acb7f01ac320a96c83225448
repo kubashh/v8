@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3e8f00fc_50a1957e",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-04T01:09:22Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027ve made {result_storage} non-optional, given that all current callers pass it in anyway.",
+      "range": {
+        "startLine": 325,
+        "startChar": 3,
+        "endLine": 325,
+        "endChar": 31
+      },
+      "revId": "a478efb1593c3c25acb7f01ac320a96c83225448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7523a5b0_e3525474",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -22,6 +45,30 @@
       "revId": "a478efb1593c3c25acb7f01ac320a96c83225448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63431c4a_b417bf8d",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-04T01:09:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7523a5b0_e3525474",
+      "range": {
+        "startLine": 407,
+        "startChar": 8,
+        "endLine": 407,
+        "endChar": 21
+      },
+      "revId": "a478efb1593c3c25acb7f01ac320a96c83225448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
