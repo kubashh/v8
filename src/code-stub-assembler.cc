@@ -529,6 +529,44 @@ TNode<Smi> CodeStubAssembler::SmiMin(SloppyTNode<Smi> a, SloppyTNode<Smi> b) {
   return SelectTaggedConstant(SmiLessThan(a, b), a, b);
 }
 
+TNode<Object> CodeStubAssembler::NumberMax(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  // TODO(danno): This could be optimized by specifically handling smi cases
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal_a(this), greater_than_equal_b(this);
+  GotoIfNumberGreaterThanOrEqual(a, b, &greater_than_equal_a);
+  GotoIfNumberGreaterThanOrEqual(b, a, &greater_than_equal_b);
+  result.Bind(NanConstant());
+  Goto(&done);
+  BIND(&greater_than_equal_a);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&greater_than_equal_b);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
+TNode<Object> CodeStubAssembler::NumberMin(SloppyTNode<Object> a,
+                                           SloppyTNode<Object> b) {
+  // TODO(danno): This could be optimized by specifically handling smi cases
+  VARIABLE(result, MachineRepresentation::kTagged);
+  Label done(this), greater_than_equal_a(this), greater_than_equal_b(this);
+  GotoIfNumberGreaterThanOrEqual(a, b, &greater_than_equal_a);
+  GotoIfNumberGreaterThanOrEqual(b, a, &greater_than_equal_b);
+  result.Bind(NanConstant());
+  Goto(&done);
+  BIND(&greater_than_equal_a);
+  result.Bind(b);
+  Goto(&done);
+  BIND(&greater_than_equal_b);
+  result.Bind(a);
+  Goto(&done);
+  BIND(&done);
+  return TNode<Object>::UncheckedCast(result.value());
+}
+
 Node* CodeStubAssembler::SmiMod(Node* a, Node* b) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   Label return_result(this, &var_result),
@@ -788,28 +826,22 @@ void CodeStubAssembler::BranchIfJSObject(Node* object, Label* if_true,
          if_true, if_false);
 }
 
-void CodeStubAssembler::BranchIfFastJSArray(
-    Node* object, Node* context, CodeStubAssembler::FastJSArrayAccessMode mode,
-    Label* if_true, Label* if_false) {
+void CodeStubAssembler::BranchIfFastJSArray(Node* object, Node* context,
+                                            Label* if_true, Label* if_false) {
   // Bailout if receiver is a Smi.
   GotoIf(TaggedIsSmi(object), if_false);
 
   Node* map = LoadMap(object);
-
-  // Bailout if instance type is not JS_ARRAY_TYPE.
-  GotoIf(Word32NotEqual(LoadMapInstanceType(map), Int32Constant(JS_ARRAY_TYPE)),
-         if_false);
-
-  Node* elements_kind = LoadMapElementsKind(map);
+  GotoIfNot(IsJSArrayMap(map), if_false);
 
   // Bailout if receiver has slow elements.
+  Node* elements_kind = LoadMapElementsKind(map);
   GotoIfNot(IsFastElementsKind(elements_kind), if_false);
 
-  // Check prototype chain if receiver does not have packed elements.
-  if (mode == FastJSArrayAccessMode::INBOUNDS_READ) {
-    GotoIfNot(IsHoleyFastElementsKind(elements_kind), if_true);
-  }
-  BranchIfPrototypesHaveNoElements(map, if_true, if_false);
+  // Check prototype chain if receiver does not have packed elements
+  GotoIfNot(IsPrototypeInitialArrayPrototype(context, map), if_false);
+
+  Branch(IsArrayProtectorCellInvalid(), if_false, if_true);
 }
 
 Node* CodeStubAssembler::AllocateRaw(Node* size_in_bytes, AllocationFlags flags,
@@ -2574,10 +2606,59 @@ Node* CodeStubAssembler::AllocateJSArray(ElementsKind kind, Node* array_map,
   return array;
 }
 
+Node* CodeStubAssembler::ExtractFastJSArray(Node* context, Node* array,
+                                            Node* begin, Node* count,
+                                            ParameterMode mode, Node* capacity,
+                                            Node* allocation_site) {
+  Node* original_array_map = LoadMap(array);
+  Node* elements_kind = LoadMapElementsKind(original_array_map);
+
+  // Use the cannonical map for the Array's ElementsKind
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
+
+  Node* new_elements =
+      ExtractFixedArray(LoadElements(array), begin, count, capacity,
+                        ExtractFixedArrayFlag::kAllFixedArrays, mode);
+
+  Node* result = AllocateUninitializedJSArrayWithoutElements(
+      array_map, ParameterToTagged(count, mode), allocation_site);
+  StoreObjectField(result, JSObject::kElementsOffset, new_elements);
+  return result;
+}
+
+Node* CodeStubAssembler::CloneFastJSArray(Node* context, Node* array,
+                                          ParameterMode mode, Node* capacity,
+                                          Node* allocation_site) {
+  Node* original_array_map = LoadMap(array);
+  Node* elements_kind = LoadMapElementsKind(original_array_map);
+
+  // Use the cannonical map for the Array's ElementsKind
+  Node* tagged_length = LoadJSArrayLength(array);
+
+  Node* length = TaggedToParameter(tagged_length, mode);
+  if (capacity == nullptr) {
+    capacity = length;
+  }
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
+
+  Node* new_elements = ExtractFixedArray(
+      LoadElements(array), IntPtrOrSmiConstant(0, mode), length, capacity,
+      ExtractFixedArrayFlag::kAllFixedArrays, mode);
+
+  Node* result = AllocateUninitializedJSArrayWithoutElements(
+      array_map, tagged_length, allocation_site);
+  StoreObjectField(result, JSObject::kElementsOffset, new_elements);
+
+  return result;
+}
+
 Node* CodeStubAssembler::AllocateFixedArray(ElementsKind kind,
                                             Node* capacity_node,
                                             ParameterMode mode,
-                                            AllocationFlags flags) {
+                                            AllocationFlags flags,
+                                            Node* fixed_array_map) {
   CSA_SLOW_ASSERT(this, MatchesParameterMode(capacity_node, mode));
   CSA_ASSERT(this, IntPtrOrSmiGreaterThan(capacity_node,
                                           IntPtrOrSmiConstant(0, mode), mode));
@@ -2586,14 +2667,136 @@ Node* CodeStubAssembler::AllocateFixedArray(ElementsKind kind,
   if (IsDoubleElementsKind(kind)) flags |= kDoubleAlignment;
   // Allocate both array and elements object, and initialize the JSArray.
   Node* array = Allocate(total_size, flags);
-  Heap::RootListIndex map_index = IsDoubleElementsKind(kind)
-                                      ? Heap::kFixedDoubleArrayMapRootIndex
-                                      : Heap::kFixedArrayMapRootIndex;
-  DCHECK(Heap::RootIsImmortalImmovable(map_index));
-  StoreMapNoWriteBarrier(array, map_index);
+  if (fixed_array_map != nullptr) {
+    StoreMapNoWriteBarrier(array, fixed_array_map);
+  } else {
+    Heap::RootListIndex map_index = IsDoubleElementsKind(kind)
+                                        ? Heap::kFixedDoubleArrayMapRootIndex
+                                        : Heap::kFixedArrayMapRootIndex;
+    DCHECK(Heap::RootIsImmortalImmovable(map_index));
+    StoreMapNoWriteBarrier(array, map_index);
+  }
   StoreObjectFieldNoWriteBarrier(array, FixedArray::kLengthOffset,
                                  ParameterToTagged(capacity_node, mode));
   return array;
+}
+
+Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
+                                           Node* count, Node* capacity,
+                                           ExtractFixedArrayFlags extract_flags,
+                                           ParameterMode parameter_mode) {
+  VARIABLE(result, MachineRepresentation::kTagged);
+  const CodeStubAssembler::AllocationFlags flags =
+      CodeStubAssembler::kAllowLargeObjectAllocation;
+  if (first == nullptr) {
+    first = IntPtrOrSmiConstant(0, parameter_mode);
+  }
+  if (count == nullptr) {
+    count =
+        IntPtrOrSmiSub(TaggedToParameter(LoadFixedArrayBaseLength(fixed_array),
+                                         parameter_mode),
+                       first, parameter_mode);
+  }
+  if (capacity == nullptr) {
+    capacity = count;
+  } else {
+    CSA_ASSERT(this, Word32Not(IntPtrOrSmiGreaterThan(
+                         IntPtrOrSmiAdd(first, count, parameter_mode), capacity,
+                         parameter_mode)));
+  }
+
+  Label if_fixed_double_array(this), empty(this), cow(this),
+      done(this, {&result});
+  GotoIf(WordEqual(IntPtrOrSmiConstant(0, parameter_mode), count), &empty);
+  Node* fixed_array_map = LoadMap(fixed_array);
+
+  if (extract_flags & ExtractFixedArrayFlag::kFixedDoubleArrays) {
+    if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
+      GotoIf(IsFixedDoubleArrayMap(fixed_array_map), &if_fixed_double_array);
+    } else {
+      CSA_ASSERT(this, IsFixedDoubleArrayMap(fixed_array_map));
+    }
+  } else {
+    DCHECK(extract_flags & ExtractFixedArrayFlag::kFixedArrays);
+    CSA_ASSERT(this, Word32BinaryNot(IsFixedDoubleArrayMap(fixed_array_map)));
+  }
+
+  if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
+    Label new_space_check(this);
+    if (!(extract_flags & ExtractFixedArrayFlag::kForceCOWCopy)) {
+      Branch(WordEqual(fixed_array_map,
+                       LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
+             &cow, &new_space_check);
+    } else {
+      Goto(&new_space_check);
+    }
+    BIND(&new_space_check);
+
+    Label old_space(this);
+    GotoIfFixedArraySizeDoesntFitInNewSpace(
+        capacity, &old_space, FixedArray::kHeaderSize, parameter_mode);
+
+    Comment("Copy PACKED_ELEMENTS new space");
+
+    ElementsKind kind = PACKED_ELEMENTS;
+    Node* to_elements = AllocateFixedArray(
+        kind, capacity, parameter_mode, AllocationFlag::kNone, fixed_array_map);
+    result.Bind(to_elements);
+    CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
+                           capacity, SKIP_WRITE_BARRIER, parameter_mode);
+    Goto(&done);
+
+    BIND(&old_space);
+    {
+      Comment("Copy PACKED_ELEMENTS old space");
+
+      to_elements = AllocateFixedArray(kind, capacity, parameter_mode, flags,
+                                       fixed_array_map);
+      result.Bind(to_elements);
+      CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
+                             capacity, UPDATE_WRITE_BARRIER, parameter_mode);
+      Goto(&done);
+    }
+
+    if (!(extract_flags & ExtractFixedArrayFlag::kForceCOWCopy)) {
+      BIND(&cow);
+      {
+        GotoIf(WordNotEqual(IntPtrOrSmiConstant(0, parameter_mode), first),
+               &new_space_check);
+
+        result.Bind(fixed_array);
+        Goto(&done);
+      }
+    }
+  } else {
+    Goto(&if_fixed_double_array);
+  }
+
+  if (extract_flags & ExtractFixedArrayFlag::kFixedDoubleArrays) {
+    BIND(&if_fixed_double_array);
+
+    Comment("Copy PACKED_DOUBLE_ELEMENTS");
+
+    ElementsKind kind = PACKED_DOUBLE_ELEMENTS;
+    Node* to_elements = AllocateFixedArray(kind, capacity, parameter_mode,
+                                           flags, fixed_array_map);
+    result.Bind(to_elements);
+    CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
+                           capacity, SKIP_WRITE_BARRIER, parameter_mode);
+
+    Goto(&done);
+  }
+
+  BIND(&empty);
+  {
+    Comment("Copy empty array");
+
+    result.Bind(EmptyFixedArrayConstant());
+    Goto(&done);
+  }
+
+  BIND(&done);
+  return result.value();
 }
 
 void CodeStubAssembler::InitializePropertyArrayLength(Node* property_array,
@@ -2694,7 +2897,7 @@ void CodeStubAssembler::FillFixedArrayWithValue(
 
 void CodeStubAssembler::CopyFixedArrayElements(
     ElementsKind from_kind, Node* from_array, ElementsKind to_kind,
-    Node* to_array, Node* element_count, Node* capacity,
+    Node* to_array, Node* first_element, Node* element_count, Node* capacity,
     WriteBarrierMode barrier_mode, ParameterMode mode) {
   CSA_SLOW_ASSERT(this, MatchesParameterMode(element_count, mode));
   CSA_SLOW_ASSERT(this, MatchesParameterMode(capacity, mode));
@@ -2711,13 +2914,14 @@ void CodeStubAssembler::CopyFixedArrayElements(
   Label done(this);
   bool from_double_elements = IsDoubleElementsKind(from_kind);
   bool to_double_elements = IsDoubleElementsKind(to_kind);
-  bool element_size_matches = Is64() || IsDoubleElementsKind(from_kind) ==
-                                            IsDoubleElementsKind(to_kind);
   bool doubles_to_objects_conversion =
       IsDoubleElementsKind(from_kind) && IsObjectElementsKind(to_kind);
   bool needs_write_barrier =
       doubles_to_objects_conversion ||
       (barrier_mode == UPDATE_WRITE_BARRIER && IsObjectElementsKind(to_kind));
+  bool element_offset_matches =
+      !needs_write_barrier && (Is64() || IsDoubleElementsKind(from_kind) ==
+                                             IsDoubleElementsKind(to_kind));
   Node* double_hole =
       Is64() ? UncheckedCast<UintPtrT>(Int64Constant(kHoleNanInt64))
              : UncheckedCast<UintPtrT>(Int32Constant(kHoleNanLower32));
@@ -2733,15 +2937,18 @@ void CodeStubAssembler::CopyFixedArrayElements(
                             Heap::kTheHoleValueRootIndex, mode);
   }
 
-  Node* limit_offset = ElementOffsetFromIndex(
-      IntPtrOrSmiConstant(0, mode), from_kind, mode, first_element_offset);
-  VARIABLE(var_from_offset, MachineType::PointerRepresentation(),
-           ElementOffsetFromIndex(element_count, from_kind, mode,
-                                  first_element_offset));
+  Node* first_from_element_offset =
+      ElementOffsetFromIndex(first_element, from_kind, mode, 0);
+  Node* limit_offset = IntPtrAdd(first_from_element_offset,
+                                 IntPtrConstant(first_element_offset));
+  VARIABLE(
+      var_from_offset, MachineType::PointerRepresentation(),
+      ElementOffsetFromIndex(IntPtrOrSmiAdd(first_element, element_count, mode),
+                             from_kind, mode, first_element_offset));
   // This second variable is used only when the element sizes of source and
   // destination arrays do not match.
   VARIABLE(var_to_offset, MachineType::PointerRepresentation());
-  if (element_size_matches) {
+  if (element_offset_matches) {
     var_to_offset.Bind(var_from_offset.value());
   } else {
     var_to_offset.Bind(ElementOffsetFromIndex(element_count, to_kind, mode,
@@ -2750,6 +2957,11 @@ void CodeStubAssembler::CopyFixedArrayElements(
 
   Variable* vars[] = {&var_from_offset, &var_to_offset};
   Label decrement(this, 2, vars);
+
+  Node* to_array_adjusted =
+      element_offset_matches
+          ? IntPtrSub(BitcastTaggedToWord(to_array), first_from_element_offset)
+          : to_array;
 
   Branch(WordEqual(var_from_offset.value(), limit_offset), &done, &decrement);
 
@@ -2761,7 +2973,7 @@ void CodeStubAssembler::CopyFixedArrayElements(
     var_from_offset.Bind(from_offset);
 
     Node* to_offset;
-    if (element_size_matches) {
+    if (element_offset_matches) {
       to_offset = from_offset;
     } else {
       to_offset = IntPtrSub(
@@ -2787,13 +2999,14 @@ void CodeStubAssembler::CopyFixedArrayElements(
         from_array, var_from_offset.value(), from_kind, to_kind, if_hole);
 
     if (needs_write_barrier) {
-      Store(to_array, to_offset, value);
+      CHECK_EQ(to_array, to_array_adjusted);
+      Store(to_array_adjusted, to_offset, value);
     } else if (to_double_elements) {
-      StoreNoWriteBarrier(MachineRepresentation::kFloat64, to_array, to_offset,
-                          value);
+      StoreNoWriteBarrier(MachineRepresentation::kFloat64, to_array_adjusted,
+                          to_offset, value);
     } else {
-      StoreNoWriteBarrier(MachineRepresentation::kTagged, to_array, to_offset,
-                          value);
+      StoreNoWriteBarrier(MachineRepresentation::kTagged, to_array_adjusted,
+                          to_offset, value);
     }
     Goto(&next_iter);
 
@@ -2808,12 +3021,12 @@ void CodeStubAssembler::CopyFixedArrayElements(
       // preserves double bits during manipulation, remove this code/change
       // this to an indexed Float64 store.
       if (Is64()) {
-        StoreNoWriteBarrier(MachineRepresentation::kWord64, to_array, to_offset,
-                            double_hole);
+        StoreNoWriteBarrier(MachineRepresentation::kWord64, to_array_adjusted,
+                            to_offset, double_hole);
       } else {
-        StoreNoWriteBarrier(MachineRepresentation::kWord32, to_array, to_offset,
-                            double_hole);
-        StoreNoWriteBarrier(MachineRepresentation::kWord32, to_array,
+        StoreNoWriteBarrier(MachineRepresentation::kWord32, to_array_adjusted,
+                            to_offset, double_hole);
+        StoreNoWriteBarrier(MachineRepresentation::kWord32, to_array_adjusted,
                             IntPtrAdd(to_offset, IntPtrConstant(kPointerSize)),
                             double_hole);
       }
@@ -9465,7 +9678,8 @@ Node* CodeStubAssembler::InstanceOf(Node* object, Node* callable,
 Node* CodeStubAssembler::NumberInc(Node* value) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   VARIABLE(var_finc_value, MachineRepresentation::kFloat64);
-  Label if_issmi(this), if_isnotsmi(this), do_finc(this), end(this);
+  Label if_issmi(this), if_isnotsmi(this, Label::kDeferred),
+      do_finc(this, Label::kDeferred), end(this);
   Branch(TaggedIsSmi(value), &if_issmi, &if_isnotsmi);
 
   BIND(&if_issmi);
@@ -9516,7 +9730,8 @@ Node* CodeStubAssembler::NumberInc(Node* value) {
 Node* CodeStubAssembler::NumberDec(Node* value) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   VARIABLE(var_fdec_value, MachineRepresentation::kFloat64);
-  Label if_issmi(this), if_isnotsmi(this), do_fdec(this), end(this);
+  Label if_issmi(this), if_isnotsmi(this, Label::kDeferred),
+      do_fdec(this, Label::kDeferred), end(this);
   Branch(TaggedIsSmi(value), &if_issmi, &if_isnotsmi);
 
   BIND(&if_issmi);
@@ -9557,6 +9772,66 @@ Node* CodeStubAssembler::NumberDec(Node* value) {
     Node* minus_one = Float64Constant(-1.0);
     Node* fdec_result = Float64Add(fdec_value, minus_one);
     var_result.Bind(AllocateHeapNumberWithValue(fdec_result));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberAdd(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fadd_value, MachineRepresentation::kFloat64);
+  Label float_add(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_add);
+  GotoIf(TaggedIsNotSmi(b), &float_add);
+
+  // Try fast Smi addition first.
+  Node* pair =
+      IntPtrAddWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi addition overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_add);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_add);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Add(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
+    Goto(&end);
+  }
+
+  BIND(&end);
+  return var_result.value();
+}
+
+Node* CodeStubAssembler::NumberSub(Node* a, Node* b) {
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fsub_value, MachineRepresentation::kFloat64);
+  Label float_sub(this, Label::kDeferred), end(this);
+  GotoIf(TaggedIsNotSmi(a), &float_sub);
+  GotoIf(TaggedIsNotSmi(b), &float_sub);
+
+  // Try fast Smi subtraction first.
+  Node* pair =
+      IntPtrSubWithOverflow(BitcastTaggedToWord(a), BitcastTaggedToWord(b));
+  Node* overflow = Projection(1, pair);
+
+  // Check if the Smi subtraction overflowed.
+  Label if_overflow(this), if_notoverflow(this);
+  GotoIf(overflow, &float_sub);
+
+  var_result.Bind(BitcastWordToTaggedSigned(Projection(0, pair)));
+  Goto(&end);
+
+  BIND(&float_sub);
+  {
+    var_result.Bind(ChangeFloat64ToTagged(
+        Float64Sub(ChangeNumberToFloat64(a), ChangeNumberToFloat64(b))));
     Goto(&end);
   }
 
@@ -9632,8 +9907,7 @@ Node* CodeStubAssembler::CreateArrayIterator(Node* array, Node* array_map,
     BIND(&if_isgeneric);
     {
       Label if_isfast(this), if_isslow(this);
-      BranchIfFastJSArray(array, context, FastJSArrayAccessMode::INBOUNDS_READ,
-                          &if_isfast, &if_isslow);
+      BranchIfFastJSArray(array, context, &if_isfast, &if_isslow);
 
       BIND(&if_isfast);
       {
@@ -9667,8 +9941,7 @@ Node* CodeStubAssembler::CreateArrayIterator(Node* array, Node* array_map,
     BIND(&if_isgeneric);
     {
       Label if_isfast(this), if_isslow(this);
-      BranchIfFastJSArray(array, context, FastJSArrayAccessMode::INBOUNDS_READ,
-                          &if_isfast, &if_isslow);
+      BranchIfFastJSArray(array, context, &if_isfast, &if_isslow);
 
       BIND(&if_isfast);
       {
@@ -9687,7 +9960,6 @@ Node* CodeStubAssembler::CreateArrayIterator(Node* array, Node* array_map,
           GotoIf(IsArrayProtectorCellInvalid(), &if_isslow);
 
           Node* native_context = LoadNativeContext(context);
-
           Node* prototype = LoadMapPrototype(array_map);
           Node* array_prototype = LoadContextElement(
               native_context, Context::INITIAL_ARRAY_PROTOTYPE_INDEX);

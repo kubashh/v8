@@ -323,17 +323,10 @@ RUNTIME_FUNCTION(Runtime_EstimateNumberOfElements) {
   }
 }
 
+namespace {
 
-// Returns an array that tells you where in the [0, length) interval an array
-// might have elements.  Can either return an array of keys (positive integers
-// or undefined) or a number representing the positive length of an interval
-// starting at index 0.
-// Intervals can span over some keys that are not in the object.
-RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(2, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, array, 0);
-  CONVERT_NUMBER_CHECKED(uint32_t, length, Uint32, args[1]);
+Object* GetArrayKeysCore(Handle<JSObject> array, uint32_t length) {
+  Isolate* isolate = array->GetIsolate();
   ElementsKind kind = array->GetElementsKind();
 
   if (IsFastElementsKind(kind) || IsFixedTypedArrayElementsKind(kind)) {
@@ -376,6 +369,59 @@ RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
   }
 
   return *isolate->factory()->NewJSArrayWithElements(keys);
+}
+
+}  // namespace
+
+// Returns an array that tells you where in the [0, length) interval an array
+// might have elements.  Can either return an array of keys (positive integers
+// or undefined) or a number representing the positive length of an interval
+// starting at index 0.
+// Intervals can span over some keys that are not in the object.
+RUNTIME_FUNCTION(Runtime_GetArrayKeys) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, array, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, length, Uint32, args[1]);
+  return GetArrayKeysCore(array, length);
+}
+
+RUNTIME_FUNCTION(Runtime_TrySliceSimpleNonFastElements) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, object, 0);
+  CONVERT_SMI_ARG_CHECKED(first, 1);
+  CONVERT_SMI_ARG_CHECKED(count, 2);
+  uint32_t length = first + count;
+
+  // Only handle elements kinds that have a ElementsAccessor Slice
+  // implementation.
+  if (object->IsJSArray()) {
+    // This "fastish" path must make sure the destination array is a JSArray.
+    if (!isolate->IsArraySpeciesLookupChainIntact() ||
+        !JSArray::cast(*object)->HasArrayPrototype(isolate)) {
+      return Smi::FromInt(0);
+    }
+  } else {
+    Map* map = object->map();
+    Context* context = *isolate->native_context();
+    if (map != context->sloppy_arguments_map() &&
+        map != context->strict_arguments_map() &&
+        map != context->fast_aliased_arguments_map() &&
+        map != context->slow_aliased_arguments_map()) {
+      return Smi::FromInt(0);
+    }
+  }
+
+  // This "fastish" path must also ensure that elements are simple (no
+  // geters/setters), no elements on prototype chain.
+  if (!JSObject::PrototypeHasNoElements(isolate, *object) ||
+      object->HasComplexElements()) {
+    return Smi::FromInt(0);
+  }
+
+  ElementsAccessor* accessor = object->GetElementsAccessor();
+  return *accessor->Slice(object, first, length);
 }
 
 RUNTIME_FUNCTION(Runtime_NewArray) {
@@ -745,7 +791,6 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   }
   return Smi::FromInt(-1);
 }
-
 
 RUNTIME_FUNCTION(Runtime_SpreadIterablePrepare) {
   HandleScope scope(isolate);

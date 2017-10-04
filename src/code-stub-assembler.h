@@ -195,6 +195,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Float64T> Float64Round(SloppyTNode<Float64T> x);
   TNode<Float64T> Float64RoundToEven(SloppyTNode<Float64T> x);
   TNode<Float64T> Float64Trunc(SloppyTNode<Float64T> x);
+  // Select the minimum of the two provided Number values.
+  TNode<Object> NumberMax(SloppyTNode<Object> left, SloppyTNode<Object> right);
+  // Select the minimum of the two provided Number values.
+  TNode<Object> NumberMin(SloppyTNode<Object> left, SloppyTNode<Object> right);
 
   // Tag a Word as a Smi value.
   TNode<Smi> SmiTag(SloppyTNode<IntPtrT> value);
@@ -275,6 +279,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Smi | HeapNumber operations.
   Node* NumberInc(Node* value);
   Node* NumberDec(Node* value);
+  Node* NumberAdd(Node* a, Node* b);
+  Node* NumberSub(Node* a, Node* b);
   void GotoIfNotNumber(Node* value, Label* is_not_number);
   void GotoIfNumber(Node* value, Label* is_number);
 
@@ -398,8 +404,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void BranchIfJSObject(Node* object, Label* if_true, Label* if_false);
 
   enum class FastJSArrayAccessMode { INBOUNDS_READ, ANY_ACCESS };
-  void BranchIfFastJSArray(Node* object, Node* context,
-                           FastJSArrayAccessMode mode, Label* if_true,
+  void BranchIfFastJSArray(Node* object, Node* context, Label* if_true,
                            Label* if_false);
 
   // Load value from current frame by given offset in bytes.
@@ -721,9 +726,20 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                         Node* length, Node* allocation_site = nullptr,
                         ParameterMode capacity_mode = INTPTR_PARAMETERS);
 
+  Node* CloneFastJSArray(Node* context, Node* array,
+                         ParameterMode mode = INTPTR_PARAMETERS,
+                         Node* capacity = nullptr,
+                         Node* allocation_site = nullptr);
+
+  Node* ExtractFastJSArray(Node* context, Node* array, Node* begin, Node* count,
+                           ParameterMode mode = INTPTR_PARAMETERS,
+                           Node* capacity = nullptr,
+                           Node* allocation_site = nullptr);
+
   Node* AllocateFixedArray(ElementsKind kind, Node* capacity,
                            ParameterMode mode = INTPTR_PARAMETERS,
-                           AllocationFlags flags = kNone);
+                           AllocationFlags flags = kNone,
+                           Node* fixed_array_map = nullptr);
 
   Node* AllocatePropertyArray(Node* capacity,
                               ParameterMode mode = INTPTR_PARAMETERS,
@@ -759,17 +775,86 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       ElementsKind kind, Node* from_array, Node* to_array, Node* length,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       ParameterMode mode = INTPTR_PARAMETERS) {
-    CopyFixedArrayElements(kind, from_array, kind, to_array, length, length,
+    CopyFixedArrayElements(kind, from_array, kind, to_array,
+                           IntPtrOrSmiConstant(0, mode), length, length,
                            barrier_mode, mode);
   }
 
-  // Copies |element_count| elements from |from_array| to |to_array| of
-  // |capacity| size respecting both array's elements kinds.
+  // Copies |element_count| elements from |from_array| starting from element
+  // zero to |to_array| of |capacity| size respecting both array's elements
+  // kinds.
   void CopyFixedArrayElements(
       ElementsKind from_kind, Node* from_array, ElementsKind to_kind,
       Node* to_array, Node* element_count, Node* capacity,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
+      ParameterMode mode = INTPTR_PARAMETERS) {
+    CopyFixedArrayElements(from_kind, from_array, to_kind, to_array,
+                           IntPtrOrSmiConstant(0, mode), element_count,
+                           capacity, barrier_mode, mode);
+  }
+
+  // Copies |element_count| elements from |from_array| starting from element
+  // |first_element| to |to_array| of |capacity| size respecting both array's
+  // elements kinds.
+  void CopyFixedArrayElements(
+      ElementsKind from_kind, Node* from_array, ElementsKind to_kind,
+      Node* to_array, Node* first_element, Node* element_count, Node* capacity,
+      WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       ParameterMode mode = INTPTR_PARAMETERS);
+
+  enum class ExtractFixedArrayFlag {
+    kFixedArrays = 1,
+    kFixedDoubleArrays = 2,
+    kForceCOWCopy = 4,
+    kAllFixedArrays = kFixedArrays | kFixedDoubleArrays
+  };
+
+  typedef base::Flags<ExtractFixedArrayFlag> ExtractFixedArrayFlags;
+
+  // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
+  // FixedArray, including special appropriate handling for empty arrays and COW
+  // arrays.
+  //
+  // * |source| is either a FixedArray or FixedDoubleArray from which to copy
+  // elements.
+  // * |first| is the starting element index to copy from, if nullptr is passed
+  // then index zero is use by default.
+  // * |count| is the number of elements to copy out of the source array
+  // starting from and including the element indexed by |start|. If |count| is
+  // nullptr, then all of the elements from |start| to the end of |source| are
+  // copied.
+  // * |capacity| determines the size of the allocated result array, with
+  // |capacity| >= |count|. If |capacity| is nullptr, then |count| is used as
+  // |the destination array's capacity.
+  // * |extract_flags| determines whether FixedArrays, FixedDoubleArrays or both
+  // are detected and copied. Although it's always correct to pass
+  // kAllFixedArrays, the generated code is more compact and efficient if the
+  // caller can specify whether only FixedArrays or FixedDoubleArrays will be
+  // passed as the |source| parameter.
+  // * |parameter_mode| determines the parameter mode of |first|, |count| and
+  // * |capacity|.
+  Node* ExtractFixedArray(Node* source, Node* first = nullptr,
+                          Node* count = nullptr, Node* capacity = nullptr,
+                          ExtractFixedArrayFlags extract_flags =
+                              ExtractFixedArrayFlag::kAllFixedArrays,
+                          ParameterMode parameter_mode = INTPTR_PARAMETERS);
+
+  // Copy the entire contents of a FixedArray or FixedDoubleArray to a new
+  // array, including special appropriate handling for empty arrays and COW
+  // arrays.
+  //
+  // * |source| is either a FixedArray or FixedDoubleArray from which to copy
+  // elements.
+  // * |extract_flags| determines whether FixedArrays, FixedDoubleArrays or both
+  // are detected and copied. Although it's always correct to pass
+  // kAllFixedArrays, the generated code is more compact and efficient if the
+  // caller can specify whether only FixedArrays or FixedDoubleArrays will be
+  // passed as the |source| parameter.
+  Node* CloneFixedArray(
+      Node* source,
+      ExtractFixedArrayFlags flags = ExtractFixedArrayFlag::kAllFixedArrays) {
+    return ExtractFixedArray(source, nullptr, nullptr, nullptr, flags);
+  }
 
   // Copies |character_count| elements from |from_string| to |to_string|
   // starting at the |from_index|'th character. |from_string| and |to_string|
