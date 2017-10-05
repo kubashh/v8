@@ -242,11 +242,11 @@ class WasmGraphBuildingInterface {
 
   void DoReturn(Decoder* decoder, Vector<Value> values) {
     size_t num_values = values.size();
-    TFNode** buffer = GetNodes(values);
+    TFBuilder::BufferRef buffer = GetNodes(values);
     for (size_t i = 0; i < num_values; ++i) {
       buffer[i] = values[i].node;
     }
-    BUILD(Return, static_cast<unsigned>(values.size()), buffer);
+    BUILD(Return, static_cast<unsigned>(values.size()), buffer.buffer());
   }
 
   void GetLocal(Decoder* decoder, Value* result,
@@ -374,16 +374,16 @@ class WasmGraphBuildingInterface {
 
   void SimdOp(Decoder* decoder, WasmOpcode opcode, Vector<Value> args,
               Value* result) {
-    TFNode** inputs = GetNodes(args);
-    TFNode* node = BUILD(SimdOp, opcode, inputs);
+    TFBuilder::BufferRef inputs = GetNodes(args);
+    TFNode* node = BUILD(SimdOp, opcode, inputs.buffer());
     if (result) result->node = node;
   }
 
   void SimdLaneOp(Decoder* decoder, WasmOpcode opcode,
                   const SimdLaneOperand<true> operand, Vector<Value> inputs,
                   Value* result) {
-    TFNode** nodes = GetNodes(inputs);
-    result->node = BUILD(SimdLaneOp, opcode, operand.lane, nodes);
+    TFBuilder::BufferRef nodes = GetNodes(inputs);
+    result->node = BUILD(SimdLaneOp, opcode, operand.lane, nodes.buffer());
   }
 
   void SimdShiftOp(Decoder* decoder, WasmOpcode opcode,
@@ -470,7 +470,10 @@ class WasmGraphBuildingInterface {
     } else {
       // TODO(kschimpf): Can't use BUILD() here, GetExceptionValues() returns
       // TFNode** rather than TFNode*. Fix to add landing pads.
-      *caught_values = builder_->GetExceptionValues(operand.exception);
+      //
+      // TODO(eholk): the use of BufferRef::buffer here is unsafe because we
+      // lose tracking of the fact that the buffer is in use.
+      *caught_values = builder_->GetExceptionValues(operand.exception).buffer();
     }
   }
 
@@ -487,8 +490,8 @@ class WasmGraphBuildingInterface {
 
   void AtomicOp(Decoder* decoder, WasmOpcode opcode, Vector<Value> args,
                 const MemoryAccessOperand<true>& operand, Value* result) {
-    TFNode** inputs = GetNodes(args);
-    TFNode* node = BUILD(AtomicOp, opcode, inputs, operand.alignment,
+    TFBuilder::BufferRef inputs = GetNodes(args);
+    TFNode* node = BUILD(AtomicOp, opcode, inputs.buffer(), operand.alignment,
                          operand.offset, decoder->position());
     if (result) result->node = node;
   }
@@ -505,15 +508,15 @@ class WasmGraphBuildingInterface {
         ->try_info;
   }
 
-  TFNode** GetNodes(Value* values, size_t count) {
-    TFNode** nodes = builder_->Buffer(count);
+  TFBuilder::BufferRef GetNodes(Value* values, size_t count) {
+    TFBuilder::BufferRef nodes = builder_->Buffer(count);
     for (size_t i = 0; i < count; ++i) {
       nodes[i] = values[i].node;
     }
     return nodes;
   }
 
-  TFNode** GetNodes(Vector<Value> values) {
+  TFBuilder::BufferRef GetNodes(Vector<Value> values) {
     return GetNodes(values.start(), values.size());
   }
 
@@ -684,12 +687,12 @@ class WasmGraphBuildingInterface {
           builder_->AppendToPhi(to->effect, from->effect);
         } else if (to->effect != from->effect) {
           uint32_t count = builder_->InputCount(merge);
-          TFNode** effects = builder_->Buffer(count);
+          TFBuilder::BufferRef effects = builder_->Buffer(count);
           for (uint32_t j = 0; j < count - 1; j++) {
             effects[j] = to->effect;
           }
           effects[count - 1] = from->effect;
-          to->effect = builder_->EffectPhi(count, effects, merge);
+          to->effect = builder_->EffectPhi(count, effects.buffer(), merge);
         }
         // Merge locals.
         for (int i = decoder->NumLocals() - 1; i >= 0; i--) {
@@ -717,10 +720,10 @@ class WasmGraphBuildingInterface {
       builder_->AppendToPhi(tnode, fnode);
     } else if (tnode != fnode) {
       uint32_t count = builder_->InputCount(merge);
-      TFNode** vals = builder_->Buffer(count);
+      TFBuilder::BufferRef vals = builder_->Buffer(count);
       for (uint32_t j = 0; j < count - 1; j++) vals[j] = tnode;
       vals[count - 1] = fnode;
-      return builder_->Phi(type, count, vals, merge);
+      return builder_->Phi(type, count, vals.buffer(), merge);
     }
     return tnode;
   }
@@ -841,17 +844,17 @@ class WasmGraphBuildingInterface {
               Value returns[], bool is_indirect) {
     if (!build(decoder)) return;
     int param_count = static_cast<int>(operand.sig->parameter_count());
-    TFNode** arg_nodes = builder_->Buffer(param_count + 1);
+    TFBuilder::BufferRef arg_nodes = builder_->Buffer(param_count + 1);
     TFNode** return_nodes = nullptr;
     arg_nodes[0] = index_node;
     for (int i = 0; i < param_count; ++i) {
       arg_nodes[i + 1] = args[i].node;
     }
     if (is_indirect) {
-      builder_->CallIndirect(operand.index, arg_nodes, &return_nodes,
+      builder_->CallIndirect(operand.index, arg_nodes.buffer(), &return_nodes,
                              decoder->position());
     } else {
-      builder_->CallDirect(operand.index, arg_nodes, &return_nodes,
+      builder_->CallDirect(operand.index, arg_nodes.buffer(), &return_nodes,
                            decoder->position());
     }
     int return_count = static_cast<int>(operand.sig->return_count());

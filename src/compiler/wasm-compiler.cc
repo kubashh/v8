@@ -163,19 +163,19 @@ Node* WasmGraphBuilder::Merge(unsigned count, Node** controls) {
 Node* WasmGraphBuilder::Phi(wasm::ValueType type, unsigned count, Node** vals,
                             Node* control) {
   DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
-  Node** buf = Realloc(vals, count, count + 1);
+  BufferRef buf = Realloc(vals, count, count + 1);
   buf[count] = control;
   return graph()->NewNode(jsgraph()->common()->Phi(type, count), count + 1,
-                          buf);
+                          buf.buffer());
 }
 
 Node* WasmGraphBuilder::EffectPhi(unsigned count, Node** effects,
                                   Node* control) {
   DCHECK(IrOpcode::IsMergeOpcode(control->opcode()));
-  Node** buf = Realloc(effects, count, count + 1);
+  BufferRef buf = Realloc(effects, count, count + 1);
   buf[count] = control;
   return graph()->NewNode(jsgraph()->common()->EffectPhi(count), count + 1,
-                          buf);
+                          buf.buffer());
 }
 
 Node* WasmGraphBuilder::NumberConstant(int32_t value) {
@@ -1603,7 +1603,7 @@ Node* WasmGraphBuilder::BuildCFuncInstruction(ExternalReference ref,
                               *control_);
 
   Node* function = graph()->NewNode(jsgraph()->common()->ExternalConstant(ref));
-  Node** args = Buffer(5);
+  BufferRef args = Buffer(5);
   args[0] = function;
   args[1] = stack_slot_param0;
   int input_count = 1;
@@ -1626,7 +1626,7 @@ Node* WasmGraphBuilder::BuildCFuncInstruction(ExternalReference ref,
   if (input1 != nullptr) {
     sig_builder.AddParam(MachineType::Pointer());
   }
-  BuildCCall(sig_builder.Build(), args);
+  BuildCCall(sig_builder.Build(), args.buffer());
 
   const Operator* load_op = jsgraph()->machine()->Load(type);
 
@@ -1921,7 +1921,7 @@ Node* WasmGraphBuilder::GetExceptionRuntimeId() {
       BuildCallToRuntime(Runtime::kWasmGetExceptionRuntimeId, nullptr, 0));
 }
 
-Node** WasmGraphBuilder::GetExceptionValues(
+WasmGraphBuilder::BufferRef WasmGraphBuilder::GetExceptionValues(
     const wasm::WasmException* except_decl) {
   // TODO(kschimpf): We need to move this code to the function-body-decoder.cc
   // in order to build landing-pad (exception) edges in case the runtime
@@ -1929,7 +1929,7 @@ Node** WasmGraphBuilder::GetExceptionValues(
 
   // Start by getting the encoded values from the exception.
   uint32_t encoded_size = GetExceptionEncodedSize(except_decl);
-  Node** values = Buffer(encoded_size);
+  BufferRef values = Buffer(encoded_size);
   for (uint32_t i = 0; i < encoded_size; ++i) {
     Node* parameters[] = {BuildChangeUint32ToSmi(Uint32Constant(i))};
     values[i] = BuildCallToRuntime(Runtime::kWasmExceptionGetElement,
@@ -1940,7 +1940,7 @@ Node** WasmGraphBuilder::GetExceptionValues(
   uint32_t index = 0;
   const wasm::WasmExceptionSig* sig = except_decl->sig;
   for (size_t i = 0; i < sig->parameter_count(); ++i) {
-    Node* value = BuildDecodeException32BitValue(values, &index);
+    Node* value = BuildDecodeException32BitValue(values.buffer(), &index);
     switch (wasm::ValueType type = sig->GetParam(i)) {
       case wasm::kWasmF32: {
         value = Unop(wasm::kExprF32ReinterpretI32, value);
@@ -1953,8 +1953,9 @@ Node** WasmGraphBuilder::GetExceptionValues(
         Node* upper =
             Binop(wasm::kExprI64Shl, Unop(wasm::kExprI64UConvertI32, value),
                   Int64Constant(32));
-        Node* lower = Unop(wasm::kExprI64UConvertI32,
-                           BuildDecodeException32BitValue(values, &index));
+        Node* lower =
+            Unop(wasm::kExprI64UConvertI32,
+                 BuildDecodeException32BitValue(values.buffer(), &index));
         value = Binop(wasm::kExprI64Ior, upper, lower);
         if (type == wasm::kWasmF64) {
           value = Unop(wasm::kExprF64ReinterpretI64, value);
@@ -2308,8 +2309,8 @@ Node* WasmGraphBuilder::BuildCCall(MachineSignature* sig, Node* const* args) {
   const size_t count = 1 + params + extra;
 
   // Reallocate the buffer to make space for extra inputs.
-  Node** new_args = Realloc(args, 1 + params, count);
-  return BuildCCallWithBuffer(sig, new_args, count);
+  BufferRef new_args = Realloc(args, 1 + params, count);
+  return BuildCCallWithBuffer(sig, new_args.buffer(), count);
 }
 
 // Builds a CCall using the caller-provided buffer rather than calling Buffer()
@@ -2350,26 +2351,27 @@ Node* WasmGraphBuilder::BuildWasmCall(wasm::FunctionSig* sig, Node** args,
   const size_t count = 1 + params + extra;
 
   // Reallocate the buffer to make space for extra inputs.
-  args = Realloc(args, 1 + params, count);
+  BufferRef new_args = Realloc(args, 1 + params, count);
 
   // Make room for the wasm_context parameter at index 1, just after code.
   memmove(&args[2], &args[1], params * sizeof(Node*));
-  args[1] = wasm_context_;
+  new_args[1] = wasm_context_;
 
   // Add effect and control inputs.
-  args[params + 2] = *effect_;
-  args[params + 3] = *control_;
+  new_args[params + 2] = *effect_;
+  new_args[params + 3] = *control_;
 
   CallDescriptor* descriptor = GetWasmCallDescriptor(jsgraph()->zone(), sig);
   const Operator* op = jsgraph()->common()->Call(descriptor);
-  Node* call = graph()->NewNode(op, static_cast<int>(count), args);
+  Node* call = graph()->NewNode(op, static_cast<int>(count), new_args.buffer());
   SetSourcePosition(call, position);
 
   *effect_ = call;
   size_t ret_count = sig->return_count();
   if (ret_count == 0) return call;  // No return value.
 
-  *rets = Buffer(ret_count);
+  // TODO(eholk): This is an unsafe use of buffer().
+  *rets = Buffer(ret_count).buffer();
   if (ret_count == 1) {
     // Only a single return value.
     (*rets)[0] = call;
@@ -2793,7 +2795,7 @@ void WasmGraphBuilder::BuildJSToWasmWrapper(Handle<Code> wasm_code,
   const int wasm_count = static_cast<int>(sig_->parameter_count());
   const int count =
       wasm_count + 4;  // wasm_code, wasm_context, effect, and control.
-  Node** args = Buffer(count);
+  BufferRef args = Buffer(count);
 
   // Build the start and the JS parameter nodes.
   Node* start = Start(wasm_count + 5);
@@ -2834,7 +2836,8 @@ void WasmGraphBuilder::BuildJSToWasmWrapper(Handle<Code> wasm_code,
     wasm::FunctionSig::Builder dummy_sig_builder(jsgraph()->zone(), 0, 0);
     CallDescriptor* desc =
         GetWasmCallDescriptor(jsgraph()->zone(), dummy_sig_builder.Build());
-    *effect_ = graph()->NewNode(jsgraph()->common()->Call(desc), pos, args);
+    *effect_ =
+        graph()->NewNode(jsgraph()->common()->Call(desc), pos, args.buffer());
     Return(jsgraph()->UndefinedConstant());
     return;
   }
@@ -2859,7 +2862,8 @@ void WasmGraphBuilder::BuildJSToWasmWrapper(Handle<Code> wasm_code,
   // Call the wasm code.
   CallDescriptor* desc = GetWasmCallDescriptor(jsgraph()->zone(), sig_);
 
-  Node* call = graph()->NewNode(jsgraph()->common()->Call(desc), count, args);
+  Node* call =
+      graph()->NewNode(jsgraph()->common()->Call(desc), count, args.buffer());
   *effect_ = call;
 
   // Clear the ThreadInWasmFlag
@@ -2946,7 +2950,7 @@ bool WasmGraphBuilder::BuildWasmToJSWrapper(
     return false;
   }
 
-  Node** args = Buffer(wasm_count + 7);
+  BufferRef args = Buffer(wasm_count + 7);
 
   Node* call = nullptr;
 
@@ -2971,7 +2975,7 @@ bool WasmGraphBuilder::BuildWasmToJSWrapper(
           graph()->zone(), false, wasm_count + 1, CallDescriptor::kNoFlags);
 
       // Convert wasm numbers to JS values.
-      pos = AddParameterNodes(args, pos, wasm_count, sig_);
+      pos = AddParameterNodes(args.buffer(), pos, wasm_count, sig_);
 
       args[pos++] = jsgraph()->UndefinedConstant();        // new target
       args[pos++] = jsgraph()->Int32Constant(wasm_count);  // argument count
@@ -2979,7 +2983,8 @@ bool WasmGraphBuilder::BuildWasmToJSWrapper(
       args[pos++] = *effect_;
       args[pos++] = *control_;
 
-      call = graph()->NewNode(jsgraph()->common()->Call(desc), pos, args);
+      call =
+          graph()->NewNode(jsgraph()->common()->Call(desc), pos, args.buffer());
     }
   }
 
@@ -2999,7 +3004,7 @@ bool WasmGraphBuilder::BuildWasmToJSWrapper(
                                           CallDescriptor::kNoFlags);
 
     // Convert wasm numbers to JS values.
-    pos = AddParameterNodes(args, pos, wasm_count, sig_);
+    pos = AddParameterNodes(args.buffer(), pos, wasm_count, sig_);
 
     // The native_context is sufficient here, because all kind of callables
     // which depend on the context provide their own context. The context here
@@ -3011,7 +3016,8 @@ bool WasmGraphBuilder::BuildWasmToJSWrapper(
     args[pos++] = *effect_;
     args[pos++] = *control_;
 
-    call = graph()->NewNode(jsgraph()->common()->Call(desc), pos, args);
+    call =
+        graph()->NewNode(jsgraph()->common()->Call(desc), pos, args.buffer());
   }
 
   *effect_ = call;
@@ -3043,7 +3049,7 @@ void WasmGraphBuilder::BuildWasmToWasmWrapper(Handle<Code> target,
                                               Address new_context_address) {
   int wasm_count = static_cast<int>(sig_->parameter_count());
   int count = wasm_count + 4;  // wasm_code, wasm_context, effect, and control.
-  Node** args = Buffer(count);
+  BufferRef args = Buffer(count);
 
   // Build the start node.
   Node* start = Start(count + 1);
@@ -3066,7 +3072,8 @@ void WasmGraphBuilder::BuildWasmToWasmWrapper(Handle<Code> target,
 
   // Call the wasm code.
   CallDescriptor* desc = GetWasmCallDescriptor(jsgraph()->zone(), sig_);
-  Node* call = graph()->NewNode(jsgraph()->common()->Call(desc), count, args);
+  Node* call =
+      graph()->NewNode(jsgraph()->common()->Call(desc), count, args.buffer());
   *effect_ = call;
   Node* retval = sig_->return_count() == 0 ? jsgraph()->Int32Constant(0) : call;
   Return(retval);
@@ -3161,7 +3168,7 @@ void WasmGraphBuilder::BuildCWasmEntry(Address wasm_context_address) {
 
   int wasm_arg_count = static_cast<int>(sig_->parameter_count());
   int arg_count = wasm_arg_count + 4;  // code, wasm_context, control, effect
-  Node** args = Buffer(arg_count);
+  BufferRef args = Buffer(arg_count);
 
   int pos = 0;
   args[pos++] = code_obj;
@@ -3184,8 +3191,8 @@ void WasmGraphBuilder::BuildCWasmEntry(Address wasm_context_address) {
   // Call the wasm code.
   CallDescriptor* desc = GetWasmCallDescriptor(jsgraph()->zone(), sig_);
 
-  Node* call =
-      graph()->NewNode(jsgraph()->common()->Call(desc), arg_count, args);
+  Node* call = graph()->NewNode(jsgraph()->common()->Call(desc), arg_count,
+                                args.buffer());
   *effect_ = call;
 
   // Clear the ThreadInWasmFlag

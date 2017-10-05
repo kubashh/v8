@@ -176,19 +176,48 @@ Handle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig,
 // the wasm decoder from the internal details of TurboFan.
 typedef ZoneVector<Node*> NodeVector;
 class WasmGraphBuilder {
+  friend class BufferRef;
+
  public:
   WasmGraphBuilder(ModuleEnv*, Zone*, JSGraph*, Handle<Code> centry_stub_,
                    wasm::FunctionSig*, compiler::SourcePositionTable* = nullptr,
                    RuntimeExceptionSupport = kRuntimeExceptionSupport);
 
-  Node** Buffer(size_t count) {
+  class BufferRef {
+    friend WasmGraphBuilder;
+
+   public:
+    // Move constructor
+    BufferRef(BufferRef&& rhs) = default;
+
+    ~BufferRef() { builder_->buffer_in_use_ = false; }
+
+    Node** buffer() const { return builder_->cur_buffer_; }
+
+    Node*& operator[](size_t index) {
+      CHECK(index < builder_->cur_bufsize_);
+      return builder_->cur_buffer_[index];
+    }
+
+   private:
+    explicit BufferRef(WasmGraphBuilder* builder) : builder_(builder) {
+      CHECK(!builder_->buffer_in_use_);
+      builder_->buffer_in_use_ = true;
+    }
+
+    WasmGraphBuilder* builder_;
+
+    DISALLOW_COPY_AND_ASSIGN(BufferRef);
+  };
+
+  BufferRef Buffer(size_t count) {
     if (count > cur_bufsize_) {
       size_t new_size = count + cur_bufsize_ + 5;
       cur_buffer_ =
           reinterpret_cast<Node**>(zone_->New(new_size * sizeof(Node*)));
       cur_bufsize_ = new_size;
     }
-    return cur_buffer_;
+    return BufferRef(this);
   }
 
   //-----------------------------------------------------------------------
@@ -220,7 +249,7 @@ class WasmGraphBuilder {
   Node* Rethrow();
   Node* ConvertExceptionTagToRuntimeId(uint32_t tag);
   Node* GetExceptionRuntimeId();
-  Node** GetExceptionValues(const wasm::WasmException* except_decl);
+  BufferRef GetExceptionValues(const wasm::WasmException* except_decl);
   unsigned InputCount(Node* node);
   bool IsPhiWithMerge(Node* phi, Node* merge);
   bool ThrowsException(Node* node, Node** if_success, Node** if_exception);
@@ -373,6 +402,7 @@ class WasmGraphBuilder {
   Node** mem_size_ = nullptr;
   Node** mem_start_ = nullptr;
   Node** cur_buffer_;
+  bool buffer_in_use_ = false;
   size_t cur_bufsize_;
   Node* def_buffer_[kDefaultBufferSize];
   bool has_simd_ = false;
@@ -506,9 +536,10 @@ class WasmGraphBuilder {
   void BuildEncodeException32BitValue(uint32_t* index, Node* value);
   Node* BuildDecodeException32BitValue(Node* const* values, uint32_t* index);
 
-  Node** Realloc(Node* const* buffer, size_t old_count, size_t new_count) {
-    Node** buf = Buffer(new_count);
-    if (buf != buffer) memcpy(buf, buffer, old_count * sizeof(Node*));
+  BufferRef Realloc(Node* const* buffer, size_t old_count, size_t new_count) {
+    BufferRef buf = Buffer(new_count);
+    if (buf.buffer() != buffer)
+      memcpy(buf.buffer(), buffer, old_count * sizeof(Node*));
     return buf;
   }
 
