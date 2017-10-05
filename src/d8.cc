@@ -201,6 +201,9 @@ class PredictablePlatform : public Platform {
     DCHECK_NOT_NULL(platform_);
   }
 
+  void* GetRandomMmapAddr(uint32_t initial_seed) override {
+    return platform_->GetRandomMmapAddr(initial_seed);
+  }
   void CallOnBackgroundThread(Task* task,
                               ExpectedRuntime expected_runtime) override {
     // It's not defined when background tasks are being executed, so we can just
