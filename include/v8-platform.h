@@ -133,6 +133,16 @@ class Platform {
   virtual ~Platform() = default;
 
   /**
+   * Returns a randomized address, suitable for memory allocation under ASLR.
+   * The address will be aligned to the host OS page size. If a predictable
+   * sequence of addresses is desired, e.g. for testing, pass a non-zero seed
+   * value, which seeds the RNG on the first call and signals that the
+   * predictable sequence is desired on subsequent calls. Both predictable and
+   * unpredictable sequences can be generated simultaneously.
+   */
+  virtual void* GetRandomMmapAddr(uint32_t initial_seed) { return nullptr; }
+
+  /**
    * Enables the embedder to respond in cases where V8 can't allocate large
    * blocks of memory. V8 retries the failed allocation once after calling this
    * method. On success, execution continues; otherwise V8 exits with a fatal
