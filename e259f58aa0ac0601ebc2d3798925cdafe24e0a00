@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0b51020b_fd81b1e3",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-05T21:35:51Z",
+      "side": 1,
+      "message": "Given the kMaxLength we currently have, it is impossible to trigger the overflow avoidance path. I\u0027ve removed it (here and in AllocateFor); if we bump kMaxLength we\u0027ll have to extend the code again.",
+      "parentUuid": "584f1f93_38facf62",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d71c460c_ff34ee07",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4d8a9b_45feeaa2",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-05T21:35:51Z",
+      "side": 1,
+      "message": "Done. (This flushed out an actual bug. Thanks!)",
+      "parentUuid": "d71c460c_ff34ee07",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "8d0e4f6c_33bdf517",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-05T21:35:51Z",
+      "side": 1,
+      "message": "I\u0027ve added a TODO comment to this effect.",
+      "parentUuid": "d1f063c8_ab18a03d",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46face09_640c5e3c",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01261a5_9b0c9eb8",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-05T21:35:51Z",
+      "side": 1,
+      "message": "Done. (I don\u0027t think it adds much, because the code above by virtue of \"chars[pos++] \u003d ...\" writes guarantees that a consecutive sequence of characters is written, but having the DCHECK doesn\u0027t hurt.)",
+      "parentUuid": "46face09_640c5e3c",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
