@@ -22,6 +22,9 @@ namespace internal {
 // optimized.
 static const int kProfilerTicksBeforeOptimization = 2;
 
+// Number of ticks to consider a function stable.
+static const int kProfilerTicksBeforeStable = 0;
+
 // The number of ticks required for optimizing a function increases with
 // the size of the bytecode. This is in addition to the
 // kProfilerTicksBeforeOptimization required for any function.
@@ -209,7 +212,12 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction* function,
   int ticks_for_optimization =
       kProfilerTicksBeforeOptimization +
       (shared->bytecode_array()->length() / kBytecodeSizeAllowancePerTick);
-  if (ticks >= ticks_for_optimization) {
+  if (function->feedback_vector()->deopt_count() != 0 &&
+      ticks >= kProfilerTicksBeforeStable) {
+    // We already know the function is hot. So just wait till the function is
+    // stable.
+    return OptimizationReason::kHotAndStable;
+  } else if (ticks >= ticks_for_optimization) {
     return OptimizationReason::kHotAndStable;
   } else if (!any_ic_changed_ &&
              shared->bytecode_array()->length() < kMaxBytecodeSizeForEarlyOpt) {

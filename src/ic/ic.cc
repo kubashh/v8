@@ -352,7 +352,10 @@ void IC::OnFeedbackChanged(Isolate* isolate, FeedbackVector* vector,
       PrintF(" due from %d due to IC change]\n", vector->profiler_ticks());
     }
   }
-  vector->set_profiler_ticks(0);
+  int profiler_ticks = vector->profiler_ticks();
+  if (profiler_ticks != 0) {
+    vector->set_profiler_ticks(profiler_ticks - 1);
+  }
   isolate->runtime_profiler()->NotifyICChanged();
   // TODO(2029): When an optimized function is patched, it would
   // be nice to propagate the corresponding type information to its
