@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "584f1f93_38facf62",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-10-05T15:32:32Z",
+      "side": 1,
+      "message": "The two paths here seems a little extreme. I think the multiplication overflow should only occur if the bit_length is bigger than 27 bits. The maximum resulting string will be around 1 or 2 orders of magnitude away from the maximum string length. Maybe we should just throw a NewInvalidStringLengthError in these overflow prevention cases. If not, I\u0027d prefer to see a test which exercises the overflow avoidance path, where something bad would\u0027ve happened if it were omitted. I don\u0027t see any test cases here or in test262 get nearly that long. (Same goes for the BigInt::AllocateFor--it\u0027d be great to see either tests or more eager failure (or both) for it.)",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d71c460c_ff34ee07",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-10-05T15:32:32Z",
+      "side": 1,
+      "message": "DisallowHeapAllocation no_gc;",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f063c8_ab18a03d",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-10-05T15:32:32Z",
+      "side": 1,
+      "message": "Rather than reversing the string, could we generate it from the end to the start, and shift it over only if we made a mistake due to conservative estimates?",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46face09_640c5e3c",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-10-05T15:32:32Z",
+      "side": 1,
+      "message": "DCHECK that there aren\u0027t any ? chars remaining?",
+      "revId": "e259f58aa0ac0601ebc2d3798925cdafe24e0a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
