@@ -226,9 +226,16 @@ static base::LazyInstance<base::RandomNumberGenerator, RNGInitializer>::type
 void* GetRandomMmapAddr() {
 #if defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || \
     defined(THREAD_SANITIZER)
-  // Dynamic tools do not support custom mmap addresses.
-  return NULL;
-#endif
+  // Dynamic tools don't work with custom mmap addresses.
+  // TODO(bbudge) Remove this when we override GetRandomMmapAddr in Chromium,
+  // which generates ranges that do work.
+  return nullptr;
+#else
+  uint32_t seed =
+      static_cast<uint32_t>(random_number_generator.Pointer()->initial_seed());
+  void* platform_addr = V8::GetCurrentPlatform()->GetRandomMmapAddr(seed);
+  if (platform_addr != nullptr) return platform_addr;
+
   uintptr_t raw_addr;
   random_number_generator.Pointer()->NextBytes(&raw_addr, sizeof(raw_addr));
 #if V8_OS_POSIX
@@ -303,6 +310,8 @@ void* GetRandomMmapAddr() {
   raw_addr &= kAllocationRandomAddressMax;
 #endif  // V8_OS_WIN
   return reinterpret_cast<void*>(raw_addr);
+#endif  // defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || \
+    // defined(THREAD_SANITIZER)
 }
 
 }  // namespace internal
