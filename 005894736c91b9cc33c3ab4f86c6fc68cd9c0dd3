@@ -22,6 +22,30 @@
       "revId": "005894736c91b9cc33c3ab4f86c6fc68cd9c0dd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83394f5e_39fd1087",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-10-06T22:49:53Z",
+      "side": 1,
+      "message": "Done. I also changed the parameter to int64_t to match V8\u0027s seed.",
+      "parentUuid": "eaebec3d_9a775449",
+      "range": {
+        "startLine": 143,
+        "startChar": 16,
+        "endLine": 143,
+        "endChar": 33
+      },
+      "revId": "005894736c91b9cc33c3ab4f86c6fc68cd9c0dd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
