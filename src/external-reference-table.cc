@@ -219,7 +219,7 @@ void ExternalReferenceTable::AddReferences(Isolate* isolate) {
   // If the trap handler is not supported, the optimizer will remove these
   // runtime functions. In this case, the arm simulator will break if we add
   // them to the external reference table.
-  if (V8_TRAP_HANDLER_SUPPORTED) {
+  if (V8_TARGET_ARCH_X64) {
     Add(ExternalReference::wasm_set_thread_in_wasm_flag(isolate).address(),
         "wasm::set_thread_in_wasm_flag");
     Add(ExternalReference::wasm_clear_thread_in_wasm_flag(isolate).address(),
