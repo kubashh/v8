@@ -214,6 +214,8 @@ struct RNGInitializer {
     int64_t random_seed = FLAG_random_seed;
     if (random_seed) {
       rng->SetSeed(random_seed);
+      // Set the embedder's RNG seed as well.
+      V8::GetCurrentPlatform()->SetRandomMmapAddrSeed(random_seed);
     }
   }
 };
@@ -226,9 +228,15 @@ static base::LazyInstance<base::RandomNumberGenerator, RNGInitializer>::type
 void* GetRandomMmapAddr() {
 #if defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || \
     defined(THREAD_SANITIZER)
-  // Dynamic tools do not support custom mmap addresses.
-  return NULL;
+  // Dynamic tools don't work with custom mmap addresses.
+  // TODO(bbudge) Remove this when we override GetRandomMmapAddr in Chromium,
+  // which generates ranges that do work.
+  return nullptr;
 #endif
+
+  void* platform_addr = V8::GetCurrentPlatform()->GetRandomMmapAddr();
+  if (platform_addr != nullptr) return platform_addr;
+
   uintptr_t raw_addr;
   random_number_generator.Pointer()->NextBytes(&raw_addr, sizeof(raw_addr));
 #if V8_OS_POSIX

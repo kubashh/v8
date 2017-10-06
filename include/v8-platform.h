@@ -133,6 +133,20 @@ class Platform {
   virtual ~Platform() = default;
 
   /**
+   * Sets the state of the random number generator used by GetRandomMmapAddr to
+   * the given seed value, to generate a predictable sequence of addresses for
+   * testing or debugging. This may be a no-op in cases where security requires
+   * randomness.
+   */
+  virtual void SetRandomMmapAddrSeed(int64_t seed) {}
+
+  /**
+   * Returns a randomized address, suitable for memory allocation under ASLR.
+   * The address will be aligned to the host OS page size.
+   */
+  virtual void* GetRandomMmapAddr() { return nullptr; }
+
+  /**
    * Enables the embedder to respond in cases where V8 can't allocate large
    * blocks of memory. V8 retries the failed allocation once after calling this
    * method. On success, execution continues; otherwise V8 exits with a fatal
