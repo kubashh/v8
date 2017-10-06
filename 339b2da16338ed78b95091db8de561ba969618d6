@@ -16,6 +16,24 @@
       "revId": "339b2da16338ed78b95091db8de561ba969618d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dfa93f5_34d7142c",
+        "filename": "src/external-reference-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-10-06T22:16:05Z",
+      "side": 1,
+      "message": "Yes, the entries will be there, but never used.",
+      "parentUuid": "a1c139ed_1c950b7b",
+      "revId": "339b2da16338ed78b95091db8de561ba969618d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
