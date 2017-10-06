@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b09e2cc6_204d7654",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-10-06T00:25:10Z",
+      "side": 1,
+      "message": "Looks like other examples use `__asm__ volatile`, does that not matter here?",
+      "revId": "5e9268c5cb24a98aff7e33c69832791533c9d96b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
