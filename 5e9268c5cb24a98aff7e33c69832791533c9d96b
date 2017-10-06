@@ -16,6 +16,24 @@
       "revId": "5e9268c5cb24a98aff7e33c69832791533c9d96b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19fd83cf_91a83c2a",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-06T00:39:06Z",
+      "side": 1,
+      "message": "According to https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile:\n\n\"GCC’s optimizers sometimes discard asm statements if they determine there is no need for the output variables. Also, the optimizers may move code out of loops if they believe that the code will always return the same result (i.e. none of its input values change between calls). Using the volatile qualifier disables these optimizations.\"\n\nI don\u0027t think we need \"volatile\" here. (Examples that need it are things like the \"rdtsc\" instruction to read the current time.)",
+      "parentUuid": "b09e2cc6_204d7654",
+      "revId": "5e9268c5cb24a98aff7e33c69832791533c9d96b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
