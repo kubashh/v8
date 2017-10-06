@@ -1956,20 +1956,9 @@ class GrowableFixedArray {
     CSA_ASSERT(a, a->IntPtrGreaterThan(new_capacity, a->IntPtrConstant(0)));
     CSA_ASSERT(a, a->IntPtrGreaterThanOrEqual(new_capacity, element_count));
 
-    const ElementsKind kind = PACKED_ELEMENTS;
-    const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
-    const CodeStubAssembler::ParameterMode mode =
-        CodeStubAssembler::INTPTR_PARAMETERS;
-    const CodeStubAssembler::AllocationFlags flags =
-        CodeStubAssembler::kAllowLargeObjectAllocation;
-
-    Node* const from_array = var_array_.value();
-    Node* const to_array =
-        a->AllocateFixedArray(kind, new_capacity, mode, flags);
-    a->CopyFixedArrayElements(kind, from_array, kind, to_array, element_count,
-                              new_capacity, barrier_mode, mode);
-
-    return to_array;
+    return a->ExtractFixedArray(
+        var_array_.value(), a->IntPtrConstant(0), element_count, new_capacity,
+        CodeStubAssembler::ExtractFixedArrayFlag::kFixedArrays);
   }
 
  private:

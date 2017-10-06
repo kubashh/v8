@@ -222,47 +222,26 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
 void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
     Node* target, Node* new_target, Node* elements, Node* length,
     Node* args_count, Node* context, Node* kind) {
-  Label if_holey_double(this), if_packed_double(this), if_done(this);
-
-  const ElementsKind new_kind = PACKED_ELEMENTS;
-  const ParameterMode mode = INTPTR_PARAMETERS;
-  const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
   Node* intptr_length = ChangeInt32ToIntPtr(length);
 
   // Allocate a new FixedArray of Objects.
+  const ElementsKind new_kind = PACKED_ELEMENTS;
+  const ParameterMode mode = INTPTR_PARAMETERS;
+  const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
   Node* new_elements =
       AllocateFixedArray(new_kind, intptr_length, mode,
                          CodeStubAssembler::kAllowLargeObjectAllocation);
-  Branch(Word32Equal(kind, Int32Constant(HOLEY_DOUBLE_ELEMENTS)),
-         &if_holey_double, &if_packed_double);
+  CopyFixedArrayElements(HOLEY_DOUBLE_ELEMENTS, elements, new_kind,
+                         new_elements, intptr_length, intptr_length,
+                         barrier_mode);
 
-  BIND(&if_holey_double);
-  {
-    // Fill the FixedArray with pointers to HeapObjects.
-    CopyFixedArrayElements(HOLEY_DOUBLE_ELEMENTS, elements, new_kind,
-                           new_elements, intptr_length, intptr_length,
-                           barrier_mode);
-    Goto(&if_done);
-  }
-
-  BIND(&if_packed_double);
-  {
-    CopyFixedArrayElements(PACKED_DOUBLE_ELEMENTS, elements, new_kind,
-                           new_elements, intptr_length, intptr_length,
-                           barrier_mode);
-    Goto(&if_done);
-  }
-
-  BIND(&if_done);
-  {
-    if (new_target == nullptr) {
-      Callable callable = CodeFactory::CallVarargs(isolate());
-      TailCallStub(callable, context, target, args_count, new_elements, length);
-    } else {
-      Callable callable = CodeFactory::ConstructVarargs(isolate());
-      TailCallStub(callable, context, target, new_target, args_count,
-                   new_elements, length);
-    }
+  if (new_target == nullptr) {
+    Callable callable = CodeFactory::CallVarargs(isolate());
+    TailCallStub(callable, context, target, args_count, new_elements, length);
+  } else {
+    Callable callable = CodeFactory::ConstructVarargs(isolate());
+    TailCallStub(callable, context, target, new_target, args_count,
+                 new_elements, length);
   }
 }
 
