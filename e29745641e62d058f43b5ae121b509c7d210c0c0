@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7515bd4_1d0aad07",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-06T15:13:27Z",
+      "side": 1,
+      "message": "Nit: Add a TODO here to also handle \"compatible elements kinds\".",
+      "range": {
+        "startLine": 855,
+        "startChar": 4,
+        "endLine": 855,
+        "endChar": 5
+      },
+      "revId": "e29745641e62d058f43b5ae121b509c7d210c0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
