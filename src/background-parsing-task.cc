@@ -35,9 +35,7 @@ BackgroundParsingTask::BackgroundParsingTask(
   // will happen in the main thread after parsing.
   ParseInfo* info = new ParseInfo(isolate->allocator());
   info->InitFromIsolate(isolate);
-  if (V8_UNLIKELY(FLAG_runtime_stats)) {
-    info->set_runtime_call_stats(new (info->zone()) RuntimeCallStats());
-  }
+  info->set_runtime_call_stats(new (info->zone()) RuntimeCallStats());
   info->set_toplevel();
   std::unique_ptr<Utf16CharacterStream> stream(
       ScannerStream::For(source->source_stream.get(), source->encoding,
