@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c13a1abb_2992509d",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-09T18:04:34Z",
+      "side": 1,
+      "message": "How about adding this:\n\nif (builtin_for_non_number \u003d\u003d Builtins::kNonNumberToNumeric) {\n  Label not_bigint(this);\n  GotoIfNot(IsBigInt(object), \u0026not_bigint);\n  var_result.Bind(object);\n  var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kBigInt));\n  Goto(\u0026if_done);\n  BIND(\u0026not_bigint);\n}",
+      "range": {
+        "startLine": 1581,
+        "startChar": 4,
+        "endLine": 1581,
+        "endChar": 64
+      },
+      "revId": "7b009579d433975b47b52e999045391b163a6e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
