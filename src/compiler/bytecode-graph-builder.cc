@@ -2516,6 +2516,11 @@ void BytecodeGraphBuilder::VisitToNumber() {
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
+void BytecodeGraphBuilder::VisitToNumeric() {
+  DCHECK(!FLAG_harmony_bigint);
+  VisitToNumber();
+}
+
 void BytecodeGraphBuilder::VisitJump() { BuildJump(); }
 
 void BytecodeGraphBuilder::VisitJumpConstant() { BuildJump(); }
