@@ -486,6 +486,8 @@ class V8_EXPORT_PRIVATE Factory final {
   // Initializes length and sign fields, but leaves digits uninitialized.
   Handle<BigInt> NewBigIntRaw(int length,
                               PretenureFlag pretenure = NOT_TENURED);
+  Handle<BigInt> NewBigIntFromSmi(int smi,
+                                  PretenureFlag pretenure = NOT_TENURED);
 
   Handle<JSWeakMap> NewJSWeakMap();
 
