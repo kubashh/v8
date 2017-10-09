@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3527eb41_966d77bd",
+        "filename": "src/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-09T16:17:51Z",
+      "side": 1,
+      "message": "This is confusing. I would expect either \"NewBigIntFromInt(int value, ...)\", or \"NewBigIntFromSmi(Smi* value, ...)\". What\u0027s wrong with keeping the name you had originally? You can get around the overflow issue by special-casing it:\n\nif (value \u003e 0) {\n  ...\n} else if (value \u003d\u003d kMinInt) {\n  STATIC_ASSERT(kMinInt \u003d\u003d -kMaxInt - 1);\n  ...-\u003eset_digit(0, static_cast\u003cuintptr_t\u003e(kMaxInt) + 1);\n} else {\n  ...-\u003eset_digit(0, -static_cast\u003cintptr_t\u003e(value));\n}",
+      "range": {
+        "startLine": 1426,
+        "startChar": 24,
+        "endLine": 1426,
+        "endChar": 48
+      },
+      "revId": "d4555c997b8f11935aef59d183605b91310eb1f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
