@@ -43,7 +43,11 @@ class BigInt : public HeapObject {
   static Handle<BigInt> BitwiseOr(Handle<BigInt> x, Handle<BigInt> y);
 
   // Other parts of the public interface.
+  static Handle<BigInt> Increment(Handle<BigInt> x);
+  static Handle<BigInt> Decrement(Handle<BigInt> x);
+
   bool ToBoolean() { return !is_zero(); }
+
   uint32_t Hash() {
     // TODO(jkummerow): Improve this. At least use length and sign.
     return is_zero() ? 0 : ComputeIntegerHash(static_cast<uint32_t>(digit(0)));

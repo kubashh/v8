@@ -13,6 +13,20 @@
 namespace v8 {
 namespace internal {
 
+RUNTIME_FUNCTION(Runtime_BigIntDecrement) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(BigInt, bigint, 0);
+  return *BigInt::Decrement(bigint);
+}
+
+RUNTIME_FUNCTION(Runtime_BigIntIncrement) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(BigInt, bigint, 0);
+  return *BigInt::Increment(bigint);
+}
+
 RUNTIME_FUNCTION(Runtime_BigIntEqual) {
   SealHandleScope shs(isolate);
   DCHECK_EQ(2, args.length());
