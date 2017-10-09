@@ -67,7 +67,7 @@ MaybeHandle<BigInt> BigInt::Divide(Handle<BigInt> x, Handle<BigInt> y) {
   //    integral value.
   if (AbsoluteCompare(x, y) < 0) {
     // TODO(jkummerow): Consider caching a canonical zero-BigInt.
-    return x->GetIsolate()->factory()->NewBigIntFromInt(0);
+    return x->GetIsolate()->factory()->NewBigIntFromSmi(0);
   }
   Handle<BigInt> quotient;
   if (y->length() == 1) {
@@ -95,7 +95,7 @@ MaybeHandle<BigInt> BigInt::Remainder(Handle<BigInt> x, Handle<BigInt> y) {
     digit_t remainder_digit;
     AbsoluteDivSmall(x, y->digit(0), nullptr, &remainder_digit);
     if (remainder_digit == 0) {
-      return x->GetIsolate()->factory()->NewBigIntFromInt(0);
+      return x->GetIsolate()->factory()->NewBigIntFromSmi(0);
     }
     remainder = x->GetIsolate()->factory()->NewBigIntRaw(1);
     remainder->set_digit(0, remainder_digit);
@@ -246,6 +246,18 @@ MaybeHandle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
     return ToStringBasePowerOfTwo(bigint, radix);
   }
   return ToStringGeneric(bigint, radix);
+}
+
+Handle<BigInt> BigInt::Increment(Handle<BigInt> x) {
+  // TODO(neis): Cache {one}.
+  Handle<BigInt> one = x->GetIsolate()->factory()->NewBigIntFromSmi(1);
+  return BigInt::Add(x, one);
+}
+
+Handle<BigInt> BigInt::Decrement(Handle<BigInt> x) {
+  // TODO(neis): Cache {one}.
+  Handle<BigInt> one = x->GetIsolate()->factory()->NewBigIntFromSmi(1);
+  return BigInt::Subtract(x, one);
 }
 
 void BigInt::Initialize(int length, bool zero_initialize) {
@@ -898,10 +910,10 @@ Handle<BigInt> BigInt::RightShiftByAbsolute(Handle<BigInt> x,
 Handle<BigInt> BigInt::RightShiftByMaximum(Isolate* isolate, bool sign) {
   if (sign) {
     // TODO(jkummerow): Consider caching a canonical -1n BigInt.
-    return isolate->factory()->NewBigIntFromInt(-1);
+    return isolate->factory()->NewBigIntFromSmi(-1);
   } else {
     // TODO(jkummerow): Consider caching a canonical zero BigInt.
-    return isolate->factory()->NewBigIntFromInt(0);
+    return isolate->factory()->NewBigIntFromSmi(0);
   }
 }
 

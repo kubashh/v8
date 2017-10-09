@@ -69,9 +69,11 @@ namespace internal {
   F(SetAllowAtomicsWait, 1, 1)
 
 #define FOR_EACH_INTRINSIC_BIGINT(F) \
+  F(BigIntBinaryOp, 3, 1)            \
+  F(BigIntDecrement, 1, 1)           \
   F(BigIntEqual, 2, 1)               \
-  F(BigIntToBoolean, 1, 1)           \
-  F(BigIntBinaryOp, 3, 1)
+  F(BigIntIncrement, 1, 1)           \
+  F(BigIntToBoolean, 1, 1)
 
 #define FOR_EACH_INTRINSIC_CLASSES(F)        \
   F(ThrowUnsupportedSuperError, 0, 1)        \
@@ -418,6 +420,7 @@ namespace internal {
   F(ToPrimitive, 1, 1)                                          \
   F(ToPrimitive_Number, 1, 1)                                   \
   F(ToNumber, 1, 1)                                             \
+  F(ToNumeric, 1, 1)                                            \
   F(ToInteger, 1, 1)                                            \
   F(ToLength, 1, 1)                                             \
   F(ToString, 1, 1)                                             \

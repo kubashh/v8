@@ -20,7 +20,7 @@ BUILTIN(BigIntConstructor) {
   // Dummy implementation only takes Smi args.
   if (!value->IsSmi()) return isolate->heap()->undefined_value();
   int num = Smi::ToInt(*value);
-  return *isolate->factory()->NewBigIntFromInt(num);
+  return *isolate->factory()->NewBigIntFromSmi(num);
 }
 
 BUILTIN(BigIntConstructor_ConstructStub) {
@@ -49,7 +49,7 @@ BUILTIN(BigIntParseInt) {
   // Fast path: avoid back-and-forth conversion for Smi inputs.
   if (string->IsSmi() && radix->IsUndefined(isolate)) {
     int num = Smi::ToInt(*string);
-    return *isolate->factory()->NewBigIntFromInt(num);
+    return *isolate->factory()->NewBigIntFromSmi(num);
   }
   Handle<String> subject;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, subject,

@@ -1327,49 +1327,14 @@ IGNITION_HANDLER(ToName, InterpreterAssembler) {
 //
 // Convert the object referenced by the accumulator to a number.
 IGNITION_HANDLER(ToNumber, InterpreterAssembler) {
-  Node* object = GetAccumulator();
-  Node* context = GetContext();
+  ToNumberOrNumericHelper(Builtins::kNonNumberToNumber);
+}
 
-  // Convert the {object} to a Number and collect feedback for the {object}.
-  Variable var_type_feedback(this, MachineRepresentation::kTaggedSigned);
-  Variable var_result(this, MachineRepresentation::kTagged);
-  Label if_done(this), if_objectissmi(this), if_objectisnumber(this),
-      if_objectisother(this, Label::kDeferred);
-
-  GotoIf(TaggedIsSmi(object), &if_objectissmi);
-  Branch(IsHeapNumber(object), &if_objectisnumber, &if_objectisother);
-
-  BIND(&if_objectissmi);
-  {
-    var_result.Bind(object);
-    var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kSignedSmall));
-    Goto(&if_done);
-  }
-
-  BIND(&if_objectisnumber);
-  {
-    var_result.Bind(object);
-    var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kNumber));
-    Goto(&if_done);
-  }
-
-  BIND(&if_objectisother);
-  {
-    // Convert the {object} to a Number.
-    var_result.Bind(CallBuiltin(Builtins::kNonNumberToNumber, context, object));
-    var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
-    Goto(&if_done);
-  }
-
-  BIND(&if_done);
-
-  // Record the type feedback collected for {object}.
-  Node* slot_index = BytecodeOperandIdx(0);
-  Node* feedback_vector = LoadFeedbackVector();
-  UpdateFeedback(var_type_feedback.value(), feedback_vector, slot_index);
-
-  SetAccumulator(var_result.value());
-  Dispatch();
+// ToNumeric <slot>
+//
+// Convert the object referenced by the accumulator to a numeric.
+IGNITION_HANDLER(ToNumeric, InterpreterAssembler) {
+  ToNumberOrNumericHelper(Builtins::kNonNumberToNumeric);
 }
 
 // ToObject <dst>
@@ -1396,16 +1361,16 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
 
   // Shared entry for floating point increment.
   Label do_finc(this), end(this);
-  Variable var_finc_value(this, MachineRepresentation::kFloat64);
+  Variable var_finc_value(this, MachineRepresentation::kFloat64,
+                          Float64Constant(0));
 
-  // We might need to try again due to ToNumber conversion.
-  Variable value_var(this, MachineRepresentation::kTagged);
-  Variable result_var(this, MachineRepresentation::kTagged);
-  Variable var_type_feedback(this, MachineRepresentation::kTaggedSigned);
+  // We might need to try again due to ToNumeric conversion.
+  Variable value_var(this, MachineRepresentation::kTagged, value);
+  Variable result_var(this, MachineRepresentation::kTagged, value);
+  Variable var_type_feedback(this, MachineRepresentation::kTaggedSigned,
+                             SmiConstant(BinaryOperationFeedback::kNone));
   Variable* loop_vars[] = {&value_var, &var_type_feedback};
   Label start(this, 2, loop_vars);
-  value_var.Bind(value);
-  var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kNone));
   Goto(&start);
   BIND(&start);
   {
@@ -1443,9 +1408,11 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
     BIND(&if_isnotsmi);
     {
       // Check if the value is a HeapNumber.
-      Label if_valueisnumber(this), if_valuenotnumber(this, Label::kDeferred);
+      Label if_valueisnumber(this), if_valueisbigint(this),
+          if_valuenotnumeric(this, Label::kDeferred);
       Node* value_map = LoadMap(value);
-      Branch(IsHeapNumberMap(value_map), &if_valueisnumber, &if_valuenotnumber);
+      GotoIf(IsHeapNumberMap(value_map), &if_valueisnumber);
+      Branch(IsBigInt(value), &if_valueisbigint, &if_valuenotnumeric);
 
       BIND(&if_valueisnumber);
       {
@@ -1454,7 +1421,14 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
         Goto(&do_finc);
       }
 
-      BIND(&if_valuenotnumber);
+      BIND(&if_valueisbigint);
+      {
+        var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
+        result_var.Bind(CallRuntime(Runtime::kBigIntIncrement, context, value));
+        Goto(&end);
+      }
+
+      BIND(&if_valuenotnumeric);
       {
         // We do not require an Or with earlier feedback here because once we
         // convert the value to a number, we cannot reach this path. We can
@@ -1482,7 +1456,7 @@ IGNITION_HANDLER(Inc, InterpreterAssembler) {
           // Convert to a Number first and try again.
           var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
           value_var.Bind(
-              CallBuiltin(Builtins::kNonNumberToNumber, context, value));
+              CallBuiltin(Builtins::kNonNumberToNumeric, context, value));
           Goto(&start);
         }
       }
@@ -1519,16 +1493,16 @@ IGNITION_HANDLER(Dec, InterpreterAssembler) {
 
   // Shared entry for floating point decrement.
   Label do_fdec(this), end(this);
-  Variable var_fdec_value(this, MachineRepresentation::kFloat64);
+  Variable var_fdec_value(this, MachineRepresentation::kFloat64,
+                          Float64Constant(0));
 
-  // We might need to try again due to ToNumber conversion.
-  Variable value_var(this, MachineRepresentation::kTagged);
-  Variable result_var(this, MachineRepresentation::kTagged);
-  Variable var_type_feedback(this, MachineRepresentation::kTaggedSigned);
+  // We might need to try again due to ToNumeric conversion.
+  Variable value_var(this, MachineRepresentation::kTagged, value);
+  Variable result_var(this, MachineRepresentation::kTagged, value);
+  Variable var_type_feedback(this, MachineRepresentation::kTaggedSigned,
+                             SmiConstant(BinaryOperationFeedback::kNone));
   Variable* loop_vars[] = {&value_var, &var_type_feedback};
   Label start(this, 2, loop_vars);
-  var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kNone));
-  value_var.Bind(value);
   Goto(&start);
   BIND(&start);
   {
@@ -1566,9 +1540,11 @@ IGNITION_HANDLER(Dec, InterpreterAssembler) {
     BIND(&if_isnotsmi);
     {
       // Check if the value is a HeapNumber.
-      Label if_valueisnumber(this), if_valuenotnumber(this, Label::kDeferred);
+      Label if_valueisnumber(this), if_valueisbigint(this),
+          if_valuenotnumeric(this, Label::kDeferred);
       Node* value_map = LoadMap(value);
-      Branch(IsHeapNumberMap(value_map), &if_valueisnumber, &if_valuenotnumber);
+      GotoIf(IsHeapNumberMap(value_map), &if_valueisnumber);
+      Branch(IsBigInt(value), &if_valueisbigint, &if_valuenotnumeric);
 
       BIND(&if_valueisnumber);
       {
@@ -1577,7 +1553,14 @@ IGNITION_HANDLER(Dec, InterpreterAssembler) {
         Goto(&do_fdec);
       }
 
-      BIND(&if_valuenotnumber);
+      BIND(&if_valueisbigint);
+      {
+        var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
+        result_var.Bind(CallRuntime(Runtime::kBigIntDecrement, context, value));
+        Goto(&end);
+      }
+
+      BIND(&if_valuenotnumeric);
       {
         // We do not require an Or with earlier feedback here because once we
         // convert the value to a number, we cannot reach this path. We can
