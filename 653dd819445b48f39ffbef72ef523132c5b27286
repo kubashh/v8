@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2b4bbbde_7495746c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-09T14:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a91c310_d73a55bd",
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "893db2a4_fbe5cc42",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -95,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "31ea4b34_fa0ad3fe",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-09T14:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fa6aaf6_00e679a2",
+      "range": {
+        "startLine": 2381,
+        "startChar": 19,
+        "endLine": 2381,
+        "endChar": 28
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71427937_6a5d7228",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -115,6 +157,30 @@
       "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8bfa947_59e207f6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2382,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-09T14:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71427937_6a5d7228",
+      "range": {
+        "startLine": 2382,
+        "startChar": 19,
+        "endLine": 2382,
+        "endChar": 28
+      },
+      "revId": "653dd819445b48f39ffbef72ef523132c5b27286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
