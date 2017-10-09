@@ -168,6 +168,10 @@ class Worklist {
     PublishPopSegmentToGlobal(task_id);
   }
 
+  void MergeGlobalPool(Worklist* other) {
+    global_pool_.Merge(&(other->global_pool_));
+  }
+
  private:
   FRIEND_TEST(WorkListTest, SegmentCreate);
   FRIEND_TEST(WorkListTest, SegmentPush);
@@ -303,6 +307,22 @@ class Worklist {
            current = current->next()) {
         current->Iterate(callback);
       }
+    }
+
+    void Merge(GlobalPool* other) {
+      base::LockGuard<base::Mutex> guard(&lock_);
+      base::LockGuard<base::Mutex> other_guard(&(other->lock_));
+      Segment* const other_top = other->top_;
+      if (other_top == nullptr) return;
+      Segment* end = other_top;
+      int cnt = 0;
+      while (end->next() != nullptr) {
+        cnt++;
+        end = end->next();
+      }
+      end->set_next(top_);
+      set_top(other_top);
+      other->set_top(nullptr);
     }
 
    private:

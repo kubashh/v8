@@ -1128,6 +1128,14 @@ size_t IncrementalMarking::Step(size_t bytes_to_process,
                                 CompletionAction action,
                                 ForceCompletionAction completion,
                                 StepOrigin step_origin) {
+  if (FLAG_concurrent_marking) {
+    heap_->new_space()->ResetOriginalTop();
+    // It is safe to merge back all objects that were on hold to the shared
+    // work list at Step.
+    marking_worklist()->shared()->MergeGlobalPool(
+        marking_worklist()->on_hold());
+  }
+
   double start = heap_->MonotonicallyIncreasingTimeInMs();
 
   if (state_ == SWEEPING) {
