@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60b3adf5_ea964f10",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-09T13:25:57Z",
+      "side": 1,
+      "message": "I suppose I should use the new BigInt feedback here?",
+      "revId": "fed34d33bae89781b9b93145318e796cedc1a4d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf0af000_5dc4c634",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-09T13:25:57Z",
+      "side": 1,
+      "message": "... and here",
+      "revId": "fed34d33bae89781b9b93145318e796cedc1a4d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
