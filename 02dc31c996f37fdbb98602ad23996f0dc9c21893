@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d9d6b15_d7914b21",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-09T18:35:13Z",
+      "side": 1,
+      "message": "Would \"Numeric\" be a better name, since this handles BigInts as well as numbers?",
+      "range": {
+        "startLine": 1171,
+        "startChar": 11,
+        "endLine": 1171,
+        "endChar": 17
+      },
+      "revId": "02dc31c996f37fdbb98602ad23996f0dc9c21893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d685f8e8_5a4534c5",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-09T18:35:13Z",
+      "side": 1,
+      "message": "arraysize(loop_vars)",
+      "range": {
+        "startLine": 1196,
+        "startChar": 22,
+        "endLine": 1196,
+        "endChar": 23
+      },
+      "revId": "02dc31c996f37fdbb98602ad23996f0dc9c21893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce54b1f_9505f275",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-09T18:35:13Z",
+      "side": 1,
+      "message": "Please add a DCHECK here that op is either INC or DEC.",
+      "revId": "02dc31c996f37fdbb98602ad23996f0dc9c21893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
