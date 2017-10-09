@@ -51,8 +51,6 @@ namespace internal {
     "The function_data field should be a BytecodeArray on interpreter entry")  \
   V(kGenerator, "Generator")                                                   \
   V(kGetIterator, "GetIterator")                                               \
-  V(kGlobalFunctionsMustHaveInitialMap,                                        \
-    "Global functions must have initial map")                                  \
   V(kGraphBuildingFailed, "Optimized graph construction failed")               \
   V(kHeapNumberMapRegisterClobbered, "HeapNumberMap register clobbered")       \
   V(kIndexIsNegative, "Index is negative")                                     \
