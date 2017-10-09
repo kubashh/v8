@@ -84,10 +84,6 @@ enum LiFlags {
 
 enum RememberedSetAction { EMIT_REMEMBERED_SET, OMIT_REMEMBERED_SET };
 enum SmiCheck { INLINE_SMI_CHECK, OMIT_SMI_CHECK };
-enum PointersToHereCheck {
-  kPointersToHereMaybeInteresting,
-  kPointersToHereAreAlwaysInteresting
-};
 enum RAStatus { kRAHasNotBeenSaved, kRAHasBeenSaved };
 
 Register GetRegisterThatIsNotOneOf(Register reg1,
@@ -1048,39 +1044,20 @@ class MacroAssembler : public TurboAssembler {
   // The offset is the offset from the start of the object, not the offset from
   // the tagged HeapObject pointer.  For use with FieldOperand(reg, off).
   void RecordWriteField(
-      Register object,
-      int offset,
-      Register value,
-      Register scratch,
-      RAStatus ra_status,
-      SaveFPRegsMode save_fp,
+      Register object, int offset, Register value, Register scratch,
+      RAStatus ra_status, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting);
+      SmiCheck smi_check = INLINE_SMI_CHECK);
 
   // As above, but the offset has the tag presubtracted.  For use with
   // MemOperand(reg, off).
   inline void RecordWriteContextSlot(
-      Register context,
-      int offset,
-      Register value,
-      Register scratch,
-      RAStatus ra_status,
-      SaveFPRegsMode save_fp,
+      Register context, int offset, Register value, Register scratch,
+      RAStatus ra_status, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting) {
-    RecordWriteField(context,
-                     offset + kHeapObjectTag,
-                     value,
-                     scratch,
-                     ra_status,
-                     save_fp,
-                     remembered_set_action,
-                     smi_check,
-                     pointers_to_here_check_for_value);
+      SmiCheck smi_check = INLINE_SMI_CHECK) {
+    RecordWriteField(context, offset + kHeapObjectTag, value, scratch,
+                     ra_status, save_fp, remembered_set_action, smi_check);
   }
 
   // For a given |object| notify the garbage collector that the slot |address|
@@ -1090,9 +1067,7 @@ class MacroAssembler : public TurboAssembler {
       Register object, Register address, Register value, RAStatus ra_status,
       SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting);
+      SmiCheck smi_check = INLINE_SMI_CHECK);
 
   void Pref(int32_t hint, const MemOperand& rs);
 

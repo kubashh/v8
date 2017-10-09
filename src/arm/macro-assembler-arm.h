@@ -53,10 +53,6 @@ enum TaggingMode {
 
 enum RememberedSetAction { EMIT_REMEMBERED_SET, OMIT_REMEMBERED_SET };
 enum SmiCheck { INLINE_SMI_CHECK, OMIT_SMI_CHECK };
-enum PointersToHereCheck {
-  kPointersToHereMaybeInteresting,
-  kPointersToHereAreAlwaysInteresting
-};
 enum LinkRegisterStatus { kLRHasNotBeenSaved, kLRHasBeenSaved };
 
 
@@ -662,9 +658,7 @@ class MacroAssembler : public TurboAssembler {
       Register object, int offset, Register value, Register scratch,
       LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting);
+      SmiCheck smi_check = INLINE_SMI_CHECK);
 
   // As above, but the offset has the tag presubtracted.  For use with
   // MemOperand(reg, off).
@@ -672,12 +666,9 @@ class MacroAssembler : public TurboAssembler {
       Register context, int offset, Register value, Register scratch,
       LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting) {
+      SmiCheck smi_check = INLINE_SMI_CHECK) {
     RecordWriteField(context, offset + kHeapObjectTag, value, scratch,
-                     lr_status, save_fp, remembered_set_action, smi_check,
-                     pointers_to_here_check_for_value);
+                     lr_status, save_fp, remembered_set_action, smi_check);
   }
 
   // For a given |object| notify the garbage collector that the slot |address|
@@ -687,9 +678,7 @@ class MacroAssembler : public TurboAssembler {
       Register object, Register address, Register value,
       LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
       RememberedSetAction remembered_set_action = EMIT_REMEMBERED_SET,
-      SmiCheck smi_check = INLINE_SMI_CHECK,
-      PointersToHereCheck pointers_to_here_check_for_value =
-          kPointersToHereMaybeInteresting);
+      SmiCheck smi_check = INLINE_SMI_CHECK);
 
   // Push and pop the registers that can hold pointers, as defined by the
   // RegList constant kSafepointSavedRegisters.
