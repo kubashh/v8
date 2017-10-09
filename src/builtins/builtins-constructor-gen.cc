@@ -256,12 +256,8 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewObject(Node* context,
   }
 
   BIND(&instantiate_map);
-
-  Node* object = AllocateJSObjectFromMap(initial_map, properties.value());
-
-  // Perform in-object slack tracking if requested.
-  HandleSlackTracking(context, object, initial_map, JSObject::kHeaderSize);
-  return object;
+  return AllocateJSObjectFromMapWithSlackTracking(context, initial_map,
+                                                  properties.value());
 }
 
 Node* ConstructorBuiltinsAssembler::EmitFastNewFunctionContext(

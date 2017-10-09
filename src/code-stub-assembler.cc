@@ -2443,16 +2443,55 @@ void CodeStubAssembler::InitializeJSObjectFromMap(Node* object, Node* map,
 void CodeStubAssembler::InitializeJSObjectBody(Node* object, Node* map,
                                                Node* size, int start_offset) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // TODO(cbruni): activate in-object slack tracking machinery.
   Comment("InitializeJSObjectBody");
-  Node* filler = UndefinedConstant();
-  // Calculate the untagged field addresses.
-  object = BitcastTaggedToWord(object);
-  Node* start_address =
-      IntPtrAdd(object, IntPtrConstant(start_offset - kHeapObjectTag));
-  Node* end_address =
-      IntPtrSub(IntPtrAdd(object, size), IntPtrConstant(kHeapObjectTag));
-  StoreFieldsNoWriteBarrier(start_address, end_address, filler);
+
+  // Perform in-object slack tracking if requested.
+  int start_offset = JSObject::kHeaderSize;
+  Node* bit_field3 = LoadMapBitField3(map);
+  Label end(this), slack_tracking(this), complete(this, Label::kDeferred);
+  STATIC_ASSERT(Map::kNoSlackTracking == 0);
+  GotoIf(IsSetWord32<Map::ConstructionCounter>(bit_field3), &slack_tracking);
+  Comment("no slack tracking");
+  InitializeJSObjectBody(object, map, instance_size);
+  Goto(&end);
+
+  BIND(&slack_tracking);
+  {
+    Comment("Decrease construction counter");
+    // Slack tracking is only done on initial maps.
+    CSA_ASSERT(this, IsUndefined(LoadMapBackPointer(map)));
+    STATIC_ASSERT(Map::ConstructionCounter::kNext == 32);
+    Node* new_bit_field3 = Int32Sub(
+        bit_field3, Int32Constant(1 << Map::ConstructionCounter::kShift));
+    StoreObjectFieldNoWriteBarrier(map, Map::kBitField3Offset, new_bit_field3,
+                                   MachineRepresentation::kWord32);
+    STATIC_ASSERT(Map::kSlackTrackingCounterEnd == 1);
+
+    Node* unused_fields = LoadObjectField(map, Map::kUnusedPropertyFieldsOffset,
+                                          MachineType::Uint8());
+    Node* used_size = IntPtrSub(
+        instance_size, TimesPointerSize(ChangeUint32ToWord(unused_fields)));
+
+    Comment("initialize filler fields");
+    InitializeFieldsWithRoot(object, used_size, instance_size,
+                             Heap::kOnePointerFillerMapRootIndex);
+
+    Comment("initialize undefined fields");
+    InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), used_size,
+                             Heap::kUndefinedValueRootIndex);
+
+    GotoIf(IsClearWord32<Map::ConstructionCounter>(new_bit_field3), &complete);
+    Goto(&end);
+  }
+
+  // Finalize the instance size.
+  BIND(&complete);
+  {
+    CallRuntime(Runtime::kCompleteInobjectSlackTracking, context, map);
+    Goto(&end);
+  }
+
+  BIND(&end);
 }
 
 void CodeStubAssembler::StoreFieldsNoWriteBarrier(Node* start_address,
