@@ -33,10 +33,10 @@ TEST(ConcurrentMarking) {
   Heap* heap = CcTest::heap();
   CcTest::CollectAllGarbage();
   if (!heap->incremental_marking()->IsStopped()) return;
-  ConcurrentMarking::MarkingWorklist shared, bailout;
+  ConcurrentMarking::MarkingWorklist shared, bailout, on_hold;
   WeakObjects weak_objects;
   ConcurrentMarking* concurrent_marking =
-      new ConcurrentMarking(heap, &shared, &bailout, &weak_objects);
+      new ConcurrentMarking(heap, &shared, &bailout, &on_hold, &weak_objects);
   PublishSegment(&shared, heap->undefined_value());
   concurrent_marking->ScheduleTasks();
   concurrent_marking->EnsureCompleted();
@@ -49,10 +49,10 @@ TEST(ConcurrentMarkingReschedule) {
   Heap* heap = CcTest::heap();
   CcTest::CollectAllGarbage();
   if (!heap->incremental_marking()->IsStopped()) return;
-  ConcurrentMarking::MarkingWorklist shared, bailout;
+  ConcurrentMarking::MarkingWorklist shared, bailout, on_hold;
   WeakObjects weak_objects;
   ConcurrentMarking* concurrent_marking =
-      new ConcurrentMarking(heap, &shared, &bailout, &weak_objects);
+      new ConcurrentMarking(heap, &shared, &bailout, &on_hold, &weak_objects);
   PublishSegment(&shared, heap->undefined_value());
   concurrent_marking->ScheduleTasks();
   concurrent_marking->EnsureCompleted();
