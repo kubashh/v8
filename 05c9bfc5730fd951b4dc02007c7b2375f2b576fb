@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f46048f_01778faa",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-10-09T13:30:41Z",
+      "side": 1,
+      "message": "nit: this is now just a local variable so it should be {platform} and not {platform_}.",
+      "range": {
+        "startLine": 124,
+        "startChar": 17,
+        "endLine": 124,
+        "endChar": 26
+      },
+      "revId": "05c9bfc5730fd951b4dc02007c7b2375f2b576fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
