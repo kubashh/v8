@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "506eac82_878d6694",
+        "filename": "src/wasm/wasm-text.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-09T12:50:52Z",
+      "side": 1,
+      "message": "s/type/type index/g ?",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c598e05_844cbd9e",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-09T12:50:52Z",
+      "side": 1,
+      "message": "This doesn\u0027t really test anything; these signatures are just added to the internal module representation.",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305f6a94_0ce0bbf6",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-09T12:50:52Z",
+      "side": 1,
+      "message": "Can you fix these tests to use a signature and a proper signature index?",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a8f034_cd6de184",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2422,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-09T12:50:52Z",
+      "side": 1,
+      "message": "Can you add some tests with different signatures before and after to make sure to test the failure case as well?",
+      "range": {
+        "startLine": 2422,
+        "startChar": 16,
+        "endLine": 2422,
+        "endChar": 17
+      },
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
