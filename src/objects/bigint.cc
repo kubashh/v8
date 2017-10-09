@@ -248,6 +248,18 @@ MaybeHandle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
   return ToStringGeneric(bigint, radix);
 }
 
+Handle<BigInt> BigInt::Increment(Handle<BigInt> x) {
+  // TODO(neis): Cache {one}.
+  Handle<BigInt> one = x->GetIsolate()->factory()->NewBigIntFromSmi(1);
+  return BigInt::Add(x, one);
+}
+
+Handle<BigInt> BigInt::Decrement(Handle<BigInt> x) {
+  // TODO(neis): Cache {one}.
+  Handle<BigInt> one = x->GetIsolate()->factory()->NewBigIntFromSmi(1);
+  return BigInt::Subtract(x, one);
+}
+
 void BigInt::Initialize(int length, bool zero_initialize) {
   set_length(length);
   set_sign(false);

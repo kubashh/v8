@@ -1437,6 +1437,8 @@ enum IsolateAddressId {
       kIsolateAddressCount
 };
 
+enum class ConversionMode { kToNumber, kToNumeric };
+
 }  // namespace internal
 }  // namespace v8
 
