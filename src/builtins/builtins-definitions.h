@@ -553,7 +553,7 @@ namespace internal {
   TFH(LoadGlobalICInsideTypeofTrampoline, LoadGlobal)                          \
                                                                                \
   /* Map */                                                                    \
-  TFS(MapLookupHashIndex, kTable, kKey)                                        \
+  TFS(FindOrderedHashMapEntry, kTable, kKey)                                   \
   TFJ(MapConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)         \
   TFJ(MapSet, 2, kKey, kValue)                                                 \
   TFJ(MapDelete, 1, kKey)                                                      \
