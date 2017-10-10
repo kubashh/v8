@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "51b1720a_16c59d01",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 6301,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "13a14052_303636a6",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "946e3e8f_0533f7ae",
         "filename": "src/d8.cc",
         "patchSetId": 8
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "663ff8d1_f91fe695",
+        "filename": "src/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Good point, needless \"optimization\" to cache DirName now that it\u0027s storing the url.",
+      "parentUuid": "946e3e8f_0533f7ae",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34177075_50ba1646",
         "filename": "src/isolate.cc",
         "patchSetId": 8
@@ -47,6 +83,24 @@
       "writtenOn": "2017-10-10T19:06:33Z",
       "side": 1,
       "message": "nit: I find it confusing to have both \u0027host_meta\u0027 and \u0027meta\u0027 variables. What do you think about inlining the cast and just using one variable?\n\n  Handle\u003cObject\u003e host_meta(module-\u003eimport_meta(), this);\n  if (host_meta-\u003eIsTheHole(this)) {\n    host_meta \u003d factory()-\u003eNewJSObjectWithNullProto();\n    if (host_initialize_import_meta_object_callback_ !\u003d nullptr) {\n      v8::Local\u003cv8::Context\u003e api_context \u003d v8::Utils::ToLocal(native_context());\n      host_initialize_import_meta_object_callback_(\n          api_context, v8::Utils::ToLocal(module),\n          v8::Utils::ToLocal(Handle\u003cJSObject\u003e::cast(host_meta)));\n    }\n    module-\u003eset_import_meta(*host_meta);\n  }\n  return Handle\u003cJSObject\u003e::cast(host_meta);",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5620a87_0012f537",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3413,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Yeah, wasn\u0027t a fan myself. Dropping the second meta handle definitely makes it easier on the eyes.",
+      "parentUuid": "34177075_50ba1646",
       "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "e8b4fa26_0795050c",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3424,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "db43f69d_d9263c38",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df15b2a7_3250dfdb",
         "filename": "src/objects/module.h",
         "patchSetId": 8
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ce86122f_1d2bfdc7",
+        "filename": "src/objects/module.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "df15b2a7_3250dfdb",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9de1d941_f8612c15",
         "filename": "test/mjsunit/harmony/modules-import-meta.js",
         "patchSetId": 8
@@ -101,6 +191,24 @@
       "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a31dc4_3cb86372",
+        "filename": "test/mjsunit/harmony/modules-import-meta.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:41:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9de1d941_f8612c15",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
