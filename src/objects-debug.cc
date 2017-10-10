@@ -833,12 +833,14 @@ void WeakCell::WeakCellVerify() {
 
 
 void Code::CodeVerify() {
+  fprintf(stderr, "-> CodeVerify %p\n", this);
   CHECK(IsAligned(reinterpret_cast<intptr_t>(instruction_start()),
                   kCodeAlignment));
   relocation_info()->ObjectVerify();
   Address last_gc_pc = NULL;
   Isolate* isolate = GetIsolate();
   for (RelocIterator it(this); !it.done(); it.next()) {
+    fprintf(stderr, "-- verify %p\n", it.rinfo());
     it.rinfo()->Verify(isolate);
     // Ensure that GC will not iterate twice over the same pointer.
     if (RelocInfo::IsGCRelocMode(it.rinfo()->rmode())) {
@@ -848,6 +850,7 @@ void Code::CodeVerify() {
   }
   CHECK(raw_type_feedback_info() == Smi::kZero ||
         raw_type_feedback_info()->IsSmi() == is_stub());
+  fprintf(stderr, "<- CodeVerify %p\n", this);
 }
 
 

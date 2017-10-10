@@ -289,6 +289,9 @@ class WasmOutOfLineTrap final : public OutOfLineCode {
   // parameter.
   void Generate() final {
     __ RecordProtectedInstructionLanding(pc_);
+#if 0
+    gen_->AddProtectedInstruction(pc_, __ pc_offset());
+#endif
 
     if (frame_elided_) {
       __ EnterFrame(StackFrame::WASM_COMPILED);

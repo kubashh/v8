@@ -4619,10 +4619,14 @@ WasmCompilationUnit::WasmCompilationUnit(
       func_body_(body),
       func_name_(name),
       counters_(counters ? counters : isolate->counters()),
+      compilation_zone_(new Zone(isolate_->allocator(), ZONE_NAME)),
       centry_stub_(centry_stub),
       func_index_(index),
       runtime_exception_support_(exception_support),
       lower_simd_(lower_simd) {}
+#if 0
+      protected_instructions_(compilation_zone_.get()) {}
+#endif
 
 void WasmCompilationUnit::ExecuteCompilation() {
   auto timed_histogram = env_->module->is_wasm()
@@ -4666,7 +4670,10 @@ void WasmCompilationUnit::ExecuteCompilation() {
       pipeline_timer.Start();
     }
 
+#if 1
+    // Should this be removed?
     compilation_zone_.reset(new Zone(isolate_->allocator(), ZONE_NAME));
+#endif
 
     // Run the compiler pipeline to generate machine code.
     CallDescriptor* descriptor =
@@ -4749,8 +4756,30 @@ MaybeHandle<Code> WasmCompilationUnit::FinishCompilation(
            codegen_ms);
   }
 
+#if 0
+  Handle<FixedArray> protected_instructions = PackProtectedInstructions();
+  code->set_protected_instructions(*protected_instructions);
+#endif
   return code;
 }
+
+#if 0
+Handle<FixedArray> WasmCompilationUnit::PackProtectedInstructions() const {
+  const int num_instructions = static_cast<int>(protected_instructions_.size());
+  DCHECK(num_instructions >= 0);
+  Handle<FixedArray> fn_protected = isolate_->factory()->NewFixedArray(
+      num_instructions * Code::kTrapDataSize, TENURED);
+  for (unsigned i = 0; i < protected_instructions_->size(); ++i) {
+    const trap_handler::ProtectedInstructionData& instruction =
+        protected_instructions_[i];
+    fn_protected->set(Code::kTrapDataSize * i + Code::kTrapCodeOffset,
+                      Smi::FromInt(instruction.instr_offset));
+    fn_protected->set(Code::kTrapDataSize * i + Code::kTrapLandingOffset,
+                      Smi::FromInt(instruction.landing_offset));
+  }
+  return fn_protected;
+}
+#endif
 
 // static
 MaybeHandle<Code> WasmCompilationUnit::CompileWasmFunction(

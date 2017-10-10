@@ -67,7 +67,8 @@ class CodeGeneratorTester : public HandleAndZoneScope {
         rng_(CcTest::random_number_generator()),
         frame_(descriptor_->CalculateFixedFrameSize()),
         generator_(main_zone(), &frame_, &linkage_, &sequence_, &info_,
-                   base::Optional<OsrHelper>(), kNoSourcePosition, nullptr) {
+                   base::Optional<OsrHelper>(), kNoSourcePosition, nullptr,
+                   nullptr) {
     // Keep track of all supported representations depending on what kind of
     // stack slots are supported.
     for (const auto& slot : slots) {

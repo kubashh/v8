@@ -349,11 +349,11 @@ class Code::BodyDescriptor final : public BodyDescriptorBase {
   STATIC_ASSERT(kHandlerTableOffset + kPointerSize ==
                 kDeoptimizationDataOffset);
   STATIC_ASSERT(kDeoptimizationDataOffset + kPointerSize ==
+                kProtectedInstructionOffset);
+  STATIC_ASSERT(kProtectedInstructionOffset + kPointerSize ==
                 kSourcePositionTableOffset);
   STATIC_ASSERT(kSourcePositionTableOffset + kPointerSize ==
                 kTypeFeedbackInfoOffset);
-  STATIC_ASSERT(kTypeFeedbackInfoOffset + kPointerSize ==
-                kNextCodeLinkOffset);
 
   static bool IsValidSlot(HeapObject* obj, int offset) {
     // Slots in code can't be invalid because we never trim code objects.

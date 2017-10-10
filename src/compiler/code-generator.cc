@@ -39,7 +39,12 @@ CodeGenerator::CodeGenerator(Zone* codegen_zone, Frame* frame, Linkage* linkage,
                              InstructionSequence* code, CompilationInfo* info,
                              base::Optional<OsrHelper> osr_helper,
                              int start_source_position,
-                             JumpOptimizationInfo* jump_opt)
+                             JumpOptimizationInfo* jump_opt
+#if 0
+                             ZoneVector<trap_handler::ProtectedInstructionData>*
+                             protected_instructions
+#endif
+                             )
     : zone_(codegen_zone),
       frame_access_state_(nullptr),
       linkage_(linkage),
@@ -68,6 +73,9 @@ CodeGenerator::CodeGenerator(Zone* codegen_zone, Frame* frame, Linkage* linkage,
       optimized_out_literal_id_(-1),
       source_position_table_builder_(zone(),
                                      info->SourcePositionRecordingMode()),
+#if 0
+      protected_instructions_(protected_instructions),
+#endif
       result_(kSuccess) {
   for (int i = 0; i < code->InstructionBlockCount(); ++i) {
     new (&labels_[i]) Label;
@@ -82,6 +90,18 @@ Isolate* CodeGenerator::isolate() const { return info_->isolate(); }
 void CodeGenerator::CreateFrameAccessState(Frame* frame) {
   FinishFrame(frame);
   frame_access_state_ = new (zone()) FrameAccessState(frame);
+}
+
+void CodeGenerator::AddProtectedInstruction(int instr_offset,
+                                            int landing_offset) {
+#if 0
+  // TODO(kschimpf): Turn on once we switch to old format.
+  if (protected_instructions_ != nullptr) {
+    trap_handler::ProtectedInstructionData data = {instr_offset,
+                                                   landing_offset};
+    protected_instructions_->emplace_back(data);
+  }
+#endif
 }
 
 CodeGenerator::CodeGenResult CodeGenerator::AssembleDeoptimizerCall(

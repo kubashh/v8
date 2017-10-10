@@ -336,9 +336,10 @@ class PipelineData {
 
   void InitializeCodeGenerator(Linkage* linkage) {
     DCHECK_NULL(code_generator_);
-    code_generator_ = new CodeGenerator(
-        codegen_zone(), frame(), linkage, sequence(), info(), osr_helper_,
-        start_source_position_, jump_optimization_info_);
+    code_generator_ =
+        new CodeGenerator(codegen_zone(), frame(), linkage, sequence(), info(),
+                          osr_helper_, start_source_position_,
+                          jump_optimization_info_, protected_instructions());
   }
 
   void BeginPhaseKind(const char* phase_kind_name) {

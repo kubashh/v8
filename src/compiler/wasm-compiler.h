@@ -106,6 +106,7 @@ class WasmCompilationUnit final {
 
  private:
   SourcePositionTable* BuildGraphForWasmFunction(double* decode_ms);
+  Handle<FixedArray> PackProtectedInstructions() const;
   Counters* counters() { return counters_; }
 
   Isolate* isolate_;
@@ -130,6 +131,12 @@ class WasmCompilationUnit final {
   bool ok_ = true;
   size_t memory_cost_ = 0;
   bool lower_simd_;
+// Instructions that are protected by the signal handler.
+#if 1
+  Handle<FixedArray> protected_instructions_;
+#else
+  ZoneVector<trap_handler::ProtectedInstructionData> protected_instructions_;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(WasmCompilationUnit);
 };

@@ -4815,6 +4815,7 @@ CODE_ACCESSORS(relocation_info, ByteArray, kRelocationInfoOffset)
 CODE_ACCESSORS(handler_table, FixedArray, kHandlerTableOffset)
 CODE_ACCESSORS(deoptimization_data, FixedArray, kDeoptimizationDataOffset)
 CODE_ACCESSORS(source_position_table, Object, kSourcePositionTableOffset)
+CODE_ACCESSORS(protected_instructions, FixedArray, kProtectedInstructionOffset)
 CODE_ACCESSORS(trap_handler_index, Smi, kTrapHandlerIndex)
 CODE_ACCESSORS(raw_type_feedback_info, Object, kTypeFeedbackInfoOffset)
 CODE_ACCESSORS(next_code_link, Object, kNextCodeLinkOffset)
@@ -4824,6 +4825,7 @@ void Code::WipeOutHeader() {
   WRITE_FIELD(this, kRelocationInfoOffset, nullptr);
   WRITE_FIELD(this, kHandlerTableOffset, nullptr);
   WRITE_FIELD(this, kDeoptimizationDataOffset, nullptr);
+  WRITE_FIELD(this, kProtectedInstructionOffset, nullptr);
   WRITE_FIELD(this, kSourcePositionTableOffset, nullptr);
   // Do not wipe out major/minor keys on a code stub or IC
   if (!READ_FIELD(this, kTypeFeedbackInfoOffset)->IsSmi()) {
@@ -4908,6 +4910,9 @@ int Code::SizeIncludingMetadata() const {
   size += relocation_info()->Size();
   size += deoptimization_data()->Size();
   size += handler_table()->Size();
+#if 1
+  size += protected_instructions()->Size();
+#endif
   return size;
 }
 

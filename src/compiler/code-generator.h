@@ -82,6 +82,10 @@ class CodeGenerator final : public GapResolver::Assembler {
                          base::Optional<OsrHelper> osr_helper,
                          int start_source_position,
                          JumpOptimizationInfo* jump_opt);
+#if 0
+                         ZoneVector<trap_handler::ProtectedInstructionData>*
+                         protected_instructions);
+#endif
 
   // Generate native code. After calling AssembleCode, call FinalizeCode to
   // produce the actual code object. If an error occurs during either phase,
@@ -96,6 +100,8 @@ class CodeGenerator final : public GapResolver::Assembler {
   Linkage* linkage() const { return linkage_; }
 
   Label* GetLabel(RpoNumber rpo) { return &labels_[rpo.ToSize()]; }
+
+  void AddProtectedInstruction(int instr_offset, int landing_offset);
 
   SourcePosition start_source_position() const {
     return start_source_position_;
@@ -349,6 +355,9 @@ class CodeGenerator final : public GapResolver::Assembler {
   int osr_pc_offset_;
   int optimized_out_literal_id_;
   SourcePositionTableBuilder source_position_table_builder_;
+#if 0
+  ZoneVector<trap_handler::ProtectedInstructionData>* protected_instructions_;
+#endif
   CodeGenResult result_;
 };
 

@@ -3700,6 +3700,10 @@ class Code: public HeapObject {
 
   inline ByteArray* SourcePositionTable() const;
 
+  // [protected instructions]: ByteArray containing list of protected
+  // instruction and corresponding landing pad offset.
+  DECL_ACCESSORS(protected_instructions, FixedArray)
+
   // [trap_handler_index]: An index into the trap handler's master list of code
   // objects.
   DECL_ACCESSORS(trap_handler_index, Smi)
@@ -3974,12 +3978,15 @@ class Code: public HeapObject {
   static const int kHandlerTableOffset = kRelocationInfoOffset + kPointerSize;
   static const int kDeoptimizationDataOffset =
       kHandlerTableOffset + kPointerSize;
-  static const int kSourcePositionTableOffset =
+  static const int kProtectedInstructionOffset =
       kDeoptimizationDataOffset + kPointerSize;
+  static const int kSourcePositionTableOffset =
+      kProtectedInstructionOffset + kPointerSize;
   // For FUNCTION kind, we store the type feedback info here.
   static const int kTypeFeedbackInfoOffset =
       kSourcePositionTableOffset + kPointerSize;
-  static const int kNextCodeLinkOffset = kTypeFeedbackInfoOffset + kPointerSize;
+  static const int kNextCodeLinkOffset =
+      kSourcePositionTableOffset + kPointerSize;
   static const int kInstructionSizeOffset = kNextCodeLinkOffset + kPointerSize;
   static const int kFlagsOffset = kInstructionSizeOffset + kIntSize;
   static const int kKindSpecificFlags1Offset = kFlagsOffset + kIntSize;
@@ -3990,6 +3997,8 @@ class Code: public HeapObject {
       kConstantPoolOffset + kConstantPoolSize;
   static const int kTrapHandlerIndex = kBuiltinIndexOffset + kIntSize;
   static const int kHeaderPaddingStart = kTrapHandlerIndex + kPointerSize;
+
+  enum TrapFields { kTrapCodeOffset, kTrapLandingOffset, kTrapDataSize };
 
   // Add padding to align the instruction start following right after
   // the Code object header.
