@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "2b1bad51_62d98ed0",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6298,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1657da20_c83f323e",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f1b6b3c_19cb5108",
         "filename": "src/isolate.cc",
         "patchSetId": 6
@@ -158,6 +176,24 @@
       "revId": "4455cb594b303824a7a48880848a74381dd441de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe196c87_f68afb8a",
+        "filename": "src/objects/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T19:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e36d4f18_ec6ef0b4",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
