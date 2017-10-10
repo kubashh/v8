@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "6c239eb1_a14e5369",
+        "filename": "src/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T18:34:55Z",
+      "side": 1,
+      "message": "Given that the host is no longer creating the object, I didn\u0027t add a DCHECK for the prototype. According to the spec changing the prototype is legal inside of HostFinalizeImportMeta. If we\u0027d prefer to limit embedders in that regard, happy to add it anyhow. :)",
+      "parentUuid": "52728fb3_d8e4e2db",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03755f5d_753034cb",
         "filename": "src/objects/module.h",
         "patchSetId": 6
