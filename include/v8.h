@@ -6292,6 +6292,13 @@ typedef MaybeLocal<Promise> (*HostImportModuleDynamicallyCallback)(
     Local<String> specifier);
 
 /**
+ * HostGetImportMetaObjectCallback is called the first time import.meta is
+ * accessed for a module. Subsequent acccess will reuse the same value.
+ */
+typedef Local<Object> (*HostGetImportMetaObjectCallback)(Local<Context> context,
+                                                         Local<Module> module);
+
+/**
  * PromiseHook with type kInit is called when a new promise is
  * created. When a new promise is created as part of the chain in the
  * case of Promise.then or in the intermediate promises created by
@@ -7110,6 +7117,16 @@ class V8_EXPORT Isolate {
    */
   void SetHostImportModuleDynamicallyCallback(
       HostImportModuleDynamicallyCallback callback);
+
+  /**
+   * This is an unfinished experimental feature, and is only exposed
+   * here for internal testing purposes. DO NOT USE.
+   *
+   * This specifies the callback called by the upcoming importa.meta
+   * language feature to retrieve host-defined meta data for a module.
+   */
+  void SetHostGetImportMetaObjectCallback(
+      HostGetImportMetaObjectCallback callback);
 
   /**
    * Optional notification that the system is running low on memory.
