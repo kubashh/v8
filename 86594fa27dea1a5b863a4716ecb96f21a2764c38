@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5672a107_4bdaf2f3",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-10T13:07:57Z",
+      "side": 1,
+      "message": "nit: wrap this up in curly braces to indicate more clearly that it\u0027s a separate basic block.",
+      "range": {
+        "startLine": 1586,
+        "startChar": 0,
+        "endLine": 1588,
+        "endChar": 21
+      },
+      "revId": "86594fa27dea1a5b863a4716ecb96f21a2764c38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12b699c4_3412cbbc",
+        "filename": "src/objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-10T13:07:57Z",
+      "side": 1,
+      "message": "nit: is this maybe too general a name for objects.h?",
+      "range": {
+        "startLine": 916,
+        "startChar": 11,
+        "endLine": 916,
+        "endChar": 25
+      },
+      "revId": "86594fa27dea1a5b863a4716ecb96f21a2764c38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
