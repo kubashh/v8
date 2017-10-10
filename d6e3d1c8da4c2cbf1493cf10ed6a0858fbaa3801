@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "830d431e_f71ffc97",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-10T09:21:14Z",
+      "side": 1,
+      "message": "since this isn\u0027t needed on the fast path, can we move the context get to only where it\u0027s needed? Then we could also remove the context parameter from bigint_op.",
+      "range": {
+        "startLine": 1187,
+        "startChar": 10,
+        "endLine": 1187,
+        "endChar": 17
+      },
+      "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b390427_863c7035",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-10T09:21:14Z",
+      "side": 1,
+      "message": "Not a strong opinion, but I would prefer this in a separate IncDecAssembler, that subclasses UnaryNumericOpAssembler.",
+      "range": {
+        "startLine": 1277,
+        "startChar": 7,
+        "endLine": 1277,
+        "endChar": 25
+      },
+      "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
