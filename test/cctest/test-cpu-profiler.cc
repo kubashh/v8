@@ -2185,6 +2185,51 @@ TEST(TracingCpuProfiler) {
   i::V8::SetPlatformForTesting(old_platform);
 }
 
+TEST(Issue763073) {
+  class AllowNativesSyntax {
+   public:
+    AllowNativesSyntax()
+        : allow_natives_syntax_(i::FLAG_allow_natives_syntax),
+          trace_deopt_(i::FLAG_trace_deopt) {
+      i::FLAG_allow_natives_syntax = true;
+      i::FLAG_trace_deopt = true;
+    }
+
+    ~AllowNativesSyntax() {
+      i::FLAG_allow_natives_syntax = allow_natives_syntax_;
+      i::FLAG_trace_deopt = trace_deopt_;
+    }
+
+   private:
+    bool allow_natives_syntax_;
+    bool trace_deopt_;
+  };
+
+  AllowNativesSyntax allow_natives_syntax_scope;
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+
+  CompileRun(
+      "function f() { return function g(x) { }; }"
+      "var g = f();"
+      "g(1);"
+      "%OptimizeFunctionOnNextCall(g);"
+      "g(1);"
+      "%DeoptimizeFunction(g);"
+      "var h = f();"
+      "h(1);"
+      "%OptimizeFunctionOnNextCall(h);"
+      "h(1);");
+
+  // Start profiling.
+  v8::CpuProfiler* cpu_profiler = v8::CpuProfiler::New(env->GetIsolate());
+  v8::Local<v8::String> profile_name = v8_str("test");
+  cpu_profiler->StartProfiling(profile_name);
+  v8::CpuProfile* p = cpu_profiler->StopProfiling(profile_name);
+  p->Delete();
+  cpu_profiler->Dispose();
+}
+
 }  // namespace test_cpu_profiler
 }  // namespace internal
 }  // namespace v8
