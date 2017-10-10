@@ -22,9 +22,18 @@ void* TryAllocateBackingStore(Isolate* isolate, size_t size,
     // TODO(eholk): On Windows we want to make sure we don't commit the guard
     // pages yet.
 
-    // We always allocate the largest possible offset into the heap, so the
-    // addressable memory after the guard page can be made inaccessible.
-    allocation_length = RoundUp(kWasmMaxHeapOffset, base::OS::CommitPageSize());
+    // The guard region size works out to be about 10 GiB. 8 GiB of this is
+    // because Wasm memory operations take a 32-bit base and a 32-bit immediate
+    // offset, which adds up to 8 GiB (kWasmMaxHeapOffset). The remaining 2 GiB
+    // actually go in front of the Wasm memory. This is because we sometimes
+    // store constants as 32-bit immediates in the assembly language. On Intel,
+    // at least, these get sign-extended to 64-bits, meaning we can end up
+    // reading at a negative offset from the memory. This is where the
+    // -std::limits<int32_t>::min() portion comes from. Finally, we round this
+    // to the nearest page size.
+    allocation_length =
+        RoundUp(kWasmMaxHeapOffset - std::numeric_limits<int32_t>::min(),
+                base::OS::CommitPageSize());
     DCHECK_EQ(0, size % base::OS::CommitPageSize());
 
     // AllocateGuarded makes the whole region inaccessible by default.
@@ -34,7 +43,10 @@ void* TryAllocateBackingStore(Isolate* isolate, size_t size,
       return nullptr;
     }
 
-    void* memory = allocation_base;
+    char* memory = reinterpret_cast<char*>(allocation_base);
+    memory -= std::numeric_limits<int32_t>::min();
+    DCHECK_GT(reinterpret_cast<uintptr_t>(memory),
+              reinterpret_cast<uintptr_t>(allocation_base));
 
     // Make the part we care about accessible.
     isolate->array_buffer_allocator()->SetProtection(
