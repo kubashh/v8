@@ -3408,6 +3408,28 @@ void Isolate::SetHostImportModuleDynamicallyCallback(
   host_import_module_dynamically_callback_ = callback;
 }
 
+Handle<JSObject> Isolate::RunHostInitializeImportMetaObjectCallback(
+    Handle<Module> module) {
+  Handle<Object> meta(module->import_meta(), this);
+  if (meta->IsTheHole(this)) {
+    Handle<JSObject> host_meta = factory()->NewJSObjectWithNullProto();
+    meta = Handle<Object>::cast(host_meta);
+    if (host_initialize_import_meta_object_callback_ != nullptr) {
+      v8::Local<v8::Context> api_context = v8::Utils::ToLocal(native_context());
+      host_initialize_import_meta_object_callback_(
+          api_context, Utils::ToLocal(module), v8::Utils::ToLocal(host_meta));
+    }
+    module->set_import_meta(*meta);
+  }
+  DCHECK(meta->IsJSObject());
+  return Handle<JSObject>::cast(meta);
+}
+
+void Isolate::SetHostInitializeImportMetaObjectCallback(
+    HostInitializeImportMetaObjectCallback callback) {
+  host_initialize_import_meta_object_callback_ = callback;
+}
+
 void Isolate::SetPromiseHook(PromiseHook hook) {
   promise_hook_ = hook;
   DebugStateUpdated();
