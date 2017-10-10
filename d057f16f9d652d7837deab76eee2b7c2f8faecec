@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0342df7d_6ffa63e8",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-10T10:01:06Z",
+      "side": 1,
+      "message": "Done. Although it might be non-intuitive that we process shared (contended) before processing the main-thread-local one (on_hold_). Added a comment to remind us.",
+      "parentUuid": "a0e6cfa7_dfb4290e",
+      "range": {
+        "startLine": 507,
+        "startChar": 10,
+        "endLine": 507,
+        "endChar": 18
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9018a3b9_52518e20",
         "filename": "src/heap/spaces.h",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8f853979_8d56a629",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2619,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-10T10:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9018a3b9_52518e20",
+      "range": {
+        "startLine": 2619,
+        "startChar": 28,
+        "endLine": 2619,
+        "endChar": 41
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2852e542_bba4aa87",
         "filename": "src/heap/worklist.h",
         "patchSetId": 8
@@ -68,6 +116,30 @@
       "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa575e9_78ab049d",
+        "filename": "src/heap/worklist.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-10T10:01:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2852e542_bba4aa87",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 16
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
