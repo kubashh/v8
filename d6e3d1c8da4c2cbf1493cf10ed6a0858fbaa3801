@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "f5319656_383f08e4",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-10T09:59:23Z",
+      "side": 1,
+      "message": "With my other CL we now have kNonNumberToNumeric, which you can call here (non-numeric implies non-number).",
+      "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b390427_863c7035",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 3
@@ -42,6 +59,40 @@
         "endLine": 1277,
         "endChar": 25
       },
+      "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cb10ed7_cfde26d7",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-10T09:59:23Z",
+      "side": 1,
+      "message": "You can use the new NewBigIntFromInt here and maybe elsewhere.",
+      "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "430823c8_b3c612a7",
+        "filename": "test/mjsunit/harmony/bigint.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-10T09:59:23Z",
+      "side": 1,
+      "message": "Could you copy in the tests that I originally had in my other CL? They also check the values of these expressions, not just their side effects.",
       "revId": "d6e3d1c8da4c2cbf1493cf10ed6a0858fbaa3801",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
