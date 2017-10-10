@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9dfae650_2164dc07",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6298,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T17:07:48Z",
+      "side": 1,
+      "message": "Given these requirements, would it make sense to just change the method signature to pass in the Local\u003cObject\u003e with proper setup and only push CreateDataProperty on the embedder? It might actually simplify implementation on both sides. E.g.:\n\n```\ntypedef void (*HostInitializeImportMetaObjectCallback)(Local\u003cContext\u003e context,\n                                                       Local\u003cModule\u003e module,\n                                                       Local\u003cObject\u003e meta);\n```",
+      "parentUuid": "7cf67d27_d44ae687",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f1b6b3c_19cb5108",
         "filename": "src/isolate.cc",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "52728fb3_d8e4e2db",
+        "filename": "src/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T17:07:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0f1b6b3c_19cb5108",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03755f5d_753034cb",
         "filename": "src/objects/module.h",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2017-10-10T16:37:32Z",
       "side": 1,
       "message": "You also need to update factory.cc",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb444be_f86dda48",
+        "filename": "src/objects/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1247016
+      },
+      "writtenOn": "2017-10-10T17:07:48Z",
+      "side": 1,
+      "message": "Ah, that\u0027s where the_hole comes into play I assume. On it.",
+      "parentUuid": "03755f5d_753034cb",
       "revId": "4455cb594b303824a7a48880848a74381dd441de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
