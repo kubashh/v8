@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0e6cfa7_dfb4290e",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-10T08:22:18Z",
+      "side": 1,
+      "message": "Most of the time this queue will be empty. Can we move this Pop after the shared_.Pop to avoid paying cost of IsEmpty check?",
+      "range": {
+        "startLine": 507,
+        "startChar": 10,
+        "endLine": 507,
+        "endChar": 18
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9018a3b9_52518e20",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2619,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-10T08:22:18Z",
+      "side": 1,
+      "message": "Let\u0027s DCHECK that top() is between original_top and original_limit.",
+      "range": {
+        "startLine": 2619,
+        "startChar": 28,
+        "endLine": 2619,
+        "endChar": 41
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2852e542_bba4aa87",
+        "filename": "src/heap/worklist.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-10T08:22:18Z",
+      "side": 1,
+      "message": "Instead of taking nested locks, how about decomposing merge into\nSegment* other_top \u003d other-\u003eMove();\nif (other_top !\u003d nullptr) global_pool_.Add(other_top);",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 16
+      },
+      "revId": "d057f16f9d652d7837deab76eee2b7c2f8faecec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
