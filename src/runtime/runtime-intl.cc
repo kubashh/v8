@@ -68,18 +68,18 @@ RUNTIME_FUNCTION(Runtime_CanonicalizeLanguageTag) {
   v8::String::Utf8Value locale_id(v8_isolate,
                                   v8::Utils::ToLocal(locale_id_str));
 
+  // TODO(jshin): uloc_{for,to}TanguageTag can fail even for a structually valid
+  // language tag if it's too long (much longer than 100 chars) . Should we
+  // reallocate a larger buffer in such an unusual case ?
+
   // Return value which denotes invalid language tag.
-  // TODO(jshin): Can uloc_{for,to}TanguageTag fail even for structually valid
-  // language tags? If not, just add CHECK instead of returning 'invalid-tag'.
   const char* const kInvalidTag = "invalid-tag";
 
   UErrorCode error = U_ZERO_ERROR;
   char icu_result[ULOC_FULLNAME_CAPACITY];
-  int icu_length = 0;
-
-  uloc_forLanguageTag(*locale_id, icu_result, ULOC_FULLNAME_CAPACITY,
-                      &icu_length, &error);
-  if (U_FAILURE(error) || icu_length == 0) {
+  uloc_forLanguageTag(*locale_id, icu_result, ULOC_FULLNAME_CAPACITY, nullptr,
+                      &error);
+  if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
     return *factory->NewStringFromAsciiChecked(kInvalidTag);
   }
 
@@ -88,7 +88,7 @@ RUNTIME_FUNCTION(Runtime_CanonicalizeLanguageTag) {
   // Force strict BCP47 rules.
   uloc_toLanguageTag(icu_result, result, ULOC_FULLNAME_CAPACITY, TRUE, &error);
 
-  if (U_FAILURE(error)) {
+  if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
     return *factory->NewStringFromAsciiChecked(kInvalidTag);
   }
 
@@ -134,7 +134,7 @@ RUNTIME_FUNCTION(Runtime_AvailableLocalesOf) {
     error = U_ZERO_ERROR;
     // No need to force strict BCP47 rules.
     uloc_toLanguageTag(icu_name, result, ULOC_FULLNAME_CAPACITY, FALSE, &error);
-    if (U_FAILURE(error)) {
+    if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
       // This shouldn't happen, but lets not break the user.
       continue;
     }
@@ -205,10 +205,9 @@ RUNTIME_FUNCTION(Runtime_GetLanguageTagVariants) {
     // Convert from BCP47 to ICU format.
     // de-DE-u-co-phonebk -> de_DE@collation=phonebook
     char icu_locale[ULOC_FULLNAME_CAPACITY];
-    int icu_locale_length = 0;
     uloc_forLanguageTag(*utf8_locale_id, icu_locale, ULOC_FULLNAME_CAPACITY,
-                        &icu_locale_length, &error);
-    if (U_FAILURE(error) || icu_locale_length == 0) {
+                        nullptr, &error);
+    if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
       return isolate->Throw(*factory->illegal_argument_string());
     }
 
@@ -241,7 +240,7 @@ RUNTIME_FUNCTION(Runtime_GetLanguageTagVariants) {
     uloc_toLanguageTag(icu_base_locale, base_locale, ULOC_FULLNAME_CAPACITY,
                        FALSE, &error);
 
-    if (U_FAILURE(error)) {
+    if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
       return isolate->Throw(*factory->illegal_argument_string());
     }
 
