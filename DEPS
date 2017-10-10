@@ -40,7 +40,7 @@ deps = {
   "v8/tools/clang":
     Var("chromium_url") + "/chromium/src/tools/clang.git" + "@" + "b3169f97cc1a9daa1a9fbae15752588079792098",
   "v8/test/wasm-js":
-    Var("chromium_url") + "/external/github.com/WebAssembly/spec.git" + "@" + "4f1d3114157e6459d8a06e7d8fcc8fc90288cd85",
+    Var("chromium_url") + "/external/github.com/WebAssembly/spec.git" + "@" + "89573ee3eabc690637deeb1b8dadec13a963ec30",
 }
 
 deps_os = {
