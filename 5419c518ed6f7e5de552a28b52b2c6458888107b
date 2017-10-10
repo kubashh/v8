@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "413169c7_0efaf89c",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 7128,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T03:24:57Z",
+      "side": 1,
+      "message": "Can you add a test for the API in cctest/test-api.cc?",
+      "revId": "5419c518ed6f7e5de552a28b52b2c6458888107b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e4fae94_8d549626",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T03:24:57Z",
+      "side": 1,
+      "message": "You can use NewJSObjectWithNullProto here.",
+      "revId": "5419c518ed6f7e5de552a28b52b2c6458888107b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2655e125_87adbd2d",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T03:24:57Z",
+      "side": 1,
+      "message": "nit: you can merge this line with the line above",
+      "revId": "5419c518ed6f7e5de552a28b52b2c6458888107b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07516e35_5376641a",
+        "filename": "src/objects/module.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T03:24:57Z",
+      "side": 1,
+      "message": "Can you update objects-debug.cc and objects-printer.cc as well?",
+      "revId": "5419c518ed6f7e5de552a28b52b2c6458888107b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84a310be_933fe1a8",
+        "filename": "test/mjsunit/harmony/modules-import-meta.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T03:24:57Z",
+      "side": 1,
+      "message": "Can you add a test for --\n(a) eval\n(b) new Function\n(c) exporting import.meta and importing it in another module",
+      "revId": "5419c518ed6f7e5de552a28b52b2c6458888107b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
