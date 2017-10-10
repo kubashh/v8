@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cf67d27_d44ae687",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6298,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T16:37:32Z",
+      "side": 1,
+      "message": "Can you add more documentation here about the return object. \"The embedder is required to create the result object using v8::Object::New and set the prototype to null using v8::Object::SetPrototype. The embedder must also install the meta properties on this Object using the v8::Object::CreateDataProperty.\"",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f1b6b3c_19cb5108",
+        "filename": "src/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T16:37:32Z",
+      "side": 1,
+      "message": "Can you add a DCHECK for host_meta-\u003eIsJSObject and cast it to a JSObject, not an Object. And change this function return type to be Handle\u003cJSObject\u003e, not Handle\u003cObject\u003e.\n\nAlso, can you add a DCHECK to check if the prototype is null?",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03755f5d_753034cb",
+        "filename": "src/objects/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T16:37:32Z",
+      "side": 1,
+      "message": "You also need to update factory.cc",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
