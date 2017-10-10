@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e861b2a5_09b70d10",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-10-10T14:05:37Z",
+      "side": 1,
+      "message": "Perhaps you should say here that this will reconnect dead predecessors to the end. (Maybe even rename the function?)",
+      "range": {
+        "startLine": 91,
+        "startChar": 1,
+        "endLine": 93,
+        "endChar": 18
+      },
+      "revId": "8a610757c278094da4551f77ff73999b973de375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
