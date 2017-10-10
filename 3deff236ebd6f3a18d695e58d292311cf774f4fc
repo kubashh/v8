@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13a14052_303636a6",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 6301,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T19:06:33Z",
+      "side": 1,
+      "message": "\"to add properties on the meta object\"",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34177075_50ba1646",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3413,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T19:06:33Z",
+      "side": 1,
+      "message": "nit: I find it confusing to have both \u0027host_meta\u0027 and \u0027meta\u0027 variables. What do you think about inlining the cast and just using one variable?\n\n  Handle\u003cObject\u003e host_meta(module-\u003eimport_meta(), this);\n  if (host_meta-\u003eIsTheHole(this)) {\n    host_meta \u003d factory()-\u003eNewJSObjectWithNullProto();\n    if (host_initialize_import_meta_object_callback_ !\u003d nullptr) {\n      v8::Local\u003cv8::Context\u003e api_context \u003d v8::Utils::ToLocal(native_context());\n      host_initialize_import_meta_object_callback_(\n          api_context, v8::Utils::ToLocal(module),\n          v8::Utils::ToLocal(Handle\u003cJSObject\u003e::cast(host_meta)));\n    }\n    module-\u003eset_import_meta(*host_meta);\n  }\n  return Handle\u003cJSObject\u003e::cast(host_meta);",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db43f69d_d9263c38",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3424,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T19:06:33Z",
+      "side": 1,
+      "message": "The cast below does a DCHECK, so this isn\u0027t required.",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
