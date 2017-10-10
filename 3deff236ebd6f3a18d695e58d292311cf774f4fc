@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "946e3e8f_0533f7ae",
+        "filename": "src/d8.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-10T19:10:51Z",
+      "side": 1,
+      "message": "Do you need a new map here, or could you just change the above map to map to file names and use DirName() in ResolveModuleCallback() to derive the dirnames there?",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34177075_50ba1646",
         "filename": "src/isolate.cc",
         "patchSetId": 8
@@ -47,6 +64,40 @@
       "writtenOn": "2017-10-10T19:06:33Z",
       "side": 1,
       "message": "The cast below does a DCHECK, so this isn\u0027t required.",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df15b2a7_3250dfdb",
+        "filename": "src/objects/module.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-10T19:10:51Z",
+      "side": 1,
+      "message": "Please mention here that it\u0027s either the hole or a JSObject.",
+      "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9de1d941_f8612c15",
+        "filename": "test/mjsunit/harmony/modules-import-meta.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-10T19:10:51Z",
+      "side": 1,
+      "message": "I think you want assertSame() here; assertEquals does structural comparison on objects.",
       "revId": "3deff236ebd6f3a18d695e58d292311cf774f4fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
