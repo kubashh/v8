@@ -1116,6 +1116,9 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kDebugBreak:
       VisitDebugBreak(node);
       return;
+    case IrOpcode::kUnreachable:
+      VisitUnreachable(node);
+      return;
     case IrOpcode::kComment:
       VisitComment(node);
       return;
@@ -2752,6 +2755,11 @@ void InstructionSelector::VisitThrow(Node* node) {
 }
 
 void InstructionSelector::VisitDebugBreak(Node* node) {
+  OperandGenerator g(this);
+  Emit(kArchDebugBreak, g.NoOutput());
+}
+
+void InstructionSelector::VisitUnreachable(Node* node) {
   OperandGenerator g(this);
   Emit(kArchDebugBreak, g.NoOutput());
 }
