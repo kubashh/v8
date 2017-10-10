@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "88493542_b32c1a7f",
+        "filename": "src/wasm/wasm-text.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-10T09:38:34Z",
+      "side": 1,
+      "message": "Isn\u0027t this function intended to mirror the Wasm text format? That uses \"(type N)\" for a type reference.",
+      "parentUuid": "506eac82_878d6694",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c598e05_844cbd9e",
         "filename": "test/cctest/wasm/test-run-wasm.cc",
         "patchSetId": 9
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "737e09a2_5ffafc0a",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-10T09:38:34Z",
+      "side": 1,
+      "message": "They are needed by the callers of this helper function below.",
+      "parentUuid": "0c598e05_844cbd9e",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "305f6a94_0ce0bbf6",
         "filename": "test/cctest/wasm/test-run-wasm.cc",
         "patchSetId": 9
@@ -47,6 +83,24 @@
       "writtenOn": "2017-10-09T12:50:52Z",
       "side": 1,
       "message": "Can you fix these tests to use a signature and a proper signature index?",
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09aba29b_594c946e",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-10T09:38:34Z",
+      "side": 1,
+      "message": "That\u0027s exactly what RunInt32AddTest does. ;)",
+      "parentUuid": "305f6a94_0ce0bbf6",
       "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -73,6 +127,30 @@
       "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a18eea64_4a612b65",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2422,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-10T09:38:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26a8f034_cd6de184",
+      "range": {
+        "startLine": 2422,
+        "startChar": 16,
+        "endLine": 2422,
+        "endChar": 17
+      },
+      "revId": "0ea08b6b8894a5a827fed2c2769f6559378af161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
