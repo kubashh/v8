@@ -22,6 +22,30 @@
       "revId": "7b009579d433975b47b52e999045391b163a6e58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d10f9b9d_1e6fe406",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-10T12:07:39Z",
+      "side": 1,
+      "message": "I did something along these lines. PTAL",
+      "parentUuid": "c13a1abb_2992509d",
+      "range": {
+        "startLine": 1581,
+        "startChar": 4,
+        "endLine": 1581,
+        "endChar": 64
+      },
+      "revId": "7b009579d433975b47b52e999045391b163a6e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
