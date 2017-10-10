@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1657da20_c83f323e",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6298,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T17:28:50Z",
+      "side": 1,
+      "message": "Agreed. SGTM",
+      "parentUuid": "9dfae650_2164dc07",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f1b6b3c_19cb5108",
         "filename": "src/isolate.cc",
         "patchSetId": 6
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Ah, that\u0027s where the_hole comes into play I assume. On it.",
       "parentUuid": "03755f5d_753034cb",
+      "revId": "4455cb594b303824a7a48880848a74381dd441de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e36d4f18_ec6ef0b4",
+        "filename": "src/objects/module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-10T17:28:50Z",
+      "side": 1,
+      "message": "You could still use undefined as the default, that\u0027s fine too. But let\u0027s explicitly set the default value in factory.cc",
+      "parentUuid": "9fb444be_f86dda48",
       "revId": "4455cb594b303824a7a48880848a74381dd441de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
