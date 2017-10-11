@@ -18,6 +18,8 @@
 #include "src/global-handles.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
+#include "src/isolate-inl.h"
+#include "src/isolate.h"
 #include "src/libsampler/sampler.h"
 #include "src/log-inl.h"
 #include "src/log-utils.h"
@@ -1478,6 +1480,30 @@ void Logger::ICEvent(const char* type, bool keyed, const Address pc, int line,
     msg.AppendDoubleQuotedString(slow_stub_reason);
   }
   msg.WriteToLogFile();
+}
+
+void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
+                      Name* name) {
+  DisallowHeapAllocation no_gc;
+#if V8_TRACE_MAPS
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  if (from) from->TraceMapPrintDetails();
+  if (to) to->TraceMapPrintDetails();
+  int line;
+  int column;
+  Address pc = isolate_->GetAbstractPC(&line, &column);
+  PrintF("[TraceMaps: %s time=%10" PRId64
+         " from=%p to=%p reason=%s pc=%p line=%i column=%i",
+         type, base::TimeTicks::HighResolutionNow().ToInternalValue(),
+         reinterpret_cast<void*>(from), reinterpret_cast<void*>(to), reason, pc,
+         line, column);
+  if (name) {
+    PrintF(" name=");
+    name->NameShortPrint();
+  }
+  PrintF(" ]\n");
+
+#endif
 }
 
 void Logger::StopProfiler() {

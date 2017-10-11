@@ -6108,11 +6108,7 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
   NotifyMapChange(old_map, new_map, isolate);
 
 #if V8_TRACE_MAPS
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: SlowToFast from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*old_map), reinterpret_cast<void*>(*new_map),
-           reason);
-  }
+  LOG(isolate, MapEvent("SlowToFast", *old_map, *new_map, reason));
 #endif
 
   if (instance_descriptor_length == 0) {
@@ -8891,6 +8887,9 @@ Handle<Map> Map::RawCopy(Handle<Map> map, int instance_size) {
     new_bit_field3 = IsUnstable::update(new_bit_field3, false);
   }
   result->set_bit_field3(new_bit_field3);
+#ifdef V8_TRACE_MAPS
+  result->set_has_been_printed(false);
+#endif
   return result;
 }
 
@@ -8948,11 +8947,7 @@ Handle<Map> Map::Normalize(Handle<Map> fast_map, PropertyNormalizationMode mode,
       isolate->counters()->maps_normalized()->Increment();
     }
 #if V8_TRACE_MAPS
-    if (FLAG_trace_maps) {
-      PrintF("[TraceMaps: Normalize from= %p to= %p reason= %s ]\n",
-             reinterpret_cast<void*>(*fast_map),
-             reinterpret_cast<void*>(*new_map), reason);
-    }
+    LOG(isolate, MapEvent("Normalize", *fast_map, *new_map, reason));
 #endif
   }
   fast_map->NotifyLeafMapLayoutChange();
@@ -9123,7 +9118,10 @@ Handle<Map> Map::ShareDescriptor(Handle<Map> map,
 // static
 void Map::TraceTransition(const char* what, Map* from, Map* to, Name* name) {
   if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: %s from= %p to= %p name= ", what,
+    from->TraceMapPrintDetails();
+    to->TraceMapPrintDetails();
+    PrintF("[TraceMaps: %s time=%10" PRId64 " from=%p to=%p name=", what,
+           base::TimeTicks::HighResolutionNow().ToInternalValue(),
            reinterpret_cast<void*>(from), reinterpret_cast<void*>(to));
     name->NameShortPrint();
     PrintF(" ]\n");
@@ -9142,6 +9140,22 @@ void Map::TraceAllTransitions(Map* map) {
     Map::TraceTransition("Transition", map, target, key);
     Map::TraceAllTransitions(target);
   }
+}
+
+void Map::TraceMapPrintDetails(JSObject* holder) {
+  DisallowHeapAllocation no_gc;
+  if (this->has_been_printed()) return;
+  this->set_has_been_printed(true);
+  PrintF("[TraceMaps: MapDetailsBegin time=%10" PRId64 " ]\n",
+         base::TimeTicks::HighResolutionNow().ToInternalValue());
+  Print();
+  instance_descriptors()->Print();
+  if (is_dictionary_map() && holder != nullptr) {
+    PrintF("Dictionary:");
+    holder->property_dictionary()->Print();
+    PrintF("\n");
+  }
+  PrintF("[TraceMaps: MapDetailsEnd]\n");
 }
 
 #endif  // V8_TRACE_MAPS
@@ -9217,9 +9231,8 @@ Handle<Map> Map::CopyReplaceDescriptors(
       (map->is_prototype_map() ||
        !(flag == INSERT_TRANSITION &&
          TransitionsAccessor(map).CanHaveMoreTransitions()))) {
-    PrintF("[TraceMaps: ReplaceDescriptors from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*result),
-           reason);
+    LOG(result->GetIsolate(),
+        MapEvent("ReplaceDescriptors", *map, *result, reason, *name));
   }
 #endif
 
@@ -9413,11 +9426,7 @@ Handle<Map> Map::CopyForTransition(Handle<Map> map, const char* reason) {
   }
 
 #if V8_TRACE_MAPS
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: CopyForTransition from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*new_map),
-           reason);
-  }
+  LOG(map->GetIsolate(), MapEvent("CopyForTransition", *map, *new_map, reason));
 #endif
 
   return new_map;
@@ -12666,11 +12675,9 @@ void JSFunction::SetInitialMap(Handle<JSFunction> function, Handle<Map> map,
   function->set_prototype_or_initial_map(*map);
   map->SetConstructor(*function);
 #if V8_TRACE_MAPS
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: InitialMap map= %p SFI= %d_%s ]\n",
-           reinterpret_cast<void*>(*map), function->shared()->unique_id(),
-           function->shared()->DebugName()->ToCString().get());
-  }
+  // TODO(cbruni): print function->shared()->unique_id()
+  LOG(map->GetIsolate(), MapEvent("InitialMap", nullptr, *map, "",
+                                  function->shared()->DebugName()));
 #endif
 }
 
