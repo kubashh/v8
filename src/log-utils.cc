@@ -163,6 +163,18 @@ void Log::MessageBuilder::AppendAddress(Address addr) {
   Append("0x%" V8PRIxPTR, reinterpret_cast<intptr_t>(addr));
 }
 
+void Log::MessageBuilder::AppendPropertyKey(Object* key) {
+  if (key->IsSmi()) {
+    Append("%d", Smi::ToInt(key));
+  } else if (key->IsNumber()) {
+    Append("%lf", key->Number());
+  } else if (key->IsString()) {
+    AppendDetailed(String::cast(key), false);
+  } else if (key->IsSymbol()) {
+    AppendSymbolName(Symbol::cast(key));
+  }
+}
+
 void Log::MessageBuilder::AppendSymbolName(Symbol* symbol) {
   DCHECK(symbol);
   Append("symbol(");

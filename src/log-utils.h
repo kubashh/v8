@@ -80,6 +80,8 @@ class Log {
     // Appends an address.
     void AppendAddress(Address addr);
 
+    void AppendPropertyKey(Object* key);
+
     void AppendSymbolName(Symbol* symbol);
 
     void AppendDetailed(String* str, bool show_impl_info);

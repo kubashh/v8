@@ -18,6 +18,8 @@
 #include "src/global-handles.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
+#include "src/isolate-inl.h"
+#include "src/isolate.h"
 #include "src/libsampler/sampler.h"
 #include "src/log-inl.h"
 #include "src/log-utils.h"
@@ -1464,20 +1466,52 @@ void Logger::ICEvent(const char* type, bool keyed, const Address pc, int line,
   msg.Append(",");
   msg.AppendAddress(reinterpret_cast<Address>(map));
   msg.Append(",");
-  if (key->IsSmi()) {
-    msg.Append("%d", Smi::ToInt(key));
-  } else if (key->IsNumber()) {
-    msg.Append("%lf", key->Number());
-  } else if (key->IsString()) {
-    msg.AppendDetailed(String::cast(key), false);
-  } else if (key->IsSymbol()) {
-    msg.AppendSymbolName(Symbol::cast(key));
-  }
+  msg.AppendPropertyKey(key);
   msg.Append(",%s,", modifier);
   if (slow_stub_reason != nullptr) {
     msg.AppendDoubleQuotedString(slow_stub_reason);
   }
   msg.WriteToLogFile();
+}
+
+void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
+                      Name* name) {
+  DisallowHeapAllocation no_gc;
+#if V8_TRACE_MAPS
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  if (from) from->TraceMapPrintDetails();
+  if (to) to->TraceMapPrintDetails();
+  int line = -1;
+  int column = -1;
+  Address pc = 0;
+  if (!isolate_->bootstrapper()->IsActive()) {
+    pc = isolate_->GetAbstractPC(&line, &column);
+  }
+  PrintF("[TraceMaps: %s time=%10" PRId64
+         " from=%p to=%p reason=%s pc=%p line=%i column=%i",
+         type, base::TimeTicks::HighResolutionNow().ToInternalValue(),
+         reinterpret_cast<void*>(from), reinterpret_cast<void*>(to), reason, pc,
+         line, column);
+
+  Log::MessageBuilder msg(log_);
+  msg.Append("Map,%s,", type);
+  msg.AppendAddress(reinterpret_cast<Address>(from));
+  msg.Append(",");
+  msg.AppendAddress(reinterpret_cast<Address>(to));
+  msg.Append(",");
+  msg.AppendAddress(pc);
+  msg.Append(",%d,%d,", line, column);
+  msg.AppendDoubleQuotedString(reason);
+  msg.Append(",");
+
+  if (name) {
+    PrintF(" name=");
+    name->NameShortPrint();
+    msg.AppendPropertyKey(name);
+  }
+  PrintF(" ]\n");
+  msg.WriteToLogFile();
+#endif
 }
 
 void Logger::StopProfiler() {
