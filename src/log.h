@@ -193,7 +193,8 @@ class Logger : public CodeEventListener {
                int column, Map* map, Object* key, char old_state,
                char new_state, const char* modifier,
                const char* slow_stub_reason);
-
+  void MapEvent(const char* type, Map* from, Map* to,
+                const char* reason = nullptr, Name* name = nullptr);
   // ==== Events logged by --log-gc. ====
   // Heap sampling events: start, end, and individual types.
   void HeapSampleBeginEvent(const char* space, const char* kind);
