@@ -397,3 +397,35 @@ const six = BigInt(6);
   assertThrows("three >>> {valueOf: function() { return 1; }}", TypeError);
   assertThrows("({valueOf: function() { return 1; }}) >>> one", TypeError);
 }
+
+// Unary ops.
+{
+  assertTrue(~minus_one === zero);
+  assertTrue(-minus_one === one);
+  assertTrue(~~two === two);
+  assertTrue(-(-two) === two);
+
+  let a = minus_one;
+  assertTrue(a++ === minus_one);
+  assertTrue(a === zero);
+  assertTrue(a++ === zero);
+  assertTrue(a === one);
+  assertTrue(++a === two);
+  assertTrue(a === two);
+  assertTrue(--a === one);
+  assertTrue(a === one);
+  assertTrue(a-- === one);
+  assertTrue(a === zero);
+  assertTrue(a-- === zero);
+  assertTrue(a === minus_one);
+
+  let x = {valueOf() { return minus_one }};
+  assertTrue(x++ === minus_one);
+  assertTrue(x++ === zero);
+  assertTrue(x === one);
+
+  let x = {valueOf() { return one }};
+  assertTrue(x-- === one);
+  assertTrue(x-- === zero);
+  assertTrue(x === minus_one);
+}
