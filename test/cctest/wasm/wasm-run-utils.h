@@ -260,9 +260,13 @@ class WasmFunctionWrapper : private compiler::GraphAndBuilders {
                : common()->Int64Constant(static_cast<int64_t>(value));
   }
 
-  void SetContextAddress(Address value) {
-    compiler::NodeProperties::ChangeOp(
-        context_address_, IntPtrConstant(reinterpret_cast<uintptr_t>(value)));
+  void SetContextAddress(uintptr_t value) {
+    auto rmode = RelocInfo::WASM_CONTEXT_REFERENCE;
+    auto op = kPointerSize == 8 ? common()->RelocatableInt64Constant(
+                                      static_cast<int64_t>(value), rmode)
+                                : common()->RelocatableInt32Constant(
+                                      static_cast<int32_t>(value), rmode);
+    compiler::NodeProperties::ChangeOp(context_address_, op);
   }
 
   Handle<Code> GetWrapperCode();
@@ -428,10 +432,9 @@ class WasmRunner : public WasmRunnerBase {
     set_trap_callback_for_testing(trap_callback);
 
     wrapper_.SetInnerCode(builder_.GetFunctionCode(0));
-    if (builder().instance_object()->has_memory_object()) {
-      wrapper_.SetContextAddress(reinterpret_cast<Address>(
-          builder().instance_object()->wasm_context()));
-    }
+    WasmContext* wasm_context =
+        builder().instance_object()->wasm_context()->get();
+    wrapper_.SetContextAddress(reinterpret_cast<uintptr_t>(wasm_context));
     compiler::CodeRunner<int32_t> runner(CcTest::InitIsolateOnce(),
                                          wrapper_.GetWrapperCode(),
                                          wrapper_.signature());
@@ -463,6 +466,8 @@ class WasmRunner : public WasmRunnerBase {
       return ReturnType{0};
     }
   }
+
+  Handle<Code> GetWrapperCode() { return wrapper_.GetWrapperCode(); }
 };
 
 // A macro to define tests that run in different engine configurations.
