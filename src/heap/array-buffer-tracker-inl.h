@@ -14,7 +14,7 @@ namespace v8 {
 namespace internal {
 
 void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
-  void* data = buffer->backing_store();
+  void* data = buffer->allocation_base();
   if (!data) return;
 
   size_t length = buffer->allocation_length();
@@ -36,7 +36,7 @@ void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
 }
 
 void ArrayBufferTracker::Unregister(Heap* heap, JSArrayBuffer* buffer) {
-  void* data = buffer->backing_store();
+  void* data = buffer->allocation_base();
   if (!data) return;
 
   Page* page = Page::FromAddress(buffer->address());
@@ -56,7 +56,7 @@ void LocalArrayBufferTracker::Free(Callback should_free) {
   size_t retained_size = 0;
   for (TrackingData::iterator it = array_buffers_.begin();
        it != array_buffers_.end();) {
-    JSArrayBuffer* buffer = reinterpret_cast<JSArrayBuffer*>(*it);
+    JSArrayBuffer* buffer = *it;
     const size_t length = buffer->allocation_length();
     if (should_free(buffer)) {
       freed_memory += length;
@@ -89,6 +89,7 @@ void ArrayBufferTracker::FreeDead(Page* page, MarkingState* marking_state) {
 
 void LocalArrayBufferTracker::Add(JSArrayBuffer* buffer, size_t length) {
   DCHECK_GE(retained_size_ + length, retained_size_);
+  DCHECK_EQ(length, buffer->allocation_length());
   retained_size_ += length;
   auto ret = array_buffers_.insert(buffer);
   USE(ret);
