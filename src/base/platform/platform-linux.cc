@@ -113,7 +113,6 @@ void* OS::ReserveRegion(size_t size, void* hint) {
   void* result =
       mmap(hint, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE,
            kMmapFd, kMmapFdOffset);
-
   if (result == MAP_FAILED) return nullptr;
   return result;
 }
@@ -178,6 +177,7 @@ bool OS::UncommitRegion(void* address, size_t size) {
 
 // static
 bool OS::ReleaseRegion(void* address, size_t size) {
+  DCHECK_EQ(reinterpret_cast<uintptr_t>(address) % CommitPageSize(), 0);
   return munmap(address, size) == 0;
 }
 

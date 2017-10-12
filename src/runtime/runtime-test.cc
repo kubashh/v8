@@ -1058,7 +1058,7 @@ RUNTIME_FUNCTION(Runtime_WasmTraceMemory) {
   uint32_t addr = (static_cast<uint32_t>(addr_low) & 0xffff) |
                   (static_cast<uint32_t>(addr_high) << 16);
   uint8_t* mem_start = reinterpret_cast<uint8_t*>(
-      frame->wasm_instance()->memory_buffer()->allocation_base());
+      frame->wasm_instance()->memory_buffer()->backing_store());
   int func_index = frame->function_index();
   int pos = frame->position();
   // TODO(titzer): eliminate dependency on WasmModule definition here.
