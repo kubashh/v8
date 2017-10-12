@@ -196,14 +196,16 @@ class V8_BASE_EXPORT OS {
   static void* ReserveAlignedRegion(size_t size, size_t alignment, void* hint,
                                     size_t* allocated);
 
-  static bool CommitRegion(void* address, size_t size, bool is_executable);
+  V8_WARN_UNUSED_RESULT static bool CommitRegion(void* address, size_t size,
+                                                 bool is_executable);
 
-  static bool UncommitRegion(void* address, size_t size);
+  V8_WARN_UNUSED_RESULT static bool UncommitRegion(void* address, size_t size);
 
-  static bool ReleaseRegion(void* address, size_t size);
+  V8_WARN_UNUSED_RESULT static bool ReleaseRegion(void* address, size_t size);
 
   // Release part of a reserved address range.
-  static bool ReleasePartialRegion(void* address, size_t size);
+  V8_WARN_UNUSED_RESULT static bool ReleasePartialRegion(void* address,
+                                                         size_t size);
 
   static bool HasLazyCommits();
 
