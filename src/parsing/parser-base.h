@@ -2273,18 +2273,24 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
                                  // as an uninitialized field.
     case PropertyKind::kShorthandProperty:
     case PropertyKind::kValueProperty:
-      if (allow_harmony_class_fields()) {
+      // TODO(gsathya): Add support for other class field kinds.
+      if (allow_harmony_class_fields() && *is_static) {
+        ExpressionT initializer;
         bool has_initializer = Check(Token::ASSIGN);
-        ExpressionT function_literal = ParseClassFieldForInitializer(
-            has_initializer, CHECK_OK_CUSTOM(NullLiteralProperty));
+        if (has_initializer) {
+          initializer = this->ParseAssignmentExpression(
+              true, CHECK_OK_CUSTOM(NullExpression));
+          impl()->RewriteNonPattern(CHECK_OK_CUSTOM(NullExpression));
+        } else {
+          initializer = factory()->NewUndefinedLiteral(kNoSourcePosition);
+        }
         ExpectSemicolon(CHECK_OK_CUSTOM(NullLiteralProperty));
         *property_kind = ClassLiteralProperty::FIELD;
         ClassLiteralPropertyT result = factory()->NewClassLiteralProperty(
-            name_expression, function_literal, *property_kind, *is_static,
+            name_expression, initializer, *property_kind, *is_static,
             *is_computed_name);
         impl()->SetFunctionNameFromPropertyName(result, name);
         return result;
-
       } else {
         ReportUnexpectedToken(Next());
         *ok = false;
@@ -2390,13 +2396,6 @@ ParserBase<Impl>::ParseClassFieldForInitializer(bool has_initializer,
   scope()->SetLanguageMode(STRICT);
   ExpressionClassifier expression_classifier(this);
   ExpressionT value;
-  if (has_initializer) {
-    value =
-        this->ParseAssignmentExpression(true, CHECK_OK_CUSTOM(NullExpression));
-    impl()->RewriteNonPattern(CHECK_OK_CUSTOM(NullExpression));
-  } else {
-    value = factory()->NewUndefinedLiteral(kNoSourcePosition);
-  }
   initializer_scope->set_end_position(scanner()->location().end_pos);
   typename Types::StatementList body = impl()->NewStatementList(1);
   body->Add(factory()->NewReturnStatement(value, kNoSourcePosition), zone());
