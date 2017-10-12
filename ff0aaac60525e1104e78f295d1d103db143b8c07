@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e3a3a89_7be82ed9",
+        "filename": "src/heap/scavenge-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-12T09:47:44Z",
+      "side": 1,
+      "message": "That looks like a completely separate (hard to catch) bugfix? If so, please split it out of this CL.",
+      "range": {
+        "startLine": 106,
+        "startChar": 35,
+        "endLine": 106,
+        "endChar": 44
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9037a780_218cb9dd",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-12T09:47:44Z",
+      "side": 1,
+      "message": "Here and below: Can we just call AllocationStep() right away? This logic here also seems to be missing a CreateFiller for |soon_object| (see AllocationStep).",
+      "range": {
+        "startLine": 2205,
+        "startChar": 23,
+        "endLine": 2205,
+        "endChar": 27
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
