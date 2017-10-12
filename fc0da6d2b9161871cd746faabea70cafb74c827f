@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0210042_3558e8a8",
+        "filename": "tools/testrunner/runners/__init__.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-12T11:08:19Z",
+      "side": 1,
+      "message": "nit: Please use the new short copyright header on all new files, https://cs.chromium.org/chromium/src/v8/tools/try_perf.py?l\u003d1 with current year.",
+      "revId": "fc0da6d2b9161871cd746faabea70cafb74c827f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f62e414_73a6dfee",
+        "filename": "tools/testrunner/runners/base.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-12T11:08:19Z",
+      "side": 1,
+      "message": "nit: Guess you need it soon, but not yet...",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 10
+      },
+      "revId": "fc0da6d2b9161871cd746faabea70cafb74c827f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d9c7e88_19849966",
+        "filename": "tools/testrunner/runners/base.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-12T11:08:19Z",
+      "side": 1,
+      "message": "nit: Run is so overused - e.g. we already call it \"run\" on the execution level. Maybe call it main or execute? Other ideas?",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 11
+      },
+      "revId": "fc0da6d2b9161871cd746faabea70cafb74c827f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b21d784_4baa618c",
+        "filename": "tools/testrunner/runners/standard.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-12T11:08:19Z",
+      "side": 1,
+      "message": "For the future, we should think about a better entry level. I think the imports should rather be relative to the  testrunner dir. Then the actual runner main scripts should probably reside in testrunner, with a simple pass-through wrapper in tools for backwards-compatibility.",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "fc0da6d2b9161871cd746faabea70cafb74c827f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
