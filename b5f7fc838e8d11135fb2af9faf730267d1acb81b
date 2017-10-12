@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b782fb0_1e1087eb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-12T11:57:33Z",
+      "side": 1,
+      "message": "Unnecessary (checked in feedback_index()) - feel free to clean up other instances of this on line 1823.",
+      "range": {
+        "startLine": 1845,
+        "startChar": 8,
+        "endLine": 1845,
+        "endChar": 33
+      },
+      "revId": "b5f7fc838e8d11135fb2af9faf730267d1acb81b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
