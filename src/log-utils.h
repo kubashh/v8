@@ -71,6 +71,9 @@ class Log {
     // Append a character to the log message.
     void Append(const char c);
 
+    // Append an unformated string to the log message.
+    void AppendString(const char* string);
+
     // Append double quoted string to the log message.
     void AppendDoubleQuotedString(const char* string);
 
@@ -79,6 +82,8 @@ class Log {
 
     // Appends an address.
     void AppendAddress(Address addr);
+
+    void AppendPropertyKey(Object* key);
 
     void AppendSymbolName(Symbol* symbol);
 
