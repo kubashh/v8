@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright 2012 the V8 project authors. All rights reserved.
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -26,13 +24,3 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-import sys
-
-from testrunner.runners import deopt_fuzzer
-
-
-if __name__ == "__main__":
-  runner = deopt_fuzzer.DeoptFuzzerRunner()
-  sys.exit(runner.run())
