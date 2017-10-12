@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "31d36f09_d2da909f",
+        "filename": "src/heap/scavenge-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2017-10-12T17:31:08Z",
+      "side": 1,
+      "message": "This fix is necessitated by the current CL. During heap tear down we remove observers now. We may have already disabled tasks, but we may yet end up doing a step which might try to schedule a task here.",
+      "parentUuid": "9e3a3a89_7be82ed9",
+      "range": {
+        "startLine": 106,
+        "startChar": 35,
+        "endLine": 106,
+        "endChar": 44
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6478314_2c0db2f5",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-12T10:31:42Z",
       "side": 1,
       "message": "At the time of calling this function \"top\" contains the actual new top.\nTo avoid confusion, can we remove the \"new_top\" parameter and unconditionally clear top_on_previous_step_ after SetTopAndLimit(NULL, NULL) in line 1705?",
+      "range": {
+        "startLine": 2201,
+        "startChar": 59,
+        "endLine": 2201,
+        "endChar": 66
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ba27aa_b410087b",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2017-10-12T17:31:08Z",
+      "side": 1,
+      "message": "1) I want to have the implementation of this function between NewSpace and PagedSpace be identical. The next CL after this one will introduce SpaceWithLinearArea superclass which which will hold the implementation of this function and others related.\n2) There is another call point that pass values of new_top that is subtly different from the value returned by top().. NewSpace::EnsureAllocation. I think it is cleaner to keep the adjustment of `top_on_previous_step_` here in this function. \n\nNote that {New,Paged}Space::PauseAllocation observer do indeed do an unnecessary clearing of `top_on_previous_step_` that I would like to remove as well. I have about 7 CLs queued behind this fix that do cleanup, but I would like this one to be focussed on the bugfix.",
+      "parentUuid": "e6478314_2c0db2f5",
       "range": {
         "startLine": 2201,
         "startChar": 59,
@@ -68,6 +116,30 @@
       "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b40b59a5_57553a5a",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2017-10-12T17:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9037a780_218cb9dd",
+      "range": {
+        "startLine": 2205,
+        "startChar": 23,
+        "endLine": 2205,
+        "endChar": 27
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
