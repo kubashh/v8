@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7199ccc_05e77b89",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-12T05:27:23Z",
+      "side": 1,
+      "message": "Please add a dedicated ReducePhi method that does the right thing for Phis instead of adding cases to general methods.",
+      "revId": "4cf476458ffc5dad0241335fbcef1d21b7ae6cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "242f4435_40998b11",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-12T05:27:23Z",
+      "side": 1,
+      "message": "How about having a ReduceUnreachable with the dedicated logic. That makes it easier to understand what happens for Unreachable and you don\u0027t have to follow the control flow through 3 different methods to get a rough idea.",
+      "revId": "4cf476458ffc5dad0241335fbcef1d21b7ae6cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
