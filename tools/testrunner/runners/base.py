@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright 2012 the V8 project authors. All rights reserved.
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -30,9 +28,13 @@
 
 import sys
 
-from testrunner.runners import deopt_fuzzer
 
+class BaseTestRunner(object):
+    def __init__(self):
+        pass
 
-if __name__ == "__main__":
-  runner = deopt_fuzzer.DeoptFuzzerRunner()
-  sys.exit(runner.run())
+    def run(self):
+        return self._do_run()
+
+    def _do_run(self):
+        raise NotImplementedError()
