@@ -1535,23 +1535,27 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       DCHECK_EQ(LeaveCC, i.OutputSBit());
       break;
     case kArmVld1F64: {
+      __ add(kScratchReg, i.InputRegister(0), i.InputRegister(1));
       __ vld1(Neon8, NeonListOperand(i.OutputDoubleRegister()),
-              NeonMemOperand(i.InputRegister(0)));
+              NeonMemOperand(kScratchReg));
       break;
     }
     case kArmVst1F64: {
+      __ add(kScratchReg, i.InputRegister(1), i.InputRegister(2));
       __ vst1(Neon8, NeonListOperand(i.InputDoubleRegister(0)),
-              NeonMemOperand(i.InputRegister(1)));
+              NeonMemOperand(kScratchReg));
       break;
     }
     case kArmVld1S128: {
+      __ add(kScratchReg, i.InputRegister(0), i.InputRegister(1));
       __ vld1(Neon8, NeonListOperand(i.OutputSimd128Register()),
-              NeonMemOperand(i.InputRegister(0)));
+              NeonMemOperand(kScratchReg));
       break;
     }
     case kArmVst1S128: {
+      __ add(kScratchReg, i.InputRegister(1), i.InputRegister(2));
       __ vst1(Neon8, NeonListOperand(i.InputSimd128Register(0)),
-              NeonMemOperand(i.InputRegister(1)));
+              NeonMemOperand(kScratchReg));
       break;
     }
     case kArmVldrF64:
