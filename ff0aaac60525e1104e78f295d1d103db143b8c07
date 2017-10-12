@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "05e7d532_106c9a9d",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-12T18:27:41Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t know that NewSpace::InlineAllocationStep already uses this \"top and new_top\" pattern. I find it confusing because it is trying to predict where the top is going to be in the future and there is no way to check the correctness of new_top argument at this point. The prediction and the actual future value can get out of sync.\n\nSince this pattern is already in TOT, the change looks good to me. Long term I would be happy if allocation observer mechanism reacted to linear allocation updates instead of anticipating the updates. Maybe we are missing \"CreatedAllocationArea\", \"AbandonedAllocationArea\" notifications for the allocation observer mechanism?",
+      "parentUuid": "f0ba27aa_b410087b",
+      "range": {
+        "startLine": 2201,
+        "startChar": 59,
+        "endLine": 2201,
+        "endChar": 66
+      },
+      "revId": "ff0aaac60525e1104e78f295d1d103db143b8c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9037a780_218cb9dd",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 1
