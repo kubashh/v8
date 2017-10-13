@@ -1,7 +1,7 @@
 // Copyright 2017 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
+#if 0
 #include "src/assembler-inl.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/code-stub-assembler.h"
@@ -963,3 +963,4 @@ TEST(AssembleTailCallGap) {
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
+#endif

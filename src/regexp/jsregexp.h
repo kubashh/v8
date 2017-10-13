@@ -198,13 +198,13 @@ class OutSet: public ZoneObject {
   // The successors are a list of sets that contain the same values
   // as this set and the one more value that is not present in this
   // set.
-  ZoneList<OutSet*>* successors(Zone* zone) { return successors_; }
+  ZoneVector<OutSet*>* successors(Zone* zone) { return successors_; }
 
-  OutSet(uint32_t first, ZoneList<unsigned>* remaining)
-      : first_(first), remaining_(remaining), successors_(NULL) { }
+  OutSet(uint32_t first, ZoneVector<unsigned>* remaining)
+      : first_(first), remaining_(remaining), successors_(NULL) {}
   uint32_t first_;
-  ZoneList<unsigned>* remaining_;
-  ZoneList<OutSet*>* successors_;
+  ZoneVector<unsigned>* remaining_;
+  ZoneVector<OutSet*>* successors_;
   friend class Trace;
 };
 
@@ -273,13 +273,13 @@ class DispatchTable : public ZoneObject {
 // Categorizes character ranges into BMP, non-BMP, lead, and trail surrogates.
 class UnicodeRangeSplitter {
  public:
-  UnicodeRangeSplitter(Zone* zone, ZoneList<CharacterRange>* base);
+  UnicodeRangeSplitter(Zone* zone, ZoneVector<CharacterRange>* base);
   void Call(uc32 from, DispatchTable::Entry entry);
 
-  ZoneList<CharacterRange>* bmp() { return bmp_; }
-  ZoneList<CharacterRange>* lead_surrogates() { return lead_surrogates_; }
-  ZoneList<CharacterRange>* trail_surrogates() { return trail_surrogates_; }
-  ZoneList<CharacterRange>* non_bmp() const { return non_bmp_; }
+  ZoneVector<CharacterRange>* bmp() { return bmp_; }
+  ZoneVector<CharacterRange>* lead_surrogates() { return lead_surrogates_; }
+  ZoneVector<CharacterRange>* trail_surrogates() { return trail_surrogates_; }
+  ZoneVector<CharacterRange>* non_bmp() const { return non_bmp_; }
 
  private:
   static const int kBase = 0;
@@ -291,10 +291,10 @@ class UnicodeRangeSplitter {
 
   Zone* zone_;
   DispatchTable table_;
-  ZoneList<CharacterRange>* bmp_;
-  ZoneList<CharacterRange>* lead_surrogates_;
-  ZoneList<CharacterRange>* trail_surrogates_;
-  ZoneList<CharacterRange>* non_bmp_;
+  ZoneVector<CharacterRange>* bmp_;
+  ZoneVector<CharacterRange>* lead_surrogates_;
+  ZoneVector<CharacterRange>* trail_surrogates_;
+  ZoneVector<CharacterRange>* non_bmp_;
 };
 
 
@@ -663,19 +663,19 @@ class ActionNode: public SeqRegExpNode {
 
 class TextNode: public SeqRegExpNode {
  public:
-  TextNode(ZoneList<TextElement>* elms, bool read_backward,
+  TextNode(ZoneVector<TextElement>* elms, bool read_backward,
            RegExpNode* on_success)
       : SeqRegExpNode(on_success), elms_(elms), read_backward_(read_backward) {}
   TextNode(RegExpCharacterClass* that, bool read_backward,
            RegExpNode* on_success)
       : SeqRegExpNode(on_success),
-        elms_(new (zone()) ZoneList<TextElement>(1, zone())),
+        elms_(new (zone()) ZoneVector<TextElement>(1, zone())),
         read_backward_(read_backward) {
-    elms_->Add(TextElement::CharClass(that), zone());
+    elms_->push_back(TextElement::CharClass(that));
   }
   // Create TextNode for a single character class for the given ranges.
   static TextNode* CreateForCharacterRanges(Zone* zone,
-                                            ZoneList<CharacterRange>* ranges,
+                                            ZoneVector<CharacterRange>* ranges,
                                             bool read_backward,
                                             RegExpNode* on_success);
   // Create TextNode for a surrogate pair with a range given for the
@@ -691,7 +691,7 @@ class TextNode: public SeqRegExpNode {
                                     RegExpCompiler* compiler,
                                     int characters_filled_in,
                                     bool not_at_start);
-  ZoneList<TextElement>* elements() { return elms_; }
+  ZoneVector<TextElement>* elements() { return elms_; }
   bool read_backward() { return read_backward_; }
   void MakeCaseIndependent(Isolate* isolate, bool is_one_byte);
   virtual int GreedyLoopTextLength();
@@ -720,7 +720,7 @@ class TextNode: public SeqRegExpNode {
                     bool first_element_checked,
                     int* checked_up_to);
   int Length();
-  ZoneList<TextElement>* elms_;
+  ZoneVector<TextElement>* elms_;
   bool read_backward_;
 };
 
@@ -877,11 +877,11 @@ class GuardedAlternative {
   void AddGuard(Guard* guard, Zone* zone);
   RegExpNode* node() { return node_; }
   void set_node(RegExpNode* node) { node_ = node; }
-  ZoneList<Guard*>* guards() { return guards_; }
+  ZoneVector<Guard*>* guards() { return guards_; }
 
  private:
   RegExpNode* node_;
-  ZoneList<Guard*>* guards_;
+  ZoneVector<Guard*>* guards_;
 };
 
 
@@ -892,16 +892,16 @@ class ChoiceNode: public RegExpNode {
  public:
   explicit ChoiceNode(int expected_size, Zone* zone)
       : RegExpNode(zone),
-        alternatives_(new(zone)
-                      ZoneList<GuardedAlternative>(expected_size, zone)),
+        alternatives_(new (zone)
+                          ZoneVector<GuardedAlternative>(expected_size, zone)),
         table_(NULL),
         not_at_start_(false),
-        being_calculated_(false) { }
+        being_calculated_(false) {}
   virtual void Accept(NodeVisitor* visitor);
   void AddAlternative(GuardedAlternative node) {
-    alternatives()->Add(node, zone());
+    alternatives()->push_back(node);
   }
-  ZoneList<GuardedAlternative>* alternatives() { return alternatives_; }
+  ZoneVector<GuardedAlternative>* alternatives() { return alternatives_; }
   DispatchTable* GetTable(bool ignore_case);
   virtual void Emit(RegExpCompiler* compiler, Trace* trace);
   virtual int EatsAtLeast(int still_to_find, int budget, bool not_at_start);
@@ -928,7 +928,7 @@ class ChoiceNode: public RegExpNode {
 
  protected:
   int GreedyLoopTextLengthForAlternative(GuardedAlternative* alternative);
-  ZoneList<GuardedAlternative>* alternatives_;
+  ZoneVector<GuardedAlternative>* alternatives_;
 
  private:
   friend class DispatchTableConstructor;
@@ -1086,18 +1086,18 @@ ContainedInLattice AddRange(ContainedInLattice a,
 class BoyerMoorePositionInfo : public ZoneObject {
  public:
   explicit BoyerMoorePositionInfo(Zone* zone)
-      : map_(new(zone) ZoneList<bool>(kMapSize, zone)),
+      : map_(new (zone) ZoneVector<bool>(kMapSize, zone)),
         map_count_(0),
         w_(kNotYet),
         s_(kNotYet),
         d_(kNotYet),
         surrogate_(kNotYet) {
-     for (int i = 0; i < kMapSize; i++) {
-       map_->Add(false, zone);
-     }
+    for (int i = 0; i < kMapSize; i++) {
+      map_->push_back(false);
+    }
   }
 
-  bool& at(int i) { return map_->at(i); }
+  //  bool& at(int i) { bool* result = &((*map_)[0]); return *result; }
 
   static const int kMapSize = 128;
   static const int kMask = kMapSize - 1;
@@ -1111,7 +1111,7 @@ class BoyerMoorePositionInfo : public ZoneObject {
   bool is_word() { return w_ == kLatticeIn; }
 
  private:
-  ZoneList<bool>* map_;
+  ZoneVector<bool>* map_;
   int map_count_;  // Number of set bits in the map.
   ContainedInLattice w_;  // The \w character class.
   ContainedInLattice s_;  // The \s character class.
@@ -1168,7 +1168,7 @@ class BoyerMooreLookahead : public ZoneObject {
   RegExpCompiler* compiler_;
   // 0xff for Latin1, 0xffff for UTF-16.
   int max_char_;
-  ZoneList<BoyerMoorePositionInfo*>* bitmaps_;
+  ZoneVector<BoyerMoorePositionInfo*>* bitmaps_;
 
   int GetSkipTable(int min_lookahead,
                    int max_lookahead,
@@ -1401,7 +1401,7 @@ class DispatchTableConstructor: public NodeVisitor {
     table()->AddRange(range, choice_index_, zone_);
   }
 
-  void AddInverse(ZoneList<CharacterRange>* ranges);
+  void AddInverse(ZoneVector<CharacterRange>* ranges);
 
 #define DECLARE_VISIT(Type)                                          \
   virtual void Visit##Type(Type##Node* that);
