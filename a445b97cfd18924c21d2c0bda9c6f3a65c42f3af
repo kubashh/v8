@@ -22,6 +22,30 @@
       "revId": "a445b97cfd18924c21d2c0bda9c6f3a65c42f3af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8063f695_a373227e",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-10-13T17:24:24Z",
+      "side": 0,
+      "message": "Thanks for pointing this out. These changes are actually not needed for this CL. I made them while I was trying to debug one of the GC stress failures I was seeing with this CL. The changes to this file are removed now.\n\nThe semantics here are that array buffers having an allocation_base, a backing_store, a backing_store_length and an allocation_length. There is an invariant that allocation_base \u003c\u003d backing_store \u003c\u003d backing_store + backing_store_length \u003c\u003d allocation_base + allocation_length.\n\nThe range allocation_base ... allocation_base + allocation_length is the region of memory requested from the OS. In the case of Wasm guard regions, most of this is marked as PROT_NONE. The range backing_store ... backing_store + backing_store_length is the portion that is actually used for the array buffer data (marked as PROT_READ | PROT_WRITE).\n\nWhen we go to free the buffer, we need to free allocation_base ... allocation_base + allocation_length. That\u0027s what I thought this variable here was being used for, but it is actually just being used as a key in the map so it doesn\u0027t matter what we use as long as we\u0027re consistent. The freeing is actually done by JSArrayBuffer::FreeBackingStore, which knows to use the full allocation rather than just the backing store.\n\nThe other CL you referenced (https://crrev.com/c/710227) raises another issue, which is whether we should count these buffers based on the amount of committed memory or based on the amount of reserved address space. Currently we count address space, since https://crrev.com/c/710227 was reverted. This is the most conservative choice, although in general I think it makes more sense to track committed memory, as this is what puts pressure on swap space and such. However, there are issues with both extremes. Tracking address space leads to more GCs than necessary, while tracking only committed address space can lead to address space exhaustion, especially in the presence of sanitizers which like to reserve even more address space than Wasm.\n\nI will start up an e-mail thread about the committed vs reserved space issue, since I think we need some more discussion to decide a good policy. The simplest option, at least from the GC perspective, is to have Wasm limit how many guard regions it creates and fall back on bounds checking when we have too many.",
+      "parentUuid": "69364018_370ebc67",
+      "range": {
+        "startLine": 17,
+        "startChar": 23,
+        "endLine": 17,
+        "endChar": 36
+      },
+      "revId": "a445b97cfd18924c21d2c0bda9c6f3a65c42f3af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
