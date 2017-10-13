@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f754965e_4b0990c6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "After offline discussion: It\u0027s still needed to fix the bug where the sweeper doesn\u0027t make progress because of missing background tasks when only Scavenges happen (without promotion).",
+      "parentUuid": "b60bb862_56d8da79",
+      "range": {
+        "startLine": 1913,
+        "startChar": 4,
+        "endLine": 1913,
+        "endChar": 5
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f21bdd_f13556bb",
         "filename": "src/heap/heap.cc",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "df23135f_9c7b2108",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "24f21bdd_f13556bb",
+      "range": {
+        "startLine": 1922,
+        "startChar": 44,
+        "endLine": 1922,
+        "endChar": 0
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d128234c_2ea0c872",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 10
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-13T12:38:01Z",
       "side": 1,
       "message": "How about moving the setting of the condition to the beginning of AbortAndWaitForTasks.",
+      "range": {
+        "startLine": 608,
+        "startChar": 12,
+        "endLine": 608,
+        "endChar": 33
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebda08b6_2b3e7510",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "We also call that during EnsureSweepingCompleted which doesn\u0027t deal with early_complete_tasks. I think it makes sense to only change it from the PauseOrCompleteScope.",
+      "parentUuid": "d128234c_2ea0c872",
       "range": {
         "startLine": 608,
         "startChar": 12,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2536ff01_e8d83d66",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "368fc04c_ca696d44",
+      "range": {
+        "startLine": 651,
+        "startChar": 30,
+        "endLine": 651,
+        "endChar": 38
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "444ce4f9_c5ceee99",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 10
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "85aa705e_6cea049c",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "444ce4f9_c5ceee99",
+      "range": {
+        "startLine": 662,
+        "startChar": 15,
+        "endLine": 662,
+        "endChar": 16
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d2f015b_88fc1f2d",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 10
@@ -137,6 +257,30 @@
       "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddd2457_483ec106",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T12:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d2f015b_88fc1f2d",
+      "range": {
+        "startLine": 691,
+        "startChar": 28,
+        "endLine": 691,
+        "endChar": 49
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
