@@ -1916,7 +1916,10 @@ void Heap::Scavenge() {
     mark_compact_collector()->EnsureSweepingCompleted();
   }
 
+  // TODO(mlippautz): Untangle the dependency of the unmapper from the sweeper.
   mark_compact_collector()->sweeper().EnsureNewSpaceCompleted();
+  MarkCompactCollector::Sweeper::PauseOrCompleteScope sweeper_scope(
+      mark_compact_collector()->sweeper());
 
   SetGCState(SCAVENGE);
 
