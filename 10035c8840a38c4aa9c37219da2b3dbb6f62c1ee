@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b4750fe_bd83365e",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-13T03:49:51Z",
+      "side": 1,
+      "message": "Please put this into the switch in Reduce(Node*) with explicit cases for the graph terminator opcodes and only DCHECK(!IrOpcode::IsGraphTerminator(node-\u003eopcode()) here",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feadfa48_f2d789f3",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-13T03:49:51Z",
+      "side": 1,
+      "message": "Please create a dedicated ReduceIfException.",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6faac5_628f7524",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-13T03:49:51Z",
+      "side": 1,
+      "message": "Please do a separate ReduceUnreachable as well. So that this generic ReduceEffectNode really doesn\u0027t need to check node-\u003eopcode() anymore.",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca1a1909_afad9a7a",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-13T03:49:51Z",
+      "side": 1,
+      "message": "Please make this into an explicit ReduceDeoptimizeOrReturnOrTerminate(Node*) instead and dispatch only for those cases. That way you don\u0027t need this exclusion here.",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
