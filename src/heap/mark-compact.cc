@@ -600,6 +600,32 @@ void MarkCompactCollector::ClearMarkbits() {
   heap_->lo_space()->ClearMarkingStateOfLiveObjects();
 }
 
+MarkCompactCollector::Sweeper::PauseOrCompleteScope::PauseOrCompleteScope(
+    MarkCompactCollector::Sweeper* sweeper)
+    : sweeper_(sweeper) {
+  if (!sweeper_->sweeping_in_progress()) return;
+
+  sweeper_->early_complete_tasks_.SetValue(true);
+  sweeper_->AbortAndWaitForTasks();
+
+  // Complete sweeping if there's nothing more to do.
+  if (sweeper_->IsDoneSweeping()) {
+    sweeper_->heap_->mark_compact_collector()->EnsureSweepingCompleted();
+    DCHECK(!sweeper_->sweeping_in_progress());
+  } else {
+    // Unless sweeping is complete the flag still indicates that the sweeper
+    // is enabled. It just cannot use tasks anymore.
+    DCHECK(sweeper_->sweeping_in_progress());
+  }
+}
+
+MarkCompactCollector::Sweeper::PauseOrCompleteScope::~PauseOrCompleteScope() {
+  if (!sweeper_->sweeping_in_progress()) return;
+
+  sweeper_->early_complete_tasks_.SetValue(false);
+  sweeper_->StartSweeperTasks();
+}
+
 class MarkCompactCollector::Sweeper::SweeperTask final : public CancelableTask {
  public:
   SweeperTask(Isolate* isolate, Sweeper* sweeper,
@@ -620,11 +646,12 @@ class MarkCompactCollector::Sweeper::SweeperTask final : public CancelableTask {
     DCHECK_LE(space_to_start_, LAST_PAGED_SPACE);
     const int offset = space_to_start_ - FIRST_SPACE;
     const int num_spaces = LAST_PAGED_SPACE - FIRST_SPACE + 1;
-    for (int i = 0; i < num_spaces; i++) {
+    for (int i = 0; i < num_spaces && !sweeper_->early_complete_tasks_.Value();
+         i++) {
       const int space_id = FIRST_SPACE + ((i + offset) % num_spaces);
       DCHECK_GE(space_id, FIRST_SPACE);
       DCHECK_LE(space_id, LAST_PAGED_SPACE);
-      sweeper_->ParallelSweepSpace(static_cast<AllocationSpace>(space_id), 0);
+      sweeper_->SweepSpaceFromTask(static_cast<AllocationSpace>(space_id));
     }
     num_sweeping_tasks_->Decrement(1);
     pending_sweeper_tasks_->Signal();
@@ -654,7 +681,8 @@ void MarkCompactCollector::Sweeper::StartSweeping() {
 void MarkCompactCollector::Sweeper::StartSweeperTasks() {
   DCHECK_EQ(0, num_tasks_);
   DCHECK_EQ(0, num_sweeping_tasks_.Value());
-  if (FLAG_concurrent_sweeping && sweeping_in_progress_) {
+  if (FLAG_concurrent_sweeping && sweeping_in_progress_ &&
+      !heap_->delay_sweeper_tasks_for_testing_) {
     ForAllSweepingSpaces([this](AllocationSpace space) {
       if (space == NEW_SPACE) return;
       num_sweeping_tasks_.Increment(1);
@@ -700,6 +728,22 @@ Page* MarkCompactCollector::Sweeper::GetSweptPageSafe(PagedSpace* space) {
   return nullptr;
 }
 
+void MarkCompactCollector::Sweeper::AbortAndWaitForTasks() {
+  if (!FLAG_concurrent_sweeping) return;
+
+  for (int i = 0; i < num_tasks_; i++) {
+    if (heap_->isolate()->cancelable_task_manager()->TryAbort(task_ids_[i]) !=
+        CancelableTaskManager::kTaskAborted) {
+      pending_sweeper_tasks_semaphore_.Wait();
+    } else {
+      // Aborted case.
+      num_sweeping_tasks_.Decrement(1);
+    }
+  }
+  num_tasks_ = 0;
+  DCHECK_EQ(0, num_sweeping_tasks_.Value());
+}
+
 void MarkCompactCollector::Sweeper::EnsureCompleted() {
   if (!sweeping_in_progress_) return;
 
@@ -708,16 +752,7 @@ void MarkCompactCollector::Sweeper::EnsureCompleted() {
   ForAllSweepingSpaces(
       [this](AllocationSpace space) { ParallelSweepSpace(space, 0); });
 
-  if (FLAG_concurrent_sweeping) {
-    for (int i = 0; i < num_tasks_; i++) {
-      if (heap_->isolate()->cancelable_task_manager()->TryAbort(task_ids_[i]) !=
-          CancelableTaskManager::kTaskAborted) {
-        pending_sweeper_tasks_semaphore_.Wait();
-      }
-    }
-    num_tasks_ = 0;
-    num_sweeping_tasks_.SetValue(0);
-  }
+  AbortAndWaitForTasks();
 
   ForAllSweepingSpaces([this](AllocationSpace space) {
     if (space == NEW_SPACE) {
@@ -1045,9 +1080,7 @@ void MarkCompactCollector::Finish() {
   heap()->VerifyCountersBeforeConcurrentSweeping();
 #endif
 
-  if (!heap()->delay_sweeper_tasks_for_testing_) {
-    sweeper().StartSweeperTasks();
-  }
+  sweeper().StartSweeperTasks();
 
   // The hashing of weak_object_to_code_table is no longer valid.
   heap()->weak_object_to_code_table()->Rehash();
@@ -4351,6 +4384,15 @@ void MarkCompactCollector::ReleaseEvacuationCandidates() {
   }
   old_space_evacuation_pages_.clear();
   compacting_ = false;
+}
+
+void MarkCompactCollector::Sweeper::SweepSpaceFromTask(
+    AllocationSpace identity) {
+  Page* page = nullptr;
+  while (!early_complete_tasks_.Value() &&
+         ((page = GetSweepingPageSafe(identity)) != nullptr)) {
+    ParallelSweepPage(page, identity);
+  }
 }
 
 int MarkCompactCollector::Sweeper::ParallelSweepSpace(AllocationSpace identity,
