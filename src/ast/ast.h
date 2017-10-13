@@ -2443,6 +2443,10 @@ class FunctionLiteral final : public Expression {
     function_literal_id_ = function_literal_id;
   }
 
+  bool is_class_field_initializer() const {
+    return is_class_field_initializer_;
+  }
+
   ProducedPreParsedScopeData* produced_preparsed_scope_data() const {
     return produced_preparsed_scope_data_;
   }
@@ -2456,7 +2460,7 @@ class FunctionLiteral final : public Expression {
       int expected_property_count, int parameter_count, int function_length,
       FunctionType function_type, ParameterFlag has_duplicate_parameters,
       EagerCompileHint eager_compile_hint, int position, bool has_braces,
-      int function_literal_id,
+      int function_literal_id, bool is_class_field_initializer,
       ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr)
       : Expression(position, kFunctionLiteral),
         expected_property_count_(expected_property_count),
@@ -2471,6 +2475,7 @@ class FunctionLiteral final : public Expression {
         raw_inferred_name_(ast_value_factory->empty_cons_string()),
         ast_properties_(zone),
         function_literal_id_(function_literal_id),
+        is_class_field_initializer_(is_class_field_initializer),
         produced_preparsed_scope_data_(produced_preparsed_scope_data) {
     bit_field_ |= FunctionTypeBits::encode(function_type) |
                   Pretenure::encode(false) |
@@ -2503,6 +2508,7 @@ class FunctionLiteral final : public Expression {
   AstProperties ast_properties_;
   int function_literal_id_;
   FeedbackSlot literal_feedback_slot_;
+  bool is_class_field_initializer_;
   ProducedPreParsedScopeData* produced_preparsed_scope_data_;
 };
 
@@ -3340,13 +3346,14 @@ class AstNodeFactory final BASE_EMBEDDED {
       FunctionLiteral::ParameterFlag has_duplicate_parameters,
       FunctionLiteral::FunctionType function_type,
       FunctionLiteral::EagerCompileHint eager_compile_hint, int position,
-      bool has_braces, int function_literal_id,
+      bool has_braces, int function_literal_id, bool is_class_field_initializer,
       ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr) {
     return new (zone_) FunctionLiteral(
         zone_, name, ast_value_factory_, scope, body, expected_property_count,
         parameter_count, function_length, function_type,
         has_duplicate_parameters, eager_compile_hint, position, has_braces,
-        function_literal_id, produced_preparsed_scope_data);
+        function_literal_id, is_class_field_initializer,
+        produced_preparsed_scope_data);
   }
 
   // Creates a FunctionLiteral representing a top-level script, the
@@ -3362,7 +3369,7 @@ class AstNodeFactory final BASE_EMBEDDED {
         FunctionLiteral::kAnonymousExpression,
         FunctionLiteral::kNoDuplicateParameters,
         FunctionLiteral::kShouldLazyCompile, 0, true,
-        FunctionLiteral::kIdTypeTopLevel);
+        FunctionLiteral::kIdTypeTopLevel, false);
   }
 
   ClassLiteral::Property* NewClassLiteralProperty(
