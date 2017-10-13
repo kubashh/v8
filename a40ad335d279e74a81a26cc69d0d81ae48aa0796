@@ -39,6 +39,48 @@
       "revId": "a40ad335d279e74a81a26cc69d0d81ae48aa0796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d611d43_d9c59956",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-10-13T16:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b62b7818_201454ae",
+      "range": {
+        "startLine": 608,
+        "startChar": 28,
+        "endLine": 608,
+        "endChar": 43
+      },
+      "revId": "a40ad335d279e74a81a26cc69d0d81ae48aa0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f89959ca_47f20d1c",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-10-13T16:27:07Z",
+      "side": 1,
+      "message": "added a comment, FindBreakablePosition is written in the way that it always should return breakable_position after source_position, so returning anything less then source_position looks like good enough indication.",
+      "parentUuid": "bddc810f_d7ea6318",
+      "revId": "a40ad335d279e74a81a26cc69d0d81ae48aa0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
