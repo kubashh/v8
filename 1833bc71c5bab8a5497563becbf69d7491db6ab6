@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b60bb862_56d8da79",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "I guess we can remove that now?",
+      "range": {
+        "startLine": 1913,
+        "startChar": 4,
+        "endLine": 1913,
+        "endChar": 5
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f21bdd_f13556bb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "Right now the sweepers are restarted at the end of scavenge. Would it make sense to make the scope smaller to start them as soon as possible, e.g. after joining the scavenger threads.",
+      "range": {
+        "startLine": 1922,
+        "startChar": 44,
+        "endLine": 1922,
+        "endChar": 0
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d128234c_2ea0c872",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "How about moving the setting of the condition to the beginning of AbortAndWaitForTasks.",
+      "range": {
+        "startLine": 608,
+        "startChar": 12,
+        "endLine": 608,
+        "endChar": 33
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "368fc04c_ca696d44",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "You can remove this condition since it is bailing out on the lower level. It is simpler and 3 more iterations are not too costly. I leave it up to you.",
+      "range": {
+        "startLine": 651,
+        "startChar": 30,
+        "endLine": 651,
+        "endChar": 38
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "444ce4f9_c5ceee99",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "For a thread-safe version you would need to grab the lock.",
+      "range": {
+        "startLine": 662,
+        "startChar": 15,
+        "endLine": 662,
+        "endChar": 16
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d2f015b_88fc1f2d",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-13T12:38:01Z",
+      "side": 1,
+      "message": "Maybe call it stop_sweeper_tasks_? To be clear that it is not forcing them to \"complete\" sweeping.",
+      "range": {
+        "startLine": 691,
+        "startChar": 28,
+        "endLine": 691,
+        "endChar": 49
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
