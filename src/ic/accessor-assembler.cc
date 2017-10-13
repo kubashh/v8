@@ -784,9 +784,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
   Branch(TaggedIsSmi(maybe_transition_cell), &array_handler, &tuple_handler);
 
   VARIABLE(var_transition, MachineRepresentation::kTagged);
-  Label if_transition(this), if_transition_to_constant(this),
-      if_store_normal(this), if_store_global_proxy(this), if_proxy(this),
-      do_store(this);
+  Label do_store(this), if_transition_map(this), if_holder_object(this);
   BIND(&tuple_handler);
   {
     Node* transition = LoadWeakCellValue(maybe_transition_cell, miss);
@@ -840,23 +838,18 @@ void AccessorAssembler::HandleStoreICProtoHandler(
 
   BIND(&do_store);
   {
-    Branch(SmiEqual(smi_or_code, SmiConstant(StoreHandler::kProxy)), &if_proxy,
-           &if_transition);
-  }
-
-  BIND(&if_proxy);
-  {
-    Node* proxy = var_transition.value();
-    HandleStoreToProxy(p, proxy, miss, support_elements);
-  }
-
-  BIND(&if_transition);
-  {
-    Node* holder = p->receiver;
     Node* transition = var_transition.value();
+    Branch(IsMap(transition), &if_transition_map, &if_holder_object);
+  }
 
-    GotoIfNot(IsMap(transition), &if_store_global_proxy);
-    GotoIf(IsDeprecatedMap(transition), miss);
+  BIND(&if_transition_map);
+  {
+    Label if_transition_to_constant(this), if_store_normal(this);
+
+    Node* holder = p->receiver;
+    Node* transition_map = var_transition.value();
+
+    GotoIf(IsDeprecatedMap(transition_map), miss);
 
     if (support_elements == kSupportElements) {
       Label if_smi_handler(this);
@@ -867,7 +860,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
 
       StoreTransitionDescriptor descriptor(isolate());
       TailCallStub(descriptor, code_handler, p->context, p->receiver, p->name,
-                   transition, p->value, p->slot, p->vector);
+                   transition_map, p->value, p->slot, p->vector);
 
       BIND(&if_smi_handler);
     }
@@ -882,13 +875,12 @@ void AccessorAssembler::HandleStoreICProtoHandler(
     GotoIf(WordEqual(handler_kind,
                      IntPtrConstant(StoreHandler::kTransitionToConstant)),
            &if_transition_to_constant);
-    // This case is already handled above.
     CSA_ASSERT(this,
-               WordNotEqual(handler_kind,
-                            IntPtrConstant(StoreHandler::kStoreGlobalProxy)));
+               WordEqual(handler_kind,
+                         IntPtrConstant(StoreHandler::kTransitionToField)));
 
     // Handle transitioning field stores.
-    HandleStoreICSmiHandlerCase(handler_word, holder, p->value, transition,
+    HandleStoreICSmiHandlerCase(handler_word, holder, p->value, transition_map,
                                 miss);
 
     BIND(&if_transition_to_constant);
@@ -901,7 +893,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
           IntPtrAdd(scaled_descriptor,
                     IntPtrConstant(DescriptorArray::kFirstIndex +
                                    DescriptorArray::kEntryValueIndex));
-      Node* descriptors = LoadMapDescriptors(transition);
+      Node* descriptors = LoadMapDescriptors(transition_map);
       CSA_ASSERT(
           this, UintPtrLessThan(descriptor,
                                 LoadAndUntagFixedArrayBaseLength(descriptors)));
@@ -909,7 +901,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
       Node* constant = LoadFixedArrayElement(descriptors, value_index);
       GotoIf(WordNotEqual(p->value, constant), miss);
 
-      StoreMap(p->receiver, transition);
+      StoreMap(p->receiver, transition_map);
       Return(p->value);
     }
 
@@ -948,10 +940,28 @@ void AccessorAssembler::HandleStoreICProtoHandler(
                         p->receiver, p->name, p->value);
       }
     }
+  }
+  BIND(&if_holder_object);
+  {
+    Label if_store_global_proxy(this);
+    Node* holder = var_transition.value();
+
+    Node* smi_handler = smi_or_code;
+    CSA_ASSERT(this, TaggedIsSmi(smi_handler));
+    Node* handler_word = SmiUntag(smi_handler);
+
+    Node* handler_kind = DecodeWord<StoreHandler::KindBits>(handler_word);
+    GotoIf(WordEqual(handler_kind,
+                     IntPtrConstant(StoreHandler::kStoreGlobalProxy)),
+           &if_store_global_proxy);
+    CSA_ASSERT(this,
+               WordEqual(handler_kind, IntPtrConstant(StoreHandler::kProxy)));
+    HandleStoreToProxy(p, holder, miss, support_elements);
+
     BIND(&if_store_global_proxy);
     {
       ExitPoint direct_exit(this);
-      StoreGlobalIC_PropertyCellCase(transition, p->value, &direct_exit, miss);
+      StoreGlobalIC_PropertyCellCase(holder, p->value, &direct_exit, miss);
     }
   }
 }
