@@ -46,7 +46,7 @@ TEST(OSReserveMemory) {
   int* addr = static_cast<int*>(mem_addr);
   addr[KB - 1] = 2;
   CHECK(OS::UncommitRegion(mem_addr, block_size));
-  OS::ReleaseRegion(mem_addr, mem_size);
+  CHECK(OS::ReleaseRegion(mem_addr, mem_size));
 }
 
 }  // namespace internal

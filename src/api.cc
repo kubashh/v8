@@ -503,7 +503,7 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
         return Free(data, length);
       }
       case v8::ArrayBuffer::Allocator::AllocationMode::kReservation: {
-        base::OS::ReleaseRegion(data, length);
+        CHECK(base::OS::ReleaseRegion(data, length));
         return;
       }
     }
