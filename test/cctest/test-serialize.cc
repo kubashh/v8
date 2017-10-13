@@ -1281,7 +1281,7 @@ TEST(CodeSerializerPromotedToCompilationCache) {
 
   InfoVectorPair pair = isolate->compilation_cache()->LookupScript(
       src, src, 0, 0, v8::ScriptOriginOptions(), isolate->native_context(),
-      SLOPPY);
+      LanguageMode::kSloppy);
 
   CHECK(pair.shared() == *copy);
 
