@@ -43,6 +43,12 @@ using DecodeResult = Result<std::nullptr_t>;
 // a buffer of bytes.
 class Decoder {
  public:
+  enum CheckedFlag : bool { kChecked = true, kUnchecked = false };
+
+  enum AdvancePCFlag : bool { kAdvancePc = true, kNoAdvancePc = false };
+
+  enum TraceFlag : bool { kTrace = true, kNoTrace = false };
+
   Decoder(const byte* start, const byte* end, uint32_t buffer_offset = 0)
       : start_(start), pc_(start), end_(end), buffer_offset_(buffer_offset) {}
   Decoder(const byte* start, const byte* pc, const byte* end,
@@ -61,58 +67,60 @@ class Decoder {
   }
 
   // Reads an 8-bit unsigned integer.
-  template <bool checked>
+  template <CheckedFlag checked>
   inline uint8_t read_u8(const byte* pc, const char* msg = "expected 1 byte") {
     return read_little_endian<uint8_t, checked>(pc, msg);
   }
 
   // Reads a 16-bit unsigned integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   inline uint16_t read_u16(const byte* pc,
                            const char* msg = "expected 2 bytes") {
     return read_little_endian<uint16_t, checked>(pc, msg);
   }
 
   // Reads a 32-bit unsigned integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   inline uint32_t read_u32(const byte* pc,
                            const char* msg = "expected 4 bytes") {
     return read_little_endian<uint32_t, checked>(pc, msg);
   }
 
   // Reads a 64-bit unsigned integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   inline uint64_t read_u64(const byte* pc,
                            const char* msg = "expected 8 bytes") {
     return read_little_endian<uint64_t, checked>(pc, msg);
   }
 
   // Reads a variable-length unsigned integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   uint32_t read_u32v(const byte* pc, uint32_t* length,
                      const char* name = "LEB32") {
-    return read_leb<uint32_t, checked, false, false>(pc, length, name);
+    return read_leb<uint32_t, checked, kNoAdvancePc, kNoTrace>(pc, length,
+                                                               name);
   }
 
   // Reads a variable-length signed integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   int32_t read_i32v(const byte* pc, uint32_t* length,
                     const char* name = "signed LEB32") {
-    return read_leb<int32_t, checked, false, false>(pc, length, name);
+    return read_leb<int32_t, checked, kNoAdvancePc, kNoTrace>(pc, length, name);
   }
 
   // Reads a variable-length unsigned integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   uint64_t read_u64v(const byte* pc, uint32_t* length,
                      const char* name = "LEB64") {
-    return read_leb<uint64_t, checked, false, false>(pc, length, name);
+    return read_leb<uint64_t, checked, kNoAdvancePc, kNoTrace>(pc, length,
+                                                               name);
   }
 
   // Reads a variable-length signed integer (little endian).
-  template <bool checked>
+  template <CheckedFlag checked>
   int64_t read_i64v(const byte* pc, uint32_t* length,
                     const char* name = "signed LEB64") {
-    return read_leb<int64_t, checked, false, false>(pc, length, name);
+    return read_leb<int64_t, checked, kNoAdvancePc, kNoTrace>(pc, length, name);
   }
 
   // Reads a 8-bit unsigned integer (byte) and advances {pc_}.
@@ -133,13 +141,13 @@ class Decoder {
   // Reads a LEB128 variable-length unsigned 32-bit integer and advances {pc_}.
   uint32_t consume_u32v(const char* name = nullptr) {
     uint32_t length = 0;
-    return read_leb<uint32_t, true, true, true>(pc_, &length, name);
+    return read_leb<uint32_t, kChecked, kAdvancePc, kTrace>(pc_, &length, name);
   }
 
   // Reads a LEB128 variable-length signed 32-bit integer and advances {pc_}.
   int32_t consume_i32v(const char* name = nullptr) {
     uint32_t length = 0;
-    return read_leb<int32_t, true, true, true>(pc_, &length, name);
+    return read_leb<int32_t, kChecked, kAdvancePc, kTrace>(pc_, &length, name);
   }
 
   // Consume {size} bytes and send them to the bit bucket, advancing {pc_}.
@@ -286,7 +294,8 @@ class Decoder {
     return val;
   }
 
-  template <typename IntType, bool checked, bool advance_pc, bool trace>
+  template <typename IntType, CheckedFlag checked, AdvancePCFlag advance_pc,
+            TraceFlag trace>
   inline IntType read_leb(const byte* pc, uint32_t* length,
                           const char* name = "varint") {
     DCHECK_IMPLIES(advance_pc, pc == pc_);
@@ -295,8 +304,8 @@ class Decoder {
                                                                  name, 0);
   }
 
-  template <typename IntType, bool checked, bool advance_pc, bool trace,
-            int byte_index>
+  template <typename IntType, CheckedFlag checked, AdvancePCFlag advance_pc,
+            TraceFlag trace, int byte_index>
   IntType read_leb_tail(const byte* pc, uint32_t* length, const char* name,
                         IntType result) {
     constexpr bool is_signed = std::is_signed<IntType>::value;
