@@ -123,7 +123,9 @@ void OS::ProtectCode(void* address, const size_t size) {
   DWORD old_protect;
   VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect);
 #else
-  mprotect(address, size, PROT_READ | PROT_EXEC);
+  const int result = mprotect(address, size, PROT_READ | PROT_EXEC);
+  USE(result);
+  DCHECK_EQ(result, 0);
 #endif
 }
 
@@ -135,7 +137,9 @@ void OS::Guard(void* address, const size_t size) {
   DWORD oldprotect;
   VirtualProtect(address, size, PAGE_NOACCESS, &oldprotect);
 #else
-  mprotect(address, size, PROT_NONE);
+  const int result = mprotect(address, size, PROT_NONE);
+  USE(result);
+  DCHECK_EQ(result, 0);
 #endif
 }
 #endif  // !V8_OS_FUCHSIA
@@ -146,7 +150,9 @@ void OS::Unprotect(void* address, const size_t size) {
   DWORD oldprotect;
   VirtualProtect(address, size, PAGE_READWRITE, &oldprotect);
 #else
-  mprotect(address, size, PROT_READ | PROT_WRITE);
+  const int result = mprotect(address, size, PROT_READ | PROT_WRITE);
+  USE(result);
+  DCHECK_EQ(result, 0);
 #endif
 }
 

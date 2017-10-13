@@ -178,6 +178,7 @@ bool OS::UncommitRegion(void* address, size_t size) {
 
 // static
 bool OS::ReleaseRegion(void* address, size_t size) {
+  DCHECK_EQ(reinterpret_cast<uintptr_t>(address) % CommitPageSize(), 0);
   return munmap(address, size) == 0;
 }
 
