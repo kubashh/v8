@@ -203,8 +203,8 @@ WeakCell* StoreHandler::GetTransitionCell(Object* handler) {
   }
 
   DCHECK(handler->IsFixedArray());
-  WeakCell* cell =
-      WeakCell::cast(FixedArray::cast(handler)->get(kTransitionCellIndex));
+  WeakCell* cell = WeakCell::cast(
+      FixedArray::cast(handler)->get(kTransitionMapOrHolderCellIndex));
   DCHECK(!cell->cleared());
   return cell;
 }

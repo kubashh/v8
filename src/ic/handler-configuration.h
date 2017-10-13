@@ -241,7 +241,7 @@ class StoreHandler {
   // when prototype chain checks include non-existing lookups and access checks.
   static const int kSmiHandlerIndex = 0;
   static const int kValidityCellIndex = 1;
-  static const int kTransitionCellIndex = 2;
+  static const int kTransitionMapOrHolderCellIndex = 2;
   static const int kFirstPrototypeIndex = 3;
 
   // Creates a Smi-handler for storing a field to fast object.
