@@ -16,6 +16,24 @@
       "revId": "ad41d1967c6b56978087e7f2b8f069be9e46b80a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de8ba9c1_21a2adde",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-10-13T08:49:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2771b754_689882da",
+      "revId": "ad41d1967c6b56978087e7f2b8f069be9e46b80a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
