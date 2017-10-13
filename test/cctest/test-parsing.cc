@@ -5129,6 +5129,9 @@ TEST(ClassFieldsNoErrors) {
     "static 0;",
     "static 'a' = 0;",
     "static 'a';",
+    "static f = new.target;",
+    "static f = function f() { return new.target; }",
+    "static f = () => new.target",
 
     // ASI
     "a = 0\n",

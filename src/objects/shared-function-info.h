@@ -331,6 +331,9 @@ class SharedFunctionInfo : public HeapObject {
   // shared function info.
   void DisableOptimization(BailoutReason reason);
 
+  // Whether this is a class field initializer.
+  DECL_BOOLEAN_ACCESSORS(is_class_field_initializer)
+
   // [source code]: Source code for the function.
   bool HasSourceCode() const;
   Handle<Object> GetSourceCode();
@@ -460,18 +463,19 @@ class SharedFunctionInfo : public HeapObject {
 #undef START_POSITION_AND_TYPE_BIT_FIELDS
 
 // Bit positions in |compiler_hints|.
-#define COMPILER_HINTS_BIT_FIELDS(V, _)    \
-  V(IsNativeBit, bool, 1, _)               \
-  V(IsStrictBit, bool, 1, _)               \
-  V(FunctionKindBits, FunctionKind, 10, _) \
-  V(HasDuplicateParametersBit, bool, 1, _) \
-  V(AllowLazyCompilationBit, bool, 1, _)   \
-  V(UsesArgumentsBit, bool, 1, _)          \
-  V(NeedsHomeObjectBit, bool, 1, _)        \
-  V(IsDeclarationBit, bool, 1, _)          \
-  V(IsAsmWasmBrokenBit, bool, 1, _)        \
-  V(FunctionMapIndexBits, int, 5, _)       \
-  V(DisabledOptimizationReasonBits, BailoutReason, 7, _)
+#define COMPILER_HINTS_BIT_FIELDS(V, _)                  \
+  V(IsNativeBit, bool, 1, _)                             \
+  V(IsStrictBit, bool, 1, _)                             \
+  V(FunctionKindBits, FunctionKind, 10, _)               \
+  V(HasDuplicateParametersBit, bool, 1, _)               \
+  V(AllowLazyCompilationBit, bool, 1, _)                 \
+  V(UsesArgumentsBit, bool, 1, _)                        \
+  V(NeedsHomeObjectBit, bool, 1, _)                      \
+  V(IsDeclarationBit, bool, 1, _)                        \
+  V(IsAsmWasmBrokenBit, bool, 1, _)                      \
+  V(FunctionMapIndexBits, int, 5, _)                     \
+  V(DisabledOptimizationReasonBits, BailoutReason, 7, _) \
+  V(IsClassFieldInitializer, bool, 1, _)
 
   DEFINE_BIT_FIELDS(COMPILER_HINTS_BIT_FIELDS)
 #undef COMPILER_HINTS_BIT_FIELDS

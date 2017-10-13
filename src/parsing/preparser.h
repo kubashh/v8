@@ -646,7 +646,7 @@ class PreParserFactory {
       FunctionLiteral::ParameterFlag has_duplicate_parameters,
       FunctionLiteral::FunctionType function_type,
       FunctionLiteral::EagerCompileHint eager_compile_hint, int position,
-      bool has_braces, int function_literal_id,
+      bool has_braces, int function_literal_id, bool is_class_field_initializer,
       ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr) {
     DCHECK_NULL(produced_preparsed_scope_data);
     return PreParserExpression::Default();
@@ -855,10 +855,12 @@ class PreParser : public ParserBase<PreParser> {
             AstValueFactory* ast_value_factory,
             PendingCompilationErrorHandler* pending_error_handler,
             RuntimeCallStats* runtime_call_stats,
-            bool parsing_on_main_thread = true)
+            bool parsing_on_main_thread = true,
+            bool parsing_class_field_initializer = false)
       : ParserBase<PreParser>(zone, scanner, stack_limit, nullptr,
                               ast_value_factory, runtime_call_stats,
-                              parsing_on_main_thread),
+                              parsing_on_main_thread,
+                              parsing_class_field_initializer),
         use_counts_(nullptr),
         track_unresolved_variables_(false),
         pending_error_handler_(pending_error_handler),

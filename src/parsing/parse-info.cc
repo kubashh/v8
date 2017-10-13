@@ -55,6 +55,7 @@ ParseInfo::ParseInfo(Handle<SharedFunctionInfo> shared)
   set_language_mode(shared->language_mode());
   set_module(shared->kind() == FunctionKind::kModule);
   set_asm_wasm_broken(shared->is_asm_wasm_broken());
+  set_is_class_field_initializer(shared->is_class_field_initializer());
 
   Handle<Script> script(Script::cast(shared->script()));
   set_script(script);
@@ -64,7 +65,8 @@ ParseInfo::ParseInfo(Handle<SharedFunctionInfo> shared)
   Handle<HeapObject> scope_info(shared->outer_scope_info());
   if (!scope_info->IsTheHole(isolate) &&
       Handle<ScopeInfo>::cast(scope_info)->length() > 0) {
-    set_outer_scope_info(Handle<ScopeInfo>::cast(scope_info));
+    Handle<ScopeInfo> info = Handle<ScopeInfo>::cast(scope_info);
+    set_outer_scope_info(info);
   }
 
   // CollectTypeProfile uses its own feedback slots. If we have existing
