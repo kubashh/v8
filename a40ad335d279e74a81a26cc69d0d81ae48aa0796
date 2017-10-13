@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bddc810f_d7ea6318",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-10-13T07:31:29Z",
+      "side": 1,
+      "message": "Please leave a comment why this condition is necessary. I also wonder if there\u0027s any other situation in which this can occur.\n\nPerhaps this could be a bit cleaner, in that FindBreakablePosition can indicate when it fails to find a matching position, wdyt?",
+      "revId": "a40ad335d279e74a81a26cc69d0d81ae48aa0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
