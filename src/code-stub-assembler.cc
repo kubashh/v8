@@ -1204,7 +1204,7 @@ TNode<Int32T> CodeStubAssembler::LoadInstanceType(
 
 Node* CodeStubAssembler::HasInstanceType(Node* object,
                                          InstanceType instance_type) {
-  return Word32Equal(LoadInstanceType(object), Int32Constant(instance_type));
+  return InstanceTypeEqual(LoadInstanceType(object), instance_type);
 }
 
 Node* CodeStubAssembler::DoesntHaveInstanceType(Node* object,
@@ -1235,10 +1235,8 @@ TNode<Int32T> CodeStubAssembler::LoadHashForJSObject(
 
   Node* type = LoadInstanceType(properties_or_hash);
   Label if_property_array(this), if_property_dictionary(this), done(this);
-  GotoIf(Word32Equal(type, Int32Constant(PROPERTY_ARRAY_TYPE)),
-         &if_property_array);
-  GotoIf(Word32Equal(type, Int32Constant(HASH_TABLE_TYPE)),
-         &if_property_dictionary);
+  GotoIf(InstanceTypeEqual(type, PROPERTY_ARRAY_TYPE), &if_property_array);
+  GotoIf(InstanceTypeEqual(type, HASH_TABLE_TYPE), &if_property_dictionary);
 
   var_hash.Bind(Int32Constant(PropertyArray::kNoHashSentinel));
   Goto(&done);
@@ -1417,7 +1415,7 @@ TNode<Object> CodeStubAssembler::LoadMapConstructor(SloppyTNode<Map> map) {
   {
     GotoIf(TaggedIsSmi(result), &done);
     Node* is_map_type =
-        Word32Equal(LoadInstanceType(CAST(result)), Int32Constant(MAP_TYPE));
+        InstanceTypeEqual(LoadInstanceType(CAST(result)), MAP_TYPE);
     GotoIfNot(is_map_type, &done);
     result =
         LoadObjectField(CAST(result), Map::kConstructorOrBackPointerOffset);
@@ -3450,7 +3448,7 @@ Node* CodeStubAssembler::ToThisValue(Node* context, Node* value,
 
     // Check if {value} is a JSValue.
     Label if_valueisvalue(this, Label::kDeferred), if_valueisnotvalue(this);
-    Branch(Word32Equal(value_instance_type, Int32Constant(JS_VALUE_TYPE)),
+    Branch(InstanceTypeEqual(value_instance_type, JS_VALUE_TYPE),
            &if_valueisvalue, &if_valueisnotvalue);
 
     BIND(&if_valueisvalue);
@@ -3721,7 +3719,7 @@ Node* CodeStubAssembler::IsNullOrJSReceiver(Node* object) {
 }
 
 Node* CodeStubAssembler::IsJSGlobalProxyInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(JS_GLOBAL_PROXY_TYPE));
+  return InstanceTypeEqual(instance_type, JS_GLOBAL_PROXY_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSObjectInstanceType(Node* instance_type) {
@@ -3740,21 +3738,17 @@ Node* CodeStubAssembler::IsJSObject(Node* object) {
 }
 
 Node* CodeStubAssembler::IsJSProxy(Node* object) {
-  Node* object_map = LoadMap(object);
-  Node* object_instance_type = LoadMapInstanceType(object_map);
-
-  return InstanceTypeEqual(object_instance_type, JS_PROXY_TYPE);
+  return HasInstanceType(object, JS_PROXY_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSGlobalProxy(Node* object) {
-  return Word32Equal(LoadInstanceType(object),
-                     Int32Constant(JS_GLOBAL_PROXY_TYPE));
+  return HasInstanceType(object, JS_GLOBAL_PROXY_TYPE);
 }
 
 Node* CodeStubAssembler::IsMap(Node* map) { return IsMetaMap(LoadMap(map)); }
 
 Node* CodeStubAssembler::IsJSValueInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(JS_VALUE_TYPE));
+  return InstanceTypeEqual(instance_type, JS_VALUE_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSValue(Node* object) {
@@ -3766,7 +3760,7 @@ Node* CodeStubAssembler::IsJSValueMap(Node* map) {
 }
 
 Node* CodeStubAssembler::IsJSArrayInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(JS_ARRAY_TYPE));
+  return InstanceTypeEqual(instance_type, JS_ARRAY_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSArray(Node* object) {
@@ -3870,7 +3864,7 @@ Node* CodeStubAssembler::IsString(Node* object) {
 }
 
 Node* CodeStubAssembler::IsSymbolInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(SYMBOL_TYPE));
+  return InstanceTypeEqual(instance_type, SYMBOL_TYPE);
 }
 
 Node* CodeStubAssembler::IsSymbol(Node* object) {
@@ -3878,7 +3872,7 @@ Node* CodeStubAssembler::IsSymbol(Node* object) {
 }
 
 Node* CodeStubAssembler::IsBigIntInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(BIGINT_TYPE));
+  return InstanceTypeEqual(instance_type, BIGINT_TYPE);
 }
 
 Node* CodeStubAssembler::IsBigInt(Node* object) {
@@ -3924,7 +3918,7 @@ Node* CodeStubAssembler::IsUnseededNumberDictionary(Node* object) {
 }
 
 Node* CodeStubAssembler::IsJSFunctionInstanceType(Node* instance_type) {
-  return Word32Equal(instance_type, Int32Constant(JS_FUNCTION_TYPE));
+  return InstanceTypeEqual(instance_type, JS_FUNCTION_TYPE);
 }
 
 Node* CodeStubAssembler::IsJSFunction(Node* object) {
@@ -4847,12 +4841,12 @@ Node* CodeStubAssembler::ToName(Node* context, Node* value) {
 
   BIND(&not_name);
   {
-    GotoIf(Word32Equal(value_instance_type, Int32Constant(HEAP_NUMBER_TYPE)),
+    GotoIf(InstanceTypeEqual(value_instance_type, HEAP_NUMBER_TYPE),
            &is_number);
 
     Label not_oddball(this);
-    GotoIf(Word32NotEqual(value_instance_type, Int32Constant(ODDBALL_TYPE)),
-           &not_oddball);
+    GotoIfNot(InstanceTypeEqual(value_instance_type, ODDBALL_TYPE),
+              &not_oddball);
 
     var_result.Bind(LoadObjectField(value, Oddball::kToStringOffset));
     Goto(&end);
@@ -4891,7 +4885,7 @@ Node* CodeStubAssembler::NonNumberToNumber(Node* context, Node* input) {
         if_inputisreceiver(this, Label::kDeferred),
         if_inputisother(this, Label::kDeferred);
     GotoIf(IsStringInstanceType(input_instance_type), &if_inputisstring);
-    GotoIf(Word32Equal(input_instance_type, Int32Constant(ODDBALL_TYPE)),
+    GotoIf(InstanceTypeEqual(input_instance_type, ODDBALL_TYPE),
            &if_inputisoddball);
     Branch(IsJSReceiverInstanceType(input_instance_type), &if_inputisreceiver,
            &if_inputisother);
@@ -5111,8 +5105,7 @@ TNode<String> CodeStubAssembler::ToString(SloppyTNode<Context> context,
 
   BIND(&not_heap_number);
   {
-    GotoIf(Word32NotEqual(input_instance_type, Int32Constant(ODDBALL_TYPE)),
-           &runtime);
+    GotoIfNot(InstanceTypeEqual(input_instance_type, ODDBALL_TYPE), &runtime);
     result.Bind(LoadObjectField(CAST(input), Oddball::kToStringOffset));
     Goto(&done);
   }
@@ -5388,11 +5381,10 @@ void CodeStubAssembler::TryToName(Node* key, Label* if_keyisindex,
   // then it must be an uncacheable index. Handle this case in the runtime.
   GotoIf(IsClearWord32(hash, Name::kIsNotArrayIndexMask), if_bailout);
   // Check if we have a ThinString.
-  GotoIf(Word32Equal(key_instance_type, Int32Constant(THIN_STRING_TYPE)),
+  GotoIf(InstanceTypeEqual(key_instance_type, THIN_STRING_TYPE),
          &if_thinstring);
-  GotoIf(
-      Word32Equal(key_instance_type, Int32Constant(THIN_ONE_BYTE_STRING_TYPE)),
-      &if_thinstring);
+  GotoIf(InstanceTypeEqual(key_instance_type, THIN_ONE_BYTE_STRING_TYPE),
+         &if_thinstring);
   // Finally, check if |key| is internalized.
   STATIC_ASSERT(kNotInternalizedTag != 0);
   GotoIf(IsSetWord32(key_instance_type, kIsNotInternalizedMask),
@@ -5970,7 +5962,7 @@ void CodeStubAssembler::TryLookupProperty(
   BIND(&if_objectisspecial);
   {
     // Handle global object here and bailout for other special objects.
-    GotoIfNot(Word32Equal(instance_type, Int32Constant(JS_GLOBAL_OBJECT_TYPE)),
+    GotoIfNot(InstanceTypeEqual(instance_type, JS_GLOBAL_OBJECT_TYPE),
               if_bailout);
 
     // Handle interceptors and access checks in runtime.
@@ -6183,9 +6175,8 @@ Node* CodeStubAssembler::CallGetterIfAccessor(Node* value, Node* details,
     Node* getter_map = LoadMap(getter);
     Node* instance_type = LoadMapInstanceType(getter_map);
     // FunctionTemplateInfo getters are not supported yet.
-    GotoIf(
-        Word32Equal(instance_type, Int32Constant(FUNCTION_TEMPLATE_INFO_TYPE)),
-        if_bailout);
+    GotoIf(InstanceTypeEqual(instance_type, FUNCTION_TEMPLATE_INFO_TYPE),
+           if_bailout);
 
     // Return undefined if the {getter} is not callable.
     var_value.Bind(UndefinedConstant());
@@ -6488,8 +6479,7 @@ void CodeStubAssembler::TryPrototypeChainLookup(
     BIND(&if_objectisreceiver);
 
     if (if_proxy) {
-      GotoIf(Word32Equal(instance_type, Int32Constant(JS_PROXY_TYPE)),
-             if_proxy);
+      GotoIf(InstanceTypeEqual(instance_type, JS_PROXY_TYPE), if_proxy);
     }
   }
 
@@ -6523,9 +6513,8 @@ void CodeStubAssembler::TryPrototypeChainLookup(
       BIND(&next_proto);
 
       // Bailout if it can be an integer indexed exotic case.
-      GotoIf(
-          Word32Equal(holder_instance_type, Int32Constant(JS_TYPED_ARRAY_TYPE)),
-          if_bailout);
+      GotoIf(InstanceTypeEqual(holder_instance_type, JS_TYPED_ARRAY_TYPE),
+             if_bailout);
 
       Node* proto = LoadMapPrototype(holder_map);
 
@@ -6659,9 +6648,8 @@ Node* CodeStubAssembler::OrdinaryHasInstance(Node* context, Node* callable,
 
   // Goto runtime if {callable} is not a JSFunction.
   Node* callable_instance_type = LoadMapInstanceType(callable_map);
-  GotoIfNot(
-      Word32Equal(callable_instance_type, Int32Constant(JS_FUNCTION_TYPE)),
-      &return_runtime);
+  GotoIfNot(InstanceTypeEqual(callable_instance_type, JS_FUNCTION_TYPE),
+            &return_runtime);
 
   // Goto runtime if {callable} is not a constructor or has
   // a non-instance "prototype".
@@ -6687,9 +6675,8 @@ Node* CodeStubAssembler::OrdinaryHasInstance(Node* context, Node* callable,
     // created so far and hence we should return false.
     Node* callable_prototype_instance_type =
         LoadInstanceType(callable_prototype);
-    GotoIfNot(
-        Word32Equal(callable_prototype_instance_type, Int32Constant(MAP_TYPE)),
-        &callable_prototype_valid);
+    GotoIfNot(InstanceTypeEqual(callable_prototype_instance_type, MAP_TYPE),
+              &callable_prototype_valid);
     var_callable_prototype.Bind(
         LoadObjectField(callable_prototype, Map::kPrototypeOffset));
     Goto(&callable_prototype_valid);
@@ -8014,17 +8001,14 @@ Node* CodeStubAssembler::RelationalComparison(RelationalComparisonMode mode,
               // and {rhs} is either a HeapNumber or Oddball.
               Label collect_any_feedback(this), collect_oddball_feedback(this),
                   collect_feedback_done(this);
-              GotoIfNot(
-                  Word32Equal(lhs_instance_type, Int32Constant(ODDBALL_TYPE)),
-                  &collect_any_feedback);
+              GotoIfNot(InstanceTypeEqual(lhs_instance_type, ODDBALL_TYPE),
+                        &collect_any_feedback);
 
               Node* rhs_instance_type = LoadMapInstanceType(rhs_map);
-              GotoIf(Word32Equal(rhs_instance_type,
-                                 Int32Constant(HEAP_NUMBER_TYPE)),
+              GotoIf(InstanceTypeEqual(rhs_instance_type, HEAP_NUMBER_TYPE),
                      &collect_oddball_feedback);
-              Branch(
-                  Word32Equal(rhs_instance_type, Int32Constant(ODDBALL_TYPE)),
-                  &collect_oddball_feedback, &collect_any_feedback);
+              Branch(InstanceTypeEqual(rhs_instance_type, ODDBALL_TYPE),
+                     &collect_oddball_feedback, &collect_any_feedback);
 
               BIND(&collect_oddball_feedback);
               {
@@ -9312,7 +9296,7 @@ Node* CodeStubAssembler::Typeof(Node* value) {
 
   Node* instance_type = LoadMapInstanceType(map);
 
-  GotoIf(Word32Equal(instance_type, Int32Constant(ODDBALL_TYPE)), &if_oddball);
+  GotoIf(InstanceTypeEqual(instance_type, ODDBALL_TYPE), &if_oddball);
 
   Node* callable_or_undetectable_mask = Word32And(
       LoadMapBitField(map),
@@ -9331,7 +9315,7 @@ Node* CodeStubAssembler::Typeof(Node* value) {
 
   GotoIf(IsBigIntInstanceType(instance_type), &return_bigint);
 
-  CSA_ASSERT(this, Word32Equal(instance_type, Int32Constant(SYMBOL_TYPE)));
+  CSA_ASSERT(this, InstanceTypeEqual(instance_type, SYMBOL_TYPE));
   result_var.Bind(HeapConstant(isolate()->factory()->symbol_string()));
   Goto(&return_result);
 
@@ -9665,8 +9649,8 @@ Node* CodeStubAssembler::CreateArrayIterator(Node* array, Node* array_map,
 
     Label if_istypedarray(this), if_isgeneric(this);
 
-    Branch(Word32Equal(array_type, Int32Constant(JS_TYPED_ARRAY_TYPE)),
-           &if_istypedarray, &if_isgeneric);
+    Branch(InstanceTypeEqual(array_type, JS_TYPED_ARRAY_TYPE), &if_istypedarray,
+           &if_isgeneric);
 
     BIND(&if_isgeneric);
     {
@@ -9699,8 +9683,8 @@ Node* CodeStubAssembler::CreateArrayIterator(Node* array, Node* array_map,
     }
   } else {
     Label if_istypedarray(this), if_isgeneric(this);
-    Branch(Word32Equal(array_type, Int32Constant(JS_TYPED_ARRAY_TYPE)),
-           &if_istypedarray, &if_isgeneric);
+    Branch(InstanceTypeEqual(array_type, JS_TYPED_ARRAY_TYPE), &if_istypedarray,
+           &if_isgeneric);
 
     BIND(&if_isgeneric);
     {
