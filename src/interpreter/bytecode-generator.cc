@@ -1820,7 +1820,6 @@ void BytecodeGenerator::VisitClassLiteralProperties(ClassLiteral* expr,
         }
 
         FeedbackSlot slot = property->GetStoreDataPropertySlot();
-        DCHECK(!slot.IsInvalid());
 
         builder()
             ->LoadAccumulatorWithRegister(value)
@@ -1837,7 +1836,16 @@ void BytecodeGenerator::VisitClassLiteralProperties(ClassLiteral* expr,
         break;
       }
       case ClassLiteral::Property::FIELD: {
-        UNREACHABLE();
+        // Only static fields are evaluated during class definition time.
+        DCHECK(property->is_static());
+        DataPropertyInLiteralFlags flags = DataPropertyInLiteralFlag::kNoFlags;
+
+        FeedbackSlot slot = property->GetStoreDataPropertySlot();
+
+        builder()
+            ->LoadAccumulatorWithRegister(value)
+            .StoreDataPropertyInLiteral(receiver, key, flags,
+                                        feedback_index(slot));
         break;
       }
     }
@@ -2077,7 +2085,6 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
         }
 
         FeedbackSlot slot = property->GetStoreDataPropertySlot();
-        DCHECK(!slot.IsInvalid());
 
         builder()
             ->LoadAccumulatorWithRegister(value)
