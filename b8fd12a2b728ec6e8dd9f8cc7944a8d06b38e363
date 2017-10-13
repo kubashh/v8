@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f581c5b1_5dec478d",
+        "filename": "src/globals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-13T12:00:34Z",
+      "side": 1,
+      "message": "Pls add a static assert here that the language mode size is 2. I guess this func doesn\u0027t necessarily make sense if we add language modes?",
+      "range": {
+        "startLine": 362,
+        "startChar": 20,
+        "endLine": 362,
+        "endChar": 42
+      },
+      "revId": "b8fd12a2b728ec6e8dd9f8cc7944a8d06b38e363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
