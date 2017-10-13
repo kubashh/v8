@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69364018_370ebc67",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-13T15:22:47Z",
+      "side": 0,
+      "message": "What is up with the renaming here? That was changed in \n  https://chromium-review.googlesource.com/c/v8/v8/+/710227/2/src/heap/array-buffer-tracker-inl.h\n\nWhy are the semantics changing all the time and what do we need to do to finally fix this? The allocation base and allocated size should not be dependent on guard regions so I don\u0027t see why we need to swap this around all the time.",
+      "range": {
+        "startLine": 17,
+        "startChar": 23,
+        "endLine": 17,
+        "endChar": 36
+      },
+      "revId": "a445b97cfd18924c21d2c0bda9c6f3a65c42f3af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
