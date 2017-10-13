@@ -3162,10 +3162,6 @@ void Parser::DeclareClassProperty(const AstRawString* class_name,
     return;
   }
 
-  if (property->kind() == ClassLiteralProperty::FIELD) {
-    DCHECK(allow_harmony_class_fields());
-    // TODO(littledan): Implement class fields
-  }
   class_info->properties->Add(property, zone());
 }
 
