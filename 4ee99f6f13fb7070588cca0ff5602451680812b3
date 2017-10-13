@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c601646_06a08a6d",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-13T07:50:05Z",
+      "side": 1,
+      "message": "nit: Start comments with capitals and end with dot.",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "4ee99f6f13fb7070588cca0ff5602451680812b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be184ebe_193b1298",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-13T07:50:05Z",
+      "side": 1,
+      "message": "Always prefer sys.path.insert(0, ...\nTo prevent the system from shadowing our path location.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "4ee99f6f13fb7070588cca0ff5602451680812b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b979ef7_90495453",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-13T07:50:05Z",
+      "side": 1,
+      "message": "nit: We usually prefer parentheses... or was this my code? :)",
+      "range": {
+        "startLine": 32,
+        "startChar": 11,
+        "endLine": 32,
+        "endChar": 12
+      },
+      "revId": "4ee99f6f13fb7070588cca0ff5602451680812b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
