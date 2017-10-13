@@ -592,6 +592,16 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   class Sweeper {
    public:
+    // Pauses the sweeper tasks or completes sweeping.
+    class PauseOrCompleteScope {
+     public:
+      explicit PauseOrCompleteScope(Sweeper* sweeper);
+      ~PauseOrCompleteScope();
+
+     private:
+      Sweeper* const sweeper_;
+    };
+
     enum FreeListRebuildingMode { REBUILD_FREE_LIST, IGNORE_FREE_LIST };
     enum ClearOldToNewSlotsMode {
       DO_NOT_CLEAR,
@@ -612,14 +622,16 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
           num_tasks_(0),
           pending_sweeper_tasks_semaphore_(0),
           sweeping_in_progress_(false),
-          num_sweeping_tasks_(0) {}
+          num_sweeping_tasks_(0),
+          early_complete_tasks_(false) {}
 
-    bool sweeping_in_progress() { return sweeping_in_progress_; }
+    bool sweeping_in_progress() const { return sweeping_in_progress_; }
 
     void AddPage(AllocationSpace space, Page* page);
 
     int ParallelSweepSpace(AllocationSpace identity, int required_freed_bytes,
                            int max_pages = 0);
+    void SweepSpaceFromTask(AllocationSpace identity);
     int ParallelSweepPage(Page* page, AllocationSpace identity);
 
     // After calling this function sweeping is considered to be in progress
@@ -648,6 +660,16 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
       }
     }
 
+    // Can only be called on the main thread when no tasks are running.
+    bool IsDoneSweeping() const {
+      for (int i = 0; i < kAllocationSpaces; i++) {
+        if (!sweeping_list_[i].empty()) return false;
+      }
+      return true;
+    }
+
+    void AbortAndWaitForTasks();
+
     Page* GetSweepingPageSafe(AllocationSpace space);
 
     void PrepareToBeSweptPage(AllocationSpace space, Page* page);
@@ -664,6 +686,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
     // Counter is actively maintained by the concurrent tasks to avoid querying
     // the semaphore for maintaining a task counter on the main thread.
     base::AtomicNumber<intptr_t> num_sweeping_tasks_;
+    // Used by PauseOrCompleteScope to signal early bailout to tasks.
+    base::AtomicValue<bool> early_complete_tasks_;
   };
 
   enum IterationMode {
