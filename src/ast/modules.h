@@ -21,10 +21,13 @@ class ModuleDescriptor : public ZoneObject {
  public:
   explicit ModuleDescriptor(Zone* zone)
       : module_requests_(zone),
-        special_exports_(1, zone),
-        namespace_imports_(1, zone),
+        special_exports_(zone),
+        namespace_imports_(zone),
         regular_exports_(zone),
-        regular_imports_(zone) {}
+        regular_imports_(zone) {
+    special_exports_.reserve(1);
+    namespace_imports_.reserve(1);
+  }
 
   // The following Add* methods are high-level convenience functions for use by
   // the parser.
@@ -130,7 +133,7 @@ class ModuleDescriptor : public ZoneObject {
   }
 
   // Namespace imports.
-  const ZoneList<const Entry*>& namespace_imports() const {
+  const ZoneVector<const Entry*>& namespace_imports() const {
     return namespace_imports_;
   }
 
@@ -140,7 +143,7 @@ class ModuleDescriptor : public ZoneObject {
   }
 
   // Star exports and explicitly indirect exports.
-  const ZoneList<const Entry*>& special_exports() const {
+  const ZoneVector<const Entry*>& special_exports() const {
     return special_exports_;
   }
 
@@ -161,7 +164,7 @@ class ModuleDescriptor : public ZoneObject {
   void AddSpecialExport(const Entry* entry, Zone* zone) {
     DCHECK_NULL(entry->local_name);
     DCHECK_LE(0, entry->module_request);
-    special_exports_.Add(entry, zone);
+    special_exports_.push_back(entry);
   }
 
   void AddRegularImport(Entry* entry) {
@@ -179,7 +182,7 @@ class ModuleDescriptor : public ZoneObject {
     DCHECK_NULL(entry->export_name);
     DCHECK_NOT_NULL(entry->local_name);
     DCHECK_LE(0, entry->module_request);
-    namespace_imports_.Add(entry, zone);
+    namespace_imports_.push_back(entry);
   }
 
   Handle<FixedArray> SerializeRegularExports(Isolate* isolate,
@@ -188,10 +191,9 @@ class ModuleDescriptor : public ZoneObject {
                                  Handle<ModuleInfo> module_info);
 
  private:
-  // TODO(neis): Use STL datastructure instead of ZoneList?
   ZoneMap<const AstRawString*, ModuleRequest> module_requests_;
-  ZoneList<const Entry*> special_exports_;
-  ZoneList<const Entry*> namespace_imports_;
+  ZoneVector<const Entry*> special_exports_;
+  ZoneVector<const Entry*> namespace_imports_;
   ZoneMultimap<const AstRawString*, Entry*> regular_exports_;
   ZoneMap<const AstRawString*, Entry*> regular_imports_;
 
