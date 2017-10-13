@@ -355,6 +355,16 @@
                     { "name": "objects", "$ref": "RemoteObject", "description": "Array with objects." }
                 ],
                 "experimental": true
+            },
+            {
+                "name": "globalScopeVariableNames",
+                "parameters": [
+                    { "name": "executionContextId", "$ref": "ExecutionContextId", "optional": true, "description": "Specifies in which execution context to lookup global scope variables." }
+                ],
+                "returns": [
+                    { "name": "names", "type": "array", "items": { "type": "string" } }
+                ],
+                "experimental": true
             }
         ],
         "events": [
