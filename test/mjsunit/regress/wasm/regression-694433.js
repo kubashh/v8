@@ -2,5 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-var size = 0x40000000;
-assertThrows(() => WebAssembly.validate(new Uint16Array(size)), RangeError);
+// Flags: --expose-gc
+
+var size = 1024*1024*1024 + 1; // 1 GB + 1 byte
+(function() {
+  let arr = new Uint8Array(size);
+  assertThrows(() => WebAssembly.validate(arr), RangeError);
+})();
+gc();
