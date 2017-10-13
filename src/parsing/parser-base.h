@@ -1084,8 +1084,6 @@ class ParserBase {
       ClassLiteralChecker* checker, bool has_extends, bool* is_computed_name,
       bool* has_seen_constructor, ClassLiteralProperty::Kind* property_kind,
       bool* is_static, bool* has_name_static_property, bool* ok);
-  FunctionLiteralT ParseClassFieldForInitializer(bool has_initializer,
-                                                 bool* ok);
   ObjectLiteralPropertyT ParseObjectPropertyDefinition(
       ObjectLiteralChecker* checker, bool* is_computed_name,
       bool* is_rest_property, bool* ok);
@@ -2273,18 +2271,24 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
                                  // as an uninitialized field.
     case PropertyKind::kShorthandProperty:
     case PropertyKind::kValueProperty:
+      // TODO(gsathya): Add support for other class field kinds.
       if (allow_harmony_class_fields()) {
+        ExpressionT initializer;
         bool has_initializer = Check(Token::ASSIGN);
-        ExpressionT function_literal = ParseClassFieldForInitializer(
-            has_initializer, CHECK_OK_CUSTOM(NullLiteralProperty));
+        if (has_initializer) {
+          initializer = this->ParseAssignmentExpression(
+              true, CHECK_OK_CUSTOM(NullExpression));
+          impl()->RewriteNonPattern(CHECK_OK_CUSTOM(NullExpression));
+        } else {
+          initializer = factory()->NewUndefinedLiteral(kNoSourcePosition);
+        }
         ExpectSemicolon(CHECK_OK_CUSTOM(NullLiteralProperty));
         *property_kind = ClassLiteralProperty::FIELD;
         ClassLiteralPropertyT result = factory()->NewClassLiteralProperty(
-            name_expression, function_literal, *property_kind, *is_static,
+            name_expression, initializer, *property_kind, *is_static,
             *is_computed_name);
         impl()->SetFunctionNameFromPropertyName(result, name);
         return result;
-
       } else {
         ReportUnexpectedToken(Next());
         *ok = false;
@@ -2374,39 +2378,6 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       return impl()->NullLiteralProperty();
   }
   UNREACHABLE();
-}
-
-template <typename Impl>
-typename ParserBase<Impl>::FunctionLiteralT
-ParserBase<Impl>::ParseClassFieldForInitializer(bool has_initializer,
-                                                bool* ok) {
-  // Makes a concise method which evaluates and returns the initialized value
-  // (or undefined if absent).
-  FunctionKind kind = FunctionKind::kConciseMethod;
-  DeclarationScope* initializer_scope = NewFunctionScope(kind);
-  initializer_scope->set_start_position(scanner()->location().end_pos);
-  FunctionState initializer_state(&function_state_, &scope_, initializer_scope);
-  DCHECK_EQ(initializer_scope, scope());
-  scope()->SetLanguageMode(STRICT);
-  ExpressionClassifier expression_classifier(this);
-  ExpressionT value;
-  if (has_initializer) {
-    value =
-        this->ParseAssignmentExpression(true, CHECK_OK_CUSTOM(NullExpression));
-    impl()->RewriteNonPattern(CHECK_OK_CUSTOM(NullExpression));
-  } else {
-    value = factory()->NewUndefinedLiteral(kNoSourcePosition);
-  }
-  initializer_scope->set_end_position(scanner()->location().end_pos);
-  typename Types::StatementList body = impl()->NewStatementList(1);
-  body->Add(factory()->NewReturnStatement(value, kNoSourcePosition), zone());
-  FunctionLiteralT function_literal = factory()->NewFunctionLiteral(
-      impl()->EmptyIdentifierString(), initializer_scope, body,
-      initializer_state.expected_property_count(), 0, 0,
-      FunctionLiteral::kNoDuplicateParameters,
-      FunctionLiteral::kAnonymousExpression, default_eager_compile_hint_,
-      initializer_scope->start_position(), true, GetNextFunctionLiteralId());
-  return function_literal;
 }
 
 template <typename Impl>
@@ -3579,7 +3550,14 @@ ParserBase<Impl>::ParseNewTargetExpression(bool* ok) {
       Scanner::Location(pos, scanner()->location().end_pos),
       MessageTemplate::kInvalidDestructuringTarget);
 
-  if (!GetReceiverScope()->is_function_scope()) {
+  DeclarationScope* scope = GetReceiverScope();
+  if (!scope->is_function_scope()) {
+    // If we're parsing a class field initializer that isn't in a function,
+    // new.target is always undefined.
+    if (scope->is_class_literal_scope()) {
+      return factory()->NewUndefinedLiteral(pos);
+    }
+
     impl()->ReportMessageAt(scanner()->location(),
                             MessageTemplate::kUnexpectedNewTarget);
     *ok = false;
@@ -4406,6 +4384,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
   }
 
   Scope* block_scope = NewScope(BLOCK_SCOPE);
+  block_scope->set_class_literal_scope();
   BlockState block_state(&scope_, block_scope);
   RaiseLanguageMode(STRICT);
 

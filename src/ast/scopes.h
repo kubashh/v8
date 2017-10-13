@@ -278,6 +278,9 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     }
   }
 
+  void set_class_literal_scope() { is_class_literal_scope_ = true; }
+  bool is_class_literal_scope() const { return is_class_literal_scope_; }
+
   // Set the language mode flag (unless disabled by a global flag).
   void SetLanguageMode(LanguageMode language_mode) {
     DCHECK(!is_module_scope() || is_strict(language_mode));
@@ -584,6 +587,8 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   bool is_declaration_scope_ : 1;
 
   bool must_use_preparsed_scope_data_ : 1;
+
+  bool is_class_literal_scope_ : 1;
 
   // Create a non-local variable with a given name.
   // These variables are looked up dynamically at runtime.
