@@ -112,6 +112,20 @@ void Verifier::Visitor::Check(Node* node) {
   }
   CHECK_EQ(input_count, node->InputCount());
 
+  // If this node has any effect outputs, make sure that it is
+  // consumed as an effect input somewhere else.
+  if (node->op()->EffectOutputCount() > 0) {
+    int effect_edges = 0;
+    for (Edge edge : node->use_edges()) {
+      Node* const user = edge.from();
+      DCHECK(!user->IsDead());
+      if (NodeProperties::IsEffectEdge(edge)) {
+        effect_edges++;
+      }
+    }
+    DCHECK(effect_edges > 0);
+  }
+
   // Verify that frame state has been inserted for the nodes that need it.
   for (int i = 0; i < frame_state_count; i++) {
     Node* frame_state = NodeProperties::GetFrameStateInput(node);
@@ -1795,6 +1809,7 @@ void Verifier::VerifyNode(Node* node) {
       }
     }
   }
+
   // Frame state input should be a frame state (or sentinel).
   if (OperatorProperties::GetFrameStateInputCount(node->op()) > 0) {
     Node* input = NodeProperties::GetFrameStateInput(node);
