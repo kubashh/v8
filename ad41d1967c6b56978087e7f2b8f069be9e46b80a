@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2771b754_689882da",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-13T08:42:08Z",
+      "side": 1,
+      "message": "Constructor implies Callable, so we could check at least for callable here.",
+      "revId": "ad41d1967c6b56978087e7f2b8f069be9e46b80a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
