@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee80403b_daf52ef8",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-10-13T10:25:14Z",
+      "side": 1,
+      "message": "Cant you say something like \n\nBithInputsAre(Type::Union(Type::Number, Type::BooleanOrNullOrUndefined)) ?\n\n(Or even better define NumberOrBooleanOrNullOrUndefined and use it here?)",
+      "range": {
+        "startLine": 534,
+        "startChar": 6,
+        "endLine": 535,
+        "endChar": 54
+      },
+      "revId": "45fa307261bddb7d5a0b21767cfb203b86cc8165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
