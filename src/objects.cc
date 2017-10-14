@@ -13763,6 +13763,8 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   }
   shared_info->set_needs_home_object(lit->scope()->NeedsHomeObject());
   shared_info->set_function_literal_id(lit->function_literal_id());
+  shared_info->set_is_class_field_initializer(
+      lit->is_class_field_initializer());
 
   // For lazy parsed functions, the following flags will be inaccurate since we
   // don't have the information yet. They're set later in

@@ -55,6 +55,7 @@ ParseInfo::ParseInfo(Handle<SharedFunctionInfo> shared)
   set_language_mode(shared->language_mode());
   set_module(shared->kind() == FunctionKind::kModule);
   set_asm_wasm_broken(shared->is_asm_wasm_broken());
+  set_is_class_field_initializer(shared->is_class_field_initializer());
 
   Handle<Script> script(Script::cast(shared->script()));
   set_script(script);
