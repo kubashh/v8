@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1276db2_b13d8875",
+        "filename": "test/mjsunit/harmony/class-public-fields.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2017-10-16T11:23:55Z",
+      "side": 1,
+      "message": "Some possible additional tests\n- All the computed property names have been evaluated before any of the static field initializers\n- The class is out of TDZ when the initializers run, e.g., you can do `class C { static c \u003d new C; }`\n- Later static field initializers can see the earlier initializers being added, one by one, in order\n- Super proper access in static class field initializers works.\n\nI haven\u0027t reviewed the code closely to determine whether this is implemented. Sorry that the test262 tests aren\u0027t ready yet to test all this detail; I hope it should be there soon, between the work of Bocoup and Igalia here.",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
