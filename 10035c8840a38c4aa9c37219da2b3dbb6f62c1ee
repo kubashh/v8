@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "20c28cbb_14b11d17",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-16T16:28:54Z",
+      "side": 1,
+      "message": "Please do this in the main switch instead, and let ReducePhi handle _only_ Phi, but _all_ the cases for it.",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171162af_3f19217c",
+        "filename": "src/compiler/dead-code-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-16T16:28:54Z",
+      "side": 1,
+      "message": "This is obscure: Why do you go here for Phi and EffectPhi, but then only handle Phi?",
+      "revId": "10035c8840a38c4aa9c37219da2b3dbb6f62c1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b4750fe_bd83365e",
         "filename": "src/compiler/dead-code-elimination.cc",
         "patchSetId": 4
