@@ -16,6 +16,24 @@
       "revId": "e60edd9505a9cf82b3f3d6f77d965b24e5a8f92b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac86903_04aa2e83",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-10-16T22:45:53Z",
+      "side": 1,
+      "message": "Whoops, thanks for taking a look. Please take a look at the follow-up here: https://chromium-review.googlesource.com/c/v8/v8/+/721630",
+      "parentUuid": "487e1d13_baf183e0",
+      "revId": "e60edd9505a9cf82b3f3d6f77d965b24e5a8f92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
