@@ -52,6 +52,24 @@
       "revId": "074e6eb49e203232933abedd43c2bbfddd0bd309",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f0d0565_e1236e53",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-10-16T12:59:58Z",
+      "side": 1,
+      "message": "I don\u0027t really like CheckedLocalIndexOperand already. I think it is not much better than ValidatedLocalIndexOperand. IMO LocalIndexOperand\u003cDecoder::kValidate\u003e is better than both, and discussing around this issue is not worth the time.",
+      "parentUuid": "c231debe_bce4846d",
+      "revId": "074e6eb49e203232933abedd43c2bbfddd0bd309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
