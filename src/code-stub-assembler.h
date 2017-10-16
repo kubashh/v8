@@ -835,7 +835,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   Node* TryTaggedToFloat64(Node* value, Label* if_valueisnotnumber);
   Node* TruncateTaggedToFloat64(Node* context, Node* value);
-  Node* TruncateTaggedToWord32(Node* context, Node* value);
   // Truncate the floating point value of a HeapNumber to an Int32.
   Node* TruncateHeapNumberValueToWord32(Node* object);
 

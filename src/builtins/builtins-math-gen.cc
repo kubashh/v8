@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-assembler.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
@@ -14,10 +15,10 @@ namespace internal {
 // -----------------------------------------------------------------------------
 // ES6 section 20.2.2 Function Properties of the Math Object
 
-class MathBuiltinsAssembler : public CodeStubAssembler {
+class MathBuiltinsAssembler : public BuiltinsAssembler {
  public:
   explicit MathBuiltinsAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+      : BuiltinsAssembler(state) {}
 
  protected:
   void MathRoundingOperation(
@@ -366,7 +367,7 @@ TF_BUILTIN(MathFround, CodeStubAssembler) {
 }
 
 // ES6 #sec-math.imul
-TF_BUILTIN(MathImul, CodeStubAssembler) {
+TF_BUILTIN(MathImul, BuiltinsAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* x = Parameter(Descriptor::kX);
   Node* y = Parameter(Descriptor::kY);

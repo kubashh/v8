@@ -6,8 +6,8 @@
 #define V8_INTERPRETER_INTERPRETER_ASSEMBLER_H_
 
 #include "src/allocation.h"
+#include "src/builtins/builtins-assembler.h"
 #include "src/builtins/builtins.h"
-#include "src/code-stub-assembler.h"
 #include "src/globals.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/bytecodes.h"
@@ -17,7 +17,7 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
-class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
+class V8_EXPORT_PRIVATE InterpreterAssembler : public BuiltinsAssembler {
  public:
   InterpreterAssembler(compiler::CodeAssemblerState* state, Bytecode bytecode,
                        OperandScale operand_scale);
@@ -220,12 +220,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   // Dispatch bytecode as wide operand variant.
   void DispatchWide(OperandScale operand_scale);
-
-  // Truncate tagged |value| to word32, or find that it is a BigInt and jump
-  // to {bigint}, and store the type feedback in |var_type_feedback|.
-  compiler::Node* TaggedToWord32OrBigIntWithFeedback(
-      compiler::Node* context, compiler::Node* value,
-      Variable* var_type_feedback, Label* bigint, Variable* var_bigint_result);
 
   // Abort with the given bailout reason.
   void Abort(BailoutReason bailout_reason);

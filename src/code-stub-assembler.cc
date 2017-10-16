@@ -3148,56 +3148,6 @@ Node* CodeStubAssembler::TruncateTaggedToFloat64(Node* context, Node* value) {
   return var_result.value();
 }
 
-Node* CodeStubAssembler::TruncateTaggedToWord32(Node* context, Node* value) {
-  // We might need to loop once due to ToNumber conversion.
-  VARIABLE(var_value, MachineRepresentation::kTagged, value);
-  VARIABLE(var_result, MachineRepresentation::kWord32);
-  Label loop(this, &var_value), done_loop(this, &var_result);
-  Goto(&loop);
-  BIND(&loop);
-  {
-    // Load the current {value}.
-    value = var_value.value();
-
-    // Check if the {value} is a Smi or a HeapObject.
-    Label if_valueissmi(this), if_valueisnotsmi(this);
-    Branch(TaggedIsSmi(value), &if_valueissmi, &if_valueisnotsmi);
-
-    BIND(&if_valueissmi);
-    {
-      // Convert the Smi {value}.
-      var_result.Bind(SmiToWord32(value));
-      Goto(&done_loop);
-    }
-
-    BIND(&if_valueisnotsmi);
-    {
-      // Check if {value} is a HeapNumber.
-      Label if_valueisheapnumber(this),
-          if_valueisnotheapnumber(this, Label::kDeferred);
-      Branch(IsHeapNumber(value), &if_valueisheapnumber,
-             &if_valueisnotheapnumber);
-
-      BIND(&if_valueisheapnumber);
-      {
-        // Truncate the floating point value.
-        var_result.Bind(TruncateHeapNumberValueToWord32(value));
-        Goto(&done_loop);
-      }
-
-      BIND(&if_valueisnotheapnumber);
-      {
-        // Convert the {value} to a Number first.
-        var_value.Bind(
-            CallBuiltin(Builtins::kNonNumberToNumber, context, value));
-        Goto(&loop);
-      }
-    }
-  }
-  BIND(&done_loop);
-  return var_result.value();
-}
-
 Node* CodeStubAssembler::TruncateHeapNumberValueToWord32(Node* object) {
   Node* value = LoadHeapNumberValue(object);
   return TruncateFloat64ToWord32(value);

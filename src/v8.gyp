@@ -173,6 +173,8 @@
         'builtins/builtins-arguments-gen.cc',
         'builtins/builtins-arguments-gen.h',
         'builtins/builtins-array-gen.cc',
+        'builtins/builtins-assembler.cc',
+        'builtins/builtins-assembler.h',
         'builtins/builtins-async-function-gen.cc',
         'builtins/builtins-async-gen.cc',
         'builtins/builtins-async-gen.h',

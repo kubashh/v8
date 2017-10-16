@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-assembler.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-stub-assembler.h"
@@ -12,11 +13,11 @@ namespace internal {
 
 using compiler::Node;
 
-class SharedArrayBufferBuiltinsAssembler : public CodeStubAssembler {
+class SharedArrayBufferBuiltinsAssembler : public BuiltinsAssembler {
  public:
   explicit SharedArrayBufferBuiltinsAssembler(
       compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+      : BuiltinsAssembler(state) {}
 
  protected:
   typedef Node* (CodeAssembler::*AssemblerFunction)(MachineType type,

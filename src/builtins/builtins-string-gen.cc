@@ -4,6 +4,7 @@
 
 #include "src/builtins/builtins-string-gen.h"
 
+#include "src/builtins/builtins-assembler.h"
 #include "src/builtins/builtins-regexp-gen.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
@@ -525,7 +526,7 @@ TF_BUILTIN(StringCharCodeAt, CodeStubAssembler) {
 // ES6 section 21.1 String Objects
 
 // ES6 #sec-string.fromcharcode
-TF_BUILTIN(StringFromCharCode, CodeStubAssembler) {
+TF_BUILTIN(StringFromCharCode, BuiltinsAssembler) {
   // TODO(ishell): use constants from Descriptor once the JSFunction linkage
   // arguments are reordered.
   Node* argc = Parameter(BuiltinDescriptor::kArgumentsCount);
