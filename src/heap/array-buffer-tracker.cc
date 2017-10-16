@@ -23,7 +23,7 @@ void LocalArrayBufferTracker::Process(Callback callback) {
   for (TrackingData::iterator it = array_buffers_.begin();
        it != array_buffers_.end();) {
     old_buffer = reinterpret_cast<JSArrayBuffer*>(*it);
-    const size_t length = old_buffer->allocation_length();
+    size_t length = NumberToSize(old_buffer->byte_length());
     const CallbackResult result = callback(old_buffer, &new_buffer);
     if (result == kKeepEntry) {
       retained_size += length;
@@ -39,7 +39,7 @@ void LocalArrayBufferTracker::Process(Callback callback) {
           tracker = target_page->local_tracker();
         }
         DCHECK_NOT_NULL(tracker);
-        DCHECK_EQ(length, new_buffer->allocation_length());
+        DCHECK_EQ(length, NumberToSize(new_buffer->byte_length()));
         tracker->Add(new_buffer, length);
       }
       it = array_buffers_.erase(it);
