@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "20b58b3c_f8c4928a",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-16T13:43:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8658b722_a2624c51",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 10
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "450633ce_5102d51f",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-16T11:19:30Z",
       "side": 1,
       "message": "Where are mode and arch checked now?",
+      "range": {
+        "startLine": 278,
+        "startChar": 6,
+        "endLine": 278,
+        "endChar": 40
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d15b3d1e_4c7fbf52",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-16T13:43:55Z",
+      "side": 1,
+      "message": "line 255. I have separate loops for values that I keep in the testrunner itself (arch and mode for now) and values that I keep in options object (the rest). Eventually I will keep everything in the testrunner object and remove the second loop.",
+      "parentUuid": "450633ce_5102d51f",
       "range": {
         "startLine": 278,
         "startChar": 6,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3645bdce_c0dfbf0f",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-16T13:43:55Z",
+      "side": 1,
+      "message": "Yes, I\u0027m going to reuse it in a separate CL.\n\nI will add a TODO.",
+      "parentUuid": "fdd78b1d_b6278726",
+      "range": {
+        "startLine": 273,
+        "startChar": 6,
+        "endLine": 273,
+        "endChar": 13
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "944e4664_741d4c3d",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1b833c68_b2e2bc5b",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-16T13:43:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "944e4664_741d4c3d",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2670e223_0ec0712b",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccf30852_f7ddedde",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-16T13:43:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2670e223_0ec0712b",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 10
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
