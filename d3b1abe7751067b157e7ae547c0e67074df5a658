@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4aea70e_91e11c61",
+        "filename": "test/mjsunit/regress/regress-6941.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-10-16T13:10:43Z",
+      "side": 1,
+      "message": "--allow-natives-syntax",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 31
+      },
+      "revId": "d3b1abe7751067b157e7ae547c0e67074df5a658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
