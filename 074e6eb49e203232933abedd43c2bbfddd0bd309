@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c99a084_9fe37a27",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-16T11:24:54Z",
+      "side": 1,
+      "message": "Sorry, but these really don\u0027t read nice. I know that this was suggested by Ben, but I vote for undoing this.",
+      "revId": "074e6eb49e203232933abedd43c2bbfddd0bd309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
