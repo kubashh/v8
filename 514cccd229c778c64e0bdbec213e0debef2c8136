@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cbd20c3_3e913986",
+        "filename": "src/parsing/preparser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-16T12:39:16Z",
+      "side": 1,
+      "message": "I also tried adding the code to this branch, but it\u0027s hard since CreateFunctionNameAssignment checks track_unresolved_variables_ (refactoring that is also not something I want to merge to a release branch..) and we\u0027ve already set it to false above. I think this is the simplest fix.",
+      "range": {
+        "startLine": 232,
+        "startChar": 6,
+        "endLine": 232,
+        "endChar": 8
+      },
+      "revId": "514cccd229c778c64e0bdbec213e0debef2c8136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
