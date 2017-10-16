@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14a5f56d_6ad15cdb",
+        "filename": "tools/testrunner/local/testsuite.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-10-16T16:31:48Z",
+      "side": 1,
+      "message": "This is now reported under \"Stdout:\" in the output. You may want to move \"Stdout\" below and replace it with \"Command:\" above.",
+      "revId": "089dd7d2447d6eaf57c8ba6d8f37957f3a269777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
