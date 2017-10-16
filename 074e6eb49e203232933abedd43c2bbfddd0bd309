@@ -34,6 +34,24 @@
       "revId": "074e6eb49e203232933abedd43c2bbfddd0bd309",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c231debe_bce4846d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-16T11:30:48Z",
+      "side": 1,
+      "message": "I know, but now that the flags are called kValidate and kNoValidate, how should the typedefs be named? Do we even need them?\n\nWe could try \"importing\" the kValidate and kNoValidate flags (if that\u0027s technically possible), so that we can skip the \"Decoder::\" prefix.",
+      "parentUuid": "31bd5ca3_0aac5633",
+      "revId": "074e6eb49e203232933abedd43c2bbfddd0bd309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
