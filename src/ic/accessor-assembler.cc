@@ -1584,9 +1584,9 @@ void AccessorAssembler::BranchIfStrictMode(Node* vector, Node* slot,
   const int kItemsPerWord = FeedbackMetadata::VectorICComputer::kItemsPerWord;
   Node* word_index = Int32Div(slot_int, Int32Constant(kItemsPerWord));
   Node* word_offset = Int32Mod(slot_int, Int32Constant(kItemsPerWord));
-  Node* data = SmiToWord32(LoadFixedArrayElement(
+  Node* data = SmiToWord32(CAST(LoadFixedArrayElement<INTPTR_PARAMETERS>(
       metadata, ChangeInt32ToIntPtr(word_index),
-      FeedbackMetadata::kReservedIndexCount * kPointerSize, INTPTR_PARAMETERS));
+      FeedbackMetadata::kReservedIndexCount * kPointerSize)));
   // See VectorICComputer::decode().
   const int kBitsPerItem = FeedbackMetadata::kFeedbackSlotKindBits;
   Node* shift = Int32Mul(word_offset, Int32Constant(kBitsPerItem));
