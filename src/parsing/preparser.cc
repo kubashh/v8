@@ -206,16 +206,8 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     }
   }
 
-  if (!IsArrowFunction(kind) && track_unresolved_variables_) {
-    CreateFunctionNameAssignment(function_name, function_type, function_scope);
-
-    // Declare arguments after parsing the function since lexical 'arguments'
-    // masks the arguments object. Declare arguments before declaring the
-    // function var since the arguments object masks 'function arguments'.
-    function_scope->DeclareArguments(ast_value_factory());
-  }
-
   use_counts_ = nullptr;
+  bool tracked_unresolved_variables = track_unresolved_variables_;
   track_unresolved_variables_ = false;
 
   if (result == kLazyParsingAborted) {
@@ -238,6 +230,17 @@ PreParser::PreParseResult PreParser::PreParseFunction(
                                CHECK_OK_VALUE(kPreParseSuccess));
 
       *produced_preparsed_scope_data = produced_preparsed_scope_data_;
+
+      if (tracked_unresolved_variables) {
+        CreateFunctionNameAssignment(function_name, function_type,
+                                     function_scope);
+
+        // Declare arguments after parsing the function since lexical
+        // 'arguments' masks the arguments object. Declare arguments before
+        // declaring the function var since the arguments object masks 'function
+        // arguments'.
+        function_scope->DeclareArguments(ast_value_factory());
+      }
     }
 
     if (is_strict(function_scope->language_mode())) {
