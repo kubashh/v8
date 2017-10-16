@@ -4169,9 +4169,6 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     ItemParallelJob updating_job(isolate()->cancelable_task_manager(),
                                  &page_parallel_job_semaphore_);
 
-    CollectNewSpaceArrayBufferTrackerItems(&updating_job);
-    CollectOldSpaceArrayBufferTrackerItems(&updating_job);
-
     int remembered_set_pages = 0;
     remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->old_space(), RememberedSetUpdatingMode::ALL);
@@ -4193,12 +4190,17 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
   }
 
   {
-    // Update pointers in map space in a separate phase to avoid data races
-    // with Map->LayoutDescriptor edge.
+    // - Update pointers in map space in a separate phase to avoid data races
+    //   with Map->LayoutDescriptor edge.
+    // - Update array buffer trackers in the second phase to have access to
+    //   byte length which is potentially a HeapNumber.
     TRACE_GC(heap()->tracer(),
              GCTracer::Scope::MC_EVACUATE_UPDATE_POINTERS_SLOTS_MAP_SPACE);
     ItemParallelJob updating_job(isolate()->cancelable_task_manager(),
                                  &page_parallel_job_semaphore_);
+
+    CollectNewSpaceArrayBufferTrackerItems(&updating_job);
+    CollectOldSpaceArrayBufferTrackerItems(&updating_job);
 
     int remembered_set_pages = 0;
     remembered_set_pages += CollectRememberedSetUpdatingItems(
