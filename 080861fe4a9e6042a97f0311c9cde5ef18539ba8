@@ -22,6 +22,30 @@
       "revId": "080861fe4a9e6042a97f0311c9cde5ef18539ba8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e745a1_a7445509",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-10-16T16:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "191b3020_47177025",
+      "range": {
+        "startLine": 60,
+        "startChar": 14,
+        "endLine": 60,
+        "endChar": 21
+      },
+      "revId": "080861fe4a9e6042a97f0311c9cde5ef18539ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
