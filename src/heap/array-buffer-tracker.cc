@@ -10,6 +10,18 @@
 namespace v8 {
 namespace internal {
 
+// NumberToSize conversion that also follows forwarding pointers.
+inline size_t GcSafeNumberToSize(Object* number) {
+  if (number->IsSmi()) {
+    return NumberToSize(number);
+  }
+  DCHECK(number->IsHeapObject());
+  MapWord map_word = HeapObject::cast(number)->map_word();
+  return (map_word.IsForwardingAddress())
+             ? NumberToSize(map_word.ToForwardingAddress())
+             : NumberToSize(number);
+}
+
 LocalArrayBufferTracker::~LocalArrayBufferTracker() {
   CHECK(array_buffers_.empty());
 }
@@ -23,7 +35,9 @@ void LocalArrayBufferTracker::Process(Callback callback) {
   for (TrackingData::iterator it = array_buffers_.begin();
        it != array_buffers_.end();) {
     old_buffer = reinterpret_cast<JSArrayBuffer*>(*it);
-    const size_t length = old_buffer->allocation_length();
+    // The old buffer doesn't have its byte length pointer updates as we only
+    // update pointers for newly allocated objects.
+    size_t length = GcSafeNumberToSize(old_buffer->byte_length());
     const CallbackResult result = callback(old_buffer, &new_buffer);
     if (result == kKeepEntry) {
       retained_size += length;
@@ -39,7 +53,9 @@ void LocalArrayBufferTracker::Process(Callback callback) {
           tracker = target_page->local_tracker();
         }
         DCHECK_NOT_NULL(tracker);
-        DCHECK_EQ(length, new_buffer->allocation_length());
+        // The phase is run in parallel with pointer updating, so we might
+        // see a forwarding pointer here.
+        DCHECK_EQ(length, GcSafeNumberToSize(new_buffer->byte_length()));
         tracker->Add(new_buffer, length);
       }
       it = array_buffers_.erase(it);

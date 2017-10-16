@@ -14,10 +14,9 @@ namespace v8 {
 namespace internal {
 
 void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
-  void* data = buffer->backing_store();
-  if (!data) return;
+  if (buffer->backing_store() == nullptr) return;
 
-  size_t length = buffer->allocation_length();
+  size_t length = NumberToSize(buffer->byte_length());
   Page* page = Page::FromAddress(buffer->address());
   {
     base::LockGuard<base::RecursiveMutex> guard(page->mutex());
@@ -36,11 +35,10 @@ void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
 }
 
 void ArrayBufferTracker::Unregister(Heap* heap, JSArrayBuffer* buffer) {
-  void* data = buffer->backing_store();
-  if (!data) return;
+  if (buffer->backing_store() == nullptr) return;
 
   Page* page = Page::FromAddress(buffer->address());
-  size_t length = buffer->allocation_length();
+  size_t length = NumberToSize(buffer->byte_length());
   {
     base::LockGuard<base::RecursiveMutex> guard(page->mutex());
     LocalArrayBufferTracker* tracker = page->local_tracker();
@@ -57,7 +55,7 @@ void LocalArrayBufferTracker::Free(Callback should_free) {
   for (TrackingData::iterator it = array_buffers_.begin();
        it != array_buffers_.end();) {
     JSArrayBuffer* buffer = reinterpret_cast<JSArrayBuffer*>(*it);
-    const size_t length = buffer->allocation_length();
+    size_t length = NumberToSize(buffer->byte_length());
     if (should_free(buffer)) {
       freed_memory += length;
       buffer->FreeBackingStore();
