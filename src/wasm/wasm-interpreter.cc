@@ -826,7 +826,7 @@ class SideTable : public ZoneObject {
         case kExprBlock:
         case kExprLoop: {
           bool is_loop = opcode == kExprLoop;
-          BlockTypeOperand<false> operand(&i, i.pc());
+          BlockTypeOperand<Decoder::kNoValidate> operand(&i, i.pc());
           if (operand.type == kWasmVar) {
             operand.sig = module->signatures[operand.sig_index];
           }
@@ -842,7 +842,7 @@ class SideTable : public ZoneObject {
           break;
         }
         case kExprIf: {
-          BlockTypeOperand<false> operand(&i, i.pc());
+          BlockTypeOperand<Decoder::kNoValidate> operand(&i, i.pc());
           if (operand.type == kWasmVar) {
             operand.sig = module->signatures[operand.sig_index];
           }
@@ -890,22 +890,22 @@ class SideTable : public ZoneObject {
           break;
         }
         case kExprBr: {
-          BreakDepthOperand<false> operand(&i, i.pc());
+          BreakDepthOperand<Decoder::kNoValidate> operand(&i, i.pc());
           TRACE("control @%u: Br[depth=%u]\n", i.pc_offset(), operand.depth);
           Control* c = &control_stack[control_stack.size() - operand.depth - 1];
           if (!unreachable) c->end_label->Ref(i.pc(), stack_height);
           break;
         }
         case kExprBrIf: {
-          BreakDepthOperand<false> operand(&i, i.pc());
+          BreakDepthOperand<Decoder::kNoValidate> operand(&i, i.pc());
           TRACE("control @%u: BrIf[depth=%u]\n", i.pc_offset(), operand.depth);
           Control* c = &control_stack[control_stack.size() - operand.depth - 1];
           if (!unreachable) c->end_label->Ref(i.pc(), stack_height);
           break;
         }
         case kExprBrTable: {
-          BranchTableOperand<false> operand(&i, i.pc());
-          BranchTableIterator<false> iterator(&i, operand);
+          BranchTableOperand<Decoder::kNoValidate> operand(&i, i.pc());
+          BranchTableIterator<Decoder::kNoValidate> iterator(&i, operand);
           TRACE("control @%u: BrTable[count=%u]\n", i.pc_offset(),
                 operand.table_count);
           if (!unreachable) {
@@ -1382,11 +1382,13 @@ class ThreadImpl {
   pc_t ReturnPc(Decoder* decoder, InterpreterCode* code, pc_t pc) {
     switch (code->orig_start[pc]) {
       case kExprCallFunction: {
-        CallFunctionOperand<false> operand(decoder, code->at(pc));
+        CallFunctionOperand<Decoder::kNoValidate> operand(decoder,
+                                                          code->at(pc));
         return pc + 1 + operand.length;
       }
       case kExprCallIndirect: {
-        CallIndirectOperand<false> operand(decoder, code->at(pc));
+        CallIndirectOperand<Decoder::kNoValidate> operand(decoder,
+                                                          code->at(pc));
         return pc + 1 + operand.length;
       }
       default:
@@ -1455,7 +1457,8 @@ class ThreadImpl {
   template <typename ctype, typename mtype>
   bool ExecuteLoad(Decoder* decoder, InterpreterCode* code, pc_t pc, int& len,
                    MachineRepresentation rep) {
-    MemoryAccessOperand<false> operand(decoder, code->at(pc), sizeof(ctype));
+    MemoryAccessOperand<Decoder::kNoValidate> operand(decoder, code->at(pc),
+                                                      sizeof(ctype));
     uint32_t index = Pop().to<uint32_t>();
     if (!BoundsCheck<mtype>(cached_instance_info_->mem_size, operand.offset,
                             index)) {
@@ -1481,7 +1484,8 @@ class ThreadImpl {
   template <typename ctype, typename mtype>
   bool ExecuteStore(Decoder* decoder, InterpreterCode* code, pc_t pc, int& len,
                     MachineRepresentation rep) {
-    MemoryAccessOperand<false> operand(decoder, code->at(pc), sizeof(ctype));
+    MemoryAccessOperand<Decoder::kNoValidate> operand(decoder, code->at(pc),
+                                                      sizeof(ctype));
     WasmValue val = Pop();
 
     uint32_t index = Pop().to<uint32_t>();
@@ -1602,17 +1606,20 @@ class ThreadImpl {
         case kExprNop:
           break;
         case kExprBlock: {
-          BlockTypeOperand<false> operand(&decoder, code->at(pc));
+          BlockTypeOperand<Decoder::kNoValidate> operand(&decoder,
+                                                         code->at(pc));
           len = 1 + operand.length;
           break;
         }
         case kExprLoop: {
-          BlockTypeOperand<false> operand(&decoder, code->at(pc));
+          BlockTypeOperand<Decoder::kNoValidate> operand(&decoder,
+                                                         code->at(pc));
           len = 1 + operand.length;
           break;
         }
         case kExprIf: {
-          BlockTypeOperand<false> operand(&decoder, code->at(pc));
+          BlockTypeOperand<Decoder::kNoValidate> operand(&decoder,
+                                                         code->at(pc));
           WasmValue cond = Pop();
           bool is_true = cond.to<uint32_t>() != 0;
           if (is_true) {
@@ -1638,13 +1645,15 @@ class ThreadImpl {
           break;
         }
         case kExprBr: {
-          BreakDepthOperand<false> operand(&decoder, code->at(pc));
+          BreakDepthOperand<Decoder::kNoValidate> operand(&decoder,
+                                                          code->at(pc));
           len = DoBreak(code, pc, operand.depth);
           TRACE("  br => @%zu\n", pc + len);
           break;
         }
         case kExprBrIf: {
-          BreakDepthOperand<false> operand(&decoder, code->at(pc));
+          BreakDepthOperand<Decoder::kNoValidate> operand(&decoder,
+                                                          code->at(pc));
           WasmValue cond = Pop();
           bool is_true = cond.to<uint32_t>() != 0;
           if (is_true) {
@@ -1657,8 +1666,9 @@ class ThreadImpl {
           break;
         }
         case kExprBrTable: {
-          BranchTableOperand<false> operand(&decoder, code->at(pc));
-          BranchTableIterator<false> iterator(&decoder, operand);
+          BranchTableOperand<Decoder::kNoValidate> operand(&decoder,
+                                                           code->at(pc));
+          BranchTableIterator<Decoder::kNoValidate> iterator(&decoder, operand);
           uint32_t key = Pop().to<uint32_t>();
           uint32_t depth = 0;
           if (key >= operand.table_count) key = operand.table_count;
@@ -1683,44 +1693,44 @@ class ThreadImpl {
           break;
         }
         case kExprI32Const: {
-          ImmI32Operand<false> operand(&decoder, code->at(pc));
+          ImmI32Operand<Decoder::kNoValidate> operand(&decoder, code->at(pc));
           Push(WasmValue(operand.value));
           len = 1 + operand.length;
           break;
         }
         case kExprI64Const: {
-          ImmI64Operand<false> operand(&decoder, code->at(pc));
+          ImmI64Operand<Decoder::kNoValidate> operand(&decoder, code->at(pc));
           Push(WasmValue(operand.value));
           len = 1 + operand.length;
           break;
         }
         case kExprF32Const: {
-          ImmF32Operand<false> operand(&decoder, code->at(pc));
+          ImmF32Operand<Decoder::kNoValidate> operand(&decoder, code->at(pc));
           Push(WasmValue(operand.value));
           len = 1 + operand.length;
           break;
         }
         case kExprF64Const: {
-          ImmF64Operand<false> operand(&decoder, code->at(pc));
+          ImmF64Operand<Decoder::kNoValidate> operand(&decoder, code->at(pc));
           Push(WasmValue(operand.value));
           len = 1 + operand.length;
           break;
         }
         case kExprGetLocal: {
-          LocalIndexOperand<false> operand(&decoder, code->at(pc));
+          NotValidatedLocalIndexOperand operand(&decoder, code->at(pc));
           Push(GetStackValue(frames_.back().sp + operand.index));
           len = 1 + operand.length;
           break;
         }
         case kExprSetLocal: {
-          LocalIndexOperand<false> operand(&decoder, code->at(pc));
+          NotValidatedLocalIndexOperand operand(&decoder, code->at(pc));
           WasmValue val = Pop();
           SetStackValue(frames_.back().sp + operand.index, val);
           len = 1 + operand.length;
           break;
         }
         case kExprTeeLocal: {
-          LocalIndexOperand<false> operand(&decoder, code->at(pc));
+          NotValidatedLocalIndexOperand operand(&decoder, code->at(pc));
           WasmValue val = Pop();
           SetStackValue(frames_.back().sp + operand.index, val);
           Push(val);
@@ -1732,7 +1742,8 @@ class ThreadImpl {
           break;
         }
         case kExprCallFunction: {
-          CallFunctionOperand<false> operand(&decoder, code->at(pc));
+          CallFunctionOperand<Decoder::kNoValidate> operand(&decoder,
+                                                            code->at(pc));
           InterpreterCode* target = codemap()->GetCode(operand.index);
           if (target->function->imported) {
             CommitPc(pc);
@@ -1764,7 +1775,8 @@ class ThreadImpl {
           continue;  // don't bump pc
         } break;
         case kExprCallIndirect: {
-          CallIndirectOperand<false> operand(&decoder, code->at(pc));
+          CallIndirectOperand<Decoder::kNoValidate> operand(&decoder,
+                                                            code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
           // Assume only one table for now.
           DCHECK_LE(module()->function_tables.size(), 1u);
@@ -1791,7 +1803,8 @@ class ThreadImpl {
           }
         } break;
         case kExprGetGlobal: {
-          GlobalIndexOperand<false> operand(&decoder, code->at(pc));
+          GlobalIndexOperand<Decoder::kNoValidate> operand(&decoder,
+                                                           code->at(pc));
           const WasmGlobal* global = &module()->globals[operand.index];
           byte* ptr = cached_instance_info_->globals_start + global->offset;
           WasmValue val;
@@ -1810,7 +1823,8 @@ class ThreadImpl {
           break;
         }
         case kExprSetGlobal: {
-          GlobalIndexOperand<false> operand(&decoder, code->at(pc));
+          GlobalIndexOperand<Decoder::kNoValidate> operand(&decoder,
+                                                           code->at(pc));
           const WasmGlobal* global = &module()->globals[operand.index];
           byte* ptr = cached_instance_info_->globals_start + global->offset;
           WasmValue val = Pop();
@@ -1916,7 +1930,8 @@ class ThreadImpl {
           ASMJS_STORE_CASE(F64AsmjsStoreMem, double, double);
 #undef ASMJS_STORE_CASE
         case kExprGrowMemory: {
-          MemoryIndexOperand<false> operand(&decoder, code->at(pc));
+          MemoryIndexOperand<Decoder::kNoValidate> operand(&decoder,
+                                                           code->at(pc));
           uint32_t delta_pages = Pop().to<uint32_t>();
           Push(WasmValue(ExecuteGrowMemory(
               delta_pages, codemap_->maybe_instance(), cached_instance_info_)));
@@ -1924,7 +1939,8 @@ class ThreadImpl {
           break;
         }
         case kExprMemorySize: {
-          MemoryIndexOperand<false> operand(&decoder, code->at(pc));
+          MemoryIndexOperand<Decoder::kNoValidate> operand(&decoder,
+                                                           code->at(pc));
           Push(WasmValue(static_cast<uint32_t>(cached_instance_info_->mem_size /
                                                WasmModule::kPageSize)));
           len = 1 + operand.length;
