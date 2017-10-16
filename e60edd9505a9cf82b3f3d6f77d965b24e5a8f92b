@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "487e1d13_baf183e0",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1002854
+      },
+      "writtenOn": "2017-10-16T19:16:42Z",
+      "side": 1,
+      "message": "You don\u0027t seem to adjust next_id_ or call AddObjectWithID to match the ID bump in WriteJSReceiver. Without this, multiple references to the same WebAssembly.Memory will not be correctly matched to the same object, and further, all references to objects later in the serialized data will be mismatched.\n\nPlease also consider adding this new type to value-serializer-unittest.cc.",
+      "revId": "e60edd9505a9cf82b3f3d6f77d965b24e5a8f92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
