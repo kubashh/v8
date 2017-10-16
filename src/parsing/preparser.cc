@@ -206,9 +206,9 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     }
   }
 
-  if (!IsArrowFunction(kind) && track_unresolved_variables_) {
+  if (!IsArrowFunction(kind) && track_unresolved_variables_ &&
+      result == kLazyParsingComplete) {
     CreateFunctionNameAssignment(function_name, function_type, function_scope);
-
     // Declare arguments after parsing the function since lexical 'arguments'
     // masks the arguments object. Declare arguments before declaring the
     // function var since the arguments object masks 'function arguments'.
