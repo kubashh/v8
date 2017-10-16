@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8658b722_a2624c51",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-16T11:19:30Z",
+      "side": 1,
+      "message": "Previously there was also description. Is that shown with optparse? Side-node: We should convert this to argparse (later).",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 10
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "450633ce_5102d51f",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-16T11:19:30Z",
+      "side": 1,
+      "message": "Where are mode and arch checked now?",
+      "range": {
+        "startLine": 278,
+        "startChar": 6,
+        "endLine": 278,
+        "endChar": 40
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd78b1d_b6278726",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-16T11:19:30Z",
+      "side": 1,
+      "message": "IIUC you moved the options to be reused by the standard runner. The deopt fuzzer doen\u0027t reuse, but overrides. I assume this comes in a separate CL, but could you add a TODO for this?\n\nOtherwise the baseclass code is only used by one of the subclasses.",
+      "range": {
+        "startLine": 273,
+        "startChar": 6,
+        "endLine": 273,
+        "endChar": 13
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "944e4664_741d4c3d",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-16T11:19:30Z",
+      "side": 1,
+      "message": "nit: Maybe some imports go away here now?",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2670e223_0ec0712b",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-16T11:19:30Z",
+      "side": 1,
+      "message": "Maybe not now, but in the future also timeouts for slow archs should be equal on fuzzers. The old deopt fuzzer never supported any of the slow archs...",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 10
+      },
+      "revId": "be01d26fb23df8936f19fd3ca71ba5d807f46c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
