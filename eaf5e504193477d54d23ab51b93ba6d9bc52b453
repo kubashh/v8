@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "017f5d2a_480e7691",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-16T12:19:30Z",
+      "side": 1,
+      "message": "this is very brittle and should maybe go into a SetByteLength() as it should always update the tracker when the buffer is not externalized.",
+      "range": {
+        "startLine": 350,
+        "startChar": 21,
+        "endLine": 350,
+        "endChar": 32
+      },
+      "revId": "eaf5e504193477d54d23ab51b93ba6d9bc52b453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
