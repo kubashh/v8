@@ -1015,20 +1015,20 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
   Node* BitwiseOp(Node* left32, Node* right32, Token::Value bitwise_op) {
     switch (bitwise_op) {
       case Token::BIT_AND:
-        return ChangeInt32ToTagged(Word32And(left32, right32));
+        return ChangeInt32ToTagged(Signed(Word32And(left32, right32)));
       case Token::BIT_OR:
-        return ChangeInt32ToTagged(Word32Or(left32, right32));
+        return ChangeInt32ToTagged(Signed(Word32Or(left32, right32)));
       case Token::BIT_XOR:
-        return ChangeInt32ToTagged(Word32Xor(left32, right32));
+        return ChangeInt32ToTagged(Signed(Word32Xor(left32, right32)));
       case Token::SHL:
         return ChangeInt32ToTagged(
-            Word32Shl(left32, Word32And(right32, Int32Constant(0x1f))));
+            Signed(Word32Shl(left32, Word32And(right32, Int32Constant(0x1f)))));
       case Token::SAR:
         return ChangeInt32ToTagged(
-            Word32Sar(left32, Word32And(right32, Int32Constant(0x1f))));
+            Signed(Word32Sar(left32, Word32And(right32, Int32Constant(0x1f)))));
       case Token::SHR:
-        return ChangeUint32ToTagged(
-            Word32Shr(left32, Word32And(right32, Int32Constant(0x1f))));
+        return ChangeUint32ToTagged(Unsigned(
+            Word32Shr(left32, Word32And(right32, Int32Constant(0x1f)))));
       default:
         break;
     }
@@ -3036,8 +3036,8 @@ IGNITION_HANDLER(ForInNext, InterpreterAssembler) {
   Node* feedback_vector = LoadFeedbackVector();
 
   // Load the next key from the enumeration array.
-  Node* key = LoadFixedArrayElement(cache_array, index, 0,
-                                    CodeStubAssembler::SMI_PARAMETERS);
+  Node* key = LoadFixedArrayElement<CodeStubAssembler::SMI_PARAMETERS>(
+      cache_array, index, 0);
 
   // Check if we can use the for-in fast path potentially using the enum cache.
   Label if_fast(this), if_slow(this, Label::kDeferred);

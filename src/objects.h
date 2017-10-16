@@ -1679,7 +1679,6 @@ class MapWord BASE_EMBEDDED {
   uintptr_t value_;
 };
 
-
 // HeapObject is the superclass for all classes describing heap allocated
 // objects.
 class HeapObject: public Object {

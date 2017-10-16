@@ -1178,13 +1178,13 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
   GotoIfNot(IsSetWord<StoreHandler::ExtendStorageBits>(handler_word), &done);
   Comment("[ Extend storage");
 
-  ParameterMode mode = OptimalParameterMode();
+  constexpr ParameterMode mode = OptimalParameterMode();
 
   // TODO(gsathya): Clean up the type conversions by creating smarter
   // helpers that do the correct op based on the mode.
   VARIABLE(var_properties, MachineRepresentation::kTaggedPointer);
-  VARIABLE(var_encoded_hash, MachineRepresentation::kWord32);
-  VARIABLE(var_length, ParameterRepresentation(mode));
+  TVARIABLE(Word32T, var_encoded_hash);
+  TVARIABLE(ParameterType<mode>, var_length);
 
   Node* properties = LoadObjectField(object, JSObject::kPropertiesOrHashOffset);
   var_properties.Bind(properties);
@@ -1197,8 +1197,8 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
     Node* hash = SmiToWord32(properties);
     Node* encoded_hash =
         Word32Shl(hash, Int32Constant(PropertyArray::HashField::kShift));
-    var_encoded_hash.Bind(encoded_hash);
-    var_length.Bind(IntPtrOrSmiConstant(0, mode));
+    var_encoded_hash = encoded_hash;
+    var_length = IntPtrOrSmiConstant<mode>(0);
     var_properties.Bind(EmptyFixedArrayConstant());
     Goto(&extend_store);
   }
@@ -1207,13 +1207,13 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
   {
     Node* length_and_hash_int32 = LoadAndUntagToWord32ObjectField(
         var_properties.value(), PropertyArray::kLengthAndHashOffset);
-    var_encoded_hash.Bind(Word32And(
-        length_and_hash_int32, Int32Constant(PropertyArray::HashField::kMask)));
-    Node* length_intptr = ChangeInt32ToIntPtr(
+    var_encoded_hash = Word32And(
+        length_and_hash_int32, Int32Constant(PropertyArray::HashField::kMask));
+    TNode<IntPtrT> length_intptr = ChangeInt32ToIntPtr(
         Word32And(length_and_hash_int32,
                   Int32Constant(PropertyArray::LengthField::kMask)));
-    Node* length = WordToParameter(length_intptr, mode);
-    var_length.Bind(length);
+    TNode<ParameterType<mode>> length = WordToParameter(length_intptr, mode);
+    var_length = length;
     Goto(&extend_store);
   }
 
@@ -1223,12 +1223,14 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
     // capacity even for a map that think it doesn't have any unused fields.
     // Perform a bounds check to see if we actually have to grow the array.
     Node* offset = DecodeWord<StoreHandler::FieldOffsetBits>(handler_word);
-    Node* size = ElementOffsetFromIndex(var_length.value(), PACKED_ELEMENTS,
-                                        mode, FixedArray::kHeaderSize);
+    Node* size = ElementOffsetFromIndex(var_length, PACKED_ELEMENTS, mode,
+                                        FixedArray::kHeaderSize);
     GotoIf(UintPtrLessThan(offset, size), &done);
 
-    Node* delta = IntPtrOrSmiConstant(JSObject::kFieldsAdded, mode);
-    Node* new_capacity = IntPtrOrSmiAdd(var_length.value(), delta, mode);
+    TNode<ParameterType<mode>> delta =
+        IntPtrOrSmiConstant<mode>(JSObject::kFieldsAdded);
+    TNode<ParameterType<mode>> new_capacity =
+        IntPtrOrSmiAdd<mode>(var_length, delta);
 
     // Grow properties array.
     DCHECK(kMaxNumberOfDescriptors + JSObject::kFieldsAdded <
@@ -1244,20 +1246,20 @@ void AccessorAssembler::ExtendPropertiesBackingStore(Node* object,
 
     Node* new_properties = AllocatePropertyArray(new_capacity, mode);
 
-    FillPropertyArrayWithUndefined(new_properties, var_length.value(),
-                                   new_capacity, mode);
+    FillPropertyArrayWithUndefined(new_properties, var_length, new_capacity,
+                                   mode);
 
     // |new_properties| is guaranteed to be in new space, so we can skip
     // the write barrier.
-    CopyPropertyArrayValues(var_properties.value(), new_properties,
-                            var_length.value(), SKIP_WRITE_BARRIER, mode);
+    CopyPropertyArrayValues(var_properties.value(), new_properties, var_length,
+                            SKIP_WRITE_BARRIER, mode);
 
     // TODO(gsathya): Clean up the type conversions by creating smarter
     // helpers that do the correct op based on the mode.
     Node* new_capacity_int32 =
-        TruncateWordToWord32(ParameterToWord(new_capacity, mode));
+        TruncateWordToWord32(ParameterToWord<mode>(new_capacity));
     Node* new_length_and_hash_int32 =
-        Word32Or(var_encoded_hash.value(), new_capacity_int32);
+        Word32Or(var_encoded_hash, new_capacity_int32);
     StoreObjectField(new_properties, PropertyArray::kLengthAndHashOffset,
                      SmiFromWord32(new_length_and_hash_int32));
     StoreObjectField(object, JSObject::kPropertiesOrHashOffset, new_properties);
@@ -1597,9 +1599,9 @@ void AccessorAssembler::BranchIfStrictMode(Node* vector, Node* slot,
   const int kItemsPerWord = FeedbackMetadata::VectorICComputer::kItemsPerWord;
   Node* word_index = Int32Div(slot_int, Int32Constant(kItemsPerWord));
   Node* word_offset = Int32Mod(slot_int, Int32Constant(kItemsPerWord));
-  Node* data = SmiToWord32(LoadFixedArrayElement(
+  Node* data = SmiToWord32(CAST(LoadFixedArrayElement<INTPTR_PARAMETERS>(
       metadata, ChangeInt32ToIntPtr(word_index),
-      FeedbackMetadata::kReservedIndexCount * kPointerSize, INTPTR_PARAMETERS));
+      FeedbackMetadata::kReservedIndexCount * kPointerSize)));
   // See VectorICComputer::decode().
   const int kBitsPerItem = FeedbackMetadata::kFeedbackSlotKindBits;
   Node* shift = Int32Mul(word_offset, Int32Constant(kBitsPerItem));

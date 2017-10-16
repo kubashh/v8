@@ -141,8 +141,8 @@ Node* RegExpBuiltinsAssembler::ConstructNewResultFromMatchInfo(
 
   Label named_captures(this), out(this);
 
-  TNode<IntPtrT> num_indices = SmiUntag(LoadFixedArrayElement(
-      match_info, RegExpMatchInfo::kNumberOfCapturesIndex));
+  TNode<IntPtrT> num_indices = SmiUntag(CAST(LoadFixedArrayElement(
+      match_info, RegExpMatchInfo::kNumberOfCapturesIndex)));
   Node* const num_results = SmiTag(WordShr(num_indices, 1));
   Node* const start =
       LoadFixedArrayElement(match_info, RegExpMatchInfo::kFirstCaptureIndex);
@@ -2489,12 +2489,12 @@ void RegExpBuiltinsAssembler::RegExpPrototypeSplitBody(Node* const context,
       BIND(&nested_loop);
       {
         Node* const reg = var_reg.value();
-        Node* const from = LoadFixedArrayElement(
+        Node* const from = LoadFixedArrayElement<mode>(
             match_indices, reg,
-            RegExpMatchInfo::kFirstCaptureIndex * kPointerSize, mode);
-        Node* const to = LoadFixedArrayElement(
+            RegExpMatchInfo::kFirstCaptureIndex * kPointerSize);
+        Node* const to = LoadFixedArrayElement<mode>(
             match_indices, reg,
-            (RegExpMatchInfo::kFirstCaptureIndex + 1) * kPointerSize, mode);
+            (RegExpMatchInfo::kFirstCaptureIndex + 1) * kPointerSize);
 
         Label select_capture(this), select_undefined(this), store_value(this);
         VARIABLE(var_value, MachineRepresentation::kTagged);
