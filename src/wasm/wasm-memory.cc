@@ -12,8 +12,8 @@ namespace internal {
 namespace wasm {
 
 void* TryAllocateBackingStore(Isolate* isolate, size_t size,
-                              bool enable_guard_regions, void*& allocation_base,
-                              size_t& allocation_length) {
+                              bool enable_guard_regions, void** allocation_base,
+                              size_t* allocation_length) {
   // TODO(eholk): Right now enable_guard_regions has no effect on 32-bit
   // systems. It may be safer to fail instead, given that other code might do
   // things that would be unsafe if they expected guard pages where there
@@ -22,19 +22,31 @@ void* TryAllocateBackingStore(Isolate* isolate, size_t size,
     // TODO(eholk): On Windows we want to make sure we don't commit the guard
     // pages yet.
 
-    // We always allocate the largest possible offset into the heap, so the
-    // addressable memory after the guard page can be made inaccessible.
-    allocation_length = RoundUp(kWasmMaxHeapOffset, base::OS::CommitPageSize());
+    // The guard region size works out to be about 10 GiB. 8 GiB of this is
+    // because Wasm memory operations take a 32-bit base and a 32-bit immediate
+    // offset, which adds up to 8 GiB (kWasmMaxHeapOffset). The remaining 2 GiB
+    // actually go in front of the Wasm memory. This is because we sometimes
+    // store constants as 32-bit immediates in the assembly language. On Intel,
+    // at least, these get sign-extended to 64-bits, meaning we can end up
+    // reading at a negative offset from the memory. This is where the
+    // -std::limits<int32_t>::min() portion comes from. Finally, we round this
+    // to the nearest page size.
+    *allocation_length =
+        RoundUp(kWasmMaxHeapOffset - std::numeric_limits<int32_t>::min(),
+                base::OS::CommitPageSize());
     DCHECK_EQ(0, size % base::OS::CommitPageSize());
 
     // AllocateGuarded makes the whole region inaccessible by default.
-    allocation_base =
-        isolate->array_buffer_allocator()->Reserve(allocation_length);
-    if (allocation_base == nullptr) {
+    char* memory = static_cast<char*>(
+        isolate->array_buffer_allocator()->Reserve(*allocation_length));
+    *allocation_base = memory;
+    if (memory == nullptr) {
       return nullptr;
     }
 
-    void* memory = allocation_base;
+    memory -= std::numeric_limits<int32_t>::min();
+    DCHECK_GT(reinterpret_cast<uintptr_t>(memory),
+              reinterpret_cast<uintptr_t>(*allocation_base));
 
     // Make the part we care about accessible.
     isolate->array_buffer_allocator()->SetProtection(
@@ -47,8 +59,8 @@ void* TryAllocateBackingStore(Isolate* isolate, size_t size,
   } else {
     void* memory =
         size == 0 ? nullptr : isolate->array_buffer_allocator()->Allocate(size);
-    allocation_base = memory;
-    allocation_length = size;
+    *allocation_base = memory;
+    *allocation_length = size;
     return memory;
   }
 }
@@ -87,10 +99,10 @@ Handle<JSArrayBuffer> NewArrayBuffer(Isolate* isolate, size_t size,
   void* allocation_base = nullptr;  // Set by TryAllocateBackingStore
   size_t allocation_length = 0;     // Set by TryAllocateBackingStore
   // Do not reserve memory till non zero memory is encountered.
-  void* memory =
-      (size == 0) ? nullptr
-                  : TryAllocateBackingStore(isolate, size, enable_guard_regions,
-                                            allocation_base, allocation_length);
+  void* memory = (size == 0) ? nullptr
+                             : TryAllocateBackingStore(
+                                   isolate, size, enable_guard_regions,
+                                   &allocation_base, &allocation_length);
 
   if (size > 0 && memory == nullptr) {
     return Handle<JSArrayBuffer>::null();
