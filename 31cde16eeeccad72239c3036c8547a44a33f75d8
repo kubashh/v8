@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30d32f9_58aebf7e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 0,
+      "message": "Why did this DCHECK go away?",
+      "revId": "31cde16eeeccad72239c3036c8547a44a33f75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -2,6 +2,160 @@
   "comments": [
     {
       "key": {
+        "uuid": "02a428c5_427b2969",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2463,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "Did you considering making this a new FunctionKind instead of a separate bool? That seems the most natural to me, but maybe that causes other problems I\u0027m not thinking of.",
+      "range": {
+        "startLine": 2463,
+        "startChar": 31,
+        "endLine": 2463,
+        "endChar": 62
+      },
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57374aa5_812de943",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2511,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "Please pack this into the bit_field_ (unless we\u0027re out of bits?). If you move to FunctionKind, you also don\u0027t have to worry about that.",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "079516cb_04c56118",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "This seems more like it should be an if-statement than a DCHECK. Wouldn\u0027t this crash if you added AST for non-static properties?",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d02a9f_c80bbcdc",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2287,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "Seems like this could also be guarded with *is_static for now (and would make the TODO make more sense).",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c83f1695_3773bbd6",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "No need for this variable, I\u0027d just inline the Check() call into the if-statement.",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aac164b_a73c54fc",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "I don\u0027t think this approach is going to work; I think you\u0027ll need a function representing the initializer so that `this` and `super` are accessible correctly anyway, and that should allow normal new.target lookup to work.",
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f46b31_66fed741",
+        "filename": "test/mjsunit/harmony/class-public-fields.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "2017 :)",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f853dab3_f2199765",
+        "filename": "test/mjsunit/harmony/class-public-fields.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-16T19:37:26Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like this is necessary.",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 55
+      },
+      "revId": "91c8b3644e7606ef09320fba0831a0032e43a4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1276db2_b13d8875",
         "filename": "test/mjsunit/harmony/class-public-fields.js",
         "patchSetId": 12
