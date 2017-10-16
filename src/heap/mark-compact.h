@@ -404,7 +404,7 @@ class MinorMarkCompactCollector final : public MarkCompactCollectorBase {
   UpdatingItem* CreateRememberedSetUpdatingItem(
       MemoryChunk* chunk, RememberedSetUpdatingMode updating_mode) override;
 
-  void CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+  int CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
 
   int NumberOfParallelMarkingTasks(int pages);
 
@@ -877,8 +877,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   UpdatingItem* CreateRememberedSetUpdatingItem(
       MemoryChunk* chunk, RememberedSetUpdatingMode updating_mode) override;
 
-  void CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
-  void CollectOldSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+  int CollectNewSpaceArrayBufferTrackerItems(ItemParallelJob* job);
+  int CollectOldSpaceArrayBufferTrackerItems(ItemParallelJob* job);
 
   void ReleaseEvacuationCandidates();
   void PostProcessEvacuationCandidates();
