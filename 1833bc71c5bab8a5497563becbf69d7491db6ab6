@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "569ab87b_4fbf9641",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-16T12:25:00Z",
+      "side": 1,
+      "message": "OK, we should figure out how to also resolve that in a more elegant way. Separate story.",
+      "parentUuid": "f754965e_4b0990c6",
+      "range": {
+        "startLine": 1913,
+        "startChar": 4,
+        "endLine": 1913,
+        "endChar": 5
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f21bdd_f13556bb",
         "filename": "src/heap/heap.cc",
         "patchSetId": 10
@@ -140,6 +164,30 @@
       "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "630f3807_ffd4b0aa",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-16T12:25:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ebda08b6_2b3e7510",
+      "range": {
+        "startLine": 608,
+        "startChar": 12,
+        "endLine": 608,
+        "endChar": 33
+      },
+      "revId": "1833bc71c5bab8a5497563becbf69d7491db6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
