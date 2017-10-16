@@ -627,7 +627,9 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* AtomicXor(MachineType rep);
 
   // Target machine word-size assumed by this builder.
-  bool Is32() const { return word() == MachineRepresentation::kWord32; }
+  constexpr bool Is32() const {
+    return word() == MachineRepresentation::kWord32;
+  }
   bool Is64() const { return word() == MachineRepresentation::kWord64; }
   MachineRepresentation word() const { return word_; }
 

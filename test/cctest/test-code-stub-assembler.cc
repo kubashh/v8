@@ -199,9 +199,8 @@ TEST(FixedArrayAccessSmiIndex) {
   CodeStubAssembler m(asm_tester.state());
   Handle<FixedArray> array = isolate->factory()->NewFixedArray(5);
   array->set(4, Smi::FromInt(733));
-  m.Return(m.LoadFixedArrayElement(m.HeapConstant(array),
-                                   m.SmiTag(m.IntPtrConstant(4)), 0,
-                                   CodeStubAssembler::SMI_PARAMETERS));
+  m.Return(m.LoadFixedArrayElement<CodeStubAssembler::SMI_PARAMETERS>(
+      m.HeapConstant(array), m.SmiTag(m.IntPtrConstant(4)), 0));
   FunctionTester ft(asm_tester.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(733, Handle<Smi>::cast(result.ToHandleChecked())->value());
@@ -212,8 +211,8 @@ TEST(LoadHeapNumberValue) {
   CodeAssemblerTester asm_tester(isolate);
   CodeStubAssembler m(asm_tester.state());
   Handle<HeapNumber> number = isolate->factory()->NewHeapNumber(1234);
-  m.Return(m.SmiFromWord32(
-      m.ChangeFloat64ToUint32(m.LoadHeapNumberValue(m.HeapConstant(number)))));
+  m.Return(m.SmiFromWord32(m.Signed(
+      m.ChangeFloat64ToUint32(m.LoadHeapNumberValue(m.HeapConstant(number))))));
   FunctionTester ft(asm_tester.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
   CHECK_EQ(1234, Handle<Smi>::cast(result.ToHandleChecked())->value());

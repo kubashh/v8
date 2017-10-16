@@ -1151,7 +1151,7 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
     {
       Node* value = LoadFixedArrayElement(elements, 0);
       BuildFastLoop(IntPtrConstant(0), new_length,
-                    [&](Node* index) {
+                    [&](SloppyTNode<IntPtrT> index) {
                       StoreFixedArrayElement(
                           elements, index,
                           LoadFixedArrayElement(
@@ -1168,7 +1168,7 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
     {
       Node* value = LoadFixedArrayElement(elements, 0);
       BuildFastLoop(IntPtrConstant(0), new_length,
-                    [&](Node* index) {
+                    [&](SloppyTNode<IntPtrT> index) {
                       StoreFixedArrayElement(
                           elements, index,
                           LoadFixedArrayElement(
@@ -1897,17 +1897,17 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant) {
 
     BIND(&string_loop);
     {
-      CSA_ASSERT(this, IsString(search_element));
+      TNode<String> search_element_string = CAST(search_element);
       Label continue_loop(this), next_iteration(this, &index_var),
           slow_compare(this), runtime(this, Label::kDeferred);
-      Node* search_length = LoadStringLength(search_element);
+      Node* search_length = LoadStringLength(search_element_string);
       Goto(&next_iteration);
       BIND(&next_iteration);
       GotoIfNot(UintPtrLessThan(index_var.value(), array_length),
                 &return_not_found);
       Node* element_k = LoadFixedArrayElement(elements, index_var.value());
       GotoIf(TaggedIsSmi(element_k), &continue_loop);
-      GotoIf(WordEqual(search_element, element_k), &return_found);
+      GotoIf(WordEqual(search_element_string, element_k), &return_found);
       Node* element_k_type = LoadInstanceType(element_k);
       GotoIfNot(IsStringInstanceType(element_k_type), &continue_loop);
       Branch(WordEqual(search_length, LoadStringLength(element_k)),
@@ -1915,12 +1915,12 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant) {
 
       BIND(&slow_compare);
       StringBuiltinsAssembler string_asm(state());
-      string_asm.StringEqual_Core(context, search_element, search_type,
+      string_asm.StringEqual_Core(context, search_element_string, search_type,
                                   search_length, element_k, element_k_type,
                                   &return_found, &continue_loop, &runtime);
       BIND(&runtime);
       TNode<Object> result = CallRuntime(Runtime::kStringEqual, context,
-                                         search_element, element_k);
+                                         search_element_string, element_k);
       Branch(WordEqual(BooleanConstant(true), result), &return_found,
              &continue_loop);
 
@@ -2247,7 +2247,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
     BIND(&packed_object_values);
     {
-      var_value.Bind(LoadFixedArrayElement(elements, index, 0, SMI_PARAMETERS));
+      var_value.Bind(LoadFixedArrayElement<SMI_PARAMETERS>(elements, index, 0));
       Goto(&allocate_entry_if_needed);
     }
 
@@ -2265,7 +2265,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
       GotoIf(IsArrayProtectorCellInvalid(), &generic_values);
 
       var_value.Bind(UndefinedConstant());
-      Node* value = LoadFixedArrayElement(elements, index, 0, SMI_PARAMETERS);
+      Node* value = LoadFixedArrayElement<SMI_PARAMETERS>(elements, index, 0);
       GotoIf(WordEqual(value, TheHoleConstant()), &allocate_entry_if_needed);
       var_value.Bind(value);
       Goto(&allocate_entry_if_needed);
