@@ -53,6 +53,9 @@ RUNTIME_FUNCTION(Runtime_DebugBreakOnBytecode) {
     // sees the return bytecode rather than the DebugBreak.
     interpreted_frame->PatchBytecodeArray(bytecode_array);
   }
+  // We do not have to deal with operand scale here. If the bytecode at the
+  // break is prefixed by operand scaling, we would have patched over the
+  // scaling prefix. We now simply dispatch to the handler for the prefix.
   return isolate->interpreter()->GetBytecodeHandler(
       bytecode, interpreter::OperandScale::kSingle);
 }
