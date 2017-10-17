@@ -474,6 +474,19 @@ void AstTraversalVisitor<Subclass>::VisitClassLiteral(ClassLiteral* expr) {
 }
 
 template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitClassFields(ClassFields* expr) {
+  PROCESS_EXPRESSION(expr);
+  ZoneList<ClassLiteralProperty*>* props = expr->fields();
+  for (int i = 0; i < props->length(); ++i) {
+    ClassLiteralProperty* prop = props->at(i);
+    if (!prop->key()->IsLiteral()) {
+      RECURSE_EXPRESSION(Visit(prop->key()));
+    }
+    RECURSE_EXPRESSION(Visit(prop->value()));
+  }
+}
+
+template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitSpread(Spread* expr) {
   PROCESS_EXPRESSION(expr);
   RECURSE_EXPRESSION(Visit(expr->expression()));

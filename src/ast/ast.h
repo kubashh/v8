@@ -99,7 +99,8 @@ namespace internal {
   V(UnaryOperation)             \
   V(VariableProxy)              \
   V(Yield)                      \
-  V(YieldStar)
+  V(YieldStar)                  \
+  V(ClassFields)
 
 #define AST_NODE_LIST(V)                        \
   DECLARATION_NODE_LIST(V)                      \
@@ -2526,6 +2527,28 @@ class ClassLiteralProperty final : public LiteralProperty {
   bool is_static_;
 };
 
+class ClassFields final : public Expression {
+ public:
+  typedef ClassLiteralProperty Property;
+  ZoneList<Property*>* fields() const { return fields_; }
+  FeedbackSlot HomeObjectSlot() const { return home_object_slot_; }
+  bool needs_home_object() const { return needs_home_object_; }
+  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
+                           FunctionKind kind, FeedbackSlotCache* cache);
+
+ private:
+  friend class AstNodeFactory;
+
+  ClassFields(ZoneList<Property*>* fields, bool needs_home_object, int pos)
+      : Expression(pos, kClassFields),
+        fields_(fields),
+        needs_home_object_(needs_home_object) {}
+
+  ZoneList<Property*>* fields_;
+  FeedbackSlot home_object_slot_;
+  bool needs_home_object_;
+};
+
 class ClassLiteral final : public Expression {
  public:
   typedef ClassLiteralProperty Property;
@@ -3439,6 +3462,11 @@ class AstNodeFactory final BASE_EMBEDDED {
 
   ImportCallExpression* NewImportCallExpression(Expression* args, int pos) {
     return new (zone_) ImportCallExpression(args, pos);
+  }
+
+  ClassFields* NewClassFields(ZoneList<ClassLiteralProperty*>* args,
+                              bool needs_home_object, int pos) {
+    return new (zone_) ClassFields(args, needs_home_object, pos);
   }
 
   Zone* zone() const { return zone_; }
