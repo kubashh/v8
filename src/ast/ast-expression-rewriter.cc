@@ -207,6 +207,14 @@ void AstExpressionRewriter::VisitClassLiteral(ClassLiteral* node) {
   }
 }
 
+void AstExpressionRewriter::VisitClassFields(ClassFields* node) {
+  REWRITE_THIS(node);
+  ZoneList<typename ClassLiteral::Property*>* properties = node->fields();
+  for (int i = 0; i < properties->length(); i++) {
+    VisitLiteralProperty(properties->at(i));
+  }
+}
+
 void AstExpressionRewriter::VisitNativeFunctionLiteral(
     NativeFunctionLiteral* node) {
   REWRITE_THIS(node);
