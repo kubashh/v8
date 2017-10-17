@@ -28,7 +28,6 @@ from testrunner.network import network_execution
 from testrunner.objects import context
 
 
-
 TIMEOUT_DEFAULT = 60
 
 # Variants ordered by expected runtime (slowest first).
@@ -138,17 +137,10 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         return 2
 
     def _add_parser_options(self, parser):
-      parser.add_option("--asan",
-                        help="Regard test expectations for ASAN",
-                        default=False, action="store_true")
       parser.add_option("--sancov-dir",
                         help="Directory where to collect coverage data")
       parser.add_option("--cfi-vptr",
                         help="Run tests with UBSAN cfi_vptr option.",
-                        default=False, action="store_true")
-      parser.add_option("--dcheck-always-on",
-                        help="Indicates that V8 was compiled with DCHECKs"
-                        " enabled",
                         default=False, action="store_true")
       parser.add_option("--novfp3",
                         help="Indicates that V8 was compiled without VFP3"
@@ -240,10 +232,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       parser.add_option("--shard-run",
                         help="Run this shard from the split up tests.",
                         default=1, type="int")
-      parser.add_option("--shell", help="DEPRECATED! use --shell-dir",
-                        default="")
-      parser.add_option("--shell-dir", help="Directory containing executables",
-                        default="")
       parser.add_option("--dont-skip-slow-simulator-tests",
                         help="Don't skip more slow tests when using a"
                         " simulator.",
@@ -282,6 +270,19 @@ class StandardTestRunner(base_runner.BaseTestRunner):
                         help="Regard test expectations for UBSanVptr",
                         default=False, action="store_true")
 
+    def _read_build_config_options(self, options, build_config):
+      for param, value in [
+        ('gcov_coverage', build_config["is_gcov_coverage"]),
+        ('msan', build_config["is_msan"]),
+        ('no_i18n', not build_config["v8_enable_i18n_support"]),
+        ('no_snap', not build_config["v8_use_snapshot"]),
+        ('tsan', build_config["is_tsan"]),
+        ('ubsan_vptr', build_config["is_ubsan_vptr"]),
+      ]:
+        self._check_option_consistency(param, getattr(options, param), value)
+        # TODO(majeski): Set self.<option> instead of options.<option>.
+        setattr(options, param, value)
+
     def _process_options(self, options):
       global VARIANTS
 
@@ -299,7 +300,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       if options.gc_stress:
         options.extra_flags += GC_STRESS_FLAGS
 
-      if options.asan:
+      if self.asan:
         options.extra_flags.append("--invoke-weak-callbacks")
         options.extra_flags.append("--omit-quit")
 
@@ -358,10 +359,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       # Dedupe.
       VARIANTS = list(set(VARIANTS))
 
-      if not options.shell_dir:
-        if options.shell:
-          print "Warning: --shell is deprecated, use --shell-dir instead."
-          options.shell_dir = os.path.dirname(options.shell)
       if options.valgrind:
         run_valgrind = os.path.join("tools", "run-valgrind.py")
         # This is OK for distributed running, so we don't need to disable
@@ -395,7 +392,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           )
       )
 
-      if options.asan:
+      if self.asan:
         asan_options = [symbolizer, "allow_user_segv_handler=1"]
         if not utils.GuessOS() in ['macos', 'windows']:
           # LSAN is not available on mac and windows.
@@ -452,26 +449,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     def _execute(self, arch, mode, args, options, suites):
       print(">>> Running tests for %s.%s" % (arch, mode))
 
-      shell_dir = options.shell_dir
-      if not shell_dir:
-        if self.auto_detect:
-          # If an output dir with a build was passed, test directly in that
-          # directory.
-          shell_dir = os.path.join(base_runner.BASE_DIR, self.outdir)
-        elif options.buildbot:
-          # TODO(machenbach): Get rid of different output folder location on
-          # buildbot. Currently this is capitalized Release and Debug.
-          shell_dir = os.path.join(base_runner.BASE_DIR, self.outdir, mode)
-          mode = self._buildbot_to_v8_mode(mode)
-        else:
-          shell_dir = os.path.join(
-              base_runner.BASE_DIR,
-              self.outdir,
-              "%s.%s" % (arch, base_runner.MODES[mode]["output_folder"]),
-          )
-      if not os.path.exists(shell_dir):
-          raise Exception('Could not find shell_dir: "%s"' % shell_dir)
-
       # Populate context object.
       mode_flags = base_runner.MODES[mode]["flags"]
 
@@ -487,7 +464,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
 
       ctx = context.Context(arch,
                             base_runner.MODES[mode]["execution_mode"],
-                            shell_dir,
+                            self.shell_dir,
                             mode_flags,
                             options.verbose,
                             options.timeout,
@@ -514,7 +491,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       # Find available test suites and read test cases from them.
       variables = {
         "arch": arch,
-        "asan": options.asan,
+        "asan": self.asan,
         "deopt_fuzzer": False,
         "gc_stress": options.gc_stress,
         "gcov_coverage": options.gcov_coverage,
@@ -527,7 +504,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         "system": utils.GuessOS(),
         "tsan": options.tsan,
         "msan": options.msan,
-        "dcheck_always_on": options.dcheck_always_on,
+        "dcheck_always_on": self.dcheck_always_on,
         "novfp3": options.novfp3,
         "predictable": options.predictable,
         "byteorder": sys.byteorder,
