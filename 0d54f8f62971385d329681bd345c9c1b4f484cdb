@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1bac3f9_91a56936",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "nit: unmatched parenthesis",
+      "range": {
+        "startLine": 20,
+        "startChar": 48,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cb41832_469a2ed5",
+        "filename": "src/base/template-utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "nit: between",
+      "range": {
+        "startLine": 97,
+        "startChar": 38,
+        "endLine": 97,
+        "endChar": 44
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b14a81c4_c63c834d",
+        "filename": "src/base/template-utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 99,
+        "startChar": 55,
+        "endLine": 99,
+        "endChar": 62
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20e38164_b2fd2164",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3609,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "You can drop this now :-)",
+      "range": {
+        "startLine": 3609,
+        "startChar": 2,
+        "endLine": 3609,
+        "endChar": 41
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba5c8a4_b899166c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "drop this",
+      "range": {
+        "startLine": 3629,
+        "startChar": 1,
+        "endLine": 3629,
+        "endChar": 41
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d28585cd_2b749a44",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5599,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "Why is this needed? Doesn\u0027t CAST() below emit a check as well?",
+      "range": {
+        "startLine": 5599,
+        "startChar": 2,
+        "endLine": 5599,
+        "endChar": 43
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e5bfd71_6520f4b1",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "s/for of/of/",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "976aa971_68568201",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "T",
+      "range": {
+        "startLine": 317,
+        "startChar": 53,
+        "endLine": 317,
+        "endChar": 54
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa22e912_64c39bec",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "nit: s/this/a/ ?",
+      "range": {
+        "startLine": 318,
+        "startChar": 58,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e77ef0_4e32a1ca",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "nit: new line for every \"-\" please",
+      "range": {
+        "startLine": 318,
+        "startChar": 14,
+        "endLine": 318,
+        "endChar": 15
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ad0d7aa_d73ffea6",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "Can you move these tests to the .cc file please? Checking types at compile time is clearly worth doing, but we should avoid wasting compile time where possible.",
+      "range": {
+        "startLine": 351,
+        "startChar": 14,
+        "endLine": 351,
+        "endChar": 30
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b49960dc_e18898d2",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T21:34:27Z",
+      "side": 1,
+      "message": "Uint64T ?",
+      "range": {
+        "startLine": 473,
+        "startChar": 26,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "0d54f8f62971385d329681bd345c9c1b4f484cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
