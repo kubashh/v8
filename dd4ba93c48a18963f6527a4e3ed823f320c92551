@@ -156,6 +156,24 @@
     },
     {
       "key": {
+        "uuid": "4d7b85e8_656580c5",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3245,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-18T12:52:59Z",
+      "side": 1,
+      "message": "I\u0027d be fine with adding SetHomeObject and DefineOwnProperty nodes as long as we would use them consistently where this code is needed (e.g., refactor ObjectLiteral property setting to use them as well) - was this your intention?",
+      "parentUuid": "1de13a1f_a708094e",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "272572dc_2f9f52d5",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 14
