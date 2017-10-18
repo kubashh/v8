@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f31d8f2b_61d3cd03",
+        "filename": "src/ast/modules.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-18T07:01:52Z",
+      "side": 1,
+      "message": "Please remove these two lines, they don\u0027t make a lot of sense.",
+      "revId": "86eac2d45511162d44b1848b5028e02d9375cc08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
