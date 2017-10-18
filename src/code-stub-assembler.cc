@@ -6815,6 +6815,11 @@ void CodeStubAssembler::UpdateFeedback(Node* feedback, Node* feedback_vector,
     // Reset profiler ticks.
     StoreObjectFieldNoWriteBarrier(
         feedback_vector, FeedbackVector::kProfilerTicksOffset, SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+    CallRuntime(Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+                LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+                SmiTag(slot_id), StringConstant("UpdateFeedback"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
     Goto(&end);
   }
 

@@ -655,6 +655,12 @@ void InterpreterAssembler::CollectCallFeedback(Node* target, Node* context,
       StoreObjectFieldNoWriteBarrier(feedback_vector,
                                      FeedbackVector::kProfilerTicksOffset,
                                      SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+      CallRuntime(
+          Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+          LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+          SmiTag(slot_id), StringConstant("Call:Initialize"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
       Goto(&done);
     }
 
@@ -672,6 +678,12 @@ void InterpreterAssembler::CollectCallFeedback(Node* target, Node* context,
       StoreObjectFieldNoWriteBarrier(feedback_vector,
                                      FeedbackVector::kProfilerTicksOffset,
                                      SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+      CallRuntime(
+          Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+          LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+          SmiTag(slot_id), StringConstant("Call:TransitionMegamorphic"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
       Goto(&done);
     }
   }
@@ -849,6 +861,12 @@ Node* InterpreterAssembler::Construct(Node* target, Node* context,
         StoreObjectFieldNoWriteBarrier(feedback_vector,
                                        FeedbackVector::kProfilerTicksOffset,
                                        SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+        CallRuntime(
+            Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+            LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+            SmiTag(slot_id), StringConstant("Construct:CreateAllocationSite"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
         Goto(&construct_array);
       }
 
@@ -860,6 +878,12 @@ Node* InterpreterAssembler::Construct(Node* target, Node* context,
         StoreObjectFieldNoWriteBarrier(feedback_vector,
                                        FeedbackVector::kProfilerTicksOffset,
                                        SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+        CallRuntime(
+            Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+            LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+            SmiTag(slot_id), StringConstant("Construct:CreateWeakCell"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
         Goto(&construct);
       }
     }
@@ -878,6 +902,12 @@ Node* InterpreterAssembler::Construct(Node* target, Node* context,
       StoreObjectFieldNoWriteBarrier(feedback_vector,
                                      FeedbackVector::kProfilerTicksOffset,
                                      SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+      CallRuntime(
+          Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+          LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+          SmiTag(slot_id), StringConstant("Construct:TransitionMegamorphic"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
       Goto(&construct);
     }
   }
@@ -983,6 +1013,12 @@ Node* InterpreterAssembler::ConstructWithSpread(Node* target, Node* context,
       StoreObjectFieldNoWriteBarrier(feedback_vector,
                                      FeedbackVector::kProfilerTicksOffset,
                                      SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+      CallRuntime(
+          Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+          LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+          SmiTag(slot_id), StringConstant("ConstructWithSpread:Initialize"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
       Goto(&construct);
     }
 
@@ -1000,6 +1036,13 @@ Node* InterpreterAssembler::ConstructWithSpread(Node* target, Node* context,
       StoreObjectFieldNoWriteBarrier(feedback_vector,
                                      FeedbackVector::kProfilerTicksOffset,
                                      SmiConstant(0));
+#ifdef V8_TRACE_FEEDBACK_UPDATES
+      CallRuntime(
+          Runtime::kInterpreterTraceUpdateFeedback, NoContextConstant(),
+          LoadFromParentFrame(JavaScriptFrameConstants::kFunctionOffset),
+          SmiTag(slot_id),
+          StringConstant("ConstructWithSpread:TransitionMegamorphic"));
+#endif  // V8_TRACE_FEEDBACK_UPDATES
       Goto(&construct);
     }
   }
