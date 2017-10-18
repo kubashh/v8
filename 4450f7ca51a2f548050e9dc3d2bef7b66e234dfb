@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "482801ba_13a21713",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-18T09:08:02Z",
+      "side": 0,
+      "message": "Agreed. Even though it looks like we should refactor this into \"static_assert(FixedArray::kMaxLength \u003e 0 \u0026\u0026 FixedArray::kMaxLength \u003c\u003d kMaxInt)\". But not in this CL ;)",
+      "parentUuid": "0ddbde0f_754af887",
+      "range": {
+        "startLine": 597,
+        "startChar": 13,
+        "endLine": 597,
+        "endChar": 34
+      },
+      "revId": "4450f7ca51a2f548050e9dc3d2bef7b66e234dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d99d9bc8_b9d0f013",
         "filename": "src/builtins/builtins-array.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "4450f7ca51a2f548050e9dc3d2bef7b66e234dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55797d5a_cdac4e68",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-18T09:08:02Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d99d9bc8_b9d0f013",
+      "range": {
+        "startLine": 610,
+        "startChar": 13,
+        "endLine": 610,
+        "endChar": 33
+      },
+      "revId": "4450f7ca51a2f548050e9dc3d2bef7b66e234dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
