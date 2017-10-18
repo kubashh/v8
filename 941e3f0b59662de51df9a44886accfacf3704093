@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc72114e_58ce5c72",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 10629,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-18T17:46:41Z",
+      "side": 1,
+      "message": "This is a leftover and should be removed.",
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7fe721a_a522417e",
+        "filename": "src/objects/string.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-18T17:46:41Z",
+      "side": 1,
+      "message": "This is a leftover and should be removed.",
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
