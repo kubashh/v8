@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "454cb400_94293c88",
+        "filename": "src/v8.gyp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-18T13:06:05Z",
+      "side": 1,
+      "message": "This ports https://chromium.googlesource.com/v8/v8/+/42df746d654794a0da9ea91c2e385034b93b98bb/BUILD.gn#833 - two features were never enabled in gyp, so keeping them off here too.",
+      "range": {
+        "startLine": 2522,
+        "startChar": 5,
+        "endLine": 2522,
+        "endChar": 0
+      },
+      "revId": "ddb503b6f585f263f35d43e192b2f63450fb05d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45b8614_3b35448f",
+        "filename": "tools/testrunner/utils/dump_build_config_gyp.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-18T13:06:05Z",
+      "side": 1,
+      "message": "This is a copy of https://chromium.googlesource.com/v8/v8/+/42df746d654794a0da9ea91c2e385034b93b98bb/tools/testrunner/utils/dump_build_config.py\n\nThe script will be trashed again when we delete the gyp files. This is the reverse mapping of:\nhttps://chromium.googlesource.com/v8/v8/+/42df746d654794a0da9ea91c2e385034b93b98bb/gni/isolate.gni#58",
+      "revId": "ddb503b6f585f263f35d43e192b2f63450fb05d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
