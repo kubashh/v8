@@ -19,6 +19,7 @@
 
 #include "src/objects/bigint.h"
 
+#include "src/double.h"
 #include "src/objects-inl.h"
 
 namespace v8 {
@@ -165,12 +166,34 @@ MaybeHandle<BigInt> BigInt::UnsignedRightShift(Handle<BigInt> x,
                   BigInt);
 }
 
-bool BigInt::LessThan(Handle<BigInt> x, Handle<BigInt> y) {
-  if (x->sign() == y->sign()) {
-    int result = AbsoluteCompare(x, y);
-    return x->sign() ? (result > 0) : (result < 0);
-  }
-  return x->sign();
+namespace {
+
+// Produces comparison result for {negative} == sign(x) != sign(y).
+ComparisonResult UnequalSign(bool left_negative) {
+  return left_negative ? ComparisonResult::kLessThan
+                       : ComparisonResult::kGreaterThan;
+}
+// Produces result for |x| > |y|, with {negative} == sign(x) == sign(y);
+ComparisonResult AbsoluteGreater(bool negative) {
+  return negative ? ComparisonResult::kLessThan
+                  : ComparisonResult::kGreaterThan;
+}
+// Produces result for |x| < |y|, with {negative} == sign(x) == sign(y).
+ComparisonResult AbsoluteLess(bool negative) {
+  return negative ? ComparisonResult::kGreaterThan
+                  : ComparisonResult::kLessThan;
+}
+
+}  // namespace
+
+ComparisonResult BigInt::CompareToBigInt(Handle<BigInt> x, Handle<BigInt> y) {
+  bool x_sign = x->sign();
+  if (x_sign != y->sign()) return UnequalSign(x_sign);
+
+  int result = AbsoluteCompare(x, y);
+  if (result > 0) return AbsoluteGreater(x_sign);
+  if (result < 0) return AbsoluteLess(x_sign);
+  return ComparisonResult::kEqual;
 }
 
 bool BigInt::Equal(BigInt* x, BigInt* y) {
@@ -277,6 +300,170 @@ MaybeHandle<BigInt> BigInt::Decrement(Handle<BigInt> x) {
   }
   result->RightTrim();
   return result;
+}
+
+bool BigInt::EqualToString(Handle<BigInt> x, Handle<String> y) {
+  Isolate* isolate = x->GetIsolate();
+  // a. Let n be StringToBigInt(y).
+  MaybeHandle<BigInt> maybe_n = StringToBigInt(isolate, y, 10);
+  // b. If n is NaN, return false.
+  Handle<BigInt> n;
+  if (!maybe_n.ToHandle(&n)) {
+    DCHECK(isolate->has_pending_exception());
+    isolate->clear_pending_exception();
+    return false;
+  }
+  // c. Return the result of x == n.
+  return Equal(*x, *n);
+}
+
+bool BigInt::EqualToNumber(Handle<BigInt> x, Handle<Object> y) {
+  DCHECK(y->IsNumber());
+  // a. If x or y are any of NaN, +∞, or -∞, return false.
+  // b. If the mathematical value of x is equal to the mathematical value of y,
+  //    return true, otherwise return false.
+  if (y->IsSmi()) {
+    int value = Smi::ToInt(*y);
+    if (value == 0) return x->is_zero();
+    STATIC_ASSERT(sizeof(digit_t) == sizeof(void*));
+    return (x->length() == 1) && (x->sign() == (value < 0)) &&
+           (x->digit(0) ==
+            static_cast<digit_t>(std::abs(static_cast<int64_t>(value))));
+  }
+  DCHECK(y->IsHeapNumber());
+  double value = Handle<HeapNumber>::cast(y)->value();
+  return CompareToDouble(x, value) == ComparisonResult::kEqual;
+}
+
+ComparisonResult BigInt::CompareToNumber(Handle<BigInt> x, Handle<Object> y) {
+  DCHECK(y->IsNumber());
+  if (y->IsSmi()) {
+    bool x_sign = x->sign();
+    int value = Smi::ToInt(*y);
+    bool y_sign = (value < 0);
+    if (x_sign != y_sign) return UnequalSign(x_sign);
+
+    if (value == 0) {
+      DCHECK(!x_sign);
+      return x->is_zero() ? ComparisonResult::kEqual
+                          : ComparisonResult::kGreaterThan;
+    }
+    int x_length = x->length();
+    // Any multi-digit BigInt is bigger than a Smi.
+    STATIC_ASSERT(sizeof(digit_t) >= sizeof(value));
+    if (x_length > 1) return AbsoluteGreater(x_sign);
+
+    digit_t abs_value = std::abs(static_cast<int64_t>(value));
+    digit_t x_digit = x->digit(0);
+    if (x_digit > abs_value) return AbsoluteGreater(x_sign);
+    if (x_digit < abs_value) return AbsoluteLess(x_sign);
+    return ComparisonResult::kEqual;
+  }
+  DCHECK(y->IsHeapNumber());
+  double value = Handle<HeapNumber>::cast(y)->value();
+  return CompareToDouble(x, value);
+}
+
+// Exposed for tests, do not call directly. Use CompareToNumber() instead.
+ComparisonResult BigInt::CompareToDouble(Handle<BigInt> x, double value) {
+  if (std::isnan(value)) return ComparisonResult::kUndefined;
+  if (value == V8_INFINITY) return ComparisonResult::kLessThan;
+  if (value == -V8_INFINITY) return ComparisonResult::kGreaterThan;
+  bool x_sign = x->sign();
+  bool y_sign = (value < 0);
+  if (x_sign != y_sign) return UnequalSign(x_sign);
+  if (value == 0) {
+    DCHECK(!x_sign);
+    return x->is_zero() ? ComparisonResult::kEqual
+                        : ComparisonResult::kGreaterThan;
+  }
+  if (x->is_zero()) {
+    DCHECK(!y_sign);
+    return ComparisonResult::kLessThan;
+  }
+  uint64_t double_bits = bit_cast<uint64_t>(value);
+  int raw_exponent =
+      static_cast<int>(double_bits >> HeapNumber::kMantissaBits) & 0x7FF;
+  uint64_t mantissa = double_bits & Double::kSignificandMask;
+  // Non-finite doubles are handled above.
+  DCHECK(raw_exponent != 0x7FF);
+  int exponent = raw_exponent - 0x3FF;
+  if (exponent < 0) {
+    // The absolute value of the double is less than 1. Only 0n has an
+    // absolute value smaller than that, but we've already covered that case.
+    DCHECK(!x->is_zero());
+    return AbsoluteGreater(x_sign);
+  }
+  int x_length = x->length();
+  digit_t msd = x->digit(x_length - 1);
+  int msd_leading_zeros = base::bits::CountLeadingZeros(msd);
+  int x_bitlength = x_length * kDigitBits - msd_leading_zeros;
+  int y_bitlength = exponent + 1;
+  if (x_bitlength < y_bitlength) return AbsoluteLess(x_sign);
+  if (x_bitlength > y_bitlength) return AbsoluteGreater(x_sign);
+
+  // At this point, we know that signs and bit lengths (i.e. position of
+  // the most significant bit in exponent-free representation) are identical.
+  // {x} is not zero, {y} is finite and not denormal.
+  // Now we virtually convert the double to an integer by shifting its
+  // mantissa according to its exponent, so it will align with the BigInt {x},
+  // and then we compare them bit for bit until we find a difference or the
+  // least significant bit.
+  //                    <----- 52 ------> <-- virtual trailing zeroes -->
+  // y / mantissa:     1yyyyyyyyyyyyyyyyy 0000000000000000000000000000000
+  // x / digits:    0001xxxx xxxxxxxx xxxxxxxx ...
+  //                    <-->          <------>
+  //              msd_topbit         kDigitBits
+  //
+  mantissa |= Double::kHiddenBit;
+  const int kMantissaTopBit = 52;  // 0-indexed.
+  // 0-indexed position of {x}'s most significant bit within the {msd}.
+  const int msd_topbit = kDigitBits - 1 - msd_leading_zeros;
+  DCHECK_EQ(msd_topbit, (x_bitlength - 1) % kDigitBits);
+  // Shifted chunk of {mantissa} for comparing with {digit}.
+  digit_t compare_mantissa;
+  // Number of unprocessed bits in {mantissa}. We'll keep them shifted to
+  // the left (i.e. most significant part) of the underlying uint64_t.
+  int remaining_mantissa_bits = 0;
+
+  // First, compare the most significant digit against the beginning of
+  // the mantissa.
+  if (msd_topbit < kMantissaTopBit) {
+    remaining_mantissa_bits = (kMantissaTopBit - msd_topbit);
+    compare_mantissa = mantissa >> remaining_mantissa_bits;
+    mantissa = mantissa << (64 - remaining_mantissa_bits);
+  } else {
+    DCHECK(msd_topbit >= kMantissaTopBit);
+    compare_mantissa = mantissa << (msd_topbit - kMantissaTopBit);
+  }
+  if (msd > compare_mantissa) return AbsoluteGreater(x_sign);
+  if (msd < compare_mantissa) return AbsoluteLess(x_sign);
+
+  // Then, compare additional digits against any remaining mantissa bits.
+  for (int digit_index = x_length - 2; digit_index >= 0; digit_index--) {
+    if (remaining_mantissa_bits > 0) {
+      remaining_mantissa_bits -= kDigitBits;
+      if (sizeof(mantissa) != sizeof(msd)) {
+        compare_mantissa = mantissa >> (64 - kDigitBits);
+        // "& 63" to appease compilers. kDigitBits is 32 here anyway.
+        mantissa = mantissa << (kDigitBits & 63);
+      } else {
+        compare_mantissa = mantissa;
+        mantissa = 0;
+      }
+    } else {
+      compare_mantissa = 0;
+    }
+    digit_t digit = x->digit(digit_index);
+    if (digit > compare_mantissa) return AbsoluteGreater(x_sign);
+    if (digit < compare_mantissa) return AbsoluteLess(x_sign);
+  }
+
+  // Integer parts are equal; check whether {y} has a fractional part.
+  if (remaining_mantissa_bits > 0 && mantissa != 0) {
+    return AbsoluteLess(x_sign);
+  }
+  return ComparisonResult::kEqual;
 }
 
 MaybeHandle<String> BigInt::ToString(Handle<BigInt> bigint, int radix) {
