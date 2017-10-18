@@ -1,0 +1,221 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31609253_3f837a3e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "This doesn\u0027t get the right order for computed property names, right? If that\u0027s correct, please add a TODO.",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "134490e4_ff06e59e",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "Seems like this should be done above, where the scope is created (only needs to happen once).",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdefd5ec_d876ab6f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "Nit: no need for \"this-\u003e\" here.",
+      "range": {
+        "startLine": 2306,
+        "startChar": 24,
+        "endLine": 2306,
+        "endChar": 30
+      },
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "098b2d6f_2ee90c4d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3174,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "Won\u0027t this mean a non-static field will end up in the wrong place?",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be99ad2_9bc871a6",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3214,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "In Parser this is just Expression*.",
+      "range": {
+        "startLine": 3214,
+        "startChar": 2,
+        "endLine": 3214,
+        "endChar": 13
+      },
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db9b2d83_c697c7aa",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "I\u0027d say \"static initializers\" here (and below).",
+      "range": {
+        "startLine": 3220,
+        "startChar": 34,
+        "endLine": 3220,
+        "endChar": 45
+      },
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cba0c649_a021bd5b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3221,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "This line should just be \"temp;\"; it\u0027s the completion value of the do-expression, not an actual return.",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de13a1f_a708094e",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3245,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "This statement isn\u0027t mentioned in the desugaring.\n\nI think there\u0027s something sort of funny about the ClassFields AST node...it\u0027s not really an \"Expression\", it\u0027s just a way of passing some data from the parser to the BytecodeGenerator. I think I\u0027d feel better if this was more \"fully desugared\", but we don\u0027t have the AST nodes to handle that at the moment. I think we\u0027d need at least a SetHomeObject node and a DefineOwnProperty node.\n\nI\u0027d be interested in some Ignition folks\u0027 thoughts on this split between Parser and BytecodeGenerator.",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "272572dc_2f9f52d5",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3249,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "ast_value_factory()-\u003eempty_string() (\"impl()\" isn\u0027t needed in Parser).",
+      "range": {
+        "startLine": 3249,
+        "startChar": 10,
+        "endLine": 3249,
+        "endChar": 41
+      },
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3de632a7_51b716b7",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3250,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "I don\u0027t think this is where you want to pass this length. We\u0027re not going to add any properties to the initializer function itself, so slack tracking doesn\u0027t make sense.",
+      "range": {
+        "startLine": 3250,
+        "startChar": 10,
+        "endLine": 3250,
+        "endChar": 45
+      },
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6220d21f_964571e6",
+        "filename": "test/mjsunit/harmony/public-class-fields.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-18T00:38:51Z",
+      "side": 1,
+      "message": "Please also add a test that the class name is assigned correctly even when you have fields, e.g.:\n\nlet C \u003d class {\n  static c;\n};\nassertEquals(\"C\", C.name)\n\nPresumably this needs to be commented out for now too.",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
