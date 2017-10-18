@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f3cf23f_413d3658",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-18T10:25:12Z",
+      "side": 1,
+      "message": "Maybe we should move all or none of the options that influence test behavior? It\u0027s just a coincidence that asan and dcheck_always_on are properly used from the options, while many of the others like msan, tsan etc are just set to false.\n\nThe only one that should remain hardcoded in the end it probably deopt_fuzzer. Possibly also gc_stress gcov_coverage as long as it\u0027s not supported.\n\nFor now, we could also just set asan and dcheck_always_on to false, since they are never used on the deopt fuzzer.",
+      "range": {
+        "startLine": 284,
+        "startChar": 14,
+        "endLine": 284,
+        "endChar": 23
+      },
+      "revId": "11f2fbe74e51d886e101391c550ed7c38d35a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
