@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ddbde0f_754af887",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-10-18T08:45:47Z",
+      "side": 0,
+      "message": "I think we need to retain the static_cast here, otherwise the check is no longer checking what it is supposed to. See the comment above.",
+      "range": {
+        "startLine": 597,
+        "startChar": 13,
+        "endLine": 597,
+        "endChar": 34
+      },
+      "revId": "4450f7ca51a2f548050e9dc3d2bef7b66e234dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d99d9bc8_b9d0f013",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-10-18T08:45:47Z",
+      "side": 0,
+      "message": "Likewise.",
+      "range": {
+        "startLine": 610,
+        "startChar": 13,
+        "endLine": 610,
+        "endChar": 33
+      },
+      "revId": "4450f7ca51a2f548050e9dc3d2bef7b66e234dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
