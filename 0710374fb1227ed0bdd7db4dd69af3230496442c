@@ -49,6 +49,23 @@
     },
     {
       "key": {
+        "uuid": "ff443483_87305209",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-18T17:39:01Z",
+      "side": 1,
+      "message": "If you plan to do a follow-up CL maybe you can migrate this to log.cc.\nI\u0027m currently refactoring log.cc to use OFStream directly, which should make this refactoring almost a NOP.",
+      "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71d97450_408d7714",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 1
