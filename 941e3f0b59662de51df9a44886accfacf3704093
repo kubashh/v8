@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "1331b57c_c616041a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 8428,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T23:48:56Z",
+      "side": 1,
+      "message": "nit: both of these are now unused. (And while you\u0027re at it, you can drop the useless comment right above.)",
+      "range": {
+        "startLine": 8428,
+        "startChar": 8,
+        "endLine": 8428,
+        "endChar": 54
+      },
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72848200_22ffaef8",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T23:48:56Z",
+      "side": 1,
+      "message": "Any reason not to add a return?\nreturn Just(BigInt::EqualToNumber(Handle\u003cBigInt\u003e::cast(y), x));",
+      "range": {
+        "startLine": 588,
+        "startChar": 8,
+        "endLine": 588,
+        "endChar": 48
+      },
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc72114e_58ce5c72",
         "filename": "src/objects.cc",
         "patchSetId": 4
@@ -30,6 +76,75 @@
       "writtenOn": "2017-10-18T17:46:41Z",
       "side": 1,
       "message": "This is a leftover and should be removed.",
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e0ae88_e85332b5",
+        "filename": "src/runtime/runtime-bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T23:48:56Z",
+      "side": 1,
+      "message": "Sgtm. CONVERT_ARG_HANDLE_CHECKED(BigInt, ...) instead.",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 40
+      },
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87077c5c_24ed7eff",
+        "filename": "test/mjsunit/harmony/bigint/basics.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T23:48:56Z",
+      "side": 1,
+      "message": "As discussed, I\u0027d prefer to move these tests to a separate file in the same directory (\"comparisons.js\" along with strict equality tests? or \"abstract-equality.js\"? Up to you).\n\nRegarding coverage:\n- let\u0027s add a Symbol test\n- let\u0027s add a few more Smi cases, e.g.: minus_one/-1, one/-1, one/2\nOtherwise I think this covers what we need.",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 20
+      },
+      "revId": "941e3f0b59662de51df9a44886accfacf3704093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0e390c4_82e7e382",
+        "filename": "test/mjsunit/harmony/bigint/basics.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-10-18T23:48:56Z",
+      "side": 1,
+      "message": "We have lots of coverage for .parseInt (see line 204 above), which uses StringToBigInt.",
+      "range": {
+        "startLine": 311,
+        "startChar": 2,
+        "endLine": 311,
+        "endChar": 49
+      },
       "revId": "941e3f0b59662de51df9a44886accfacf3704093",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
