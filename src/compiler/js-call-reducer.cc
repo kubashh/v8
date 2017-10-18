@@ -57,7 +57,7 @@ bool CanBePrimitive(Node* node) {
 bool CanBeNullOrUndefined(Node* node) {
   if (CanBePrimitive(node)) {
     switch (node->opcode()) {
-      case IrOpcode::kJSToBoolean:
+      case IrOpcode::kToBoolean:
       case IrOpcode::kJSToInteger:
       case IrOpcode::kJSToLength:
       case IrOpcode::kJSToName:
@@ -137,12 +137,12 @@ Reduction JSCallReducer::ReduceBooleanConstructor(Node* node) {
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   CallParameters const& p = CallParametersOf(node->op());
 
-  // Replace the {node} with a proper {JSToBoolean} operator.
+  // Replace the {node} with a proper {ToBoolean} operator.
   DCHECK_LE(2u, p.arity());
   Node* value = (p.arity() == 2) ? jsgraph()->UndefinedConstant()
                                  : NodeProperties::GetValueInput(node, 2);
   Node* context = NodeProperties::GetContextInput(node);
-  value = graph()->NewNode(javascript()->ToBoolean(ToBooleanHint::kAny), value,
+  value = graph()->NewNode(simplified()->ToBoolean(ToBooleanHint::kAny), value,
                            context);
   ReplaceWithValue(node, value);
   return Replace(value);
