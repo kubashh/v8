@@ -14,6 +14,8 @@
 namespace v8 {
 namespace internal {
 
+class BigInt;
+
 enum AllowNullsFlag { ALLOW_NULLS, DISALLOW_NULLS };
 enum RobustnessFlag { ROBUST_STRING_TRAVERSAL, FAST_STRING_TRAVERSAL };
 
@@ -188,6 +190,8 @@ class String : public Name {
 
   // ES6 section 7.1.3.1 ToNumber Applied to the String Type
   static Handle<Object> ToNumber(Handle<String> subject);
+
+  static MaybeHandle<BigInt> ToBigInt(Handle<String> subject);
 
   // Flattens the string.  Checks first inline to see if it is
   // necessary.  Does nothing if the string is not a cons string.
