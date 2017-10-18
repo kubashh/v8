@@ -1552,7 +1552,7 @@ Counter* CounterCollection::GetNextCounter() {
 
 void Shell::MapCounters(v8::Isolate* isolate, const char* name) {
   counters_file_ = base::OS::MemoryMappedFile::create(
-      name, nullptr, sizeof(CounterCollection), &local_counters_);
+      name, sizeof(CounterCollection), &local_counters_);
   void* memory = (counters_file_ == NULL) ?
       NULL : counters_file_->memory();
   if (memory == NULL) {
