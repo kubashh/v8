@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28a2d5df_e7791e61",
+        "filename": "tools/testrunner/utils/dump_build_config_gyp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-18T13:46:07Z",
+      "side": 1,
+      "message": "Maybe map(as_json, sys.argv[2:])?",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 51
+      },
+      "revId": "48274ab0ac4c8c7de2e80a00511300eb5757eb55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
