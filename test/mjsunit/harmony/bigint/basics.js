@@ -284,6 +284,139 @@ const six = BigInt(6);
   assertTrue(%StrictNotEqual(0, zero));
 }
 
+// Abstract equality
+{
+  assertTrue(%Equal(zero, zero));
+  assertTrue(%Equal(zero, another_zero));
+  assertFalse(%Equal(zero, one));
+  assertFalse(%Equal(one, zero));
+
+  assertTrue(%Equal(zero, +0));
+  assertTrue(%Equal(zero, -0));
+  assertTrue(%Equal(+0, zero));
+  assertTrue(%Equal(-0, zero));
+
+  assertTrue(%Equal(zero, false));
+  assertTrue(%Equal(one, true));
+  assertFalse(%Equal(zero, true));
+  assertFalse(%Equal(one, false));
+  assertTrue(%Equal(false, zero));
+  assertTrue(%Equal(true, one));
+  assertFalse(%Equal(true, zero));
+  assertFalse(%Equal(false, one));
+
+  assertFalse(%Equal(one, 1.0000000000001));
+  assertFalse(%Equal(1.0000000000001, one));
+
+  // TODO(neis): Test StringToBigInt extensively.
+  // TODO(neis): Empty string must get converted to 0n.
+  //assertTrue(%Equal(zero, ""));
+  //assertTrue(%Equal("", zero));
+  assertTrue(%Equal(one, "1"));
+  assertTrue(%Equal("1", one));
+
+  assertTrue(%Equal(one, {valueOf() { return true }}));
+  assertTrue(%Equal({valueOf() { return true }}, one));
+  assertFalse(%Equal(two, {valueOf() { return true }}));
+  assertFalse(%Equal({valueOf() { return true }}, two));
+}{
+  assertTrue(zero == zero);
+  assertTrue(zero == another_zero);
+  assertFalse(zero == one);
+  assertFalse(one == zero);
+
+  assertTrue(zero == +0);
+  assertTrue(zero == -0);
+  assertTrue(+0 == zero);
+  assertTrue(-0 == zero);
+
+  assertTrue(zero == false);
+  assertTrue(one == true);
+  assertFalse(zero == true);
+  assertFalse(one == false);
+  assertTrue(false == zero);
+  assertTrue(true == one);
+  assertFalse(true == zero);
+  assertFalse(false == one);
+
+  assertFalse(one == 1.0000000000001);
+  assertFalse(1.0000000000001 == one);
+
+  //assertTrue(zero == "");
+  //assertTrue("" == zero);
+  assertTrue(one == "1");
+  assertTrue("1" == one);
+
+  assertTrue(one == {valueOf() { return true }});
+  assertTrue({valueOf() { return true }} == one);
+  assertFalse(two == {valueOf() { return true }});
+  assertFalse({valueOf() { return true }} == two);
+}{
+  assertFalse(%NotEqual(zero, zero));
+  assertFalse(%NotEqual(zero, another_zero));
+  assertTrue(%NotEqual(zero, one));
+  assertTrue(%NotEqual(one, zero));
+
+  assertFalse(%NotEqual(zero, +0));
+  assertFalse(%NotEqual(zero, -0));
+  assertFalse(%NotEqual(+0, zero));
+  assertFalse(%NotEqual(-0, zero));
+
+  assertFalse(%NotEqual(zero, false));
+  assertFalse(%NotEqual(one, true));
+  assertTrue(%NotEqual(zero, true));
+  assertTrue(%NotEqual(one, false));
+  assertFalse(%NotEqual(false, zero));
+  assertFalse(%NotEqual(true, one));
+  assertTrue(%NotEqual(true, zero));
+  assertTrue(%NotEqual(false, one));
+
+  assertTrue(%NotEqual(one, 1.0000000000001));
+  assertTrue(%NotEqual(1.0000000000001, one));
+
+  //assertFalse(%NotEqual(zero, ""));
+  //assertFalse(%NotEqual("", zero));
+  assertFalse(%NotEqual(one, "1"));
+  assertFalse(%NotEqual("1", one));
+
+  assertFalse(%NotEqual(one, {valueOf() { return true }}));
+  assertFalse(%NotEqual({valueOf() { return true }}, one));
+  assertTrue(%NotEqual(two, {valueOf() { return true }}));
+  assertTrue(%NotEqual({valueOf() { return true }}, two));
+}{
+  assertFalse(zero != zero);
+  assertFalse(zero != another_zero);
+  assertTrue(zero != one);
+  assertTrue(one != zero);
+
+  assertFalse(zero != +0);
+  assertFalse(zero != -0);
+  assertFalse(+0 != zero);
+  assertFalse(-0 != zero);
+
+  assertFalse(zero != false);
+  assertFalse(one != true);
+  assertTrue(zero != true);
+  assertTrue(one != false);
+  assertFalse(false != zero);
+  assertFalse(true != one);
+  assertTrue(true != zero);
+  assertTrue(false != one);
+
+  assertTrue(one != 1.0000000000001);
+  assertTrue(1.0000000000001 != one);
+
+  //assertFalse(zero != "");
+  //assertFalse("" != zero);
+  assertFalse(one != "1");
+  assertFalse("1" != one);
+
+  assertFalse(one != {valueOf() { return true }});
+  assertFalse({valueOf() { return true }} != one);
+  assertTrue(two != {valueOf() { return true }});
+  assertTrue({valueOf() { return true }} != two);
+}
+
 // SameValue
 {
   assertTrue(Object.is(zero, zero));
