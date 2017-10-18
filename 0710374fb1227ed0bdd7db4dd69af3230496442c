@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "12aca25e_4843036d",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-18T15:55:13Z",
+      "side": 1,
+      "message": "I wanted to keep it separate because of the extra runtime calls in CSA UpdateFeedback",
+      "parentUuid": "03e1b795_3fafb491",
+      "range": {
+        "startLine": 340,
+        "startChar": 4,
+        "endLine": 340,
+        "endChar": 26
+      },
+      "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71d97450_408d7714",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-18T15:51:39Z",
       "side": 1,
       "message": "Could we create a single bottleneck function in CSA for updating the a feedback vector slot where we can add this optional runtime call?",
+      "range": {
+        "startLine": 659,
+        "startChar": 6,
+        "endLine": 659,
+        "endChar": 17
+      },
+      "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e929066_acf99503",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-18T15:55:13Z",
+      "side": 1,
+      "message": "Yeah, I was thinking the same thing when I had to find and update every profiler tick reset. I\u0027ll do this in the next PS.",
+      "parentUuid": "71d97450_408d7714",
       "range": {
         "startLine": 659,
         "startChar": 6,
