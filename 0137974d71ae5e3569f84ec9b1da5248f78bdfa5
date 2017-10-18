@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d02e3ad1_c4ade31c",
+        "filename": "tools/testrunner/utils/dump_build_config_gyp.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-10-18T14:42:21Z",
+      "side": 1,
+      "message": "\u003e 2, \"documentation for cmd line params\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 23,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "0137974d71ae5e3569f84ec9b1da5248f78bdfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
