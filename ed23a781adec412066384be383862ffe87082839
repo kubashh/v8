@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d886d158_76510539",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-19T15:12:39Z",
+      "side": 1,
+      "message": "If I understand the macros correctly, this block should come after \nDEFINE_IMPLICATION(single_threaded, single_threaded_gc)",
+      "range": {
+        "startLine": 1219,
+        "startChar": 0,
+        "endLine": 1219,
+        "endChar": 11
+      },
+      "revId": "ed23a781adec412066384be383862ffe87082839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb13b92_2a11e6ed",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-19T15:12:39Z",
+      "side": 1,
+      "message": "This should be positive implication.",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1233,
+        "endChar": 22
+      },
+      "revId": "ed23a781adec412066384be383862ffe87082839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
