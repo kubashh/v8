@@ -807,9 +807,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   enum class ExtractFixedArrayFlag {
     kFixedArrays = 1,
     kFixedDoubleArrays = 2,
-    // Forcing COW copying removes special COW handling, resulting in better
-    // code if the source array has already been validated to not be COW.
-    kForceCOWCopy = 4,
+    kDontCopyCOW = 4,
     kNewSpaceAllocationOnly = 8,
     kAllFixedArrays = kFixedArrays | kFixedDoubleArrays
   };
@@ -859,6 +857,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       Node* source,
       ExtractFixedArrayFlags flags = ExtractFixedArrayFlag::kAllFixedArrays) {
     ParameterMode mode = OptimalParameterMode();
+    flags |= ExtractFixedArrayFlag::kDontCopyCOW;
     return ExtractFixedArray(source, IntPtrOrSmiConstant(0, mode), nullptr,
                              nullptr, flags, mode);
   }
