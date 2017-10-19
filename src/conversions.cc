@@ -891,13 +891,18 @@ class BigIntParseIntHelper : public StringToIntHelper {
   Handle<BigInt> result_;
 };
 
-MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string,
+MaybeHandle<BigInt> BigIntParseInt(Isolate* isolate, Handle<String> string,
                                    int radix) {
   BigIntParseIntHelper helper(isolate, string, radix);
   return helper.GetResult();
 }
 
-MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, const char* string) {
+MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string) {
+  if (string->length() == 0) return isolate->factory()->NewBigIntFromInt(0);
+  return BigIntParseInt(isolate, string, 10);
+}
+
+MaybeHandle<BigInt> BigIntLiteral(Isolate* isolate, const char* string) {
   BigIntParseIntHelper helper(isolate, reinterpret_cast<const uint8_t*>(string),
                               static_cast<int>(strlen(string)));
   return helper.GetResult();
