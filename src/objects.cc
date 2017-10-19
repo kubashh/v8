@@ -14021,7 +14021,8 @@ void JSFunction::ClearTypeFeedbackInfo() {
     FeedbackVector* vector = feedback_vector();
     Isolate* isolate = GetIsolate();
     if (vector->ClearSlots(isolate)) {
-      IC::OnFeedbackChanged(isolate, vector, this);
+      IC::OnFeedbackChanged(isolate, vector, FeedbackSlot::Invalid(), this,
+                            "ClearTypeFeedbackInfo");
     }
   }
 }
