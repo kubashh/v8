@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "35bcaec9_1b6c86dd",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-19T11:43:04Z",
+      "side": 1,
+      "message": "afaik log.cc is more for machine readable logs -- I think those would be good too, possibly to be integrated into our various log reading tools, but this CL is more for printf-style debugging (like --trace-opt in compiler.cc).",
+      "parentUuid": "ff443483_87305209",
+      "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71d97450_408d7714",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 1
@@ -110,6 +128,30 @@
       "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea0122dc_c046110f",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-19T11:43:04Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "7e929066_acf99503",
+      "range": {
+        "startLine": 659,
+        "startChar": 6,
+        "endLine": 659,
+        "endChar": 17
+      },
+      "revId": "0710374fb1227ed0bdd7db4dd69af3230496442c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
