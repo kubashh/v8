@@ -284,6 +284,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void GotoIfNotNumber(Node* value, Label* is_not_number);
   void GotoIfNumber(Node* value, Label* is_number);
 
+  Node* BitwiseOp(Node* left32, Node* right32, Token::Value bitwise_op);
+
   // Allocate an object of the given size.
   Node* AllocateInNewSpace(Node* size, AllocationFlags flags = kNone);
   Node* AllocateInNewSpace(int size, AllocationFlags flags = kNone);
@@ -836,6 +838,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* TryTaggedToFloat64(Node* value, Label* if_valueisnotnumber);
   Node* TruncateTaggedToFloat64(Node* context, Node* value);
   Node* TruncateTaggedToWord32(Node* context, Node* value);
+  void TaggedToWord32OrBigInt(Node* context, Node* value, Label* if_number,
+                              Variable* var_word32, Label* if_bigint,
+                              Variable* var_bigint);
+  void TaggedToWord32OrBigIntWithFeedback(
+      Node* context, Node* value, Label* if_number, Variable* var_word32,
+      Label* if_bigint, Variable* var_bigint, Variable* var_feedback);
+
   // Truncate the floating point value of a HeapNumber to an Int32.
   Node* TruncateHeapNumberValueToWord32(Node* object);
 
@@ -845,6 +854,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* ChangeUint32ToTagged(Node* value);
   Node* ChangeNumberToFloat64(Node* value);
   Node* ChangeNumberToIntPtr(Node* value);
+
+  void TaggedToNumeric(Node* context, Node* value, Label* done,
+                       Variable* var_numeric);
+  void TaggedToNumericWithFeedback(Node* context, Node* value, Label* done,
+                                   Variable* var_numeric,
+                                   Variable* var_feedback);
 
   Node* TimesPointerSize(Node* value);
 
@@ -1754,6 +1769,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   Node* NonNumberToNumberOrNumeric(Node* context, Node* input,
                                    Object::Conversion mode);
+
+  enum class Feedback { kCollect, kNone };
+  template <Feedback feedback>
+  void TaggedToNumeric(Node* context, Node* value, Label* done,
+                       Variable* var_numeric, Variable* var_feedback = nullptr);
+
+  template <Feedback feedback, Object::Conversion conversion>
+  void TaggedToWord32OrBigIntImpl(Node* context, Node* value, Label* if_number,
+                                  Variable* var_word32,
+                                  Label* if_bigint = nullptr,
+                                  Variable* var_bigint = nullptr,
+                                  Variable* var_feedback = nullptr);
 };
 
 class CodeStubArguments {
