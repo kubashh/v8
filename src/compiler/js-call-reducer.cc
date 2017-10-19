@@ -1369,6 +1369,9 @@ Node* JSCallReducer::DoFilterPostCallbackWork(ElementsKind kind, Node** control,
     // {original_length} at all times.
     Node* checked_to =
         graph()->NewNode(common()->TypeGuard(Type::Unsigned31()), to, if_true);
+    Node* elements_length = etrue = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForFixedArrayLength()), elements,
+        etrue, if_true);
 
     GrowFastElementsMode mode = GrowFastElementsMode::kSmiOrObjectElements;
     // TODO(mvstanton): Make sure{flags} is correct when we handle{a} as a
@@ -1376,7 +1379,7 @@ Node* JSCallReducer::DoFilterPostCallbackWork(ElementsKind kind, Node** control,
     DCHECK(!IsDoubleElementsKind(kind));
     elements = etrue =
         graph()->NewNode(simplified()->MaybeGrowFastElements(mode), a, elements,
-                         checked_to, checked_to, etrue, if_true);
+                         checked_to, elements_length, etrue, if_true);
 
     // Update the length of {a}.
     Node* new_length_a = graph()->NewNode(simplified()->NumberAdd(), checked_to,
