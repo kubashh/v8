@@ -318,6 +318,9 @@ class AsmJsParser {
 
   FunctionSig* ConvertSignature(AsmType* return_type,
                                 const ZoneVector<AsmType*>& params);
+  FunctionSig* ConvertGhostSignature(AsmType* return_type,
+                                     const ZoneVector<AsmType*>& params,
+                                     ZoneVector<ValueType>* locals);
 
   void ValidateModule();            // 6.1 ValidateModule
   void ValidateModuleParameters();  // 6.1 ValidateModule - parameters
