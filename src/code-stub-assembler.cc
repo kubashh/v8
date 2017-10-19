@@ -2630,9 +2630,10 @@ Node* CodeStubAssembler::ExtractFastJSArray(Node* context, Node* array,
   Node* native_context = LoadNativeContext(context);
   Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
 
-  Node* new_elements =
-      ExtractFixedArray(LoadElements(array), begin, count, capacity,
-                        ExtractFixedArrayFlag::kAllFixedArrays, mode);
+  ExtractFixedArrayFlags flags;
+  flags |= ExtractFixedArrayFlag::kAllFixedArrays;
+  Node* new_elements = ExtractFixedArray(LoadElements(array), begin, count,
+                                         capacity, flags, mode);
 
   Node* result = AllocateUninitializedJSArrayWithoutElements(
       array_map, ParameterToTagged(count, mode), allocation_site);
@@ -2647,12 +2648,20 @@ Node* CodeStubAssembler::CloneFastJSArray(Node* context, Node* array,
   Node* tagged_length = LoadJSArrayLength(array);
 
   Node* length = TaggedToParameter(tagged_length, mode);
-  if (capacity == nullptr) {
-    capacity = length;
-  }
+  Node* elements = LoadElements(array);
 
-  return ExtractFastJSArray(context, array, IntPtrOrSmiConstant(0, mode),
-                            length, mode, capacity, allocation_site);
+  Node* original_array_map = LoadMap(array);
+  Node* elements_kind = LoadMapElementsKind(original_array_map);
+
+  Node* new_elements = CloneFixedArray(elements);
+
+  // Use the cannonical map for the Array's ElementsKind
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
+  Node* result = AllocateUninitializedJSArrayWithoutElements(array_map, length,
+                                                             allocation_site);
+  StoreObjectField(result, JSObject::kElementsOffset, new_elements);
+  return result;
 }
 
 Node* CodeStubAssembler::AllocateFixedArray(ElementsKind kind,
@@ -2697,6 +2706,7 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
                                            ExtractFixedArrayFlags extract_flags,
                                            ParameterMode parameter_mode) {
   VARIABLE(result, MachineRepresentation::kTagged);
+  VARIABLE(fixed_array_map, MachineRepresentation::kTagged);
   const AllocationFlags flags =
       (extract_flags & ExtractFixedArrayFlag::kNewSpaceAllocationOnly)
           ? CodeStubAssembler::kNone
@@ -2723,30 +2733,29 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
   }
 
   Label if_fixed_double_array(this), empty(this), cow(this),
-      done(this, {&result});
+      done(this, {&result, &fixed_array_map});
+  fixed_array_map.Bind(LoadMap(fixed_array));
   GotoIf(WordEqual(IntPtrOrSmiConstant(0, parameter_mode), count), &empty);
-  Node* fixed_array_map = LoadMap(fixed_array);
 
   if (extract_flags & ExtractFixedArrayFlag::kFixedDoubleArrays) {
     if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
-      GotoIf(IsFixedDoubleArrayMap(fixed_array_map), &if_fixed_double_array);
+      GotoIf(IsFixedDoubleArrayMap(fixed_array_map.value()),
+             &if_fixed_double_array);
     } else {
-      CSA_ASSERT(this, IsFixedDoubleArrayMap(fixed_array_map));
+      CSA_ASSERT(this, IsFixedDoubleArrayMap(fixed_array_map.value()));
     }
   } else {
     DCHECK(extract_flags & ExtractFixedArrayFlag::kFixedArrays);
-    CSA_ASSERT(this, Word32BinaryNot(IsFixedDoubleArrayMap(fixed_array_map)));
+    CSA_ASSERT(this,
+               Word32BinaryNot(IsFixedDoubleArrayMap(fixed_array_map.value())));
   }
 
   if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
-    Label new_space_check(this);
-    if (!(extract_flags & ExtractFixedArrayFlag::kForceCOWCopy)) {
-      Branch(WordEqual(fixed_array_map,
-                       LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
-             &cow, &new_space_check);
-    } else {
-      Goto(&new_space_check);
-    }
+    Label new_space_check(this, {&fixed_array_map});
+    Branch(WordEqual(fixed_array_map.value(),
+                     LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
+           &cow, &new_space_check);
+
     BIND(&new_space_check);
 
     bool handle_old_space = true;
@@ -2772,8 +2781,9 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
     Comment("Copy PACKED_ELEMENTS new space");
 
     ElementsKind kind = PACKED_ELEMENTS;
-    Node* to_elements = AllocateFixedArray(
-        kind, capacity, parameter_mode, AllocationFlag::kNone, fixed_array_map);
+    Node* to_elements =
+        AllocateFixedArray(kind, capacity, parameter_mode,
+                           AllocationFlag::kNone, fixed_array_map.value());
     result.Bind(to_elements);
     CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
                            capacity, SKIP_WRITE_BARRIER, parameter_mode);
@@ -2785,7 +2795,7 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
         Comment("Copy PACKED_ELEMENTS old space");
 
         to_elements = AllocateFixedArray(kind, capacity, parameter_mode, flags,
-                                         fixed_array_map);
+                                         fixed_array_map.value());
         result.Bind(to_elements);
         CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first,
                                count, capacity, UPDATE_WRITE_BARRIER,
@@ -2794,14 +2804,17 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
       }
     }
 
-    if (!(extract_flags & ExtractFixedArrayFlag::kForceCOWCopy)) {
-      BIND(&cow);
-      {
+    BIND(&cow);
+    {
+      if (extract_flags & ExtractFixedArrayFlag::kDontCopyCOW) {
         GotoIf(WordNotEqual(IntPtrOrSmiConstant(0, parameter_mode), first),
                &new_space_check);
 
         result.Bind(fixed_array);
         Goto(&done);
+      } else {
+        fixed_array_map.Bind(LoadRoot(Heap::kFixedArrayMapRootIndex));
+        Goto(&new_space_check);
       }
     }
   } else {
@@ -2815,7 +2828,7 @@ Node* CodeStubAssembler::ExtractFixedArray(Node* fixed_array, Node* first,
 
     ElementsKind kind = PACKED_DOUBLE_ELEMENTS;
     Node* to_elements = AllocateFixedArray(kind, capacity, parameter_mode,
-                                           flags, fixed_array_map);
+                                           flags, fixed_array_map.value());
     result.Bind(to_elements);
     CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
                            capacity, SKIP_WRITE_BARRIER, parameter_mode);

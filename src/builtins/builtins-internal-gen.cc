@@ -34,7 +34,6 @@ TF_BUILTIN(CopyFastSmiOrObjectElements, CodeStubAssembler) {
   Node* source = LoadObjectField(object, JSObject::kElementsOffset);
   ExtractFixedArrayFlags flags;
   flags |= ExtractFixedArrayFlag::kFixedArrays;
-  flags |= ExtractFixedArrayFlag::kForceCOWCopy;
   Node* target = CloneFixedArray(source, flags);
   StoreObjectField(object, JSObject::kElementsOffset, target);
   Return(target);
