@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fe0f09d_1e383b07",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2707,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-19T13:00:38Z",
+      "side": 1,
+      "message": "var_result",
+      "range": {
+        "startLine": 2707,
+        "startChar": 11,
+        "endLine": 2707,
+        "endChar": 17
+      },
+      "revId": "09f5f0890a21ba0e09d29b8d70ce5cac257c948d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bba6c9b_5d4a4563",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2708,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-19T13:00:38Z",
+      "side": 1,
+      "message": "var_fixed_array_map to be consistent with the CSA code around.",
+      "range": {
+        "startLine": 2708,
+        "startChar": 11,
+        "endLine": 2708,
+        "endChar": 26
+      },
+      "revId": "09f5f0890a21ba0e09d29b8d70ce5cac257c948d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
