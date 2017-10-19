@@ -584,8 +584,8 @@ Node* ConstructorBuiltinsAssembler::EmitCreateShallowObjectLiteral(
                          IsFixedCOWArrayMap(LoadMap(boilerplate_elements))));
     ExtractFixedArrayFlags flags;
     flags |= ExtractFixedArrayFlag::kAllFixedArrays;
-    flags |= ExtractFixedArrayFlag::kForceCOWCopy;
     flags |= ExtractFixedArrayFlag::kNewSpaceAllocationOnly;
+    flags |= ExtractFixedArrayFlag::kDontCopyCOW;
     var_elements.Bind(CloneFixedArray(boilerplate_elements, flags));
     Goto(&done);
     BIND(&done);
