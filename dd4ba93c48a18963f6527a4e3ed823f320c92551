@@ -192,6 +192,24 @@
     },
     {
       "key": {
+        "uuid": "2c0b71dc_acf2a3e8",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3245,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-19T12:16:17Z",
+      "side": 1,
+      "message": "I\u0027m not super keen on using the an AST node just to pass the data across, I agree this isn\u0027t really an expression so it feels a bit weird. I can\u0027t really think of a better way to do this right now though other than your suggestion above.",
+      "parentUuid": "17ffadd9_0a8596d5",
+      "revId": "dd4ba93c48a18963f6527a4e3ed823f320c92551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "272572dc_2f9f52d5",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 14
