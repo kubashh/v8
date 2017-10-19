@@ -1083,7 +1083,7 @@ Type* Typer::Visitor::JSModulusTyper(Type* lhs, Type* rhs, Typer* t) {
 
 // JS unary operators.
 
-Type* Typer::Visitor::TypeJSClassOf(Node* node) {
+Type* Typer::Visitor::TypeClassOf(Node* node) {
   return Type::InternalizedStringOrNull();
 }
 
