@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce03dcad_53d6f4b9",
+        "filename": "src/conversions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-19T07:54:31Z",
+      "side": 1,
+      "message": "That\u0027s not enough, we must also return 0n for whitespace-only strings, just like ToNumber:\n\nd8\u003e +\"   \"\n0\nd8\u003e +\"\\n\\t\"\n0\n\n(I didn\u0027t realize that when I filed the bug.)\n\nFor ToNumber this seems to be done in InternalStringToDouble:\n\n  if (!AdvanceToNonspace(unicode_cache, \u0026current, end)) {\n    return empty_string_val;\n  }",
+      "revId": "57288fd5ea7e205b9a5e4ee9f751521c31f5e9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
