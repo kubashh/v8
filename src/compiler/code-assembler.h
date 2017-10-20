@@ -14,6 +14,7 @@
 #include "src/base/template-utils.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
+#include "src/code-stubs.h"
 #include "src/globals.h"
 #include "src/heap/heap.h"
 #include "src/machine-type.h"
