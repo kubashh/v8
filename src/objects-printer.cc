@@ -1611,6 +1611,34 @@ int Name::NameShortPrint(Vector<char> str) {
   }
 }
 
+// static
+void Map::LogAllTransitions(std::ostream& os, Map* map) {
+  if (!FLAG_trace_maps) return;
+  DisallowHeapAllocation no_gc;
+  Isolate* isolate = map->GetIsolate();
+  LOG(isolate, MapDetails(map));
+  TransitionsAccessor transitions(map, &no_gc);
+  int num_transitions = transitions.NumberOfTransitions();
+  for (int i = -0; i < num_transitions; ++i) {
+    Map* target = transitions.GetTarget(i);
+    Name* key = transitions.GetKey(i);
+    LOG(isolate, MapDetails(target));
+    LOG(isolate, MapEvent("Transition", map, target, nullptr, key));
+    Map::LogAllTransitions(os, target);
+  }
+}
+
+void Map::PrintMapDetails(std::ostream& os, JSObject* holder) {
+  if (!FLAG_trace_maps) return;
+  DisallowHeapAllocation no_gc;
+  MapPrint(os);
+  os << "\n";
+  instance_descriptors()->PrintDescriptors(os);
+  if (is_dictionary_map() && holder != nullptr) {
+    os << holder->property_dictionary() << "\n";
+  }
+}
+
 #endif  // V8_TRACE_MAPS
 
 #if defined(DEBUG) || defined(OBJECT_PRINT)
