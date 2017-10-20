@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06438537_45f7cb53",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "How about filtering only the old space? Other spaces should be safe.",
+      "range": {
+        "startLine": 1925,
+        "startChar": 35,
+        "endLine": 1925,
+        "endChar": 59
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a55a8eb_a1055e98",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "If this predicate would be pure and would return only true/false without adding items, then we could unconditionally add items in line 1941.\n\nI guess this is needed to ensure that the PageScavengingItems come in the sweeping order?\nCould you please add a comment?",
+      "range": {
+        "startLine": 1931,
+        "startChar": 8,
+        "endLine": 1931,
+        "endChar": 50
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0357a63_c9fea830",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "This is fragile as it relies on the invariant the the sweeping list does not contain pages with SweepingDone(). If I understand correctly the destructor of FilterSweepingPagesScope can break that invariant (see my comment there). Other places might also break this invariant (they just need to sweep a page without extracting it from the list).\n\nHow about maintaining \"was added to job\" local state explicitly in this function? Or giving up the sweeping order?",
+      "range": {
+        "startLine": 1940,
+        "startChar": 21,
+        "endLine": 1940,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efc2a446_7992fa60",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "Some of the pages in the list will be swept at this point. Is it ok?",
+      "range": {
+        "startLine": 651,
+        "startChar": 44,
+        "endLine": 651,
+        "endChar": 62
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37dc351b_8ea43e3f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4484,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "range": {
+        "startLine": 4484,
+        "startChar": 6,
+        "endLine": 4484,
+        "endChar": 70
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23be26e7_b21acefd",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-20T16:11:07Z",
+      "side": 1,
+      "message": "Why are we allowing NEW_SPACE pages?",
+      "range": {
+        "startLine": 91,
+        "startChar": 26,
+        "endLine": 91,
+        "endChar": 47
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
