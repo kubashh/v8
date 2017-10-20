@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c49c049f_5bb2dfc5",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-20T20:48:46Z",
+      "side": 1,
+      "message": "Looks like this is unused? AFAICT the slot is assigned in the BytecodeGenerator.",
+      "revId": "63b827f6a4ff201068be2690b315a6249dd0d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c3ddc98_2ab705af",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-20T20:48:46Z",
+      "side": 1,
+      "message": "\"INITIALIZE CLASS FIELDS\"?",
+      "range": {
+        "startLine": 962,
+        "startChar": 30,
+        "endLine": 962,
+        "endChar": 42
+      },
+      "revId": "63b827f6a4ff201068be2690b315a6249dd0d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e1e718_71363a64",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-20T20:48:46Z",
+      "side": 1,
+      "message": "Don\u0027t think you need this; we already enter an allocation scope per statement in VisitStatements().",
+      "revId": "63b827f6a4ff201068be2690b315a6249dd0d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e30c2111_29277709",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-20T20:48:46Z",
+      "side": 1,
+      "message": "Might be clearer if you named this semantically, e.g., \"constructor\". WDYT?",
+      "range": {
+        "startLine": 1892,
+        "startChar": 11,
+        "endLine": 1892,
+        "endChar": 19
+      },
+      "revId": "63b827f6a4ff201068be2690b315a6249dd0d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47a68445_83329108",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 3228,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-20T20:48:46Z",
+      "side": 1,
+      "message": "This initialization can go up above, where class_var is declared.",
+      "revId": "63b827f6a4ff201068be2690b315a6249dd0d460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
