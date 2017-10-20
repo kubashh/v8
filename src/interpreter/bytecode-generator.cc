@@ -1937,6 +1937,8 @@ void BytecodeGenerator::VisitLiteral(Literal* expr) {
   if (!execution_result()->IsEffect()) {
     if (expr->IsSmi()) {
       builder()->LoadLiteral(expr->AsSmiLiteral());
+    } else if (expr->IsNumber()) {
+      builder()->LoadLiteral(expr->AsNumber());
     } else if (expr->IsUndefined()) {
       builder()->LoadUndefined();
     } else if (expr->IsTrue()) {

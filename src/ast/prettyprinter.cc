@@ -213,7 +213,7 @@ void CallPrinter::VisitConditional(Conditional* node) {
 
 
 void CallPrinter::VisitLiteral(Literal* node) {
-  PrintLiteral(node->value(), true);
+  PrintLiteral(node->value(isolate_), true);
 }
 
 
@@ -279,10 +279,10 @@ void CallPrinter::VisitThrow(Throw* node) { Find(node->exception()); }
 void CallPrinter::VisitProperty(Property* node) {
   Expression* key = node->key();
   Literal* literal = key->AsLiteral();
-  if (literal != nullptr && literal->value()->IsInternalizedString()) {
+  if (literal != nullptr && literal->value(isolate_)->IsInternalizedString()) {
     Find(node->obj(), true);
     Print(".");
-    PrintLiteral(literal->value(), false);
+    PrintLiteral(literal->value(isolate_), false);
   } else {
     Find(node->obj(), true);
     Print("[");
@@ -1002,7 +1002,7 @@ void AstPrinter::VisitConditional(Conditional* node) {
 
 // TODO(svenpanne) Start with IndentedScope.
 void AstPrinter::VisitLiteral(Literal* node) {
-  PrintLiteralIndented("LITERAL", node->value(), true);
+  PrintLiteralIndented("LITERAL", node->value(isolate_), true);
 }
 
 
@@ -1154,8 +1154,8 @@ void AstPrinter::VisitProperty(Property* node) {
 
   Visit(node->obj());
   Literal* literal = node->key()->AsLiteral();
-  if (literal != nullptr && literal->value()->IsInternalizedString()) {
-    PrintLiteralIndented("NAME", literal->value(), false);
+  if (literal != nullptr && literal->value(isolate_)->IsInternalizedString()) {
+    PrintLiteralIndented("NAME", literal->value(isolate_), false);
   } else {
     PrintIndentedVisit("KEY", node->key());
   }

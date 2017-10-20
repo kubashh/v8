@@ -5,6 +5,9 @@
 #ifndef V8_AST_AST_H_
 #define V8_AST_AST_H_
 
+// TODO(adamk): Remove
+#include "src/conversions-inl.h"
+
 #include "src/ast/ast-value-factory.h"
 #include "src/ast/modules.h"
 #include "src/ast/variables.h"
@@ -987,46 +990,76 @@ class Literal final : public Expression {
  public:
   // Returns true if literal represents a property name (i.e. cannot be parsed
   // as array indices).
-  bool IsPropertyName() const { return value_->IsPropertyName(); }
+  bool IsPropertyName() const { return type() == kOther && value_->IsPropertyName(); }
 
   const AstRawString* AsRawPropertyName() {
     DCHECK(IsPropertyName());
     return value_->AsString();
   }
 
-  bool IsSmi() const { return value_->IsSmi(); }
+  bool IsSmi() const { return type() == kSmi; }
   Smi* AsSmiLiteral() const {
-    DCHECK(IsSmi());
-    return value_->AsSmi();
+    DCHECK_EQ(kSmi, type());
+    return Smi::FromInt(smi_);
   }
 
-  bool IsNumber() const { return value_->IsNumber(); }
+  bool IsNumber() const { return type() == kHeapNumber || type() == kSmi; }
   double AsNumber() const {
     DCHECK(IsNumber());
-    return value_->AsNumber();
+    switch (type()) {
+      case kSmi:
+        return smi_;
+      case kHeapNumber:
+        return number_;
+      default:
+        UNREACHABLE();
+    }
   }
 
-  bool IsString() const { return value_->IsString(); }
+  bool IsString() const { return type() == kOther && value_->IsString(); }
   const AstRawString* AsRawString() {
     DCHECK(IsString());
     return value_->AsString();
   }
 
-  bool IsNull() const { return value_->IsNull(); }
-  bool IsUndefined() const { return value_->IsUndefined(); }
-  bool IsTheHole() const { return value_->IsTheHole(); }
+  bool IsNull() const { return type() == kNull; }
+  bool IsUndefined() const { return type() == kUndefined; }
+  bool IsTheHole() const { return type() == kTheHole; }
 
-  bool IsTrue() const { return value_->IsTrue(); }
-  bool IsFalse() const { return value_->IsFalse(); }
+  bool IsTrue() const { return type() == kTrue; }
+  bool IsFalse() const { return type() == kFalse; }
 
-  bool ToBooleanIsTrue() const { return value_->BooleanValue(); }
-  bool ToBooleanIsFalse() const { return !value_->BooleanValue(); }
+  bool ToBooleanIsTrue() const {
+    switch (type()) {
+      case kSmi:
+        return smi_ != 0;
+      case kHeapNumber:
+        return DoubleToBoolean(number_);
+      case kNull:
+      case kUndefined:
+        return false;
+      case kTrue:
+        return true;
+      case kFalse:
+        return false;
+      case kOther:
+        return value_->BooleanValue();
+      case kTheHole:
+        UNREACHABLE();
+    }
+  }
+  bool ToBooleanIsFalse() const {
+    return !ToBooleanIsTrue();
+  }
 
   bool ToUint32(uint32_t* value) const;
   bool ToArrayIndex(uint32_t* value) const;
 
-  Handle<Object> value() const { return value_->value(); }
-  const AstValue* raw_value() const { return value_; }
+  Handle<Object> value(Isolate* isolate) const;
+  const AstValue* raw_value() const {
+    DCHECK_EQ(kOther, type());
+    return value_;
+  }
 
   // Support for using Literal as a HashMap key. NOTE: Currently, this works
   // only for string and number literals!
@@ -1036,10 +1069,48 @@ class Literal final : public Expression {
  private:
   friend class AstNodeFactory;
 
-  Literal(const AstValue* value, int position)
-      : Expression(position, kLiteral), value_(value) {}
+  enum Type {
+    kSmi,
+    kHeapNumber,
+    kUndefined,
+    kNull,
+    kTheHole,
+    kTrue,
+    kFalse,
+    kOther
+  };
 
-  const AstValue* value_;
+  class TypeField
+      : public BitField<Type, Expression::kNextBitFieldIndex, 3> {};
+
+  Type type() const { return TypeField::decode(bit_field_); }
+
+  Literal(const AstValue* value, int position)
+      : Expression(position, kLiteral), value_(value) {
+    bit_field_ = TypeField::update(bit_field_, kOther);
+  }
+
+  Literal(int smi, int position)
+      : Expression(position, kLiteral), smi_(smi) {
+    bit_field_ = TypeField::update(bit_field_, kSmi);
+  }
+
+  Literal(double number, int position)
+      : Expression(position, kLiteral), number_(number) {
+    bit_field_ = TypeField::update(bit_field_, kHeapNumber);
+  }
+
+  Literal(Type type, int position)
+      : Expression(position, kLiteral) {
+    DCHECK(type != kSmi && type != kHeapNumber && type != kOther);
+    bit_field_ = TypeField::update(bit_field_, type);
+  }
+
+  union {
+    const AstValue* value_;
+    int smi_;
+    double number_;
+  };
 };
 
 // Base class for literals that need space in the type feedback vector.
@@ -2849,11 +2920,15 @@ class AstNodeFactory final BASE_EMBEDDED {
   }
 
   Literal* NewNumberLiteral(double number, int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewNumber(number), pos);
+    int int_value;
+    if (DoubleToSmiInteger(number, &int_value)) {
+      return NewSmiLiteral(int_value, pos);
+    }
+    return new (zone_) Literal(number, pos);
   }
 
-  Literal* NewSmiLiteral(uint32_t number, int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewSmi(number), pos);
+  Literal* NewSmiLiteral(int number, int pos) {
+    return new (zone_) Literal(number, pos);
   }
 
   Literal* NewBigIntLiteral(const char* buffer, int pos) {
@@ -2861,20 +2936,22 @@ class AstNodeFactory final BASE_EMBEDDED {
   }
 
   Literal* NewBooleanLiteral(bool b, int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewBoolean(b), pos);
+    if (b) {
+      return new (zone_) Literal(Literal::kTrue, pos);
+    }
+    return new (zone_) Literal(Literal::kFalse, pos);
   }
 
   Literal* NewNullLiteral(int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewNull(), pos);
+    return new (zone_) Literal(Literal::kNull, pos);
   }
 
   Literal* NewUndefinedLiteral(int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewUndefined(), pos);
+    return new (zone_) Literal(Literal::kUndefined, pos);
   }
 
   Literal* NewTheHoleLiteral() {
-    return new (zone_)
-        Literal(ast_value_factory_->NewTheHole(), kNoSourcePosition);
+    return new (zone_) Literal(Literal::kTheHole, kNoSourcePosition);
   }
 
   ObjectLiteral* NewObjectLiteral(

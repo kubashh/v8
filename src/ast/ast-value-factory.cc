@@ -168,17 +168,6 @@ void AstConsString::Internalize(Isolate* isolate) {
   set_string(tmp);
 }
 
-AstValue::AstValue(double n) : next_(nullptr) {
-  int int_value;
-  if (DoubleToSmiInteger(n, &int_value)) {
-    type_ = SMI;
-    smi_ = int_value;
-  } else {
-    type_ = NUMBER;
-    number_ = n;
-  }
-}
-
 bool AstValue::IsPropertyName() const {
   if (type_ == STRING) {
     uint32_t index;
@@ -196,10 +185,6 @@ bool AstValue::BooleanValue() const {
     case SYMBOL:
       UNREACHABLE();
       break;
-    case NUMBER:
-      return DoubleToBoolean(number_);
-    case SMI:
-      return smi_ != 0;
     case BIGINT: {
       size_t length = strlen(bigint_buffer_);
       DCHECK_GT(length, 0);
@@ -211,17 +196,7 @@ bool AstValue::BooleanValue() const {
       }
       return false;
     }
-    case BOOLEAN:
-      return bool_;
-    case NULL_TYPE:
-      return false;
-    case THE_HOLE:
-      UNREACHABLE();
-      break;
-    case UNDEFINED:
-      return false;
   }
-  UNREACHABLE();
 }
 
 
@@ -239,32 +214,10 @@ void AstValue::Internalize(Isolate* isolate) {
           break;
       }
       break;
-    case NUMBER:
-      set_value(isolate->factory()->NewNumber(number_, TENURED));
-      break;
-    case SMI:
-      set_value(handle(Smi::FromInt(smi_), isolate));
-      break;
     case BIGINT:
       // TODO(adamk): Don't check-fail on conversion failure; instead
       // check for errors during parsing and throw at that point.
       set_value(StringToBigInt(isolate, bigint_buffer_).ToHandleChecked());
-      break;
-    case BOOLEAN:
-      if (bool_) {
-        set_value(isolate->factory()->true_value());
-      } else {
-        set_value(isolate->factory()->false_value());
-      }
-      break;
-    case NULL_TYPE:
-      set_value(isolate->factory()->null_value());
-      break;
-    case THE_HOLE:
-      set_value(isolate->factory()->the_hole_value());
-      break;
-    case UNDEFINED:
-      set_value(isolate->factory()->undefined_value());
       break;
   }
 }
@@ -385,56 +338,10 @@ const AstValue* AstValueFactory::NewSymbol(AstSymbol symbol) {
   return AddValue(value);
 }
 
-const AstValue* AstValueFactory::NewNumber(double number) {
-  AstValue* value = new (zone_) AstValue(number);
-  return AddValue(value);
-}
-
-const AstValue* AstValueFactory::NewSmi(uint32_t number) {
-  bool cacheable_smi = number <= kMaxCachedSmi;
-  if (cacheable_smi && smis_[number] != nullptr) return smis_[number];
-
-  AstValue* value = new (zone_) AstValue(AstValue::SMI, number);
-  if (cacheable_smi) smis_[number] = value;
-  return AddValue(value);
-}
-
 const AstValue* AstValueFactory::NewBigInt(const char* number) {
   AstValue* value = new (zone_) AstValue(number);
   return AddValue(value);
 }
-
-#define GENERATE_VALUE_GETTER(value, initializer)        \
-  if (!value) {                                          \
-    value = AddValue(new (zone_) AstValue(initializer)); \
-  }                                                      \
-  return value;
-
-const AstValue* AstValueFactory::NewBoolean(bool b) {
-  if (b) {
-    GENERATE_VALUE_GETTER(true_value_, true);
-  } else {
-    GENERATE_VALUE_GETTER(false_value_, false);
-  }
-}
-
-
-const AstValue* AstValueFactory::NewNull() {
-  GENERATE_VALUE_GETTER(null_value_, AstValue::NULL_TYPE);
-}
-
-
-const AstValue* AstValueFactory::NewUndefined() {
-  GENERATE_VALUE_GETTER(undefined_value_, AstValue::UNDEFINED);
-}
-
-
-const AstValue* AstValueFactory::NewTheHole() {
-  GENERATE_VALUE_GETTER(the_hole_value_, AstValue::THE_HOLE);
-}
-
-
-#undef GENERATE_VALUE_GETTER
 
 AstRawString* AstValueFactory::GetString(uint32_t hash_field, bool is_one_byte,
                                          Vector<const byte> literal_bytes) {

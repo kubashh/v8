@@ -186,8 +186,6 @@ class AstValue : public ZoneObject {
 
   bool IsSymbol() const { return type_ == SYMBOL; }
 
-  bool IsNumber() const { return IsSmi() || IsHeapNumber(); }
-
   const AstRawString* AsString() const {
     CHECK_EQ(STRING, type_);
     return string_;
@@ -198,29 +196,11 @@ class AstValue : public ZoneObject {
     return symbol_;
   }
 
-  double AsNumber() const {
-    if (IsHeapNumber()) return number_;
-    if (IsSmi()) return smi_;
-    UNREACHABLE();
-  }
-
-  Smi* AsSmi() const {
-    CHECK(IsSmi());
-    return Smi::FromInt(smi_);
-  }
-
   bool IsPropertyName() const;
 
   V8_EXPORT_PRIVATE bool BooleanValue() const;
 
-  bool IsSmi() const { return type_ == SMI; }
-  bool IsHeapNumber() const { return type_ == NUMBER; }
   bool IsBigInt() const { return type_ == BIGINT; }
-  bool IsFalse() const { return type_ == BOOLEAN && !bool_; }
-  bool IsTrue() const { return type_ == BOOLEAN && bool_; }
-  bool IsUndefined() const { return type_ == UNDEFINED; }
-  bool IsTheHole() const { return type_ == THE_HOLE; }
-  bool IsNull() const { return type_ == NULL_TYPE; }
 
   void Internalize(Isolate* isolate);
 
@@ -242,13 +222,7 @@ class AstValue : public ZoneObject {
   enum Type {
     STRING,
     SYMBOL,
-    NUMBER,
-    SMI,
-    BIGINT,
-    BOOLEAN,
-    NULL_TYPE,
-    UNDEFINED,
-    THE_HOLE
+    BIGINT
   };
 
   explicit AstValue(const AstRawString* s) : type_(STRING), next_(nullptr) {
@@ -259,21 +233,8 @@ class AstValue : public ZoneObject {
     symbol_ = symbol;
   }
 
-  explicit AstValue(double n);
-
-  AstValue(Type t, int i) : type_(t), next_(nullptr) {
-    DCHECK(type_ == SMI);
-    smi_ = i;
-  }
-
   explicit AstValue(const char* n) : type_(BIGINT), next_(nullptr) {
     bigint_buffer_ = n;
-  }
-
-  explicit AstValue(bool b) : type_(BOOLEAN), next_(nullptr) { bool_ = b; }
-
-  explicit AstValue(Type t) : type_(t), next_(nullptr) {
-    DCHECK(t == NULL_TYPE || t == UNDEFINED || t == THE_HOLE);
   }
 
   Type type_;
@@ -288,9 +249,6 @@ class AstValue : public ZoneObject {
   // Uninternalized value.
   union {
     const AstRawString* string_;
-    double number_;
-    int smi_;
-    bool bool_;
     AstSymbol symbol_;
     const char* bigint_buffer_;
   };
@@ -381,7 +339,6 @@ class AstValueFactory {
         zone_(zone),
         hash_seed_(hash_seed) {
     DCHECK_EQ(hash_seed, string_constants->hash_seed());
-    std::fill(smis_, smis_ + arraysize(smis_), nullptr);
     std::fill(one_character_strings_,
               one_character_strings_ + arraysize(one_character_strings_),
               nullptr);
@@ -419,20 +376,10 @@ class AstValueFactory {
   V8_EXPORT_PRIVATE const AstValue* NewString(const AstRawString* string);
   // A JavaScript symbol (ECMA-262 edition 6).
   const AstValue* NewSymbol(AstSymbol symbol);
-  V8_EXPORT_PRIVATE const AstValue* NewNumber(double number);
-  const AstValue* NewSmi(uint32_t number);
   V8_EXPORT_PRIVATE const AstValue* NewBigInt(const char* number);
-  const AstValue* NewBoolean(bool b);
   const AstValue* NewStringList(ZoneList<const AstRawString*>* strings);
-  const AstValue* NewNull();
-  const AstValue* NewUndefined();
-  const AstValue* NewTheHole();
 
  private:
-  static const uint32_t kMaxCachedSmi = 1 << 10;
-
-  STATIC_ASSERT(kMaxCachedSmi <= Smi::kMaxValue);
-
   AstValue* AddValue(AstValue* value) {
     value->set_next(values_);
     values_ = value;
@@ -477,20 +424,12 @@ class AstValueFactory {
   const AstStringConstants* string_constants_;
   const AstConsString* empty_cons_string_;
 
-  // Caches for faster access: small numbers, one character lowercase strings
-  // (for minified code).
-  AstValue* smis_[kMaxCachedSmi + 1];
+  // Caches one character lowercase strings (for minified code).
   AstRawString* one_character_strings_[26];
 
   Zone* zone_;
 
   uint32_t hash_seed_;
-
-  AstValue* true_value_ = nullptr;
-  AstValue* false_value_ = nullptr;
-  AstValue* null_value_ = nullptr;
-  AstValue* undefined_value_ = nullptr;
-  AstValue* the_hole_value_ = nullptr;
 };
 }  // namespace internal
 }  // namespace v8

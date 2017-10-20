@@ -99,6 +99,7 @@ ConstantArrayBuilder::ConstantArrayBuilder(Zone* zone)
                      ZoneAllocationPolicy(zone)),
       smi_map_(zone),
       smi_pairs_(zone),
+      heap_number_map_(zone),
 #define INIT_SINGLETON_ENTRY_FIELD(NAME, LOWER_NAME) LOWER_NAME##_(-1),
       SINGLETON_CONSTANT_ENTRY_TYPES(INIT_SINGLETON_ENTRY_FIELD)
 #undef INIT_SINGLETON_ENTRY_FIELD
@@ -181,6 +182,16 @@ size_t ConstantArrayBuilder::Insert(Smi* smi) {
   return entry->second;
 }
 
+size_t ConstantArrayBuilder::Insert(double number) {
+  auto entry = heap_number_map_.find(number);
+  if (entry == heap_number_map_.end()) {
+    index_t index = static_cast<index_t>(AllocateIndex(Entry(number)));
+    heap_number_map_[number] = index;
+    return index;
+  }
+  return entry->second;
+}
+
 size_t ConstantArrayBuilder::Insert(const AstRawString* raw_string) {
   return constants_map_
       .LookupOrInsert(reinterpret_cast<intptr_t>(raw_string),
@@ -190,17 +201,17 @@ size_t ConstantArrayBuilder::Insert(const AstRawString* raw_string) {
       ->value;
 }
 
-size_t ConstantArrayBuilder::Insert(const AstValue* heap_number) {
+size_t ConstantArrayBuilder::Insert(const AstValue* bigint) {
   // This method only accepts heap numbers and BigInts. Other types of
   // AstValue should either be passed through as raw values (in the
   // case of strings), use the singleton Insert methods (in the case
   // of symbols), or skip the constant pool entirely and use bytecodes
   // with immediate values (Smis, booleans, undefined, etc.).
-  DCHECK(heap_number->IsHeapNumber() || heap_number->IsBigInt());
+  DCHECK(bigint->IsBigInt());
   return constants_map_
-      .LookupOrInsert(reinterpret_cast<intptr_t>(heap_number),
-                      static_cast<uint32_t>(base::hash_value(heap_number)),
-                      [&]() { return AllocateIndex(Entry(heap_number)); },
+      .LookupOrInsert(reinterpret_cast<intptr_t>(bigint),
+                      static_cast<uint32_t>(base::hash_value(bigint)),
+                      [&]() { return AllocateIndex(Entry(bigint)); },
                       ZoneAllocationPolicy(zone_))
       ->value;
 }
@@ -340,8 +351,10 @@ Handle<Object> ConstantArrayBuilder::Entry::ToHandle(Isolate* isolate) const {
     case Tag::kRawString:
       return raw_string_->string();
     case Tag::kHeapNumber:
-      DCHECK(heap_number_->IsHeapNumber() || heap_number_->IsBigInt());
-      return heap_number_->value();
+      return isolate->factory()->NewNumber(heap_number_);
+    case Tag::kBigInt:
+      DCHECK(bigint_->IsBigInt());
+      return bigint_->value();
     case Tag::kScope:
       return scope_->scope_info();
 #define ENTRY_LOOKUP(Name, name) \

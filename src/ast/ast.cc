@@ -421,7 +421,7 @@ void ObjectLiteral::BuildConstantProperties(Isolate* isolate) {
       continue;
     }
 
-    Handle<Object> key = property->key()->AsLiteral()->value();
+    Handle<Object> key = property->key()->AsLiteral()->value(isolate);
 
     uint32_t element_index = 0;
     if (key->ToArrayIndex(&element_index) ||
@@ -454,7 +454,7 @@ void ObjectLiteral::BuildConstantProperties(Isolate* isolate) {
     // Add CONSTANT and COMPUTED properties to boilerplate. Use undefined
     // value for COMPUTED properties, the real value is filled in at
     // runtime. The enumeration order is maintained.
-    Handle<Object> key = property->key()->AsLiteral()->value();
+    Handle<Object> key = property->key()->AsLiteral()->value(isolate);
     Handle<Object> value = GetBoilerplateValue(property->value(), isolate);
 
     uint32_t element_index = 0;
@@ -603,7 +603,7 @@ bool MaterializedLiteral::IsSimple() const {
 Handle<Object> MaterializedLiteral::GetBoilerplateValue(Expression* expression,
                                                         Isolate* isolate) {
   if (expression->IsLiteral()) {
-    return expression->AsLiteral()->value();
+    return expression->AsLiteral()->value(isolate);
   }
   if (CompileTimeValue::IsCompileTimeValue(expression)) {
     return CompileTimeValue::GetValue(isolate, expression);
@@ -645,18 +645,18 @@ Handle<TemplateObjectDescription> GetTemplateObject::GetOrBuildDescription(
       isolate->factory()->NewFixedArray(this->raw_strings()->length(), TENURED);
   bool raw_and_cooked_match = true;
   for (int i = 0; i < raw_strings->length(); ++i) {
-    if (*this->raw_strings()->at(i)->value() !=
-        *this->cooked_strings()->at(i)->value()) {
+    if (*this->raw_strings()->at(i)->value(isolate) !=
+        *this->cooked_strings()->at(i)->value(isolate)) {
       raw_and_cooked_match = false;
     }
-    raw_strings->set(i, *this->raw_strings()->at(i)->value());
+    raw_strings->set(i, *this->raw_strings()->at(i)->value(isolate));
   }
   Handle<FixedArray> cooked_strings = raw_strings;
   if (!raw_and_cooked_match) {
     cooked_strings = isolate->factory()->NewFixedArray(
         this->cooked_strings()->length(), TENURED);
     for (int i = 0; i < cooked_strings->length(); ++i) {
-      cooked_strings->set(i, *this->cooked_strings()->at(i)->value());
+      cooked_strings->set(i, *this->cooked_strings()->at(i)->value(isolate));
     }
   }
   return isolate->factory()->NewTemplateObjectDescription(
@@ -788,20 +788,41 @@ CaseClause::CaseClause(Expression* label, ZoneList<Statement*>* statements)
     : label_(label), statements_(statements) {}
 
 bool Literal::ToUint32(uint32_t* value) const {
-  if (IsSmi()) {
-    int num = AsSmiLiteral()->value();
-    if (num < 0) return false;
-    *value = static_cast<uint32_t>(num);
-    return true;
+  switch (type()) {
+    case kSmi:
+      if (smi_ < 0) return false;
+      *value = static_cast<uint32_t>(smi_);
+      return true;
+    case kHeapNumber:
+      return DoubleToUint32IfEqualToSelf(AsNumber(), value);
+    default:
+      return false;
   }
-  if (IsNumber()) {
-    return DoubleToUint32IfEqualToSelf(AsNumber(), value);
-  }
-  return false;
 }
 
 bool Literal::ToArrayIndex(uint32_t* value) const {
   return ToUint32(value) && *value != kMaxUInt32;
+}
+
+Handle<Object> Literal::value(Isolate* isolate) const {
+  switch (type()) {
+    case kSmi:
+      return handle(Smi::FromInt(smi_), isolate);
+    case kHeapNumber:
+      return isolate->factory()->NewNumber(number_);
+    case kTrue:
+      return isolate->factory()->true_value();
+    case kFalse:
+      return isolate->factory()->false_value();
+    case kNull:
+      return isolate->factory()->null_value();
+    case kUndefined:
+      return isolate->factory()->undefined_value();
+    case kTheHole:
+      return isolate->factory()->the_hole_value();
+    case kOther:
+      return value_->value();
+  }
 }
 
 uint32_t Literal::Hash() {
@@ -811,10 +832,10 @@ uint32_t Literal::Hash() {
 
 
 // static
-bool Literal::Match(void* literal1, void* literal2) {
-  const AstValue* x = static_cast<Literal*>(literal1)->value_;
-  const AstValue* y = static_cast<Literal*>(literal2)->value_;
-  return (x->IsString() && y->IsString() && x->AsString() == y->AsString()) ||
+bool Literal::Match(void* a, void* b) {
+  Literal* x = static_cast<Literal*>(a);
+  Literal* y = static_cast<Literal*>(b);
+  return (x->IsString() && y->IsString() && x->AsRawString() == y->AsRawString()) ||
          (x->IsNumber() && y->IsNumber() && x->AsNumber() == y->AsNumber());
 }
 
