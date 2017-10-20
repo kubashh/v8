@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "100dc0c7_8441ad9d",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-10-20T11:05:20Z",
+      "side": 1,
+      "message": "nit: I don\u0027t immediately see why we would need this header in this file. Do you happen to remember what piece needed it? Otherwise I\u0027d vote for dropping it from here.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 27
+      },
+      "revId": "0677955f1298a2c77122832f279a237fafe1464b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
