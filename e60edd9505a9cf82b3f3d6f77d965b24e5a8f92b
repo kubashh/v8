@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f0434d13_907fad3e",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-20T07:52:56Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it have been nicer to move this call to {ThrowDataCloneError} out of the switch, and just {break} in the error case? It seems like for all regular cases, we return anyway, so the code after the switch would only be reached in the error case.\nWe should only use goto if there is no reasonable alternative.",
+      "revId": "e60edd9505a9cf82b3f3d6f77d965b24e5a8f92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "487e1d13_baf183e0",
         "filename": "src/value-serializer.cc",
         "patchSetId": 2
