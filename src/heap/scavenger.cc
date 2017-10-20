@@ -86,8 +86,15 @@ void Scavenger::IterateAndScavengePromotedObject(HeapObject* target, int size) {
   target->IterateBody(target->map()->instance_type(), size, &visitor);
 }
 
+void Scavenger::AddPageToSweeperIfNecessary(MemoryChunk* page) {
+  AllocationSpace space = page->owner()->identity();
+  if ((space == OLD_SPACE || space == NEW_SPACE) && !page->SweepingDone()) {
+    heap()->mark_compact_collector()->sweeper().AddPage(
+        space, reinterpret_cast<Page*>(page));
+  }
+}
+
 void Scavenger::ScavengePage(MemoryChunk* page) {
-  base::LockGuard<base::RecursiveMutex> guard(page->mutex());
   AnnounceLockedPage(page);
 
   RememberedSet<OLD_TO_NEW>::Iterate(
@@ -102,6 +109,8 @@ void Scavenger::ScavengePage(MemoryChunk* page) {
                                             reinterpret_cast<Address>(addr));
             });
       });
+
+  AddPageToSweeperIfNecessary(page);
 }
 
 void Scavenger::Process(OneshotBarrier* barrier) {

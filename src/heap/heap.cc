@@ -1914,16 +1914,34 @@ void Heap::Scavenge() {
     job.AddTask(new ScavengingTask(this, scavengers[i], &barrier));
   }
 
-  CodeSpaceMemoryModificationScope code_modification(this);
-
-  RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
-      this, [&job](MemoryChunk* chunk) {
-        job.AddItem(new PageScavengingItem(chunk));
-      });
-
   {
-    MarkCompactCollector::Sweeper::PauseOrCompleteScope sweeper_scope(
-        &mark_compact_collector()->sweeper());
+    CodeSpaceMemoryModificationScope code_modification(this);
+    MarkCompactCollector::Sweeper* sweeper =
+        &mark_compact_collector()->sweeper();
+    // Pause the concurrent sweeper.
+    MarkCompactCollector::Sweeper::PauseOrCompleteScope pause_scope(sweeper);
+    // Filter out pages that need to be scavenges from the sweeper. They will
+    // be re-added temporarily.
+    MarkCompactCollector::Sweeper::FilterSweepingPagesScope filter_scope(
+        sweeper);
+    filter_scope.FilterSweepingPages([&job](Page* page) {
+      if (page->slot_set<OLD_TO_NEW>() != nullptr ||
+          page->typed_slot_set<OLD_TO_NEW>() != nullptr ||
+          page->invalidated_slots() != nullptr) {
+        job.AddItem(new PageScavengingItem(page));
+        return false;
+      }
+      return true;
+    });
+    RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
+        this, [&job](MemoryChunk* chunk) {
+          // Pages where sweeping is still in progress where added before in
+          // order of most to least free memory.
+          if (chunk->SweepingDone()) {
+            job.AddItem(new PageScavengingItem(chunk));
+          }
+        });
+
     RootScavengeVisitor root_scavenge_visitor(this, scavengers[kMainThreadId]);
 
     {
@@ -1961,11 +1979,11 @@ void Heap::Scavenge() {
           &root_scavenge_visitor);
       scavengers[kMainThreadId]->Process();
     }
-  }
 
-  for (int i = 0; i < num_scavenge_tasks; i++) {
-    scavengers[i]->Finalize();
-    delete scavengers[i];
+    for (int i = 0; i < num_scavenge_tasks; i++) {
+      scavengers[i]->Finalize();
+      delete scavengers[i];
+    }
   }
 
   UpdateNewSpaceReferencesInExternalStringTable(

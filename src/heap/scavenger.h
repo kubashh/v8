@@ -56,6 +56,8 @@ class Scavenger {
 
   inline void PageMemoryFence(Object* object);
 
+  void AddPageToSweeperIfNecessary(MemoryChunk* page);
+
   // Potentially scavenges an object referenced from |slot_address| if it is
   // indeed a HeapObject and resides in from space.
   inline SlotCallbackResult CheckAndScavengeObject(Heap* heap,
