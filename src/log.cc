@@ -18,6 +18,8 @@
 #include "src/global-handles.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
+#include "src/isolate-inl.h"
+#include "src/isolate.h"
 #include "src/libsampler/sampler.h"
 #include "src/log-inl.h"
 #include "src/log-utils.h"
@@ -1464,20 +1466,82 @@ void Logger::ICEvent(const char* type, bool keyed, const Address pc, int line,
   msg.Append(",");
   msg.AppendAddress(reinterpret_cast<Address>(map));
   msg.Append(",");
-  if (key->IsSmi()) {
-    msg.Append("%d", Smi::ToInt(key));
-  } else if (key->IsNumber()) {
-    msg.Append("%lf", key->Number());
-  } else if (key->IsString()) {
-    msg.AppendDetailed(String::cast(key), false);
-  } else if (key->IsSymbol()) {
-    msg.AppendSymbolName(Symbol::cast(key));
-  }
+  msg.AppendPropertyKey(key);
   msg.Append(",%s,", modifier);
   if (slow_stub_reason != nullptr) {
     msg.AppendDoubleQuotedString(slow_stub_reason);
   }
   msg.WriteToLogFile();
+}
+
+void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
+                      HeapObject* name_or_sfi) {
+  DisallowHeapAllocation no_gc;
+#if V8_TRACE_MAPS
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  OFStream os(stdout);
+  if (from) MapDetails(from);
+  if (to) MapDetails(to);
+  int line = -1;
+  int column = -1;
+  Address pc = 0;
+  if (!isolate_->bootstrapper()->IsActive()) {
+    pc = isolate_->GetAbstractPC(&line, &column);
+  }
+  PrintF("[TraceMaps: %s time=%10" PRId64
+         " from=%p to=%p reason=%s pc=%p line=%i column=%i",
+         type, base::TimeTicks::HighResolutionNow().ToInternalValue(),
+         reinterpret_cast<void*>(from), reinterpret_cast<void*>(to), reason, pc,
+         line, column);
+
+  Log::MessageBuilder msg(log_);
+  msg.Append("map,%s,%d,", type,
+             static_cast<int>(timer_.Elapsed().InMicroseconds()));
+  msg.AppendAddress(reinterpret_cast<Address>(from));
+  msg.Append(",");
+  msg.AppendAddress(reinterpret_cast<Address>(to));
+  msg.Append(",");
+  msg.AppendAddress(pc);
+  msg.Append(",%d,%d,", line, column);
+  msg.AppendDoubleQuotedString(reason);
+  msg.Append(",");
+
+  if (name_or_sfi) {
+    if (name_or_sfi->IsName()) {
+      Name* name = Name::cast(name_or_sfi);
+      PrintF(" name=");
+      name->NameShortPrint();
+      msg.AppendPropertyKey(name);
+    } else if (name_or_sfi->IsSharedFunctionInfo()) {
+      SharedFunctionInfo* sfi = SharedFunctionInfo::cast(name_or_sfi);
+      msg.Append(sfi->DebugName());
+    }
+  }
+  PrintF(" ]\n");
+  msg.WriteToLogFile();
+#endif
+}
+
+void Logger::MapDetails(Map* map) {
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  if (map->has_been_printed()) return;
+  map->set_has_been_printed(true);
+  DisallowHeapAllocation no_gc;
+  Log::MessageBuilder msg(log_);
+  msg.Append("map-details-start,");
+  msg.AppendAddress(reinterpret_cast<Address>(map));
+  msg.Append(",");
+  msg.WriteToLogFile();
+
+  std::ostringstream buffer;
+  map->PrintMapDetails(buffer);
+  msg.AppendUnbufferedCString(buffer.str().c_str());
+  msg.AppendUnbufferedCString("\n");
+
+  PrintF("[TraceMaps: MapDetailsBegin time=%10" PRId64 " ]\n",
+         base::TimeTicks::HighResolutionNow().ToInternalValue());
+  PrintF("%s", buffer.str().c_str());
+  PrintF("[TraceMaps: MapDetailsEnd]\n");
 }
 
 void Logger::StopProfiler() {
@@ -1547,10 +1611,7 @@ static int EnumerateCompiledFunctions(Heap* heap,
           !Script::cast(maybe_script)->HasValidSource()) {
         continue;
       }
-      // TODO(jarin) This leaves out deoptimized code that might still be on the
-      // stack. Also note that we will not log optimized code objects that are
-      // only on a type feedback vector. We should make this mroe precise.
-      if (function->IsOptimized()) {
+      if (function->HasOptimizedCode()) {
         AddFunctionAndCode(sfi, AbstractCode::cast(function->code()), sfis,
                            code_objects, compiled_funcs_count);
         ++compiled_funcs_count;
@@ -1825,7 +1886,7 @@ bool Logger::SetUp(Isolate* isolate) {
     is_logging_ = true;
   }
 
-  if (FLAG_log_internal_timer_events || FLAG_prof_cpp) timer_.Start();
+  timer_.Start();
 
   if (FLAG_prof_cpp) {
     profiler_ = new Profiler(isolate);
