@@ -278,8 +278,8 @@ code is governed by a BSD-style license that can be found in the LICENSE file.
       let omitted = entries.length - max;
       if (omitted > 0) {
         let tr = document.createElement("tr");
-        let td = td(tr, 'Omitted ' + omitted + " entries.");
-        td.colSpan = 4;
+        let tdNode = td(tr, 'Omitted ' + omitted + " entries.");
+        tdNode.colSpan = 4;
         fragment.appendChild(tr);
       }
       parent.appendChild(fragment);
