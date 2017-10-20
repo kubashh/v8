@@ -419,6 +419,14 @@ void AstNumberingVisitor::VisitClassLiteral(ClassLiteral* node) {
   ReserveFeedbackSlots(node);
 }
 
+void AstNumberingVisitor::VisitInitializeClassFieldsStatement(
+    InitializeClassFieldsStatement* node) {
+  LanguageModeScope language_mode_scope(this, LanguageMode::kStrict);
+  for (int i = 0; i < node->fields()->length(); i++) {
+    VisitLiteralProperty(node->fields()->at(i));
+  }
+  ReserveFeedbackSlots(node);
+}
 
 void AstNumberingVisitor::VisitObjectLiteral(ObjectLiteral* node) {
   for (int i = 0; i < node->properties()->length(); i++) {

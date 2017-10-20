@@ -376,6 +376,28 @@ void ClassLiteral::AssignFeedbackSlots(FeedbackVectorSpec* spec,
   }
 }
 
+void InitializeClassFieldsStatement::AssignFeedbackSlots(
+    FeedbackVectorSpec* spec, LanguageMode language_mode, FunctionKind kind,
+    FeedbackSlotCache* cache) {
+  DCHECK_EQ(kind, FunctionKind::kConciseMethod);
+
+  // This logic that computes the number of slots needed for vector store
+  // ICs must mirror BytecodeGenerator::VisitInitializeClassFieldsStatement.
+  if (needs_home_object()) {
+    home_object_slot_ = spec->AddStoreICSlot(language_mode);
+  }
+
+  for (int i = 0; i < fields()->length(); i++) {
+    ClassLiteral::Property* property = fields()->at(i);
+    Expression* value = property->value();
+    if (FunctionLiteral::NeedsHomeObject(value)) {
+      property->SetSlot(spec->AddStoreICSlot(language_mode));
+    }
+    property->SetStoreDataPropertySlot(
+        spec->AddStoreDataPropertyInLiteralICSlot());
+  }
+}
+
 bool ObjectLiteral::Property::IsCompileTimeValue() const {
   return kind_ == CONSTANT ||
       (kind_ == MATERIALIZED_LITERAL &&
