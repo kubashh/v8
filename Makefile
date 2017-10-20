@@ -352,7 +352,8 @@ $(addsuffix .check,$(ARCHES)): $$(basename $$@)
 
 $(CHECKS): $$(basename $$@)
 	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(basename $@) $(TESTFLAGS)
+	    --arch=$(basename $(basename $@)) \
+	    --mode=$(subst .,,$(suffix $(basename $@))) $(TESTFLAGS)
 
 $(addsuffix .quickcheck,$(MODES)): $$(basename $$@)
 	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
@@ -364,7 +365,9 @@ $(addsuffix .quickcheck,$(ARCHES)): $$(basename $$@)
 
 $(QUICKCHECKS): $$(basename $$@)
 	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(basename $@) $(TESTFLAGS) --quickcheck
+	    --arch=$(basename $(basename $@)) \
+	    --mode=$(subst .,,$(suffix $(basename $@))) \
+	    $(TESTFLAGS) --quickcheck
 
 $(addsuffix .sync, $(ANDROID_BUILDS)): $$(basename $$@)
 	@tools/android-sync.sh $(basename $@) $(OUTDIR) \
@@ -372,7 +375,8 @@ $(addsuffix .sync, $(ANDROID_BUILDS)): $$(basename $$@)
 
 $(addsuffix .check, $(ANDROID_BUILDS)): $$(basename $$@).sync
 	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	     --arch-and-mode=$(basename $@) \
+	     --arch=$(basename $(basename $@)) \
+	     --mode=$(subst .,,$(suffix $(basename $@))) \
 	     --timeout=600 \
 	     --command-prefix="tools/android-run.py" $(TESTFLAGS)
 
@@ -380,8 +384,7 @@ $(addsuffix .check, $(ANDROID_ARCHES)): \
                 $(addprefix $$(basename $$@).,$(MODES)).check
 
 native.check: native
-	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR)/native \
-	    --arch-and-mode=. $(TESTFLAGS)
+	@tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR)/native $(TESTFLAGS)
 
 SUPERFASTTESTMODES = ia32.release
 FASTTESTMODES = $(SUPERFASTTESTMODES),x64.release,ia32.optdebug,x64.optdebug,arm.optdebug,arm64.release
@@ -392,19 +395,25 @@ EMPTY =
 SPACE = $(EMPTY) $(EMPTY)
 quickcheck: $(subst $(COMMA),$(SPACE),$(FASTCOMPILEMODES))
 	tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(SUPERFASTTESTMODES) $(TESTFLAGS) --quickcheck \
+	    --arch=$(basename $(basename $(SUPERFASTTESTMODES))) \
+	    --mode=$(subst .,,$(suffix $(basename $(SUPERFASTTESTMODES)))) \
+	    $(TESTFLAGS) --quickcheck \
 	    --download-data mozilla webkit
 	tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(FASTTESTMODES) $(TESTFLAGS) --quickcheck
+	    --arch=$(basename $(basename $(FASTTESTMODES))) \
+	    --mode=$(subst .,,$(suffix $(basename $(FASTTESTMODES)))) \
+	    $(TESTFLAGS) --quickcheck
 qc: quickcheck
 
 turbocheck: $(subst $(COMMA),$(SPACE),$(FASTCOMPILEMODES))
 	tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(SUPERFASTTESTMODES) $(TESTFLAGS) \
+	    --arch=$(basename $(basename $(SUPERFASTTESTMODES))) \
+	    --mode=$(subst .,,$(suffix $(basename $(SUPERFASTTESTMODES)))) $(TESTFLAGS) \
 	    --quickcheck --variants=turbofan --download-data mozilla webkit
 	tools/run-tests.py $(TESTJOBS) --outdir=$(OUTDIR) \
-	    --arch-and-mode=$(FASTTESTMODES) $(TESTFLAGS) \
-	    --quickcheck --variants=turbofan
+	    --arch=$(basename $(basename $(FASTTESTMODES))) \
+	    --mode=$(subst .,,$(suffix $(basename $(FASTTESTMODES)))) \
+	    $(TESTFLAGS) --quickcheck --variants=turbofan
 tc: turbocheck
 
 # Clean targets. You can clean each architecture individually, or everything.
