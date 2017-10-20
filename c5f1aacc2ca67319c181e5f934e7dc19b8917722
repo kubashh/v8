@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf0394cb_1832efee",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-20T08:26:46Z",
+      "side": 1,
+      "message": "We need to do more than just pass the locals to the next function; we have to update the internal mapping of asm variables to wasm variables.",
+      "revId": "c5f1aacc2ca67319c181e5f934e7dc19b8917722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252a9aa7_770a2acb",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-20T08:26:46Z",
+      "side": 1,
+      "message": "We should probably use the number of outputted WASM bytes for the triggering criteria, and it should probably be pretty high (\u003e10k maybe)",
+      "revId": "c5f1aacc2ca67319c181e5f934e7dc19b8917722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
