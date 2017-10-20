@@ -34,6 +34,24 @@
       "revId": "1f450ba48f64da649248789640fc32863bba9e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aec9c81_1a8f0ad0",
+        "filename": "test/unittests/compiler/graph-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-20T12:40:26Z",
+      "side": 1,
+      "message": "Oh, IC. Lgtm then.",
+      "parentUuid": "a39d049d_1313087a",
+      "revId": "1f450ba48f64da649248789640fc32863bba9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
