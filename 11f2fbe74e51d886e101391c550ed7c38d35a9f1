@@ -22,6 +22,30 @@
       "revId": "11f2fbe74e51d886e101391c550ed7c38d35a9f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "334b240b_45b8c8b2",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-20T17:11:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f3cf23f_413d3658",
+      "range": {
+        "startLine": 284,
+        "startChar": 14,
+        "endLine": 284,
+        "endChar": 23
+      },
+      "revId": "11f2fbe74e51d886e101391c550ed7c38d35a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
