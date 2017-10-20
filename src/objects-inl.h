@@ -3402,6 +3402,19 @@ bool Map::is_access_check_needed() const {
   return ((1 << kIsAccessCheckNeeded) & bit_field()) != 0;
 }
 
+#ifdef V8_TRACE_MAPS
+void Map::set_has_been_printed(bool value) {
+  if (value) {
+    set_bit_field(bit_field() | (1 << kHasBeenPrinted));
+  } else {
+    set_bit_field(bit_field() & ~(1 << kHasBeenPrinted));
+  }
+}
+
+bool Map::has_been_printed() const {
+  return ((1 << kHasBeenPrinted) & bit_field()) != 0;
+}
+#endif
 
 void Map::set_is_extensible(bool value) {
   if (value) {
@@ -3514,6 +3527,11 @@ bool Map::is_callable() const {
 
 void Map::deprecate() {
   set_bit_field3(Deprecated::update(bit_field3(), true));
+#if V8_TRACE_MAPS
+  if (FLAG_trace_maps) {
+    PrintF("[TraceMaps: Deprecate map=%p ]\n", reinterpret_cast<void*>(this));
+  }
+#endif
 }
 
 bool Map::is_deprecated() const { return Deprecated::decode(bit_field3()); }

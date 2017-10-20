@@ -1542,6 +1542,35 @@ Object* Isolate::PromoteScheduledException() {
   return ReThrow(thrown);
 }
 
+Address Isolate::GetAbstractPC(int* line, int* column) {
+  JavaScriptFrameIterator it(this);
+
+  JavaScriptFrame* frame = it.frame();
+  DCHECK(!frame->is_builtin());
+  int position = frame->position();
+
+  Object* maybe_script = frame->function()->shared()->script();
+  if (maybe_script->IsScript()) {
+    Handle<Script> script(Script::cast(maybe_script), this);
+    Script::PositionInfo info;
+    Script::GetPositionInfo(script, position, &info, Script::WITH_OFFSET);
+    *line = info.line + 1;
+    *column = info.column + 1;
+  } else {
+    *line = position;
+    *column = -1;
+  }
+
+  if (frame->is_interpreted()) {
+    InterpretedFrame* iframe = static_cast<InterpretedFrame*>(frame);
+    Address bytecode_start =
+        reinterpret_cast<Address>(iframe->GetBytecodeArray()) - kHeapObjectTag +
+        BytecodeArray::kHeaderSize;
+    return bytecode_start + iframe->GetBytecodeOffset();
+  }
+
+  return frame->pc();
+}
 
 void Isolate::PrintCurrentStackTrace(FILE* out) {
   for (StackTraceFrameIterator it(this); !it.done(); it.Advance()) {
@@ -2320,10 +2349,6 @@ class VerboseAccountingAllocator : public AccountingAllocator {
   size_t allocation_sample_bytes_, pool_sample_bytes_;
 };
 
-#ifdef DEBUG
-base::AtomicNumber<size_t> Isolate::non_disposed_isolates_;
-#endif  // DEBUG
-
 Isolate::Isolate(bool enable_serializer)
     : embedder_data_(),
       entry_stack_(NULL),
@@ -2407,9 +2432,7 @@ Isolate::Isolate(bool enable_serializer)
 #ifdef DEBUG
   // heap_histograms_ initializes itself.
   memset(&js_spill_information_, 0, sizeof(js_spill_information_));
-
-  non_disposed_isolates_.Increment(1);
-#endif  // DEBUG
+#endif
 
   handle_scope_data_.Initialize();
 
@@ -2449,10 +2472,6 @@ void Isolate::TearDown() {
     base::LockGuard<base::Mutex> lock_guard(thread_data_table_mutex_.Pointer());
     thread_data_table_->RemoveAllThreads(this);
   }
-
-#ifdef DEBUG
-  non_disposed_isolates_.Decrement(1);
-#endif  // DEBUG
 
   delete this;
 
@@ -3174,14 +3193,6 @@ void Isolate::InvalidateIsConcatSpreadableProtector() {
   DCHECK(!IsIsConcatSpreadableLookupChainIntact());
 }
 
-void Isolate::InvalidateArrayConstructorProtector() {
-  DCHECK(factory()->array_constructor_protector()->value()->IsSmi());
-  DCHECK(IsArrayConstructorIntact());
-  factory()->array_constructor_protector()->set_value(
-      Smi::FromInt(kProtectorInvalid));
-  DCHECK(!IsArrayConstructorIntact());
-}
-
 void Isolate::InvalidateArraySpeciesProtector() {
   DCHECK(factory()->species_protector()->value()->IsSmi());
   DCHECK(IsArraySpeciesLookupChainIntact());
@@ -3418,27 +3429,6 @@ void Isolate::SetHostImportModuleDynamicallyCallback(
   host_import_module_dynamically_callback_ = callback;
 }
 
-Handle<JSObject> Isolate::RunHostInitializeImportMetaObjectCallback(
-    Handle<Module> module) {
-  Handle<Object> host_meta(module->import_meta(), this);
-  if (host_meta->IsTheHole(this)) {
-    host_meta = factory()->NewJSObjectWithNullProto();
-    if (host_initialize_import_meta_object_callback_ != nullptr) {
-      v8::Local<v8::Context> api_context = v8::Utils::ToLocal(native_context());
-      host_initialize_import_meta_object_callback_(
-          api_context, Utils::ToLocal(module),
-          v8::Local<v8::Object>::Cast(v8::Utils::ToLocal(host_meta)));
-    }
-    module->set_import_meta(*host_meta);
-  }
-  return Handle<JSObject>::cast(host_meta);
-}
-
-void Isolate::SetHostInitializeImportMetaObjectCallback(
-    HostInitializeImportMetaObjectCallback callback) {
-  host_initialize_import_meta_object_callback_ = callback;
-}
-
 void Isolate::SetPromiseHook(PromiseHook hook) {
   promise_hook_ = hook;
   DebugStateUpdated();
@@ -3456,10 +3446,9 @@ void Isolate::SetPromiseRejectCallback(PromiseRejectCallback callback) {
   promise_reject_callback_ = callback;
 }
 
-void Isolate::ReportPromiseReject(Handle<JSPromise> promise,
+void Isolate::ReportPromiseReject(Handle<JSObject> promise,
                                   Handle<Object> value,
                                   v8::PromiseRejectEvent event) {
-  DCHECK_EQ(v8::Promise::kRejected, promise->status());
   if (promise_reject_callback_ == NULL) return;
   Handle<FixedArray> stack_trace;
   if (event == v8::kPromiseRejectWithNoHandler && value->IsJSObject()) {
