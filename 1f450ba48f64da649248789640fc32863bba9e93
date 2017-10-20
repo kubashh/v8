@@ -16,6 +16,24 @@
       "revId": "1f450ba48f64da649248789640fc32863bba9e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39d049d_1313087a",
+        "filename": "test/unittests/compiler/graph-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1244341
+      },
+      "writtenOn": "2017-10-20T11:22:26Z",
+      "side": 1,
+      "message": "This was the smallest obvious fix that I could see.  Since GraphTest is used in other source files, moving it into the graph_unittest namespace would require modifying a bunch of other source files.  Doing this would also require some changes to the GraphTest code: the zone() calls fail with \"use of undeclared identifier\" errors, and I would need to figure out why.",
+      "parentUuid": "02cd4350_48cf9a6a",
+      "revId": "1f450ba48f64da649248789640fc32863bba9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
