@@ -93,6 +93,19 @@ struct has_output_operator {
   static constexpr bool value = sizeof(__check_operator(ptr_t{nullptr})) == 1;
 };
 
+// When passing template types in macros, it can be necessary to wrap the type
+// in parentheses such that the comma between the template arguments is not
+// interpreted as a comma of the macro call. But C++ does not allow additional
+// parentheses around types. This macro can be used to remove such parentheses.
+template <class T>
+struct extract_argument_type;
+template <class T>
+struct extract_argument_type<void(T)> {
+  using type = T;
+};
+#define REMOVE_PARENTHESES(T) \
+  typename ::v8::base::extract_argument_type<void(T)>::type
+
 }  // namespace base
 }  // namespace v8
 
