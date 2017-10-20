@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "365867fe_ee586488",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-20T10:54:33Z",
+      "side": 1,
+      "message": "I think we can still use no-WB stores here because the size of the fast object definitely fits into the max new space object limit and the potential call to Runtime::kFinalizeInstanceSize does not allocate (we can even add a DisallowHeapAllocation scope into the runtime function to make it clear).\nAnd please update the AllocateJSObjectFromMapWithSlackTracking\u0027s comment regarding this.",
+      "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ced2125_086a5972",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-20T10:54:33Z",
+      "side": 1,
+      "message": "Since this function does not allocate it can be made as a C-function which can be called without |context| parameter and therefore AllocateJSObjectFromMapWithSlackTracking and AllocateJSObjectFromMap (and friends) can be merged together by adding an enum parameter or extending the flags list.",
+      "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353d5c75_dcc0fbb4",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-20T10:54:33Z",
+      "side": 1,
+      "message": "DisallowHeapAllocation no_gc;",
+      "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
