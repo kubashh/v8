@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e45785df_b18b0f82",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-10-20T17:15:33Z",
+      "side": 1,
+      "message": "Yes, I suppose so. I don\u0027t find goto so egregious for error handling, but I know many do. :-)",
+      "parentUuid": "f0434d13_907fad3e",
+      "revId": "e60edd9505a9cf82b3f3d6f77d965b24e5a8f92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "487e1d13_baf183e0",
         "filename": "src/value-serializer.cc",
         "patchSetId": 2
