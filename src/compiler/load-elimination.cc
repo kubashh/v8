@@ -713,7 +713,7 @@ Reduction LoadElimination::ReduceArrayBufferWasNeutered(Node* node) {
 }
 
 Reduction LoadElimination::ReduceMapGuard(Node* node) {
-  ZoneHandleSet<Map> const maps = MapGuardMapsOf(node->op());
+  ZoneHandleSet<Map> const maps = MapGuardMapsOf(node->op()).maps();
   Node* const object = NodeProperties::GetValueInput(node, 0);
   Node* const effect = NodeProperties::GetEffectInput(node);
   AbstractState const* state = node_states_.Get(effect);
@@ -745,7 +745,7 @@ Reduction LoadElimination::ReduceCheckMaps(Node* node) {
 }
 
 Reduction LoadElimination::ReduceCompareMaps(Node* node) {
-  ZoneHandleSet<Map> const maps = CompareMapsParametersOf(node->op());
+  ZoneHandleSet<Map> const maps = CompareMapsParametersOf(node->op()).maps();
   Node* const object = NodeProperties::GetValueInput(node, 0);
   Node* const effect = NodeProperties::GetEffectInput(node);
   AbstractState const* state = node_states_.Get(effect);
