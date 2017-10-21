@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cd45ce7_b3c95f84",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-21T16:55:45Z",
+      "side": 1,
+      "message": "We could move these two checks out of the fast path by doing them only in case the IsJSArray check below fails.",
+      "revId": "30e13418d2ee6a43c00f9eacb0214326df2f26a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95cb83e8_3e587614",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-21T16:55:45Z",
+      "side": 1,
+      "message": "How about introducing a helper to compare to a native context slot?",
+      "range": {
+        "startLine": 1219,
+        "startChar": 2,
+        "endLine": 1219,
+        "endChar": 8
+      },
+      "revId": "30e13418d2ee6a43c00f9eacb0214326df2f26a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f19dfda_a06c3202",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-10-21T16:55:45Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why we still need this runtime call? What are the exact cases that the fast-path in the CSA doesn\u0027t cover already?",
+      "range": {
+        "startLine": 381,
+        "startChar": 17,
+        "endLine": 381,
+        "endChar": 54
+      },
+      "revId": "30e13418d2ee6a43c00f9eacb0214326df2f26a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
