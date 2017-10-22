@@ -56,17 +56,16 @@ namespace bits {
 
 // CountPopulation(value) returns the number of bits set in |value|.
 template <typename T>
-constexpr inline
-    typename std::enable_if<std::is_unsigned<T>::value && sizeof(T) <= 8,
-                            unsigned>::type
-    CountPopulation(T value) {
+inline typename std::enable_if<std::is_unsigned<T>::value && sizeof(T) <= 8,
+                               unsigned>::type
+CountPopulation(T value) {
 #if V8_HAS_BUILTIN_POPCOUNT
   return sizeof(T) == 8 ? __builtin_popcountll(static_cast<uint64_t>(value))
                         : __builtin_popcount(static_cast<uint32_t>(value));
 #else
-  constexpr uint64_t mask[] = {0x5555555555555555, 0x3333333333333333,
-                               0x0f0f0f0f0f0f0f0f, 0x00ff00ff00ff00ff,
-                               0x0000ffff0000ffff, 0x00000000ffffffff};
+  static uint64_t mask[] = {0x5555555555555555, 0x3333333333333333,
+                            0x0f0f0f0f0f0f0f0f, 0x00ff00ff00ff00ff,
+                            0x0000ffff0000ffff, 0x00000000ffffffff};
   value = ((value >> 1) & mask[0]) + (value & mask[0]);
   value = ((value >> 2) & mask[1]) + (value & mask[1]);
   value = ((value >> 4) & mask[2]) + (value & mask[2]);

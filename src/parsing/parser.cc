@@ -707,7 +707,6 @@ FunctionLiteral* Parser::DoParseProgram(ParseInfo* info) {
     }
 
     if (ok) {
-      RewriteDestructuringAssignments();
       int parameter_count = parsing_module_ ? 1 : 0;
       result = factory()->NewScriptOrEvalFunctionLiteral(
           scope, body, function_state.expected_property_count(),
@@ -827,8 +826,6 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
       scope->set_start_position(info->start_position());
       ExpressionClassifier formals_classifier(this);
       ParserFormalParameters formals(scope);
-      int rewritable_length =
-          function_state.destructuring_assignments_to_rewrite().length();
       {
         // Parsing patterns as variable reference expression creates
         // NewUnresolved references in current scope. Enter arrow function
@@ -866,8 +863,7 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
 
         // Pass `accept_IN=true` to ParseArrowFunctionLiteral --- This should
         // not be observable, or else the preparser would have failed.
-        Expression* expression =
-            ParseArrowFunctionLiteral(true, formals, rewritable_length, &ok);
+        Expression* expression = ParseArrowFunctionLiteral(true, formals, &ok);
         if (ok) {
           // Scanning must end at the same position that was recorded
           // previously. If not, parsing has been interrupted due to a stack
@@ -880,10 +876,6 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
             // must produce a FunctionLiteral.
             DCHECK(expression->IsFunctionLiteral());
             result = expression->AsFunctionLiteral();
-            // Rewrite destructuring assignments in the parameters. (The ones
-            // inside the function body are rewritten by
-            // ParseArrowFunctionLiteral.)
-            RewriteDestructuringAssignments();
           } else {
             ok = false;
           }
@@ -3122,8 +3114,6 @@ ZoneList<Statement*>* Parser::ParseFunction(
   ValidateFormalParameters(function_scope->language_mode(),
                            allow_duplicate_parameters, CHECK_OK);
 
-  RewriteDestructuringAssignments();
-
   *has_duplicate_parameters =
       !classifier()->is_valid_formal_parameter_list_without_duplicates();
 
@@ -3758,28 +3748,6 @@ void Parser::RewriteNonPattern(bool* ok) {
   }
 }
 
-
-void Parser::RewriteDestructuringAssignments() {
-  const auto& assignments =
-      function_state_->destructuring_assignments_to_rewrite();
-  for (int i = assignments.length() - 1; i >= 0; --i) {
-    // Rewrite list in reverse, so that nested assignment patterns are rewritten
-    // correctly.
-    const DestructuringAssignment& pair = assignments.at(i);
-    RewritableExpression* to_rewrite =
-        pair.assignment->AsRewritableExpression();
-    DCHECK_NOT_NULL(to_rewrite);
-    if (!to_rewrite->is_rewritten()) {
-      // Since this function is called at the end of parsing the program,
-      // pair.scope may already have been removed by FinalizeBlockScope in the
-      // meantime.
-      Scope* scope = pair.scope->GetUnremovedScope();
-      BlockState block_state(&scope_, scope);
-      RewriteDestructuringAssignment(to_rewrite);
-    }
-  }
-}
-
 Expression* Parser::RewriteExponentiation(Expression* left, Expression* right,
                                           int pos) {
   ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(2, zone());
@@ -3918,12 +3886,6 @@ Expression* Parser::RewriteSpreads(ArrayLiteral* lit) {
   // first spread (included) until the end. This fixes $R's initialization.
   lit->RewindSpreads();
   return factory()->NewDoExpression(do_block, result, lit->position());
-}
-
-void Parser::QueueDestructuringAssignmentForRewriting(Expression* expr) {
-  DCHECK(expr->IsRewritableExpression());
-  function_state_->AddDestructuringAssignment(
-      DestructuringAssignment(expr, scope()));
 }
 
 void Parser::QueueNonPatternForRewriting(Expression* expr, bool* ok) {

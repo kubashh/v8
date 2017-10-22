@@ -576,6 +576,9 @@ class PreParserFactory {
       int pos, bool has_rest_property) {
     return PreParserExpression::ObjectLiteral(properties.variables_);
   }
+  PreParserExpression NewPattern(const PreParserExpression& expression) {
+    return PreParserExpression::Default();
+  }
   PreParserExpression NewVariableProxy(void* variable) {
     return PreParserExpression::Default();
   }
@@ -1174,8 +1177,6 @@ class PreParser : public ParserBase<PreParser> {
     return PreParserStatement::Default();
   }
 
-  V8_INLINE void QueueDestructuringAssignmentForRewriting(
-      PreParserExpression assignment) {}
   V8_INLINE void QueueNonPatternForRewriting(const PreParserExpression& expr,
                                              bool* ok) {}
 

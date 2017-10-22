@@ -549,9 +549,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   void SetLanguageMode(Scope* scope, LanguageMode mode);
   void SetAsmModule();
 
-  // Rewrite all DestructuringAssignments in the current FunctionState.
-  V8_INLINE void RewriteDestructuringAssignments();
-
   V8_INLINE Expression* RewriteExponentiation(Expression* left,
                                               Expression* right, int pos);
   V8_INLINE Expression* RewriteAssignExponentiation(Expression* left,
@@ -563,8 +560,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   // Rewrite expressions that are not used as patterns
   V8_INLINE void RewriteNonPattern(bool* ok);
 
-  V8_INLINE void QueueDestructuringAssignmentForRewriting(
-      Expression* assignment);
   V8_INLINE void QueueNonPatternForRewriting(Expression* expr, bool* ok);
 
   friend class InitializerRewriter;
