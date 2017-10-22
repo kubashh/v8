@@ -237,7 +237,6 @@ void CallPrinter::VisitObjectLiteral(ObjectLiteral* node) {
   Print("}");
 }
 
-
 void CallPrinter::VisitArrayLiteral(ArrayLiteral* node) {
   Print("[");
   for (int i = 0; i < node->values()->length(); i++) {
@@ -247,6 +246,46 @@ void CallPrinter::VisitArrayLiteral(ArrayLiteral* node) {
   Print("]");
 }
 
+void CallPrinter::VisitObjectPattern(ObjectPattern* node) {
+  Print("{");
+  bool first = true;
+  for (const auto& element : node->elements()) {
+    if (!first) Print(", ");
+    if (element.is_computed_name()) {
+      Print("[");
+      Find(element.name());
+      Print("]: ");
+      Find(element.target());
+    } else if (element.name() != element.target()) {
+      Find(element.name());
+      Print(": ");
+      Find(element.target());
+    } else {
+      Find(element.target());
+      Print(" ");
+    }
+    if (element.initializer()) Find(element.initializer());
+    first = false;
+  }
+  Print("}");
+}
+
+void CallPrinter::VisitArrayPattern(ArrayPattern* node) {
+  Print("[");
+  bool first = true;
+  for (const auto& element : node->elements()) {
+    if (!first) Print(", ");
+    if (element.target()) {
+      Find(element.target());
+      if (element.initializer()) {
+        Print(" = ");
+        Find(element.initializer());
+      }
+    }
+    first = false;
+  }
+  Print("]");
+}
 
 void CallPrinter::VisitVariableProxy(VariableProxy* node) {
   if (is_user_js_) {
@@ -1064,7 +1103,6 @@ void AstPrinter::PrintObjectProperties(
   }
 }
 
-
 void AstPrinter::VisitArrayLiteral(ArrayLiteral* node) {
   IndentedScope indent(this, "ARRAY LITERAL", node->position());
   if (node->values()->length() > 0) {
@@ -1075,6 +1113,46 @@ void AstPrinter::VisitArrayLiteral(ArrayLiteral* node) {
   }
 }
 
+void AstPrinter::VisitObjectPattern(ObjectPattern* node) {
+  IndentedScope indent(this, "OBJECT PATTERN", node->position());
+  const char* prop_kind = "NAME (CONSTANT)";
+  for (const auto& element : node->elements()) {
+    if (element.is_computed_name()) {
+      prop_kind = "NAME (COMPUTED)";
+    }
+
+    EmbeddedVector<char, 128> buf;
+    bool is_rest = element.type() == ObjectPattern::BindingType::kRestElement;
+    SNPrintF(buf,
+             is_rest ? "REST DESTRUCTURING TARGET" : "DESTRUCTURING TARGET");
+    IndentedScope prop(this, buf.start());
+    PrintIndentedVisit(prop_kind, element.name());
+    PrintIndentedVisit("TARGET", element.target());
+    if (element.initializer()) {
+      PrintIndentedVisit("INITIALIZER", element.initializer());
+    }
+  }
+}
+
+void AstPrinter::VisitArrayPattern(ArrayPattern* node) {
+  IndentedScope indent(this, "ARRAY PATTERN", node->position());
+  for (const auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) {
+      PrintIndented("ELISION");
+      continue;
+    }
+
+    EmbeddedVector<char, 128> buf;
+    bool is_rest = element.type() == ArrayPattern::BindingType::kRestElement;
+    SNPrintF(buf,
+             is_rest ? "REST DESTRUCTURING TARGET" : "DESTRUCTURING TARGET");
+    IndentedScope prop(this, buf.start());
+    PrintIndentedVisit("TARGET", element.target());
+    if (element.initializer()) {
+      PrintIndentedVisit("INITIALIZER", element.initializer());
+    }
+  }
+}
 
 void AstPrinter::VisitVariableProxy(VariableProxy* node) {
   EmbeddedVector<char, 128> buf;

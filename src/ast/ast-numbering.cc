@@ -325,6 +325,26 @@ void AstNumberingVisitor::VisitArrayLiteral(ArrayLiteral* node) {
   node->InitDepthAndFlags();
 }
 
+void AstNumberingVisitor::VisitObjectPattern(ObjectPattern* node) {
+  for (const auto& element : node->elements()) {
+    Visit(element.name());
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
+}
+
+void AstNumberingVisitor::VisitArrayPattern(ArrayPattern* node) {
+  for (const auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
+}
+
 void AstNumberingVisitor::VisitCall(Call* node) {
   Visit(node->expression());
   VisitArguments(node->arguments());
