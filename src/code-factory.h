@@ -8,7 +8,7 @@
 #include "src/allocation.h"
 #include "src/assembler.h"
 #include "src/callable.h"
-#include "src/codegen.h"
+#include "src/code-stubs.h"
 #include "src/globals.h"
 #include "src/interface-descriptors.h"
 #include "src/parsing/token.h"
@@ -58,7 +58,6 @@ class V8_EXPORT_PRIVATE CodeFactory final {
                             StringAddFlags flags = STRING_ADD_CHECK_NONE,
                             PretenureFlag pretenure_flag = NOT_TENURED);
   static Callable StringCompare(Isolate* isolate, Token::Value token);
-  static Callable SubString(Isolate* isolate);
 
   static Callable FastNewFunctionContext(Isolate* isolate,
                                          ScopeType scope_type);

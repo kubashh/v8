@@ -15,7 +15,7 @@
 #include "src/base/once.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/bootstrapper.h"
-#include "src/codegen.h"
+#include "src/code-stubs.h"
 #include "src/compilation-cache.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/conversions.h"
@@ -170,10 +170,10 @@ Heap::Heap()
       contexts_disposed_(0),
       number_of_disposed_maps_(0),
       new_space_(nullptr),
-      old_space_(NULL),
-      code_space_(NULL),
-      map_space_(NULL),
-      lo_space_(NULL),
+      old_space_(nullptr),
+      code_space_(nullptr),
+      map_space_(nullptr),
+      lo_space_(nullptr),
       gc_state_(NOT_IN_GC),
       gc_post_processing_depth_(0),
       allocations_count_(0),
@@ -225,7 +225,7 @@ Heap::Heap()
       external_string_table_(this),
       gc_callbacks_depth_(0),
       deserialization_complete_(false),
-      strong_roots_list_(NULL),
+      strong_roots_list_(nullptr),
       heap_iterator_depth_(0),
       local_embedder_heap_tracer_(nullptr),
       fast_promotion_mode_(false),
@@ -237,12 +237,12 @@ Heap::Heap()
   DCHECK_EQ(0, max_old_generation_size_ & (Page::kPageSize - 1));
 
   memset(roots_, 0, sizeof(roots_[0]) * kRootListLength);
-  set_native_contexts_list(NULL);
+  set_native_contexts_list(nullptr);
   set_allocation_sites_list(Smi::kZero);
   set_encountered_weak_collections(Smi::kZero);
   // Put a dummy entry in the remembered pages so we can find the list the
   // minidump even if there are no real unmapped pages.
-  RememberUnmappedPage(NULL, false);
+  RememberUnmappedPage(nullptr, false);
 }
 
 size_t Heap::Capacity() {
@@ -303,7 +303,7 @@ size_t Heap::Available() {
 
   size_t total = 0;
   AllSpaces spaces(this);
-  for (Space* space = spaces.next(); space != NULL; space = spaces.next()) {
+  for (Space* space = spaces.next(); space != nullptr; space = spaces.next()) {
     total += space->Available();
   }
   return total;
@@ -311,8 +311,8 @@ size_t Heap::Available() {
 
 
 bool Heap::HasBeenSetUp() {
-  return old_space_ != NULL && code_space_ != NULL && map_space_ != NULL &&
-         lo_space_ != NULL;
+  return old_space_ != nullptr && code_space_ != nullptr &&
+         map_space_ != nullptr && lo_space_ != nullptr;
 }
 
 
@@ -354,7 +354,7 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
   }
 
   // Default
-  *reason = NULL;
+  *reason = nullptr;
   return YoungGenerationCollector();
 }
 
@@ -616,7 +616,7 @@ void Heap::GarbageCollectionPrologue() {
 size_t Heap::SizeOfObjects() {
   size_t total = 0;
   AllSpaces spaces(this);
-  for (Space* space = spaces.next(); space != NULL; space = spaces.next()) {
+  for (Space* space = spaces.next(); space != nullptr; space = spaces.next()) {
     total += space->SizeOfObjects();
   }
   return total;
@@ -647,7 +647,7 @@ void Heap::SetRootCodeStubs(UnseededNumberDictionary* value) {
 
 void Heap::RepairFreeListsAfterDeserialization() {
   PagedSpaces spaces(this);
-  for (PagedSpace* space = spaces.next(); space != NULL;
+  for (PagedSpace* space = spaces.next(); space != nullptr;
        space = spaces.next()) {
     space->RepairFreeListsAfterDeserialization();
   }
@@ -1168,7 +1168,7 @@ bool Heap::CollectGarbage(AllocationSpace space,
   // The VM is in the GC state until exiting this function.
   VMState<GC> state(isolate());
 
-  const char* collector_reason = NULL;
+  const char* collector_reason = nullptr;
   GarbageCollector collector = SelectGarbageCollector(space, &collector_reason);
 
 #ifdef DEBUG
@@ -1748,7 +1748,7 @@ class ScavengeWeakObjectRetainer : public WeakObjectRetainer {
     if (map_word.IsForwardingAddress()) {
       return map_word.ToForwardingAddress();
     }
-    return NULL;
+    return nullptr;
   }
 
  private:
@@ -1805,10 +1805,15 @@ static bool IsLogging(Isolate* isolate) {
           isolate->heap_profiler()->is_tracking_object_moves());
 }
 
-class ScavengingItem : public ItemParallelJob::Item {
+class PageScavengingItem final : public ItemParallelJob::Item {
  public:
-  virtual ~ScavengingItem() {}
-  virtual void Process(Scavenger* scavenger) = 0;
+  explicit PageScavengingItem(MemoryChunk* chunk) : chunk_(chunk) {}
+  virtual ~PageScavengingItem() {}
+
+  void Process(Scavenger* scavenger) { scavenger->ScavengePage(chunk_); }
+
+ private:
+  MemoryChunk* const chunk_;
 };
 
 class ScavengingTask final : public ItemParallelJob::Task {
@@ -1824,8 +1829,8 @@ class ScavengingTask final : public ItemParallelJob::Task {
     {
       barrier_->Start();
       TimedScope scope(&scavenging_time);
-      ScavengingItem* item = nullptr;
-      while ((item = GetItem<ScavengingItem>()) != nullptr) {
+      PageScavengingItem* item = nullptr;
+      while ((item = GetItem<PageScavengingItem>()) != nullptr) {
         item->Process(scavenger_);
         item->MarkFinished();
       }
@@ -1846,41 +1851,6 @@ class ScavengingTask final : public ItemParallelJob::Task {
   Heap* const heap_;
   Scavenger* const scavenger_;
   OneshotBarrier* const barrier_;
-};
-
-class PageScavengingItem final : public ScavengingItem {
- public:
-  explicit PageScavengingItem(Heap* heap, MemoryChunk* chunk)
-      : heap_(heap), chunk_(chunk) {}
-  virtual ~PageScavengingItem() {}
-
-  void Process(Scavenger* scavenger) final {
-    base::LockGuard<base::RecursiveMutex> guard(chunk_->mutex());
-    scavenger->AnnounceLockedPage(chunk_);
-    RememberedSet<OLD_TO_NEW>::Iterate(
-        chunk_,
-        [this, scavenger](Address addr) {
-          return scavenger->CheckAndScavengeObject(heap_, addr);
-        },
-        SlotSet::KEEP_EMPTY_BUCKETS);
-    RememberedSet<OLD_TO_NEW>::IterateTyped(
-        chunk_,
-        [this, scavenger](SlotType type, Address host_addr, Address addr) {
-          return UpdateTypedSlotHelper::UpdateTypedSlot(
-              heap_->isolate(), type, addr, [this, scavenger](Object** addr) {
-                // We expect that objects referenced by code are long
-                // living. If we do not force promotion, then we need to
-                // clear old_to_new slots in dead code objects after
-                // mark-compact.
-                return scavenger->CheckAndScavengeObject(
-                    heap_, reinterpret_cast<Address>(addr));
-              });
-        });
-  }
-
- private:
-  Heap* const heap_;
-  MemoryChunk* const chunk_;
 };
 
 int Heap::NumberOfScavengeTasks() {
@@ -1916,6 +1886,7 @@ void Heap::Scavenge() {
     mark_compact_collector()->EnsureSweepingCompleted();
   }
 
+  // TODO(mlippautz): Untangle the dependency of the unmapper from the sweeper.
   mark_compact_collector()->sweeper().EnsureNewSpaceCompleted();
 
   SetGCState(SCAVENGE);
@@ -1943,46 +1914,53 @@ void Heap::Scavenge() {
     job.AddTask(new ScavengingTask(this, scavengers[i], &barrier));
   }
 
+  CodeSpaceMemoryModificationScope code_modification(this);
+
   RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
-      this, [this, &job](MemoryChunk* chunk) {
-        job.AddItem(new PageScavengingItem(this, chunk));
+      this, [&job](MemoryChunk* chunk) {
+        job.AddItem(new PageScavengingItem(chunk));
       });
 
-  RootScavengeVisitor root_scavenge_visitor(this, scavengers[kMainThreadId]);
+  {
+    MarkCompactCollector::Sweeper::PauseOrCompleteScope sweeper_scope(
+        &mark_compact_collector()->sweeper());
+    RootScavengeVisitor root_scavenge_visitor(this, scavengers[kMainThreadId]);
 
-  {
-    // Identify weak unmodified handles. Requires an unmodified graph.
-    TRACE_GC(tracer(),
-             GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY);
-    isolate()->global_handles()->IdentifyWeakUnmodifiedObjects(
-        &JSObject::IsUnmodifiedApiObject);
-  }
-  {
-    // Copy roots.
-    TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_ROOTS);
-    IterateRoots(&root_scavenge_visitor, VISIT_ALL_IN_SCAVENGE);
-  }
-  {
-    // Weak collections are held strongly by the Scavenger.
-    TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK);
-    IterateEncounteredWeakCollections(&root_scavenge_visitor);
-  }
-  {
-    // Parallel phase scavenging all copied and promoted objects.
-    TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_PARALLEL);
-    job.Run();
-    DCHECK(copied_list.IsGlobalEmpty());
-    DCHECK(promotion_list.IsGlobalEmpty());
-  }
-  {
-    // Scavenge weak global handles.
-    TRACE_GC(tracer(),
-             GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS);
-    isolate()->global_handles()->MarkNewSpaceWeakUnmodifiedObjectsPending(
-        &IsUnscavengedHeapObject);
-    isolate()->global_handles()->IterateNewSpaceWeakUnmodifiedRoots(
-        &root_scavenge_visitor);
-    scavengers[kMainThreadId]->Process();
+    {
+      // Identify weak unmodified handles. Requires an unmodified graph.
+      TRACE_GC(
+          tracer(),
+          GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY);
+      isolate()->global_handles()->IdentifyWeakUnmodifiedObjects(
+          &JSObject::IsUnmodifiedApiObject);
+    }
+    {
+      // Copy roots.
+      TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_ROOTS);
+      IterateRoots(&root_scavenge_visitor, VISIT_ALL_IN_SCAVENGE);
+    }
+    {
+      // Weak collections are held strongly by the Scavenger.
+      TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK);
+      IterateEncounteredWeakCollections(&root_scavenge_visitor);
+    }
+    {
+      // Parallel phase scavenging all copied and promoted objects.
+      TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_PARALLEL);
+      job.Run();
+      DCHECK(copied_list.IsGlobalEmpty());
+      DCHECK(promotion_list.IsGlobalEmpty());
+    }
+    {
+      // Scavenge weak global handles.
+      TRACE_GC(tracer(),
+               GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS);
+      isolate()->global_handles()->MarkNewSpaceWeakUnmodifiedObjectsPending(
+          &IsUnscavengedHeapObject);
+      isolate()->global_handles()->IterateNewSpaceWeakUnmodifiedRoots(
+          &root_scavenge_visitor);
+      scavengers[kMainThreadId]->Process();
+    }
   }
 
   for (int i = 0; i < num_scavenge_tasks; i++) {
@@ -2056,10 +2034,10 @@ String* Heap::UpdateNewSpaceReferenceInExternalStringTableEntry(Heap* heap,
     if (!string->IsExternalString()) {
       // Original external string has been internalized.
       DCHECK(string->IsThinString());
-      return NULL;
+      return nullptr;
     }
     heap->FinalizeExternalString(string);
-    return NULL;
+    return nullptr;
   }
 
   // String is still reachable.
@@ -2095,7 +2073,7 @@ void Heap::ExternalStringTable::UpdateNewSpaceReferences(
   for (Object** p = start; p < end; ++p) {
     String* target = updater_func(heap_, p);
 
-    if (target == NULL) continue;
+    if (target == nullptr) continue;
 
     DCHECK(target->IsExternalString());
 
@@ -2362,10 +2340,10 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   return map;
 }
 
-
 AllocationResult Heap::AllocateMap(InstanceType instance_type,
                                    int instance_size,
-                                   ElementsKind elements_kind) {
+                                   ElementsKind elements_kind,
+                                   int inobject_properties) {
   HeapObject* result = nullptr;
   AllocationResult allocation = AllocateRaw(Map::kSize, MAP_SPACE);
   if (!allocation.To(&result)) return allocation;
@@ -2378,12 +2356,13 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
   map->set_constructor_or_backpointer(null_value(), SKIP_WRITE_BARRIER);
   map->set_instance_size(instance_size);
   map->clear_unused();
-  map->set_inobject_properties_or_constructor_function_index(0);
+  map->set_inobject_properties_or_constructor_function_index(
+      inobject_properties);
   map->set_dependent_code(DependentCode::cast(empty_fixed_array()),
                           SKIP_WRITE_BARRIER);
   map->set_weak_cell_cache(Smi::kZero);
   map->set_raw_transitions(Smi::kZero);
-  map->set_unused_property_fields(0);
+  map->set_unused_property_fields(inobject_properties);
   map->set_instance_descriptors(empty_descriptor_array());
   if (FLAG_unbox_double_fields) {
     map->set_layout_descriptor(LayoutDescriptor::FastPointerLayout());
@@ -2583,7 +2562,7 @@ bool Heap::RootCanBeWrittenAfterInitialization(Heap::RootListIndex root_index) {
     case kWeakNewSpaceObjectToCodeListRootIndex:
     case kRetainedMapsRootIndex:
     case kRetainingPathTargetsRootIndex:
-    case kCodeCoverageListRootIndex:
+    case kFeedbackVectorsForProfilingToolsRootIndex:
     case kNoScriptSharedFunctionInfosRootIndex:
     case kWeakStackTraceListRootIndex:
     case kSerializedTemplatesRootIndex:
@@ -2808,8 +2787,8 @@ HeapObject* Heap::CreateFillerObjectAt(Address addr, int size,
   }
 
   // At this point, we may be deserializing the heap from a snapshot, and
-  // none of the maps have been created yet and are NULL.
-  DCHECK((filler->map() == NULL && !deserialization_complete_) ||
+  // none of the maps have been created yet and are nullptr.
+  DCHECK((filler->map() == nullptr && !deserialization_complete_) ||
          filler->map()->IsMap());
   return filler;
 }
@@ -2897,12 +2876,8 @@ void Heap::RightTrimFixedArray(FixedArrayBase* object, int elements_to_trim) {
   DCHECK_GE(elements_to_trim, 0);
 
   int bytes_to_trim;
-  if (object->IsFixedTypedArrayBase()) {
-    InstanceType type = object->map()->instance_type();
-    bytes_to_trim =
-        FixedTypedArrayBase::TypedArraySize(type, len) -
-        FixedTypedArrayBase::TypedArraySize(type, len - elements_to_trim);
-  } else if (object->IsByteArray()) {
+  DCHECK(!object->IsFixedTypedArrayBase());
+  if (object->IsByteArray()) {
     int new_size = ByteArray::SizeFor(len - elements_to_trim);
     bytes_to_trim = ByteArray::SizeFor(len) - new_size;
     DCHECK_GE(bytes_to_trim, 0);
@@ -3073,6 +3048,7 @@ AllocationResult Heap::AllocateCode(int object_size, bool immovable) {
 
 
 AllocationResult Heap::CopyCode(Code* code) {
+  CodeSpaceMemoryModificationScope code_modification(this);
   AllocationResult allocation;
 
   HeapObject* result = nullptr;
@@ -3149,7 +3125,7 @@ AllocationResult Heap::Allocate(Map* map, AllocationSpace space,
   DCHECK(gc_state_ == NOT_IN_GC);
   DCHECK(map->instance_type() != MAP_TYPE);
   int size = map->instance_size();
-  if (allocation_site != NULL) {
+  if (allocation_site != nullptr) {
     size += AllocationMemento::kSize;
   }
   HeapObject* result = nullptr;
@@ -3159,7 +3135,7 @@ AllocationResult Heap::Allocate(Map* map, AllocationSpace space,
   WriteBarrierMode write_barrier_mode =
       space == NEW_SPACE ? SKIP_WRITE_BARRIER : UPDATE_WRITE_BARRIER;
   result->set_map_after_allocation(map, write_barrier_mode);
-  if (allocation_site != NULL) {
+  if (allocation_site != nullptr) {
     AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
         reinterpret_cast<Address>(result) + map->instance_size());
     InitializeAllocationMemento(alloc_memento, allocation_site);
@@ -3274,10 +3250,10 @@ AllocationResult Heap::CopyJSObject(JSObject* source, AllocationSite* site) {
   int object_size = map->instance_size();
   HeapObject* clone = nullptr;
 
-  DCHECK(site == NULL || AllocationSite::CanTrack(map->instance_type()));
+  DCHECK(site == nullptr || AllocationSite::CanTrack(map->instance_type()));
 
   int adjusted_object_size =
-      site != NULL ? object_size + AllocationMemento::kSize : object_size;
+      site != nullptr ? object_size + AllocationMemento::kSize : object_size;
   AllocationResult allocation = AllocateRaw(adjusted_object_size, NEW_SPACE);
   if (!allocation.To(&clone)) return allocation;
 
@@ -3286,7 +3262,7 @@ AllocationResult Heap::CopyJSObject(JSObject* source, AllocationSite* site) {
   // the contents without worrying about updating the write barrier.
   CopyBlock(clone->address(), source->address(), object_size);
 
-  if (site != NULL) {
+  if (site != nullptr) {
     AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
         reinterpret_cast<Address>(clone) + object_size);
     InitializeAllocationMemento(alloc_memento, site);
@@ -4394,7 +4370,7 @@ void Heap::Print() {
   if (!HasBeenSetUp()) return;
   isolate()->PrintStack(stdout);
   AllSpaces spaces(this);
-  for (Space* space = spaces.next(); space != NULL; space = spaces.next()) {
+  for (Space* space = spaces.next(); space != nullptr; space = spaces.next()) {
     space->Print();
   }
 }
@@ -5055,7 +5031,7 @@ void Heap::RecordStats(HeapStats* stats, bool take_snapshot) {
   *stats->malloced_peak_memory = isolate_->allocator()->GetMaxMemoryUsage();
   if (take_snapshot) {
     HeapIterator iterator(this);
-    for (HeapObject* obj = iterator.next(); obj != NULL;
+    for (HeapObject* obj = iterator.next(); obj != nullptr;
          obj = iterator.next()) {
       InstanceType type = obj->map()->instance_type();
       DCHECK(0 <= type && type <= LAST_TYPE);
@@ -5063,9 +5039,9 @@ void Heap::RecordStats(HeapStats* stats, bool take_snapshot) {
       stats->size_per_type[type] += obj->Size();
     }
   }
-  if (stats->last_few_messages != NULL)
+  if (stats->last_few_messages != nullptr)
     GetFromRingBuffer(stats->last_few_messages);
-  if (stats->js_stacktrace != NULL) {
+  if (stats->js_stacktrace != nullptr) {
     FixedStringAllocator fixed(stats->js_stacktrace, kStacktraceBufferSize - 1);
     StringStream accumulator(&fixed, StringStream::kPrintObjectConcise);
     if (gc_state() == Heap::NOT_IN_GC) {
@@ -5349,7 +5325,7 @@ void Heap::DisableInlineAllocation() {
 
   // Update inline allocation limit for old spaces.
   PagedSpaces spaces(this);
-  for (PagedSpace* space = spaces.next(); space != NULL;
+  for (PagedSpace* space = spaces.next(); space != nullptr;
        space = spaces.next()) {
     space->EmptyAllocationInfo();
   }
@@ -5373,7 +5349,7 @@ bool Heap::SetUp() {
   }
 
   mmap_region_base_ =
-      reinterpret_cast<uintptr_t>(v8::internal::GetRandomMmapAddr()) &
+      reinterpret_cast<uintptr_t>(base::OS::GetRandomMmapAddr()) &
       ~kMmapRegionMask;
 
   // Set up memory allocator.
@@ -5383,10 +5359,9 @@ bool Heap::SetUp() {
   store_buffer_ = new StoreBuffer(this);
 
   mark_compact_collector_ = new MarkCompactCollector(this);
-  incremental_marking_ = new IncrementalMarking(this);
+  incremental_marking_ =
+      new IncrementalMarking(this, mark_compact_collector_->marking_worklist());
 
-  incremental_marking_->set_marking_worklist(
-      mark_compact_collector_->marking_worklist());
   if (FLAG_concurrent_marking) {
     MarkCompactCollector::MarkingWorklist* marking_worklist =
         mark_compact_collector_->marking_worklist();
@@ -5473,7 +5448,7 @@ void Heap::InitializeHashSeed() {
 }
 
 void Heap::SetStackLimits() {
-  DCHECK(isolate_ != NULL);
+  DCHECK_NOT_NULL(isolate_);
   DCHECK(isolate_ == isolate());
   // On 64 bit machines, pointers are generally out of range of Smis.  We write
   // something that looks like an out of range Smi to the GC.
@@ -5499,7 +5474,7 @@ void Heap::PrintAllocationsHash() {
 
 void Heap::NotifyDeserializationComplete() {
   PagedSpaces spaces(this);
-  for (PagedSpace* s = spaces.next(); s != NULL; s = spaces.next()) {
+  for (PagedSpace* s = spaces.next(); s != nullptr; s = spaces.next()) {
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
     // All pages right after bootstrapping must be marked as never-evacuate.
@@ -5617,37 +5592,37 @@ void Heap::TearDown() {
   delete new_space_;
   new_space_ = nullptr;
 
-  if (old_space_ != NULL) {
+  if (old_space_ != nullptr) {
     delete old_space_;
-    old_space_ = NULL;
+    old_space_ = nullptr;
   }
 
-  if (code_space_ != NULL) {
+  if (code_space_ != nullptr) {
     delete code_space_;
-    code_space_ = NULL;
+    code_space_ = nullptr;
   }
 
-  if (map_space_ != NULL) {
+  if (map_space_ != nullptr) {
     delete map_space_;
-    map_space_ = NULL;
+    map_space_ = nullptr;
   }
 
-  if (lo_space_ != NULL) {
+  if (lo_space_ != nullptr) {
     lo_space_->TearDown();
     delete lo_space_;
-    lo_space_ = NULL;
+    lo_space_ = nullptr;
   }
 
   store_buffer()->TearDown();
 
   memory_allocator()->TearDown();
 
-  StrongRootsList* next = NULL;
+  StrongRootsList* next = nullptr;
   for (StrongRootsList* list = strong_roots_list_; list; list = next) {
     next = list->next;
     delete list;
   }
-  strong_roots_list_ = NULL;
+  strong_roots_list_ = nullptr;
 
   delete store_buffer_;
   store_buffer_ = nullptr;
@@ -5745,7 +5720,7 @@ void CompactWeakFixedArray(Object* object) {
 void Heap::CompactWeakFixedArrays() {
   // Find known WeakFixedArrays and compact them.
   HeapIterator iterator(this);
-  for (HeapObject* o = iterator.next(); o != NULL; o = iterator.next()) {
+  for (HeapObject* o = iterator.next(); o != nullptr; o = iterator.next()) {
     if (o->IsPrototypeInfo()) {
       Object* prototype_users = PrototypeInfo::cast(o)->prototype_users();
       if (prototype_users->IsWeakFixedArray()) {
@@ -5915,7 +5890,7 @@ Space* AllSpaces::next() {
     case LO_SPACE:
       return heap_->lo_space();
     default:
-      return NULL;
+      return nullptr;
   }
 }
 
@@ -5928,7 +5903,7 @@ PagedSpace* PagedSpaces::next() {
     case MAP_SPACE:
       return heap_->map_space();
     default:
-      return NULL;
+      return nullptr;
   }
 }
 
@@ -5940,7 +5915,7 @@ OldSpace* OldSpaces::next() {
     case CODE_SPACE:
       return heap_->code_space();
     default:
-      return NULL;
+      return nullptr;
   }
 }
 
@@ -6216,7 +6191,7 @@ void Heap::RegisterStrongRoots(Object** start, Object** end) {
 
 
 void Heap::UnregisterStrongRoots(Object** start) {
-  StrongRootsList* prev = NULL;
+  StrongRootsList* prev = nullptr;
   StrongRootsList* list = strong_roots_list_;
   while (list != nullptr) {
     StrongRootsList* next = list->next;
@@ -6299,7 +6274,7 @@ const char* AllocationSpaceName(AllocationSpace space) {
     default:
       UNREACHABLE();
   }
-  return NULL;
+  return nullptr;
 }
 
 void VerifyPointersVisitor::VisitPointers(HeapObject* host, Object** start,

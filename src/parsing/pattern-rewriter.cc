@@ -220,7 +220,7 @@ void PatternRewriter::VisitVariableProxy(VariableProxy* pattern) {
   if (!*ok_) return;
   DCHECK_NOT_NULL(var);
   DCHECK(proxy->is_resolved());
-  DCHECK(initializer_position_ != kNoSourcePosition);
+  DCHECK_NE(initializer_position_, kNoSourcePosition);
   var->set_initializer_position(initializer_position_);
 
   Scope* declaration_scope =
@@ -419,7 +419,7 @@ void PatternRewriter::VisitObjectLiteral(ObjectLiteral* pattern,
           DCHECK(key->IsPropertyName() || key->IsNumberLiteral());
         }
 
-        DCHECK(rest_runtime_callargs != nullptr);
+        DCHECK_NOT_NULL(rest_runtime_callargs);
         rest_runtime_callargs->Add(excluded_property, zone());
       }
 
@@ -772,6 +772,10 @@ NOT_A_PATTERN(WithStatement)
 NOT_A_PATTERN(Yield)
 NOT_A_PATTERN(YieldStar)
 NOT_A_PATTERN(Await)
+
+// These don't need to be rewritten due to being handled in Ignition
+NOT_A_PATTERN(ObjectPattern)
+NOT_A_PATTERN(ArrayPattern)
 
 #undef NOT_A_PATTERN
 }  // namespace internal

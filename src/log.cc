@@ -85,7 +85,7 @@ class CodeEventLogger::NameBuffer {
   }
 
   void AppendString(String* str) {
-    if (str == NULL) return;
+    if (str == nullptr) return;
     int uc16_length = Min(str->length(), kUtf16BufferSize);
     String::WriteToFlat(str, utf16_buffer, 0, uc16_length);
     int previous = unibrow::Utf16::kNoPreviousCharacter;
@@ -159,14 +159,14 @@ void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
                                       AbstractCode* code, const char* comment) {
   name_buffer_->Init(tag);
   name_buffer_->AppendBytes(comment);
-  LogRecordedBuffer(code, NULL, name_buffer_->get(), name_buffer_->size());
+  LogRecordedBuffer(code, nullptr, name_buffer_->get(), name_buffer_->size());
 }
 
 void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
                                       AbstractCode* code, Name* name) {
   name_buffer_->Init(tag);
   name_buffer_->AppendName(name);
-  LogRecordedBuffer(code, NULL, name_buffer_->get(), name_buffer_->size());
+  LogRecordedBuffer(code, nullptr, name_buffer_->get(), name_buffer_->size());
 }
 
 void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
@@ -198,18 +198,11 @@ void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
   LogRecordedBuffer(code, shared, name_buffer_->get(), name_buffer_->size());
 }
 
-void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
-                                      AbstractCode* code, int args_count) {
-  name_buffer_->Init(tag);
-  name_buffer_->AppendInt(args_count);
-  LogRecordedBuffer(code, NULL, name_buffer_->get(), name_buffer_->size());
-}
-
 void CodeEventLogger::RegExpCodeCreateEvent(AbstractCode* code,
                                             String* source) {
   name_buffer_->Init(CodeEventListener::REG_EXP_TAG);
   name_buffer_->AppendString(source);
-  LogRecordedBuffer(code, NULL, name_buffer_->get(), name_buffer_->size());
+  LogRecordedBuffer(code, nullptr, name_buffer_->get(), name_buffer_->size());
 }
 
 
@@ -238,8 +231,7 @@ const char PerfBasicLogger::kFilenameFormatString[] = "/tmp/perf-%d.map";
 // Extra space for the PID in the filename
 const int PerfBasicLogger::kFilenameBufferPadding = 16;
 
-PerfBasicLogger::PerfBasicLogger()
-    : perf_output_handle_(NULL) {
+PerfBasicLogger::PerfBasicLogger() : perf_output_handle_(nullptr) {
   // Open the perf JIT dump file.
   int bufferSize = sizeof(kFilenameFormatString) + kFilenameBufferPadding;
   ScopedVector<char> perf_dump_name(bufferSize);
@@ -251,13 +243,13 @@ PerfBasicLogger::PerfBasicLogger()
   perf_output_handle_ =
       base::OS::FOpen(perf_dump_name.start(), base::OS::LogFileOpenMode);
   CHECK_NOT_NULL(perf_output_handle_);
-  setvbuf(perf_output_handle_, NULL, _IOLBF, 0);
+  setvbuf(perf_output_handle_, nullptr, _IOLBF, 0);
 }
 
 
 PerfBasicLogger::~PerfBasicLogger() {
   fclose(perf_output_handle_);
-  perf_output_handle_ = NULL;
+  perf_output_handle_ = nullptr;
 }
 
 void PerfBasicLogger::LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
@@ -336,8 +328,7 @@ class LowLevelLogger : public CodeEventLogger {
 
 const char LowLevelLogger::kLogExt[] = ".ll";
 
-LowLevelLogger::LowLevelLogger(const char* name)
-    : ll_output_handle_(NULL) {
+LowLevelLogger::LowLevelLogger(const char* name) : ll_output_handle_(nullptr) {
   // Open the low-level log file.
   size_t len = strlen(name);
   ScopedVector<char> ll_name(static_cast<int>(len + sizeof(kLogExt)));
@@ -345,7 +336,7 @@ LowLevelLogger::LowLevelLogger(const char* name)
   MemCopy(ll_name.start() + len, kLogExt, sizeof(kLogExt));
   ll_output_handle_ =
       base::OS::FOpen(ll_name.start(), base::OS::LogFileOpenMode);
-  setvbuf(ll_output_handle_, NULL, _IOLBF, 0);
+  setvbuf(ll_output_handle_, nullptr, _IOLBF, 0);
 
   LogCodeInfo();
 }
@@ -353,7 +344,7 @@ LowLevelLogger::LowLevelLogger(const char* name)
 
 LowLevelLogger::~LowLevelLogger() {
   fclose(ll_output_handle_);
-  ll_output_handle_ = NULL;
+  ll_output_handle_ = nullptr;
 }
 
 
@@ -626,7 +617,7 @@ class Ticker: public sampler::Sampler {
   }
 
   void SetProfiler(Profiler* profiler) {
-    DCHECK(profiler_ == nullptr);
+    DCHECK_NULL(profiler_);
     profiler_ = profiler;
     IncreaseProfilingDepth();
     if (!IsActive()) Start();
@@ -730,15 +721,15 @@ void Profiler::Run() {
 
 Logger::Logger(Isolate* isolate)
     : isolate_(isolate),
-      ticker_(NULL),
-      profiler_(NULL),
-      log_events_(NULL),
+      ticker_(nullptr),
+      profiler_(nullptr),
+      log_events_(nullptr),
       is_logging_(false),
       log_(new Log(this)),
-      perf_basic_logger_(NULL),
-      perf_jit_logger_(NULL),
-      ll_logger_(NULL),
-      jit_logger_(NULL),
+      perf_basic_logger_(nullptr),
+      perf_jit_logger_(nullptr),
+      ll_logger_(nullptr),
+      jit_logger_(nullptr),
       is_initialized_(false) {}
 
 Logger::~Logger() {
@@ -845,9 +836,7 @@ void Logger::CodeDeoptEvent(Code* code, DeoptKind kind, Address pc,
   if (!log_->IsEnabled()) return;
   Deoptimizer::DeoptInfo info = Deoptimizer::GetDeoptInfo(code, pc);
   Log::MessageBuilder msg(log_);
-  int since_epoch = timer_.IsStarted()
-                        ? static_cast<int>(timer_.Elapsed().InMicroseconds())
-                        : -1;
+  int since_epoch = static_cast<int>(timer_.Elapsed().InMicroseconds());
   msg.Append("code-deopt,%d,%d,", since_epoch, code->CodeSize());
   msg.AppendAddress(code->instruction_start());
 
@@ -893,24 +882,27 @@ void Logger::CurrentTimeEvent() {
 
 void Logger::TimerEvent(Logger::StartEnd se, const char* name) {
   if (!log_->IsEnabled()) return;
-  DCHECK(FLAG_log_internal_timer_events);
   Log::MessageBuilder msg(log_);
   int since_epoch = static_cast<int>(timer_.Elapsed().InMicroseconds());
-  const char* format = (se == START) ? "timer-event-start,\"%s\",%ld"
-                                     : "timer-event-end,\"%s\",%ld";
+  const char* format = (se == START)
+                           ? "timer-event-start,\"%s\",%ld"
+                           : (se == END) ? "timer-event-end,\"%s\",%ld"
+                                         : "timer-event,\"%s\",%ld";
   msg.Append(format, name, since_epoch);
   msg.WriteToLogFile();
 }
 
-
+// static
 void Logger::EnterExternal(Isolate* isolate) {
+  DCHECK(FLAG_log_internal_timer_events);
   LOG(isolate, TimerEvent(START, TimerEventExternal::name()));
   DCHECK(isolate->current_vm_state() == JS);
   isolate->set_current_vm_state(EXTERNAL);
 }
 
-
+// static
 void Logger::LeaveExternal(Isolate* isolate) {
+  DCHECK(FLAG_log_internal_timer_events);
   LOG(isolate, TimerEvent(END, TimerEventExternal::name()));
   DCHECK(isolate->current_vm_state() == EXTERNAL);
   isolate->set_current_vm_state(JS);
@@ -1000,9 +992,7 @@ void Logger::CallbackEventInternal(const char* prefix, Name* name,
   msg.Append("%s,%s,-2,",
              kLogEventsNames[CodeEventListener::CODE_CREATION_EVENT],
              kLogEventsNames[CodeEventListener::CALLBACK_TAG]);
-  int timestamp = timer_.IsStarted()
-                      ? static_cast<int>(timer_.Elapsed().InMicroseconds())
-                      : -1;
+  int timestamp = static_cast<int>(timer_.Elapsed().InMicroseconds());
   msg.Append("%d,", timestamp);
   msg.AppendAddress(entry_point);
   if (name->IsString()) {
@@ -1048,9 +1038,7 @@ void AppendCodeCreateHeader(Log::MessageBuilder* msg,
   msg->Append("%s,%s,%d,",
               kLogEventsNames[CodeEventListener::CODE_CREATION_EVENT],
               kLogEventsNames[tag], code->kind());
-  int timestamp = timer->IsStarted()
-                      ? static_cast<int>(timer->Elapsed().InMicroseconds())
-                      : -1;
+  int timestamp = static_cast<int>(timer->Elapsed().InMicroseconds());
   msg->Append("%d,", timestamp);
   msg->AppendAddress(code->instruction_start());
   msg->Append(",%d,", code->instruction_size());
@@ -1216,8 +1204,7 @@ void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
       int maxInlinedId = -1;
       if (hasInlined) {
         PodArray<InliningPosition>* inlining_positions =
-            DeoptimizationInputData::cast(
-                Code::cast(code)->deoptimization_data())
+            DeoptimizationData::cast(Code::cast(code)->deoptimization_data())
                 ->InliningPositions();
         for (int i = 0; i < inlining_positions->length(); i++) {
           InliningPosition inlining_pos = inlining_positions->get(i);
@@ -1237,8 +1224,8 @@ void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
       }
       os << ",";
       if (hasInlined) {
-        DeoptimizationInputData* deopt_data = DeoptimizationInputData::cast(
-            Code::cast(code)->deoptimization_data());
+        DeoptimizationData* deopt_data =
+            DeoptimizationData::cast(Code::cast(code)->deoptimization_data());
 
         os << std::hex;
         for (int i = 0; i <= maxInlinedId; i++) {
@@ -1253,16 +1240,6 @@ void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
       msg.AppendUnbufferedCString(os.str().c_str());
     }
   }
-}
-
-void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
-                             AbstractCode* code, int args_count) {
-  if (!is_logging_code_events()) return;
-  if (!FLAG_log_code || !log_->IsEnabled()) return;
-  Log::MessageBuilder msg(log_);
-  AppendCodeCreateHeader(&msg, tag, code, &timer_);
-  msg.Append("\"args_count: %d\"", args_count);
-  msg.WriteToLogFile();
 }
 
 void Logger::CodeDisableOptEvent(AbstractCode* code,
@@ -1282,7 +1259,7 @@ void Logger::CodeDisableOptEvent(AbstractCode* code,
 void Logger::CodeMovingGCEvent() {
   if (!is_logging_code_events()) return;
   if (!log_->IsEnabled() || !FLAG_ll_prof) return;
-  base::OS::SignalCodeMovingGC(GetRandomMmapAddr());
+  base::OS::SignalCodeMovingGC();
 }
 
 void Logger::RegExpCodeCreateEvent(AbstractCode* code, String* source) {
@@ -1303,7 +1280,7 @@ void Logger::CodeMoveEvent(AbstractCode* from, Address to) {
 
 void Logger::CodeLinePosInfoRecordEvent(AbstractCode* code,
                                         ByteArray* source_position_table) {
-  if (jit_logger_) {
+  if (jit_logger_ && source_position_table->length() > 0) {
     void* jit_handler_data = jit_logger_->StartCodePosInfoEvent();
     for (SourcePositionTableIterator iter(source_position_table); !iter.done();
          iter.Advance()) {
@@ -1322,7 +1299,7 @@ void Logger::CodeLinePosInfoRecordEvent(AbstractCode* code,
 }
 
 void Logger::CodeNameEvent(Address addr, int pos, const char* code_name) {
-  if (code_name == NULL) return;  // Not a code object.
+  if (code_name == nullptr) return;  // Not a code object.
   Log::MessageBuilder msg(log_);
   msg.Append("%s,%d,",
              kLogEventsNames[CodeEventListener::SNAPSHOT_CODE_NAME_EVENT], pos);
@@ -1482,7 +1459,7 @@ void Logger::ICEvent(const char* type, bool keyed, const Address pc, int line,
 
 void Logger::StopProfiler() {
   if (!log_->IsEnabled()) return;
-  if (profiler_ != NULL) {
+  if (profiler_ != nullptr) {
     profiler_->pause();
     is_logging_ = false;
     removeCodeEventListener(this);
@@ -1500,10 +1477,10 @@ static void AddFunctionAndCode(SharedFunctionInfo* sfi,
                                AbstractCode* code_object,
                                Handle<SharedFunctionInfo>* sfis,
                                Handle<AbstractCode>* code_objects, int offset) {
-  if (sfis != NULL) {
+  if (sfis != nullptr) {
     sfis[offset] = Handle<SharedFunctionInfo>(sfi);
   }
-  if (code_objects != NULL) {
+  if (code_objects != nullptr) {
     code_objects[offset] = Handle<AbstractCode>(code_object);
   }
 }
@@ -1517,7 +1494,8 @@ static int EnumerateCompiledFunctions(Heap* heap,
 
   // Iterate the heap to find shared function info objects and record
   // the unoptimized code for them.
-  for (HeapObject* obj = iterator.next(); obj != NULL; obj = iterator.next()) {
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
     if (obj->IsSharedFunctionInfo()) {
       SharedFunctionInfo* sfi = SharedFunctionInfo::cast(obj);
       if (sfi->is_compiled() &&
@@ -1574,8 +1552,7 @@ void Logger::LogCodeObject(Object* object) {
     case AbstractCode::STUB:
       description =
           CodeStub::MajorName(CodeStub::GetMajorKey(code_object->GetCode()));
-      if (description == NULL)
-        description = "A stub from the snapshot";
+      if (description == nullptr) description = "A stub from the snapshot";
       tag = CodeEventListener::STUB_TAG;
       break;
     case AbstractCode::REGEXP:
@@ -1618,7 +1595,8 @@ void Logger::LogCodeObjects() {
   Heap* heap = isolate_->heap();
   HeapIterator iterator(heap);
   DisallowHeapAllocation no_gc;
-  for (HeapObject* obj = iterator.next(); obj != NULL; obj = iterator.next()) {
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
     if (obj->IsCode()) LogCodeObject(obj);
     if (obj->IsBytecodeArray()) LogCodeObject(obj);
   }
@@ -1701,7 +1679,8 @@ void Logger::LogExistingFunction(Handle<SharedFunctionInfo> shared,
 void Logger::LogCompiledFunctions() {
   Heap* heap = isolate_->heap();
   HandleScope scope(isolate_);
-  const int compiled_funcs_count = EnumerateCompiledFunctions(heap, NULL, NULL);
+  const int compiled_funcs_count =
+      EnumerateCompiledFunctions(heap, nullptr, nullptr);
   ScopedVector< Handle<SharedFunctionInfo> > sfis(compiled_funcs_count);
   ScopedVector<Handle<AbstractCode> > code_objects(compiled_funcs_count);
   EnumerateCompiledFunctions(heap, sfis.start(), code_objects.start());
@@ -1720,7 +1699,8 @@ void Logger::LogAccessorCallbacks() {
   Heap* heap = isolate_->heap();
   HeapIterator iterator(heap);
   DisallowHeapAllocation no_gc;
-  for (HeapObject* obj = iterator.next(); obj != NULL; obj = iterator.next()) {
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
     if (!obj->IsAccessorInfo()) continue;
     AccessorInfo* ai = AccessorInfo::cast(obj);
     if (!ai->name()->IsName()) continue;
@@ -1825,7 +1805,7 @@ bool Logger::SetUp(Isolate* isolate) {
     is_logging_ = true;
   }
 
-  if (FLAG_log_internal_timer_events || FLAG_prof_cpp) timer_.Start();
+  timer_.Start();
 
   if (FLAG_prof_cpp) {
     profiler_ = new Profiler(isolate);
@@ -1848,7 +1828,7 @@ void Logger::SetCodeEventHandler(uint32_t options,
   if (jit_logger_) {
       removeCodeEventListener(jit_logger_);
       delete jit_logger_;
-      jit_logger_ = NULL;
+      jit_logger_ = nullptr;
   }
 
   if (event_handler) {
@@ -1881,41 +1861,41 @@ sampler::Sampler* Logger::sampler() {
 
 
 FILE* Logger::TearDown() {
-  if (!is_initialized_) return NULL;
+  if (!is_initialized_) return nullptr;
   is_initialized_ = false;
 
   // Stop the profiler before closing the file.
-  if (profiler_ != NULL) {
+  if (profiler_ != nullptr) {
     profiler_->Disengage();
     delete profiler_;
-    profiler_ = NULL;
+    profiler_ = nullptr;
   }
 
   delete ticker_;
-  ticker_ = NULL;
+  ticker_ = nullptr;
 
   if (perf_basic_logger_) {
     removeCodeEventListener(perf_basic_logger_);
     delete perf_basic_logger_;
-    perf_basic_logger_ = NULL;
+    perf_basic_logger_ = nullptr;
   }
 
   if (perf_jit_logger_) {
     removeCodeEventListener(perf_jit_logger_);
     delete perf_jit_logger_;
-    perf_jit_logger_ = NULL;
+    perf_jit_logger_ = nullptr;
   }
 
   if (ll_logger_) {
     removeCodeEventListener(ll_logger_);
     delete ll_logger_;
-    ll_logger_ = NULL;
+    ll_logger_ = nullptr;
   }
 
   if (jit_logger_) {
     removeCodeEventListener(jit_logger_);
     delete jit_logger_;
-    jit_logger_ = NULL;
+    jit_logger_ = nullptr;
   }
 
   if (profiler_listener_.get() != nullptr) {

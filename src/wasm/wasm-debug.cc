@@ -136,36 +136,12 @@ class InterpreterHandle {
     return {bytes_str->GetChars(), static_cast<size_t>(bytes_str->length())};
   }
 
-  static uint32_t GetMemSize(WasmDebugInfo* debug_info) {
-    DisallowHeapAllocation no_gc;
-    return debug_info->wasm_instance()->has_memory_object()
-               ? debug_info->wasm_instance()->wasm_context()->mem_size
-               : 0;
-  }
-
-  static byte* GetMemStart(WasmDebugInfo* debug_info) {
-    DisallowHeapAllocation no_gc;
-    return debug_info->wasm_instance()->has_memory_object()
-               ? debug_info->wasm_instance()->wasm_context()->mem_start
-               : nullptr;
-  }
-
-  static byte* GetGlobalsStart(WasmDebugInfo* debug_info) {
-    DisallowHeapAllocation no_gc;
-    WasmCompiledModule* compiled_module =
-        debug_info->wasm_instance()->compiled_module();
-    return reinterpret_cast<byte*>(compiled_module->has_globals_start()
-                                       ? compiled_module->globals_start()
-                                       : 0);
-  }
-
  public:
   InterpreterHandle(Isolate* isolate, WasmDebugInfo* debug_info)
       : isolate_(isolate),
         module_(debug_info->wasm_instance()->compiled_module()->module()),
         interpreter_(isolate, module_, GetBytes(debug_info),
-                     GetGlobalsStart(debug_info), GetMemStart(debug_info),
-                     GetMemSize(debug_info)) {}
+                     debug_info->wasm_instance()->wasm_context()->get()) {}
 
   ~InterpreterHandle() { DCHECK_EQ(0, activations_.size()); }
 
@@ -428,13 +404,6 @@ class InterpreterHandle {
   uint64_t NumInterpretedCalls() {
     DCHECK_EQ(1, interpreter()->GetThreadCount());
     return interpreter()->GetThread(0)->NumInterpretedCalls();
-  }
-
-  void UpdateMemory(JSArrayBuffer* new_memory) {
-    byte* mem_start = reinterpret_cast<byte*>(new_memory->backing_store());
-    uint32_t mem_size;
-    CHECK(new_memory->byte_length()->ToUint32(&mem_size));
-    interpreter()->UpdateMemory(mem_start, mem_size);
   }
 
   Handle<JSObject> GetGlobalScopeObject(wasm::InterpretedFrame* frame,
@@ -750,12 +719,6 @@ void WasmDebugInfo::Unwind(Address frame_pointer) {
 uint64_t WasmDebugInfo::NumInterpretedCalls() {
   auto* handle = GetInterpreterHandleOrNull(this);
   return handle ? handle->NumInterpretedCalls() : 0;
-}
-
-void WasmDebugInfo::UpdateMemory(JSArrayBuffer* new_memory) {
-  auto* interp_handle = GetInterpreterHandleOrNull(this);
-  if (!interp_handle) return;
-  interp_handle->UpdateMemory(new_memory);
 }
 
 // static

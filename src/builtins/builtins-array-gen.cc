@@ -92,8 +92,9 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
 
   void FilterResultGenerator() {
     // 7. Let A be ArraySpeciesCreate(O, 0).
-    Node* len = SmiConstant(0);
-    ArraySpeciesCreate(len);
+    // This version of ArraySpeciesCreate will create with the correct
+    // ElementsKind in the fast case.
+    ArraySpeciesCreate();
   }
 
   Node* FilterProcessor(Node* k_value, Node* k) {
@@ -305,7 +306,7 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
 
     BIND(&slow);
     CallRuntime(Runtime::kSetProperty, context(), a(), k, mapped_value,
-                SmiConstant(STRICT));
+                SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
     Goto(&done);
 
     BIND(&detached);
@@ -743,13 +744,61 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
   }
 
   // Perform ArraySpeciesCreate (ES6 #sec-arrayspeciescreate).
-  void ArraySpeciesCreate(Node* len) {
+  // This version is specialized to create a zero length array
+  // of the elements kind of the input array.
+  void ArraySpeciesCreate() {
+    Label runtime(this, Label::kDeferred), done(this);
+
+    TNode<Smi> len = SmiConstant(0);
+    TNode<Map> original_map = LoadMap(o());
+    GotoIfNot(
+        InstanceTypeEqual(LoadMapInstanceType(original_map), JS_ARRAY_TYPE),
+        &runtime);
+
+    GotoIfNot(IsPrototypeInitialArrayPrototype(context(), original_map),
+              &runtime);
+
+    Node* species_protector = SpeciesProtectorConstant();
+    Node* value =
+        LoadObjectField(species_protector, PropertyCell::kValueOffset);
+    TNode<Smi> const protector_invalid =
+        SmiConstant(Isolate::kProtectorInvalid);
+    GotoIf(WordEqual(value, protector_invalid), &runtime);
+
+    // Respect the ElementsKind of the input array.
+    TNode<Int32T> elements_kind = LoadMapElementsKind(original_map);
+    GotoIfNot(IsFastElementsKind(elements_kind), &runtime);
+    TNode<Context> native_context = CAST(LoadNativeContext(context()));
+    TNode<Map> array_map =
+        CAST(LoadJSArrayElementsMap(elements_kind, native_context));
+    TNode<JSArray> array =
+        CAST(AllocateJSArray(GetInitialFastElementsKind(), array_map, len, len,
+                             nullptr, CodeStubAssembler::SMI_PARAMETERS));
+    a_.Bind(array);
+
+    Goto(&done);
+
+    BIND(&runtime);
+    {
+      // 5. Let A be ? ArraySpeciesCreate(O, len).
+      Node* constructor =
+          CallRuntime(Runtime::kArraySpeciesConstructor, context(), o());
+      a_.Bind(ConstructJS(CodeFactory::Construct(isolate()), context(),
+                          constructor, len));
+      Goto(&fully_spec_compliant_);
+    }
+
+    BIND(&done);
+  }
+
+  // Perform ArraySpeciesCreate (ES6 #sec-arrayspeciescreate).
+  void ArraySpeciesCreate(SloppyTNode<Smi> len) {
     Label runtime(this, Label::kDeferred), done(this);
 
     Node* const original_map = LoadMap(o());
-    GotoIf(Word32NotEqual(LoadMapInstanceType(original_map),
-                          Int32Constant(JS_ARRAY_TYPE)),
-           &runtime);
+    GotoIfNot(
+        InstanceTypeEqual(LoadMapInstanceType(original_map), JS_ARRAY_TYPE),
+        &runtime);
 
     GotoIfNot(IsPrototypeInitialArrayPrototype(context(), original_map),
               &runtime);
@@ -769,8 +818,9 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
     // element in the input array (maybe the callback deletes an element).
     const ElementsKind elements_kind =
         GetHoleyElementsKind(GetInitialFastElementsKind());
-    Node* const native_context = LoadNativeContext(context());
-    Node* array_map = LoadJSArrayElementsMap(elements_kind, native_context);
+    TNode<Context> native_context = CAST(LoadNativeContext(context()));
+    TNode<Map> array_map =
+        CAST(LoadJSArrayElementsMap(elements_kind, native_context));
     a_.Bind(AllocateJSArray(PACKED_SMI_ELEMENTS, array_map, len, len, nullptr,
                             CodeStubAssembler::SMI_PARAMETERS));
 
@@ -829,8 +879,7 @@ TF_BUILTIN(FastArrayPop, CodeStubAssembler) {
 
   BIND(&fast);
   {
-    CSA_ASSERT(this, TaggedIsPositiveSmi(
-                         LoadObjectField(receiver, JSArray::kLengthOffset)));
+    CSA_ASSERT(this, TaggedIsPositiveSmi(LoadJSArrayLength(receiver)));
     Node* length = LoadAndUntagObjectField(receiver, JSArray::kLengthOffset);
     Label return_undefined(this), fast_elements(this);
     GotoIf(IntPtrEqual(length, IntPtrConstant(0)), &return_undefined);
@@ -954,7 +1003,7 @@ TF_BUILTIN(FastArrayPush, CodeStubAssembler) {
     // TODO(danno): Use the KeyedStoreGeneric stub here when possible,
     // calling into the runtime to do the elements transition is overkill.
     CallRuntime(Runtime::kSetProperty, context, receiver, length, arg,
-                SmiConstant(STRICT));
+                SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
     Increment(&arg_index);
     // The runtime SetProperty call could have converted the array to dictionary
     // mode, which must be detected to abort the fast-path.
@@ -1001,7 +1050,7 @@ TF_BUILTIN(FastArrayPush, CodeStubAssembler) {
     // TODO(danno): Use the KeyedStoreGeneric stub here when possible,
     // calling into the runtime to do the elements transition is overkill.
     CallRuntime(Runtime::kSetProperty, context, receiver, length, arg,
-                SmiConstant(STRICT));
+                SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
     Increment(&arg_index);
     // The runtime SetProperty call could have converted the array to dictionary
     // mode, which must be detected to abort the fast-path.
@@ -1021,7 +1070,7 @@ TF_BUILTIN(FastArrayPush, CodeStubAssembler) {
         [this, receiver, context](Node* arg) {
           Node* length = LoadJSArrayLength(receiver);
           CallRuntime(Runtime::kSetProperty, context, receiver, length, arg,
-                      SmiConstant(STRICT));
+                      SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
         },
         arg_index);
     args.PopAndReturn(LoadJSArrayLength(receiver));
@@ -1060,8 +1109,7 @@ TF_BUILTIN(FastArrayShift, CodeStubAssembler) {
 
   BIND(&fast);
   {
-    CSA_ASSERT(this, TaggedIsPositiveSmi(
-                         LoadObjectField(receiver, JSArray::kLengthOffset)));
+    CSA_ASSERT(this, TaggedIsPositiveSmi(LoadJSArrayLength(receiver)));
     Node* length = LoadAndUntagObjectField(receiver, JSArray::kLengthOffset);
     Label return_undefined(this), fast_elements_tagged(this),
         fast_elements_smi(this);
@@ -1688,12 +1736,11 @@ TF_BUILTIN(ArrayIsArray, CodeStubAssembler) {
   GotoIf(TaggedIsSmi(object), &return_false);
   TNode<Word32T> instance_type = LoadInstanceType(CAST(object));
 
-  GotoIf(Word32Equal(instance_type, Int32Constant(JS_ARRAY_TYPE)),
-         &return_true);
+  GotoIf(InstanceTypeEqual(instance_type, JS_ARRAY_TYPE), &return_true);
 
   // TODO(verwaest): Handle proxies in-place.
-  Branch(Word32Equal(instance_type, Int32Constant(JS_PROXY_TYPE)),
-         &call_runtime, &return_false);
+  Branch(InstanceTypeEqual(instance_type, JS_PROXY_TYPE), &call_runtime,
+         &return_false);
 
   BIND(&return_true);
   Return(BooleanConstant(true));
@@ -2177,11 +2224,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
   // (22.1.5.3), throw a TypeError exception
   GotoIf(TaggedIsSmi(iterator), &throw_bad_receiver);
   TNode<Int32T> instance_type = LoadInstanceType(iterator);
-  GotoIf(
-      Uint32LessThan(
-          Int32Constant(LAST_ARRAY_ITERATOR_TYPE - FIRST_ARRAY_ITERATOR_TYPE),
-          Int32Sub(instance_type, Int32Constant(FIRST_ARRAY_ITERATOR_TYPE))),
-      &throw_bad_receiver);
+  GotoIf(IsArrayIteratorInstanceType(instance_type), &throw_bad_receiver);
 
   // Let a be O.[[IteratedObject]].
   Node* array =
@@ -2200,10 +2243,10 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
   BIND(&if_isfastarray);
   {
-    CSA_ASSERT(this, Word32Equal(LoadMapInstanceType(array_map),
-                                 Int32Constant(JS_ARRAY_TYPE)));
+    CSA_ASSERT(
+        this, InstanceTypeEqual(LoadMapInstanceType(array_map), JS_ARRAY_TYPE));
 
-    Node* length = LoadObjectField(array, JSArray::kLengthOffset);
+    Node* length = LoadJSArrayLength(array);
 
     CSA_ASSERT(this, TaggedIsSmi(length));
     CSA_ASSERT(this, TaggedIsSmi(index));
@@ -2293,8 +2336,8 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
     GotoIf(WordEqual(array, UndefinedConstant()), &allocate_iterator_result);
 
     Node* array_type = LoadInstanceType(array);
-    Branch(Word32Equal(array_type, Int32Constant(JS_TYPED_ARRAY_TYPE)),
-           &if_istypedarray, &if_isgeneric);
+    Branch(InstanceTypeEqual(array_type, JS_TYPED_ARRAY_TYPE), &if_istypedarray,
+           &if_isgeneric);
 
     BIND(&if_isgeneric);
     {
@@ -2304,12 +2347,12 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
       {
         VARIABLE(var_length, MachineRepresentation::kTagged);
         Label if_isarray(this), if_isnotarray(this), done(this);
-        Branch(Word32Equal(array_type, Int32Constant(JS_ARRAY_TYPE)),
-               &if_isarray, &if_isnotarray);
+        Branch(InstanceTypeEqual(array_type, JS_ARRAY_TYPE), &if_isarray,
+               &if_isnotarray);
 
         BIND(&if_isarray);
         {
-          var_length.Bind(LoadObjectField(array, JSArray::kLengthOffset));
+          var_length.Bind(LoadJSArrayLength(array));
 
           // Invalidate protector cell if needed
           Branch(WordNotEqual(orig_map, UndefinedConstant()), &if_wasfastarray,

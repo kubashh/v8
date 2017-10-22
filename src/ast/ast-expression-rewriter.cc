@@ -39,10 +39,10 @@ void AstExpressionRewriter::VisitStatements(ZoneList<Statement*>* statements) {
 void AstExpressionRewriter::VisitExpressions(
     ZoneList<Expression*>* expressions) {
   for (int i = 0; i < expressions->length(); i++) {
-    // The variable statement visiting code may pass NULL expressions
+    // The variable statement visiting code may pass null expressions
     // to this code. Maybe this should be handled by introducing an
-    // undefined expression or literal?  Revisit this code if this
-    // changes
+    // undefined expression or literal? Revisit this code if this
+    // changes.
     if (expressions->at(i) != nullptr) {
       AST_REWRITE_LIST_ELEMENT(Expression, expressions, i);
     }
@@ -260,6 +260,37 @@ void AstExpressionRewriter::VisitArrayLiteral(ArrayLiteral* node) {
   VisitExpressions(node->values());
 }
 
+void AstExpressionRewriter::VisitObjectPattern(ObjectPattern* node) {
+  REWRITE_THIS(node);
+  for (auto& element : node->elements()) {
+    if (element.is_computed_name()) {
+      AST_REWRITE_PROPERTY(Expression, &element, name);
+      DCHECK_NOT_NULL(element.name());
+    }
+    AST_REWRITE_PROPERTY(Expression, &element, target);
+    DCHECK_NOT_NULL(element.target());
+    DCHECK(element.target()->IsValidReferenceExpression() ||
+           element.target()->IsPattern());
+
+    if (element.initializer()) {
+      AST_REWRITE_PROPERTY(Expression, &element, initializer);
+    }
+  }
+}
+
+void AstExpressionRewriter::VisitArrayPattern(ArrayPattern* node) {
+  REWRITE_THIS(node);
+  for (auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    AST_REWRITE_PROPERTY(Expression, &element, target);
+    DCHECK_NOT_NULL(element.target());
+    DCHECK(element.target()->IsValidReferenceExpression() ||
+           element.target()->IsPattern());
+    if (element.initializer()) {
+      AST_REWRITE_PROPERTY(Expression, &element, initializer);
+    }
+  }
+}
 
 void AstExpressionRewriter::VisitAssignment(Assignment* node) {
   REWRITE_THIS(node);

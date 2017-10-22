@@ -68,8 +68,13 @@ namespace internal {
   V(ObjectLiteral)           \
   V(ArrayLiteral)
 
+#define PATTERN_NODE_LIST(V) \
+  V(ArrayPattern)            \
+  V(ObjectPattern)
+
 #define EXPRESSION_NODE_LIST(V) \
   LITERAL_NODE_LIST(V)          \
+  PATTERN_NODE_LIST(V)          \
   V(Assignment)                 \
   V(Await)                      \
   V(BinaryOperation)            \
@@ -107,6 +112,7 @@ namespace internal {
   EXPRESSION_NODE_LIST(V)
 
 // Forward declarations
+class AstNode;
 class AstNodeFactory;
 class Declaration;
 class BreakableStatement;
@@ -120,44 +126,6 @@ class Statement;
 #define DEF_FORWARD_DECLARATION(type) class type;
 AST_NODE_LIST(DEF_FORWARD_DECLARATION)
 #undef DEF_FORWARD_DECLARATION
-
-class FeedbackSlotCache {
- public:
-  typedef std::pair<TypeofMode, Variable*> Key;
-
-  explicit FeedbackSlotCache(Zone* zone) : map_(zone) {}
-
-  void Put(TypeofMode typeof_mode, Variable* variable, FeedbackSlot slot) {
-    Key key = std::make_pair(typeof_mode, variable);
-    auto entry = std::make_pair(key, slot);
-    map_.insert(entry);
-  }
-
-  FeedbackSlot Get(TypeofMode typeof_mode, Variable* variable) const {
-    Key key = std::make_pair(typeof_mode, variable);
-    auto iter = map_.find(key);
-    if (iter != map_.end()) {
-      return iter->second;
-    }
-    return FeedbackSlot();
-  }
-
- private:
-  ZoneMap<Key, FeedbackSlot> map_;
-};
-
-
-class AstProperties final BASE_EMBEDDED {
- public:
-  explicit AstProperties(Zone* zone) : spec_(zone) {}
-
-  const FeedbackVectorSpec* get_spec() const { return &spec_; }
-  FeedbackVectorSpec* get_spec() { return &spec_; }
-
- private:
-  FeedbackVectorSpec spec_;
-};
-
 
 class AstNode: public ZoneObject {
  public:
@@ -183,6 +151,10 @@ class AstNode: public ZoneObject {
   AST_NODE_LIST(DECLARE_NODE_FUNCTIONS)
 #undef DECLARE_NODE_FUNCTIONS
 
+  V8_INLINE bool IsPattern() const {
+    return IsObjectPattern() || IsArrayPattern();
+  }
+
   BreakableStatement* AsBreakableStatement();
   IterationStatement* AsIterationStatement();
   MaterializedLiteral* AsMaterializedLiteral();
@@ -206,7 +178,7 @@ class AstNode: public ZoneObject {
 
 class Statement : public AstNode {
  public:
-  bool IsEmpty() { return AsEmptyStatement() != NULL; }
+  bool IsEmpty() { return AsEmptyStatement() != nullptr; }
   bool IsJump() const;
 
  protected:
@@ -312,8 +284,8 @@ class Block : public BreakableStatement {
   inline ZoneList<const AstRawString*>* labels() const;
 
   bool IsJump() const {
-    return !statements_.is_empty() && statements_.last()->IsJump()
-        && labels() == NULL;  // Good enough as an approximation...
+    return !statements_.is_empty() && statements_.last()->IsJump() &&
+           labels() == nullptr;  // Good enough as an approximation...
   }
 
   Scope* scope() const { return scope_; }
@@ -335,7 +307,7 @@ class Block : public BreakableStatement {
         bool ignore_completion_value)
       : BreakableStatement(TARGET_FOR_NAMED_ONLY, kNoSourcePosition, kBlock),
         statements_(capacity, zone),
-        scope_(NULL) {
+        scope_(nullptr) {
     bit_field_ |= IgnoreCompletionField::encode(ignore_completion_value) |
                   IsLabeledField::encode(labels != nullptr);
   }
@@ -455,7 +427,7 @@ class FunctionDeclaration final : public Declaration {
 
   FunctionDeclaration(VariableProxy* proxy, FunctionLiteral* fun, int pos)
       : Declaration(proxy, pos, kFunctionDeclaration), fun_(fun) {
-    DCHECK(fun != NULL);
+    DCHECK_NOT_NULL(fun);
   }
 
   FunctionLiteral* fun_;
@@ -481,7 +453,7 @@ class IterationStatement : public BreakableStatement {
                      NodeType type)
       : BreakableStatement(TARGET_FOR_ANONYMOUS, pos, type),
         labels_(labels),
-        body_(NULL),
+        body_(nullptr),
         suspend_count_(0),
         first_suspend_id_(0) {}
   void Initialize(Statement* body) { body_ = body; }
@@ -511,7 +483,7 @@ class DoWhileStatement final : public IterationStatement {
   friend class AstNodeFactory;
 
   DoWhileStatement(ZoneList<const AstRawString*>* labels, int pos)
-      : IterationStatement(labels, pos, kDoWhileStatement), cond_(NULL) {}
+      : IterationStatement(labels, pos, kDoWhileStatement), cond_(nullptr) {}
 
   Expression* cond_;
 };
@@ -531,7 +503,7 @@ class WhileStatement final : public IterationStatement {
   friend class AstNodeFactory;
 
   WhileStatement(ZoneList<const AstRawString*>* labels, int pos)
-      : IterationStatement(labels, pos, kWhileStatement), cond_(NULL) {}
+      : IterationStatement(labels, pos, kWhileStatement), cond_(nullptr) {}
 
   Expression* cond_;
 };
@@ -560,9 +532,9 @@ class ForStatement final : public IterationStatement {
 
   ForStatement(ZoneList<const AstRawString*>* labels, int pos)
       : IterationStatement(labels, pos, kForStatement),
-        init_(NULL),
-        cond_(NULL),
-        next_(NULL) {}
+        init_(nullptr),
+        cond_(nullptr),
+        next_(nullptr) {}
 
   Statement* init_;
   Expression* cond_;
@@ -608,15 +580,6 @@ class ForInStatement final : public ForEachStatement {
   void set_each(Expression* e) { each_ = e; }
   void set_subject(Expression* e) { subject_ = e; }
 
-  // Type feedback information.
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-  FeedbackSlot EachFeedbackSlot() const { return each_slot_; }
-  FeedbackSlot ForInFeedbackSlot() {
-    DCHECK(!for_in_feedback_slot_.IsInvalid());
-    return for_in_feedback_slot_;
-  }
-
   enum ForInType { FAST_FOR_IN, SLOW_FOR_IN };
   ForInType for_in_type() const { return ForInTypeField::decode(bit_field_); }
   void set_for_in_type(ForInType type) {
@@ -635,8 +598,6 @@ class ForInStatement final : public ForEachStatement {
 
   Expression* each_;
   Expression* subject_;
-  FeedbackSlot each_slot_;
-  FeedbackSlot for_in_feedback_slot_;
 
   class ForInTypeField
       : public BitField<ForInType, ForEachStatement::kNextBitFieldIndex, 1> {};
@@ -690,11 +651,11 @@ class ForOfStatement final : public ForEachStatement {
 
   ForOfStatement(ZoneList<const AstRawString*>* labels, int pos)
       : ForEachStatement(labels, pos, kForOfStatement),
-        iterator_(NULL),
-        assign_iterator_(NULL),
-        next_result_(NULL),
-        result_done_(NULL),
-        assign_each_(NULL) {}
+        iterator_(nullptr),
+        assign_iterator_(nullptr),
+        next_result_(nullptr),
+        result_done_(nullptr),
+        assign_each_(nullptr) {}
 
   Variable* iterator_;
   Expression* assign_iterator_;
@@ -811,7 +772,7 @@ class WithStatement final : public Statement {
 
 class CaseClause final : public ZoneObject {
  public:
-  bool is_default() const { return label_ == NULL; }
+  bool is_default() const { return label_ == nullptr; }
   Expression* label() const {
     DCHECK(!is_default());
     return label_;
@@ -819,17 +780,11 @@ class CaseClause final : public ZoneObject {
   void set_label(Expression* e) { label_ = e; }
   ZoneList<Statement*>* statements() const { return statements_; }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot CompareOperationFeedbackSlot() { return feedback_slot_; }
-
  private:
   friend class AstNodeFactory;
 
   CaseClause(Expression* label, ZoneList<Statement*>* statements);
 
-  FeedbackSlot feedback_slot_;
   Expression* label_;
   ZoneList<Statement*>* statements_;
 };
@@ -1073,19 +1028,9 @@ class Literal final : public Expression {
 // Base class for literals that need space in the type feedback vector.
 class MaterializedLiteral : public Expression {
  public:
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    literal_slot_ = spec->AddLiteralSlot();
-  }
-
-  FeedbackSlot literal_slot() const { return literal_slot_; }
-
   // A Materializedliteral is simple if the values consist of only
   // constants and simple object and array literals.
   bool IsSimple() const;
-
- private:
-  FeedbackSlot literal_slot_;
 
  protected:
   MaterializedLiteral(int pos, NodeType type) : Expression(pos, type) {}
@@ -1203,21 +1148,6 @@ class LiteralProperty : public ZoneObject {
   void set_value(Expression* e) { value_ = e; }
 
   bool is_computed_name() const { return is_computed_name_; }
-
-  FeedbackSlot GetSlot(int offset = 0) const {
-    DCHECK_LT(offset, static_cast<int>(arraysize(slots_)));
-    return slots_[offset];
-  }
-
-  FeedbackSlot GetStoreDataPropertySlot() const;
-
-  void SetSlot(FeedbackSlot slot, int offset = 0) {
-    DCHECK_LT(offset, static_cast<int>(arraysize(slots_)));
-    slots_[offset] = slot;
-  }
-
-  void SetStoreDataPropertySlot(FeedbackSlot slot);
-
   bool NeedsSetFunctionName() const;
 
  protected:
@@ -1226,7 +1156,6 @@ class LiteralProperty : public ZoneObject {
 
   Expression* key_;
   Expression* value_;
-  FeedbackSlot slots_[2];
   bool is_computed_name_;
 };
 
@@ -1348,15 +1277,10 @@ class ObjectLiteral final : public AggregateLiteral {
       static_cast<int>(kFastElements));
 
   struct Accessors: public ZoneObject {
-    Accessors() : getter(NULL), setter(NULL) {}
+    Accessors() : getter(nullptr), setter(nullptr) {}
     ObjectLiteralProperty* getter;
     ObjectLiteralProperty* setter;
   };
-
-  // Object literals need one feedback slot for each non-trivial value, as well
-  // as some slots for home objects.
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
 
  private:
   friend class AstNodeFactory;
@@ -1399,6 +1323,99 @@ class ObjectLiteral final : public AggregateLiteral {
       : public BitField<bool, FastElementsField::kNext, 1> {};
 };
 
+class Pattern : public Expression {
+ public:
+  enum class BindingType { kElision, kElement, kRestElement };
+
+  bool has_rest_element() const {
+    return HasRestElementField::decode(bit_field_);
+  }
+
+ protected:
+  inline Pattern(NodeType node_type, int pos) : Expression(pos, node_type) {}
+
+  class HasRestElementField
+      : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
+  static const uint8_t kNextBitFieldIndex = HasRestElementField::kNext;
+
+  inline void set_has_rest_element() {
+    bit_field_ |= HasRestElementField::encode(true);
+  }
+};
+
+class ObjectPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* name() const { return name_; }
+    inline void set_name(Expression* replacement) { name_ = replacement; }
+    inline bool is_computed_name() const { return is_computed_name_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+
+   private:
+    friend class ObjectPattern;
+    Element() = delete;
+    explicit Element(ObjectLiteralProperty* prop);
+
+    BindingType type_ : 4;
+    bool is_computed_name_ : 1;
+    Expression* name_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ArrayPattern;
+  ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
+
+class ArrayPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+    inline bool IsPattern() const {
+      return target_ != nullptr && target_->IsPattern();
+    }
+
+   private:
+    friend class ArrayPattern;
+    Element() = delete;
+    explicit Element(Expression* target);
+
+    BindingType type_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ObjectPattern;
+  ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
 
 // A map from property names to getter/setter pairs allocated in the zone.
 class AccessorTable
@@ -1414,7 +1431,9 @@ class AccessorTable
 
   Iterator lookup(Literal* literal) {
     Iterator it = find(literal, true, ZoneAllocationPolicy(zone_));
-    if (it->second == NULL) it->second = new (zone_) ObjectLiteral::Accessors();
+    if (it->second == nullptr) {
+      it->second = new (zone_) ObjectLiteral::Accessors();
+    }
     return it;
   }
 
@@ -1467,10 +1486,6 @@ class ArrayLiteral final : public AggregateLiteral {
   // Rewind an array literal omitting everything from the first spread on.
   void RewindSpreads();
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-  FeedbackSlot LiteralFeedbackSlot() const { return literal_slot_; }
-
  private:
   friend class AstNodeFactory;
 
@@ -1480,7 +1495,6 @@ class ArrayLiteral final : public AggregateLiteral {
         values_(values) {}
 
   int first_spread_index_;
-  FeedbackSlot literal_slot_;
   Handle<ConstantElementsPair> constant_elements_;
   ZoneList<Expression*>* values_;
 };
@@ -1542,15 +1556,6 @@ class VariableProxy final : public Expression {
   // Bind this proxy to the variable var.
   void BindTo(Variable* var);
 
-  bool UsesVariableFeedbackSlot() const {
-    return var()->IsUnallocated() || var()->IsLookupSlot();
-  }
-
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, TypeofMode typeof_mode,
-                           FeedbackSlotCache* cache);
-
-  FeedbackSlot VariableFeedbackSlot() { return variable_feedback_slot_; }
-
   void set_next_unresolved(VariableProxy* next) { next_unresolved_ = next; }
   VariableProxy* next_unresolved() { return next_unresolved_; }
 
@@ -1580,7 +1585,6 @@ class VariableProxy final : public Expression {
   class HoleCheckModeField
       : public BitField<HoleCheckMode, IsNewTargetField::kNext, 1> {};
 
-  FeedbackSlot variable_feedback_slot_;
   union {
     const AstRawString* raw_name_;  // if !is_resolved_
     Variable* var_;                 // if is_resolved_
@@ -1612,20 +1616,9 @@ class Property final : public Expression {
 
   bool IsSuperAccess() { return obj()->IsSuperPropertyReference(); }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    if (key()->IsPropertyName()) {
-      property_feedback_slot_ = spec->AddLoadICSlot();
-    } else {
-      property_feedback_slot_ = spec->AddKeyedLoadICSlot();
-    }
-  }
-
-  FeedbackSlot PropertyFeedbackSlot() const { return property_feedback_slot_; }
-
   // Returns the properties assign type.
   static LhsKind GetAssignType(Property* property) {
-    if (property == NULL) return VARIABLE;
+    if (property == nullptr) return VARIABLE;
     bool super_access = property->IsSuperAccess();
     return (property->key()->IsPropertyName())
                ? (super_access ? NAMED_SUPER_PROPERTY : NAMED_PROPERTY)
@@ -1639,7 +1632,6 @@ class Property final : public Expression {
       : Expression(pos, kProperty), obj_(obj), key_(key) {
   }
 
-  FeedbackSlot property_feedback_slot_;
   Expression* obj_;
   Expression* key_;
 };
@@ -1652,14 +1644,12 @@ class Call final : public Expression {
 
   void set_expression(Expression* e) { expression_ = e; }
 
-  // Type feedback information.
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot CallFeedbackICSlot() const { return ic_slot_; }
-
   bool is_possibly_eval() const {
     return IsPossiblyEvalField::decode(bit_field_);
+  }
+
+  bool is_tagged_template() const {
+    return IsTaggedTemplateField::decode(bit_field_);
   }
 
   bool only_last_arg_is_spread() {
@@ -1685,6 +1675,8 @@ class Call final : public Expression {
   // Helpers to determine how to handle the call.
   CallType GetCallType() const;
 
+  enum class TaggedTemplateTag { kTrue };
+
  private:
   friend class AstNodeFactory;
 
@@ -1694,13 +1686,22 @@ class Call final : public Expression {
         expression_(expression),
         arguments_(arguments) {
     bit_field_ |=
-        IsPossiblyEvalField::encode(possibly_eval == IS_POSSIBLY_EVAL);
+        IsPossiblyEvalField::encode(possibly_eval == IS_POSSIBLY_EVAL) |
+        IsTaggedTemplateField::encode(false);
+  }
+
+  Call(Expression* expression, ZoneList<Expression*>* arguments, int pos,
+       TaggedTemplateTag tag)
+      : Expression(pos, kCall), expression_(expression), arguments_(arguments) {
+    bit_field_ |= IsPossiblyEvalField::encode(false) |
+                  IsTaggedTemplateField::encode(true);
   }
 
   class IsPossiblyEvalField
       : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
+  class IsTaggedTemplateField
+      : public BitField<bool, IsPossiblyEvalField::kNext, 1> {};
 
-  FeedbackSlot ic_slot_;
   Expression* expression_;
   ZoneList<Expression*>* arguments_;
 };
@@ -1712,19 +1713,6 @@ class CallNew final : public Expression {
   ZoneList<Expression*>* arguments() const { return arguments_; }
 
   void set_expression(Expression* e) { expression_ = e; }
-
-  // Type feedback information.
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    // CallNew stores feedback in the exact same way as Call. We can
-    // piggyback on the type feedback infrastructure for calls.
-    callnew_feedback_slot_ = spec->AddCallICSlot();
-  }
-
-  FeedbackSlot CallNewFeedbackSlot() {
-    DCHECK(!callnew_feedback_slot_.IsInvalid());
-    return callnew_feedback_slot_;
-  }
 
   bool only_last_arg_is_spread() {
     return !arguments_->is_empty() && arguments_->last()->IsSpread();
@@ -1739,7 +1727,6 @@ class CallNew final : public Expression {
         arguments_(arguments) {
   }
 
-  FeedbackSlot callnew_feedback_slot_;
   Expression* expression_;
   ZoneList<Expression*>* arguments_;
 };
@@ -1752,7 +1739,7 @@ class CallNew final : public Expression {
 class CallRuntime final : public Expression {
  public:
   ZoneList<Expression*>* arguments() const { return arguments_; }
-  bool is_jsruntime() const { return function_ == NULL; }
+  bool is_jsruntime() const { return function_ == nullptr; }
 
   int context_index() const {
     DCHECK(is_jsruntime());
@@ -1780,7 +1767,7 @@ class CallRuntime final : public Expression {
   CallRuntime(int context_index, ZoneList<Expression*>* arguments, int pos)
       : Expression(pos, kCallRuntime),
         context_index_(context_index),
-        function_(NULL),
+        function_(nullptr),
         arguments_(arguments) {}
 
   int context_index_;
@@ -1795,11 +1782,6 @@ class UnaryOperation final : public Expression {
   Expression* expression() const { return expression_; }
   void set_expression(Expression* e) { expression_ = e; }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot UnaryOperationFeedbackSlot() const { return feedback_slot_; }
-
  private:
   friend class AstNodeFactory;
 
@@ -1809,7 +1791,6 @@ class UnaryOperation final : public Expression {
     DCHECK(Token::IsUnaryOp(op));
   }
 
-  FeedbackSlot feedback_slot_;
   Expression* expression_;
 
   class OperatorField
@@ -1825,11 +1806,6 @@ class BinaryOperation final : public Expression {
   Expression* right() const { return right_; }
   void set_right(Expression* e) { right_ = e; }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot BinaryOperationFeedbackSlot() const { return feedback_slot_; }
-
   // Returns true if one side is a Smi literal, returning the other side's
   // sub-expression in |subexpr| and the literal Smi in |literal|.
   bool IsSmiLiteralOperation(Expression** subexpr, Smi** literal);
@@ -1843,7 +1819,6 @@ class BinaryOperation final : public Expression {
     DCHECK(Token::IsBinaryOp(op));
   }
 
-  FeedbackSlot feedback_slot_;
   Expression* left_;
   Expression* right_;
 
@@ -1862,15 +1837,6 @@ class CountOperation final : public Expression {
   Expression* expression() const { return expression_; }
   void set_expression(Expression* e) { expression_ = e; }
 
-  // Feedback slot for binary operation is only used by ignition.
-  FeedbackSlot CountBinaryOpFeedbackSlot() const {
-    return binary_operation_slot_;
-  }
-
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-  FeedbackSlot CountSlot() const { return slot_; }
-
  private:
   friend class AstNodeFactory;
 
@@ -1883,8 +1849,6 @@ class CountOperation final : public Expression {
       : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
   class TokenField : public BitField<Token::Value, IsPrefixField::kNext, 7> {};
 
-  FeedbackSlot slot_;
-  FeedbackSlot binary_operation_slot_;
   Expression* expression_;
 };
 
@@ -1897,11 +1861,6 @@ class CompareOperation final : public Expression {
 
   void set_left(Expression* e) { left_ = e; }
   void set_right(Expression* e) { right_ = e; }
-
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot CompareOperationFeedbackSlot() const { return feedback_slot_; }
 
   // Match special cases.
   bool IsLiteralCompareTypeof(Expression** expr, Literal** literal);
@@ -1918,7 +1877,6 @@ class CompareOperation final : public Expression {
     DCHECK(Token::IsCompareOp(op));
   }
 
-  FeedbackSlot feedback_slot_;
   Expression* left_;
   Expression* right_;
 
@@ -1993,10 +1951,6 @@ class Assignment : public Expression {
         LookupHoistingModeField::update(bit_field_, static_cast<bool>(mode));
   }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-  FeedbackSlot AssignmentSlot() const { return slot_; }
-
  protected:
   Assignment(NodeType type, Token::Value op, Expression* target,
              Expression* value, int pos);
@@ -2009,7 +1963,6 @@ class Assignment : public Expression {
   class LookupHoistingModeField : public BitField<bool, TokenField::kNext, 1> {
   };
 
-  FeedbackSlot slot_;
   Expression* target_;
   Expression* value_;
 };
@@ -2165,63 +2118,6 @@ class YieldStar final : public Suspend {
     return 1;
   }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    load_iterable_iterator_slot_ = spec->AddLoadICSlot();
-    load_iterator_return_slot_ = spec->AddLoadICSlot();
-    load_iterator_next_slot_ = spec->AddLoadICSlot();
-    load_iterator_throw_slot_ = spec->AddLoadICSlot();
-    load_output_done_slot_ = spec->AddLoadICSlot();
-    load_output_value_slot_ = spec->AddLoadICSlot();
-    call_iterable_iterator_slot_ = spec->AddCallICSlot();
-    call_iterator_return_slot1_ = spec->AddCallICSlot();
-    call_iterator_return_slot2_ = spec->AddCallICSlot();
-    call_iterator_next_slot_ = spec->AddCallICSlot();
-    call_iterator_throw_slot_ = spec->AddCallICSlot();
-    if (IsAsyncGeneratorFunction(kind)) {
-      load_iterable_async_iterator_slot_ = spec->AddLoadICSlot();
-      call_iterable_async_iterator_slot_ = spec->AddCallICSlot();
-    }
-  }
-
-  FeedbackSlot load_iterable_iterator_slot() const {
-    return load_iterable_iterator_slot_;
-  }
-  FeedbackSlot load_iterator_return_slot() const {
-    return load_iterator_return_slot_;
-  }
-  FeedbackSlot load_iterator_next_slot() const {
-    return load_iterator_next_slot_;
-  }
-  FeedbackSlot load_iterator_throw_slot() const {
-    return load_iterator_throw_slot_;
-  }
-  FeedbackSlot load_output_done_slot() const { return load_output_done_slot_; }
-  FeedbackSlot load_output_value_slot() const {
-    return load_output_value_slot_;
-  }
-  FeedbackSlot call_iterable_iterator_slot() const {
-    return call_iterable_iterator_slot_;
-  }
-  FeedbackSlot call_iterator_return_slot1() const {
-    return call_iterator_return_slot1_;
-  }
-  FeedbackSlot call_iterator_return_slot2() const {
-    return call_iterator_return_slot2_;
-  }
-  FeedbackSlot call_iterator_next_slot() const {
-    return call_iterator_next_slot_;
-  }
-  FeedbackSlot call_iterator_throw_slot() const {
-    return call_iterator_throw_slot_;
-  }
-  FeedbackSlot load_iterable_async_iterator_slot() const {
-    return load_iterable_async_iterator_slot_;
-  }
-  FeedbackSlot call_iterable_async_iterator_slot() const {
-    return call_iterable_async_iterator_slot_;
-  }
-
  private:
   friend class AstNodeFactory;
 
@@ -2230,21 +2126,6 @@ class YieldStar final : public Suspend {
                 Suspend::OnAbruptResume::kNoControl),
         await_iterator_close_suspend_id_(-1),
         await_delegated_iterator_output_suspend_id_(-1) {}
-
-  FeedbackSlot load_iterable_iterator_slot_;
-  FeedbackSlot load_iterator_return_slot_;
-  FeedbackSlot load_iterator_next_slot_;
-  FeedbackSlot load_iterator_throw_slot_;
-  FeedbackSlot load_output_done_slot_;
-  FeedbackSlot load_output_value_slot_;
-  FeedbackSlot call_iterable_iterator_slot_;
-  FeedbackSlot call_iterator_return_slot1_;
-  FeedbackSlot call_iterator_return_slot2_;
-  FeedbackSlot call_iterator_next_slot_;
-  FeedbackSlot call_iterator_throw_slot_;
-
-  FeedbackSlot load_iterable_async_iterator_slot_;
-  FeedbackSlot call_iterable_async_iterator_slot_;
 
   int await_iterator_close_suspend_id_;
   int await_delegated_iterator_output_suspend_id_;
@@ -2312,13 +2193,6 @@ class FunctionLiteral final : public Expression {
   }
   LanguageMode language_mode() const;
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    literal_feedback_slot_ = spec->AddCreateClosureSlot();
-  }
-
-  FeedbackSlot LiteralFeedbackSlot() const { return literal_feedback_slot_; }
-
   static bool NeedsHomeObject(Expression* expr);
 
   int expected_property_count() {
@@ -2340,7 +2214,7 @@ class FunctionLiteral final : public Expression {
   }
 
   Handle<String> debug_name() const {
-    if (raw_name_ != NULL && !raw_name_->IsEmpty()) {
+    if (raw_name_ != nullptr && !raw_name_->IsEmpty()) {
       return raw_name_->string();
     }
     return inferred_name();
@@ -2348,10 +2222,10 @@ class FunctionLiteral final : public Expression {
 
   Handle<String> inferred_name() const {
     if (!inferred_name_.is_null()) {
-      DCHECK(raw_inferred_name_ == NULL);
+      DCHECK_NULL(raw_inferred_name_);
       return inferred_name_;
     }
-    if (raw_inferred_name_ != NULL) {
+    if (raw_inferred_name_ != nullptr) {
       return raw_inferred_name_->string();
     }
     UNREACHABLE();
@@ -2361,12 +2235,12 @@ class FunctionLiteral final : public Expression {
   void set_inferred_name(Handle<String> inferred_name) {
     DCHECK(!inferred_name.is_null());
     inferred_name_ = inferred_name;
-    DCHECK(raw_inferred_name_== NULL || raw_inferred_name_->IsEmpty());
-    raw_inferred_name_ = NULL;
+    DCHECK(raw_inferred_name_ == nullptr || raw_inferred_name_->IsEmpty());
+    raw_inferred_name_ = nullptr;
   }
 
   void set_raw_inferred_name(const AstConsString* raw_inferred_name) {
-    DCHECK(raw_inferred_name != NULL);
+    DCHECK_NOT_NULL(raw_inferred_name);
     raw_inferred_name_ = raw_inferred_name;
     DCHECK(inferred_name_.is_null());
     inferred_name_ = Handle<String>();
@@ -2393,13 +2267,6 @@ class FunctionLiteral final : public Expression {
     return FunctionTypeBits::decode(bit_field_);
   }
   FunctionKind kind() const;
-
-  void set_ast_properties(AstProperties* ast_properties) {
-    ast_properties_ = *ast_properties;
-  }
-  const FeedbackVectorSpec* feedback_vector_spec() const {
-    return ast_properties_.get_spec();
-  }
 
   bool dont_optimize() { return dont_optimize_reason() != kNoReason; }
   BailoutReason dont_optimize_reason() {
@@ -2451,7 +2318,6 @@ class FunctionLiteral final : public Expression {
         scope_(scope),
         body_(body),
         raw_inferred_name_(ast_value_factory->empty_cons_string()),
-        ast_properties_(zone),
         function_literal_id_(function_literal_id),
         produced_preparsed_scope_data_(produced_preparsed_scope_data) {
     bit_field_ |= FunctionTypeBits::encode(function_type) |
@@ -2482,9 +2348,7 @@ class FunctionLiteral final : public Expression {
   ZoneList<Statement*>* body_;
   const AstConsString* raw_inferred_name_;
   Handle<String> inferred_name_;
-  AstProperties ast_properties_;
   int function_literal_id_;
-  FeedbackSlot literal_feedback_slot_;
   ProducedPreParsedScopeData* produced_preparsed_scope_data_;
 };
 
@@ -2535,13 +2399,6 @@ class ClassLiteral final : public Expression {
     return is_anonymous_expression();
   }
 
-  // Object literals need one feedback slot for each non-trivial value, as well
-  // as some slots for home objects.
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache);
-
-  FeedbackSlot HomeObjectSlot() const { return home_object_slot_; }
-
  private:
   friend class AstNodeFactory;
 
@@ -2563,7 +2420,6 @@ class ClassLiteral final : public Expression {
   }
 
   int end_position_;
-  FeedbackSlot home_object_slot_;
   Scope* scope_;
   Variable* class_variable_;
   Expression* extends_;
@@ -2583,14 +2439,6 @@ class NativeFunctionLiteral final : public Expression {
  public:
   Handle<String> name() const { return name_->string(); }
   v8::Extension* extension() const { return extension_; }
-  FeedbackSlot LiteralFeedbackSlot() const { return literal_feedback_slot_; }
-
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    // TODO(mvstanton): The FeedbackSlotCache can be adapted
-    // to always return the same slot for this case.
-    literal_feedback_slot_ = spec->AddCreateClosureSlot();
-  }
 
  private:
   friend class AstNodeFactory;
@@ -2601,7 +2449,6 @@ class NativeFunctionLiteral final : public Expression {
         name_(name),
         extension_(extension) {}
 
-  FeedbackSlot literal_feedback_slot_;
   const AstRawString* name_;
   v8::Extension* extension_;
 };
@@ -2703,32 +2550,6 @@ class GetIterator final : public Expression {
   Expression* iterable() const { return iterable_; }
   void set_iterable(Expression* iterable) { iterable_ = iterable; }
 
-  void AssignFeedbackSlots(FeedbackVectorSpec* spec, LanguageMode language_mode,
-                           FunctionKind kind, FeedbackSlotCache* cache) {
-    iterator_property_feedback_slot_ = spec->AddLoadICSlot();
-    iterator_call_feedback_slot_ = spec->AddCallICSlot();
-    if (hint() == IteratorType::kAsync) {
-      async_iterator_property_feedback_slot_ = spec->AddLoadICSlot();
-      async_iterator_call_feedback_slot_ = spec->AddCallICSlot();
-    }
-  }
-
-  FeedbackSlot IteratorPropertyFeedbackSlot() const {
-    return iterator_property_feedback_slot_;
-  }
-
-  FeedbackSlot IteratorCallFeedbackSlot() const {
-    return iterator_call_feedback_slot_;
-  }
-
-  FeedbackSlot AsyncIteratorPropertyFeedbackSlot() const {
-    return async_iterator_property_feedback_slot_;
-  }
-
-  FeedbackSlot AsyncIteratorCallFeedbackSlot() const {
-    return async_iterator_call_feedback_slot_;
-  }
-
   Expression* iterable_for_call_printer() const {
     return destructured_iterable_ != nullptr ? destructured_iterable_
                                              : iterable_;
@@ -2757,11 +2578,6 @@ class GetIterator final : public Expression {
   // the raw value stored in the variable proxy. This is only used for
   // pretty printing error messages.
   Expression* destructured_iterable_;
-
-  FeedbackSlot iterator_property_feedback_slot_;
-  FeedbackSlot iterator_call_feedback_slot_;
-  FeedbackSlot async_iterator_property_feedback_slot_;
-  FeedbackSlot async_iterator_call_feedback_slot_;
 };
 
 // Represents the spec operation `GetTemplateObject(templateLiteral)`
@@ -2813,12 +2629,12 @@ class AstVisitor BASE_EMBEDDED {
 
   void VisitExpressions(ZoneList<Expression*>* expressions) {
     for (int i = 0; i < expressions->length(); i++) {
-      // The variable statement visiting code may pass NULL expressions
+      // The variable statement visiting code may pass null expressions
       // to this code. Maybe this should be handled by introducing an
-      // undefined expression or literal?  Revisit this code if this
-      // changes
+      // undefined expression or literal? Revisit this code if this
+      // changes.
       Expression* expression = expressions->at(i);
-      if (expression != NULL) Visit(expression);
+      if (expression != nullptr) Visit(expression);
     }
   }
 
@@ -3116,6 +2932,10 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) Literal(ast_value_factory_->NewSmi(number), pos);
   }
 
+  Literal* NewBigIntLiteral(const char* buffer, int pos) {
+    return new (zone_) Literal(ast_value_factory_->NewBigInt(buffer), pos);
+  }
+
   Literal* NewBooleanLiteral(bool b, int pos) {
     return new (zone_) Literal(ast_value_factory_->NewBoolean(b), pos);
   }
@@ -3128,8 +2948,9 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) Literal(ast_value_factory_->NewUndefined(), pos);
   }
 
-  Literal* NewTheHoleLiteral(int pos) {
-    return new (zone_) Literal(ast_value_factory_->NewTheHole(), pos);
+  Literal* NewTheHoleLiteral() {
+    return new (zone_)
+        Literal(ast_value_factory_->NewTheHole(), kNoSourcePosition);
   }
 
   ObjectLiteral* NewObjectLiteral(
@@ -3137,6 +2958,24 @@ class AstNodeFactory final BASE_EMBEDDED {
       uint32_t boilerplate_properties, int pos, bool has_rest_property) {
     return new (zone_) ObjectLiteral(properties, boilerplate_properties, pos,
                                      has_rest_property);
+  }
+
+  ObjectPattern* NewObjectPattern(ObjectLiteral* literal) {
+    return new (zone_) ObjectPattern(zone_, literal, literal->position());
+  }
+
+  ArrayPattern* NewArrayPattern(ArrayLiteral* literal) {
+    return new (zone_) ArrayPattern(zone_, literal, literal->position());
+  }
+
+  Pattern* NewPattern(Expression* literal) {
+    if (literal->IsObjectLiteral()) {
+      return NewObjectPattern(literal->AsObjectLiteral());
+    } else if (literal->IsArrayLiteral()) {
+      return NewArrayPattern(literal->AsArrayLiteral());
+    }
+    UNREACHABLE();
+    return nullptr;
   }
 
   ObjectLiteral::Property* NewObjectLiteralProperty(
@@ -3196,6 +3035,12 @@ class AstNodeFactory final BASE_EMBEDDED {
   Call* NewCall(Expression* expression, ZoneList<Expression*>* arguments,
                 int pos, Call::PossiblyEval possibly_eval = Call::NOT_EVAL) {
     return new (zone_) Call(expression, arguments, pos, possibly_eval);
+  }
+
+  Call* NewTaggedTemplate(Expression* expression,
+                          ZoneList<Expression*>* arguments, int pos) {
+    return new (zone_)
+        Call(expression, arguments, pos, Call::TaggedTemplateTag::kTrue);
   }
 
   CallNew* NewCallNew(Expression* expression,
@@ -3428,38 +3273,39 @@ class AstNodeFactory final BASE_EMBEDDED {
 // Type testing & conversion functions overridden by concrete subclasses.
 // Inline functions for AstNode.
 
-#define DECLARE_NODE_FUNCTIONS(type)                                          \
-  bool AstNode::Is##type() const {                                            \
-    NodeType mine = node_type();                                              \
-    if (mine == AstNode::kRewritableExpression &&                             \
-        AstNode::k##type != AstNode::kRewritableExpression)                   \
-      mine = reinterpret_cast<const RewritableExpression*>(this)              \
-                 ->expression()                                               \
-                 ->node_type();                                               \
-    return mine == AstNode::k##type;                                          \
-  }                                                                           \
-  type* AstNode::As##type() {                                                 \
-    NodeType mine = node_type();                                              \
-    AstNode* result = this;                                                   \
-    if (mine == AstNode::kRewritableExpression &&                             \
-        AstNode::k##type != AstNode::kRewritableExpression) {                 \
-      result =                                                                \
-          reinterpret_cast<const RewritableExpression*>(this)->expression();  \
-      mine = result->node_type();                                             \
-    }                                                                         \
-    return mine == AstNode::k##type ? reinterpret_cast<type*>(result) : NULL; \
-  }                                                                           \
-  const type* AstNode::As##type() const {                                     \
-    NodeType mine = node_type();                                              \
-    const AstNode* result = this;                                             \
-    if (mine == AstNode::kRewritableExpression &&                             \
-        AstNode::k##type != AstNode::kRewritableExpression) {                 \
-      result =                                                                \
-          reinterpret_cast<const RewritableExpression*>(this)->expression();  \
-      mine = result->node_type();                                             \
-    }                                                                         \
-    return mine == AstNode::k##type ? reinterpret_cast<const type*>(result)   \
-                                    : NULL;                                   \
+#define DECLARE_NODE_FUNCTIONS(type)                                         \
+  bool AstNode::Is##type() const {                                           \
+    NodeType mine = node_type();                                             \
+    if (mine == AstNode::kRewritableExpression &&                            \
+        AstNode::k##type != AstNode::kRewritableExpression)                  \
+      mine = reinterpret_cast<const RewritableExpression*>(this)             \
+                 ->expression()                                              \
+                 ->node_type();                                              \
+    return mine == AstNode::k##type;                                         \
+  }                                                                          \
+  type* AstNode::As##type() {                                                \
+    NodeType mine = node_type();                                             \
+    AstNode* result = this;                                                  \
+    if (mine == AstNode::kRewritableExpression &&                            \
+        AstNode::k##type != AstNode::kRewritableExpression) {                \
+      result =                                                               \
+          reinterpret_cast<const RewritableExpression*>(this)->expression(); \
+      mine = result->node_type();                                            \
+    }                                                                        \
+    return mine == AstNode::k##type ? reinterpret_cast<type*>(result)        \
+                                    : nullptr;                               \
+  }                                                                          \
+  const type* AstNode::As##type() const {                                    \
+    NodeType mine = node_type();                                             \
+    const AstNode* result = this;                                            \
+    if (mine == AstNode::kRewritableExpression &&                            \
+        AstNode::k##type != AstNode::kRewritableExpression) {                \
+      result =                                                               \
+          reinterpret_cast<const RewritableExpression*>(this)->expression(); \
+      mine = result->node_type();                                            \
+    }                                                                        \
+    return mine == AstNode::k##type ? reinterpret_cast<const type*>(result)  \
+                                    : nullptr;                               \
   }
 AST_NODE_LIST(DECLARE_NODE_FUNCTIONS)
 #undef DECLARE_NODE_FUNCTIONS

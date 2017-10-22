@@ -23,6 +23,11 @@
 namespace v8 {
 namespace internal {
 
+using IncrementalMarkingMarkingVisitor =
+    MarkingVisitor<FixedArrayVisitationMode::kIncremental,
+                   TraceRetainingPathMode::kDisabled,
+                   IncrementalMarking::MarkingState>;
+
 void IncrementalMarking::Observer::Step(int bytes_allocated, Address addr,
                                         size_t size) {
   Heap* heap = incremental_marking_.heap();
@@ -45,9 +50,10 @@ void IncrementalMarking::Observer::Step(int bytes_allocated, Address addr,
   }
 }
 
-IncrementalMarking::IncrementalMarking(Heap* heap)
+IncrementalMarking::IncrementalMarking(
+    Heap* heap, MarkCompactCollector::MarkingWorklist* marking_worklist)
     : heap_(heap),
-      marking_worklist_(nullptr),
+      marking_worklist_(marking_worklist),
       initial_old_generation_size_(0),
       bytes_marked_ahead_of_schedule_(0),
       unscanned_bytes_of_large_object_(0),
@@ -60,6 +66,7 @@ IncrementalMarking::IncrementalMarking(Heap* heap)
       request_type_(NONE),
       new_generation_observer_(*this, kYoungGenerationAllocatedThreshold),
       old_generation_observer_(*this, kOldGenerationAllocatedThreshold) {
+  DCHECK_NOT_NULL(marking_worklist_);
   SetState(STOPPED);
 }
 
@@ -84,7 +91,7 @@ bool IncrementalMarking::BaseRecordWrite(HeapObject* obj, Object* value) {
 
 void IncrementalMarking::RecordWriteSlow(HeapObject* obj, Object** slot,
                                          Object* value) {
-  if (BaseRecordWrite(obj, value) && slot != NULL) {
+  if (BaseRecordWrite(obj, value) && slot != nullptr) {
     // Object is not going to be rescanned we need to record the slot.
     heap_->mark_compact_collector()->RecordSlot(obj, slot, value);
   }
@@ -186,96 +193,6 @@ void IncrementalMarking::NotifyLeftTrimming(HeapObject* from, HeapObject* to) {
     RestartIfNotMarking();
   }
 }
-
-class IncrementalMarkingMarkingVisitor final
-    : public MarkingVisitor<IncrementalMarkingMarkingVisitor> {
- public:
-  typedef MarkingVisitor<IncrementalMarkingMarkingVisitor> Parent;
-
-  static const int kProgressBarScanningChunk = 32 * 1024;
-
-  explicit IncrementalMarkingMarkingVisitor(MarkCompactCollector* collector)
-      : MarkingVisitor<IncrementalMarkingMarkingVisitor>(collector->heap(),
-                                                         collector),
-        incremental_marking_(collector->heap()->incremental_marking()) {}
-
-  V8_INLINE int VisitFixedArray(Map* map, FixedArray* object) {
-    MemoryChunk* chunk = MemoryChunk::FromAddress(object->address());
-    int object_size = FixedArray::BodyDescriptor::SizeOf(map, object);
-    if (chunk->IsFlagSet(MemoryChunk::HAS_PROGRESS_BAR)) {
-      DCHECK(!FLAG_use_marking_progress_bar ||
-             chunk->owner()->identity() == LO_SPACE);
-      // When using a progress bar for large fixed arrays, scan only a chunk of
-      // the array and try to push it onto the marking deque again until it is
-      // fully scanned. Fall back to scanning it through to the end in case this
-      // fails because of a full deque.
-      int start_offset =
-          Max(FixedArray::BodyDescriptor::kStartOffset, chunk->progress_bar());
-      if (start_offset < object_size) {
-        // Ensure that the object is either grey or black before pushing it
-        // into marking worklist.
-        incremental_marking_->marking_state()->WhiteToGrey(object);
-        if (FLAG_concurrent_marking) {
-          incremental_marking_->marking_worklist()->PushBailout(object);
-        } else {
-          incremental_marking_->marking_worklist()->Push(object);
-        }
-        DCHECK(incremental_marking_->marking_state()->IsGrey(object) ||
-               incremental_marking_->marking_state()->IsBlack(object));
-
-        int end_offset =
-            Min(object_size, start_offset + kProgressBarScanningChunk);
-        int already_scanned_offset = start_offset;
-        VisitPointers(object, HeapObject::RawField(object, start_offset),
-                      HeapObject::RawField(object, end_offset));
-        start_offset = end_offset;
-        end_offset = Min(object_size, end_offset + kProgressBarScanningChunk);
-        chunk->set_progress_bar(start_offset);
-        if (start_offset < object_size) {
-          incremental_marking_->NotifyIncompleteScanOfObject(
-              object_size - (start_offset - already_scanned_offset));
-        }
-      }
-    } else {
-      FixedArray::BodyDescriptor::IterateBody(object, object_size, this);
-    }
-    return object_size;
-  }
-
-  V8_INLINE void VisitPointer(HeapObject* host, Object** p) final {
-    Object* target = *p;
-    if (target->IsHeapObject()) {
-      collector_->RecordSlot(host, p, target);
-      MarkObject(host, target);
-    }
-  }
-
-  V8_INLINE void VisitPointers(HeapObject* host, Object** start,
-                               Object** end) final {
-    for (Object** p = start; p < end; p++) {
-      Object* target = *p;
-      if (target->IsHeapObject()) {
-        collector_->RecordSlot(host, p, target);
-        MarkObject(host, target);
-      }
-    }
-  }
-
-  // Marks the object grey and pushes it on the marking stack.
-  V8_INLINE void MarkObject(HeapObject* host, Object* obj) {
-    incremental_marking_->WhiteToGreyAndPush(HeapObject::cast(obj));
-  }
-
-  // Marks the object black without pushing it on the marking stack.
-  // Returns true if object needed marking and false otherwise.
-  V8_INLINE bool MarkObjectWithoutPush(HeapObject* host, Object* obj) {
-    HeapObject* heap_object = HeapObject::cast(obj);
-    return incremental_marking_->marking_state()->WhiteToBlack(heap_object);
-  }
-
- private:
-  IncrementalMarking* const incremental_marking_;
-};
 
 class IncrementalMarkingRootMarkingVisitor : public RootVisitor {
  public:
@@ -788,7 +705,8 @@ int IncrementalMarking::VisitObject(Map* map, HeapObject* obj) {
   }
   DCHECK(marking_state()->IsBlack(obj));
   WhiteToGreyAndPush(map);
-  IncrementalMarkingMarkingVisitor visitor(heap()->mark_compact_collector());
+  IncrementalMarkingMarkingVisitor visitor(heap()->mark_compact_collector(),
+                                           marking_state());
   return visitor.Visit(map, obj);
 }
 
@@ -807,7 +725,8 @@ void IncrementalMarking::RevisitObject(HeapObject* obj) {
   }
   Map* map = obj->map();
   WhiteToGreyAndPush(map);
-  IncrementalMarkingMarkingVisitor visitor(heap()->mark_compact_collector());
+  IncrementalMarkingMarkingVisitor visitor(heap()->mark_compact_collector(),
+                                           marking_state());
   visitor.Visit(map, obj);
 }
 

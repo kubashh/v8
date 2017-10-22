@@ -263,7 +263,7 @@ void HeapObject::VerifyHeapPointer(Object* p) {
 void Symbol::SymbolVerify() {
   CHECK(IsSymbol());
   CHECK(HasHashCode());
-  CHECK(Hash() > 0u);
+  CHECK_GT(Hash(), 0);
   CHECK(name()->IsUndefined(GetIsolate()) || name()->IsString());
 }
 
@@ -304,7 +304,7 @@ void FixedTypedArray<Traits>::FixedTypedArrayVerify() {
     CHECK(external_pointer() ==
           ExternalReference::fixed_typed_array_base_data_offset().address());
   } else {
-    CHECK(base_pointer() == nullptr);
+    CHECK_NULL(base_pointer());
   }
 }
 
@@ -666,7 +666,7 @@ void ConsString::ConsStringVerify() {
   CHECK(this->first()->IsString());
   CHECK(this->second() == GetHeap()->empty_string() ||
         this->second()->IsString());
-  CHECK(this->length() >= ConsString::kMinLength);
+  CHECK_GE(this->length(), ConsString::kMinLength);
   CHECK(this->length() == this->first()->length() + this->second()->length());
   if (this->IsFlat()) {
     // A flat cons can only be created by String::SlowFlatten.
@@ -684,7 +684,7 @@ void ThinString::ThinStringVerify() {
 void SlicedString::SlicedStringVerify() {
   CHECK(!this->parent()->IsConsString());
   CHECK(!this->parent()->IsSlicedString());
-  CHECK(this->length() >= SlicedString::kMinLength);
+  CHECK_GE(this->length(), SlicedString::kMinLength);
 }
 
 
@@ -705,9 +705,11 @@ void JSBoundFunction::JSBoundFunctionVerify() {
 
 void JSFunction::JSFunctionVerify() {
   CHECK(IsJSFunction());
-  VerifyObjectField(kPrototypeOrInitialMapOffset);
   CHECK(code()->IsCode());
   CHECK(map()->is_callable());
+  if (has_prototype_slot()) {
+    VerifyObjectField(kPrototypeOrInitialMapOffset);
+  }
 }
 
 
@@ -736,7 +738,7 @@ void SharedFunctionInfo::SharedFunctionInfoVerify() {
         HasInferredName());
 
   int expected_map_index = Context::FunctionMapIndex(
-      language_mode(), kind(), has_shared_name(), needs_home_object());
+      language_mode(), kind(), true, has_shared_name(), needs_home_object());
   CHECK_EQ(expected_map_index, function_map_index());
 
   if (scope_info()->length() > 0) {
@@ -785,7 +787,7 @@ void Oddball::OddballVerify() {
     // Hidden oddballs have negative smis.
     const int kLeastHiddenOddballNumber = -7;
     CHECK_LE(value, 1);
-    CHECK(value >= kLeastHiddenOddballNumber);
+    CHECK_GE(value, kLeastHiddenOddballNumber);
   }
   if (map() == heap->undefined_map()) {
     CHECK(this == heap->undefined_value());
@@ -836,7 +838,7 @@ void Code::CodeVerify() {
   CHECK(IsAligned(reinterpret_cast<intptr_t>(instruction_start()),
                   kCodeAlignment));
   relocation_info()->ObjectVerify();
-  Address last_gc_pc = NULL;
+  Address last_gc_pc = nullptr;
   Isolate* isolate = GetIsolate();
   for (RelocIterator it(this); !it.done(); it.next()) {
     it.rinfo()->Verify(isolate);
@@ -1548,7 +1550,7 @@ void JSObject::SpillInformation::Print() {
 
 bool DescriptorArray::IsSortedNoDuplicates(int valid_entries) {
   if (valid_entries == -1) valid_entries = number_of_descriptors();
-  Name* current_key = NULL;
+  Name* current_key = nullptr;
   uint32_t current = 0;
   for (int i = 0; i < number_of_descriptors(); i++) {
     Name* key = GetSortedKey(i);
@@ -1569,8 +1571,8 @@ bool DescriptorArray::IsSortedNoDuplicates(int valid_entries) {
 
 
 bool TransitionArray::IsSortedNoDuplicates(int valid_entries) {
-  DCHECK(valid_entries == -1);
-  Name* prev_key = NULL;
+  DCHECK_EQ(valid_entries, -1);
+  Name* prev_key = nullptr;
   PropertyKind prev_kind = kData;
   PropertyAttributes prev_attributes = NONE;
   uint32_t prev_hash = 0;

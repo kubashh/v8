@@ -28,6 +28,7 @@ bool CanBePrimitive(Node* node) {
     case IrOpcode::kJSCreate:
     case IrOpcode::kJSCreateArguments:
     case IrOpcode::kJSCreateArray:
+    case IrOpcode::kJSCreateBoundFunction:
     case IrOpcode::kJSCreateClosure:
     case IrOpcode::kJSCreateEmptyLiteralArray:
     case IrOpcode::kJSCreateEmptyLiteralObject:
@@ -56,7 +57,7 @@ bool CanBePrimitive(Node* node) {
 bool CanBeNullOrUndefined(Node* node) {
   if (CanBePrimitive(node)) {
     switch (node->opcode()) {
-      case IrOpcode::kJSToBoolean:
+      case IrOpcode::kToBoolean:
       case IrOpcode::kJSToInteger:
       case IrOpcode::kJSToLength:
       case IrOpcode::kJSToName:
@@ -136,13 +137,11 @@ Reduction JSCallReducer::ReduceBooleanConstructor(Node* node) {
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   CallParameters const& p = CallParametersOf(node->op());
 
-  // Replace the {node} with a proper {JSToBoolean} operator.
+  // Replace the {node} with a proper {ToBoolean} operator.
   DCHECK_LE(2u, p.arity());
   Node* value = (p.arity() == 2) ? jsgraph()->UndefinedConstant()
                                  : NodeProperties::GetValueInput(node, 2);
-  Node* context = NodeProperties::GetContextInput(node);
-  value = graph()->NewNode(javascript()->ToBoolean(ToBooleanHint::kAny), value,
-                           context);
+  value = graph()->NewNode(simplified()->ToBoolean(ToBooleanHint::kAny), value);
   ReplaceWithValue(node, value);
   return Replace(value);
 }
@@ -301,6 +300,106 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
   return reduction.Changed() ? reduction : Changed(node);
 }
 
+// ES section #sec-function.prototype.bind
+Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  // Value inputs to the {node} are as follows:
+  //
+  //  - target, which is Function.prototype.bind JSFunction
+  //  - receiver, which is the [[BoundTargetFunction]]
+  //  - bound_this (optional), which is the [[BoundThis]]
+  //  - and all the remaining value inouts are [[BoundArguments]]
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Node* bound_this = (node->op()->ValueInputCount() < 3)
+                         ? jsgraph()->UndefinedConstant()
+                         : NodeProperties::GetValueInput(node, 2);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  // Ensure that the {receiver} is known to be a JSBoundFunction or
+  // a JSFunction with the same [[Prototype]], and all maps we've
+  // seen for the {receiver} so far indicate that {receiver} is
+  // definitely a constructor or not a constructor.
+  ZoneHandleSet<Map> receiver_maps;
+  NodeProperties::InferReceiverMapsResult result =
+      NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
+  DCHECK_NE(0, receiver_maps.size());
+  bool const is_constructor = receiver_maps[0]->is_constructor();
+  Handle<Object> const prototype(receiver_maps[0]->prototype(), isolate());
+  for (Handle<Map> const receiver_map : receiver_maps) {
+    // Check for consistency among the {receiver_maps}.
+    STATIC_ASSERT(LAST_TYPE == LAST_FUNCTION_TYPE);
+    if (receiver_map->prototype() != *prototype) return NoChange();
+    if (receiver_map->is_constructor() != is_constructor) return NoChange();
+    if (receiver_map->instance_type() < FIRST_FUNCTION_TYPE) return NoChange();
+
+    // Disallow binding of slow-mode functions. We need to figure out
+    // whether the length and name property are in the original state.
+    if (receiver_map->is_dictionary_map()) return NoChange();
+
+    // Check whether the length and name properties are still present
+    // as AccessorInfo objects. In that case, their values can be
+    // recomputed even if the actual value of the object changes.
+    // This mirrors the checks done in builtins-function-gen.cc at
+    // runtime otherwise.
+    Handle<DescriptorArray> descriptors(receiver_map->instance_descriptors(),
+                                        isolate());
+    if (descriptors->length() < 2) return NoChange();
+    if (descriptors->GetKey(JSFunction::kLengthDescriptorIndex) !=
+        isolate()->heap()->length_string()) {
+      return NoChange();
+    }
+    if (!descriptors->GetValue(JSFunction::kLengthDescriptorIndex)
+             ->IsAccessorInfo()) {
+      return NoChange();
+    }
+    if (descriptors->GetKey(JSFunction::kNameDescriptorIndex) !=
+        isolate()->heap()->name_string()) {
+      return NoChange();
+    }
+    if (!descriptors->GetValue(JSFunction::kNameDescriptorIndex)
+             ->IsAccessorInfo()) {
+      return NoChange();
+    }
+  }
+
+  // Setup the map for the resulting JSBoundFunction with the
+  // correct instance {prototype}.
+  Handle<Map> map(
+      is_constructor
+          ? native_context()->bound_function_with_constructor_map()
+          : native_context()->bound_function_without_constructor_map(),
+      isolate());
+  if (map->prototype() != *prototype) {
+    map = Map::TransitionToPrototype(map, prototype);
+  }
+
+  // Make sure we can rely on the {receiver_maps}.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect = graph()->NewNode(
+        simplified()->CheckMaps(CheckMapsFlag::kNone, receiver_maps), receiver,
+        effect, control);
+  }
+
+  // Replace the {node} with a JSCreateBoundFunction.
+  int const arity = std::max(0, node->op()->ValueInputCount() - 3);
+  int const input_count = 2 + arity + 3;
+  Node** inputs = graph()->zone()->NewArray<Node*>(input_count);
+  inputs[0] = receiver;
+  inputs[1] = bound_this;
+  for (int i = 0; i < arity; ++i) {
+    inputs[2 + i] = NodeProperties::GetValueInput(node, 3 + i);
+  }
+  inputs[2 + arity + 0] = context;
+  inputs[2 + arity + 1] = effect;
+  inputs[2 + arity + 2] = control;
+  Node* value = effect = graph()->NewNode(
+      javascript()->CreateBoundFunction(arity, map), input_count, inputs);
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(value);
+}
 
 // ES6 section 19.2.3.3 Function.prototype.call (thisArg, ...args)
 Reduction JSCallReducer::ReduceFunctionPrototypeCall(Node* node) {
@@ -490,8 +589,9 @@ Reduction JSCallReducer::ReduceObjectPrototypeHasOwnProperty(Node* node) {
                                receiver, effect, control);
           Node* check = graph()->NewNode(simplified()->ReferenceEqual(),
                                          receiver_map, cache_type);
-          effect =
-              graph()->NewNode(simplified()->CheckIf(), check, effect, control);
+          effect = graph()->NewNode(
+              simplified()->CheckIf(DeoptimizeReason::kNoReason), check, effect,
+              control);
         }
         Node* value = jsgraph()->TrueConstant();
         ReplaceWithValue(node, value, effect, control);
@@ -587,6 +687,76 @@ Reduction JSCallReducer::ReduceReflectGetPrototypeOf(Node* node) {
                      ? NodeProperties::GetValueInput(node, 2)
                      : jsgraph()->UndefinedConstant();
   return ReduceObjectGetPrototype(node, target);
+}
+
+// ES section #sec-reflect.has
+Reduction JSCallReducer::ReduceReflectHas(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  int arity = static_cast<int>(p.arity() - 2);
+  DCHECK_LE(0, arity);
+  Node* target = (arity >= 1) ? NodeProperties::GetValueInput(node, 2)
+                              : jsgraph()->UndefinedConstant();
+  Node* key = (arity >= 2) ? NodeProperties::GetValueInput(node, 3)
+                           : jsgraph()->UndefinedConstant();
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  // Check whether {target} is a JSReceiver.
+  Node* check = graph()->NewNode(simplified()->ObjectIsReceiver(), target);
+  Node* branch =
+      graph()->NewNode(common()->Branch(BranchHint::kTrue), check, control);
+
+  // Throw an appropriate TypeError if the {target} is not a JSReceiver.
+  Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
+  Node* efalse = effect;
+  {
+    if_false = efalse = graph()->NewNode(
+        javascript()->CallRuntime(Runtime::kThrowTypeError, 2),
+        jsgraph()->Constant(MessageTemplate::kCalledOnNonObject),
+        jsgraph()->HeapConstant(
+            factory()->NewStringFromAsciiChecked("Reflect.has")),
+        context, frame_state, efalse, if_false);
+  }
+
+  // Otherwise just use the existing {JSHasProperty} logic.
+  Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
+  Node* etrue = effect;
+  Node* vtrue;
+  {
+    vtrue = etrue = if_true =
+        graph()->NewNode(javascript()->HasProperty(), key, target, context,
+                         frame_state, etrue, if_true);
+  }
+
+  // Rewire potential exception edges.
+  Node* on_exception = nullptr;
+  if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
+    // Create appropriate {IfException} and {IfSuccess} nodes.
+    Node* extrue = graph()->NewNode(common()->IfException(), etrue, if_true);
+    if_true = graph()->NewNode(common()->IfSuccess(), if_true);
+    Node* exfalse = graph()->NewNode(common()->IfException(), efalse, if_false);
+    if_false = graph()->NewNode(common()->IfSuccess(), if_false);
+
+    // Join the exception edges.
+    Node* merge = graph()->NewNode(common()->Merge(2), extrue, exfalse);
+    Node* ephi =
+        graph()->NewNode(common()->EffectPhi(2), extrue, exfalse, merge);
+    Node* phi =
+        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                         extrue, exfalse, merge);
+    ReplaceWithValue(on_exception, phi, ephi, merge);
+  }
+
+  // Connect the throwing path to end.
+  if_false = graph()->NewNode(common()->Throw(), efalse, if_false);
+  NodeProperties::MergeControlToEnd(graph(), common(), if_false);
+
+  // Continue on the regular path.
+  ReplaceWithValue(node, vtrue, etrue, if_true);
+  return Changed(vtrue);
 }
 
 bool CanInlineArrayIteratingBuiltin(Handle<Map> receiver_map) {
@@ -1298,6 +1468,56 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
   } else {
     NodeProperties::ChangeOp(
         node, javascript()->Construct(arity + 2, frequency, feedback));
+    Node* new_target = NodeProperties::GetValueInput(node, arity + 1);
+    Node* frame_state = NodeProperties::GetFrameStateInput(node);
+    Node* context = NodeProperties::GetContextInput(node);
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+
+    // Check whether the given new target value is a constructor function. The
+    // replacement {JSConstruct} operator only checks the passed target value
+    // but relies on the new target value to be implicitly valid.
+    Node* check =
+        graph()->NewNode(simplified()->ObjectIsConstructor(), new_target);
+    Node* check_branch =
+        graph()->NewNode(common()->Branch(BranchHint::kTrue), check, control);
+    Node* check_fail = graph()->NewNode(common()->IfFalse(), check_branch);
+    Node* check_throw = check_fail =
+        graph()->NewNode(javascript()->CallRuntime(Runtime::kThrowTypeError, 2),
+                         jsgraph()->Constant(MessageTemplate::kNotConstructor),
+                         new_target, context, frame_state, effect, check_fail);
+    control = graph()->NewNode(common()->IfTrue(), check_branch);
+    NodeProperties::ReplaceControlInput(node, control);
+
+    // Rewire potential exception edges.
+    Node* on_exception = nullptr;
+    if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
+      // Create appropriate {IfException}  and {IfSuccess} nodes.
+      Node* if_exception =
+          graph()->NewNode(common()->IfException(), check_throw, check_fail);
+      check_fail = graph()->NewNode(common()->IfSuccess(), check_fail);
+
+      // Join the exception edges.
+      Node* merge =
+          graph()->NewNode(common()->Merge(2), if_exception, on_exception);
+      Node* ephi = graph()->NewNode(common()->EffectPhi(2), if_exception,
+                                    on_exception, merge);
+      Node* phi =
+          graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                           if_exception, on_exception, merge);
+      ReplaceWithValue(on_exception, phi, ephi, merge);
+      merge->ReplaceInput(1, on_exception);
+      ephi->ReplaceInput(1, on_exception);
+      phi->ReplaceInput(1, on_exception);
+    }
+
+    // The above %ThrowTypeError runtime call is an unconditional throw, making
+    // it impossible to return a successful completion in this case. We simply
+    // connect the successful completion to the graph end.
+    Node* terminate =
+        graph()->NewNode(common()->Throw(), check_throw, check_fail);
+    NodeProperties::MergeControlToEnd(graph(), common(), terminate);
+
     Reduction const reduction = ReduceJSConstruct(node);
     return reduction.Changed() ? reduction : Changed(node);
   }
@@ -1335,6 +1555,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
   Node* target = NodeProperties::GetValueInput(node, 0);
   Node* control = NodeProperties::GetControlInput(node);
   Node* effect = NodeProperties::GetEffectInput(node);
+  size_t arity = p.arity();
+  DCHECK_LE(2u, arity);
 
   // Try to specialize JSCall {node}s with constant {target}s.
   HeapObjectMatcher m(target);
@@ -1363,6 +1585,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
           return ReduceBooleanConstructor(node);
         case Builtins::kFunctionPrototypeApply:
           return ReduceFunctionPrototypeApply(node);
+        case Builtins::kFastFunctionPrototypeBind:
+          return ReduceFunctionPrototypeBind(node);
         case Builtins::kFunctionPrototypeCall:
           return ReduceFunctionPrototypeCall(node);
         case Builtins::kFunctionPrototypeHasInstance:
@@ -1385,6 +1609,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
           return ReduceReflectConstruct(node);
         case Builtins::kReflectGetPrototypeOf:
           return ReduceReflectGetPrototypeOf(node);
+        case Builtins::kReflectHas:
+          return ReduceReflectHas(node);
         case Builtins::kArrayForEach:
           return ReduceArrayForEach(function, node);
         case Builtins::kArrayMap:
@@ -1408,13 +1634,10 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       Handle<Object> bound_this(function->bound_this(), isolate());
       Handle<FixedArray> bound_arguments(function->bound_arguments(),
                                          isolate());
-      CallParameters const& p = CallParametersOf(node->op());
       ConvertReceiverMode const convert_mode =
           (bound_this->IsNullOrUndefined(isolate()))
               ? ConvertReceiverMode::kNullOrUndefined
               : ConvertReceiverMode::kNotNullOrUndefined;
-      size_t arity = p.arity();
-      DCHECK_LE(2u, arity);
       // Patch {node} to use [[BoundTargetFunction]] and [[BoundThis]].
       NodeProperties::ReplaceValueInput(
           node, jsgraph()->Constant(bound_target_function), 0);
@@ -1440,6 +1663,40 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     return NoChange();
   }
 
+  // If {target} is the result of a JSCreateBoundFunction operation,
+  // we can just fold the construction and call the bound target
+  // function directly instead.
+  if (target->opcode() == IrOpcode::kJSCreateBoundFunction) {
+    Node* bound_target_function = NodeProperties::GetValueInput(target, 0);
+    Node* bound_this = NodeProperties::GetValueInput(target, 1);
+    int const bound_arguments_length =
+        static_cast<int>(CreateBoundFunctionParametersOf(target->op()).arity());
+
+    // Patch the {node} to use [[BoundTargetFunction]] and [[BoundThis]].
+    NodeProperties::ReplaceValueInput(node, bound_target_function, 0);
+    NodeProperties::ReplaceValueInput(node, bound_this, 1);
+
+    // Insert the [[BoundArguments]] for {node}.
+    for (int i = 0; i < bound_arguments_length; ++i) {
+      Node* value = NodeProperties::GetValueInput(target, 2 + i);
+      node->InsertInput(graph()->zone(), 2 + i, value);
+      arity++;
+    }
+
+    // Update the JSCall operator on {node}.
+    ConvertReceiverMode const convert_mode =
+        CanBeNullOrUndefined(bound_this)
+            ? ConvertReceiverMode::kAny
+            : ConvertReceiverMode::kNotNullOrUndefined;
+    NodeProperties::ChangeOp(
+        node, javascript()->Call(arity, p.frequency(), VectorSlotPair(),
+                                 convert_mode));
+
+    // Try to further reduce the JSCall {node}.
+    Reduction const reduction = ReduceJSCall(node);
+    return reduction.Changed() ? reduction : Changed(node);
+  }
+
   // Extract feedback from the {node} using the CallICNexus.
   if (!p.feedback().IsValid()) return NoChange();
   CallICNexus nexus(p.feedback().vector(), p.feedback().slot());
@@ -1458,7 +1715,7 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
     if (!ShouldUseCallICFeedback(target)) return NoChange();
 
     Handle<WeakCell> cell = Handle<WeakCell>::cast(feedback);
-    if (cell->value()->IsJSFunction()) {
+    if (cell->value()->IsCallable()) {
       Node* target_function =
           jsgraph()->Constant(handle(cell->value(), isolate()));
 
@@ -1466,7 +1723,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       Node* check = graph()->NewNode(simplified()->ReferenceEqual(), target,
                                      target_function);
       effect =
-          graph()->NewNode(simplified()->CheckIf(), check, effect, control);
+          graph()->NewNode(simplified()->CheckIf(DeoptimizeReason::kNoReason),
+                           check, effect, control);
 
       // Specialize the JSCall node to the {target_function}.
       NodeProperties::ReplaceValueInput(node, target_function, 0);
@@ -1538,7 +1796,8 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
       Node* check = graph()->NewNode(simplified()->ReferenceEqual(), target,
                                      array_function);
       effect =
-          graph()->NewNode(simplified()->CheckIf(), check, effect, control);
+          graph()->NewNode(simplified()->CheckIf(DeoptimizeReason::kNoReason),
+                           check, effect, control);
 
       // Turn the {node} into a {JSCreateArray} call.
       NodeProperties::ReplaceEffectInput(node, effect);
@@ -1560,7 +1819,8 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
         Node* check = graph()->NewNode(simplified()->ReferenceEqual(),
                                        new_target, new_target_feedback);
         effect =
-            graph()->NewNode(simplified()->CheckIf(), check, effect, control);
+            graph()->NewNode(simplified()->CheckIf(DeoptimizeReason::kNoReason),
+                             check, effect, control);
 
         // Specialize the JSConstruct node to the {new_target_feedback}.
         NodeProperties::ReplaceValueInput(node, new_target_feedback, arity + 1);

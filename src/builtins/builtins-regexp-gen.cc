@@ -11,6 +11,7 @@
 #include "src/code-stub-assembler.h"
 #include "src/counters.h"
 #include "src/factory-inl.h"
+#include "src/objects/js-regexp.h"
 #include "src/objects/regexp-match-info.h"
 #include "src/regexp/regexp-macro-assembler.h"
 
@@ -118,7 +119,7 @@ void RegExpBuiltinsAssembler::SlowStoreLastIndex(Node* context, Node* regexp,
   // Store through runtime.
   // TODO(ishell): Use SetPropertyStub here once available.
   Node* const name = HeapConstant(isolate()->factory()->lastIndex_string());
-  Node* const language_mode = SmiConstant(STRICT);
+  Node* const language_mode = SmiConstant(Smi::FromEnum(LanguageMode::kStrict));
   CallRuntime(Runtime::kSetProperty, context, regexp, name, value,
               language_mode);
 }
@@ -1956,18 +1957,12 @@ class GrowableFixedArray {
     CSA_ASSERT(a, a->IntPtrGreaterThan(new_capacity, a->IntPtrConstant(0)));
     CSA_ASSERT(a, a->IntPtrGreaterThanOrEqual(new_capacity, element_count));
 
-    const ElementsKind kind = PACKED_ELEMENTS;
-    const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
-    const CodeStubAssembler::ParameterMode mode =
-        CodeStubAssembler::INTPTR_PARAMETERS;
-    const CodeStubAssembler::AllocationFlags flags =
-        CodeStubAssembler::kAllowLargeObjectAllocation;
-
     Node* const from_array = var_array_.value();
-    Node* const to_array =
-        a->AllocateFixedArray(kind, new_capacity, mode, flags);
-    a->CopyFixedArrayElements(kind, from_array, kind, to_array, element_count,
-                              new_capacity, barrier_mode, mode);
+
+    CodeStubAssembler::ExtractFixedArrayFlags flags;
+    flags |= CodeStubAssembler::ExtractFixedArrayFlag::kFixedArrays;
+    Node* to_array = a->ExtractFixedArray(from_array, nullptr, element_count,
+                                          new_capacity, flags);
 
     return to_array;
   }
@@ -2063,7 +2058,7 @@ void RegExpBuiltinsAssembler::RegExpPrototypeMatchBody(Node* const context,
             Node* const match = LoadFixedArrayElement(result_fixed_array, 0);
 
             // The match is guaranteed to be a string on the fast path.
-            CSA_ASSERT(this, IsStringInstanceType(LoadInstanceType(match)));
+            CSA_ASSERT(this, IsString(match));
 
             var_match.Bind(match);
             Goto(&if_didmatch);

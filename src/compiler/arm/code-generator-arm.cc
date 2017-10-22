@@ -134,6 +134,20 @@ class ArmOperandConverter final : public InstructionOperandConverter {
     FrameOffset offset = frame_access_state()->GetFrameOffset(slot);
     return MemOperand(offset.from_stack_pointer() ? sp : fp, offset.offset());
   }
+
+  NeonMemOperand NeonInputOperand(size_t first_index) {
+    const size_t index = first_index;
+    switch (AddressingModeField::decode(instr_->opcode())) {
+      case kMode_Offset_RR:
+        return NeonMemOperand(InputRegister(index + 0),
+                              InputRegister(index + 1));
+      case kMode_Operand2_R:
+        return NeonMemOperand(InputRegister(index + 0));
+      default:
+        break;
+    }
+    UNREACHABLE();
+  }
 };
 
 namespace {
@@ -1536,22 +1550,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     case kArmVld1F64: {
       __ vld1(Neon8, NeonListOperand(i.OutputDoubleRegister()),
-              NeonMemOperand(i.InputRegister(0)));
+              i.NeonInputOperand(0));
       break;
     }
     case kArmVst1F64: {
       __ vst1(Neon8, NeonListOperand(i.InputDoubleRegister(0)),
-              NeonMemOperand(i.InputRegister(1)));
+              i.NeonInputOperand(1));
       break;
     }
     case kArmVld1S128: {
       __ vld1(Neon8, NeonListOperand(i.OutputSimd128Register()),
-              NeonMemOperand(i.InputRegister(0)));
+              i.NeonInputOperand(0));
       break;
     }
     case kArmVst1S128: {
       __ vst1(Neon8, NeonListOperand(i.InputSimd128Register(0)),
-              NeonMemOperand(i.InputRegister(1)));
+              i.NeonInputOperand(1));
       break;
     }
     case kArmVldrF64:
@@ -2778,15 +2792,14 @@ void CodeGenerator::FinishFrame(Frame* frame) {
     STATIC_ASSERT(DwVfpRegister::kNumRegisters == 32);
     uint32_t last = base::bits::CountLeadingZeros32(saves_fp) - 1;
     uint32_t first = base::bits::CountTrailingZeros32(saves_fp);
-    DCHECK_EQ((last - first + 1), base::bits::CountPopulation32(saves_fp));
+    DCHECK_EQ((last - first + 1), base::bits::CountPopulation(saves_fp));
     frame->AllocateSavedCalleeRegisterSlots((last - first + 1) *
                                             (kDoubleSize / kPointerSize));
   }
   const RegList saves = descriptor->CalleeSavedRegisters();
   if (saves != 0) {
     // Save callee-saved registers.
-    frame->AllocateSavedCalleeRegisterSlots(
-        base::bits::CountPopulation32(saves));
+    frame->AllocateSavedCalleeRegisterSlots(base::bits::CountPopulation(saves));
   }
 }
 
@@ -2876,7 +2889,7 @@ void CodeGenerator::AssembleConstructFrame() {
     STATIC_ASSERT(DwVfpRegister::kNumRegisters == 32);
     uint32_t last = base::bits::CountLeadingZeros32(saves_fp) - 1;
     uint32_t first = base::bits::CountTrailingZeros32(saves_fp);
-    DCHECK_EQ((last - first + 1), base::bits::CountPopulation32(saves_fp));
+    DCHECK_EQ((last - first + 1), base::bits::CountPopulation(saves_fp));
     __ vstm(db_w, sp, DwVfpRegister::from_code(first),
             DwVfpRegister::from_code(last));
   }

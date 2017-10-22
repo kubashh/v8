@@ -9,7 +9,7 @@ vars = {
 
 deps = {
   'v8/build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'ddb142bd33db8985a96a8a91f6d0f7edf78e75eb',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + '2d90a2961d8628d25798899470ecaef7d2635c82',
   'v8/tools/gyp':
     Var('chromium_url') + '/external/gyp.git' + '@' + 'd61a9397e668fa9843c4aa7da9e79460fe590bfb',
   'v8/third_party/icu':
@@ -17,15 +17,15 @@ deps = {
   'v8/third_party/instrumented_libraries':
     Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + 'e07d437dc8b65ca96ebd3b7d4aa303cd2ec0ec45',
   'v8/buildtools':
-    Var('chromium_url') + '/chromium/buildtools.git' + '@' + 'f6d165d9d842ddd29056c127a5f3a3c5d8e0d2e3',
+    Var('chromium_url') + '/chromium/buildtools.git' + '@' + 'e043d81e9185a2445fa3ec3fc34a4f69b58d4969',
   'v8/base/trace_event/common':
-    Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + 'abcc4153b783b5e2c2dafcfbf658017ecb56989a',
+    Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + '0e9a47d74970bee1bbfc063c47215406f8918699',
   'v8/third_party/android_tools': {
-    'url': Var('chromium_url') + '/android_tools.git' + '@' + 'ca9dc7245b888c75307f0619e4a39fb46a82de66',
+    'url': Var('chromium_url') + '/android_tools.git' + '@' + '110e5f6c0dcb6f7d586ac0c00f10bc7d1d410088',
     'condition': 'checkout_android',
   },
   'v8/third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '072921b6803a1a84beb46bc2698ca61a580210ac',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + '76a8dd7e8a110d2ea336389ec10255bf2af781a7',
     'condition': 'checkout_android',
   },
   'v8/third_party/jinja2':
@@ -43,11 +43,11 @@ deps = {
   'v8/test/mozilla/data':
     Var('chromium_url') + '/v8/deps/third_party/mozilla-tests.git' + '@' + 'f6c578a10ea707b1a8ab0b88943fe5115ce2b9be',
   'v8/test/test262/data':
-    Var('chromium_url') + '/external/github.com/tc39/test262.git' + '@' + '290799bbeeba86245a355894b6ff2bb33d946d9e',
+    Var('chromium_url') + '/external/github.com/tc39/test262.git' + '@' + '5d4c667b271a9b39d0de73aef5ffe6879c6f8811',
   'v8/test/test262/harness':
     Var('chromium_url') + '/external/github.com/test262-utils/test262-harness-py.git' + '@' + '0f2acdd882c84cff43b9d60df7574a1901e2cdcd',
   'v8/tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '0c09c7ae54add6adeaf21c432a454b092f6be02e',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'dce401419c4281e2aad72a9bafb885a9fb9aec59',
   'v8/tools/luci-go':
     Var('chromium_url') + '/chromium/src/tools/luci-go.git' + '@' + '45a8a51fda92e123619a69e7644d9c64a320b0c1',
   'v8/test/wasm-js':
@@ -307,6 +307,7 @@ hooks = [
   },
   {
     # A change to a .gyp, .gypi, or to GYP itself should run the generator.
+    'name': 'regyp_if_needed',
     'pattern': '.',
     'action': ['python', 'v8/gypfiles/gyp_v8', '--running-as-hook'],
   },

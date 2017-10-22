@@ -323,7 +323,7 @@ compiler::Node* InterpreterAssembler::BytecodeOperandReadUnaligned(
 
   // Read the most signicant bytecode into bytes[0] and then in order
   // down to least significant in bytes[count - 1].
-  DCHECK(count <= kMaxCount);
+  DCHECK_LE(count, kMaxCount);
   compiler::Node* bytes[kMaxCount];
   for (int i = 0; i < count; i++) {
     MachineType machine_type = (i == 0) ? msb_type : MachineType::Uint8();
@@ -484,8 +484,8 @@ Node* InterpreterAssembler::BytecodeOperandImmSmi(int operand_index) {
 }
 
 Node* InterpreterAssembler::BytecodeOperandIdxInt32(int operand_index) {
-  DCHECK(OperandType::kIdx ==
-         Bytecodes::GetOperandType(bytecode_, operand_index));
+  DCHECK_EQ(OperandType::kIdx,
+            Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
   return BytecodeUnsignedOperand(operand_index, operand_size);
@@ -509,8 +509,8 @@ Node* InterpreterAssembler::BytecodeOperandReg(int operand_index) {
 }
 
 Node* InterpreterAssembler::BytecodeOperandRuntimeId(int operand_index) {
-  DCHECK(OperandType::kRuntimeId ==
-         Bytecodes::GetOperandType(bytecode_, operand_index));
+  DCHECK_EQ(OperandType::kRuntimeId,
+            Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
   DCHECK_EQ(operand_size, OperandSize::kShort);
@@ -519,8 +519,8 @@ Node* InterpreterAssembler::BytecodeOperandRuntimeId(int operand_index) {
 
 Node* InterpreterAssembler::BytecodeOperandNativeContextIndex(
     int operand_index) {
-  DCHECK(OperandType::kNativeContextIndex ==
-         Bytecodes::GetOperandType(bytecode_, operand_index));
+  DCHECK_EQ(OperandType::kNativeContextIndex,
+            Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
   return ChangeUint32ToWord(
@@ -528,8 +528,8 @@ Node* InterpreterAssembler::BytecodeOperandNativeContextIndex(
 }
 
 Node* InterpreterAssembler::BytecodeOperandIntrinsicId(int operand_index) {
-  DCHECK(OperandType::kIntrinsicId ==
-         Bytecodes::GetOperandType(bytecode_, operand_index));
+  DCHECK_EQ(OperandType::kIntrinsicId,
+            Bytecodes::GetOperandType(bytecode_, operand_index));
   OperandSize operand_size =
       Bytecodes::GetOperandSize(bytecode_, operand_index, operand_scale());
   DCHECK_EQ(operand_size, OperandSize::kByte);
@@ -564,7 +564,7 @@ void InterpreterAssembler::CallPrologue() {
   }
 
   if (FLAG_debug_code && !disable_stack_check_across_call_) {
-    DCHECK(stack_pointer_before_call_ == nullptr);
+    DCHECK_NULL(stack_pointer_before_call_);
     stack_pointer_before_call_ = LoadStackPointer();
   }
   bytecode_array_valid_ = false;
@@ -641,15 +641,42 @@ void InterpreterAssembler::CollectCallFeedback(Node* target, Node* context,
       // context.
       Comment("check if function in same native context");
       GotoIf(TaggedIsSmi(target), &mark_megamorphic);
-      // TODO(bmeurer): Add support for arbitrary callables here, and
-      // check via GetFunctionRealm (see src/objects.cc).
-      GotoIfNot(IsJSFunction(target), &mark_megamorphic);
-      Node* target_context =
-          LoadObjectField(target, JSFunction::kContextOffset);
-      Node* target_native_context = LoadNativeContext(target_context);
-      GotoIfNot(WordEqual(LoadNativeContext(context), target_native_context),
-                &mark_megamorphic);
+      // Check if the {target} is a JSFunction or JSBoundFunction
+      // in the current native context.
+      VARIABLE(var_target, MachineRepresentation::kTagged, target);
+      Label loop(this, &var_target), done_loop(this);
+      Goto(&loop);
+      BIND(&loop);
+      {
+        Label if_boundfunction(this), if_function(this);
+        Node* target = var_target.value();
+        CSA_ASSERT(this, TaggedIsNotSmi(target));
+        Node* target_instance_type = LoadInstanceType(target);
+        GotoIf(InstanceTypeEqual(target_instance_type, JS_BOUND_FUNCTION_TYPE),
+               &if_boundfunction);
+        Branch(InstanceTypeEqual(target_instance_type, JS_FUNCTION_TYPE),
+               &if_function, &mark_megamorphic);
 
+        BIND(&if_function);
+        {
+          // Check that the JSFunction {target} is in the current native
+          // context.
+          Node* target_context =
+              LoadObjectField(target, JSFunction::kContextOffset);
+          Node* target_native_context = LoadNativeContext(target_context);
+          Branch(WordEqual(LoadNativeContext(context), target_native_context),
+                 &done_loop, &mark_megamorphic);
+        }
+
+        BIND(&if_boundfunction);
+        {
+          // Continue with the [[BoundTargetFunction]] of {target}.
+          var_target.Bind(LoadObjectField(
+              target, JSBoundFunction::kBoundTargetFunctionOffset));
+          Goto(&loop);
+        }
+      }
+      BIND(&done_loop);
       CreateWeakCellInFeedbackVector(feedback_vector, SmiTag(slot_id), target);
       // Reset profiler ticks.
       StoreObjectFieldNoWriteBarrier(feedback_vector,
@@ -1294,12 +1321,11 @@ Node* InterpreterAssembler::TaggedToWord32OrBigIntWithFeedback(
       // only reach this path on the first pass when the feedback is kNone.
       CSA_ASSERT(this, SmiEqual(var_type_feedback->value(),
                                 SmiConstant(BinaryOperationFeedback::kNone)));
-      GotoIf(Word32Equal(instance_type, Int32Constant(ODDBALL_TYPE)),
-             &is_oddball);
+      GotoIf(InstanceTypeEqual(instance_type, ODDBALL_TYPE), &is_oddball);
 
       // Not an oddball either -> convert to Numeric.
-      // TODO(jkummerow): This should use "NonNumericToNumeric".
-      var_value.Bind(CallBuiltin(Builtins::kNonNumberToNumber, context, value));
+      var_value.Bind(
+          CallBuiltin(Builtins::kNonNumberToNumeric, context, value));
       var_type_feedback->Bind(SmiConstant(BinaryOperationFeedback::kAny));
       Goto(&loop);
 

@@ -121,7 +121,7 @@ void* OS::ReserveRegion(size_t size, void* hint) {
 // static
 void* OS::ReserveAlignedRegion(size_t size, size_t alignment, void* hint,
                                size_t* allocated) {
-  DCHECK((alignment % OS::AllocateAlignment()) == 0);
+  DCHECK_EQ(alignment % OS::AllocateAlignment(), 0);
   hint = AlignedAddress(hint, alignment);
   size_t request_size =
       RoundUp(size + alignment, static_cast<intptr_t>(OS::AllocateAlignment()));
@@ -195,7 +195,7 @@ std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
   // hex_start_addr-hex_end_addr rwxp <unused data> [binary_file_name]
   // If we encounter an unexpected situation we abort scanning further entries.
   FILE* fp = fopen("/proc/self/maps", "r");
-  if (fp == NULL) return result;
+  if (fp == nullptr) return result;
 
   // Allocate enough room to be able to store a full file name.
   const int kLibNameLen = FILENAME_MAX + 1;
@@ -203,11 +203,15 @@ std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
 
   // This loop will terminate once the scanning hits an EOF.
   while (true) {
-    uintptr_t start, end;
+    uintptr_t start, end, offset;
     char attr_r, attr_w, attr_x, attr_p;
     // Parse the addresses and permission bits at the beginning of the line.
     if (fscanf(fp, "%" V8PRIxPTR "-%" V8PRIxPTR, &start, &end) != 2) break;
     if (fscanf(fp, " %c%c%c%c", &attr_r, &attr_w, &attr_x, &attr_p) != 4) break;
+    if (fscanf(fp, "%" V8PRIxPTR, &offset) != 1) break;
+
+    // Adjust {start} based on {offset}.
+    start -= offset;
 
     int c;
     if (attr_r == 'r' && attr_w != 'w' && attr_x == 'x') {
@@ -224,7 +228,7 @@ std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
         ungetc(c, fp);
 
         // Read to the end of the line. Exit if the read fails.
-        if (fgets(lib_name, kLibNameLen, fp) == NULL) break;
+        if (fgets(lib_name, kLibNameLen, fp) == nullptr) break;
 
         // Drop the newline character read by fgets. We do not need to check
         // for a zero-length string because we know that we at least read the
@@ -250,7 +254,7 @@ std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
   return result;
 }
 
-void OS::SignalCodeMovingGC(void* hint) {
+void OS::SignalCodeMovingGC() {
   // Support for ll_prof.py.
   //
   // The Linux profiler built into the kernel logs all mmap's with
@@ -261,12 +265,12 @@ void OS::SignalCodeMovingGC(void* hint) {
   // kernel log.
   long size = sysconf(_SC_PAGESIZE);  // NOLINT(runtime/int)
   FILE* f = fopen(OS::GetGCFakeMMapFile(), "w+");
-  if (f == NULL) {
+  if (f == nullptr) {
     OS::PrintError("Failed to open %s\n", OS::GetGCFakeMMapFile());
     OS::Abort();
   }
-  void* addr =
-      mmap(hint, size, PROT_READ | PROT_EXEC, MAP_PRIVATE, fileno(f), 0);
+  void* addr = mmap(OS::GetRandomMmapAddr(), size, PROT_READ | PROT_EXEC,
+                    MAP_PRIVATE, fileno(f), 0);
   DCHECK_NE(MAP_FAILED, addr);
   OS::Free(addr, size);
   fclose(f);

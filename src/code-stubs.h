@@ -7,7 +7,6 @@
 
 #include "src/allocation.h"
 #include "src/assembler.h"
-#include "src/codegen.h"
 #include "src/factory.h"
 #include "src/globals.h"
 #include "src/interface-descriptors.h"
@@ -41,7 +40,6 @@ class Node;
   V(RecordWrite)                              \
   V(StoreBufferOverflow)                      \
   V(StoreSlowElement)                         \
-  V(SubString)                                \
   V(NameDictionaryLookup)                     \
   /* --- TurboFanCodeStubs --- */             \
   V(ArrayNoArgumentConstructor)               \
@@ -230,9 +228,6 @@ class CodeStub : public ZoneObject {
   // initially generated.
   void RecordCodeGeneration(Handle<Code> code);
 
-  // Finish the code object after it has been generated.
-  virtual void FinishCode(Handle<Code> code) { }
-
   // Activate newly generated stub. Is called after
   // registering stub in the stub cache.
   virtual void Activate(Code* code) { }
@@ -316,6 +311,9 @@ class PlatformCodeStub : public CodeStub {
   // Generates the assembler code for the stub.
   virtual void Generate(MacroAssembler* masm) = 0;
 
+  // Generates the exception handler table for the stub.
+  virtual Handle<HandlerTable> GenerateHandlerTable();
+
   DEFINE_CODE_STUB_BASE(PlatformCodeStub, CodeStub);
 };
 
@@ -329,11 +327,11 @@ class CodeStubDescriptor {
 
   CodeStubDescriptor(Isolate* isolate, uint32_t stub_key);
 
-  void Initialize(Address deoptimization_handler = NULL,
+  void Initialize(Address deoptimization_handler = nullptr,
                   int hint_stack_parameter_count = -1,
                   StubFunctionMode function_mode = NOT_JS_FUNCTION_STUB_MODE);
   void Initialize(Register stack_parameter_count,
-                  Address deoptimization_handler = NULL,
+                  Address deoptimization_handler = nullptr,
                   int hint_stack_parameter_count = -1,
                   StubFunctionMode function_mode = NOT_JS_FUNCTION_STUB_MODE);
 
@@ -751,7 +749,7 @@ class JSEntryStub : public PlatformCodeStub {
   }
 
  private:
-  void FinishCode(Handle<Code> code) override;
+  Handle<HandlerTable> GenerateHandlerTable() override;
 
   void PrintName(std::ostream& os) const override {  // NOLINT
     os << (type() == StackFrame::ENTRY ? "JSEntryStub"
@@ -790,45 +788,22 @@ enum EmbedMode {
 
 class DoubleToIStub : public PlatformCodeStub {
  public:
-  DoubleToIStub(Isolate* isolate, Register source, Register destination,
-                int offset, bool is_truncating, bool skip_fastpath = false)
+  DoubleToIStub(Isolate* isolate, Register destination)
       : PlatformCodeStub(isolate) {
-    minor_key_ = SourceRegisterBits::encode(source.code()) |
-                 DestinationRegisterBits::encode(destination.code()) |
-                 OffsetBits::encode(offset) |
-                 IsTruncatingBits::encode(is_truncating) |
-                 SkipFastPathBits::encode(skip_fastpath) |
-                 SSE3Bits::encode(CpuFeatures::IsSupported(SSE3) ? 1 : 0);
+    minor_key_ = DestinationRegisterBits::encode(destination.code());
   }
 
   bool SometimesSetsUpAFrame() override { return false; }
 
  private:
-  Register source() const {
-    return Register::from_code(SourceRegisterBits::decode(minor_key_));
-  }
   Register destination() const {
     return Register::from_code(DestinationRegisterBits::decode(minor_key_));
   }
-  bool is_truncating() const { return IsTruncatingBits::decode(minor_key_); }
-  bool skip_fastpath() const { return SkipFastPathBits::decode(minor_key_); }
-  int offset() const { return OffsetBits::decode(minor_key_); }
 
   static const int kBitsPerRegisterNumber = 6;
   STATIC_ASSERT((1L << kBitsPerRegisterNumber) >= Register::kNumRegisters);
-  class SourceRegisterBits:
-      public BitField<int, 0, kBitsPerRegisterNumber> {};  // NOLINT
-  class DestinationRegisterBits:
-      public BitField<int, kBitsPerRegisterNumber,
-        kBitsPerRegisterNumber> {};  // NOLINT
-  class IsTruncatingBits:
-      public BitField<bool, 2 * kBitsPerRegisterNumber, 1> {};  // NOLINT
-  class OffsetBits:
-      public BitField<int, 2 * kBitsPerRegisterNumber + 1, 3> {};  // NOLINT
-  class SkipFastPathBits:
-      public BitField<int, 2 * kBitsPerRegisterNumber + 4, 1> {};  // NOLINT
-  class SSE3Bits:
-      public BitField<int, 2 * kBitsPerRegisterNumber + 5, 1> {};  // NOLINT
+  class DestinationRegisterBits
+      : public BitField<int, 0, kBitsPerRegisterNumber> {};  // NOLINT
 
   DEFINE_NULL_CALL_INTERFACE_DESCRIPTOR();
   DEFINE_PLATFORM_CODE_STUB(DoubleToI, PlatformCodeStub);
@@ -1113,15 +1088,6 @@ class StoreBufferOverflowStub : public PlatformCodeStub {
   DEFINE_NULL_CALL_INTERFACE_DESCRIPTOR();
   DEFINE_PLATFORM_CODE_STUB(StoreBufferOverflow, PlatformCodeStub);
 };
-
-class SubStringStub : public TurboFanCodeStub {
- public:
-  explicit SubStringStub(Isolate* isolate) : TurboFanCodeStub(isolate) {}
-
-  DEFINE_CALL_INTERFACE_DESCRIPTOR(SubString);
-  DEFINE_TURBOFAN_CODE_STUB(SubString, TurboFanCodeStub);
-};
-
 
 #undef DEFINE_CALL_INTERFACE_DESCRIPTOR
 #undef DEFINE_PLATFORM_CODE_STUB

@@ -228,13 +228,13 @@ void AstTraversalVisitor<Subclass>::VisitWhileStatement(WhileStatement* stmt) {
 template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitForStatement(ForStatement* stmt) {
   PROCESS_NODE(stmt);
-  if (stmt->init() != NULL) {
+  if (stmt->init() != nullptr) {
     RECURSE(Visit(stmt->init()));
   }
-  if (stmt->cond() != NULL) {
+  if (stmt->cond() != nullptr) {
     RECURSE(Visit(stmt->cond()));
   }
-  if (stmt->next() != NULL) {
+  if (stmt->next() != nullptr) {
     RECURSE(Visit(stmt->next()));
   }
   RECURSE(Visit(stmt->body()));
@@ -344,6 +344,30 @@ void AstTraversalVisitor<Subclass>::VisitArrayLiteral(ArrayLiteral* expr) {
   for (int i = 0; i < values->length(); ++i) {
     Expression* value = values->at(i);
     RECURSE_EXPRESSION(Visit(value));
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitObjectPattern(ObjectPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    RECURSE_EXPRESSION(Visit(element.name()));
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitArrayPattern(ArrayPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
   }
 }
 

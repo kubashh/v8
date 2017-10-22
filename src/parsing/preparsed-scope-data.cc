@@ -36,11 +36,12 @@ const size_t kUint32Size = 4;
 const size_t kUint8Size = 1;
 #endif
 
+const int kPlaceholderSize = kUint32Size;
 const int kSkippableFunctionDataSize = 4 * kUint32Size + 1 * kUint8Size;
 
-STATIC_ASSERT(LANGUAGE_END == 2);
-class LanguageField : public BitField<int, 0, 1> {};
+class LanguageField : public BitField<LanguageMode, 0, 1> {};
 class UsesSuperField : public BitField<bool, LanguageField::kNext, 1> {};
+STATIC_ASSERT(LanguageModeSize <= LanguageField::kNumValues);
 
 }  // namespace
 
@@ -193,7 +194,7 @@ void ProducedPreParsedScopeData::DataGatheringScope::MarkFunctionAsSkippable(
   produced_preparsed_scope_data_->parent_->AddSkippableFunction(
       function_scope_->start_position(), end_position,
       function_scope_->num_parameters(), num_inner_functions,
-      function_scope_->language_mode(), function_scope_->uses_super_property());
+      function_scope_->language_mode(), function_scope_->NeedsHomeObject());
 }
 
 void ProducedPreParsedScopeData::AddSkippableFunction(
@@ -224,9 +225,9 @@ void ProducedPreParsedScopeData::SaveScopeAllocationData(
   DCHECK(previously_produced_preparsed_scope_data_.is_null());
   // The data contains a uint32 (reserved space for scope_data_start) and
   // function data items, kSkippableFunctionDataSize each.
-  DCHECK_GE(byte_data_->size(), kUint32Size);
+  DCHECK_GE(byte_data_->size(), kPlaceholderSize);
   DCHECK_LE(byte_data_->size(), std::numeric_limits<uint32_t>::max());
-  DCHECK_EQ(byte_data_->size() % kSkippableFunctionDataSize, kUint32Size);
+  DCHECK_EQ(byte_data_->size() % kSkippableFunctionDataSize, kPlaceholderSize);
 
   if (bailed_out_) {
     return;
@@ -235,7 +236,7 @@ void ProducedPreParsedScopeData::SaveScopeAllocationData(
   uint32_t scope_data_start = static_cast<uint32_t>(byte_data_->size());
 
   // If there are no skippable inner functions, we don't need to save anything.
-  if (scope_data_start == kUint32Size) {
+  if (scope_data_start == kPlaceholderSize) {
     return;
   }
 
@@ -248,6 +249,10 @@ void ProducedPreParsedScopeData::SaveScopeAllocationData(
   byte_data_->WriteUint32(scope->end_position());
 
   SaveDataForScope(scope);
+}
+
+bool ProducedPreParsedScopeData::ContainsInnerFunctions() const {
+  return byte_data_->size() > kPlaceholderSize;
 }
 
 MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
@@ -263,7 +268,7 @@ MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
 
   DCHECK(!ThisOrParentBailedOut());
 
-  if (byte_data_->size() <= kUint32Size) {
+  if (byte_data_->size() <= kPlaceholderSize) {
     // The data contains only the placeholder.
     return MaybeHandle<PreParsedScopeData>();
   }
@@ -336,12 +341,6 @@ bool ProducedPreParsedScopeData::ScopeIsSkippableFunctionScope(Scope* scope) {
 void ProducedPreParsedScopeData::SaveDataForScope(Scope* scope) {
   DCHECK_NE(scope->end_position(), kNoSourcePosition);
 
-  // We're not trying to save data for default constructors because the
-  // PreParser doesn't construct them.
-  DCHECK_IMPLIES(scope->scope_type() == ScopeType::FUNCTION_SCOPE,
-                 (scope->AsDeclarationScope()->function_kind() &
-                  kDefaultConstructor) == 0);
-
   if (!ScopeNeedsData(scope)) {
     return;
   }
@@ -403,8 +402,8 @@ void ProducedPreParsedScopeData::SaveDataForInnerScopes(Scope* scope) {
     if (ScopeIsSkippableFunctionScope(inner)) {
       // Don't save data about function scopes, since they'll have their own
       // ProducedPreParsedScopeData where their data is saved.
-      DCHECK(inner->AsDeclarationScope()->produced_preparsed_scope_data() !=
-             nullptr);
+      DCHECK_NOT_NULL(
+          inner->AsDeclarationScope()->produced_preparsed_scope_data());
       continue;
     }
     scopes.push_back(inner);
@@ -458,7 +457,7 @@ void ConsumedPreParsedScopeData::SetData(Handle<PreParsedScopeData> data) {
   DCHECK_EQ(scope_data_->ReadUint32(), kMagicValue);
 #endif
   // The first data item is scope_data_start. Skip over it.
-  scope_data_->SetPosition(kUint32Size);
+  scope_data_->SetPosition(kPlaceholderSize);
 }
 
 ProducedPreParsedScopeData*

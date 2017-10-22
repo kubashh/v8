@@ -96,11 +96,8 @@ Code* Snapshot::DeserializeBuiltin(Isolate* isolate, int builtin_id) {
   Vector<const byte> builtin_data = Snapshot::ExtractBuiltinData(blob);
   BuiltinSnapshotData builtin_snapshot_data(builtin_data);
 
+  CodeSpaceMemoryModificationScope code_allocation(isolate->heap());
   BuiltinDeserializer builtin_deserializer(isolate, &builtin_snapshot_data);
-  builtin_deserializer.ReserveAndInitializeBuiltinsTableForBuiltin(builtin_id);
-
-  DisallowHeapAllocation no_gc;
-
   Code* code = builtin_deserializer.DeserializeBuiltin(builtin_id);
   DCHECK_EQ(code, isolate->builtins()->builtin(builtin_id));
 

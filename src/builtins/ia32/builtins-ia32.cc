@@ -5,7 +5,6 @@
 #if V8_TARGET_ARCH_IA32
 
 #include "src/code-factory.h"
-#include "src/codegen.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer.h"
 #include "src/frame-constants.h"
@@ -55,12 +54,12 @@ void AdaptorWithExitFrameType(MacroAssembler* masm,
 
   // CEntryStub expects eax to contain the number of arguments including the
   // receiver and the extra arguments.
-  const int num_extra_args = 3;
-  __ add(eax, Immediate(num_extra_args + 1));
+  __ add(eax, Immediate(BuiltinExitFrameConstants::kNumExtraArgsWithReceiver));
 
   // Insert extra arguments.
   __ PopReturnAddressTo(ecx);
   __ SmiTag(eax);
+  __ PushRoot(Heap::kTheHoleValueRootIndex);  // Padding.
   __ Push(eax);
   __ SmiUntag(eax);
   __ Push(edi);
@@ -396,11 +395,8 @@ void Builtins::Generate_ConstructedNonConstructable(MacroAssembler* masm) {
   __ CallRuntime(Runtime::kThrowConstructedNonConstructable);
 }
 
-enum IsTagged { kEaxIsSmiTagged, kEaxIsUntaggedInt };
-
 // Clobbers ecx, edx, edi; preserves all other registers.
-static void Generate_CheckStackOverflow(MacroAssembler* masm,
-                                        IsTagged eax_is_tagged) {
+static void Generate_CheckStackOverflow(MacroAssembler* masm) {
   // eax   : the number of items to be pushed to the stack
   //
   // Check the stack for overflow. We are not trying to catch
@@ -417,8 +413,7 @@ static void Generate_CheckStackOverflow(MacroAssembler* masm,
   // Make edx the space we need for the array when it is unrolled onto the
   // stack.
   __ mov(edx, eax);
-  int smi_tag = eax_is_tagged == kEaxIsSmiTagged ? kSmiTagSize : 0;
-  __ shl(edx, kPointerSizeLog2 - smi_tag);
+  __ shl(edx, kPointerSizeLog2);
   // Check if the arguments will overflow the stack.
   __ cmp(ecx, edx);
   __ j(greater, &okay);  // Signed comparison.
@@ -454,7 +449,7 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
 
     // Check if we have enough stack space to push all arguments.
     // Expects argument count in eax. Clobbers ecx, edx, edi.
-    Generate_CheckStackOverflow(masm, kEaxIsUntaggedInt);
+    Generate_CheckStackOverflow(masm);
 
     // Copy arguments to the stack in a loop.
     Label loop, entry;
@@ -698,24 +693,15 @@ static void MaybeTailCallOptimizedCodeSlot(MacroAssembler* masm,
         Runtime::kCompileOptimized_Concurrent);
 
     {
-      // Otherwise, the marker is InOptimizationQueue.
+      // Otherwise, the marker is InOptimizationQueue, so fall through hoping
+      // that an interrupt will eventually update the slot with optimized code.
       if (FLAG_debug_code) {
         __ cmp(
             optimized_code_entry,
             Immediate(Smi::FromEnum(OptimizationMarker::kInOptimizationQueue)));
         __ Assert(equal, kExpectedOptimizationSentinel);
       }
-
-      // Checking whether the queued function is ready for install is optional,
-      // since we come across interrupts and stack checks elsewhere.  However,
-      // not checking may delay installing ready functions, and always checking
-      // would be quite expensive.  A good compromise is to first check against
-      // stack limit as a cue for an interrupt signal.
-      ExternalReference stack_limit =
-          ExternalReference::address_of_stack_limit(masm->isolate());
-      __ cmp(esp, Operand::StaticVariable(stack_limit));
-      __ j(above_equal, &fallthrough);
-      GenerateTailCallToReturnedCode(masm, Runtime::kTryInstallOptimizedCode);
+      __ jmp(&fallthrough);
     }
   }
 
@@ -1843,7 +1829,7 @@ void Builtins::Generate_InternalArrayConstructor(MacroAssembler* masm) {
   if (FLAG_debug_code) {
     // Initial map for the builtin InternalArray function should be a map.
     __ mov(ebx, FieldOperand(edi, JSFunction::kPrototypeOrInitialMapOffset));
-    // Will both indicate a NULL and a Smi.
+    // Will both indicate a nullptr and a Smi.
     __ test(ebx, Immediate(kSmiTagMask));
     __ Assert(not_zero, kUnexpectedInitialMapForInternalArrayFunction);
     __ CmpObjectType(ebx, MAP_TYPE, ecx);
@@ -1872,7 +1858,7 @@ void Builtins::Generate_ArrayConstructor(MacroAssembler* masm) {
   if (FLAG_debug_code) {
     // Initial map for the builtin Array function should be a map.
     __ mov(ebx, FieldOperand(edi, JSFunction::kPrototypeOrInitialMapOffset));
-    // Will both indicate a NULL and a Smi.
+    // Will both indicate a nullptr and a Smi.
     __ test(ebx, Immediate(kSmiTagMask));
     __ Assert(not_zero, kUnexpectedInitialMapForArrayFunction);
     __ CmpObjectType(ebx, MAP_TYPE, ecx);
@@ -2653,7 +2639,7 @@ static void Generate_OnStackReplacementHelper(MacroAssembler* masm,
 
   // Load the OSR entrypoint offset from the deoptimization data.
   __ mov(ebx, Operand(ebx, FixedArray::OffsetOfElementAt(
-                               DeoptimizationInputData::kOsrPcOffsetIndex) -
+                               DeoptimizationData::kOsrPcOffsetIndex) -
                                kHeapObjectTag));
   __ SmiUntag(ebx);
 

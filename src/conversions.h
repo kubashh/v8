@@ -105,8 +105,17 @@ double StringToDouble(UnicodeCache* unicode_cache,
 
 double StringToInt(Isolate* isolate, Handle<String> string, int radix);
 
-MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string,
-                                   int radix);
+V8_EXPORT_PRIVATE MaybeHandle<BigInt> StringToBigInt(Isolate* isolate,
+                                                     Handle<String> string,
+                                                     int radix);
+
+// This version expects a zero-terminated character array. Radix will
+// be inferred from string prefix (case-insensitive):
+//   0x -> hex
+//   0o -> octal
+//   0b -> binary
+V8_EXPORT_PRIVATE MaybeHandle<BigInt> StringToBigInt(Isolate* isolate,
+                                                     const char* string);
 
 const int kDoubleToCStringMinBufferSize = 100;
 

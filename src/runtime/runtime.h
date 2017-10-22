@@ -71,6 +71,8 @@ namespace internal {
 #define FOR_EACH_INTRINSIC_BIGINT(F) \
   F(BigIntBinaryOp, 3, 1)            \
   F(BigIntEqual, 2, 1)               \
+  F(BigIntEqualToNumber, 2, 1)       \
+  F(BigIntEqualToString, 2, 1)       \
   F(BigIntToBoolean, 1, 1)           \
   F(BigIntUnaryOp, 2, 1)
 
@@ -120,7 +122,6 @@ namespace internal {
   F(EvictOptimizedCodeSlot, 1, 1)         \
   F(NotifyDeoptimized, 0, 1)              \
   F(CompileForOnStackReplacement, 1, 1)   \
-  F(TryInstallOptimizedCode, 1, 1)        \
   F(ResolvePossiblyDirectEval, 6, 1)      \
   F(InstantiateAsmJs, 4, 1)
 
@@ -671,6 +672,7 @@ namespace internal {
   F(LoadIC_Miss, 4, 1)                       \
   F(LoadPropertyWithInterceptor, 5, 1)       \
   F(StoreCallbackProperty, 6, 1)             \
+  F(StoreGlobalIC_Slow, 5, 1)                \
   F(StoreIC_Miss, 5, 1)                      \
   F(StorePropertyWithInterceptor, 5, 1)      \
   F(Unreachable, 0, 1)

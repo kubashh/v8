@@ -18,7 +18,8 @@ void StartupDeserializer::DeserializeInto(Isolate* isolate) {
 
   BuiltinDeserializer builtin_deserializer(isolate, builtin_data_);
 
-  if (!Deserializer::ReserveSpace(this, &builtin_deserializer)) {
+  if (!DefaultDeserializerAllocator::ReserveSpace(this,
+                                                  &builtin_deserializer)) {
     V8::FatalProcessOutOfMemory("StartupDeserializer");
   }
 
@@ -93,7 +94,7 @@ void StartupDeserializer::PrintDisassembledCodeObjects() {
     CodeTracer::Scope tracing_scope(isolate()->GetCodeTracer());
     OFStream os(tracing_scope.file());
 
-    for (HeapObject* obj = iterator.next(); obj != NULL;
+    for (HeapObject* obj = iterator.next(); obj != nullptr;
          obj = iterator.next()) {
       if (obj->IsCode()) {
         Code::cast(obj)->Disassemble(nullptr, os);

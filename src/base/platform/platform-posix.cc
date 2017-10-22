@@ -71,7 +71,7 @@ const pthread_t kNoThread = (pthread_t) 0;
 
 bool g_hard_abort = false;
 
-const char* g_gc_fake_mmap = NULL;
+const char* g_gc_fake_mmap = nullptr;
 
 }  // namespace
 
@@ -113,17 +113,16 @@ void OS::Free(void* address, const size_t size) {
   // TODO(1240712): munmap has a return value which is ignored here.
   int result = munmap(address, size);
   USE(result);
-  DCHECK(result == 0);
+  DCHECK_EQ(result, 0);
 }
 
-
-// Get rid of writable permission on code allocations.
-void OS::ProtectCode(void* address, const size_t size) {
+void OS::SetReadAndExecutable(void* address, const size_t size) {
 #if V8_OS_CYGWIN
   DWORD old_protect;
-  VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect);
+  CHECK_NOT_NULL(
+      VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect));
 #else
-  mprotect(address, size, PROT_READ | PROT_EXEC);
+  CHECK_EQ(0, mprotect(address, size, PROT_READ | PROT_EXEC));
 #endif
 }
 
@@ -141,16 +140,23 @@ void OS::Guard(void* address, const size_t size) {
 #endif  // !V8_OS_FUCHSIA
 
 // Make a region of memory readable and writable.
-void OS::Unprotect(void* address, const size_t size) {
+void OS::SetReadAndWritable(void* address, const size_t size, bool commit) {
 #if V8_OS_CYGWIN
   DWORD oldprotect;
-  VirtualProtect(address, size, PAGE_READWRITE, &oldprotect);
+  CHECK_NOT_NULL(VirtualProtect(address, size, PAGE_READWRITE, &oldprotect));
 #else
-  mprotect(address, size, PROT_READ | PROT_WRITE);
+  CHECK_EQ(0, mprotect(address, size, PROT_READ | PROT_WRITE));
 #endif
 }
 
-void OS::Initialize(bool hard_abort, const char* const gc_fake_mmap) {
+static LazyInstance<RandomNumberGenerator>::type
+    platform_random_number_generator = LAZY_INSTANCE_INITIALIZER;
+
+void OS::Initialize(int64_t random_seed, bool hard_abort,
+                    const char* const gc_fake_mmap) {
+  if (random_seed) {
+    platform_random_number_generator.Pointer()->SetSeed(random_seed);
+  }
   g_hard_abort = hard_abort;
   g_gc_fake_mmap = gc_fake_mmap;
 }
@@ -160,6 +166,70 @@ const char* OS::GetGCFakeMMapFile() {
   return g_gc_fake_mmap;
 }
 
+void* OS::GetRandomMmapAddr() {
+#if defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || \
+    defined(THREAD_SANITIZER)
+  // Dynamic tools do not support custom mmap addresses.
+  return NULL;
+#endif
+  uintptr_t raw_addr;
+  platform_random_number_generator.Pointer()->NextBytes(&raw_addr,
+                                                        sizeof(raw_addr));
+#if V8_TARGET_ARCH_X64
+  // Currently available CPUs have 48 bits of virtual addressing.  Truncate
+  // the hint address to 46 bits to give the kernel a fighting chance of
+  // fulfilling our placement request.
+  raw_addr &= V8_UINT64_C(0x3ffffffff000);
+#elif V8_TARGET_ARCH_PPC64
+#if V8_OS_AIX
+  // AIX: 64 bits of virtual addressing, but we limit address range to:
+  //   a) minimize Segment Lookaside Buffer (SLB) misses and
+  raw_addr &= V8_UINT64_C(0x3ffff000);
+  // Use extra address space to isolate the mmap regions.
+  raw_addr += V8_UINT64_C(0x400000000000);
+#elif V8_TARGET_BIG_ENDIAN
+  // Big-endian Linux: 44 bits of virtual addressing.
+  raw_addr &= V8_UINT64_C(0x03fffffff000);
+#else
+  // Little-endian Linux: 48 bits of virtual addressing.
+  raw_addr &= V8_UINT64_C(0x3ffffffff000);
+#endif
+#elif V8_TARGET_ARCH_S390X
+  // Linux on Z uses bits 22-32 for Region Indexing, which translates to 42 bits
+  // of virtual addressing.  Truncate to 40 bits to allow kernel chance to
+  // fulfill request.
+  raw_addr &= V8_UINT64_C(0xfffffff000);
+#elif V8_TARGET_ARCH_S390
+  // 31 bits of virtual addressing.  Truncate to 29 bits to allow kernel chance
+  // to fulfill request.
+  raw_addr &= 0x1ffff000;
+#else
+  raw_addr &= 0x3ffff000;
+
+#ifdef __sun
+  // For our Solaris/illumos mmap hint, we pick a random address in the bottom
+  // half of the top half of the address space (that is, the third quarter).
+  // Because we do not MAP_FIXED, this will be treated only as a hint -- the
+  // system will not fail to mmap() because something else happens to already
+  // be mapped at our random address. We deliberately set the hint high enough
+  // to get well above the system's break (that is, the heap); Solaris and
+  // illumos will try the hint and if that fails allocate as if there were
+  // no hint at all. The high hint prevents the break from getting hemmed in
+  // at low values, ceding half of the address space to the system heap.
+  raw_addr += 0x80000000;
+#elif V8_OS_AIX
+  // The range 0x30000000 - 0xD0000000 is available on AIX;
+  // choose the upper range.
+  raw_addr += 0x90000000;
+#else
+  // The range 0x20000000 - 0x60000000 is relatively unpopulated across a
+  // variety of ASLR modes (PAE kernel, NX compat mode, etc) and on macos
+  // 10.6 and 10.7.
+  raw_addr += 0x20000000;
+#endif
+#endif
+  return reinterpret_cast<void*>(raw_addr);
+}
 
 size_t OS::AllocateAlignment() {
   return static_cast<size_t>(sysconf(_SC_PAGESIZE));
@@ -220,13 +290,14 @@ class PosixMemoryMappedFile final : public OS::MemoryMappedFile {
 
 
 // static
-OS::MemoryMappedFile* OS::MemoryMappedFile::open(const char* name, void* hint) {
+OS::MemoryMappedFile* OS::MemoryMappedFile::open(const char* name) {
   if (FILE* file = fopen(name, "r+")) {
     if (fseek(file, 0, SEEK_END) == 0) {
       long size = ftell(file);  // NOLINT(runtime/int)
       if (size >= 0) {
-        void* const memory = mmap(hint, size, PROT_READ | PROT_WRITE,
-                                  MAP_SHARED, fileno(file), 0);
+        void* const memory =
+            mmap(OS::GetRandomMmapAddr(), size, PROT_READ | PROT_WRITE,
+                 MAP_SHARED, fileno(file), 0);
         if (memory != MAP_FAILED) {
           return new PosixMemoryMappedFile(file, memory, size);
         }
@@ -239,13 +310,13 @@ OS::MemoryMappedFile* OS::MemoryMappedFile::open(const char* name, void* hint) {
 
 
 // static
-OS::MemoryMappedFile* OS::MemoryMappedFile::create(const char* name, void* hint,
+OS::MemoryMappedFile* OS::MemoryMappedFile::create(const char* name,
                                                    size_t size, void* initial) {
   if (FILE* file = fopen(name, "w+")) {
     size_t result = fwrite(initial, 1, size, file);
     if (result == size && !ferror(file)) {
-      void* memory = mmap(hint, result, PROT_READ | PROT_WRITE, MAP_SHARED,
-                          fileno(file), 0);
+      void* memory = mmap(OS::GetRandomMmapAddr(), result,
+                          PROT_READ | PROT_WRITE, MAP_SHARED, fileno(file), 0);
       if (memory != MAP_FAILED) {
         return new PosixMemoryMappedFile(file, memory, result);
       }
@@ -309,7 +380,7 @@ double PosixTimezoneCache::DaylightSavingsOffset(double time) {
   time_t tv = static_cast<time_t>(std::floor(time/msPerSecond));
   struct tm tm;
   struct tm* t = localtime_r(&tv, &tm);
-  if (NULL == t) return std::numeric_limits<double>::quiet_NaN();
+  if (nullptr == t) return std::numeric_limits<double>::quiet_NaN();
   return t->tm_isdst > 0 ? 3600 * msPerSecond : 0;
 }
 
@@ -325,16 +396,16 @@ int OS::GetLastError() {
 
 FILE* OS::FOpen(const char* path, const char* mode) {
   FILE* file = fopen(path, mode);
-  if (file == NULL) return NULL;
+  if (file == nullptr) return nullptr;
   struct stat file_stat;
   if (fstat(fileno(file), &file_stat) != 0) {
     fclose(file);
-    return NULL;
+    return nullptr;
   }
   bool is_regular_file = ((file_stat.st_mode & S_IFREG) != 0);
   if (is_regular_file) return file;
   fclose(file);
-  return NULL;
+  return nullptr;
 }
 
 
@@ -462,7 +533,7 @@ class Thread::PlatformData {
 Thread::Thread(const Options& options)
     : data_(new PlatformData),
       stack_size_(options.stack_size()),
-      start_semaphore_(NULL) {
+      start_semaphore_(nullptr) {
   if (stack_size_ > 0 && static_cast<size_t>(stack_size_) < PTHREAD_STACK_MIN) {
     stack_size_ = PTHREAD_STACK_MIN;
   }
@@ -487,8 +558,7 @@ static void SetThreadName(const char* name) {
   int (*dynamic_pthread_setname_np)(const char*);
   *reinterpret_cast<void**>(&dynamic_pthread_setname_np) =
     dlsym(RTLD_DEFAULT, "pthread_setname_np");
-  if (dynamic_pthread_setname_np == NULL)
-    return;
+  if (dynamic_pthread_setname_np == nullptr) return;
 
   // Mac OS X does not expose the length limit of the name, so hardcode it.
   static const int kMaxNameLength = 63;
@@ -509,9 +579,9 @@ static void* ThreadEntry(void* arg) {
   // one).
   { LockGuard<Mutex> lock_guard(&thread->data()->thread_creation_mutex_); }
   SetThreadName(thread->name());
-  DCHECK(thread->data()->thread_ != kNoThread);
+  DCHECK_NE(thread->data()->thread_, kNoThread);
   thread->NotifyStartedAndRun();
-  return NULL;
+  return nullptr;
 }
 
 
@@ -548,15 +618,11 @@ void Thread::Start() {
   DCHECK_EQ(0, result);
   result = pthread_attr_destroy(&attr);
   DCHECK_EQ(0, result);
-  DCHECK(data_->thread_ != kNoThread);
+  DCHECK_NE(data_->thread_, kNoThread);
   USE(result);
 }
 
-
-void Thread::Join() {
-  pthread_join(data_->thread_, NULL);
-}
-
+void Thread::Join() { pthread_join(data_->thread_, nullptr); }
 
 static Thread::LocalStorageKey PthreadKeyToLocalKey(pthread_key_t pthread_key) {
 #if V8_OS_CYGWIN
@@ -595,7 +661,7 @@ static void InitializeTlsBaseOffset() {
   char buffer[kBufferSize];
   size_t buffer_size = kBufferSize;
   int ctl_name[] = { CTL_KERN , KERN_OSRELEASE };
-  if (sysctl(ctl_name, 2, buffer, &buffer_size, NULL, 0) != 0) {
+  if (sysctl(ctl_name, 2, buffer, &buffer_size, nullptr, 0) != 0) {
     V8_Fatal(__FILE__, __LINE__, "V8 failed to get kernel version");
   }
   // The buffer now contains a string of the form XX.YY.ZZ, where
@@ -605,7 +671,7 @@ static void InitializeTlsBaseOffset() {
   char* period_pos = strchr(buffer, '.');
   *period_pos = '\0';
   int kernel_version_major =
-      static_cast<int>(strtol(buffer, NULL, 10));  // NOLINT
+      static_cast<int>(strtol(buffer, nullptr, 10));  // NOLINT
   // The constants below are taken from pthreads.s from the XNU kernel
   // sources archive at www.opensource.apple.com.
   if (kernel_version_major < 11) {
@@ -633,7 +699,7 @@ static void CheckFastTls(Thread::LocalStorageKey key) {
     V8_Fatal(__FILE__, __LINE__,
              "V8 failed to initialize fast TLS on current kernel");
   }
-  Thread::SetThreadLocal(key, NULL);
+  Thread::SetThreadLocal(key, nullptr);
 }
 
 #endif  // V8_FAST_TLS_SUPPORTED
@@ -648,7 +714,7 @@ Thread::LocalStorageKey Thread::CreateThreadLocalKey() {
   }
 #endif
   pthread_key_t key;
-  int result = pthread_key_create(&key, NULL);
+  int result = pthread_key_create(&key, nullptr);
   DCHECK_EQ(0, result);
   USE(result);
   LocalStorageKey local_key = PthreadKeyToLocalKey(key);

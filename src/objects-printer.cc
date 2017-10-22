@@ -16,6 +16,7 @@
 #include "src/ostreams.h"
 #include "src/regexp/jsregexp.h"
 #include "src/transitions-inl.h"
+#include "src/wasm/wasm-objects-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -582,6 +583,10 @@ void Map::MapPrint(std::ostream& os) {  // NOLINT
   if (is_undetectable()) os << "\n - undetectable";
   if (is_callable()) os << "\n - callable";
   if (is_constructor()) os << "\n - constructor";
+  if (has_prototype_slot()) {
+    os << "\n - has_prototype_slot";
+    if (has_non_instance_prototype()) os << " (non-instance prototype)";
+  }
   if (is_access_check_needed()) os << "\n - access_check_needed";
   if (!is_extensible()) os << "\n - non-extensible";
   if (is_prototype_map()) {
@@ -778,12 +783,14 @@ void FeedbackVector::FeedbackVectorPrint(std::ostream& os) {  // NOLINT
       }
       case FeedbackSlotKind::kBinaryOp: {
         BinaryOpICNexus nexus(this, slot);
-        os << Code::ICState2String(nexus.StateFromFeedback());
+        os << Code::ICState2String(nexus.StateFromFeedback()) << " ("
+           << nexus.GetBinaryOperationFeedback() << ")";
         break;
       }
       case FeedbackSlotKind::kCompareOp: {
         CompareICNexus nexus(this, slot);
-        os << Code::ICState2String(nexus.StateFromFeedback());
+        os << Code::ICState2String(nexus.StateFromFeedback()) << " ("
+           << nexus.GetCompareOperationFeedback() << ")";
         break;
       }
       case FeedbackSlotKind::kForIn: {
@@ -1057,8 +1064,19 @@ std::ostream& operator<<(std::ostream& os, FunctionKind kind) {
 
 void JSFunction::JSFunctionPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "Function");
-  os << "\n - initial_map = ";
-  if (has_initial_map()) os << Brief(initial_map());
+  os << "\n - function prototype = ";
+  if (has_prototype_slot()) {
+    if (has_prototype()) {
+      os << Brief(prototype());
+      if (map()->has_non_instance_prototype()) {
+        os << " (non-instance prototype)";
+      }
+    }
+    os << "\n - initial_map = ";
+    if (has_initial_map()) os << Brief(initial_map());
+  } else {
+    os << "<no-prototype-slot>";
+  }
   os << "\n - shared_info = " << Brief(shared());
   os << "\n - name = " << Brief(shared()->name());
   os << "\n - formal_parameter_count = "
@@ -1071,6 +1089,14 @@ void JSFunction::JSFunctionPrint(std::ostream& os) {  // NOLINT
     if (shared()->HasBytecodeArray()) {
       os << "\n - bytecode = " << shared()->bytecode_array();
     }
+  }
+  if (WasmExportedFunction::IsWasmExportedFunction(this)) {
+    WasmExportedFunction* function = WasmExportedFunction::cast(this);
+    os << "\n - WASM instance "
+       << reinterpret_cast<void*>(function->instance());
+    os << "\n   context "
+       << reinterpret_cast<void*>(function->instance()->wasm_context()->get());
+    os << "\n - WASM function index " << function->function_index();
   }
   shared()->PrintSourceCode(os);
   JSObjectPrintBody(os, this);
@@ -1089,7 +1115,7 @@ void SharedFunctionInfo::PrintSourceCode(std::ostream& os) {
     int start = start_position();
     int length = end_position() - start;
     std::unique_ptr<char[]> source_string = source->ToCString(
-        DISALLOW_NULLS, FAST_STRING_TRAVERSAL, start, length, NULL);
+        DISALLOW_NULLS, FAST_STRING_TRAVERSAL, start, length, nullptr);
     os << source_string.get();
   }
 }
@@ -1241,7 +1267,7 @@ void Code::CodePrint(std::ostream& os) {  // NOLINT
   os << "\n";
 #ifdef ENABLE_DISASSEMBLER
   if (FLAG_use_verbose_printer) {
-    Disassemble(NULL, os);
+    Disassemble(nullptr, os);
   }
 #endif
 }
@@ -1620,8 +1646,8 @@ int Name::NameShortPrint(Vector<char> str) {
 char* String::ToAsciiArray() {
   // Static so that subsequent calls frees previously allocated space.
   // This also means that previous results will be overwritten.
-  static char* buffer = NULL;
-  if (buffer != NULL) delete[] buffer;
+  static char* buffer = nullptr;
+  if (buffer != nullptr) delete[] buffer;
   buffer = new char[length() + 1];
   WriteToFlat(this, reinterpret_cast<uint8_t*>(buffer), 0, length());
   buffer[length()] = 0;

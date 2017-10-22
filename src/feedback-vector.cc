@@ -297,8 +297,9 @@ Handle<FeedbackVector> FeedbackVector::New(Isolate* isolate,
   }
 
   Handle<FeedbackVector> result = Handle<FeedbackVector>::cast(vector);
-  if (!isolate->is_best_effort_code_coverage()) {
-    AddToCodeCoverageList(isolate, result);
+  if (!isolate->is_best_effort_code_coverage() ||
+      isolate->is_collecting_type_profile()) {
+    AddToVectorsForProfilingTools(isolate, result);
   }
   return result;
 }
@@ -309,21 +310,23 @@ Handle<FeedbackVector> FeedbackVector::Copy(Isolate* isolate,
   Handle<FeedbackVector> result;
   result = Handle<FeedbackVector>::cast(
       isolate->factory()->CopyFixedArray(Handle<FixedArray>::cast(vector)));
-  if (!isolate->is_best_effort_code_coverage()) {
-    AddToCodeCoverageList(isolate, result);
+  if (!isolate->is_best_effort_code_coverage() ||
+      isolate->is_collecting_type_profile()) {
+    AddToVectorsForProfilingTools(isolate, result);
   }
   return result;
 }
 
 // static
-void FeedbackVector::AddToCodeCoverageList(Isolate* isolate,
-                                           Handle<FeedbackVector> vector) {
-  DCHECK(!isolate->is_best_effort_code_coverage());
+void FeedbackVector::AddToVectorsForProfilingTools(
+    Isolate* isolate, Handle<FeedbackVector> vector) {
+  DCHECK(!isolate->is_best_effort_code_coverage() ||
+         isolate->is_collecting_type_profile());
   if (!vector->shared_function_info()->IsSubjectToDebugging()) return;
-  Handle<ArrayList> list =
-      Handle<ArrayList>::cast(isolate->factory()->code_coverage_list());
+  Handle<ArrayList> list = Handle<ArrayList>::cast(
+      isolate->factory()->feedback_vectors_for_profiling_tools());
   list = ArrayList::Add(list, vector);
-  isolate->SetCodeCoverageList(*list);
+  isolate->SetFeedbackVectorsForProfilingTools(*list);
 }
 
 // static
@@ -705,7 +708,7 @@ void FeedbackNexus::ConfigurePolymorphic(Handle<Name> name,
                                          MapHandles const& maps,
                                          ObjectHandles* handlers) {
   int receiver_count = static_cast<int>(maps.size());
-  DCHECK(receiver_count > 1);
+  DCHECK_GT(receiver_count, 1);
   Handle<FixedArray> array;
   if (name.is_null()) {
     array = EnsureArrayOfSize(receiver_count * 2);
@@ -833,7 +836,7 @@ Name* KeyedLoadICNexus::FindFirstName() const {
   if (IsPropertyNameFeedback(feedback)) {
     return Name::cast(feedback);
   }
-  return NULL;
+  return nullptr;
 }
 
 Name* KeyedStoreICNexus::FindFirstName() const {
@@ -841,7 +844,7 @@ Name* KeyedStoreICNexus::FindFirstName() const {
   if (IsPropertyNameFeedback(feedback)) {
     return Name::cast(feedback);
   }
-  return NULL;
+  return nullptr;
 }
 
 KeyedAccessStoreMode KeyedStoreICNexus::GetKeyedAccessStoreMode() const {

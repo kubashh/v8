@@ -2,5 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-var size = 0x40000000;
-assertThrows(() => WebAssembly.validate(new Uint16Array(size)), RangeError);
+// Flags: --allow-natives-syntax
+
+function f() {}
+
+f();
+f();
+%OptimizeFunctionOnNextCall(f);
+f();
+%DeoptimizeFunction(f);
+
+%DisassembleFunction(f);

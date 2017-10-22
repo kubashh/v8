@@ -249,128 +249,6 @@ const six = BigInt(6);
   assertFalse(%CreateIterResultObject(42, zero).done);
 }
 
-// Strict equality
-{
-  assertTrue(zero === zero);
-  assertFalse(zero !== zero);
-
-  assertTrue(zero === another_zero);
-  assertFalse(zero !== another_zero);
-
-  assertFalse(zero === one);
-  assertTrue(zero !== one);
-  assertTrue(one !== zero);
-  assertFalse(one === zero);
-
-  assertFalse(zero === 0);
-  assertTrue(zero !== 0);
-  assertFalse(0 === zero);
-  assertTrue(0 !== zero);
-}{
-  assertTrue(%StrictEqual(zero, zero));
-  assertFalse(%StrictNotEqual(zero, zero));
-
-  assertTrue(%StrictEqual(zero, another_zero));
-  assertFalse(%StrictNotEqual(zero, another_zero));
-
-  assertFalse(%StrictEqual(zero, one));
-  assertTrue(%StrictNotEqual(zero, one));
-  assertTrue(%StrictNotEqual(one, zero));
-  assertFalse(%StrictEqual(one, zero));
-
-  assertFalse(%StrictEqual(zero, 0));
-  assertTrue(%StrictNotEqual(zero, 0));
-  assertFalse(%StrictEqual(0, zero));
-  assertTrue(%StrictNotEqual(0, zero));
-}
-
-// SameValue
-{
-  assertTrue(Object.is(zero, zero));
-  assertTrue(Object.is(zero, another_zero));
-  assertTrue(Object.is(one, one));
-  assertTrue(Object.is(one, another_one));
-  assertFalse(Object.is(zero, +0));
-  assertFalse(Object.is(zero, -0));
-  assertFalse(Object.is(+0, zero));
-  assertFalse(Object.is(-0, zero));
-  assertFalse(Object.is(zero, one));
-  assertFalse(Object.is(one, minus_one));
-}{
-  const obj = Object.defineProperty({}, 'foo',
-      {value: zero, writable: false, configurable: false});
-
-  assertTrue(Reflect.defineProperty(obj, 'foo', {value: zero}));
-  assertTrue(Reflect.defineProperty(obj, 'foo', {value: another_zero}));
-  assertFalse(Reflect.defineProperty(obj, 'foo', {value: one}));
-}{
-  assertTrue(%SameValue(zero, zero));
-  assertTrue(%SameValue(zero, another_zero));
-
-  assertFalse(%SameValue(zero, +0));
-  assertFalse(%SameValue(zero, -0));
-
-  assertFalse(%SameValue(+0, zero));
-  assertFalse(%SameValue(-0, zero));
-
-  assertTrue(%SameValue(one, one));
-  assertTrue(%SameValue(one, another_one));
-}
-
-// SameValueZero
-{
-  assertTrue([zero].includes(zero));
-  assertTrue([zero].includes(another_zero));
-
-  assertFalse([zero].includes(+0));
-  assertFalse([zero].includes(-0));
-
-  assertFalse([+0].includes(zero));
-  assertFalse([-0].includes(zero));
-
-  assertTrue([one].includes(one));
-  assertTrue([one].includes(another_one));
-
-  assertFalse([one].includes(1));
-  assertFalse([1].includes(one));
-}{
-  assertTrue(new Set([zero]).has(zero));
-  assertTrue(new Set([zero]).has(another_zero));
-
-  assertFalse(new Set([zero]).has(+0));
-  assertFalse(new Set([zero]).has(-0));
-
-  assertFalse(new Set([+0]).has(zero));
-  assertFalse(new Set([-0]).has(zero));
-
-  assertTrue(new Set([one]).has(one));
-  assertTrue(new Set([one]).has(another_one));
-}{
-  assertTrue(new Map([[zero, 42]]).has(zero));
-  assertTrue(new Map([[zero, 42]]).has(another_zero));
-
-  assertFalse(new Map([[zero, 42]]).has(+0));
-  assertFalse(new Map([[zero, 42]]).has(-0));
-
-  assertFalse(new Map([[+0, 42]]).has(zero));
-  assertFalse(new Map([[-0, 42]]).has(zero));
-
-  assertTrue(new Map([[one, 42]]).has(one));
-  assertTrue(new Map([[one, 42]]).has(another_one));
-}{
-  assertTrue(%SameValueZero(zero, zero));
-  assertTrue(%SameValueZero(zero, another_zero));
-
-  assertFalse(%SameValueZero(zero, +0));
-  assertFalse(%SameValueZero(zero, -0));
-
-  assertFalse(%SameValueZero(+0, zero));
-  assertFalse(%SameValueZero(-0, zero));
-
-  assertTrue(%SameValueZero(one, one));
-  assertTrue(%SameValueZero(one, another_one));
-}
-
 // ToNumber
 {
   assertThrows(() => isNaN(zero), TypeError);
@@ -399,9 +277,32 @@ const six = BigInt(6);
   assertThrows(() => +One, TypeError);
 }
 
+// Literals
+{
+  // Invalid literals.
+  assertThrows("00n", SyntaxError);
+  assertThrows("01n", SyntaxError);
+  assertThrows("0bn", SyntaxError);
+  assertThrows("0on", SyntaxError);
+  assertThrows("0xn", SyntaxError);
+  assertThrows("1.n", SyntaxError);
+  assertThrows("1.0n", SyntaxError);
+  assertThrows("1e25n", SyntaxError);
+
+  // Various radixes.
+  assertTrue(12345n === BigInt(12345));
+  assertTrue(0xabcden === BigInt(0xabcde));
+  assertTrue(0xAbCdEn === BigInt(0xabcde));
+  assertTrue(0o54321n === BigInt(0o54321));
+  assertTrue(0b1010101n === BigInt(0b1010101));
+}
+
 // Binary ops.
 {
+  let One = {valueOf() { return one }};
   assertTrue(one + two === three);
+  assertTrue(One + two === three);
+  assertTrue(two + One === three);
   assertEquals("hello1", "hello" + one);
   assertEquals("2hello", two + "hello");
   assertThrows("one + 2", TypeError);
@@ -418,6 +319,8 @@ const six = BigInt(6);
   assertThrows("2.5 - one", TypeError);
 
   assertTrue(two * three === six);
+  assertTrue(two * One === two);
+  assertTrue(One * two === two);
   assertThrows("two * 1", TypeError);
   assertThrows("1 * two", TypeError);
   assertThrows("two * 1.5", TypeError);
@@ -442,7 +345,11 @@ const six = BigInt(6);
 
 // Bitwise binary ops.
 {
+  let One = {valueOf() { return one }};
   assertTrue((three & one) === one);
+  assertTrue((BigInt(-2) & zero) === zero);
+  assertTrue((three & One) === one);
+  assertTrue((One & three) === one);
   assertThrows("three & 1", TypeError);
   assertThrows("1 & three", TypeError);
   assertThrows("three & true", TypeError);
@@ -486,10 +393,13 @@ const six = BigInt(6);
 
 // Unary ops.
 {
+  let One = {valueOf() { return one }};
   assertTrue(~minus_one === zero);
   assertTrue(-minus_one === one);
+  assertTrue(-One === minus_one);
   assertTrue(~~two === two);
   assertTrue(-(-two) === two);
+  assertTrue(~One === BigInt(-2));
 
   let a = minus_one;
   assertTrue(a++ === minus_one);

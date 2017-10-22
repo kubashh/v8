@@ -287,12 +287,12 @@ class CpuFeatures : public AllStatic {
   static inline bool SupportsWasmSimd128();
 
   static inline unsigned icache_line_size() {
-    DCHECK(icache_line_size_ != 0);
+    DCHECK_NE(icache_line_size_, 0);
     return icache_line_size_;
   }
 
   static inline unsigned dcache_line_size() {
-    DCHECK(dcache_line_size_ != 0);
+    DCHECK_NE(dcache_line_size_, 0);
     return dcache_line_size_;
   }
 
@@ -364,7 +364,6 @@ class RelocInfo {
     // wasm code. Everything after WASM_CONTEXT_REFERENCE (inclusive) is not
     // GC'ed.
     WASM_CONTEXT_REFERENCE,
-    WASM_GLOBAL_REFERENCE,
     WASM_FUNCTION_TABLE_SIZE_REFERENCE,
     WASM_PROTECTED_INSTRUCTION_LANDING,
     WASM_GLOBAL_HANDLE,
@@ -460,9 +459,6 @@ class RelocInfo {
   static inline bool IsWasmContextReference(Mode mode) {
     return mode == WASM_CONTEXT_REFERENCE;
   }
-  static inline bool IsWasmGlobalReference(Mode mode) {
-    return mode == WASM_GLOBAL_REFERENCE;
-  }
   static inline bool IsWasmFunctionTableSizeReference(Mode mode) {
     return mode == WASM_FUNCTION_TABLE_SIZE_REFERENCE;
   }
@@ -473,8 +469,7 @@ class RelocInfo {
     return IsWasmFunctionTableSizeReference(mode);
   }
   static inline bool IsWasmPtrReference(Mode mode) {
-    return mode == WASM_CONTEXT_REFERENCE || mode == WASM_GLOBAL_REFERENCE ||
-           mode == WASM_GLOBAL_HANDLE;
+    return mode == WASM_CONTEXT_REFERENCE || mode == WASM_GLOBAL_HANDLE;
   }
   static inline bool IsWasmProtectedLanding(Mode mode) {
     return mode == WASM_PROTECTED_INSTRUCTION_LANDING;
@@ -506,16 +501,11 @@ class RelocInfo {
   bool IsInConstantPool();
 
   Address wasm_context_reference() const;
-  Address wasm_global_reference() const;
   uint32_t wasm_function_table_size_reference() const;
-  uint32_t wasm_memory_size_reference() const;
   Address global_handle() const;
 
   void set_wasm_context_reference(
       Isolate* isolate, Address address,
-      ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
-  void update_wasm_global_reference(
-      Isolate* isolate, Address old_base, Address new_base,
       ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
   void update_wasm_function_table_size_reference(
       Isolate* isolate, uint32_t old_base, uint32_t new_base,
@@ -634,7 +624,7 @@ class RelocInfo {
 // lower addresses.
 class RelocInfoWriter BASE_EMBEDDED {
  public:
-  RelocInfoWriter() : pos_(NULL), last_pc_(NULL) {}
+  RelocInfoWriter() : pos_(nullptr), last_pc_(nullptr) {}
   RelocInfoWriter(byte* pos, byte* pc) : pos_(pos), last_pc_(pc) {}
 
   byte* pos() const { return pos_; }
@@ -799,7 +789,7 @@ class ExternalReference BASE_EMBEDDED {
   typedef void* ExternalReferenceRedirector(Isolate* isolate, void* original,
                                             Type type);
 
-  ExternalReference() : address_(NULL) {}
+  ExternalReference() : address_(nullptr) {}
 
   ExternalReference(Address address, Isolate* isolate);
 
@@ -969,6 +959,8 @@ class ExternalReference BASE_EMBEDDED {
   static ExternalReference libc_memmove_function(Isolate* isolate);
   static ExternalReference libc_memset_function(Isolate* isolate);
 
+  static ExternalReference printf_function(Isolate* isolate);
+
   static ExternalReference try_internalize_string_function(Isolate* isolate);
 
   static ExternalReference check_object_type(Isolate* isolate);
@@ -1053,8 +1045,9 @@ class ExternalReference BASE_EMBEDDED {
         reinterpret_cast<ExternalReferenceRedirector*>(
             isolate->external_reference_redirector());
     void* address = reinterpret_cast<void*>(address_arg);
-    void* answer =
-        (redirector == NULL) ? address : (*redirector)(isolate, address, type);
+    void* answer = (redirector == nullptr)
+                       ? address
+                       : (*redirector)(isolate, address, type);
     return answer;
   }
 
@@ -1105,11 +1098,11 @@ class ConstantPoolEntry {
     DCHECK(is_merged());
   }
   int offset(void) const {
-    DCHECK(merged_index_ >= 0);
+    DCHECK_GE(merged_index_, 0);
     return merged_index_;
   }
   void set_offset(int offset) {
-    DCHECK(offset >= 0);
+    DCHECK_GE(offset, 0);
     merged_index_ = offset;
   }
   intptr_t value() const { return value_; }

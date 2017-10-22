@@ -277,7 +277,8 @@ class InterpreterStoreGlobalAssembler : public InterpreterAssembler {
 // Store the value in the accumulator into the global with name in constant pool
 // entry <name_index> using FeedBackVector slot <slot> in sloppy mode.
 IGNITION_HANDLER(StaGlobalSloppy, InterpreterStoreGlobalAssembler) {
-  Callable ic = CodeFactory::StoreGlobalICInOptimizedCode(isolate(), SLOPPY);
+  Callable ic = CodeFactory::StoreGlobalICInOptimizedCode(
+      isolate(), LanguageMode::kSloppy);
   StaGlobal(ic);
 }
 
@@ -286,7 +287,8 @@ IGNITION_HANDLER(StaGlobalSloppy, InterpreterStoreGlobalAssembler) {
 // Store the value in the accumulator into the global with name in constant pool
 // entry <name_index> using FeedBackVector slot <slot> in strict mode.
 IGNITION_HANDLER(StaGlobalStrict, InterpreterStoreGlobalAssembler) {
-  Callable ic = CodeFactory::StoreGlobalICInOptimizedCode(isolate(), STRICT);
+  Callable ic = CodeFactory::StoreGlobalICInOptimizedCode(
+      isolate(), LanguageMode::kStrict);
   StaGlobal(ic);
 }
 
@@ -511,8 +513,8 @@ IGNITION_HANDLER(StaLookupSlot, InterpreterAssembler) {
   Variable var_result(this, MachineRepresentation::kTagged);
 
   Label sloppy(this), strict(this), end(this);
-  DCHECK_EQ(0, SLOPPY);
-  DCHECK_EQ(1, STRICT);
+  DCHECK_EQ(0, LanguageMode::kSloppy);
+  DCHECK_EQ(1, LanguageMode::kStrict);
   DCHECK_EQ(0, static_cast<int>(LookupHoistingMode::kNormal));
   DCHECK_EQ(1, static_cast<int>(LookupHoistingMode::kLegacySloppy));
   Branch(IsSetWord32<StoreLookupSlotFlags::LanguageModeBit>(bytecode_flags),
@@ -1205,8 +1207,8 @@ class UnaryNumericOpAssembler : public InterpreterAssembler {
       GotoIf(IsHeapNumberMap(map), &if_heapnumber);
       Node* instance_type = LoadMapInstanceType(map);
       GotoIf(IsBigIntInstanceType(instance_type), &if_bigint);
-      Branch(Word32Equal(instance_type, Int32Constant(ODDBALL_TYPE)),
-             &if_oddball, &if_other);
+      Branch(InstanceTypeEqual(instance_type, ODDBALL_TYPE), &if_oddball,
+             &if_other);
 
       BIND(&if_smi);
       {
@@ -1250,9 +1252,8 @@ class UnaryNumericOpAssembler : public InterpreterAssembler {
         CSA_ASSERT(this, SmiEqual(var_feedback.value(),
                                   SmiConstant(BinaryOperationFeedback::kNone)));
         var_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
-        // TODO(jkummerow): This should call kNonNumericToNumeric.
         var_value.Bind(
-            CallBuiltin(Builtins::kNonNumberToNumber, GetContext(), value));
+            CallBuiltin(Builtins::kNonNumberToNumeric, GetContext(), value));
         Goto(&start);
       }
     }
@@ -1481,7 +1482,7 @@ IGNITION_HANDLER(DeletePropertyStrict, InterpreterAssembler) {
   Node* key = GetAccumulator();
   Node* context = GetContext();
   Node* result = CallBuiltin(Builtins::kDeleteProperty, context, object, key,
-                             SmiConstant(STRICT));
+                             SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
   SetAccumulator(result);
   Dispatch();
 }
@@ -1496,7 +1497,7 @@ IGNITION_HANDLER(DeletePropertySloppy, InterpreterAssembler) {
   Node* key = GetAccumulator();
   Node* context = GetContext();
   Node* result = CallBuiltin(Builtins::kDeleteProperty, context, object, key,
-                             SmiConstant(SLOPPY));
+                             SmiConstant(Smi::FromEnum(LanguageMode::kSloppy)));
   SetAccumulator(result);
   Dispatch();
 }

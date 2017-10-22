@@ -211,9 +211,6 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
 
-  // We're not prepared to handle a function with arguments object.
-  DCHECK(!function->shared()->uses_arguments());
-
   // Only reachable when OST is enabled.
   CHECK(FLAG_use_osr);
 
@@ -242,8 +239,8 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   Handle<Code> result;
   if (maybe_result.ToHandle(&result) &&
       result->kind() == Code::OPTIMIZED_FUNCTION) {
-    DeoptimizationInputData* data =
-        DeoptimizationInputData::cast(result->deoptimization_data());
+    DeoptimizationData* data =
+        DeoptimizationData::cast(result->deoptimization_data());
 
     if (data->OsrPcOffset()->value() >= 0) {
       DCHECK(BailoutId(data->OsrBytecodeOffset()->value()) == ast_id);
@@ -278,28 +275,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   if (!function->IsOptimized()) {
     function->set_code(function->shared()->code());
   }
-  return NULL;
-}
-
-
-RUNTIME_FUNCTION(Runtime_TryInstallOptimizedCode) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
-
-  // First check if this is a real stack overflow.
-  StackLimitCheck check(isolate);
-  if (check.JsHasOverflowed(kStackSpaceRequiredForCompilation * KB)) {
-    return isolate->StackOverflow();
-  }
-
-  // Only try to install optimized functions if the interrupt was InstallCode.
-  if (isolate->stack_guard()->CheckAndClearInstallCode()) {
-    isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
-  }
-
-  return (function->IsOptimized()) ? function->code()
-                                   : function->shared()->code();
+  return nullptr;
 }
 
 static Object* CompileGlobalEval(Isolate* isolate, Handle<String> source,

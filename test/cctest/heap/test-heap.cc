@@ -213,7 +213,7 @@ static void CheckFindCodeObject(Isolate* isolate) {
   // Test FindCodeObject
 #define __ assm.
 
-  Assembler assm(isolate, NULL, 0);
+  Assembler assm(isolate, nullptr, 0);
 
   __ nop();  // supported on all architectures
 
@@ -364,11 +364,14 @@ TEST(GarbageCollection) {
     HandleScope inner_scope(isolate);
     // Allocate a function and keep it in global object's property.
     Handle<JSFunction> function = factory->NewFunction(name);
-    JSReceiver::SetProperty(global, name, function, SLOPPY).Check();
+    JSReceiver::SetProperty(global, name, function, LanguageMode::kSloppy)
+        .Check();
     // Allocate an object.  Unrooted after leaving the scope.
     Handle<JSObject> obj = factory->NewJSObject(function);
-    JSReceiver::SetProperty(obj, prop_name, twenty_three, SLOPPY).Check();
-    JSReceiver::SetProperty(obj, prop_namex, twenty_four, SLOPPY).Check();
+    JSReceiver::SetProperty(obj, prop_name, twenty_three, LanguageMode::kSloppy)
+        .Check();
+    JSReceiver::SetProperty(obj, prop_namex, twenty_four, LanguageMode::kSloppy)
+        .Check();
 
     CHECK_EQ(Smi::FromInt(23),
              *Object::GetProperty(obj, prop_name).ToHandleChecked());
@@ -390,8 +393,10 @@ TEST(GarbageCollection) {
     HandleScope inner_scope(isolate);
     // Allocate another object, make it reachable from global.
     Handle<JSObject> obj = factory->NewJSObject(function);
-    JSReceiver::SetProperty(global, obj_name, obj, SLOPPY).Check();
-    JSReceiver::SetProperty(obj, prop_name, twenty_three, SLOPPY).Check();
+    JSReceiver::SetProperty(global, obj_name, obj, LanguageMode::kSloppy)
+        .Check();
+    JSReceiver::SetProperty(obj, prop_name, twenty_three, LanguageMode::kSloppy)
+        .Check();
   }
 
   // After gc, it should survive.
@@ -931,11 +936,14 @@ TEST(FunctionAllocation) {
 
   Handle<String> prop_name = factory->InternalizeUtf8String("theSlot");
   Handle<JSObject> obj = factory->NewJSObject(function);
-  JSReceiver::SetProperty(obj, prop_name, twenty_three, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, prop_name, twenty_three, LanguageMode::kSloppy)
+      .Check();
   CHECK_EQ(Smi::FromInt(23),
            *Object::GetProperty(obj, prop_name).ToHandleChecked());
   // Check that we can add properties to function objects.
-  JSReceiver::SetProperty(function, prop_name, twenty_four, SLOPPY).Check();
+  JSReceiver::SetProperty(function, prop_name, twenty_four,
+                          LanguageMode::kSloppy)
+      .Check();
   CHECK_EQ(Smi::FromInt(24),
            *Object::GetProperty(function, prop_name).ToHandleChecked());
 }
@@ -962,50 +970,55 @@ TEST(ObjectProperties) {
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
 
   // add first
-  JSReceiver::SetProperty(obj, first, one, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, first, one, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
 
   // delete first
-  CHECK(Just(true) == JSReceiver::DeleteProperty(obj, first, SLOPPY));
+  CHECK(Just(true) ==
+        JSReceiver::DeleteProperty(obj, first, LanguageMode::kSloppy));
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
 
   // add first and then second
-  JSReceiver::SetProperty(obj, first, one, SLOPPY).Check();
-  JSReceiver::SetProperty(obj, second, two, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, first, one, LanguageMode::kSloppy).Check();
+  JSReceiver::SetProperty(obj, second, two, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, second));
 
   // delete first and then second
-  CHECK(Just(true) == JSReceiver::DeleteProperty(obj, first, SLOPPY));
+  CHECK(Just(true) ==
+        JSReceiver::DeleteProperty(obj, first, LanguageMode::kSloppy));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, second));
-  CHECK(Just(true) == JSReceiver::DeleteProperty(obj, second, SLOPPY));
+  CHECK(Just(true) ==
+        JSReceiver::DeleteProperty(obj, second, LanguageMode::kSloppy));
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, second));
 
   // add first and then second
-  JSReceiver::SetProperty(obj, first, one, SLOPPY).Check();
-  JSReceiver::SetProperty(obj, second, two, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, first, one, LanguageMode::kSloppy).Check();
+  JSReceiver::SetProperty(obj, second, two, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, second));
 
   // delete second and then first
-  CHECK(Just(true) == JSReceiver::DeleteProperty(obj, second, SLOPPY));
+  CHECK(Just(true) ==
+        JSReceiver::DeleteProperty(obj, second, LanguageMode::kSloppy));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
-  CHECK(Just(true) == JSReceiver::DeleteProperty(obj, first, SLOPPY));
+  CHECK(Just(true) ==
+        JSReceiver::DeleteProperty(obj, first, LanguageMode::kSloppy));
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, second));
 
   // check string and internalized string match
   const char* string1 = "fisk";
   Handle<String> s1 = factory->NewStringFromAsciiChecked(string1);
-  JSReceiver::SetProperty(obj, s1, one, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, s1, one, LanguageMode::kSloppy).Check();
   Handle<String> s1_string = factory->InternalizeUtf8String(string1);
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, s1_string));
 
   // check internalized string and string match
   const char* string2 = "fugl";
   Handle<String> s2_string = factory->InternalizeUtf8String(string2);
-  JSReceiver::SetProperty(obj, s2_string, one, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, s2_string, one, LanguageMode::kSloppy).Check();
   Handle<String> s2 = factory->NewStringFromAsciiChecked(string2);
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, s2));
 }
@@ -1026,7 +1039,8 @@ TEST(JSObjectMaps) {
 
   // Set a propery
   Handle<Smi> twenty_three(Smi::FromInt(23), isolate);
-  JSReceiver::SetProperty(obj, prop_name, twenty_three, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, prop_name, twenty_three, LanguageMode::kSloppy)
+      .Check();
   CHECK_EQ(Smi::FromInt(23),
            *Object::GetProperty(obj, prop_name).ToHandleChecked());
 
@@ -1060,7 +1074,8 @@ TEST(JSArray) {
   CHECK(array->HasSmiOrObjectElements());
 
   // array[length] = name.
-  JSReceiver::SetElement(isolate, array, 0, name, SLOPPY).Check();
+  JSReceiver::SetElement(isolate, array, 0, name, LanguageMode::kSloppy)
+      .Check();
   CHECK_EQ(Smi::FromInt(1), array->length());
   element = i::Object::GetElement(isolate, array, 0).ToHandleChecked();
   CHECK_EQ(*element, *name);
@@ -1074,7 +1089,9 @@ TEST(JSArray) {
   CHECK(array->HasDictionaryElements());  // Must be in slow mode.
 
   // array[length] = name.
-  JSReceiver::SetElement(isolate, array, int_length, name, SLOPPY).Check();
+  JSReceiver::SetElement(isolate, array, int_length, name,
+                         LanguageMode::kSloppy)
+      .Check();
   uint32_t new_int_length = 0;
   CHECK(array->length()->ToArrayIndex(&new_int_length));
   CHECK_EQ(static_cast<double>(int_length), new_int_length - 1);
@@ -1102,11 +1119,12 @@ TEST(JSObjectCopy) {
   Handle<Smi> one(Smi::FromInt(1), isolate);
   Handle<Smi> two(Smi::FromInt(2), isolate);
 
-  JSReceiver::SetProperty(obj, first, one, SLOPPY).Check();
-  JSReceiver::SetProperty(obj, second, two, SLOPPY).Check();
+  JSReceiver::SetProperty(obj, first, one, LanguageMode::kSloppy).Check();
+  JSReceiver::SetProperty(obj, second, two, LanguageMode::kSloppy).Check();
 
-  JSReceiver::SetElement(isolate, obj, 0, first, SLOPPY).Check();
-  JSReceiver::SetElement(isolate, obj, 1, second, SLOPPY).Check();
+  JSReceiver::SetElement(isolate, obj, 0, first, LanguageMode::kSloppy).Check();
+  JSReceiver::SetElement(isolate, obj, 1, second, LanguageMode::kSloppy)
+      .Check();
 
   // Make the clone.
   Handle<Object> value1, value2;
@@ -1128,11 +1146,13 @@ TEST(JSObjectCopy) {
   CHECK_EQ(*value1, *value2);
 
   // Flip the values.
-  JSReceiver::SetProperty(clone, first, two, SLOPPY).Check();
-  JSReceiver::SetProperty(clone, second, one, SLOPPY).Check();
+  JSReceiver::SetProperty(clone, first, two, LanguageMode::kSloppy).Check();
+  JSReceiver::SetProperty(clone, second, one, LanguageMode::kSloppy).Check();
 
-  JSReceiver::SetElement(isolate, clone, 0, second, SLOPPY).Check();
-  JSReceiver::SetElement(isolate, clone, 1, first, SLOPPY).Check();
+  JSReceiver::SetElement(isolate, clone, 0, second, LanguageMode::kSloppy)
+      .Check();
+  JSReceiver::SetElement(isolate, clone, 1, first, LanguageMode::kSloppy)
+      .Check();
 
   value1 = Object::GetElement(isolate, obj, 1).ToHandleChecked();
   value2 = Object::GetElement(isolate, clone, 0).ToHandleChecked();
@@ -1194,7 +1214,8 @@ static int ObjectsFoundInHeap(Heap* heap, Handle<Object> objs[], int size) {
   // Count the number of objects found in the heap.
   int found_count = 0;
   HeapIterator iterator(heap);
-  for (HeapObject* obj = iterator.next(); obj != NULL; obj = iterator.next()) {
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
     for (int i = 0; i < size; i++) {
       if (*objs[i] == obj) {
         found_count++;
@@ -1570,7 +1591,7 @@ TEST(TestAlignmentCalculations) {
   int max_double_unaligned_fill = Heap::GetMaximumFillToAlign(kDoubleUnaligned);
   CHECK_EQ(maximum_double_misalignment, max_double_unaligned_fill);
 
-  Address base = static_cast<Address>(NULL);
+  Address base = static_cast<Address>(nullptr);
   int fill = 0;
 
   // Word alignment never requires fill.
@@ -1598,7 +1619,7 @@ static HeapObject* NewSpaceAllocateAligned(int size,
   Heap* heap = CcTest::heap();
   AllocationResult allocation =
       heap->new_space()->AllocateRawAligned(size, alignment);
-  HeapObject* obj = NULL;
+  HeapObject* obj = nullptr;
   allocation.To(&obj);
   heap->CreateFillerObjectAt(obj->address(), size, ClearRecordedSlots::kNo);
   return obj;
@@ -1665,7 +1686,7 @@ static HeapObject* OldSpaceAllocateAligned(int size,
   Heap* heap = CcTest::heap();
   AllocationResult allocation =
       heap->old_space()->AllocateRawAligned(size, alignment);
-  HeapObject* obj = NULL;
+  HeapObject* obj = nullptr;
   allocation.To(&obj);
   heap->CreateFillerObjectAt(obj->address(), size, ClearRecordedSlots::kNo);
   return obj;
@@ -1743,8 +1764,7 @@ TEST(TestSizeOfObjectsVsHeapIteratorPrecision) {
   HeapIterator iterator(CcTest::heap());
   intptr_t size_of_objects_1 = CcTest::heap()->SizeOfObjects();
   intptr_t size_of_objects_2 = 0;
-  for (HeapObject* obj = iterator.next();
-       obj != NULL;
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
        obj = iterator.next()) {
     if (!obj->IsFreeSpace()) {
       size_of_objects_2 += obj->Size();
@@ -1857,7 +1877,8 @@ TEST(CollectingAllAvailableGarbageShrinksNewSpace) {
 static int NumberOfGlobalObjects() {
   int count = 0;
   HeapIterator iterator(CcTest::heap());
-  for (HeapObject* obj = iterator.next(); obj != NULL; obj = iterator.next()) {
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
     if (obj->IsJSGlobalObject()) count++;
   }
   return count;
@@ -2726,7 +2747,9 @@ static void AddPropertyTo(
   FLAG_gc_global = true;
   FLAG_retain_maps_for_n_gc = 0;
   CcTest::heap()->set_allocation_timeout(gc_count);
-  JSReceiver::SetProperty(object, prop_name, twenty_three, SLOPPY).Check();
+  JSReceiver::SetProperty(object, prop_name, twenty_three,
+                          LanguageMode::kSloppy)
+      .Check();
 }
 
 
@@ -3148,14 +3171,14 @@ class SourceResource : public v8::String::ExternalOneByteStringResource {
 
   virtual void Dispose() {
     i::DeleteArray(data_);
-    data_ = NULL;
+    data_ = nullptr;
   }
 
   const char* data() const { return data_; }
 
   size_t length() const { return length_; }
 
-  bool IsDisposed() { return data_ == NULL; }
+  bool IsDisposed() { return data_ == nullptr; }
 
  private:
   const char* data_;
@@ -3313,7 +3336,7 @@ TEST(Regress169928) {
 
   // We need filler the size of AllocationMemento object, plus an extra
   // fill pointer value.
-  HeapObject* obj = NULL;
+  HeapObject* obj = nullptr;
   AllocationResult allocation =
       CcTest::heap()->new_space()->AllocateRawUnaligned(
           AllocationMemento::kSize + kPointerSize);
@@ -4408,7 +4431,7 @@ static void InterruptCallback357137(v8::Isolate* isolate, void* data) { }
 
 
 static void RequestInterrupt(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  CcTest::isolate()->RequestInterrupt(&InterruptCallback357137, NULL);
+  CcTest::isolate()->RequestInterrupt(&InterruptCallback357137, nullptr);
 }
 
 HEAP_TEST(Regress538257) {
@@ -4455,7 +4478,7 @@ TEST(Regress357137) {
       v8::String::NewFromUtf8(isolate, "interrupt", v8::NewStringType::kNormal)
           .ToLocalChecked(),
       v8::FunctionTemplate::New(isolate, RequestInterrupt));
-  v8::Local<v8::Context> context = v8::Context::New(isolate, NULL, global);
+  v8::Local<v8::Context> context = v8::Context::New(isolate, nullptr, global);
   CHECK(!context.IsEmpty());
   v8::Context::Scope cscope(context);
 
@@ -4487,7 +4510,7 @@ TEST(Regress507979) {
   // way the filler object shares the mark bits with the following live object.
   o1->Shrink(kFixedArrayLen - 1);
 
-  for (HeapObject* obj = it.next(); obj != NULL; obj = it.next()) {
+  for (HeapObject* obj = it.next(); obj != nullptr; obj = it.next()) {
     // Let's not optimize the loop away.
     CHECK_NOT_NULL(obj->address());
   }
@@ -4596,7 +4619,7 @@ TEST(Regress442710) {
   Handle<JSArray> array = factory->NewJSArray(2);
 
   Handle<String> name = factory->InternalizeUtf8String("testArray");
-  JSReceiver::SetProperty(global, name, array, SLOPPY).Check();
+  JSReceiver::SetProperty(global, name, array, LanguageMode::kSloppy).Check();
   CompileRun("testArray[0] = 1; testArray[1] = 2; testArray.shift();");
   CcTest::CollectGarbage(OLD_SPACE);
 }
@@ -4718,58 +4741,6 @@ TEST(WritableVsImmortalRoots) {
     CHECK(!immortal || !writable);
   }
 }
-
-
-static void TestRightTrimFixedTypedArray(i::ExternalArrayType type,
-                                         int initial_length,
-                                         int elements_to_trim) {
-  v8::HandleScope scope(CcTest::isolate());
-  Isolate* isolate = CcTest::i_isolate();
-  Factory* factory = isolate->factory();
-  Heap* heap = isolate->heap();
-
-  Handle<FixedTypedArrayBase> array =
-      factory->NewFixedTypedArray(initial_length, type, true);
-  int old_size = array->size();
-  heap->RightTrimFixedArray(*array, elements_to_trim);
-
-  // Check that free space filler is at the right place and did not smash the
-  // array header.
-  CHECK(array->IsFixedArrayBase());
-  CHECK_EQ(initial_length - elements_to_trim, array->length());
-  int new_size = array->size();
-  if (new_size != old_size) {
-    // Free space filler should be created in this case.
-    Address next_obj_address = array->address() + array->size();
-    CHECK(HeapObject::FromAddress(next_obj_address)->IsFiller());
-  }
-  CcTest::CollectAllAvailableGarbage();
-}
-
-
-TEST(Regress472513) {
-  CcTest::InitializeVM();
-  v8::HandleScope scope(CcTest::isolate());
-
-  // The combination of type/initial_length/elements_to_trim triggered
-  // typed array header smashing with free space filler (crbug/472513).
-
-  // 64-bit cases.
-  TestRightTrimFixedTypedArray(i::kExternalUint8Array, 32, 6);
-  TestRightTrimFixedTypedArray(i::kExternalUint8Array, 32 - 7, 6);
-  TestRightTrimFixedTypedArray(i::kExternalUint16Array, 16, 6);
-  TestRightTrimFixedTypedArray(i::kExternalUint16Array, 16 - 3, 6);
-  TestRightTrimFixedTypedArray(i::kExternalUint32Array, 8, 6);
-  TestRightTrimFixedTypedArray(i::kExternalUint32Array, 8 - 1, 6);
-
-  // 32-bit cases.
-  TestRightTrimFixedTypedArray(i::kExternalUint8Array, 16, 3);
-  TestRightTrimFixedTypedArray(i::kExternalUint8Array, 16 - 3, 3);
-  TestRightTrimFixedTypedArray(i::kExternalUint16Array, 8, 3);
-  TestRightTrimFixedTypedArray(i::kExternalUint16Array, 8 - 1, 3);
-  TestRightTrimFixedTypedArray(i::kExternalUint32Array, 4, 3);
-}
-
 
 TEST(WeakFixedArray) {
   CcTest::InitializeVM();
@@ -4984,7 +4955,7 @@ TEST(MessageObjectLeak) {
       v8::String::NewFromUtf8(isolate, "check", v8::NewStringType::kNormal)
           .ToLocalChecked(),
       v8::FunctionTemplate::New(isolate, CheckLeak));
-  v8::Local<v8::Context> context = v8::Context::New(isolate, NULL, global);
+  v8::Local<v8::Context> context = v8::Context::New(isolate, nullptr, global);
   v8::Context::Scope cscope(context);
 
   const char* test =
@@ -5039,7 +5010,7 @@ TEST(CanonicalSharedFunctionInfo) {
                                     isolate, CheckEqualSharedFunctionInfos));
   global->Set(isolate, "remove",
               v8::FunctionTemplate::New(isolate, RemoveCodeAndGC));
-  v8::Local<v8::Context> context = v8::Context::New(isolate, NULL, global);
+  v8::Local<v8::Context> context = v8::Context::New(isolate, nullptr, global);
   v8::Context::Scope cscope(context);
   CompileRun(
       "function f() { return function g() {}; }"
@@ -5069,7 +5040,7 @@ TEST(ScriptIterator) {
   int script_count = 0;
   {
     HeapIterator it(heap);
-    for (HeapObject* obj = it.next(); obj != NULL; obj = it.next()) {
+    for (HeapObject* obj = it.next(); obj != nullptr; obj = it.next()) {
       if (obj->IsScript()) script_count++;
     }
   }
@@ -5096,7 +5067,7 @@ TEST(SharedFunctionInfoIterator) {
   int sfi_count = 0;
   {
     HeapIterator it(heap);
-    for (HeapObject* obj = it.next(); obj != NULL; obj = it.next()) {
+    for (HeapObject* obj = it.next(); obj != nullptr; obj = it.next()) {
       if (!obj->IsSharedFunctionInfo()) continue;
       sfi_count++;
     }
@@ -5795,7 +5766,7 @@ HEAP_TEST(Regress670675) {
 
 namespace {
 Handle<Code> GenerateDummyImmovableCode(Isolate* isolate) {
-  Assembler assm(isolate, NULL, 256);
+  Assembler assm(isolate, nullptr, 256);
 
   const int kNumberOfNops = 1 << 10;
   for (int i = 0; i < kNumberOfNops; i++) {
@@ -5805,8 +5776,9 @@ Handle<Code> GenerateDummyImmovableCode(Isolate* isolate) {
   CodeDesc desc;
   assm.GetCode(isolate, &desc);
   const bool kImmovable = true;
-  Handle<Code> code =
-      isolate->factory()->NewCode(desc, Code::STUB, Handle<Code>(), kImmovable);
+  Handle<Code> code = isolate->factory()->NewCode(
+      desc, Code::STUB, Handle<Code>(), HandlerTable::Empty(isolate),
+      MaybeHandle<ByteArray>(), DeoptimizationData::Empty(isolate), kImmovable);
   CHECK(code->IsCode());
 
   return code;

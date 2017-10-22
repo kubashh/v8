@@ -188,7 +188,7 @@ TF_BUILTIN(ObjectKeys, ObjectBuiltinsAssembler) {
 
   // Ensure that the {object} doesn't have any elements.
   CSA_ASSERT(this, IsJSObjectMap(object_map));
-  Node* object_elements = LoadObjectField(object, JSObject::kElementsOffset);
+  Node* object_elements = LoadElements(object);
   GotoIf(IsEmptyFixedArray(object_elements), &if_empty_elements);
   Branch(IsEmptySlowElementDictionary(object_elements), &if_empty_elements,
          &if_slow);
@@ -725,9 +725,10 @@ TF_BUILTIN(CreateGeneratorObject, ObjectBuiltinsAssembler) {
 
   // Get the initial map from the function, jumping to the runtime if we don't
   // have one.
+  Label runtime(this);
+  GotoIfNot(IsFunctionWithPrototypeSlotMap(LoadMap(closure)), &runtime);
   Node* maybe_map =
       LoadObjectField(closure, JSFunction::kPrototypeOrInitialMapOffset);
-  Label runtime(this);
   GotoIf(DoesntHaveInstanceType(maybe_map, MAP_TYPE), &runtime);
 
   Node* shared =

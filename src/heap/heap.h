@@ -36,6 +36,9 @@ class HeapTester;
 class TestMemoryAllocatorScope;
 }  // namespace heap
 
+class BytecodeArray;
+class JSArrayBuffer;
+
 using v8::MemoryPressureLevel;
 
 // Defines all the roots in Heap.
@@ -224,8 +227,9 @@ using v8::MemoryPressureLevel;
   /* slots refer to the code with the reference to the weak object. */         \
   V(ArrayList, weak_new_space_object_to_code_list,                             \
     WeakNewSpaceObjectToCodeList)                                              \
-  /* List to hold onto feedback vectors that we need for code coverage */      \
-  V(Object, code_coverage_list, CodeCoverageList)                              \
+  /* Feedback vectors that we need for code coverage or type profile */        \
+  V(Object, feedback_vectors_for_profiling_tools,                              \
+    FeedbackVectorsForProfilingTools)                                          \
   V(Object, weak_stack_trace_list, WeakStackTraceList)                         \
   V(Object, noscript_shared_function_infos, NoScriptSharedFunctionInfos)       \
   V(FixedArray, serialized_templates, SerializedTemplates)                     \
@@ -397,6 +401,10 @@ enum ArrayStorageAllocationMode {
 
 enum class ClearRecordedSlots { kYes, kNo };
 
+enum class FixedArrayVisitationMode { kRegular, kIncremental };
+
+enum class TraceRetainingPathMode { kEnabled, kDisabled };
+
 enum class GarbageCollectionReason {
   kUnknown = 0,
   kAllocationFailure = 1,
@@ -478,7 +486,7 @@ struct CommentStatistic {
   int size;
   int count;
   void Clear() {
-    comment = NULL;
+    comment = nullptr;
     size = 0;
     count = 0;
   }
@@ -776,7 +784,7 @@ class Heap {
   inline bool IsInGCPostProcessing() { return gc_post_processing_depth_ > 0; }
 
   // If an object has an AllocationMemento trailing it, return it, otherwise
-  // return NULL;
+  // return nullptr;
   template <FindMementoMode mode>
   inline AllocationMemento* FindAllocationMemento(Map* map, HeapObject* object);
 
@@ -1520,7 +1528,7 @@ class Heap {
   void ReportCodeStatistics(const char* title);
 #endif
   void* GetRandomMmapAddr() {
-    void* result = v8::internal::GetRandomMmapAddr();
+    void* result = base::OS::GetRandomMmapAddr();
 #if V8_TARGET_ARCH_X64
 #if V8_OS_MACOSX
     // The Darwin kernel [as of macOS 10.12.5] does not clean up page
@@ -1531,7 +1539,7 @@ class Heap {
     // killed. Confine the hint to a 32-bit section of the virtual address
     // space. See crbug.com/700928.
     uintptr_t offset =
-        reinterpret_cast<uintptr_t>(v8::internal::GetRandomMmapAddr()) &
+        reinterpret_cast<uintptr_t>(base::OS::GetRandomMmapAddr()) &
         kMmapRegionMask;
     result = reinterpret_cast<void*>(mmap_region_base_ + offset);
 #endif  // V8_OS_MACOSX
@@ -1544,7 +1552,6 @@ class Heap {
 
  private:
   class SkipStoreBufferScope;
-  class PretenuringScope;
 
   typedef String* (*ExternalStringTableUpdaterCallback)(Heap* heap,
                                                         Object** pointer);
@@ -1955,12 +1962,13 @@ class Heap {
   // Properties and elements are copied too.
   // Optionally takes an AllocationSite to be appended in an AllocationMemento.
   MUST_USE_RESULT AllocationResult CopyJSObject(JSObject* source,
-                                                AllocationSite* site = NULL);
+                                                AllocationSite* site = nullptr);
 
   // Allocates a JS Map in the heap.
   MUST_USE_RESULT AllocationResult
   AllocateMap(InstanceType instance_type, int instance_size,
-              ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND);
+              ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
+              int inobject_properties = 0);
 
   // Allocates and initializes a new JavaScript object based on a
   // constructor.
@@ -1968,14 +1976,14 @@ class Heap {
   // that points to the site.
   MUST_USE_RESULT AllocationResult AllocateJSObject(
       JSFunction* constructor, PretenureFlag pretenure = NOT_TENURED,
-      AllocationSite* allocation_site = NULL);
+      AllocationSite* allocation_site = nullptr);
 
   // Allocates and initializes a new JavaScript object based on a map.
   // Passing an allocation site means that a memento will be created that
   // points to the site.
   MUST_USE_RESULT AllocationResult
   AllocateJSObjectFromMap(Map* map, PretenureFlag pretenure = NOT_TENURED,
-                          AllocationSite* allocation_site = NULL);
+                          AllocationSite* allocation_site = nullptr);
 
   // Allocates a HeapNumber from value.
   MUST_USE_RESULT AllocationResult AllocateHeapNumber(
@@ -2031,8 +2039,8 @@ class Heap {
 
   // Allocates a heap object based on the map.
   MUST_USE_RESULT AllocationResult
-      Allocate(Map* map, AllocationSpace space,
-               AllocationSite* allocation_site = NULL);
+  Allocate(Map* map, AllocationSpace space,
+           AllocationSite* allocation_site = nullptr);
 
   // Allocates a partial map for bootstrapping.
   MUST_USE_RESULT AllocationResult
@@ -2438,16 +2446,16 @@ class Heap {
   friend class GCCallbacksScope;
   friend class GCTracer;
   friend class HeapIterator;
-  template <typename ConcreteVisitor>
-  friend class MarkingVisitor;
   friend class IdleScavengeObserver;
   friend class IncrementalMarking;
   friend class IncrementalMarkingJob;
   friend class LargeObjectSpace;
+  template <FixedArrayVisitationMode fixed_array_mode,
+            TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+  friend class MarkingVisitor;
   friend class MarkCompactCollector;
   friend class MarkCompactCollectorBase;
   friend class MinorMarkCompactCollector;
-  friend class MarkCompactMarkingVisitor;
   friend class NewSpace;
   friend class ObjectStatsCollector;
   friend class Page;
@@ -2511,6 +2519,23 @@ class AlwaysAllocateScope {
   Heap* heap_;
 };
 
+class CodeSpaceMemoryModificationScope {
+ public:
+  explicit inline CodeSpaceMemoryModificationScope(Heap* heap);
+  inline ~CodeSpaceMemoryModificationScope();
+
+ private:
+  Heap* heap_;
+};
+
+class CodePageMemoryModificationScope {
+ public:
+  explicit inline CodePageMemoryModificationScope(MemoryChunk* chunk);
+  inline ~CodePageMemoryModificationScope();
+
+ private:
+  MemoryChunk* chunk_;
+};
 
 // Visitor class to verify interior pointers in spaces that do not contain
 // or care about intergenerational references. All heap object pointers have to
@@ -2629,7 +2654,7 @@ class WeakObjectRetainer {
  public:
   virtual ~WeakObjectRetainer() {}
 
-  // Return whether this object should be retained. If NULL is returned the
+  // Return whether this object should be retained. If nullptr is returned the
   // object has no references. Otherwise the address of the retained object
   // should be returned as in some GC situations the object has been moved.
   virtual Object* RetainAs(Object* object) = 0;
