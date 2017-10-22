@@ -2211,6 +2211,380 @@ void BytecodeGenerator::VisitArrayLiteral(ArrayLiteral* expr) {
   }
 }
 
+// ObjectPattern and ArrayPattern are handled by VisitDestructuringAssignment
+void BytecodeGenerator::VisitObjectPattern(ObjectPattern* pattern) {
+  UNREACHABLE();
+}
+void BytecodeGenerator::VisitArrayPattern(ArrayPattern* pattern) {
+  UNREACHABLE();
+}
+
+// This duplicates a lot of code from VisitAssignment()...
+// Maybe it would be better to have some utility functions for it instead?
+void BytecodeGenerator::BuildApplyDestructuringTarget(Expression* target,
+                                                      Expression* initializer) {
+  DCHECK_NOT_NULL(target);
+  // The accumulator contains a value loaded from a destructured object.
+  Register object, key;
+  RegisterList super_property_args;
+  const AstRawString* name;
+
+  if (initializer != nullptr) {
+    RegisterAllocationScope register_scope(this);
+    // If the loaded value is undefined, use the initializer value.
+    BytecodeLabel if_notundefined;
+    builder()->JumpIfNotUndefined(&if_notundefined);
+    VisitForAccumulatorValue(initializer);
+    builder()->Bind(&if_notundefined);
+  }
+
+  Property* property = target->AsProperty();
+  LhsKind assign_type = Property::GetAssignType(property);
+
+  // Evaluate LHS expression.
+  switch (assign_type) {
+    case VARIABLE:
+      // Nothing to do to evaluate variable assignment LHS.
+      break;
+    case NAMED_PROPERTY: {
+      object = VisitForRegisterValue(property->obj());
+      name = property->key()->AsLiteral()->AsRawPropertyName();
+      break;
+    }
+    case KEYED_PROPERTY: {
+      object = VisitForRegisterValue(property->obj());
+      key = VisitForRegisterValue(property->key());
+      break;
+    }
+    case NAMED_SUPER_PROPERTY: {
+      super_property_args = register_allocator()->NewRegisterList(4);
+      SuperPropertyReference* super_property =
+          property->obj()->AsSuperPropertyReference();
+      VisitForRegisterValue(super_property->this_var(), super_property_args[0]);
+      VisitForRegisterValue(super_property->home_object(),
+                            super_property_args[1]);
+      builder()
+          ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
+          .StoreAccumulatorInRegister(super_property_args[2]);
+      break;
+    }
+    case KEYED_SUPER_PROPERTY: {
+      super_property_args = register_allocator()->NewRegisterList(4);
+      SuperPropertyReference* super_property =
+          property->obj()->AsSuperPropertyReference();
+      VisitForRegisterValue(super_property->this_var(), super_property_args[0]);
+      VisitForRegisterValue(super_property->home_object(),
+                            super_property_args[1]);
+      VisitForRegisterValue(property->key(), super_property_args[2]);
+      break;
+    }
+  }
+
+  // Destructuring assignment is never a compound operation, so do not load the
+  // LHS value...
+
+  switch (assign_type) {
+    case VARIABLE: {
+      // TODO(caitp): use correct Token::Type op for lexical declarations when
+      // needed.
+      VariableProxy* proxy = target->AsVariableProxy();
+      BuildVariableAssignment(proxy->var(), Token::ASSIGN,
+                              proxy->hole_check_mode(),
+                              LookupHoistingMode::kNormal);
+      break;
+    }
+    case NAMED_PROPERTY: {
+      FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
+      builder()->StoreNamedProperty(object, name, feedback_index(slot),
+                                    language_mode());
+      break;
+    }
+    case KEYED_PROPERTY: {
+      FeedbackSlot slot = feedback_spec()->AddKeyedStoreICSlot(language_mode());
+      builder()->StoreKeyedProperty(object, key, feedback_index(slot),
+                                    language_mode());
+      break;
+    }
+    case NAMED_SUPER_PROPERTY: {
+      builder()
+          ->StoreAccumulatorInRegister(super_property_args[3])
+          .CallRuntime(StoreToSuperRuntimeId(), super_property_args);
+      break;
+    }
+    case KEYED_SUPER_PROPERTY: {
+      builder()
+          ->StoreAccumulatorInRegister(super_property_args[3])
+          .CallRuntime(StoreKeyedToSuperRuntimeId(), super_property_args);
+      break;
+    }
+  }
+}
+
+void BytecodeGenerator::VisitObjectPattern(ObjectPattern* pattern,
+                                           Register current_value,
+                                           bool require_object_coercible) {
+  using Element = ObjectPattern::Element;
+  const ZoneVector<Element>& elements = pattern->elements();
+
+  if (require_object_coercible) {
+    BytecodeLabel if_nullorundefined, if_objectcoercible;
+    builder()
+        ->JumpIfNull(&if_nullorundefined)
+        .JumpIfNotUndefined(&if_objectcoercible)
+        .Bind(&if_nullorundefined);
+    {
+      // Build an error message to throw.
+      int source_position = pattern->position();
+      MessageTemplate::Template msg = MessageTemplate::kNonCoercible;
+      const AstRawString* property = ast_string_constants()->empty_string();
+      for (const Element& element : elements) {
+        Expression* name = element.name();
+        if (name->IsPropertyName()) {
+          property = name->AsLiteral()->AsRawPropertyName();
+          msg = MessageTemplate::kNonCoercibleWithProperty;
+          source_position = name->position();
+          break;
+        }
+      }
+
+      RegisterList args = register_allocator()->NewRegisterList(2);
+
+      builder()->SetExpressionPosition(source_position);
+      builder()
+          ->LoadLiteral(Smi::FromInt(msg))
+          .StoreAccumulatorInRegister(args[0])
+          .LoadLiteral(property)
+          .StoreAccumulatorInRegister(args[1])
+          .CallRuntime(Runtime::kNewTypeError, args)
+          .Throw();
+    }
+    builder()->Bind(&if_objectcoercible);
+  }
+
+  RegisterList rest_args;
+  int rest_argc = 0;
+  if (pattern->has_rest_element()) {
+    rest_args = register_allocator()->NewRegisterList(
+        static_cast<int>(elements.size()));
+    builder()->MoveRegister(current_value, rest_args[rest_argc++]);
+  }
+
+  for (const Element& element : elements) {
+    switch (element.type()) {
+#ifdef DEBUG
+      case ObjectPattern::BindingType::kElision: {
+        UNREACHABLE();
+        break;
+      }
+#endif
+      case ObjectPattern::BindingType::kElement: {
+        VisitForAccumulatorValue(element.name());
+        Literal* name_literal = element.name()->AsLiteral();
+        const AstRawString* raw_property_name = nullptr;
+        if (name_literal != nullptr) {
+          raw_property_name = name_literal->AsRawPropertyName();
+        }
+
+        if (pattern->has_rest_element()) {
+          // In the rest element case, add the name to the list of arguments.
+          Register name = rest_args[rest_argc++];
+          if (name_literal != nullptr) {
+            builder()->StoreAccumulatorInRegister(name);
+          } else {
+            DCHECK(element.is_computed_name());
+            builder()->ToName(name);
+          }
+        }
+
+        if (raw_property_name != nullptr) {
+          builder()->LoadNamedProperty(
+              current_value, raw_property_name,
+              feedback_index(feedback_spec()->AddLoadICSlot()));
+        } else {
+          builder()->LoadKeyedProperty(
+              current_value,
+              feedback_index(feedback_spec()->AddKeyedLoadICSlot()));
+        }
+
+        BuildApplyDestructuringTarget(element.target(), element.initializer());
+        break;
+      }
+      case ObjectPattern::BindingType::kRestElement: {
+        DCHECK_GT(rest_args.register_count(), 0);
+        builder()->CallRuntime(
+            Runtime::kCopyDataPropertiesWithExcludedProperties, rest_args);
+        BuildApplyDestructuringTarget(element.target(), element.initializer());
+        break;
+      }
+    }
+  }
+}
+
+void BytecodeGenerator::BuildIteratorClose(Register iterator) {
+  RegisterAllocationScope register_scope(this);
+  Register return_method = register_allocator()->NewRegister();
+  Register iterator_result = register_allocator()->NewRegister();
+  BytecodeLabel done, if_null, if_undefined;
+  builder()
+      ->LoadNamedProperty(iterator, ast_string_constants()->return_string(),
+                          feedback_index(feedback_spec()->AddLoadICSlot()))
+      .JumpIfNull(&if_null)
+      .JumpIfUndefined(&if_undefined)
+      .StoreAccumulatorInRegister(return_method)
+      .CallProperty(return_method, RegisterList(iterator),
+                    feedback_index(feedback_spec()->AddCallICSlot()))
+      .JumpIfJSReceiver(&done)
+      .StoreAccumulatorInRegister(iterator_result)
+      .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, iterator_result)
+      // --- Unreachable ---
+      .Bind(&if_null)
+      .Bind(&if_undefined)
+      .Bind(&done);
+}
+
+void BytecodeGenerator::VisitArrayPattern(ArrayPattern* pattern,
+                                          Register current_value) {
+  using Element = ArrayPattern::Element;
+  const ZoneVector<Element>& elements = pattern->elements();
+
+  RegisterAllocationScope register_scope(this);
+  RegisterList iterator_and_input = register_allocator()->NewRegisterList(2);
+  Register iterator = iterator_and_input[0];
+
+  builder()->LoadAccumulatorWithRegister(current_value);
+  BuildGetIteratorFromAccumulator(IteratorType::kNormal);
+  builder()->StoreAccumulatorInRegister(iterator);
+
+  Register iterator_next = register_allocator()->NewRegister();
+  builder()->LoadNamedProperty(
+      iterator, ast_string_constants()->next_string(),
+      feedback_index(feedback_spec()->AddLoadICSlot()));
+
+  if (elements.empty()) {
+    BuildIteratorClose(iterator);
+    // Keep `current_value` in accumulator on exit
+    // --- Also avoid saving `iterator_next` in this case.
+    builder()->LoadAccumulatorWithRegister(current_value);
+    return;
+  }
+
+  builder()->StoreAccumulatorInRegister(iterator_next);
+
+  // Reuse {iterator_next} as iteratorRecord.[[Done]]. We will store `undefined`
+  // in {iterator_next} when {iteratorResult}.value is falsey. Using `undefined`
+  // rather than a boolean value allows the elimination of an LdaUndefined
+  // before assigning to the target.
+  bool first = true;
+  for (const Element& element : elements) {
+    switch (element.type()) {
+      case ArrayPattern::BindingType::kElision:
+      case ArrayPattern::BindingType::kElement: {
+        RegisterAllocationScope register_scope(this);
+        BytecodeLabel if_object, prepare_value, apply_value;
+        Register result = register_allocator()->NewRegister();
+        if (!first) {
+          builder()
+              ->LoadAccumulatorWithRegister(iterator_next)
+              .JumpIfUndefined(&apply_value);
+          first = false;
+        }
+        builder()
+            ->CallProperty(iterator_next, RegisterList(iterator),
+                           feedback_index(feedback_spec()->AddCallICSlot()))
+            .StoreAccumulatorInRegister(result)
+            .JumpIfJSReceiver(&if_object)
+            .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, result)
+            // --- Unreachable ---
+            .Bind(&if_object)
+            .LoadNamedProperty(result, ast_string_constants()->done_string(),
+                               feedback_index(feedback_spec()->AddLoadICSlot()))
+            .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &prepare_value)
+            // Done is true: Mark {iterator_next} as undefined and use this
+            // as the value to apply.
+            .LoadUndefined()
+            .StoreAccumulatorInRegister(iterator_next)
+            .Jump(&apply_value);
+
+        if (element.type() == ArrayPattern::BindingType::kElision) {
+          // Don't store value for elisions
+          builder()->Bind(&prepare_value).Bind(&apply_value);
+          continue;
+        }
+
+        // Load the iterated value and apply it to the destructuring target
+        builder()
+            // Load {result}.value
+            ->Bind(&prepare_value)
+            .LoadNamedProperty(result, ast_string_constants()->value_string(),
+                               feedback_index(feedback_spec()->AddLoadICSlot()))
+            // Assign {value} in accumulator to {element.target()}
+            .Bind(&apply_value);
+        BuildApplyDestructuringTarget(element.target(), element.initializer());
+        break;
+      }
+      case ObjectPattern::BindingType::kRestElement: {
+        RegisterAllocationScope register_scope(this);
+        RegisterList append_args = register_allocator()->NewRegisterList(2);
+
+        Register array = append_args[0];
+        builder()
+            ->CreateEmptyArrayLiteral(
+                feedback_index(feedback_spec()->AddLiteralSlot()))
+            .StoreAccumulatorInRegister(array);
+
+        BytecodeLabel apply_value;
+        if (!first) {
+          BytecodeLabel prepare_value;
+          builder()
+              ->LoadAccumulatorWithRegister(iterator_next)
+              .JumpIfNotUndefined(&prepare_value)
+              .LoadAccumulatorWithRegister(array)
+              .Jump(&apply_value)
+              .Bind(&prepare_value);
+        }
+
+        Register result = register_allocator()->NewRegister();
+        {
+          LoopBuilder loop(builder(), nullptr, nullptr);
+
+          loop.LoopHeader();
+          loop.LoopBody();
+          {
+            BytecodeLabel if_object;
+            builder()
+                ->CallProperty(iterator_next, RegisterList(iterator),
+                               feedback_index(feedback_spec()->AddCallICSlot()))
+                .StoreAccumulatorInRegister(result)
+                .JumpIfJSReceiver(&if_object)
+                .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, result)
+                // --- Unreachable ---
+                .Bind(&if_object)
+                .LoadNamedProperty(
+                    result, ast_string_constants()->done_string(),
+                    feedback_index(feedback_spec()->AddLoadICSlot()));
+            loop.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
+
+            builder()
+                ->LoadNamedProperty(
+                    result, ast_string_constants()->value_string(),
+                    feedback_index(feedback_spec()->AddLoadICSlot()))
+                .StoreAccumulatorInRegister(append_args[1])
+                .CallRuntime(Runtime::kAppendElement, append_args);
+
+            loop.BindContinueTarget();
+            loop.JumpToHeader(loop_depth_);
+          }
+        }
+
+        // Assign {array} to {element.target()}
+        builder()->LoadAccumulatorWithRegister(array).Bind(&apply_value);
+        BuildApplyDestructuringTarget(element.target(), nullptr);
+        break;
+      }
+    }
+  }
+}
+
 void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   builder()->SetExpressionPosition(proxy);
   BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
@@ -2507,7 +2881,54 @@ void BytecodeGenerator::BuildVariableAssignment(
   }
 }
 
+void BytecodeGenerator::VisitDestructuringAssignment(Assignment* expr) {
+  DCHECK(expr->target()->IsPattern());
+
+  RegisterAllocationScope register_scope(this);
+  Register current_value = register_allocator()->NewRegister();
+
+  std::stack<Assignment*> stack;
+  for (Assignment* a = expr; a && a->target()->IsPattern();
+       a = a->value()->AsAssignment()) {
+    stack.push(a);
+  }
+
+  DCHECK(!stack.top()->value()->IsPattern());
+  VisitForRegisterValue(stack.top()->value(), current_value);
+
+  // ObjectAssignmentPatterns perform RequireObjectCoercible(value) as
+  // a first step, but we only need to do this for the right-most
+  // destructuring assignment.
+  //
+  // Also don't perform this check if the right-most pattern is an ArrayPattern,
+  // because GetIterator() will similarly throw if not coercible.
+  bool require_object_coercible = true;
+
+  while (stack.size()) {
+    RegisterAllocationScope inner_scope(this);
+    Assignment* curr = stack.top();
+    stack.pop();
+    switch (curr->target()->node_type()) {
+      case AstNode::kObjectPattern: {
+        VisitObjectPattern(curr->target()->AsObjectPattern(), current_value,
+                           require_object_coercible);
+        break;
+      }
+      case AstNode::kArrayPattern: {
+        VisitArrayPattern(curr->target()->AsArrayPattern(), current_value);
+        break;
+      }
+      default: { UNREACHABLE(); }
+    }
+    require_object_coercible = false;
+  }
+
+  builder()->LoadAccumulatorWithRegister(current_value);
+}
+
 void BytecodeGenerator::VisitAssignment(Assignment* expr) {
+  if (expr->target()->IsPattern()) return VisitDestructuringAssignment(expr);
+
   DCHECK(expr->target()->IsValidReferenceExpression() ||
          (expr->op() == Token::INIT && expr->target()->IsVariableProxy() &&
           expr->target()->AsVariableProxy()->is_this()));
@@ -3798,11 +4219,14 @@ void BytecodeGenerator::VisitImportCallExpression(ImportCallExpression* expr) {
 
 void BytecodeGenerator::BuildGetIterator(Expression* iterable,
                                          IteratorType hint) {
+  VisitForAccumulatorValue(iterable);
+  BuildGetIteratorFromAccumulator(hint);
+}
+
+void BytecodeGenerator::BuildGetIteratorFromAccumulator(IteratorType hint) {
   RegisterList args = register_allocator()->NewRegisterList(1);
   Register method = register_allocator()->NewRegister();
   Register obj = args[0];
-
-  VisitForAccumulatorValue(iterable);
 
   if (hint == IteratorType::kAsync) {
     // Set method to GetMethod(obj, @@asyncIterator)

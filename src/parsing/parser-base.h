@@ -396,22 +396,6 @@ class ParserBase {
     FunctionKind kind() const { return scope()->function_kind(); }
     FunctionState* outer() const { return outer_function_state_; }
 
-    void RewindDestructuringAssignments(int pos) {
-      destructuring_assignments_to_rewrite_.Rewind(pos);
-    }
-
-    void SetDestructuringAssignmentsScope(int pos, Scope* scope) {
-      for (int i = pos; i < destructuring_assignments_to_rewrite_.length();
-           ++i) {
-        destructuring_assignments_to_rewrite_[i].scope = scope;
-      }
-    }
-
-    const ZoneList<DestructuringAssignment>&
-        destructuring_assignments_to_rewrite() const {
-      return destructuring_assignments_to_rewrite_;
-    }
-
     ZoneList<typename ExpressionClassifier::Error>* GetReportedErrorList() {
       return &reported_errors_;
     }
@@ -457,10 +441,6 @@ class ParserBase {
     };
 
    private:
-    void AddDestructuringAssignment(DestructuringAssignment pair) {
-      destructuring_assignments_to_rewrite_.Add(pair, scope_->zone());
-    }
-
     void AddNonPatternForRewriting(ExpressionT expr, bool* ok) {
       non_patterns_to_rewrite_.Add(expr, scope_->zone());
       if (non_patterns_to_rewrite_.length() >=
@@ -475,7 +455,6 @@ class ParserBase {
     FunctionState* outer_function_state_;
     DeclarationScope* scope_;
 
-    ZoneList<DestructuringAssignment> destructuring_assignments_to_rewrite_;
     ZoneList<ExpressionT> non_patterns_to_rewrite_;
 
     ZoneList<typename ExpressionClassifier::Error> reported_errors_;
@@ -1116,13 +1095,9 @@ class ParserBase {
   ExpressionT ParseMemberExpressionContinuation(ExpressionT expression,
                                                 bool* is_async, bool* ok);
 
-  // `rewritable_length`: length of the destructuring_assignments_to_rewrite()
-  // queue in the parent function state, prior to parsing of formal parameters.
-  // If the arrow function is lazy, any items added during formal parameter
-  // parsing are removed from the queue.
   ExpressionT ParseArrowFunctionLiteral(bool accept_IN,
                                         const FormalParametersT& parameters,
-                                        int rewritable_length, bool* ok);
+                                        bool* ok);
   void ParseSingleExpressionFunctionBody(StatementListT body, bool is_async,
                                          bool accept_IN, bool* ok);
   void ParseAsyncFunctionBody(Scope* scope, StatementListT body, bool* ok);
@@ -1525,7 +1500,6 @@ ParserBase<Impl>::FunctionState::FunctionState(
       function_state_stack_(function_state_stack),
       outer_function_state_(*function_state_stack),
       scope_(scope),
-      destructuring_assignments_to_rewrite_(16, scope->zone()),
       non_patterns_to_rewrite_(0, scope->zone()),
       reported_errors_(16, scope->zone()),
       next_function_is_likely_called_(false),
@@ -2772,8 +2746,6 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
       this, classifier()->duplicate_finder());
 
   Scope::Snapshot scope_snapshot(scope());
-  int rewritable_length =
-      function_state_->destructuring_assignments_to_rewrite().length();
 
   bool is_async = peek() == Token::ASYNC &&
                   !scanner()->HasAnyLineTerminatorAfterNext() &&
@@ -2825,7 +2797,6 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     // Because the arrow's parameters were parsed in the outer scope,
     // we need to fix up the scope chain appropriately.
     scope_snapshot.Reparent(scope);
-    function_state_->SetDestructuringAssignmentsScope(rewritable_length, scope);
 
     FormalParametersT parameters(scope);
     if (!classifier()->is_simple_parameter_list()) {
@@ -2840,8 +2811,7 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     if (duplicate_loc.IsValid()) {
       classifier()->RecordDuplicateFormalParameterError(duplicate_loc);
     }
-    expression = ParseArrowFunctionLiteral(accept_IN, parameters,
-                                           rewritable_length, CHECK_OK);
+    expression = ParseArrowFunctionLiteral(accept_IN, parameters, CHECK_OK);
     DiscardExpressionClassifier();
     classifier()->RecordPatternError(arrow_loc,
                                      MessageTemplate::kUnexpectedToken,
@@ -2873,6 +2843,10 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     // This is definitely not an expression so don't accumulate
     // expression-related errors.
     productions &= ~ExpressionClassifier::ExpressionProduction;
+
+    // Replace ObjectLiteral or ArrayLiteral with an ObjectPattern or
+    // ArrayPattern
+    expression = factory()->NewPattern(expression);
   }
 
   if (!Token::IsAssignmentOp(peek())) {
@@ -2941,11 +2915,6 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
 
   DCHECK_NE(op, Token::INIT);
   ExpressionT result = factory()->NewAssignment(op, expression, right, pos);
-
-  if (is_destructuring_assignment) {
-    result = factory()->NewRewritableExpression(result);
-    impl()->QueueDestructuringAssignmentForRewriting(result);
-  }
 
   return result;
 }
@@ -4260,8 +4229,7 @@ bool ParserBase<Impl>::IsTrivialExpression() {
 template <typename Impl>
 typename ParserBase<Impl>::ExpressionT
 ParserBase<Impl>::ParseArrowFunctionLiteral(
-    bool accept_IN, const FormalParametersT& formal_parameters,
-    int rewritable_length, bool* ok) {
+    bool accept_IN, const FormalParametersT& formal_parameters, bool* ok) {
   const RuntimeCallStats::CounterId counters[2][2] = {
       {&RuntimeCallStats::ParseBackgroundArrowFunctionLiteral,
        &RuntimeCallStats::ParseArrowFunctionLiteral},
@@ -4358,16 +4326,6 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
                               scanner()->location().end_pos, CHECK_OK);
     }
     impl()->CheckConflictingVarDeclarations(formal_parameters.scope, CHECK_OK);
-
-    if (is_lazy_top_level_function) {
-      FunctionState* parent_state = function_state.outer();
-      DCHECK_NOT_NULL(parent_state);
-      DCHECK_GE(parent_state->destructuring_assignments_to_rewrite().length(),
-                rewritable_length);
-      parent_state->RewindDestructuringAssignments(rewritable_length);
-    }
-
-    impl()->RewriteDestructuringAssignments();
   }
 
   if (FLAG_trace_preparse) {

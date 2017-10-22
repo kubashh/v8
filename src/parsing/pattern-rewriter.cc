@@ -773,6 +773,10 @@ NOT_A_PATTERN(Yield)
 NOT_A_PATTERN(YieldStar)
 NOT_A_PATTERN(Await)
 
+// These don't need to be rewritten due to being handled in Ignition
+NOT_A_PATTERN(ObjectPattern)
+NOT_A_PATTERN(ArrayPattern)
+
 #undef NOT_A_PATTERN
 }  // namespace internal
 }  // namespace v8
