@@ -630,6 +630,23 @@ MarkCompactCollector::Sweeper::PauseOrCompleteScope::~PauseOrCompleteScope() {
   sweeper_->StartSweeperTasks();
 }
 
+MarkCompactCollector::Sweeper::FilterSweepingPagesScope::
+    FilterSweepingPagesScope(MarkCompactCollector::Sweeper* sweeper)
+    : sweeper_(sweeper) {
+  if (!sweeper_->sweeping_in_progress()) return;
+
+  old_space_sweeping_list_ = std::move(sweeper_->sweeping_list_[OLD_SPACE]);
+  sweeper_->sweeping_list_[OLD_SPACE].clear();
+}
+
+MarkCompactCollector::Sweeper::FilterSweepingPagesScope::
+    ~FilterSweepingPagesScope() {
+  if (!sweeper_->sweeping_in_progress()) return;
+
+  sweeper_->sweeping_list_[OLD_SPACE] = std::move(old_space_sweeping_list_);
+  // old_space_sweeping_list_ does not need to be cleared as we don't use it.
+}
+
 class MarkCompactCollector::Sweeper::SweeperTask final : public CancelableTask {
  public:
   SweeperTask(Isolate* isolate, Sweeper* sweeper,
@@ -4456,8 +4473,15 @@ int MarkCompactCollector::Sweeper::ParallelSweepPage(Page* page,
 }
 
 void MarkCompactCollector::Sweeper::AddPage(AllocationSpace space, Page* page) {
+  base::LockGuard<base::Mutex> guard(&mutex_);
   DCHECK(!FLAG_concurrent_sweeping || !AreSweeperTasksRunning());
-  PrepareToBeSweptPage(space, page);
+  // AddPage can be called on pages that have been temporarily removed from the
+  // sweeper. Such pages have already been prepared, i.e., the sweeper updated
+  // accounting accordingly.
+  if (page->concurrent_sweeping_state().Value() == Page::kSweepingDone) {
+    PrepareToBeSweptPage(space, page);
+  }
+  DCHECK_EQ(Page::kSweepingPending, page->concurrent_sweeping_state().Value());
   sweeping_list_[space].push_back(page);
 }
 
