@@ -22,6 +22,30 @@
       "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "178be1e5_1b03270a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-23T16:18:26Z",
+      "side": 1,
+      "message": "It could, I kept it separate to save a few ints (since there\u0027s one fewer operation positions than child expressions, and the n-ary expression itself already has a position which I use for the first operation, see the layout comment in ast.h) but I\u0027m happy to move it into the \"subsequent\" vector if it\u0027s more readable.",
+      "parentUuid": "c0153873_f0c4db64",
+      "range": {
+        "startLine": 3719,
+        "startChar": 0,
+        "endLine": 3721,
+        "endChar": 68
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
