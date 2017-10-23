@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87eda652_b065b48d",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-10-23T20:43:28Z",
+      "side": 1,
+      "message": "return rep \u003d\u003d MachineRepresentation::kWord32 || IsAnyTagged(rep);",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 59
+      },
+      "revId": "783e5528f22f9629279a8c2b70dcf885efc4f515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
