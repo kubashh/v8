@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9d004289_d8ef1cf3",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-23T15:17:15Z",
+      "side": 1,
+      "message": "We\u0027re not using SUPPORTED_ARCHS anymore, but I removed android_* archs from SLOW_ARCHS.",
+      "parentUuid": "299bd772_14477688",
+      "range": {
+        "startLine": 77,
+        "startChar": 3,
+        "endLine": 77,
+        "endChar": 14
+      },
+      "revId": "11f2fbe74e51d886e101391c550ed7c38d35a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f3cf23f_413d3658",
         "filename": "tools/testrunner/deopt_fuzzer.py",
         "patchSetId": 2
