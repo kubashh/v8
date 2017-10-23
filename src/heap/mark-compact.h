@@ -593,14 +593,47 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   class Sweeper {
    public:
+    static const int kAllocationSpaces = LAST_PAGED_SPACE + 1;
+
+    typedef std::deque<Page*> SweepingList;
+    typedef std::vector<Page*> SweptList;
+
     // Pauses the sweeper tasks or completes sweeping.
-    class PauseOrCompleteScope {
+    class PauseOrCompleteScope final {
      public:
       explicit PauseOrCompleteScope(Sweeper* sweeper);
       ~PauseOrCompleteScope();
 
      private:
       Sweeper* const sweeper_;
+    };
+
+    // Temporary filters sweeping lists. Requires the concurrent sweeper to be
+    // paused. Allows for pages to be added to the sweeper while in this scope.
+    // Note that the original list of sweeping pages is restored after exiting
+    // this scope.
+    class FilterSweepingPagesScope final {
+     public:
+      explicit FilterSweepingPagesScope(Sweeper* sweeper);
+      ~FilterSweepingPagesScope();
+
+      template <typename Callback>
+      void FilterOldSpaceSweepingPages(Callback callback) {
+        if (!sweeper_->sweeping_in_progress()) return;
+
+        SweepingList* sweeper_list = &sweeper_->sweeping_list_[OLD_SPACE];
+        // Iteration here is from most free space to least free space.
+        for (auto it = old_space_sweeping_list_.begin();
+             it != old_space_sweeping_list_.end(); it++) {
+          if (callback(*it)) {
+            sweeper_list->push_back(*it);
+          }
+        }
+      }
+
+     private:
+      Sweeper* const sweeper_;
+      SweepingList old_space_sweeping_list_;
     };
 
     enum FreeListRebuildingMode { REBUILD_FREE_LIST, IGNORE_FREE_LIST };
@@ -610,14 +643,11 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
       CLEAR_TYPED_SLOTS
     };
 
-    typedef std::deque<Page*> SweepingList;
-    typedef std::vector<Page*> SweptList;
-
     int RawSweep(Page* p, FreeListRebuildingMode free_list_mode,
                  FreeSpaceTreatmentMode free_space_mode);
 
-    explicit Sweeper(Heap* heap,
-                     MarkCompactCollector::NonAtomicMarkingState* marking_state)
+    Sweeper(Heap* heap,
+            MarkCompactCollector::NonAtomicMarkingState* marking_state)
         : heap_(heap),
           marking_state_(marking_state),
           num_tasks_(0),
@@ -650,7 +680,6 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
    private:
     class SweeperTask;
 
-    static const int kAllocationSpaces = LAST_PAGED_SPACE + 1;
     static const int kMaxSweeperTasks = kAllocationSpaces;
 
     template <typename Callback>

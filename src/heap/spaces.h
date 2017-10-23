@@ -458,6 +458,12 @@ class MemoryChunk {
 
   inline void set_skip_list(SkipList* skip_list) { skip_list_ = skip_list; }
 
+  template <RememberedSetType type>
+  bool ContainsSlots() {
+    return slot_set<type>() != nullptr || typed_slot_set<type>() != nullptr ||
+           invalidated_slots() != nullptr;
+  }
+
   template <RememberedSetType type, AccessMode access_mode = AccessMode::ATOMIC>
   SlotSet* slot_set() {
     if (access_mode == AccessMode::ATOMIC)
