@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05e87b15_6e25374c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T15:00:26Z",
+      "side": 1,
+      "message": "Let\u0027s add a timer scope to this block since there are a couple of things going on here.",
+      "range": {
+        "startLine": 1917,
+        "startChar": 3,
+        "endLine": 1917,
+        "endChar": 0
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2559ac80_b875577c",
+        "filename": "src/heap/local-allocator.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T15:00:26Z",
+      "side": 1,
+      "message": "not code space?",
+      "range": {
+        "startLine": 79,
+        "startChar": 17,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4e0150e_7d1a0f43",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T15:00:26Z",
+      "side": 1,
+      "message": "Why are you not handling code space?",
+      "range": {
+        "startLine": 643,
+        "startChar": 64,
+        "endLine": 643,
+        "endChar": 73
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
