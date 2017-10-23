@@ -47,7 +47,9 @@ class IA32OperandGenerator final : public OperandGenerator {
       case kIA32Cmp:
       case kIA32Test:
         return rep == MachineRepresentation::kWord32 ||
-               rep == MachineRepresentation::kTagged;
+               rep == MachineRepresentation::kTagged ||
+               rep == MachineRepresentation::kTaggedSigned ||
+               rep == MachineRepresentation::kTaggedPointer;
       case kIA32Cmp16:
       case kIA32Test16:
         return rep == MachineRepresentation::kWord16;
