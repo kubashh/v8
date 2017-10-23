@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6c6e58d7_51c6dae6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T12:55:23Z",
+      "side": 1,
+      "message": "This one is gone. It was preserving sweeping order but removed for simplicity.",
+      "parentUuid": "8fef141e_81b5b759",
+      "range": {
+        "startLine": 1923,
+        "startChar": 29,
+        "endLine": 1923,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06438537_45f7cb53",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d60f46b4_45c29a2a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T12:55:23Z",
+      "side": 1,
+      "message": "Done. That\u0027s what we do for now. I can construct a case where this is not optimal but lets go for the simpler solution first.",
+      "parentUuid": "85840cfa_42ba4012",
+      "range": {
+        "startLine": 1927,
+        "startChar": 17,
+        "endLine": 1927,
+        "endChar": 36
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e55e6b5_9f3d3a89",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -115,6 +163,30 @@
       "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f895619_1dabe1cf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T12:55:23Z",
+      "side": 1,
+      "message": "It is hidden behind the general abstraction which we shared across the whole GC codebase. Should not be any noticeable overhead so I\u0027d like to keep it uniform.",
+      "parentUuid": "8e55e6b5_9f3d3a89",
+      "range": {
+        "startLine": 1930,
+        "startChar": 16,
+        "endLine": 1930,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -370,6 +442,24 @@
     },
     {
       "key": {
+        "uuid": "6f5b0c31_022e513a",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T12:55:23Z",
+      "side": 1,
+      "message": "Renamed to PreferredSweepingPage.",
+      "parentUuid": "197b9a45_f42a5cbc",
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac4ef0e1_bfc97216",
         "filename": "src/heap/scavenger.cc",
         "patchSetId": 5
@@ -381,6 +471,30 @@
       "writtenOn": "2017-10-23T12:30:20Z",
       "side": 1,
       "message": "This seems to be a hybrid between two solutions: Push back to the sweeper list and using the old_sweeping_list which will be copied back. Why don\u0027t we get rid of old_sweeping_list and push scavenged pages that need sweeping back to the sweeping list? That would be simpler.",
+      "range": {
+        "startLine": 113,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 29
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d33e93_21265c5b",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T12:55:23Z",
+      "side": 1,
+      "message": "Nothing will be copied when merging back the saved list. I would like to merge back the saved list as this one is properly sorted. Concurrent or lazy sweeping actions will immediately bailing out on pages that are already swept.",
+      "parentUuid": "ac4ef0e1_bfc97216",
       "range": {
         "startLine": 113,
         "startChar": 2,
