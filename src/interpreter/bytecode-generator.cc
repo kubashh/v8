@@ -3706,6 +3706,30 @@ void BytecodeGenerator::VisitBinaryOperation(BinaryOperation* binop) {
   }
 }
 
+void BytecodeGenerator::VisitNaryOperation(NaryOperation* expr) {
+  // TODO(leszeks): Support these.
+  DCHECK_NE(expr->op(), Token::COMMA);
+  DCHECK_NE(expr->op(), Token::OR);
+  DCHECK_NE(expr->op(), Token::AND);
+
+  FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
+
+  Register lhs = VisitForRegisterValue(expr->first());
+
+  VisitForAccumulatorValue(expr->second());
+  builder()->SetExpressionPosition(expr);
+  builder()->BinaryOperation(expr->op(), lhs, feedback_index(slot));
+
+  for (size_t i = 0; i < expr->subsequent_length(); ++i) {
+    FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
+
+    builder()->StoreAccumulatorInRegister(lhs);
+    VisitForAccumulatorValue(expr->subsequent(i));
+    builder()->SetExpressionPosition(expr->subsequent_op_position(i));
+    builder()->BinaryOperation(expr->op(), lhs, feedback_index(slot));
+  }
+}
+
 void BytecodeGenerator::BuildLiteralCompareNil(Token::Value op, NilValue nil) {
   if (execution_result()->IsTest()) {
     TestResultScope* test_result = execution_result()->AsTest();

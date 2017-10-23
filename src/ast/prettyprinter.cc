@@ -377,6 +377,21 @@ void CallPrinter::VisitBinaryOperation(BinaryOperation* node) {
   Print(")");
 }
 
+void CallPrinter::VisitNaryOperation(NaryOperation* node) {
+  Print("(");
+  Find(node->first(), true);
+  Print(" ");
+  Print(Token::String(node->op()));
+  Print(" ");
+  Find(node->second(), true);
+  for (size_t i = 0; i < node->subsequent_length(); ++i) {
+    Print(" ");
+    Print(Token::String(node->op()));
+    Print(" ");
+    Find(node->subsequent(i), true);
+  }
+  Print(")");
+}
 
 void CallPrinter::VisitCompareOperation(CompareOperation* node) {
   Print("(");
@@ -384,7 +399,6 @@ void CallPrinter::VisitCompareOperation(CompareOperation* node) {
   Print(" ");
   Print(Token::String(node->op()));
   Print(" ");
-  Find(node->right(), true);
   Print(")");
 }
 
@@ -1209,6 +1223,14 @@ void AstPrinter::VisitBinaryOperation(BinaryOperation* node) {
   Visit(node->right());
 }
 
+void AstPrinter::VisitNaryOperation(NaryOperation* node) {
+  IndentedScope indent(this, Token::Name(node->op()), node->position());
+  Visit(node->first());
+  Visit(node->second());
+  for (size_t i = 0; i < node->subsequent_length(); ++i) {
+    Visit(node->subsequent(i));
+  }
+}
 
 void AstPrinter::VisitCompareOperation(CompareOperation* node) {
   IndentedScope indent(this, Token::Name(node->op()), node->position());
