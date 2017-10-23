@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8fef141e_81b5b759",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T12:30:20Z",
+      "side": 1,
+      "message": "Please also explain here why we are doing this.",
+      "range": {
+        "startLine": 1923,
+        "startChar": 29,
+        "endLine": 1923,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06438537_45f7cb53",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -46,6 +69,52 @@
       "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85840cfa_42ba4012",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T12:30:20Z",
+      "side": 1,
+      "message": "Overall: Why don\u0027t we just remove pages from the sweeping list here and let 1936 iterate over all old to new chunks? That should be safe because you removed everything that may still require sweeping and simpler.",
+      "range": {
+        "startLine": 1927,
+        "startChar": 17,
+        "endLine": 1927,
+        "endChar": 36
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e55e6b5_9f3d3a89",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T12:30:20Z",
+      "side": 1,
+      "message": "The Scavenger will not iterate invalidated slots. I think you can remove that condition.",
+      "range": {
+        "startLine": 1930,
+        "startChar": 16,
+        "endLine": 1930,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -281,6 +350,46 @@
       "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "197b9a45_f42a5cbc",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T12:30:20Z",
+      "side": 1,
+      "message": "Given the introduced complexity of this function, I am not sure if it is worth it keeping it. WDYT? It helps only in the case where there is nothing else available for sweeping and kind of bypass the mechanism you are introducing here.\n\nAnd if you wanna keep it, please rename it :-)",
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac4ef0e1_bfc97216",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-23T12:30:20Z",
+      "side": 1,
+      "message": "This seems to be a hybrid between two solutions: Push back to the sweeper list and using the old_sweeping_list which will be copied back. Why don\u0027t we get rid of old_sweeping_list and push scavenged pages that need sweeping back to the sweeping list? That would be simpler.",
+      "range": {
+        "startLine": 113,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 29
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
