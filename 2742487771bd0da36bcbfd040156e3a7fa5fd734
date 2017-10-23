@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cb739338_d9769510",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06438537_45f7cb53",
+      "range": {
+        "startLine": 1925,
+        "startChar": 35,
+        "endLine": 1925,
+        "endChar": 59
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a55a8eb_a1055e98",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bf5f4ab_690b187c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "As discussed offline: I will remove the logic that keeps the order of pages for simplicity. Lets only re-add if necessary.",
+      "parentUuid": "3a55a8eb_a1055e98",
+      "range": {
+        "startLine": 1931,
+        "startChar": 8,
+        "endLine": 1931,
+        "endChar": 50
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "63ef3c2e_84e8d777",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "Done. Giving up sweeping order for now.",
+      "parentUuid": "c0357a63_c9fea830",
+      "range": {
+        "startLine": 1940,
+        "startChar": 21,
+        "endLine": 1940,
+        "endChar": 33
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efc2a446_7992fa60",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 5
@@ -82,6 +154,30 @@
       "writtenOn": "2017-10-20T16:11:07Z",
       "side": 1,
       "message": "Some of the pages in the list will be swept at this point. Is it ok?",
+      "range": {
+        "startLine": 651,
+        "startChar": 44,
+        "endLine": 651,
+        "endChar": 62
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16544e79_3571a1a9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "Yes, they will be immediately filter out when the concurrent or lazy sweeper gets to them.\n\nWe already have to deal with such cases, as the debugger and other infra might eagerly sweep a page that is still in the working set.",
+      "parentUuid": "efc2a446_7992fa60",
       "range": {
         "startLine": 651,
         "startChar": 44,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "565b2a5e_bc3b0943",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4484,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "We re-add pages after scavenging them. Such pages have already gone through the prepare process which means their counters have been incorporated into their corresponding spaces. We have to omit them here to keep the counters in sync.\n\nAdded a comment.",
+      "parentUuid": "37dc351b_8ea43e3f",
+      "range": {
+        "startLine": 4484,
+        "startChar": 6,
+        "endLine": 4484,
+        "endChar": 70
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23be26e7_b21acefd",
         "filename": "src/heap/scavenger.cc",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8fa7af0_4a4c2a80",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T08:54:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23be26e7_b21acefd",
+      "range": {
+        "startLine": 91,
+        "startChar": 26,
+        "endLine": 91,
+        "endChar": 47
+      },
+      "revId": "2742487771bd0da36bcbfd040156e3a7fa5fd734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
