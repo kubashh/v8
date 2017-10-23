@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7242a09b_30671baa",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-23T09:27:20Z",
+      "side": 1,
+      "message": "Nit: return !page-\u003eContainsSlots\u003cOLD_TO_NEW\u003e();",
+      "range": {
+        "startLine": 1928,
+        "startChar": 6,
+        "endLine": 1928,
+        "endChar": 8
+      },
+      "revId": "6cf9e85d7563f02921d1afe01a7189492b2f9ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f548139_2f22e478",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-23T09:27:20Z",
+      "side": 1,
+      "message": "How about caching this in constructor and then checking in the destructor that the value is the same?",
+      "range": {
+        "startLine": 636,
+        "startChar": 7,
+        "endLine": 636,
+        "endChar": 39
+      },
+      "revId": "6cf9e85d7563f02921d1afe01a7189492b2f9ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
