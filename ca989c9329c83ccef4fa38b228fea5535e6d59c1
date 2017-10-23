@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a8a7cec_71c1f98a",
+        "filename": "src/compiler/verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2017-10-23T19:17:28Z",
+      "side": 1,
+      "message": "Why this check? A killed node can never occur in any use-list.",
+      "range": {
+        "startLine": 126,
+        "startChar": 6,
+        "endLine": 126,
+        "endChar": 37
+      },
+      "revId": "ca989c9329c83ccef4fa38b228fea5535e6d59c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
