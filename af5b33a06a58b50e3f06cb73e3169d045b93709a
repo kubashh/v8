@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c97e4f48_b6151360",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-23T14:00:47Z",
+      "side": 1,
+      "message": "nit: We should also drop this in a future CL. Guess it\u0027s deprecated since years.",
+      "range": {
+        "startLine": 280,
+        "startChar": 6,
+        "endLine": 282,
+        "endChar": 55
+      },
+      "revId": "af5b33a06a58b50e3f06cb73e3169d045b93709a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea5ec38a_b9adc08e",
+        "filename": "tools/testrunner/deopt_fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-23T14:00:47Z",
+      "side": 1,
+      "message": "nit: The standard runner also has \"simulator_run\". Maybe just set to false for now here? Please also add a TODO to share this code (or at least just add a mental TODO :) ).",
+      "range": {
+        "startLine": 293,
+        "startChar": 7,
+        "endLine": 293,
+        "endChar": 16
+      },
+      "revId": "af5b33a06a58b50e3f06cb73e3169d045b93709a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea682a95_9865c52d",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-23T14:00:47Z",
+      "side": 1,
+      "message": "nit: Since build_config is in self we might not need to pass those two anymore?",
+      "range": {
+        "startLine": 136,
+        "startChar": 10,
+        "endLine": 136,
+        "endChar": 56
+      },
+      "revId": "af5b33a06a58b50e3f06cb73e3169d045b93709a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "299bd772_14477688",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-23T14:00:47Z",
+      "side": 1,
+      "message": "Thinking twice about this, I think the auto-detect for android_arm is broken. Strictly speaking there\u0027s no such thing anyways. The arch is just arm and the system should be android. We have a bunch of test expectations in the status files for this pseudo arch and they need to cleaned up first. But go ahead and remove this here as it\u0027s broken already anyways, and we don\u0027t run tests on android atm.",
+      "range": {
+        "startLine": 77,
+        "startChar": 3,
+        "endLine": 77,
+        "endChar": 14
+      },
+      "revId": "11f2fbe74e51d886e101391c550ed7c38d35a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f3cf23f_413d3658",
         "filename": "tools/testrunner/deopt_fuzzer.py",
         "patchSetId": 2
