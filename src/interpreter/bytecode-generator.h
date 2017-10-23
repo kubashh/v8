@@ -59,6 +59,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   class TestResultScope;
   class ValueResultScope;
 
+  class SimpleTryFinally;
+  class SimpleTryCatch;
+
   using ToBooleanMode = BytecodeArrayBuilder::ToBooleanMode;
 
   enum class TestFallthrough { kThen, kElse, kNone };
@@ -142,6 +145,19 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildAwait(int suspend_id);
 
   void BuildGetIterator(Expression* iterable, IteratorType hint);
+  void BuildGetIteratorFromAccumulator(IteratorType hint);
+  void BuildIteratorClose(Register iterator);
+
+  // Assign accumulator to `target`, using `initializer` if present and accum.
+  // is undefined.
+  void VisitDestructuringAssignment(Assignment* assignment);
+  void BuildRecurseDestructuringTarget(Expression* target,
+                                       Expression* initializer,
+                                       Register current_value,
+                                       bool require_object_coercible);
+  void VisitObjectPattern(ObjectPattern* pattern, Register current_value,
+                          bool require_object_coercible = true);
+  void VisitArrayPattern(ArrayPattern* pattern, Register current_value);
 
   void AllocateTopLevelRegisters();
   void VisitArgumentsObject(Variable* variable);

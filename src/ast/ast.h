@@ -68,8 +68,13 @@ namespace internal {
   V(ObjectLiteral)           \
   V(ArrayLiteral)
 
+#define PATTERN_NODE_LIST(V) \
+  V(ArrayPattern)            \
+  V(ObjectPattern)
+
 #define EXPRESSION_NODE_LIST(V) \
   LITERAL_NODE_LIST(V)          \
+  PATTERN_NODE_LIST(V)          \
   V(Assignment)                 \
   V(Await)                      \
   V(BinaryOperation)            \
@@ -145,6 +150,10 @@ class AstNode: public ZoneObject {
   V8_INLINE const type* As##type() const;
   AST_NODE_LIST(DECLARE_NODE_FUNCTIONS)
 #undef DECLARE_NODE_FUNCTIONS
+
+  V8_INLINE bool IsPattern() const {
+    return IsObjectPattern() || IsArrayPattern();
+  }
 
   BreakableStatement* AsBreakableStatement();
   IterationStatement* AsIterationStatement();
@@ -1314,6 +1323,99 @@ class ObjectLiteral final : public AggregateLiteral {
       : public BitField<bool, FastElementsField::kNext, 1> {};
 };
 
+class Pattern : public Expression {
+ public:
+  enum class BindingType { kElision, kElement, kRestElement };
+
+  bool has_rest_element() const {
+    return HasRestElementField::decode(bit_field_);
+  }
+
+ protected:
+  inline Pattern(NodeType node_type, int pos) : Expression(pos, node_type) {}
+
+  class HasRestElementField
+      : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
+  static const uint8_t kNextBitFieldIndex = HasRestElementField::kNext;
+
+  inline void set_has_rest_element() {
+    bit_field_ |= HasRestElementField::encode(true);
+  }
+};
+
+class ObjectPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* name() const { return name_; }
+    inline void set_name(Expression* replacement) { name_ = replacement; }
+    inline bool is_computed_name() const { return is_computed_name_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+
+   private:
+    friend class ObjectPattern;
+    Element() = delete;
+    explicit Element(ObjectLiteralProperty* prop);
+
+    BindingType type_ : 4;
+    bool is_computed_name_ : 1;
+    Expression* name_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ArrayPattern;
+  ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
+
+class ArrayPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+    inline bool IsPattern() const {
+      return target_ != nullptr && target_->IsPattern();
+    }
+
+   private:
+    friend class ArrayPattern;
+    Element() = delete;
+    explicit Element(Expression* target);
+
+    BindingType type_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ObjectPattern;
+  ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
 
 // A map from property names to getter/setter pairs allocated in the zone.
 class AccessorTable
@@ -2856,6 +2958,24 @@ class AstNodeFactory final BASE_EMBEDDED {
       uint32_t boilerplate_properties, int pos, bool has_rest_property) {
     return new (zone_) ObjectLiteral(properties, boilerplate_properties, pos,
                                      has_rest_property);
+  }
+
+  ObjectPattern* NewObjectPattern(ObjectLiteral* literal) {
+    return new (zone_) ObjectPattern(zone_, literal, literal->position());
+  }
+
+  ArrayPattern* NewArrayPattern(ArrayLiteral* literal) {
+    return new (zone_) ArrayPattern(zone_, literal, literal->position());
+  }
+
+  Pattern* NewPattern(Expression* literal) {
+    if (literal->IsObjectLiteral()) {
+      return NewObjectPattern(literal->AsObjectLiteral());
+    } else if (literal->IsArrayLiteral()) {
+      return NewArrayPattern(literal->AsArrayLiteral());
+    }
+    UNREACHABLE();
+    return nullptr;
   }
 
   ObjectLiteral::Property* NewObjectLiteralProperty(

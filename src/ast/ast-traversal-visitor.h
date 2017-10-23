@@ -348,6 +348,30 @@ void AstTraversalVisitor<Subclass>::VisitArrayLiteral(ArrayLiteral* expr) {
 }
 
 template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitObjectPattern(ObjectPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    RECURSE_EXPRESSION(Visit(element.name()));
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitArrayPattern(ArrayPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
+  }
+}
+
+template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitAssignment(Assignment* expr) {
   PROCESS_EXPRESSION(expr);
   RECURSE_EXPRESSION(Visit(expr->target()));
