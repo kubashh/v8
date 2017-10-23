@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "84e0282e_50136726",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T16:14:00Z",
+      "side": 1,
+      "message": "Will add one once the delta between SCAVENGER_SCAVENGE and SCAVENGER_SCAVENGE_PARALLEL gets to big.",
+      "parentUuid": "05e87b15_6e25374c",
+      "range": {
+        "startLine": 1917,
+        "startChar": 3,
+        "endLine": 1917,
+        "endChar": 0
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2559ac80_b875577c",
         "filename": "src/heap/local-allocator.h",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "901356d7_8d5357a4",
+        "filename": "src/heap/local-allocator.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T16:14:00Z",
+      "side": 1,
+      "message": "We don\u0027t allocate (and thus sweep) on code space.",
+      "parentUuid": "2559ac80_b875577c",
+      "range": {
+        "startLine": 79,
+        "startChar": 17,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4e0150e_7d1a0f43",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 13
@@ -68,6 +116,30 @@
       "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "165e0f7c_622154e7",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-23T16:14:00Z",
+      "side": 1,
+      "message": "We don\u0027t allocate (and thus sweep) on code space.",
+      "parentUuid": "e4e0150e_7d1a0f43",
+      "range": {
+        "startLine": 643,
+        "startChar": 64,
+        "endLine": 643,
+        "endChar": 73
+      },
+      "revId": "09f1514e12db0ecb93eb803755c62d880818a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
