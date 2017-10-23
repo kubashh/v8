@@ -579,6 +579,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                                          SloppyTNode<Object> value);
   TNode<Context> LoadNativeContext(SloppyTNode<Context> context);
 
+  void GotoIfContextElementEqual(Node* value, Node* native_context,
+                                 int slot_index, Label* if_equal) {
+    GotoIf(WordEqual(value, LoadContextElement(native_context, slot_index)),
+           if_equal);
+  }
+
   TNode<Map> LoadJSArrayElementsMap(ElementsKind kind,
                                     SloppyTNode<Context> native_context);
   TNode<Map> LoadJSArrayElementsMap(SloppyTNode<Int32T> kind,
