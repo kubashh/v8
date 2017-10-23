@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0153873_f0c4db64",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-23T16:14:44Z",
+      "side": 1,
+      "message": "Any reason this couldn\u0027t all be folded into the loop of subsequent nodes? (i.e., not have a first/second at all and just have all sides be in the list of operations?)",
+      "range": {
+        "startLine": 3719,
+        "startChar": 0,
+        "endLine": 3721,
+        "endChar": 68
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
