@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a640c06a_6f51c3e5",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-23T10:37:17Z",
+      "side": 1,
+      "message": "nit - I don\u0027t think this is needed",
+      "range": {
+        "startLine": 1357,
+        "startChar": 2,
+        "endLine": 1357,
+        "endChar": 31
+      },
+      "revId": "48fa85ec3c7dfbd4796ac97edd5627259e95b6d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92fac3de_fd64ef82",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-23T10:37:17Z",
+      "side": 1,
+      "message": "Can you move this DCHECK to op() (set_op should go away with the suggestion below).",
+      "range": {
+        "startLine": 1361,
+        "startChar": 4,
+        "endLine": 1361,
+        "endChar": 49
+      },
+      "revId": "48fa85ec3c7dfbd4796ac97edd5627259e95b6d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6165c82e_ea9e876e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-23T10:37:17Z",
+      "side": 1,
+      "message": "nit - how about just adding IncWithFeedback and DecWithFeedback as methods to IncDecAssembler and call that from here instead of set_op/UnaryOpWithFeedback ?",
+      "range": {
+        "startLine": 1411,
+        "startChar": 2,
+        "endLine": 1411,
+        "endChar": 21
+      },
+      "revId": "48fa85ec3c7dfbd4796ac97edd5627259e95b6d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
