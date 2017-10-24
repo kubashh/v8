@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "c5bc34d2_95d7bdab",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T16:13:11Z",
+      "side": 1,
+      "message": "For reference, this is the end goal: https://chromium-review.googlesource.com/c/v8/v8/+/735497/1/src/parsing/parser.cc#314",
+      "parentUuid": "ca2850dd_8c401bdd",
+      "range": {
+        "startLine": 315,
+        "startChar": 2,
+        "endLine": 315,
+        "endChar": 68
+      },
+      "revId": "26968c351f1346a1dec7b721f242549bb730342c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6ac1cf1_4fbf9f73",
         "filename": "test/cctest/interpreter/bytecode_expectations/StringConcat.golden",
         "patchSetId": 4
