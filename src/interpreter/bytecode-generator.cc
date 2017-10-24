@@ -1966,28 +1966,40 @@ void BytecodeGenerator::VisitConditional(Conditional* expr) {
 }
 
 void BytecodeGenerator::VisitLiteral(Literal* expr) {
-  if (!execution_result()->IsEffect()) {
-    if (expr->IsSmi()) {
+  if (execution_result()->IsEffect()) return;
+  switch (expr->type()) {
+    case Literal::kSmi:
       builder()->LoadLiteral(expr->AsSmiLiteral());
-    } else if (expr->IsUndefined()) {
+      break;
+    case Literal::kHeapNumber:
+      builder()->LoadLiteral(expr->AsNumber());
+      break;
+    case Literal::kUndefined:
       builder()->LoadUndefined();
-    } else if (expr->IsTrue()) {
+      break;
+    case Literal::kTrue:
       builder()->LoadTrue();
-    } else if (expr->IsFalse()) {
-      builder()->LoadFalse();
-    } else if (expr->IsNull()) {
-      builder()->LoadNull();
-    } else if (expr->IsTheHole()) {
-      builder()->LoadTheHole();
-    } else if (expr->IsString()) {
-      builder()->LoadLiteral(expr->AsRawString());
-    } else {
-      // TODO(adamk): Get rid of this case.
-      builder()->LoadLiteral(expr->raw_value());
-    }
-    if (expr->IsTrue() || expr->IsFalse()) {
       execution_result()->SetResultIsBoolean();
-    }
+      break;
+    case Literal::kFalse:
+      builder()->LoadFalse();
+      execution_result()->SetResultIsBoolean();
+      break;
+    case Literal::kNull:
+      builder()->LoadNull();
+      break;
+    case Literal::kTheHole:
+      builder()->LoadTheHole();
+      break;
+    case Literal::kString:
+      builder()->LoadLiteral(expr->AsRawString());
+      break;
+    case Literal::kSymbol:
+      builder()->LoadLiteral(expr->AsSymbol());
+      break;
+    case Literal::kBigInt:
+      builder()->LoadLiteral(expr->AsBigIntCString());
+      break;
   }
 }
 
