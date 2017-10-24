@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c595c78_a8d5a7e0",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T23:17:08Z",
+      "side": 0,
+      "message": "My understanding is that CanonicalHandleScope hasn\u0027t been involved in deduping constants in awhile; let me know if I\u0027m wrong about that.",
+      "range": {
+        "startLine": 157,
+        "startChar": 57,
+        "endLine": 157,
+        "endChar": 77
+      },
+      "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

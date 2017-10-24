@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3eca19e0_e58683e9",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T23:17:08Z",
+      "side": 1,
+      "message": "CheckAllElementsAreUnique() depended pretty heavily on Entry::ToHandle() always returning the same handle for a given entry. That\u0027s clearly not true anymore.\n\nThe most straightforward fix I thought of was to pass in the generated FixedArray, rather than operating on constants_. But if I do that it\u0027s not clear how to identify JumpTableEntries. Any ideas?",
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
