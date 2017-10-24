@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "dd481772_6924bbc4",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-24T16:37:55Z",
+      "side": 1,
+      "message": "ok sgtm",
+      "parentUuid": "c5bc34d2_95d7bdab",
+      "range": {
+        "startLine": 315,
+        "startChar": 2,
+        "endLine": 315,
+        "endChar": 68
+      },
+      "revId": "26968c351f1346a1dec7b721f242549bb730342c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6ac1cf1_4fbf9f73",
         "filename": "test/cctest/interpreter/bytecode_expectations/StringConcat.golden",
         "patchSetId": 4
