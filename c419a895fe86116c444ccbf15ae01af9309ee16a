@@ -22,6 +22,23 @@
       "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "902119d7_8fdba1ad",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-10-24T21:48:46Z",
+      "side": 1,
+      "message": "How about `builder()-\u003eCallProperty(initializer_fn, class, feedback_index(feedback_spec()-\u003eAddCallICSlot())`? Or do you think the feedback slot is wasteful?",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
