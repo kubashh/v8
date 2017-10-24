@@ -3738,6 +3738,23 @@ void BytecodeGenerator::VisitBinaryOperation(BinaryOperation* binop) {
   }
 }
 
+void BytecodeGenerator::VisitNaryOperation(NaryOperation* expr) {
+  switch (expr->op()) {
+    case Token::COMMA:
+      VisitNaryCommaExpression(expr);
+      break;
+    case Token::OR:
+      VisitNaryLogicalOrExpression(expr);
+      break;
+    case Token::AND:
+      VisitNaryLogicalAndExpression(expr);
+      break;
+    default:
+      VisitNaryArithmeticExpression(expr);
+      break;
+  }
+}
+
 void BytecodeGenerator::BuildLiteralCompareNil(Token::Value op, NilValue nil) {
   if (execution_result()->IsTest()) {
     TestResultScope* test_result = execution_result()->AsTest();
@@ -3813,6 +3830,26 @@ void BytecodeGenerator::VisitArithmeticExpression(BinaryOperation* expr) {
     Register lhs = VisitForRegisterValue(expr->left());
     VisitForAccumulatorValue(expr->right());
     builder()->SetExpressionPosition(expr);
+    builder()->BinaryOperation(expr->op(), lhs, feedback_index(slot));
+  }
+}
+
+void BytecodeGenerator::VisitNaryArithmeticExpression(NaryOperation* expr) {
+  FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
+
+  // TODO(leszeks): Add Smi support.
+  Register lhs = VisitForRegisterValue(expr->first());
+
+  VisitForAccumulatorValue(expr->second());
+  builder()->SetExpressionPosition(expr);
+  builder()->BinaryOperation(expr->op(), lhs, feedback_index(slot));
+
+  for (size_t i = 0; i < expr->subsequent_length(); ++i) {
+    FeedbackSlot slot = feedback_spec()->AddBinaryOpICSlot();
+
+    builder()->StoreAccumulatorInRegister(lhs);
+    VisitForAccumulatorValue(expr->subsequent(i));
+    builder()->SetExpressionPosition(expr->subsequent_op_position(i));
     builder()->BinaryOperation(expr->op(), lhs, feedback_index(slot));
   }
 }
@@ -3928,6 +3965,11 @@ void BytecodeGenerator::VisitCommaExpression(BinaryOperation* binop) {
   Visit(binop->right());
 }
 
+void BytecodeGenerator::VisitNaryCommaExpression(NaryOperation* expr) {
+  // TODO(leszeks): Implement
+  UNREACHABLE();
+}
+
 void BytecodeGenerator::BuildLogicalTest(Token::Value token, Expression* left,
                                          Expression* right) {
   DCHECK(token == Token::OR || token == Token::AND);
@@ -3981,6 +4023,10 @@ void BytecodeGenerator::VisitLogicalOrExpression(BinaryOperation* binop) {
     }
   }
 }
+void BytecodeGenerator::VisitNaryLogicalOrExpression(NaryOperation* expr) {
+  // TODO(leszeks): Implement.
+  UNREACHABLE();
+}
 
 void BytecodeGenerator::VisitLogicalAndExpression(BinaryOperation* binop) {
   Expression* left = binop->left();
@@ -4009,6 +4055,10 @@ void BytecodeGenerator::VisitLogicalAndExpression(BinaryOperation* binop) {
       builder()->Bind(&end_label);
     }
   }
+}
+void BytecodeGenerator::VisitNaryLogicalAndExpression(NaryOperation* expr) {
+  // TODO(leszeks): Implement.
+  UNREACHABLE();
 }
 
 void BytecodeGenerator::VisitRewritableExpression(RewritableExpression* expr) {
