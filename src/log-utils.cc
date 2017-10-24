@@ -87,14 +87,12 @@ Log::MessageBuilder::MessageBuilder(Log* log)
   DCHECK_NOT_NULL(log_->format_buffer_);
 }
 
-
 void Log::MessageBuilder::Append(const char* format, ...) {
   va_list args;
   va_start(args, format);
   AppendVA(format, args);
   va_end(args);
 }
-
 
 void Log::MessageBuilder::AppendVA(const char* format, va_list args) {
   Vector<char> buf(log_->format_buffer_, Log::kMessageBufferSize);
@@ -103,13 +101,6 @@ void Log::MessageBuilder::AppendVA(const char* format, va_list args) {
   if (length == -1) length = Log::kMessageBufferSize;
   DCHECK_LE(length, Log::kMessageBufferSize);
   AppendStringPart(log_->format_buffer_, length);
-}
-
-void Log::MessageBuilder::Append(String* string) {
-  DisallowHeapAllocation no_gc;  // Ensure string stay valid.
-  std::unique_ptr<char[]> characters =
-      string->ToCString(DISALLOW_NULLS, ROBUST_STRING_TRAVERSAL);
-  AppendString(characters.get());
 }
 
 void Log::MessageBuilder::AppendAddress(Address addr) {

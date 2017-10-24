@@ -67,9 +67,6 @@ class Log {
     // Append string data to the log message.
     void PRINTF_FORMAT(2, 0) AppendVA(const char* format, va_list args);
 
-    // Append a heap string.
-    void Append(String* str);
-
     // Appends an address.
     void AppendAddress(Address addr);
 

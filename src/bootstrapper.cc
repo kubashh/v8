@@ -5373,11 +5373,13 @@ Genesis::Genesis(
     isolate->counters()->contexts_created_by_snapshot()->Increment();
 #if V8_TRACE_MAPS
     if (FLAG_trace_maps) {
+      DisallowHeapAllocation no_gc;
       Handle<JSFunction> object_fun = isolate->object_function();
-      PrintF("[TraceMap: InitialMap map= %p SFI= %d_Object ]\n",
-             reinterpret_cast<void*>(object_fun->initial_map()),
-             object_fun->shared()->unique_id());
-      Map::TraceAllTransitions(object_fun->initial_map());
+      Map* initial_map = object_fun->initial_map();
+      LOG(isolate, MapEvent("InitialMap", nullptr, initial_map, "Object",
+                            object_fun->shared()));
+      OFStream os(stdout);
+      Map::LogAllTransitions(os, initial_map);
     }
 #endif
 
