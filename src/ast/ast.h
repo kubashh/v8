@@ -2528,8 +2528,12 @@ class GetIterator final : public Expression {
 // (defined at https://tc39.github.io/ecma262/#sec-gettemplateobject).
 class GetTemplateObject final : public Expression {
  public:
-  ZoneList<Literal*>* cooked_strings() const { return cooked_strings_; }
-  ZoneList<Literal*>* raw_strings() const { return raw_strings_; }
+  const ZoneList<const AstRawString*>* cooked_strings() const {
+    return cooked_strings_;
+  }
+  const ZoneList<const AstRawString*>* raw_strings() const {
+    return raw_strings_;
+  }
   int hash() const { return hash_; }
 
   Handle<TemplateObjectDescription> GetOrBuildDescription(Isolate* isolate);
@@ -2537,15 +2541,16 @@ class GetTemplateObject final : public Expression {
  private:
   friend class AstNodeFactory;
 
-  GetTemplateObject(ZoneList<Literal*>* cooked_strings,
-                    ZoneList<Literal*>* raw_strings, int hash, int pos)
+  GetTemplateObject(const ZoneList<const AstRawString*>* cooked_strings,
+                    const ZoneList<const AstRawString*>* raw_strings, int hash,
+                    int pos)
       : Expression(pos, kGetTemplateObject),
         cooked_strings_(cooked_strings),
         raw_strings_(raw_strings),
         hash_(hash) {}
 
-  ZoneList<Literal*>* cooked_strings_;
-  ZoneList<Literal*>* raw_strings_;
+  const ZoneList<const AstRawString*>* cooked_strings_;
+  const ZoneList<const AstRawString*>* raw_strings_;
   int hash_;
 };
 
@@ -3172,9 +3177,9 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) GetIterator(iterable, hint, pos);
   }
 
-  GetTemplateObject* NewGetTemplateObject(ZoneList<Literal*>* cooked_strings,
-                                          ZoneList<Literal*>* raw_strings,
-                                          int hash, int pos) {
+  GetTemplateObject* NewGetTemplateObject(
+      const ZoneList<const AstRawString*>* cooked_strings,
+      const ZoneList<const AstRawString*>* raw_strings, int hash, int pos) {
     return new (zone_)
         GetTemplateObject(cooked_strings, raw_strings, hash, pos);
   }
