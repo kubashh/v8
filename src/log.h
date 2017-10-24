@@ -195,6 +195,13 @@ class Logger : public CodeEventListener {
                char old_state, char new_state, const char* modifier,
                const char* slow_stub_reason);
 
+#ifdef V8_TRACE_MAPS
+  void MapEvent(const char* type, Map* from, Map* to,
+                const char* reason = nullptr,
+                HeapObject* name_or_sfi = nullptr);
+  void MapDetails(Map* map);
+#endif  // V8_TRACE_MAPS
+
   // ==== Events logged by --log-gc. ====
   // Heap sampling events: start, end, and individual types.
   void HeapSampleBeginEvent(const char* space, const char* kind);

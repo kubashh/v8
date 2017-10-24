@@ -87,14 +87,12 @@ Log::MessageBuilder::MessageBuilder(Log* log)
   DCHECK_NOT_NULL(log_->format_buffer_);
 }
 
-
 void Log::MessageBuilder::Append(const char* format, ...) {
   va_list args;
   va_start(args, format);
   AppendVA(format, args);
   va_end(args);
 }
-
 
 void Log::MessageBuilder::AppendVA(const char* format, va_list args) {
   Vector<char> buf(log_->format_buffer_, Log::kMessageBufferSize);

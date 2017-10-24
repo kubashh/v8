@@ -18,6 +18,8 @@
 #include "src/global-handles.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
+#include "src/isolate-inl.h"
+#include "src/isolate.h"
 #include "src/libsampler/sampler.h"
 #include "src/log-inl.h"
 #include "src/macro-assembler.h"
@@ -1351,6 +1353,69 @@ void Logger::ICEvent(const char* type, bool keyed, Map* map, Object* key,
   }
   msg.WriteToLogFile();
 }
+
+#if V8_TRACE_MAPS
+void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
+                      HeapObject* name_or_sfi) {
+  DisallowHeapAllocation no_gc;
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  OFStream os(stdout);
+  if (from) MapDetails(from);
+  if (to) MapDetails(to);
+  int line = -1;
+  int column = -1;
+  Address pc = 0;
+  if (!isolate_->bootstrapper()->IsActive()) {
+    pc = isolate_->GetAbstractPC(&line, &column);
+  }
+  PrintF("[TraceMaps: %s time=%10" PRId64
+         " from=%p to=%p reason=%s pc=%p line=%i column=%i",
+         type, base::TimeTicks::HighResolutionNow().ToInternalValue(),
+         reinterpret_cast<void*>(from), reinterpret_cast<void*>(to), reason, pc,
+         line, column);
+
+  Log::MessageBuilder msg(log_);
+  msg << "map" << kNext << type << kNext
+      << static_cast<int>(timer_.Elapsed().InMicroseconds()) << kNext
+      << reinterpret_cast<void*>(from) << kNext << reinterpret_cast<void*>(to)
+      << kNext << reinterpret_case<void*>(pc) << kNext << line << kNext
+      << column << kNext reason;
+
+  if (name_or_sfi) {
+    if (name_or_sfi->IsName()) {
+      Name* name = Name::cast(name_or_sfi);
+      PrintF(" name=");
+      name->NameShortPrint();
+      msg << name;
+    } else if (name_or_sfi->IsSharedFunctionInfo()) {
+      SharedFunctionInfo* sfi = SharedFunctionInfo::cast(name_or_sfi);
+      msg << sfi->DebugName();
+    }
+  }
+  PrintF(" ]\n");
+  msg.WriteToLogFile();
+}
+
+void Logger::MapDetails(Map* map) {
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  if (map->has_been_printed()) return;
+  map->set_has_been_printed(true);
+
+  DisallowHeapAllocation no_gc;
+  Log::MessageBuilder msg(log_);
+  msg << "map-details" << reinterpret_cast<void*>(map) << kNext;
+
+  std::ostringstream buffer;
+  map->PrintMapDetails(buffer);
+  msg << buffer.str().c_str();
+
+  PrintF("[TraceMaps: MapDetailsBegin time=%10" PRId64 " ]\n",
+         base::TimeTicks::HighResolutionNow().ToInternalValue());
+  PrintF("%s", buffer.str().c_str());
+  PrintF("[TraceMaps: MapDetailsEnd]\n");
+  msg.WriteToLogFile();
+}
+#endif  // V8_TRACE_MAPS
 
 void Logger::StopProfiler() {
   if (!log_->IsEnabled()) return;
