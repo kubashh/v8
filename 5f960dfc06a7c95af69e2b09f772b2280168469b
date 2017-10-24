@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "890c7cb8_d8054ce6",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-24T11:20:40Z",
+      "side": 0,
+      "message": "I think we need to revive this path. Some users pass --arch and --mode, but not --outdir in their workflows. We can also make that work with the autodetect workflow.\n\nE.g. if outdir itself doesn\u0027t point to an output directory, try outdir/arch.mode and then go through the same autodetect routine as with the first case.",
+      "revId": "5f960dfc06a7c95af69e2b09f772b2280168469b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
