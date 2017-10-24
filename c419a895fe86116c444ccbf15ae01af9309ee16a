@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d4f3ffa_6d73ae68",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T21:10:20Z",
+      "side": 1,
+      "message": "initializing",
+      "range": {
+        "startLine": 1787,
+        "startChar": 35,
+        "endLine": 1787,
+        "endChar": 48
+      },
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

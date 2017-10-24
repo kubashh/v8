@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d47c3138_1bd229f4",
+        "filename": "src/ast/ast-numbering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T21:10:20Z",
+      "side": 1,
+      "message": "Style nit: for if-statements that don\u0027t fit on one line, please wrap body in  { }.",
+      "revId": "97de40821d592471118b2b0697998a5b50bfaeb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c30242f_3b81ccc2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T21:10:20Z",
+      "side": 1,
+      "message": "Do you really need to load this from the variable? Don\u0027t you already have it in a register? It seems cleaner not to have to declare a dummy class variable in the parser.",
+      "range": {
+        "startLine": 1802,
+        "startChar": 22,
+        "endLine": 1802,
+        "endChar": 44
+      },
+      "revId": "97de40821d592471118b2b0697998a5b50bfaeb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf94e29_d0e3e2cd",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3210,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T21:10:20Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be necessary, see comment in BytecodeGenerator (and let me know if I\u0027m missing something).",
+      "range": {
+        "startLine": 3210,
+        "startChar": 6,
+        "endLine": 3210,
+        "endChar": 62
+      },
+      "revId": "97de40821d592471118b2b0697998a5b50bfaeb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20db2529_6c2cbb67",
+        "filename": "test/mjsunit/harmony/public-class-fields.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-24T21:10:20Z",
+      "side": 1,
+      "message": "Please update the preparser so that this isn\u0027t necessary.",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 42
+      },
+      "revId": "97de40821d592471118b2b0697998a5b50bfaeb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
