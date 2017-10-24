@@ -47,7 +47,7 @@ LinkageLocation stackloc(int i, MachineType type) {
 // == ia32 ===================================================================
 // ===========================================================================
 #define GP_PARAM_REGISTERS esi, eax, edx, ecx, ebx
-#define GP_RETURN_REGISTERS eax, edx
+#define GP_RETURN_REGISTERS eax, edx, ecx
 #define FP_PARAM_REGISTERS xmm1, xmm2, xmm3, xmm4, xmm5, xmm6
 #define FP_RETURN_REGISTERS xmm1, xmm2
 
@@ -65,7 +65,7 @@ LinkageLocation stackloc(int i, MachineType type) {
 // == arm ====================================================================
 // ===========================================================================
 #define GP_PARAM_REGISTERS r3, r0, r1, r2
-#define GP_RETURN_REGISTERS r0, r1
+#define GP_RETURN_REGISTERS r0, r1, r3
 #define FP_PARAM_REGISTERS d0, d1, d2, d3, d4, d5, d6, d7
 #define FP_RETURN_REGISTERS d0, d1
 
