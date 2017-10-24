@@ -22,6 +22,30 @@
       "revId": "c8145232101a977bbc055ac07abd0e476c971d85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4b2162a_6efb1c63",
+        "filename": "src/heap/array-buffer-tracker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-10-24T10:57:31Z",
+      "side": 1,
+      "message": "That makes sense but is actually slightly slower, I guess due to the calculation time :\\",
+      "parentUuid": "ccb3af71_74adf333",
+      "range": {
+        "startLine": 107,
+        "startChar": 13,
+        "endLine": 107,
+        "endChar": 50
+      },
+      "revId": "c8145232101a977bbc055ac07abd0e476c971d85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
