@@ -3169,19 +3169,18 @@ class TypedElementsAccessor
 
   template <typename SourceTraits>
   static void CopyBetweenBackingStores(FixedTypedArrayBase* source,
-                                       BackingStore* dest, size_t length,
-                                       uint32_t offset) {
+                                       BackingStore* dest, size_t length) {
     FixedTypedArray<SourceTraits>* source_fta =
         FixedTypedArray<SourceTraits>::cast(source);
     for (uint32_t i = 0; i < length; i++) {
       typename SourceTraits::ElementType elem = source_fta->get_scalar(i);
-      dest->set(offset + i, dest->from(elem));
+      dest->set(i, dest->from(elem));
     }
   }
 
   static void CopyElementsHandleFromTypedArray(Handle<JSTypedArray> source,
                                                Handle<JSTypedArray> destination,
-                                               size_t length, uint32_t offset) {
+                                               size_t length) {
     // The source is a typed array, so we know we don't need to do ToNumber
     // side-effects, as the source elements will always be a number or
     // undefined.
@@ -3192,7 +3191,6 @@ class TypedElementsAccessor
     Handle<BackingStore> destination_elements(
         BackingStore::cast(destination->elements()));
 
-    DCHECK_LE(offset + source->length(), destination->length());
     DCHECK_GE(destination->length(), source->length());
     DCHECK(source->length()->IsSmi());
     DCHECK_EQ(Smi::FromInt(static_cast<int>(length)), source->length());
@@ -3222,16 +3220,15 @@ class TypedElementsAccessor
     // which have special conversion operations.
     if (same_type || (same_size && both_are_simple)) {
       size_t element_size = source->element_size();
-      std::memcpy(dest_data + offset * element_size, source_data,
-                  length * element_size);
+      std::memcpy(dest_data, source_data, length * element_size);
     } else {
       // We use scalar accessors below to avoid boxing/unboxing, so there are
       // no allocations.
       switch (source->GetElementsKind()) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size)           \
-  case TYPE##_ELEMENTS:                                           \
-    CopyBetweenBackingStores<Type##ArrayTraits>(                  \
-        *source_elements, *destination_elements, length, offset); \
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size)   \
+  case TYPE##_ELEMENTS:                                   \
+    CopyBetweenBackingStores<Type##ArrayTraits>(          \
+        *source_elements, *destination_elements, length); \
     break;
         TYPED_ARRAYS(TYPED_ARRAY_CASE)
         default:
@@ -3258,7 +3255,7 @@ class TypedElementsAccessor
 
   static bool TryCopyElementsHandleFastNumber(Handle<JSArray> source,
                                               Handle<JSTypedArray> destination,
-                                              size_t length, uint32_t offset) {
+                                              size_t length) {
     Isolate* isolate = source->GetIsolate();
     DisallowHeapAllocation no_gc;
     DisallowJavascriptExecution no_js(isolate);
@@ -3283,19 +3280,19 @@ class TypedElementsAccessor
         Object* elem = source_store->get(i);
         DCHECK(elem->IsSmi());
         int int_value = Smi::ToInt(elem);
-        dest->set(offset + i, dest->from(int_value));
+        dest->set(i, dest->from(int_value));
       }
       return true;
     } else if (kind == HOLEY_SMI_ELEMENTS) {
       FixedArray* source_store = FixedArray::cast(source->elements());
       for (uint32_t i = 0; i < length; i++) {
         if (source_store->is_the_hole(isolate, i)) {
-          dest->SetValue(offset + i, undefined);
+          dest->SetValue(i, undefined);
         } else {
           Object* elem = source_store->get(i);
           DCHECK(elem->IsSmi());
           int int_value = Smi::ToInt(elem);
-          dest->set(offset + i, dest->from(int_value));
+          dest->set(i, dest->from(int_value));
         }
       }
       return true;
@@ -3309,7 +3306,7 @@ class TypedElementsAccessor
         // Use the from_double conversion for this specific TypedArray type,
         // rather than relying on C++ to convert elem.
         double elem = source_store->get_scalar(i);
-        dest->set(offset + i, dest->from(elem));
+        dest->set(i, dest->from(elem));
       }
       return true;
     } else if (kind == HOLEY_DOUBLE_ELEMENTS) {
@@ -3317,10 +3314,10 @@ class TypedElementsAccessor
           FixedDoubleArray::cast(source->elements());
       for (uint32_t i = 0; i < length; i++) {
         if (source_store->is_the_hole(i)) {
-          dest->SetValue(offset + i, undefined);
+          dest->SetValue(i, undefined);
         } else {
           double elem = source_store->get_scalar(i);
-          dest->set(offset + i, dest->from(elem));
+          dest->set(i, dest->from(elem));
         }
       }
       return true;
@@ -3330,7 +3327,7 @@ class TypedElementsAccessor
 
   static Object* CopyElementsHandleSlow(Handle<JSReceiver> source,
                                         Handle<JSTypedArray> destination,
-                                        size_t length, uint32_t offset) {
+                                        size_t length) {
     Isolate* isolate = source->GetIsolate();
     Handle<BackingStore> destination_elements(
         BackingStore::cast(destination->elements()));
@@ -3352,7 +3349,7 @@ class TypedElementsAccessor
       }
       // The spec says we store the length, then get each element, so we don't
       // need to check changes to length.
-      destination_elements->SetValue(offset + i, *elem);
+      destination_elements->SetValue(i, *elem);
     }
     return *isolate->factory()->undefined_value();
   }
@@ -3366,29 +3363,36 @@ class TypedElementsAccessor
     Isolate* isolate = destination->GetIsolate();
     Handle<JSTypedArray> destination_ta =
         Handle<JSTypedArray>::cast(destination);
-    DCHECK_LE(offset + length, destination_ta->length_value());
+
+    if (offset != 0) {
+      DCHECK_LE(offset + length, destination_ta->length_value());
+      destination_ta = isolate->factory()->NewJSTypedArray(
+          destination_ta->type(), destination_ta->GetBuffer(),
+          destination_ta->byte_offset()->Number() +
+              offset * destination_ta->element_size(),
+          length);
+    }
 
     if (length == 0) return *isolate->factory()->undefined_value();
 
     // All conversions from TypedArrays can be done without allocation.
     if (source->IsJSTypedArray()) {
       Handle<JSTypedArray> source_ta = Handle<JSTypedArray>::cast(source);
-      CopyElementsHandleFromTypedArray(source_ta, destination_ta, length,
-                                       offset);
+      CopyElementsHandleFromTypedArray(source_ta, destination_ta, length);
       return *isolate->factory()->undefined_value();
     }
 
     // Fast cases for packed numbers kinds where we don't need to allocate.
     if (source->IsJSArray()) {
       Handle<JSArray> source_array = Handle<JSArray>::cast(source);
-      if (TryCopyElementsHandleFastNumber(source_array, destination_ta, length,
-                                          offset)) {
+      if (TryCopyElementsHandleFastNumber(source_array, destination_ta,
+                                          length)) {
         return *isolate->factory()->undefined_value();
       }
     }
     // Final generic case that handles prototype chain lookups, getters, proxies
     // and observable side effects via valueOf, etc.
-    return CopyElementsHandleSlow(source, destination_ta, length, offset);
+    return CopyElementsHandleSlow(source, destination_ta, length);
   }
 };
 
