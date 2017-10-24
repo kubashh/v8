@@ -22,6 +22,30 @@
       "revId": "b3e59119a573f6a924c8c694b3952ffb302b0f16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac79fac9_92d6745e",
+        "filename": "src/heap/array-buffer-tracker.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-10-24T09:54:19Z",
+      "side": 1,
+      "message": "Yeah that would be more general, let\u0027s hide it here for now though, we are basing this on the idea that all the pointers are on the same page so it might not be a good hashing function for HeapObject pointers in general",
+      "parentUuid": "a6f08763_b07adca6",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 14
+      },
+      "revId": "b3e59119a573f6a924c8c694b3952ffb302b0f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
