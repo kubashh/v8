@@ -68,8 +68,13 @@ namespace internal {
   V(ObjectLiteral)           \
   V(ArrayLiteral)
 
+#define PATTERN_NODE_LIST(V) \
+  V(ArrayPattern)            \
+  V(ObjectPattern)
+
 #define EXPRESSION_NODE_LIST(V) \
   LITERAL_NODE_LIST(V)          \
+  PATTERN_NODE_LIST(V)          \
   V(Assignment)                 \
   V(Await)                      \
   V(BinaryOperation)            \
@@ -122,6 +127,8 @@ class Statement;
 AST_NODE_LIST(DEF_FORWARD_DECLARATION)
 #undef DEF_FORWARD_DECLARATION
 
+enum class IteratorType { kNormal, kAsync };
+
 class AstNode: public ZoneObject {
  public:
 #define DECLARE_TYPE_ENUM(type) k##type,
@@ -145,6 +152,10 @@ class AstNode: public ZoneObject {
   V8_INLINE const type* As##type() const;
   AST_NODE_LIST(DECLARE_NODE_FUNCTIONS)
 #undef DECLARE_NODE_FUNCTIONS
+
+  V8_INLINE bool IsPattern() const {
+    return IsObjectPattern() || IsArrayPattern();
+  }
 
   BreakableStatement* AsBreakableStatement();
   IterationStatement* AsIterationStatement();
@@ -597,62 +608,52 @@ class ForInStatement final : public ForEachStatement {
 
 class ForOfStatement final : public ForEachStatement {
  public:
-  void Initialize(Statement* body, Variable* iterator,
-                  Expression* assign_iterator, Expression* next_result,
-                  Expression* result_done, Expression* assign_each) {
+  void Initialize(Statement* body, Expression* target, Expression* iterable,
+                  IteratorType type, bool finalize) {
     ForEachStatement::Initialize(body);
-    iterator_ = iterator;
-    assign_iterator_ = assign_iterator;
-    next_result_ = next_result;
-    result_done_ = result_done;
-    assign_each_ = assign_each;
+    target_ = target;
+    iterable_ = iterable;
+    set_iterator_type(type);
+    set_should_finalize(finalize);
   }
 
-  Variable* iterator() const {
-    return iterator_;
+  Expression* target() const { return target_; }
+
+  Expression* iterable() const { return iterable_; }
+
+  IteratorType iterator_type() const {
+    return IteratorTypeField::decode(bit_field_);
   }
 
-  // iterator = subject[Symbol.iterator]()
-  Expression* assign_iterator() const {
-    return assign_iterator_;
+  bool should_finalize() const {
+    return ShouldFinalizeField::decode(bit_field_);
   }
 
-  // result = iterator.next()  // with type check
-  Expression* next_result() const {
-    return next_result_;
+  void set_target(Expression* e) { target_ = e; }
+  void set_iterable(Expression* e) { iterable_ = e; }
+  void set_iterator_type(IteratorType type) {
+    bit_field_ = IteratorTypeField::update(bit_field_, type);
   }
-
-  // result.done
-  Expression* result_done() const {
-    return result_done_;
+  void set_should_finalize(bool finalize) {
+    bit_field_ = ShouldFinalizeField::update(bit_field_, finalize);
   }
-
-  // each = result.value
-  Expression* assign_each() const {
-    return assign_each_;
-  }
-
-  void set_assign_iterator(Expression* e) { assign_iterator_ = e; }
-  void set_next_result(Expression* e) { next_result_ = e; }
-  void set_result_done(Expression* e) { result_done_ = e; }
-  void set_assign_each(Expression* e) { assign_each_ = e; }
 
  private:
   friend class AstNodeFactory;
 
   ForOfStatement(ZoneList<const AstRawString*>* labels, int pos)
       : ForEachStatement(labels, pos, kForOfStatement),
-        iterator_(nullptr),
-        assign_iterator_(nullptr),
-        next_result_(nullptr),
-        result_done_(nullptr),
-        assign_each_(nullptr) {}
+        target_(nullptr),
+        iterable_(nullptr) {}
 
-  Variable* iterator_;
-  Expression* assign_iterator_;
-  Expression* next_result_;
-  Expression* result_done_;
-  Expression* assign_each_;
+  class IteratorTypeField
+      : public BitField<IteratorType, ForEachStatement::kNextBitFieldIndex, 2> {
+  };
+  class ShouldFinalizeField
+      : public BitField<bool, IteratorTypeField::kNext, 1> {};
+
+  Expression* target_;
+  Expression* iterable_;
 };
 
 
@@ -1314,6 +1315,99 @@ class ObjectLiteral final : public AggregateLiteral {
       : public BitField<bool, FastElementsField::kNext, 1> {};
 };
 
+class Pattern : public Expression {
+ public:
+  enum class BindingType { kElision, kElement, kRestElement };
+
+  bool has_rest_element() const {
+    return HasRestElementField::decode(bit_field_);
+  }
+
+ protected:
+  inline Pattern(NodeType node_type, int pos) : Expression(pos, node_type) {}
+
+  class HasRestElementField
+      : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
+  static const uint8_t kNextBitFieldIndex = HasRestElementField::kNext;
+
+  inline void set_has_rest_element() {
+    bit_field_ |= HasRestElementField::encode(true);
+  }
+};
+
+class ObjectPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* name() const { return name_; }
+    inline void set_name(Expression* replacement) { name_ = replacement; }
+    inline bool is_computed_name() const { return is_computed_name_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+
+   private:
+    friend class ObjectPattern;
+    Element() = delete;
+    explicit Element(ObjectLiteralProperty* prop);
+
+    BindingType type_ : 4;
+    bool is_computed_name_ : 1;
+    Expression* name_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ArrayPattern;
+  ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
+
+class ArrayPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+    inline bool IsPattern() const {
+      return target_ != nullptr && target_->IsPattern();
+    }
+
+   private:
+    friend class ArrayPattern;
+    Element() = delete;
+    explicit Element(Expression* target);
+
+    BindingType type_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ObjectPattern;
+  ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
 
 // A map from property names to getter/setter pairs allocated in the zone.
 class AccessorTable
@@ -2440,7 +2534,6 @@ class EmptyParentheses final : public Expression {
 // (defined at https://tc39.github.io/ecma262/#sec-getiterator). Ignition
 // desugars this into a LoadIC / JSLoadNamed, CallIC, and a type-check to
 // validate return value of the Symbol.iterator() call.
-enum class IteratorType { kNormal, kAsync };
 class GetIterator final : public Expression {
  public:
   IteratorType hint() const { return hint_; }
@@ -2856,6 +2949,24 @@ class AstNodeFactory final BASE_EMBEDDED {
       uint32_t boilerplate_properties, int pos, bool has_rest_property) {
     return new (zone_) ObjectLiteral(properties, boilerplate_properties, pos,
                                      has_rest_property);
+  }
+
+  ObjectPattern* NewObjectPattern(ObjectLiteral* literal) {
+    return new (zone_) ObjectPattern(zone_, literal, literal->position());
+  }
+
+  ArrayPattern* NewArrayPattern(ArrayLiteral* literal) {
+    return new (zone_) ArrayPattern(zone_, literal, literal->position());
+  }
+
+  Pattern* NewPattern(Expression* literal) {
+    if (literal->IsObjectLiteral()) {
+      return NewObjectPattern(literal->AsObjectLiteral());
+    } else if (literal->IsArrayLiteral()) {
+      return NewArrayPattern(literal->AsArrayLiteral());
+    }
+    UNREACHABLE();
+    return nullptr;
   }
 
   ObjectLiteral::Property* NewObjectLiteralProperty(

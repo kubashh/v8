@@ -159,10 +159,8 @@ void AstExpressionRewriter::VisitForInStatement(ForInStatement* node) {
 
 
 void AstExpressionRewriter::VisitForOfStatement(ForOfStatement* node) {
-  AST_REWRITE_PROPERTY(Expression, node, assign_iterator);
-  AST_REWRITE_PROPERTY(Expression, node, next_result);
-  AST_REWRITE_PROPERTY(Expression, node, result_done);
-  AST_REWRITE_PROPERTY(Expression, node, assign_each);
+  AST_REWRITE_PROPERTY(Expression, node, target);
+  AST_REWRITE_PROPERTY(Expression, node, iterable);
   AST_REWRITE_PROPERTY(Statement, node, body);
 }
 
@@ -260,6 +258,37 @@ void AstExpressionRewriter::VisitArrayLiteral(ArrayLiteral* node) {
   VisitExpressions(node->values());
 }
 
+void AstExpressionRewriter::VisitObjectPattern(ObjectPattern* node) {
+  REWRITE_THIS(node);
+  for (auto& element : node->elements()) {
+    if (element.is_computed_name()) {
+      AST_REWRITE_PROPERTY(Expression, &element, name);
+      DCHECK_NOT_NULL(element.name());
+    }
+    AST_REWRITE_PROPERTY(Expression, &element, target);
+    DCHECK_NOT_NULL(element.target());
+    DCHECK(element.target()->IsValidReferenceExpression() ||
+           element.target()->IsPattern());
+
+    if (element.initializer()) {
+      AST_REWRITE_PROPERTY(Expression, &element, initializer);
+    }
+  }
+}
+
+void AstExpressionRewriter::VisitArrayPattern(ArrayPattern* node) {
+  REWRITE_THIS(node);
+  for (auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    AST_REWRITE_PROPERTY(Expression, &element, target);
+    DCHECK_NOT_NULL(element.target());
+    DCHECK(element.target()->IsValidReferenceExpression() ||
+           element.target()->IsPattern());
+    if (element.initializer()) {
+      AST_REWRITE_PROPERTY(Expression, &element, initializer);
+    }
+  }
+}
 
 void AstExpressionRewriter::VisitAssignment(Assignment* node) {
   REWRITE_THIS(node);

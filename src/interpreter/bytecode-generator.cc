@@ -403,9 +403,37 @@ class BytecodeGenerator::ControlScopeForIteration final
   }
   ~ControlScopeForIteration() { generator()->loop_depth_--; }
 
+  void SetAbruptCompletionRegister(Register reg) {
+    DCHECK(!abrupt_completion_register_.is_valid());
+    abrupt_completion_register_ = reg;
+  }
+
  protected:
+  void RecordAbruptCompletionIfNeeded(Command command, Statement* statement) {
+    if (!abrupt_completion_register_.is_valid()) return;
+
+    // LoopContinues returns true if the continue completion's target is the
+    // current iteration statement.
+    if (command == CMD_CONTINUE && statement == statement_) return;
+
+    Register temp;
+    if (CommandUsesAccumulator(command)) {
+      temp = generator()->register_allocator()->NewRegister();
+      generator()->builder()->StoreAccumulatorInRegister(temp);
+    }
+
+    generator()->builder()->LoadTrue().StoreAccumulatorInRegister(
+        abrupt_completion_register_);
+
+    if (CommandUsesAccumulator(command)) {
+      generator()->builder()->LoadAccumulatorWithRegister(temp);
+      generator()->register_allocator()->ReleaseRegisters(temp.index() - 1);
+    }
+  }
+
   bool Execute(Command command, Statement* statement,
                int source_position) override {
+    RecordAbruptCompletionIfNeeded(command, statement);
     if (statement != statement_) return false;
     switch (command) {
       case CMD_BREAK:
@@ -427,6 +455,7 @@ class BytecodeGenerator::ControlScopeForIteration final
  private:
   Statement* statement_;
   LoopBuilder* loop_builder_;
+  Register abrupt_completion_register_;
 };
 
 // Scoped class for enabling 'throw' in try-catch constructs.
@@ -472,10 +501,10 @@ class BytecodeGenerator::ControlScopeForTryFinally final
                int source_position) override {
     switch (command) {
       case CMD_BREAK:
-      case CMD_CONTINUE:
       case CMD_RETURN:
       case CMD_ASYNC_RETURN:
       case CMD_RETHROW:
+      case CMD_CONTINUE:
         PopContextToExpectedDepth();
         // We don't record source_position here since we don't generate return
         // bytecode right here and will generate it later as part of finally
@@ -806,6 +835,264 @@ class BytecodeGenerator::FeedbackSlotCache : public ZoneObject {
 
  private:
   ZoneMap<Key, FeedbackSlot> map_;
+};
+
+class BytecodeGenerator::SimpleTryFinally : private TryFinallyBuilder {
+ public:
+  enum class Mode { kNone, kTry, kAfterTry, kFinally };
+
+  // We can't know whether the finally block will override ("catch") an
+  // exception thrown in the try block, so we just adopt the outer prediction.
+
+  // We keep a record of all paths that enter the finally-block to be able to
+  // dispatch to the correct continuation point after the statements in the
+  // finally-block have been evaluated.
+  //
+  // The try-finally construct can enter the finally-block in three ways:
+  // 1. By exiting the try-block normally, falling through at the end.
+  // 2. By exiting the try-block with a function-local control flow transfer
+  //    (i.e. through break/continue/return statements).
+  // 3. By exiting the try-block with a thrown exception.
+  //
+  // The result register semantics depend on how the block was entered:
+  //  - ReturnStatement: It represents the return value being returned.
+  //  - ThrowStatement: It represents the exception being thrown.
+  //  - BreakStatement/ContinueStatement: Undefined and not used.
+  //  - Falling through into finally-block: Undefined and not used.
+
+  explicit SimpleTryFinally(BytecodeGenerator* self)
+      : TryFinallyBuilder(self->builder(), self->catch_prediction()),
+        mode_(Mode::kNone),
+        control_scope_(nullptr) {
+    this->self = self;
+  }
+
+  ~SimpleTryFinally() { DCHECK_EQ(mode_, Mode::kNone); }
+
+  void BeginTry() {
+    DCHECK_EQ(mode_, Mode::kNone);
+    mode_ = Mode::kTry;
+
+    // We keep a record of all paths that enter the finally-block to be able to
+    // dispatch to the correct continuation point after the statements in the
+    // finally-block have been evaluated.
+    //
+    // The try-finally construct can enter the finally-block in three ways:
+    // 1. By exiting the try-block normally, falling through at the end.
+    // 2. By exiting the try-block with a function-local control flow transfer
+    //    (i.e. through break/continue/return statements).
+    // 3. By exiting the try-block with a thrown exception.
+    //
+    // The result register semantics depend on how the block was entered:
+    //  - ReturnStatement: It represents the return value being returned.
+    //  - ThrowStatement: It represents the exception being thrown.
+    //  - BreakStatement/ContinueStatement: Undefined and not used.
+    //  - Falling through into finally-block: Undefined and not used.
+    token_ = register_allocator()->NewRegister();
+    result_ = register_allocator()->NewRegister();
+    commands_ = new ControlScope::DeferredCommands(self, token_, result_);
+
+    // Preserve the context in a dedicated register, so that it can be restored
+    // when the handler is entered by the stack-unwinding machinery.
+    // TODO(mstarzinger): Be smarter about register allocation.
+    context_ = register_allocator()->NewRegister();
+    self->builder()->MoveRegister(Register::current_context(), context_);
+
+    // Evaluate the try-block inside a control scope. This simulates a handler
+    // that is intercepting all control commands.
+    TryFinallyBuilder::BeginTry(context_);
+    control_scope_ = new ControlScopeForTryFinally(self, this, commands_);
+  }
+
+  void EndTry() {
+    DCHECK_EQ(mode_, Mode::kTry);
+    mode_ = Mode::kAfterTry;
+    delete control_scope_;
+    control_scope_ = nullptr;
+
+    TryFinallyBuilder::EndTry();
+
+    // Record fall-through and exception cases.
+    commands_->RecordFallThroughPath();
+    TryFinallyBuilder::LeaveTry();
+  }
+
+  void BeginFinally() {
+    DCHECK_EQ(mode_, Mode::kAfterTry);
+    mode_ = Mode::kFinally;
+
+    TryFinallyBuilder::BeginHandler();
+    commands_->RecordHandlerReThrowPath();
+
+    // Pending message object is saved on entry.
+    TryFinallyBuilder::BeginFinally();
+    Register message = context_;  // Reuse register.
+
+    // Clear message object as we enter the finally block.
+    builder()->LoadTheHole().SetPendingMessage().StoreAccumulatorInRegister(
+        message);
+  }
+
+  void EndFinally() {
+    DCHECK_EQ(mode_, Mode::kFinally);
+    mode_ = Mode::kNone;
+
+    TryFinallyBuilder::EndFinally();
+
+    // Pending message object is restored on exit.
+    Register message = context_;  // Reuse register.
+    builder()->LoadAccumulatorWithRegister(message).SetPendingMessage();
+
+    // Dynamic dispatch after the finally-block.
+    commands_->ApplyDeferredCommands();
+
+    delete commands_;
+    commands_ = nullptr;
+  }
+
+ private:
+  BytecodeArrayBuilder* builder() { return self->builder(); }
+  BytecodeRegisterAllocator* register_allocator() {
+    return self->register_allocator();
+  }
+
+  BytecodeGenerator* self;
+  Register token_;
+  Register result_;
+  Register context_;
+  Mode mode_;
+
+  ControlScope::DeferredCommands* commands_;
+  ControlScopeForTryFinally* control_scope_;
+};
+
+class BytecodeGenerator::SimpleTryCatch : private TryCatchBuilder {
+ public:
+  enum class Mode { kNone, kTry, kAfterTry, kCatch };
+
+  SimpleTryCatch(BytecodeGenerator* self,
+                 HandlerTable::CatchPrediction catch_prediction)
+      : TryCatchBuilder(self->builder(),
+                        GetCatchPrediction(self, catch_prediction)),
+        old_catch_prediction_(self->catch_prediction()),
+        mode_(Mode::kNone) {
+    this->self = self;
+  }
+
+  ~SimpleTryCatch() { DCHECK_EQ(mode_, Mode::kNone); }
+
+  void BeginTry() {
+    DCHECK_EQ(mode_, Mode::kNone);
+    mode_ = Mode::kTry;
+
+    // Preserve the context in a dedicated register, so that it can be restored
+    // when the handler is entered by the stack-unwinding machinery.
+    // TODO(mstarzinger): Be smarter about register allocation.
+    context_ = register_allocator()->NewRegister();
+    builder()->MoveRegister(Register::current_context(), context_);
+
+    self->set_catch_prediction(TryCatchBuilder::catch_prediction());
+
+    // Evaluate the try-block inside a control scope. This simulates a handler
+    // that is intercepting all control commands.
+    TryCatchBuilder::BeginTry(context_);
+    control_scope_ = new ControlScopeForTryCatch(self, this);
+  }
+
+  void EndTry() {
+    DCHECK_EQ(mode_, Mode::kTry);
+    mode_ = Mode::kAfterTry;
+
+    self->set_catch_prediction(old_catch_prediction_);
+
+    delete control_scope_;
+    control_scope_ = nullptr;
+    TryCatchBuilder::EndTry();
+  }
+
+  Register CreateCatchContext(Scope* scope) {
+    DCHECK_EQ(mode_, Mode::kAfterTry);
+    self->BuildNewLocalCatchContext(scope);
+    builder()->StoreAccumulatorInRegister(context_);
+    return context_;
+  }
+
+  void BeginCatch() {
+    DCHECK_EQ(mode_, Mode::kAfterTry);
+    mode_ = Mode::kCatch;
+
+    // If requested, clear message object as we enter the catch block.
+    if (ShouldClearPendingException()) {
+      builder()->LoadTheHole().SetPendingMessage();
+    }
+  }
+
+  void EndCatch() {
+    DCHECK_EQ(mode_, Mode::kCatch);
+    mode_ = Mode::kNone;
+
+    TryCatchBuilder::EndCatch();
+  }
+
+ private:
+  BytecodeArrayBuilder* builder() { return self->builder(); }
+  BytecodeRegisterAllocator* register_allocator() {
+    return self->register_allocator();
+  }
+
+  BytecodeGenerator* self;
+  HandlerTable::CatchPrediction old_catch_prediction_;
+  Mode mode_;
+  Register context_;
+
+  ControlScopeForTryCatch* control_scope_;
+
+  // Prediction of whether exceptions thrown into the handler for this try block
+  // will be caught.
+  //
+  // BytecodeGenerator tracks the state of catch prediction, which can change
+  // with each TryCatchStatement encountered. The tracked catch prediction is
+  // later compiled into the code's handler table. The runtime uses this
+  // information to implement a feature that notifies the debugger when an
+  // uncaught exception is thrown, _before_ the exception propagates to the top.
+  //
+  // If this try/catch statement is meant to rethrow (HandlerTable::UNCAUGHT),
+  // the catch prediction value is set to the same value as the surrounding
+  // catch prediction.
+  //
+  // Since it's generally undecidable whether an exception will be caught, our
+  // prediction is only an approximation.
+  // ---------------------------------------------------------------------------
+  static HandlerTable::CatchPrediction GetCatchPrediction(
+      BytecodeGenerator* self, HandlerTable::CatchPrediction new_prediction) {
+    if (new_prediction == HandlerTable::UNCAUGHT) {
+      return self->catch_prediction();
+    }
+    return new_prediction;
+  }
+
+  // Indicates whether or not code should be generated to clear the pending
+  // exception. The pending exception is cleared for cases where the exception
+  // is not guaranteed to be rethrown, indicated by the value
+  // HandlerTable::UNCAUGHT. If both the current and surrounding catch handler's
+  // are predicted uncaught, the exception is not cleared.
+  //
+  // If this handler is not going to simply rethrow the exception, this method
+  // indicates that the isolate's pending exception message should be cleared
+  // before executing the catch_block.
+  // In the normal use case, this flag is always on because the message object
+  // is not needed anymore when entering the catch block and should not be
+  // kept alive.
+  // The use case where the flag is off is when the catch block is guaranteed
+  // to rethrow the caught exception (using %ReThrow), which reuses the
+  // pending message instead of generating a new one.
+  // (When the catch block doesn't rethrow but is guaranteed to perform an
+  // ordinary throw, not clearing the old message is safe but not very
+  // useful.)
+  bool ShouldClearPendingException() const {
+    return TryCatchBuilder::catch_prediction() != HandlerTable::UNCAUGHT ||
+           old_catch_prediction_ != HandlerTable::UNCAUGHT;
+  }
 };
 
 BytecodeGenerator::BytecodeGenerator(CompilationInfo* info)
@@ -1419,9 +1706,13 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitIterationBody(IterationStatement* stmt,
-                                           LoopBuilder* loop_builder) {
+                                           LoopBuilder* loop_builder,
+                                           Register was_abrupt) {
   loop_builder->LoopBody();
   ControlScopeForIteration execution_control(this, stmt, loop_builder);
+  if (was_abrupt.is_valid()) {
+    execution_control.SetAbruptCompletionRegister(was_abrupt);
+  }
   builder()->StackCheck(stmt->position());
   Visit(stmt->body());
   loop_builder->BindContinueTarget();
@@ -1613,130 +1904,148 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
 }
 
 void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
-  LoopBuilder loop_builder(builder(), block_coverage_builder_, stmt);
+  // Perform GetIterator(node.[[Iterable]], node.[[IteratorType]])
+  builder()->SetExpressionAsStatementPosition(stmt->iterable());
+  BuildGetIterator(stmt->iterable(), stmt->iterator_type());
 
-  builder()->SetExpressionAsStatementPosition(stmt->assign_iterator());
-  VisitForEffect(stmt->assign_iterator());
+  Register iterator = register_allocator()->NewRegister();
+  Register iterator_next = register_allocator()->NewRegister();
 
-  VisitIterationHeader(stmt, &loop_builder);
-  builder()->SetExpressionAsStatementPosition(stmt->next_result());
-  VisitForEffect(stmt->next_result());
-  TypeHint type_hint = VisitForAccumulatorValue(stmt->result_done());
-  loop_builder.BreakIfTrue(ToBooleanModeFromTypeHint(type_hint));
+  builder()
+      ->StoreAccumulatorInRegister(iterator)
+      .LoadNamedProperty(iterator, ast_string_constants()->next_string(),
+                         feedback_index(feedback_spec()->AddLoadICSlot()))
+      .StoreAccumulatorInRegister(iterator_next);
 
-  VisitForEffect(stmt->assign_each());
-  VisitIterationBody(stmt, &loop_builder);
-  loop_builder.JumpToHeader(loop_depth_);
+  Register was_abrupt = register_allocator()->NewRegister();
+  builder()->LoadFalse().StoreAccumulatorInRegister(was_abrupt);
+
+  SimpleTryFinally try_finally(this);
+  SimpleTryCatch try_catch(this, HandlerTable::UNCAUGHT);
+  if (stmt->should_finalize()) try_finally.BeginTry();
+  {
+    LoopBuilder loop_builder(builder(), block_coverage_builder_, stmt);
+    VisitIterationHeader(stmt, &loop_builder);
+
+    // Let nextResult be ? IteratorStep(iteratorRecord)
+    Register current_value = register_allocator()->NewRegister();
+    BytecodeLabel result_is_object;
+    {
+      Register next_result = current_value;
+      builder()
+          ->CallProperty(iterator_next, RegisterList(iterator),
+                         feedback_index(feedback_spec()->AddCallICSlot()))
+          .StoreAccumulatorInRegister(next_result)
+          .JumpIfJSReceiver(&result_is_object)
+          .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, next_result)
+          // --- Unreachable ---
+          .Bind(&result_is_object)
+          .LoadNamedProperty(next_result, ast_string_constants()->done_string(),
+                             feedback_index(feedback_spec()->AddLoadICSlot()));
+      loop_builder.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
+
+      builder()
+          ->LoadNamedProperty(next_result,
+                              ast_string_constants()->value_string(),
+                              feedback_index(feedback_spec()->AddLoadICSlot()))
+          .StoreAccumulatorInRegister(current_value);
+    }
+
+    ControlScopeForIteration execution_control(this, stmt, &loop_builder);
+    if (stmt->should_finalize()) try_catch.BeginTry();
+    {
+      // Initialize bindings and evaluate loop
+      builder()->SetExpressionAsStatementPosition(stmt->target());
+      const bool kRequireObjectCoercible = true;
+      BuildRecurseDestructuringTarget(stmt->target(), nullptr, current_value,
+                                      kRequireObjectCoercible);
+      VisitIterationBody(stmt, &loop_builder, was_abrupt);
+      loop_builder.JumpToHeader(loop_depth_);
+    }
+  }
+
+  if (stmt->should_finalize()) {
+    try_catch.EndTry();
+    try_catch.BeginCatch();
+    {
+      RegisterAllocationScope catch_scope(this);
+      Register exception = register_allocator()->NewRegister();
+
+      // If an exception occurred during binding initialization or during
+      // evaluation of the iteration body, mark the completion as abrupt.
+      builder()
+          ->StoreAccumulatorInRegister(exception)
+          .LoadTrue()
+          .StoreAccumulatorInRegister(was_abrupt)
+          .LoadAccumulatorWithRegister(exception)
+          .ReThrow();
+    }
+    try_catch.EndCatch();
+
+    try_finally.EndTry();
+    try_finally.BeginFinally();
+    {
+      BytecodeLabel done_loop;
+      builder()
+          ->LoadAccumulatorWithRegister(was_abrupt)
+          .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done_loop);
+      BuildIteratorClose(iterator);
+      builder()->Bind(&done_loop);
+    }
+    try_finally.EndFinally();
+  }
 }
 
 void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
   // Update catch prediction tracking. The updated catch_prediction value lasts
   // until the end of the try_block in the AST node, and does not apply to the
   // catch_block.
-  HandlerTable::CatchPrediction outer_catch_prediction = catch_prediction();
-  set_catch_prediction(stmt->GetCatchPrediction(outer_catch_prediction));
-
-  TryCatchBuilder try_control_builder(builder(), catch_prediction());
-
-  // Preserve the context in a dedicated register, so that it can be restored
-  // when the handler is entered by the stack-unwinding machinery.
-  // TODO(mstarzinger): Be smarter about register allocation.
-  Register context = register_allocator()->NewRegister();
-  builder()->MoveRegister(Register::current_context(), context);
+  SimpleTryCatch try_control_builder(
+      this, stmt->GetCatchPrediction(catch_prediction()));
 
   // Evaluate the try-block inside a control scope. This simulates a handler
   // that is intercepting 'throw' control commands.
-  try_control_builder.BeginTry(context);
+  try_control_builder.BeginTry();
   {
-    ControlScopeForTryCatch scope(this, &try_control_builder);
     Visit(stmt->try_block());
-    set_catch_prediction(outer_catch_prediction);
   }
   try_control_builder.EndTry();
 
   // Create a catch scope that binds the exception.
-  BuildNewLocalCatchContext(stmt->scope());
-  builder()->StoreAccumulatorInRegister(context);
+  Register context = try_control_builder.CreateCatchContext(stmt->scope());
 
-  // If requested, clear message object as we enter the catch block.
-  if (stmt->ShouldClearPendingException(outer_catch_prediction)) {
-    builder()->LoadTheHole().SetPendingMessage();
+  try_control_builder.BeginCatch();
+  {
+    // Load the catch context into the accumulator.
+    builder()->LoadAccumulatorWithRegister(context);
+
+    // Evaluate the catch-block.
+    BuildIncrementBlockCoverageCounterIfEnabled(stmt, SourceRangeKind::kCatch);
+    VisitInScope(stmt->catch_block(), stmt->scope());
   }
-
-  // Load the catch context into the accumulator.
-  builder()->LoadAccumulatorWithRegister(context);
-
-  // Evaluate the catch-block.
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt, SourceRangeKind::kCatch);
-  VisitInScope(stmt->catch_block(), stmt->scope());
   try_control_builder.EndCatch();
   BuildIncrementBlockCoverageCounterIfEnabled(stmt,
                                               SourceRangeKind::kContinuation);
 }
 
 void BytecodeGenerator::VisitTryFinallyStatement(TryFinallyStatement* stmt) {
-  // We can't know whether the finally block will override ("catch") an
-  // exception thrown in the try block, so we just adopt the outer prediction.
-  TryFinallyBuilder try_control_builder(builder(), catch_prediction());
+  SimpleTryFinally try_control_builder(this);
 
-  // We keep a record of all paths that enter the finally-block to be able to
-  // dispatch to the correct continuation point after the statements in the
-  // finally-block have been evaluated.
-  //
-  // The try-finally construct can enter the finally-block in three ways:
-  // 1. By exiting the try-block normally, falling through at the end.
-  // 2. By exiting the try-block with a function-local control flow transfer
-  //    (i.e. through break/continue/return statements).
-  // 3. By exiting the try-block with a thrown exception.
-  //
-  // The result register semantics depend on how the block was entered:
-  //  - ReturnStatement: It represents the return value being returned.
-  //  - ThrowStatement: It represents the exception being thrown.
-  //  - BreakStatement/ContinueStatement: Undefined and not used.
-  //  - Falling through into finally-block: Undefined and not used.
-  Register token = register_allocator()->NewRegister();
-  Register result = register_allocator()->NewRegister();
-  ControlScope::DeferredCommands commands(this, token, result);
-
-  // Preserve the context in a dedicated register, so that it can be restored
-  // when the handler is entered by the stack-unwinding machinery.
-  // TODO(mstarzinger): Be smarter about register allocation.
-  Register context = register_allocator()->NewRegister();
-  builder()->MoveRegister(Register::current_context(), context);
-
-  // Evaluate the try-block inside a control scope. This simulates a handler
-  // that is intercepting all control commands.
-  try_control_builder.BeginTry(context);
+  try_control_builder.BeginTry();
   {
-    ControlScopeForTryFinally scope(this, &try_control_builder, &commands);
+    // Evaluate the try-block.
     Visit(stmt->try_block());
   }
   try_control_builder.EndTry();
 
-  // Record fall-through and exception cases.
-  commands.RecordFallThroughPath();
-  try_control_builder.LeaveTry();
-  try_control_builder.BeginHandler();
-  commands.RecordHandlerReThrowPath();
-
-  // Pending message object is saved on entry.
   try_control_builder.BeginFinally();
-  Register message = context;  // Reuse register.
-
-  // Clear message object as we enter the finally block.
-  builder()->LoadTheHole().SetPendingMessage().StoreAccumulatorInRegister(
-      message);
-
-  // Evaluate the finally-block.
-  BuildIncrementBlockCoverageCounterIfEnabled(stmt, SourceRangeKind::kFinally);
-  Visit(stmt->finally_block());
+  {
+    // Evaluate the finally-block.
+    BuildIncrementBlockCoverageCounterIfEnabled(stmt,
+                                                SourceRangeKind::kFinally);
+    Visit(stmt->finally_block());
+  }
   try_control_builder.EndFinally();
-
-  // Pending message object is restored on exit.
-  builder()->LoadAccumulatorWithRegister(message).SetPendingMessage();
-
-  // Dynamic dispatch after the finally-block.
-  commands.ApplyDeferredCommands();
   BuildIncrementBlockCoverageCounterIfEnabled(stmt,
                                               SourceRangeKind::kContinuation);
 }
@@ -2211,6 +2520,459 @@ void BytecodeGenerator::VisitArrayLiteral(ArrayLiteral* expr) {
   }
 }
 
+// ObjectPattern and ArrayPattern are handled by VisitDestructuringAssignment
+void BytecodeGenerator::VisitObjectPattern(ObjectPattern* pattern) {
+  UNREACHABLE();
+}
+void BytecodeGenerator::VisitArrayPattern(ArrayPattern* pattern) {
+  UNREACHABLE();
+}
+
+void BytecodeGenerator::BuildRecurseDestructuringTarget(
+    Expression* target, Expression* initializer, Register current_value,
+    bool require_object_coercible) {
+  const bool kInRegister = current_value.is_valid();
+  if (kInRegister) {
+    builder()->LoadAccumulatorWithRegister(current_value);
+  }
+
+  if (initializer != nullptr) {
+    RegisterAllocationScope register_scope(this);
+    // If the loaded value is undefined, use the initializer value.
+    BytecodeLabel if_notundefined;
+    builder()->JumpIfNotUndefined(&if_notundefined);
+    VisitForAccumulatorValue(initializer);
+    builder()->Bind(&if_notundefined);
+  }
+
+  if (target->IsPattern()) {
+    RegisterAllocationScope register_scope(this);
+
+    if (!kInRegister) {
+      current_value = register_allocator()->NewRegister();
+      builder()->StoreAccumulatorInRegister(current_value);
+    }
+
+    switch (target->node_type()) {
+      case AstNode::kArrayPattern: {
+        VisitArrayPattern(target->AsArrayPattern(), current_value);
+        break;
+      }
+      case AstNode::kObjectPattern: {
+        VisitObjectPattern(target->AsObjectPattern(), current_value,
+                           require_object_coercible);
+        break;
+      }
+      default:
+        break;
+    }
+  } else {
+    // This duplicates a lot of code from VisitAssignment()...
+    // Maybe it would be better to have some utility functions for it instead?
+
+    // The accumulator contains a value loaded from a destructured object.
+    Register object, key;
+    RegisterList super_property_args;
+    const AstRawString* name;
+
+    Property* property = target->AsProperty();
+    LhsKind assign_type = Property::GetAssignType(property);
+
+    // Evaluate LHS expression.
+    switch (assign_type) {
+      case VARIABLE:
+        // Nothing to do to evaluate variable assignment LHS.
+        break;
+      case NAMED_PROPERTY: {
+        object = VisitForRegisterValue(property->obj());
+        name = property->key()->AsLiteral()->AsRawPropertyName();
+        break;
+      }
+      case KEYED_PROPERTY: {
+        object = VisitForRegisterValue(property->obj());
+        key = VisitForRegisterValue(property->key());
+        break;
+      }
+      case NAMED_SUPER_PROPERTY: {
+        super_property_args = register_allocator()->NewRegisterList(4);
+        SuperPropertyReference* super_property =
+            property->obj()->AsSuperPropertyReference();
+        VisitForRegisterValue(super_property->this_var(),
+                              super_property_args[0]);
+        VisitForRegisterValue(super_property->home_object(),
+                              super_property_args[1]);
+        builder()
+            ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
+            .StoreAccumulatorInRegister(super_property_args[2]);
+        break;
+      }
+      case KEYED_SUPER_PROPERTY: {
+        super_property_args = register_allocator()->NewRegisterList(4);
+        SuperPropertyReference* super_property =
+            property->obj()->AsSuperPropertyReference();
+        VisitForRegisterValue(super_property->this_var(),
+                              super_property_args[0]);
+        VisitForRegisterValue(super_property->home_object(),
+                              super_property_args[1]);
+        VisitForRegisterValue(property->key(), super_property_args[2]);
+        break;
+      }
+    }
+
+    // Destructuring assignment is never a compound operation, so do not load
+    // the LHS value...
+
+    switch (assign_type) {
+      case VARIABLE: {
+        // TODO(caitp): use correct Token::Type op for lexical declarations when
+        // needed.
+        VariableProxy* proxy = target->AsVariableProxy();
+        BuildVariableAssignment(proxy->var(), Token::ASSIGN,
+                                proxy->hole_check_mode(),
+                                LookupHoistingMode::kNormal);
+        break;
+      }
+      case NAMED_PROPERTY: {
+        FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
+        builder()->StoreNamedProperty(object, name, feedback_index(slot),
+                                      language_mode());
+        break;
+      }
+      case KEYED_PROPERTY: {
+        FeedbackSlot slot =
+            feedback_spec()->AddKeyedStoreICSlot(language_mode());
+        builder()->StoreKeyedProperty(object, key, feedback_index(slot),
+                                      language_mode());
+        break;
+      }
+      case NAMED_SUPER_PROPERTY: {
+        builder()
+            ->StoreAccumulatorInRegister(super_property_args[3])
+            .CallRuntime(StoreToSuperRuntimeId(), super_property_args);
+        break;
+      }
+      case KEYED_SUPER_PROPERTY: {
+        builder()
+            ->StoreAccumulatorInRegister(super_property_args[3])
+            .CallRuntime(StoreKeyedToSuperRuntimeId(), super_property_args);
+        break;
+      }
+    }
+  }
+}
+
+void BytecodeGenerator::VisitObjectPattern(ObjectPattern* pattern,
+                                           Register current_value,
+                                           bool require_object_coercible) {
+  using Element = ObjectPattern::Element;
+  const ZoneVector<Element>& elements = pattern->elements();
+
+  if (require_object_coercible) {
+    BytecodeLabel if_nullorundefined, if_objectcoercible;
+    builder()
+        ->JumpIfNull(&if_nullorundefined)
+        .JumpIfNotUndefined(&if_objectcoercible)
+        .Bind(&if_nullorundefined);
+    {
+      // Build an error message to throw.
+      int source_position = pattern->position();
+      MessageTemplate::Template msg = MessageTemplate::kNonCoercible;
+      const AstRawString* property = ast_string_constants()->empty_string();
+      for (const Element& element : elements) {
+        Expression* name = element.name();
+        if (name->IsPropertyName()) {
+          property = name->AsLiteral()->AsRawPropertyName();
+          msg = MessageTemplate::kNonCoercibleWithProperty;
+          source_position = name->position();
+          break;
+        }
+      }
+
+      RegisterList args = register_allocator()->NewRegisterList(2);
+
+      builder()->SetExpressionPosition(source_position);
+      builder()
+          ->LoadLiteral(Smi::FromInt(msg))
+          .StoreAccumulatorInRegister(args[0])
+          .LoadLiteral(property)
+          .StoreAccumulatorInRegister(args[1])
+          .CallRuntime(Runtime::kNewTypeError, args)
+          .Throw();
+    }
+    builder()->Bind(&if_objectcoercible);
+  }
+
+  RegisterList rest_args;
+  int rest_argc = 0;
+  if (pattern->has_rest_element()) {
+    rest_args = register_allocator()->NewRegisterList(
+        static_cast<int>(elements.size()));
+    builder()->MoveRegister(current_value, rest_args[rest_argc++]);
+  }
+
+  for (const Element& element : elements) {
+    switch (element.type()) {
+      case ObjectPattern::BindingType::kElision:
+#ifdef DEBUG
+        UNREACHABLE();
+        break;
+#endif
+      case ObjectPattern::BindingType::kElement: {
+        VisitForAccumulatorValue(element.name());
+        Literal* name_literal = element.name()->AsLiteral();
+        const AstRawString* raw_property_name = nullptr;
+        if (name_literal != nullptr) {
+          raw_property_name = name_literal->AsRawPropertyName();
+        }
+
+        if (pattern->has_rest_element()) {
+          // In the rest element case, add the name to the list of arguments.
+          Register name = rest_args[rest_argc++];
+          if (name_literal != nullptr) {
+            builder()->StoreAccumulatorInRegister(name);
+          } else {
+            DCHECK(element.is_computed_name());
+            builder()->ToName(name);
+          }
+        }
+
+        if (raw_property_name != nullptr) {
+          builder()->LoadNamedProperty(
+              current_value, raw_property_name,
+              feedback_index(feedback_spec()->AddLoadICSlot()));
+        } else {
+          builder()->LoadKeyedProperty(
+              current_value,
+              feedback_index(feedback_spec()->AddKeyedLoadICSlot()));
+        }
+
+        const bool kRequireObjectCoercible = true;
+        BuildRecurseDestructuringTarget(element.target(), element.initializer(),
+                                        Register::invalid_value(),
+                                        kRequireObjectCoercible);
+        break;
+      }
+      case ObjectPattern::BindingType::kRestElement: {
+        DCHECK_GT(rest_args.register_count(), 0);
+        builder()->CallRuntime(
+            Runtime::kCopyDataPropertiesWithExcludedProperties, rest_args);
+
+        const bool kRequireObjectCoercible = false;
+        BuildRecurseDestructuringTarget(element.target(), nullptr,
+                                        Register::invalid_value(),
+                                        kRequireObjectCoercible);
+        break;
+      }
+    }
+  }
+}
+
+void BytecodeGenerator::BuildIteratorClose(Register iterator) {
+  RegisterAllocationScope register_scope(this);
+  Register return_method = register_allocator()->NewRegister();
+  Register iterator_result = register_allocator()->NewRegister();
+  BytecodeLabel done, if_null, if_undefined;
+  builder()
+      ->LoadNamedProperty(iterator, ast_string_constants()->return_string(),
+                          feedback_index(feedback_spec()->AddLoadICSlot()))
+      .JumpIfNull(&if_null)
+      .JumpIfUndefined(&if_undefined)
+      .StoreAccumulatorInRegister(return_method)
+      .CallProperty(return_method, RegisterList(iterator),
+                    feedback_index(feedback_spec()->AddCallICSlot()))
+      .JumpIfJSReceiver(&done)
+      .StoreAccumulatorInRegister(iterator_result)
+      .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, iterator_result)
+      // --- Unreachable ---
+      .Bind(&if_null)
+      .Bind(&if_undefined)
+      .Bind(&done);
+}
+
+void BytecodeGenerator::VisitArrayPattern(ArrayPattern* pattern,
+                                          Register current_value) {
+  using Element = ArrayPattern::Element;
+  const ZoneVector<Element>& elements = pattern->elements();
+
+  RegisterAllocationScope register_scope(this);
+  RegisterList iterator_and_input = register_allocator()->NewRegisterList(2);
+  Register iterator = iterator_and_input[0];
+
+  builder()->LoadAccumulatorWithRegister(current_value);
+  BuildGetIteratorFromAccumulator(IteratorType::kNormal);
+  builder()->StoreAccumulatorInRegister(iterator);
+
+  Register iterator_next = register_allocator()->NewRegister();
+  builder()->LoadNamedProperty(
+      iterator, ast_string_constants()->next_string(),
+      feedback_index(feedback_spec()->AddLoadICSlot()));
+
+  if (elements.empty()) {
+    BuildIteratorClose(iterator);
+    // Keep `current_value` in accumulator on exit
+    // --- Also avoid saving `iterator_next` in this case.
+    builder()->LoadAccumulatorWithRegister(current_value);
+    return;
+  }
+
+  builder()->StoreAccumulatorInRegister(iterator_next);
+
+  SimpleTryFinally try_finally(this);
+  try_finally.BeginTry();
+
+  bool first = true;
+  Register done = register_allocator()->NewRegister();
+
+  for (const Element& element : elements) {
+    switch (element.type()) {
+      case ArrayPattern::BindingType::kElision:
+      case ArrayPattern::BindingType::kElement: {
+        RegisterAllocationScope register_scope(this);
+        BytecodeLabel if_object, prepare_value, apply_value;
+        Register result = register_allocator()->NewRegister();
+
+        if (!first) {
+          builder()
+              ->LoadAccumulatorWithRegister(iterator_next)
+              .JumpIfUndefined(&apply_value);
+          first = false;
+        }
+        builder()
+            ->LoadTrue()
+            // Don't close iterator if an exception occurs during IteratorStep,
+            // or IteratorValue.
+            .StoreAccumulatorInRegister(done)
+            .CallProperty(iterator_next, RegisterList(iterator),
+                          feedback_index(feedback_spec()->AddCallICSlot()))
+            .StoreAccumulatorInRegister(result)
+            .JumpIfJSReceiver(&if_object)
+            .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, result)
+            // --- Unreachable ---
+            .Bind(&if_object)
+            .LoadNamedProperty(result, ast_string_constants()->done_string(),
+                               feedback_index(feedback_spec()->AddLoadICSlot()))
+            .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &prepare_value)
+            // Done is true: Mark {iterator_next} as undefined and use this
+            // as the value to apply.
+            .LoadUndefined()
+            .StoreAccumulatorInRegister(iterator_next)
+            .Jump(&apply_value);
+
+        if (element.type() == ArrayPattern::BindingType::kElision) {
+          // Don't store value for elisions
+          builder()->Bind(&prepare_value).Bind(&apply_value);
+          continue;
+        }
+
+        builder()
+            // Load {result}.value
+            ->Bind(&prepare_value)
+            .LoadNamedProperty(
+                result, ast_string_constants()->value_string(),
+                feedback_index(feedback_spec()->AddLoadICSlot()));
+        {
+          // Overwrite `done` so that exceptions thrown while applying the
+          // value will cause the iterator to be closed.
+          RegisterAllocationScope register_scope(this);
+          Register temp = register_allocator()->NewRegister();
+          builder()
+              ->StoreAccumulatorInRegister(temp)
+              .LoadFalse()
+              .StoreAccumulatorInRegister(done)
+              .LoadAccumulatorWithRegister(temp)
+              .Bind(&apply_value);
+        }
+
+        // Assign {value} in accumulator to {element.target()}
+        const bool kRequireObjectCoercible = true;
+        BuildRecurseDestructuringTarget(element.target(), element.initializer(),
+                                        Register::invalid_value(),
+                                        kRequireObjectCoercible);
+        break;
+      }
+      case ObjectPattern::BindingType::kRestElement: {
+        RegisterAllocationScope register_scope(this);
+        RegisterList append_args = register_allocator()->NewRegisterList(2);
+
+        Register array = append_args[0];
+        builder()
+            ->CreateEmptyArrayLiteral(
+                feedback_index(feedback_spec()->AddLiteralSlot()))
+            .StoreAccumulatorInRegister(array)
+            .LoadTrue()
+            .StoreAccumulatorInRegister(done);
+
+        BytecodeLabel apply_value;
+        if (!first) {
+          BytecodeLabel prepare_value;
+          builder()
+              ->LoadAccumulatorWithRegister(iterator_next)
+              .JumpIfNotUndefined(&prepare_value)
+              .Jump(&apply_value)
+              .Bind(&prepare_value);
+        }
+
+        Register result = register_allocator()->NewRegister();
+        {
+          LoopBuilder loop(builder(), nullptr, nullptr);
+
+          loop.LoopHeader();
+          loop.LoopBody();
+          {
+            BytecodeLabel if_object;
+            builder()
+                ->CallProperty(iterator_next, RegisterList(iterator),
+                               feedback_index(feedback_spec()->AddCallICSlot()))
+                .StoreAccumulatorInRegister(result)
+                .JumpIfJSReceiver(&if_object)
+                .CallRuntime(Runtime::kThrowIteratorResultNotAnObject, result)
+                // --- Unreachable ---
+                .Bind(&if_object)
+                .LoadNamedProperty(
+                    result, ast_string_constants()->done_string(),
+                    feedback_index(feedback_spec()->AddLoadICSlot()));
+            loop.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
+
+            builder()
+                ->LoadNamedProperty(
+                    result, ast_string_constants()->value_string(),
+                    feedback_index(feedback_spec()->AddLoadICSlot()))
+                .StoreAccumulatorInRegister(append_args[1])
+                .CallRuntime(Runtime::kAppendElement, append_args);
+
+            loop.BindContinueTarget();
+            loop.JumpToHeader(loop_depth_);
+          }
+        }
+
+        // Assign {array} to {element.target()}
+        const bool kRequireObjectCoercible = false;
+        BuildRecurseDestructuringTarget(element.target(), nullptr, array,
+                                        kRequireObjectCoercible);
+        break;
+      }
+    }
+  }
+
+  try_finally.EndTry();
+  try_finally.BeginFinally();
+  {
+    BytecodeLabel rethrow;
+    // if ({done} == false) IteratorClose(iterator)
+    builder()->LoadAccumulatorWithRegister(done).JumpIfTrue(
+        ToBooleanMode::kAlreadyBoolean, &rethrow);
+
+    BuildIteratorClose(iterator);
+
+    builder()->Bind(&rethrow);
+  }
+  try_finally.EndFinally();
+
+  // Keep `current_value` in accumulator on exit
+  // --- Also avoid saving `iterator_next` in this case.
+  builder()->LoadAccumulatorWithRegister(current_value);
+}
+
 void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   builder()->SetExpressionPosition(proxy);
   BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
@@ -2507,7 +3269,54 @@ void BytecodeGenerator::BuildVariableAssignment(
   }
 }
 
+void BytecodeGenerator::VisitDestructuringAssignment(Assignment* expr) {
+  DCHECK(expr->target()->IsPattern());
+
+  RegisterAllocationScope register_scope(this);
+  Register current_value = register_allocator()->NewRegister();
+
+  std::stack<Assignment*> stack;
+  for (Assignment* a = expr; a && a->target()->IsPattern();
+       a = a->value()->AsAssignment()) {
+    stack.push(a);
+  }
+
+  DCHECK(!stack.top()->value()->IsPattern());
+  VisitForRegisterValue(stack.top()->value(), current_value);
+
+  // ObjectAssignmentPatterns perform RequireObjectCoercible(value) as
+  // a first step, but we only need to do this for the right-most
+  // destructuring assignment.
+  //
+  // Also don't perform this check if the right-most pattern is an ArrayPattern,
+  // because GetIterator() will similarly throw if not coercible.
+  bool require_object_coercible = true;
+
+  while (stack.size()) {
+    RegisterAllocationScope inner_scope(this);
+    Assignment* curr = stack.top();
+    stack.pop();
+    switch (curr->target()->node_type()) {
+      case AstNode::kObjectPattern: {
+        VisitObjectPattern(curr->target()->AsObjectPattern(), current_value,
+                           require_object_coercible);
+        break;
+      }
+      case AstNode::kArrayPattern: {
+        VisitArrayPattern(curr->target()->AsArrayPattern(), current_value);
+        break;
+      }
+      default: { UNREACHABLE(); }
+    }
+    require_object_coercible = false;
+  }
+
+  builder()->LoadAccumulatorWithRegister(current_value);
+}
+
 void BytecodeGenerator::VisitAssignment(Assignment* expr) {
+  if (expr->target()->IsPattern()) return VisitDestructuringAssignment(expr);
+
   DCHECK(expr->target()->IsValidReferenceExpression() ||
          (expr->op() == Token::INIT && expr->target()->IsVariableProxy() &&
           expr->target()->AsVariableProxy()->is_this()));
@@ -3798,11 +4607,14 @@ void BytecodeGenerator::VisitImportCallExpression(ImportCallExpression* expr) {
 
 void BytecodeGenerator::BuildGetIterator(Expression* iterable,
                                          IteratorType hint) {
+  VisitForAccumulatorValue(iterable);
+  BuildGetIteratorFromAccumulator(hint);
+}
+
+void BytecodeGenerator::BuildGetIteratorFromAccumulator(IteratorType hint) {
   RegisterList args = register_allocator()->NewRegisterList(1);
   Register method = register_allocator()->NewRegister();
   Register obj = args[0];
-
-  VisitForAccumulatorValue(iterable);
 
   if (hint == IteratorType::kAsync) {
     // Set method to GetMethod(obj, @@asyncIterator)

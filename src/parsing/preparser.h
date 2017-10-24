@@ -149,6 +149,11 @@ class PreParserExpression {
                                variables);
   }
 
+  static PreParserExpression Pattern(ZoneList<VariableProxy*>* variables) {
+    return PreParserExpression(TypeField::encode(kPatternExpression),
+                               variables);
+  }
+
   static PreParserExpression StringLiteral() {
     return PreParserExpression(TypeField::encode(kStringLiteralExpression));
   }
@@ -233,6 +238,10 @@ class PreParserExpression {
     return TypeField::decode(code_) == kArrayLiteralExpression;
   }
 
+  bool IsPattern() const {
+    return TypeField::decode(code_) == kPatternExpression;
+  }
+
   bool IsStringLiteral() const {
     return TypeField::decode(code_) == kStringLiteralExpression;
   }
@@ -312,7 +321,8 @@ class PreParserExpression {
     kStringLiteralExpression,
     kSpreadExpression,
     kObjectLiteralExpression,
-    kArrayLiteralExpression
+    kArrayLiteralExpression,
+    kPatternExpression
   };
 
   enum ExpressionType {
@@ -575,6 +585,9 @@ class PreParserFactory {
       const PreParserExpressionList& properties, int boilerplate_properties,
       int pos, bool has_rest_property) {
     return PreParserExpression::ObjectLiteral(properties.variables_);
+  }
+  PreParserExpression NewPattern(const PreParserExpression& pattern) {
+    return PreParserExpression::Pattern(pattern.variables_);
   }
   PreParserExpression NewVariableProxy(void* variable) {
     return PreParserExpression::Default();
@@ -1174,8 +1187,6 @@ class PreParser : public ParserBase<PreParser> {
     return PreParserStatement::Default();
   }
 
-  V8_INLINE void QueueDestructuringAssignmentForRewriting(
-      PreParserExpression assignment) {}
   V8_INLINE void QueueNonPatternForRewriting(const PreParserExpression& expr,
                                              bool* ok) {}
 

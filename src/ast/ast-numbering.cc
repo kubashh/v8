@@ -254,11 +254,19 @@ void AstNumberingVisitor::VisitForInStatement(ForInStatement* node) {
 }
 
 void AstNumberingVisitor::VisitForOfStatement(ForOfStatement* node) {
-  Visit(node->assign_iterator());  // Not part of loop.
   node->set_first_suspend_id(suspend_count_);
-  Visit(node->next_result());
-  Visit(node->result_done());
-  Visit(node->assign_each());
+
+  // The iterable is evaluated first, so ensure any suspends occuring within
+  // it have an earlier suspend ID.
+  Visit(node->iterable());
+
+  if (node->iterator_type() == IteratorType::kAsync) {
+    // TODO(caitp): for-await-of loops have some additional awaits...
+  }
+
+  // Next, suspend IDs which occur during assignment of the target
+  Visit(node->target());
+
   Visit(node->body());
   node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
@@ -323,6 +331,26 @@ void AstNumberingVisitor::VisitArrayLiteral(ArrayLiteral* node) {
     Visit(node->values()->at(i));
   }
   node->InitDepthAndFlags();
+}
+
+void AstNumberingVisitor::VisitObjectPattern(ObjectPattern* node) {
+  for (const auto& element : node->elements()) {
+    Visit(element.name());
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
+}
+
+void AstNumberingVisitor::VisitArrayPattern(ArrayPattern* node) {
+  for (const auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
 }
 
 void AstNumberingVisitor::VisitCall(Call* node) {
