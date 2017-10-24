@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6f08763_b07adca6",
+        "filename": "src/heap/array-buffer-tracker.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-24T09:37:08Z",
+      "side": 1,
+      "message": "nit: Not sure it\u0027s useful but we could also move this onto HeapObject. (Similar with how we provide MemoryChunk::Hasher for all pages).",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 14
+      },
+      "revId": "b3e59119a573f6a924c8c694b3952ffb302b0f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
