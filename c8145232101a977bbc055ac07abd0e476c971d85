@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccb3af71_74adf333",
+        "filename": "src/heap/array-buffer-tracker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-10-24T10:54:50Z",
+      "side": 1,
+      "message": "Should we mask out the higher page address bits?",
+      "range": {
+        "startLine": 107,
+        "startChar": 13,
+        "endLine": 107,
+        "endChar": 50
+      },
+      "revId": "c8145232101a977bbc055ac07abd0e476c971d85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
