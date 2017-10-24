@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf957eaa_42409411",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-24T11:28:21Z",
+      "side": 1,
+      "message": "I think this is much clearer without the template and its specializations. Is it possible to do it as before with std::is_same?",
+      "revId": "8348b3dd61f9588c12f8e5aaa887193634a04472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
