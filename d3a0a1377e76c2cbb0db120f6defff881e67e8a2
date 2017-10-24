@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b89c90e9_b41a941c",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T12:21:09Z",
+      "side": 1,
+      "message": "Well, the best cast cost of ZoneVectors is N, and the pathological cost of ZoneVectors is 2N thanks to the allocation doubling. NaryOperationEntry is 2 words (because of padding), so adding a \"next\" pointer would mean a fixed cost of 1.5N. This is about the same memory hit as the reallocation cost of the vector, on average, and similar order of magnitude in the pathological case.\n\nI have a weak preference for vectors because of generally better cache performance, and because we could pre-allocate the size once I port template strings to this, but I haven\u0027t measured either of those benefits here nor do I think it matters practically. So, I\u0027m happy to defer to your preference.",
+      "parentUuid": "10211b25_5fab8914",
+      "range": {
+        "startLine": 1789,
+        "startChar": 2,
+        "endLine": 1789,
+        "endChar": 12
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0153873_f0c4db64",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 2
@@ -117,6 +141,30 @@
       "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bacb90e_abab93ba",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T12:21:09Z",
+      "side": 1,
+      "message": "I\u0027ll leave it like this until someone complains then :) I might end up refactoring it if it becomes too ugly with the other ops (comma, or, and).",
+      "parentUuid": "311ec856_07a3e5a1",
+      "range": {
+        "startLine": 3719,
+        "startChar": 0,
+        "endLine": 3721,
+        "endChar": 68
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

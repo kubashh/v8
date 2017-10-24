@@ -22,6 +22,30 @@
       "revId": "8dfebbc381fb6f2cfdc9e7a68a72b3486aaa1e19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c43003_fc42d00a",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T12:21:09Z",
+      "side": 0,
+      "message": "Whoops, bad copy\u0026paste\u0026edit-the-wrong-function\u0026try-to-undo-bad-edits. Done.",
+      "parentUuid": "3b4524e8_2be19e1d",
+      "range": {
+        "startLine": 387,
+        "startChar": 2,
+        "endLine": 387,
+        "endChar": 6
+      },
+      "revId": "8dfebbc381fb6f2cfdc9e7a68a72b3486aaa1e19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
