@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "10211b25_5fab8914",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-24T07:22:50Z",
+      "side": 1,
+      "message": "I was wondering about the memory consumption of this in the pathological case. Would ThreadedList be a better alternative? You can add a next pointer directly to NaryOperationEntry.",
+      "range": {
+        "startLine": 1789,
+        "startChar": 2,
+        "endLine": 1789,
+        "endChar": 12
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0153873_f0c4db64",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 2
@@ -61,6 +84,30 @@
       "side": 1,
       "message": "Ahh I see. I guess I\u0027m OK with this if Marja is happy.",
       "parentUuid": "178be1e5_1b03270a",
+      "range": {
+        "startLine": 3719,
+        "startChar": 0,
+        "endLine": 3721,
+        "endChar": 68
+      },
+      "revId": "d3a0a1377e76c2cbb0db120f6defff881e67e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "311ec856_07a3e5a1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-24T07:22:50Z",
+      "side": 1,
+      "message": "I\u0027m OK with either approach. The readability is not too bad with this version, otoh, I\u0027m also not insisting on saving those ints. :)",
+      "parentUuid": "8e1aa08d_de765c38",
       "range": {
         "startLine": 3719,
         "startChar": 0,
