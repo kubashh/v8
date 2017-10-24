@@ -162,7 +162,7 @@ TEST(InterpreterLoadLiteral) {
 
     BytecodeArrayBuilder builder(isolate, zone, 1, 0);
 
-    builder.LoadLiteral(ast_factory.NewNumber(-2.1e19)).Return();
+    builder.LoadLiteral(-2.1e19).Return();
 
     ast_factory.Internalize(isolate);
     Handle<BytecodeArray> bytecode_array = builder.ToBytecodeArray(isolate);
@@ -359,8 +359,6 @@ TEST(InterpreterBinaryOpsHeapNumber) {
         Isolate* isolate = handles.main_isolate();
         Zone* zone = handles.main_zone();
         Factory* factory = isolate->factory();
-        AstValueFactory ast_factory(zone, isolate->ast_string_constants(),
-                                    isolate->heap()->HashSeed());
         FeedbackVectorSpec feedback_spec(zone);
         BytecodeArrayBuilder builder(isolate, zone, 1, 1, &feedback_spec);
 
@@ -371,12 +369,11 @@ TEST(InterpreterBinaryOpsHeapNumber) {
         Register reg(0);
         double lhs = lhs_inputs[l];
         double rhs = rhs_inputs[r];
-        builder.LoadLiteral(ast_factory.NewNumber(lhs))
+        builder.LoadLiteral(lhs)
             .StoreAccumulatorInRegister(reg)
-            .LoadLiteral(ast_factory.NewNumber(rhs))
+            .LoadLiteral(rhs)
             .BinaryOperation(kArithmeticOperators[o], reg, GetIndex(slot))
             .Return();
-        ast_factory.Internalize(isolate);
         Handle<BytecodeArray> bytecode_array = builder.ToBytecodeArray(isolate);
 
         InterpreterTester tester(isolate, bytecode_array, metadata);
@@ -391,25 +388,52 @@ TEST(InterpreterBinaryOpsHeapNumber) {
 }
 
 namespace {
-// Follows the same logic as BytecodeGraphBuilder::VisitLiteral().
-void LoadLiteralForTest(BytecodeArrayBuilder* builder, const AstValue* value) {
-  if (value->IsString()) {
-    builder->LoadLiteral(value->AsString());
-  } else if (value->IsSmi()) {
-    builder->LoadLiteral(value->AsSmi());
-  } else if (value->IsUndefined()) {
-    builder->LoadUndefined();
-  } else if (value->IsNull()) {
-    builder->LoadNull();
-  } else if (value->IsTrue()) {
-    builder->LoadTrue();
-  } else if (value->IsFalse()) {
-    builder->LoadFalse();
-  } else {
-    builder->LoadLiteral(value);
+
+struct TestValue {
+  enum Type { kString, kHeapNumber, kSmi, kTrue, kFalse, kUndefined, kNull };
+
+  explicit TestValue(const AstRawString* string)
+      : type(kString), string(string) {}
+  explicit TestValue(double number) : type(kHeapNumber), number(number) {}
+  explicit TestValue(int smi) : type(kSmi), smi(smi) {}
+  explicit TestValue(Type type) : type(type) {}
+
+  Type type;
+  union {
+    const AstRawString* string;
+    double number;
+    int smi;
+  };
+};
+
+void LoadLiteralForTest(BytecodeArrayBuilder* builder, const TestValue& value) {
+  switch (value.type) {
+    case TestValue::kString:
+      builder->LoadLiteral(value.string);
+      return;
+    case TestValue::kHeapNumber:
+      builder->LoadLiteral(value.number);
+      return;
+    case TestValue::kSmi:
+      builder->LoadLiteral(Smi::FromInt(value.smi));
+      return;
+    case TestValue::kTrue:
+      builder->LoadTrue();
+      return;
+    case TestValue::kFalse:
+      builder->LoadFalse();
+      return;
+    case TestValue::kUndefined:
+      builder->LoadUndefined();
+      return;
+    case TestValue::kNull:
+      builder->LoadNull();
+      return;
   }
+  UNREACHABLE();
 }
-}  // namespace
+
+}  // anonymous namespace
 
 TEST(InterpreterStringAdd) {
   HandleAndZoneScope handles;
@@ -421,37 +445,37 @@ TEST(InterpreterStringAdd) {
 
   struct TestCase {
     const AstRawString* lhs;
-    const AstValue* rhs;
+    TestValue rhs;
     Handle<Object> expected_value;
     int32_t expected_feedback;
   } test_cases[] = {
       {ast_factory.GetOneByteString("a"),
-       ast_factory.NewString(ast_factory.GetOneByteString("b")),
+       TestValue(ast_factory.GetOneByteString("b")),
        factory->NewStringFromStaticChars("ab"),
        BinaryOperationFeedback::kString},
       {ast_factory.GetOneByteString("aaaaaa"),
-       ast_factory.NewString(ast_factory.GetOneByteString("b")),
+       TestValue(ast_factory.GetOneByteString("b")),
        factory->NewStringFromStaticChars("aaaaaab"),
        BinaryOperationFeedback::kString},
       {ast_factory.GetOneByteString("aaa"),
-       ast_factory.NewString(ast_factory.GetOneByteString("bbbbb")),
+       TestValue(ast_factory.GetOneByteString("bbbbb")),
        factory->NewStringFromStaticChars("aaabbbbb"),
        BinaryOperationFeedback::kString},
       {ast_factory.GetOneByteString(""),
-       ast_factory.NewString(ast_factory.GetOneByteString("b")),
+       TestValue(ast_factory.GetOneByteString("b")),
        factory->NewStringFromStaticChars("b"),
        BinaryOperationFeedback::kString},
       {ast_factory.GetOneByteString("a"),
-       ast_factory.NewString(ast_factory.GetOneByteString("")),
+       TestValue(ast_factory.GetOneByteString("")),
        factory->NewStringFromStaticChars("a"),
        BinaryOperationFeedback::kString},
-      {ast_factory.GetOneByteString("1.11"), ast_factory.NewNumber(2.5),
+      {ast_factory.GetOneByteString("1.11"), TestValue(2.5),
        factory->NewStringFromStaticChars("1.112.5"),
        BinaryOperationFeedback::kAny},
-      {ast_factory.GetOneByteString("-1.11"), ast_factory.NewNumber(2.56),
+      {ast_factory.GetOneByteString("-1.11"), TestValue(2.56),
        factory->NewStringFromStaticChars("-1.112.56"),
        BinaryOperationFeedback::kAny},
-      {ast_factory.GetOneByteString(""), ast_factory.NewNumber(2.5),
+      {ast_factory.GetOneByteString(""), TestValue(2.5),
        factory->NewStringFromStaticChars("2.5"), BinaryOperationFeedback::kAny},
   };
 
@@ -564,108 +588,98 @@ TEST(InterpreterBinaryOpTypeFeedback) {
 
   struct BinaryOpExpectation {
     Token::Value op;
-    const AstValue* arg1;
-    const AstValue* arg2;
+    TestValue arg1;
+    TestValue arg2;
     Handle<Object> result;
     int32_t feedback;
   };
 
   BinaryOpExpectation const kTestCases[] = {
       // ADD
-      {Token::Value::ADD, ast_factory.NewSmi(2), ast_factory.NewSmi(3),
+      {Token::Value::ADD, TestValue(2), TestValue(3),
        Handle<Smi>(Smi::FromInt(5), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::ADD, ast_factory.NewSmi(Smi::kMaxValue),
-       ast_factory.NewSmi(1),
+      {Token::Value::ADD, TestValue(Smi::kMaxValue), TestValue(1),
        isolate->factory()->NewHeapNumber(Smi::kMaxValue + 1.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::ADD, ast_factory.NewNumber(3.1415), ast_factory.NewSmi(3),
+      {Token::Value::ADD, TestValue(3.1415), TestValue(3),
        isolate->factory()->NewHeapNumber(3.1415 + 3),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::ADD, ast_factory.NewNumber(3.1415),
-       ast_factory.NewNumber(1.4142),
+      {Token::Value::ADD, TestValue(3.1415), TestValue(1.4142),
        isolate->factory()->NewHeapNumber(3.1415 + 1.4142),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::ADD,
-       ast_factory.NewString(ast_factory.GetOneByteString("foo")),
-       ast_factory.NewString(ast_factory.GetOneByteString("bar")),
+      {Token::Value::ADD, TestValue(ast_factory.GetOneByteString("foo")),
+       TestValue(ast_factory.GetOneByteString("bar")),
        isolate->factory()->NewStringFromAsciiChecked("foobar"),
        BinaryOperationFeedback::kString},
-      {Token::Value::ADD, ast_factory.NewSmi(2),
-       ast_factory.NewString(ast_factory.GetOneByteString("2")),
+      {Token::Value::ADD, TestValue(2),
+       TestValue(ast_factory.GetOneByteString("2")),
        isolate->factory()->NewStringFromAsciiChecked("22"),
        BinaryOperationFeedback::kAny},
       // SUB
-      {Token::Value::SUB, ast_factory.NewSmi(2), ast_factory.NewSmi(3),
+      {Token::Value::SUB, TestValue(2), TestValue(3),
        Handle<Smi>(Smi::FromInt(-1), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::SUB,
-       ast_factory.NewSmi(static_cast<uint32_t>(Smi::kMinValue)),
-       ast_factory.NewSmi(1),
+      {Token::Value::SUB, TestValue(Smi::kMinValue), TestValue(1),
        isolate->factory()->NewHeapNumber(Smi::kMinValue - 1.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SUB, ast_factory.NewNumber(3.1415), ast_factory.NewSmi(3),
+      {Token::Value::SUB, TestValue(3.1415), TestValue(3),
        isolate->factory()->NewHeapNumber(3.1415 - 3),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SUB, ast_factory.NewNumber(3.1415),
-       ast_factory.NewNumber(1.4142),
+      {Token::Value::SUB, TestValue(3.1415), TestValue(1.4142),
        isolate->factory()->NewHeapNumber(3.1415 - 1.4142),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SUB, ast_factory.NewSmi(2),
-       ast_factory.NewString(ast_factory.GetOneByteString("1")),
+      {Token::Value::SUB, TestValue(2),
+       TestValue(ast_factory.GetOneByteString("1")),
        Handle<Smi>(Smi::FromInt(1), isolate), BinaryOperationFeedback::kAny},
       // MUL
-      {Token::Value::MUL, ast_factory.NewSmi(2), ast_factory.NewSmi(3),
+      {Token::Value::MUL, TestValue(2), TestValue(3),
        Handle<Smi>(Smi::FromInt(6), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::MUL,
-       ast_factory.NewSmi(static_cast<uint32_t>(Smi::kMinValue)),
-       ast_factory.NewSmi(2),
+      {Token::Value::MUL, TestValue(Smi::kMinValue), TestValue(2),
        isolate->factory()->NewHeapNumber(Smi::kMinValue * 2.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MUL, ast_factory.NewNumber(3.1415), ast_factory.NewSmi(3),
+      {Token::Value::MUL, TestValue(3.1415), TestValue(3),
        isolate->factory()->NewHeapNumber(3 * 3.1415),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MUL, ast_factory.NewNumber(3.1415),
-       ast_factory.NewNumber(1.4142),
+      {Token::Value::MUL, TestValue(3.1415), TestValue(1.4142),
        isolate->factory()->NewHeapNumber(3.1415 * 1.4142),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MUL, ast_factory.NewSmi(2),
-       ast_factory.NewString(ast_factory.GetOneByteString("1")),
+      {Token::Value::MUL, TestValue(2),
+       TestValue(ast_factory.GetOneByteString("1")),
        Handle<Smi>(Smi::FromInt(2), isolate), BinaryOperationFeedback::kAny},
       // DIV
-      {Token::Value::DIV, ast_factory.NewSmi(6), ast_factory.NewSmi(3),
+      {Token::Value::DIV, TestValue(6), TestValue(3),
        Handle<Smi>(Smi::FromInt(2), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::DIV, ast_factory.NewSmi(3), ast_factory.NewSmi(2),
+      {Token::Value::DIV, TestValue(3), TestValue(2),
        isolate->factory()->NewHeapNumber(3.0 / 2.0),
        BinaryOperationFeedback::kSignedSmallInputs},
-      {Token::Value::DIV, ast_factory.NewNumber(3.1415), ast_factory.NewSmi(3),
+      {Token::Value::DIV, TestValue(3.1415), TestValue(3),
        isolate->factory()->NewHeapNumber(3.1415 / 3),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::DIV, ast_factory.NewNumber(3.1415),
-       ast_factory.NewNumber(-std::numeric_limits<double>::infinity()),
+      {Token::Value::DIV, TestValue(3.1415),
+       TestValue(-std::numeric_limits<double>::infinity()),
        isolate->factory()->NewHeapNumber(-0.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::DIV, ast_factory.NewSmi(2),
-       ast_factory.NewString(ast_factory.GetOneByteString("1")),
+      {Token::Value::DIV, TestValue(2),
+       TestValue(ast_factory.GetOneByteString("1")),
        Handle<Smi>(Smi::FromInt(2), isolate), BinaryOperationFeedback::kAny},
       // MOD
-      {Token::Value::MOD, ast_factory.NewSmi(5), ast_factory.NewSmi(3),
+      {Token::Value::MOD, TestValue(5), TestValue(3),
        Handle<Smi>(Smi::FromInt(2), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::MOD, ast_factory.NewSmi(static_cast<uint32_t>(-4)),
-       ast_factory.NewSmi(2), isolate->factory()->NewHeapNumber(-0.0),
+      {Token::Value::MOD, TestValue(-4), TestValue(2),
+       isolate->factory()->NewHeapNumber(-0.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MOD, ast_factory.NewNumber(3.1415), ast_factory.NewSmi(3),
+      {Token::Value::MOD, TestValue(3.1415), TestValue(3),
        isolate->factory()->NewHeapNumber(fmod(3.1415, 3.0)),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MOD, ast_factory.NewNumber(-3.1415),
-       ast_factory.NewNumber(-1.4142),
+      {Token::Value::MOD, TestValue(-3.1415), TestValue(-1.4142),
        isolate->factory()->NewHeapNumber(fmod(-3.1415, -1.4142)),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::MOD, ast_factory.NewSmi(3),
-       ast_factory.NewString(ast_factory.GetOneByteString("-2")),
+      {Token::Value::MOD, TestValue(3),
+       TestValue(ast_factory.GetOneByteString("-2")),
        Handle<Smi>(Smi::FromInt(1), isolate), BinaryOperationFeedback::kAny}};
 
   for (const BinaryOpExpectation& test_case : kTestCases) {
@@ -706,7 +720,7 @@ TEST(InterpreterBinaryOpSmiTypeFeedback) {
 
   struct BinaryOpExpectation {
     Token::Value op;
-    const AstValue* arg1;
+    TestValue arg1;
     int32_t arg2;
     Handle<Object> result;
     int32_t feedback;
@@ -714,70 +728,63 @@ TEST(InterpreterBinaryOpSmiTypeFeedback) {
 
   BinaryOpExpectation const kTestCases[] = {
       // ADD
-      {Token::Value::ADD, ast_factory.NewSmi(2), 42,
+      {Token::Value::ADD, TestValue(2), 42,
        Handle<Smi>(Smi::FromInt(44), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::ADD, ast_factory.NewSmi(2), Smi::kMaxValue,
+      {Token::Value::ADD, TestValue(2), Smi::kMaxValue,
        isolate->factory()->NewHeapNumber(Smi::kMaxValue + 2.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::ADD, ast_factory.NewNumber(3.1415), 2,
+      {Token::Value::ADD, TestValue(3.1415), 2,
        isolate->factory()->NewHeapNumber(3.1415 + 2.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::ADD,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 2,
+      {Token::Value::ADD, TestValue(ast_factory.GetOneByteString("2")), 2,
        isolate->factory()->NewStringFromAsciiChecked("22"),
        BinaryOperationFeedback::kAny},
       // SUB
-      {Token::Value::SUB, ast_factory.NewSmi(2), 42,
+      {Token::Value::SUB, TestValue(2), 42,
        Handle<Smi>(Smi::FromInt(-40), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::SUB,
-       ast_factory.NewSmi(static_cast<uint32_t>(Smi::kMinValue)), 1,
+      {Token::Value::SUB, TestValue(Smi::kMinValue), 1,
        isolate->factory()->NewHeapNumber(Smi::kMinValue - 1.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SUB, ast_factory.NewNumber(3.1415), 2,
+      {Token::Value::SUB, TestValue(3.1415), 2,
        isolate->factory()->NewHeapNumber(3.1415 - 2.0),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SUB,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 2,
+      {Token::Value::SUB, TestValue(ast_factory.GetOneByteString("2")), 2,
        Handle<Smi>(Smi::kZero, isolate), BinaryOperationFeedback::kAny},
       // BIT_OR
-      {Token::Value::BIT_OR, ast_factory.NewSmi(4), 1,
+      {Token::Value::BIT_OR, TestValue(4), 1,
        Handle<Smi>(Smi::FromInt(5), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::BIT_OR, ast_factory.NewNumber(3.1415), 8,
+      {Token::Value::BIT_OR, TestValue(3.1415), 8,
        Handle<Smi>(Smi::FromInt(11), isolate),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::BIT_OR,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 1,
+      {Token::Value::BIT_OR, TestValue(ast_factory.GetOneByteString("2")), 1,
        Handle<Smi>(Smi::FromInt(3), isolate), BinaryOperationFeedback::kAny},
       // BIT_AND
-      {Token::Value::BIT_AND, ast_factory.NewSmi(3), 1,
+      {Token::Value::BIT_AND, TestValue(3), 1,
        Handle<Smi>(Smi::FromInt(1), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::BIT_AND, ast_factory.NewNumber(3.1415), 2,
+      {Token::Value::BIT_AND, TestValue(3.1415), 2,
        Handle<Smi>(Smi::FromInt(2), isolate), BinaryOperationFeedback::kNumber},
-      {Token::Value::BIT_AND,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 1,
+      {Token::Value::BIT_AND, TestValue(ast_factory.GetOneByteString("2")), 1,
        Handle<Smi>(Smi::kZero, isolate), BinaryOperationFeedback::kAny},
       // SHL
-      {Token::Value::SHL, ast_factory.NewSmi(3), 1,
+      {Token::Value::SHL, TestValue(3), 1,
        Handle<Smi>(Smi::FromInt(6), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::SHL, ast_factory.NewNumber(3.1415), 2,
+      {Token::Value::SHL, TestValue(3.1415), 2,
        Handle<Smi>(Smi::FromInt(12), isolate),
        BinaryOperationFeedback::kNumber},
-      {Token::Value::SHL,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 1,
+      {Token::Value::SHL, TestValue(ast_factory.GetOneByteString("2")), 1,
        Handle<Smi>(Smi::FromInt(4), isolate), BinaryOperationFeedback::kAny},
       // SAR
-      {Token::Value::SAR, ast_factory.NewSmi(3), 1,
+      {Token::Value::SAR, TestValue(3), 1,
        Handle<Smi>(Smi::FromInt(1), isolate),
        BinaryOperationFeedback::kSignedSmall},
-      {Token::Value::SAR, ast_factory.NewNumber(3.1415), 2,
+      {Token::Value::SAR, TestValue(3.1415), 2,
        Handle<Smi>(Smi::kZero, isolate), BinaryOperationFeedback::kNumber},
-      {Token::Value::SAR,
-       ast_factory.NewString(ast_factory.GetOneByteString("2")), 1,
+      {Token::Value::SAR, TestValue(ast_factory.GetOneByteString("2")), 1,
        Handle<Smi>(Smi::FromInt(1), isolate), BinaryOperationFeedback::kAny}};
 
   for (const BinaryOpExpectation& test_case : kTestCases) {
@@ -1598,7 +1605,7 @@ TEST(InterpreterJumpConstantWith16BitOperand) {
   builder.StoreAccumulatorInRegister(reg);
   // Consume all 8-bit operands
   for (int i = 1; i <= 256; i++) {
-    builder.LoadLiteral(ast_factory.NewNumber(i + 0.5));
+    builder.LoadLiteral(i + 0.5);
     builder.BinaryOperation(Token::Value::ADD, reg, GetIndex(slot));
     builder.StoreAccumulatorInRegister(reg);
   }
@@ -1654,7 +1661,7 @@ TEST(InterpreterJumpWith32BitOperand) {
   // Consume all 16-bit constant pool entries. Make sure to use doubles so that
   // the jump can't re-use an integer.
   for (int i = 1; i <= 65536; i++) {
-    builder.LoadLiteral(ast_factory.NewNumber(i + 0.5));
+    builder.LoadLiteral(i + 0.5);
   }
   builder.Jump(&done);
   builder.LoadLiteral(Smi::kZero);
@@ -1791,9 +1798,9 @@ TEST(InterpreterHeapNumberComparisons) {
             NewFeedbackMetadata(isolate, &feedback_spec);
 
         Register r0(0);
-        builder.LoadLiteral(ast_factory.NewNumber(inputs[i]))
+        builder.LoadLiteral(inputs[i])
             .StoreAccumulatorInRegister(r0)
-            .LoadLiteral(ast_factory.NewNumber(inputs[j]))
+            .LoadLiteral(inputs[j])
             .CompareOperation(comparison, r0, GetIndex(slot))
             .Return();
 
@@ -1926,8 +1933,7 @@ TEST(InterpreterMixedComparisons) {
             if (which_side == kRhsIsString) {
               // Comparison with HeapNumber on the lhs and String on the rhs.
 
-              builder.LoadLiteral(ast_factory.NewNumber(lhs))
-                  .StoreAccumulatorInRegister(lhs_reg);
+              builder.LoadLiteral(lhs).StoreAccumulatorInRegister(lhs_reg);
 
               if (string_type == kInternalizedStringConstant) {
                 // rhs string is internalized.
@@ -1954,7 +1960,7 @@ TEST(InterpreterMixedComparisons) {
               }
               builder.StoreAccumulatorInRegister(lhs_reg);
 
-              builder.LoadLiteral(ast_factory.NewNumber(rhs));
+              builder.LoadLiteral(rhs);
             }
 
             builder.CompareOperation(comparison, lhs_reg, GetIndex(slot))
@@ -2210,17 +2216,15 @@ TEST(InterpreterUnaryNotNonBoolean) {
   AstValueFactory ast_factory(zone, isolate->ast_string_constants(),
                               isolate->heap()->HashSeed());
 
-  std::pair<const AstValue*, bool> object_type_tuples[] = {
-      std::make_pair(ast_factory.NewUndefined(), true),
-      std::make_pair(ast_factory.NewNull(), true),
-      std::make_pair(ast_factory.NewBoolean(false), true),
-      std::make_pair(ast_factory.NewBoolean(true), false),
-      std::make_pair(ast_factory.NewNumber(9.1), false),
-      std::make_pair(ast_factory.NewNumber(0), true),
-      std::make_pair(
-          ast_factory.NewString(ast_factory.GetOneByteString("hello")), false),
-      std::make_pair(ast_factory.NewString(ast_factory.GetOneByteString("")),
-                     true),
+  std::pair<TestValue, bool> object_type_tuples[] = {
+      std::make_pair(TestValue(TestValue::kUndefined), true),
+      std::make_pair(TestValue(TestValue::kNull), true),
+      std::make_pair(TestValue(TestValue::kFalse), true),
+      std::make_pair(TestValue(TestValue::kTrue), false),
+      std::make_pair(TestValue(9.1), false),
+      std::make_pair(TestValue(0), true),
+      std::make_pair(TestValue(ast_factory.GetOneByteString("hello")), false),
+      std::make_pair(TestValue(ast_factory.GetOneByteString("")), true),
   };
 
   for (size_t i = 0; i < arraysize(object_type_tuples); i++) {
