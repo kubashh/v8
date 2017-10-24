@@ -34,6 +34,24 @@
       "revId": "8348b3dd61f9588c12f8e5aaa887193634a04472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9f00d2d_5e8314f5",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-24T11:39:27Z",
+      "side": 1,
+      "message": "WasmValue is still the \"supertype\" of all of these, so you can still access access the underlying bit pattern to construct a new Float64 or Float32 as necessary.",
+      "parentUuid": "4faa7535_41b1b179",
+      "revId": "8348b3dd61f9588c12f8e5aaa887193634a04472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
