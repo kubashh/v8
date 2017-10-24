@@ -22,6 +22,30 @@
       "revId": "ca989c9329c83ccef4fa38b228fea5535e6d59c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c42a7c_50c6c873",
+        "filename": "src/compiler/verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2017-10-24T08:15:38Z",
+      "side": 1,
+      "message": "I can\u0027t honestly say why it\u0027s there! I\u0027ll remove it, very good.",
+      "parentUuid": "1a8a7cec_71c1f98a",
+      "range": {
+        "startLine": 126,
+        "startChar": 6,
+        "endLine": 126,
+        "endChar": 37
+      },
+      "revId": "ca989c9329c83ccef4fa38b228fea5535e6d59c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
