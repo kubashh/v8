@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "91365e23_f0a8d312",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T13:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3da171b2_55824093",
+      "range": {
+        "startLine": 3838,
+        "startChar": 22,
+        "endLine": 3838,
+        "endChar": 58
+      },
+      "revId": "26968c351f1346a1dec7b721f242549bb730342c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ee77412_0644e34c",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a8114703_a6b98c8d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3840,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T13:59:53Z",
+      "side": 1,
+      "message": "No reason other than simplicity of implementation. Done now, and the duplication between second() and subsequent(i) is starting to become a bit painful...",
+      "parentUuid": "7ee77412_0644e34c",
+      "range": {
+        "startLine": 3840,
+        "startChar": 5,
+        "endLine": 3840,
+        "endChar": 36
+      },
+      "revId": "26968c351f1346a1dec7b721f242549bb730342c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8fca970_563c98b8",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-24T13:32:04Z",
       "side": 1,
       "message": "Actually, would it be better to list here which operations are allowed (whitelist approach instead of blacklist)?",
+      "range": {
+        "startLine": 315,
+        "startChar": 2,
+        "endLine": 315,
+        "endChar": 68
+      },
+      "revId": "26968c351f1346a1dec7b721f242549bb730342c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2850dd_8c401bdd",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-24T13:59:53Z",
+      "side": 1,
+      "message": "I want to cut this blacklist down in subsequent CLs, until it accepts all left-associative binary ops (i.e. all binary ops except EXP), so eventually it should become effectively IsBinaryOp as the whitelist, with EXP as the lone blacklist entry. Given that there are so many binary ops, listing them all would be a pain. WDYT?",
+      "parentUuid": "c8fca970_563c98b8",
       "range": {
         "startLine": 315,
         "startChar": 2,
