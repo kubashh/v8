@@ -6,6 +6,7 @@
 
 #include <unordered_map>
 
+#include "src/base/random-utils.h"
 #include "src/cancelable-task.h"
 #include "src/code-stubs.h"
 #include "src/compilation-cache.h"
@@ -864,7 +865,6 @@ void MarkCompactCollector::ComputeEvacuationHeuristics(
   }
 }
 
-
 void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   DCHECK(space->identity() == OLD_SPACE || space->identity() == CODE_SPACE);
 
@@ -918,6 +918,20 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
         candidate_count++;
         total_live_bytes += pages[i].first;
         AddEvacuationCandidate(p);
+      }
+    }
+  } else if (FLAG_stress_compaction_percentage) {
+    DCHECK_GE(FLAG_stress_compaction_percentage, 0);
+    DCHECK_LE(FLAG_stress_compaction_percentage, 100);
+    size_t pages_to_mark_count =
+        FLAG_stress_compaction_percentage * pages.size() / 100;
+
+    if (pages_to_mark_count) {
+      for (size_t i : base::RandomSample(isolate()->random_number_generator(),
+                                         pages.size(), pages_to_mark_count)) {
+        candidate_count++;
+        total_live_bytes += pages[i].first;
+        AddEvacuationCandidate(pages[i].second);
       }
     }
   } else {
