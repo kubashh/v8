@@ -568,6 +568,7 @@ class ParserBase {
           has_seen_constructor(false),
           has_name_static_property(false),
           has_static_computed_names(false),
+          has_static_class_fields(false),
           is_anonymous(false),
           field_scope(nullptr) {}
     Variable* variable;
@@ -578,6 +579,7 @@ class ParserBase {
     bool has_seen_constructor;
     bool has_name_static_property;
     bool has_static_computed_names;
+    bool has_static_class_fields;
     bool is_anonymous;
     DeclarationScope* field_scope;
   };
@@ -2291,6 +2293,7 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       if (allow_harmony_class_fields()) {
         bool has_initializer = Check(Token::ASSIGN);
         ExpressionT initializer;
+        class_info->has_static_class_fields = true;
         if (class_info->field_scope == nullptr) {
           class_info->field_scope =
               NewFunctionScope(FunctionKind::kConciseMethod);
