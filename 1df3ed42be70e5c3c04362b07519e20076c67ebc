@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86c8bea0_04bd229c",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-25T20:03:53Z",
+      "side": 1,
+      "message": "This can be a const method.",
+      "revId": "1df3ed42be70e5c3c04362b07519e20076c67ebc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
