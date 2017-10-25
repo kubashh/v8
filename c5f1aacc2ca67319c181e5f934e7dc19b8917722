@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "75828710_abad5b7a",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-25T07:55:45Z",
+      "side": 1,
+      "message": "You need to make sure that the variable indices match up, e.g.",
+      "parentUuid": "bd7225d5_c821fca8",
+      "revId": "c5f1aacc2ca67319c181e5f934e7dc19b8917722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "252a9aa7_770a2acb",
         "filename": "src/asmjs/asm-parser.cc",
         "patchSetId": 1
