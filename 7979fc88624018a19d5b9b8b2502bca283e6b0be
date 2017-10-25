@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b44d171_295a7874",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-25T07:51:44Z",
+      "side": 1,
+      "message": "nit: Maybe call this \"option\" since what is returned is not only the path.",
+      "range": {
+        "startLine": 372,
+        "startChar": 31,
+        "endLine": 372,
+        "endChar": 35
+      },
+      "revId": "7979fc88624018a19d5b9b8b2502bca283e6b0be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
