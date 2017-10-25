@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b08875a_723c54dc",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-25T12:39:42Z",
+      "side": 1,
+      "message": "I think you can generalize this a bit to remove the special case for 1 return count. E.g. just gather the return values into a buffer (whether it is the original call or a projection), and then replace them one by one.",
+      "revId": "45aa02384df3d1d014f905a629746ef9956acb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6727b649_ce8c72b8",
+        "filename": "src/compiler/wasm-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-25T12:39:42Z",
+      "side": 1,
+      "message": "Somewhat arbitrary changes here. Were these necessary to make the tests work?",
+      "revId": "45aa02384df3d1d014f905a629746ef9956acb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
