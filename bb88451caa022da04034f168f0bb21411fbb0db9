@@ -22,6 +22,30 @@
       "revId": "bb88451caa022da04034f168f0bb21411fbb0db9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6f2dce_55623558",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3863,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-25T10:17:54Z",
+      "side": 1,
+      "message": "No strong opinion, so ok.",
+      "parentUuid": "821d769f_89479111",
+      "range": {
+        "startLine": 3863,
+        "startChar": 6,
+        "endLine": 3863,
+        "endChar": 51
+      },
+      "revId": "bb88451caa022da04034f168f0bb21411fbb0db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
