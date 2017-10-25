@@ -1066,7 +1066,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsMutableHeapNumber(Node* object);
   Node* IsName(Node* object);
   Node* IsNativeContext(Node* object);
-  Node* IsOneByteStringInstanceType(Node* instance_type);
+  TNode<BoolT> IsOneByteStringInstanceType(SloppyTNode<Int32T> instance_type);
   Node* IsPrimitiveInstanceType(Node* instance_type);
   Node* IsPrivateSymbol(Node* object);
   Node* IsPropertyArray(Node* object);

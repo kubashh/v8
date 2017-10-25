@@ -511,6 +511,51 @@ TNode<Float64T> Float64Add(TNode<Float64T> a, TNode<Float64T> b);
 // temporary-scoped and short-lived); all its state is encapsulated into
 // a CodeAssemblerState instance.
 class V8_EXPORT_PRIVATE CodeAssembler {
+ private:
+  struct CompleteElse {
+    std::function<void()> block;
+  };
+
+  struct IncompleteElse {
+   public:
+    CompleteElse operator-(std::function<void()> block) const {
+      return CompleteElse{block};
+    }
+  };
+
+  class CompleteIfBuilder {
+   public:
+    CompleteIfBuilder(CodeAssembler* assembler, TNode<IntegralT> condition,
+                      std::function<void()> then_block)
+        : assembler_(assembler),
+          condition_(condition),
+          then_block_(then_block) {}
+
+    void operator|(CompleteElse else_clause) {
+      CHECK(!else_block_);
+      else_block_ = else_clause.block;
+    }
+
+    CompleteIfBuilder(const CompleteIfBuilder&) = delete;
+    CompleteIfBuilder(CompleteIfBuilder&&) = delete;
+
+    ~CompleteIfBuilder();
+
+   private:
+    CodeAssembler* assembler_;
+    TNode<IntegralT> condition_;
+    std::function<void()> then_block_;
+    std::function<void()> else_block_;
+  };
+
+  struct IfBuilder {
+    CompleteIfBuilder operator-(std::function<void()> then_block) const {
+      return {assembler, condition, then_block};
+    }
+    CodeAssembler* assembler;
+    TNode<IntegralT> condition;
+  };
+
  public:
   explicit CodeAssembler(CodeAssemblerState* state) : state_(state) {}
   ~CodeAssembler();
@@ -679,6 +724,11 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void GotoIfNot(SloppyTNode<IntegralT> condition, Label* false_label);
   void Branch(SloppyTNode<IntegralT> condition, Label* true_label,
               Label* false_label);
+
+  IfBuilder If(TNode<IntegralT> condition) {
+    return IfBuilder{this, condition};
+  }
+  static constexpr IncompleteElse Else = IncompleteElse();
 
   void Switch(Node* index, Label* default_label, const int32_t* case_values,
               Label** case_labels, size_t case_count);
@@ -1214,6 +1264,22 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
 
   DISALLOW_COPY_AND_ASSIGN(CodeAssemblerState);
 };
+
+inline CodeAssembler::CompleteIfBuilder::~CompleteIfBuilder() {
+  Label then_label(assembler_);
+  Label else_label(assembler_);
+  Label end(assembler_);
+  assembler_->Branch(condition_, &then_label, &else_label);
+  assembler_->Bind(&then_label);
+  then_block_();
+  assembler_->Goto(&end);
+
+  assembler_->Bind(&else_label);
+  if (else_block_) else_block_();
+  assembler_->Goto(&end);
+
+  assembler_->Bind(&end);
+}
 
 }  // namespace compiler
 }  // namespace internal

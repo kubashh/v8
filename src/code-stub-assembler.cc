@@ -124,21 +124,8 @@ Node* CodeStubAssembler::Select(SloppyTNode<BoolT> condition,
                                 const NodeGenerator& false_body,
                                 MachineRepresentation rep) {
   VARIABLE(value, rep);
-  Label vtrue(this), vfalse(this), end(this);
-  Branch(condition, &vtrue, &vfalse);
-
-  BIND(&vtrue);
-  {
-    value.Bind(true_body());
-    Goto(&end);
-  }
-  BIND(&vfalse);
-  {
-    value.Bind(false_body());
-    Goto(&end);
-  }
-
-  BIND(&end);
+  If(condition) - [&] { value.Bind(true_body()); } |
+      Else - [&] { value.Bind(false_body()); };
   return value.value();
 }
 
@@ -4022,7 +4009,8 @@ Node* CodeStubAssembler::IsStringInstanceType(Node* instance_type) {
   return Int32LessThan(instance_type, Int32Constant(FIRST_NONSTRING_TYPE));
 }
 
-Node* CodeStubAssembler::IsOneByteStringInstanceType(Node* instance_type) {
+TNode<BoolT> CodeStubAssembler::IsOneByteStringInstanceType(
+    SloppyTNode<Int32T> instance_type) {
   CSA_ASSERT(this, IsStringInstanceType(instance_type));
   return Word32Equal(
       Word32And(instance_type, Int32Constant(kStringEncodingMask)),
@@ -4435,21 +4423,13 @@ TNode<Uint32T> CodeStubAssembler::StringCharCodeAt(
   Node* const string_data = to_direct.PointerToData(&if_runtime);
 
   // Check if the {string} is a TwoByteSeqString or a OneByteSeqString.
-  Branch(IsOneByteStringInstanceType(instance_type), &if_stringisonebyte,
-         &if_stringistwobyte);
-
-  BIND(&if_stringisonebyte);
-  {
+  If(IsOneByteStringInstanceType(instance_type)) - [&] {
     var_result.Bind(Load(MachineType::Uint8(), string_data, offset));
-    Goto(&return_result);
-  }
-
-  BIND(&if_stringistwobyte);
-  {
+  } | Else - [&] {
     var_result.Bind(Load(MachineType::Uint16(), string_data,
                          WordShl(offset, IntPtrConstant(1))));
-    Goto(&return_result);
-  }
+  };
+  Goto(&return_result);
 
   BIND(&if_runtime);
   {
