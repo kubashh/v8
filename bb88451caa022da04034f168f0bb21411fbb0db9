@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "821d769f_89479111",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3863,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-25T09:29:44Z",
+      "side": 1,
+      "message": "nit - how about putting this at the top of the for loop (in case we add other special cases)",
+      "range": {
+        "startLine": 3863,
+        "startChar": 6,
+        "endLine": 3863,
+        "endChar": 51
+      },
+      "revId": "bb88451caa022da04034f168f0bb21411fbb0db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
