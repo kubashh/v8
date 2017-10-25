@@ -672,6 +672,8 @@ DEFINE_BOOL(force_marking_deque_overflows, false,
 DEFINE_BOOL(stress_compaction, false,
             "stress the GC compactor to flush out bugs (implies "
             "--force_marking_deque_overflows)")
+DEFINE_INT(stress_compaction_percentage, 0,
+           "stress the GC compactor to mark random pages for evacuation")
 DEFINE_BOOL(stress_incremental_marking, false,
             "force incremental marking for small heaps and run it more often")
 DEFINE_INT(stress_incremental_marking_percentage, 0,
