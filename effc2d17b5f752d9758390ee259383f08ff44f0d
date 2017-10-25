@@ -22,6 +22,30 @@
       "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e68be3_74fc71bd",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-25T16:10:54Z",
+      "side": 1,
+      "message": "Yeah, this is a difference in API, but it boils down to the difference I mentioned in the CL description, which is that it just moves when this HeapNumber is allocated. We should never (except when using CallPrinter or AstPrinter) call this more than once on a given literal. Outside of prettyprinter.cc, GetValue() is used only for boilerplate creation.\n\nThe interpreter uses ConstantArrayBuilder to allocate these HeapNumbers, which uses a different mechanism.",
+      "parentUuid": "aaafe5e2_3fec0851",
+      "range": {
+        "startLine": 820,
+        "startChar": 0,
+        "endLine": 823,
+        "endChar": 52
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
