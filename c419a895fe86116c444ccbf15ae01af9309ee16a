@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e3866397_cb619cb9",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2324,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-25T10:57:58Z",
+      "side": 1,
+      "message": "Is this needed? If not, please remove it.",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d4f3ffa_6d73ae68",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 4
@@ -36,6 +53,23 @@
       "writtenOn": "2017-10-24T21:48:46Z",
       "side": 1,
       "message": "How about `builder()-\u003eCallProperty(initializer_fn, class, feedback_index(feedback_spec()-\u003eAddCallICSlot())`? Or do you think the feedback slot is wasteful?",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d164e91_9c06c7ae",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3208,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-10-25T10:57:58Z",
+      "side": 1,
+      "message": "Why do you need to pass the class via a variable?",
       "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
