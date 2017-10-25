@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2a077f6c_b910d166",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-25T13:28:57Z",
+      "side": 1,
+      "message": "Done, but the result turns out to be longer and less clear, since you now need a case distinction in 3 places. I would propose reverting.",
+      "parentUuid": "5b08875a_723c54dc",
+      "revId": "45aa02384df3d1d014f905a629746ef9956acb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6727b649_ce8c72b8",
         "filename": "src/compiler/wasm-linkage.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-10-25T12:39:42Z",
       "side": 1,
       "message": "Somewhat arbitrary changes here. Were these necessary to make the tests work?",
+      "revId": "45aa02384df3d1d014f905a629746ef9956acb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3674167e_3744a7d2",
+        "filename": "src/compiler/wasm-linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-25T13:28:57Z",
+      "side": 1,
+      "message": "Yes, as long as passing on stack does not work, three registers are required to make the new test pass everywhere.",
+      "parentUuid": "6727b649_ce8c72b8",
       "revId": "45aa02384df3d1d014f905a629746ef9956acb4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
