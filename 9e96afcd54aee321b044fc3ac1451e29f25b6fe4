@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b00a3aa2_f06a3969",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-25T09:38:00Z",
+      "side": 1,
+      "message": "Won\u0027t this swallow an exception?",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 27
+      },
+      "revId": "9e96afcd54aee321b044fc3ac1451e29f25b6fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fcc359b_28eb5395",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-25T09:38:00Z",
+      "side": 1,
+      "message": "nit: I\u0027d be less verbose and only print in the error case. Or maybe tie this to the --verbose option?\n\nI think it should print once with which executables it is running the tests. E.g. when it prints the line \"running tests for...\"",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 61
+      },
+      "revId": "9e96afcd54aee321b044fc3ac1451e29f25b6fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11eca12e_f958f3d4",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-25T09:38:00Z",
+      "side": 1,
+      "message": "nit: pass?",
+      "range": {
+        "startLine": 220,
+        "startChar": 8,
+        "endLine": 220,
+        "endChar": 16
+      },
+      "revId": "9e96afcd54aee321b044fc3ac1451e29f25b6fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e8f821_4c8fd8bc",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-25T09:38:00Z",
+      "side": 1,
+      "message": "Maybe in a follow up we can add those two options to the possible outdirs and drop the --buildbot option.",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 259,
+        "endChar": 49
+      },
+      "revId": "9e96afcd54aee321b044fc3ac1451e29f25b6fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
