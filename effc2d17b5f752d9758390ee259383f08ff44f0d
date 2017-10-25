@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaafe5e2_3fec0851",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2017-10-25T09:18:07Z",
+      "side": 1,
+      "message": "A functional difference to the previous version: If we call GetValue multiple times, NewNumber will be called multiple times too (unlike in the current version, where we internalize once and for all). Assuming that won\u0027t be a problem?",
+      "range": {
+        "startLine": 820,
+        "startChar": 0,
+        "endLine": 823,
+        "endChar": 52
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
