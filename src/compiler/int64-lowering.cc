@@ -75,7 +75,24 @@ void Int64Lowering::LowerGraph() {
 
 namespace {
 
-static int GetParameterIndexAfterLowering(
+int GetReturnIndexAfterLowering(
+    CallDescriptor* descriptor, int old_index) {
+  int result = old_index;
+  for (int i = 0; i < old_index; i++) {
+    if (descriptor->GetReturnType(i).representation() ==
+        MachineRepresentation::kWord64) {
+      result++;
+    }
+  }
+  return result;
+}
+
+int GetReturnCountAfterLowering(CallDescriptor* descriptor) {
+  return GetReturnIndexAfterLowering(
+      descriptor, static_cast<int>(descriptor->ReturnCount()));
+}
+
+int GetParameterIndexAfterLowering(
     Signature<MachineRepresentation>* signature, int old_index) {
   int result = old_index;
   for (int i = 0; i < old_index; i++) {
@@ -276,13 +293,12 @@ void Int64Lowering::LowerNode(Node* node) {
         ++new_index;
         NodeProperties::ChangeOp(node, common()->Parameter(new_index));
 
-        Node* high_node = nullptr;
         if (signature()->GetParam(old_index) ==
             MachineRepresentation::kWord64) {
-          high_node = graph()->NewNode(common()->Parameter(new_index + 1),
-                                       graph()->start());
+          Node* high_node = graph()->NewNode(common()->Parameter(new_index + 1),
+                                             graph()->start());
+          ReplaceNode(node, node, high_node);
         }
-        ReplaceNode(node, node, high_node);
       }
       break;
     }
@@ -313,21 +329,42 @@ void Int64Lowering::LowerNode(Node* node) {
     case IrOpcode::kCall: {
       CallDescriptor* descriptor =
           const_cast<CallDescriptor*>(CallDescriptorOf(node->op()));
-      if (DefaultLowering(node) ||
-          (descriptor->ReturnCount() == 1 &&
-           descriptor->GetReturnType(0) == MachineType::Int64())) {
+      bool returns_require_lowering =
+          GetReturnCountAfterLowering(descriptor) !=
+              static_cast<int>(descriptor->ReturnCount());
+      if (DefaultLowering(node) || returns_require_lowering) {
         // We have to adjust the call descriptor.
         NodeProperties::ChangeOp(
             node, common()->Call(GetI32WasmCallDescriptor(zone(), descriptor)));
       }
-      if (descriptor->ReturnCount() == 1 &&
-          descriptor->GetReturnType(0) == MachineType::Int64()) {
-        // We access the additional return values through projections.
-        Node* low_node =
-            graph()->NewNode(common()->Projection(0), node, graph()->start());
-        Node* high_node =
-            graph()->NewNode(common()->Projection(1), node, graph()->start());
-        ReplaceNode(node, low_node, high_node);
+      if (returns_require_lowering) {
+        bool singular = descriptor->ReturnCount() == 1;
+        for (Edge edge : node->use_edges()) {
+          if (NodeProperties::IsValueEdge(edge)) {
+            Node* use_node = edge.from();
+            Node* low_node = use_node;
+            int old_index = singular
+                ? 0 : static_cast<int>(ProjectionIndexOf(use_node->op()));
+            int new_index =
+                GetReturnIndexAfterLowering(descriptor, old_index);
+            if (new_index != old_index) {
+              DCHECK_EQ(IrOpcode::kProjection, use_node->opcode());
+              NodeProperties::ChangeOp(
+                  low_node, common()->Projection(new_index));
+            } else if (singular) {
+              DCHECK_EQ(0, old_index);
+              low_node = graph()->NewNode(common()->Projection(0), node,
+                                          graph()->start());
+            }
+            if (descriptor->GetReturnType(old_index).representation() ==
+                MachineRepresentation::kWord64) {
+              Node* high_node = graph()->NewNode(
+                  common()->Projection(new_index + 1), node,
+                  graph()->start());
+              ReplaceNode(singular ? node : use_node, low_node, high_node);
+            }
+          }
+        }
       }
       break;
     }
@@ -809,18 +846,6 @@ void Int64Lowering::LowerNode(Node* node) {
         }
       } else {
         DefaultLowering(node);
-      }
-      break;
-    }
-    case IrOpcode::kProjection: {
-      Node* call = node->InputAt(0);
-      DCHECK_EQ(IrOpcode::kCall, call->opcode());
-      CallDescriptor* descriptor =
-          const_cast<CallDescriptor*>(CallDescriptorOf(call->op()));
-      for (size_t i = 0; i < descriptor->ReturnCount(); i++) {
-        if (descriptor->GetReturnType(i) == MachineType::Int64()) {
-          UNREACHABLE();  // TODO(titzer): implement multiple i64 returns.
-        }
       }
       break;
     }
