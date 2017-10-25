@@ -216,22 +216,21 @@
 }
 
 
+{
+  let C  = class {
+    static c;
+  };
 
-// {
-//   let C  = class {
-//     static c;
-//   };
+  assertEquals("C", C.name);
+}
 
-//   assertEquals("C", C.name);
-// }
+{
+  class C {
+    static c = new C;
+  }
 
-// {
-//   class C {
-//     static c = new C;
-//   }
-
-//   assertTrue(c instanceof C);
-// }
+  assertTrue(C.c instanceof C);
+}
 
 // (function test() {
 //   function makeC() {
