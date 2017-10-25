@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16359816_5fd38f42",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2324,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-25T19:50:30Z",
+      "side": 1,
+      "message": "Need it for the ast expression rewriter",
+      "parentUuid": "e3866397_cb619cb9",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d4f3ffa_6d73ae68",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 4
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "54e13ae9_e65651e4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-25T19:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d4f3ffa_6d73ae68",
+      "range": {
+        "startLine": 1787,
+        "startChar": 35,
+        "endLine": 1787,
+        "endChar": 48
+      },
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "902119d7_8fdba1ad",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 4
@@ -53,6 +95,24 @@
       "writtenOn": "2017-10-24T21:48:46Z",
       "side": 1,
       "message": "How about `builder()-\u003eCallProperty(initializer_fn, class, feedback_index(feedback_spec()-\u003eAddCallICSlot())`? Or do you think the feedback slot is wasteful?",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e542b1a_54e39407",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-25T19:50:30Z",
+      "side": 1,
+      "message": "Changed. But maybe +Mythri has thoughts on this?",
+      "parentUuid": "902119d7_8fdba1ad",
       "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -73,6 +133,24 @@
       "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fece5c14_4af5ef1b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3208,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-10-25T19:50:30Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "9d164e91_9c06c7ae",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
