@@ -2161,8 +2161,6 @@
                   'sources': [
                     'base/debug/stack_trace_posix.cc',
                     'base/platform/platform-cygwin.cc',
-                    'base/platform/platform-posix.h',
-                    'base/platform/platform-posix.cc',
                   ],
                 }, {
                   'sources': [

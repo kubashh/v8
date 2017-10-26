@@ -161,15 +161,22 @@ class V8_BASE_EXPORT OS {
   // here even though most systems support additional modes.
   enum class MemoryPermission { kNoAccess, kReadWrite, kReadWriteExecute };
 
-  // Allocate/Free memory used by JS heap. Permissions are set according to the
-  // is_* flags. Returns the address of allocated memory, or nullptr if failed.
+  // Allocate/Free memory used by JS heap with permissions specified by access.
+  // Returns the address of allocated memory, or nullptr if failed.
   static void* Allocate(const size_t requested, size_t* allocated,
                         MemoryPermission access, void* hint = nullptr);
+
   // Allocate/Free memory used by JS heap. Pages are readable/writable, but
   // they are not guaranteed to be executable unless 'executable' is true.
   // Returns the address of allocated memory, or nullptr if failed.
   static void* Allocate(const size_t requested, size_t* allocated,
-                        bool is_executable, void* hint = nullptr);
+                        bool is_executable, void* hint = nullptr) {
+    return Allocate(requested, allocated,
+                    is_executable ? OS::MemoryPermission::kReadWriteExecute
+                                  : OS::MemoryPermission::kReadWrite,
+                    hint);
+  }
+
   static void Free(void* address, const size_t size);
 
   // Allocates a region of memory that is inaccessible. On Windows this reserves

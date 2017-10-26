@@ -57,7 +57,7 @@
 #include <sys/prctl.h>  // NOLINT, for prctl
 #endif
 
-#if !defined(_AIX) && !defined(V8_OS_FUCHSIA)
+#if !defined(_AIX)
 #include <sys/syscall.h>
 #endif
 
@@ -73,7 +73,6 @@ bool g_hard_abort = false;
 
 const char* g_gc_fake_mmap = nullptr;
 
-#if !V8_OS_FUCHSIA
 #if V8_OS_MACOSX
 // kMmapFd is used to pass vm_alloc flags to tag the region with the user
 // defined tag 255 This helps identify V8-allocated regions in memory analysis
@@ -96,7 +95,6 @@ int GetProtectionFromMemoryPermission(OS::MemoryPermission access) {
   }
   UNREACHABLE();
 }
-#endif  // !V8_OS_FUCHSIA
 
 }  // namespace
 
@@ -125,16 +123,6 @@ intptr_t OS::CommitPageSize() {
 }
 
 void* OS::Allocate(const size_t requested, size_t* allocated,
-                   bool is_executable, void* hint) {
-  return OS::Allocate(requested, allocated,
-                      is_executable ? OS::MemoryPermission::kReadWriteExecute
-                                    : OS::MemoryPermission::kReadWrite,
-                      hint);
-}
-
-// TODO(bbudge) Move Cygwin and Fuschia stuff into platform-specific files.
-#if !V8_OS_FUCHSIA
-void* OS::Allocate(const size_t requested, size_t* allocated,
                    OS::MemoryPermission access, void* hint) {
   const size_t msize = RoundUp(requested, AllocateAlignment());
   int prot = GetProtectionFromMemoryPermission(access);
@@ -144,7 +132,6 @@ void* OS::Allocate(const size_t requested, size_t* allocated,
   *allocated = msize;
   return mbase;
 }
-#endif  // !V8_OS_FUCHSIA
 
 void OS::Free(void* address, const size_t size) {
   // TODO(1240712): munmap has a return value which is ignored here.
@@ -154,38 +141,17 @@ void OS::Free(void* address, const size_t size) {
 }
 
 void OS::SetReadAndExecutable(void* address, const size_t size) {
-#if V8_OS_CYGWIN
-  DWORD old_protect;
-  CHECK_NOT_NULL(
-      VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect));
-#else
   CHECK_EQ(0, mprotect(address, size, PROT_READ | PROT_EXEC));
-#endif
 }
 
-// Create guard pages.
-#if !V8_OS_FUCHSIA
 void OS::Guard(void* address, const size_t size) {
-#if V8_OS_CYGWIN
-  DWORD oldprotect;
-  VirtualProtect(address, size, PAGE_NOACCESS, &oldprotect);
-#else
   mprotect(address, size, PROT_NONE);
-#endif
 }
-#endif  // !V8_OS_FUCHSIA
 
-// Make a region of memory readable and writable.
 void OS::SetReadAndWritable(void* address, const size_t size, bool commit) {
-#if V8_OS_CYGWIN
-  DWORD oldprotect;
-  CHECK_NOT_NULL(VirtualProtect(address, size, PAGE_READWRITE, &oldprotect));
-#else
   CHECK_EQ(0, mprotect(address, size, PROT_READ | PROT_WRITE));
-#endif
 }
 
-#if !V8_OS_CYGWIN && !V8_OS_FUCHSIA
 // static
 void* OS::ReserveRegion(size_t size, void* hint) {
   int map_flags = MAP_PRIVATE | MAP_ANONYMOUS;
@@ -291,7 +257,6 @@ bool OS::HasLazyCommits() {
   return false;
 #endif
 }
-#endif  // !V8_OS_CYGWIN && !V8_OS_FUCHSIA
 
 static LazyInstance<RandomNumberGenerator>::type
     platform_random_number_generator = LAZY_INSTANCE_INITIALIZER;
@@ -490,8 +455,6 @@ int OS::GetCurrentThreadId() {
   return static_cast<int>(gettid());
 #elif V8_OS_AIX
   return static_cast<int>(thread_self());
-#elif V8_OS_FUCHSIA
-  return static_cast<int>(pthread_self());
 #elif V8_OS_SOLARIS
   return static_cast<int>(pthread_self());
 #else
@@ -768,27 +731,12 @@ void Thread::Start() {
 void Thread::Join() { pthread_join(data_->thread_, nullptr); }
 
 static Thread::LocalStorageKey PthreadKeyToLocalKey(pthread_key_t pthread_key) {
-#if V8_OS_CYGWIN
-  // We need to cast pthread_key_t to Thread::LocalStorageKey in two steps
-  // because pthread_key_t is a pointer type on Cygwin. This will probably not
-  // work on 64-bit platforms, but Cygwin doesn't support 64-bit anyway.
-  STATIC_ASSERT(sizeof(Thread::LocalStorageKey) == sizeof(pthread_key_t));
-  intptr_t ptr_key = reinterpret_cast<intptr_t>(pthread_key);
-  return static_cast<Thread::LocalStorageKey>(ptr_key);
-#else
   return static_cast<Thread::LocalStorageKey>(pthread_key);
-#endif
 }
 
 
 static pthread_key_t LocalKeyToPthreadKey(Thread::LocalStorageKey local_key) {
-#if V8_OS_CYGWIN
-  STATIC_ASSERT(sizeof(Thread::LocalStorageKey) == sizeof(pthread_key_t));
-  intptr_t ptr_key = static_cast<intptr_t>(local_key);
-  return reinterpret_cast<pthread_key_t>(ptr_key);
-#else
   return static_cast<pthread_key_t>(local_key);
-#endif
 }
 
 

@@ -764,14 +764,6 @@ static void* RandomizedVirtualAlloc(size_t size, int action, int protection,
 }  // namespace
 
 void* OS::Allocate(const size_t requested, size_t* allocated,
-                   bool is_executable, void* hint) {
-  return OS::Allocate(requested, allocated,
-                      is_executable ? OS::MemoryPermission::kReadWriteExecute
-                                    : OS::MemoryPermission::kReadWrite,
-                      hint);
-}
-
-void* OS::Allocate(const size_t requested, size_t* allocated,
                    OS::MemoryPermission access, void* hint) {
   // VirtualAlloc rounds allocated size to page size automatically.
   size_t msize = RoundUp(requested, static_cast<int>(GetPageSize()));
