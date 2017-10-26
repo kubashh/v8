@@ -174,6 +174,13 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   // on the expression values.
   void BuildLogicalTest(Token::Value token, Expression* left,
                         Expression* right);
+  void BuildNaryLogicalTest(Token::Value token, NaryOperation* expr);
+
+  // Helpers for binary and nary logical op value expressions.
+  bool VisitLogicalOrSubExpression(Expression* expr,
+                                   BytecodeLabels* end_labels);
+  bool VisitLogicalAndSubExpression(Expression* expr,
+                                    BytecodeLabels* end_labels);
 
   // Visit the header/body of a loop iteration.
   void VisitIterationHeader(IterationStatement* stmt,

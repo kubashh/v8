@@ -4005,18 +4005,82 @@ void BytecodeGenerator::BuildLogicalTest(Token::Value token, Expression* left,
     // Visit the left side using current TestResultScope.
     BytecodeLabels test_right(zone());
     if (token == Token::OR) {
-      test_result->set_fallthrough(TestFallthrough::kElse);
-      test_result->set_else_labels(&test_right);
+      VisitForTest(left, then_labels, &test_right, TestFallthrough::kElse);
     } else {
       DCHECK_EQ(Token::AND, token);
-      test_result->set_fallthrough(TestFallthrough::kThen);
-      test_result->set_then_labels(&test_right);
+      VisitForTest(left, &test_right, else_labels, TestFallthrough::kThen);
     }
-    VisitInSameTestExecutionScope(left);
     test_right.Bind(builder());
   }
   // Visit the right side in a new TestResultScope.
   VisitForTest(right, then_labels, else_labels, fallthrough);
+}
+
+void BytecodeGenerator::BuildNaryLogicalTest(Token::Value token,
+                                             NaryOperation* expr) {
+  DCHECK(token == Token::OR || token == Token::AND);
+  DCHECK_GT(expr->subsequent_length(), 0);
+
+  TestResultScope* test_result = execution_result()->AsTest();
+  BytecodeLabels* then_labels = test_result->then_labels();
+  BytecodeLabels* else_labels = test_result->else_labels();
+  TestFallthrough fallthrough = test_result->fallthrough();
+
+  {
+    BytecodeLabels test_next(zone());
+    if (token == Token::OR) {
+      VisitForTest(expr->first(), then_labels, &test_next,
+                   TestFallthrough::kElse);
+    } else {
+      DCHECK_EQ(Token::AND, token);
+      VisitForTest(expr->first(), &test_next, else_labels,
+                   TestFallthrough::kThen);
+    }
+    test_next.Bind(builder());
+  }
+  for (size_t i = 0; i < expr->subsequent_length() - 1; ++i) {
+    BytecodeLabels test_next(zone());
+    if (token == Token::OR) {
+      VisitForTest(expr->subsequent(i), then_labels, &test_next,
+                   TestFallthrough::kElse);
+    } else {
+      DCHECK_EQ(Token::AND, token);
+      VisitForTest(expr->subsequent(i), &test_next, else_labels,
+                   TestFallthrough::kThen);
+    }
+    test_next.Bind(builder());
+  }
+
+  VisitForTest(expr->subsequent(expr->subsequent_length() - 1), then_labels,
+               else_labels, fallthrough);
+}
+
+bool BytecodeGenerator::VisitLogicalOrSubExpression(
+    Expression* expr, BytecodeLabels* end_labels) {
+  if (expr->ToBooleanIsTrue()) {
+    VisitForAccumulatorValue(expr);
+    end_labels->Bind(builder());
+    return true;
+  } else if (!expr->ToBooleanIsFalse()) {
+    TypeHint type_hint = VisitForAccumulatorValue(expr);
+    builder()->JumpIfTrue(ToBooleanModeFromTypeHint(type_hint),
+                          end_labels->New());
+  }
+  return false;
+}
+
+bool BytecodeGenerator::VisitLogicalAndSubExpression(
+    Expression* expr, BytecodeLabels* end_labels) {
+  if (expr->ToBooleanIsFalse()) {
+    VisitForAccumulatorValue(expr);
+    end_labels->Bind(builder());
+    return true;
+  } else if (!expr->ToBooleanIsTrue()) {
+    TypeHint type_hint = VisitForAccumulatorValue(expr);
+    builder()->JumpIfFalse(ToBooleanModeFromTypeHint(type_hint),
+                           end_labels->New());
+  }
+  return false;
 }
 
 void BytecodeGenerator::VisitLogicalOrExpression(BinaryOperation* binop) {
@@ -4034,22 +4098,38 @@ void BytecodeGenerator::VisitLogicalOrExpression(BinaryOperation* binop) {
     }
     test_result->SetResultConsumedByTest();
   } else {
-    if (left->ToBooleanIsTrue()) {
-      VisitForAccumulatorValue(left);
-    } else if (left->ToBooleanIsFalse()) {
-      VisitForAccumulatorValue(right);
-    } else {
-      BytecodeLabel end_label;
-      TypeHint type_hint = VisitForAccumulatorValue(left);
-      builder()->JumpIfTrue(ToBooleanModeFromTypeHint(type_hint), &end_label);
-      VisitForAccumulatorValue(right);
-      builder()->Bind(&end_label);
-    }
+    BytecodeLabels end_labels(zone());
+    if (VisitLogicalOrSubExpression(left, &end_labels)) return;
+    VisitForAccumulatorValue(right);
+    end_labels.Bind(builder());
   }
 }
+
 void BytecodeGenerator::VisitNaryLogicalOrExpression(NaryOperation* expr) {
-  // TODO(leszeks): Implement.
-  UNREACHABLE();
+  Expression* first = expr->first();
+  DCHECK_GT(expr->subsequent_length(), 0);
+
+  if (execution_result()->IsTest()) {
+    TestResultScope* test_result = execution_result()->AsTest();
+    if (first->ToBooleanIsTrue()) {
+      builder()->Jump(test_result->NewThenLabel());
+    } else {
+      BuildNaryLogicalTest(Token::OR, expr);
+    }
+    test_result->SetResultConsumedByTest();
+  } else {
+    BytecodeLabels end_labels(zone());
+    if (VisitLogicalOrSubExpression(first, &end_labels)) return;
+    for (size_t i = 0; i < expr->subsequent_length() - 1; ++i) {
+      if (VisitLogicalOrSubExpression(expr->subsequent(i), &end_labels)) {
+        return;
+      }
+    }
+    // We have to visit the last value even if it's true, because we need its
+    // actual value.
+    VisitForAccumulatorValue(expr->subsequent(expr->subsequent_length() - 1));
+    end_labels.Bind(builder());
+  }
 }
 
 void BytecodeGenerator::VisitLogicalAndExpression(BinaryOperation* binop) {
@@ -4067,22 +4147,38 @@ void BytecodeGenerator::VisitLogicalAndExpression(BinaryOperation* binop) {
     }
     test_result->SetResultConsumedByTest();
   } else {
-    if (left->ToBooleanIsFalse()) {
-      VisitForAccumulatorValue(left);
-    } else if (left->ToBooleanIsTrue()) {
-      VisitForAccumulatorValue(right);
-    } else {
-      BytecodeLabel end_label;
-      TypeHint type_hint = VisitForAccumulatorValue(left);
-      builder()->JumpIfFalse(ToBooleanModeFromTypeHint(type_hint), &end_label);
-      VisitForAccumulatorValue(right);
-      builder()->Bind(&end_label);
-    }
+    BytecodeLabels end_labels(zone());
+    if (VisitLogicalAndSubExpression(left, &end_labels)) return;
+    VisitForAccumulatorValue(right);
+    end_labels.Bind(builder());
   }
 }
+
 void BytecodeGenerator::VisitNaryLogicalAndExpression(NaryOperation* expr) {
-  // TODO(leszeks): Implement.
-  UNREACHABLE();
+  Expression* first = expr->first();
+  DCHECK_GT(expr->subsequent_length(), 0);
+
+  if (execution_result()->IsTest()) {
+    TestResultScope* test_result = execution_result()->AsTest();
+    if (first->ToBooleanIsFalse()) {
+      builder()->Jump(test_result->NewElseLabel());
+    } else {
+      BuildNaryLogicalTest(Token::AND, expr);
+    }
+    test_result->SetResultConsumedByTest();
+  } else {
+    BytecodeLabels end_labels(zone());
+    if (VisitLogicalAndSubExpression(first, &end_labels)) return;
+    for (size_t i = 0; i < expr->subsequent_length() - 1; ++i) {
+      if (VisitLogicalAndSubExpression(expr->subsequent(i), &end_labels)) {
+        return;
+      }
+    }
+    // We have to visit the last value even if it's false, because we need its
+    // actual value.
+    VisitForAccumulatorValue(expr->subsequent(expr->subsequent_length() - 1));
+    end_labels.Bind(builder());
+  }
 }
 
 void BytecodeGenerator::VisitRewritableExpression(RewritableExpression* expr) {
