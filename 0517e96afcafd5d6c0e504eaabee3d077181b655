@@ -381,6 +381,30 @@
     },
     {
       "key": {
+        "uuid": "c6b867c4_73dfe39e",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T14:43:31Z",
+      "side": 1,
+      "message": "Correction: choosing random number from [0, 1) is already implemented in RNG as nextDouble(), so I will use it instead of implementing the new one.",
+      "parentUuid": "36d819f4_1b8040d7",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1dfac57_3866a479",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 4
