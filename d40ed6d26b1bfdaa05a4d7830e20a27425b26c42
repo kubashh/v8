@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "20a98d66_d917f847",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T14:33:58Z",
+      "side": 1,
+      "message": "Good idea",
+      "parentUuid": "50a3468c_95e34da0",
+      "range": {
+        "startLine": 916,
+        "startChar": 8,
+        "endLine": 916,
+        "endChar": 41
+      },
+      "revId": "d40ed6d26b1bfdaa05a4d7830e20a27425b26c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44d94767_1bc1f776",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-26T13:38:01Z",
       "side": 1,
       "message": "Is this reusing the program\u0027s RNG state? If yes, should we not rather have our own?",
+      "range": {
+        "startLine": 919,
+        "startChar": 41,
+        "endLine": 919,
+        "endChar": 77
+      },
+      "revId": "d40ed6d26b1bfdaa05a4d7830e20a27425b26c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ab9cedc_b8819fc6",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T14:33:58Z",
+      "side": 1,
+      "message": "My bad, I have even mentioned it in the design doc to have separate RNG but I forgot about it.",
+      "parentUuid": "44d94767_1bc1f776",
       "range": {
         "startLine": 919,
         "startChar": 41,

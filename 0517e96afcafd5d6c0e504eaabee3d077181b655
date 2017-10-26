@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "3023bb5f_8874ffc5",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T14:33:58Z",
+      "side": 1,
+      "message": "So we should probably choose algorithm based on (n / max) value. I can check experimentally what limit makes sense.",
+      "parentUuid": "ff762d29_4d38a873",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f21ab206_f9267e06",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -321,6 +345,30 @@
       "side": 1,
       "message": "I.e. you\u0027d want to construct the full vector of possible values first? But that could be very large, right?\n\nHow about making a fraction of LLONG_MAX / NextInt64? And then use this fraction like the d I described above?",
       "parentUuid": "4f6a1c68_1c4f0b17",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d819f4_1b8040d7",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T14:33:58Z",
+      "side": 1,
+      "message": "I will implement random double from [0.0; 1.0] and use it here.",
+      "parentUuid": "36005bb2_ce6f1871",
       "range": {
         "startLine": 33,
         "startChar": 40,
