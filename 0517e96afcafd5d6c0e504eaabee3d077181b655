@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5c5e1e0c_3eabe0eb",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T11:58:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cecdaa2a_11d46003",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d193aa8a_eeffcf7f",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "84a6c32e_9f61cc35",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T11:58:16Z",
+      "side": 1,
+      "message": "Right, but isn\u0027t this approach prone to be wasteful when the number n gets close to half? If n is at half, towards the end of the loop, near half the values will be chosen and it will re-iterate until it finds a vacant value.\n\nWith a truly entropic RNG, I\u0027d assume that we still get progress, but with a pseudo-RNG that follows a simplistic pattern, we might actually cycle through existing values and get an infinite loop. Is that possible?\n\nHow about an approach where, instead of reiterating, we pick the nearest unused value?",
+      "parentUuid": "d16b4b2e_8ed3cb38",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f21ab206_f9267e06",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "You\u0027re right.\n\nWe could also return a vector of integers, then we could use nextInt(max) from RandomNumberGenerator. What do you think?",
       "parentUuid": "f11a7175_0e85a741",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36005bb2_ce6f1871",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T11:58:16Z",
+      "side": 1,
+      "message": "I.e. you\u0027d want to construct the full vector of possible values first? But that could be very large, right?\n\nHow about making a fraction of LLONG_MAX / NextInt64? And then use this fraction like the d I described above?",
+      "parentUuid": "4f6a1c68_1c4f0b17",
       "range": {
         "startLine": 33,
         "startChar": 40,
@@ -375,6 +447,30 @@
       "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9edd97a0_f1d0c38e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T11:58:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d6c71d7b_3e5ad03d",
+      "range": {
+        "startLine": 930,
+        "startChar": 6,
+        "endLine": 930,
+        "endChar": 9
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
