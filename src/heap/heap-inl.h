@@ -604,7 +604,7 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 }
 
 CodePageMemoryModificationScope::CodePageMemoryModificationScope(
-    MemoryChunk* chunk)
+    MemoryChunk* chunk, bool set_executable)
     : chunk_(chunk),
       scope_active_(FLAG_write_protect_code_memory &&
                     chunk_->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
@@ -615,7 +615,11 @@ CodePageMemoryModificationScope::CodePageMemoryModificationScope(
            chunk_->owner()->identity() == CODE_SPACE ||
            (chunk_->owner()->identity() == LO_SPACE &&
             chunk_->IsFlagSet(MemoryChunk::IS_EXECUTABLE)));
-    chunk_->SetReadAndWritable();
+    if (set_executable) {
+      chunk_->SetReadWriteAndExecutable();
+    } else {
+      chunk_->SetReadAndWritable();
+    }
   }
 }
 

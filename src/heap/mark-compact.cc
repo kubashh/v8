@@ -4443,7 +4443,7 @@ int MarkCompactCollector::Sweeper::ParallelSweepPage(Page* page,
 
     // If the page is a code page, the CodePageMemoryModificationScope changes
     // the page protection mode from read+execute to read+write while sweeping.
-    CodePageMemoryModificationScope code_page_scope(page);
+    CodePageMemoryModificationScope code_page_scope(page, true);
 
     DCHECK_EQ(Page::kSweepingPending,
               page->concurrent_sweeping_state().Value());
