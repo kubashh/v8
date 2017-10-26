@@ -2018,7 +2018,7 @@ void Deoptimizer::EnsureCodeForDeoptimizationEntry(Isolate* isolate,
 
   // TODO(mstarzinger,6792): This code-space modification section should be
   // moved into {Heap} eventually and a safe wrapper be provided.
-  CodePageMemoryModificationScope modification_scope(chunk);
+  CodePageMemoryModificationScope modification_scope(chunk, false);
 
   CHECK(static_cast<int>(Deoptimizer::GetMaxDeoptTableSize()) >=
         desc.instr_size);
