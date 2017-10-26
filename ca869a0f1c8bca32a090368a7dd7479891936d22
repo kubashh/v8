@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98f3b29b_00943ac1",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-10-26T10:02:13Z",
+      "side": 1,
+      "message": "nit: Use FromAllocationAreaAddress.",
+      "range": {
+        "startLine": 378,
+        "startChar": 20,
+        "endLine": 378,
+        "endChar": 31
+      },
+      "revId": "ca869a0f1c8bca32a090368a7dd7479891936d22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
