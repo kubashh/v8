@@ -1,0 +1,129 @@
+Tests Runtime.RemoteObject.
+
+Running test: testNull
+{
+    result : {
+        subtype : null
+        type : object
+        value : null
+    }
+}
+
+Running test: testBoolean
+{
+    result : {
+        type : boolean
+        value : true
+    }
+}
+{
+    result : {
+        type : boolean
+        value : false
+    }
+}
+
+Running test: testNumber
+NaN
+{
+    result : {
+        type : number
+        unserializableValue : NaN
+    }
+}
+-0
+{
+    result : {
+        type : number
+        unserializableValue : -0
+    }
+}
+0
+{
+    result : {
+        type : number
+        value : 0
+    }
+}
+Infinity
+{
+    result : {
+        type : number
+        unserializableValue : Infinity
+    }
+}
+-Infinity
+{
+    result : {
+        type : number
+        unserializableValue : -Infinity
+    }
+}
+2.3456
+{
+    result : {
+        type : number
+        value : 2.3456
+    }
+}
+
+Running test: testUndefined
+{
+    result : {
+        type : undefined
+    }
+}
+
+Running test: testString
+{
+    result : {
+        type : string
+        value : Hello!
+    }
+}
+
+Running test: testReturnByValue
+Empty object
+{
+    result : {
+        type : object
+        value : {
+        }
+    }
+}
+Object with properties
+{
+    result : {
+        type : object
+        value : {
+            a : 1
+            b : 2
+        }
+    }
+}
+Object with cycle
+{
+    code : -32000
+    message : Object reference chain is too long
+}
+Function () => 42
+{
+    result : {
+        type : function
+        value : {
+        }
+    }
+}
+Symbol(42)
+{
+    code : -32000
+    message : Object couldn't be returned by value
+}
+Error object
+{
+    result : {
+        type : object
+        value : {
+        }
+    }
+}
