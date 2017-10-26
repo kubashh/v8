@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "ff762d29_4d38a873",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T12:31:07Z",
+      "side": 1,
+      "message": "Probably choosing the nearest value gives also a biased result.\n\nAfter reading \nhttps://visualstudiomagazine.com/articles/2013/07/01/generating-distinct-random-array-indices.aspx I tend to be fine with your approach, given the number n is small. Maybe introduce a sanity variable that prevents infinite loops as in one of the examples in the article?\n\nIf n is larger, reservoir sampling seems to be the best method.",
+      "parentUuid": "84a6c32e_9f61cc35",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f21ab206_f9267e06",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
