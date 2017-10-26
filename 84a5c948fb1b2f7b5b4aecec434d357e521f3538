@@ -16,6 +16,24 @@
       "revId": "84a5c948fb1b2f7b5b4aecec434d357e521f3538",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73ce3903_e14543d7",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1119504
+      },
+      "writtenOn": "2017-10-26T08:50:23Z",
+      "side": 1,
+      "message": "Oh, but that is a separate issue. You can solve that just fine by keeping count in the present loop. I don\u0027t think any additional pass is needed, nor does the incorporation of the singular case help.",
+      "parentUuid": "ace776ca_3dd86586",
+      "revId": "84a5c948fb1b2f7b5b4aecec434d357e521f3538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
