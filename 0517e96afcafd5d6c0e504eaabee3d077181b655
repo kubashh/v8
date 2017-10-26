@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ae49a2b_7344a350",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Maybe also put this file into base/utils? Or maybe add it to random-number-generator directly?",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d193aa8a_eeffcf7f",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "nit: http://shortn/_UVcs3z4hSi",
+      "range": {
+        "startLine": 22,
+        "startChar": 49,
+        "endLine": 22,
+        "endChar": 53
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ecdaa6e_78a3438c",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "It looks like selected might contain the same values several times. Should it? And if it should, why restrict to n\u003cmax?",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21ab206_f9267e06",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Just making sure that I get the math:\nLLONG_MIN - LLONG_MIN \u003d 0\n-1 - LLONG_MIN \u003d LLONG_MAX\nDoes that sound right?",
+      "range": {
+        "startLine": 31,
+        "startChar": 6,
+        "endLine": 31,
+        "endChar": 21
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f11a7175_0e85a741",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Won\u0027t this have a (very small) bias towards the modulo rest? E.g. assume nextint64 returns in interval [0,9] and max is 7. We\u0027d have a higher probability for 0,1,2 than for the other numbers.\n\nMaybe use a random double d in (0,1] and choose max*d?",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1dfac57_3866a479",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "I\u0027m too much of a python guy I guess. What happens if FLAG_stress_compaction_percentage is 0? Which value is used to keep the flag off? For the other fuzzer flags we include \u003e 0 in this check.",
+      "range": {
+        "startLine": 923,
+        "startChar": 13,
+        "endLine": 923,
+        "endChar": 46
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a379ae35_a83e2b24",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Wonder if we maybe should make all dchecks checks instead within our fuzzing code? We\u0027d discover dcheck failures only if we add a debug fuzzer build. But maybe we only do release + tsan... Those checks should not be that expensive at this point I guess...",
+      "range": {
+        "startLine": 924,
+        "startChar": 4,
+        "endLine": 924,
+        "endChar": 52
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8076cffa_dd250ae7",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Is the order in this loop important? Right now, the samples are not sorted. Also note that I believe it can contain the same i twice, as commented on the util file.",
+      "range": {
+        "startLine": 930,
+        "startChar": 6,
+        "endLine": 930,
+        "endChar": 9
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3058c901_e862e090",
+        "filename": "test/unittests/base/random-utils-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-26T09:10:22Z",
+      "side": 1,
+      "message": "Could we not compare with exact expected numbers? The RNG should be deterministic with the 123 seed.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
