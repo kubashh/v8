@@ -30,6 +30,8 @@
 
 #include "src/inspector/injected-script.h"
 
+#include <cmath>
+
 #include "src/inspector/injected-script-source.h"
 #include "src/inspector/inspected-context.h"
 #include "src/inspector/protocol/Protocol.h"
@@ -56,6 +58,66 @@ using protocol::Runtime::PropertyDescriptor;
 using protocol::Runtime::InternalPropertyDescriptor;
 using protocol::Runtime::RemoteObject;
 using protocol::Maybe;
+
+namespace {
+std::unique_ptr<RemoteObject> remoteObjectForNull() {
+  return RemoteObject::create()
+      .setType(RemoteObject::TypeEnum::Object)
+      .setSubtype(RemoteObject::SubtypeEnum::Null)
+      .setValue(protocol::Value::null())
+      .build();
+}
+
+std::unique_ptr<RemoteObject> remoteObjectForUndefined() {
+  return RemoteObject::create()
+      .setType(RemoteObject::TypeEnum::Undefined)
+      .build();
+}
+
+std::unique_ptr<RemoteObject> remoteObjectFor(v8::Local<v8::Boolean> value) {
+  return RemoteObject::create()
+      .setType(RemoteObject::TypeEnum::Boolean)
+      .setValue(protocol::FundamentalValue::create(value->Value()))
+      .build();
+}
+
+std::unique_ptr<RemoteObject> remoteObjectFor(v8::Local<v8::Number> value) {
+  double rawValue = value->Value();
+  if (std::isnan(rawValue)) {
+    return RemoteObject::create()
+        .setType(RemoteObject::TypeEnum::Number)
+        .setUnserializableValue(protocol::Runtime::UnserializableValueEnum::NaN)
+        .build();
+  }
+  if (rawValue == 0.0 && std::signbit(rawValue)) {
+    return RemoteObject::create()
+        .setType(RemoteObject::TypeEnum::Number)
+        .setUnserializableValue(
+            protocol::Runtime::UnserializableValueEnum::Negative0)
+        .build();
+  }
+  if (std::isinf(rawValue)) {
+    return RemoteObject::create()
+        .setType(RemoteObject::TypeEnum::Number)
+        .setUnserializableValue(
+            std::signbit(rawValue)
+                ? protocol::Runtime::UnserializableValueEnum::NegativeInfinity
+                : protocol::Runtime::UnserializableValueEnum::Infinity)
+        .build();
+  }
+  return RemoteObject::create()
+      .setType(RemoteObject::TypeEnum::Number)
+      .setValue(protocol::FundamentalValue::create(rawValue))
+      .build();
+}
+
+std::unique_ptr<RemoteObject> remoteObjectFor(v8::Local<v8::String> value) {
+  return RemoteObject::create()
+      .setType(RemoteObject::TypeEnum::String)
+      .setValue(protocol::StringValue::create(toProtocolString(value)))
+      .build();
+}
+}  // namespace
 
 class InjectedScript::ProtocolPromiseHandler {
  public:
@@ -373,6 +435,37 @@ Response InjectedScript::wrapObject(
     v8::Local<v8::Value> value, const String16& groupName, bool forceValueType,
     bool generatePreview,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result) const {
+  bool hasClientSubtypeAndUndefined = false;
+  if (value->IsUndefined()) {
+    // document.all is undefined with client subtype.
+    hasClientSubtypeAndUndefined =
+        !!m_context->inspector()->client()->valueSubtype(value);
+  }
+  if (value->IsNull()) {
+    *result = remoteObjectForNull();
+  } else if (value->IsUndefined() && !hasClientSubtypeAndUndefined) {
+    *result = remoteObjectForUndefined();
+  } else if (value->IsBoolean()) {
+    *result = remoteObjectFor(v8::Local<v8::Boolean>::Cast(value));
+  } else if (value->IsNumber()) {
+    *result = remoteObjectFor(v8::Local<v8::Number>::Cast(value));
+  } else if (value->IsString()) {
+    *result = remoteObjectFor(v8::Local<v8::String>::Cast(value));
+  } else if (forceValueType) {
+    std::unique_ptr<protocol::Value> protocolValue;
+    Response response =
+        toProtocolValue(m_context->context(), value, &protocolValue);
+    if (!response.isSuccess()) return response;
+    *result = RemoteObject::create()
+                  .setType(hasClientSubtypeAndUndefined
+                               ? RemoteObject::TypeEnum::Object
+                               : toProtocolString(
+                                     value->TypeOf(m_context->isolate())))
+                  .setValue(std::move(protocolValue))
+                  .build();
+  }
+  if (*result) return Response::OK();
+
   v8::HandleScope handles(m_context->isolate());
   v8::Local<v8::Value> wrappedObject;
   v8::Local<v8::Context> context = m_context->context();
