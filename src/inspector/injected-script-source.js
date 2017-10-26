@@ -716,14 +716,14 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
 
         // Provide user-friendly number values.
         if (this.type === "number") {
-            this.description = toStringDescription(object);
-            switch (this.description) {
+            var description = toStringDescription(object);
+            switch (description) {
             case "NaN":
             case "Infinity":
             case "-Infinity":
             case "-0":
                 delete this.value;
-                this.unserializableValue = this.description;
+                this.unserializableValue = description;
                 break;
             }
         }
@@ -734,7 +734,6 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
     if (injectedScript._shouldPassByValue(object)) {
         this.value = object;
         this.subtype = injectedScript._subtype(object);
-        this.description = injectedScript._describeIncludingPrimitives(object);
         return;
     }
 
