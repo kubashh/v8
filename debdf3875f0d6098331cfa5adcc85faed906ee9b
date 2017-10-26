@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "48ec3bf7_2f0d7eb6",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "That doesn\u0027t really help, as it\u0027s trivially true that for any Entry, we only create one object from it.\n\nLet\u0027s step back for a moment: what is this trying to check for? It\u0027s not two objects with the same underlying value (since we used to have multiple HeapNumbers for the same double value). It seems like it might just be trying to test ast_value_factory.Internalize().\n\nDo we want to change it to check that we only have one entry for any _value_?",
+      "parentUuid": "be9daced_20331183",
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "707e90b8_0d38f75b",
         "filename": "src/interpreter/constant-array-builder.cc",
         "patchSetId": 11
@@ -57,6 +75,30 @@
       "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6c92196_96ea481c",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "Yes; the only way this can fail is if we try to allocate a BigInt larger than the runtime supports, and that\u0027s something we should be detecting in the Parser (and throwing there).",
+      "parentUuid": "707e90b8_0d38f75b",
+      "range": {
+        "startLine": 353,
+        "startChar": 6,
+        "endLine": 354,
+        "endChar": 65
+      },
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

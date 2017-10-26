@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e5ad85d5_45af327c",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "Renamed to BuildValue, and added TODOs in prettyprinter, build this function would still be necessary for generating boilerplate values (for inclusion in Array and Object literals).",
+      "parentUuid": "3a126e96_6965333a",
+      "range": {
+        "startLine": 820,
+        "startChar": 0,
+        "endLine": 823,
+        "endChar": 52
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83e9a25b_a327d51d",
         "filename": "src/interpreter/bytecode-array-builder.cc",
         "patchSetId": 12
@@ -93,6 +117,30 @@
       "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233ae42f_f2d197f6",
+        "filename": "src/interpreter/bytecode-array-builder.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "Added a tiny AstBigInt class for this purpose, let me know what you think.",
+      "parentUuid": "83e9a25b_a327d51d",
+      "range": {
+        "startLine": 593,
+        "startChar": 56,
+        "endLine": 593,
+        "endChar": 67
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "38e62fae_3e9addf6",
+        "filename": "src/interpreter/constant-array-builder.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "I actually went the other way; this gives us consistent ordering of iteration of these maps.\n\nI should have had a \"DO NOT SUBMIT\" comment over the unordered map: it was to make NaN sorta work. I\u0027ve now added special support for NaN as a singleton.",
+      "parentUuid": "8b9f7f7f_f9797ee2",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 9
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbc5fe05_5efbc0b3",
         "filename": "test/cctest/interpreter/test-interpreter.cc",
         "patchSetId": 12
@@ -139,6 +211,30 @@
       "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4261f1dd_e5717a06",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-26T21:33:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc5fe05_5efbc0b3",
+      "range": {
+        "startLine": 392,
+        "startChar": 7,
+        "endLine": 392,
+        "endChar": 16
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
