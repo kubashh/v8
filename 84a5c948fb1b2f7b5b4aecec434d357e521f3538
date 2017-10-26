@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ace776ca_3dd86586",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-26T08:39:14Z",
+      "side": 1,
+      "message": "Since GetReturnIndexAfterLowering() is linear, this is going to end up being O(n^2). What I had in mind was first gathering the all the nodes representing the values from the old instruction (in the case of {singular}, that is just the call node itself, while in the case of \u003e 1 return value, it will be the projections) and then iterating over them in step with the old call descriptor, introducing new projections from the call and updating the new index as you go. That will definitely be O(n).",
+      "revId": "84a5c948fb1b2f7b5b4aecec434d357e521f3538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
