@@ -319,8 +319,8 @@ bool Parser::CollapseNaryExpression(Expression** x, Expression* y,
     BinaryOperation* binop = (*x)->AsBinaryOperation();
     if (binop->op() != op) return false;
 
-    nary = factory()->NewNaryOperation(op, binop->left(), binop->right(),
-                                       binop->position());
+    nary = factory()->NewNaryOperation(op, binop->left());
+    nary->AddSubsequent(binop->right(), binop->position());
     *x = nary;
   } else if ((*x)->IsNaryOperation()) {
     nary = (*x)->AsNaryOperation();
@@ -3527,9 +3527,17 @@ Expression* Parser::CloseTemplateLiteral(TemplateLiteralState* state, int start,
   DCHECK_EQ(cooked_strings->length(), expressions->length() + 1);
 
   if (!tag) {
-    // Build tree of BinaryOps to simplify code-generation
-    Expression* expr =
+    Expression* first_string =
         factory()->NewStringLiteral(cooked_strings->at(0), kNoSourcePosition);
+    if (expressions->length() == 0) return first_string;
+
+    // Build N-ary addition op to simplify code-generation.
+    // TODO(leszeks): Could we just store this expression in the
+    // TemplateLiteralState and build it as we go?
+    NaryOperation* expr = factory()->NewNaryOperation(Token::ADD, first_string);
+    // Preallocate space in the nary operation.
+    expr->ReserveSubsequent(2 * expressions->length());
+
     int i = 0;
     while (i < expressions->length()) {
       Expression* sub = expressions->at(i++);
@@ -3540,13 +3548,11 @@ Expression* Parser::CloseTemplateLiteral(TemplateLiteralState* state, int start,
       ZoneList<Expression*>* args =
           new (zone()) ZoneList<Expression*>(1, zone());
       args->Add(sub, zone());
-      Expression* middle = factory()->NewCallRuntime(Runtime::kInlineToString,
-                                                     args, sub->position());
+      Expression* sub_to_string = factory()->NewCallRuntime(
+          Runtime::kInlineToString, args, sub->position());
 
-      expr = factory()->NewBinaryOperation(
-          Token::ADD,
-          factory()->NewBinaryOperation(Token::ADD, expr, middle,
-                                        expr->position()),
+      expr->AddSubsequent(sub_to_string, sub->position());
+      expr->AddSubsequent(
           factory()->NewStringLiteral(cooked_str, kNoSourcePosition),
           sub->position());
     }
