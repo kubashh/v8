@@ -190,6 +190,10 @@ class V8_BASE_EXPORT OS {
   // Make a region of memory non-executable but readable and writable.
   static void SetReadAndWritable(void* address, const size_t size, bool commit);
 
+  // Make a region of memory read, write, and executable. Do not use this
+  // function. This is only a temporary function and will go away soon.
+  static void SetReadWriteAndExecutable(void* address, const size_t size);
+
   // Generate a random address to be used for hinting mmap().
   static void* GetRandomMmapAddr();
 
