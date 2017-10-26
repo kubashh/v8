@@ -46,6 +46,99 @@
       "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a126e96_6965333a",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "Could we call this BuildValue or similar to make it clear it creates the value. Also, prettyprinter should be moved to just print ast-values (not on-heap) values at some point, so all this would be used for is boiler plate creation. Could that be done differently so as to avoid the need for this function going forward? If so please add a TODO, thanks.",
+      "parentUuid": "40e68be3_74fc71bd",
+      "range": {
+        "startLine": 820,
+        "startChar": 0,
+        "endLine": 823,
+        "endChar": 52
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83e9a25b_a327d51d",
+        "filename": "src/interpreter/bytecode-array-builder.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "Could we have a better type for bigint to add some type safety (I could imagine confusion about LoadLiteral(\"string\") here)",
+      "range": {
+        "startLine": 593,
+        "startChar": 56,
+        "endLine": 593,
+        "endChar": 67
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9f7f7f_f9797ee2",
+        "filename": "src/interpreter/constant-array-builder.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "nit - can you make this an ZoneUnorderedMap too please.",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 217,
+        "endChar": 9
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbc5fe05_5efbc0b3",
+        "filename": "test/cctest/interpreter/test-interpreter.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "nit - LiteralForTest",
+      "range": {
+        "startLine": 392,
+        "startChar": 7,
+        "endLine": 392,
+        "endChar": 16
+      },
+      "revId": "effc2d17b5f752d9758390ee259383f08ff44f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

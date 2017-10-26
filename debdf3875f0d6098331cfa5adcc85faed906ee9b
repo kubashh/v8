@@ -16,6 +16,47 @@
       "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be9daced_20331183",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "How about retaining the generated handles in Entry for debug mode and using those for the uniqueness check?",
+      "parentUuid": "3eca19e0_e58683e9",
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "707e90b8_0d38f75b",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 1,
+      "message": "Do you have a plan on how to do this todo?",
+      "range": {
+        "startLine": 353,
+        "startChar": 6,
+        "endLine": 354,
+        "endChar": 65
+      },
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

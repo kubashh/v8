@@ -22,6 +22,53 @@
       "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d69bd1f1_7ccac16d",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 0,
+      "message": "Nope that was removed a while ago, thanks for cleaning up the comment",
+      "parentUuid": "9c595c78_a8d5a7e0",
+      "range": {
+        "startLine": 157,
+        "startChar": 57,
+        "endLine": 157,
+        "endChar": 77
+      },
+      "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ca5eac_1428f306",
+        "filename": "test/unittests/interpreter/bytecode-array-random-iterator-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 0,
+      "message": "Any reason you need to get rid of these (can\u0027t you use GetValue instead of value() and still check the same thing)?",
+      "range": {
+        "startLine": 332,
+        "startChar": 2,
+        "endLine": 333,
+        "endChar": 28
+      },
+      "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

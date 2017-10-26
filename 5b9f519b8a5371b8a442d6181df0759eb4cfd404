@@ -46,6 +46,30 @@
       "revId": "5b9f519b8a5371b8a442d6181df0759eb4cfd404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d1fbb4_4022334f",
+        "filename": "test/cctest/interpreter/bytecode_expectations/ArrayLiteralsWide.golden",
+        "patchSetId": 1
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-26T09:44:43Z",
+      "side": 0,
+      "message": "Let\u0027s just drop these tests, I don\u0027t think they are particularly useful any longer.",
+      "parentUuid": "54c67486_95ac00a1",
+      "range": {
+        "startLine": 791,
+        "startChar": 2,
+        "endLine": 791,
+        "endChar": 25
+      },
+      "revId": "5b9f519b8a5371b8a442d6181df0759eb4cfd404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
