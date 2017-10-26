@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cecdaa2a_11d46003",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Other \"utils\" files are under src/base, so I wanted to be consistent with the majority.\nMaybe utils need simple reorganization?",
+      "parentUuid": "9ae49a2b_7344a350",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d193aa8a_eeffcf7f",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "eb5c90c2_e443ad6d",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d193aa8a_eeffcf7f",
+      "range": {
+        "startLine": 22,
+        "startChar": 49,
+        "endLine": 22,
+        "endChar": 53
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ecdaa6e_78a3438c",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-26T09:10:22Z",
       "side": 1,
       "message": "It looks like selected might contain the same values several times. Should it? And if it should, why restrict to n\u003cmax?",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d16b4b2e_8ed3cb38",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Set contains only unique values.",
+      "parentUuid": "9ecdaa6e_78a3438c",
       "range": {
         "startLine": 25,
         "startChar": 29,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "67cab058_03e5d708",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "f21ab206_f9267e06",
+      "range": {
+        "startLine": 31,
+        "startChar": 6,
+        "endLine": 31,
+        "endChar": 21
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f11a7175_0e85a741",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 4
@@ -105,6 +201,30 @@
       "writtenOn": "2017-10-26T09:10:22Z",
       "side": 1,
       "message": "Won\u0027t this have a (very small) bias towards the modulo rest? E.g. assume nextint64 returns in interval [0,9] and max is 7. We\u0027d have a higher probability for 0,1,2 than for the other numbers.\n\nMaybe use a random double d in (0,1] and choose max*d?",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 47
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6a1c68_1c4f0b17",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "You\u0027re right.\n\nWe could also return a vector of integers, then we could use nextInt(max) from RandomNumberGenerator. What do you think?",
+      "parentUuid": "f11a7175_0e85a741",
       "range": {
         "startLine": 33,
         "startChar": 40,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "91e341e6_984d258e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1dfac57_3866a479",
+      "range": {
+        "startLine": 923,
+        "startChar": 13,
+        "endLine": 923,
+        "endChar": 46
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a379ae35_a83e2b24",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10029fcc_76dde6c4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a379ae35_a83e2b24",
+      "range": {
+        "startLine": 924,
+        "startChar": 4,
+        "endLine": 924,
+        "endChar": 52
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "d6c71d7b_3e5ad03d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "The order is not important, I just want to iterate over page indexes that should be marked.",
+      "parentUuid": "8076cffa_dd250ae7",
+      "range": {
+        "startLine": 930,
+        "startChar": 6,
+        "endLine": 930,
+        "endChar": 9
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3058c901_e862e090",
         "filename": "test/unittests/base/random-utils-unittest.cc",
         "patchSetId": 4
@@ -197,6 +389,30 @@
       "writtenOn": "2017-10-26T09:10:22Z",
       "side": 1,
       "message": "Could we not compare with exact expected numbers? The RNG should be deterministic with the 123 seed.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "0517e96afcafd5d6c0e504eaabee3d077181b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a9f2836_e9d2aba9",
+        "filename": "test/unittests/base/random-utils-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-26T10:06:07Z",
+      "side": 1,
+      "message": "I just wanted to check if they\u0027re from given range. If we change how we generate random values inside RandomSample then the test with hardcoded values will fail, even if they\u0027re still correct (from the correct range).\nMaybe I should call the same test multiple times with different seeds?",
+      "parentUuid": "3058c901_e862e090",
       "range": {
         "startLine": 44,
         "startChar": 4,
