@@ -1919,6 +1919,8 @@
         'base/platform/platform.h',
         'base/platform/semaphore.cc',
         'base/platform/semaphore.h',
+        'base/random-utils.cc',
+        'base/random-utils.h',
         'base/ring-buffer.h',
         'base/safe_conversions.h',
         'base/safe_conversions_impl.h',
