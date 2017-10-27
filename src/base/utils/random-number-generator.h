@@ -5,6 +5,8 @@
 #ifndef V8_BASE_UTILS_RANDOM_NUMBER_GENERATOR_H_
 #define V8_BASE_UTILS_RANDOM_NUMBER_GENERATOR_H_
 
+#include <vector>
+
 #include "src/base/base-export.h"
 #include "src/base/macros.h"
 
@@ -84,6 +86,10 @@ class V8_BASE_EXPORT RandomNumberGenerator final {
 
   // Fills the elements of a specified array of bytes with random numbers.
   void NextBytes(void* buffer, size_t buflen);
+
+  // Returns the next pseudorandom set of n unique int64 values from the range 0
+  // (inclusive) to max (exclusive). max must be less than n.
+  std::vector<int64_t> NextSample(int64_t max, size_t n) WARN_UNUSED_RESULT;
 
   // Override the current ssed.
   void SetSeed(int64_t seed);
