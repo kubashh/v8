@@ -18,6 +18,8 @@
 #include "src/global-handles.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
+#include "src/isolate-inl.h"
+#include "src/isolate.h"
 #include "src/libsampler/sampler.h"
 #include "src/log-inl.h"
 #include "src/macro-assembler.h"
@@ -1352,6 +1354,46 @@ void Logger::ICEvent(const char* type, bool keyed, Map* map, Object* key,
   msg.WriteToLogFile();
 }
 
+void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
+                      HeapObject* name_or_sfi) {
+  DisallowHeapAllocation no_gc;
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  MapDetails(to);
+  int line = -1;
+  int column = -1;
+  Address pc = 0;
+  if (!isolate_->bootstrapper()->IsActive()) {
+    pc = isolate_->GetAbstractPC(&line, &column);
+  }
+  Log::MessageBuilder msg(log_);
+  msg << "map" << kNext << type << kNext << timer_.Elapsed().InMicroseconds()
+      << kNext << reinterpret_cast<void*>(from) << kNext
+      << reinterpret_cast<void*>(to) << kNext << reinterpret_cast<void*>(pc)
+      << kNext << line << kNext << column << kNext << reason << kNext;
+
+  if (name_or_sfi) {
+    if (name_or_sfi->IsName()) {
+      msg << Name::cast(name_or_sfi);
+    } else if (name_or_sfi->IsSharedFunctionInfo()) {
+      SharedFunctionInfo* sfi = SharedFunctionInfo::cast(name_or_sfi);
+      msg << sfi->DebugName();
+    }
+  }
+  msg.WriteToLogFile();
+}
+
+void Logger::MapDetails(Map* map) {
+  if (!log_->IsEnabled() || !FLAG_trace_maps) return;
+  DisallowHeapAllocation no_gc;
+  Log::MessageBuilder msg(log_);
+  msg << "map-details" << kNext << timer_.Elapsed().InMicroseconds() << kNext
+      << reinterpret_cast<void*>(map) << kNext;
+  std::ostringstream buffer;
+  map->PrintMapDetails(buffer);
+  msg << buffer.str().c_str();
+  msg.WriteToLogFile();
+}
+
 void Logger::StopProfiler() {
   if (!log_->IsEnabled()) return;
   if (profiler_ != nullptr) {
@@ -1588,7 +1630,6 @@ void Logger::LogCompiledFunctions() {
   }
 }
 
-
 void Logger::LogAccessorCallbacks() {
   Heap* heap = isolate_->heap();
   HeapIterator iterator(heap);
@@ -1616,6 +1657,17 @@ void Logger::LogAccessorCallbacks() {
   }
 }
 
+void Logger::LogMaps() {
+  Heap* heap = isolate_->heap();
+  HeapIterator iterator(heap);
+  DisallowHeapAllocation no_gc;
+  for (HeapObject* obj = iterator.next(); obj != nullptr;
+       obj = iterator.next()) {
+    if (obj->IsMap()) {
+      MapDetails(Map::cast(obj));
+    }
+  }
+}
 
 static void AddIsolateIdIfNeeded(std::ostream& os,  // NOLINT
                                  Isolate* isolate) {

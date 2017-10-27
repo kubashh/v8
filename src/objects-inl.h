@@ -3307,7 +3307,6 @@ bool Map::is_access_check_needed() const {
   return ((1 << kIsAccessCheckNeeded) & bit_field()) != 0;
 }
 
-
 void Map::set_is_extensible(bool value) {
   if (value) {
     set_bit_field2(bit_field2() | (1 << kIsExtensible));
@@ -3419,6 +3418,9 @@ bool Map::is_callable() const {
 
 void Map::deprecate() {
   set_bit_field3(Deprecated::update(bit_field3(), true));
+  if (FLAG_trace_maps) {
+    LOG(GetIsolate(), MapEvent("Deprecate", this, this));
+  }
 }
 
 bool Map::is_deprecated() const { return Deprecated::decode(bit_field3()); }

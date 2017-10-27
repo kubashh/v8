@@ -64,6 +64,9 @@ void StartupDeserializer::DeserializeInto(Isolate* isolate) {
   LOG_CODE_EVENT(isolate, LogCodeObjects());
   LOG_CODE_EVENT(isolate, LogBytecodeHandlers());
   LOG_CODE_EVENT(isolate, LogCompiledFunctions());
+  if (FLAG_trace_maps) {
+    LOG(isolate, LogMaps());
+  }
 
   isolate->builtins()->MarkInitialized();
 

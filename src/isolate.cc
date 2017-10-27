@@ -659,6 +659,11 @@ Handle<FixedArray> Isolate::GetDetailedStackTrace(
 Address Isolate::GetAbstractPC(int* line, int* column) {
   JavaScriptFrameIterator it(this);
 
+  if (it.done()) {
+    *line = -1;
+    *column = -1;
+    return nullptr;
+  }
   JavaScriptFrame* frame = it.frame();
   DCHECK(!frame->is_builtin());
   int position = frame->position();

@@ -195,6 +195,11 @@ class Logger : public CodeEventListener {
                char old_state, char new_state, const char* modifier,
                const char* slow_stub_reason);
 
+  void MapEvent(const char* type, Map* from, Map* to,
+                const char* reason = nullptr,
+                HeapObject* name_or_sfi = nullptr);
+  void MapDetails(Map* map);
+
   // ==== Events logged by --log-gc. ====
   // Heap sampling events: start, end, and individual types.
   void HeapSampleBeginEvent(const char* space, const char* kind);
@@ -246,6 +251,8 @@ class Logger : public CodeEventListener {
   void LogCodeObjects();
   // Used for logging bytecode handlers found in the snapshot.
   void LogBytecodeHandlers();
+  // Log all Maps found on the heap;
+  void LogMaps();
 
   // Converts tag to a corresponding NATIVE_... if the script is native.
   INLINE(static CodeEventListener::LogEventsAndTags ToNativeByScript(

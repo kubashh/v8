@@ -1978,6 +1978,9 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
   // Set up the global object as a normalized object.
   global->set_global_dictionary(*dictionary);
   global->synchronized_set_map(*new_map);
+  if (FLAG_trace_maps) {
+    LOG(isolate(), MapEvent("NewJSGlobalObject", *map, *new_map));
+  }
 
   // Make sure result is a global object with properties in dictionary.
   DCHECK(global->IsJSGlobalObject() && !global->HasFastProperties());

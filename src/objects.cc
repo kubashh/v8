@@ -5193,9 +5193,13 @@ Handle<Map> Map::GetObjectCreateMap(Handle<HeapObject> prototype) {
     if (info->HasObjectCreateMap()) {
       map = handle(info->ObjectCreateMap(), isolate);
     } else {
-      map = Map::CopyInitialMap(map);
-      Map::SetPrototype(map, prototype);
-      PrototypeInfo::SetObjectCreateMap(info, map);
+      Handle<Map> result = Map::CopyInitialMap(map);
+      Map::SetPrototype(result, prototype);
+      PrototypeInfo::SetObjectCreateMap(info, result);
+      if (FLAG_trace_maps) {
+        LOG(isolate, MapEvent("CopyInitialMap", *map, *result));
+      }
+      return result;
     }
     return map;
   }
@@ -6218,11 +6222,7 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 
   NotifyMapChange(old_map, new_map, isolate);
 
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: SlowToFast from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*old_map), reinterpret_cast<void*>(*new_map),
-           reason);
-  }
+  LOG(isolate, MapEvent("SlowToFast", *old_map, *new_map, reason));
 
   if (instance_descriptor_length == 0) {
     DisallowHeapAllocation no_gc;
@@ -9039,11 +9039,7 @@ Handle<Map> Map::Normalize(Handle<Map> fast_map, PropertyNormalizationMode mode,
       cache->Set(fast_map, new_map, cell);
       isolate->counters()->maps_normalized()->Increment();
     }
-    if (FLAG_trace_maps) {
-      PrintF("[TraceMaps: Normalize from= %p to= %p reason= %s ]\n",
-             reinterpret_cast<void*>(*fast_map),
-             reinterpret_cast<void*>(*new_map), reason);
-    }
+    LOG(isolate, MapEvent("Normalize", *fast_map, *new_map, reason));
   }
   fast_map->NotifyLeafMapLayoutChange();
   return new_map;
@@ -9208,30 +9204,6 @@ Handle<Map> Map::ShareDescriptor(Handle<Map> map,
   return result;
 }
 
-// static
-void Map::TraceTransition(const char* what, Map* from, Map* to, Name* name) {
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: %s from= %p to= %p name= ", what,
-           reinterpret_cast<void*>(from), reinterpret_cast<void*>(to));
-    name->NameShortPrint();
-    PrintF(" ]\n");
-  }
-}
-
-
-// static
-void Map::TraceAllTransitions(Map* map) {
-  DisallowHeapAllocation no_gc;
-  TransitionsAccessor transitions(map, &no_gc);
-  int num_transitions = transitions.NumberOfTransitions();
-  for (int i = -0; i < num_transitions; ++i) {
-    Map* target = transitions.GetTarget(i);
-    Name* key = transitions.GetKey(i);
-    Map::TraceTransition("Transition", map, target, key);
-    Map::TraceAllTransitions(target);
-  }
-}
-
 void Map::ConnectTransition(Handle<Map> parent, Handle<Map> child,
                             Handle<Name> name, SimpleTransitionFlag flag) {
   Isolate* isolate = parent->GetIsolate();
@@ -9242,6 +9214,9 @@ void Map::ConnectTransition(Handle<Map> parent, Handle<Map> child,
   // Do not track transitions during bootstrap except for element transitions.
   if (isolate->bootstrapper()->IsActive() &&
       !name.is_identical_to(isolate->factory()->elements_transition_symbol())) {
+    if (FLAG_trace_maps) {
+      LOG(isolate, MapEvent("Transition", *parent, *child, "elements", *name));
+    }
     return;
   }
   if (!parent->GetBackPointer()->IsUndefined(isolate)) {
@@ -9255,10 +9230,10 @@ void Map::ConnectTransition(Handle<Map> parent, Handle<Map> child,
   }
   if (parent->is_prototype_map()) {
     DCHECK(child->is_prototype_map());
-    Map::TraceTransition("NoTransition", *parent, *child, *name);
+    LOG(isolate, MapEvent("Transition", *parent, *child, "prototype", *name));
   } else {
     TransitionsAccessor(parent).Insert(name, child, flag);
-    Map::TraceTransition("Transition", *parent, *child, *name);
+    LOG(isolate, MapEvent("Transition", *parent, *child, "", *name));
   }
 }
 
@@ -9298,9 +9273,8 @@ Handle<Map> Map::CopyReplaceDescriptors(
       (map->is_prototype_map() ||
        !(flag == INSERT_TRANSITION &&
          TransitionsAccessor(map).CanHaveMoreTransitions()))) {
-    PrintF("[TraceMaps: ReplaceDescriptors from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*result),
-           reason);
+    LOG(map->GetIsolate(), MapEvent("ReplaceDescriptors", *map, *result, reason,
+                                    maybe_name.is_null() ? nullptr : *name));
   }
   return result;
 }
@@ -9460,6 +9434,9 @@ Handle<Map> Map::AsLanguageMode(Handle<Map> initial_map,
   if (TransitionsAccessor(initial_map).CanHaveMoreTransitions()) {
     Map::ConnectTransition(initial_map, map, transition_symbol,
                            SPECIAL_TRANSITION);
+  } else if (FLAG_trace_maps) {
+    LOG(isolate, MapEvent("Transition", *initial_map, *map, "language-mode",
+                          *transition_symbol));
   }
   return map;
 }
@@ -9487,12 +9464,7 @@ Handle<Map> Map::CopyForTransition(Handle<Map> map, const char* reason) {
     new_map->InitializeDescriptors(*new_descriptors, *new_layout_descriptor);
   }
 
-  if (FLAG_trace_maps) {
-    PrintF("[TraceMaps: CopyForTransition from= %p to= %p reason= %s ]\n",
-           reinterpret_cast<void*>(*map), reinterpret_cast<void*>(*new_map),
-           reason);
-  }
-
+  LOG(map->GetIsolate(), MapEvent("CopyForTransition", *map, *new_map, reason));
   return new_map;
 }
 
@@ -12747,9 +12719,9 @@ void JSFunction::SetInitialMap(Handle<JSFunction> function, Handle<Map> map,
 #if V8_SFI_HAS_UNIQUE_ID
     sfi_id = function->shared()->unique_id();
 #endif  // V8_SFI_HAS_UNIQUE_ID
-    PrintF("[TraceMaps: InitialMap map= %p SFI= %d_%s ]\n",
-           reinterpret_cast<void*>(*map), sfi_id,
-           function->shared()->DebugName()->ToCString().get());
+    // TODO(cbruni): print function->shared()->unique_id()
+    LOG(map->GetIsolate(), MapEvent("InitialMap", nullptr, *map, "",
+                                    function->shared()->DebugName()));
   }
 }
 
@@ -12980,6 +12952,9 @@ MaybeHandle<Map> JSFunction::GetDerivedMap(Isolate* isolate,
   DCHECK(prototype->IsJSReceiver());
   if (map->prototype() != *prototype) Map::SetPrototype(map, prototype);
   map->SetConstructor(*constructor);
+  if (FLAG_trace_maps) {
+    LOG(isolate, MapEvent("CopyInitialMap", *constructor_initial_map, *map));
+  }
   return map;
 }
 

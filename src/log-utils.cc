@@ -139,6 +139,7 @@ void Log::MessageBuilder::AppendString(String* str) {
 }
 
 void Log::MessageBuilder::AppendString(const char* string) {
+  if (string == nullptr) return;
   for (const char* p = string; *p != '\0'; p++) {
     this->AppendCharacter(*p);
   }
@@ -171,14 +172,16 @@ void Log::MessageBuilder::AppendCharacter(char c) {
   // A log entry (separate by commas) cannot contain commas or line-brakes.
   if (c >= 32 && c <= 126) {
     if (c == ',') {
-      // Escape commas directly.
+      // Escape commas (field separator) directly.
       os << "\x2c";
     } else {
       // Directly append any printable ascii character.
       os << c;
     }
+  } else if (c == '\n') {
+    os << "\\n";
   } else {
-    // Escape any non-printable haracters.
+    // Escape any non-printable characters.
     Append("\\x%02x", c);
   }
 }
