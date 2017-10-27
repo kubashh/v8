@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52f83e58_71920b79",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-27T07:02:58Z",
+      "side": 1,
+      "message": "It\u0027s crashing for you with smaller values because this should be:\n+      current_function_builder_-\u003eEmit(kExprCallFunction);\n+      current_function_builder_-\u003eEmitDirectCallIndex(prev_index);\n\nI suspect for larger values it\u0027s not kicking.",
+      "revId": "2970adf06aa5f2258eadf03f3cdf984a8f664aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
