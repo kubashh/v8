@@ -1261,7 +1261,6 @@ FrameSummary::~FrameSummary() {
 
 FrameSummary FrameSummary::GetTop(const StandardFrame* frame) {
   std::vector<FrameSummary> frames;
-  frames.reserve(FLAG_max_inlining_levels + 1);
   frame->Summarize(&frames);
   DCHECK_LT(0, frames.size());
   return frames.back();
@@ -1281,7 +1280,6 @@ FrameSummary FrameSummary::GetSingle(const StandardFrame* frame) {
 FrameSummary FrameSummary::Get(const StandardFrame* frame, int index) {
   DCHECK_LE(0, index);
   std::vector<FrameSummary> frames;
-  frames.reserve(FLAG_max_inlining_levels + 1);
   frame->Summarize(&frames);
   DCHECK_GT(frames.size(), index);
   return frames[index];
