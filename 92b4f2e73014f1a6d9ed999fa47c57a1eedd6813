@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0264420d_4a4eaa97",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-10-27T11:28:59Z",
+      "side": 0,
+      "message": "nit: I\u0027d vote for keeping this hook (with the check for FLAG_suppress_asm_messages inside) and just changing it\u0027s signature to take a ParseInfo* instead of the Handle\u003cScript\u003e. WDYT?",
+      "range": {
+        "startLine": 148,
+        "startChar": 5,
+        "endLine": 148,
+        "endChar": 29
+      },
+      "revId": "92b4f2e73014f1a6d9ed999fa47c57a1eedd6813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
