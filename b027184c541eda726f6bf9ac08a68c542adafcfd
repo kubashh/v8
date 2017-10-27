@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "819fd518_edbbe0de",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73b0ae80_e2287a94",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "508fa3d0_d9363738",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "c7714ec3_a8f1e937",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "508fa3d0_d9363738",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe82ea67_46910802",
         "filename": "src/base/random-utils.cc",
         "patchSetId": 7
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "237fbd6c_d6514307",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe82ea67_46910802",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e0868f2_34c5d370",
         "filename": "src/base/random-utils.h",
         "patchSetId": 7
@@ -73,6 +133,24 @@
       "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "209c3b8a_4bc108ec",
+        "filename": "src/base/random-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e0868f2_34c5d370",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -123,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "8a82366f_bc5895c6",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da71ef00_17b6acf5",
+      "range": {
+        "startLine": 1166,
+        "startChar": 49,
+        "endLine": 1166,
+        "endChar": 59
+      },
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4040527_80a42d57",
         "filename": "test/unittests/base/random-utils-unittest.cc",
         "patchSetId": 7
@@ -134,6 +236,24 @@
       "writtenOn": "2017-10-27T07:38:30Z",
       "side": 1,
       "message": "Please add more test cases.\n\nYou should check the boundary cases and also if all numbers are unique.",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5b0bb6_713b74e8",
+        "filename": "test/unittests/base/random-utils-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-10-27T13:40:35Z",
+      "side": 1,
+      "message": "I\u0027m checking if all numbers are unique by doing sort \u0026 adjacent_find, I will add comment for this.",
+      "parentUuid": "f4040527_80a42d57",
       "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
