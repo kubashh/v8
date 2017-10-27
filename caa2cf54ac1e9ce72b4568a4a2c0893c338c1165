@@ -93,6 +93,30 @@
       "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15ddaea0_04520ad7",
+        "filename": "test/unittests/interpreter/bytecode-array-random-iterator-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-27T10:26:56Z",
+      "side": 0,
+      "message": "Yeah sorry this was what I was wanting (I thought the is_identical_to was actually calling SameValue under the hood and so was checking the value was the same rather than the object, but you are right) - checking the value is the semantics we want her.",
+      "parentUuid": "5d80211e_522a3c62",
+      "range": {
+        "startLine": 332,
+        "startChar": 2,
+        "endLine": 333,
+        "endChar": 28
+      },
+      "revId": "caa2cf54ac1e9ce72b4568a4a2c0893c338c1165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

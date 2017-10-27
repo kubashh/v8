@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "dd467029_88f35d72",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-27T10:26:56Z",
+      "side": 1,
+      "message": "Yeah sorry for not being clear here - yeah the intention is it checks for unnecessary duplicate values in the constant pool - as mentioned in another comment I think an easier way to do this would be to just use !obj-\u003eSameValue(other) for non-jump-table values.",
+      "parentUuid": "f238384d_9a16c434",
+      "revId": "debdf3875f0d6098331cfa5adcc85faed906ee9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "707e90b8_0d38f75b",
         "filename": "src/interpreter/constant-array-builder.cc",
         "patchSetId": 11
