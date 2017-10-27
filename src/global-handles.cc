@@ -643,8 +643,7 @@ void GlobalHandles::IdentifyWeakHandles(WeakSlotCallback f) {
 void GlobalHandles::IterateNewSpaceStrongAndDependentRoots(RootVisitor* v) {
   for (Node* node : new_space_nodes_) {
     if (node->IsStrongRetainer() ||
-        (node->IsWeakRetainer() && !node->is_independent() &&
-         node->is_active())) {
+        (node->IsWeakRetainer() && node->is_active())) {
       v->VisitRootPointer(Root::kGlobalHandles, node->location());
     }
   }
@@ -658,8 +657,7 @@ void GlobalHandles::IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
       node->set_active(true);
     }
     if (node->IsStrongRetainer() ||
-        (node->IsWeakRetainer() && !node->is_independent() &&
-         node->is_active())) {
+        (node->IsWeakRetainer() && node->is_active())) {
       v->VisitRootPointer(Root::kGlobalHandles, node->location());
     }
   }
@@ -679,8 +677,9 @@ void GlobalHandles::MarkNewSpaceWeakUnmodifiedObjectsPending(
     WeakSlotCallbackWithHeap is_unscavenged) {
   for (Node* node : new_space_nodes_) {
     DCHECK(node->is_in_new_space_list());
-    if ((node->is_independent() || !node->is_active()) && node->IsWeak() &&
-        is_unscavenged(isolate_->heap(), node->location())) {
+    DCHECK_IMPLIES(is_unscavenged(isolate_->heap(), node->location()),
+                   !node->is_active());
+    if (node->IsWeak() && is_unscavenged(isolate_->heap(), node->location())) {
       node->MarkPending();
     }
   }
@@ -689,8 +688,7 @@ void GlobalHandles::MarkNewSpaceWeakUnmodifiedObjectsPending(
 void GlobalHandles::IterateNewSpaceWeakUnmodifiedRoots(RootVisitor* v) {
   for (Node* node : new_space_nodes_) {
     DCHECK(node->is_in_new_space_list());
-    if ((node->is_independent() || !node->is_active()) &&
-        node->IsWeakRetainer()) {
+    if (!node->is_active() && node->IsWeakRetainer()) {
       // Pending weak phantom handles die immediately. Everything else survives.
       if (node->IsPendingPhantomResetHandle()) {
         node->ResetPhantomHandle();
@@ -727,15 +725,13 @@ int GlobalHandles::PostScavengeProcessing(
       // the freed_nodes.
       continue;
     }
-    // Skip dependent or unmodified handles. Their weak callbacks might expect
-    // to be
-    // called between two global garbage collection callbacks which
-    // are not called for minor collections.
-      if (!node->is_independent() && (node->is_active())) {
-        node->set_active(false);
-        continue;
-      }
+
+    // Active nodes are kept alive, so no further processing is requires.
+    if (node->is_active()) {
       node->set_active(false);
+      continue;
+    }
+    node->set_active(false);
 
     if (node->PostGarbageCollectionProcessing(isolate_)) {
       if (initial_post_gc_processing_count != post_gc_processing_count_) {
@@ -746,9 +742,9 @@ int GlobalHandles::PostScavengeProcessing(
         return freed_nodes;
       }
     }
-    if (!node->IsRetainer()) {
-      freed_nodes++;
-    }
+
+    DCHECK(node->IsRetainer());
+    freed_nodes++;
   }
   return freed_nodes;
 }
