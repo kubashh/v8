@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "7ace98e3_58ef08e4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-10-27T09:47:53Z",
+      "side": 1,
+      "message": "I think using CallProperty is good here. I think one extra slot is Ok. Since it is a class initializer I think it does not happen too often. Also, I am not quite sure what would be the type of class_variable, but we use a slot for some of the types.",
+      "parentUuid": "8e542b1a_54e39407",
+      "revId": "c419a895fe86116c444ccbf15ae01af9309ee16a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d164e91_9c06c7ae",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 4
