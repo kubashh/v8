@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ecdbbaf_9a44f060",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-27T19:47:53Z",
+      "side": 1,
+      "message": "It\u0027s a little trickier than that, as we don\u0027t have a generic way to hash all Objects, nor is SameValue usable on all things in the constant pool (e.g., ScopeInfo).\n\nI\u0027ve taken a crack at doing what I can with SameValue, but I\u0027m not sure it\u0027s better than this. PTAL.",
+      "parentUuid": "c0b94b9a_69230447",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 5
+      },
+      "revId": "8f9bc2736045e0c619db65702604b7b8929d9822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5697240c_1333d2c3",
         "filename": "src/interpreter/constant-array-builder.h",
         "patchSetId": 14
@@ -45,6 +69,30 @@
       "revId": "8f9bc2736045e0c619db65702604b7b8929d9822",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "748f8629_4a73e467",
+        "filename": "src/interpreter/constant-array-builder.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-27T19:47:53Z",
+      "side": 1,
+      "message": "Not if I use the SameValue approach.",
+      "parentUuid": "5697240c_1333d2c3",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 6
+      },
+      "revId": "8f9bc2736045e0c619db65702604b7b8929d9822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
