@@ -22,6 +22,30 @@
       "revId": "92b4f2e73014f1a6d9ed999fa47c57a1eedd6813",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddfd108_0ee276a0",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-10-27T15:56:24Z",
+      "side": 0,
+      "message": "Sure, done.",
+      "parentUuid": "0264420d_4a4eaa97",
+      "range": {
+        "startLine": 148,
+        "startChar": 5,
+        "endLine": 148,
+        "endChar": 29
+      },
+      "revId": "92b4f2e73014f1a6d9ed999fa47c57a1eedd6813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
