@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d6da3c4d_799a9bda",
+        "filename": "src/factory.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3102,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "It\u0027s a bug but it was not observable because the old implementation used JSObject::SetOwnPropertyIgnoreAttributes() with proper attributes to set function\u0027s prototype. See DefineClass() function in runtime-classes.cc.",
+      "parentUuid": "cb9b9f83_d9a62add",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c1d11fd_388fe943",
         "filename": "src/objects.cc",
         "patchSetId": 17
@@ -30,6 +48,24 @@
       "writtenOn": "2017-10-17T11:59:17Z",
       "side": 1,
       "message": "Why did you change this? Doesn\u0027t this increase memory usage? We probably should at least try to encode this more compactly; e.g., both start and end (or length) in a single smi?\n\nWhat about doing this in another CL?",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43bd2b1_110690ed",
+        "filename": "src/objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 13081,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "I need this to simplify encoding of a arguments indices in the class boilerplate. These two values were the only Smis that may appear in the boilerplate, so I turned them to an object value.\n\nIt\u0027s memory neutral change because we used to have two properties \"3 words for a property * 2\" vs. \"3 words for a property + 3 words for a Tuple2 object\". The good side is that now we have to do one property query instead of two. Indeed, it makes sense to land this change separately, see https://chromium-review.googlesource.com/c/v8/v8/+/730744",
+      "parentUuid": "7c1d11fd_388fe943",
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "805eaf11_29280fa5",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Leftover. Removed.",
+      "parentUuid": "10339154_e1115a55",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92142eba_f7baf664",
         "filename": "src/objects/literal-objects.cc",
         "patchSetId": 17
@@ -67,6 +121,24 @@
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1433dbc9_5a393892",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92142eba_f7baf664",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "d1dd024b_62bd39af",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Indeed, thanks!",
+      "parentUuid": "d3c6000f_54d4f21b",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7260a77_26ea4882",
         "filename": "src/objects/literal-objects.cc",
         "patchSetId": 17
@@ -127,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "eaa3058b_1917d7a7",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7260a77_26ea4882",
+      "range": {
+        "startLine": 160,
+        "startChar": 11,
+        "endLine": 160,
+        "endChar": 12
+      },
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f05f1e6b_ad5da432",
         "filename": "src/objects/literal-objects.cc",
         "patchSetId": 17
@@ -141,6 +255,24 @@
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6722be7_efff66e3",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f05f1e6b_ad5da432",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +293,24 @@
     },
     {
       "key": {
+        "uuid": "1ad47283_3b984ff5",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "791797bd_cf09b0df",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "607351b3_653a3fe7",
         "filename": "src/objects/literal-objects.cc",
         "patchSetId": 17
@@ -175,6 +325,24 @@
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc55ae7c_6f3b587c",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "607351b3_653a3fe7",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -195,6 +363,24 @@
     },
     {
       "key": {
+        "uuid": "5e0faff7_bb2202b6",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ef5a2ef_5bb58bf5",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac4ce4b_ccb6a504",
         "filename": "src/objects/literal-objects.h",
         "patchSetId": 17
@@ -212,6 +398,24 @@
     },
     {
       "key": {
+        "uuid": "e9808af9_227e8d8a",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac4ce4b_ccb6a504",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "789fb8c5_b74bce1d",
         "filename": "src/objects/literal-objects.h",
         "patchSetId": 17
@@ -223,6 +427,24 @@
       "writtenOn": "2017-10-17T11:59:17Z",
       "side": 1,
       "message": "Is this just to allow sloppiness below?",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c6b44ca_b0ae0c1d",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Moved this to ComputeEnumerationIndex() and added comment there.",
+      "parentUuid": "789fb8c5_b74bce1d",
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -246,6 +468,24 @@
     },
     {
       "key": {
+        "uuid": "5a3a3599_96dcaf6e",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "I think it\u0027s better to do method\u0027s fetching and post-processing in one go.\nI changed the name and reordered the arguments which makes it a little bit more clear what do this function and the next one do.",
+      "parentUuid": "f529f064_ef6bb87b",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a046b51_bc9a3b70",
         "filename": "src/runtime/runtime-classes.cc",
         "patchSetId": 17
@@ -257,6 +497,24 @@
       "writtenOn": "2017-10-17T11:59:17Z",
       "side": 1,
       "message": "Should we rename kFirstDynamicArgument to kFirstMethod or so to make it clear we\u0027re only post-processing methods? I suppose that\u0027s not the best name for getters/setters... Another idea?",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a51af3_c2685f15",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Arguments that we are referring here could be methods or names. I added a comment to the kFirstDynamicArgument definition.",
+      "parentUuid": "7a046b51_bc9a3b70",
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -280,6 +538,24 @@
     },
     {
       "key": {
+        "uuid": "16dc0db8_e54557ca",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "In this function we read values from the template, possibly post-process them and store to the \"instantiated\" descriptor array. I added a comment describing what\u0027s going on here before the loop.",
+      "parentUuid": "26689239_f22517bd",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f56e80c_a9bd4024",
         "filename": "src/runtime/runtime-classes.cc",
         "patchSetId": 17
@@ -297,6 +573,24 @@
     },
     {
       "key": {
+        "uuid": "15616301_bcb3405b",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f56e80c_a9bd4024",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cf518dc_a337ab3c",
         "filename": "src/runtime/runtime-classes.cc",
         "patchSetId": 17
@@ -308,6 +602,24 @@
       "writtenOn": "2017-10-17T11:59:17Z",
       "side": 1,
       "message": "I suppose we should rename is_prototype to something like is_singleton or is_special_instance or so...?",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "510280d5_d30ab5e5",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "I think is_prototype meaning is still fine here although the class becomes prototype for real only when a derived class is created. This CL is already huge, let\u0027s rename this flag in a follow-up CL.",
+      "parentUuid": "2cf518dc_a337ab3c",
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -331,6 +643,24 @@
     },
     {
       "key": {
+        "uuid": "555cf1e8_32e3ed34",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "I guess so. That\u0027s what we do when we normalize maps.",
+      "parentUuid": "6b63a7c1_0fa4e7d3",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "17c1baf8_2ce7bc55",
         "filename": "src/runtime/runtime-classes.cc",
         "patchSetId": 17
@@ -342,6 +672,24 @@
       "writtenOn": "2017-10-17T11:59:17Z",
       "side": 1,
       "message": "Also this function should probably be named differently. ShouldBeFastInstanceMap or so?",
+      "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b57b67b_9c25f165",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-27T10:08:52Z",
+      "side": 1,
+      "message": "Sgtm but let\u0027s rename it in a follow-up CL.",
+      "parentUuid": "17c1baf8_2ce7bc55",
       "revId": "6604f36b36f212ae2326b68b96c881eee6bec97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
