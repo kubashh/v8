@@ -99,6 +99,30 @@
     },
     {
       "key": {
+        "uuid": "da71ef00_17b6acf5",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-10-27T11:07:41Z",
+      "side": 1,
+      "message": "We discussed that before and wanted to decouple the fuzzing rng from the program\u0027s. Like that we can control the layout of fuzz checkpoints independent of other things.\n\nBut it makes only sense if we also pass a separate seed to it, so that we could e.g. stress a given test with a fixed seed for program rng, but with a varying seed for the fuzz rng.\n\nI\u0027d be also fine with post-poning this for now - and reuse the program one. Could make a separate CL with separate rng and seed flag.",
+      "parentUuid": "13991502_b6877199",
+      "range": {
+        "startLine": 1166,
+        "startChar": 49,
+        "endLine": 1166,
+        "endChar": 59
+      },
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4040527_80a42d57",
         "filename": "test/unittests/base/random-utils-unittest.cc",
         "patchSetId": 7
