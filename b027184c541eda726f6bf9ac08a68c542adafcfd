@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73b0ae80_e2287a94",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "Say in a comment what this function is doing.",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "508fa3d0_d9363738",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "Don\u0027t use size_t here since size_t should only be used for size properties.",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe82ea67_46910802",
+        "filename": "src/base/random-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "This loop does not terminate with low probability.\n\nHow about you generate the numbers 0 to max in a data structure and remove from there until you picked n.",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e0868f2_34c5d370",
+        "filename": "src/base/random-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "We should make this a utility function on RandomNumberGenerator.",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13991502_b6877199",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "One random number generator should be enough.",
+      "range": {
+        "startLine": 1166,
+        "startChar": 49,
+        "endLine": 1166,
+        "endChar": 59
+      },
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4040527_80a42d57",
+        "filename": "test/unittests/base/random-utils-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-10-27T07:38:30Z",
+      "side": 1,
+      "message": "Please add more test cases.\n\nYou should check the boundary cases and also if all numbers are unique.",
+      "revId": "b027184c541eda726f6bf9ac08a68c542adafcfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
