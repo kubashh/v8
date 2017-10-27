@@ -991,6 +991,11 @@ class Literal final : public Expression {
   // as array indices).
   bool IsPropertyName() const { return value_->IsPropertyName(); }
 
+  // Returns true if literal represents an array index.
+  bool AsArrayIndex(uint32_t* index) const {
+    return value_->AsArrayIndex(index);
+  }
+
   const AstRawString* AsRawPropertyName() {
     DCHECK(IsPropertyName());
     return value_->AsString();
