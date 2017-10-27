@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7506bbfc_604d18ff",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-10-27T17:10:16Z",
+      "side": 1,
+      "message": "Don\u0027t know how much space our std::vectors normally reserved, but would it be overkill to ReserveSubsequent(2) here?\n\nOr maybe instead of adding ReserveSubsequent() to the API, just pass the expected number to the factory method/constructor, since both of the construction cases know how many they\u0027re going to add?",
+      "revId": "df2eb19091a2d773037d66532aad0bf3c855806c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
