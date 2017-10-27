@@ -44,6 +44,50 @@ TEST_P(RandomNumberGeneratorTest, NextDoubleReturnsValueBetween0And1) {
   }
 }
 
+TEST_P(RandomNumberGeneratorTest, NextSample) {
+  size_t n = 5;
+  int64_t m = 10;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    EXPECT_EQ(sample.size(), n);
+
+    // Check if values are unique.
+    std::sort(sample.begin(), sample.end());
+    EXPECT_EQ(std::adjacent_find(sample.begin(), sample.end()), sample.end());
+
+    for (auto x : sample) {
+      EXPECT_GE(x, 0);
+      EXPECT_LT(x, m);
+    }
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleMoreThanHalf) {
+  size_t n = 90;
+  int64_t m = 100;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    EXPECT_EQ(sample.size(), n);
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleLessThanHalf) {
+  size_t n = 10;
+  int64_t m = 100;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    EXPECT_EQ(sample.size(), n);
+  }
+}
 
 INSTANTIATE_TEST_CASE_P(RandomSeeds, RandomNumberGeneratorTest,
                         ::testing::Values(INT_MIN, -1, 0, 1, 42, 100,
