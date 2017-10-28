@@ -16,6 +16,24 @@
       "revId": "2970adf06aa5f2258eadf03f3cdf984a8f664aae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f615cb52_5d13c446",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1131655
+      },
+      "writtenOn": "2017-10-28T01:45:25Z",
+      "side": 1,
+      "message": "fixed. Worked now",
+      "parentUuid": "52f83e58_71920b79",
+      "revId": "2970adf06aa5f2258eadf03f3cdf984a8f664aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
