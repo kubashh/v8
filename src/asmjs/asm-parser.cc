@@ -158,8 +158,15 @@ void AsmJsParser::InitializeStdlibTypes() {
 
 FunctionSig* AsmJsParser::ConvertSignature(AsmType* return_type,
                                            const ZoneVector<AsmType*>& params) {
+  return ConvertGhostSignature(return_type, params, nullptr);
+}
+
+FunctionSig* AsmJsParser::ConvertGhostSignature(
+    AsmType* return_type, const ZoneVector<AsmType*>& params,
+    ZoneVector<ValueType>* locals) {
   FunctionSig::Builder sig_builder(
-      zone(), !return_type->IsA(AsmType::Void()) ? 1 : 0, params.size());
+      zone(), !return_type->IsA(AsmType::Void()) ? 1 : 0,
+      locals != nullptr ? params.size() + locals->size() : params.size());
   for (auto param : params) {
     if (param->IsA(AsmType::Double())) {
       sig_builder.AddParam(kWasmF64);
@@ -169,6 +176,11 @@ FunctionSig* AsmJsParser::ConvertSignature(AsmType* return_type,
       sig_builder.AddParam(kWasmI32);
     } else {
       UNREACHABLE();
+    }
+  }
+  if (locals != nullptr) {
+    for (auto local : *locals) {
+      sig_builder.AddParam(local);
     }
   }
   if (!return_type->IsA(AsmType::Void())) {
@@ -753,11 +765,24 @@ void AsmJsParser::ValidateFunction() {
   function_temp_locals_depth_ = 0;
 
   bool last_statement_is_return = false;
+  int num_stmts = 0;
+  std::vector<WasmFunctionBuilder*> func_queue;
+  std::vector<int> temp_size_queue;
   while (!failed_ && !Peek('}')) {
+    if (current_function_builder_->GetPosition() >
+        static_cast<size_t>(FLAG_asm_break_size)) {
+      CHECK_EQ(0, function_temp_locals_depth_);
+      func_queue.emplace_back(current_function_builder_);
+      temp_size_queue.emplace_back(function_temp_locals_used_);
+      current_function_builder_ = module_builder_->AddFunction();
+      function_temp_locals_used_ = 0;
+      num_stmts = 0;
+    }
     // clang-format off
     last_statement_is_return = Peek(TOK(return));
     // clang-format on
     RECURSE(ValidateStatement());
+    ++num_stmts;
   }
   EXPECT_TOKEN('}');
 
@@ -769,6 +794,38 @@ void AsmJsParser::ValidateFunction() {
     }
   }
   DCHECK_NOT_NULL(return_type_);
+
+  if (!func_queue.empty()) {
+    FunctionSig* ghost_sig =
+        ConvertGhostSignature(return_type_, params, &locals);
+    while (!func_queue.empty()) {
+      // add current function meta-data and end it.
+      current_function_builder_->SetSignature(ghost_sig);
+      for (int i = 0; i < function_temp_locals_used_; i++) {
+        current_function_builder_->AddLocal(kWasmI32);
+      }
+      current_function_builder_->Emit(kExprEnd);
+      uint32_t prev_index = current_function_builder_->func_index();
+      // call the current function.
+      current_function_builder_ = func_queue.back();
+      function_temp_locals_used_ = temp_size_queue.back();
+      func_queue.pop_back();
+      temp_size_queue.pop_back();
+      size_t params_size = params.size();
+      for (size_t i = 0; i < params_size; i++) {
+        current_function_builder_->EmitGetLocal(static_cast<uint32_t>(i));
+      }
+      for (size_t i = 0; i < locals.size(); i++) {
+        current_function_builder_->EmitGetLocal(
+            static_cast<uint32_t>(i + params_size));
+      }
+      current_function_builder_->Emit(kExprCallFunction);
+      current_function_builder_->EmitDirectCallIndex(prev_index);
+      if (last_statement_is_return) {
+        current_function_builder_->Emit(kExprReturn);
+      }
+    }
+  }
 
   // TODO(bradnelson): WasmModuleBuilder can't take this in the right order.
   //                   We should fix that so we can use it instead.
