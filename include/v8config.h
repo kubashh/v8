@@ -58,6 +58,7 @@
 //
 //  V8_OS_ANDROID       - Android
 //  V8_OS_BSD           - BSDish (Mac OS X, Net/Free/Open/DragonFlyBSD)
+//  V8_OS_CLOUDABI      - CloudABI sandboxed runtime
 //  V8_OS_CYGWIN        - Cygwin
 //  V8_OS_DRAGONFLYBSD  - DragonFlyBSD
 //  V8_OS_FREEBSD       - FreeBSD
@@ -79,6 +80,9 @@
 #elif defined(__APPLE__)
 # define V8_OS_BSD 1
 # define V8_OS_MACOSX 1
+# define V8_OS_POSIX 1
+#elif defined(__CloudABI__)
+# define V8_OS_CLOUDABI 1
 # define V8_OS_POSIX 1
 #elif defined(__CYGWIN__)
 # define V8_OS_CYGWIN 1
