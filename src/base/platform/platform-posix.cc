@@ -122,7 +122,11 @@ int OS::ActivationFrameAlignment() {
 }
 
 intptr_t OS::CommitPageSize() {
+#ifdef _SC_PAGESIZE
+  static intptr_t page_size = sysconf(_SC_PAGESIZE);
+#else
   static intptr_t page_size = getpagesize();
+#endif
   return page_size;
 }
 
