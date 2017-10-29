@@ -55,7 +55,7 @@
 #include <sys/prctl.h>  // NOLINT, for prctl
 #endif
 
-#if !defined(_AIX) && !defined(V8_OS_FUCHSIA)
+#if !defined(_AIX) && !defined(V8_OS_FUCHSIA) && !defined(V8_OS_CLOUDABI)
 #include <sys/syscall.h>
 #endif
 
@@ -122,7 +122,11 @@ int OS::ActivationFrameAlignment() {
 }
 
 intptr_t OS::CommitPageSize() {
+#ifdef _SC_PAGESIZE
+  static intptr_t page_size = sysconf(_SC_PAGESIZE);
+#else
   static intptr_t page_size = getpagesize();
+#endif
   return page_size;
 }
 
