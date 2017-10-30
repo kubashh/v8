@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d154301_bf667612",
+        "filename": "test/mjsunit/wasm/js-api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-30T15:45:09Z",
+      "side": 1,
+      "message": "What does this test? That subclassing is not allowed? Or that this fails the same way as calling WebAssembly.Module() directly would fail?\nIf it\u0027s the latter, shouldn\u0027t we have some positive tests also?\nIf it\u0027s the first, we should at least check the error type, maybe also the message.",
+      "revId": "c00cced60366fa82f9c0a25226c61e6eaaa6b049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
