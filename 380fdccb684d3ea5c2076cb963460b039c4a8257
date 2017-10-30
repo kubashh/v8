@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30256054_eb259cb8",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-10-30T16:32:11Z",
+      "side": 1,
+      "message": "Why not just zone() :)",
+      "revId": "380fdccb684d3ea5c2076cb963460b039c4a8257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a4a84f6_40a47baa",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2017-10-30T16:32:11Z",
+      "side": 1,
+      "message": "I\u0027ve seen similar code in objects.cc:\n\n  Handle\u003cName\u003e property_name \u003d\n      key-\u003eIsName()\n          ? Handle\u003cName\u003e::cast(key)\n          : Handle\u003cName\u003e::cast(isolate-\u003efactory()-\u003eNumberToString(key));\n\nThat\u0027s actually more general since it also supports HeapNumber keys for the full [0,kmaxuint32[ range. I suppose that\u0027s just untested and unsupported in this CL?\n\nShouldn\u0027t we just have a conversion method on Dictionary:: KeyToName or so that\u0027s just a cast for NameDictionary and NumberToString for NumberDictionary? Or just 2 local helper methods.",
+      "revId": "380fdccb684d3ea5c2076cb963460b039c4a8257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
