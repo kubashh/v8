@@ -119,12 +119,13 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     const AstRawString* function_name, FunctionKind kind,
     FunctionLiteral::FunctionType function_type,
     DeclarationScope* function_scope, bool is_inner_function, bool may_abort,
-    int* use_counts,
-    ProducedPreParsedScopeData** produced_preparsed_scope_data) {
+    int* use_counts, ProducedPreParsedScopeData** produced_preparsed_scope_data,
+    int script_id) {
   DCHECK_EQ(FUNCTION_SCOPE, function_scope->scope_type());
   use_counts_ = use_counts;
   DCHECK(!track_unresolved_variables_);
   track_unresolved_variables_ = is_inner_function;
+  set_script_id(script_id);
 #ifdef DEBUG
   function_scope->set_is_being_lazily_parsed(true);
 #endif
