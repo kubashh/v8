@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7ff7f3_e25bf725",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-30T15:40:55Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we also log something in this case?",
+      "revId": "d07b148150834de95e6f43bb0ebb06a2891e3f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ff281fa_f5568932",
+        "filename": "src/log.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-10-30T15:40:55Z",
+      "side": 1,
+      "message": "I think it makes sense to check the flag first because it requires less dereferences on a hot path when logging is disabled.\n\nAnd while you are here please also fix the other logging functions too.",
+      "range": {
+        "startLine": 1290,
+        "startChar": 28,
+        "endLine": 1290,
+        "endChar": 53
+      },
+      "revId": "d07b148150834de95e6f43bb0ebb06a2891e3f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
