@@ -22,6 +22,30 @@
       "revId": "36735cf730278e7700284813dab5639a8cff73d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ba0bb84_25085903",
+        "filename": "test/cctest/test-log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-10-30T10:45:28Z",
+      "side": 1,
+      "message": "I wanted to do this... let me refactor this a bit.",
+      "parentUuid": "17449acd_422f3993",
+      "range": {
+        "startLine": 754,
+        "startChar": 4,
+        "endLine": 760,
+        "endChar": 55
+      },
+      "revId": "36735cf730278e7700284813dab5639a8cff73d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
