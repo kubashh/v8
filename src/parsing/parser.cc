@@ -502,8 +502,9 @@ Expression* Parser::NewV8Intrinsic(const AstRawString* name,
 Parser::Parser(ParseInfo* info)
     : ParserBase<Parser>(info->zone(), &scanner_, info->stack_limit(),
                          info->extension(), info->GetOrCreateAstValueFactory(),
-                         info->runtime_call_stats(), info->is_module(),
-                         info->pending_error_handler(), true),
+                         info->pending_error_handler(),
+                         info->runtime_call_stats(), info->script()->id(),
+                         info->is_module(), true),
       scanner_(info->unicode_cache(), use_counts_),
       reusable_preparser_(nullptr),
       mode_(PARSE_EAGERLY),  // Lazy mode must be set explicitly.
@@ -623,16 +624,16 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
 
   if (FLAG_trace_parse && result != nullptr) {
     double ms = timer.Elapsed().InMillisecondsF();
-    if (info->is_eval()) {
-      PrintF("[parsing eval");
-    } else if (info->script()->name()->IsString()) {
-      String* name = String::cast(info->script()->name());
-      std::unique_ptr<char[]> name_chars = name->ToCString();
-      PrintF("[parsing script: %s", name_chars.get());
-    } else {
-      PrintF("[parsing script");
+    const char* event_name = "parse-eval";
+    Script* script = *info->script();
+    int start = -1;
+    int end = -1;
+    if (!info->is_eval()) {
+      event_name = "parse-script";
+      start = 0;
+      end = String::cast(script->source())->length();
     }
-    PrintF(" - took %0.3f ms]\n", ms);
+    LOG(script->GetIsolate(), FunctionEvent(event_name, script, -1, ms));
   }
   if (produce_cached_parse_data() && result != nullptr) {
     *info->cached_data() = logger.GetScriptData();
@@ -781,8 +782,12 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
     double ms = timer.Elapsed().InMillisecondsF();
     // We need to make sure that the debug-name is available.
     ast_value_factory()->Internalize(isolate);
-    std::unique_ptr<char[]> name_chars = result->debug_name()->ToCString();
-    PrintF("[parsing function: %s - took %0.3f ms]\n", name_chars.get(), ms);
+    DeclarationScope* function_scope = result->scope();
+    Script* script = *info->script();
+    LOG(script->GetIsolate(),
+        FunctionEvent("parse-function", script, -1, ms,
+                      function_scope->start_position(),
+                      function_scope->end_position(), *result->debug_name()));
   }
   return result;
 }
@@ -2825,7 +2830,7 @@ Parser::LazyParsingResult Parser::SkipFunction(
 
   PreParser::PreParseResult result = reusable_preparser()->PreParseFunction(
       function_name, kind, function_type, function_scope, is_inner_function,
-      may_abort, use_counts_, produced_preparsed_scope_data);
+      may_abort, use_counts_, produced_preparsed_scope_data, this->script_id());
 
   // Return immediately if pre-parser decided to abort parsing.
   if (result == PreParser::kPreParseAbort) return kLazyParsingAborted;
