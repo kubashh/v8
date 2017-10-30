@@ -138,6 +138,8 @@ class ScopedLoggerInitializer {
   }
 
   const char* FindLine(const char* prefix, const char* suffix = nullptr) {
+    // Make sure that StopLogging() has been called before.
+    CHECK(log_.size());
     return FindLogLine(&log_, prefix, suffix);
   }
 
@@ -726,5 +728,36 @@ TEST(TraceMaps) {
     CHECK(logger.FindLine("map-details", ",0x"));
   }
   i::FLAG_trace_maps = false;
+  isolate->Dispose();
+}
+
+TEST(ConsoleTimeEvents) {
+  SETUP_FLAGS();
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  {
+    ScopedLoggerInitializer logger(saved_log, saved_prof, isolate);
+    // Test that console time events are properly logged
+    const char* source_text =
+        "console.time();"
+        "console.timeEnd();"
+        "console.timeStamp();"
+        "console.time('timerEvent1');"
+        "console.timeEnd('timerEvent1');"
+        "console.timeStamp('timerEvent2');"
+        "console.timeStamp('timerEvent3');";
+    CompileRun(source_text);
+
+    logger.StopLogging();
+
+    CHECK(logger.FindLine("timer-event-start,default,"));
+    CHECK(logger.FindLine("timer-event-end,default,"));
+    CHECK(logger.FindLine("timer-event,default,"));
+    CHECK(logger.FindLine("timer-event-start,timerEvent1,"));
+    CHECK(logger.FindLine("timer-event-end,timerEvent1,"));
+    CHECK(logger.FindLine("timer-event,timerEvent2,"));
+    CHECK(logger.FindLine("timer-event,timerEvent3,"));
+  }
   isolate->Dispose();
 }
