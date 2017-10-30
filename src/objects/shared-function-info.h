@@ -281,6 +281,7 @@ class SharedFunctionInfo : public HeapObject {
   // Bit field containing various information collected by the compiler to
   // drive optimization.
   DECL_INT_ACCESSORS(compiler_hints)
+  DECL_INT_ACCESSORS(compiler_hints2)
 
   // Indicates if this function can be lazy compiled.
   DECL_BOOLEAN_ACCESSORS(allows_lazy_compilation)
@@ -291,6 +292,8 @@ class SharedFunctionInfo : public HeapObject {
 
   // True if the function has any duplicated parameter names.
   DECL_BOOLEAN_ACCESSORS(has_duplicate_parameters)
+
+  DECL_BOOLEAN_ACCESSORS(has_been_executed)
 
   // Indicates whether the function is a native function.
   // These needs special treatment in .call and .apply since
@@ -434,6 +437,7 @@ class SharedFunctionInfo : public HeapObject {
   V(kEndPositionOffset, kInt32Size)           \
   V(kFunctionTokenPositionOffset, kInt32Size) \
   V(kCompilerHintsOffset, kInt32Size)         \
+  V(kCompilerHints2Offset, kInt32Size)        \
   /* Total size. */                           \
   V(kSize, 0)
 
@@ -475,6 +479,13 @@ class SharedFunctionInfo : public HeapObject {
 
   // Bailout reasons must fit in the DisabledOptimizationReason bitfield.
   STATIC_ASSERT(kLastErrorMessage <= DisabledOptimizationReasonBits::kMax);
+
+// Bit positions in |compiler_hints|.
+#define COMPILER_HINTS2_BIT_FIELDS(V, _) \
+  V(HasBeenExecutedBit, bool, 1, _)      \
+  /* Bits 1-31 are unused */
+  DEFINE_BIT_FIELDS(COMPILER_HINTS2_BIT_FIELDS)
+#undef COMPILER_HINTS2_BIT_FIELDS
 
   // Masks for checking if certain FunctionKind bits are set without fully
   // decoding of the FunctionKind bit field.
