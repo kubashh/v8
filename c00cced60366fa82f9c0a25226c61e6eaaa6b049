@@ -16,6 +16,24 @@
       "revId": "c00cced60366fa82f9c0a25226c61e6eaaa6b049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59e4ea14_54de96b2",
+        "filename": "test/mjsunit/wasm/js-api.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2017-10-30T15:47:54Z",
+      "side": 1,
+      "message": "At the moment it just tests that the class can even be defined. If we want to make this a more thorough test, it should take arguments and pass those arguments to super, which should be correct module arguments.\n\nWe should probably add such a test in the future and make it part of the WASM spec compliance tests.",
+      "parentUuid": "0d154301_bf667612",
+      "revId": "c00cced60366fa82f9c0a25226c61e6eaaa6b049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
