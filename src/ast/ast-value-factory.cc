@@ -187,6 +187,16 @@ bool AstValue::IsPropertyName() const {
   return false;
 }
 
+bool AstValue::AsArrayIndex(uint32_t* index) const {
+  if (type_ == STRING) {
+    return string_->AsArrayIndex(index);
+  } else {
+    DCHECK_EQ(SMI, type_);
+    DCHECK_LE(0, smi_);
+    *index = smi_;
+    return true;
+  }
+}
 
 bool AstValue::BooleanValue() const {
   switch (type_) {

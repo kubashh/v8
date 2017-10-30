@@ -210,6 +210,7 @@ class AstValue : public ZoneObject {
   }
 
   bool IsPropertyName() const;
+  bool AsArrayIndex(uint32_t* index) const;
 
   V8_EXPORT_PRIVATE bool BooleanValue() const;
 
