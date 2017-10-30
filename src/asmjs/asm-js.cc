@@ -188,7 +188,7 @@ class AsmJsCompilationJob final : public CompilationJob {
   explicit AsmJsCompilationJob(ParseInfo* parse_info, FunctionLiteral* literal,
                                Isolate* isolate)
       : CompilationJob(parse_info->stack_limit(), parse_info,
-                       &compilation_info_, "AsmJs"),
+                       &compilation_info_, "AsmJs", State::kReadyToExecute),
         zone_(isolate->allocator(), ZONE_NAME),
         compilation_info_(&zone_, isolate, parse_info, literal),
         module_(nullptr),
@@ -214,7 +214,8 @@ class AsmJsCompilationJob final : public CompilationJob {
   DISALLOW_COPY_AND_ASSIGN(AsmJsCompilationJob);
 };
 
-CompilationJob::Status AsmJsCompilationJob::PrepareJobImpl() {
+AsmJsCompilationJob::Status AsmJsCompilationJob::PrepareJobImpl() {
+  UNREACHABLE();  // Prepare should always be skipped.
   return SUCCEEDED;
 }
 
