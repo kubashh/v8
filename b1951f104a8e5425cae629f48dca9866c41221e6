@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f77cbca2_dfeae922",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-30T15:35:54Z",
+      "side": 1,
+      "message": "Can you add a comment to explain that we compare against the FLAG_stack_size, even though the data is not stored on the stack? Similar to the note in the commit message.",
+      "revId": "b1951f104a8e5425cae629f48dca9866c41221e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bacc164_c96a7cd1",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-30T15:35:54Z",
+      "side": 1,
+      "message": "This is not a compile-time constant, hence it should be named differently.",
+      "range": {
+        "startLine": 1526,
+        "startChar": 20,
+        "endLine": 1526,
+        "endChar": 30
+      },
+      "revId": "b1951f104a8e5425cae629f48dca9866c41221e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5233b2c2_bf1cc503",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-30T15:35:54Z",
+      "side": 1,
+      "message": "Maybe store this in another local variable first, to increase readability.",
+      "range": {
+        "startLine": 1528,
+        "startChar": 18,
+        "endLine": 1528,
+        "endChar": 71
+      },
+      "revId": "b1951f104a8e5425cae629f48dca9866c41221e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ea036e_aa87d27a",
+        "filename": "test/mjsunit/regress/wasm/regress-778917.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-10-30T15:35:54Z",
+      "side": 1,
+      "message": "I think the JS way of writing this is \"() \u003d\u003e module.exports.huge_frame()\", but you should also be able to just use \"module.exports.huge_frame\" (it\u0027s already a JS function).",
+      "range": {
+        "startLine": 20,
+        "startChar": 13,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "b1951f104a8e5425cae629f48dca9866c41221e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
