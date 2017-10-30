@@ -1523,8 +1523,10 @@ class ThreadImpl {
   // Do call this function immediately *after* pushing a new frame. The pc of
   // the top frame will be reset to 0 if the stack check fails.
   bool DoStackCheck() WARN_UNUSED_RESULT {
-    // Sum up the size of all dynamically growing structures.
-    if (V8_LIKELY(frames_.size() <= kV8MaxWasmInterpretedStackSize)) {
+    const uintptr_t kLimitSize = FLAG_stack_size * KB;
+    // Sum up the value stack size and the control stack size.
+    if (V8_LIKELY((sp_ - stack_start_) + frames_.size() * sizeof(Frame) <=
+                  kLimitSize)) {
       return true;
     }
     if (!codemap()->has_instance()) {
