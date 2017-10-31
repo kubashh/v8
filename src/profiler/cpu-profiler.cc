@@ -4,6 +4,7 @@
 
 #include "src/profiler/cpu-profiler.h"
 
+#include "src/base/platform/mutex.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer.h"
 #include "src/frames-inl.h"
@@ -241,14 +242,14 @@ void CpuProfiler::CodeEventHandler(const CodeEventsContainer& evt_rec) {
   }
 }
 
+namespace {
+std::map<Isolate*, std::unique_ptr<std::set<CpuProfiler*>>> g_all_profilers;
+base::Mutex g_all_profilers_mutex;
+}  // namespace
+
 CpuProfiler::CpuProfiler(Isolate* isolate)
-    : isolate_(isolate),
-      sampling_interval_(base::TimeDelta::FromMicroseconds(
-          FLAG_cpu_profiler_sampling_interval)),
-      profiles_(new CpuProfilesCollection(isolate)),
-      is_profiling_(false) {
-  profiles_->set_cpu_profiler(this);
-}
+    : CpuProfiler(isolate, new CpuProfilesCollection(isolate), nullptr,
+                  nullptr) {}
 
 CpuProfiler::CpuProfiler(Isolate* isolate, CpuProfilesCollection* test_profiles,
                          ProfileGenerator* test_generator,
@@ -261,10 +262,22 @@ CpuProfiler::CpuProfiler(Isolate* isolate, CpuProfilesCollection* test_profiles,
       processor_(test_processor),
       is_profiling_(false) {
   profiles_->set_cpu_profiler(this);
+  base::LockGuard<base::Mutex> lock(&g_all_profilers_mutex);
+  auto result = g_all_profilers.insert(
+      std::pair<Isolate*, std::unique_ptr<std::set<CpuProfiler*>>>(
+          isolate, std::make_unique<std::set<CpuProfiler*>>()));
+  result.first->second->insert(this);
 }
 
 CpuProfiler::~CpuProfiler() {
   DCHECK(!is_profiling_);
+  base::LockGuard<base::Mutex> lock(&g_all_profilers_mutex);
+  auto it = g_all_profilers.find(isolate_);
+  DCHECK(it != g_all_profilers.end());
+  it->second->erase(this);
+  if (it->second->empty()) {
+    g_all_profilers.erase(it);
+  }
 }
 
 void CpuProfiler::set_sampling_interval(base::TimeDelta value) {
@@ -289,6 +302,16 @@ void CpuProfiler::CreateEntriesForRuntimeCallStats() {
                       CodeEntry::kEmptyNamePrefix, "native V8Runtime"));
     code_map->AddCode(reinterpret_cast<Address>(counter), entry.get(), 1);
     static_entries_.push_back(std::move(entry));
+  }
+}
+
+// static
+void CpuProfiler::CollectSample(Isolate* isolate) {
+  base::LockGuard<base::Mutex> lock(&g_all_profilers_mutex);
+  auto profilers = g_all_profilers.find(isolate);
+  if (profilers == g_all_profilers.end()) return;
+  for (auto it : *profilers->second) {
+    it->CollectSample();
   }
 }
 
