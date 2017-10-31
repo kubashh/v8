@@ -195,6 +195,8 @@ class CpuProfiler : public CodeEventObserver {
 
   ~CpuProfiler() override;
 
+  static void CollectSample(Isolate* isolate);
+
   void set_sampling_interval(base::TimeDelta value);
   void CollectSample();
   void StartProfiling(const char* title, bool record_samples = false);
@@ -230,6 +232,9 @@ class CpuProfiler : public CodeEventObserver {
   std::vector<std::unique_ptr<CodeEntry>> static_entries_;
   bool saved_is_logging_;
   bool is_profiling_;
+
+  static std::map<Isolate*, std::unique_ptr<std::set<CpuProfiler*>>> profilers_;
+  static base::Mutex profilers_mutex_;
 
   DISALLOW_COPY_AND_ASSIGN(CpuProfiler);
 };

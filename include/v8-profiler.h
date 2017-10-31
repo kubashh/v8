@@ -286,6 +286,8 @@ class V8_EXPORT CpuProfiler {
    */
   static CpuProfiler* New(Isolate* isolate);
 
+  static void CollectSample(Isolate* isolate);
+
   /**
    * Disposes the CPU profiler object.
    */
