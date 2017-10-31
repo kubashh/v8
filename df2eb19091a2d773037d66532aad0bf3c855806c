@@ -16,6 +16,24 @@
       "revId": "df2eb19091a2d773037d66532aad0bf3c855806c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d6f0ae2_d625e659",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-10-31T10:17:02Z",
+      "side": 1,
+      "message": "I was thinking that too, I\u0027ve added it now that two of us have had the same thought independently.",
+      "parentUuid": "7506bbfc_604d18ff",
+      "revId": "df2eb19091a2d773037d66532aad0bf3c855806c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
