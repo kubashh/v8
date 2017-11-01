@@ -365,13 +365,23 @@ Response V8HeapProfilerAgentImpl::stopSampling(
     std::unique_ptr<protocol::HeapProfiler::SamplingHeapProfile>* profile) {
   v8::HeapProfiler* profiler = m_isolate->GetHeapProfiler();
   if (!profiler) return Response::Error("Cannot access v8 heap profiler");
+  Response result = getSamplingProfile(profile);
+  if (result.isSuccess()) {
+    profiler->StopSamplingHeapProfiler();
+    m_state->setBoolean(HeapProfilerAgentState::samplingHeapProfilerEnabled,
+                        false);
+  }
+  return result;
+}
+
+Response V8HeapProfilerAgentImpl::getSamplingProfile(
+    std::unique_ptr<protocol::HeapProfiler::SamplingHeapProfile>* profile) {
+  v8::HeapProfiler* profiler = m_isolate->GetHeapProfiler();
+  if (!profiler) return Response::Error("Cannot access v8 heap profiler");
   v8::HandleScope scope(
-      m_isolate);  // Allocation profile contains Local handles.
+      m_isolate);  // v8::AllocationProfile contains Local handles.
   std::unique_ptr<v8::AllocationProfile> v8Profile(
       profiler->GetAllocationProfile());
-  profiler->StopSamplingHeapProfiler();
-  m_state->setBoolean(HeapProfilerAgentState::samplingHeapProfilerEnabled,
-                      false);
   if (!v8Profile)
     return Response::Error("Cannot access v8 sampled heap profile.");
   v8::AllocationProfile::Node* root = v8Profile->GetRootNode();
