@@ -405,7 +405,6 @@ PreParserExpression PreParser::ExpressionFromIdentifier(
 }
 
 void PreParser::DeclareAndInitializeVariables(
-    PreParserStatement block,
     const DeclarationDescriptor* declaration_descriptor,
     const DeclarationParsingResult::Declaration* declaration,
     ZoneList<const AstRawString*>* names, bool* ok) {

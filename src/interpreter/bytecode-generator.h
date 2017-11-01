@@ -59,6 +59,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   class TestResultScope;
   class ValueResultScope;
 
+  class SimpleTryFinally;
+  class SimpleTryCatch;
+
   using ToBooleanMode = BytecodeArrayBuilder::ToBooleanMode;
 
   enum class TestFallthrough { kThen, kElse, kNone };
@@ -68,6 +71,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void AllocateDeferredConstants(Isolate* isolate, Handle<Script> script);
 
   DEFINE_AST_VISITOR_SUBCLASS_MEMBERS();
+
+  // Control context scopes without relying on RAII structures
+  class LexicalScope;
 
   // Dispatched from VisitBinaryOperation.
   void VisitArithmeticExpression(BinaryOperation* binop);
@@ -142,6 +148,25 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildAwait(int suspend_id);
 
   void BuildGetIterator(Expression* iterable, IteratorType hint);
+  void BuildGetIteratorFromAccumulator(IteratorType hint);
+  void BuildIteratorClose(Register iterator);
+
+  // Assign accumulator to `target`, using `initializer` if present and accum.
+  // is undefined.
+  void VisitDestructuringAssignment(Assignment* assignment);
+  void BuildRecurseDestructuringTarget(Expression* target,
+                                       Expression* initializer,
+                                       Register current_value,
+                                       bool require_object_coercible,
+                                       Token::Value op = Token::ASSIGN);
+  void UpdatePerIterationEnvironment(
+      const std::vector<const AstRawString*>& bound_names,
+      VariableMode binding_type, Scope* scope);
+  void VisitObjectPattern(ObjectPattern* pattern, Register current_value,
+                          Token::Value op,
+                          bool require_object_coercible = true);
+  void VisitArrayPattern(ArrayPattern* pattern, Register current_value,
+                         Token::Value op);
 
   void AllocateTopLevelRegisters();
   void VisitArgumentsObject(Variable* variable);
@@ -174,7 +199,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
                             LoopBuilder* loop_builder);
   void VisitIterationHeader(int first_suspend_id, int suspend_count,
                             LoopBuilder* loop_builder);
-  void VisitIterationBody(IterationStatement* stmt, LoopBuilder* loop_builder);
+  void VisitIterationBody(IterationStatement* stmt, LoopBuilder* loop_builder,
+                          // Optionally track abrupt completions
+                          Register was_abrupt = Register::invalid_value());
 
   // Visit a statement and switch scopes, the context is in the accumulator.
   void VisitInScope(Statement* stmt, Scope* scope);

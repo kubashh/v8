@@ -127,6 +127,17 @@ void AstTraversalVisitor<Subclass>::VisitVariableDeclaration(
 }
 
 template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitVarExpression(VarExpression* node) {
+  PROCESS_NODE(node);
+  for (const auto& element : *node) {
+    RECURSE(Visit(element.pattern()));
+    if (element.initializer() != nullptr) {
+      RECURSE(Visit(element.initializer()));
+    }
+  }
+}
+
+template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitFunctionDeclaration(
     FunctionDeclaration* decl) {
   PROCESS_NODE(decl);
@@ -250,10 +261,8 @@ void AstTraversalVisitor<Subclass>::VisitForInStatement(ForInStatement* stmt) {
 template <class Subclass>
 void AstTraversalVisitor<Subclass>::VisitForOfStatement(ForOfStatement* stmt) {
   PROCESS_NODE(stmt);
-  RECURSE(Visit(stmt->assign_iterator()));
-  RECURSE(Visit(stmt->next_result()));
-  RECURSE(Visit(stmt->result_done()));
-  RECURSE(Visit(stmt->assign_each()));
+  RECURSE(Visit(stmt->target()));
+  RECURSE(Visit(stmt->iterable()));
   RECURSE(Visit(stmt->body()));
 }
 
@@ -344,6 +353,30 @@ void AstTraversalVisitor<Subclass>::VisitArrayLiteral(ArrayLiteral* expr) {
   for (int i = 0; i < values->length(); ++i) {
     Expression* value = values->at(i);
     RECURSE_EXPRESSION(Visit(value));
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitObjectPattern(ObjectPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    RECURSE_EXPRESSION(Visit(element.name()));
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
+  }
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitArrayPattern(ArrayPattern* expr) {
+  PROCESS_EXPRESSION(expr);
+  for (const auto& element : expr->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    RECURSE_EXPRESSION(Visit(element.target()));
+    if (element.initializer()) {
+      RECURSE_EXPRESSION(Visit(element.initializer()));
+    }
   }
 }
 

@@ -706,7 +706,6 @@ FunctionLiteral* Parser::DoParseProgram(ParseInfo* info) {
     }
 
     if (ok) {
-      RewriteDestructuringAssignments();
       int parameter_count = parsing_module_ ? 1 : 0;
       result = factory()->NewScriptOrEvalFunctionLiteral(
           scope, body, function_state.expected_property_count(),
@@ -826,8 +825,6 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
       scope->set_start_position(info->start_position());
       ExpressionClassifier formals_classifier(this);
       ParserFormalParameters formals(scope);
-      int rewritable_length =
-          function_state.destructuring_assignments_to_rewrite().length();
       {
         // Parsing patterns as variable reference expression creates
         // NewUnresolved references in current scope. Enter arrow function
@@ -865,8 +862,7 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
 
         // Pass `accept_IN=true` to ParseArrowFunctionLiteral --- This should
         // not be observable, or else the preparser would have failed.
-        Expression* expression =
-            ParseArrowFunctionLiteral(true, formals, rewritable_length, &ok);
+        Expression* expression = ParseArrowFunctionLiteral(true, formals, &ok);
         if (ok) {
           // Scanning must end at the same position that was recorded
           // previously. If not, parsing has been interrupted due to a stack
@@ -879,10 +875,6 @@ FunctionLiteral* Parser::DoParseFunction(ParseInfo* info,
             // must produce a FunctionLiteral.
             DCHECK(expression->IsFunctionLiteral());
             result = expression->AsFunctionLiteral();
-            // Rewrite destructuring assignments in the parameters. (The ones
-            // inside the function body are rewritten by
-            // ParseArrowFunctionLiteral.)
-            RewriteDestructuringAssignments();
           } else {
             ok = false;
           }
@@ -1862,9 +1854,9 @@ Statement* Parser::InitializeForEachStatement(ForEachStatement* stmt,
                                               Statement* body) {
   ForOfStatement* for_of = stmt->AsForOfStatement();
   if (for_of != nullptr) {
-    const bool finalize = true;
-    return InitializeForOfStatement(for_of, each, subject, body, finalize,
-                                    IteratorType::kNormal, each->position());
+    const bool kFinalize = true;
+    for_of->Initialize(body, each, subject, IteratorType::kNormal, kFinalize);
+    return for_of;
   } else {
     if (each->IsArrayLiteral() || each->IsObjectLiteral()) {
       Variable* temp = NewTemporary(ast_value_factory()->empty_string());
@@ -1886,42 +1878,6 @@ Statement* Parser::InitializeForEachStatement(ForEachStatement* stmt,
   return stmt;
 }
 
-// Special case for legacy for
-//
-//    for (var x = initializer in enumerable) body
-//
-// An initialization block of the form
-//
-//    {
-//      x = initializer;
-//    }
-//
-// is returned in this case.  It has reserved space for two statements,
-// so that (later on during parsing), the equivalent of
-//
-//   for (x in enumerable) body
-//
-// is added as a second statement to it.
-Block* Parser::RewriteForVarInLegacy(const ForInfo& for_info) {
-  const DeclarationParsingResult::Declaration& decl =
-      for_info.parsing_result.declarations[0];
-  if (!IsLexicalVariableMode(for_info.parsing_result.descriptor.mode) &&
-      decl.pattern->IsVariableProxy() && decl.initializer != nullptr) {
-    ++use_counts_[v8::Isolate::kForInInitializer];
-    const AstRawString* name = decl.pattern->AsVariableProxy()->raw_name();
-    VariableProxy* single_var = NewUnresolved(name);
-    Block* init_block = factory()->NewBlock(2, true);
-    init_block->statements()->Add(
-        factory()->NewExpressionStatement(
-            factory()->NewAssignment(Token::ASSIGN, single_var,
-                                     decl.initializer, kNoSourcePosition),
-            kNoSourcePosition),
-        zone());
-    return init_block;
-  }
-  return nullptr;
-}
-
 // Rewrite a for-in/of statement of the form
 //
 //   for (let/const/var x in/of e) b
@@ -1940,6 +1896,7 @@ void Parser::DesugarBindingInForEachStatement(ForInfo* for_info,
                                               Block** body_block,
                                               Expression** each_variable,
                                               bool* ok) {
+  return;
   DCHECK_EQ(1, for_info->parsing_result.declarations.size());
   DeclarationParsingResult::Declaration& decl =
       for_info->parsing_result.declarations[0];
@@ -2012,117 +1969,6 @@ Block* Parser::CreateForEachStatementTDZ(Block* init_block,
     }
   }
   return init_block;
-}
-
-Statement* Parser::InitializeForOfStatement(
-    ForOfStatement* for_of, Expression* each, Expression* iterable,
-    Statement* body, bool finalize, IteratorType type, int next_result_pos) {
-  // Create the auxiliary expressions needed for iterating over the iterable,
-  // and initialize the given ForOfStatement with them.
-  // If finalize is true, also instrument the loop with code that performs the
-  // proper ES6 iterator finalization.  In that case, the result is not
-  // immediately a ForOfStatement.
-  const int nopos = kNoSourcePosition;
-  auto avfactory = ast_value_factory();
-
-  Variable* iterator = NewTemporary(avfactory->dot_iterator_string());
-  Variable* result = NewTemporary(avfactory->dot_result_string());
-  Variable* completion = NewTemporary(avfactory->empty_string());
-
-  // iterator = GetIterator(iterable, type)
-  Expression* assign_iterator;
-  {
-    assign_iterator = factory()->NewAssignment(
-        Token::ASSIGN, factory()->NewVariableProxy(iterator),
-        factory()->NewGetIterator(iterable, type, iterable->position()),
-        iterable->position());
-  }
-
-  // [if (IteratorType == kNormal)]
-  //     !%_IsJSReceiver(result = iterator.next()) &&
-  //         %ThrowIteratorResultNotAnObject(result)
-  // [else if (IteratorType == kAsync)]
-  //     !%_IsJSReceiver(result = Await(iterator.next())) &&
-  //         %ThrowIteratorResultNotAnObject(result)
-  // [endif]
-  Expression* next_result;
-  {
-    Expression* iterator_proxy = factory()->NewVariableProxy(iterator);
-    next_result =
-        BuildIteratorNextResult(iterator_proxy, result, type, next_result_pos);
-  }
-
-  // result.done
-  Expression* result_done;
-  {
-    Expression* done_literal = factory()->NewStringLiteral(
-        ast_value_factory()->done_string(), kNoSourcePosition);
-    Expression* result_proxy = factory()->NewVariableProxy(result);
-    result_done =
-        factory()->NewProperty(result_proxy, done_literal, kNoSourcePosition);
-  }
-
-  // result.value
-  Expression* result_value;
-  {
-    Expression* value_literal =
-        factory()->NewStringLiteral(avfactory->value_string(), nopos);
-    Expression* result_proxy = factory()->NewVariableProxy(result);
-    result_value = factory()->NewProperty(result_proxy, value_literal, nopos);
-  }
-
-  // {{tmp = #result_value, completion = kAbruptCompletion, tmp}}
-  // Expression* result_value (gets overwritten)
-  if (finalize) {
-    Variable* tmp = NewTemporary(avfactory->empty_string());
-    Expression* save_result = factory()->NewAssignment(
-        Token::ASSIGN, factory()->NewVariableProxy(tmp), result_value, nopos);
-
-    Expression* set_completion_abrupt = factory()->NewAssignment(
-        Token::ASSIGN, factory()->NewVariableProxy(completion),
-        factory()->NewSmiLiteral(Parser::kAbruptCompletion, nopos), nopos);
-
-    result_value = factory()->NewBinaryOperation(Token::COMMA, save_result,
-                                                 set_completion_abrupt, nopos);
-    result_value = factory()->NewBinaryOperation(
-        Token::COMMA, result_value, factory()->NewVariableProxy(tmp), nopos);
-  }
-
-  // each = #result_value;
-  Expression* assign_each;
-  {
-    assign_each =
-        factory()->NewAssignment(Token::ASSIGN, each, result_value, nopos);
-    if (each->IsArrayLiteral() || each->IsObjectLiteral()) {
-      assign_each = RewriteDestructuringAssignment(assign_each->AsAssignment());
-    }
-  }
-
-  // {{completion = kNormalCompletion;}}
-  Statement* set_completion_normal;
-  if (finalize) {
-    Expression* proxy = factory()->NewVariableProxy(completion);
-    Expression* assignment = factory()->NewAssignment(
-        Token::ASSIGN, proxy,
-        factory()->NewSmiLiteral(Parser::kNormalCompletion, nopos), nopos);
-
-    set_completion_normal =
-        IgnoreCompletion(factory()->NewExpressionStatement(assignment, nopos));
-  }
-
-  // { #loop-body; #set_completion_normal }
-  // Statement* body (gets overwritten)
-  if (finalize) {
-    Block* block = factory()->NewBlock(2, false);
-    block->statements()->Add(body, zone());
-    block->statements()->Add(set_completion_normal, zone());
-    body = block;
-  }
-
-  for_of->Initialize(body, iterator, assign_iterator, next_result, result_done,
-                     assign_each);
-  return finalize ? FinalizeForOfStatement(for_of, completion, type, nopos)
-                  : for_of;
 }
 
 Statement* Parser::DesugarLexicalBindingsInForStatement(
@@ -2303,9 +2149,8 @@ Statement* Parser::DesugarLexicalBindingsInForStatement(
     }
 
     // Create chain of expressions "flag = 0, temp_x = x, ..."
-    Statement* compound_next_statement = nullptr;
+    Expression* compound_next = nullptr;
     {
-      Expression* compound_next = nullptr;
       // Make expression: flag = 0.
       {
         VariableProxy* flag_proxy = factory()->NewVariableProxy(flag);
@@ -2325,16 +2170,13 @@ Statement* Parser::DesugarLexicalBindingsInForStatement(
         compound_next = factory()->NewBinaryOperation(
             Token::COMMA, compound_next, assignment, kNoSourcePosition);
       }
-
-      compound_next_statement =
-          factory()->NewExpressionStatement(compound_next, kNoSourcePosition);
     }
 
     // Make statement: labels: for (; flag == 1; flag = 0, temp_x = x)
     // Note that we re-use the original loop node, which retains its labels
     // and ensures that any break or continue statements in body point to
     // the right place.
-    loop->Initialize(nullptr, flag_cond, compound_next_statement, body);
+    loop->Initialize(nullptr, flag_cond, compound_next, body);
     inner_block->statements()->Add(loop, zone());
 
     // Make statement: {{if (flag == 1) break;}}
@@ -3121,8 +2963,6 @@ ZoneList<Statement*>* Parser::ParseFunction(
   ValidateFormalParameters(function_scope->language_mode(),
                            allow_duplicate_parameters, CHECK_OK);
 
-  RewriteDestructuringAssignments();
-
   *has_duplicate_parameters =
       !classifier()->is_valid_formal_parameter_list_without_duplicates();
 
@@ -3757,28 +3597,6 @@ void Parser::RewriteNonPattern(bool* ok) {
   }
 }
 
-
-void Parser::RewriteDestructuringAssignments() {
-  const auto& assignments =
-      function_state_->destructuring_assignments_to_rewrite();
-  for (int i = assignments.length() - 1; i >= 0; --i) {
-    // Rewrite list in reverse, so that nested assignment patterns are rewritten
-    // correctly.
-    const DestructuringAssignment& pair = assignments.at(i);
-    RewritableExpression* to_rewrite =
-        pair.assignment->AsRewritableExpression();
-    DCHECK_NOT_NULL(to_rewrite);
-    if (!to_rewrite->is_rewritten()) {
-      // Since this function is called at the end of parsing the program,
-      // pair.scope may already have been removed by FinalizeBlockScope in the
-      // meantime.
-      Scope* scope = pair.scope->GetUnremovedScope();
-      BlockState block_state(&scope_, scope);
-      RewriteDestructuringAssignment(to_rewrite);
-    }
-  }
-}
-
 Expression* Parser::RewriteExponentiation(Expression* left, Expression* right,
                                           int pos) {
   ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(2, zone());
@@ -3907,9 +3725,9 @@ Expression* Parser::RewriteSpreads(ArrayLiteral* lit) {
       // for (each of spread) %AppendElement($R, each)
       ForOfStatement* loop =
           factory()->NewForOfStatement(nullptr, kNoSourcePosition);
-      const bool finalize = false;
-      InitializeForOfStatement(loop, factory()->NewVariableProxy(each), subject,
-                               append_body, finalize, IteratorType::kNormal);
+      const bool kFinalize = false;
+      loop->Initialize(append_body, factory()->NewVariableProxy(each), subject,
+                       IteratorType::kNormal, kFinalize);
       do_block->statements()->Add(loop, zone());
     }
   }
@@ -3917,12 +3735,6 @@ Expression* Parser::RewriteSpreads(ArrayLiteral* lit) {
   // first spread (included) until the end. This fixes $R's initialization.
   lit->RewindSpreads();
   return factory()->NewDoExpression(do_block, result, lit->position());
-}
-
-void Parser::QueueDestructuringAssignmentForRewriting(Expression* expr) {
-  DCHECK(expr->IsRewritableExpression());
-  function_state_->AddDestructuringAssignment(
-      DestructuringAssignment(expr, scope()));
 }
 
 void Parser::QueueNonPatternForRewriting(Expression* expr, bool* ok) {
@@ -4418,28 +4230,28 @@ Statement* Parser::FinalizeForOfStatement(ForOfStatement* loop,
   // Note that the loop's body and its assign_each already contain appropriate
   // assignments to completion (see InitializeForOfStatement).
   //
+  /*
+    const int nopos = kNoSourcePosition;
 
-  const int nopos = kNoSourcePosition;
+    // !(completion === kNormalCompletion)
+    Expression* closing_condition;
+    {
+      Expression* cmp = factory()->NewCompareOperation(
+          Token::EQ_STRICT, factory()->NewVariableProxy(var_completion),
+          factory()->NewSmiLiteral(Parser::kNormalCompletion, nopos), nopos);
+      closing_condition = factory()->NewUnaryOperation(Token::NOT, cmp, nopos);
+    }
 
-  // !(completion === kNormalCompletion)
-  Expression* closing_condition;
-  {
-    Expression* cmp = factory()->NewCompareOperation(
-        Token::EQ_STRICT, factory()->NewVariableProxy(var_completion),
-        factory()->NewSmiLiteral(Parser::kNormalCompletion, nopos), nopos);
-    closing_condition = factory()->NewUnaryOperation(Token::NOT, cmp, nopos);
-  }
+    Block* final_loop = factory()->NewBlock(2, false);
+    {
+      Block* try_block = factory()->NewBlock(1, false);
+      try_block->statements()->Add(loop, zone());
+  */
+  //   FinalizeIteratorUse(var_completion, closing_condition, loop->iterator(),
+  //                       try_block, final_loop, type);
+  //}
 
-  Block* final_loop = factory()->NewBlock(2, false);
-  {
-    Block* try_block = factory()->NewBlock(1, false);
-    try_block->statements()->Add(loop, zone());
-
-    FinalizeIteratorUse(var_completion, closing_condition, loop->iterator(),
-                        try_block, final_loop, type);
-  }
-
-  return final_loop;
+  return loop;
 }
 
 #undef CHECK_OK

@@ -800,6 +800,139 @@ bool Literal::Match(void* literal1, void* literal2) {
          (x->IsNumber() && y->IsNumber() && x->AsNumber() == y->AsNumber());
 }
 
+ObjectPattern::Element::Element(ObjectLiteralProperty* prop)
+    : type_(prop->kind() == ObjectLiteralProperty::SPREAD
+                ? BindingType::kRestElement
+                : BindingType::kElement),
+      is_computed_name_(prop->is_computed_name()),
+      name_(prop->key()),
+      target_(prop->value()),
+      initializer_(nullptr) {
+  if (target_->IsAssignment()) {
+    Assignment* assignment = target_->AsAssignment();
+    DCHECK_EQ(Token::ASSIGN, assignment->op());
+    target_ = assignment->target();
+    initializer_ = assignment->value();
+  }
+}
+
+ObjectPattern::ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos)
+    : Pattern(kObjectPattern, pos), elements_(zone) {
+  ZoneList<ObjectLiteralProperty*>* properties = literal->properties();
+  if (properties == nullptr) return;
+
+  elements_.reserve(properties->length());
+  if (literal->has_rest_property()) set_has_rest_element();
+
+  // Convert ObjectLiteralProperties into Elements
+  for (ObjectLiteralProperty* prop : *properties) {
+    Expression* value = prop->value();
+    switch (value->node_type()) {
+      case kObjectLiteral: {
+        prop->set_value(new (zone) ObjectPattern(zone, value->AsObjectLiteral(),
+                                                 value->position()));
+        break;
+      }
+      case kArrayLiteral: {
+        prop->set_value(new (zone) ArrayPattern(zone, value->AsArrayLiteral(),
+                                                value->position()));
+        break;
+      }
+#ifdef DEBUG
+      case kAssignment: {
+        Assignment* assign = value->AsAssignment();
+        // ParseAssignmentExpression should have converted the initializer's
+        // LHS into a Pattern object.
+        DCHECK_EQ(assign->op(), Token::ASSIGN);
+        DCHECK_NULL(assign->target()->AsObjectLiteral());
+        DCHECK_NULL(assign->target()->AsArrayLiteral());
+        break;
+      }
+#endif
+      default:
+        break;
+    }
+
+    elements_.push_back(Element(prop));
+  }
+}
+
+ArrayPattern::Element::Element(Expression* target)
+    : type_(BindingType::kElement), target_(target), initializer_(nullptr) {
+  if (target->IsLiteral()) {
+    DCHECK(target->AsLiteral()->raw_value()->IsTheHole());
+    type_ = BindingType::kElision;
+    target_ = nullptr;
+    initializer_ = nullptr;
+  } else if (target->IsSpread()) {
+    type_ = BindingType::kRestElement;
+    target_ = target->AsSpread()->expression();
+  } else if (target->IsAssignment()) {
+    Assignment* assignment = target->AsAssignment();
+    DCHECK_EQ(Token::ASSIGN, assignment->op());
+    target_ = assignment->target();
+    initializer_ = assignment->value();
+  }
+}
+
+ArrayPattern::ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos)
+    : Pattern(kArrayPattern, pos), elements_(zone) {
+  ZoneList<Expression*>* values = literal->values();
+
+  elements_.reserve(values->length());
+
+  for (Expression* value : *values) {
+    switch (value->node_type()) {
+      case kObjectLiteral: {
+        value = new (zone)
+            ObjectPattern(zone, value->AsObjectLiteral(), value->position());
+        break;
+      }
+      case kArrayLiteral: {
+        value = new (zone)
+            ArrayPattern(zone, value->AsArrayLiteral(), value->position());
+        break;
+      }
+      case kSpread: {
+        set_has_rest_element();
+        Spread* spread = value->AsSpread();
+        Expression* expr = spread->expression();
+        switch (expr->node_type()) {
+          case kObjectLiteral: {
+            spread->set_expression(new (zone) ObjectPattern(
+                zone, expr->AsObjectLiteral(), expr->position()));
+            break;
+          }
+          case kArrayLiteral: {
+            spread->set_expression(new (zone) ArrayPattern(
+                zone, expr->AsArrayLiteral(), expr->position()));
+            break;
+          }
+          default:
+            break;
+        }
+        break;
+      }
+#ifdef DEBUG
+      case kAssignment: {
+        Assignment* assign = value->AsAssignment();
+        // ParseAssignmentExpression should have converted the initializer's
+        // LHS into a Pattern object.
+        DCHECK_EQ(assign->op(), Token::ASSIGN);
+        DCHECK_NULL(assign->target()->AsObjectLiteral());
+        DCHECK_NULL(assign->target()->AsArrayLiteral());
+        break;
+      }
+#endif
+
+      default:
+        break;
+    }
+
+    elements_.push_back(Element(value));
+  }
+}
+
 const char* CallRuntime::debug_name() {
 #ifdef DEBUG
   return is_jsruntime() ? NameForNativeContextIntrinsicIndex(context_index_)
@@ -823,6 +956,49 @@ ZoneList<const AstRawString*>* BreakableStatement::labels() const {
 }
 
 #undef RETURN_LABELS
+
+std::vector<const AstRawString*> VarExpression::GetBoundNames() const {
+  // TODO: just save BoundNames in VarExpression to avoid this awkward loop.
+  std::stack<Expression*> patterns;
+  std::vector<const AstRawString*> bound_names;
+
+  for (const auto& element : elements_) {
+    patterns.push(element.pattern());
+    while (patterns.size()) {
+      Expression* pattern = patterns.top();
+      patterns.pop();
+      switch (pattern->node_type()) {
+        case AstNode::kObjectPattern: {
+          ObjectPattern* object = pattern->AsObjectPattern();
+          const auto& elements = object->elements();
+          for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+            patterns.push(it->target());
+          }
+          break;
+        }
+        case AstNode::kArrayPattern: {
+          ArrayPattern* array = pattern->AsArrayPattern();
+          const auto& elements = array->elements();
+          for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+            if (it->target() != nullptr) {
+              patterns.push(it->target());
+            }
+          }
+          break;
+        }
+        case AstNode::kVariableProxy: {
+          VariableProxy* proxy = pattern->AsVariableProxy();
+          bound_names.push_back(proxy->raw_name());
+          break;
+        }
+        default:
+          UNREACHABLE();
+      }
+    }
+  }
+
+  return bound_names;
+}
 
 }  // namespace internal
 }  // namespace v8

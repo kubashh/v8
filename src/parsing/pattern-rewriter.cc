@@ -124,6 +124,103 @@ void Parser::DeclareAndInitializeVariables(
       this, block, declaration_descriptor, declaration, names, ok);
 }
 
+void Parser::DeclareAndInitializeVariables(
+    const DeclarationDescriptor* desc,
+    const DeclarationParsingResult::Declaration* declaration,
+    ZoneList<const AstRawString*>* names, bool* ok) {
+  // When an extra declaration scope needs to be inserted to account for
+  // a sloppy eval in a default parameter or function body, the parameter
+  // needs to be declared in the function's scope, not in the varblock
+  // scope which will be used for the initializer expression.
+  Scope* outer_function_scope = nullptr;
+  if (desc->declaration_kind == DeclarationDescriptor::PARAMETER &&
+      // And only when scope is a block scope;
+      // without eval, it is a function scope.
+      desc->scope->is_block_scope()) {
+    DCHECK(desc->scope->is_declaration_scope());
+    DCHECK(desc->scope->AsDeclarationScope()->calls_sloppy_eval());
+    DCHECK(desc->scope->outer_scope()->is_function_scope());
+    outer_function_scope = desc->scope->outer_scope();
+  }
+
+  std::function<bool(Expression*)> RecurseIntoPattern;
+  RecurseIntoPattern = [this, desc, outer_function_scope, names,
+                        &RecurseIntoPattern](Expression* pattern) -> bool {
+    if (pattern->IsSpread()) {
+      // Short circuit recursion into spreads
+      pattern = pattern->AsSpread()->expression();
+    }
+
+    switch (pattern->node_type()) {
+      case AstNode::kVariableProxy: {
+        VariableProxy* node = pattern->AsVariableProxy();
+
+        desc->scope->RemoveUnresolved(node);
+
+        // Declare variable
+        Declaration* declaration;
+        if (desc->mode == VAR && !desc->scope->is_declaration_scope()) {
+          DCHECK(desc->scope->is_block_scope() || desc->scope->is_with_scope());
+          declaration = factory()->NewNestedVariableDeclaration(
+              node, desc->scope, desc->declaration_pos);
+        } else {
+          declaration =
+              factory()->NewVariableDeclaration(node, desc->declaration_pos);
+        }
+
+        bool ok = true;
+        Variable* var = Declare(declaration, desc->declaration_kind, desc->mode,
+                                Variable::DefaultInitializationFlag(desc->mode),
+                                &ok, nullptr);
+        if (!ok) return false;
+        DCHECK_NOT_NULL(var);
+        DCHECK(node->is_resolved());
+        DCHECK_NE(desc->declaration_pos, kNoSourcePosition);
+        var->set_initializer_position(desc->declaration_pos);
+
+        static const int kMaxNumFunctionLocals = 4194303;
+        Scope* declaration_scope =
+            outer_function_scope != nullptr
+                ? outer_function_scope
+                : (IsLexicalVariableMode(desc->mode)
+                       ? desc->scope
+                       : desc->scope->GetDeclarationScope());
+        if (declaration_scope->num_var() > kMaxNumFunctionLocals) {
+          ReportMessage(MessageTemplate::kTooManyVariables);
+          return false;
+        }
+
+        if (names != nullptr) {
+          names->Add(node->raw_name(), zone());
+        }
+        break;
+      }
+      case AstNode::kObjectPattern: {
+        ObjectPattern* node = pattern->AsObjectPattern();
+        for (const ObjectPattern::Element& element : node->elements()) {
+          if (!RecurseIntoPattern(element.target())) return false;
+        }
+        break;
+      }
+      case AstNode::kArrayPattern: {
+        ArrayPattern* node = pattern->AsArrayPattern();
+        for (const ArrayPattern::Element& element : node->elements()) {
+          if (element.type() == ArrayPattern::BindingType::kElision) {
+            continue;
+          }
+          if (!RecurseIntoPattern(element.target())) return false;
+        }
+        break;
+      }
+      default:
+        UNREACHABLE();
+    }
+    return true;
+  };
+
+  if (!RecurseIntoPattern(declaration->pattern)) *ok = false;
+}
+
 void Parser::RewriteDestructuringAssignment(RewritableExpression* to_rewrite) {
   PatternRewriter::RewriteDestructuringAssignment(this, to_rewrite, scope());
 }
@@ -772,6 +869,11 @@ NOT_A_PATTERN(WithStatement)
 NOT_A_PATTERN(Yield)
 NOT_A_PATTERN(YieldStar)
 NOT_A_PATTERN(Await)
+
+// These don't need to be rewritten due to being handled in Ignition
+NOT_A_PATTERN(ObjectPattern)
+NOT_A_PATTERN(ArrayPattern)
+NOT_A_PATTERN(VarExpression)
 
 #undef NOT_A_PATTERN
 }  // namespace internal

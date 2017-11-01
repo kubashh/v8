@@ -164,6 +164,7 @@ struct ParserTypes<Parser> {
   typedef const AstRawString* Identifier;
   typedef v8::internal::Expression* Expression;
   typedef v8::internal::FunctionLiteral* FunctionLiteral;
+  typedef v8::internal::VarExpression* VarExpression;
   typedef ObjectLiteral::Property* ObjectLiteralProperty;
   typedef ClassLiteral::Property* ClassLiteralProperty;
   typedef v8::internal::Suspend* Suspend;
@@ -377,6 +378,18 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   V8_INLINE Statement* DeclareNative(const AstRawString* name, int pos,
                                      bool* ok);
 
+  V8_INLINE void AppendVariableDefinition(VarExpression* declaration,
+                                          Expression* pattern,
+                                          Expression* initializer) {
+    declaration->push_back(pattern, initializer);
+    declaration->set_end_position(scanner()->location().end_pos);
+  }
+
+  V8_INLINE void SetVarExpressionScope(VarExpression* expr, Scope* scope) {
+    DCHECK_NOT_NULL(expr);
+    expr->set_scope(scope);
+  }
+
   V8_INLINE Block* IgnoreCompletion(Statement* statement);
 
   V8_INLINE Scope* NewHiddenCatchScope();
@@ -387,8 +400,15 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       Block* block, const DeclarationDescriptor* declaration_descriptor,
       const DeclarationParsingResult::Declaration* declaration,
       ZoneList<const AstRawString*>* names, bool* ok);
+  void DeclareAndInitializeVariables(
+      const DeclarationDescriptor* declaration_descriptor,
+      const DeclarationParsingResult::Declaration* declaration,
+      ZoneList<const AstRawString*>* names, bool* ok);
   void RewriteDestructuringAssignment(RewritableExpression* expr);
   Expression* RewriteDestructuringAssignment(Assignment* assignment);
+  V8_INLINE void SetBlockScope(Statement* stmt, Scope* scope) {
+    if (stmt->IsBlock()) stmt->AsBlock()->set_scope(scope);
+  }
 
   // [if (IteratorType == kAsync)]
   //     !%_IsJSReceiver(result = Await(iterator.next()) &&
@@ -409,7 +429,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
                                       bool finalize, IteratorType type,
                                       int next_result_pos = kNoSourcePosition);
 
-  Block* RewriteForVarInLegacy(const ForInfo& for_info);
   void DesugarBindingInForEachStatement(ForInfo* for_info, Block** body_block,
                                         Expression** each_variable, bool* ok);
   Block* CreateForEachStatementTDZ(Block* init_block, const ForInfo& for_info,
@@ -549,9 +568,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   void SetLanguageMode(Scope* scope, LanguageMode mode);
   void SetAsmModule();
 
-  // Rewrite all DestructuringAssignments in the current FunctionState.
-  V8_INLINE void RewriteDestructuringAssignments();
-
   V8_INLINE Expression* RewriteExponentiation(Expression* left,
                                               Expression* right, int pos);
   V8_INLINE Expression* RewriteAssignExponentiation(Expression* left,
@@ -563,8 +579,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   // Rewrite expressions that are not used as patterns
   V8_INLINE void RewriteNonPattern(bool* ok);
 
-  V8_INLINE void QueueDestructuringAssignmentForRewriting(
-      Expression* assignment);
   V8_INLINE void QueueNonPatternForRewriting(Expression* expr, bool* ok);
 
   friend class InitializerRewriter;
