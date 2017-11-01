@@ -1,0 +1,256 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c72d900_3ec826f7",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Missing \u003c!DOCTYPE html\u003e. Let’s not render in quirks mode",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 5
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae1d1044_419938cf",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Nit: trim trailing whitespace across the whole file",
+      "range": {
+        "startLine": 37,
+        "startChar": 18,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbfa2c7f_70c36a07",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Drop `type\u003d\"text/javascript\"` everywhere. It’s the implicit default.",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "908298f6_fa99dd5c",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": ";",
+      "range": {
+        "startLine": 361,
+        "startChar": 9,
+        "endLine": 361,
+        "endChar": 18
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e2e5cfe_90a02fba",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": ";",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a023af_3d011895",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": ";",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7272d36b_512d9567",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "I prefer `textContent` over `innerText` for setting, although the latter has been standardized nowadays",
+      "range": {
+        "startLine": 377,
+        "startChar": 27,
+        "endLine": 377,
+        "endChar": 36
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a14b98a_b77f2a36",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "`let print`? Also ;",
+      "range": {
+        "startLine": 394,
+        "startChar": 8,
+        "endLine": 394,
+        "endChar": 15
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c619a3f6_5aae2695",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Use `KeyboardEvent.prototype.key` instead. This also removes the need for the comments after the keyCodes",
+      "range": {
+        "startLine": 405,
+        "startChar": 9,
+        "endLine": 405,
+        "endChar": 22
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb3aaba_81276142",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Use `URLSearchParams` here",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0677829_ea69d47d",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "Move the `let` here. You don’t need it in the outer block",
+      "range": {
+        "startLine": 1016,
+        "startChar": 9,
+        "endLine": 1016,
+        "endChar": 10
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4d2289d_fdb9a37b",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-01T14:53:03Z",
+      "side": 1,
+      "message": "weird indentation",
+      "range": {
+        "startLine": 1367,
+        "startChar": 18,
+        "endLine": 1367,
+        "endChar": 23
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
