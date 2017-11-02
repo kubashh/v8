@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fc1350d6_82641c9d",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-11-02T00:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62b83d5b_8b2bbdd3",
+      "revId": "ddadd2bc846a398fdc278ed0043acc0f1d091d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "493d7a9a_7a10ed7d",
         "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ddadd2bc846a398fdc278ed0043acc0f1d091d2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0834ef7f_87fce0df",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-11-02T00:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "493d7a9a_7a10ed7d",
+      "revId": "ddadd2bc846a398fdc278ed0043acc0f1d091d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
