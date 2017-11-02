@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dba8bb2_396fc397",
+        "filename": "test/inspector/heap-profiler/sampling-heap-profiler.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-02T01:11:06Z",
+      "side": 1,
+      "message": "Please dump something like: `Initial profile size is ${size1}`. console.assert probably nop if Runtime agent is disabled and logging of console api calls is off. Our tests in inspector are expectations based.",
+      "revId": "e69eef2906ba28f5a58a59eee7ba379c85236c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8e8e438_a0b80871",
+        "filename": "test/inspector/heap-profiler/sampling-heap-profiler.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-02T01:11:06Z",
+      "side": 1,
+      "message": "\"Size of profile is more then 100000 after chunk allocation\"",
+      "revId": "e69eef2906ba28f5a58a59eee7ba379c85236c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76e4daa9_9293c193",
+        "filename": "test/inspector/heap-profiler/sampling-heap-profiler.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-02T01:11:06Z",
+      "side": 1,
+      "message": "\"Size is increased after another chunk allocation\"",
+      "revId": "e69eef2906ba28f5a58a59eee7ba379c85236c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59b255fa_a827ebc2",
+        "filename": "test/inspector/heap-profiler/sampling-heap-profiler.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-02T01:11:06Z",
+      "side": 1,
+      "message": "Size is not changed after stopSampling",
+      "revId": "e69eef2906ba28f5a58a59eee7ba379c85236c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
