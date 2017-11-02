@@ -22,6 +22,30 @@
       "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8642190_533b4abd",
+        "filename": "src/parsing/background-parsing-task.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T10:19:52Z",
+      "side": 1,
+      "message": "Yeah it does. Going forward I\u0027d like to rename this and perhaps have it all embedded in compiler.cc or similar so all the driving of the parsing/compilers happens in one place.",
+      "parentUuid": "0ee1827c_922f6489",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
