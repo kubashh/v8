@@ -22,6 +22,30 @@
       "revId": "60c190f42267686107e92c3f54085b4206439012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55bdf251_acf9b201",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-02T09:40:44Z",
+      "side": 1,
+      "message": "Thanks for noticing, this is a copy/paste artifact.",
+      "parentUuid": "512e8798_d4c51dc8",
+      "range": {
+        "startLine": 1530,
+        "startChar": 10,
+        "endLine": 1530,
+        "endChar": 19
+      },
+      "revId": "60c190f42267686107e92c3f54085b4206439012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
