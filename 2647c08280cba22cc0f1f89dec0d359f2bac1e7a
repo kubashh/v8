@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb8c988e_ff1091e9",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "Unintended. Done.",
+      "parentUuid": "fe26869e_4c7b51b6",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 5
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fe30ee1_0b0fc53a",
         "filename": "src/compiler.cc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-02T10:54:09Z",
       "side": 1,
       "message": "nit: Can we DCHECK_EQ(kReadyToExecute, asm_job-\u003estate()) here?",
+      "range": {
+        "startLine": 355,
+        "startChar": 8,
+        "endLine": 355,
+        "endChar": 29
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba8d76b_7b5eff3b",
+        "filename": "src/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "ExecuteJob already DCHECKs this",
+      "parentUuid": "5fe30ee1_0b0fc53a",
       "range": {
         "startLine": 355,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "64fa8d2d_19f25e2a",
+        "filename": "src/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "ditto.",
+      "parentUuid": "2cc7be3d_84cbdf27",
+      "range": {
+        "startLine": 368,
+        "startChar": 6,
+        "endLine": 368,
+        "endChar": 23
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "404ac564_31c1bfb2",
         "filename": "src/compiler.h",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbd60ba1_8eb88870",
+        "filename": "src/compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "404ac564_31c1bfb2",
+      "range": {
+        "startLine": 133,
+        "startChar": 41,
+        "endLine": 133,
+        "endChar": 74
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "98464f81_0918d971",
+        "filename": "src/compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d592b2e_77b6c83a",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 37
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad368478_a1593007",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 5
@@ -128,6 +248,30 @@
       "writtenOn": "2017-11-02T10:54:09Z",
       "side": 1,
       "message": "Printing in the background seems racy, won\u0027t this potentially produce garbled output?",
+      "range": {
+        "startLine": 171,
+        "startChar": 2,
+        "endLine": 171,
+        "endChar": 50
+      },
+      "revId": "2647c08280cba22cc0f1f89dec0d359f2bac1e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a42e531b_666563dd",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-02T23:22:08Z",
+      "side": 1,
+      "message": "Currently it will DCHECK if printing ast on a background thread (although I have some CLs to change this). If --print-ast is enabled while doing background compile then this will produce garbled output, however this isn\u0027t something I would expect to happen often (most ast debuging would happen in d8 where there is never background compilation unless --stress-background-compile is enabled). The parser folks want to be able to print the ast before we start generating the bytecode, so the only other option would be to disable printing if we are compiling from a background thread - would you prefer this?",
+      "parentUuid": "ad368478_a1593007",
       "range": {
         "startLine": 171,
         "startChar": 2,
