@@ -1,0 +1,4 @@
+Checks sampling heap profiler methods.
+Expected error: Cannot access v8 sampled heap profile.
+Successfully finished
+
