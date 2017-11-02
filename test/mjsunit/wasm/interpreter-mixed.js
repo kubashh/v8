@@ -179,7 +179,9 @@ function redirectToInterpreter(
 
     try {
       // Call plus_two, which calls plus_one.
+      print("Calling plus_two");
       instance2.exports.plus_two(7);
+      print("Returned from plus_two");
       assertUnreachable('should trap because of unreachable instruction');
     } catch (e) {
       checkStack(stripPath(e.stack), [
