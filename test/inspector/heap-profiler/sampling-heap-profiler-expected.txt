@@ -1,0 +1,4 @@
+Checks sampling heap profiler methods.
+Expected error: V8 sampling heap profiler was not started.
+Successfully finished
+
