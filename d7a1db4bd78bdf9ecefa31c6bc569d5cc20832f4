@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f375e2f4_0be4856a",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "Just drop this. You can drop the DCHECK above too -- it\u0027s ToIndex()\u0027s responsibility to perform as spec\u0027ed, callers can rely on that blindly.",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 5
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34239414_b35b383b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "What depends on kMaxSafeInteger here?\nSuggestion: pass in an {int} instead of {uint64_t} (if Factory::NewBigInt() can do that, then so can BigInt::AsUintN), and throw a kBigIntTooBig exception in the caller if the given Number is bigger than BigInt::kMaxLengthBits.",
+      "range": {
+        "startLine": 1590,
+        "startChar": 2,
+        "endLine": 1590,
+        "endChar": 32
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4a7e34_9332a0b8",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1602,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "this, too, can simply take an {int}.",
+      "range": {
+        "startLine": 1602,
+        "startChar": 39,
+        "endLine": 1602,
+        "endChar": 49
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df9c76cb_38c63020",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "branch-free version:\n\nint needed_digits \u003d (N + (kDigitBits - 1)) / kDigitBits;",
+      "range": {
+        "startLine": 1612,
+        "startChar": 22,
+        "endLine": 1612,
+        "endChar": 62
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebfab760_8331dd49",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "Are you sure this does the right thing on 64-bit platforms? Please add a test covering that situation, maybe:\n\nassertSame(BigInt.parseInt(\"0x7234567812345678\"), \n           BigInt.asUintN(63, BigInt.parseInt(\"0xf234567812345678\"));",
+      "range": {
+        "startLine": 1624,
+        "startChar": 2,
+        "endLine": 1624,
+        "endChar": 20
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414d8240_ab296b4f",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "here, too, just {int}",
+      "range": {
+        "startLine": 1632,
+        "startChar": 52,
+        "endLine": 1632,
+        "endChar": 62
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d70a79_518d6d3a",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "I don\u0027t think you can just take the minimum here... also, 1 + kMaxLengthBits would be an invalid value for needed_bits.\nSuggestion: simply DCHECK_LT(n, kMaxLengthBits).",
+      "range": {
+        "startLine": 1636,
+        "startChar": 27,
+        "endLine": 1636,
+        "endChar": 35
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a67290c_c7dd961b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T05:35:18Z",
+      "side": 1,
+      "message": "branch-free: (needed_bits + (kDigitBits - 1)) / kDigitBits",
+      "range": {
+        "startLine": 1638,
+        "startChar": 6,
+        "endLine": 1638,
+        "endChar": 66
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
