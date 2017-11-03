@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e8b36605_c33efbd8",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T23:55:06Z",
+      "side": 1,
+      "message": "Hm, OK. I think there\u0027s no reason to ever do that (\u003dcall AsUintN with N bigger than the maximum BigInt we allow) because it\u0027s guaranteed to always be a no-op, so I think it would make sense to throw (because otherwise it looks a bit like the implementation lets you request a BigInt that\u0027s bigger than what it\u0027ll actually return), but I don\u0027t feel strongly about it. We can keep this if you prefer.",
+      "parentUuid": "65046873_5a691f67",
+      "range": {
+        "startLine": 1590,
+        "startChar": 2,
+        "endLine": 1590,
+        "endChar": 32
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d4a7e34_9332a0b8",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -271,6 +295,30 @@
       "side": 1,
       "message": "The point of taking the minimum: If n doesn\u0027t fit into an int, then I need to make sure that the allocation fails hence I choose kMaxLengthBits + 1, which is still a valid int.",
       "parentUuid": "47d70a79_518d6d3a",
+      "range": {
+        "startLine": 1636,
+        "startChar": 27,
+        "endLine": 1636,
+        "endChar": 35
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26748210_ebc07dad",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-03T23:55:06Z",
+      "side": 1,
+      "message": "If that\u0027s the intention, then it needs a comment explaining it, because otherwise this looks like a bug. That said, if the goal is to crash in the allocation function for too-big requests, then you might as well (D)CHECK_LT here.",
+      "parentUuid": "f759bf59_cb1b3430",
       "range": {
         "startLine": 1636,
         "startChar": 27,
