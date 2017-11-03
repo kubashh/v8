@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c09dc54_e63d68e4",
+        "filename": "src/snapshot/object-deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-03T12:21:24Z",
+      "side": 1,
+      "message": "Can\u0027t we move this into {DeserializeWasmModule}?",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfe2f2d2_47a8a239",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-03T12:21:24Z",
+      "side": 1,
+      "message": "This can be moved inside the if (you could then also remove the block scope which you introduced).",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef58420_57f2df64",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-03T12:21:24Z",
+      "side": 1,
+      "message": "Do we care about performance yet? If so, we should move this out of the for loop.",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
