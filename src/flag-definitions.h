@@ -1090,6 +1090,7 @@ DEFINE_BOOL(log_all, false, "Log all events to the log file.")
 DEFINE_BOOL(log_api, false, "Log API events to the log file.")
 DEFINE_BOOL(log_code, false,
             "Log code events to the log file without profiling.")
+DEFINE_BOOL(log_function_events, false, "log function events.")
 DEFINE_BOOL(log_gc, false,
             "Log heap samples on garbage collection for the hp2ps tool.")
 DEFINE_BOOL(log_handles, false, "Log global handle events.")

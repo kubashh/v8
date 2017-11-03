@@ -98,6 +98,20 @@ const Register FastNewArgumentsDescriptor::TargetRegister() {
   return kJSFunctionRegister;
 }
 
+void FunctionFirstExecutionDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {TargetRegister(), NewTargetRegister()};
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
+const Register FunctionFirstExecutionDescriptor::TargetRegister() {
+  return kJSFunctionRegister;
+}
+
+const Register FunctionFirstExecutionDescriptor::NewTargetRegister() {
+  return kJavaScriptCallNewTargetRegister;
+}
+
 void RecordWriteDescriptor::InitializePlatformIndependent(
     CallInterfaceDescriptorData* data) {
   MachineType machine_types[] = {MachineType::TaggedPointer(),
