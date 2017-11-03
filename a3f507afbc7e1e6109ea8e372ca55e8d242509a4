@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b0e8e5d8_2919960f",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c72d900_3ec826f7",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 5
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae1d1044_419938cf",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6db7d548_6059e82c",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae1d1044_419938cf",
+      "range": {
+        "startLine": 37,
+        "startChar": 18,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbfa2c7f_70c36a07",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -62,6 +110,24 @@
       "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04999e88_9b4548dc",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbfa2c7f_70c36a07",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "f5a65326_ea203420",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "908298f6_fa99dd5c",
+      "range": {
+        "startLine": 361,
+        "startChar": 9,
+        "endLine": 361,
+        "endChar": 18
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e2e5cfe_90a02fba",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "17d59a1f_bc806ecf",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e2e5cfe_90a02fba",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31a023af_3d011895",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -119,6 +227,24 @@
       "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb021667_a0ac4a31",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31a023af_3d011895",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "894b724c_47ebc6a3",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "for now I need the newline rendering... will probably leave it as is.",
+      "parentUuid": "7272d36b_512d9567",
+      "range": {
+        "startLine": 377,
+        "startChar": 27,
+        "endLine": 377,
+        "endChar": 36
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a14b98a_b77f2a36",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -165,6 +315,30 @@
       "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3253c302_6044f51c",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "console.log is available by default now in d8, so I\u0027ll just drop print.",
+      "parentUuid": "6a14b98a_b77f2a36",
+      "range": {
+        "startLine": 394,
+        "startChar": 8,
+        "endLine": 394,
+        "endChar": 15
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -191,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "a15c859f_30693741",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "sweet, didn\u0027t know this one :)",
+      "parentUuid": "c619a3f6_5aae2695",
+      "range": {
+        "startLine": 405,
+        "startChar": 9,
+        "endLine": 405,
+        "endChar": 22
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afb3aaba_81276142",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -205,6 +403,24 @@
       "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fdc5da0_5ed70e7e",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afb3aaba_81276142",
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -231,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "30a57951_5142f1df",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0677829_ea69d47d",
+      "range": {
+        "startLine": 1016,
+        "startChar": 9,
+        "endLine": 1016,
+        "endChar": 10
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4d2289d_fdb9a37b",
         "filename": "tools/maptracer.html",
         "patchSetId": 28
@@ -251,6 +491,30 @@
       "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ac0652_b9bcab9c",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 28
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-03T13:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d2289d_fdb9a37b",
+      "range": {
+        "startLine": 1367,
+        "startChar": 18,
+        "endLine": 1367,
+        "endChar": 23
+      },
+      "revId": "a3f507afbc7e1e6109ea8e372ca55e8d242509a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
