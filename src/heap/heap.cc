@@ -1733,8 +1733,11 @@ void Heap::CheckNewSpaceExpansionCriteria() {
 }
 
 static bool IsUnscavengedHeapObject(Heap* heap, Object** p) {
-  return heap->InNewSpace(*p) &&
-         !HeapObject::cast(*p)->map_word().IsForwardingAddress();
+  DCHECK(heap->InNewSpace(*p));
+  // The scavenger fixes up pointers on the fly, so we should never see a
+  // forwarding pointer here.
+  DCHECK(!HeapObject::cast(*p)->map_word().IsForwardingAddress());
+  return heap->InFromSpace(*p);
 }
 
 class ScavengeWeakObjectRetainer : public WeakObjectRetainer {
