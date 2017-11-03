@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "41b7d8f1_8589ef88",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f375e2f4_0be4856a",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 5
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34239414_b35b383b",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-03T05:35:18Z",
       "side": 1,
       "message": "What depends on kMaxSafeInteger here?\nSuggestion: pass in an {int} instead of {uint64_t} (if Factory::NewBigInt() can do that, then so can BigInt::AsUintN), and throw a kBigIntTooBig exception in the caller if the given Number is bigger than BigInt::kMaxLengthBits.",
+      "range": {
+        "startLine": 1590,
+        "startChar": 2,
+        "endLine": 1590,
+        "endChar": 32
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65046873_5a691f67",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "I think nothing depends on kMaxSafeInteger. It was just a way for me to express that we don\u0027t need to worry about anything larger than that. I can remove it if you prefer.\n\nRegarding the type of n: Your suggestion would imply that we throw for something like BigInt.AsUintN(2**32, 42n). My code supports such uses and returns the correct result (42n in this example).",
+      "parentUuid": "34239414_b35b383b",
       "range": {
         "startLine": 1590,
         "startChar": 2,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "04a9f657_5d362d5a",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df9c76cb_38c63020",
+      "range": {
+        "startLine": 1612,
+        "startChar": 22,
+        "endLine": 1612,
+        "endChar": 62
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebfab760_8331dd49",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -105,6 +177,30 @@
       "writtenOn": "2017-11-03T05:35:18Z",
       "side": 1,
       "message": "Are you sure this does the right thing on 64-bit platforms? Please add a test covering that situation, maybe:\n\nassertSame(BigInt.parseInt(\"0x7234567812345678\"), \n           BigInt.asUintN(63, BigInt.parseInt(\"0xf234567812345678\"));",
+      "range": {
+        "startLine": 1624,
+        "startChar": 2,
+        "endLine": 1624,
+        "endChar": 20
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb0861e_cc9fc5d1",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "It does the right thing for me, but it may be compiler-dependent. I rewrote it now using std::numeric_limits::max.\n\nAlso added your example.",
+      "parentUuid": "ebfab760_8331dd49",
       "range": {
         "startLine": 1624,
         "startChar": 2,
@@ -163,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "f759bf59_cb1b3430",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "The point of taking the minimum: If n doesn\u0027t fit into an int, then I need to make sure that the allocation fails hence I choose kMaxLengthBits + 1, which is still a valid int.",
+      "parentUuid": "47d70a79_518d6d3a",
+      "range": {
+        "startLine": 1636,
+        "startChar": 27,
+        "endLine": 1636,
+        "endChar": 35
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a67290c_c7dd961b",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -183,6 +303,30 @@
       "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed845bf_030cdbc8",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-03T10:36:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a67290c_c7dd961b",
+      "range": {
+        "startLine": 1638,
+        "startChar": 6,
+        "endLine": 1638,
+        "endChar": 66
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
