@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e37595ce_6bc39e23",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-03T09:37:26Z",
+      "side": 1,
+      "message": "I think there is a nesting problem with this. Imagine the following ordering of events:\n- Main thread enters scope, counter \u003d\u003d 1, page permissions are changed to \"rw\".\n- Sweeper thread enters scope, counter \u003d\u003d 2, no permission change, still \"rw\".\n- Main thread leaves scopes, counter \u003d\u003d 1, no permission change, still \"rw\".\n- Main thread continues mutator exectution, permissions lack \"x\", boom. :(\n\nWould just unconditionally (irrespective of whether counter \u003d\u003d 1) setting the \"rwx\" permission here solve this problem? That way the transition from \"rw\" -\u003e \"rwx\" can happen no matter how deep the nesting level on the main thread is. WDYT?",
+      "range": {
+        "startLine": 590,
+        "startChar": 6,
+        "endLine": 590,
+        "endChar": 35
+      },
+      "revId": "c3f6595ce528731464b899f38985431586e39cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
