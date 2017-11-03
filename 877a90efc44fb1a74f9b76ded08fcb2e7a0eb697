@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e758dc7c_4e300f55",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-11-03T13:36:15Z",
+      "side": 1,
+      "message": "The description seems to be off then:\n  https://cs.chromium.org/chromium/src/v8/src/heap/spaces.h?q\u003dwrite_unprotect_counter_\u0026l\u003d701",
+      "range": {
+        "startLine": 568,
+        "startChar": 12,
+        "endLine": 568,
+        "endChar": 36
+      },
+      "revId": "877a90efc44fb1a74f9b76ded08fcb2e7a0eb697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
