@@ -1733,8 +1733,7 @@ void Heap::CheckNewSpaceExpansionCriteria() {
 }
 
 static bool IsUnscavengedHeapObject(Heap* heap, Object** p) {
-  return heap->InNewSpace(*p) &&
-         !HeapObject::cast(*p)->map_word().IsForwardingAddress();
+  return heap->InFromSpace(*p);
 }
 
 class ScavengeWeakObjectRetainer : public WeakObjectRetainer {

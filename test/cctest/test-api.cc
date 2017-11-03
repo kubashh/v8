@@ -7842,28 +7842,30 @@ static void ResetUseValueAndSetFlag(
 }
 
 void v8::internal::heap::HeapTester::ResetWeakHandle(bool global_gc) {
-  using v8::Context;
-  using v8::Local;
-  using v8::Object;
-
-  v8::Isolate* iso = CcTest::isolate();
-  v8::HandleScope scope(iso);
-  v8::Local<Context> context = Context::New(iso);
-  Context::Scope context_scope(context);
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Context> context = v8::Context::New(isolate);
+  v8::Context::Scope context_scope(context);
 
   FlagAndPersistent object_a, object_b;
 
   {
-    v8::HandleScope handle_scope(iso);
-    Local<Object> a(v8::Object::New(iso));
-    Local<Object> b(v8::Object::New(iso));
-    object_a.handle.Reset(iso, a);
-    object_b.handle.Reset(iso, b);
-    if (global_gc) {
-      CcTest::CollectAllGarbage(Heap::kAbortIncrementalMarkingMask);
-    } else {
-      CcTest::CollectGarbage(i::NEW_SPACE);
-    }
+    v8::HandleScope handle_scope(isolate);
+    v8::Local<v8::FunctionTemplate> fun =
+        v8::FunctionTemplate::New(isolate, SimpleCallback);
+    v8::Local<v8::Object> a = fun->GetFunction(context)
+                                  .ToLocalChecked()
+                                  ->NewInstance(context)
+                                  .ToLocalChecked();
+    v8::Local<v8::Object> b(v8::Object::New(isolate));
+    CHECK(!a.IsEmpty());
+    CHECK(!b.IsEmpty());
+    CHECK(CcTest::i_isolate()->heap()->InNewSpace(*v8::Utils::OpenHandle(*a)));
+    CHECK(CcTest::i_isolate()->heap()->InNewSpace(*v8::Utils::OpenHandle(*b)));
+    object_a.handle.Reset(isolate, a);
+    object_b.handle.Reset(isolate, b);
+    CHECK(!object_a.handle.IsEmpty());
+    CHECK(!object_b.handle.IsEmpty());
   }
 
   object_a.flag = false;
@@ -7872,18 +7874,23 @@ void v8::internal::heap::HeapTester::ResetWeakHandle(bool global_gc) {
                           v8::WeakCallbackType::kParameter);
   object_b.handle.SetWeak(&object_b, &ResetUseValueAndSetFlag,
                           v8::WeakCallbackType::kParameter);
-  if (!global_gc) {
-    object_a.handle.MarkIndependent();
-    object_b.handle.MarkIndependent();
-    CHECK(object_b.handle.IsIndependent());
-  }
   if (global_gc) {
+    // No weak otherwise unreferenced handle can survive a full GC.
     CcTest::CollectAllGarbage(Heap::kAbortIncrementalMarkingMask);
+    CHECK(object_a.flag);
+    CHECK(object_b.flag);
   } else {
+    object_a.handle.MarkActive();
     CcTest::CollectGarbage(i::NEW_SPACE);
+    // Active API objects survive a Scavenge.
+    CHECK(!object_a.flag);
+    // Regular JS objects always survive.
+    CHECK(!object_b.flag);
+
+    // Active gets cleared after a GC, so the object will die on this Scavenge.
+    CcTest::CollectGarbage(i::NEW_SPACE);
+    CHECK(object_a.flag);
   }
-  CHECK(object_a.flag);
-  CHECK(object_b.flag);
 }
 
 
@@ -7942,7 +7949,13 @@ THREADED_TEST(GCFromWeakCallbacks) {
       FlagAndPersistent object;
       {
         v8::HandleScope handle_scope(isolate);
-        object.handle.Reset(isolate, v8::Object::New(isolate));
+        v8::Local<v8::FunctionTemplate> fun =
+            v8::FunctionTemplate::New(isolate, SimpleCallback);
+        v8::Local<v8::Object> a = fun->GetFunction(context)
+                                      .ToLocalChecked()
+                                      ->NewInstance(context)
+                                      .ToLocalChecked();
+        object.handle.Reset(isolate, a);
       }
       object.flag = false;
       object.handle.SetWeak(&object, gc_forcing_callback[inner_gc],
