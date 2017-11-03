@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2510418d_394ff901",
+        "filename": "src/snapshot/object-deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-03T13:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c09dc54_e63d68e4",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfe2f2d2_47a8a239",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "486933e0_8f040456",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-03T13:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfe2f2d2_47a8a239",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bef58420_57f2df64",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de422908_4dabd3be",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-03T13:27:07Z",
+      "side": 1,
+      "message": "Ack. Nah, don\u0027t care about performance yet. Before enabling the protection (i.e. this scope has almost no overhead if the corresponding flag is not enabled) we should aim for either using a separate field different from {deoptimization_data} for this or make {deoptimization_data} mutable (depending on how soon WebAssembly code is off the heap).",
+      "parentUuid": "bef58420_57f2df64",
+      "revId": "103d634467964336b4e502cdfb03d84b5b7bbd49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
