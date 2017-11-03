@@ -28,12 +28,12 @@ namespace interpreter {
 class InterpreterCompilationJob final : public CompilationJob {
  public:
   InterpreterCompilationJob(ParseInfo* parse_info, FunctionLiteral* literal,
-                            Isolate* isolate);
+                            AccountingAllocator* allocator);
 
  protected:
-  Status PrepareJobImpl() final;
+  Status PrepareJobImpl(Isolate* isolate) final;
   Status ExecuteJobImpl() final;
-  Status FinalizeJobImpl() final;
+  Status FinalizeJobImpl(Isolate* isolate) final;
 
  private:
   BytecodeGenerator* generator() { return &generator_; }
@@ -107,20 +107,7 @@ void Interpreter::IterateDispatchTable(RootVisitor* v) {
 namespace {
 
 void MaybePrintAst(ParseInfo* parse_info, CompilationInfo* compilation_info) {
-  Isolate* isolate = compilation_info->isolate();
-  bool print_ast = isolate->bootstrapper()->IsActive() ? FLAG_print_builtin_ast
-                                                       : FLAG_print_ast;
-  if (!print_ast) return;
-
-  // Requires internalizing the AST, so make sure we are on the main thread and
-  // allow handle dereference and allocations.
-  // TODO(rmcilroy): Make ast-printer print ast raw strings instead of
-  // internalized strings to avoid internalizing here.
-  DCHECK(ThreadId::Current().Equals(isolate->thread_id()));
-  AllowHandleDereference allow_deref;
-  AllowHandleAllocation allow_handles;
-  AllowHeapAllocation allow_gc;
-  parse_info->ast_value_factory()->Internalize(isolate);
+  if (!FLAG_print_ast) return;
 
   OFStream os(stdout);
   std::unique_ptr<char[]> name = compilation_info->GetDebugName();
@@ -128,7 +115,8 @@ void MaybePrintAst(ParseInfo* parse_info, CompilationInfo* compilation_info) {
      << compilation_info->GetDebugName().get() << "]" << std::endl;
 #ifdef DEBUG
   os << "--- AST ---" << std::endl
-     << AstPrinter(isolate).PrintProgram(compilation_info->literal())
+     << AstPrinter(parse_info->stack_limit())
+            .PrintProgram(compilation_info->literal())
      << std::endl;
 #endif  // DEBUG
 }
@@ -147,16 +135,17 @@ bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
 
 }  // namespace
 
-InterpreterCompilationJob::InterpreterCompilationJob(ParseInfo* parse_info,
-                                                     FunctionLiteral* literal,
-                                                     Isolate* isolate)
+InterpreterCompilationJob::InterpreterCompilationJob(
+    ParseInfo* parse_info, FunctionLiteral* literal,
+    AccountingAllocator* allocator)
     : CompilationJob(parse_info->stack_limit(), parse_info, &compilation_info_,
                      "Ignition", State::kReadyToExecute),
-      zone_(isolate->allocator(), ZONE_NAME),
-      compilation_info_(&zone_, isolate, parse_info, literal),
-      generator_(&compilation_info_) {}
+      zone_(allocator, ZONE_NAME),
+      compilation_info_(&zone_, parse_info, literal),
+      generator_(&compilation_info_, parse_info->ast_string_constants()) {}
 
-InterpreterCompilationJob::Status InterpreterCompilationJob::PrepareJobImpl() {
+InterpreterCompilationJob::Status InterpreterCompilationJob::PrepareJobImpl(
+    Isolate* isolate) {
   UNREACHABLE();  // Prepare should always be skipped.
   return SUCCEEDED;
 }
@@ -183,13 +172,14 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   return SUCCEEDED;
 }
 
-InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
+InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl(
+    Isolate* isolate) {
   RuntimeCallTimerScope runtimeTimerScope(
       parse_info()->runtime_call_stats(),
       &RuntimeCallStats::CompileIgnitionFinalization);
 
-  Handle<BytecodeArray> bytecodes = generator()->FinalizeBytecode(
-      compilation_info()->isolate(), parse_info()->script());
+  Handle<BytecodeArray> bytecodes =
+      generator()->FinalizeBytecode(isolate, parse_info()->script());
   if (generator()->HasStackOverflow()) {
     return FAILED;
   }
@@ -205,14 +195,14 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
 
   compilation_info()->SetBytecodeArray(bytecodes);
   compilation_info()->SetCode(
-      BUILTIN_CODE(compilation_info()->isolate(), InterpreterEntryTrampoline));
+      BUILTIN_CODE(isolate, InterpreterEntryTrampoline));
   return SUCCEEDED;
 }
 
 CompilationJob* Interpreter::NewCompilationJob(ParseInfo* parse_info,
                                                FunctionLiteral* literal,
-                                               Isolate* isolate) {
-  return new InterpreterCompilationJob(parse_info, literal, isolate);
+                                               AccountingAllocator* allocator) {
+  return new InterpreterCompilationJob(parse_info, literal, allocator);
 }
 
 bool Interpreter::IsDispatchTableInitialized() const {

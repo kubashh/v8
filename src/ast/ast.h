@@ -2266,12 +2266,7 @@ class FunctionLiteral final : public Expression {
     return false;
   }
 
-  Handle<String> debug_name() const {
-    if (raw_name_ != nullptr && !raw_name_->IsEmpty()) {
-      return raw_name_->string();
-    }
-    return inferred_name();
-  }
+  std::unique_ptr<char[]> debug_name() const;
 
   Handle<String> inferred_name() const {
     if (!inferred_name_.is_null()) {
@@ -2291,6 +2286,8 @@ class FunctionLiteral final : public Expression {
     DCHECK(raw_inferred_name_ == nullptr || raw_inferred_name_->IsEmpty());
     raw_inferred_name_ = nullptr;
   }
+
+  const AstConsString* raw_inferred_name() { return raw_inferred_name_; }
 
   void set_raw_inferred_name(const AstConsString* raw_inferred_name) {
     DCHECK_NOT_NULL(raw_inferred_name);
@@ -2520,6 +2517,7 @@ class ClassLiteral final : public Expression {
 class NativeFunctionLiteral final : public Expression {
  public:
   Handle<String> name() const { return name_->string(); }
+  const AstRawString* raw_name() const { return name_; }
   v8::Extension* extension() const { return extension_; }
 
  private:
