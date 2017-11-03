@@ -7832,66 +7832,6 @@ THREADED_TEST(InternalFieldCallback) {
   InternalFieldCallback(true);
 }
 
-
-static void ResetUseValueAndSetFlag(
-    const v8::WeakCallbackInfo<FlagAndPersistent>& data) {
-  // Blink will reset the handle, and then use the other handle, so they
-  // can't use the same backing slot.
-  data.GetParameter()->handle.Reset();
-  data.GetParameter()->flag = true;
-}
-
-void v8::internal::heap::HeapTester::ResetWeakHandle(bool global_gc) {
-  using v8::Context;
-  using v8::Local;
-  using v8::Object;
-
-  v8::Isolate* iso = CcTest::isolate();
-  v8::HandleScope scope(iso);
-  v8::Local<Context> context = Context::New(iso);
-  Context::Scope context_scope(context);
-
-  FlagAndPersistent object_a, object_b;
-
-  {
-    v8::HandleScope handle_scope(iso);
-    Local<Object> a(v8::Object::New(iso));
-    Local<Object> b(v8::Object::New(iso));
-    object_a.handle.Reset(iso, a);
-    object_b.handle.Reset(iso, b);
-    if (global_gc) {
-      CcTest::CollectAllGarbage(Heap::kAbortIncrementalMarkingMask);
-    } else {
-      CcTest::CollectGarbage(i::NEW_SPACE);
-    }
-  }
-
-  object_a.flag = false;
-  object_b.flag = false;
-  object_a.handle.SetWeak(&object_a, &ResetUseValueAndSetFlag,
-                          v8::WeakCallbackType::kParameter);
-  object_b.handle.SetWeak(&object_b, &ResetUseValueAndSetFlag,
-                          v8::WeakCallbackType::kParameter);
-  if (!global_gc) {
-    object_a.handle.MarkIndependent();
-    object_b.handle.MarkIndependent();
-    CHECK(object_b.handle.IsIndependent());
-  }
-  if (global_gc) {
-    CcTest::CollectAllGarbage(Heap::kAbortIncrementalMarkingMask);
-  } else {
-    CcTest::CollectGarbage(i::NEW_SPACE);
-  }
-  CHECK(object_a.flag);
-  CHECK(object_b.flag);
-}
-
-
-THREADED_HEAP_TEST(ResetWeakHandle) {
-  v8::internal::heap::HeapTester::ResetWeakHandle(false);
-  v8::internal::heap::HeapTester::ResetWeakHandle(true);
-}
-
 static void InvokeScavenge() { CcTest::CollectGarbage(i::NEW_SPACE); }
 
 static void InvokeMarkSweep() { CcTest::CollectAllGarbage(); }
@@ -7942,7 +7882,13 @@ THREADED_TEST(GCFromWeakCallbacks) {
       FlagAndPersistent object;
       {
         v8::HandleScope handle_scope(isolate);
-        object.handle.Reset(isolate, v8::Object::New(isolate));
+        v8::Local<v8::FunctionTemplate> fun =
+            v8::FunctionTemplate::New(isolate, SimpleCallback);
+        v8::Local<v8::Object> a = fun->GetFunction(context)
+                                      .ToLocalChecked()
+                                      ->NewInstance(context)
+                                      .ToLocalChecked();
+        object.handle.Reset(isolate, a);
       }
       object.flag = false;
       object.handle.SetWeak(&object, gc_forcing_callback[inner_gc],
