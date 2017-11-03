@@ -66,6 +66,8 @@ ObjectDeserializer::DeserializeWasmCompiledModule(
 }
 
 MaybeHandle<HeapObject> ObjectDeserializer::Deserialize(Isolate* isolate) {
+  // TODO(6792): No longer needed once WebAssembly code is off heap.
+  CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
   Initialize(isolate);
   if (!allocator()->ReserveSpace()) return MaybeHandle<HeapObject>();
 
