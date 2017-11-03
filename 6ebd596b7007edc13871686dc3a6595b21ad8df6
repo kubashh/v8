@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64aad201_1bb2fca7",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 33
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2017-11-03T13:47:13Z",
+      "side": 1,
+      "message": "Why not `new URLSearchParams(state).toString()`? You don‘t need the loop that way.",
+      "revId": "6ebd596b7007edc13871686dc3a6595b21ad8df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
