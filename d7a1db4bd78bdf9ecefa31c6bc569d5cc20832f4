@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "d983a6c3_fd40e228",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-11-04T00:15:59Z",
+      "side": 1,
+      "message": "I don\u0027t think we should throw for this case, as it\u0027d clearly not be following the spec. The only reason it\u0027s OK for us to throw in the BigIntTooBig case is that we\u0027d crash otherwise.",
+      "parentUuid": "e8b36605_c33efbd8",
+      "range": {
+        "startLine": 1590,
+        "startChar": 2,
+        "endLine": 1590,
+        "endChar": 32
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d4a7e34_9332a0b8",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
