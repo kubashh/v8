@@ -65,6 +65,29 @@
     },
     {
       "key": {
+        "uuid": "97cde3f7_426290fd",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T09:00:45Z",
+      "side": 1,
+      "message": "Maybe also call this result, like below? How about using the values you already have from selected set and remove those from the result vector?",
+      "range": {
+        "startLine": 145,
+        "startChar": 25,
+        "endLine": 145,
+        "endChar": 33
+      },
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "182e4abd_cdbfcacf",
         "filename": "src/base/utils/random-number-generator.h",
         "patchSetId": 10
