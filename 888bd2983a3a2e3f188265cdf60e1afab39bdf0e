@@ -201,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "fccc16d1_91fcb552",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T10:15:16Z",
+      "side": 1,
+      "message": "Correction. I understand now that the algo reduces the vector to n. But for very small n, we could use an optimization that only reduces to larger_size, the inverse of smaller_size and still turn the result around.",
+      "parentUuid": "29b462d8_963d7e17",
+      "range": {
+        "startLine": 147,
+        "startChar": 30,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "182e4abd_cdbfcacf",
         "filename": "src/base/utils/random-number-generator.h",
         "patchSetId": 10
