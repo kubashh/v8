@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa0117e7_c909f1b7",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-06T14:44:31Z",
+      "side": 1,
+      "message": "CacheState is a struct. Maybe it shouldn\u0027t, but converting it to a class would be a separate CL.\nI added a TODO to the header file.",
+      "parentUuid": "9e440ed5_5fc06a71",
+      "range": {
+        "startLine": 134,
+        "startChar": 9,
+        "endLine": 134,
+        "endChar": 20
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcf10752_6d3207a2",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c170be17_2bfee11f",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-06T14:44:31Z",
+      "side": 1,
+      "message": "No, it needs to be stored outside since it\u0027s incremented on each invocation, so it\u0027s state needs to be preserved across calls.",
+      "parentUuid": "dcf10752_6d3207a2",
+      "range": {
+        "startLine": 137,
+        "startChar": 7,
+        "endLine": 137,
+        "endChar": 11
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1709512d_10491333",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-06T14:44:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e331709f_82a10fad",
+      "range": {
+        "startLine": 139,
+        "startChar": 33,
+        "endLine": 139,
+        "endChar": 41
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a16df01_05867e88",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 1
@@ -82,6 +154,24 @@
       "writtenOn": "2017-11-06T11:57:28Z",
       "side": 1,
       "message": "Why do you inline this function, instead of just adding a proper new function? I think mentioning all parameters needed for InitStackSlot would also have value.",
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec19375_399aa96d",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-06T14:44:31Z",
+      "side": 1,
+      "message": "This helper is very specific for implementing InitMerge. It\u0027s just there to avoid code duplication in the two (previously three) loops. It\u0027s not meant to be called externally. What would be the value of exposing it?",
+      "parentUuid": "2a16df01_05867e88",
       "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -102,6 +192,24 @@
       "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29911a3_35a8808e",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-06T14:44:31Z",
+      "side": 1,
+      "message": "Initially, all slots are stack slots. They are initialized by the {resize} above. I added a comment.",
+      "parentUuid": "f06e3948_279b0c21",
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
