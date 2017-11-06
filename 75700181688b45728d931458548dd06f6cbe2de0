@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "523ed3da_4c100d23",
+        "filename": "src/base/bits.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-06T11:31:47Z",
+      "side": 1,
+      "message": "nit: Can we hoist this out into a local constexpr for readability?",
+      "range": {
+        "startLine": 91,
+        "startChar": 32,
+        "endLine": 91,
+        "endChar": 56
+      },
+      "revId": "75700181688b45728d931458548dd06f6cbe2de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c9d4af_5237d91b",
+        "filename": "src/base/bits.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-06T11:31:47Z",
+      "side": 1,
+      "message": "nit: This change seems not needed.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 29
+      },
+      "revId": "75700181688b45728d931458548dd06f6cbe2de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
