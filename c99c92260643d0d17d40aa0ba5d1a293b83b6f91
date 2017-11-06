@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "4a9f05be_c70903fa",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T19:31:41Z",
+      "side": 1,
+      "message": "Would a CHECK be graceful enough? (Since it\u0027s a requirement of the function)",
+      "parentUuid": "2ff8fa3e_c8eb5aa5",
+      "range": {
+        "startLine": 131,
+        "startChar": 14,
+        "endLine": 131,
+        "endChar": 15
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24d9acb9_cb7c1ee1",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T19:31:41Z",
+      "side": 1,
+      "message": "nit: Maybe use \u003e for safety, also the other one in this line?",
+      "range": {
+        "startLine": 182,
+        "startChar": 23,
+        "endLine": 182,
+        "endChar": 25
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "afaabecb_409cf91f",
         "filename": "src/base/utils/random-number-generator.h",
         "patchSetId": 14
@@ -104,6 +151,75 @@
         "startChar": 31,
         "endLine": 1522,
         "endChar": 42
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47e0c046_b9005606",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T19:31:41Z",
+      "side": 1,
+      "message": "nit: Have a hole in the data to make it more expressive, e.g. 2, 3, 5, 6?",
+      "range": {
+        "startLine": 189,
+        "startChar": 42,
+        "endLine": 189,
+        "endChar": 52
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfaa1f18_1e5deea8",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T19:31:41Z",
+      "side": 1,
+      "message": "Do we need kMaxRuns runs? There are several rng calls within each next sample call. How much time does this test take? Can you run it in isolation? If it\u0027s \u003c1s in release mode then never mind.",
+      "range": {
+        "startLine": 192,
+        "startChar": 22,
+        "endLine": 192,
+        "endChar": 30
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bcef29d_1e95300f",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T19:31:41Z",
+      "side": 1,
+      "message": "Just for my understanding: This is just for having complete test cases for the public method, right? The fast method can never call it that way, as the size of \"excluded\" can\u0027t be more than half of min(n, m-n), right?",
+      "range": {
+        "startLine": 202,
+        "startChar": 30,
+        "endLine": 202,
+        "endChar": 53
       },
       "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
