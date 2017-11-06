@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "04e75056_ee0dfe68",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T16:53:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa0117e7_c909f1b7",
+      "range": {
+        "startLine": 134,
+        "startChar": 9,
+        "endLine": 134,
+        "endChar": 20
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcf10752_6d3207a2",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "No, it needs to be stored outside since it\u0027s incremented on each invocation, so it\u0027s state needs to be preserved across calls.",
       "parentUuid": "dcf10752_6d3207a2",
+      "range": {
+        "startLine": 137,
+        "startChar": 7,
+        "endLine": 137,
+        "endChar": 11
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "160bbddc_48725dbf",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T16:53:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c170be17_2bfee11f",
       "range": {
         "startLine": 137,
         "startChar": 7,
@@ -172,6 +220,24 @@
       "side": 1,
       "message": "This helper is very specific for implementing InitMerge. It\u0027s just there to avoid code duplication in the two (previously three) loops. It\u0027s not meant to be called externally. What would be the value of exposing it?",
       "parentUuid": "2a16df01_05867e88",
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "655d888a_4c56b8de",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T16:53:32Z",
+      "side": 1,
+      "message": "As discussed offline, please state the capture list explicitly.",
+      "parentUuid": "fec19375_399aa96d",
       "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
