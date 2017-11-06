@@ -57,6 +57,7 @@ class LiftoffAssembler : public TurboAssembler {
     }
 
     RegList pinned_regs() const { return pinned_regs_; }
+    bool has(Register reg) const { return (pinned_regs_ & reg.bit()) != 0; }
 
    private:
     RegList pinned_regs_ = 0;
