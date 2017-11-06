@@ -15,6 +15,18 @@ class RandomNumberGeneratorTest : public ::testing::TestWithParam<int> {};
 
 static const int kMaxRuns = 12345;
 
+static void CheckSample(std::vector<int64_t> sample, int64_t max, size_t size) {
+  EXPECT_EQ(sample.size(), size);
+
+  // Check if values are unique.
+  std::sort(sample.begin(), sample.end());
+  EXPECT_EQ(std::adjacent_find(sample.begin(), sample.end()), sample.end());
+
+  for (auto x : sample) {
+    EXPECT_GE(x, 0);
+    EXPECT_LT(x, max);
+  }
+}
 
 TEST_P(RandomNumberGeneratorTest, NextIntWithMaxValue) {
   RandomNumberGenerator rng(GetParam());
@@ -44,6 +56,71 @@ TEST_P(RandomNumberGeneratorTest, NextDoubleReturnsValueBetween0And1) {
   }
 }
 
+TEST_P(RandomNumberGeneratorTest, NextSample0) {
+  size_t m = 1;
+  RandomNumberGenerator rng(GetParam());
+
+  std::vector<int64_t> sample = rng.NextSample(m, 0);
+  EXPECT_TRUE(sample.empty());
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSample1) {
+  size_t m = 10;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, 1);
+
+    CheckSample(sample, m, 1);
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleMax) {
+  size_t m = 10;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, m);
+
+    CheckSample(sample, m, m);
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleHalf) {
+  size_t n = 5;
+  int64_t m = 10;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    CheckSample(sample, m, n);
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleMoreThanHalf) {
+  size_t n = 90;
+  int64_t m = 100;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    CheckSample(sample, m, n);
+  }
+}
+
+TEST_P(RandomNumberGeneratorTest, NextSampleLessThanHalf) {
+  size_t n = 10;
+  int64_t m = 100;
+  RandomNumberGenerator rng(GetParam());
+
+  for (int k = 0; k < kMaxRuns; ++k) {
+    std::vector<int64_t> sample = rng.NextSample(m, n);
+
+    CheckSample(sample, m, n);
+  }
+}
 
 INSTANTIATE_TEST_CASE_P(RandomSeeds, RandomNumberGeneratorTest,
                         ::testing::Values(INT_MIN, -1, 0, 1, 42, 100,
