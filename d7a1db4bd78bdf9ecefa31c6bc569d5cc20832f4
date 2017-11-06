@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "c72329d0_3767b117",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-06T08:59:33Z",
+      "side": 1,
+      "message": "I agree that we should follow the spec if we can (and here we can).",
+      "parentUuid": "d983a6c3_fd40e228",
+      "range": {
+        "startLine": 1590,
+        "startChar": 2,
+        "endLine": 1590,
+        "endChar": 32
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d4a7e34_9332a0b8",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -343,6 +367,30 @@
       "side": 1,
       "message": "If that\u0027s the intention, then it needs a comment explaining it, because otherwise this looks like a bug. That said, if the goal is to crash in the allocation function for too-big requests, then you might as well (D)CHECK_LT here.",
       "parentUuid": "f759bf59_cb1b3430",
+      "range": {
+        "startLine": 1636,
+        "startChar": 27,
+        "endLine": 1636,
+        "endChar": 35
+      },
+      "revId": "d7a1db4bd78bdf9ecefa31c6bc569d5cc20832f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21d2a1ae_1d9945f0",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-06T08:59:33Z",
+      "side": 1,
+      "message": "Added a comment. Once we move the TooBig-throwing into the allocation function, this will end up throwing rather than crashing.",
+      "parentUuid": "26748210_ebc07dad",
       "range": {
         "startLine": 1636,
         "startChar": 27,
