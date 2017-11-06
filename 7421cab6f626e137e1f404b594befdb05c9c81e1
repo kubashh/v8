@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e440ed5_5fc06a71",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T11:57:28Z",
+      "side": 1,
+      "message": "Where does {stack_state} come from? Should it be called {stack_state_}?",
+      "range": {
+        "startLine": 134,
+        "startChar": 9,
+        "endLine": 134,
+        "endChar": 20
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf10752_6d3207a2",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T11:57:28Z",
+      "side": 1,
+      "message": "Couldn\u0027t {slot} be moved into the {InitStackSlot} function?",
+      "range": {
+        "startLine": 137,
+        "startChar": 7,
+        "endLine": 137,
+        "endChar": 11
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e331709f_82a10fad",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T11:57:28Z",
+      "side": 1,
+      "message": "registers",
+      "range": {
+        "startLine": 139,
+        "startChar": 33,
+        "endLine": 139,
+        "endChar": 41
+      },
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a16df01_05867e88",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T11:57:28Z",
+      "side": 1,
+      "message": "Why do you inline this function, instead of just adding a proper new function? I think mentioning all parameters needed for InitStackSlot would also have value.",
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f06e3948_279b0c21",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-06T11:57:28Z",
+      "side": 1,
+      "message": "Can you add a comment why this DCHECK should be true? It does not seem obvious to me.",
+      "revId": "7421cab6f626e137e1f404b594befdb05c9c81e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
