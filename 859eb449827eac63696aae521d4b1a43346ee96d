@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d40edf31_6ace58ff",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-11-06T13:45:38Z",
+      "side": 1,
+      "message": "nit: Not for this CL but I think it should be\n  SetReadWriteExecute\n  SetReadWrite\nwithout *And*.",
+      "range": {
+        "startLine": 195,
+        "startChar": 14,
+        "endLine": 195,
+        "endChar": 39
+      },
+      "revId": "859eb449827eac63696aae521d4b1a43346ee96d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
