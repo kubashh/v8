@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ff8fa3e_c8eb5aa5",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-11-06T17:59:17Z",
+      "side": 1,
+      "message": "What happens if n is larger max in a non-debug environment? Instead of having a DCHECK we should gracefully handle that case (and please add a test).",
+      "range": {
+        "startLine": 131,
+        "startChar": 14,
+        "endLine": 131,
+        "endChar": 15
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afaabecb_409cf91f",
+        "filename": "src/base/utils/random-number-generator.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-11-06T17:59:17Z",
+      "side": 1,
+      "message": "Since this function only returns positive values, how about changing the type to unit64_t for arguments and return values.",
+      "range": {
+        "startLine": 91,
+        "startChar": 79,
+        "endLine": 91,
+        "endChar": 80
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6e1b8ac_371e504a",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-11-06T17:59:17Z",
+      "side": 1,
+      "message": "\"Stress GC compaction by selecting X percent of pages as evacuation candidates. It overrides stress_compaction.\"",
+      "range": {
+        "startLine": 683,
+        "startChar": 26,
+        "endLine": 683,
+        "endChar": 35
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79da4dee_ceb8d66e",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-11-06T17:59:17Z",
+      "side": 1,
+      "message": "As a follow-up, we can get rid of stress compaction as soon as we are confident that the new strategy works.",
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3726a77_6f108cd1",
+        "filename": "src/isolate.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-11-06T17:59:17Z",
+      "side": 1,
+      "message": "Do we really need a separate instance? If this is not necessary right now then let\u0027s postpone it.",
+      "range": {
+        "startLine": 1522,
+        "startChar": 31,
+        "endLine": 1522,
+        "endChar": 42
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
