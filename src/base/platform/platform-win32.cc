@@ -804,6 +804,12 @@ void OS::SetReadAndExecutable(void* address, const size_t size) {
            VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect));
 }
 
+void OS::SetReadAndExecutable(void* address, const size_t size) {
+  DWORD old_protect;
+  CHECK_NE(NULL,
+           VirtualProtect(address, size, PAGE_EXECUTE_READ, &old_protect));
+}
+
 void OS::Guard(void* address, const size_t size) {
   DWORD oldprotect;
   VirtualProtect(address, size, PAGE_NOACCESS, &oldprotect);
@@ -816,6 +822,13 @@ void OS::SetReadAndWritable(void* address, const size_t size, bool commit) {
     DWORD oldprotect;
     CHECK_NE(NULL, VirtualProtect(address, size, PAGE_READWRITE, &oldprotect));
   }
+}
+
+// Make a region of memory readable, writable, and executable.
+void OS::SetReadWriteAndExecutable(void* address, const size_t size) {
+  DWORD oldprotect;
+  CHECK_NE(NULL,
+           VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldprotect));
 }
 
 // static
