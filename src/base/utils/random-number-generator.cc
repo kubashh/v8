@@ -6,8 +6,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <algorithm>
 #include <new>
+#include <unordered_set>
 
 #include "src/base/bits.h"
 #include "src/base/macros.h"
@@ -114,6 +115,59 @@ void RandomNumberGenerator::NextBytes(void* buffer, size_t buflen) {
   }
 }
 
+std::vector<int64_t> RandomNumberGenerator::NextSample(int64_t max, size_t n) {
+  DCHECK_LE(n, max);
+
+  if (n == 0) {
+    return {};
+  }
+
+  // Choose to select or exclude, whatever needs fewer generator calls.
+  size_t smaller_part = static_cast<size_t>(
+      std::min(max - static_cast<int64_t>(n), static_cast<int64_t>(n)));
+  std::unordered_set<int64_t> selected;
+
+  size_t counter = 0;
+  while (selected.size() != smaller_part && counter / 3 < smaller_part) {
+    int64_t x = static_cast<int64_t>(NextDouble() * max);
+    DCHECK_LT(x, max);
+
+    selected.insert(x);
+    counter++;
+  }
+
+  // Failed to select numbers in smaller_part * 3 steps, try different approach.
+  // Generate list of all possible values and remove random values from it until
+  // size reaches n.
+  if (selected.size() != smaller_part) {
+    std::vector<int64_t> result;
+    result.reserve(max - selected.size());
+
+    for (int64_t i = 0; i < max; i++) {
+      if (!selected.count(i)) {
+        result.push_back(i);
+      }
+    }
+    while (result.size() != n) {
+      int x = NextInt(static_cast<int>(result.size()));
+      std::swap(result[x], result.back());
+      result.pop_back();
+    }
+    return result;
+  }
+
+  if (smaller_part == n) {
+    return std::vector<int64_t>(selected.begin(), selected.end());
+  } else {
+    std::vector<int64_t> result;
+    for (int64_t i = 0; i < max; i++) {
+      if (!selected.count(i)) {
+        result.push_back(i);
+      }
+    }
+    return result;
+  }
+}
 
 int RandomNumberGenerator::Next(int bits) {
   DCHECK_LT(0, bits);
