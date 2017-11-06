@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <algorithm>
 #include <new>
 
 #include "src/base/bits.h"
@@ -114,6 +115,82 @@ void RandomNumberGenerator::NextBytes(void* buffer, size_t buflen) {
   }
 }
 
+static std::vector<int64_t> ComplementSample(
+    const std::unordered_set<int64_t>& set, int64_t max) {
+  std::vector<int64_t> result;
+  result.reserve(max - set.size());
+  for (int64_t i = 0; i < max; i++) {
+    if (!set.count(i)) {
+      result.push_back(i);
+    }
+  }
+  return result;
+}
+
+std::vector<int64_t> RandomNumberGenerator::NextSample(int64_t max, size_t n) {
+  DCHECK_LE(n, max);
+
+  if (n == 0) {
+    return {};
+  }
+
+  // Choose to select or exclude, whatever needs fewer generator calls.
+  size_t smaller_part = std::min(max - n, n);
+  std::unordered_set<int64_t> selected;
+
+  size_t counter = 0;
+  while (selected.size() != smaller_part && counter / 3 < smaller_part) {
+    int64_t x = static_cast<int64_t>(NextDouble() * max);
+    CHECK_LT(x, max);
+
+    selected.insert(x);
+    counter++;
+  }
+
+  if (selected.size() == smaller_part) {
+    if (smaller_part != n) {
+      return ComplementSample(selected, max);
+    }
+    return std::vector<int64_t>(selected.begin(), selected.end());
+  }
+
+  // Failed to select numbers in smaller_part * 3 steps, try different approach.
+  return NextSampleSlow(max, n, selected);
+}
+
+std::vector<int64_t> RandomNumberGenerator::NextSampleSlow(
+    int64_t max, size_t n, const std::unordered_set<int64_t>& excluded) {
+  DCHECK_GE(max - excluded.size(), n);
+
+  std::vector<int64_t> result;
+  result.reserve(max - excluded.size());
+
+  for (int64_t i = 0; i < max; i++) {
+    if (!excluded.count(i)) {
+      result.push_back(i);
+    }
+  }
+
+  // Decrease result vector until it contains values to select or exclude,
+  // whatever needs fewer generator calls.
+  size_t larger_part = std::max(max - n, n);
+
+  // Excluded set may cause that initial result is already smaller than
+  // larget_part.
+  while (result.size() != larger_part && result.size() != n) {
+    size_t x = static_cast<size_t>(NextDouble() * result.size());
+    CHECK_LT(x, result.size());
+
+    std::swap(result[x], result.back());
+    result.pop_back();
+  }
+
+  if (result.size() != n) {
+    return ComplementSample(
+        std::unordered_set<int64_t>(result.begin(), result.end()), max);
+  }
+  return result;
+}
 
 int RandomNumberGenerator::Next(int bits) {
   DCHECK_LT(0, bits);
