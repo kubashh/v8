@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cca2327_2d82232d",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T08:57:39Z",
+      "side": 1,
+      "message": "Maybe group those imports together with #include \u003cnew\u003e below?",
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d853fdc8_74a8d99c",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T08:57:39Z",
+      "side": 1,
+      "message": "\u003c ?\n\nOtherwise I see this bail out on first iteration.",
+      "range": {
+        "startLine": 134,
+        "startChar": 56,
+        "endLine": 134,
+        "endChar": 57
+      },
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4650161_7d2c01f0",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T08:57:39Z",
+      "side": 1,
+      "message": "can x\u003d\u003dmax ever hold? I thought NextDouble above is in [0,1) and the cast does round down, i.e. floor? If it should never hold, maybe rather add a check instead?",
+      "range": {
+        "startLine": 136,
+        "startChar": 20,
+        "endLine": 136,
+        "endChar": 28
+      },
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "182e4abd_cdbfcacf",
+        "filename": "src/base/utils/random-number-generator.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-06T08:57:39Z",
+      "side": 1,
+      "message": "Why? n\u003dmax could just be a special case, just like 0. E.g. max\u003d10, interval is [0,10) and n in [0,10] where n\u003d0 is {} and n\u003d10 is {0, 1, ..., 9}.",
+      "range": {
+        "startLine": 91,
+        "startChar": 37,
+        "endLine": 91,
+        "endChar": 60
+      },
+      "revId": "888bd2983a3a2e3f188265cdf60e1afab39bdf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
