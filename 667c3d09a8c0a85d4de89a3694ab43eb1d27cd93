@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad8259b5_b0aad7a6",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-07T14:28:48Z",
+      "side": 1,
+      "message": "This uses the same configs like the corresponding chromium bot:\nhttps://cs.chromium.org/chromium/src/tools/mb/mb_config.pyl?q\u003dmb_conf\u0026sq\u003dpackage:chromium\u0026l\u003d354\n(all that are relevant to V8)\n\nThe win asan bot seems to not support edge coverage. Chromium has no debug bot, so we add a standard asan debug bot for windows in V8 (verify heap is part of debug in V8).",
+      "revId": "667c3d09a8c0a85d4de89a3694ab43eb1d27cd93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
