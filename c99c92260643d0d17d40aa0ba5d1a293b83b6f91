@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b72a0208_99c89ac5",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "I\u0027m changing it to CHECK for now.",
+      "parentUuid": "4a9f05be_c70903fa",
+      "range": {
+        "startLine": 131,
+        "startChar": 14,
+        "endLine": 131,
+        "endChar": 15
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24d9acb9_cb7c1ee1",
         "filename": "src/base/utils/random-number-generator.cc",
         "patchSetId": 14
@@ -60,6 +84,30 @@
       "writtenOn": "2017-11-06T19:31:41Z",
       "side": 1,
       "message": "nit: Maybe use \u003e for safety, also the other one in this line?",
+      "range": {
+        "startLine": 182,
+        "startChar": 23,
+        "endLine": 182,
+        "endChar": 25
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c78c95ec_814fc585",
+        "filename": "src/base/utils/random-number-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "There are 2 cases when we want to decrease the size of the result:\n1. result.size() \u003e larger_part \u0026\u0026 result.size() \u003e n\n2. result.size() \u003c larger_part \u0026\u0026 result.size() \u003e n (when |excluded| \u003e max - larger_part)\n\nBut I can change it to:\nwhile (result.size() !\u003d larger_part \u0026\u0026 result.size() \u003e n)",
+      "parentUuid": "24d9acb9_cb7c1ee1",
       "range": {
         "startLine": 182,
         "startChar": 23,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "a802e592_c9ee9c07",
+        "filename": "src/base/utils/random-number-generator.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afaabecb_409cf91f",
+      "range": {
+        "startLine": 91,
+        "startChar": 79,
+        "endLine": 91,
+        "endChar": 80
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6e1b8ac_371e504a",
         "filename": "src/flag-definitions.h",
         "patchSetId": 14
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "327419e6_d081834a",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6e1b8ac_371e504a",
+      "range": {
+        "startLine": 683,
+        "startChar": 26,
+        "endLine": 683,
+        "endChar": 35
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79da4dee_ceb8d66e",
         "filename": "src/flag-definitions.h",
         "patchSetId": 14
@@ -135,6 +231,24 @@
     },
     {
       "key": {
+        "uuid": "850481cc_5df28160",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "I can see stress compaction flag being used in other places.\nhttps://cs.chromium.org/search/?q\u003dFLAG_stress_compaction\u0026sq\u003dpackage:chromium\u0026type\u003dcs\n\nDo you mean that we can change all of this to the new flag later?",
+      "parentUuid": "79da4dee_ceb8d66e",
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3726a77_6f108cd1",
         "filename": "src/isolate.h",
         "patchSetId": 14
@@ -146,6 +260,30 @@
       "writtenOn": "2017-11-06T17:59:17Z",
       "side": 1,
       "message": "Do we really need a separate instance? If this is not necessary right now then let\u0027s postpone it.",
+      "range": {
+        "startLine": 1522,
+        "startChar": 31,
+        "endLine": 1522,
+        "endChar": 42
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bebbc86b_24ea64f8",
+        "filename": "src/isolate.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/738112/7/src/isolate.h#1166",
+      "parentUuid": "c3726a77_6f108cd1",
       "range": {
         "startLine": 1522,
         "startChar": 31,
@@ -181,6 +319,30 @@
     },
     {
       "key": {
+        "uuid": "4e01816e_66eb53bd",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47e0c046_b9005606",
+      "range": {
+        "startLine": 189,
+        "startChar": 42,
+        "endLine": 189,
+        "endChar": 52
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfaa1f18_1e5deea8",
         "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
         "patchSetId": 14
@@ -204,6 +366,30 @@
     },
     {
       "key": {
+        "uuid": "7fc22c87_a8891641",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "Single test (without run-tests.py) takes 0.065s on my machine in release mode.\n\nAll NextSample* tests (135 tests) take 7s on one thread.\ntime ./tools/run-tests.py --gn unittests/RandomSeeds/RandomNumberGeneratorTest.NextSample* -j1\n\nI guess it would be fine to use fewer runs for some tests. Should I change it?",
+      "parentUuid": "bfaa1f18_1e5deea8",
+      "range": {
+        "startLine": 192,
+        "startChar": 22,
+        "endLine": 192,
+        "endChar": 30
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1bcef29d_1e95300f",
         "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
         "patchSetId": 14
@@ -215,6 +401,30 @@
       "writtenOn": "2017-11-06T19:31:41Z",
       "side": 1,
       "message": "Just for my understanding: This is just for having complete test cases for the public method, right? The fast method can never call it that way, as the size of \"excluded\" can\u0027t be more than half of min(n, m-n), right?",
+      "range": {
+        "startLine": 202,
+        "startChar": 30,
+        "endLine": 202,
+        "endChar": 53
+      },
+      "revId": "c99c92260643d0d17d40aa0ba5d1a293b83b6f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e4a439_b427c52b",
+        "filename": "test/unittests/base/utils/random-number-generator-unittest.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-07T12:39:21Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right, excluded size won\u0027t be more than smaller_part, which is min(n, max - n), but since I\u0027m exposing it to public I need to handle it.",
+      "parentUuid": "1bcef29d_1e95300f",
       "range": {
         "startLine": 202,
         "startChar": 30,
