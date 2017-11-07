@@ -237,16 +237,11 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
   }
 #endif
 
-  // TODO(mstarzinger,6792): This code-space modification section should be
-  // moved into {Heap} eventually and a safe wrapper be provided.
-  CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
-
   // We will use this set to mark those Code objects that are marked for
   // deoptimization and have not been found in stack frames.
   std::set<Code*> codes;
 
-  // Move marked code from the optimized code list to the deoptimized
-  // code list.
+  // Move marked code from the optimized code list to the deoptimized code list.
   // Walk over all optimized code objects in this native context.
   Code* prev = nullptr;
   Object* element = context->OptimizedCodeListHead();
@@ -256,8 +251,6 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
     Object* next = code->next_code_link();
 
     if (code->marked_for_deoptimization()) {
-      // Make sure that this object does not point to any garbage.
-      code->InvalidateEmbeddedObjects();
       codes.insert(code);
 
       if (prev != nullptr) {
@@ -287,13 +280,11 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(Context* context) {
   // the code currently beings deoptimized.
   isolate->thread_manager()->IterateArchivedThreads(&visitor);
 
-  // If there's no activation of a code in any stack then we can remove its
-  // deoptimization data. We do this to ensure that Code objects that will be
-  // unlinked won't be kept alive.
-  std::set<Code*>::iterator it;
-  for (it = codes.begin(); it != codes.end(); ++it) {
-    Code* code = *it;
-    code->set_deoptimization_data(isolate->heap()->empty_fixed_array());
+  // If there's no activation of a code in any stack then we can invalidate the
+  // object, because it will not be executed again. We do this to ensure that
+  // code objects that are unlinked don't keep objects alive unnecessary.
+  for (Code* code : codes) {
+    isolate->heap()->InvalidateCodeObjectReferences(code);
   }
 }
 
