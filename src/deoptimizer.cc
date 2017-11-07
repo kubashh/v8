@@ -23,23 +23,13 @@
 namespace v8 {
 namespace internal {
 
-static MemoryChunk* AllocateCodeChunk(MemoryAllocator* allocator) {
-  MemoryChunk* chunk = allocator->AllocateChunk(
-      Deoptimizer::GetMaxDeoptTableSize(), MemoryAllocator::GetCommitPageSize(),
-      EXECUTABLE, nullptr);
-  if (FLAG_write_protect_code_memory) {
-    // TODO(hpayer): Ensure code memory chunk allocation gives us rx by default.
-    chunk->SetReadAndWritable();
-    chunk->SetReadAndExecutable();
-  }
-  return chunk;
-}
-
 DeoptimizerData::DeoptimizerData(MemoryAllocator* allocator)
     : allocator_(allocator), current_(nullptr) {
   for (int i = 0; i <= Deoptimizer::kLastBailoutType; ++i) {
     deopt_entry_code_entries_[i] = -1;
-    deopt_entry_code_[i] = AllocateCodeChunk(allocator);
+    deopt_entry_code_[i] = allocator->AllocateChunk(
+        Deoptimizer::GetMaxDeoptTableSize(),
+        MemoryAllocator::GetCommitPageSize(), EXECUTABLE, nullptr);
   }
 }
 
@@ -1829,17 +1819,18 @@ void Deoptimizer::EnsureCodeForDeoptimizationEntry(Isolate* isolate,
 
   MemoryChunk* chunk = data->deopt_entry_code_[type];
 
-  // TODO(mstarzinger,6792): This code-space modification section should be
-  // moved into {Heap} eventually and a safe wrapper be provided.
-  CodePageMemoryModificationScope modification_scope(
-      chunk, CodePageMemoryModificationScope::READ_WRITE);
-
   CHECK(static_cast<int>(Deoptimizer::GetMaxDeoptTableSize()) >=
         desc.instr_size);
   if (!chunk->CommitArea(desc.instr_size)) {
     V8::FatalProcessOutOfMemory(
         "Deoptimizer::EnsureCodeForDeoptimizationEntry");
   }
+
+  // TODO(mstarzinger,6792): This code-space modification section should be
+  // moved into {Heap} eventually and a safe wrapper be provided.
+  CodePageMemoryModificationScope modification_scope(
+      chunk, CodePageMemoryModificationScope::READ_WRITE);
+
   CopyBytes(chunk->area_start(), desc.buffer,
             static_cast<size_t>(desc.instr_size));
   Assembler::FlushICache(isolate, chunk->area_start(), desc.instr_size);
