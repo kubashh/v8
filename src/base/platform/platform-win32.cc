@@ -814,7 +814,12 @@ void OS::SetReadAndWritable(void* address, const size_t size, bool commit) {
     CHECK(VirtualAlloc(address, size, MEM_COMMIT, PAGE_READWRITE));
   } else {
     DWORD oldprotect;
-    CHECK_NE(NULL, VirtualProtect(address, size, PAGE_READWRITE, &oldprotect));
+    BOOL result = VirtualProtect(address, size, PAGE_READWRITE, &oldprotect);
+    if (result == NULL) {
+      DWORD dw = GetLastError();
+      printf("error: %d\n", dw);
+    }
+    CHECK_NE(NULL, result);
   }
 }
 
@@ -827,6 +832,7 @@ void OS::SetReadWriteAndExecutable(void* address, const size_t size) {
 
 // static
 void* OS::ReserveRegion(size_t size, void* hint) {
+  printf("ReserveRegion: %p\n", hint);
   return RandomizedVirtualAlloc(size, MEM_RESERVE, PAGE_NOACCESS, hint);
 }
 
@@ -865,6 +871,7 @@ void* OS::ReserveAlignedRegion(size_t size, size_t alignment, void* hint,
 
 // static
 bool OS::CommitRegion(void* address, size_t size, bool is_executable) {
+  printf("CommitRegion: %p\n", address);
   int prot = is_executable ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE;
   if (NULL == VirtualAlloc(address, size, MEM_COMMIT, prot)) {
     return false;

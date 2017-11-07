@@ -1811,6 +1811,8 @@ void PagedSpace::SetReadAndExecutable() {
 void PagedSpace::SetReadAndWritable() {
   DCHECK(identity() == CODE_SPACE);
   for (Page* page : *this) {
+    printf("paged space page: %p\n", page);
+    printf("anchor page: %p\n", anchor());
     page->SetReadAndWritable();
   }
 }
