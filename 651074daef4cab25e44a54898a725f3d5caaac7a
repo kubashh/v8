@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a79d0ed_228d309b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-07T01:50:17Z",
+      "side": 1,
+      "message": "How about storing this as a bool? Maybe \"greater_than_2n1\" or \"must_subtract\" or \"top_bit_set\".",
+      "range": {
+        "startLine": 1601,
+        "startChar": 2,
+        "endLine": 1601,
+        "endChar": 17
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34f18ed5_a0d1b57b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-07T01:50:17Z",
+      "side": 1,
+      "message": "This can never happen, can it?",
+      "range": {
+        "startLine": 1605,
+        "startChar": 8,
+        "endLine": 1605,
+        "endChar": 62
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58c62fcc_2e87b897",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-07T01:50:17Z",
+      "side": 1,
+      "message": "Agreed. Suggestion:\n\n  digit_t msd \u003d result-\u003edigit(result-\u003elength() - 1);\n  bool nth_bit_set \u003d (msd \u003e\u003e (n % kDigitBits)) !\u003d 0;\n  comparison \u003d nth_bit_set ? 1 : -1;",
+      "range": {
+        "startLine": 1611,
+        "startChar": 21,
+        "endLine": 1611,
+        "endChar": 63
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd0d3317_fc49f1b9",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-07T01:50:17Z",
+      "side": 1,
+      "message": "With a bit of massaging, you can get this down to one allocation:\n\n  Handle\u003cBigInt\u003e adjusted_result \u003d PowerOfTwo(isolate, n);\n  digit_t borrow \u003d adjusted_result-\u003eInplaceSub(result, 0);\n  DCHECK_EQ(borrow, 0);\n  USE(borrow);\n  adjusted_result-\u003eset_sign(true);\n  return adjusted_result;\n\nFeel free to extract that into a helper function, as it\u0027s needed three times.",
+      "range": {
+        "startLine": 1620,
+        "startChar": 11,
+        "endLine": 1620,
+        "endChar": 61
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
