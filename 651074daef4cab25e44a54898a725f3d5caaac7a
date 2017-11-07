@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65f1d633_8a793901",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-07T11:14:35Z",
+      "side": 1,
+      "message": "I need more than 1 bit of information: once I check \"comparison \u003c 0\" and once \"comparison \u003c\u003d 0\".",
+      "parentUuid": "0a79d0ed_228d309b",
+      "range": {
+        "startLine": 1601,
+        "startChar": 2,
+        "endLine": 1601,
+        "endChar": 17
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34f18ed5_a0d1b57b",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-11-07T01:50:17Z",
       "side": 1,
       "message": "This can never happen, can it?",
+      "range": {
+        "startLine": 1605,
+        "startChar": 8,
+        "endLine": 1605,
+        "endChar": 62
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e5b8ccd_b2a5100e",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-07T11:14:35Z",
+      "side": 1,
+      "message": "Yes indeed! Great catch.\n\nHere\u0027s the proof.\n\nLet min(l) be the smallest value of a BigInt of length l.\nLet max(l) be the greatest value of a BigInt of length l.\n\nAssume power_length \u003c result_length.\n\nWe have: 2^(n-1) \u003c\u003d max(power_length)\n                 \u003c\u003d 2^(power_length * digit_size) - 1\nHence: power_length * digit_size \u003e\u003d n.\n\nWe also have: abs(result) \u003e\u003d min(result_length)\n                          \u003e\u003d min(power_length + 1)\n                          \u003e\u003d max(power_length) + 1\n                          \u003e\u003d 2^(power_length * digit_size)\n                          \u003e\u003d 2^n\n\nThis contradicts abs(x) mod 2^n \u003d abs(result).",
+      "parentUuid": "34f18ed5_a0d1b57b",
       "range": {
         "startLine": 1605,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "226fad73_0e79fb6b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-07T11:14:35Z",
+      "side": 1,
+      "message": "That\u0027s missing the case where the numbers are equal (nth bit is set but no others). I think I\u0027ll do a followup-CL to get rid of this allocation and the ones for subtraction too.",
+      "parentUuid": "58c62fcc_2e87b897",
+      "range": {
+        "startLine": 1611,
+        "startChar": 21,
+        "endLine": 1611,
+        "endChar": 63
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd0d3317_fc49f1b9",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41b23551_be4ba580",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-07T11:14:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd0d3317_fc49f1b9",
+      "range": {
+        "startLine": 1620,
+        "startChar": 11,
+        "endLine": 1620,
+        "endChar": 61
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
