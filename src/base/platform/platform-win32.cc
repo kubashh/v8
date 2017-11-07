@@ -827,6 +827,7 @@ void OS::SetReadWriteAndExecutable(void* address, const size_t size) {
 
 // static
 void* OS::ReserveRegion(size_t size, void* hint) {
+  printf("ReserveRegion: %p", hint);
   return RandomizedVirtualAlloc(size, MEM_RESERVE, PAGE_NOACCESS, hint);
 }
 
@@ -865,6 +866,7 @@ void* OS::ReserveAlignedRegion(size_t size, size_t alignment, void* hint,
 
 // static
 bool OS::CommitRegion(void* address, size_t size, bool is_executable) {
+  printf("CommitRegion: %p", address);
   int prot = is_executable ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE;
   if (NULL == VirtualAlloc(address, size, MEM_COMMIT, prot)) {
     return false;
