@@ -16,6 +16,24 @@
       "revId": "6ebd596b7007edc13871686dc3a6595b21ad8df6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb19e028_a23c01dd",
+        "filename": "tools/maptracer.html",
+        "patchSetId": 33
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-08T13:08:50Z",
+      "side": 1,
+      "message": "dammit, I guessed this wouldn\u0027t work :)",
+      "parentUuid": "64aad201_1bb2fca7",
+      "revId": "6ebd596b7007edc13871686dc3a6595b21ad8df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
