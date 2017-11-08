@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc2e8daf_6a784f9c",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4972,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-11-08T12:57:18Z",
+      "side": 1,
+      "message": "I think it would be a good idea to have template functions instead of four functions for each type here. You could determine number of instructions to generate based on sizeof(T)",
+      "revId": "616343abc53d2bd087f1293972554069ec9b5d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c2cfc64_d5bf3d15",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4987,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-11-08T12:57:18Z",
+      "side": 1,
+      "message": "This is undefined behavior in C. Please rewrite this code to use bit extraction operands like above instead of this",
+      "revId": "616343abc53d2bd087f1293972554069ec9b5d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4bf047b_b9c8b42c",
+        "filename": "test/cctest/test-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5059,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2017-11-08T12:57:18Z",
+      "side": 1,
+      "message": "create a template function here as well. you could generate appropriate instrunction with a switch (sizeof(T))",
+      "revId": "616343abc53d2bd087f1293972554069ec9b5d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
