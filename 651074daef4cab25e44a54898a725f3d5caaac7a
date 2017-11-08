@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "be7a2451_82e131bc",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-08T08:06:33Z",
+      "side": 1,
+      "message": "Hmm I think it\u0027s not that simple. abs(result) is less than 2^n, but here we are comparing against (the length of) 2^(n-1).",
+      "parentUuid": "f4e6632c_68442dce",
+      "range": {
+        "startLine": 1605,
+        "startChar": 8,
+        "endLine": 1605,
+        "endChar": 62
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58c62fcc_2e87b897",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 7
