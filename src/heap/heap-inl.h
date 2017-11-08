@@ -600,9 +600,11 @@ AlwaysAllocateScope::~AlwaysAllocateScope() {
 CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
     : heap_(heap) {
   if (FLAG_write_protect_code_memory) {
+    printf("set code space\n");
     heap_->code_space()->SetReadAndWritable();
     LargePage* page = heap_->lo_space()->first_page();
     while (page != nullptr) {
+      printf("large page %p\n", page);
       if (page->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
         page->SetReadAndWritable();
       }
