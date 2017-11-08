@@ -3427,11 +3427,10 @@ bool Map::is_callable() const {
   return ((1 << kIsCallable) & bit_field()) != 0;
 }
 
-
 void Map::deprecate() {
   set_bit_field3(Deprecated::update(bit_field3(), true));
-  if (FLAG_trace_maps) {
-    LOG(GetIsolate(), MapEvent("Deprecate", this, nullptr));
+  if (V8_UNLIKELY(FLAG_trace_maps)) {
+    LOG(GetIsolate(), MapEvent("Deprecate", this, this));
   }
 }
 
