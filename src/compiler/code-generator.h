@@ -217,6 +217,39 @@ class CodeGenerator final : public GapResolver::Assembler {
                                      PushTypeFlags push_type,
                                      ZoneVector<MoveOperands*>* pushes);
 
+  class MoveType {
+   public:
+    static constexpr int kSourceShift = 0;
+    static constexpr int kDestinationShift = 2;
+
+    enum SourceType {
+      kRegisterSource = 0 << kSourceShift,
+      kStackSlotSource = 1 << kSourceShift,
+      kConstantSource = 2 << kSourceShift
+    };
+    enum DestinationType {
+      kRegisterDestination = 0 << kDestinationShift,
+      kStackSlotDestination = 1 << kDestinationShift,
+    };
+
+    enum Type {
+      kRegisterToRegister = kRegisterSource | kRegisterDestination,
+      kRegisterToStack = kRegisterSource | kStackSlotDestination,
+      kStackToRegister = kStackSlotSource | kRegisterDestination,
+      kStackToStack = kStackSlotSource | kStackSlotDestination,
+      kConstantToRegister = kConstantSource | kRegisterDestination,
+      kConstantToStack = kConstantSource | kStackSlotDestination,
+    };
+
+    // Detect what type of move or swap needs to be performed. Note that these
+    // function do not take into account the representation (Tagged, FP,
+    // ...etc).
+
+    static Type InferMove(InstructionOperand* source,
+                          InstructionOperand* destination);
+    static Type InferSwap(InstructionOperand* source,
+                          InstructionOperand* destination);
+  };
   // Called before a tail call |instr|'s gap moves are assembled and allows
   // gap-specific pre-processing, e.g. adjustment of the sp for tail calls that
   // need it before gap moves or conversion of certain gap moves into pushes.

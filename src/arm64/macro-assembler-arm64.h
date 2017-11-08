@@ -260,6 +260,10 @@ class TurboAssembler : public Assembler {
   void Move(Register dst, Handle<HeapObject> x);
   void Move(Register dst, Smi* src);
 
+  // Register swap.
+  void Swap(Register lhs, Register rhs);
+  void Swap(VRegister lhs, VRegister rhs);
+
 // NEON by element instructions.
 #define NEON_BYELEMENT_MACRO_LIST(V) \
   V(fmla, Fmla)                      \
@@ -2197,6 +2201,7 @@ class UseScratchRegisterScope {
   Register AcquireX() { return AcquireNextAvailable(available_).X(); }
   VRegister AcquireS() { return AcquireNextAvailable(availablefp_).S(); }
   VRegister AcquireD() { return AcquireNextAvailable(availablefp_).D(); }
+  VRegister AcquireQ() { return AcquireNextAvailable(availablefp_).Q(); }
   VRegister AcquireV(VectorFormat format) {
     return VRegister::Create(AcquireNextAvailable(availablefp_).code(), format);
   }

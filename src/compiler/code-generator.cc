@@ -462,6 +462,36 @@ void CodeGenerator::GetPushCompatibleMoves(Instruction* instr,
   pushes->resize(push_count);
 }
 
+CodeGenerator::MoveType::Type CodeGenerator::MoveType::InferMove(
+    InstructionOperand* source, InstructionOperand* destination) {
+  int type = 0;
+  type |= source->IsAnyRegister() ? kRegisterSource : 0;
+  type |= source->IsAnyStackSlot() ? kStackSlotSource : 0;
+  type |= source->IsConstant() ? kConstantSource : 0;
+  type |= destination->IsAnyRegister() ? kRegisterDestination : 0;
+  type |= destination->IsAnyStackSlot() ? kStackSlotDestination : 0;
+
+  DCHECK((type == kRegisterToRegister) || (type == kRegisterToStack) ||
+         (type == kStackToRegister) || (type == kStackToStack) ||
+         (type == kConstantToRegister) || (type == kConstantToStack));
+
+  return static_cast<Type>(type);
+}
+
+CodeGenerator::MoveType::Type CodeGenerator::MoveType::InferSwap(
+    InstructionOperand* source, InstructionOperand* destination) {
+  int type = 0;
+  type |= source->IsAnyRegister() ? kRegisterSource : 0;
+  type |= source->IsAnyStackSlot() ? kStackSlotSource : 0;
+  type |= destination->IsAnyRegister() ? kRegisterDestination : 0;
+  type |= destination->IsAnyStackSlot() ? kStackSlotDestination : 0;
+
+  DCHECK((type == kRegisterToRegister) || (type == kRegisterToStack) ||
+         (type == kStackToStack));
+
+  return static_cast<Type>(type);
+}
+
 CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
     Instruction* instr, const InstructionBlock* block) {
   int first_unused_stack_slot;
