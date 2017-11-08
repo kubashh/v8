@@ -546,7 +546,7 @@ void MemoryChunk::SetReadAndExecutable() {
   if (write_unprotect_counter_ == 0) {
     Address protect_start =
         address() + MemoryAllocator::CodePageAreaStartOffset();
-    size_t protect_size = size() - MemoryAllocator::CodePageAreaStartOffset();
+    size_t protect_size = area_size();
     DCHECK(
         IsAddressAligned(protect_start, MemoryAllocator::GetCommitPageSize()));
     base::OS::SetReadAndExecutable(protect_start, protect_size);
@@ -567,7 +567,7 @@ void MemoryChunk::SetReadAndWritable() {
   if (write_unprotect_counter_ == 1) {
     Address unprotect_start =
         address() + MemoryAllocator::CodePageAreaStartOffset();
-    size_t unprotect_size = size() - MemoryAllocator::CodePageAreaStartOffset();
+    size_t unprotect_size = area_size();
     DCHECK(IsAddressAligned(unprotect_start,
                             MemoryAllocator::GetCommitPageSize()));
     base::OS::SetReadAndWritable(unprotect_start, unprotect_size, false);
@@ -587,7 +587,7 @@ void MemoryChunk::SetReadWriteAndExecutable() {
   DCHECK_LE(write_unprotect_counter_, 3);
   Address unprotect_start =
       address() + MemoryAllocator::CodePageAreaStartOffset();
-  size_t unprotect_size = size() - MemoryAllocator::CodePageAreaStartOffset();
+  size_t unprotect_size = area_size();
   DCHECK(
       IsAddressAligned(unprotect_start, MemoryAllocator::GetCommitPageSize()));
   base::OS::SetReadWriteAndExecutable(unprotect_start, unprotect_size);
@@ -1811,6 +1811,8 @@ void PagedSpace::SetReadAndExecutable() {
 void PagedSpace::SetReadAndWritable() {
   DCHECK(identity() == CODE_SPACE);
   for (Page* page : *this) {
+    printf("paged space page: %p\n", page);
+    printf("anchor page: %p\n", anchor());
     page->SetReadAndWritable();
   }
 }
