@@ -14,6 +14,7 @@
 #include "src/base/hashmap.h"
 #include "src/counters.h"
 #include "src/globals.h"
+#include "src/log.h"
 #include "src/messages.h"
 #include "src/parsing/expression-classifier.h"
 #include "src/parsing/func-name-inferrer.h"
@@ -251,9 +252,9 @@ class ParserBase {
 
   ParserBase(Zone* zone, Scanner* scanner, uintptr_t stack_limit,
              v8::Extension* extension, AstValueFactory* ast_value_factory,
-             RuntimeCallStats* runtime_call_stats, bool parsing_module,
              PendingCompilationErrorHandler* pending_error_handler,
-             bool parsing_on_main_thread = true)
+             RuntimeCallStats* runtime_call_stats, int script_id,
+             bool parsing_module, bool parsing_on_main_thread = true)
       : scope_(nullptr),
         original_scope_(nullptr),
         function_state_(nullptr),
@@ -271,6 +272,7 @@ class ParserBase {
         scanner_(scanner),
         default_eager_compile_hint_(FunctionLiteral::kShouldLazyCompile),
         function_literal_id_(0),
+        script_id_(script_id),
         allow_natives_(false),
         allow_harmony_do_expressions_(false),
         allow_harmony_function_sent_(false),
@@ -649,6 +651,8 @@ class ParserBase {
     return pending_error_handler()->stack_overflow();
   }
   void set_stack_overflow() { pending_error_handler()->set_stack_overflow(); }
+  int script_id() { return script_id_; }
+  void set_script_id(int id) { script_id_ = id; }
 
   INLINE(Token::Value peek()) {
     if (stack_overflow()) return Token::ILLEGAL;
@@ -1514,6 +1518,7 @@ class ParserBase {
   FunctionLiteral::EagerCompileHint default_eager_compile_hint_;
 
   int function_literal_id_;
+  int script_id_;
 
   bool allow_natives_;
   bool allow_harmony_do_expressions_;
