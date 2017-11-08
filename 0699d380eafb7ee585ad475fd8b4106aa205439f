@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "937a195e_3d508716",
+        "filename": "test/inspector/runtime/remote-object-for.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-11-08T17:48:12Z",
+      "side": 1,
+      "message": "remote-object-for-primitives.js",
+      "revId": "0699d380eafb7ee585ad475fd8b4106aa205439f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
