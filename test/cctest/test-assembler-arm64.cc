@@ -15654,23 +15654,3 @@ TEST(internal_reference_linked) {
 
 }  // namespace internal
 }  // namespace v8
-
-#undef __
-#undef BUF_SIZE
-#undef SETUP
-#undef INIT_V8
-#undef SETUP_SIZE
-#undef RESET
-#undef START_AFTER_RESET
-#undef START
-#undef RUN
-#undef END
-#undef TEARDOWN
-#undef CHECK_EQUAL_NZCV
-#undef CHECK_EQUAL_REGISTERS
-#undef CHECK_EQUAL_32
-#undef CHECK_EQUAL_FP32
-#undef CHECK_EQUAL_64
-#undef CHECK_EQUAL_FP64
-#undef CHECK_EQUAL_128
-#undef CHECK_CONSTANT_POOL_SIZE
