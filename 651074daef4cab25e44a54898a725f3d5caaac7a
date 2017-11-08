@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d7d0ba34_e56b0ede",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-08T01:08:54Z",
+      "side": 1,
+      "message": "Yes, I can see that you do two different comparisons. Yesterday I managed to convince myself that storing one bit of information (as the spec text implies, which only asks whether result \u003e\u003d 2^(n-1)) was enough to cover all cases, but it seems I was confused about negative inputs. Never mind.",
+      "parentUuid": "65f1d633_8a793901",
+      "range": {
+        "startLine": 1601,
+        "startChar": 2,
+        "endLine": 1601,
+        "endChar": 17
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34f18ed5_a0d1b57b",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 7
@@ -93,6 +117,30 @@
       "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4e6632c_68442dce",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-08T01:08:54Z",
+      "side": 1,
+      "message": "Alternative proof: {result} is the result of \"AbsolutAsUintN(n, ...)\", which by definition is an n-bit number ;-)",
+      "parentUuid": "6e5b8ccd_b2a5100e",
+      "range": {
+        "startLine": 1605,
+        "startChar": 8,
+        "endLine": 1605,
+        "endChar": 62
+      },
+      "revId": "651074daef4cab25e44a54898a725f3d5caaac7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
