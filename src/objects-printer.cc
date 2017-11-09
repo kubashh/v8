@@ -270,7 +270,7 @@ bool JSObject::PrintProperties(std::ostream& os) {  // NOLINT
     DescriptorArray* descs = map()->instance_descriptors();
     int nof_inobject_properties = map()->GetInObjectProperties();
     int i = 0;
-    for (; i < map()->NumberOfOwnDescriptors(); i++) {
+    for (; i < map()->NumberOfOwnDescriptors() && i < MAX_ELEMENTS; i++) {
       os << "\n    ";
       descs->GetKey(i)->NamePrint(os);
       os << ": ";
@@ -336,7 +336,7 @@ void DoPrintElements(std::ostream& os, Object* object) {  // NOLINT
   double previous_value = GetScalarElement(array, 0);
   double value = 0.0;
   int i;
-  for (i = 1; i <= array->length(); i++) {
+  for (i = 1; i <= array->length() && i <= MAX_ELEMENTS; i++) {
     if (i < array->length()) value = GetScalarElement(array, i);
     bool values_are_nan = std::isnan(previous_value) && std::isnan(value);
     if (i != array->length() && (previous_value == value || values_are_nan) &&
@@ -367,7 +367,7 @@ void PrintFixedArrayElements(std::ostream& os, T* array) {
   Object* value = nullptr;
   int previous_index = 0;
   int i;
-  for (i = 1; i <= array->length(); i++) {
+  for (i = 1; i <= array->length() && i <= MAX_ELEMENTS; i++) {
     if (i < array->length()) value = array->get(i);
     if (previous_value == value && i != array->length()) {
       continue;

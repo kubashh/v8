@@ -276,6 +276,8 @@ const int kVariableSizeSentinel = 0;
 const int kStubMajorKeyBits = 8;
 const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
 
+const int MAX_ELEMENTS = 50;
+
 // All Maps have a field instance_type containing a InstanceType.
 // It describes the type of the instances.
 //

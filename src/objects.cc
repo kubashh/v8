@@ -15595,7 +15595,7 @@ void Dictionary<Derived, Shape>::Print(std::ostream& os) {
   Isolate* isolate = this->GetIsolate();
   Derived* dictionary = Derived::cast(this);
   int capacity = dictionary->Capacity();
-  for (int i = 0; i < capacity; i++) {
+  for (int i = 0; i < capacity && i < MAX_ELEMENTS; i++) {
     Object* k = dictionary->KeyAt(i);
     if (!Shape::IsLive(isolate, k)) continue;
     if (!dictionary->ToKey(isolate, i, &k)) continue;
