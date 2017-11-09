@@ -13,7 +13,7 @@ deps = {
   'v8/tools/gyp':
     Var('chromium_url') + '/external/gyp.git' + '@' + 'd61a9397e668fa9843c4aa7da9e79460fe590bfb',
   'v8/third_party/icu':
-    Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'b31896655a701874d13e70cc24bca95e3e66a991',
+    Var('chromium_url') + '/chromium/deps/icu.git' + '@' + '5ed26985c0171755d7542e7ad6bce12cde4dccfb',
   'v8/third_party/instrumented_libraries':
     Var('chromium_url') + '/chromium/src/third_party/instrumented_libraries.git' + '@' + 'e07d437dc8b65ca96ebd3b7d4aa303cd2ec0ec45',
   'v8/buildtools':
