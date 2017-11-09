@@ -22,6 +22,30 @@
       "revId": "23883b85f21a2c61515cb57064b19901ae666884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69b014d7_18b0d41c",
+        "filename": "src/compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-11-09T11:55:03Z",
+      "side": 0,
+      "message": "Ah, it\u0027s implied by the below comparison and no one else on this path calls {set_eager} otherwise. I see now. Please disregard this comment. Sorry for the noise.",
+      "parentUuid": "4e7f42b3_ebfdf574",
+      "range": {
+        "startLine": 1516,
+        "startChar": 4,
+        "endLine": 1516,
+        "endChar": 50
+      },
+      "revId": "23883b85f21a2c61515cb57064b19901ae666884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
