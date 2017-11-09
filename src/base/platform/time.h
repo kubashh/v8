@@ -351,6 +351,12 @@ class V8_BASE_EXPORT TimeTicks final
   // This method never returns a null TimeTicks.
   static TimeTicks Now();
 
+  // This method is for test purposes only. Use TimeTicks::Now() to create a
+  // new object.
+  static TimeTicks FromMicroseconds(int64_t microseconds) {
+    return TimeTicks(microseconds);
+  }
+
   // Returns a platform-dependent high-resolution tick count. Implementation
   // is hardware dependent and may or may not return sub-millisecond
   // resolution.  THIS CALL IS GENERALLY MUCH MORE EXPENSIVE THAN Now() AND
