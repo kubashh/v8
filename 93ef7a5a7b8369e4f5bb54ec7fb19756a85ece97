@@ -16,6 +16,24 @@
       "revId": "93ef7a5a7b8369e4f5bb54ec7fb19756a85ece97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63bd426_006b2ff8",
+        "filename": "src/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-11-10T22:18:40Z",
+      "side": 1,
+      "message": "removed the comment",
+      "parentUuid": "f8e093d3_a6aaae30",
+      "revId": "93ef7a5a7b8369e4f5bb54ec7fb19756a85ece97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
