@@ -866,6 +866,13 @@ class Heap {
     external_memory_concurrently_freed_.SetValue(0);
   }
 
+  // Invalidates most references from the given {code} object to other objects,
+  // reducing the amount of memory it keeps alive. Note that the {code} is no
+  // longer allowed to be executed afterwards. This invalidation includes:
+  //  - Literals (and other references) in the deoptimization data.
+  //  - Embedded objects within the instruction stream.
+  void InvalidateCodeObjectReferences(Code* code);
+
   void DeoptMarkedAllocationSites();
 
   bool DeoptMaybeTenuredAllocationSites();
