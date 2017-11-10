@@ -118,12 +118,6 @@ Type* OperationTyper::Rangify(Type* type) {
   }
   double min = type->Min();
   double max = type->Max();
-  // Handle the degenerate case of empty bitset types (such as
-  // OtherUnsigned31 and OtherSigned32 on 64-bit architectures).
-  if (std::isnan(min)) {
-    DCHECK(std::isnan(max));
-    return type;
-  }
   return Type::Range(min, max, zone());
 }
 
@@ -954,9 +948,9 @@ Type* OperationTyper::NumberMax(Type* lhs, Type* rhs) {
     type = Type::Union(type, Type::NaN(), zone());
   }
   lhs = Type::Intersect(lhs, Type::OrderedNumber(), zone());
-  DCHECK(!lhs->IsNone());
+  DCHECK(!lhs->Is(Type::NaN()));
   rhs = Type::Intersect(rhs, Type::OrderedNumber(), zone());
-  DCHECK(!rhs->IsNone());
+  DCHECK(!rhs->Is(Type::NaN()));
   if (lhs->Is(cache_.kInteger) && rhs->Is(cache_.kInteger)) {
     double max = std::max(lhs->Max(), rhs->Max());
     double min = std::max(lhs->Min(), rhs->Min());
@@ -980,9 +974,9 @@ Type* OperationTyper::NumberMin(Type* lhs, Type* rhs) {
     type = Type::Union(type, Type::NaN(), zone());
   }
   lhs = Type::Intersect(lhs, Type::OrderedNumber(), zone());
-  DCHECK(!lhs->IsNone());
+  DCHECK(!lhs->Is(Type::NaN()));
   rhs = Type::Intersect(rhs, Type::OrderedNumber(), zone());
-  DCHECK(!rhs->IsNone());
+  DCHECK(!rhs->Is(Type::NaN()));
   if (lhs->Is(cache_.kInteger) && rhs->Is(cache_.kInteger)) {
     double max = std::min(lhs->Max(), rhs->Max());
     double min = std::min(lhs->Min(), rhs->Min());
