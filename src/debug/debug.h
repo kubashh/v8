@@ -207,8 +207,6 @@ class Debug {
   void OnPromiseReject(Handle<Object> promise, Handle<Object> value);
   void OnCompileError(Handle<Script> script);
   void OnAfterCompile(Handle<Script> script);
-  void OnAsyncTaskEvent(debug::PromiseDebugActionType type, int id,
-                        int parent_id);
 
   MUST_USE_RESULT MaybeHandle<Object> Call(Handle<Object> fun,
                                            Handle<Object> data);
@@ -409,6 +407,7 @@ class Debug {
   bool IsExceptionBlackboxed(bool uncaught);
 
   void OnException(Handle<Object> exception, Handle<Object> promise);
+  void OnAsyncTaskEvent(debug::PromiseDebugActionType type, int id);
 
   // Constructors for debug event objects.
   MUST_USE_RESULT MaybeHandle<Object> MakeExecutionState();
@@ -574,7 +573,7 @@ class LegacyDebugDelegate : public v8::debug::DebugDelegate {
  public:
   explicit LegacyDebugDelegate(Isolate* isolate) : isolate_(isolate) {}
   void PromiseEventOccurred(v8::debug::PromiseDebugActionType type, int id,
-                            int parent_id, bool created_by_user) override;
+                            bool created_by_user) override;
   void ScriptCompiled(v8::Local<v8::debug::Script> script, bool is_live_edited,
                       bool has_compile_error) override;
   void BreakProgramRequested(v8::Local<v8::Context> paused_context,

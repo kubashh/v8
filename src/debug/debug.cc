@@ -1752,21 +1752,17 @@ void Debug::RunPromiseHook(PromiseHookType type, Handle<JSPromise> promise,
   int id = GetReferenceAsyncTaskId(isolate_, promise);
   switch (type) {
     case PromiseHookType::kInit:
-      OnAsyncTaskEvent(debug::kDebugPromiseCreated, id,
-                       parent->IsJSPromise()
-                           ? GetReferenceAsyncTaskId(
-                                 isolate_, Handle<JSPromise>::cast(parent))
-                           : 0);
+      OnAsyncTaskEvent(debug::kDebugPromiseCreated, id);
       return;
     case PromiseHookType::kResolve:
       // We can't use this hook because it's called before promise object will
       // get resolved status.
       return;
     case PromiseHookType::kBefore:
-      OnAsyncTaskEvent(debug::kDebugWillHandle, id, 0);
+      OnAsyncTaskEvent(debug::kDebugWillHandle, id);
       return;
     case PromiseHookType::kAfter:
-      OnAsyncTaskEvent(debug::kDebugDidHandle, id, 0);
+      OnAsyncTaskEvent(debug::kDebugDidHandle, id);
       return;
   }
 }
@@ -1857,21 +1853,49 @@ bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
   return true;
 }
 
-void Debug::OnAsyncTaskEvent(debug::PromiseDebugActionType type, int id,
-                             int parent_id) {
+void Debug::OnAsyncTaskEvent(debug::PromiseDebugActionType type, int id) {
   if (in_debug_scope() || ignore_events()) return;
   if (!debug_delegate_) return;
   PostponeInterruptsScope no_interrupts(isolate_);
   bool created_by_user = false;
   if (type == debug::kDebugPromiseCreated) {
+    // Check how promise is created.
+    Handle<SharedFunctionInfo> last_builtin;
+    Handle<SharedFunctionInfo> first_user;
+
     JavaScriptFrameIterator it(isolate_);
-    // We need to skip top frame which contains instrumentation.
-    it.Advance();
-    created_by_user =
-        !it.done() &&
-        !IsFrameBlackboxed(it.frame());
+    while (!it.done() && first_user.is_null()) {
+      std::vector<Handle<SharedFunctionInfo>> infos;
+      it.frame()->GetFunctions(&infos);
+      for (size_t i = 0; i < infos.size(); ++i) {
+        if (!infos[i]->HasLazyDeserializationBuiltinId()) {
+          first_user = infos[i];
+          break;
+        } else {
+          last_builtin = infos[i];
+        }
+        if (last_builtin->lazy_deserialization_builtin_id() ==
+            Builtins::Builtins::kAsyncFunctionPromiseCreate) {
+          type = debug::kDebugEnqueueAsyncFunction;
+        }
+      }
+      it.Advance();
+    }
+    DCHECK(!last_builtin.is_null());
+    if (last_builtin->lazy_deserialization_builtin_id() ==
+        Builtins::kPromiseThen) {
+      type = debug::kDebugEnqueuePromiseResolve;
+    }
+    if (last_builtin->lazy_deserialization_builtin_id() ==
+        Builtins::kPromiseCatch) {
+      type = debug::kDebugEnqueuePromiseReject;
+    }
+    if (type == debug::kDebugPromiseCreated) return;
+    created_by_user = !first_user.is_null() && !IsBlackboxed(first_user);
+    debug_delegate_->PromiseEventOccurred(type, id, created_by_user);
+    return;
   }
-  debug_delegate_->PromiseEventOccurred(type, id, parent_id, created_by_user);
+  debug_delegate_->PromiseEventOccurred(type, id, created_by_user);
 }
 
 void Debug::ProcessCompileEvent(v8::DebugEvent event, Handle<Script> script) {
@@ -2161,8 +2185,7 @@ bool Debug::PerformSideEffectCheckForCallback(Address function) {
 }
 
 void LegacyDebugDelegate::PromiseEventOccurred(
-    v8::debug::PromiseDebugActionType type, int id, int parent_id,
-    bool created_by_user) {
+    v8::debug::PromiseDebugActionType type, int id, bool created_by_user) {
   DebugScope debug_scope(isolate_->debug());
   if (debug_scope.failed()) return;
   HandleScope scope(isolate_);
