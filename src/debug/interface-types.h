@@ -70,10 +70,9 @@ struct WasmDisassembly {
 };
 
 enum PromiseDebugActionType {
-  kDebugPromiseCreated,
-  kDebugEnqueueAsyncFunction,
-  kDebugEnqueuePromiseResolve,
-  kDebugEnqueuePromiseReject,
+  kDebugAsyncFunctionCreated,
+  kDebugPromiseThen,
+  kDebugPromiseCatch,
   kDebugWillHandle,
   kDebugDidHandle,
 };
