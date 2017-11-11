@@ -1864,12 +1864,48 @@ void Debug::OnAsyncTaskEvent(debug::PromiseDebugActionType type, int id,
   PostponeInterruptsScope no_interrupts(isolate_);
   bool created_by_user = false;
   if (type == debug::kDebugPromiseCreated) {
+    // Check how promise is created.
+    Handle<SharedFunctionInfo> last_builtin;
+    Handle<SharedFunctionInfo> first_user;
+
     JavaScriptFrameIterator it(isolate_);
+    while (!it.done() && first_user.is_null()) {
+      std::vector<Handle<SharedFunctionInfo>> infos;
+      it.frame()->GetFunctions(&infos);
+      for (size_t i = 0; i < infos.size(); ++i) {
+        if (!infos[i]->HasLazyDeserializationBuiltinId()) {
+          first_user = infos[i];
+          break;
+        } else {
+          last_builtin = infos[i];
+        }
+        if (last_builtin->lazy_deserialization_builtin_id() ==
+            Builtins::Builtins::kAsyncFunctionPromiseCreate) {
+          debug_delegate_->PromiseEventOccurred(
+              debug::kDebugEnqueueAsyncFunction, id, parent_id, true);
+          return;
+        }
+      }
+      it.Advance();
+    }
+    DCHECK(!last_builtin.is_null());
+    if (last_builtin->lazy_deserialization_builtin_id() ==
+        Builtins::kPromiseThen) {
+      debug_delegate_->PromiseEventOccurred(debug::kDebugEnqueuePromiseResolve,
+                                            id, parent_id, true);
+      return;
+    }
+    if (last_builtin->lazy_deserialization_builtin_id() ==
+        Builtins::kPromiseCatch) {
+      debug_delegate_->PromiseEventOccurred(debug::kDebugEnqueuePromiseReject,
+                                            id, parent_id, true);
+      return;
+    }
     // We need to skip top frame which contains instrumentation.
-    it.Advance();
-    created_by_user =
-        !it.done() &&
-        !IsFrameBlackboxed(it.frame());
+    // created_by_user =
+    //     !it.done() &&
+    //     !IsFrameBlackboxed(it.frame());
+    return;
   }
   debug_delegate_->PromiseEventOccurred(type, id, parent_id, created_by_user);
 }
