@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab69472_53b1e5ad",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-11-13T17:48:49Z",
+      "side": 1,
+      "message": "last_frame_was_promise_builtin",
+      "range": {
+        "startLine": 1767,
+        "startChar": 6,
+        "endLine": 1767,
+        "endChar": 20
+      },
+      "revId": "57100c6f843613a68496370fb666da880dfac222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "320d6d64_08c617d6",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-11-13T17:48:49Z",
+      "side": 1,
+      "message": "Drop this one.",
+      "range": {
+        "startLine": 1768,
+        "startChar": 6,
+        "endLine": 1768,
+        "endChar": 19
+      },
+      "revId": "57100c6f843613a68496370fb666da880dfac222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd0f793_0c322a0c",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-11-13T17:48:49Z",
+      "side": 1,
+      "message": "is_blackboxed",
+      "range": {
+        "startLine": 529,
+        "startChar": 51,
+        "endLine": 529,
+        "endChar": 64
+      },
+      "revId": "57100c6f843613a68496370fb666da880dfac222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
