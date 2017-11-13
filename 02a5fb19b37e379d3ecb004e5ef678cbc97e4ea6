@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "630df6fe_f5e11830",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-13T09:50:37Z",
+      "side": 1,
+      "message": "right!",
+      "parentUuid": "9ced2125_086a5972",
+      "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "353d5c75_dcc0fbb4",
         "filename": "src/runtime/runtime-object.cc",
         "patchSetId": 5
@@ -50,6 +68,24 @@
       "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a312208_b439ffca",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-13T09:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "353d5c75_dcc0fbb4",
+      "revId": "02a5fb19b37e379d3ecb004e5ef678cbc97e4ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
