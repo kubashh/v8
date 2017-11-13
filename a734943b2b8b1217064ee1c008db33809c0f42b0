@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6487151_76a6f83c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-13T14:23:28Z",
+      "side": 1,
+      "message": "NoContextConstant()",
+      "range": {
+        "startLine": 2583,
+        "startChar": 57,
+        "endLine": 2583,
+        "endChar": 67
+      },
+      "revId": "a734943b2b8b1217064ee1c008db33809c0f42b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
