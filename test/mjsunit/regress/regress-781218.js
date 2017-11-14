@@ -24,7 +24,10 @@ f(new C());
 var o = new C();
 %HeapObjectVerify(o);
 
-m.set(o, 1);  // This creates hash code on o.
+// We need at least 2 elements in the Map.
+m.set({}, 3);
+// This creates hash code on o.
+m.set(o, 1);
 
 // Add an out-of-object property.
 o.x = true;
