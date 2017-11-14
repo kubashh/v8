@@ -22,6 +22,30 @@
       "revId": "4dabb6f0e988da03b38b402e418c73024a2b51f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bea7759a_58684d5d",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-11-14T09:13:13Z",
+      "side": 1,
+      "message": "No. This flag is set when the Isolate is created, and never changed afterwards.",
+      "parentUuid": "117e7e0b_fc5512f3",
+      "range": {
+        "startLine": 1510,
+        "startChar": 22,
+        "endLine": 1510,
+        "endChar": 53
+      },
+      "revId": "4dabb6f0e988da03b38b402e418c73024a2b51f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
