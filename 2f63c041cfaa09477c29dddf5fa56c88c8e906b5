@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe1c9171_2d1e9c22",
+        "filename": "src/objects/map.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-14T12:02:30Z",
+      "side": 1,
+      "message": "It\u0027s soon time to find a poor soul to update the v8 cheat sheet :P\nhttps://docs.google.com/document/d/1DeEaAQlN4ZCVkaUzhHIhHOQVvF2aOvl-7uEkvi3oq-c",
+      "revId": "2f63c041cfaa09477c29dddf5fa56c88c8e906b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
