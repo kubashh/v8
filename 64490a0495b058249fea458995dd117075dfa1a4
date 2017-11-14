@@ -16,6 +16,24 @@
       "revId": "64490a0495b058249fea458995dd117075dfa1a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1482ac3b_7c343fd7",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-11-14T18:10:11Z",
+      "side": 1,
+      "message": "Well, the explanation is really that I added this value a few days ago (and the whole enum a week ago), and it\u0027s only been for our analysis, so I strongly doubt that this is used by anyone (and if anyone did use it, they shouldn\u0027t have, because it\u0027s not the right state for them). I can keep it as is, or have a kNoCacheBecauseExtension \u003d kNoCacheBecauseV8Extension deprecation path, but it feels like overkill. I can if you feel strongly about it though.",
+      "parentUuid": "84bb850e_ebbd996a",
+      "revId": "64490a0495b058249fea458995dd117075dfa1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
