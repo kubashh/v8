@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86f2c016_0856a7fd",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "Nit: else if",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c055a08_20dc5089",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "Nit: else",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dcc42a6_f9c00690",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "I wonder if we could handle this case without a stack walk.",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5be253d_bcf44447",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "Nit: This seems unnatural, why not iterate from 0 \u003c\u003d i \u003c size? Or just C++11 style:\n\n  for (const auto\u0026 info : infos) {",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c50fc153_4fd814d1",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "SFI::lazy_deserialization_builtin_id is meant only for use by lazy deserialization. Could you compare the code objects instead (i.e. against *BUILTIN_CODE(isolate, Builtins::kAsyncFunctionPromiseCreate))? Since the frame is on the callstack, the builtin must\u0027ve already been deserialized.",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755191ee_55ab973e",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2174,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:07:25Z",
+      "side": 1,
+      "message": "Nit: the argument is called `is_blackboxed` here and `created_by_user` in the header.",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
