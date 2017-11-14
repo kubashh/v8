@@ -800,7 +800,9 @@ TEST(LogFunctionEvents) {
     CHECK_NULL(
         logger.FindLine("function,compile-lazy,", ",lazyNotExecutedFunction"));
     CHECK(logger.FindLine("function,compile-lazy,", ",lazyFunction"));
+    CHECK(logger.FindLine("function,first-execution,", ",lazyFunction"));
     CHECK(logger.FindLine("function,compile,", ",eagerFunction"));
+    CHECK(logger.FindLine("function,first-execution,", ",eagerFunction"));
   }
   i::FLAG_log_function_events = false;
   isolate->Dispose();
