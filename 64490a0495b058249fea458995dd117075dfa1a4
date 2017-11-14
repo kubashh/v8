@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84bb850e_ebbd996a",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-11-14T18:03:06Z",
+      "side": 1,
+      "message": "I don\u0027t understand your explanation about why renaming this is safe. It\u0027s part of the public API, so this could break a build depending on its name. I\u0027d prefer to leave it untouched.",
+      "revId": "64490a0495b058249fea458995dd117075dfa1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
