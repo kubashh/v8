@@ -866,20 +866,26 @@ TEST(LogFunctionEvents) {
         // - Compiling script without name.
         {"function,compile,,", nullptr},
         {"function,compile,", ",eagerFunction"},
+        {"function,first-execution,", ",eagerFunction"},
 
         // Step 3: start executing script
         // Step 4. - lazy parse, lazy compiling and execute skipped functions
         //         - execute eager functions.
         {"function,parse-function,", ",lazyFunction"},
         {"function,compile-lazy,", ",lazyFunction"},
+        {"function,first-execution,", ",lazyFunction"},
 
         {"function,parse-function,", ",lazyInnerFunction"},
         {"function,compile-lazy,", ",lazyInnerFunction"},
+        {"function,first-execution,", ",lazyInnerFunction"},
 
         {"function,parse-function,", ",Foo"},
         {"function,compile-lazy,", ",Foo"},
+        {"function,first-execution,", ",Foo"},
+
         {"function,parse-function,", ",Foo.foo"},
         {"function,compile-lazy,", ",Foo.foo"},
+        {"function,first-execution,", ",Foo.foo"},
     };
     logger.FindLogLines(pairs, arraysize(pairs), start);
   }
