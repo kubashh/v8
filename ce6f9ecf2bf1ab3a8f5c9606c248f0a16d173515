@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5284560_f6a3737a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-14T09:38:17Z",
+      "side": 1,
+      "message": "This must be defined as TFJ (because this stub will be called with JavaScript calling convention) with kDontAdaptArgumentsSentinel (it should not mess up the stack before we jump to the entry trampoline). See FastArrayPop for example.",
+      "revId": "ce6f9ecf2bf1ab3a8f5c9606c248f0a16d173515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c706b26_9b1d3bfe",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-14T09:38:17Z",
+      "side": 1,
+      "message": "You should use BuiltinDescriptor here. And don\u0027t forget to pass argc to the trampoline.\nSee FastArrayPop builtin how to properly tail call to TFJ thing.",
+      "revId": "ce6f9ecf2bf1ab3a8f5c9606c248f0a16d173515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "100c06e9_67e77305",
+        "filename": "src/frames.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-14T09:38:17Z",
+      "side": 1,
+      "message": "first",
+      "range": {
+        "startLine": 170,
+        "startChar": 8,
+        "endLine": 170,
+        "endChar": 12
+      },
+      "revId": "ce6f9ecf2bf1ab3a8f5c9606c248f0a16d173515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8435dc4d_a0eea283",
+        "filename": "src/frames.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-14T09:38:17Z",
+      "side": 1,
+      "message": "Maybe InterpreterFirstEntryTrampoline?",
+      "range": {
+        "startLine": 171,
+        "startChar": 46,
+        "endLine": 171,
+        "endChar": 68
+      },
+      "revId": "ce6f9ecf2bf1ab3a8f5c9606c248f0a16d173515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7573e604_a306f9b0",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-14T09:38:17Z",
+      "side": 1,
+      "message": "Not necessary.",
+      "revId": "ce6f9ecf2bf1ab3a8f5c9606c248f0a16d173515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
