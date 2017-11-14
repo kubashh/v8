@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5629353a_e467882b",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3472,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-14T14:30:43Z",
+      "side": 1,
+      "message": "PrintBaseName is on CodeStub which is the compile-time object, not the actual CodeObject",
+      "parentUuid": "4830baef_583dc2b0",
+      "revId": "0ae8ed5f83fdb97f63946ced78409189360bf602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce024582_38509954",
         "filename": "src/objects.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "0ae8ed5f83fdb97f63946ced78409189360bf602",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "112c541c_f1b2fa43",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14427,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-14T14:30:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce024582_38509954",
+      "revId": "0ae8ed5f83fdb97f63946ced78409189360bf602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
