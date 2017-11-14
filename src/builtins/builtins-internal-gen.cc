@@ -169,6 +169,26 @@ TF_BUILTIN(ReturnReceiver, CodeStubAssembler) {
   Return(Parameter(Descriptor::kReceiver));
 }
 
+TF_BUILTIN(FunctionFirstExecution, CodeStubAssembler) {
+  Node* target_function = Parameter(Descriptor::kTarget);
+  Node* new_target = Parameter(Descriptor::kNewTarget);
+  Node* context = Parameter(Descriptor::kContext);
+  Node* sfi =
+      LoadObjectField(target_function, JSFunction::kSharedFunctionInfoOffset);
+  // Jump to the runtime to handle first-execution logging.
+  CallRuntime(Runtime::kFunctionFirstExecution, context, sfi);
+  // Install the InterpreterEntryTrampolin.
+  Handle<Code> code(
+      isolate()->builtins()->builtin(Builtins::kInterpreterEntryTrampoline));
+  Node* interpreter_entry_trampoline = HeapConstant(code);
+  StoreObjectField(target_function, JSFunction::kCodeOffset,
+                   interpreter_entry_trampoline);
+  // Tail call the InterpreterEntryTrampoline.
+  FunctionFirstExecutionDescriptor descriptor(isolate());
+  TailCallStub(descriptor, interpreter_entry_trampoline, context,
+               target_function, new_target);
+}
+
 class RecordWriteCodeStubAssembler : public CodeStubAssembler {
  public:
   explicit RecordWriteCodeStubAssembler(compiler::CodeAssemblerState* state)

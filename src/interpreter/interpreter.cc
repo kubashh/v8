@@ -226,8 +226,13 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl() {
   }
 
   compilation_info()->SetBytecodeArray(bytecodes);
-  compilation_info()->SetCode(
-      BUILTIN_CODE(compilation_info()->isolate(), InterpreterEntryTrampoline));
+  if (FLAG_log_function_events) {
+    compilation_info()->SetCode(
+        BUILTIN_CODE(compilation_info()->isolate(), FunctionFirstExecution));
+  } else {
+    compilation_info()->SetCode(BUILTIN_CODE(compilation_info()->isolate(),
+                                             InterpreterEntryTrampoline));
+  }
   return SUCCEEDED;
 }
 

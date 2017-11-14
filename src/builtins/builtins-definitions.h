@@ -106,6 +106,7 @@ namespace internal {
   TFS(OrderedHashTableHealIndex, kTable, kIndex)                               \
                                                                                \
   /* Interpreter */                                                            \
+  TFC(FunctionFirstExecution, FunctionFirstExecution, 1)                       \
   ASM(InterpreterEntryTrampoline)                                              \
   ASM(InterpreterPushArgsThenCall)                                             \
   ASM(InterpreterPushUndefinedAndArgsThenCall)                                 \
