@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "827e3fef_61b2f866",
+        "filename": "tools/testrunner/gc_fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-14T13:13:35Z",
+      "side": 1,
+      "message": "We shouldn\u0027t pass 0 as that switches the flag off. Maybe extract a helper method to get a fresh random number based on an rng and also use it above?",
+      "range": {
+        "startLine": 244,
+        "startChar": 40,
+        "endLine": 244,
+        "endChar": 51
+      },
+      "revId": "05ba37c8d699f256a37ffde8fc9f9b202abb72be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
