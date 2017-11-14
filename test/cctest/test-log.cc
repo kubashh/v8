@@ -172,8 +172,8 @@ class ScopedLoggerInitializer {
     const char* last_position = FindLine(prefix, suffix, start);
     if (last_position == nullptr) {
       PrintLog(50);
-      V8_Fatal(__FILE__, __LINE__, "Could not find log line: %s ... %s", prefix,
-               suffix);
+      V8_Fatal(__FILE__, __LINE__, "Could not find log line [0]: %s ... %s",
+               prefix, suffix);
     }
     CHECK(last_position);
     for (size_t i = 1; i < limit; i++) {
@@ -182,17 +182,21 @@ class ScopedLoggerInitializer {
       const char* position = FindLine(prefix, suffix, start);
       if (position == nullptr) {
         PrintLog(50);
-        V8_Fatal(__FILE__, __LINE__, "Could not find log line: %s ... %s",
-                 prefix, suffix);
+        V8_Fatal(__FILE__, __LINE__,
+                 "Could not find log linei [%zu]: %s ... %s", i, prefix,
+                 suffix);
       }
       // Check that all string positions are in order.
       if (position <= last_position) {
         PrintLog(50);
-        V8_Fatal(__FILE__, __LINE__,
-                 "Log statements not in expected order (prev=%p, current=%p): "
-                 "%s ... %s",
-                 reinterpret_cast<const void*>(last_position),
-                 reinterpret_cast<const void*>(position), prefix, suffix);
+        V8_Fatal(
+            __FILE__, __LINE__,
+            "Log statements not in expected order (prev=%p, current=%p): \n"
+            "#   Previous [%zu]: %s ... %s\n"
+            "#   Current  [%zu]: %s ... %s",
+            reinterpret_cast<const void*>(last_position),
+            reinterpret_cast<const void*>(position), i - 1, pairs[i - 1][0],
+            pairs[i - 1][1], i, prefix, suffix);
       }
       last_position = position;
     }
@@ -821,6 +825,9 @@ TEST(ConsoleTimeEvents) {
 }
 
 TEST(LogFunctionEvents) {
+  // Always opt and stress opt will break the fine-grained log order.
+  if (i::FLAG_always_opt) return;
+
   SETUP_FLAGS();
   i::FLAG_log_function_events = true;
   v8::Isolate::CreateParams create_params;
@@ -872,14 +879,21 @@ TEST(LogFunctionEvents) {
         //         - execute eager functions.
         {"function,parse-function,", ",lazyFunction"},
         {"function,compile-lazy,", ",lazyFunction"},
+        {"function,first-execution,", ",lazyFunction"},
 
         {"function,parse-function,", ",lazyInnerFunction"},
         {"function,compile-lazy,", ",lazyInnerFunction"},
+        {"function,first-execution,", ",lazyInnerFunction"},
+
+        {"function,first-execution,", ",eagerFunction"},
 
         {"function,parse-function,", ",Foo"},
         {"function,compile-lazy,", ",Foo"},
+        {"function,first-execution,", ",Foo"},
+
         {"function,parse-function,", ",Foo.foo"},
         {"function,compile-lazy,", ",Foo.foo"},
+        {"function,first-execution,", ",Foo.foo"},
     };
     logger.FindLogLines(pairs, arraysize(pairs), start);
   }
