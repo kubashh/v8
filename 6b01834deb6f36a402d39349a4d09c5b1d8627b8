@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32dc0400_25870d0c",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-11-14T15:29:16Z",
+      "side": 1,
+      "message": "This might deserve a separate predicate, WDYT?",
+      "range": {
+        "startLine": 1252,
+        "startChar": 17,
+        "endLine": 1253,
+        "endChar": 65
+      },
+      "revId": "6b01834deb6f36a402d39349a4d09c5b1d8627b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
