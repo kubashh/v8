@@ -3264,8 +3264,7 @@ class V8_EXPORT Object : public Value {
 
   void SetAccessorProperty(Local<Name> name, Local<Function> getter,
                            Local<Function> setter = Local<Function>(),
-                           PropertyAttribute attribute = None,
-                           AccessControl settings = DEFAULT);
+                           PropertyAttribute attribute = None);
 
   /**
    * Sets a native data property like Template::SetNativeDataProperty, but
