@@ -168,6 +168,8 @@ bool StackTraceFrameIterator::IsValidFrame(StackFrame* frame) const {
 namespace {
 
 bool IsInterpreterFramePc(Isolate* isolate, Address pc) {
+  Code* first_entry_trampoline =
+      isolate->builtins()->builtin(Builtins::kInterpreterFirstEntryTrampoline);
   Code* interpreter_entry_trampoline =
       isolate->builtins()->builtin(Builtins::kInterpreterEntryTrampoline);
   Code* interpreter_bytecode_advance =
@@ -175,7 +177,9 @@ bool IsInterpreterFramePc(Isolate* isolate, Address pc) {
   Code* interpreter_bytecode_dispatch =
       isolate->builtins()->builtin(Builtins::kInterpreterEnterBytecodeDispatch);
 
-  return (pc >= interpreter_entry_trampoline->instruction_start() &&
+  return (pc >= first_entry_trampoline->instruction_start() &&
+          pc < first_entry_trampoline->instruction_end()) ||
+         (pc >= interpreter_entry_trampoline->instruction_start() &&
           pc < interpreter_entry_trampoline->instruction_end()) ||
          (pc >= interpreter_bytecode_advance->instruction_start() &&
           pc < interpreter_bytecode_advance->instruction_end()) ||
