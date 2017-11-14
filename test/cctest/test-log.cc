@@ -188,11 +188,14 @@ class ScopedLoggerInitializer {
       // Check that all string positions are in order.
       if (position <= last_position) {
         PrintLog(50);
-        V8_Fatal(__FILE__, __LINE__,
-                 "Log statements not in expected order (prev=%p, current=%p): "
-                 "%s ... %s",
-                 reinterpret_cast<const void*>(last_position),
-                 reinterpret_cast<const void*>(position), prefix, suffix);
+        V8_Fatal(
+            __FILE__, __LINE__,
+            "Log statements not in expected order (prev=%p, current=%p): \n"
+            "#   Previous [%zu]: %s ... %s\n"
+            "#   Current  [%zu]: %s ... %s",
+            reinterpret_cast<const void*>(last_position),
+            reinterpret_cast<const void*>(position), i - 1, pairs[i - 1][0],
+            pairs[i - 1][1], i, prefix, suffix);
       }
       last_position = position;
     }
@@ -872,14 +875,21 @@ TEST(LogFunctionEvents) {
         //         - execute eager functions.
         {"function,parse-function,", ",lazyFunction"},
         {"function,compile-lazy,", ",lazyFunction"},
+        {"function,first-execution,", ",lazyFunction"},
 
         {"function,parse-function,", ",lazyInnerFunction"},
         {"function,compile-lazy,", ",lazyInnerFunction"},
+        {"function,first-execution,", ",lazyInnerFunction"},
+
+        {"function,first-execution,", ",eagerFunction"},
 
         {"function,parse-function,", ",Foo"},
         {"function,compile-lazy,", ",Foo"},
+        {"function,first-execution,", ",Foo"},
+
         {"function,parse-function,", ",Foo.foo"},
         {"function,compile-lazy,", ",Foo.foo"},
+        {"function,first-execution,", ",Foo.foo"},
     };
     logger.FindLogLines(pairs, arraysize(pairs), start);
   }
