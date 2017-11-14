@@ -660,7 +660,7 @@ void V8Console::installMemoryGetter(v8::Local<v8::Context> context,
                         &V8Console::call<&V8Console::memorySetterCallback>,
                         data, 0, v8::ConstructorBehavior::kThrow)
           .ToLocalChecked(),
-      static_cast<v8::PropertyAttribute>(v8::None), v8::DEFAULT);
+      static_cast<v8::PropertyAttribute>(v8::None));
 }
 
 v8::Local<v8::Object> V8Console::createCommandLineAPI(
