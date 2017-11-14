@@ -5032,10 +5032,7 @@ bool Object::SetAccessor(Local<Name> name, AccessorNameGetterCallback getter,
 
 void Object::SetAccessorProperty(Local<Name> name, Local<Function> getter,
                                  Local<Function> setter,
-                                 PropertyAttribute attribute,
-                                 AccessControl settings) {
-  // TODO(verwaest): Remove |settings|.
-  DCHECK_EQ(v8::DEFAULT, settings);
+                                 PropertyAttribute attribute) {
   i::Isolate* isolate = Utils::OpenHandle(this)->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
   i::HandleScope scope(isolate);
