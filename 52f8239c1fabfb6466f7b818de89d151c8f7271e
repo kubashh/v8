@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "9972fbe5_a1b49ae9",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-14T16:55:37Z",
+      "side": 1,
+      "message": "Oh I missed that. I would\u0027ve expected `for (i \u003d size - 1; i \u003e\u003d 0; i--)` then, but YMMV.",
+      "parentUuid": "c988566e_5e0455a6",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c50fc153_4fd814d1",
         "filename": "src/debug/debug.cc",
         "patchSetId": 9
