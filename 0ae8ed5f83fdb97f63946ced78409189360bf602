@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4830baef_583dc2b0",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3472,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-11-14T14:21:48Z",
+      "side": 1,
+      "message": "Can you just call PrintBaseName() instead? This is already implemented there.",
+      "revId": "0ae8ed5f83fdb97f63946ced78409189360bf602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce024582_38509954",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14427,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2017-11-14T14:21:48Z",
+      "side": 1,
+      "message": "Same comment as above here",
+      "revId": "0ae8ed5f83fdb97f63946ced78409189360bf602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
