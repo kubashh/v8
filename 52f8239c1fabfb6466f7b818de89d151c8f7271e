@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0d9fcc50_4cf5a54c",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86f2c016_0856a7fd",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c055a08_20dc5089",
         "filename": "src/debug/debug.cc",
         "patchSetId": 9
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "819c035b_c496bb3d",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c055a08_20dc5089",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dcc42a6_f9c00690",
         "filename": "src/debug/debug.cc",
         "patchSetId": 9
@@ -47,6 +83,24 @@
       "writtenOn": "2017-11-14T16:07:25Z",
       "side": 1,
       "message": "I wonder if we could handle this case without a stack walk.",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c47dad2_cbe7239d",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "We walk only until first user function on stack trace and in any case this part is much faster then getting async task id from promise. We can optimize this part later by adding specific instrumentation into promise builtins.",
+      "parentUuid": "0dcc42a6_f9c00690",
       "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "c988566e_5e0455a6",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "I need to iterate in reverse order and since always (size value) \u003e\u003d 0 I prefer this kind of cycle.",
+      "parentUuid": "a5be253d_bcf44447",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c50fc153_4fd814d1",
         "filename": "src/debug/debug.cc",
         "patchSetId": 9
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "f768b68c_0ed5f4af",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c50fc153_4fd814d1",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "755191ee_55ab973e",
         "filename": "src/debug/debug.cc",
         "patchSetId": 9
@@ -101,6 +191,24 @@
       "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c01b4a8_4bb6767f",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2174,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-14T16:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "755191ee_55ab973e",
+      "revId": "52f8239c1fabfb6466f7b818de89d151c8f7271e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
