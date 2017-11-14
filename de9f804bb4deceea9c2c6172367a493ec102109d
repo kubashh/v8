@@ -22,6 +22,30 @@
       "revId": "de9f804bb4deceea9c2c6172367a493ec102109d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d9b9c2_16c91d9b",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-11-14T15:55:57Z",
+      "side": 1,
+      "message": "The comment is correct - we clear the hint the first time through the loop. I\u0027ll make this a little clearer.",
+      "parentUuid": "19270d35_9d83dd48",
+      "range": {
+        "startLine": 809,
+        "startChar": 13,
+        "endLine": 809,
+        "endChar": 16
+      },
+      "revId": "de9f804bb4deceea9c2c6172367a493ec102109d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
