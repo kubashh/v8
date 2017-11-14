@@ -842,11 +842,6 @@ class Heap {
   inline int NextScriptId();
   inline int GetNextTemplateSerialNumber();
 
-  void SetArgumentsAdaptorDeoptPCOffset(int pc_offset);
-  void SetConstructStubCreateDeoptPCOffset(int pc_offset);
-  void SetConstructStubInvokeDeoptPCOffset(int pc_offset);
-  void SetInterpreterEntryReturnPCOffset(int pc_offset);
-
   void SetSerializedTemplates(FixedArray* templates);
   void SetSerializedGlobalProxySizes(FixedArray* sizes);
 
@@ -866,10 +861,6 @@ class Heap {
     external_memory_ -= external_memory_concurrently_freed_.Value();
     external_memory_concurrently_freed_.SetValue(0);
   }
-
-  void DeoptMarkedAllocationSites();
-
-  bool DeoptMaybeTenuredAllocationSites();
 
   void AddWeakNewSpaceObjectToCodeDependency(Handle<HeapObject> obj,
                                              Handle<WeakCell> code);
@@ -1228,6 +1219,28 @@ class Heap {
   // - or it was communicated to GC using NotifyObjectLayoutChange.
   void VerifyObjectLayoutChange(HeapObject* object, Map* new_map);
 #endif
+
+  // ===========================================================================
+  // Deoptimization support API. ===============================================
+  // ===========================================================================
+
+  // Setters for code offsets of well-known deoptimization targets.
+  void SetArgumentsAdaptorDeoptPCOffset(int pc_offset);
+  void SetConstructStubCreateDeoptPCOffset(int pc_offset);
+  void SetConstructStubInvokeDeoptPCOffset(int pc_offset);
+  void SetInterpreterEntryReturnPCOffset(int pc_offset);
+
+  // Invalidates references in the given {code} object that are directly
+  // embedded within the instruction stream. Mutates write-protected code.
+  void InvalidateCodeEmbeddedObjects(Code* code);
+
+  // Invalidates references in the given {code} object that are referenced
+  // transitively from the deoptimization data. Mutates write-protected code.
+  void InvalidateCodeDeoptimizationData(Code* code);
+
+  void DeoptMarkedAllocationSites();
+
+  bool DeoptMaybeTenuredAllocationSites();
 
   // ===========================================================================
   // Embedder heap tracer support. =============================================
