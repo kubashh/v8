@@ -1244,9 +1244,12 @@ struct ScriptCompileTimerScope {
     kNoCacheBecauseCachingDisabled,
     kNoCacheBecauseModule,
     kNoCacheBecauseStreamingSource,
-    kNoCacheBecauseExtension,
+    kNoCacheBecauseV8Extension,
     kHitIsolateCacheWhenProduceCodeCache,
     kHitIsolateCacheWhenConsumeCodeCache,
+    kNoCacheBecauseExtensionModule,
+    kNoCacheBecausePacScript,
+    kNoCacheBecauseInDocumentWrite,
     kCount
   };
 
@@ -1343,8 +1346,14 @@ struct ScriptCompileTimerScope {
         return CacheBehaviour::kNoCacheBecauseModule;
       case ScriptCompiler::kNoCacheBecauseStreamingSource:
         return CacheBehaviour::kNoCacheBecauseStreamingSource;
-      case ScriptCompiler::kNoCacheBecauseExtension:
-        return CacheBehaviour::kNoCacheBecauseExtension;
+      case ScriptCompiler::kNoCacheBecauseV8Extension:
+        return CacheBehaviour::kNoCacheBecauseV8Extension;
+      case ScriptCompiler::kNoCacheBecauseExtensionModule:
+        return CacheBehaviour::kNoCacheBecauseExtensionModule;
+      case ScriptCompiler::kNoCacheBecausePacScript:
+        return CacheBehaviour::kNoCacheBecausePacScript;
+      case ScriptCompiler::kNoCacheBecauseInDocumentWrite:
+        return CacheBehaviour::kNoCacheBecauseInDocumentWrite;
     }
     UNREACHABLE();
   }
@@ -1387,7 +1396,10 @@ struct ScriptCompileTimerScope {
       // TODO(leszeks): Count separately or remove entirely once we have
       // background compilation.
       case CacheBehaviour::kNoCacheBecauseStreamingSource:
-      case CacheBehaviour::kNoCacheBecauseExtension:
+      case CacheBehaviour::kNoCacheBecauseV8Extension:
+      case CacheBehaviour::kNoCacheBecauseExtensionModule:
+      case CacheBehaviour::kNoCacheBecausePacScript:
+      case CacheBehaviour::kNoCacheBecauseInDocumentWrite:
         return isolate_->counters()->compile_script_no_cache_other();
 
       case CacheBehaviour::kCount:
