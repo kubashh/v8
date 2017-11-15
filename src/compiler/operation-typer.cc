@@ -253,7 +253,7 @@ Type* OperationTyper::ConvertReceiver(Type* type) {
   return type;
 }
 
-Type* OperationTyper::ToNumber(Type* type) {
+Type* OperationTyper::ToNumberOrNumeric(Object::Conversion mode, Type* type) {
   if (type->Is(Type::Number())) return type;
   if (type->Is(Type::NullOrUndefined())) {
     if (type->Is(Type::Null())) return cache_.kSingletonZero;
@@ -277,7 +277,19 @@ Type* OperationTyper::ToNumber(Type* type) {
     }
     return Type::Intersect(type, Type::Number(), zone());
   }
-  return Type::Number();
+  if (type->Is(Type::BigInt())) {
+    return mode == Object::Conversion::kToNumber ? Type::None() : type;
+  }
+  return mode == Object::Conversion::kToNumber ? Type::Number()
+                                               : Type::Numeric();
+}
+
+Type* OperationTyper::ToNumber(Type* type) {
+  return ToNumberOrNumeric(Object::Conversion::kToNumber, type);
+}
+
+Type* OperationTyper::ToNumeric(Type* type) {
+  return ToNumberOrNumeric(Object::Conversion::kToNumeric, type);
 }
 
 Type* OperationTyper::NumberAbs(Type* type) {
