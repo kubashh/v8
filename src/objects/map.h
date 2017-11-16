@@ -86,7 +86,7 @@ typedef std::vector<Handle<Map>> MapHandles;
 // +---------------+---------------------------------------------+
 // | TaggedPointer | map - Always a pointer to the MetaMap root  |
 // +---------------+---------------------------------------------+
-// | Int           | The first int field                         |
+// | Int           | instance_sizes (the first int field)        |
 //  `---+----------+---------------------------------------------+
 //      | Byte     | [instance_size]                             |
 //      +----------+---------------------------------------------+
@@ -102,14 +102,10 @@ typedef std::vector<Handle<Map>> MapHandles;
 //      +----------+---------------------------------------------+
 //      | Byte     | [visitor_id]                                |
 // +----+----------+---------------------------------------------+
-// | Int           | The second int field                        |
+// | Int           | instance_attributes (second int field)      |
 //  `---+----------+---------------------------------------------+
-//      | Byte     | [instance_type]                             |
-//      +----------+---------------------------------------------+
-//      | Byte     | [unused_property_fields] number of unused   |
-//      |          | property fields in JSObject (for fast-mode) |
-//      +----------+---------------------------------------------+
-//      | Byte     | [bit_field]                                 |
+//      | Word16   | [instance_type] in low byte                 |
+//      |          | [bit_field] in high byte                    |
 //      |          |   - has_non_instance_prototype (bit 0)      |
 //      |          |   - is_callable (bit 1)                     |
 //      |          |   - has_named_interceptor (bit 2)           |
@@ -123,8 +119,11 @@ typedef std::vector<Handle<Map>> MapHandles;
 //      |          |   - is_extensible (bit 0)                   |
 //      |          |   - is_prototype_map (bit 2)                |
 //      |          |   - elements_kind (bits 3..7)               |
+//      +----------+---------------------------------------------+
+//      | Byte     | [unused_property_fields] number of unused   |
+//      |          | property fields in JSObject (for fast-mode) |
 // +----+----------+---------------------------------------------+
-// | Int           | [bit_field3]                                |
+// | Word          | [bit_field3]                                |
 // |               |   - number_of_own_descriptors (bit 0..19)   |
 // |               |   - is_dictionary_map (bit 20)              |
 // |               |   - owns_descriptors (bit 21)               |
@@ -137,10 +136,9 @@ typedef std::vector<Handle<Map>> MapHandles;
 // |               |   - may_have_interesting_symbols (bit 28)   |
 // |               |   - construction_counter (bit 29..31)       |
 // |               |                                             |
-// +*************************************************************+
-// | Int           | On systems with 64bit pointer types, there  |
+// |               | On systems with 64bit pointer types, there  |
 // |               | is an unused 32bits after bit_field3        |
-// +*************************************************************+
+// +---------------+---------------------------------------------+
 // | TaggedPointer | [prototype]                                 |
 // +---------------+---------------------------------------------+
 // | TaggedPointer | [constructor_or_backpointer]                |
@@ -153,9 +151,7 @@ typedef std::vector<Handle<Map>> MapHandles;
 // | TaggedPointer | [instance_descriptors]                      |
 // +*************************************************************+
 // ! TaggedPointer ! [layout_descriptors]                        !
-// !               ! Field is only present if compile-time flag  !
-// !               ! FLAG_unbox_double_fields is enabled         !
-// !               ! (basically on 64 bit architectures)         !
+// !               ! Field is only present on 64 bit arch        !
 // +*************************************************************+
 // | TaggedPointer | [dependent_code]                            |
 // +---------------+---------------------------------------------+
@@ -167,13 +163,14 @@ class Map : public HeapObject {
   // Instance size.
   // Size in bytes or kVariableSizeSentinel if instances do not have
   // a fixed size.
-  DECL_INT_ACCESSORS(instance_size)
+  inline int instance_size() const;
+  inline void set_instance_size(int value);
 
   // [inobject_properties_or_constructor_function_index]: Provides access
   // to the inobject properties in case of JSObject maps, or the constructor
   // function index in case of primitive maps.
-  DECL_INT_ACCESSORS(inobject_properties_or_constructor_function_index)
-
+  inline int inobject_properties_or_constructor_function_index() const;
+  inline void set_inobject_properties_or_constructor_function_index(int value);
   // Count of properties allocated in the object (JSObject only).
   inline int GetInObjectProperties() const;
   inline void SetInObjectProperties(int value);
@@ -209,7 +206,8 @@ class Map : public HeapObject {
   //     - there is no slack in the object.
   //     - the property array has value slack slots.
   // Note that this encoding requires that H = JSObject::kFieldsAdded.
-  DECL_INT_ACCESSORS(used_instance_size_in_words)
+  inline int used_instance_size_in_words() const;
+  inline void set_used_instance_size_in_words(int value);
   inline int UsedInstanceSize() const;
 
   inline int UnusedPropertyFields() const;
@@ -322,18 +320,21 @@ class Map : public HeapObject {
 
   // Tells whether the instance has a [[Construct]] internal method.
   // This property is implemented according to ES6, section 7.2.4.
-  DECL_BOOLEAN_ACCESSORS(is_constructor)
+  inline void set_is_constructor(bool value);
+  inline bool is_constructor() const;
 
   // Tells whether the instance with this map may have properties for
   // interesting symbols on it.
   // An "interesting symbol" is one for which Name::IsInterestingSymbol()
   // returns true, i.e. a well-known symbol like @@toStringTag.
-  DECL_BOOLEAN_ACCESSORS(may_have_interesting_symbols)
+  inline void set_may_have_interesting_symbols(bool value);
+  inline bool may_have_interesting_symbols() const;
 
   DECL_BOOLEAN_ACCESSORS(has_prototype_slot)
 
   // Tells whether the instance with this map has a hidden prototype.
-  DECL_BOOLEAN_ACCESSORS(has_hidden_prototype)
+  inline void set_has_hidden_prototype(bool value);
+  inline bool has_hidden_prototype() const;
 
   // Records and queries whether the instance has a named interceptor.
   inline void set_has_named_interceptor();
@@ -357,9 +358,12 @@ class Map : public HeapObject {
   inline void set_is_callable();
   inline bool is_callable() const;
 
-  DECL_BOOLEAN_ACCESSORS(new_target_is_base)
-  DECL_BOOLEAN_ACCESSORS(is_extensible)
-  DECL_BOOLEAN_ACCESSORS(is_prototype_map)
+  inline void set_new_target_is_base(bool value);
+  inline bool new_target_is_base() const;
+  inline void set_is_extensible(bool value);
+  inline bool is_extensible() const;
+  inline void set_is_prototype_map(bool value);
+  inline bool is_prototype_map() const;
   inline bool is_abandoned_prototype_map() const;
 
   inline void set_elements_kind(ElementsKind elements_kind);
@@ -430,8 +434,6 @@ class Map : public HeapObject {
   inline int GetInObjectPropertyOffset(int index) const;
 
   int NumberOfFields() const;
-
-  bool HasOutOfObjectProperties() const;
 
   // Returns true if transition to the given map requires special
   // synchronization with the concurrent marker.
@@ -567,14 +569,16 @@ class Map : public HeapObject {
   inline int EnumLength() const;
   inline void SetEnumLength(int length);
 
-  DECL_BOOLEAN_ACCESSORS(owns_descriptors)
+  inline bool owns_descriptors() const;
+  inline void set_owns_descriptors(bool owns_descriptors);
   inline void mark_unstable();
   inline bool is_stable() const;
   inline void set_migration_target(bool value);
   inline bool is_migration_target() const;
   inline void set_immutable_proto(bool value);
   inline bool is_immutable_proto() const;
-  DECL_INT_ACCESSORS(construction_counter)
+  inline void set_construction_counter(int value);
+  inline int construction_counter() const;
   inline void deprecate();
   inline bool is_deprecated() const;
   inline bool CanBeDeprecated() const;
@@ -719,7 +723,8 @@ class Map : public HeapObject {
   void DictionaryMapVerify();
 #endif
 
-  DECL_PRIMITIVE_ACCESSORS(visitor_id, VisitorId)
+  inline int visitor_id() const;
+  inline void set_visitor_id(int visitor_id);
 
   static Handle<Map> TransitionToPrototype(Handle<Map> map,
                                            Handle<Object> prototype);
@@ -729,37 +734,67 @@ class Map : public HeapObject {
   static const int kMaxPreAllocatedPropertyFields = 255;
 
   // Layout description.
-#define MAP_FIELDS(V)                                                       \
-  /* Raw data fields. */                                                    \
-  V(kInstanceSizeOffset, kUInt8Size)                                        \
-  V(kInObjectPropertiesOrConstructorFunctionIndexOffset, kUInt8Size)        \
-  V(kUsedInstanceSizeInWordsOffset, kUInt8Size)                             \
-  V(kVisitorIdOffset, kUInt8Size)                                           \
-  V(kInstanceTypeOffset, kUInt8Size)                                        \
-  /* TODO(ulan): Free this byte after unused_property_fields are */         \
-  /* computed using the used_instance_size_in_words() byte. */              \
-  V(kUnusedPropertyFieldsOffset, kUInt8Size)                                \
-  V(kBitFieldOffset, kUInt8Size)                                            \
-  V(kBitField2Offset, kUInt8Size)                                           \
-  V(kBitField3Offset, kUInt32Size)                                          \
-  V(k64BitArchPaddingOffset, kPointerSize == kUInt32Size ? 0 : kUInt32Size) \
-  /* Pointer fields. */                                                     \
-  V(kPointerFieldsBeginOffset, 0)                                           \
-  V(kPrototypeOffset, kPointerSize)                                         \
-  V(kConstructorOrBackPointerOffset, kPointerSize)                          \
-  V(kTransitionsOrPrototypeInfoOffset, kPointerSize)                        \
-  V(kDescriptorsOffset, kPointerSize)                                       \
-  V(kLayoutDescriptorOffset, FLAG_unbox_double_fields ? kPointerSize : 0)   \
-  V(kDependentCodeOffset, kPointerSize)                                     \
-  V(kWeakCellCacheOffset, kPointerSize)                                     \
-  V(kPointerFieldsEndOffset, 0)                                             \
-  /* Total size. */                                                         \
-  V(kSize, 0)
+  static const int kInstanceSizesOffset = HeapObject::kHeaderSize;
+  static const int kInstanceAttributesOffset = kInstanceSizesOffset + kIntSize;
+  static const int kBitField3Offset = kInstanceAttributesOffset + kIntSize;
+  static const int kPrototypeOffset = kBitField3Offset + kPointerSize;
+  static const int kConstructorOrBackPointerOffset =
+      kPrototypeOffset + kPointerSize;
+  // When there is only one transition, it is stored directly in this field;
+  // otherwise a transition array is used.
+  // For prototype maps, this slot is used to store this map's PrototypeInfo
+  // struct.
+  static const int kTransitionsOrPrototypeInfoOffset =
+      kConstructorOrBackPointerOffset + kPointerSize;
+  static const int kDescriptorsOffset =
+      kTransitionsOrPrototypeInfoOffset + kPointerSize;
+#if V8_DOUBLE_FIELDS_UNBOXING
+  static const int kLayoutDescriptorOffset = kDescriptorsOffset + kPointerSize;
+  static const int kDependentCodeOffset =
+      kLayoutDescriptorOffset + kPointerSize;
+#else
+  static const int kLayoutDescriptorOffset = 1;  // Must not be ever accessed.
+  static const int kDependentCodeOffset = kDescriptorsOffset + kPointerSize;
+#endif
+  static const int kWeakCellCacheOffset = kDependentCodeOffset + kPointerSize;
+  static const int kSize = kWeakCellCacheOffset + kPointerSize;
 
-  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, MAP_FIELDS)
-#undef MAP_FIELDS
+  // Layout of pointer fields. Heap iteration code relies on them
+  // being continuously allocated.
+  static const int kPointerFieldsBeginOffset = Map::kPrototypeOffset;
+  static const int kPointerFieldsEndOffset = kSize;
 
-  STATIC_ASSERT(kInstanceTypeOffset == Internals::kMapInstanceTypeOffset);
+  // Byte offsets within kInstanceSizesOffset.
+  static const int kInstanceSizeOffset = kInstanceSizesOffset + 0;
+  static const int kInObjectPropertiesOrConstructorFunctionIndexByte = 1;
+  static const int kInObjectPropertiesOrConstructorFunctionIndexOffset =
+      kInstanceSizesOffset + kInObjectPropertiesOrConstructorFunctionIndexByte;
+  static const int kUsedInstanceSizeInWordsByte = 2;
+  static const int kUsedInstanceSizeInWordsOffset =
+      kInstanceSizesOffset + kUsedInstanceSizeInWordsByte;
+  static const int kVisitorIdByte = 3;
+  static const int kVisitorIdOffset = kInstanceSizesOffset + kVisitorIdByte;
+
+// Byte offsets within kInstanceAttributesOffset attributes.
+#if V8_TARGET_LITTLE_ENDIAN
+  // Order instance type and bit field together such that they can be loaded
+  // together as a 16-bit word with instance type in the lower 8 bits regardless
+  // of endianess. Also provide endian-independent offset to that 16-bit word.
+  static const int kInstanceTypeOffset = kInstanceAttributesOffset + 0;
+  static const int kBitFieldOffset = kInstanceAttributesOffset + 1;
+#else
+  static const int kBitFieldOffset = kInstanceAttributesOffset + 0;
+  static const int kInstanceTypeOffset = kInstanceAttributesOffset + 1;
+#endif
+  static const int kInstanceTypeAndBitFieldOffset =
+      kInstanceAttributesOffset + 0;
+  static const int kBitField2Offset = kInstanceAttributesOffset + 2;
+  // TODO(ulan): Free this byte after unused_property_fields are computed using
+  // the used_instance_size_in_words() byte.
+  static const int kUnusedPropertyFieldsOffset = kInstanceAttributesOffset + 3;
+
+  STATIC_ASSERT(kInstanceTypeAndBitFieldOffset ==
+                Internals::kMapInstanceTypeAndBitFieldOffset);
 
   // Bit positions for bit field.
   static const int kHasNonInstancePrototype = 0;
@@ -776,6 +811,24 @@ class Map : public HeapObject {
   // Bit 1 is free.
   class IsPrototypeMapBits : public BitField<bool, 2, 1> {};
   class ElementsKindBits : public BitField<ElementsKind, 3, 5> {};
+
+  // Derived values from bit field 2
+  static const int8_t kMaximumBitField2FastElementValue =
+      static_cast<int8_t>((PACKED_ELEMENTS + 1)
+                          << Map::ElementsKindBits::kShift) -
+      1;
+  static const int8_t kMaximumBitField2FastSmiElementValue =
+      static_cast<int8_t>((PACKED_SMI_ELEMENTS + 1)
+                          << Map::ElementsKindBits::kShift) -
+      1;
+  static const int8_t kMaximumBitField2FastHoleyElementValue =
+      static_cast<int8_t>((HOLEY_ELEMENTS + 1)
+                          << Map::ElementsKindBits::kShift) -
+      1;
+  static const int8_t kMaximumBitField2FastHoleySmiElementValue =
+      static_cast<int8_t>((HOLEY_SMI_ELEMENTS + 1)
+                          << Map::ElementsKindBits::kShift) -
+      1;
 
   typedef FixedBodyDescriptor<kPointerFieldsBeginOffset,
                               kPointerFieldsEndOffset, kSize>

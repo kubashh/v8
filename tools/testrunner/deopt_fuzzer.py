@@ -148,9 +148,6 @@ class DeoptFuzzer(base_runner.BaseTestRunner):
                       default= -1, type="int")
     parser.add_option("--random-seed", default=0, dest="random_seed",
                       help="Default seed for initializing random generator")
-    parser.add_option("--fuzzer-random-seed", default=0,
-                      help="Default seed for initializing fuzzer random "
-                      "generator")
     return parser
 
 
@@ -276,7 +273,6 @@ class DeoptFuzzer(base_runner.BaseTestRunner):
       "byteorder": sys.byteorder,
       "dcheck_always_on": self.build_config.dcheck_always_on,
       "deopt_fuzzer": True,
-      "gc_fuzzer": False,
       "gc_stress": False,
       "gcov_coverage": self.build_config.gcov_coverage,
       "isolates": options.isolates,

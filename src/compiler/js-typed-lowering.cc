@@ -426,10 +426,25 @@ Reduction JSTypedLowering::ReduceSpeculativeNumberAdd(Node* node) {
   return NoChange();
 }
 
+Reduction JSTypedLowering::ReduceJSNegate(Node* node) {
+  Node* input = NodeProperties::GetValueInput(node, 0);
+  Type* input_type = NodeProperties::GetType(input);
+  if (input_type->Is(Type::PlainPrimitive())) {
+    // JSNegate(x) => NumberMultiply(ToNumber(x), -1)
+    node->InsertInput(graph()->zone(), 1, jsgraph()->SmiConstant(-1));
+    NodeProperties::ChangeOp(node, javascript()->Multiply());
+    JSBinopReduction r(this, node);
+    r.ConvertInputsToNumber();
+    return r.ChangeToPureOperator(r.NumberOp(), Type::Number());
+  }
+  return NoChange();
+}
+
 Reduction JSTypedLowering::ReduceJSAdd(Node* node) {
   JSBinopReduction r(this, node);
   if (r.BothInputsAre(Type::Number())) {
     // JSAdd(x:number, y:number) => NumberAdd(x, y)
+    r.ConvertInputsToNumber();
     return r.ChangeToPureOperator(simplified()->NumberAdd(), Type::Number());
   }
   if (r.BothInputsAre(Type::PlainPrimitive()) &&
@@ -911,23 +926,19 @@ Reduction JSTypedLowering::ReduceJSToNumberOrNumericInput(Node* input) {
       return Replace(jsgraph()->Constant(
           String::ToNumber(Handle<String>::cast(input_value))));
     }
-  }
-  if (input_type->IsHeapConstant()) {
+  } else if (input_type->IsHeapConstant()) {
     Handle<Object> input_value = input_type->AsHeapConstant()->Value();
     if (input_value->IsOddball()) {
       return Replace(jsgraph()->Constant(
           Oddball::ToNumber(Handle<Oddball>::cast(input_value))));
     }
-  }
-  if (input_type->Is(Type::Number())) {
+  } else if (input_type->Is(Type::Number())) {
     // JSToNumber(x:number) => x
     return Changed(input);
-  }
-  if (input_type->Is(Type::Undefined())) {
+  } else if (input_type->Is(Type::Undefined())) {
     // JSToNumber(undefined) => #NaN
     return Replace(jsgraph()->NaNConstant());
-  }
-  if (input_type->Is(Type::Null())) {
+  } else if (input_type->Is(Type::Null())) {
     // JSToNumber(null) => #0
     return Replace(jsgraph()->ZeroConstant());
   }
@@ -2062,6 +2073,8 @@ Reduction JSTypedLowering::Reduce(Node* node) {
     case IrOpcode::kJSDivide:
     case IrOpcode::kJSModulus:
       return ReduceNumberBinop(node);
+    case IrOpcode::kJSNegate:
+      return ReduceJSNegate(node);
     case IrOpcode::kJSHasInPrototypeChain:
       return ReduceJSHasInPrototypeChain(node);
     case IrOpcode::kJSOrdinaryHasInstance:

@@ -679,9 +679,8 @@ DEFINE_INT(stress_compaction_percentage, 0,
            "candidates. It overrides stress_compaction.")
 DEFINE_BOOL(stress_incremental_marking, false,
             "force incremental marking for small heaps and run it more often")
-DEFINE_INT(stress_marking, 0,
-           "force marking at random points between 0 and X (inclusive) percent "
-           "of the regular marking start limit")
+DEFINE_INT(stress_incremental_marking_percentage, 0,
+           "force incremental marking after X percent of the standard limit")
 DEFINE_BOOL(manual_evacuation_candidates_selection, false,
             "Test mode only flag. It allows an unit test to select evacuation "
             "candidates pages (requires --stress_compaction).")
@@ -889,9 +888,6 @@ DEFINE_BOOL(preparser_scope_analysis, true,
             "perform scope analysis for preparsed inner functions")
 DEFINE_IMPLICATION(preparser_scope_analysis, aggressive_lazy_inner_functions)
 
-// compiler.cc
-DEFINE_BOOL(background_compile, false, "enable background compilation")
-
 // simulator-arm.cc, simulator-arm64.cc and simulator-mips.cc
 DEFINE_BOOL(trace_sim, false, "Trace simulator execution")
 DEFINE_BOOL(debug_sim, false, "Enable debugging the simulator")
@@ -956,10 +952,6 @@ DEFINE_VALUE_IMPLICATION(runtime_call_stats, runtime_stats, 1)
 // snapshot-common.cc
 DEFINE_BOOL(lazy_deserialization, true,
             "Deserialize code lazily from the snapshot.")
-DEFINE_BOOL(lazy_handler_deserialization, false,
-            "Deserialize bytecode handlers lazily from the snapshot.")
-DEFINE_IMPLICATION(lazy_handler_deserialization, lazy_deserialization)
-DEFINE_IMPLICATION(future, lazy_handler_deserialization)
 DEFINE_BOOL(trace_lazy_deserialization, false, "Trace lazy deserialization.")
 DEFINE_BOOL(profile_deserialization, false,
             "Print the time it takes to deserialize the snapshot.")

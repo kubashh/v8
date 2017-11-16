@@ -66,7 +66,8 @@ Node* AsyncBuiltinsAssembler::Await(
     StoreMapNoWriteBarrier(wrapped_value, promise_map);
     InitializeJSObjectFromMap(
         wrapped_value, promise_map,
-        IntPtrConstant(JSPromise::kSizeWithEmbedderFields));
+        IntPtrConstant(JSPromise::kSizeWithEmbedderFields),
+        EmptyFixedArrayConstant(), EmptyFixedArrayConstant());
     PromiseInit(wrapped_value);
   }
 
@@ -76,7 +77,8 @@ Node* AsyncBuiltinsAssembler::Await(
     StoreMapNoWriteBarrier(throwaway, promise_map);
     InitializeJSObjectFromMap(
         throwaway, promise_map,
-        IntPtrConstant(JSPromise::kSizeWithEmbedderFields));
+        IntPtrConstant(JSPromise::kSizeWithEmbedderFields),
+        EmptyFixedArrayConstant(), EmptyFixedArrayConstant());
     PromiseInit(throwaway);
   }
 

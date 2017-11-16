@@ -699,6 +699,7 @@ namespace internal {
   TFC(Equal, Compare, 1)                                                       \
   TFC(SameValue, Compare, 1)                                                   \
   TFC(StrictEqual, Compare, 1)                                                 \
+  TFS(Negate, kValue)                                                          \
                                                                                \
   /* Object */                                                                 \
   TFJ(ObjectConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)      \
@@ -1084,7 +1085,6 @@ namespace internal {
   TFC(ThrowWasmTrapFuncSigMismatch, WasmRuntimeCall, 1)                        \
                                                                                \
   /* WeakMap */                                                                \
-  TFJ(WeakMapConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)     \
   TFS(WeakMapLookupHashIndex, kTable, kKey)                                    \
   TFJ(WeakMapGet, 1, kKey)                                                     \
   TFJ(WeakMapHas, 1, kKey)                                                     \
@@ -1092,7 +1092,6 @@ namespace internal {
   TFJ(WeakMapPrototypeDelete, 1, kKey)                                         \
                                                                                \
   /* WeakSet */                                                                \
-  TFJ(WeakSetConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)     \
   TFJ(WeakSetHas, 1, kKey)                                                     \
   TFJ(WeakSetPrototypeAdd, 1, kValue)                                          \
   TFJ(WeakSetPrototypeDelete, 1, kValue)                                       \

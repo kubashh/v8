@@ -467,7 +467,7 @@ TEST(ParserWithLookbehind) {
 
 
 TEST(ParserWithoutLookbehind) {
-  TestRegExpParser(false);  // Lookbehind disabled.
+  TestRegExpParser(true);  // Lookbehind enabled.
 }
 
 TEST(ParserRegression) {

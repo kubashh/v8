@@ -2086,24 +2086,21 @@ CallFrequency BytecodeGraphBuilder::ComputeCallFrequency(int slot_id) const {
 void BytecodeGraphBuilder::VisitNegate() {
   PrepareEagerCheckpoint();
 
-  // TODO(adamk): Create a JSNegate operator, as this desugaring is
-  // invalid for BigInts.
-  const Operator* op = javascript()->Multiply();
-  Node* operand = environment()->LookupAccumulator();
-  Node* multiplier = jsgraph()->SmiConstant(-1);
-
   FeedbackSlot slot = feedback_vector()->ToSlot(
       bytecode_iterator().GetIndexOperand(kUnaryOperationHintIndex));
-  JSTypeHintLowering::LoweringResult lowering =
-      TryBuildSimplifiedBinaryOp(op, operand, multiplier, slot);
-  if (lowering.IsExit()) return;
+  Node* operand = environment()->LookupAccumulator();
 
+  // Lower to a speculative multiplication with -1 if we have some kind of
+  // Number feedback.
+  JSTypeHintLowering::LoweringResult lowering = TryBuildSimplifiedBinaryOp(
+      javascript()->Multiply(), operand, jsgraph()->SmiConstant(-1), slot);
+  if (lowering.IsExit()) return;
   Node* node = nullptr;
   if (lowering.IsSideEffectFree()) {
     node = lowering.value();
   } else {
     DCHECK(!lowering.Changed());
-    node = NewNode(op, operand, multiplier);
+    node = NewNode(javascript()->Negate(), operand);
   }
 
   environment()->BindAccumulator(node, Environment::kAttachFrameState);

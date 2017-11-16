@@ -583,9 +583,7 @@ template <class T> class PersistentBase {
 
   /**
    * Marks the reference to this object as active. The scavenge garbage
-   * collection should not reclaim the objects marked as active, even if the
-   * object held by the handle is otherwise unreachable.
-   *
+   * collection should not reclaim the objects marked as active.
    * This bit is cleared after the each garbage collection pass.
    */
   V8_INLINE void MarkActive();
@@ -1449,10 +1447,7 @@ class V8_EXPORT ScriptCompiler {
     kNoCacheBecauseInspector,
     kNoCacheBecauseScriptTooSmall,
     kNoCacheBecauseCacheTooCold,
-    kNoCacheBecauseV8Extension,
-    kNoCacheBecauseExtensionModule,
-    kNoCacheBecausePacScript,
-    kNoCacheBecauseInDocumentWrite
+    kNoCacheBecauseExtension,
   };
 
   /**
@@ -2088,6 +2083,20 @@ class V8_EXPORT ValueDeserializer {
 
   struct PrivateData;
   PrivateData* private_;
+};
+
+/**
+ * A map whose keys are referenced weakly. It is similar to JavaScript WeakMap
+ * but can be created without entering a v8::Context and hence shouldn't
+ * escape to JavaScript.
+ */
+class V8_EXPORT NativeWeakMap : public Data {
+ public:
+  static Local<NativeWeakMap> New(Isolate* isolate);
+  void Set(Local<Value> key, Local<Value> value);
+  Local<Value> Get(Local<Value> key) const;
+  bool Has(Local<Value> key);
+  bool Delete(Local<Value> key);
 };
 
 
@@ -9087,7 +9096,8 @@ class Internals {
   // These values match non-compiler-dependent values defined within
   // the implementation of v8.
   static const int kHeapObjectMapOffset = 0;
-  static const int kMapInstanceTypeOffset = 1 * kApiPointerSize + kApiIntSize;
+  static const int kMapInstanceTypeAndBitFieldOffset =
+      1 * kApiPointerSize + kApiIntSize;
   static const int kStringResourceOffset = 3 * kApiPointerSize;
 
   static const int kOddballKindOffset = 4 * kApiPointerSize + sizeof(double);
@@ -9165,7 +9175,9 @@ class Internals {
   V8_INLINE static int GetInstanceType(const internal::Object* obj) {
     typedef internal::Object O;
     O* map = ReadField<O*>(obj, kHeapObjectMapOffset);
-    return ReadField<uint8_t>(map, kMapInstanceTypeOffset);
+    // Map::InstanceType is defined so that it will always be loaded into
+    // the LS 8 bits of one 16-bit word, regardless of endianess.
+    return ReadField<uint16_t>(map, kMapInstanceTypeAndBitFieldOffset) & 0xff;
   }
 
   V8_INLINE static int GetOddballKind(const internal::Object* obj) {

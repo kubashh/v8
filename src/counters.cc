@@ -527,11 +527,6 @@ bool RuntimeCallStats::IsCalledOnTheSameThread() {
   return true;
 }
 
-void RuntimeCallStats::Print() {
-  OFStream os(stdout);
-  Print(os);
-}
-
 void RuntimeCallStats::Print(std::ostream& os) {
   RuntimeCallStatEntries entries;
   if (current_timer_.Value() != nullptr) {

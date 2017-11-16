@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "src/api.h"
+#include "src/ast/ast-expression-rewriter.h"
 #include "src/ast/ast-function-literal-id-reindexer.h"
 #include "src/ast/ast-traversal-visitor.h"
 #include "src/ast/ast.h"
@@ -15,7 +16,6 @@
 #include "src/base/platform/platform.h"
 #include "src/char-predicates-inl.h"
 #include "src/compiler-dispatcher/compiler-dispatcher.h"
-#include "src/log.h"
 #include "src/messages.h"
 #include "src/objects-inl.h"
 #include "src/parsing/duplicate-finder.h"
@@ -499,10 +499,8 @@ Expression* Parser::NewV8Intrinsic(const AstRawString* name,
 Parser::Parser(ParseInfo* info)
     : ParserBase<Parser>(info->zone(), &scanner_, info->stack_limit(),
                          info->extension(), info->GetOrCreateAstValueFactory(),
-                         info->pending_error_handler(),
-                         info->runtime_call_stats(), info->logger(),
-                         info->script().is_null() ? -1 : info->script()->id(),
-                         info->is_module(), true),
+                         info->runtime_call_stats(), info->is_module(),
+                         info->pending_error_handler(), true),
       scanner_(info->unicode_cache(), use_counts_),
       reusable_preparser_(nullptr),
       mode_(PARSE_EAGERLY),  // Lazy mode must be set explicitly.
@@ -594,7 +592,9 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
                                            : &RuntimeCallStats::ParseProgram);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.ParseProgram");
   base::ElapsedTimer timer;
-  if (V8_UNLIKELY(FLAG_log_function_events)) timer.Start();
+  if (FLAG_trace_parse) {
+    timer.Start();
+  }
   fni_ = new (zone()) FuncNameInferrer(ast_value_factory(), zone());
 
   // Initialize parser state.
@@ -618,25 +618,23 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
 
   HandleSourceURLComments(isolate, info->script());
 
+  if (FLAG_trace_parse && result != nullptr) {
+    double ms = timer.Elapsed().InMillisecondsF();
+    if (info->is_eval()) {
+      PrintF("[parsing eval");
+    } else if (info->script()->name()->IsString()) {
+      String* name = String::cast(info->script()->name());
+      std::unique_ptr<char[]> name_chars = name->ToCString();
+      PrintF("[parsing script: %s", name_chars.get());
+    } else {
+      PrintF("[parsing script");
+    }
+    PrintF(" - took %0.3f ms]\n", ms);
+  }
   if (produce_cached_parse_data() && result != nullptr) {
     *info->cached_data() = logger.GetScriptData();
   }
   log_ = nullptr;
-
-  if (V8_UNLIKELY(FLAG_log_function_events) && result != nullptr) {
-    double ms = timer.Elapsed().InMillisecondsF();
-    const char* event_name = "parse-eval";
-    Script* script = *info->script();
-    int start = -1;
-    int end = -1;
-    if (!info->is_eval()) {
-      event_name = "parse-script";
-      start = 0;
-      end = String::cast(script->source())->length();
-    }
-    LOG(script->GetIsolate(),
-        FunctionEvent(event_name, script, -1, ms, start, end, "", 0));
-  }
   return result;
 }
 
@@ -758,8 +756,9 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
                                       &RuntimeCallStats::ParseFunction);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.ParseFunction");
   base::ElapsedTimer timer;
-  if (V8_UNLIKELY(FLAG_log_function_events)) timer.Start();
-
+  if (FLAG_trace_parse) {
+    timer.Start();
+  }
   DeserializeScopeChain(info, info->maybe_outer_scope_info());
   DCHECK_EQ(factory()->zone(), info->zone());
 
@@ -775,18 +774,12 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
     result->set_inferred_name(inferred_name);
   }
 
-  if (V8_UNLIKELY(FLAG_log_function_events) && result != nullptr) {
+  if (FLAG_trace_parse && result != nullptr) {
     double ms = timer.Elapsed().InMillisecondsF();
     // We need to make sure that the debug-name is available.
     ast_value_factory()->Internalize(isolate);
-    DeclarationScope* function_scope = result->scope();
-    Script* script = *info->script();
-    std::unique_ptr<char[]> function_name = result->GetDebugName();
-    LOG(script->GetIsolate(),
-        FunctionEvent("parse-function", script, -1, ms,
-                      function_scope->start_position(),
-                      function_scope->end_position(), function_name.get(),
-                      strlen(function_name.get())));
+    std::unique_ptr<char[]> name_chars = result->GetDebugName();
+    PrintF("[parsing function: %s - took %0.3f ms]\n", name_chars.get(), ms);
   }
   return result;
 }
@@ -2595,8 +2588,6 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       parsing_on_main_thread_
           ? &RuntimeCallStats::ParseFunctionLiteral
           : &RuntimeCallStats::ParseBackgroundFunctionLiteral);
-  base::ElapsedTimer timer;
-  if (V8_UNLIKELY(FLAG_log_function_events)) timer.Start();
 
   // Determine whether we can still lazy parse the inner function.
   // The preconditions are:
@@ -2697,17 +2688,13 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
     }
 
     DCHECK_EQ(should_preparse, temp_zoned_);
-    if (V8_UNLIKELY(FLAG_log_function_events)) {
-      double ms = timer.Elapsed().InMillisecondsF();
-      const char* event_name = should_preparse
-                                   ? (is_top_level ? "preparse-no-resolution"
-                                                   : "preparse-resolution")
-                                   : "full-parse";
-      logger_->FunctionEvent(
-          event_name, nullptr, script_id(), ms, scope->start_position(),
-          scope->end_position(),
-          reinterpret_cast<const char*>(function_name->raw_data()),
-          function_name->byte_length());
+    if (V8_UNLIKELY(FLAG_trace_preparse)) {
+      PrintF("  [%s]: %i-%i %.*s\n",
+             should_preparse ? (is_top_level ? "Preparse no-resolution"
+                                             : "Preparse resolution")
+                             : "Full parse",
+             scope->start_position(), scope->end_position(),
+             function_name->byte_length(), function_name->raw_data());
     }
     if (V8_UNLIKELY(FLAG_runtime_stats)) {
       if (should_preparse) {
@@ -2835,7 +2822,7 @@ Parser::LazyParsingResult Parser::SkipFunction(
 
   PreParser::PreParseResult result = reusable_preparser()->PreParseFunction(
       function_name, kind, function_type, function_scope, is_inner_function,
-      may_abort, use_counts_, produced_preparsed_scope_data, this->script_id());
+      may_abort, use_counts_, produced_preparsed_scope_data);
 
   // Return immediately if pre-parser decided to abort parsing.
   if (result == PreParser::kPreParseAbort) return kLazyParsingAborted;
@@ -3477,9 +3464,6 @@ void Parser::UpdateStatistics(Isolate* isolate, Handle<Script> script) {
 
 void Parser::ParseOnBackground(ParseInfo* info) {
   parsing_on_main_thread_ = false;
-  if (!info->script().is_null()) {
-    set_script_id(info->script()->id());
-  }
 
   DCHECK_NULL(info->literal());
   FunctionLiteral* result = nullptr;
@@ -3842,18 +3826,53 @@ void Parser::RewriteAsyncFunctionBody(ZoneList<Statement*>* body, Block* block,
   body->Add(block, zone());
 }
 
+class NonPatternRewriter : public AstExpressionRewriter {
+ public:
+  NonPatternRewriter(uintptr_t stack_limit, Parser* parser)
+      : AstExpressionRewriter(stack_limit), parser_(parser) {}
+  ~NonPatternRewriter() override {}
+
+ private:
+  bool RewriteExpression(Expression* expr) override {
+    if (expr->IsRewritableExpression()) return true;
+    // Rewrite only what could have been a pattern but is not.
+    if (expr->IsArrayLiteral()) {
+      // Spread rewriting in array literals.
+      ArrayLiteral* lit = expr->AsArrayLiteral();
+      VisitExpressions(lit->values());
+      replacement_ = parser_->RewriteSpreads(lit);
+      return false;
+    }
+    if (expr->IsObjectLiteral()) {
+      return true;
+    }
+    if (expr->IsBinaryOperation() &&
+        expr->AsBinaryOperation()->op() == Token::COMMA) {
+      return true;
+    }
+    // Everything else does not need rewriting.
+    return false;
+  }
+
+  void VisitLiteralProperty(LiteralProperty* property) override {
+    if (property == nullptr) return;
+    // Do not rewrite (computed) key expressions
+    AST_REWRITE_PROPERTY(Expression, property, value);
+  }
+
+  Parser* parser_;
+};
+
 void Parser::RewriteNonPattern(bool* ok) {
   ValidateExpression(CHECK_OK_VOID);
   auto non_patterns_to_rewrite = function_state_->non_patterns_to_rewrite();
   int begin = classifier()->GetNonPatternBegin();
   int end = non_patterns_to_rewrite->length();
   if (begin < end) {
+    NonPatternRewriter rewriter(stack_limit_, this);
     for (int i = begin; i < end; i++) {
-      RewritableExpression* expr = non_patterns_to_rewrite->at(i);
-      // TODO(adamk): Make this more typesafe.
-      DCHECK(expr->expression()->IsArrayLiteral());
-      ArrayLiteral* lit = expr->expression()->AsArrayLiteral();
-      expr->Rewrite(RewriteSpreads(lit));
+      DCHECK(non_patterns_to_rewrite->at(i)->IsRewritableExpression());
+      rewriter.Rewrite(non_patterns_to_rewrite->at(i));
     }
     non_patterns_to_rewrite->Rewind(begin);
   }
@@ -3866,13 +3885,15 @@ void Parser::RewriteDestructuringAssignments() {
   for (int i = assignments.length() - 1; i >= 0; --i) {
     // Rewrite list in reverse, so that nested assignment patterns are rewritten
     // correctly.
-    RewritableExpression* to_rewrite = assignments[i];
+    const DestructuringAssignment& pair = assignments.at(i);
+    RewritableExpression* to_rewrite =
+        pair.assignment->AsRewritableExpression();
     DCHECK_NOT_NULL(to_rewrite);
     if (!to_rewrite->is_rewritten()) {
       // Since this function is called at the end of parsing the program,
       // pair.scope may already have been removed by FinalizeBlockScope in the
       // meantime.
-      Scope* scope = to_rewrite->scope()->GetUnremovedScope();
+      Scope* scope = pair.scope->GetUnremovedScope();
       BlockState block_state(&scope_, scope);
       RewriteDestructuringAssignment(to_rewrite);
     }
@@ -4018,12 +4039,14 @@ Expression* Parser::RewriteSpreads(ArrayLiteral* lit) {
   return factory()->NewDoExpression(do_block, result, lit->position());
 }
 
-void Parser::QueueDestructuringAssignmentForRewriting(
-    RewritableExpression* expr) {
-  function_state_->AddDestructuringAssignment(expr);
+void Parser::QueueDestructuringAssignmentForRewriting(Expression* expr) {
+  DCHECK(expr->IsRewritableExpression());
+  function_state_->AddDestructuringAssignment(
+      DestructuringAssignment(expr, scope()));
 }
 
-void Parser::QueueNonPatternForRewriting(RewritableExpression* expr, bool* ok) {
+void Parser::QueueNonPatternForRewriting(Expression* expr, bool* ok) {
+  DCHECK(expr->IsRewritableExpression());
   function_state_->AddNonPatternForRewriting(expr, ok);
 }
 

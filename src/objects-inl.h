@@ -2968,11 +2968,9 @@ Handle<Object> Float64ArrayTraits::ToHandle(Isolate* isolate, double scalar) {
   return isolate->factory()->NewNumber(scalar);
 }
 
-VisitorId Map::visitor_id() const {
-  return static_cast<VisitorId>(READ_BYTE_FIELD(this, kVisitorIdOffset));
-}
+int Map::visitor_id() const { return READ_BYTE_FIELD(this, kVisitorIdOffset); }
 
-void Map::set_visitor_id(VisitorId id) {
+void Map::set_visitor_id(int id) {
   DCHECK_LE(0, id);
   DCHECK_LT(id, 256);
   WRITE_BYTE_FIELD(this, kVisitorIdOffset, static_cast<byte>(id));
@@ -3575,14 +3573,12 @@ void Map::set_prototype(Object* value, WriteBarrierMode mode) {
 }
 
 LayoutDescriptor* Map::layout_descriptor_gc_safe() const {
-  DCHECK(FLAG_unbox_double_fields);
   Object* layout_desc = RELAXED_READ_FIELD(this, kLayoutDescriptorOffset);
   return LayoutDescriptor::cast_gc_safe(layout_desc);
 }
 
 
 bool Map::HasFastPointerLayout() const {
-  DCHECK(FLAG_unbox_double_fields);
   Object* layout_desc = RELAXED_READ_FIELD(this, kLayoutDescriptorOffset);
   return LayoutDescriptor::IsFastPointerLayout(layout_desc);
 }
@@ -3599,7 +3595,7 @@ void Map::UpdateDescriptors(DescriptorArray* descriptors,
     // TODO(ishell): remove these checks from VERIFY_HEAP mode.
     if (FLAG_verify_heap) {
       CHECK(layout_descriptor()->IsConsistentWithMap(this));
-      CHECK_EQ(Map::GetVisitorId(this), visitor_id());
+      CHECK(visitor_id() == Map::GetVisitorId(this));
     }
 #else
     SLOW_DCHECK(layout_descriptor()->IsConsistentWithMap(this));
@@ -3631,8 +3627,7 @@ void Map::InitializeDescriptors(DescriptorArray* descriptors,
 
 
 ACCESSORS(Map, instance_descriptors, DescriptorArray, kDescriptorsOffset)
-ACCESSORS_CHECKED(Map, layout_descriptor, LayoutDescriptor,
-                  kLayoutDescriptorOffset, FLAG_unbox_double_fields)
+ACCESSORS(Map, layout_descriptor, LayoutDescriptor, kLayoutDescriptorOffset)
 
 void Map::set_bit_field3(uint32_t bits) {
   if (kInt32Size != kPointerSize) {
@@ -4102,8 +4097,6 @@ bool Map::IsInobjectSlackTrackingInProgress() const {
 
 
 void Map::InobjectSlackTrackingStep() {
-  // Slack tracking should only be performed on an initial map.
-  DCHECK(GetBackPointer()->IsUndefined(GetIsolate()));
   if (!IsInobjectSlackTrackingInProgress()) return;
   int counter = construction_counter();
   set_construction_counter(counter - 1);

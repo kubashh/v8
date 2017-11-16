@@ -43,12 +43,13 @@ Handle<AccessorInfo> Accessors::MakeAccessor(
   return info;
 }
 
+
 static V8_INLINE bool CheckForName(Handle<Name> name,
-                                   Handle<String> property_name, int offset,
-                                   FieldIndex::Encoding encoding,
-                                   FieldIndex* index) {
+                                   Handle<String> property_name,
+                                   int offset,
+                                   int* object_offset) {
   if (Name::Equals(name, property_name)) {
-    *index = FieldIndex::ForInObjectOffset(offset, encoding);
+    *object_offset = offset;
     return true;
   }
   return false;
@@ -58,17 +59,18 @@ static V8_INLINE bool CheckForName(Handle<Name> name,
 // Returns true for properties that are accessors to object fields.
 // If true, *object_offset contains offset of object field.
 bool Accessors::IsJSObjectFieldAccessor(Handle<Map> map, Handle<Name> name,
-                                        FieldIndex* index) {
+                                        int* object_offset) {
   Isolate* isolate = name->GetIsolate();
 
   switch (map->instance_type()) {
     case JS_ARRAY_TYPE:
-      return CheckForName(name, isolate->factory()->length_string(),
-                          JSArray::kLengthOffset, FieldIndex::kTagged, index);
+      return
+        CheckForName(name, isolate->factory()->length_string(),
+                     JSArray::kLengthOffset, object_offset);
     default:
       if (map->instance_type() < FIRST_NONSTRING_TYPE) {
         return CheckForName(name, isolate->factory()->length_string(),
-                            String::kLengthOffset, FieldIndex::kTagged, index);
+                            String::kLengthOffset, object_offset);
       }
 
       return false;
@@ -681,7 +683,6 @@ void Accessors::FunctionLengthGetter(
     v8::Local<v8::Name> name,
     const v8::PropertyCallbackInfo<v8::Value>& info) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::FunctionLengthGetter);
   HandleScope scope(isolate);
   Handle<JSFunction> function =
       Handle<JSFunction>::cast(Utils::OpenHandle(*info.Holder()));

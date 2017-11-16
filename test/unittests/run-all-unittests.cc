@@ -11,24 +11,27 @@ namespace {
 
 class DefaultPlatformEnvironment final : public ::testing::Environment {
  public:
-  DefaultPlatformEnvironment() {}
+  DefaultPlatformEnvironment() : platform_(NULL) {}
 
   void SetUp() override {
-    platform_ = v8::platform::NewDefaultPlatform(
+    EXPECT_EQ(NULL, platform_);
+    platform_ = v8::platform::CreateDefaultPlatform(
         0, v8::platform::IdleTaskSupport::kEnabled);
-    ASSERT_TRUE(platform_.get() != NULL);
-    v8::V8::InitializePlatform(platform_.get());
+    ASSERT_TRUE(platform_ != NULL);
+    v8::V8::InitializePlatform(platform_);
     ASSERT_TRUE(v8::V8::Initialize());
   }
 
   void TearDown() override {
-    ASSERT_TRUE(platform_.get() != NULL);
+    ASSERT_TRUE(platform_ != NULL);
     v8::V8::Dispose();
     v8::V8::ShutdownPlatform();
+    delete platform_;
+    platform_ = NULL;
   }
 
  private:
-  std::unique_ptr<v8::Platform> platform_;
+  v8::Platform* platform_;
 };
 
 }  // namespace
