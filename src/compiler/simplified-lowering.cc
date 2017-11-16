@@ -1559,15 +1559,18 @@ class RepresentationSelector {
         }
         return;
       }
-      case IrOpcode::kJSToNumber: {
+      case IrOpcode::kJSToNumber:
+      case IrOpcode::kJSToNumeric: {
         VisitInputs(node);
         // TODO(bmeurer): Optimize somewhat based on input type?
         if (truncation.IsUsedAsWord32()) {
           SetOutput(node, MachineRepresentation::kWord32);
-          if (lower()) lowering->DoJSToNumberTruncatesToWord32(node, this);
+          if (lower())
+            lowering->DoJSToNumberOrNumericTruncatesToWord32(node, this);
         } else if (truncation.IsUsedAsFloat64()) {
           SetOutput(node, MachineRepresentation::kFloat64);
-          if (lower()) lowering->DoJSToNumberTruncatesToFloat64(node, this);
+          if (lower())
+            lowering->DoJSToNumberOrNumericTruncatesToFloat64(node, this);
         } else {
           SetOutput(node, MachineRepresentation::kTagged);
         }
@@ -3180,9 +3183,10 @@ void SimplifiedLowering::LowerAllNodes() {
   selector.Run(this);
 }
 
-void SimplifiedLowering::DoJSToNumberTruncatesToFloat64(
+void SimplifiedLowering::DoJSToNumberOrNumericTruncatesToFloat64(
     Node* node, RepresentationSelector* selector) {
-  DCHECK_EQ(IrOpcode::kJSToNumber, node->opcode());
+  DCHECK(node->opcode() == IrOpcode::kJSToNumber ||
+         node->opcode() == IrOpcode::kJSToNumeric);
   Node* value = node->InputAt(0);
   Node* context = node->InputAt(1);
   Node* frame_state = node->InputAt(2);
@@ -3205,12 +3209,16 @@ void SimplifiedLowering::DoJSToNumberTruncatesToFloat64(
   Node* efalse0 = effect;
   Node* vfalse0;
   {
-    vfalse0 = efalse0 = if_false0 =
-        graph()->NewNode(ToNumberOperator(), ToNumberCode(), value, context,
-                         frame_state, efalse0, if_false0);
+    Operator const* op = node->opcode() == IrOpcode::kJSToNumber
+                             ? ToNumberOperator()
+                             : ToNumericOperator();
+    Node* code = node->opcode() == IrOpcode::kJSToNumber ? ToNumberCode()
+                                                         : ToNumericCode();
+    vfalse0 = efalse0 = if_false0 = graph()->NewNode(
+        op, code, value, context, frame_state, efalse0, if_false0);
 
     // Update potential {IfException} uses of {node} to point to the above
-    // {ToNumber} stub call node instead.
+    // stub call node instead.
     Node* on_exception = nullptr;
     if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
       NodeProperties::ReplaceControlInput(on_exception, vfalse0);
@@ -3270,9 +3278,10 @@ void SimplifiedLowering::DoJSToNumberTruncatesToFloat64(
   selector->DeferReplacement(node, value);
 }
 
-void SimplifiedLowering::DoJSToNumberTruncatesToWord32(
+void SimplifiedLowering::DoJSToNumberOrNumericTruncatesToWord32(
     Node* node, RepresentationSelector* selector) {
-  DCHECK_EQ(IrOpcode::kJSToNumber, node->opcode());
+  DCHECK(node->opcode() == IrOpcode::kJSToNumber ||
+         node->opcode() == IrOpcode::kJSToNumeric);
   Node* value = node->InputAt(0);
   Node* context = node->InputAt(1);
   Node* frame_state = node->InputAt(2);
@@ -3292,12 +3301,16 @@ void SimplifiedLowering::DoJSToNumberTruncatesToWord32(
   Node* efalse0 = effect;
   Node* vfalse0;
   {
-    vfalse0 = efalse0 = if_false0 =
-        graph()->NewNode(ToNumberOperator(), ToNumberCode(), value, context,
-                         frame_state, efalse0, if_false0);
+    Operator const* op = node->opcode() == IrOpcode::kJSToNumber
+                             ? ToNumberOperator()
+                             : ToNumericOperator();
+    Node* code = node->opcode() == IrOpcode::kJSToNumber ? ToNumberCode()
+                                                         : ToNumericCode();
+    vfalse0 = efalse0 = if_false0 = graph()->NewNode(
+        op, code, value, context, frame_state, efalse0, if_false0);
 
     // Update potential {IfException} uses of {node} to point to the above
-    // {ToNumber} stub call node instead.
+    // stub call node instead.
     Node* on_exception = nullptr;
     if (NodeProperties::IsExceptionalCall(node, &on_exception)) {
       NodeProperties::ReplaceControlInput(on_exception, vfalse0);
@@ -3797,6 +3810,14 @@ Node* SimplifiedLowering::ToNumberCode() {
   return to_number_code_.get();
 }
 
+Node* SimplifiedLowering::ToNumericCode() {
+  if (!to_numeric_code_.is_set()) {
+    Callable callable = Builtins::CallableFor(isolate(), Builtins::kToNumeric);
+    to_number_code_.set(jsgraph()->HeapConstant(callable.code()));
+  }
+  return to_numeric_code_.get();
+}
+
 Operator const* SimplifiedLowering::ToNumberOperator() {
   if (!to_number_operator_.is_set()) {
     Callable callable = Builtins::CallableFor(isolate(), Builtins::kToNumber);
@@ -3807,6 +3828,18 @@ Operator const* SimplifiedLowering::ToNumberOperator() {
     to_number_operator_.set(common()->Call(desc));
   }
   return to_number_operator_.get();
+}
+
+Operator const* SimplifiedLowering::ToNumericOperator() {
+  if (!to_numeric_operator_.is_set()) {
+    Callable callable = Builtins::CallableFor(isolate(), Builtins::kToNumeric);
+    CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
+    CallDescriptor* desc = Linkage::GetStubCallDescriptor(
+        isolate(), graph()->zone(), callable.descriptor(), 0, flags,
+        Operator::kNoProperties);
+    to_numeric_operator_.set(common()->Call(desc));
+  }
+  return to_numeric_operator_.get();
 }
 
 #undef TRACE
