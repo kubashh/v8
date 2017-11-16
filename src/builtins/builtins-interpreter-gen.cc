@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
+#include "src/handles-inl.h"
+
+#include "src/code-stub-assembler.h"
 #include "src/globals.h"
 #include "src/macro-assembler.h"
 
@@ -56,6 +60,30 @@ void Builtins::Generate_InterpreterPushArgsThenConstructFunction(
     MacroAssembler* masm) {
   return Generate_InterpreterPushArgsThenConstructImpl(
       masm, InterpreterPushArgsMode::kJSFunction);
+}
+
+TF_BUILTIN(InterpreterFirstEntryTrampoline, CodeStubAssembler) {
+  Node* target_function = LoadFromFrame(StandardFrameConstants::kFunctionOffset,
+                                        MachineType::TaggedPointer());
+  CSA_ASSERT(this, IsJSFunction(target_function));
+  Node* sfi =
+      LoadObjectField(target_function, JSFunction::kSharedFunctionInfoOffset);
+  CSA_ASSERT(this, IsSharedFunctionInfo(sfi));
+  Node* context = Parameter(BuiltinDescriptor::kContext);
+  // Jump to the runtime to handle first-execution logging.
+  CallRuntime(Runtime::kFunctionFirstExecution, context, sfi);
+  // Install the InterpreterEntryTrampolin.
+  Handle<Code> code(
+      isolate()->builtins()->builtin(Builtins::kInterpreterEntryTrampoline));
+  Node* interpreter_entry_trampoline = HeapConstant(code);
+  StoreObjectField(target_function, JSFunction::kCodeOffset,
+                   interpreter_entry_trampoline);
+  // Tail call the InterpreterEntryTrampoline.
+  Node* argc = Parameter(BuiltinDescriptor::kArgumentsCount);
+  Node* new_target = Parameter(BuiltinDescriptor::kNewTarget);
+  BuiltinDescriptor descriptor(isolate());
+  TailCallStub(descriptor, interpreter_entry_trampoline, context,
+               target_function, new_target, argc);
 }
 
 }  // namespace internal

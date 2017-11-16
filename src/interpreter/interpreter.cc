@@ -220,8 +220,13 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::FinalizeJobImpl(
   }
 
   compilation_info()->SetBytecodeArray(bytecodes);
-  compilation_info()->SetCode(
-      BUILTIN_CODE(isolate, InterpreterEntryTrampoline));
+  if (FLAG_log_function_events) {
+    compilation_info()->SetCode(
+        BUILTIN_CODE(isolate, InterpreterFirstEntryTrampoline));
+  } else {
+    compilation_info()->SetCode(
+        BUILTIN_CODE(isolate, InterpreterEntryTrampoline));
+  }
   return SUCCEEDED;
 }
 

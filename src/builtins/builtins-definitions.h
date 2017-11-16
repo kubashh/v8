@@ -106,6 +106,8 @@ namespace internal {
   TFS(OrderedHashTableHealIndex, kTable, kIndex)                               \
                                                                                \
   /* Interpreter */                                                            \
+  TFJ(InterpreterFirstEntryTrampoline,                                         \
+      SharedFunctionInfo::kDontAdaptArgumentsSentinel)                         \
   ASM(InterpreterEntryTrampoline)                                              \
   ASM(InterpreterPushArgsThenCall)                                             \
   ASM(InterpreterPushUndefinedAndArgsThenCall)                                 \
