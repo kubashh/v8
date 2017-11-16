@@ -46,8 +46,12 @@
 #include "unicode/uloc.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unicode/uvernum.h"
 #include "unicode/uversion.h"
 
+#if U_ICU_VERSION_MAJOR_NUM >= 59
+#include "unicode/char16ptr.h"
+#endif
 
 namespace v8 {
 namespace internal {
@@ -477,12 +481,21 @@ RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
 
   CONVERT_ARG_HANDLE_CHECKED(String, currency, 0);
 
-  v8::String::Value currency_string(v8_isolate, v8::Utils::ToLocal(currency));
+  // TODO(littledan): Avoid transcoding the string twice
+  v8::String::Utf8Value currency_string(v8_isolate,
+                                        v8::Utils::ToLocal(currency));
+  icu::UnicodeString currency_icu =
+      icu::UnicodeString::fromUTF8(*currency_string);
 
   DisallowHeapAllocation no_gc;
   UErrorCode status = U_ZERO_ERROR;
+#if U_ICU_VERSION_MAJOR_NUM >= 59
   uint32_t fraction_digits = ucurr_getDefaultFractionDigits(
-      reinterpret_cast<const UChar*>(*currency_string), &status);
+      icu::toUCharPtr(currency_icu.getTerminatedBuffer()), &status);
+#else
+  uint32_t fraction_digits = ucurr_getDefaultFractionDigits(
+      currency_icu.getTerminatedBuffer(), &status);
+#endif
   // For missing currency codes, default to the most common, 2
   if (!U_SUCCESS(status)) fraction_digits = 2;
   return Smi::FromInt(fraction_digits);

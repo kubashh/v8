@@ -360,8 +360,8 @@ bool AccessInfoFactory::ComputePropertyAccessInfo(
         if (details.kind() == kData) {
           int index = descriptors->GetFieldIndex(number);
           Representation details_representation = details.representation();
-          FieldIndex field_index =
-              FieldIndex::ForPropertyIndex(*map, index, details_representation);
+          FieldIndex field_index = FieldIndex::ForPropertyIndex(
+              *map, index, details_representation.IsDouble());
           Type* field_type = Type::NonInternal();
           MachineRepresentation field_representation =
               MachineRepresentation::kTagged;
@@ -600,8 +600,9 @@ bool AccessInfoFactory::ConsolidateElementLoad(MapHandles const& maps,
 bool AccessInfoFactory::LookupSpecialFieldAccessor(
     Handle<Map> map, Handle<Name> name, PropertyAccessInfo* access_info) {
   // Check for special JSObject field accessors.
-  FieldIndex field_index;
-  if (Accessors::IsJSObjectFieldAccessor(map, name, &field_index)) {
+  int offset;
+  if (Accessors::IsJSObjectFieldAccessor(map, name, &offset)) {
+    FieldIndex field_index = FieldIndex::ForInObjectOffset(offset);
     Type* field_type = Type::NonInternal();
     MachineRepresentation field_representation = MachineRepresentation::kTagged;
     if (map->IsStringMap()) {
@@ -655,8 +656,8 @@ bool AccessInfoFactory::LookupTransition(Handle<Map> map, Handle<Name> name,
   if (details.location() != kField) return false;
   int const index = details.field_index();
   Representation details_representation = details.representation();
-  FieldIndex field_index = FieldIndex::ForPropertyIndex(*transition_map, index,
-                                                        details_representation);
+  FieldIndex field_index = FieldIndex::ForPropertyIndex(
+      *transition_map, index, details_representation.IsDouble());
   Type* field_type = Type::NonInternal();
   MaybeHandle<Map> field_map;
   MachineRepresentation field_representation = MachineRepresentation::kTagged;

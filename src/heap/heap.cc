@@ -459,30 +459,21 @@ void Heap::ReportStatisticsAfterGC() {
   }
 }
 
-void Heap::AddRetainingPathTarget(Handle<HeapObject> object,
-                                  RetainingPathOption option) {
+void Heap::AddRetainingPathTarget(Handle<HeapObject> object) {
   if (!FLAG_track_retaining_path) {
     PrintF("Retaining path tracking requires --trace-retaining-path\n");
   } else {
-    int index = 0;
     Handle<WeakFixedArray> array = WeakFixedArray::Add(
-        handle(retaining_path_targets(), isolate()), object, &index);
+        handle(retaining_path_targets(), isolate()), object);
     set_retaining_path_targets(*array);
-    retaining_path_target_option_[index] = option;
   }
 }
 
-bool Heap::IsRetainingPathTarget(HeapObject* object,
-                                 RetainingPathOption* option) {
-  if (!retaining_path_targets()->IsWeakFixedArray()) return false;
-  WeakFixedArray* targets = WeakFixedArray::cast(retaining_path_targets());
-  int length = targets->Length();
-  for (int i = 0; i < length; i++) {
-    if (targets->Get(i) == object) {
-      DCHECK(retaining_path_target_option_.count(i));
-      *option = retaining_path_target_option_[i];
-      return true;
-    }
+bool Heap::IsRetainingPathTarget(HeapObject* object) {
+  WeakFixedArray::Iterator it(retaining_path_targets());
+  HeapObject* target;
+  while ((target = it.Next<HeapObject>()) != nullptr) {
+    if (target == object) return true;
   }
   return false;
 }
@@ -511,23 +502,17 @@ const char* RootToString(Root root) {
 }
 }  // namespace
 
-void Heap::PrintRetainingPath(HeapObject* target, RetainingPathOption option) {
+void Heap::PrintRetainingPath(HeapObject* target) {
   PrintF("\n\n\n");
   PrintF("#################################################\n");
   PrintF("Retaining path for %p:\n", static_cast<void*>(target));
   HeapObject* object = target;
-  std::vector<std::pair<HeapObject*, bool>> retaining_path;
+  std::vector<HeapObject*> retaining_path;
   Root root = Root::kUnknown;
-  bool ephemeral = false;
   while (true) {
-    retaining_path.push_back(std::make_pair(object, ephemeral));
-    if (option == RetainingPathOption::kTrackEphemeralPath &&
-        ephemeral_retainer_.count(object)) {
-      object = ephemeral_retainer_[object];
-      ephemeral = true;
-    } else if (retainer_.count(object)) {
+    retaining_path.push_back(object);
+    if (retainer_.count(object)) {
       object = retainer_[object];
-      ephemeral = false;
     } else {
       if (retaining_root_.count(object)) {
         root = retaining_root_[object];
@@ -536,13 +521,10 @@ void Heap::PrintRetainingPath(HeapObject* target, RetainingPathOption option) {
     }
   }
   int distance = static_cast<int>(retaining_path.size());
-  for (auto node : retaining_path) {
-    HeapObject* object = node.first;
-    bool ephemeral = node.second;
+  for (auto object : retaining_path) {
     PrintF("\n");
     PrintF("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-    PrintF("Distance from root %d%s: ", distance,
-           ephemeral ? " (ephemeral)" : "");
+    PrintF("Distance from root %d: ", distance);
     object->ShortPrint();
     PrintF("\n");
 #ifdef OBJECT_PRINT
@@ -558,38 +540,16 @@ void Heap::PrintRetainingPath(HeapObject* target, RetainingPathOption option) {
 }
 
 void Heap::AddRetainer(HeapObject* retainer, HeapObject* object) {
-  if (retainer_.count(object)) return;
   retainer_[object] = retainer;
-  RetainingPathOption option = RetainingPathOption::kDefault;
-  if (IsRetainingPathTarget(object, &option)) {
-    // Check if the retaining path was already printed in
-    // AddEphemeralRetainer().
-    if (ephemeral_retainer_.count(object) == 0 ||
-        option == RetainingPathOption::kDefault) {
-      PrintRetainingPath(object, option);
-    }
-  }
-}
-
-void Heap::AddEphemeralRetainer(HeapObject* retainer, HeapObject* object) {
-  if (ephemeral_retainer_.count(object)) return;
-  ephemeral_retainer_[object] = retainer;
-  RetainingPathOption option = RetainingPathOption::kDefault;
-  if (IsRetainingPathTarget(object, &option) &&
-      option == RetainingPathOption::kTrackEphemeralPath) {
-    // Check if the retaining path was already printed in AddRetainer().
-    if (retainer_.count(object) == 0) {
-      PrintRetainingPath(object, option);
-    }
+  if (IsRetainingPathTarget(object)) {
+    PrintRetainingPath(object);
   }
 }
 
 void Heap::AddRetainingRoot(Root root, HeapObject* object) {
-  if (retaining_root_.count(object)) return;
   retaining_root_[object] = root;
-  RetainingPathOption option = RetainingPathOption::kDefault;
-  if (IsRetainingPathTarget(object, &option)) {
-    PrintRetainingPath(object, option);
+  if (IsRetainingPathTarget(object)) {
+    PrintRetainingPath(object);
   }
 }
 
@@ -639,7 +599,6 @@ void Heap::GarbageCollectionPrologue() {
   UpdateNewSpaceAllocationCounter();
   if (FLAG_track_retaining_path) {
     retainer_.clear();
-    ephemeral_retainer_.clear();
     retaining_root_.clear();
   }
 }
@@ -1469,11 +1428,6 @@ bool Heap::ReserveSpace(Reservation* reservations, std::vector<Address>* maps) {
         }
       }
       if (perform_gc) {
-        // We cannot perfom a GC with an uninitialized isolate. This check
-        // fails for example if the max old space size is chosen unwisely,
-        // so that we cannot allocate space to deserialize the initial heap.
-        CHECK_WITH_MSG(deserialization_complete_,
-                       "insufficient memory to create an Isolate");
         if (space == NEW_SPACE) {
           CollectGarbage(NEW_SPACE, GarbageCollectionReason::kDeserializer);
         } else {
@@ -2627,9 +2581,6 @@ bool Heap::RootCanBeWrittenAfterInitialization(Heap::RootListIndex root_index) {
     case kApiSymbolTableRootIndex:
     case kApiPrivateSymbolTableRootIndex:
     case kMessageListenersRootIndex:
-    case kDeserializeLazyHandlerRootIndex:
-    case kDeserializeLazyHandlerWideRootIndex:
-    case kDeserializeLazyHandlerExtraWideRootIndex:
 // Smi values
 #define SMI_ENTRY(type, name, Name) case k##Name##RootIndex:
       SMI_ROOT_LIST(SMI_ENTRY)
@@ -3773,10 +3724,7 @@ AllocationResult Heap::AllocateFixedArrayWithFiller(int length,
 
 AllocationResult Heap::AllocatePropertyArray(int length,
                                              PretenureFlag pretenure) {
-  // Allow length = 0 for the empty_property_array singleton.
   DCHECK_LE(0, length);
-  DCHECK_IMPLIES(length == 0, pretenure == TENURED);
-
   DCHECK(!InNewSpace(undefined_value()));
   HeapObject* result = nullptr;
   {
@@ -5354,7 +5302,7 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
     return IncrementalMarkingLimit::kHardLimit;
   }
 
-  if (FLAG_stress_marking > 0) {
+  if (FLAG_stress_incremental_marking_percentage > 0) {
     double gained_since_last_gc =
         PromotedSinceLastGC() +
         (external_memory_ - external_memory_at_last_mark_compact_);
@@ -5369,8 +5317,8 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
             current_percent);
       }
 
-      if (static_cast<int>(current_percent) >= stress_marking_percentage_) {
-        stress_marking_percentage_ = NextStressMarkingLimit();
+      if (static_cast<int>(current_percent) >=
+          FLAG_stress_incremental_marking_percentage) {
         return IncrementalMarkingLimit::kHardLimit;
       }
     }
@@ -5522,10 +5470,6 @@ bool Heap::SetUp() {
   SetGetExternallyAllocatedMemoryInBytesCallback(
       DefaultGetExternallyAllocatedMemoryInBytesCallback);
 
-  if (FLAG_stress_marking > 0) {
-    stress_marking_percentage_ = NextStressMarkingLimit();
-  }
-
   return true;
 }
 
@@ -5562,9 +5506,6 @@ void Heap::PrintAllocationsHash() {
   PrintF("\n### Allocations = %u, hash = 0x%08x\n", allocations_count(), hash);
 }
 
-int Heap::NextStressMarkingLimit() {
-  return isolate()->fuzzer_rng()->NextInt(FLAG_stress_marking + 1);
-}
 
 void Heap::NotifyDeserializationComplete() {
   PagedSpaces spaces(this);
@@ -6303,23 +6244,6 @@ void Heap::UnregisterStrongRoots(Object** start) {
   }
 }
 
-bool Heap::IsDeserializeLazyHandler(Code* code) {
-  return (code == deserialize_lazy_handler() ||
-          code == deserialize_lazy_handler_wide() ||
-          code == deserialize_lazy_handler_extra_wide());
-}
-
-void Heap::SetDeserializeLazyHandler(Code* code) {
-  set_deserialize_lazy_handler(code);
-}
-
-void Heap::SetDeserializeLazyHandlerWide(Code* code) {
-  set_deserialize_lazy_handler_wide(code);
-}
-
-void Heap::SetDeserializeLazyHandlerExtraWide(Code* code) {
-  set_deserialize_lazy_handler_extra_wide(code);
-}
 
 size_t Heap::NumberOfTrackedHeapObjectTypes() {
   return ObjectStats::OBJECT_STATS_COUNT;

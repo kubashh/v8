@@ -142,9 +142,7 @@ class ShellArrayBufferAllocator : public ArrayBufferAllocatorBase {
   void Free(void* data, size_t length) override {
 #if USE_VM
     if (RoundToPageSize(&length)) {
-      bool result = base::OS::Free(data, length);
-      DCHECK(result);
-      USE(result);
+      base::OS::ReleaseRegion(data, length);
       return;
     }
 #endif
@@ -162,17 +160,16 @@ class ShellArrayBufferAllocator : public ArrayBufferAllocatorBase {
   }
 #if USE_VM
   void* VirtualMemoryAllocate(size_t length) {
-    size_t page_size = base::OS::AllocatePageSize();
-    size_t alloc_size = RoundUp(length, page_size);
-    void* address = base::OS::Allocate(nullptr, alloc_size, page_size,
-                                       base::OS::MemoryPermission::kReadWrite);
-    if (address != nullptr) {
-#if defined(LEAK_SANITIZER)
-      __lsan_register_root_region(address, alloc_size);
-#endif
-      MSAN_MEMORY_IS_INITIALIZED(address, alloc_size);
+    void* data = base::OS::ReserveRegion(length, nullptr);
+    if (data && !base::OS::CommitRegion(data, length, false)) {
+      base::OS::ReleaseRegion(data, length);
+      return nullptr;
     }
-    return address;
+#if defined(LEAK_SANITIZER)
+    __lsan_register_root_region(data, length);
+#endif
+    MSAN_MEMORY_IS_INITIALIZED(data, length);
+    return data;
   }
 #endif
 };
@@ -255,12 +252,12 @@ class PredictablePlatform : public Platform {
   DISALLOW_COPY_AND_ASSIGN(PredictablePlatform);
 };
 
-std::unique_ptr<v8::Platform> g_platform;
+v8::Platform* g_platform = nullptr;
 
 v8::Platform* GetDefaultPlatform() {
   return i::FLAG_verify_predictable
-             ? static_cast<PredictablePlatform*>(g_platform.get())->platform()
-             : g_platform.get();
+             ? static_cast<PredictablePlatform*>(g_platform)->platform()
+             : g_platform;
 }
 
 static Local<Value> Throw(Isolate* isolate, const char* message) {
@@ -3213,26 +3210,25 @@ int Shell::Main(int argc, char* argv[]) {
           ? v8::platform::InProcessStackDumping::kDisabled
           : v8::platform::InProcessStackDumping::kEnabled;
 
-  std::unique_ptr<platform::tracing::TracingController> tracing;
+  platform::tracing::TracingController* tracing_controller = nullptr;
   if (options.trace_enabled && !i::FLAG_verify_predictable) {
-    tracing = base::make_unique<platform::tracing::TracingController>();
     trace_file.open("v8_trace.json");
+    tracing_controller = new platform::tracing::TracingController();
     platform::tracing::TraceBuffer* trace_buffer =
         platform::tracing::TraceBuffer::CreateTraceBufferRingBuffer(
             platform::tracing::TraceBuffer::kRingBufferChunks,
             platform::tracing::TraceWriter::CreateJSONTraceWriter(trace_file));
-    tracing->Initialize(trace_buffer);
+    tracing_controller->Initialize(trace_buffer);
   }
 
-  platform::tracing::TracingController* tracing_controller = tracing.get();
-  g_platform = v8::platform::NewDefaultPlatform(
+  g_platform = v8::platform::CreateDefaultPlatform(
       0, v8::platform::IdleTaskSupport::kEnabled, in_process_stack_dumping,
-      std::move(tracing));
+      tracing_controller);
   if (i::FLAG_verify_predictable) {
-    g_platform.reset(new PredictablePlatform(std::move(g_platform)));
+    g_platform = new PredictablePlatform(std::unique_ptr<Platform>(g_platform));
   }
 
-  v8::V8::InitializePlatform(g_platform.get());
+  v8::V8::InitializePlatform(g_platform);
   v8::V8::Initialize();
   if (options.natives_blob || options.snapshot_blob) {
     v8::V8::InitializeExternalStartupData(options.natives_blob,
@@ -3347,6 +3343,7 @@ int Shell::Main(int argc, char* argv[]) {
   OnExit(isolate);
   V8::Dispose();
   V8::ShutdownPlatform();
+  delete g_platform;
 
   return result;
 }

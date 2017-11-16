@@ -156,8 +156,8 @@ int main(int argc, char** argv) {
 
   i::CpuFeatures::Probe(true);
   v8::V8::InitializeICUDefaultLocation(argv[0]);
-  std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
-  v8::V8::InitializePlatform(platform.get());
+  v8::Platform* platform = v8::platform::CreateDefaultPlatform();
+  v8::V8::InitializePlatform(platform);
   v8::V8::Initialize();
 
   {
@@ -186,5 +186,6 @@ int main(int argc, char** argv) {
 
   v8::V8::Dispose();
   v8::V8::ShutdownPlatform();
+  delete platform;
   return 0;
 }

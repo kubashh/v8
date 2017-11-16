@@ -34,6 +34,7 @@ CompilationInfo::CompilationInfo(Zone* zone, Isolate* isolate,
 
   if (parse_info->is_eval()) MarkAsEval();
   if (parse_info->is_native()) MarkAsNative();
+  if (parse_info->will_serialize()) MarkAsSerializing();
   if (parse_info->collect_type_profile()) MarkAsCollectTypeProfile();
 }
 

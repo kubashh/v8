@@ -181,7 +181,6 @@ Handle<FixedArray> Factory::NewFixedArray(int size, PretenureFlag pretenure) {
 Handle<PropertyArray> Factory::NewPropertyArray(int size,
                                                 PretenureFlag pretenure) {
   DCHECK_LE(0, size);
-  if (size == 0) return empty_property_array();
   CALL_HEAP_FUNCTION(isolate(),
                      isolate()->heap()->AllocatePropertyArray(size, pretenure),
                      PropertyArray);
@@ -1332,7 +1331,6 @@ Handle<FixedArray> Factory::CopyFixedArrayAndGrow(Handle<FixedArray> array,
 
 Handle<PropertyArray> Factory::CopyPropertyArrayAndGrow(
     Handle<PropertyArray> array, int grow_by, PretenureFlag pretenure) {
-  DCHECK_LE(0, grow_by);
   CALL_HEAP_FUNCTION(
       isolate(),
       isolate()->heap()->CopyArrayAndGrow(*array, grow_by, pretenure),
@@ -2826,6 +2824,15 @@ Handle<JSObject> Factory::NewArgumentsObject(Handle<JSFunction> callee,
         .Assert();
   }
   return result;
+}
+
+
+Handle<JSWeakMap> Factory::NewJSWeakMap() {
+  // TODO(adamk): Currently the map is only created three times per
+  // isolate. If it's created more often, the map should be moved into the
+  // strong root list.
+  Handle<Map> map = NewMap(JS_WEAK_MAP_TYPE, JSWeakMap::kSize);
+  return Handle<JSWeakMap>::cast(NewJSObjectFromMap(map));
 }
 
 Handle<Map> Factory::ObjectLiteralMapFromCache(Handle<Context> native_context,

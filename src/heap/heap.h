@@ -241,11 +241,6 @@ using v8::MemoryPressureLevel;
   V(FixedArray, serialized_templates, SerializedTemplates)                     \
   V(FixedArray, serialized_global_proxy_sizes, SerializedGlobalProxySizes)     \
   V(TemplateList, message_listeners, MessageListeners)                         \
-  /* DeserializeLazy handlers for lazy bytecode deserialization */             \
-  V(Object, deserialize_lazy_handler, DeserializeLazyHandler)                  \
-  V(Object, deserialize_lazy_handler_wide, DeserializeLazyHandlerWide)         \
-  V(Object, deserialize_lazy_handler_extra_wide,                               \
-    DeserializeLazyHandlerExtraWide)                                           \
   /* JS Entries */                                                             \
   V(Code, js_entry_code, JsEntryCode)                                          \
   V(Code, js_construct_entry_code, JsConstructEntryCode)
@@ -416,8 +411,6 @@ enum class ClearRecordedSlots { kYes, kNo };
 enum class FixedArrayVisitationMode { kRegular, kIncremental };
 
 enum class TraceRetainingPathMode { kEnabled, kDisabled };
-
-enum class RetainingPathOption { kDefault, kTrackEphemeralPath };
 
 enum class GarbageCollectionReason {
   kUnknown = 0,
@@ -1100,11 +1093,6 @@ class Heap {
   void RegisterStrongRoots(Object** start, Object** end);
   void UnregisterStrongRoots(Object** start);
 
-  bool IsDeserializeLazyHandler(Code* code);
-  void SetDeserializeLazyHandler(Code* code);
-  void SetDeserializeLazyHandlerWide(Code* code);
-  void SetDeserializeLazyHandlerExtraWide(Code* code);
-
   // ===========================================================================
   // Inline allocation. ========================================================
   // ===========================================================================
@@ -1532,8 +1520,7 @@ class Heap {
   // Adds the given object to the weak table of retaining path targets.
   // On each GC if the marker discovers the object, it will print the retaining
   // path. This requires --track-retaining-path flag.
-  void AddRetainingPathTarget(Handle<HeapObject> object,
-                              RetainingPathOption option);
+  void AddRetainingPathTarget(Handle<HeapObject> object);
 
 // =============================================================================
 #ifdef VERIFY_HEAP
@@ -1811,8 +1798,6 @@ class Heap {
   inline void UpdateAllocationsHash(HeapObject* object);
   inline void UpdateAllocationsHash(uint32_t value);
   void PrintAllocationsHash();
-
-  int NextStressMarkingLimit();
 
   void AddToRingBuffer(const char* string);
   void GetFromRingBuffer(char* buffer);
@@ -2226,12 +2211,9 @@ class Heap {
   // ===========================================================================
 
   void AddRetainer(HeapObject* retainer, HeapObject* object);
-  void AddEphemeralRetainer(HeapObject* retainer, HeapObject* object);
   void AddRetainingRoot(Root root, HeapObject* object);
-  // Returns true if the given object is a target of retaining path tracking.
-  // Stores the option corresponding to the object in the provided *option.
-  bool IsRetainingPathTarget(HeapObject* object, RetainingPathOption* option);
-  void PrintRetainingPath(HeapObject* object, RetainingPathOption option);
+  bool IsRetainingPathTarget(HeapObject* object);
+  void PrintRetainingPath(HeapObject* object);
 
   // The amount of external memory registered through the API.
   int64_t external_memory_;
@@ -2304,10 +2286,6 @@ class Heap {
 
   // Running hash over allocations performed.
   uint32_t raw_allocations_hash_;
-
-  // Starts marking when stress_marking_percentage_% of the marking start limit
-  // is reached.
-  int stress_marking_percentage_;
 
   // How many mark-sweep collections happened.
   unsigned int ms_count_;
@@ -2474,12 +2452,6 @@ class Heap {
 
   std::map<HeapObject*, HeapObject*> retainer_;
   std::map<HeapObject*, Root> retaining_root_;
-  // If an object is retained by an ephemeron, then the retaining key of the
-  // ephemeron is stored in this map.
-  std::map<HeapObject*, HeapObject*> ephemeral_retainer_;
-  // For each index inthe retaining_path_targets_ array this map
-  // stores the option of the corresponding target.
-  std::map<int, RetainingPathOption> retaining_path_target_option_;
 
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;

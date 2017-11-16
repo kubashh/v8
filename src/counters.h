@@ -785,13 +785,10 @@ class RuntimeCallTimer final {
   V(ArrayLengthSetter)                         \
   V(BoundFunctionNameGetter)                   \
   V(BoundFunctionLengthGetter)                 \
-  V(CompileBackgroundAnalyse)                  \
-  V(CompileBackgroundEval)                     \
-  V(CompileBackgroundIgnition)                 \
-  V(CompileBackgroundScript)                   \
   V(CompileDeserialize)                        \
   V(CompileEval)                               \
   V(CompileAnalyse)                            \
+  V(CompileBackgroundIgnition)                 \
   V(CompileFunction)                           \
   V(CompileGetFromOptimizedCodeMap)            \
   V(CompileIgnition)                           \
@@ -806,7 +803,6 @@ class RuntimeCallTimer final {
   V(FunctionCallback)                          \
   V(FunctionPrototypeGetter)                   \
   V(FunctionPrototypeSetter)                   \
-  V(FunctionLengthGetter)                      \
   V(GC_Custom_AllAvailableGarbage)             \
   V(GC_Custom_IncrementalMarkingObserver)      \
   V(GC_Custom_SlowAllocateRaw)                 \
@@ -960,7 +956,6 @@ class RuntimeCallStats final : public ZoneObject {
   // Add all entries from another stats object.
   void Add(RuntimeCallStats* other);
   V8_EXPORT_PRIVATE void Print(std::ostream& os);
-  V8_EXPORT_PRIVATE void Print();
   V8_NOINLINE void Dump(v8::tracing::TracedValue* value);
 
   ThreadId thread_id() const { return thread_id_; }
@@ -1065,7 +1060,7 @@ class RuntimeCallTimerScope {
      20)                                                                       \
   HR(wasm_lazy_compilation_throughput, V8.WasmLazyCompilationThroughput, 1,    \
      10000, 50)                                                                \
-  HR(compile_script_cache_behaviour, V8.CompileScript.CacheBehaviour, 0, 18, 19)
+  HR(compile_script_cache_behaviour, V8.CompileScript.CacheBehaviour, 0, 15, 16)
 
 #define HISTOGRAM_TIMER_LIST(HT)                                               \
   /* Garbage collection timers. */                                             \

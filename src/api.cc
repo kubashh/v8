@@ -489,15 +489,10 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
   virtual void Free(void* data, size_t) { free(data); }
 
   virtual void* Reserve(size_t length) {
-    size_t page_size = base::OS::AllocatePageSize();
-    size_t allocated = RoundUp(length, page_size);
     void* address =
-        base::OS::Allocate(base::OS::GetRandomMmapAddr(), allocated, page_size,
-                           base::OS::MemoryPermission::kNoAccess);
+        base::OS::ReserveRegion(length, base::OS::GetRandomMmapAddr());
 #if defined(LEAK_SANITIZER)
-    if (address != nullptr) {
-      __lsan_register_root_region(address, allocated);
-    }
+    __lsan_register_root_region(address, length);
 #endif
     return address;
   }
@@ -509,9 +504,7 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
         return Free(data, length);
       }
       case v8::ArrayBuffer::Allocator::AllocationMode::kReservation: {
-        bool result = base::OS::Free(data, length);
-        DCHECK(result);
-        USE(result);
+        base::OS::ReleaseRegion(data, length);
         return;
       }
     }
@@ -2613,25 +2606,19 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
   }
 
   source->info->set_script(script);
+  if (source->info->literal() == nullptr) {
+    source->info->pending_error_handler()->ReportErrors(
+        isolate, script, source->info->ast_value_factory());
+  }
   source->parser->UpdateStatistics(isolate, script);
   source->info->UpdateStatisticsAfterBackgroundParse(isolate);
   source->parser->HandleSourceURLComments(isolate, script);
 
   i::Handle<i::SharedFunctionInfo> result;
-  if (source->info->literal() == nullptr) {
-    // Parsing has failed - report error messages.
-    source->info->pending_error_handler()->ReportErrors(
-        isolate, script, source->info->ast_value_factory());
-  } else {
-    // Parsing has succeeded - finalize compile.
-    if (i::FLAG_background_compile) {
-      result = i::Compiler::GetSharedFunctionInfoForBackgroundCompile(
-          script, source->info.get(), str->length(),
-          source->outer_function_job.get(), &source->inner_function_jobs);
-    } else {
-      result = i::Compiler::GetSharedFunctionInfoForStreamedScript(
-          script, source->info.get(), str->length());
-    }
+  if (source->info->literal() != nullptr) {
+    // Parsing has succeeded.
+    result = i::Compiler::GetSharedFunctionInfoForStreamedScript(
+        script, source->info.get(), str->length());
   }
   has_pending_exception = result.is_null();
   if (has_pending_exception) isolate->ReportPendingMessages();
@@ -3164,6 +3151,101 @@ bool StackFrame::IsConstructor() const {
 }
 
 bool StackFrame::IsWasm() const { return Utils::OpenHandle(this)->is_wasm(); }
+
+// --- N a t i v e W e a k M a p ---
+
+Local<NativeWeakMap> NativeWeakMap::New(Isolate* v8_isolate) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::Handle<i::JSWeakMap> weakmap = isolate->factory()->NewJSWeakMap();
+  i::JSWeakCollection::Initialize(weakmap, isolate);
+  return Utils::NativeWeakMapToLocal(weakmap);
+}
+
+
+void NativeWeakMap::Set(Local<Value> v8_key, Local<Value> v8_value) {
+  i::Handle<i::JSWeakMap> weak_collection = Utils::OpenHandle(this);
+  i::Isolate* isolate = weak_collection->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  i::Handle<i::Object> key = Utils::OpenHandle(*v8_key);
+  i::Handle<i::Object> value = Utils::OpenHandle(*v8_value);
+  if (!key->IsJSReceiver() && !key->IsSymbol()) {
+    DCHECK(false);
+    return;
+  }
+  i::Handle<i::ObjectHashTable> table(
+      i::ObjectHashTable::cast(weak_collection->table()));
+  if (!table->IsKey(isolate, *key)) {
+    DCHECK(false);
+    return;
+  }
+  int32_t hash = key->GetOrCreateHash(isolate)->value();
+  i::JSWeakCollection::Set(weak_collection, key, value, hash);
+}
+
+Local<Value> NativeWeakMap::Get(Local<Value> v8_key) const {
+  i::Handle<i::JSWeakMap> weak_collection = Utils::OpenHandle(this);
+  i::Isolate* isolate = weak_collection->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::Handle<i::Object> key = Utils::OpenHandle(*v8_key);
+  if (!key->IsJSReceiver() && !key->IsSymbol()) {
+    DCHECK(false);
+    return v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+  }
+  i::Handle<i::ObjectHashTable> table(
+      i::ObjectHashTable::cast(weak_collection->table()));
+  if (!table->IsKey(isolate, *key)) {
+    DCHECK(false);
+    return v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+  }
+  i::Handle<i::Object> lookup(table->Lookup(key), isolate);
+  if (lookup->IsTheHole(isolate))
+    return v8::Undefined(reinterpret_cast<v8::Isolate*>(isolate));
+  return Utils::ToLocal(lookup);
+}
+
+
+bool NativeWeakMap::Has(Local<Value> v8_key) {
+  i::Handle<i::JSWeakMap> weak_collection = Utils::OpenHandle(this);
+  i::Isolate* isolate = weak_collection->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  i::Handle<i::Object> key = Utils::OpenHandle(*v8_key);
+  if (!key->IsJSReceiver() && !key->IsSymbol()) {
+    DCHECK(false);
+    return false;
+  }
+  i::Handle<i::ObjectHashTable> table(
+      i::ObjectHashTable::cast(weak_collection->table()));
+  if (!table->IsKey(isolate, *key)) {
+    DCHECK(false);
+    return false;
+  }
+  i::Handle<i::Object> lookup(table->Lookup(key), isolate);
+  return !lookup->IsTheHole(isolate);
+}
+
+
+bool NativeWeakMap::Delete(Local<Value> v8_key) {
+  i::Handle<i::JSWeakMap> weak_collection = Utils::OpenHandle(this);
+  i::Isolate* isolate = weak_collection->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+  i::HandleScope scope(isolate);
+  i::Handle<i::Object> key = Utils::OpenHandle(*v8_key);
+  if (!key->IsJSReceiver() && !key->IsSymbol()) {
+    DCHECK(false);
+    return false;
+  }
+  i::Handle<i::ObjectHashTable> table(
+      i::ObjectHashTable::cast(weak_collection->table()));
+  if (!table->IsKey(isolate, *key)) {
+    DCHECK(false);
+    return false;
+  }
+  int32_t hash = key->GetOrCreateHash(isolate)->value();
+  return i::JSWeakCollection::Delete(weak_collection, key, hash);
+}
 
 
 // --- J S O N ---
