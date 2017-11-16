@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adcaceee_31d8eab1",
+        "filename": "src/frames.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-16T11:31:50Z",
+      "side": 1,
+      "message": "This should never appear on the stack when we are actually in the interpreter (since it tail calls the actual IET before entering the interpreter). Could you remove this please.",
+      "range": {
+        "startLine": 180,
+        "startChar": 9,
+        "endLine": 181,
+        "endChar": 60
+      },
+      "revId": "d32c8d71d31c0d8a18d30ba42a34ec09bf8dbcb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eea178c_3291b80b",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-16T11:31:50Z",
+      "side": 1,
+      "message": "Can we have a single bottleneck for this logic which is used both here and in compiler.cc",
+      "range": {
+        "startLine": 223,
+        "startChar": 2,
+        "endLine": 229,
+        "endChar": 3
+      },
+      "revId": "d32c8d71d31c0d8a18d30ba42a34ec09bf8dbcb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
