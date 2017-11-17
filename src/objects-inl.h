@@ -2982,47 +2982,48 @@ int Map::instance_size() const {
   return RELAXED_READ_BYTE_FIELD(this, kInstanceSizeOffset) << kPointerSizeLog2;
 }
 
-int Map::inobject_properties_or_constructor_function_index() const {
+int Map::inobject_properties_start_or_constructor_function_index() const {
   return RELAXED_READ_BYTE_FIELD(
-      this, kInObjectPropertiesOrConstructorFunctionIndexOffset);
+      this, kInObjectPropertiesStartOrConstructorFunctionIndexOffset);
 }
 
-
-void Map::set_inobject_properties_or_constructor_function_index(int value) {
+void Map::set_inobject_properties_start_or_constructor_function_index(
+    int value) {
   DCHECK_LE(0, value);
   DCHECK_LT(value, 256);
-  RELAXED_WRITE_BYTE_FIELD(this,
-                           kInObjectPropertiesOrConstructorFunctionIndexOffset,
-                           static_cast<byte>(value));
+  RELAXED_WRITE_BYTE_FIELD(
+      this, kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
+      static_cast<byte>(value));
+}
+
+int Map::GetInObjectPropertiesStart() const {
+  DCHECK(IsJSObjectMap());
+  return inobject_properties_start_or_constructor_function_index();
+}
+
+void Map::SetInObjectPropertiesStart(int value) {
+  DCHECK(IsJSObjectMap());
+  set_inobject_properties_start_or_constructor_function_index(value);
 }
 
 int Map::GetInObjectProperties() const {
   DCHECK(IsJSObjectMap());
-  return inobject_properties_or_constructor_function_index();
-}
-
-
-void Map::SetInObjectProperties(int value) {
-  DCHECK(IsJSObjectMap());
-  set_inobject_properties_or_constructor_function_index(value);
+  return instance_size() / kPointerSize - GetInObjectPropertiesStart();
 }
 
 int Map::GetConstructorFunctionIndex() const {
   DCHECK(IsPrimitiveMap());
-  return inobject_properties_or_constructor_function_index();
+  return inobject_properties_start_or_constructor_function_index();
 }
 
 
 void Map::SetConstructorFunctionIndex(int value) {
   DCHECK(IsPrimitiveMap());
-  set_inobject_properties_or_constructor_function_index(value);
+  set_inobject_properties_start_or_constructor_function_index(value);
 }
 
 int Map::GetInObjectPropertyOffset(int index) const {
-  // Adjust for the number of properties stored in the object.
-  index -= GetInObjectProperties();
-  DCHECK_LE(index, 0);
-  return instance_size() + (index * kPointerSize);
+  return (GetInObjectPropertiesStart() + index) * kPointerSize;
 }
 
 
