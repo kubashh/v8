@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "59f9583f_d03a2962",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6619,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Awesome suggestions!",
+      "parentUuid": "c39fdc6c_972e564d",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99638de4_e804d0b4",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03a862e9_3c4214f1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6621,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99638de4_e804d0b4",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a7c4859_212d0537",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6626,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f352eefb_822dd8de",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43b2486b_2bc02d87",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "4b630e9c_de262062",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6632,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43b2486b_2bc02d87",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23978d9b_c8b0e4e8",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -84,6 +156,24 @@
       "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81954cfa_2e1dfc11",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6659,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23978d9b_c8b0e4e8",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "d73fc928_566f9004",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2435,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "SetConstructorFunctionIndex asserts that the map is a IsPrimitiveMap().\n\nThis does not hold for other maps like fixed array map.",
+      "parentUuid": "a323ee05_38465296",
+      "range": {
+        "startLine": 2435,
+        "startChar": 9,
+        "endLine": 2435,
+        "endChar": 68
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18f6e46f_fd923df3",
         "filename": "src/ic/keyed-store-generic.cc",
         "patchSetId": 4
@@ -124,6 +238,24 @@
       "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9cf81b6_67e4887f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18f6e46f_fd923df3",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "98901142_332273c7",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebf1a0a0_3cea0e95",
+      "range": {
+        "startLine": 2999,
+        "startChar": 9,
+        "endLine": 2999,
+        "endChar": 35
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce96c5a4_8f02b3dc",
         "filename": "src/objects-inl.h",
         "patchSetId": 4
@@ -164,6 +320,24 @@
       "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aca8f1ea_f04b802f",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce96c5a4_8f02b3dc",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +361,30 @@
       "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d388f7e_99ffc064",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-11-17T20:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61413afd_51c10d47",
+      "range": {
+        "startLine": 3011,
+        "startChar": 9,
+        "endLine": 3011,
+        "endChar": 39
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
