@@ -16,6 +16,24 @@
       "revId": "7c5ab148685abff368b510d6ea923d3fff25a4f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e338454_2a23b4da",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-17T07:41:30Z",
+      "side": 1,
+      "message": "I\u0027d tend to keep this around, it seems reasonable to expect valid flags passed to JSRegExp::New, and as you said it should make new flag values just work. No strong opinion though.",
+      "parentUuid": "45ac550f_70787601",
+      "revId": "7c5ab148685abff368b510d6ea923d3fff25a4f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
