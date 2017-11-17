@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3e356af_f3641e6f",
+        "filename": "test/unittests/base/functional-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-17T11:02:17Z",
+      "side": 1,
+      "message": "MSVC complains that for unsigned types, \"-max\" will still be unsigned.\nThis CL will have to be reverted until this is fixed.",
+      "range": {
+        "startLine": 245,
+        "startChar": 60,
+        "endLine": 245,
+        "endChar": 64
+      },
+      "revId": "3e0bf580e8424e37ae2ed311616d109e91052292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
