@@ -805,6 +805,8 @@ Handle<Map> CreateNonConstructorMap(Handle<Map> source_map,
     // TODO(ulan): Do not change instance size after map creation.
     int unused_property_fields = map->UnusedPropertyFields();
     map->set_instance_size(map->instance_size() + kPointerSize);
+    // The prototype slot shifts the in-object properties area by one slot.
+    map->SetInObjectPropertiesStart(map->GetInObjectPropertiesStart() + 1);
     map->set_has_prototype_slot(true);
     map->SetInObjectUnusedPropertyFields(unused_property_fields);
   }
@@ -3367,6 +3369,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     // TODO(ulan): Do not change instance size after map creation.
     int unused_property_fields = proxy_function_map->UnusedPropertyFields();
     proxy_function_map->set_instance_size(JSFunction::kSizeWithPrototype);
+    // The prototype slot shifts the in-object properties area by one slot.
+    proxy_function_map->SetInObjectPropertiesStart(
+        proxy_function_map->GetInObjectPropertiesStart() + 1);
     proxy_function_map->set_has_prototype_slot(true);
     proxy_function_map->set_is_constructor(true);
     proxy_function_map->SetInObjectUnusedPropertyFields(unused_property_fields);

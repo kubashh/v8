@@ -1368,13 +1368,13 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapInstanceSize(SloppyTNode<Map> map) {
       LoadObjectField(map, Map::kInstanceSizeOffset, MachineType::Uint8()));
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectProperties(
+TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectPropertiesStart(
     SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  // See Map::GetInObjectProperties() for details.
+  // See Map::GetInObjectPropertiesStart() for details.
   CSA_ASSERT(this, IsJSObjectMap(map));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -1384,7 +1384,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
   // See Map::GetConstructorFunctionIndex() for details.
   CSA_ASSERT(this, IsPrimitiveInstanceType(LoadMapInstanceType(map)));
   return ChangeInt32ToIntPtr(LoadObjectField(
-      map, Map::kInObjectPropertiesOrConstructorFunctionIndexOffset,
+      map, Map::kInObjectPropertiesStartOrConstructorFunctionIndexOffset,
       MachineType::Uint8()));
 }
 
@@ -6616,7 +6616,9 @@ void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
     Node* representation =
         DecodeWord32<PropertyDetails::RepresentationField>(details);
 
-    Node* inobject_properties = LoadMapInobjectProperties(map);
+    Node* inobject_properties_start = LoadMapInobjectPropertiesStart(map);
+    Node* inobject_properties =
+        IntPtrSub(LoadMapInstanceSize(map), inobject_properties_start);
 
     Label if_inobject(this), if_backing_store(this);
     VARIABLE(var_double_value, MachineRepresentation::kFloat64);
@@ -6626,9 +6628,8 @@ void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
     BIND(&if_inobject);
     {
       Comment("if_inobject");
-      Node* field_offset = TimesPointerSize(
-          IntPtrAdd(IntPtrSub(LoadMapInstanceSize(map), inobject_properties),
-                    field_index));
+      Node* field_offset =
+          TimesPointerSize(IntPtrAdd(inobject_properties_start, field_index));
 
       Label if_double(this), if_tagged(this);
       Branch(Word32NotEqual(representation,
