@@ -1090,6 +1090,12 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
     PrintF(trace_scope_->file(), "(%d)\n", height - 1);
   }
 
+  if (ArgumentsAdaptorFrameConstants::kHasPadding) {
+    output_offset -= kPointerSize;
+    WriteValueToOutput(isolate()->heap()->the_hole_value(), 0, frame_index,
+                       output_offset, "padding ");
+  }
+
   DCHECK_EQ(0, output_offset);
 
   Builtins* builtins = isolate_->builtins();

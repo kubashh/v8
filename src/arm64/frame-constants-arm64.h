@@ -37,6 +37,16 @@ class JavaScriptFrameConstants : public AllStatic {
   static const int kFunctionOffset = StandardFrameConstants::kFunctionOffset;
 };
 
+class ArgumentsAdaptorFrameConstants : public TypedFrameConstants {
+ public:
+  // FP-relative.
+  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static const int kPaddingOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
+  static const bool kHasPadding = true;
+  DEFINE_TYPED_FRAME_SIZES(3);
+};
+
 }  // namespace internal
 }  // namespace v8
 

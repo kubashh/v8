@@ -42,6 +42,15 @@ class JavaScriptFrameConstants : public AllStatic {
   static const int kReceiverOffset = -1 * kPointerSize;
 };
 
+class ArgumentsAdaptorFrameConstants : public TypedFrameConstants {
+ public:
+  // FP-relative.
+  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static const bool kHasPadding = false;
+  DEFINE_TYPED_FRAME_SIZES(2);
+};
+
 }  // namespace internal
 }  // namespace v8
 

@@ -212,14 +212,6 @@ class TypedFrameConstants : public CommonFrameConstants {
   static const int kFixedFrameSizeFromFp = TYPED_FRAME_SIZE_FROM_SP(count); \
   static const int kFixedSlotCountFromFp = kFixedFrameSizeFromFp / kPointerSize
 
-class ArgumentsAdaptorFrameConstants : public TypedFrameConstants {
- public:
-  // FP-relative.
-  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
-  DEFINE_TYPED_FRAME_SIZES(2);
-};
-
 class BuiltinFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.

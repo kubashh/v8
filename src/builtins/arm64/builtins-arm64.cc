@@ -2038,10 +2038,9 @@ static void EnterArgumentsAdaptorFrame(MacroAssembler* masm) {
   __ Push(lr, fp);
   __ Mov(x11, StackFrame::TypeToMarker(StackFrame::ARGUMENTS_ADAPTOR));
   __ Push(x11, x1);  // x1: function
-  // We do not yet push the number of arguments, to maintain a 16-byte aligned
-  // stack pointer. This is done in step (3) in
-  // Generate_ArgumentsAdaptorTrampoline.
-  __ Add(fp, jssp, StandardFrameConstants::kFixedFrameSizeFromFp);
+  __ SmiTag(x11, x0);  // x0: number of arguments.
+  __ Push(x11, padreg);
+  __ Add(fp, jssp, ArgumentsAdaptorFrameConstants::kFixedFrameSizeFromFp);
 }
 
 static void LeaveArgumentsAdaptorFrame(MacroAssembler* masm) {
@@ -2669,10 +2668,10 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   Register argc_unused_actual = x14;
   Register scratch1 = x15, scratch2 = x16;
 
-  // We need slots for the expected arguments, with two extra slots for the
-  // number of actual arguments and the receiver.
+  // We need slots for the expected arguments, with one extra slot for the
+  // receiver.
   __ RecordComment("-- Stack check --");
-  __ Add(scratch1, argc_expected, 2);
+  __ Add(scratch1, argc_expected, 1);
   Generate_StackOverflowCheck(masm, scratch1, &stack_overflow);
 
   // Round up number of slots to be even, to maintain stack alignment.
@@ -2730,11 +2729,10 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   __ Cmp(copy_end, copy_to);
   __ B(hi, &copy_2_by_2);
 
-  // (3) Store number of actual arguments and padding. The padding might be
-  // unnecessary, in which case it will be overwritten by the receiver.
-  __ RecordComment("-- Store number of args and padding --");
-  __ SmiTag(scratch1, argc_actual);
-  __ Stp(xzr, scratch1, MemOperand(fp, -4 * kPointerSize));
+  // (3) Store padding, which might be overwritten by the receiver, if it is not
+  // necessary.
+  __ RecordComment("-- Store padding --");
+  __ Str(padreg, MemOperand(fp, -5 * kPointerSize));
 
   // (4) Store receiver. Calculate target address from jssp to avoid checking
   // for padding. Storing the receiver will overwrite either the extra slot
