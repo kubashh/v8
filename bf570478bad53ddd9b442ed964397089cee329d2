@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c39fdc6c_972e564d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6619,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "I think that with the following changes we can reduce register pressure because only two values (field_index and instance_size_in_words) are alive till Branch(..., \u0026if_inobject, \u0026if_backing_store) vs three registers (field_index, inobject_properties, inobject_properties_start):\n\nJust\n  field_index \u003d IntPtrAdd(field_index, LoadMapInobjectPropertiesStart(map));",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99638de4_e804d0b4",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6621,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Just\n  Node* instance_size_in_words \u003d LoadMapInstanceSize(map);",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f352eefb_822dd8de",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6626,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Just\n  Branch(UintPtrLessThan(field_index, instance_size_in_words),",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43b2486b_2bc02d87",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6632,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Node* field_offset \u003d TimesPointerSize(field_index);",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23978d9b_c8b0e4e8",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6659,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Just\n  field_index \u003d IntPtrSub(field_index, instance_size_in_words);",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a323ee05_38465296",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2435,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "To be precise:\n  map-\u003eSetConstructorFunctionIndex(0);\n\nand we can probably drop the DCHECK_EQ(inobject_properties, 0);",
+      "range": {
+        "startLine": 2435,
+        "startChar": 9,
+        "endLine": 2435,
+        "endChar": 68
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18f6e46f_fd923df3",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Please apply the same changes here.",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf1a0a0_3cea0e95",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "Maybe\n  GetInObjectPropertiesStartInWords()",
+      "range": {
+        "startLine": 2999,
+        "startChar": 9,
+        "endLine": 2999,
+        "endChar": 35
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce96c5a4_8f02b3dc",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "SetInObjectPropertiesStartInWords",
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61413afd_51c10d47",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-11-17T19:44:20Z",
+      "side": 1,
+      "message": "instance_size_in_words() would be useful here.",
+      "range": {
+        "startLine": 3011,
+        "startChar": 9,
+        "endLine": 3011,
+        "endChar": 39
+      },
+      "revId": "bf570478bad53ddd9b442ed964397089cee329d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
