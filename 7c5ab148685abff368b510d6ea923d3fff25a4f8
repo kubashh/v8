@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45ac550f_70787601",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2017-11-17T00:48:23Z",
+      "side": 1,
+      "message": "It looks like this code may be unnecessary at this point, should I delete it along with JSRegExp::FlagCount() and the accompanying unittest? Or do we want this in case we add more flags later (how should we avoid code rot in that case)?",
+      "revId": "7c5ab148685abff368b510d6ea923d3fff25a4f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
