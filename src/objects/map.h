@@ -93,7 +93,7 @@ typedef std::vector<Handle<Map>> MapHandles;
 //      | Byte     | If Map for a primitive type:                |
 //      |          |   native context index for constructor fn   |
 //      |          | If Map for an Object type:                  |
-//      |          |   number of in-object properties            |
+//      |          |   inobject properties start offset in words |
 //      +----------+---------------------------------------------+
 //      | Byte     | [used_instance_size_in_words]               |
 //      |          | For JSObject in fast mode this byte encodes |
@@ -169,14 +169,16 @@ class Map : public HeapObject {
   // a fixed size.
   DECL_INT_ACCESSORS(instance_size)
 
-  // [inobject_properties_or_constructor_function_index]: Provides access
-  // to the inobject properties in case of JSObject maps, or the constructor
-  // function index in case of primitive maps.
-  DECL_INT_ACCESSORS(inobject_properties_or_constructor_function_index)
+  // [inobject_properties_start_or_constructor_function_index]:
+  // Provides access to the inobject properties start offset in words in case of
+  // JSObject maps, or the constructor function index in case of primitive maps.
+  DECL_INT_ACCESSORS(inobject_properties_start_or_constructor_function_index)
 
+  // Get/set the in-object property area start offset in words in the object.
+  inline int GetInObjectPropertiesStart() const;
+  inline void SetInObjectPropertiesStart(int value);
   // Count of properties allocated in the object (JSObject only).
   inline int GetInObjectProperties() const;
-  inline void SetInObjectProperties(int value);
   // Index of the constructor function in the native context (primitives only),
   // or the special sentinel value to indicate that there is no object wrapper
   // for the primitive (i.e. in case of null or undefined).
@@ -732,7 +734,7 @@ class Map : public HeapObject {
 #define MAP_FIELDS(V)                                                       \
   /* Raw data fields. */                                                    \
   V(kInstanceSizeOffset, kUInt8Size)                                        \
-  V(kInObjectPropertiesOrConstructorFunctionIndexOffset, kUInt8Size)        \
+  V(kInObjectPropertiesStartOrConstructorFunctionIndexOffset, kUInt8Size)   \
   V(kUsedInstanceSizeInWordsOffset, kUInt8Size)                             \
   V(kVisitorIdOffset, kUInt8Size)                                           \
   V(kInstanceTypeOffset, kUInt8Size)                                        \
