@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "006db766_f7a8b824",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-20T08:18:46Z",
+      "side": 1,
+      "message": "What looks like a ton of changes, is is just 2 spaces more indentation in each line.",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 771,
+        "endChar": 22
+      },
+      "revId": "e6fa87f380db297e70ef76faf5e52b3a1ef8e87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
