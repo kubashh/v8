@@ -699,6 +699,7 @@ namespace internal {
   TFC(Equal, Compare, 1)                                                       \
   TFC(SameValue, Compare, 1)                                                   \
   TFC(StrictEqual, Compare, 1)                                                 \
+  TFS(Negate, kValue)                                                          \
                                                                                \
   /* Object */                                                                 \
   TFJ(ObjectConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)      \
