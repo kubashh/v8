@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b88d4381_8dad1bc1",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-11-20T17:32:58Z",
+      "side": 1,
+      "message": "When does this happen? I thought the lazy deserialize builtin tail-calls after it executed to deserialize the builtin. So it should not be on the stack?",
+      "range": {
+        "startLine": 1782,
+        "startChar": 19,
+        "endLine": 1782,
+        "endChar": 50
+      },
+      "revId": "51b2b1eb3c8ef90402c4015228d44346120f43ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
