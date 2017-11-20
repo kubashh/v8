@@ -22,6 +22,30 @@
       "revId": "51b2b1eb3c8ef90402c4015228d44346120f43ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddef544b_d9961253",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2017-11-20T19:45:02Z",
+      "side": 1,
+      "message": "removed.",
+      "parentUuid": "b88d4381_8dad1bc1",
+      "range": {
+        "startLine": 1782,
+        "startChar": 19,
+        "endLine": 1782,
+        "endChar": 50
+      },
+      "revId": "51b2b1eb3c8ef90402c4015228d44346120f43ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
