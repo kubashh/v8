@@ -3081,6 +3081,48 @@ WASM_EXEC_TEST(IfInsideUnreachable) {
   CHECK_EQ(17, r.Call());
 }
 
+namespace {
+template <typename T>
+V8_NOINLINE unsigned testRegListSpeed(int* start, int* end) {
+  unsigned result = 0;
+  T tmp = T{0};
+  for (size_t num = 1024 * 1024;; num *= 2) {
+    base::ElapsedTimer t;
+    t.Start();
+    for (size_t i = 0; i < num; ++i) {
+      for (int* t = start; t < end; ++t) {
+        tmp |= (T{1} << (*t & (sizeof(T) * 8 - 1)));
+        result += base::bits::CountTrailingZeros(tmp);
+      }
+      for (int* t = start; t < end; ++t) {
+        tmp &= ~(T{1} << (*t & (sizeof(T) * 8 - 1)));
+        result += base::bits::CountTrailingZeros(tmp);
+      }
+    }
+    base::TimeDelta d = t.Elapsed();
+    printf("n=%zu, ms=%.2f, avg ns=%.2f\n", num, d.InSecondsF(),
+           d.InSecondsF() * 1e9 / num);
+    if (d.InMilliseconds() > 2000) break;
+  }
+  return result;
+}
+}  // namespace
+
+TEST(SpeedTestDifferentRegLists) {
+  static int regs[] = {5, 2, 7, 1, 4, 2, 3, 4, 1};
+  printf("uint16_t\n");
+  testRegListSpeed<uint16_t>(regs, regs + arraysize(regs));
+
+  printf("uint32_t\n");
+  testRegListSpeed<uint32_t>(regs, regs + arraysize(regs));
+
+  printf("uint64_t\n");
+  testRegListSpeed<uint64_t>(regs, regs + arraysize(regs));
+
+  printf("finished\n");
+  abort();
+}
+
 #undef B1
 #undef B2
 #undef RET
