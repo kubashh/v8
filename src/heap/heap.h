@@ -807,6 +807,18 @@ class Heap {
   // Print short heap statistics.
   void PrintShortHeapStatistics();
 
+  uintptr_t code_space_memory_modification_scope_depth() {
+    return code_space_memory_modification_scope_depth_;
+  }
+
+  void increment_code_space_memory_modification_scope_depth() {
+    code_space_memory_modification_scope_depth_++;
+  }
+
+  void decrement_code_space_memory_modification_scope_depth() {
+    code_space_memory_modification_scope_depth_--;
+  }
+
   inline HeapState gc_state() { return gc_state_; }
   void SetGCState(HeapState state);
 
@@ -2314,6 +2326,10 @@ class Heap {
   LargeObjectSpace* lo_space_;
   // Map from the space id to the space.
   Space* space_[LAST_SPACE + 1];
+
+  // Holds the number of open CodeSpaceMemoryModificationScopes.
+  uintptr_t code_space_memory_modification_scope_depth_;
+
   HeapState gc_state_;
   int gc_post_processing_depth_;
 
