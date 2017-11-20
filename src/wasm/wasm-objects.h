@@ -74,7 +74,8 @@ class WasmModuleObject : public JSObject {
 
   enum {  // --
     kCompiledModuleIndex,
-    kFieldCount
+    kFieldCount,
+    kAfterFieldCount  // TODO(clemensh): Revert this change
   };
 
   DEF_SIZE(JSObject)
