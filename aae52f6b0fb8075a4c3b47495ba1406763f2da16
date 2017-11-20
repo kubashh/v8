@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90c7b115_37cfed26",
+        "filename": "test/mjsunit/regress/regress-707187.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-20T12:10:26Z",
+      "side": 0,
+      "message": "Previously worked due to type confusion which led to interpreting this as -1 in runtime-regexp.cc.",
+      "revId": "aae52f6b0fb8075a4c3b47495ba1406763f2da16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d362af04_f68cb615",
+        "filename": "src/runtime/runtime-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-20T12:10:26Z",
+      "side": 1,
+      "message": "Note: OOM could be triggered here long before we check for kTooManyArguments below. I\u0027m not sure there\u0027s much we can do about this; there\u0027s no real limit we can enforce, and the spec says to build a list of args. Running OOM seems to be the right thing to do here. WDYT?",
+      "revId": "19c4dc749d070063e63ff49589f0d333cc217ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
