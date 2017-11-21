@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07efd2b0_ea29fc87",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-11-21T20:54:26Z",
+      "side": 1,
+      "message": "Why not just include trap-handler.h instead?",
+      "revId": "dc09509564daf408f4a0ac788106fa45a0f0934f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e36a70fe_1190924d",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-11-21T20:54:26Z",
+      "side": 1,
+      "message": "And here too?",
+      "revId": "dc09509564daf408f4a0ac788106fa45a0f0934f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
