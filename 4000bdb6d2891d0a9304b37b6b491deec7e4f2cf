@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad1e2c09_6b8c1372",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-11-21T10:49:46Z",
+      "side": 1,
+      "message": "This always enables emitting external references for these code kinds. Is there any indication leading up to this point that we are going to serialize this wasm module?",
+      "range": {
+        "startLine": 85,
+        "startChar": 10,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "4000bdb6d2891d0a9304b37b6b491deec7e4f2cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
