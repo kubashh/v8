@@ -22,6 +22,30 @@
       "revId": "4000bdb6d2891d0a9304b37b6b491deec7e4f2cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e6b565_808c31ca",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1125279
+      },
+      "writtenOn": "2017-11-21T14:48:29Z",
+      "side": 1,
+      "message": "We must assume wasm gets serialized, unfortunately.",
+      "parentUuid": "ad1e2c09_6b8c1372",
+      "range": {
+        "startLine": 85,
+        "startChar": 10,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "4000bdb6d2891d0a9304b37b6b491deec7e4f2cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
