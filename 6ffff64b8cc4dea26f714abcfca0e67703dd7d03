@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48464905_04417484",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1788,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2017-11-21T14:38:21Z",
+      "side": 1,
+      "message": "What about PromiseFinally, does that change anything here?",
+      "revId": "6ffff64b8cc4dea26f714abcfca0e67703dd7d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
