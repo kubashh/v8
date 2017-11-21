@@ -3435,6 +3435,8 @@ bool AsyncStreamingProcessor::ProcessFunctionBody(Vector<const uint8_t> bytes,
                                        bytes, name);
   }
   ++next_function_;
+  // This method always succeeds. The return value is necessary to comply with
+  // the StreamingProcessor interface.
   return true;
 }
 
