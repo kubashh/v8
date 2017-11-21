@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eff57aaa_78c8f611",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-21T21:42:13Z",
+      "side": 1,
+      "message": "This is mandated by the style guide:\nhttps://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md#forward-declarations-vs_includes\n\n\"\nUnlike the Google style guide, Chromium style prefers forward declarations to #includes where possible. This can reduce compile times and result in fewer files needing recompilation when a header changes.\n\"",
+      "parentUuid": "07efd2b0_ea29fc87",
+      "revId": "dc09509564daf408f4a0ac788106fa45a0f0934f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e36a70fe_1190924d",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "dc09509564daf408f4a0ac788106fa45a0f0934f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86adb0fc_e0536bbe",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-11-21T21:42:13Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "e36a70fe_1190924d",
+      "revId": "dc09509564daf408f4a0ac788106fa45a0f0934f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
