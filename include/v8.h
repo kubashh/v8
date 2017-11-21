@@ -9156,7 +9156,6 @@ class Internals {
   static const int kNodeStateIsWeakValue = 2;
   static const int kNodeStateIsPendingValue = 3;
   static const int kNodeStateIsNearDeathValue = 4;
-  static const int kNodeIsIndependentShift = 3;
   static const int kNodeIsActiveShift = 4;
 
   static const int kFirstNonstringType = 0x80;
@@ -9355,15 +9354,8 @@ void Persistent<T, M>::Copy(const Persistent<S, M2>& that) {
   M::Copy(that, this);
 }
 
-
 template <class T>
-bool PersistentBase<T>::IsIndependent() const {
-  typedef internal::Internals I;
-  if (this->IsEmpty()) return false;
-  return I::GetNodeFlag(reinterpret_cast<internal::Object**>(this->val_),
-                        I::kNodeIsIndependentShift);
-}
-
+bool PersistentBase<T>::IsIndependent() const {}
 
 template <class T>
 bool PersistentBase<T>::IsNearDeath() const {
@@ -9445,13 +9437,7 @@ void PersistentBase<T>::RegisterExternalReference(Isolate* isolate) const {
 }
 
 template <class T>
-void PersistentBase<T>::MarkIndependent() {
-  typedef internal::Internals I;
-  if (this->IsEmpty()) return;
-  I::UpdateNodeFlag(reinterpret_cast<internal::Object**>(this->val_),
-                    true,
-                    I::kNodeIsIndependentShift);
-}
+void PersistentBase<T>::MarkIndependent() {}
 
 template <class T>
 void PersistentBase<T>::MarkActive() {
