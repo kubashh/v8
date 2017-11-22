@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a46ecb0_5017888e",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-11-22T09:37:13Z",
+      "side": 1,
+      "message": "Hm. Good point. I was thinking about ast.literal_eval, but it can\u0027t evaluate expressions. Well, due to a lack of better alternative, let\u0027s leave it as is...",
+      "parentUuid": "8d1e24a7_9e90e6d8",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 15
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e861e51e_a4c7db1a",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 1
@@ -69,6 +93,30 @@
       "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0370789_2093a018",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-11-22T09:37:13Z",
+      "side": 1,
+      "message": "Not needed anymore. See discussion above.",
+      "parentUuid": "e861e51e_a4c7db1a",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 13
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
