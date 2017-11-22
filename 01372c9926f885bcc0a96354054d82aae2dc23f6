@@ -22,6 +22,30 @@
       "revId": "01372c9926f885bcc0a96354054d82aae2dc23f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3edffd_ee6afb08",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-11-22T18:01:49Z",
+      "side": 1,
+      "message": "Unfortunately, I don\u0027t think it\u0027s possible. In page_allocator, the equivalent to OS::Release is DiscardSystemPages, and there we call DiscardVirtualMemory, falling back to a call to VirtualAlloc with flag MEM_RESET. In both cases, the address space stays reserved.\n\nhttps://cs.chromium.org/chromium/src/base/allocator/partition_allocator/page_allocator.cc?rcl\u003dc3b0a9ba7ca55a3c11ff1179176992056dfcaeec\u0026l\u003d344",
+      "parentUuid": "c73cd919_dbefc1e9",
+      "range": {
+        "startLine": 830,
+        "startChar": 9,
+        "endLine": 830,
+        "endChar": 20
+      },
+      "revId": "01372c9926f885bcc0a96354054d82aae2dc23f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
