@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d1e24a7_9e90e6d8",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-22T09:23:00Z",
+      "side": 1,
+      "message": "But with execution-free format we won\u0027t be able to easily check conditions inside status file. I got the impression that this is the reason behind executable status file.",
+      "parentUuid": "133f037e_e3335215",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 15
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e861e51e_a4c7db1a",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "6ab7afa2_76b3624b",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-22T09:23:00Z",
+      "side": 1,
+      "message": "We do support outcomes that is only a single string instead of list:\nhttps://cs.chromium.org/chromium/src/v8/tools/testrunner/local/statusfile.py?q\u003dstatusfile\u0026sq\u003dpackage:chromium\u0026l\u003d151",
+      "parentUuid": "964b6f76_d66f0e06",
+      "range": {
+        "startLine": 204,
+        "startChar": 14,
+        "endLine": 204,
+        "endChar": 38
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aee92821_a0bb5be2",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 1
@@ -91,6 +139,30 @@
       "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf37c565_0ddf9e63",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-22T09:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aee92821_a0bb5be2",
+      "range": {
+        "startLine": 242,
+        "startChar": 10,
+        "endLine": 242,
+        "endChar": 70
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
