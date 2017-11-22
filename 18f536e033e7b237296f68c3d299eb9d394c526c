@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "964b6f76_d66f0e06",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-22T09:05:39Z",
+      "side": 1,
+      "message": "outcomes is always a list, e.g.:\npath: [SINGLE_OUTCOME]\npath: [SINGLE_OUTCOME, [CONDITION, SINGLE_OUTCOME]]",
+      "range": {
+        "startLine": 204,
+        "startChar": 14,
+        "endLine": 204,
+        "endChar": 38
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee92821_a0bb5be2",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-22T09:05:39Z",
+      "side": 1,
+      "message": "nit: 4 spaces indent after (",
+      "range": {
+        "startLine": 242,
+        "startChar": 10,
+        "endLine": 242,
+        "endChar": 70
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
