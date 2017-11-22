@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "133f037e_e3335215",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-11-22T09:07:23Z",
+      "side": 1,
+      "message": "yikes! please add a TODO for replacing this with execution-free format, e.g. JSON",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 15
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e861e51e_a4c7db1a",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-11-22T09:07:23Z",
+      "side": 1,
+      "message": "ditto: add same comment here",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 13
+      },
+      "revId": "18f536e033e7b237296f68c3d299eb9d394c526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "964b6f76_d66f0e06",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 1
