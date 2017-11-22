@@ -3081,6 +3081,108 @@ WASM_EXEC_TEST(IfInsideUnreachable) {
   CHECK_EQ(17, r.Call());
 }
 
+namespace {
+template <typename T>
+V8_NOINLINE unsigned countPopulation(volatile T* list, int i) {
+  return base::bits::CountPopulation(*list);
+}
+template <typename T>
+V8_NOINLINE unsigned executeRegListOp1(volatile T* list, int i) {
+  *list |= (1 << (i & (sizeof(T) * 8 - 1)));
+  return base::bits::CountPopulation(*list);
+}
+template <typename T>
+V8_NOINLINE unsigned executeRegListOp2(volatile T* list, int i) {
+  *list &= ~(1 << (i & (sizeof(T) * 8 - 1)));
+  return base::bits::CountPopulation(*list);
+}
+
+template <typename T>
+V8_NOINLINE unsigned testRegListSpeed(int* start, int* end) {
+  unsigned result = 0;
+  T tmp = T{13};
+  for (size_t num = 1024 * 1024;; num *= 2) {
+    base::ElapsedTimer t;
+    t.Start();
+    for (size_t i = 0; i < num; ++i) {
+      for (int* t = start; t < end; ++t) {
+        result += countPopulation(&tmp, *t);
+      }
+    }
+    base::TimeDelta d = t.Elapsed();
+    printf("%-20s n=%-12zu   ms=%7.2f   avg ns=%5.2f\n", "countPopulation", num,
+           1e3 * d.InSecondsF(), d.InSecondsF() * 1e9 / num);
+    if (d.InMilliseconds() > 2000) break;
+  }
+  printf("\n");
+
+  for (size_t num = 1024 * 1024;; num *= 2) {
+    base::ElapsedTimer t;
+    t.Start();
+    for (size_t i = 0; i < num; ++i) {
+      for (int* t = start; t < end; ++t) {
+        result += executeRegListOp1(&tmp, *t);
+      }
+    }
+    base::TimeDelta d = t.Elapsed();
+    printf("%-20s n=%-12zu   ms=%7.2f   avg ns=%5.2f\n", "executeRegListOp1",
+           num, 1e3 * d.InSecondsF(), d.InSecondsF() * 1e9 / num);
+    if (d.InMilliseconds() > 2000) break;
+  }
+  printf("\n");
+
+  for (size_t num = 1024 * 1024;; num *= 2) {
+    base::ElapsedTimer t;
+    t.Start();
+    for (size_t i = 0; i < num; ++i) {
+      for (int* t = start; t < end; ++t) {
+        result += executeRegListOp2(&tmp, *t);
+      }
+    }
+    base::TimeDelta d = t.Elapsed();
+    printf("%-20s n=%-12zu   ms=%7.2f   avg ns=%5.2f\n", "executeRegListOp2",
+           num, 1e3 * d.InSecondsF(), d.InSecondsF() * 1e9 / num);
+    if (d.InMilliseconds() > 2000) break;
+  }
+  printf("\n");
+
+  for (size_t num = 1024 * 1024;; num *= 2) {
+    base::ElapsedTimer t;
+    t.Start();
+    for (size_t i = 0; i < num; ++i) {
+      for (int* t = start; t < end; ++t) {
+        result += executeRegListOp1(&tmp, *t);
+      }
+      for (int* t = start; t < end; ++t) {
+        result += executeRegListOp2(&tmp, *t);
+      }
+    }
+    base::TimeDelta d = t.Elapsed();
+    printf("%-20s n=%-12zu   ms=%7.2f   avg ns=%5.2f\n", "executeRegListOp1+2",
+           num, 1e3 * d.InSecondsF(), d.InSecondsF() * 1e9 / num);
+    if (d.InMilliseconds() > 2000) break;
+  }
+  printf("\n\n");
+  return result;
+}
+}  // namespace
+
+TEST(SpeedTestDifferentRegLists) {
+  static int regs[] = {5, 2,  7,  1,  4,  2, 3,  4,  1,  9,  17, 3, 44, 13,
+                       8, 35, 11, 55, 44, 5, 50, 61, 48, 38, 4,  5, 9};
+  printf("uint16_t\n");
+  testRegListSpeed<uint16_t>(regs, regs + arraysize(regs));
+
+  printf("uint32_t\n");
+  testRegListSpeed<uint32_t>(regs, regs + arraysize(regs));
+
+  printf("uint64_t\n");
+  testRegListSpeed<uint64_t>(regs, regs + arraysize(regs));
+
+  printf("finished\n");
+  abort();
+}
+
 #undef B1
 #undef B2
 #undef RET
