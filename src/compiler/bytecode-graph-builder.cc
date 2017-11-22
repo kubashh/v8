@@ -2147,6 +2147,10 @@ void BytecodeGraphBuilder::VisitMod() {
   BuildBinaryOp(javascript()->Modulus());
 }
 
+void BytecodeGraphBuilder::VisitExp() {
+  BuildBinaryOp(javascript()->Exponentiate());
+}
+
 void BytecodeGraphBuilder::VisitBitwiseOr() {
   BuildBinaryOp(javascript()->BitwiseOr());
 }
@@ -2211,6 +2215,10 @@ void BytecodeGraphBuilder::VisitDivSmi() {
 
 void BytecodeGraphBuilder::VisitModSmi() {
   BuildBinaryOpWithImmediate(javascript()->Modulus());
+}
+
+void BytecodeGraphBuilder::VisitExpSmi() {
+  BuildBinaryOpWithImmediate(javascript()->Exponentiate());
 }
 
 void BytecodeGraphBuilder::VisitBitwiseOrSmi() {

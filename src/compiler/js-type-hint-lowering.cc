@@ -325,6 +325,10 @@ JSTypeHintLowering::LoweringResult JSTypeHintLowering::ReduceBinaryOperation(
       }
       break;
     }
+    case IrOpcode::kJSExponentiate: {
+      // TODO(neis): Introduce a SpeculativeNumberPow operator?
+      break;
+    }
     default:
       UNREACHABLE();
       break;
