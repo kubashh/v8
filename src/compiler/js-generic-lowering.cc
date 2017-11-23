@@ -526,6 +526,12 @@ void JSGenericLowering::LowerJSCreateScriptContext(Node* node) {
   ReplaceWithRuntimeCall(node, Runtime::kNewScriptContext);
 }
 
+void JSGenericLowering::LowerJSCreateScriptContext(Node* node) {
+  Handle<ScopeInfo> scope_info = OpParameter<Handle<ScopeInfo>>(node);
+  node->InsertInput(zone(), 0, jsgraph()->HeapConstant(scope_info));
+  ReplaceWithRuntimeCall(node, Runtime::kNewScriptContext);
+}
+
 void JSGenericLowering::LowerJSConstructForwardVarargs(Node* node) {
   ConstructForwardVarargsParameters p =
       ConstructForwardVarargsParametersOf(node->op());
