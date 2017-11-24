@@ -484,6 +484,7 @@ class GlobalDictionary;
 template <typename T> class MaybeHandle;
 template <typename T> class Handle;
 class Heap;
+enum HeapRootIndex : int;
 class HeapObject;
 class IC;
 class InterceptorInfo;
