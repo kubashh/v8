@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7f4d6fd_14635687",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-24T09:53:55Z",
+      "side": 1,
+      "message": "Why does this matter here?",
+      "revId": "e97031c80aac88321f7be3f175ddf7757b8b7ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6d29b60_81ae28e5",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-24T09:53:55Z",
+      "side": 1,
+      "message": "Hmm, why don\u0027t you just call PowerOfTwo here?",
+      "revId": "e97031c80aac88321f7be3f175ddf7757b8b7ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
