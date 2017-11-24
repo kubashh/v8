@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb2ed702_d24e822f",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-24T12:57:08Z",
+      "side": 1,
+      "message": "Just a bit of refactoring. No functional changes.",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
