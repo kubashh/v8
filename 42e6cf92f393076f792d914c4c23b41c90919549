@@ -33,6 +33,24 @@
       "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc7bd40_e9debae2",
+        "filename": "src/elements.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-24T14:34:19Z",
+      "side": 1,
+      "message": "I don\u0027t like skipping checks much either. But we can neither check for the initial_array_prototype, nor the NoElementsProtector without a context.\n\nI supposed I can move the bailout to just before is_initial_array_prototype below. The alternative is to set up the thread-local context pointer before CallCFunction.",
+      "parentUuid": "8111d419_5c5d475a",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
