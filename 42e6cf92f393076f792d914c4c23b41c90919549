@@ -16,6 +16,23 @@
       "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8111d419_5c5d475a",
+        "filename": "src/elements.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-24T14:16:05Z",
+      "side": 1,
+      "message": "I would feel safer if the following conditions are still DCHECK\u0027ed in debug mode (modulo names):\n\n... HoleyPrototypeLookupRequired(...) {\n  if (isolate-\u003econtext() \u003d\u003d nullptr) {\n    DCHECK(BasicHoleyPrototypeLookupRequired(...));\n    return false;\n  }\n  return BasicHoleyPrototypeLookupRequired(...);\n}",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
