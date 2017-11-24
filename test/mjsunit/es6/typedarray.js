@@ -636,6 +636,32 @@ function TestTypedArraySet() {
   };
   assertThrows(() => Int8Array.prototype.set.call(1, tmp), TypeError);
   assertThrows(() => Int8Array.prototype.set.call([], tmp), TypeError);
+
+  // Detached array buffer when converting offset.
+  {
+    const xs = new Int8Array(10);
+    let detached = false;
+    const offset = {
+      [Symbol.toPrimitive]() {
+        %ArrayBufferNeuter(xs.buffer);
+        detached = true;
+        return 0;
+      }
+    };
+    assertThrows(() => xs.set(xs, offset), TypeError);
+    assertEquals(true, detached);
+  }
+
+  // Various offset edge cases.
+  {
+    const xs = new Int8Array(10);
+    assertThrows(() => xs.set(xs, -1), RangeError);
+    assertThrows(() => xs.set(xs, -1 * 2**64), RangeError);
+    xs.set(xs, -0.0);
+    xs.set(xs, 0.0);
+    xs.set(xs, 0.5);
+    assertThrows(() => xs.set(xs, 2**64), RangeError);
+  }
 }
 
 TestTypedArraySet();
