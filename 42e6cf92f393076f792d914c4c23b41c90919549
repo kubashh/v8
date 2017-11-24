@@ -51,6 +51,23 @@
       "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "291e190b_2ef498be",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-24T15:38:07Z",
+      "side": 1,
+      "message": "Can you add a .set test for TypedArray ElementsKind X JSArray ElementsKind?",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
