@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a223bfbe_e9189f72",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-27T09:37:43Z",
+      "side": 1,
+      "message": "Ah, then please move the assert above the (exponent-\u003elength() \u003e 1) check.",
+      "parentUuid": "f94d744b_4207d98e",
+      "revId": "e97031c80aac88321f7be3f175ddf7757b8b7ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6d29b60_81ae28e5",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I\u0027ve considered that, but I\u0027m getting rid of PowerOfTwo in https://chromium-review.googlesource.com/c/v8/v8/+/786170, and this inlined version is ~half as long.",
       "parentUuid": "a6d29b60_81ae28e5",
+      "revId": "e97031c80aac88321f7be3f175ddf7757b8b7ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9a207da_29d3cd78",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-27T09:37:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e791c63_3a6cbf57",
       "revId": "e97031c80aac88321f7be3f175ddf7757b8b7ab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

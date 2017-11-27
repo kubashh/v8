@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7c97fe6_103066be",
+        "filename": "test/mjsunit/harmony/bigint/exp.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-27T09:37:43Z",
+      "side": 1,
+      "message": "Please add some where the base is negative.",
+      "revId": "c7fdd128eb54414f87f410967ff655a9658bcc51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
