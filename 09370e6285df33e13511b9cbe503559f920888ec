@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ce8b9fd_0ceea1c0",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "This is also used in builtins-array-gen.cc, probably a better fit on CodeStubAssembler directly. (work for a separate cleanup CL).",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d74eb253_2e1a5695",
+        "filename": "src/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "nit: ...native_context()-\u003eis_initial_array_prototype(JSObject::cast(source_proto))",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f94cb4_04981d1d",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "nit: typedArrayConstructors.map(klass \u003d\u003e new klass(kSize));",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4dac903_3b11e8c5",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "maybe this is worth being extended with more elements kind: see mjsunit/array-indexing-receiver.js",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c280eab_60861ae6",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "nice! I think we should do this in more places and not just assume that the elements kind are correct :/.",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28e2aa86_f658b420",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:07:05Z",
+      "side": 1,
+      "message": "%HeapObjectVerify(target);\n%HeapObjectVerify(source);",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
