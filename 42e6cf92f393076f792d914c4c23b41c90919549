@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "833a84d5_f290c6cc",
+        "filename": "src/elements.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T10:34:16Z",
+      "side": 1,
+      "message": "After some more thought, I still don\u0027t have a good solution for this:\nOur options as I see them:\n\n1) Don\u0027t check if called from CSA, i.e. isolate-\u003econtext() is nullptr.\n2) Do a partial check if called from CSA.\n3) Pass in the context from CSA.\n4) Set Isolate::context_ before CallCFunction.\n\nRe 2: IMO a partial check is not much better then no check at all.\nRe 3: This makes the interface very unnatural, we\u0027d also have to change Isolate::IsNoElementsProtectorIntact to read from the passed context rather than the isolate.\nRe 4: Seems okeyish, but I\u0027m hesitant to add such a change to this CL. Setting \u0026 accessing Isolate::context from CallCFunction should be discussed with other involved folks. \n\nSo that leaves us with option 1, which at least documents this oddity somehow. WDYT?",
+      "parentUuid": "edc7bd40_e9debae2",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "291e190b_2ef498be",
         "filename": "test/mjsunit/es6/typedarray.js",
         "patchSetId": 3
@@ -68,6 +86,24 @@
       "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e97fc00_8cd91e0a",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T10:34:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "291e190b_2ef498be",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
