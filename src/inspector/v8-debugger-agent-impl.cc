@@ -1533,15 +1533,18 @@ void V8DebuggerAgentImpl::didPause(
   if (!response.isSuccess()) protocolCallFrames = Array<CallFrame>::create();
 
   Maybe<protocol::Runtime::StackTraceId> asyncCallStackTrace;
-  void* rawScheduledAsyncTask = m_debugger->scheduledAsyncTask();
-  if (rawScheduledAsyncTask) {
+  v8_inspector::V8StackTraceId scheduledAsyncCall =
+      m_debugger->scheduledAsyncCall();
+  if (!scheduledAsyncCall.IsInvalid()) {
     asyncCallStackTrace =
         protocol::Runtime::StackTraceId::create()
-            .setId(stackTraceIdToString(
-                reinterpret_cast<uintptr_t>(rawScheduledAsyncTask)))
-            .setDebuggerId(debuggerIdToString(
-                m_debugger->debuggerIdFor(m_session->contextGroupId())))
+            .setId(stackTraceIdToString(scheduledAsyncCall.id))
             .build();
+    if (scheduledAsyncCall.debugger_id.first ||
+        scheduledAsyncCall.debugger_id.second) {
+      asyncCallStackTrace.fromJust()->setDebuggerId(
+          debuggerIdToString(scheduledAsyncCall.debugger_id));
+    }
   }
 
   m_frontend.paused(std::move(protocolCallFrames), breakReason,
