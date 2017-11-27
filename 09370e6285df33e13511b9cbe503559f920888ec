@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f109f691_9511ee1a",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T12:31:27Z",
+      "side": 1,
+      "message": "Could you add a ASSERT here that both {source_length} and {offset} are \u003c Smi::kMaxValue, this is no longer obvious from the arguments here.",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ce8b9fd_0ceea1c0",
         "filename": "src/builtins/builtins-typedarray-gen.cc",
         "patchSetId": 6
