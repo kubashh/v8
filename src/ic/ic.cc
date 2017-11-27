@@ -958,7 +958,7 @@ static Handle<Object> TryConvertKey(Handle<Object> key, Isolate* isolate) {
       }
     }
   } else if (key->IsUndefined(isolate)) {
-    key = isolate->factory()->undefined_string();
+    key = isolate->factory()->undefined_value();
   } else if (key->IsString()) {
     key = isolate->factory()->InternalizeString(Handle<String>::cast(key));
   }
