@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a76b1546_d1c14b76",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "For {offset}, it\u0027s asserted at the beginning of this function. {source_length} was just SmiUntagged so it\u0027s in range by definition.",
+      "parentUuid": "f109f691_9511ee1a",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ce8b9fd_0ceea1c0",
         "filename": "src/builtins/builtins-typedarray-gen.cc",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "09370e6285df33e13511b9cbe503559f920888ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d232c060_112485d4",
+        "filename": "src/builtins/builtins-typedarray-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3ce8b9fd_0ceea1c0",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7e40f66b_b8e89d5d",
+        "filename": "src/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d74eb253_2e1a5695",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4f94cb4_04981d1d",
         "filename": "test/mjsunit/es6/typedarray.js",
         "patchSetId": 6
@@ -67,6 +121,24 @@
       "revId": "09370e6285df33e13511b9cbe503559f920888ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "714ae1d2_f518c9ef",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f94cb4_04981d1d",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "846ef6c5_86e818ab",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Added PACKED,HOLEY,DICTIONARY kinds.",
+      "parentUuid": "d4dac903_3b11e8c5",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c280eab_60861ae6",
         "filename": "test/mjsunit/es6/typedarray.js",
         "patchSetId": 6
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "8705e006_2e3524ec",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c280eab_60861ae6",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28e2aa86_f658b420",
         "filename": "test/mjsunit/es6/typedarray.js",
         "patchSetId": 6
@@ -118,6 +226,24 @@
       "revId": "09370e6285df33e13511b9cbe503559f920888ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fccc652_42fe8cd6",
+        "filename": "test/mjsunit/es6/typedarray.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28e2aa86_f658b420",
+      "revId": "09370e6285df33e13511b9cbe503559f920888ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

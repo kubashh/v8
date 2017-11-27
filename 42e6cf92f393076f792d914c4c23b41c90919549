@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "7fb2e03d_579f98c3",
+        "filename": "src/elements.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-27T12:34:00Z",
+      "side": 1,
+      "message": "After offline discussion: went with 3) for now, opened https://crbug.com/v8/7128 to perhaps transition to 4) in the future.",
+      "parentUuid": "833a84d5_f290c6cc",
+      "revId": "42e6cf92f393076f792d914c4c23b41c90919549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "291e190b_2ef498be",
         "filename": "test/mjsunit/es6/typedarray.js",
         "patchSetId": 3
