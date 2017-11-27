@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae701350_e939acde",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-11-27T11:50:31Z",
+      "side": 1,
+      "message": "Just drop the check altogether and return the input {key} for undefined.",
+      "revId": "2f3fbdac3b2c07042c48470c12cb5179b70610ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
