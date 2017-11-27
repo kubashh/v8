@@ -636,6 +636,67 @@ function TestTypedArraySet() {
   };
   assertThrows(() => Int8Array.prototype.set.call(1, tmp), TypeError);
   assertThrows(() => Int8Array.prototype.set.call([], tmp), TypeError);
+
+  // Detached array buffer when converting offset.
+  {
+    const xs = new Int8Array(10);
+    let detached = false;
+    const offset = {
+      [Symbol.toPrimitive]() {
+        %ArrayBufferNeuter(xs.buffer);
+        detached = true;
+        return 0;
+      }
+    };
+    assertThrows(() => xs.set(xs, offset), TypeError);
+    assertEquals(true, detached);
+  }
+
+  // Various offset edge cases.
+  {
+    const xs = new Int8Array(10);
+    assertThrows(() => xs.set(xs, -1), RangeError);
+    assertThrows(() => xs.set(xs, -1 * 2**64), RangeError);
+    xs.set(xs, -0.0);
+    xs.set(xs, 0.0);
+    xs.set(xs, 0.5);
+    assertThrows(() => xs.set(xs, 2**64), RangeError);
+  }
+
+  // Exhaustively test elements kind combinations with JSArray source arg.
+  {
+    const kSize = 3;
+    const targets = [ new Uint8Array(kSize)
+                    , new Int8Array(kSize)
+                    , new Uint16Array(kSize)
+                    , new Int16Array(kSize)
+                    , new Uint32Array(kSize)
+                    , new Int32Array(kSize)
+                    , new Float32Array(kSize)
+                    , new Float64Array(kSize)
+                    , new Uint8ClampedArray(kSize)
+                    ];
+    const sources = [ [0,1,2]
+                    , [0,,2]
+                    , [0.1,0.2,0.3]
+                    , [0.1,,0.3]
+                    ];
+
+    assertTrue(%HasSmiElements(sources[0]));
+    assertTrue(%HasSmiElements(sources[1]));
+    assertTrue(%HasDoubleElements(sources[2]));
+    assertTrue(%HasDoubleElements(sources[3]));
+    assertTrue(%HasFastElements(sources[0]) && !%HasHoleyElements(sources[0]));
+    assertTrue(%HasFastElements(sources[1]) && %HasHoleyElements(sources[1]));
+    assertTrue(%HasFastElements(sources[2]) && !%HasHoleyElements(sources[2]));
+    assertTrue(%HasFastElements(sources[3]) && %HasHoleyElements(sources[3]));
+
+    for (const target of targets) {
+      for (const source of sources) {
+        target.set(source);
+      }
+    }
+  }
 }
 
 TestTypedArraySet();
