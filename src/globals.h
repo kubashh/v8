@@ -1304,6 +1304,7 @@ enum class Operation {
   kMultiply,
   kDivide,
   kModulus,
+  kExponentiate,
   kBitwiseAnd,
   kBitwiseOr,
   kBitwiseXor,
