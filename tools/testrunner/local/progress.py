@@ -32,7 +32,6 @@ import os
 import sys
 import time
 
-from . import execution
 from . import junit_output
 from . import statusfile
 
@@ -71,16 +70,15 @@ class ProgressIndicator(object):
     }
 
   def _EscapeCommand(self, test):
-    command, _ = execution.GetCommand(test, self.runner.context)
-    parts = []
-    for part in command:
+    def escape(part):
+      # Escape spaces. We may need to escape more characters for this to work
+      # properly.
       if ' ' in part:
-        # Escape spaces.  We may need to escape more characters for this
-        # to work properly.
-        parts.append('"%s"' % part)
-      else:
-        parts.append(part)
-    return " ".join(parts)
+        return '"%s"' % part
+
+      return part
+
+    return ' '.join(map(escape, test.cmd.parts))
 
 
 class IndicatorNotifier(object):

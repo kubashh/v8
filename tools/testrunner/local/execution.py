@@ -34,7 +34,7 @@ import sys
 import time
 
 from pool import Pool
-from . import commands
+from . import command
 from . import perfdata
 from . import statusfile
 from . import testsuite
@@ -46,15 +46,6 @@ from ..objects import output
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__)))))
 TEST_DIR = os.path.join(BASE_DIR, "test")
-
-
-class Instructions(object):
-  def __init__(self, command, test_id, timeout, verbose, env):
-    self.command = command
-    self.id = test_id
-    self.timeout = timeout
-    self.verbose = verbose
-    self.env = env
 
 
 # Structure that keeps global information per worker process.
@@ -81,43 +72,6 @@ def MakeProcessContext(context, suite_names):
     if suite:
       suites[suite.name] = suite
   return ProcessContext(suites, context)
-
-
-def GetCommand(test, context):
-  d8testflag = []
-  shell = test.suite.GetShellForTestCase(test)
-  if shell == "d8":
-    d8testflag = ["--test"]
-  if utils.IsWindows():
-    shell += ".exe"
-  if context.random_seed:
-    d8testflag += ["--random-seed=%s" % context.random_seed]
-  files, flags, env = test.suite.GetParametersForTestCase(test, context)
-  cmd = (
-      context.command_prefix +
-      [os.path.abspath(os.path.join(context.shell_dir, shell))] +
-      d8testflag +
-      files +
-      context.extra_flags +
-      # Flags from test cases can overwrite extra cmd-line flags.
-      flags
-  )
-  return cmd, env
-
-
-def _GetInstructions(test, context):
-  command, env = GetCommand(test, context)
-  timeout = context.timeout
-  if ("--stress-opt" in test.flags or
-      "--stress-opt" in context.mode_flags or
-      "--stress-opt" in context.extra_flags):
-    timeout *= 4
-  if "--noenable-vfp3" in context.extra_flags:
-    timeout *= 2
-
-  # TODO(majeski): make it slow outcome dependent.
-  timeout *= 2
-  return Instructions(command, test.id, timeout, context.verbose, env)
 
 
 class Job(object):
@@ -180,16 +134,14 @@ class TestJob(Job):
       # Retrieve a new suite object on the worker-process side. The original
       # suite object isn't pickled.
       self.test.SetSuiteObject(process_context.suites)
-      instr = _GetInstructions(self.test, process_context.context)
     except Exception, e:
       # TODO(majeski): Better exception reporting.
       return SetupProblem(e, self.test)
 
     start_time = time.time()
-    output = commands.Execute(instr.command, instr.verbose, instr.timeout,
-                              instr.env)
+    output = self.test.cmd.execute(process_context.context.verbose)
     self._rename_coverage_data(output, process_context.context)
-    return (instr.id, output, time.time() - start_time)
+    return (self.test.id, output, time.time() - start_time)
 
 
 def RunTest(job, process_context):
