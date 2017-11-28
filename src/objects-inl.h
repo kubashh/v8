@@ -4055,10 +4055,14 @@ bool JSFunction::HasOptimizationMarker() {
   return has_feedback_vector() && feedback_vector()->has_optimization_marker();
 }
 
+bool JSFunction::HasBeenExecuted() {
+  return has_feedback_vector() && feedback_vector()->has_execution_marker();
+}
+
 void JSFunction::ClearOptimizationMarker() {
   DCHECK(has_feedback_vector());
   DCHECK(!feedback_vector()->has_optimized_code());
-  feedback_vector()->SetOptimizationMarker(OptimizationMarker::kNone);
+  feedback_vector()->ClearOptimizationMarker();
 }
 
 bool JSFunction::IsInterpreted() {

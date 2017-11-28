@@ -117,7 +117,12 @@ bool FeedbackVector::has_optimized_code() const {
 }
 
 bool FeedbackVector::has_optimization_marker() const {
-  return optimization_marker() != OptimizationMarker::kNone;
+  return optimization_marker() != OptimizationMarker::kNotYetExecuted &&
+         optimization_marker() != OptimizationMarker::kNone;
+}
+
+bool FeedbackVector::has_execution_marker() const {
+  return optimization_marker() != OptimizationMarker::kNotYetExecuted;
 }
 
 // Conversion from an integer index to either a slot or an ic slot.

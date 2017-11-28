@@ -234,7 +234,9 @@ Handle<FeedbackVector> FeedbackVector::New(Isolate* isolate,
 
   DCHECK_EQ(vector->shared_function_info(), *shared);
   DCHECK_EQ(vector->optimized_code_cell(),
-            Smi::FromEnum(OptimizationMarker::kNone));
+            Smi::FromEnum(FLAG_log_function_events
+                              ? OptimizationMarker::kNotYetExecuted
+                              : OptimizationMarker::kNone));
   DCHECK_EQ(vector->invocation_count(), 0);
   DCHECK_EQ(vector->profiler_ticks(), 0);
   DCHECK_EQ(vector->deopt_count(), 0);
@@ -345,8 +347,10 @@ void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
   set_optimized_code_cell(Smi::FromEnum(marker));
 }
 
-void FeedbackVector::ClearOptimizedCode() {
-  set_optimized_code_cell(Smi::FromEnum(OptimizationMarker::kNone));
+void FeedbackVector::ClearOptimizedCode() { ClearOptimizationMarker(); }
+
+void FeedbackVector::ClearOptimizationMarker() {
+  SetOptimizationMarker(OptimizationMarker::kNone);
 }
 
 void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(

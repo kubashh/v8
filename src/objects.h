@@ -4000,6 +4000,8 @@ class JSFunction: public JSObject {
   // Tells whether or not this function has a (non-zero) optimization marker.
   inline bool HasOptimizationMarker();
 
+  inline bool HasBeenExecuted();
+
   // Mark this function for lazy recompilation. The function will be recompiled
   // the next time it is executed.
   void MarkForOptimization(ConcurrencyMode mode);
