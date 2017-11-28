@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50bd4264_780409f9",
+        "filename": "src/feedback-vector-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-28T15:13:13Z",
+      "side": 1,
+      "message": "Could you turn this around and make it marked_as_not_yet_executed.\n\nAlso could you DCHECK(FLAG_log_function_events)",
+      "range": {
+        "startLine": 124,
+        "startChar": 21,
+        "endLine": 124,
+        "endChar": 41
+      },
+      "revId": "ec0481bf58e1c76d79a14893970c9ca46831fe5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19340b56_f8be0e50",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-28T15:13:13Z",
+      "side": 1,
+      "message": "Could you DCHECK here that there is optimized code (and no marker) in the slot.",
+      "range": {
+        "startLine": 350,
+        "startChar": 44,
+        "endLine": 350,
+        "endChar": 69
+      },
+      "revId": "ec0481bf58e1c76d79a14893970c9ca46831fe5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43960f23_4799ddd8",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-28T15:13:13Z",
+      "side": 1,
+      "message": "Could you make other calls to set_optimized_code_cell(Smi::FromEnum(OptimizationMarker::kNone)) in the codebase call this instead please.",
+      "range": {
+        "startLine": 352,
+        "startChar": 21,
+        "endLine": 352,
+        "endChar": 44
+      },
+      "revId": "ec0481bf58e1c76d79a14893970c9ca46831fe5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95136c4d_4ea669e8",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2017-11-28T15:13:13Z",
+      "side": 1,
+      "message": "Could you DCHECK here that there is no optimized code in the slot",
+      "revId": "ec0481bf58e1c76d79a14893970c9ca46831fe5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
