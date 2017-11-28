@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c059651_1d38247a",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2017-11-28T17:15:32Z",
+      "side": 1,
+      "message": "Extract a method for this.",
+      "revId": "3dd567118e42b80633b2e0f0546deca921cc9d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
