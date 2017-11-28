@@ -16,6 +16,24 @@
       "revId": "c7fdd128eb54414f87f410967ff655a9658bcc51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4af851cb_3f8041f5",
+        "filename": "test/mjsunit/harmony/bigint/exp.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-11-28T06:30:24Z",
+      "side": 1,
+      "message": "Oh, very good point, the 2^n fast-path was missing sign handling. Done.",
+      "parentUuid": "b7c97fe6_103066be",
+      "revId": "c7fdd128eb54414f87f410967ff655a9658bcc51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
