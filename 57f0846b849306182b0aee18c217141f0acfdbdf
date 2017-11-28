@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab73ff89_457e1bbd",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "nit: How about we consistently switch to single quotes in all new files? The old version is already a mess, sadly.\n\nThough, if this filter wasn\u0027t needed before, why now?",
+      "range": {
+        "startLine": 33,
+        "startChar": 39,
+        "endLine": 33,
+        "endChar": 41
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8782cebf_801d14ca",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "nit: just use {} to be consistent with other infra code",
+      "range": {
+        "startLine": 34,
+        "startChar": 22,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f010a505_1b92340a",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "Ideally a command is immutable and repeatable. Hence it should not have state. Maybe keep the old logic and use a pseudo-boolean that\u0027s passed around?",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "603a8b80_dc69c002",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "Bonus points: Turn this into context manager? :) To write e.g.:\n\nwith win_error_mode():\n  ...",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 53
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b988e2_1419b3a9",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "In the future we should also add the concept of cwd here. Right now, this is still a hidden environment condition.",
+      "range": {
+        "startLine": 55,
+        "startChar": 6,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9342f5e4_58f02e54",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "Don\u0027t we always have a timeout? I\u0027d like to enforce always a well-defined timeout. Then we wouldn\u0027t need this extra logic here.",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b060116_88855f6d",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "Maybe extract also this into a _kill_process_posix side-by-side with _kill_process_windows.",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 127,
+        "endChar": 26
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7851450d_3b1bcb7e",
+        "filename": "tools/testrunner/local/progress.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-28T09:20:20Z",
+      "side": 1,
+      "message": "Maybe move this support method into command?",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 48
+      },
+      "revId": "57f0846b849306182b0aee18c217141f0acfdbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
