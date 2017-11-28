@@ -1130,6 +1130,33 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfJSReceiver(
   return *this;
 }
 
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfHole(BytecodeLabel* label) {
+  DCHECK(!label->is_bound());
+  OutputJumpIfHole(label, 0);
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNotHole(
+    BytecodeLabel* label) {
+  DCHECK(!label->is_bound());
+  OutputJumpIfNotHole(label, 0);
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfCallable(
+    BytecodeLabel* label) {
+  DCHECK(!label->is_bound());
+  OutputJumpIfCallable(label, 0);
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNotCallable(
+    BytecodeLabel* label) {
+  DCHECK(!label->is_bound());
+  OutputJumpIfNotCallable(label, 0);
+  return *this;
+}
+
 BytecodeArrayBuilder& BytecodeArrayBuilder::JumpLoop(BytecodeLabel* label,
                                                      int loop_depth) {
   DCHECK(label->is_bound());

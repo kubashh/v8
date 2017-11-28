@@ -64,8 +64,15 @@ class AsyncGeneratorBuiltinsAssembler : public AsyncBuiltinsAssembler {
     return SmiNotEqual(state,
                        SmiConstant(JSGeneratorObject::kGeneratorExecuting));
   }
+  inline Node* IsGeneratorStateExecuting(Node* const state) {
+    return SmiEqual(state, SmiConstant(JSGeneratorObject::kGeneratorExecuting));
+  }
   inline Node* IsGeneratorNotExecuting(Node* const generator) {
     return IsGeneratorStateNotExecuting(LoadGeneratorState(generator));
+  }
+
+  inline Node* IsGeneratorExecuting(Node* const generator) {
+    return IsGeneratorStateExecuting(LoadGeneratorState(generator));
   }
 
   inline Node* LoadGeneratorAwaitedPromise(Node* const generator) {
@@ -237,9 +244,37 @@ void AsyncGeneratorBuiltinsAssembler::AsyncGeneratorAwaitResumeClosure(
 
   CSA_SLOW_ASSERT(this, IsGeneratorSuspended(generator));
 
-  CallStub(CodeFactory::ResumeGenerator(isolate()), context, value, generator,
-           SmiConstant(resume_mode));
+  VARIABLE(exception, MachineRepresentation::kTagged, TheHoleConstant());
 
+  Node* const result =
+      CallStub(CodeFactory::ResumeGenerator(isolate()), context, value,
+               generator, SmiConstant(resume_mode));
+
+  Label if_exception(this), if_done(this), close_generator(this), next(this);
+  GotoIfException(result, &if_exception, &exception);
+
+  Branch(IsGeneratorExecuting(generator), &if_done, &next);
+
+  BIND(&if_exception);
+  {
+    CallBuiltin(Builtins::kAsyncGeneratorReject, context, generator,
+                exception.value());
+    Goto(&close_generator);
+  }
+
+  BIND(&if_done);
+  {
+    CallBuiltin(Builtins::kAsyncGeneratorResolve, context, generator, result,
+                TrueConstant());
+    Goto(&close_generator);
+  }
+
+  BIND(&close_generator);
+  CloseGenerator(generator);
+  Goto(&next);
+
+  // Continue executing generator
+  BIND(&next);
   TailCallBuiltin(Builtins::kAsyncGeneratorResumeNext, context, generator);
 }
 
@@ -410,6 +445,7 @@ TF_BUILTIN(AsyncGeneratorResumeNext, AsyncGeneratorBuiltinsAssembler) {
   typedef AsyncGeneratorResumeNextDescriptor Descriptor;
   Node* const generator = Parameter(Descriptor::kGenerator);
   Node* const context = Parameter(Descriptor::kContext);
+  VARIABLE(exception, MachineRepresentation::kTagged, TheHoleConstant());
 
   // The penultimate step of proposal-async-iteration/#sec-asyncgeneratorresolve
   // and proposal-async-iteration/#sec-asyncgeneratorreject both recursively
@@ -423,8 +459,8 @@ TF_BUILTIN(AsyncGeneratorResumeNext, AsyncGeneratorBuiltinsAssembler) {
            LoadGeneratorState(generator));
   VARIABLE(var_next, MachineRepresentation::kTagged,
            LoadFirstAsyncGeneratorRequestFromQueue(generator));
-  Variable* loop_variables[] = {&var_state, &var_next};
-  Label start(this, 2, loop_variables);
+  Variable* loop_variables[] = {&var_state, &var_next, &exception};
+  Label start(this, arraysize(loop_variables), loop_variables);
   Goto(&start);
   BIND(&start);
 
@@ -489,11 +525,37 @@ TF_BUILTIN(AsyncGeneratorResumeNext, AsyncGeneratorBuiltinsAssembler) {
 
   BIND(&resume_generator);
   {
-    CallStub(CodeFactory::ResumeGenerator(isolate()), context,
-             LoadValueFromAsyncGeneratorRequest(next), generator, resume_type);
+    Node* const result = CallStub(
+        CodeFactory::ResumeGenerator(isolate()), context,
+        LoadValueFromAsyncGeneratorRequest(next), generator, resume_type);
+
+    Label if_exception(this), if_done(this), close_generator(this);
+    GotoIfException(result, &if_exception, &exception);
+
+    GotoIf(IsGeneratorExecuting(generator), &if_done);
+
+    // Continue executing generator
     var_state.Bind(LoadGeneratorState(generator));
     var_next.Bind(LoadFirstAsyncGeneratorRequestFromQueue(generator));
     Goto(&start);
+
+    BIND(&if_exception);
+    {
+      CallBuiltin(Builtins::kAsyncGeneratorReject, context, generator,
+                  exception.value());
+      Goto(&close_generator);
+    }
+
+    BIND(&if_done);
+    {
+      CallBuiltin(Builtins::kAsyncGeneratorResolve, context, generator, result,
+                  TrueConstant());
+      Goto(&close_generator);
+    }
+
+    BIND(&close_generator);
+    CloseGenerator(generator);
+    Return(UndefinedConstant());
   }
 }
 

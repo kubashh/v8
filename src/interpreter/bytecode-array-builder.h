@@ -373,7 +373,10 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
 
   BytecodeArrayBuilder& JumpIfTrue(ToBooleanMode mode, BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfFalse(ToBooleanMode mode, BytecodeLabel* label);
+  BytecodeArrayBuilder& JumpIfHole(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNotHole(BytecodeLabel* label);
+  BytecodeArrayBuilder& JumpIfCallable(BytecodeLabel* label);
+  BytecodeArrayBuilder& JumpIfNotCallable(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfJSReceiver(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNull(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNotNull(BytecodeLabel* label);
@@ -393,6 +396,12 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
   BytecodeArrayBuilder& SetPendingMessage();
 
   BytecodeArrayBuilder& Throw();
+
+  // Convenience method for throwing a type error. Each argument must be a
+  // Register.
+  template <typename... Args>
+  BytecodeArrayBuilder& ThrowTypeError(MessageTemplate::Template message,
+                                       Args... args);
   BytecodeArrayBuilder& ReThrow();
   BytecodeArrayBuilder& Abort(BailoutReason reason);
   BytecodeArrayBuilder& Return();
@@ -453,17 +462,25 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
 
   void InitializeReturnPosition(FunctionLiteral* literal);
 
+  void SetStatementPosition(int position) {
+    if (position == kNoSourcePosition) return;
+    latest_source_info_.MakeStatementPosition(position);
+  }
   void SetStatementPosition(Statement* stmt) {
     if (stmt->position() == kNoSourcePosition) return;
     latest_source_info_.MakeStatementPosition(stmt->position());
   }
 
   void SetExpressionPosition(Expression* expr) {
-    if (expr->position() == kNoSourcePosition) return;
+    SetExpressionPosition(expr->position());
+  }
+
+  void SetExpressionPosition(int position) {
+    if (position == kNoSourcePosition) return;
     if (!latest_source_info_.is_statement()) {
       // Ensure the current expression position is overwritten with the
       // latest value.
-      latest_source_info_.MakeExpressionPosition(expr->position());
+      latest_source_info_.MakeExpressionPosition(position);
     }
   }
 
@@ -585,6 +602,45 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(
     std::ostream& os, const BytecodeArrayBuilder::ToBooleanMode& mode);
+
+template <typename... Regs>
+struct VariadicRegisters {
+  Register data[sizeof...(Regs)];
+
+  using iterator = Register*;
+  using const_iterator = const Register*;
+
+  iterator begin() { return &data[0]; }
+  iterator end() { return &data[sizeof...(Regs)]; }
+  const_iterator begin() const { return &data[0]; }
+  const_iterator end() const { return &data[sizeof...(Regs)]; }
+
+  constexpr VariadicRegisters(Regs... regs) : data{regs...} {}
+  static constexpr size_t size = sizeof...(Regs);
+};
+
+template <typename... Regs>
+BytecodeArrayBuilder& BytecodeArrayBuilder::ThrowTypeError(
+    MessageTemplate::Template message, Regs... regs) {
+  int outer_next_index = register_allocator()->next_register_index();
+
+  using Arguments = VariadicRegisters<Regs...>;
+  Arguments arguments(std::forward<Regs>(regs)...);
+
+  RegisterList args =
+      register_allocator()->NewRegisterList(Arguments::size + 1);
+  LoadLiteral(Smi::FromInt(message));
+
+  int index = 0;
+  StoreAccumulatorInRegister(args[index++]);
+
+  for (Register reg : arguments) MoveRegister(reg, args[index++]);
+
+  CallRuntime(Runtime::kThrowTypeError, args);
+
+  register_allocator()->ReleaseRegisters(outer_next_index);
+  return *this;
+}
 
 }  // namespace interpreter
 }  // namespace internal

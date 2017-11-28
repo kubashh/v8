@@ -329,6 +329,7 @@ class AstValue : public ZoneObject {
   F(native, "native")                           \
   F(new_target, ".new.target")                  \
   F(next, "next")                               \
+  F(null, "null")                               \
   F(number, "number")                           \
   F(object, "object")                           \
   F(proto, "__proto__")                         \

@@ -188,7 +188,7 @@ TF_BUILTIN(AsyncFunctionPromiseRelease, AsyncFunctionBuiltinsAssembler) {
   GotoIf(IsDebugActive(), &if_is_debug_active);
 
   // Early exit if debug is not active.
-  Return(UndefinedConstant());
+  Return(promise);
 
   BIND(&if_is_debug_active);
   {

@@ -68,8 +68,13 @@ namespace internal {
   V(ObjectLiteral)           \
   V(ArrayLiteral)
 
+#define PATTERN_NODE_LIST(V) \
+  V(ArrayPattern)            \
+  V(ObjectPattern)
+
 #define EXPRESSION_NODE_LIST(V) \
   LITERAL_NODE_LIST(V)          \
+  PATTERN_NODE_LIST(V)          \
   V(Assignment)                 \
   V(Await)                      \
   V(BinaryOperation)            \
@@ -99,7 +104,8 @@ namespace internal {
   V(UnaryOperation)             \
   V(VariableProxy)              \
   V(Yield)                      \
-  V(YieldStar)
+  V(YieldStar)                  \
+  V(VarExpression)
 
 #define AST_NODE_LIST(V)                        \
   DECLARATION_NODE_LIST(V)                      \
@@ -121,6 +127,8 @@ class Statement;
 #define DEF_FORWARD_DECLARATION(type) class type;
 AST_NODE_LIST(DEF_FORWARD_DECLARATION)
 #undef DEF_FORWARD_DECLARATION
+
+enum class IteratorType : uint8_t { kNormal, kAsync };
 
 class AstNode: public ZoneObject {
  public:
@@ -146,6 +154,10 @@ class AstNode: public ZoneObject {
   AST_NODE_LIST(DECLARE_NODE_FUNCTIONS)
 #undef DECLARE_NODE_FUNCTIONS
 
+  V8_INLINE bool IsPattern() const {
+    return IsObjectPattern() || IsArrayPattern();
+  }
+
   BreakableStatement* AsBreakableStatement();
   IterationStatement* AsIterationStatement();
   MaterializedLiteral* AsMaterializedLiteral();
@@ -165,7 +177,6 @@ class AstNode: public ZoneObject {
   AstNode(int position, NodeType type)
       : position_(position), bit_field_(NodeTypeField::encode(type)) {}
 };
-
 
 class Statement : public AstNode {
  public:
@@ -192,6 +203,16 @@ class Expression : public AstNode {
     // Evaluated for control flow (and side effects).
     kTest
   };
+
+  // `calls_sloppy_eval` is tracked primarily for Arrow formal parameters, to
+  // easily determine if a given FormalParameter needs a new environment for
+  // evaluating initializers. It is not reliable in all cases, be careful!
+  bool calls_sloppy_eval() const {
+    return CallsSloppyEvalField::decode(bit_field_);
+  }
+  void set_calls_sloppy_eval(bool value = true) {
+    bit_field_ = CallsSloppyEvalField::update(bit_field_, value);
+  }
 
   // True iff the expression is a valid reference expression.
   bool IsValidReferenceExpression() const;
@@ -231,10 +252,14 @@ class Expression : public AstNode {
   // that this also checks for loads of the global "undefined" variable.
   bool IsUndefinedLiteral() const;
 
+ private:
+  class CallsSloppyEvalField
+      : public BitField<bool, AstNode::kNextBitFieldIndex, 1> {};
+
  protected:
   Expression(int pos, NodeType type) : AstNode(pos, type) {}
 
-  static const uint8_t kNextBitFieldIndex = AstNode::kNextBitFieldIndex;
+  static const uint8_t kNextBitFieldIndex = CallsSloppyEvalField::kNext;
 };
 
 
@@ -402,11 +427,163 @@ class NestedVariableDeclaration final : public VariableDeclaration {
   Scope* scope_;
 };
 
-inline NestedVariableDeclaration* VariableDeclaration::AsNested() {
-  return IsNestedField::decode(bit_field_)
-             ? static_cast<NestedVariableDeclaration*>(this)
-             : nullptr;
-}
+class PreParserIdentifier;
+class BoundName final {
+ public:
+  V8_INLINE BoundName() : name_(nullptr), var_(nullptr), position_(-1) {}
+  V8_INLINE BoundName(const PreParserIdentifier&, int position);
+  V8_INLINE BoundName(const AstRawString* name, int position)
+      : name_(name), var_(nullptr), position_(position) {}
+  V8_INLINE BoundName(const VariableProxy* proxy);
+
+  const AstRawString* name() const { return name_; }
+  int position() const { return position_; }
+  Variable* var() const { return var_; }
+  void set_var(Variable* var) { var_ = var; }
+
+  bool is_lexical_binding() const {
+    DCHECK_NOT_NULL(var_);
+    return IsLexicalVariableMode(var_->mode());
+  }
+
+ private:
+  const AstRawString* name_;
+  Variable* var_;
+  int position_;
+};
+
+class BoundNames final : public ZoneVector<BoundName> {
+ public:
+  BoundNames() = delete;
+  explicit BoundNames(Zone* zone) : ZoneVector<BoundName>(zone) {}
+  BoundNames(size_t n, Zone* zone) : ZoneVector<BoundName>(zone) {
+    // Rather than inserting n default constructed BoundName objects, simply
+    // reserve space for them. This allows emplace_back() to put objects at the
+    // correct index.
+    reserve(n);
+  }
+
+  int int_size() const {
+#ifdef ENABLE_SLOW_DCHECKS
+    DCHECK_LT(size(), static_cast<size_type>(std::numeric_limits<int>::max()));
+#endif
+    return static_cast<int>(size());
+  }
+
+  static const BoundNames& Empty() {
+    // Some libc++ implementations make it unsafe to treat an array of 0x00
+    // bytes as an empty vector, so unfortunately it's necessary to have a real
+    // one. This is particularly necessary for libstdc++, but it's probably
+    // safer on all implementations.
+    static std::vector<BoundName> kEmpty;
+    DCHECK(kEmpty.empty());
+    return *reinterpret_cast<const BoundNames*>(&kEmpty);
+  }
+
+  void* operator new(size_t size, Zone* zone) { return zone->New(size); }
+  void operator delete(void*, size_t) { UNREACHABLE(); }
+  void operator delete(void* pointer, Zone* zone) { UNREACHABLE(); }
+
+  // Add(VariableProxy*)
+  // Add(const AstRawString*, int position)
+  template <typename... Args>
+  void Add(const AstRawString*&& first, Args&&... args) {
+    emplace_back(std::forward<const AstRawString*>(first),
+                 std::forward<Args>(args)...);
+  }
+
+  template <typename... Args>
+  void Add(VariableProxy*&& first, Args&&... args) {
+    emplace_back(std::forward<VariableProxy*>(first),
+                 std::forward<Args>(args)...);
+  }
+
+  template <typename... Args>
+  void Add(PreParserIdentifier&& first, Args&&... args);
+};
+
+// Used to generate bytecode for initializing variable declarations.
+class VarExpression : public Expression {
+ public:
+  VariableMode mode() const { return mode_; }
+  int end_position() const { return end_position_; }
+
+  // Invoked by Parser::AppendVariableDefinition()
+  void set_end_position(int pos) { end_position_ = pos; }
+
+  // Convenience access for first pattern
+  Expression* pattern() const {
+    DCHECK_EQ(size(), 1);
+    return elements_.at(0).pattern();
+  }
+
+  // Convenience access for first initializer
+  Expression* initializer() const {
+    DCHECK_EQ(size(), 1);
+    return elements_.at(0).initializer();
+  }
+
+  bool BindingIsInitialized(size_t index = 0) const;
+
+  class Element {
+   public:
+    Expression* pattern() const { return pattern_; }
+    Expression* initializer() const { return initializer_; }
+    int position() const { return pattern_->position(); }
+    size_t first_index() const { return first_; }
+    size_t last_index() const { return last_; }
+
+   private:
+    friend class VarExpression;
+    Element(Expression* pattern, Expression* initializer, size_t first,
+            size_t last)
+        : pattern_(pattern),
+          initializer_(initializer),
+          first_(first),
+          last_(last) {}
+    Expression* pattern_;
+    Expression* initializer_;
+    size_t first_;
+    size_t last_;
+  };
+
+  typedef ZoneVector<Element>::const_iterator const_iterator;
+  typedef ZoneVector<Element>::size_type size_type;
+  const_iterator begin() const { return elements_.begin(); }
+  const_iterator end() const { return elements_.end(); }
+  size_type size() const { return elements_.size(); }
+
+  void push_back(Expression* pattern, Expression* initializer, size_t first,
+                 size_t last) {
+    elements_.push_back(Element(pattern, initializer, first, last));
+  }
+
+  const BoundNames& GetBoundNames() const {
+    if (!bound_names_) return BoundNames::Empty();
+    return *bound_names_;
+  }
+
+  void set_bound_names(BoundNames* bound_names) { bound_names_ = bound_names; }
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  VarExpression(Zone* zone, VariableMode mode, int pos)
+      : Expression(pos, kVarExpression),
+        mode_(mode),
+        elements_(zone),
+        bound_names_(nullptr),
+        cached_element_(nullptr) {
+    DCHECK(IsDeclaredVariableMode(mode));
+  }
+
+  VariableMode mode_;
+  int end_position_;
+  ZoneVector<Element> elements_;
+  BoundNames* bound_names_;
+  mutable Element* cached_element_;
+};
 
 class FunctionDeclaration final : public Declaration {
  public:
@@ -502,7 +679,7 @@ class WhileStatement final : public IterationStatement {
 
 class ForStatement final : public IterationStatement {
  public:
-  void Initialize(Statement* init, Expression* cond, Statement* next,
+  void Initialize(Expression* init, Expression* cond, Expression* next,
                   Statement* body) {
     IterationStatement::Initialize(body);
     init_ = init;
@@ -510,13 +687,16 @@ class ForStatement final : public IterationStatement {
     next_ = next;
   }
 
-  Statement* init() const { return init_; }
+  Expression* init() const { return init_; }
   Expression* cond() const { return cond_; }
-  Statement* next() const { return next_; }
+  Expression* next() const { return next_; }
+  Scope* per_iteration_scope() const { return per_iteration_scope_; }
 
-  void set_init(Statement* s) { init_ = s; }
+  void set_init(Expression* e) { init_ = e; }
   void set_cond(Expression* e) { cond_ = e; }
-  void set_next(Statement* s) { next_ = s; }
+  void set_next(Expression* e) { next_ = e; }
+
+  void set_per_iteration_scope(Scope* scope) { per_iteration_scope_ = scope; }
 
  private:
   friend class AstNodeFactory;
@@ -525,50 +705,77 @@ class ForStatement final : public IterationStatement {
       : IterationStatement(labels, pos, kForStatement),
         init_(nullptr),
         cond_(nullptr),
-        next_(nullptr) {}
+        next_(nullptr),
+        per_iteration_scope_(nullptr) {}
 
-  Statement* init_;
+  Expression* init_;
   Expression* cond_;
-  Statement* next_;
+  Expression* next_;
+  Scope* per_iteration_scope_;
 };
 
 
 class ForEachStatement : public IterationStatement {
  public:
   enum VisitMode {
-    ENUMERATE,   // for (each in subject) body;
-    ITERATE      // for (each of subject) body;
+    ENUMERATE,     // for (each in subject) body;
+    ITERATE,       // for (each of subject) body;
+    ASYNC_ITERATE  // for await (each of subject) body;
   };
 
   using IterationStatement::Initialize;
 
-  static const char* VisitModeString(VisitMode mode) {
-    return mode == ITERATE ? "for-of" : "for-in";
+  void Initialize(Expression* target, Expression* subject, Statement* body) {
+    IterationStatement::Initialize(body);
+    target_ = target;
+    subject_ = subject;
   }
+
+  static const char* VisitModeString(VisitMode mode) {
+    switch (mode) {
+      case ENUMERATE:
+        return "for-in";
+      case ITERATE:
+        return "for-of";
+      case ASYNC_ITERATE:
+        return "for-await-of";
+      default:
+        break;
+    }
+    UNREACHABLE();
+    return nullptr;
+  }
+
+  // iterationEnv DeclarativeEnvironment
+  Scope* iteration_scope() const { return iteration_scope_; }
+  void set_iteration_scope(Scope* s) { iteration_scope_ = s; }
 
  protected:
   ForEachStatement(ZoneList<const AstRawString*>* labels, int pos,
                    NodeType type)
-      : IterationStatement(labels, pos, type) {}
+      : IterationStatement(labels, pos, type),
+        target_(nullptr),
+        subject_(nullptr),
+        iteration_scope_(nullptr) {}
+
+  Expression* target_;
+  Expression* subject_;
+
+ private:
+  Scope* iteration_scope_;
 };
 
 
 class ForInStatement final : public ForEachStatement {
  public:
-  void Initialize(Expression* each, Expression* subject, Statement* body) {
-    ForEachStatement::Initialize(body);
-    each_ = each;
-    subject_ = subject;
-  }
-
   Expression* enumerable() const {
     return subject();
   }
 
-  Expression* each() const { return each_; }
+  Expression* target() const { return target_; }
   Expression* subject() const { return subject_; }
 
-  void set_each(Expression* e) { each_ = e; }
+  void set_target(Expression* e) { target_ = e; }
   void set_subject(Expression* e) { subject_ = e; }
 
   enum ForInType { FAST_FOR_IN, SLOW_FOR_IN };
@@ -581,80 +788,53 @@ class ForInStatement final : public ForEachStatement {
   friend class AstNodeFactory;
 
   ForInStatement(ZoneList<const AstRawString*>* labels, int pos)
-      : ForEachStatement(labels, pos, kForInStatement),
-        each_(nullptr),
-        subject_(nullptr) {
+      : ForEachStatement(labels, pos, kForInStatement) {
     bit_field_ = ForInTypeField::update(bit_field_, SLOW_FOR_IN);
   }
-
-  Expression* each_;
-  Expression* subject_;
-
   class ForInTypeField
       : public BitField<ForInType, ForEachStatement::kNextBitFieldIndex, 1> {};
 };
 
-
 class ForOfStatement final : public ForEachStatement {
  public:
-  void Initialize(Statement* body, Variable* iterator,
-                  Expression* assign_iterator, Expression* next_result,
-                  Expression* result_done, Expression* assign_each) {
-    ForEachStatement::Initialize(body);
-    iterator_ = iterator;
-    assign_iterator_ = assign_iterator;
-    next_result_ = next_result;
-    result_done_ = result_done;
-    assign_each_ = assign_each;
+  Expression* target() const { return target_; }
+  Expression* iterable() const { return subject_; }
+  IteratorType iterator_type() const {
+    return IteratorTypeField::decode(bit_field_);
   }
 
-  Variable* iterator() const {
-    return iterator_;
+  void set_target(Expression* e) { target_ = e; }
+  void set_iterable(Expression* e) { subject_ = e; }
+
+  // for-await-of statements contain suspends for 2 awaits
+  int next_suspend_id() const { return next_suspend_id_; }
+  void set_next_suspend_id(int id) {
+    DCHECK_EQ(iterator_type(), IteratorType::kAsync);
+    next_suspend_id_ = id;
   }
 
-  // iterator = subject[Symbol.iterator]()
-  Expression* assign_iterator() const {
-    return assign_iterator_;
+  // AsyncIteratorClose awaits result of calling iterator.return()
+  int close_suspend_id() const { return close_suspend_id_; }
+  void set_close_suspend_id(int id) {
+    DCHECK_EQ(iterator_type(), IteratorType::kAsync);
+    close_suspend_id_ = id;
   }
-
-  // result = iterator.next()  // with type check
-  Expression* next_result() const {
-    return next_result_;
-  }
-
-  // result.done
-  Expression* result_done() const {
-    return result_done_;
-  }
-
-  // each = result.value
-  Expression* assign_each() const {
-    return assign_each_;
-  }
-
-  void set_assign_iterator(Expression* e) { assign_iterator_ = e; }
-  void set_next_result(Expression* e) { next_result_ = e; }
-  void set_result_done(Expression* e) { result_done_ = e; }
-  void set_assign_each(Expression* e) { assign_each_ = e; }
 
  private:
   friend class AstNodeFactory;
+  ForOfStatement(ZoneList<const AstRawString*>* labels,
+                 IteratorType iterator_type, int pos)
+      : ForEachStatement(labels, pos, kForOfStatement) {
+    bit_field_ = IteratorTypeField::update(bit_field_, iterator_type);
+  }
 
-  ForOfStatement(ZoneList<const AstRawString*>* labels, int pos)
-      : ForEachStatement(labels, pos, kForOfStatement),
-        iterator_(nullptr),
-        assign_iterator_(nullptr),
-        next_result_(nullptr),
-        result_done_(nullptr),
-        assign_each_(nullptr) {}
+  class IteratorTypeField
+      : public BitField<IteratorType, ForEachStatement::kNextBitFieldIndex, 1> {
+  };
 
-  Variable* iterator_;
-  Expression* assign_iterator_;
-  Expression* next_result_;
-  Expression* result_done_;
-  Expression* assign_each_;
+  int next_suspend_id_{-1};
+  int close_suspend_id_{-1};
 };
-
 
 class ExpressionStatement final : public Statement {
  public:
@@ -865,6 +1045,9 @@ class TryCatchStatement final : public TryStatement {
   Block* catch_block() const { return catch_block_; }
   void set_catch_block(Block* b) { catch_block_ = b; }
 
+  Expression* pattern() { return pattern_; }
+  void set_pattern(Expression* pattern) { pattern = pattern_; }
+
   // Prediction of whether exceptions thrown into the handler for this try block
   // will be caught.
   //
@@ -913,17 +1096,28 @@ class TryCatchStatement final : public TryStatement {
            outer_catch_prediction != HandlerTable::UNCAUGHT;
   }
 
+  const BoundNames& GetBoundNames() const {
+    if (bound_names_ == nullptr) return BoundNames::Empty();
+    return *bound_names_;
+  }
+  void set_bound_names(BoundNames* bound_names) { bound_names_ = bound_names; }
+
  private:
   friend class AstNodeFactory;
 
-  TryCatchStatement(Block* try_block, Scope* scope, Block* catch_block,
+  TryCatchStatement(Block* try_block, Scope* scope, Expression* pattern,
+                    BoundNames* bound_names, Block* catch_block,
                     HandlerTable::CatchPrediction catch_prediction, int pos)
       : TryStatement(try_block, pos, kTryCatchStatement),
         scope_(scope),
+        pattern_(pattern),
+        bound_names_(bound_names),
         catch_block_(catch_block),
         catch_prediction_(catch_prediction) {}
 
   Scope* scope_;
+  Expression* pattern_;
+  BoundNames* bound_names_;
   Block* catch_block_;
   HandlerTable::CatchPrediction catch_prediction_;
 };
@@ -1314,6 +1508,115 @@ class ObjectLiteral final : public AggregateLiteral {
       : public BitField<bool, FastElementsField::kNext, 1> {};
 };
 
+class Pattern : public Expression {
+ public:
+  enum class BindingType { kElision, kElement, kRestElement };
+
+  bool has_rest_element() const {
+    return HasRestElementField::decode(bit_field_);
+  }
+
+ protected:
+  inline Pattern(NodeType node_type, int pos) : Expression(pos, node_type) {}
+
+  class HasRestElementField
+      : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
+  static const uint8_t kNextBitFieldIndex = HasRestElementField::kNext;
+
+  inline void set_has_rest_element() {
+    bit_field_ |= HasRestElementField::encode(true);
+  }
+
+  static Pattern* CreatePattern(Zone* zone, Expression* pattern);
+};
+
+class ObjectPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* name() const { return name_; }
+    inline void set_name(Expression* replacement) { name_ = replacement; }
+    inline bool is_computed_name() const { return is_computed_name_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+
+   private:
+    friend class ObjectPattern;
+    friend class Pattern;
+    Element() = delete;
+    explicit Element(ObjectLiteralProperty* prop);
+
+    BindingType type_ : 4;
+    bool is_computed_name_ : 1;
+    Expression* name_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+  const BoundNames& GetBoundNames() const {
+    if (!bound_names_) return BoundNames::Empty();
+    return *bound_names_;
+  }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ArrayPattern;
+  friend class Pattern;
+  ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+  BoundNames* bound_names_;
+};
+
+class ArrayPattern final : public Pattern {
+ public:
+  class Element final {
+   public:
+    inline BindingType type() const { return type_; }
+    inline Expression* target() const { return target_; }
+    inline void set_target(Expression* replacement) { target_ = replacement; }
+    inline Expression* initializer() const { return initializer_; }
+    inline void set_initializer(Expression* replacement) {
+      initializer_ = replacement;
+    }
+    inline bool IsPattern() const {
+      return target_ != nullptr && target_->IsPattern();
+    }
+
+    inline bool IsRestElement() const {
+      return type() == BindingType::kRestElement;
+    }
+    inline bool IsElision() const { return type() == BindingType::kElision; }
+
+   private:
+    friend class ArrayPattern;
+    Element() = delete;
+    explicit Element(Expression* target);
+
+    BindingType type_;
+    Expression* target_;
+    Expression* initializer_;
+  };
+
+  const ZoneVector<Element>& elements() const { return elements_; }
+  ZoneVector<Element>& elements() { return elements_; }
+
+ private:
+  friend class AstNodeFactory;
+  friend class ObjectPattern;
+  friend class Pattern;
+  ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos);
+
+  ZoneVector<Element> elements_;
+};
 
 // A map from property names to getter/setter pairs allocated in the zone.
 class AccessorTable
@@ -1490,6 +1793,8 @@ class VariableProxy final : public Expression {
   VariableProxy* next_unresolved_;
 };
 
+BoundName::BoundName(const VariableProxy* proxy)
+    : name_(proxy->raw_name()), var_(nullptr), position_(proxy->position()) {}
 
 // Left-hand side can only be a property, a global or a (parameter or local)
 // slot.
@@ -2051,6 +2356,128 @@ class Throw final : public Expression {
   Expression* exception_;
 };
 
+class FunctionParameter final {
+ public:
+  int position() const { return pattern_->position(); }
+  int end_position() const { return end_position_; }
+  bool is_simple() const { return is_simple_; }
+  bool has_initializer() const { return has_initializer_; }
+  bool is_rest_parameter() const { return is_rest_parameter_; }
+  bool calls_sloppy_eval() const { return calls_sloppy_eval_; }
+
+  DeclarationScope* parameter_scope() const { return parameter_scope_; }
+
+  Expression* pattern() const { return pattern_; }
+  Expression* initializer() const { return initializer_; }
+  const AstRawString* raw_name() const {
+    if (!pattern_->IsVariableProxy() && !has_initializer_) return nullptr;
+    return pattern_->AsVariableProxy()->raw_name();
+  }
+  Variable* var() const {
+    if (pattern_->IsVariableProxy()) return pattern_->AsVariableProxy()->var();
+    return nullptr;
+  }
+
+  const BoundNames& GetBoundNames() const {
+    if (bound_names_ == nullptr) return BoundNames::Empty();
+    return *bound_names_;
+  }
+  void set_bound_names(BoundNames* bound_names) { bound_names_ = bound_names; }
+
+  FunctionParameter(Expression* pattern, Expression* initializer,
+                    BoundNames* bound_names, int end_position, bool rest,
+                    bool calls_sloppy_eval)
+      : pattern_(pattern),
+        initializer_(initializer),
+        bound_names_(bound_names),
+        parameter_scope_(nullptr),
+        end_position_(end_position) {
+    DCHECK(pattern->IsVariableProxy() || pattern->IsPattern());
+
+    const bool has_initializer = initializer != nullptr;
+
+    is_simple_ = !has_initializer && !rest && pattern->IsVariableProxy();
+    has_initializer_ = has_initializer;
+    is_rest_parameter_ = rest;
+    calls_sloppy_eval_ = calls_sloppy_eval;
+  }
+
+  FunctionParameter()
+      : pattern_(nullptr),
+        initializer_(nullptr),
+        bound_names_(nullptr),
+        parameter_scope_(nullptr),
+        end_position_(-1) {}
+
+ private:
+  friend class FunctionParameters;
+  Expression* pattern_;
+  Expression* initializer_;
+  BoundNames* bound_names_;
+  DeclarationScope* parameter_scope_;
+
+  int end_position_;
+  bool is_simple_ : 1;
+  bool has_initializer_ : 1;
+  bool is_rest_parameter_ : 1;
+  bool calls_sloppy_eval_ : 1;
+};
+
+inline NestedVariableDeclaration* VariableDeclaration::AsNested() {
+  return IsNestedField::decode(bit_field_)
+             ? static_cast<NestedVariableDeclaration*>(this)
+             : nullptr;
+};
+
+// A helper collection for managing formal parameters.
+class FunctionParameters : public ZoneVector<FunctionParameter> {
+ public:
+  explicit FunctionParameters(Zone* zone) : ZoneVector(zone), scope_(nullptr) {}
+  FunctionParameters(int size, Zone* zone) : ZoneVector(zone), scope_(nullptr) {
+    reserve(size);
+  }
+
+  int FirstNonSimpleParameterIndex() const {
+    int index = 0;
+    for (const FunctionParameter& p : *this) {
+      if (!p.is_simple()) return index;
+      ++index;
+    }
+    return kNoSourcePosition;
+  }
+
+  const_iterator FirstNonSimpleParameter() const {
+    return std::find_if(begin(), end(), IsNonSimple);
+  }
+
+  void AddParameter(Expression* expression, Expression* initializer,
+                    BoundNames* bound_names, int end_position,
+                    bool calls_sloppy_eval) {
+    static const bool kIsRestParameter = false;
+    emplace_back(expression, initializer, bound_names, end_position,
+                 kIsRestParameter, calls_sloppy_eval);
+  }
+
+  void AddRestParameter(Expression* expression, BoundNames* bound_names,
+                        int end_position) {
+    static const bool kIsRestParameter = true;
+    static const bool kCallsSloppyEval = false;
+    emplace_back(expression, nullptr, bound_names, end_position,
+                 kIsRestParameter, kCallsSloppyEval);
+  }
+
+  Scope* scope() const { return scope_; }
+  void set_scope(Scope* scope) { scope_ = scope; }
+
+  void AddParameterScopes(DeclarationScope* fun_scope);
+
+ private:
+  static bool IsNonSimple(const FunctionParameter& parameter) {
+    return !parameter.is_simple();
+  }
+
+  Scope* scope_;
+};
 
 class FunctionLiteral final : public Expression {
  public:
@@ -2077,6 +2504,7 @@ class FunctionLiteral final : public Expression {
   const AstConsString* raw_name() const { return raw_name_; }
   void set_raw_name(const AstConsString* name) { raw_name_ = name; }
   DeclarationScope* scope() const { return scope_; }
+  const FunctionParameters* parameters() const { return parameters_; };
   ZoneList<Statement*>* body() const { return body_; }
   void set_function_token_position(int pos) { function_token_position_ = pos; }
   int function_token_position() const { return function_token_position_; }
@@ -2109,6 +2537,10 @@ class FunctionLiteral final : public Expression {
       return true;
     }
     return false;
+  }
+
+  void set_parameters(FunctionParameters* parameters) {
+    parameters_ = parameters;
   }
 
   Handle<String> debug_name() const {
@@ -2214,6 +2646,7 @@ class FunctionLiteral final : public Expression {
         has_braces_(has_braces),
         raw_name_(name ? ast_value_factory->NewConsString(name) : nullptr),
         scope_(scope),
+        parameters_(nullptr),
         body_(body),
         raw_inferred_name_(ast_value_factory->empty_cons_string()),
         function_literal_id_(function_literal_id),
@@ -2243,6 +2676,7 @@ class FunctionLiteral final : public Expression {
 
   const AstConsString* raw_name_;
   DeclarationScope* scope_;
+  FunctionParameters* parameters_;
   ZoneList<Statement*>* body_;
   const AstConsString* raw_inferred_name_;
   Handle<String> inferred_name_;
@@ -2440,7 +2874,6 @@ class EmptyParentheses final : public Expression {
 // (defined at https://tc39.github.io/ecma262/#sec-getiterator). Ignition
 // desugars this into a LoadIC / JSLoadNamed, CallIC, and a type-check to
 // validate return value of the Symbol.iterator() call.
-enum class IteratorType { kNormal, kAsync };
 class GetIterator final : public Expression {
  public:
   IteratorType hint() const { return hint_; }
@@ -2681,6 +3114,10 @@ class AstNodeFactory final BASE_EMBEDDED {
     return new (zone_) FunctionDeclaration(proxy, fun, pos);
   }
 
+  VarExpression* NewVarExpression(VariableMode mode, int pos) {
+    return new (zone_) VarExpression(zone_, mode, pos);
+  }
+
   Block* NewBlock(int capacity, bool ignore_completion_value,
                   ZoneList<const AstRawString*>* labels = nullptr) {
     return labels != nullptr
@@ -2712,7 +3149,10 @@ class AstNodeFactory final BASE_EMBEDDED {
         return new (zone_) ForInStatement(labels, pos);
       }
       case ForEachStatement::ITERATE: {
-        return new (zone_) ForOfStatement(labels, pos);
+        return new (zone_) ForOfStatement(labels, IteratorType::kNormal, pos);
+      }
+      case ForEachStatement::ASYNC_ITERATE: {
+        return new (zone_) ForOfStatement(labels, IteratorType::kAsync, pos);
       }
     }
     UNREACHABLE();
@@ -2720,7 +3160,12 @@ class AstNodeFactory final BASE_EMBEDDED {
 
   ForOfStatement* NewForOfStatement(ZoneList<const AstRawString*>* labels,
                                     int pos) {
-    return new (zone_) ForOfStatement(labels, pos);
+    return new (zone_) ForOfStatement(labels, IteratorType::kNormal, pos);
+  }
+
+  ForOfStatement* NewForAwaitOfStatement(ZoneList<const AstRawString*>* labels,
+                                         int pos) {
+    return new (zone_) ForOfStatement(labels, IteratorType::kAsync, pos);
   }
 
   ExpressionStatement* NewExpressionStatement(Expression* expression, int pos) {
@@ -2761,33 +3206,36 @@ class AstNodeFactory final BASE_EMBEDDED {
   }
 
   TryCatchStatement* NewTryCatchStatement(Block* try_block, Scope* scope,
+                                          Expression* pattern,
+                                          BoundNames* bound_names,
                                           Block* catch_block, int pos) {
-    return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::CAUGHT, pos);
+    return new (zone_)
+        TryCatchStatement(try_block, scope, pattern, bound_names, catch_block,
+                          HandlerTable::CAUGHT, pos);
   }
 
-  TryCatchStatement* NewTryCatchStatementForReThrow(Block* try_block,
-                                                    Scope* scope,
-                                                    Block* catch_block,
-                                                    int pos) {
-    return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::UNCAUGHT, pos);
+  TryCatchStatement* NewTryCatchStatementForReThrow(
+      Block* try_block, Scope* scope, Expression* pattern,
+      BoundNames* bound_names, Block* catch_block, int pos) {
+    return new (zone_)
+        TryCatchStatement(try_block, scope, pattern, bound_names, catch_block,
+                          HandlerTable::UNCAUGHT, pos);
   }
 
-  TryCatchStatement* NewTryCatchStatementForDesugaring(Block* try_block,
-                                                       Scope* scope,
-                                                       Block* catch_block,
-                                                       int pos) {
-    return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::DESUGARING, pos);
+  TryCatchStatement* NewTryCatchStatementForDesugaring(
+      Block* try_block, Scope* scope, Expression* pattern,
+      BoundNames* bound_names, Block* catch_block, int pos) {
+    return new (zone_)
+        TryCatchStatement(try_block, scope, pattern, bound_names, catch_block,
+                          HandlerTable::DESUGARING, pos);
   }
 
-  TryCatchStatement* NewTryCatchStatementForAsyncAwait(Block* try_block,
-                                                       Scope* scope,
-                                                       Block* catch_block,
-                                                       int pos) {
-    return new (zone_) TryCatchStatement(try_block, scope, catch_block,
-                                         HandlerTable::ASYNC_AWAIT, pos);
+  TryCatchStatement* NewTryCatchStatementForAsyncAwait(
+      Block* try_block, Scope* scope, Expression* pattern,
+      BoundNames* bound_names, Block* catch_block, int pos) {
+    return new (zone_)
+        TryCatchStatement(try_block, scope, pattern, bound_names, catch_block,
+                          HandlerTable::ASYNC_AWAIT, pos);
   }
 
   TryFinallyStatement* NewTryFinallyStatement(Block* try_block,
@@ -2856,6 +3304,24 @@ class AstNodeFactory final BASE_EMBEDDED {
       uint32_t boilerplate_properties, int pos, bool has_rest_property) {
     return new (zone_) ObjectLiteral(properties, boilerplate_properties, pos,
                                      has_rest_property);
+  }
+
+  ObjectPattern* NewObjectPattern(ObjectLiteral* literal) {
+    return new (zone_) ObjectPattern(zone_, literal, literal->position());
+  }
+
+  ArrayPattern* NewArrayPattern(ArrayLiteral* literal) {
+    return new (zone_) ArrayPattern(zone_, literal, literal->position());
+  }
+
+  Pattern* NewPattern(Expression* literal) {
+    if (literal->IsObjectLiteral()) {
+      return NewObjectPattern(literal->AsObjectLiteral());
+    } else if (literal->IsArrayLiteral()) {
+      return NewArrayPattern(literal->AsArrayLiteral());
+    }
+    UNREACHABLE();
+    return nullptr;
   }
 
   ObjectLiteral::Property* NewObjectLiteralProperty(

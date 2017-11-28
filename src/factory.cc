@@ -1064,7 +1064,8 @@ Handle<Context> Factory::NewCatchContext(Handle<JSFunction> function,
                                          Handle<Object> thrown_object) {
   STATIC_ASSERT(Context::MIN_CONTEXT_SLOTS == Context::THROWN_OBJECT_INDEX);
   Handle<ContextExtension> extension = NewContextExtension(scope_info, name);
-  Handle<FixedArray> array = NewFixedArray(Context::MIN_CONTEXT_SLOTS + 1);
+  Handle<FixedArray> array = NewFixedArray(Context::MIN_CONTEXT_SLOTS +
+                                           scope_info->ContextLocalCount());
   array->set_map_no_write_barrier(*catch_context_map());
   Handle<Context> context = Handle<Context>::cast(array);
   context->set_closure(*function);

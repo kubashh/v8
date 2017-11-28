@@ -155,7 +155,8 @@ void Processor::VisitBlock(Block* node) {
 
 void Processor::VisitExpressionStatement(ExpressionStatement* node) {
   // Rewrite : <x>; -> .result = <x>;
-  if (!is_set_) {
+  const bool ignore = node->expression()->IsVarExpression();
+  if (!is_set_ && !ignore) {
     node->set_expression(SetResult(node->expression()));
     is_set_ = true;
   }
@@ -373,7 +374,6 @@ bool Rewriter::Rewrite(ParseInfo* info) {
   }
 
   ZoneList<Statement*>* body = function->body();
-  DCHECK_IMPLIES(scope->is_module_scope(), !body->is_empty());
   if (!body->is_empty()) {
     Variable* result = scope->AsDeclarationScope()->NewTemporary(
         info->ast_value_factory()->dot_result_string());
@@ -381,7 +381,6 @@ bool Rewriter::Rewrite(ParseInfo* info) {
                         result, info->ast_value_factory());
     processor.Process(body);
 
-    DCHECK_IMPLIES(scope->is_module_scope(), processor.result_assigned());
     if (processor.result_assigned()) {
       int pos = kNoSourcePosition;
       Expression* result_value =

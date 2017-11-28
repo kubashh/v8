@@ -486,7 +486,6 @@ bool ArrayLiteral::is_empty() const {
 }
 
 int ArrayLiteral::InitDepthAndFlags() {
-  DCHECK_LT(first_spread_index_, 0);
   if (is_initialized()) return depth();
 
   int constants_length = values()->length();
@@ -497,7 +496,6 @@ int ArrayLiteral::InitDepthAndFlags() {
   int array_index = 0;
   for (; array_index < constants_length; array_index++) {
     Expression* element = values()->at(array_index);
-    DCHECK(!element->IsSpread());
     MaterializedLiteral* literal = element->AsMaterializedLiteral();
     if (literal != nullptr) {
       int subliteral_depth = literal->InitDepthAndFlags() + 1;
@@ -518,11 +516,11 @@ int ArrayLiteral::InitDepthAndFlags() {
 }
 
 void ArrayLiteral::BuildConstantElements(Isolate* isolate) {
-  DCHECK_LT(first_spread_index_, 0);
-
   if (!constant_elements_.is_null()) return;
 
-  int constants_length = values()->length();
+  int constants_length =
+      first_spread_index_ >= 0 ? first_spread_index_ : values()->length();
+  bool seen_spread = false;
   ElementsKind kind = FIRST_FAST_ELEMENTS_KIND;
   Handle<FixedArray> fixed_array =
       isolate->factory()->NewFixedArrayWithHoles(constants_length);
@@ -532,11 +530,13 @@ void ArrayLiteral::BuildConstantElements(Isolate* isolate) {
   int array_index = 0;
   for (; array_index < constants_length; array_index++) {
     Expression* element = values()->at(array_index);
-    DCHECK(!element->IsSpread());
+    if (element->IsSpread()) seen_spread = true;
     MaterializedLiteral* m_literal = element->AsMaterializedLiteral();
     if (m_literal != nullptr) {
       m_literal->BuildConstants(isolate);
     }
+
+    if (seen_spread) continue;
 
     // New handle scope here, needs to be after BuildContants().
     HandleScope scope(isolate);
@@ -800,6 +800,140 @@ bool Literal::Match(void* literal1, void* literal2) {
          (x->IsNumber() && y->IsNumber() && x->AsNumber() == y->AsNumber());
 }
 
+ObjectPattern::Element::Element(ObjectLiteralProperty* prop)
+    : type_(prop->kind() == ObjectLiteralProperty::SPREAD
+                ? BindingType::kRestElement
+                : BindingType::kElement),
+      is_computed_name_(prop->is_computed_name()),
+      name_(prop->key()),
+      target_(prop->value()),
+      initializer_(nullptr) {
+  if (target_->IsAssignment()) {
+    Assignment* assignment = target_->AsAssignment();
+    DCHECK_EQ(Token::ASSIGN, assignment->op());
+    target_ = assignment->target();
+    initializer_ = assignment->value();
+  }
+}
+
+ObjectPattern::ObjectPattern(Zone* zone, ObjectLiteral* literal, int pos)
+    : Pattern(kObjectPattern, pos), elements_(zone) {
+  ZoneList<ObjectLiteralProperty*>* properties = literal->properties();
+  if (properties == nullptr) return;
+
+  elements_.reserve(properties->length());
+  if (literal->has_rest_property()) set_has_rest_element();
+
+  // Convert ObjectLiteralProperties into Elements
+  for (ObjectLiteralProperty* prop : *properties) {
+    Expression* value = prop->value();
+    int position = value->position();
+    switch (value->node_type()) {
+      case kObjectLiteral: {
+        ObjectLiteral* literal = value->AsObjectLiteral();
+        prop->set_value(new (zone) ObjectPattern(zone, literal, position));
+        break;
+      }
+      case kArrayLiteral: {
+        ArrayLiteral* literal = value->AsArrayLiteral();
+        prop->set_value(new (zone) ArrayPattern(zone, literal, position));
+        break;
+      }
+#ifdef DEBUG
+      case kAssignment: {
+        Assignment* assign = value->AsAssignment();
+        // ParseAssignmentExpression should have converted the initializer's
+        // LHS into a Pattern object.
+        DCHECK_EQ(assign->op(), Token::ASSIGN);
+        DCHECK_NULL(assign->target()->AsObjectLiteral());
+        DCHECK_NULL(assign->target()->AsArrayLiteral());
+        break;
+      }
+#endif
+      default:
+        break;
+    }
+
+    elements_.push_back(Element(prop));
+  }
+}
+
+ArrayPattern::Element::Element(Expression* target)
+    : type_(BindingType::kElement), target_(target), initializer_(nullptr) {
+  if (target->IsLiteral()) {
+    DCHECK(target->AsLiteral()->raw_value()->IsTheHole());
+    type_ = BindingType::kElision;
+    target_ = nullptr;
+    initializer_ = nullptr;
+  } else if (target->IsSpread()) {
+    type_ = BindingType::kRestElement;
+    target_ = target->AsSpread()->expression();
+  } else if (target->IsAssignment()) {
+    Assignment* assignment = target->AsAssignment();
+    DCHECK_EQ(Token::ASSIGN, assignment->op());
+    target_ = assignment->target();
+    initializer_ = assignment->value();
+  }
+}
+
+ArrayPattern::ArrayPattern(Zone* zone, ArrayLiteral* literal, int pos)
+    : Pattern(kArrayPattern, pos), elements_(zone) {
+  ZoneList<Expression*>* values = literal->values();
+
+  elements_.reserve(values->length());
+
+  for (Expression* value : *values) {
+    switch (value->node_type()) {
+      case kObjectLiteral: {
+        value = new (zone)
+            ObjectPattern(zone, value->AsObjectLiteral(), value->position());
+        break;
+      }
+      case kArrayLiteral: {
+        value = new (zone)
+            ArrayPattern(zone, value->AsArrayLiteral(), value->position());
+        break;
+      }
+      case kSpread: {
+        set_has_rest_element();
+        Spread* spread = value->AsSpread();
+        Expression* expr = spread->expression();
+        switch (expr->node_type()) {
+          case kObjectLiteral: {
+            spread->set_expression(new (zone) ObjectPattern(
+                zone, expr->AsObjectLiteral(), expr->position()));
+            break;
+          }
+          case kArrayLiteral: {
+            spread->set_expression(new (zone) ArrayPattern(
+                zone, expr->AsArrayLiteral(), expr->position()));
+            break;
+          }
+          default:
+            break;
+        }
+        break;
+      }
+#ifdef DEBUG
+      case kAssignment: {
+        Assignment* assign = value->AsAssignment();
+        // ParseAssignmentExpression should have converted the initializer's
+        // LHS into a Pattern object.
+        DCHECK_EQ(assign->op(), Token::ASSIGN);
+        DCHECK_NULL(assign->target()->AsObjectLiteral());
+        DCHECK_NULL(assign->target()->AsArrayLiteral());
+        break;
+      }
+#endif
+
+      default:
+        break;
+    }
+
+    elements_.push_back(Element(value));
+  }
+}
+
 const char* CallRuntime::debug_name() {
 #ifdef DEBUG
   return is_jsruntime() ? NameForNativeContextIntrinsicIndex(context_index_)
@@ -823,6 +957,39 @@ ZoneList<const AstRawString*>* BreakableStatement::labels() const {
 }
 
 #undef RETURN_LABELS
+
+void FunctionParameters::AddParameterScopes(DeclarationScope* fun_scope) {
+  DCHECK_NOT_NULL(fun_scope);
+  Zone* zone = get_allocator().zone();
+  for (FunctionParameter& p : *this) {
+    if (p.calls_sloppy_eval() && !p.is_simple()) {
+      DeclarationScope* scope =
+          new (zone) DeclarationScope(zone, fun_scope, BLOCK_SCOPE);
+      scope->RecordEvalCall();
+      scope->set_start_position(p.position());
+      scope->set_end_position(p.end_position());
+      p.parameter_scope_ = scope;
+    }
+  }
+}
+
+// Return true if a given binding has an initializer. This is used to mark
+// pre-existing VAR single-name bindings as maybe assigned on declaration.
+// (regress-5636-2.js)
+bool VarExpression::BindingIsInitialized(size_t index) const {
+  DCHECK_LT(index, GetBoundNames().size());
+  if (cached_element_ == nullptr || cached_element_->last_ < index ||
+      cached_element_->first_ >= index) {
+    for (auto& element : *this) {
+      if (element.first_ <= index || element.last_ > index) {
+        cached_element_ = const_cast<Element*>(&element);
+        break;
+      }
+    }
+  }
+
+  return cached_element_->initializer() != nullptr;
+}
 
 }  // namespace internal
 }  // namespace v8

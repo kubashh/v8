@@ -1001,7 +1001,8 @@ enum VariableKind : uint8_t {
   NORMAL_VARIABLE,
   FUNCTION_VARIABLE,
   THIS_VARIABLE,
-  SLOPPY_FUNCTION_NAME_VARIABLE
+  SLOPPY_FUNCTION_NAME_VARIABLE,
+  CATCH_PARAMETER,
 };
 
 inline bool IsDynamicVariableMode(VariableMode mode) {

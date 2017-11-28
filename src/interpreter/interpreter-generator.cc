@@ -2293,6 +2293,72 @@ IGNITION_HANDLER(JumpIfNotUndefinedConstant, InterpreterAssembler) {
   JumpIfWordNotEqual(accumulator, undefined_value, relative_jump);
 }
 
+// JumpIfHole <imm>
+//
+// Jump by the number of bytes represented by an immediate operand if the object
+// referenced by the accumulator is the hole constant.
+IGNITION_HANDLER(JumpIfHole, InterpreterAssembler) {
+  Node* accumulator = GetAccumulator();
+  Node* the_hole_value = HeapConstant(isolate()->factory()->the_hole_value());
+  Node* relative_jump = BytecodeOperandUImmWord(0);
+  JumpIfWordEqual(accumulator, the_hole_value, relative_jump);
+}
+
+// JumpIfNotHole <imm>
+//
+// Jump by the number of bytes represented by an immediate operand if the object
+// referenced by the accumulator is not the hole constant.
+IGNITION_HANDLER(JumpIfNotHole, InterpreterAssembler) {
+  Node* accumulator = GetAccumulator();
+  Node* the_hole_value = HeapConstant(isolate()->factory()->the_hole_value());
+  Node* relative_jump = BytecodeOperandUImmWord(0);
+  JumpIfWordNotEqual(accumulator, the_hole_value, relative_jump);
+}
+
+// JumpIfCallable
+//
+// Jump by the number of bytes represented by an immediate operand if the object
+// referenced by the accumulator is a callable HeapObject.
+IGNITION_HANDLER(JumpIfCallable, InterpreterAssembler) {
+  Node* accumulator = GetAccumulator();
+  Node* relative_jump = BytecodeOperandUImmWord(0);
+  Label if_callable(this), if_notcallable(this, Label::kDeferred);
+
+  GotoIf(TaggedIsSmi(accumulator), &if_notcallable);
+
+  Node* map = LoadMap(accumulator);
+  Branch(IsSetWord(LoadMapBitField(map), 1 << Map::kIsCallable), &if_callable,
+         &if_notcallable);
+
+  BIND(&if_callable);
+  Jump(relative_jump);
+
+  BIND(&if_notcallable);
+  Dispatch();
+}
+
+// JumpIfNotCallable
+//
+// Jump by the number of bytes represented by an immediate operand if the object
+// referenced by the accumulator is not a callable HeapObject.
+IGNITION_HANDLER(JumpIfNotCallable, InterpreterAssembler) {
+  Node* accumulator = GetAccumulator();
+  Node* relative_jump = BytecodeOperandUImmWord(0);
+  Label if_callable(this), if_notcallable(this, Label::kDeferred);
+
+  GotoIf(TaggedIsSmi(accumulator), &if_notcallable);
+
+  Node* map = LoadMap(accumulator);
+  Branch(IsSetWord(LoadMapBitField(map), 1 << Map::kIsCallable), &if_callable,
+         &if_notcallable);
+
+  BIND(&if_notcallable);
+  Jump(relative_jump);
+
+  BIND(&if_callable);
+  Dispatch();
+}
+
 // JumpIfJSReceiver <imm>
 //
 // Jump by the number of bytes represented by an immediate operand if the object
@@ -2335,7 +2401,7 @@ IGNITION_HANDLER(JumpIfJSReceiverConstant, InterpreterAssembler) {
   Dispatch();
 }
 
-// JumpLoop <imm> <loop_depth>
+// JumpLoop <imm> <loop_depth> <has_context>
 //
 // Jump by the number of bytes represented by the immediate operand |imm|. Also
 // performs a loop nesting check and potentially triggers OSR in case the

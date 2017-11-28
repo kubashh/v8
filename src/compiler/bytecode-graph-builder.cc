@@ -412,8 +412,9 @@ void BytecodeGraphBuilder::Environment::PrepareForLoopExit(
   for (int i = 0; i < register_count(); i++) {
     if (assignments.ContainsLocal(i) &&
         (liveness == nullptr || liveness->RegisterIsLive(i))) {
-      Node* rename = graph()->NewNode(common()->LoopExitValue(),
-                                      values_[register_base() + i], loop_exit);
+      Node* old = values_[register_base() + i];
+      Node* rename =
+          graph()->NewNode(common()->LoopExitValue(), old, loop_exit);
       values_[register_base() + i] = rename;
     }
   }
@@ -917,7 +918,13 @@ void BytecodeGraphBuilder::VisitStar() {
 void BytecodeGraphBuilder::VisitMov() {
   Node* value =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
-  environment()->BindRegister(bytecode_iterator().GetRegisterOperand(1), value);
+  interpreter::Register dest = bytecode_iterator().GetRegisterOperand(1);
+
+  if (dest.is_current_context()) {
+    environment()->SetContext(value);
+  } else {
+    environment()->BindRegister(dest, value);
+  }
 }
 
 Node* BytecodeGraphBuilder::BuildLoadGlobal(Handle<Name> name,
@@ -2586,6 +2593,26 @@ void BytecodeGraphBuilder::VisitJumpIfNotUndefined() {
 
 void BytecodeGraphBuilder::VisitJumpIfNotUndefinedConstant() {
   BuildJumpIfNotEqual(jsgraph()->UndefinedConstant());
+}
+
+void BytecodeGraphBuilder::VisitJumpIfHole() {
+  BuildJumpIfEqual(jsgraph()->TheHoleConstant());
+}
+
+void BytecodeGraphBuilder::VisitJumpIfNotHole() {
+  BuildJumpIfNotEqual(jsgraph()->TheHoleConstant());
+}
+
+void BytecodeGraphBuilder::VisitJumpIfCallable() {
+  Node* accumulator = environment()->LookupAccumulator();
+  Node* condition = NewNode(simplified()->ObjectIsCallable(), accumulator);
+  BuildJumpIf(condition);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfNotCallable() {
+  Node* accumulator = environment()->LookupAccumulator();
+  Node* condition = NewNode(simplified()->ObjectIsCallable(), accumulator);
+  BuildJumpIfNot(condition);
 }
 
 void BytecodeGraphBuilder::VisitJumpLoop() { BuildJump(); }

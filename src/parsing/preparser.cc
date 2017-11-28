@@ -172,6 +172,8 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     CheckArityRestrictions(
         formals.arity, kind, formals.has_rest, function_scope->start_position(),
         formals_end_position, CHECK_OK_VALUE(kPreParseSuccess));
+  } else {
+    formals.is_simple = function_scope->HasSimpleParameters();
   }
 
   Expect(Token::LBRACE, CHECK_OK_VALUE(kPreParseSuccess));
@@ -189,7 +191,7 @@ PreParser::PreParseResult PreParser::PreParseFunction(
   }
 
   if (!formals.is_simple) {
-    BuildParameterInitializationBlock(formals, ok);
+    // BuildParameterInitializationBlock(formals, ok);
 
     if (is_sloppy(inner_scope->language_mode())) {
       inner_scope->HoistSloppyBlockFunctions(nullptr);
@@ -311,12 +313,27 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
 
   Expect(Token::LBRACE, CHECK_OK);
 
-  // Parse function body.
+  DeclarationScope* inner_scope = function_scope;
   PreParserStatementList body;
+
+  // Parse function body.
   int pos = function_token_pos == kNoSourcePosition ? peek_position()
                                                     : function_token_pos;
-  ParseFunctionBody(body, function_name, pos, formals, kind, function_type,
-                    CHECK_OK);
+  if (!formals.is_simple) {
+    inner_scope = NewVarblockScope();
+    inner_scope->set_start_position(position());
+  }
+
+  {
+    BlockState block_state(&scope_, inner_scope);
+    ParseFunctionBody(body, function_name, pos, formals, kind, function_type,
+                      ok);
+  }
+
+  if (!formals.is_simple) {
+    function_scope->SetLanguageMode(inner_scope->language_mode());
+    inner_scope->FinalizeBlockScope();
+  }
 
   // Parsing the body may change the language mode in our scope.
   language_mode = function_scope->language_mode();
@@ -362,35 +379,10 @@ PreParser::LazyParsingResult PreParser::ParseStatementListAndLogFunction(
   // Position right after terminal '}'.
   DCHECK_EQ(Token::RBRACE, scanner()->peek());
   int body_end = scanner()->peek_location().end_pos;
-  DCHECK_EQ(this->scope()->is_function_scope(), formals->is_simple);
+  // DCHECK_EQ(this->scope()->is_function_scope(), formals->is_simple);
   log_.LogFunction(body_end, formals->num_parameters(),
                    GetLastFunctionLiteralId());
   return kLazyParsingComplete;
-}
-
-PreParserStatement PreParser::BuildParameterInitializationBlock(
-    const PreParserFormalParameters& parameters, bool* ok) {
-  DCHECK(!parameters.is_simple);
-  DCHECK(scope()->is_function_scope());
-  if (FLAG_preparser_scope_analysis &&
-      scope()->AsDeclarationScope()->calls_sloppy_eval() &&
-      produced_preparsed_scope_data_ != nullptr) {
-    // We cannot replicate the Scope structure constructed by the Parser,
-    // because we've lost information whether each individual parameter was
-    // simple or not. Give up trying to produce data to skip inner functions.
-    if (produced_preparsed_scope_data_->parent() != nullptr) {
-      // Lazy parsing started before the current function; the function which
-      // cannot contain skippable functions is the parent function. (Its inner
-      // functions cannot either; they are implicitly bailed out.)
-      produced_preparsed_scope_data_->parent()->Bailout();
-    } else {
-      // Lazy parsing started at the current function; it cannot contain
-      // skippable functions.
-      produced_preparsed_scope_data_->Bailout();
-    }
-  }
-
-  return PreParserStatement::Default();
 }
 
 PreParserExpression PreParser::ExpressionFromIdentifier(
@@ -404,29 +396,118 @@ PreParserExpression PreParser::ExpressionFromIdentifier(
   return PreParserExpression::FromIdentifier(name, proxy, zone());
 }
 
-void PreParser::DeclareAndInitializeVariables(
-    PreParserStatement block,
-    const DeclarationDescriptor* declaration_descriptor,
-    const DeclarationParsingResult::Declaration* declaration,
-    ZoneList<const AstRawString*>* names, bool* ok) {
-  if (declaration->pattern.variables_ != nullptr) {
-    DCHECK(FLAG_lazy_inner_functions);
-    DCHECK(track_unresolved_variables_);
-    for (auto variable : *(declaration->pattern.variables_)) {
-      declaration_descriptor->scope->RemoveUnresolved(variable);
-      Variable* var = scope()->DeclareVariableName(
-          variable->raw_name(), declaration_descriptor->mode);
-      if (FLAG_preparser_scope_analysis) {
-        MarkLoopVariableAsAssigned(declaration_descriptor->scope, var,
-                                   declaration_descriptor->declaration_kind);
-        // This is only necessary if there is an initializer, but we don't have
-        // that information here.  Consequently, the preparser sometimes says
-        // maybe-assigned where the parser (correctly) says never-assigned.
-      }
-      if (names) {
-        names->Add(variable->raw_name(), zone());
+void PreParser::CreateBindings(const BoundNames& bound_names, VariableMode mode,
+                               int initializer_position,
+                               ZoneList<const AstRawString*>* names,
+                               const PreParserExpression& declarations,
+                               bool* ok) {
+  if (!track_unresolved_variables_) return;
+
+  DCHECK(!scope()->is_catch_scope());
+  Scope* catch_scope = scope()->GetOuterCatchScope();
+
+  auto init = mode == VAR ? kCreatedInitialized : kNeedsInitialization;
+
+  for (const BoundName& binding : bound_names) {
+    Variable* var = nullptr;
+
+    if (catch_scope != nullptr && mode == VAR) {
+      var = catch_scope->LookupCatchParameter(binding.name());
+      if (var != nullptr) {
+        pending_error_handler_->ReportMessageAt(
+            binding.position(), binding.position() + 1,
+            MessageTemplate::kVarRedeclaration, binding.name());
+        *ok = false;
       }
     }
+
+    DeclareVariable(binding.name(), mode, init, binding.position(), &var, ok);
+    if (!*ok) return;
+    DCHECK_NOT_NULL(var);
+
+    if (IsLexicalVariableMode(mode)) {
+      var->set_initializer_position(initializer_position);
+    }
+
+    // D: const_cast I'm sorry ._.
+    const_cast<BoundName&>(binding).set_var(var);
+  }
+}
+
+void PreParser::CreateCatchParameterBindings(Scope* catch_scope,
+                                             CatchInfo* catch_info,
+                                             const BoundNames& bound_names,
+                                             bool* ok) {
+  const AstRawString* catch_name = catch_info->name.string_;
+  if (catch_name == nullptr) {
+    catch_name = ast_value_factory()->dot_catch_string();
+  }
+  catch_scope->DeclareCatchVariableName(catch_name);
+
+  for (const BoundName& binding : bound_names) {
+    if (!binding.name()) {
+      // The name should only be a nullptr if we aren't tracking unresolved
+      // variables.
+      DCHECK_NULL(catch_info->pattern.variables_);
+      break;
+    }
+
+    Variable* existing = catch_scope->LookupLocal(binding.name());
+    if (existing != nullptr) {
+      pending_error_handler_->ReportMessageAt(
+          binding.position(), binding.position() + 1,
+          MessageTemplate::kVarRedeclaration, binding.name());
+      *ok = false;
+      return;
+    }
+    catch_scope->DeclareVariableName(binding.name(), LET);
+  }
+}
+
+void PreParser::CreateLegacyVarBindings(const BoundNames& bound_names,
+                                        ZoneList<const AstRawString*>* names,
+                                        const PreParserExpression& declarations,
+                                        bool* ok) {
+  if (!track_unresolved_variables_) return;
+
+  Scope* catch_scope = scope();
+  Scope* declaration_scope = scope()->GetDeclarationScope();
+  while (catch_scope && !catch_scope->is_catch_scope()) {
+    if (catch_scope->is_declaration_scope() && !catch_scope->is_block_scope()) {
+      catch_scope = nullptr;
+      break;
+    }
+    catch_scope = catch_scope->outer_scope();
+  }
+
+  if (!catch_scope) {
+    return CreateBindings(bound_names, VAR, kNoSourcePosition, names,
+                          declarations, ok);
+  }
+
+  for (const BoundName& binding : bound_names) {
+    DCHECK_NOT_NULL(binding.name());
+    Variable* existing = catch_scope->LookupCatchParameter(binding.name());
+    if (existing != nullptr) {
+      if (existing->mode() == VAR) {
+        // D: const_cast I'm sorry ._.
+        const_cast<BoundName&>(binding).set_var(existing);
+        continue;
+      }
+      pending_error_handler_->ReportMessageAt(
+          binding.position(), binding.position() + 1,
+          MessageTemplate::kVarRedeclaration, binding.name());
+      *ok = false;
+      return;
+    }
+
+    Variable* var = declaration_scope->LookupLocal(binding.name());
+    if (var == nullptr) {
+      var = declaration_scope->DeclareLocal(
+          binding.name(), VAR, kCreatedInitialized, NORMAL_VARIABLE);
+    }
+    // D: const_cast I'm sorry ._.
+    const_cast<BoundName&>(binding).set_var(var);
   }
 }
 

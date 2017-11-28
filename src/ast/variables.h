@@ -135,6 +135,7 @@ class Variable final : public ZoneObject {
   bool is_sloppy_function_name() const {
     return kind() == SLOPPY_FUNCTION_NAME_VARIABLE;
   }
+  bool is_catch_parameter() const { return kind() == CATCH_PARAMETER; }
 
   Variable* local_if_not_shadowed() const {
     DCHECK(mode() == DYNAMIC_LOCAL && local_if_not_shadowed_ != nullptr);

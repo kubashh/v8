@@ -14,6 +14,52 @@
 namespace v8 {
 namespace internal {
 
+static const bool kLogScopes = false;
+
+template <typename... Args>
+void ScopeLogger(const char* fmt, Args&&... args) {
+  if (!kLogScopes) return;
+  PrintF(fmt, std::forward<Args>(args)...);
+}
+
+void ScopeLogger(Variable* var, const char* header) {
+  if (!kLogScopes) return;
+  const AstRawString* raw_name = var->raw_name();
+  std::string name((const char*)raw_name->raw_data(),
+                   (size_t)raw_name->byte_length());
+  ScopeLogger("  > %s: %s\n", header, name.c_str());
+}
+
+std::string ToString(const AstRawString* name) {
+  if (!name) return "nullptr!";
+  return std::string((const char*)name->raw_data(),
+                     (size_t)name->byte_length());
+}
+
+std::string ToString(Variable* var) {
+  if (!var) return "nullptr!";
+  return ToString(var->raw_name());
+}
+
+std::string ScopeName(Scope* scope) {
+  std::string ret;
+
+#ifdef DEBUG
+  ret += "`" + ToString(scope->scope_name()) + "`";
+#endif
+
+  if (scope->is_declaration_scope()) {
+    DeclarationScope* decl = scope->AsDeclarationScope();
+    if (decl->is_function_scope() && decl->function_var()) {
+      Variable* var = decl->function_var();
+      if (ret.length()) ret += " ";
+      ret += "(fn: " + ToString(var) + ")";
+    }
+  }
+
+  return ret;
+}
+
 namespace {
 
 class ScopeCallsSloppyEvalField : public BitField<bool, 0, 1> {};
@@ -345,6 +391,8 @@ void ProducedPreParsedScopeData::SaveDataForScope(Scope* scope) {
     return;
   }
 
+  ScopeLogger("\n\nSaveDataForScope (%s)\n", ScopeName(scope).c_str());
+
 #ifdef DEBUG
   byte_data_->WriteUint8(scope->scope_type());
 #endif
@@ -373,6 +421,7 @@ void ProducedPreParsedScopeData::SaveDataForScope(Scope* scope) {
 }
 
 void ProducedPreParsedScopeData::SaveDataForVariable(Variable* var) {
+  ScopeLogger(var, "SaveDataForVariable");
 #ifdef DEBUG
   // Store the variable name in debug mode; this way we can check that we
   // restore data to the correct variable.
@@ -526,6 +575,7 @@ void ConsumedPreParsedScopeData::SkipFunctionDataForTesting() {
 }
 
 void ConsumedPreParsedScopeData::RestoreData(Scope* scope) {
+  ScopeLogger("\n\nRestoreData (%s)\n", ScopeName(scope).c_str());
   if (scope->is_declaration_scope() &&
       scope->AsDeclarationScope()->is_skipped_function()) {
     return;
@@ -574,6 +624,7 @@ void ConsumedPreParsedScopeData::RestoreData(Scope* scope) {
 }
 
 void ConsumedPreParsedScopeData::RestoreDataForVariable(Variable* var) {
+  ScopeLogger(var, "RestoreDataForVariable");
 #ifdef DEBUG
   const AstRawString* name = var->raw_name();
   DCHECK_EQ(scope_data_->ReadUint32(), static_cast<uint32_t>(name->length()));

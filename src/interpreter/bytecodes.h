@@ -282,6 +282,10 @@ namespace interpreter {
   V(JumpIfNotNull, AccumulatorUse::kRead, OperandType::kUImm)                  \
   V(JumpIfUndefined, AccumulatorUse::kRead, OperandType::kUImm)                \
   V(JumpIfNotUndefined, AccumulatorUse::kRead, OperandType::kUImm)             \
+  V(JumpIfHole, AccumulatorUse::kRead, OperandType::kUImm)                     \
+  V(JumpIfNotHole, AccumulatorUse::kRead, OperandType::kUImm)                  \
+  V(JumpIfCallable, AccumulatorUse::kRead, OperandType::kUImm)                 \
+  V(JumpIfNotCallable, AccumulatorUse::kRead, OperandType::kUImm)              \
   V(JumpIfJSReceiver, AccumulatorUse::kRead, OperandType::kUImm)               \
                                                                                \
   /* Smi-table lookup for switch statements */                                 \
@@ -389,7 +393,9 @@ namespace interpreter {
   V(JumpIfNotNull)                                      \
   V(JumpIfUndefined)                                    \
   V(JumpIfNotUndefined)                                 \
-  V(JumpIfJSReceiver)                                   \
+  V(JumpIfHole)                                         \
+  V(JumpIfNotHole)                                      \
+  V(JumpIfJSReceiver)
 
 #define JUMP_CONDITIONAL_CONSTANT_BYTECODE_LIST(V)     \
   JUMP_TOBOOLEAN_CONDITIONAL_CONSTANT_BYTECODE_LIST(V) \

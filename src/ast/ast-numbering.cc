@@ -33,6 +33,7 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
 
   void VisitSuspend(Suspend* node);
 
+  void VisitFunctionParameters(const FunctionParameters& parameters);
   void VisitStatementsAndDeclarations(Block* node);
   void VisitStatements(ZoneList<Statement*>* statements);
   void VisitDeclarations(Declaration::List* declarations);
@@ -59,6 +60,15 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
 
 void AstNumberingVisitor::VisitVariableDeclaration(VariableDeclaration* node) {
   VisitVariableProxy(node->proxy());
+}
+
+void AstNumberingVisitor::VisitVarExpression(VarExpression* node) {
+  for (auto& element : *node) {
+    Visit(element.pattern());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
 }
 
 void AstNumberingVisitor::VisitEmptyStatement(EmptyStatement* node) {
@@ -193,6 +203,7 @@ void AstNumberingVisitor::VisitWhileStatement(WhileStatement* node) {
 void AstNumberingVisitor::VisitTryCatchStatement(TryCatchStatement* node) {
   DCHECK(node->scope() == nullptr || !node->scope()->HasBeenRemoved());
   Visit(node->try_block());
+  if (node->pattern()) Visit(node->pattern());
   Visit(node->catch_block());
 }
 
@@ -248,19 +259,22 @@ void AstNumberingVisitor::VisitImportCallExpression(
 void AstNumberingVisitor::VisitForInStatement(ForInStatement* node) {
   Visit(node->enumerable());  // Not part of loop.
   node->set_first_suspend_id(suspend_count_);
-  Visit(node->each());
+  Visit(node->target());
   Visit(node->body());
   node->set_suspend_count(suspend_count_ - node->first_suspend_id());
 }
 
 void AstNumberingVisitor::VisitForOfStatement(ForOfStatement* node) {
-  Visit(node->assign_iterator());  // Not part of loop.
-  node->set_first_suspend_id(suspend_count_);
-  Visit(node->next_result());
-  Visit(node->result_done());
-  Visit(node->assign_each());
-  Visit(node->body());
-  node->set_suspend_count(suspend_count_ - node->first_suspend_id());
+  const bool await = node->iterator_type() == IteratorType::kAsync;
+  Visit(node->iterable());
+  {
+    node->set_first_suspend_id(suspend_count_);
+    if (await) node->set_next_suspend_id(suspend_count_++);
+    Visit(node->target());
+    Visit(node->body());
+    node->set_suspend_count(suspend_count_ - node->first_suspend_id());
+  }
+  if (await) node->set_close_suspend_id(suspend_count_++);
 }
 
 void AstNumberingVisitor::VisitConditional(Conditional* node) {
@@ -325,6 +339,26 @@ void AstNumberingVisitor::VisitArrayLiteral(ArrayLiteral* node) {
   node->InitDepthAndFlags();
 }
 
+void AstNumberingVisitor::VisitObjectPattern(ObjectPattern* node) {
+  for (const auto& element : node->elements()) {
+    Visit(element.name());
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
+}
+
+void AstNumberingVisitor::VisitArrayPattern(ArrayPattern* node) {
+  for (const auto& element : node->elements()) {
+    if (element.type() == ArrayPattern::BindingType::kElision) continue;
+    Visit(element.target());
+    if (element.initializer()) {
+      Visit(element.initializer());
+    }
+  }
+}
+
 void AstNumberingVisitor::VisitCall(Call* node) {
   Visit(node->expression());
   VisitArguments(node->arguments());
@@ -374,12 +408,36 @@ void AstNumberingVisitor::VisitRewritableExpression(
   Visit(node->expression());
 }
 
+void AstNumberingVisitor::VisitFunctionParameters(
+    const FunctionParameters& parameters) {
+  auto it = parameters.begin();
+
+  // Skip leading simple parameters
+  for (; it != parameters.end() && it->is_simple(); ++it)
+    ;
+
+  for (; it != parameters.end(); ++it) {
+    const FunctionParameter& p = *it;
+    Visit(p.pattern());
+    if (p.has_initializer()) Visit(p.initializer());
+  }
+}
+
 bool AstNumberingVisitor::Renumber(FunctionLiteral* node) {
   DeclarationScope* scope = node->scope();
   DCHECK(!scope->HasBeenRemoved());
   function_kind_ = node->kind();
 
+  if (IsGeneratorFunction(function_kind_) || IsModule(function_kind_)) {
+    // Generators and modules have an initial yield which is not present in the
+    // AST.
+    suspend_count_++;
+  }
+
   VisitDeclarations(scope->declarations());
+  if (node->parameters() != nullptr) {
+    VisitFunctionParameters(*node->parameters());
+  }
   VisitStatements(node->body());
 
   node->set_dont_optimize_reason(dont_optimize_reason());

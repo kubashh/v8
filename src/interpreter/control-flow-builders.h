@@ -185,7 +185,7 @@ class V8_EXPORT_PRIVATE SwitchBuilder final
 
 
 // A class to help with co-ordinating control flow in try-catch statements.
-class V8_EXPORT_PRIVATE TryCatchBuilder final : public ControlFlowBuilder {
+class V8_EXPORT_PRIVATE TryCatchBuilder : public ControlFlowBuilder {
  public:
   TryCatchBuilder(BytecodeArrayBuilder* builder,
                   HandlerTable::CatchPrediction catch_prediction)
@@ -197,6 +197,10 @@ class V8_EXPORT_PRIVATE TryCatchBuilder final : public ControlFlowBuilder {
   void EndTry();
   void EndCatch();
 
+  inline HandlerTable::CatchPrediction catch_prediction() const {
+    return catch_prediction_;
+  }
+
  private:
   int handler_id_;
   HandlerTable::CatchPrediction catch_prediction_;
@@ -206,7 +210,7 @@ class V8_EXPORT_PRIVATE TryCatchBuilder final : public ControlFlowBuilder {
 
 
 // A class to help with co-ordinating control flow in try-finally statements.
-class V8_EXPORT_PRIVATE TryFinallyBuilder final : public ControlFlowBuilder {
+class V8_EXPORT_PRIVATE TryFinallyBuilder : public ControlFlowBuilder {
  public:
   TryFinallyBuilder(BytecodeArrayBuilder* builder,
                     HandlerTable::CatchPrediction catch_prediction)

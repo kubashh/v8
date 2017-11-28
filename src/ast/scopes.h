@@ -105,6 +105,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   void SetScopeName(const AstRawString* scope_name) {
     scope_name_ = scope_name;
   }
+  const AstRawString* scope_name() const { return scope_name_; }
   void set_needs_migration() { needs_migration_ = true; }
 #endif
 
@@ -193,12 +194,17 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
                          InitializationFlag init_flag = kCreatedInitialized,
                          VariableKind kind = NORMAL_VARIABLE,
                          MaybeAssignedFlag maybe_assigned_flag = kNotAssigned);
+  void DeclareLocalName(const AstRawString* name, VariableMode mode);
 
   Variable* DeclareVariable(Declaration* declaration, VariableMode mode,
                             InitializationFlag init,
                             bool allow_harmony_restrictive_generators,
                             bool* sloppy_mode_block_scope_function_redefinition,
                             bool* ok);
+
+  void CreateVarBindingOrShadowCatchParameter(Declaration* declaration,
+                                              const AstRawString* name,
+                                              bool* ok);
 
   // The return value is meaningful only if FLAG_preparser_scope_analysis is on.
   Variable* DeclareVariableName(const AstRawString* name, VariableMode mode);
@@ -234,6 +240,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // allocated globally as a "ghost" variable. RemoveUnresolved removes
   // such a variable again if it was added; otherwise this is a no-op.
   bool RemoveUnresolved(VariableProxy* var);
+  void RemoveUnresolved(const AstRawString* name, int position);
 
   // Creates a new temporary variable in this scope's TemporaryScope.  The
   // name is only used for printing and cannot be used to find the variable.
@@ -257,7 +264,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // which is an error even though the two 'e's are declared in different
   // scopes.
   Declaration* CheckLexDeclarationsConflictingWith(
-      const ZoneList<const AstRawString*>& names);
+      const BoundNames& bound_names);
 
   // ---------------------------------------------------------------------------
   // Scope-specific info.
@@ -364,6 +371,12 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   bool is_with_scope() const { return scope_type_ == WITH_SCOPE; }
   bool is_declaration_scope() const { return is_declaration_scope_; }
 
+  bool IsFunctionVarblockScope() const {
+    // Top-level block-DeclarationScope
+    return is_block_scope() && is_declaration_scope() &&
+           outer_scope()->is_function_scope();
+  }
+
   bool inner_scope_calls_eval() const { return inner_scope_calls_eval_; }
   bool IsAsmModule() const;
   // Returns true if this scope or any inner scopes that might be eagerly
@@ -401,8 +414,13 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
 
   Variable* catch_variable() const {
     DCHECK(is_catch_scope());
-    DCHECK_EQ(1, num_var());
-    return static_cast<Variable*>(variables_.Start()->value);
+
+    // catch_scopes can have a single VAR name, which is tracked as the first
+    // "local" in the scope.
+    DCHECK(!locals_.is_empty());
+    Variable* catch_variable = const_cast<Variable*>(*locals_.begin());
+    DCHECK(catch_variable->mode() == VAR);
+    return catch_variable;
   }
 
   // ---------------------------------------------------------------------------
@@ -429,6 +447,10 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // Find the first function, script, eval or (declaration) block scope. This is
   // the scope where var declarations will be hoisted to in the implementation.
   DeclarationScope* GetDeclarationScope();
+
+  // Find the next outer CATCH_SCOPE
+  Scope* GetOuterCatchScope();
+  Variable* LookupCatchParameter(const AstRawString* name);
 
   // Find the first non-block declaration scope. This should be either a script,
   // function, or eval scope. Same as DeclarationScope(), but skips declaration
@@ -719,11 +741,6 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   // calls sloppy eval.
   Variable* DeclareFunctionVar(const AstRawString* name);
 
-  // Declare some special internal variables which must be accessible to
-  // Ignition without ScopeInfo.
-  Variable* DeclareGeneratorObjectVar(const AstRawString* name);
-  Variable* DeclarePromiseVar(const AstRawString* name);
-
   // Declare a parameter in this scope.  When there are duplicated
   // parameters the rightmost one 'wins'.  However, the implementation
   // expects all parameters to be declared and from left to right.
@@ -768,18 +785,6 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
     return function_;
   }
 
-  Variable* generator_object_var() const {
-    DCHECK(is_function_scope() || is_module_scope());
-    return GetRareVariable(RareVariable::kGeneratorObject);
-  }
-
-  Variable* promise_var() const {
-    DCHECK(is_function_scope());
-    DCHECK(IsAsyncFunction(function_kind_));
-    if (IsAsyncGeneratorFunction(function_kind_)) return nullptr;
-    return GetRareVariable(RareVariable::kPromise);
-  }
-
   // Parameters. The left-most parameter has index 0.
   // Only valid for function and module scopes.
   Variable* parameter(int index) const {
@@ -800,6 +805,12 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   Variable* rest_parameter() const {
     return has_rest_ ? params_[params_.length() - 1] : nullptr;
   }
+
+  Variable* shadowed_rest_parameter() const {
+    return GetRareVariable(RareVariable::kShadowedRestParameter);
+  }
+
+  void SetShadowedRestParameter(Variable* var);
 
   bool has_simple_parameters() const { return has_simple_parameters_; }
 
@@ -971,17 +982,13 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
     // Convenience variable; Subclass constructor only
     Variable* this_function = nullptr;
 
-    // Generator object, if any; generator function scopes and module scopes
-    // only.
-    Variable* generator_object = nullptr;
-    // Promise, if any; async function scopes only.
-    Variable* promise = nullptr;
+    // Used to ensure allocation of a rest parameter if its proxy is used.
+    Variable* shadowed_rest_parameter = nullptr;
   };
 
   enum class RareVariable {
     kThisFunction = offsetof(RareData, this_function),
-    kGeneratorObject = offsetof(RareData, generator_object),
-    kPromise = offsetof(RareData, promise)
+    kShadowedRestParameter = offsetof(RareData, shadowed_rest_parameter),
   };
 
   V8_INLINE RareData* EnsureRareData() {

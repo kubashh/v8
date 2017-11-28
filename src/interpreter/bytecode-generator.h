@@ -44,6 +44,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
  private:
   class ContextScope;
+  class ContextReference;
   class ControlScope;
   class ControlScopeForBreakable;
   class ControlScopeForIteration;
@@ -59,6 +60,23 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   class TestResultScope;
   class ValueResultScope;
 
+  class Reference;
+
+  // Used by ContextScope and ContextReference
+  struct ContextData {
+    Scope* scope;               // The scope
+    ContextReference* outer;    // The outer ContextData wrapper, or nullptr.
+    Register context_register;  // Register holding the outer context
+    int depth;                  // Current context depth
+  };
+
+  ContextReference* PushContextIfNeeded(Scope* scope);
+  void PushContextIfNeeded(ContextReference* context, Register context_reg);
+  void PopContextIfNeeded(ContextReference* context);
+
+  class SimpleTryFinally;
+  class SimpleTryCatch;
+
   using ToBooleanMode = BytecodeArrayBuilder::ToBooleanMode;
 
   enum class TestFallthrough { kThen, kElse, kNone };
@@ -68,6 +86,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void AllocateDeferredConstants(Isolate* isolate, Handle<Script> script);
 
   DEFINE_AST_VISITOR_SUBCLASS_MEMBERS();
+
+  // Control context scopes without relying on RAII structures
+  class LexicalScope;
 
   // Dispatched from VisitBinaryOperation.
   void VisitArithmeticExpression(BinaryOperation* binop);
@@ -132,16 +153,67 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void BuildNewLocalActivationContext();
   void BuildLocalActivationContextInitialization();
+  void CreateContextScopeIfNeeded(Scope* scope);
   void BuildNewLocalBlockContext(Scope* scope);
   void BuildNewLocalCatchContext(Scope* scope);
   void BuildNewLocalWithContext(Scope* scope);
 
+  void BuildFunctionParameters(const FunctionParameters& parameters);
+
   void BuildGeneratorPrologue();
+  void BuildYieldAccumulator(int suspend_id, Yield* expr = nullptr);
   void BuildSuspendPoint(int suspend_id);
+
+  void BuildGeneratorBody();
+  void BuildAsyncFunctionBody();
+  void BuildFunctionBody();
 
   void BuildAwait(int suspend_id);
 
   void BuildGetIterator(Expression* iterable, IteratorType hint);
+  void BuildGetIteratorFromAccumulator(IteratorType hint);
+
+  struct IteratorRecord {
+    IteratorType type;
+    Register object;
+    Register next;
+  };
+
+  IteratorRecord BuildIteratorRecord(Register iterator,
+                                     IteratorType type = IteratorType::kNormal);
+  IteratorRecord BuildIteratorRecord(IteratorType type = IteratorType::kNormal);
+  Register BuildIteratorNext(Register result, const IteratorRecord& iterator,
+                             int await_suspend_id = -1);
+  void BuildIteratorClose(const IteratorRecord& iterator,
+                          SimpleTryFinally* loop_try_finally,
+                          int await_suspend_id = -1);
+  void BuildIteratorClose(const IteratorRecord& iterator,
+                          BytecodeLabel* throw_not_callable,
+                          int await_suspend_id = -1);
+
+  void VisitDestructuringAssignment(Assignment* assignment);
+
+  // Apply bound_value to `target`. If `target` is a Pattern node, bound_value
+  // is destructured using the target pattern. If bound_value is an invalid
+  // register, the Accumulator is used instead.
+  void BindValue(Register bound_value, Expression* target,
+                 Token::Value op = Token::ASSIGN,
+                 bool require_object_coercible = true);
+  void BindValue(Expression* target, Token::Value op = Token::ASSIGN,
+                 bool require_object_coercible = true) {
+    BindValue(Register::invalid_value(), target, op, require_object_coercible);
+  }
+
+  void UpdatePerIterationEnvironment(const VarExpression* declarations,
+                                     ContextReference* environment,
+                                     Register new_context);
+  void PushNewIterationEnvironment(const VarExpression* declarations,
+                                   ContextReference* environment);
+  void VisitObjectPattern(ObjectPattern* pattern, Register current_value,
+                          Token::Value op,
+                          bool require_object_coercible = true);
+  void VisitArrayPattern(ArrayPattern* pattern, Register current_value,
+                         Token::Value op);
 
   void AllocateTopLevelRegisters();
   void VisitArgumentsObject(Variable* variable);
@@ -153,15 +225,16 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildClassLiteral(ClassLiteral* expr);
   void VisitNewTargetVariable(Variable* variable);
   void VisitThisFunctionVariable(Variable* variable);
+  void VisitFunctionVariable(Variable* variable);
   void BuildGeneratorObjectVariableInitialization();
   void VisitBlockDeclarationsAndStatements(Block* stmt);
+  void VisitFunctionVarblock(Block* stmt);
   void VisitFunctionClosureForContext();
   void VisitSetHomeObject(Register value, Register home_object,
                           LiteralProperty* property);
   void VisitObjectLiteralAccessor(Register home_object,
                                   ObjectLiteralProperty* property,
                                   Register value_out);
-  void VisitForInAssignment(Expression* expr);
   void VisitModuleNamespaceImports();
 
   // Builds a logical OR/AND within a test context by rewiring the jumps based
@@ -174,7 +247,11 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
                             LoopBuilder* loop_builder);
   void VisitIterationHeader(int first_suspend_id, int suspend_count,
                             LoopBuilder* loop_builder);
-  void VisitIterationBody(IterationStatement* stmt, LoopBuilder* loop_builder);
+
+  // If `env` is passed, breaking from the loop will pop to the context of
+  // `env`.
+  void VisitIterationBody(IterationStatement* stmt, LoopBuilder* loop_builder,
+                          ContextReference* env = nullptr);
 
   // Visit a statement and switch scopes, the context is in the accumulator.
   void VisitInScope(Statement* stmt, Scope* scope);
@@ -224,6 +301,7 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   }
 
   inline Register generator_object() const;
+  inline Register await_promise() const;
 
   inline BytecodeArrayBuilder* builder() const { return builder_; }
   inline Zone* zone() const { return zone_; }
@@ -240,8 +318,11 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   inline void set_execution_control(ControlScope* scope) {
     execution_control_ = scope;
   }
-  inline ContextScope* execution_context() const { return execution_context_; }
-  inline void set_execution_context(ContextScope* context) {
+  inline ContextReference* execution_context() const {
+    return execution_context_;
+  }
+  ContextReference* OuterContextReference(ContextReference* current) const;
+  inline void set_execution_context(ContextReference* context) {
     execution_context_ = context;
   }
   inline void set_execution_result(ExpressionResultScope* execution_result) {
@@ -292,14 +373,18 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   ZoneVector<std::pair<GetTemplateObject*, size_t>> template_objects_;
 
   ControlScope* execution_control_;
-  ContextScope* execution_context_;
+  ContextReference* execution_context_;
   ExpressionResultScope* execution_result_;
 
   Register incoming_new_target_or_generator_;
 
+  // Top-level Promise returned from Async Functions
+  Register await_promise_;
+
   BytecodeJumpTable* generator_jump_table_;
   Register generator_state_;
   int loop_depth_;
+  ZoneStack<ContextData> context_stack_;
 
   HandlerTable::CatchPrediction catch_prediction_;
 };
