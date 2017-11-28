@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecb26275_19cc9fa4",
+        "filename": "src/ast/ast-expression-rewriter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this file at all anymore, let alone the changes here.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ac64882_dec22e90",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2479,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "TODO: get rid of FunctionParameters::scope_.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65927f99_d95e1a85",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "Most of this complex logic doesn\u0027t do what I wanted it to do, so maybe better to just remove it.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7869b33_2b7d0e45",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "Because the GetIterator AST node isn\u0027t really used anymore, some cleverness is needed here to get the right message. This is probably not the best way to do that cleverness, help :)",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b766f8_2870ec81",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "ditto for yield*",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da7109ed_cd6239d7",
+        "filename": "src/base/bits.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "this was done to make MSVC happy when I originally prototyped this on a windows machine, but shouldn\u0027t be a part of the actual product.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df68018e_64bf59d3",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "This was just here for debugging, since libc++ currently inlines too much stuff that it makes inspecting stl collections hard ._.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65bb1b3_eee9f5f8",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "`Mov(register, \u003ccontext\u003e)` didn\u0027t seem to work before... Maybe it should? I believe it\u0027s still smaller than ldar + PushContext",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e723be23_a000bb59",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "I\u0027m not sure if all of these new ops are even used anymore... I think JumpIfNotCallable() is still used for IteratorClose... And at least one of the JumpIfHole things... But a binary op could be used instead for those, so those are technically removable.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5652f406_370e8d68",
+        "filename": "src/parsing/preparsed-scope-data.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "Uh, these were some debugging helpers I put together to fix problems :) They won\u0027t be in the final product",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63dc716b_4b098081",
+        "filename": "src/parsing/rewriter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:24:35Z",
+      "side": 1,
+      "message": "`var x \u003d 1;` doesn\u0027t produce a completion, so VarExpressions are ignored here.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
