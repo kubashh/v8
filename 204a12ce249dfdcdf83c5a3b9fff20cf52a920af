@@ -87,6 +87,193 @@
     },
     {
       "key": {
+        "uuid": "7887d93f_a4c3fb2e",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "the idea of the shadowed rest parameter:\n\nwe create the rest parameter early, but have a separate variable for binding to it in cases where TDZ is needed. So, the \"shadowed\" parameter has the same name, but is a lexical variable rather than the create-initialized binding. In cases like `function f(...a) {`, the shadowed parameter isn\u0027t needed, but it is needed in cases like `function f({ a \u003d 1 }, ...b)` because initializers in the first parameter may reference `b`, so the TDZ is needed.\n\nWaste of time? maybe. It does increase LoC for this prototype unnecessarily, but it seems like a not bad idea to me.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d21b5fb5_1154e122",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "I _think_ this is true?",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139e3cc3_12cbd803",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "this block is probably irrelevant ever since Parser::CreateBindings",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73b65cd9_8ef9f560",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "This isn\u0027t used and can be deleted",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37b998f8_8ebb42e5",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "typo",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce2489a_184dd951",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "I think this is a nice touch that helps clear things up, but it\u0027s not strictly necessary here.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daf98d0a_423ebe96",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "This was needed becaue of a crash in some test relating to eval, I think. For whatever reason, scopes were still present but were no longer valid. That\u0027s probably a bug from one of my changes, though.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef5be907_4fc14446",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "leftover from the preparsed-scope-data changes",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a36bfd4_e71f2fb2",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "I don\u0027t think this was ever implemented, since I decided to put this in Parser/PreParser instead (maybe a mistake?)",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98b1b3db_aa300c81",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "maybe the function body deserves its own scope type?",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57175197_adb5630d",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "One change was to put all the catch parameter bindings in the same scope. I think this is _ok_, but not strictly necessary. It does make things a bit simpler with the current abstractions in BytecodeGenerator.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da7109ed_cd6239d7",
         "filename": "src/base/bits.h",
         "patchSetId": 9
@@ -149,6 +336,108 @@
       "writtenOn": "2017-11-28T22:24:35Z",
       "side": 1,
       "message": "I\u0027m not sure if all of these new ops are even used anymore... I think JumpIfNotCallable() is still used for IteratorClose... And at least one of the JumpIfHole things... But a binary op could be used instead for those, so those are technically removable.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edafbd36_96fccb41",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "delete since only one user of this",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b7d76c4_44aa5653",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "Delete these and replace with a simpler abstraction",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2254bf95_15482ad3",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "delete",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1c00256_86128778",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "delete BindValue, this is largely replaced by BytecodeGenerator::Reference::SetValue()",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ec17a7c_5270efd2",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "since ZoneDeque reuses zone memory when elements are freed, this seems like a good way to do this. But, stop doing ContextScope(this, PushContextIfNeeded(...)), it\u0027s silly.",
+      "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cdb71e6_d44bd0a0",
+        "filename": "src/interpreter/control-flow-builders.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-11-28T22:56:14Z",
+      "side": 1,
+      "message": "IMHO the TryCatchBuilder and TryFinallyBuilder are pretty bad abstractions which both A) don\u0027t do enough, and B) do too much --- they should be replaced with simpler tools.",
       "revId": "204a12ce249dfdcdf83c5a3b9fff20cf52a920af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
