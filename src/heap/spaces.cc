@@ -57,8 +57,7 @@ bool HeapObjectIterator::AdvanceToNextPage() {
   Page* cur_page = *(current_page_++);
   Heap* heap = space_->heap();
 
-  heap->mark_compact_collector()->sweeper()->SweepOrWaitUntilSweepingCompleted(
-      cur_page);
+  heap->mark_compact_collector()->sweeper()->EnsurePageIsIterable(cur_page);
   if (cur_page->IsFlagSet(Page::SWEEP_TO_ITERATE))
     heap->minor_mark_compact_collector()->MakeIterable(
         cur_page, MarkingTreatmentMode::CLEAR,

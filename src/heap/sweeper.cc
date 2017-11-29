@@ -74,15 +74,15 @@ class Sweeper::SweeperTask final : public CancelableTask {
 
  private:
   void RunInternal() final {
-    DCHECK_GE(space_to_start_, FIRST_SPACE);
+    DCHECK_GE(space_to_start_, FIRST_PAGED_SPACE);
     DCHECK_LE(space_to_start_, LAST_PAGED_SPACE);
-    const int offset = space_to_start_ - FIRST_SPACE;
-    const int num_spaces = LAST_PAGED_SPACE - FIRST_SPACE + 1;
+    const int offset = space_to_start_ - FIRST_PAGED_SPACE;
+    const int num_spaces = LAST_PAGED_SPACE - FIRST_PAGED_SPACE + 1;
     for (int i = 0; i < num_spaces; i++) {
-      const int space_id = FIRST_SPACE + ((i + offset) % num_spaces);
+      const int space_id = FIRST_PAGED_SPACE + ((i + offset) % num_spaces);
       // Do not sweep code space concurrently.
       if (static_cast<AllocationSpace>(space_id) == CODE_SPACE) continue;
-      DCHECK_GE(space_id, FIRST_SPACE);
+      DCHECK_GE(space_id, FIRST_PAGED_SPACE);
       DCHECK_LE(space_id, LAST_PAGED_SPACE);
       sweeper_->SweepSpaceFromTask(static_cast<AllocationSpace>(space_id));
     }
@@ -199,6 +199,8 @@ void Sweeper::AbortAndWaitForTasks() {
 
 void Sweeper::EnsureCompleted() {
   if (!sweeping_in_progress_) return;
+
+  EnsureIterabilityCompleted();
 
   // If sweeping is not completed or not running at all, we try to complete it
   // here.
@@ -491,12 +493,89 @@ void Sweeper::PrepareToBeSweptPage(AllocationSpace space, Page* page) {
 
 Page* Sweeper::GetSweepingPageSafe(AllocationSpace space) {
   base::LockGuard<base::Mutex> guard(&mutex_);
+  DCHECK(IsValidSweepingSpace(space));
   Page* page = nullptr;
   if (!sweeping_list_[space].empty()) {
     page = sweeping_list_[space].front();
     sweeping_list_[space].pop_front();
   }
   return page;
+}
+
+void Sweeper::EnsurePageIsIterable(Page* page) {
+  SweepOrWaitUntilSweepingCompleted(page);
+  EnsureIterabilityCompleted();
+}
+
+void Sweeper::EnsureIterabilityCompleted() {
+  if (!iterability_in_progress_) return;
+
+  if (FLAG_concurrent_sweeping) {
+    if (heap_->isolate()->cancelable_task_manager()->TryAbort(
+            iterability_task_id_) != CancelableTaskManager::kTaskAborted) {
+      pending_sweeper_tasks_semaphore_.Wait();
+    }
+    iterability_in_progress_ = false;
+  }
+
+  for (Page* page : iterability_list_) {
+    MakeIterable(page);
+  }
+  iterability_list_.clear();
+  iterability_in_progress_ = false;
+}
+
+class Sweeper::IterabilityTask final : public CancelableTask {
+ public:
+  IterabilityTask(Isolate* isolate, Sweeper* sweeper,
+                  base::Semaphore* pending_iterability_task)
+      : CancelableTask(isolate),
+        sweeper_(sweeper),
+        pending_iterability_task_(pending_iterability_task) {}
+
+  virtual ~IterabilityTask() {}
+
+ private:
+  void RunInternal() final {
+    for (Page* page : sweeper_->iterability_list_) {
+      sweeper_->MakeIterable(page);
+    }
+    sweeper_->iterability_list_.clear();
+    pending_iterability_task_->Signal();
+  }
+
+  Sweeper* const sweeper_;
+  base::Semaphore* const pending_iterability_task_;
+
+  DISALLOW_COPY_AND_ASSIGN(IterabilityTask);
+};
+
+void Sweeper::StartIterabilityTasks() {
+  if (!iterability_in_progress_) return;
+
+  if (FLAG_concurrent_sweeping) {
+    IterabilityTask* task = new IterabilityTask(heap_->isolate(), this,
+                                                &iterability_task_semaphore_);
+    iterability_task_id_ = task->id();
+    V8::GetCurrentPlatform()->CallOnBackgroundThread(
+        task, v8::Platform::kShortRunningTask);
+  }
+}
+
+void Sweeper::AddPageForIterability(Page* page) {
+  DCHECK(sweeping_in_progress_);
+  iterability_in_progress_ = true;
+  DCHECK(IsValidIterabilitySpace(page->owner()->identity()));
+  page->ForAllFreeListCategories(
+      [](FreeListCategory* category) { DCHECK(!category->is_linked()); });
+  iterability_list_.push_back(page);
+}
+
+void Sweeper::MakeIterable(Page* page) {
+  DCHECK(IsValidIterabilitySpace(page->owner()->identity()));
+  const FreeSpaceTreatmentMode free_space_mode =
+      Heap::ShouldZapGarbage() ? ZAP_FREE_SPACE : IGNORE_FREE_SPACE;
+  RawSweep(page, IGNORE_FREE_LIST, free_space_mode);
 }
 
 }  // namespace internal
