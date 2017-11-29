@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78371448_61940b2e",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb982ce9_577b9a5b",
+      "range": {
+        "startLine": 56,
+        "startChar": 9,
+        "endLine": 56,
+        "endChar": 16
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de6d3499_2ed5b345",
         "filename": "tools/testrunner/local/command.py",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ebe6a236_cdc7939e",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de6d3499_2ed5b345",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 6
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0223602_a81ad0c7",
         "filename": "tools/testrunner/local/command.py",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2017-11-29T12:51:56Z",
       "side": 1,
       "message": "Do we use escape_parts\u003dFalse anywhere?",
+      "range": {
+        "startLine": 162,
+        "startChar": 38,
+        "endLine": 162,
+        "endChar": 55
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f77b241a_56a99930",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "No, I\u0027m removing it.",
+      "parentUuid": "e0223602_a81ad0c7",
       "range": {
         "startLine": 162,
         "startChar": 38,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ff45397e_06b092c4",
+        "filename": "tools/testrunner/local/execution.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bcae7e2_764dc2e1",
+      "range": {
+        "startLine": 66,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 12
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8871e80e_584aa739",
         "filename": "tools/testrunner/local/execution.py",
         "patchSetId": 5
@@ -105,6 +201,30 @@
       "writtenOn": "2017-11-29T12:51:56Z",
       "side": 1,
       "message": "Here are still references to self.test. The first could be replaced by self.test_id, but the run attempt is a more general problem. To have a truly immutable test object, I think the run attempt needs to vanish from it and passed in a separate structure, or maybe pass together with test ID as parameter?",
+      "range": {
+        "startLine": 97,
+        "startChar": 44,
+        "endLine": 97,
+        "endChar": 53
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f03c4f_22fe9820",
+        "filename": "tools/testrunner/local/execution.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "For now I will pass it as a parameter to TestJob. It will be removed from the test object when we get to test processors and immutable test.",
+      "parentUuid": "8871e80e_584aa739",
       "range": {
         "startLine": 97,
         "startChar": 44,
@@ -137,6 +257,30 @@
       "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eef29ba_cfbe11c7",
+        "filename": "tools/testrunner/local/execution.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-11-29T17:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fb079c7_b7a0b6c2",
+      "range": {
+        "startLine": 177,
+        "startChar": 38,
+        "endLine": 177,
+        "endChar": 74
+      },
+      "revId": "7af0238ecedd72c96fad64d5a9472d4225bdcbd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
