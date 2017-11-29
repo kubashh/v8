@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9c12f79_4d2492db",
+        "filename": ".gitignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-29T14:10:06Z",
+      "side": 1,
+      "message": "How about removing this instead? I have no idea what it\u0027s doing there. Along with a bunch of other things...",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 2
+      },
+      "revId": "0ca90a27fbca64def52622dfe2746e073f48ac7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ada6d901_0a4826a4",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3447,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-29T14:10:06Z",
+      "side": 1,
+      "message": "I can\u0027t say anything about this. The rest +1",
+      "range": {
+        "startLine": 3445,
+        "startChar": 2,
+        "endLine": 3447,
+        "endChar": 21
+      },
+      "revId": "0ca90a27fbca64def52622dfe2746e073f48ac7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
