@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d06e3169_cd2a0e49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-29T19:37:50Z",
+      "side": 1,
+      "message": "Maybe describe in a little more details what\u0027s changed here. E.g. the fact that the command setup is moved from the worker processes to the main process would be worth mentioning.",
+      "revId": "4b795d0016710e9aa2059208b26f2a51cac8791f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e4201d_dd0a3533",
+        "filename": "tools/testrunner/local/execution.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-29T19:37:50Z",
+      "side": 1,
+      "message": "nit: because",
+      "range": {
+        "startLine": 58,
+        "startChar": 34,
+        "endLine": 58,
+        "endChar": 39
+      },
+      "revId": "4b795d0016710e9aa2059208b26f2a51cac8791f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97854990_1bd63898",
+        "filename": "tools/testrunner/local/execution.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-11-29T19:37:50Z",
+      "side": 1,
+      "message": "nit: \u0027Keeping it\u0027 sounds historical. Please keep descriptions timeless. E.g.\nGlobal function for multiprocessing, because pickling a static method doesn\u0027t work on windows.",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 12
+      },
+      "revId": "4b795d0016710e9aa2059208b26f2a51cac8791f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
