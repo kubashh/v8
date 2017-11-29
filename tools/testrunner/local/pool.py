@@ -120,8 +120,10 @@ class Pool():
                                          self.done,
                                          process_context_fn,
                                          process_context_args))
+        print '%s created' % p
         self.processes.append(p)
         p.start()
+        print '%s started' % p
 
       self.advance(gen)
       while self.count > 0:
@@ -183,7 +185,9 @@ class Pool():
       self.work_queue.put("STOP")
 
     for p in self.processes:
+      print '%s join' % p
       p.join()
+      print '%s joined' % p
 
     # Drain the queues to prevent failures when queues are garbage collected.
     try:
