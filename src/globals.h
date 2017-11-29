@@ -1417,6 +1417,7 @@ inline std::ostream& operator<<(std::ostream& os,
 }
 
 enum class OptimizationMarker {
+  kNotYetExecuted,
   kNone,
   kCompileOptimized,
   kCompileOptimizedConcurrent,
@@ -1426,6 +1427,8 @@ enum class OptimizationMarker {
 inline std::ostream& operator<<(std::ostream& os,
                                 const OptimizationMarker& marker) {
   switch (marker) {
+    case OptimizationMarker::kNotYetExecuted:
+      return os << "OptimizationMarker::kNotYetExecuted";
     case OptimizationMarker::kNone:
       return os << "OptimizationMarker::kNone";
     case OptimizationMarker::kCompileOptimized:

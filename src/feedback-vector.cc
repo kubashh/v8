@@ -234,7 +234,9 @@ Handle<FeedbackVector> FeedbackVector::New(Isolate* isolate,
 
   DCHECK_EQ(vector->shared_function_info(), *shared);
   DCHECK_EQ(vector->optimized_code_cell(),
-            Smi::FromEnum(OptimizationMarker::kNone));
+            Smi::FromEnum(FLAG_log_function_events
+                              ? OptimizationMarker::kNotYetExecuted
+                              : OptimizationMarker::kNone));
   DCHECK_EQ(vector->invocation_count(), 0);
   DCHECK_EQ(vector->profiler_ticks(), 0);
   DCHECK_EQ(vector->deopt_count(), 0);
@@ -341,12 +343,21 @@ void FeedbackVector::SetOptimizedCode(Handle<FeedbackVector> vector,
   vector->set_optimized_code_cell(*cell);
 }
 
-void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
-  set_optimized_code_cell(Smi::FromEnum(marker));
+void FeedbackVector::ClearOptimizedCode() {
+#if DEBUG
+  CHECK(has_optimized_code());
+  set_optimized_code_cell(Smi::kZero);
+#endif
+  ClearOptimizationMarker();
 }
 
-void FeedbackVector::ClearOptimizedCode() {
-  set_optimized_code_cell(Smi::FromEnum(OptimizationMarker::kNone));
+void FeedbackVector::ClearOptimizationMarker() {
+  DCHECK(!has_optimized_code());
+  SetOptimizationMarker(OptimizationMarker::kNone);
+}
+
+void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
+  set_optimized_code_cell(Smi::FromEnum(marker));
 }
 
 void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
@@ -356,7 +367,7 @@ void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
 
   WeakCell* cell = WeakCell::cast(slot);
   if (cell->cleared()) {
-    ClearOptimizedCode();
+    ClearOptimizationMarker();
     return;
   }
 
