@@ -86,7 +86,7 @@ class ProfilerListener : public CodeEventListener {
   }
 
   StringsStorage function_and_resource_names_;
-  std::vector<CodeEntry*> code_entries_;
+  std::vector<std::unique_ptr<CodeEntry>> code_entries_;
   std::vector<CodeEventObserver*> observers_;
   base::Mutex mutex_;
 
