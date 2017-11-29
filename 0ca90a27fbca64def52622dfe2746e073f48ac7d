@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "056e6eb8_b2edd7b3",
+        "filename": ".gitignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-29T14:37:19Z",
+      "side": 1,
+      "message": "As discussed offline we can do the cleanup in a separate CL.",
+      "parentUuid": "a9c12f79_4d2492db",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 2
+      },
+      "revId": "0ca90a27fbca64def52622dfe2746e073f48ac7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ada6d901_0a4826a4",
         "filename": "src/d8.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "0ca90a27fbca64def52622dfe2746e073f48ac7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a2f0d9c_1ba4a9a7",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3447,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-11-29T14:37:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ada6d901_0a4826a4",
+      "range": {
+        "startLine": 3445,
+        "startChar": 2,
+        "endLine": 3447,
+        "endChar": 21
+      },
+      "revId": "0ca90a27fbca64def52622dfe2746e073f48ac7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
