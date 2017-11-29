@@ -106,7 +106,7 @@ import re
 import subprocess
 import sys
 
-from testrunner.local import commands
+from testrunner.local import command
 from testrunner.local import utils
 
 ARCH_GUESS = utils.DefaultArch()
@@ -678,17 +678,15 @@ class DesktopPlatform(Platform):
     shell_dir = self.shell_dir_secondary if secondary else self.shell_dir
     title = ">>> %%s (#%d)%s:" % ((count + 1), suffix)
     if runnable.process_size:
-      command = ["/usr/bin/time", "--format=MaxMemory: %MKB"]
+      cmd_parts = ["/usr/bin/time", "--format=MaxMemory: %MKB"]
     else:
-      command = []
+      cmd_parts = []
 
-    command += self.command_prefix + runnable.GetCommand(shell_dir,
-                                                        self.extra_flags)
+    cmd_parts += self.command_prefix + runnable.GetCommand(shell_dir,
+                                                           self.extra_flags)
+    cmd = command.Command(cmd_parts, timeout=runnable.timeout)
     try:
-      output = commands.Execute(
-        command,
-        timeout=runnable.timeout,
-      )
+      output = cmd.execute()
     except OSError as e:  # pragma: no cover
       print title % "OSError"
       print e
