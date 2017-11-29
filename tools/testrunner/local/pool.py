@@ -114,14 +114,20 @@ class Pool():
       self.advance = self._advance_more
 
       for w in xrange(self.num_workers):
-        p = Process(target=Worker, args=(fn,
-                                         self.work_queue,
-                                         self.done_queue,
-                                         self.done,
-                                         process_context_fn,
-                                         process_context_args))
-        self.processes.append(p)
-        p.start()
+        try:
+          p = Process(target=Worker, args=(fn,
+                                           self.work_queue,
+                                           self.done_queue,
+                                           self.done,
+                                           process_context_fn,
+                                           process_context_args))
+          print '%s created' % p
+          self.processes.append(p)
+          p.start()
+          print '%s started' % p
+        except Exception, e:
+          traceback.print_exc()
+          raise
 
       self.advance(gen)
       while self.count > 0:
@@ -183,7 +189,9 @@ class Pool():
       self.work_queue.put("STOP")
 
     for p in self.processes:
+      print '%s join' % p
       p.join()
+      print '%s joined' % p
 
     # Drain the queues to prevent failures when queues are garbage collected.
     try:
