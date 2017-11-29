@@ -29,6 +29,8 @@ class SnapshotData : public SerializedData {
   // Used when consuming.
   explicit SnapshotData(const Vector<const byte> snapshot)
       : SerializedData(const_cast<byte*>(snapshot.begin()), snapshot.length()) {
+    CHECK(IsAligned(reinterpret_cast<intptr_t>(snapshot.begin()),
+                    kPointerAlignment));
   }
 
   Vector<const Reservation> Reservations() const;
