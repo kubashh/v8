@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28b37765_cf046863",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4637,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-11-29T09:43:47Z",
+      "side": 1,
+      "message": "Nit: Just to be safe we should CSA_ASSERT these conditions, especially since we don\u0027t pass a context to AllocateSeqXByteString anymore (which throws if {character_count} is oob).",
+      "revId": "7776f0203823f42bfee799689afdf532a2c44b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
