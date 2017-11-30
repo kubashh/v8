@@ -5391,6 +5391,7 @@ class InterceptorInfo: public Struct {
   DECL_BOOLEAN_ACCESSORS(can_intercept_symbols)
   DECL_BOOLEAN_ACCESSORS(all_can_read)
   DECL_BOOLEAN_ACCESSORS(non_masking)
+  DECL_BOOLEAN_ACCESSORS(is_named)
 
   inline int flags() const;
   inline void set_flags(int flags);
@@ -5415,6 +5416,7 @@ class InterceptorInfo: public Struct {
   static const int kCanInterceptSymbolsBit = 0;
   static const int kAllCanReadBit = 1;
   static const int kNonMasking = 2;
+  static const int kNamed = 3;
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(InterceptorInfo);
