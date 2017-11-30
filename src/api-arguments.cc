@@ -26,14 +26,35 @@ Handle<Object> FunctionCallbackArguments::Call(FunctionCallback f) {
   return GetReturnValue<Object>(isolate);
 }
 
-Handle<JSObject> PropertyCallbackArguments::Call(
-    IndexedPropertyEnumeratorCallback f) {
+Handle<JSObject> PropertyCallbackArguments::CallNamedEnumerator(
+    Handle<InterceptorInfo> interceptor) {
+  DCHECK(interceptor->is_named());
+  LOG(isolate(), ApiObjectAccess("interceptor-named-enumerator", holder()));
+  RuntimeCallTimerScope timer(isolate(),
+                              RuntimeCallCounterId::kNamedEnumeratorCallback);
+  return CallPropertyEnumerator(interceptor);
+}
+
+Handle<JSObject> PropertyCallbackArguments::CallIndexedEnumerator(
+    Handle<InterceptorInfo> interceptor) {
+  DCHECK(!interceptor->is_named());
+  LOG(isolate(), ApiObjectAccess("interceptor-indexed-enumerator", holder()));
+  RuntimeCallTimerScope timer(isolate(),
+                              RuntimeCallCounterId::kIndexedEnumeratorCallback);
+  return CallPropertyEnumerator(interceptor);
+}
+
+Handle<JSObject> PropertyCallbackArguments::CallPropertyEnumerator(
+    Handle<InterceptorInfo> interceptor) {
+  // For now there is a single enumerator for indexed and named properties.
+  IndexedPropertyEnumeratorCallback f =
+      v8::ToCData<IndexedPropertyEnumeratorCallback>(interceptor->enumerator());
+  // TODO(cbruni): assert same type for indexed and named callback.
   Isolate* isolate = this->isolate();
   if (isolate->needs_side_effect_check() &&
       !isolate->debug()->PerformSideEffectCheckForCallback(FUNCTION_ADDR(f))) {
     return Handle<JSObject>();
   }
-  RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kPropertyCallback);
   VMState<EXTERNAL> state(isolate);
   ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));
   PropertyCallbackInfo<v8::Array> info(begin());
