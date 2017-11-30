@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc0e012_9c7cdbff",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2017-11-30T15:52:12Z",
+      "side": 0,
+      "message": "This change is already in a separate CL, I will rebase once that lands.",
+      "revId": "6b76e4594581232880233d4b35c4812074b8fe49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
