@@ -8870,7 +8870,6 @@ void Isolate::RemoveCallCompletedCallback(CallCompletedCallback callback) {
   isolate->RemoveCallCompletedCallback(callback);
 }
 
-
 void Isolate::AddCallCompletedCallback(
     DeprecatedCallCompletedCallback callback) {
   AddCallCompletedCallback(reinterpret_cast<CallCompletedCallback>(callback));
@@ -10912,8 +10911,7 @@ void InvokeAccessorGetterCallback(
     v8::AccessorNameGetterCallback getter) {
   // Leaving JavaScript.
   Isolate* isolate = reinterpret_cast<Isolate*>(info.GetIsolate());
-  RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::AccessorGetterCallback);
+  RuntimeCallTimerScope timer(isolate, &RuntimeCallStats::NamedGetterCallback);
   Address getter_address = reinterpret_cast<Address>(reinterpret_cast<intptr_t>(
       getter));
   VMState<EXTERNAL> state(isolate);
