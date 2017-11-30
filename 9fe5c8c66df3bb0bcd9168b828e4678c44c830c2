@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9acffa34_c22221fa",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1144939
+      },
+      "writtenOn": "2017-11-30T01:11:39Z",
+      "side": 1,
+      "message": "Could this be in RemoveObserver() to free the code entries immediately after the last observer is removed?",
+      "revId": "9fe5c8c66df3bb0bcd9168b828e4678c44c830c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76eeb58e_0b0fce43",
+        "filename": "src/profiler/profiler-listener.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1144939
+      },
+      "writtenOn": "2017-11-30T01:11:39Z",
+      "side": 1,
+      "message": "Curious: I don\u0027t see code_entries_ used anywhere in the code, it\u0027s only populated then freed. Is it just used to retain the code entries weakly referenced from elsewhere?",
+      "revId": "9fe5c8c66df3bb0bcd9168b828e4678c44c830c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
