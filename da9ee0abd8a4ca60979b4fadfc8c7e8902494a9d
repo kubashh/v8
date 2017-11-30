@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c54723f_a7bf4e2a",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-11-30T15:03:56Z",
+      "side": 1,
+      "message": "I would prefer e.g. LogFirstExecution, since we only set it in the logging case. It might be confusing in the future that in the non-logging case, a non-kNotYetExecuted function hasn\u0027t been executed yet.",
+      "range": {
+        "startLine": 780,
+        "startChar": 54,
+        "endLine": 780,
+        "endChar": 69
+      },
+      "revId": "da9ee0abd8a4ca60979b4fadfc8c7e8902494a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4025f293_be1f2879",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-11-30T15:03:56Z",
+      "side": 1,
+      "message": "I don\u0027t love the logic here -- clearing only in debug because the DCHECK below is only tested in debug. I\u0027d rather have DCHECKs still work if we change them to CHECKs. Maybe just SetOptimizationMarker(OptimizationMarker::kNone) here and DCHECK for has_optimized_code(), and live with the minor code duplication?",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 6
+      },
+      "revId": "da9ee0abd8a4ca60979b4fadfc8c7e8902494a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59287f8_6888b0f4",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2017-11-30T15:03:56Z",
+      "side": 1,
+      "message": "Should this be a DCHECK rather than an if?",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 4
+      },
+      "revId": "da9ee0abd8a4ca60979b4fadfc8c7e8902494a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
