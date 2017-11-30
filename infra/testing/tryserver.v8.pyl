@@ -7,4 +7,16 @@
   # 'v8_linux64_rel_ng_triggered': [
   #   {'name': 'benchmarks', 'variant': 'default', 'shards': 1},
   # ],
+  'v8_linux64_rel_ng_triggered': [
+    {'name': 'v8testing', 'variant': 'slow_path', 'shards': 1},
+  ],
+  'v8_linux_gc_stress_dbg': [
+    {'name': 'mjsunit', 'variant': 'slow_path', 'shards': 1},
+  ],
+  'v8_linux64_asan_rel_ng_triggered': [
+    {'name': 'v8testing', 'variant': 'slow_path', 'shards': 1},
+  ],
+  'v8_linux64_tsan_rel': [
+    {'name': 'v8testing', 'variant': 'slow_path', 'shards': 1},
+  ],
 }
