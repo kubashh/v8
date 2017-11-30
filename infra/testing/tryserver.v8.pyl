@@ -19,4 +19,7 @@
   'v8_linux64_tsan_rel': [
     {'name': 'v8testing', 'variant': 'slow_path', 'shards': 1},
   ],
+  'v8_linux_nosnap_dbg': [
+    {'name': 'v8testing', 'variant': 'slow_path', 'shards': 2},
+  ],
 }
