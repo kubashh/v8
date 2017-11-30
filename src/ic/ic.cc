@@ -2313,16 +2313,11 @@ RUNTIME_FUNCTION(Runtime_StoreCallbackProperty) {
 
   DCHECK(callback->IsCompatibleReceiver(*receiver));
 
-  Address setter_address = v8::ToCData<Address>(callback->setter());
-  v8::AccessorNameSetterCallback fun =
-      FUNCTION_CAST<v8::AccessorNameSetterCallback>(setter_address);
-  DCHECK_NOT_NULL(fun);
-
   ShouldThrow should_throw =
       is_sloppy(language_mode) ? kDontThrow : kThrowOnError;
   PropertyCallbackArguments custom_args(isolate, callback->data(), *receiver,
                                         *holder, should_throw);
-  custom_args.Call(fun, name, value);
+  custom_args.CallAccessorNameSetter(callback->setter(), name, value);
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
   return *value;
 }
@@ -2348,10 +2343,8 @@ RUNTIME_FUNCTION(Runtime_LoadPropertyWithInterceptor) {
   PropertyCallbackArguments arguments(isolate, interceptor->data(), *receiver,
                                       *holder, kDontThrow);
 
-  v8::GenericNamedPropertyGetterCallback getter =
-      v8::ToCData<v8::GenericNamedPropertyGetterCallback>(
-          interceptor->getter());
-  Handle<Object> result = arguments.Call(getter, name);
+  Handle<Object> result =
+      arguments.CallNamedPropertyGetter(interceptor->getter(), name);
 
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
 
@@ -2404,10 +2397,8 @@ RUNTIME_FUNCTION(Runtime_StorePropertyWithInterceptor) {
   PropertyCallbackArguments arguments(isolate, interceptor->data(), *receiver,
                                       *receiver, kDontThrow);
 
-  v8::GenericNamedPropertySetterCallback setter =
-      v8::ToCData<v8::GenericNamedPropertySetterCallback>(
-          interceptor->setter());
-  Handle<Object> result = arguments.Call(setter, name, value);
+  Handle<Object> result =
+      arguments.CallNamedPropertySetter(interceptor->setter(), name, value);
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
   if (!result.is_null()) return *value;
 
@@ -2439,9 +2430,8 @@ RUNTIME_FUNCTION(Runtime_LoadElementWithInterceptor) {
   PropertyCallbackArguments arguments(isolate, interceptor->data(), *receiver,
                                       *receiver, kDontThrow);
 
-  v8::IndexedPropertyGetterCallback getter =
-      v8::ToCData<v8::IndexedPropertyGetterCallback>(interceptor->getter());
-  Handle<Object> result = arguments.Call(getter, index);
+  Handle<Object> result =
+      arguments.CallIndexedPropertyGetter(interceptor->getter(), index);
 
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
 
