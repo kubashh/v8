@@ -10913,7 +10913,7 @@ void InvokeAccessorGetterCallback(
   // Leaving JavaScript.
   Isolate* isolate = reinterpret_cast<Isolate*>(info.GetIsolate());
   RuntimeCallTimerScope timer(isolate,
-                              &RuntimeCallStats::AccessorGetterCallback);
+                              &RuntimeCallStats::NamedPropertySetterCallback);
   Address getter_address = reinterpret_cast<Address>(reinterpret_cast<intptr_t>(
       getter));
   VMState<EXTERNAL> state(isolate);

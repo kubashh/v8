@@ -26,8 +26,23 @@ Handle<Object> FunctionCallbackArguments::Call(FunctionCallback f) {
   return GetReturnValue<Object>(isolate);
 }
 
-Handle<JSObject> PropertyCallbackArguments::Call(
-    IndexedPropertyEnumeratorCallback f) {
+Handle<JSObject> PropertyCallbackArguments::CallNamedPropertyEnumerator(
+    Object* callback) {
+  LOG(isolate(), ApiObjectAccess("interceptor-named-enum", holder()));
+  return CallPropertyEnumerator(callback);
+}
+
+Handle<JSObject> PropertyCallbackArguments::CallIndexedPropertyEnumerator(
+    Object* callback) {
+  LOG(isolate(), ApiObjectAccess("interceptor-indexed-enum", holder()));
+  return CallPropertyEnumerator(callback);
+}
+
+Handle<JSObject> PropertyCallbackArguments::CallPropertyEnumerator(
+    Object* callback) {
+  // For now there is a single enumerator for indexed and named properties.
+  IndexedPropertyEnumeratorCallback f =
+      v8::ToCData<IndexedPropertyEnumeratorCallback>(callback);
   Isolate* isolate = this->isolate();
   if (isolate->needs_side_effect_check() &&
       !isolate->debug()->PerformSideEffectCheckForCallback(FUNCTION_ADDR(f))) {

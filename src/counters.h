@@ -784,7 +784,6 @@ class RuntimeCallTimer final {
   V(ValueSerializer_WriteValue)
 
 #define FOR_EACH_MANUAL_COUNTER(V)             \
-  V(AccessorGetterCallback)                    \
   V(AccessorNameGetterCallback)                \
   V(AccessorNameSetterCallback)                \
   V(ArrayLengthGetter)                         \
@@ -821,12 +820,13 @@ class RuntimeCallTimer final {
   V(GC_Custom_SlowAllocateRaw)                 \
   V(GCEpilogueCallback)                        \
   V(GCPrologueCallback)                        \
-  V(GenericNamedPropertyDefinerCallback)       \
-  V(GenericNamedPropertyDeleterCallback)       \
-  V(GenericNamedPropertyDescriptorCallback)    \
-  V(GenericNamedPropertyQueryCallback)         \
-  V(GenericNamedPropertySetterCallback)        \
   V(GetMoreDataCallback)                       \
+  V(NamedPropertyDefinerCallback)              \
+  V(NamedPropertyDeleterCallback)              \
+  V(NamedPropertyDescriptorCallback)           \
+  V(NamedPropertyQueryCallback)                \
+  V(NamedPropertySetterCallback)               \
+  V(NamedPropertyGetterCallback)               \
   V(IndexedPropertyDefinerCallback)            \
   V(IndexedPropertyDeleterCallback)            \
   V(IndexedPropertyDescriptorCallback)         \
