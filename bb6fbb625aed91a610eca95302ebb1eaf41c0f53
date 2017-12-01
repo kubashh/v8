@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85fa02a8_da93d368",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3484,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T09:53:09Z",
+      "side": 1,
+      "message": "Why are we adding this page for iterability instead of normal sweeping?",
+      "range": {
+        "startLine": 3484,
+        "startChar": 8,
+        "endLine": 3484,
+        "endChar": 44
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "737d96f7_4f3cc540",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T09:53:09Z",
+      "side": 1,
+      "message": "Why is this change needed?",
+      "range": {
+        "startLine": 606,
+        "startChar": 2,
+        "endLine": 606,
+        "endChar": 40
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b4a3981_c696c378",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T09:53:09Z",
+      "side": 1,
+      "message": "DCHECK(!iterability_in_progress);",
+      "range": {
+        "startLine": 564,
+        "startChar": 2,
+        "endLine": 564,
+        "endChar": 34
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab03fc93_fd5ddb34",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T09:53:09Z",
+      "side": 1,
+      "message": "Can we assert that the page is not in sweeper\u0027s list?",
+      "range": {
+        "startLine": 568,
+        "startChar": 2,
+        "endLine": 568,
+        "endChar": 69
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e74d790a_0872a6ef",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T09:53:09Z",
+      "side": 1,
+      "message": "The \"Real\" part is confusing. How about dropping it (this also requires adjusting of kNumberOfSweepingSpaces)?",
+      "range": {
+        "startLine": 127,
+        "startChar": 20,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
