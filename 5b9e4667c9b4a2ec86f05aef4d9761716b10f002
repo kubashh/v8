@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "6079015c_46de6ece",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-12-01T22:26:48Z",
+      "side": 1,
+      "message": "Seems like this may not work, since the opcode after the prefix could be shared between the SIMD and Atomics?",
+      "revId": "5b9e4667c9b4a2ec86f05aef4d9761716b10f002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7c47217_85ff8b8f",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2017-12-01T22:26:48Z",
+      "side": 1,
+      "message": "Maybe just fallthrough to the default case below?",
+      "revId": "5b9e4667c9b4a2ec86f05aef4d9761716b10f002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42db0b6c_5ce9cdca",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 3
