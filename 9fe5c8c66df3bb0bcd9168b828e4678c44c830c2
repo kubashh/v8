@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "918cbb90_98e97af5",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-12-01T00:24:40Z",
+      "side": 1,
+      "message": "Unfortunately, no. At least without certain code refactoring. The client (CPU profiler) first stops profiling by unregistering itself from observers and then still can access some code entries to finish up the profile conversion.",
+      "parentUuid": "9acffa34_c22221fa",
+      "revId": "9fe5c8c66df3bb0bcd9168b828e4678c44c830c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76eeb58e_0b0fce43",
         "filename": "src/profiler/profiler-listener.h",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-11-30T01:11:39Z",
       "side": 1,
       "message": "Curious: I don\u0027t see code_entries_ used anywhere in the code, it\u0027s only populated then freed. Is it just used to retain the code entries weakly referenced from elsewhere?",
+      "revId": "9fe5c8c66df3bb0bcd9168b828e4678c44c830c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0292373_7f021322",
+        "filename": "src/profiler/profiler-listener.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2017-12-01T00:24:40Z",
+      "side": 1,
+      "message": "Yes, observers may share the entries. So the ownership is retained here. Another options would be to make them refcounted and make a copy for each observer. These seem to be less efficient.",
+      "parentUuid": "76eeb58e_0b0fce43",
       "revId": "9fe5c8c66df3bb0bcd9168b828e4678c44c830c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
