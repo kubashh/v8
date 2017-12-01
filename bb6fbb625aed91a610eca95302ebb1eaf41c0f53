@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "68b1182c_aa5e0a3c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3484,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T10:49:45Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "85fa02a8_da93d368",
+      "range": {
+        "startLine": 3484,
+        "startChar": 8,
+        "endLine": 3484,
+        "endChar": 44
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "737d96f7_4f3cc540",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b700e6ef_c9601424",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T10:49:45Z",
+      "side": 1,
+      "message": "That could\u0027ve been done separately. Essentially, for NEW_SPACE pages we never set up the free list category pointers on a page. We then only DCHECK that none of the categories are linked anywhere for OLD_SPACE pages.\n\nI expanded the check to apply for every page (AddPageForIterability) which requires that the pointers are in a consistent state.",
+      "parentUuid": "737d96f7_4f3cc540",
+      "range": {
+        "startLine": 606,
+        "startChar": 2,
+        "endLine": 606,
+        "endChar": 40
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5f8b56a4_cf7fafe7",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T10:49:45Z",
+      "side": 1,
+      "message": "Won\u0027t work as we can call this multiple times.",
+      "parentUuid": "3b4a3981_c696c378",
+      "range": {
+        "startLine": 564,
+        "startChar": 2,
+        "endLine": 564,
+        "endChar": 34
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab03fc93_fd5ddb34",
         "filename": "src/heap/sweeper.cc",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bd6274a5_965bdca7",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T10:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab03fc93_fd5ddb34",
+      "range": {
+        "startLine": 568,
+        "startChar": 2,
+        "endLine": 568,
+        "endChar": 69
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e74d790a_0872a6ef",
         "filename": "src/heap/sweeper.h",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5a7661e_b9961155",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T10:49:45Z",
+      "side": 1,
+      "message": "Done. Got rid of the constant. We not call them explicitly in ForAllSweepingSpaces.",
+      "parentUuid": "e74d790a_0872a6ef",
+      "range": {
+        "startLine": 127,
+        "startChar": 20,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "bb6fbb625aed91a610eca95302ebb1eaf41c0f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
