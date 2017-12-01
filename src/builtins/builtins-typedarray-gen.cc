@@ -45,7 +45,7 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
   TNode<Map> LoadMapForType(TNode<JSTypedArray> array);
   Node* CalculateExternalPointer(Node* backing_store, Node* byte_offset);
   Node* LoadDataPtr(Node* typed_array);
-  Node* ByteLengthIsValid(Node* byte_length);
+  TNode<BoolT> ByteLengthIsValid(TNode<Number> byte_length);
 
   // Returns true if kind is either UINT8_ELEMENTS or UINT8_CLAMPED_ELEMENTS.
   TNode<Word32T> IsUint8ElementsKind(TNode<Word32T> kind);
@@ -552,25 +552,27 @@ Node* TypedArrayBuiltinsAssembler::LoadDataPtr(Node* typed_array) {
   return IntPtrAdd(base_pointer, external_pointer);
 }
 
-Node* TypedArrayBuiltinsAssembler::ByteLengthIsValid(Node* byte_length) {
+TNode<BoolT> TypedArrayBuiltinsAssembler::ByteLengthIsValid(
+    TNode<Number> byte_length) {
   Label smi(this), done(this);
-  VARIABLE(is_valid, MachineRepresentation::kWord32);
+  TVARIABLE(BoolT, is_valid);
   GotoIf(TaggedIsSmi(byte_length), &smi);
 
-  CSA_ASSERT(this, IsHeapNumber(byte_length));
-  Node* float_value = LoadHeapNumberValue(byte_length);
-  Node* max_byte_length_double =
+  TNode<Float64T> float_value = LoadHeapNumberValue(CAST(byte_length));
+  TNode<Float64T> max_byte_length_double =
       Float64Constant(FixedTypedArrayBase::kMaxByteLength);
-  is_valid.Bind(Float64LessThanOrEqual(float_value, max_byte_length_double));
+  is_valid = Float64LessThanOrEqual(float_value, max_byte_length_double);
   Goto(&done);
 
   BIND(&smi);
-  Node* max_byte_length = IntPtrConstant(FixedTypedArrayBase::kMaxByteLength);
-  is_valid.Bind(UintPtrLessThanOrEqual(SmiUntag(byte_length), max_byte_length));
+  TNode<IntPtrT> max_byte_length =
+      IntPtrConstant(FixedTypedArrayBase::kMaxByteLength);
+  is_valid =
+      UintPtrLessThanOrEqual(SmiUntag(CAST(byte_length)), max_byte_length);
   Goto(&done);
 
   BIND(&done);
-  return is_valid.value();
+  return is_valid;
 }
 
 TF_BUILTIN(TypedArrayConstructByArrayLike, TypedArrayBuiltinsAssembler) {
@@ -615,9 +617,10 @@ TF_BUILTIN(TypedArrayConstructByArrayLike, TypedArrayBuiltinsAssembler) {
                                      array_like, JSTypedArray::kBufferOffset)),
                                  Int32Constant(0)));
 
-    Node* byte_length = SmiMul(length, element_size);
+    TNode<Number> byte_length = SmiMul(length, element_size);
     CSA_ASSERT(this, ByteLengthIsValid(byte_length));
-    Node* byte_length_intptr = ChangeNonnegativeNumberToUintPtr(byte_length);
+    TNode<UintPtrT> byte_length_intptr =
+        ChangeNonnegativeNumberToUintPtr(byte_length);
     CSA_ASSERT(this, UintPtrLessThanOrEqual(
                          byte_length_intptr,
                          IntPtrConstant(FixedTypedArrayBase::kMaxByteLength)));
