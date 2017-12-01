@@ -1404,12 +1404,16 @@ enum ExternalArrayType {
   kExternalUint8ClampedArray,
 };
 
+static int AssemblerDebugInfoId = 0;
 struct AssemblerDebugInfo {
   AssemblerDebugInfo(const char* name, const char* file, int line)
-      : name(name), file(file), line(line) {}
+      : name(name), file(file), line(line), id(AssemblerDebugInfoId++) {}
+  AssemblerDebugInfo(const char* name, const char* file, int line, int id)
+      : name(name), file(file), line(line), id(id) {}
   const char* name;
   const char* file;
   int line;
+  int id;
 };
 
 inline std::ostream& operator<<(std::ostream& os,
@@ -1417,6 +1421,8 @@ inline std::ostream& operator<<(std::ostream& os,
   os << "(" << info.name << ":" << info.file << ":" << info.line << ")";
   return os;
 }
+
+void inline v8_log_coverage_id(int id) { printf("cov %i\n", id); }
 
 enum class OptimizationMarker {
   kLogFirstExecution,

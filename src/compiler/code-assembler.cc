@@ -401,7 +401,7 @@ void CodeAssembler::Bind(Label* label) { return label->Bind(); }
 
 #if DEBUG
 void CodeAssembler::Bind(Label* label, AssemblerDebugInfo debug_info) {
-  return label->Bind(debug_info);
+  label->Bind(debug_info);
 }
 #endif  // DEBUG
 
@@ -1406,6 +1406,9 @@ CodeAssemblerLabel::CodeAssemblerLabel(CodeAssembler* assembler,
 }
 
 CodeAssemblerLabel::~CodeAssemblerLabel() { label_->~RawMachineLabel(); }
+void CodeAssemblerLabel::PrintCoverageInfo() {
+  label_->block()->PrintCoverageInfo();
+}
 
 void CodeAssemblerLabel::MergeVariables() {
   ++merge_count_;

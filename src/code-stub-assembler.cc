@@ -785,6 +785,11 @@ TNode<BoolT> CodeStubAssembler::WordIsWordAligned(SloppyTNode<WordT> word) {
 #if DEBUG
 void CodeStubAssembler::Bind(Label* label, AssemblerDebugInfo debug_info) {
   CodeAssembler::Bind(label, debug_info);
+  label->PrintCoverageInfo();
+  Node* log_function =
+      ExternalConstant(ExternalReference::log_coverage_id_function(isolate()));
+  CallCFunction1(MachineType::Pointer(), MachineType::IntPtr(), log_function,
+                 IntPtrConstant(debug_info.id));
 }
 #else
 void CodeStubAssembler::Bind(Label* label) { CodeAssembler::Bind(label); }

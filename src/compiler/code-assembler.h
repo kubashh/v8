@@ -1174,6 +1174,8 @@ class CodeAssemblerLabel {
       : CodeAssemblerLabel(assembler, 1, &merged_variable, type) {}
   ~CodeAssemblerLabel();
 
+  void PrintCoverageInfo();
+
   inline bool is_bound() const { return bound_; }
 
  private:

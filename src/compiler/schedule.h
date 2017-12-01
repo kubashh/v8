@@ -63,6 +63,25 @@ class V8_EXPORT_PRIVATE BasicBlock final
     debug_info_ = debug_info;
   }
   AssemblerDebugInfo debug_info() const { return debug_info_; }
+  void PrintCoverageInfo() {
+    int predecessor_debug_id = -1;
+    if (PredecessorCount() > 0) {
+      predecessor_debug_id = PredecessorAt(0)->debug_info().id;
+    }
+    printf("Id %i::%s:%i:%s", debug_info_.id, debug_info_.file,
+           debug_info_.line, debug_info_.name);
+
+    int i = 0;
+    const BasicBlock* current_block = this;
+    const int kMaxDisplayedBlocks = 10;
+    while (current_block->PredecessorCount() > 0 && i++ < kMaxDisplayedBlocks) {
+      current_block = current_block->predecessors().front();
+      int id = current_block->debug_info().id;
+      printf("::%i", id);
+      if (id != -1) break;
+    }
+    printf("\n");
+  }
 #endif  // DEBUG
 
   void Print();

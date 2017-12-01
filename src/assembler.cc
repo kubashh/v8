@@ -1374,6 +1374,12 @@ void* libc_memchr(void* string, int character, size_t search_length) {
   return memchr(string, character, search_length);
 }
 
+ExternalReference ExternalReference::log_coverage_id_function(
+    Isolate* isolate) {
+  return ExternalReference(
+      Redirect(isolate, FUNCTION_ADDR(v8_log_coverage_id)));
+}
+
 ExternalReference ExternalReference::libc_memchr_function(Isolate* isolate) {
   return ExternalReference(Redirect(isolate, FUNCTION_ADDR(libc_memchr)));
 }

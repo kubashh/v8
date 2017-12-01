@@ -970,6 +970,7 @@ class ExternalReference BASE_EMBEDDED {
   static ExternalReference ieee754_tan_function(Isolate* isolate);
   static ExternalReference ieee754_tanh_function(Isolate* isolate);
 
+  static ExternalReference log_coverage_id_function(Isolate* isolate);
   static ExternalReference libc_memchr_function(Isolate* isolate);
   static ExternalReference libc_memcpy_function(Isolate* isolate);
   static ExternalReference libc_memmove_function(Isolate* isolate);

@@ -28,7 +28,7 @@ BasicBlock::BasicBlock(Zone* zone, Id id)
       successors_(zone),
       predecessors_(zone),
 #if DEBUG
-      debug_info_(AssemblerDebugInfo(nullptr, nullptr, -1)),
+      debug_info_(AssemblerDebugInfo(nullptr, nullptr, -1, -1)),
 #endif
       id_(id) {
 }
