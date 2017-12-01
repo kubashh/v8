@@ -1819,7 +1819,7 @@ void Heap::EvacuateYoungGeneration() {
     DCHECK(CanExpandOldGeneration(new_space()->Size()));
   }
 
-  mark_compact_collector()->sweeper()->EnsureNewSpaceCompleted();
+  mark_compact_collector()->sweeper()->EnsureIterabilityCompleted();
 
   SetGCState(SCAVENGE);
   LOG(isolate_, ResourceEvent("scavenge", "begin"));
@@ -1941,8 +1941,7 @@ void Heap::Scavenge() {
     mark_compact_collector()->EnsureSweepingCompleted();
   }
 
-  // TODO(mlippautz): Untangle the dependency of the unmapper from the sweeper.
-  mark_compact_collector()->sweeper()->EnsureNewSpaceCompleted();
+  mark_compact_collector()->sweeper()->EnsureIterabilityCompleted();
 
   SetGCState(SCAVENGE);
 
@@ -6611,7 +6610,7 @@ Code* Heap::GcSafeFindCodeForInnerPointer(Address inner_pointer) {
   // after the inner pointer.
   Page* page = Page::FromAddress(inner_pointer);
   DCHECK_EQ(page->owner(), code_space());
-  mark_compact_collector()->sweeper()->SweepOrWaitUntilSweepingCompleted(page);
+  mark_compact_collector()->sweeper()->EnsurePageIsIterable(page);
 
   Address addr = page->skip_list()->StartFor(inner_pointer);
   Address top = code_space()->top();
