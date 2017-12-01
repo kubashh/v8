@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "683ade08_3f6aeda4",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T13:54:19Z",
+      "side": 1,
+      "message": "DCHECK_NE(identity, NEW_SPACE)",
+      "range": {
+        "startLine": 421,
+        "startChar": 4,
+        "endLine": 421,
+        "endChar": 13
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "385854fa_53f77747",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T13:54:19Z",
+      "side": 1,
+      "message": "DCHECK_EQ(Page::kSweepingDone, page-\u003econcurrent_sweeping_state().Value());",
+      "range": {
+        "startLine": 472,
+        "startChar": 2,
+        "endLine": 472,
+        "endChar": 6
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d17787_2ec96b4a",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T13:54:19Z",
+      "side": 1,
+      "message": "Do we want to avoid starting a task if the list is empty?",
+      "range": {
+        "startLine": 540,
+        "startChar": 6,
+        "endLine": 540,
+        "endChar": 30
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1b5e30_ad032533",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2017-12-01T13:54:19Z",
+      "side": 1,
+      "message": "DCHECK(!iterability_task_started_)",
+      "range": {
+        "startLine": 552,
+        "startChar": 2,
+        "endLine": 552,
+        "endChar": 8
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
