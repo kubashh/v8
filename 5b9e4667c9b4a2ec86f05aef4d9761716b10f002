@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42db0b6c_5ce9cdca",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2017-12-01T21:19:15Z",
+      "side": 1,
+      "message": "len should be a pointer or const\u0026 by the coding style: https://google.github.io/styleguide/cppguide.html#Reference_Arguments\n\nIf it can be const, it\u0027d be better not to make it a reference at all.\n\n(It\u0027s fine to do this as a separate cleanup since it\u0027s kind of independent of your change)",
+      "revId": "5b9e4667c9b4a2ec86f05aef4d9761716b10f002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
