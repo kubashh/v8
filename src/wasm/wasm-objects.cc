@@ -334,6 +334,7 @@ void WasmTableObject::Set(Isolate* isolate, Handle<WasmTableObject> table,
     WasmCodeWrapper wasm_code = exported_function->GetWasmCode();
     if (!wasm_code.IsCodeObject()) {
       wasm::NativeModule* native_module = wasm_code.GetWasmCode()->owner();
+      wasm::NativeModuleModificationScope moddification_scope(native_module);
       // we create the wrapper on the module exporting the function. This
       // wrapper will only be called as indirect call.
       wasm::WasmCode* exported_wrapper =

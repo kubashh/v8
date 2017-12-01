@@ -783,6 +783,12 @@ Address CompileLazy(Isolate* isolate) {
           ->get();
   DCHECK(!orchestrator->IsFrozenForTesting());
 
+  // We don't know which functions will get patched. The call from js_to_wasm is
+  // special, because we don't need to patch and we could just mark executable
+  // the portion that.
+  NativeModuleModificationScope native_module_modification_scope(
+      compiled_module->GetNativeModule());
+
   const wasm::WasmCode* result = nullptr;
   // The caller may be js to wasm calling a function
   // also available for indirect calls.
@@ -2281,6 +2287,11 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     }
     compiled_module_->set_native_context(isolate_->native_context());
   }
+  base::Optional<wasm::NativeModuleModificationScope>
+      native_module_modification_scope;
+  if (native_module != nullptr) {
+    native_module_modification_scope.emplace(native_module);
+  }
 
   //--------------------------------------------------------------------------
   // Allocate the instance object.
@@ -2543,8 +2554,9 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     RecordStats(startup_code, counters());
     // Call the JS function.
     Handle<Object> undefined = factory->undefined_value();
-    // Close the CodeSpaceMemoryModificationScope to execute the start function.
+    // Close the modification scopes, so we can execute the start function.
     modification_scope.reset();
+    native_module_modification_scope.reset();
     {
       // We're OK with JS execution here. The instance is fully setup.
       AllowJavascriptExecution allow_js(isolate_);
