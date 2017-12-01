@@ -23,6 +23,7 @@ enum FreeSpaceTreatmentMode { IGNORE_FREE_SPACE, ZAP_FREE_SPACE };
 
 class Sweeper {
  public:
+  typedef std::vector<Page*> IterabilityList;
   typedef std::deque<Page*> SweepingList;
   typedef std::vector<Page*> SweptList;
 
@@ -83,7 +84,9 @@ class Sweeper {
         incremental_sweeper_pending_(false),
         sweeping_in_progress_(false),
         num_sweeping_tasks_(0),
-        stop_sweeper_tasks_(false) {}
+        stop_sweeper_tasks_(false),
+        iterability_task_semaphore_(0),
+        iterability_in_progress_(false) {}
 
   bool sweeping_in_progress() const { return sweeping_in_progress_; }
 
@@ -106,28 +109,35 @@ class Sweeper {
   void EnsureCompleted();
   void EnsureNewSpaceCompleted();
   bool AreSweeperTasksRunning();
-  void SweepOrWaitUntilSweepingCompleted(Page* page);
 
   void AddSweptPageSafe(PagedSpace* space, Page* page);
   Page* GetSweptPageSafe(PagedSpace* space);
 
+  void EnsurePageIsIterable(Page* page);
+
+  void AddPageForIterability(Page* page);
+  void StartIterabilityTasks();
+  void EnsureIterabilityCompleted();
+
  private:
   class IncrementalSweeperTask;
+  class IterabilityTask;
   class SweeperTask;
 
-  static const int kAllocationSpaces = LAST_PAGED_SPACE + 1;
-  static const int kMaxSweeperTasks = kAllocationSpaces;
+  static const int kFirstRealSweepingSpace = FIRST_PAGED_SPACE;
+  static const int kNumberOfSweepingSpaces = LAST_PAGED_SPACE + 1;
+  static const int kMaxSweeperTasks = kNumberOfSweepingSpaces;
 
   template <typename Callback>
   void ForAllSweepingSpaces(Callback callback) {
-    for (int i = 0; i < kAllocationSpaces; i++) {
+    for (int i = kFirstRealSweepingSpace; i < kNumberOfSweepingSpaces; i++) {
       callback(static_cast<AllocationSpace>(i));
     }
   }
 
   // Can only be called on the main thread when no tasks are running.
   bool IsDoneSweeping() const {
-    for (int i = 0; i < kAllocationSpaces; i++) {
+    for (int i = kFirstRealSweepingSpace; i < kNumberOfSweepingSpaces; i++) {
       if (!sweeping_list_[i].empty()) return false;
     }
     return true;
@@ -145,14 +155,26 @@ class Sweeper {
 
   void PrepareToBeSweptPage(AllocationSpace space, Page* page);
 
+  void SweepOrWaitUntilSweepingCompleted(Page* page);
+
+  void MakeIterable(Page* page);
+
+  bool IsValidIterabilitySpace(AllocationSpace space) {
+    return space == NEW_SPACE || space == OLD_SPACE;
+  }
+
+  bool IsValidSweepingSpace(AllocationSpace space) {
+    return space >= FIRST_PAGED_SPACE && space <= LAST_PAGED_SPACE;
+  }
+
   Heap* const heap_;
   MajorNonAtomicMarkingState* marking_state_;
   int num_tasks_;
-  CancelableTaskManager::Id task_ids_[kMaxSweeperTasks];
+  CancelableTaskManager::Id task_ids_[kNumberOfSweepingSpaces];
   base::Semaphore pending_sweeper_tasks_semaphore_;
   base::Mutex mutex_;
-  SweptList swept_list_[kAllocationSpaces];
-  SweepingList sweeping_list_[kAllocationSpaces];
+  SweptList swept_list_[kNumberOfSweepingSpaces];
+  SweepingList sweeping_list_[kNumberOfSweepingSpaces];
   bool incremental_sweeper_pending_;
   bool sweeping_in_progress_;
   // Counter is actively maintained by the concurrent tasks to avoid querying
@@ -160,6 +182,12 @@ class Sweeper {
   base::AtomicNumber<intptr_t> num_sweeping_tasks_;
   // Used by PauseOrCompleteScope to signal early bailout to tasks.
   base::AtomicValue<bool> stop_sweeper_tasks_;
+
+  // Pages that are only made iterable but have their free lists ignored.
+  IterabilityList iterability_list_;
+  CancelableTaskManager::Id iterability_task_id_;
+  base::Semaphore iterability_task_semaphore_;
+  bool iterability_in_progress_;
 };
 
 }  // namespace internal
