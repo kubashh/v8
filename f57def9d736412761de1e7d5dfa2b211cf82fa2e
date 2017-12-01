@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8ba5adc2_7e00040e",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T15:16:39Z",
+      "side": 1,
+      "message": "Added DCHECK(IsValidSweepingSpace(...)) above.",
+      "parentUuid": "683ade08_3f6aeda4",
+      "range": {
+        "startLine": 421,
+        "startChar": 4,
+        "endLine": 421,
+        "endChar": 13
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "385854fa_53f77747",
         "filename": "src/heap/sweeper.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f045376b_8f99bc3c",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T15:16:39Z",
+      "side": 1,
+      "message": "Moved exactly this DCHECK from the caller into the call.",
+      "parentUuid": "385854fa_53f77747",
+      "range": {
+        "startLine": 472,
+        "startChar": 2,
+        "endLine": 472,
+        "endChar": 6
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f6d69b6e_6a037f28",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T15:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3d17787_2ec96b4a",
+      "range": {
+        "startLine": 540,
+        "startChar": 6,
+        "endLine": 540,
+        "endChar": 30
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a1b5e30_ad032533",
         "filename": "src/heap/sweeper.cc",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfaadd75_0ee69568",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2017-12-01T15:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a1b5e30_ad032533",
+      "range": {
+        "startLine": 552,
+        "startChar": 2,
+        "endLine": 552,
+        "endChar": 8
+      },
+      "revId": "f57def9d736412761de1e7d5dfa2b211cf82fa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
