@@ -36,7 +36,7 @@ class VectorSegment {
   ~VectorSegment() { container_.resize(begin_); }
 
   Vector<const value_type> GetVector() const {
-    return Vector<const value_type>(&container_[begin_],
+    return Vector<const value_type>(container_.data() + begin_,
                                     container_.size() - begin_);
   }
 
