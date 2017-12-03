@@ -523,6 +523,8 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kArrayIncludes:
     case Builtins::kArrayPrototypeEntries:
     case Builtins::kArrayPrototypeKeys:
+    case Builtins::kArrayPrototypeFind:
+    case Builtins::kArrayPrototypeFindIndex:
     case Builtins::kArrayForEach:
     case Builtins::kArrayEvery:
     case Builtins::kArraySome:
