@@ -383,7 +383,8 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
       const char* name, const BuiltinResultGenerator& generator,
       const CallResultProcessor& processor, const PostLoopAction& action,
       const Callable& slow_case_continuation,
-      ForEachDirection direction = ForEachDirection::kForward) {
+      ForEachDirection direction = ForEachDirection::kForward,
+      bool skip_holes = false) {
     Label non_array(this), array_changes(this, {&k_, &a_, &to_});
 
     // TODO(danno): Seriously? Do we really need to throw the exact error
@@ -439,7 +440,8 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
 
     generator(this);
 
-    HandleFastElements(processor, action, &fully_spec_compliant_, direction);
+    HandleFastElements(processor, action, &fully_spec_compliant_, direction,
+                       skip_holes);
 
     BIND(&fully_spec_compliant_);
 
@@ -550,7 +552,8 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
 
   void GenerateIteratingArrayBuiltinLoopContinuation(
       const CallResultProcessor& processor, const PostLoopAction& action,
-      ForEachDirection direction = ForEachDirection::kForward) {
+      ForEachDirection direction = ForEachDirection::kForward,
+      bool skip_missing_properties = true) {
     Label loop(this, {&k_, &a_, &to_});
     Label after_loop(this);
     Goto(&loop);
@@ -572,12 +575,14 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
       // index in the range [0, 2^32-1).
       CSA_ASSERT(this, IsNumberArrayIndex(k()));
 
-      // b. Let kPresent be HasProperty(O, Pk).
-      // c. ReturnIfAbrupt(kPresent).
-      Node* k_present = HasProperty(o(), k(), context(), kHasProperty);
+      if (skip_missing_properties) {
+        // b. Let kPresent be HasProperty(O, Pk).
+        // c. ReturnIfAbrupt(kPresent).
+        Node* k_present = HasProperty(o(), k(), context(), kHasProperty);
 
-      // d. If kPresent is true, then
-      GotoIf(WordNotEqual(k_present, TrueConstant()), &done_element);
+        // d. If kPresent is true, then
+        GotoIf(WordNotEqual(k_present, TrueConstant()), &done_element);
+      }
 
       // i. Let kValue be Get(O, Pk).
       // ii. ReturnIfAbrupt(kValue).
@@ -655,7 +660,8 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
   void VisitAllFastElementsOneKind(ElementsKind kind,
                                    const CallResultProcessor& processor,
                                    Label* array_changed, ParameterMode mode,
-                                   ForEachDirection direction) {
+                                   ForEachDirection direction,
+                                   bool skip_holes) {
     Comment("begin VisitAllFastElementsOneKind");
     VARIABLE(original_map, MachineRepresentation::kTagged);
     original_map.Bind(LoadMap(o()));
@@ -670,7 +676,8 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
         list, start, end,
         [=, &original_map](Node* index) {
           k_.Bind(ParameterToTagged(index, mode));
-          Label one_element_done(this), hole_element(this);
+          Label one_element_done(this), hole_element(this),
+              process_element(this);
 
           // Check if o's map has changed during the callback. If so, we have to
           // fall back to the slower spec implementation for the rest of the
@@ -693,24 +700,34 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
                               ? FixedArray::kHeaderSize
                               : (FixedArray::kHeaderSize - kHeapObjectTag);
           Node* offset = ElementOffsetFromIndex(index, kind, mode, base_size);
-          Node* value = nullptr;
+          VARIABLE(value, MachineRepresentation::kTagged);
           if (kind == PACKED_ELEMENTS) {
-            value = LoadObjectField(elements, offset);
-            GotoIf(WordEqual(value, TheHoleConstant()), &hole_element);
+            value.Bind(LoadObjectField(elements, offset));
+            GotoIf(WordEqual(value.value(), TheHoleConstant()), &hole_element);
           } else {
             Node* double_value =
                 LoadDoubleWithHoleCheck(elements, offset, &hole_element);
-            value = AllocateHeapNumberWithValue(double_value);
+            value.Bind(AllocateHeapNumberWithValue(double_value));
           }
-          a_.Bind(processor(this, value, k()));
-          Goto(&one_element_done);
+          Goto(&process_element);
 
           BIND(&hole_element);
-          // Check if o's prototype change unexpectedly has elements after the
-          // callback in the case of a hole.
-          BranchIfPrototypesHaveNoElements(o_map, &one_element_done,
-                                           array_changed);
-
+          {
+            if (skip_holes) {
+              value.Bind(UndefinedConstant());
+              Goto(&process_element);
+            } else {
+              // Check if o's prototype change unexpectedly has elements after
+              // the callback in the case of a hole.
+              BranchIfPrototypesHaveNoElements(o_map, &one_element_done,
+                                               array_changed);
+            }
+          }
+          BIND(&process_element);
+          {
+            a_.Bind(processor(this, value.value(), k()));
+            Goto(&one_element_done);
+          }
           BIND(&one_element_done);
         },
         1, mode, advance_mode);
@@ -719,7 +736,7 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
 
   void HandleFastElements(const CallResultProcessor& processor,
                           const PostLoopAction& action, Label* slow,
-                          ForEachDirection direction) {
+                          ForEachDirection direction, bool skip_holes) {
     Label switch_on_elements_kind(this), fast_elements(this),
         maybe_double_elements(this), fast_double_elements(this);
 
@@ -742,7 +759,7 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
     BIND(&fast_elements);
     {
       VisitAllFastElementsOneKind(PACKED_ELEMENTS, processor, slow, mode,
-                                  direction);
+                                  direction, skip_holes);
 
       action(this);
 
@@ -757,7 +774,7 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
     BIND(&fast_double_elements);
     {
       VisitAllFastElementsOneKind(PACKED_DOUBLE_ELEMENTS, processor, slow, mode,
-                                  direction);
+                                  direction, skip_holes);
 
       action(this);
 
@@ -1617,6 +1634,95 @@ TF_BUILTIN(CloneFastJSArray, ArrayBuiltinCodeStubAssembler) {
 
   ParameterMode mode = OptimalParameterMode();
   Return(CloneFastJSArray(context, array, mode));
+}
+
+TF_BUILTIN(ArrayFindLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+  Node* to = Parameter(Descriptor::kTo);
+
+  InitIteratingArrayBuiltinLoopContinuation(context, receiver, callbackfn,
+                                            this_arg, array, object, initial_k,
+                                            len, to);
+
+  GenerateIteratingArrayBuiltinLoopContinuation(
+      &ArrayBuiltinCodeStubAssembler::FindProcessor,
+      &ArrayBuiltinCodeStubAssembler::NullPostLoopAction,
+      ForEachDirection::kForward, false);
+}
+
+// ES #sec-get-%typedarray%.prototype.find
+TF_BUILTIN(ArrayPrototypeFind, ArrayBuiltinCodeStubAssembler) {
+  Node* argc =
+      ChangeInt32ToIntPtr(Parameter(BuiltinDescriptor::kArgumentsCount));
+  CodeStubArguments args(this, argc);
+  Node* context = Parameter(BuiltinDescriptor::kContext);
+  Node* new_target = Parameter(BuiltinDescriptor::kNewTarget);
+  Node* receiver = args.GetReceiver();
+  Node* callbackfn = args.GetOptionalArgumentValue(0);
+  Node* this_arg = args.GetOptionalArgumentValue(1);
+
+  InitIteratingArrayBuiltinBody(context, receiver, callbackfn, this_arg,
+                                new_target, argc);
+
+  GenerateIteratingArrayBuiltinBody(
+      "Array.prototype.find",
+      &ArrayBuiltinCodeStubAssembler::FindResultGenerator,
+      &ArrayBuiltinCodeStubAssembler::FindProcessor,
+      &ArrayBuiltinCodeStubAssembler::NullPostLoopAction,
+      Builtins::CallableFor(isolate(), Builtins::kArrayFindLoopContinuation),
+      ForEachDirection::kForward, true);
+}
+
+TF_BUILTIN(ArrayFindIndexLoopContinuation, ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* this_arg = Parameter(Descriptor::kThisArg);
+  Node* array = Parameter(Descriptor::kArray);
+  Node* object = Parameter(Descriptor::kObject);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+  Node* to = Parameter(Descriptor::kTo);
+
+  InitIteratingArrayBuiltinLoopContinuation(context, receiver, callbackfn,
+                                            this_arg, array, object, initial_k,
+                                            len, to);
+
+  GenerateIteratingArrayBuiltinLoopContinuation(
+      &ArrayBuiltinCodeStubAssembler::FindIndexProcessor,
+      &ArrayBuiltinCodeStubAssembler::NullPostLoopAction,
+      ForEachDirection::kForward, false);
+}
+
+// ES #sec-get-%typedarray%.prototype.findIndex
+TF_BUILTIN(ArrayPrototypeFindIndex, ArrayBuiltinCodeStubAssembler) {
+  Node* argc =
+      ChangeInt32ToIntPtr(Parameter(BuiltinDescriptor::kArgumentsCount));
+  CodeStubArguments args(this, argc);
+  Node* context = Parameter(BuiltinDescriptor::kContext);
+  Node* new_target = Parameter(BuiltinDescriptor::kNewTarget);
+  Node* receiver = args.GetReceiver();
+  Node* callbackfn = args.GetOptionalArgumentValue(0);
+  Node* this_arg = args.GetOptionalArgumentValue(1);
+
+  InitIteratingArrayBuiltinBody(context, receiver, callbackfn, this_arg,
+                                new_target, argc);
+
+  GenerateIteratingArrayBuiltinBody(
+      "Array.prototype.findIndex",
+      &ArrayBuiltinCodeStubAssembler::FindIndexResultGenerator,
+      &ArrayBuiltinCodeStubAssembler::FindIndexProcessor,
+      &ArrayBuiltinCodeStubAssembler::NullPostLoopAction,
+      Builtins::CallableFor(isolate(),
+                            Builtins::kArrayFindIndexLoopContinuation),
+      ForEachDirection::kForward, true);
 }
 
 // ES #sec-get-%typedarray%.prototype.find

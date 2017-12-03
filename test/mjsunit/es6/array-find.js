@@ -234,6 +234,21 @@ assertEquals(22, a.find(function(val) { return 22 === val; }), undefined);
 
 
 //
+// Test predicate is called for missing properties
+//
+(function() {
+  const obj = {
+    "0": 0,
+    "2": 2,
+    length: 3
+  };
+  const received = [];
+  Array.prototype.find.call(obj, (v) => { received.push(v); return false; });
+  assertArrayEquals([0, undefined, 2], received);
+})();
+
+
+//
 // Test thisArg
 //
 (function() {
