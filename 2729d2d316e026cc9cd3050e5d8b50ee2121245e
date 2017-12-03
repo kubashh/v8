@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0047ab36_2390cd45",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-03T01:21:31Z",
+      "side": 1,
+      "message": "skip_missing_properties (and skip_holes) account for the subtle difference between find/findIndex and the other iteration methods.  find/findIndex don\u0027t skip over these cases while the others do.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d390af39_219c9927",
+        "filename": "test/mjsunit/es6/array-find.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-03T01:21:31Z",
+      "side": 1,
+      "message": "This test case (and the one for findIndex), was specifically added to verify the slow path (receiver is not a fast JS array) matched current behavior by not skipping over missing properties (in this case \"1\").",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
