@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28dad220_1c8ff0dc",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-12-04T15:47:55Z",
+      "side": 1,
+      "message": "question: Why is this condition needed here? IIUC then it should be fine to use both scopes unconditionally here (similar to the other places). Am I missing something?",
+      "range": {
+        "startLine": 735,
+        "startChar": 2,
+        "endLine": 735,
+        "endChar": 33
+      },
+      "revId": "50ac1ad0b528f3148ea1a302a27a552173081bfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04ae2fdd_197a2249",
+        "filename": "src/wasm/wasm-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2017-12-04T15:47:55Z",
+      "side": 1,
+      "message": "nit: Curly brackets around this body.",
+      "range": {
+        "startLine": 820,
+        "startChar": 6,
+        "endLine": 820,
+        "endChar": 19
+      },
+      "revId": "50ac1ad0b528f3148ea1a302a27a552173081bfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
