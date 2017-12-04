@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc3f8f98_1a25321d",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-04T08:30:56Z",
+      "side": 1,
+      "message": "hmm, lemme guess. The triggered_by doesn\u0027t work cross-bucket. Then lets just switch trigger/tiggered pair in sync?",
+      "range": {
+        "startLine": 43,
+        "startChar": 8,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "d161e0c92e25da9a8fedac3949cff6f7214e6eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
