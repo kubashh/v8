@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "60c98d3a_a8f7af63",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "This default value changes behavior for all other array builtins, doesn\u0027t it? Could you add a test verifying they correctly skip/don\u0027t skip as specced?\n\nI\u0027d also be in favor of making this argument default-less and adding an enum for it to make callsites more readable.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48018aca_94fb7f1b",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Why does skip_holes default to `false` and this to `true`? And please make the names consistent, I\u0027d be fine with `skip_missing_properties` for both.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0047ab36_2390cd45",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -19,6 +53,143 @@
     },
     {
       "key": {
+        "uuid": "073492a9_16c80cf9",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Nice. Since this is fairly subtle, did you check if other existing Array CSA ports behave correctly here?",
+      "parentUuid": "0047ab36_2390cd45",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82d3339a_30153b32",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Idea for a follow-up: I\u0027d feel safer if we had a IsBoolean CSA_ASSERT here or made CSA::HasProperty typed.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f902ac_3ff9e39b",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Logic seems inverted. Now I understand why things seem to work while one `skip...` defaults to false and the other to true :)\n\nAlso, please add an explanatory comment here and at the other skip_* use site.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea791c0_78ca5360",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Nit: Whitespace above and below.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fe8558b_76d617a6",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Why are we skipping holes here and below but not in the respective slow-path? Assuming we should *not* skip holes, please add a test as well.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09998767_006f7719",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8eb63e4_13ad0ad6",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Nit: Alpha-sort. Since we\u0027re here, would you mind sorting the entire array section and fixing the bulitins typo below? :) Thanks.",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7da582a_adbed3a0",
+        "filename": "test/mjsunit/es6/array-find.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Nit: assertEquals(undefined, ...)",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d390af39_219c9927",
         "filename": "test/mjsunit/es6/array-find.js",
         "patchSetId": 2
@@ -30,6 +201,41 @@
       "writtenOn": "2017-12-03T01:21:31Z",
       "side": 1,
       "message": "This test case (and the one for findIndex), was specifically added to verify the slow path (receiver is not a fast JS array) matched current behavior by not skipping over missing properties (in this case \"1\").",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb96c3d_e4f4c6ef",
+        "filename": "test/mjsunit/es6/array-find.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Could you also add one where the fast-\u003eslow continuation path is tested? I.e. where the array starts fast but is turned slow by the callback.",
+      "parentUuid": "d390af39_219c9927",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e7c508_2ab2fbec",
+        "filename": "test/mjsunit/es6/array-findindex.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-04T09:51:21Z",
+      "side": 1,
+      "message": "Same here please.",
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
