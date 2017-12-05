@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "430f30e1_cbf0758e",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done. Apologies, I kept flip-flopping on the wording right before I uploaded this CL.  I have replaced this boolean flag with an enum MissingPropertyMode (kSkip, kUseUndefined). WDYT?",
+      "parentUuid": "60c98d3a_a8f7af63",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48018aca_94fb7f1b",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "334289e8_98675319",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done. Replaced by MissingPropertyMode enum with no default value.",
+      "parentUuid": "48018aca_94fb7f1b",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "313a63b5_fdfe968d",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done. Yeah, as far as I can tell from the spec.  I\u0027ve added more test cases in array-iteration.js",
+      "parentUuid": "073492a9_16c80cf9",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82d3339a_30153b32",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -85,6 +139,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94060381_049ddc21",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82d3339a_30153b32",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "a56bc8c7_811cd9e2",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Apologies, I kept flip-flopping on the wording right before I uploaded this CL.  I have replaced this boolean flag with an enum MissingPropertyMode (kSkip, kUseUndefined).",
+      "parentUuid": "b8f902ac_3ff9e39b",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ea791c0_78ca5360",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -119,6 +209,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daad38bf_f111c748",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ea791c0_78ca5360",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "5b18763c_8f15a797",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done, fixed inverted logic and using new MissingPropertyMode enum.",
+      "parentUuid": "3fe8558b_76d617a6",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09998767_006f7719",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 2
@@ -153,6 +279,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b921a89_6ee644d7",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done, fixed inverted logic and using new MissingPropertyMode enum.",
+      "parentUuid": "09998767_006f7719",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -173,6 +317,24 @@
     },
     {
       "key": {
+        "uuid": "226730ad_9c037363",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done, I need to build myself a linter just for this. Gets me every time...",
+      "parentUuid": "d8eb63e4_13ad0ad6",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7da582a_adbed3a0",
         "filename": "test/mjsunit/es6/array-find.js",
         "patchSetId": 2
@@ -187,6 +349,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0d3877_eb62e096",
+        "filename": "test/mjsunit/es6/array-find.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7da582a_adbed3a0",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -225,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "d22138cf_f50d9ea3",
+        "filename": "test/mjsunit/es6/array-find.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done, also added this type of test case for the other iterator methods in mjsunit/array-iteration.js",
+      "parentUuid": "8cb96c3d_e4f4c6ef",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70e7c508_2ab2fbec",
         "filename": "test/mjsunit/es6/array-findindex.js",
         "patchSetId": 2
@@ -239,6 +437,24 @@
       "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecfb2a1c_3cb0a3ac",
+        "filename": "test/mjsunit/es6/array-findindex.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2017-12-05T04:16:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70e7c508_2ab2fbec",
+      "revId": "2729d2d316e026cc9cd3050e5d8b50ee2121245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
