@@ -12,6 +12,7 @@
 #include "src/counters.h"
 #include "src/heap/array-buffer-tracker.h"
 #include "src/heap/concurrent-marking.h"
+#include "src/heap/gc-tracer.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/slot-set.h"
@@ -313,15 +314,20 @@ void MemoryAllocator::TearDown() {
 class MemoryAllocator::Unmapper::UnmapFreeMemoryTask : public CancelableTask {
  public:
   explicit UnmapFreeMemoryTask(Isolate* isolate, Unmapper* unmapper)
-      : CancelableTask(isolate), unmapper_(unmapper) {}
+      : CancelableTask(isolate),
+        unmapper_(unmapper),
+        tracer_(isolate->heap()->tracer()) {}
 
  private:
   void RunInternal() override {
+    GCTracer::BackgroundScope scope(
+        tracer_, GCTracer::BackgroundScope::BACKGROUND_UNMAPPER);
     unmapper_->PerformFreeMemoryOnQueuedChunks<FreeMode::kUncommitPooled>();
     unmapper_->pending_unmapping_tasks_semaphore_.Signal();
   }
 
   Unmapper* const unmapper_;
+  GCTracer* const tracer_;
   DISALLOW_COPY_AND_ASSIGN(UnmapFreeMemoryTask);
 };
 
@@ -3039,13 +3045,16 @@ bool FreeList::Allocate(size_t size_in_bytes) {
 
 size_t FreeList::EvictFreeListItems(Page* page) {
   size_t sum = 0;
-  page->ForAllFreeListCategories(
-      [this, &sum](FreeListCategory* category) {
-        DCHECK_EQ(this, category->owner());
-        sum += category->available();
-        RemoveCategory(category);
-        category->Invalidate();
-      });
+  page->ForAllFreeListCategories([this, &sum](FreeListCategory* category) {
+    // The category might have been already evicted
+    // if the page is an evacuation candidate.
+    if (category->type_ != kInvalidCategory) {
+      DCHECK_EQ(this, category->owner());
+      sum += category->available();
+      RemoveCategory(category);
+      category->Invalidate();
+    }
+  });
   return sum;
 }
 
@@ -3067,6 +3076,7 @@ void FreeList::RepairLists(Heap* heap) {
 
 bool FreeList::AddCategory(FreeListCategory* category) {
   FreeListCategoryType type = category->type_;
+  DCHECK_LE(type, kNumberOfCategories);
   FreeListCategory* top = categories_[type];
 
   if (category->is_empty()) return false;
@@ -3083,6 +3093,7 @@ bool FreeList::AddCategory(FreeListCategory* category) {
 
 void FreeList::RemoveCategory(FreeListCategory* category) {
   FreeListCategoryType type = category->type_;
+  DCHECK_LE(type, kNumberOfCategories);
   FreeListCategory* top = categories_[type];
 
   // Common double-linked list removal.
