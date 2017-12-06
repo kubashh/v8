@@ -4348,6 +4348,14 @@ Node* CodeStubAssembler::IsName(Node* object) {
                               Int32Constant(LAST_NAME_TYPE));
 }
 
+Node* CodeStubAssembler::IsStringWrapperElementsKind(Node* map) {
+  Node* kind = LoadMapElementsKind(map);
+  Node* tagged_kind = SmiTag(kind);
+  return SmiOr(
+      SmiEqual(tagged_kind, SmiConstant(FAST_STRING_WRAPPER_ELEMENTS)),
+      SmiEqual(tagged_kind, SmiConstant(SLOW_STRING_WRAPPER_ELEMENTS)));
+}
+
 Node* CodeStubAssembler::IsString(Node* object) {
   return IsStringInstanceType(LoadInstanceType(object));
 }
@@ -7166,6 +7174,12 @@ void CodeStubAssembler::TryPrototypeChainLookup(
       Goto(&loop);
     }
   }
+}
+
+Node* CodeStubAssembler::HasHiddenPrototype(Node* map) {
+  Node* bit_field3 = LoadMapBitField3(map);
+  return DecodeWord32(bit_field3, Map::HasHiddenPrototype::kShift,
+                      Map::HasHiddenPrototype::kMask);
 }
 
 Node* CodeStubAssembler::HasInPrototypeChain(Node* context, Node* object,
