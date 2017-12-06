@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f74f9977_c649afd6",
+        "filename": "src/heap/stress-scavenge-observer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-06T19:39:57Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 18
+      },
+      "revId": "f514dca4943d095c2f39afd7fcc2a2d2458c3b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb173669_fb0a12aa",
+        "filename": "src/heap/stress-scavenge-observer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-06T19:39:57Z",
+      "side": 1,
+      "message": "should not some default argument be passed? Or is it 0 automatically?",
+      "range": {
+        "startLine": 18,
+        "startChar": 25,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "f514dca4943d095c2f39afd7fcc2a2d2458c3b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1817fc13_b8802e7c",
+        "filename": "src/heap/stress-scavenge-observer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-06T19:39:57Z",
+      "side": 1,
+      "message": "Is this size already part of heap_.new_space()-\u003eSize() when this is called?",
+      "range": {
+        "startLine": 28,
+        "startChar": 34,
+        "endLine": 28,
+        "endChar": 45
+      },
+      "revId": "f514dca4943d095c2f39afd7fcc2a2d2458c3b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
