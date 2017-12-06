@@ -411,10 +411,11 @@ class ObjectStats;
 class Page;
 class PagedSpace;
 class RootVisitor;
-class Scavenger;
 class ScavengeJob;
+class Scavenger;
 class Space;
 class StoreBuffer;
+class StressScavengeObserver;
 class TracePossibleWrapperReporter;
 class WeakObjectRetainer;
 
@@ -2403,6 +2404,9 @@ class Heap {
   // Observer that causes more frequent checks for reached incremental marking
   // limit.
   AllocationObserver* stress_marking_observer_;
+
+  // Observer that can cause early scavenge start.
+  StressScavengeObserver* stress_scavenge_observer_;
 
   // How many mark-sweep collections happened.
   unsigned int ms_count_;
