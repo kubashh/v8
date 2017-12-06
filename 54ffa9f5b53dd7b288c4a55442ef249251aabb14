@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b4f2367_81792f37",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "I\u0027d expect these repeated runtime calls on the fast path to be slower than just doing everything in runtime (or a CPP builtin). Did you measure perf impact of this change?\n\nMost of these runtime calls can probably be either done in CSA, or if that\u0027s too complex then through CallCFunction.",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1caa1036_70b8c24f",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Note: gotta be careful here in case the allocation is too big and thus needs to go into large-object space. Check out CSA::AllocationFlags if this case needs to be handled.",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

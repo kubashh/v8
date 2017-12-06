@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27c90686_c4502e30",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Please type this new code if possible (TNode\u003cType\u003e instead of Node*). Also, I suppose `get_entries` is really a switch between Entries/Values? Let\u0027s make that an enum instead. And it might make sense to extract these new methods required for entries/values into a new subclass of ObjectBuiltinsAssembler just to keep things organized.",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb030219_c971fbff",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Nit: Finalize",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c98d65b_6cc7a57d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Nit: It\u0027ll be faster to place the GotoIf\u0027s right after the respective calculation, instead of grabbing everything first and then doing a bunch of Gotos.",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eb93294_5d0933ff",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Should be Word32Or, and you could avoid SmiTag above if you\u0027d compare against Int32Constants.",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f80f9301_8b6f7fba",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-06T15:43:42Z",
+      "side": 1,
+      "message": "Nit: It\u0027d be nice if new CSA could be typed, i.e. use TNode\u003cType\u003e instead of raw Node*.",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
