@@ -70,7 +70,7 @@ const int MB = 1024 * 1024;
 const int kMaxWorkers = 50;
 const int kMaxSerializerMemoryUsage = 1 * MB;  // Arbitrary maximum for testing.
 
-#define USE_VM 1
+#define USE_VM 0
 #define VM_THRESHOLD 65536
 // TODO(titzer): allocations should fail if >= 2gb because of
 // array buffers storing the lengths as a SMI internally.
@@ -3479,3 +3479,9 @@ int main(int argc, char* argv[]) {
   return v8::Shell::Main(argc, argv);
 }
 #endif
+
+#undef CHECK
+#undef DCHECK
+#undef TWO_GB
+#undef USE_VM
+#undef VM_THRESHOLD
