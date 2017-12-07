@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ddfb5ba_b403d548",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-07T13:16:58Z",
+      "side": 1,
+      "message": "This variable doesn\u0027t seem to be needed, we can just return the result from FastGetOwnValuesOrEntries.",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7b4f2367_81792f37",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 6
@@ -66,6 +83,57 @@
       "side": 1,
       "message": "Oh. I should have be more considerate for memory allocation.\nOK. I\u0027ll add AllocationFlag::kAllowLargeObjectAllocation.",
       "parentUuid": "1caa1036_70b8c24f",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec75944c_4a6e3163",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-07T13:16:58Z",
+      "side": 1,
+      "message": "Nit: IsEmptyFixedArray",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4d28ffa_6d986dff",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-07T13:16:58Z",
+      "side": 1,
+      "message": "Nit: We don\u0027t create a pair here if fetching values (instead of entries).",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "258e4db1_b74138d0",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-07T13:16:58Z",
+      "side": 1,
+      "message": "No need to allocate a result array here. 1. there\u0027s better ways to return tuples, and 2. in this case we could e.g. return -1 if the result is Nothing.",
       "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
