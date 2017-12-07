@@ -15,7 +15,14 @@ namespace internal {
 // -----------------------------------------------------------------------------
 // ES6 section 19.1 Object Objects
 
+enum CollectType: uint8_t {
+  kEntries,
+  kValues
+};
+
 typedef compiler::Node Node;
+template <class T>
+using TNode = CodeStubAssembler::TNode<T>;
 
 class ObjectBuiltinsAssembler : public CodeStubAssembler {
  public:
@@ -34,6 +41,24 @@ class ObjectBuiltinsAssembler : public CodeStubAssembler {
   Node* ConstructDataDescriptor(Node* context, Node* value, Node* writable,
                                 Node* enumerable, Node* configurable);
   Node* GetAccessorOrUndefined(Node* accessor, Label* if_bailout);
+
+  void GetOwnValuesOrEntries(SloppyTNode<Context> context,
+                             SloppyTNode<JSObject> object,
+                             CollectType collect_type);
+
+  void OnlyHasSimpleProperties(SloppyTNode<Map> map, Label* if_slow);
+
+  TNode<FixedArray> FastGetOwnValuesOrEntries(SloppyTNode<Context> context,
+                                              SloppyTNode<JSObject> object,
+                                              Label* if_empty_array,
+                                              CollectType collect_type);
+
+  TNode<FixedArray> FinalizeValuesOrEntriesJSArray(
+      SloppyTNode<Context> context,
+      SloppyTNode<FixedArray> values_or_entries,
+      SloppyTNode<IntPtrT> initial_size,
+      SloppyTNode<IntPtrT> size,
+      SloppyTNode<Map> array_map, Label* if_empty);
 };
 
 void ObjectBuiltinsAssembler::ReturnToStringFormat(Node* context,
@@ -95,6 +120,208 @@ Node* ObjectBuiltinsAssembler::ConstructDataDescriptor(Node* context,
                                  SelectBooleanConstant(configurable));
 
   return js_desc;
+}
+
+void ObjectBuiltinsAssembler::GetOwnValuesOrEntries(
+    SloppyTNode<Context> context,
+    SloppyTNode<JSObject> object,
+    CollectType collect_type) {
+  VARIABLE(var_try_fast_path, MachineRepresentation::kTagged, SmiConstant(0));
+  Label if_try_fast_path(this),
+    if_call_runtime(this, Label::kDeferred),
+    if_empty_array(this, Label::kDeferred);
+
+  Node* map = LoadMap(object);
+  GotoIfNot(IsJSObjectMap(map), &if_call_runtime);
+  OnlyHasSimpleProperties(map, &if_call_runtime);
+
+  Node* elements = LoadElements(object);
+  // If elements is exists in object, we treat it as slow case.
+  // So, we go to runtime call.
+  GotoIfNot(IsEmptyFixedArray(elements), &if_try_fast_path);
+
+  TNode<FixedArray> result = FastGetOwnValuesOrEntries(
+      context, object, &if_empty_array, collect_type);
+  Return(result);
+
+  BIND(&if_try_fast_path);
+  {
+    var_try_fast_path.Bind(SmiConstant(1));
+    Goto(&if_call_runtime);
+  }
+
+  BIND(&if_call_runtime);
+  {
+    Node* result = nullptr;
+    // In slow case, we simply call runtime.
+    if (collect_type == CollectType::kEntries) {
+      result = CallRuntime(Runtime::kObjectEntries, context, object,
+                           var_try_fast_path.value());
+    } else {
+      result = CallRuntime(Runtime::kObjectValues, context, object,
+                           var_try_fast_path.value());
+    }
+    Return(result);
+  }
+
+  BIND(&if_empty_array);
+  {
+    Node* native_context = LoadNativeContext(context);
+    Node* array_map = LoadJSArrayElementsMap(PACKED_ELEMENTS, native_context);
+    Node* empty_array =
+        AllocateJSArray(PACKED_ELEMENTS, array_map, SmiConstant(0),
+                        SmiConstant(0), nullptr, SMI_PARAMETERS);
+    Return(empty_array);
+  }
+}
+
+void ObjectBuiltinsAssembler::OnlyHasSimpleProperties(SloppyTNode<Map> map,
+                                                      Label* if_slow) {
+  GotoIf(IsStringWrapperElementsKind(map), if_slow);
+  GotoIf(IsSpecialReceiverInstanceType(LoadMapInstanceType(map)), if_slow);
+  GotoIf(HasHiddenPrototype(map), if_slow);
+  GotoIf(IsDictionaryMap(map), if_slow);
+}
+
+TNode<FixedArray> ObjectBuiltinsAssembler::FastGetOwnValuesOrEntries(
+    SloppyTNode<Context> context, SloppyTNode<JSObject> object,
+    Label* if_empty_array, CollectType collect_type) {
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(PACKED_ELEMENTS, native_context);
+  Node* map = LoadMap(object);
+  Node* bit_field3 = LoadMapBitField3(map);
+  Node* number_of_own_descriptors =
+      DecodeWord32<Map::NumberOfOwnDescriptorsBits>(bit_field3);
+
+  VARIABLE(var_property_count, MachineType::PointerRepresentation(),
+           IntPtrConstant(0));
+  GotoIf(WordEqual(number_of_own_descriptors,
+                   IntPtrConstant(0)), if_empty_array);
+
+  Node* values_or_entries =
+    AllocateFixedArray(PACKED_ELEMENTS, number_of_own_descriptors,
+                       INTPTR_PARAMETERS, kAllowLargeObjectAllocation);
+  // number_of_own_descriptors includes unenumerable property key
+  // and we should exclude it from the array.
+  // But if do so, the array has extra capacity and illegal area.
+  // So we fill the array with the-hole.
+  FillFixedArrayWithValue(PACKED_ELEMENTS, values_or_entries, IntPtrConstant(0),
+                          number_of_own_descriptors,
+                          Heap::kTheHoleValueRootIndex);
+
+  VARIABLE(var_index, MachineType::PointerRepresentation(),
+           IntPtrConstant(0));
+  VARIABLE(var_property_value, MachineRepresentation::kTagged,
+           UndefinedConstant());
+  Variable* vars[] = {&var_index, &var_property_count, &var_property_value};
+  Label loop(this, 3, vars), after_loop(this), loop_condition(this);
+  Branch(IntPtrEqual(var_index.value(), number_of_own_descriptors),
+         &after_loop, &loop);
+  // We dont use BuildFastLoop.
+  // Instead, we use hand-written loop
+  // because of we need to use 'continue' functionality.
+  BIND(&loop);
+  {
+    // Map must be loaded each loop header to get newest map object.
+    map = LoadMap(object);
+    Node* object_descriptors = LoadMapDescriptors(map);
+
+    Node* next_key =
+      DescriptorArrayGetKey(object_descriptors, var_index.value());
+    Node* key_instance_type = LoadMapInstanceType(LoadMap(next_key));
+
+    // Skip Symbols.
+    GotoIf(WordEqual(key_instance_type, IntPtrConstant(SYMBOL_TYPE)),
+           &loop_condition);
+
+    {
+      Node* instance_type = LoadMapInstanceType(map);
+      VARIABLE(var_details, MachineRepresentation::kWord32);
+      VARIABLE(var_raw_value, MachineRepresentation::kTagged);
+      Label if_found(this), if_bailout(this),
+        store_values_or_entries(this);
+
+      TryGetOwnProperty(context, object, object, map, instance_type, next_key,
+                        &if_found, &var_property_value, &var_details,
+                        &var_raw_value, &loop_condition, &if_bailout,
+                        kCallJSGetter);
+
+      BIND(&if_bailout);
+      {
+        var_property_value.Bind(UndefinedConstant());
+        Goto(&store_values_or_entries);
+      }
+
+      BIND(&if_found);
+      {
+        Node* details = var_details.value();
+        Node* attributes =
+          DecodeWord32<PropertyDetails::AttributesField>(details);
+        Node* dont_enum = Int32Constant(PropertyAttributes::DONT_ENUM);
+        GotoIf(WordNotEqual(WordAnd(attributes, dont_enum), SmiConstant(0)),
+               &loop_condition);
+        Goto(&store_values_or_entries);
+      }
+
+      BIND(&store_values_or_entries);
+      {
+        if (collect_type == CollectType::kEntries) {
+          Node* array = nullptr;
+          Node* elements = nullptr;
+          std::tie(array, elements) =
+            AllocateUninitializedJSArrayWithElements(
+                PACKED_ELEMENTS, array_map, SmiConstant(2), nullptr,
+                IntPtrConstant(2));
+          StoreFixedArrayElement(elements, 0, next_key, SKIP_WRITE_BARRIER);
+          StoreFixedArrayElement(elements, 1, var_property_value.value(),
+                                 SKIP_WRITE_BARRIER);
+          var_property_value.Bind(array);
+        }
+        StoreFixedArrayElement(values_or_entries, var_property_count.value(),
+                               var_property_value.value());
+        Increment(&var_property_count, 1, INTPTR_PARAMETERS);
+        Goto(&loop_condition);
+      }
+    }
+
+    BIND(&loop_condition);
+    {
+      Increment(&var_index, 1, INTPTR_PARAMETERS);
+      Branch(IntPtrEqual(var_index.value(), number_of_own_descriptors),
+             &after_loop, &loop);
+    }
+  }
+  BIND(&after_loop);
+  return FinalizeValuesOrEntriesJSArray(
+      context, values_or_entries,
+      number_of_own_descriptors,
+      var_property_count.value(), array_map, if_empty_array);
+}
+
+TNode<FixedArray> ObjectBuiltinsAssembler::FinalizeValuesOrEntriesJSArray(
+    SloppyTNode<Context> context, SloppyTNode<FixedArray> result,
+    SloppyTNode<IntPtrT> initial_size, SloppyTNode<IntPtrT> size,
+    SloppyTNode<Map> array_map, Label* if_empty) {
+  CSA_ASSERT(this, IsFixedArray(result));
+  CSA_ASSERT(this, IsJSArrayMap(array_map));
+
+  GotoIf(WordEqual(size, IntPtrConstant(0)), if_empty);
+  CSA_ASSERT(this, IntPtrGreaterThanOrEqual(initial_size, size));
+  Node* array_length = SmiTag(size);
+  Node* array = AllocateUninitializedJSArrayWithoutElements(
+      array_map, array_length, nullptr);
+  Label if_should_shrink(this), done(this);
+  Branch(WordNotEqual(initial_size, size), &if_should_shrink, &done);
+
+  BIND(&if_should_shrink);
+  CallRuntime(Runtime::kShrinkFixedArray, context, result, array_length);
+  Goto(&done);
+
+  BIND(&done);
+  StoreObjectField(array, JSArray::kElementsOffset, result);
+  CSA_ASSERT(this, SmiEqual(LoadObjectField(result, FixedArray::kLengthOffset),
+                            array_length));
+  return TNode<FixedArray>::UncheckedCast(array);
 }
 
 TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
@@ -248,6 +475,20 @@ TF_BUILTIN(ObjectKeys, ObjectBuiltinsAssembler) {
                                    var_elements.value());
     Return(array);
   }
+}
+
+TF_BUILTIN(ObjectValues, ObjectBuiltinsAssembler) {
+  Node* object = Parameter(Descriptor::kObject);
+  Node* context = Parameter(Descriptor::kContext);
+  object = CallBuiltin(Builtins::kToObject, context, object);
+  GetOwnValuesOrEntries(context, object, CollectType::kValues);
+}
+
+TF_BUILTIN(ObjectEntries, ObjectBuiltinsAssembler) {
+  Node* object = Parameter(Descriptor::kObject);
+  Node* context = Parameter(Descriptor::kContext);
+  object = CallBuiltin(Builtins::kToObject, context, object);
+  GetOwnValuesOrEntries(context, object, CollectType::kEntries);
 }
 
 // ES #sec-object.prototype.isprototypeof
