@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c1d771f9_0e2fa086",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "OK. I\u0027ll change type of arguments as Node to SloppyTNode\u003cType\u003e.\nRight, \u0027get_entries\u0027 variable works as flag that determine to collect both keys and values or values only to use as common CSA code for Object.entries/values, so I extract these codes.\nOK. I\u0027ll fix \u0027get_entries\u0027 type from boolean to an enum class.",
+      "parentUuid": "27c90686_c4502e30",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb030219_c971fbff",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-06T15:43:42Z",
       "side": 1,
       "message": "Nit: Finalize",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71236d79_d222f37d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "Oops... sorry typo.",
+      "parentUuid": "fb030219_c971fbff",
       "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ec5540b1_778bee96",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "OK. I\u0027ll fix all GotoIf code to a WordOr and a GotoIF.",
+      "parentUuid": "5c98d65b_6cc7a57d",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4eb93294_5d0933ff",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "66767086_87945e58",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "Make sense. I\u0027ll fix this to Word32Or and remove SmiTag.",
+      "parentUuid": "4eb93294_5d0933ff",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f80f9301_8b6f7fba",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 3
@@ -81,6 +153,24 @@
       "writtenOn": "2017-12-06T15:43:42Z",
       "side": 1,
       "message": "Nit: It\u0027d be nice if new CSA could be typed, i.e. use TNode\u003cType\u003e instead of raw Node*.",
+      "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8df9ddd9_ac37d19f",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "Ok. I fix it to SloppyTNode\u003cType\u003e.",
+      "parentUuid": "f80f9301_8b6f7fba",
       "revId": "6fe291684a0a6fc2450c43a9620c494770402b30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

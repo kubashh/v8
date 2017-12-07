@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f4c5a2c3_2f3f6604",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "I guess so. CSA will be more better than Runtime.\nSo, I rewrote this by CSA and this rewriting make benchmark 1.2 time faster than before.\nThus I will move this Runtime call to CSA.",
+      "parentUuid": "7b4f2367_81792f37",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1caa1036_70b8c24f",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-06T15:43:42Z",
       "side": 1,
       "message": "Note: gotta be careful here in case the allocation is too big and thus needs to go into large-object space. Check out CSA::AllocationFlags if this case needs to be handled.",
+      "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17395e4f_7e4dcd6d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T05:36:37Z",
+      "side": 1,
+      "message": "Oh. I should have be more considerate for memory allocation.\nOK. I\u0027ll add AllocationFlag::kAllowLargeObjectAllocation.",
+      "parentUuid": "1caa1036_70b8c24f",
       "revId": "54ffa9f5b53dd7b288c4a55442ef249251aabb14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
