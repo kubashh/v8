@@ -586,8 +586,10 @@ void InterpreterAssembler::IncrementCallCount(Node* feedback_vector,
   Comment("increment call count");
   Node* call_count =
       LoadFeedbackVectorSlot(feedback_vector, slot_id, kPointerSize);
-  Node* new_count = SmiAdd(call_count, SmiConstant(1));
+  // We store twice the call count and use the LSB of the SMI's value as a flag.
+  Node* new_count = SmiAdd(call_count, SmiConstant(2));
   // Count is Smi, so we don't need a write barrier.
+  CSA_ASSERT(this, SmiEqual(SmiMod(new_count, SmiConstant(2)), SmiConstant(0)));
   StoreFeedbackVectorSlot(feedback_vector, slot_id, new_count,
                           SKIP_WRITE_BARRIER, kPointerSize);
 }

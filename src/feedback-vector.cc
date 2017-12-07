@@ -678,10 +678,24 @@ InlineCacheState CallICNexus::StateFromFeedback() const {
 int CallICNexus::ExtractCallCount() {
   Object* call_count = GetFeedbackExtra();
   CHECK(call_count->IsSmi());
-  int value = Smi::ToInt(call_count);
-  return value;
+  uint32_t value = static_cast<uint32_t>(Smi::ToInt(call_count));
+  return CallCount::decode(value);
 }
 
+void CallICNexus::SetNoOptimizeFlag() {
+  Object* call_count = GetFeedbackExtra();
+  CHECK(call_count->IsSmi());
+  uint32_t value = static_cast<uint32_t>(Smi::ToInt(call_count));
+  int result = static_cast<int>(value | NoOptimizeFlag::encode(true));
+  SetFeedbackExtra(Smi::FromInt(result), SKIP_WRITE_BARRIER);
+}
+
+bool CallICNexus::GetNoOptimizeFlag() {
+  Object* call_count = GetFeedbackExtra();
+  CHECK(call_count->IsSmi());
+  uint32_t value = static_cast<uint32_t>(Smi::ToInt(call_count));
+  return NoOptimizeFlag::decode(value);
+}
 float CallICNexus::ComputeCallFrequency() {
   double const invocation_count = vector()->invocation_count();
   double const call_count = ExtractCallCount();

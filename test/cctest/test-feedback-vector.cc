@@ -296,6 +296,33 @@ TEST(VectorConstructCounts) {
   CHECK_EQ(4, nexus.ExtractCallCount());
 }
 
+TEST(VectorNoOptimizeFlag) {
+  if (i::FLAG_always_opt) return;
+  CcTest::InitializeVM();
+  LocalContext context;
+  v8::HandleScope scope(context->GetIsolate());
+  Isolate* isolate = CcTest::i_isolate();
+
+  // Make sure function f has a call that uses a type feedback slot.
+  CompileRun(
+      "function Foo() {}"
+      "function f(a) { new a(); } f(Foo);");
+  Handle<JSFunction> f = GetFunction("f");
+  Handle<FeedbackVector> feedback_vector =
+      Handle<FeedbackVector>(f->feedback_vector(), isolate);
+
+  FeedbackSlot slot(0);
+  CallICNexus nexus(feedback_vector, slot);
+  CHECK_EQ(false, nexus.GetNoOptimizeFlag());
+
+  CompileRun("f(Foo); f(Foo);");
+  CHECK_EQ(3, nexus.ExtractCallCount());
+  CHECK_EQ(false, nexus.GetNoOptimizeFlag());
+
+  nexus.SetNoOptimizeFlag();
+  CHECK_EQ(true, nexus.GetNoOptimizeFlag());
+}
+
 TEST(VectorLoadICStates) {
   if (i::FLAG_always_opt) return;
   CcTest::InitializeVM();

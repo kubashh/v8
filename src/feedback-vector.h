@@ -648,10 +648,16 @@ class CallICNexus final : public FeedbackNexus {
   }
 
   int ExtractCallCount();
+  void SetNoOptimizeFlag();
+  bool GetNoOptimizeFlag();
 
   // Compute the call frequency based on the call count and the invocation
   // count (taken from the type feedback vector).
   float ComputeCallFrequency();
+
+ private:
+  typedef BitField<bool, 0, 1> NoOptimizeFlag;
+  typedef BitField<uint32_t, 1, 31> CallCount;
 };
 
 class LoadICNexus : public FeedbackNexus {
