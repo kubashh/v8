@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "eed92aee_a15eac35",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T14:32:36Z",
+      "side": 1,
+      "message": "Thank you for examples!\nI completely understand that.\nI think too.\nStarting simplest case is more better choice than previous CSA codes.",
+      "parentUuid": "ed824e5c_e3816992",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e286bfc_33237fcd",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 7
