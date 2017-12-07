@@ -22,6 +22,30 @@
       "revId": "c9336e24525974dfb62a3b9df4073c7598635dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0584a6b_352fbb69",
+        "filename": "test/message/message.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-07T18:36:53Z",
+      "side": 1,
+      "message": "Thanks, I will keep that in mind for next time! :)",
+      "parentUuid": "13b0ef22_919f1c09",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 56
+      },
+      "revId": "c9336e24525974dfb62a3b9df4073c7598635dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
