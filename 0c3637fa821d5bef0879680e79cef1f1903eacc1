@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffade3a7_08070925",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "If we call it FOR_EACH_CALLBACK_OPERATION_TABLE_MAPPING_1(F) then we can have only one list. I assume that the set of operations we perform are the same for named and indexed properties.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 47
+      },
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9e7da43_7ff3a3c5",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "This can be just\n  PREPARE(isolate, f, void, void);\nif you treat the last argument the whole type, but not as something inside Handle\u003c\u003e.",
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "151c4052_c0ec2725",
+        "filename": "src/api-arguments.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "PREPARE(isolate, f, v8::Array, JSObject) ?",
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e33dc72_eb37a6b0",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "It seems that it\u0027s enough to check info-\u003egetter() !\u003d nullptr (or Smi::kZero).",
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6192ad2f_2d317ce4",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "I think you don\u0027t need this raw cast anymore.",
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc6464d_5fd76483",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2017-12-07T11:28:40Z",
+      "side": 1,
+      "message": "? ))",
+      "revId": "0c3637fa821d5bef0879680e79cef1f1903eacc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
