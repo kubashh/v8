@@ -1469,8 +1469,6 @@
         'wasm/signature-map.h',
         'wasm/streaming-decoder.cc',
         'wasm/streaming-decoder.h',
-        'wasm/wasm-api.cc',
-        'wasm/wasm-api.h',
         'wasm/wasm-code-manager.cc',
         'wasm/wasm-code-manager.h',
         'wasm/wasm-code-specialization.cc',
