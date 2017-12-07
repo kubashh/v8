@@ -70,8 +70,6 @@ const int MB = 1024 * 1024;
 const int kMaxWorkers = 50;
 const int kMaxSerializerMemoryUsage = 1 * MB;  // Arbitrary maximum for testing.
 
-#define USE_VM 1
-#define VM_THRESHOLD 65536
 // TODO(titzer): allocations should fail if >= 2gb because of
 // array buffers storing the lengths as a SMI internally.
 #define TWO_GB (2u * 1024u * 1024u * 1024u)
@@ -107,29 +105,10 @@ class ArrayBufferAllocatorBase : public v8::ArrayBuffer::Allocator {
 class ShellArrayBufferAllocator : public ArrayBufferAllocatorBase {
  public:
   void* Allocate(size_t length) override {
-#if USE_VM
-    if (RoundToPageSize(&length)) {
-      void* data = VirtualMemoryAllocate(length);
-#if DEBUG
-      if (data) {
-        // In debug mode, check the memory is zero-initialized.
-        size_t limit = length / sizeof(uint64_t);
-        uint64_t* ptr = reinterpret_cast<uint64_t*>(data);
-        for (size_t i = 0; i < limit; i++) {
-          DCHECK_EQ(0u, ptr[i]);
-        }
-      }
-#endif
-      return data;
-    }
-#endif
     void* data = AllocateUninitialized(length);
     return data == nullptr ? data : memset(data, 0, length);
   }
   void* AllocateUninitialized(size_t length) override {
-#if USE_VM
-    if (RoundToPageSize(&length)) return VirtualMemoryAllocate(length);
-#endif
 // Work around for GCC bug on AIX
 // See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79839
 #if V8_OS_AIX && _LINUX_SOURCE_COMPAT
@@ -138,41 +117,9 @@ class ShellArrayBufferAllocator : public ArrayBufferAllocatorBase {
     return malloc(length);
 #endif
   }
-  using ArrayBufferAllocatorBase::Free;
   void Free(void* data, size_t length) override {
-#if USE_VM
-    if (RoundToPageSize(&length)) {
-      CHECK(base::OS::Free(data, length));
-      return;
-    }
-#endif
     free(data);
   }
-  // If {length} is at least {VM_THRESHOLD}, round up to next page size and
-  // return {true}. Otherwise return {false}.
-  bool RoundToPageSize(size_t* length) {
-    size_t page_size = base::OS::AllocatePageSize();
-    if (*length >= VM_THRESHOLD && *length < TWO_GB) {
-      *length = RoundUp(*length, page_size);
-      return true;
-    }
-    return false;
-  }
-#if USE_VM
-  void* VirtualMemoryAllocate(size_t length) {
-    size_t page_size = base::OS::AllocatePageSize();
-    size_t alloc_size = RoundUp(length, page_size);
-    void* address = base::OS::Allocate(nullptr, alloc_size, page_size,
-                                       base::OS::MemoryPermission::kReadWrite);
-    if (address != nullptr) {
-#if defined(LEAK_SANITIZER)
-      __lsan_register_root_region(address, alloc_size);
-#endif
-      MSAN_MEMORY_IS_INITIALIZED(address, alloc_size);
-    }
-    return address;
-  }
-#endif
 };
 
 class MockArrayBufferAllocator : public ArrayBufferAllocatorBase {
@@ -3479,3 +3426,7 @@ int main(int argc, char* argv[]) {
   return v8::Shell::Main(argc, argv);
 }
 #endif
+
+#undef CHECK
+#undef DCHECK
+#undef TWO_GB
