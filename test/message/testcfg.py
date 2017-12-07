@@ -112,7 +112,7 @@ class MessageTestSuite(testsuite.TestSuite):
         if line.startswith("#") or not line.strip(): continue
         expected_lines.append(line)
     raw_lines = output.stdout.splitlines()
-    actual_lines = [ s for s in raw_lines if not self._IgnoreLine(s) ]
+    actual_lines = [s.rstrip() for s in raw_lines if not self._IgnoreLine(s)]
     env = { "basename": os.path.basename(testpath + ".js") }
     if len(expected_lines) != len(actual_lines):
       return True
@@ -121,6 +121,7 @@ class MessageTestSuite(testsuite.TestSuite):
       pattern = re.escape(expected.rstrip() % env)
       pattern = pattern.replace("\\*", ".*")
       pattern = pattern.replace("\\{NUMBER\\}", "\d+(?:\.\d*)?")
+      pattern = pattern.replace("\\{HEX\\}", "(?:0x)?[0-9a-fA-F]+")
       pattern = "^%s$" % pattern
       if not re.match(pattern, actual):
         return True

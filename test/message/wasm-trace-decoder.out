@@ -1,0 +1,89 @@
+  +0  wasm magic          : 00 61 73 6d = 1836278016
+  +4  wasm version        : 01 00 00 00 = 1
+  +8  section code        : 01 = 1
+  +9  section length      : 06 = 6
+Section: Type
+Decode Section {HEX} - {HEX}
+  +10  types count         : 01 = 1
+DecodeSignature[0] module+1
+  +11  type form           : 60 = 96
+  +12  param count         : 01 = 1
+  +13  value type          : 7f = 127
+  +14  return count        : 01 = 1
+  +15  value type          : 7f = 127
+  +10  skip                : 6 bytes
+  +16  section code        : 03 = 3
+  +17  section length      : 02 = 2
+Section: Function
+Decode Section {HEX} - {HEX}
+  +18  functions count     : 01 = 1
+  +19  signature index     : 00 = 0
+  +18  skip                : 2 bytes
+  +20  section code        : 07 = 7
+  +21  section length      : 09 = 9
+Section: Export
+Decode Section {HEX} - {HEX}
+  +22  exports count       : 01 = 1
+DecodeExportTable[0] module+1
+  +23  string length       : 05 = 5
+  +24  field name          : 5 bytes
+  +29  export kind         : 00 = 0
+  +30  function index      : 00 = 0
+  +22  skip                : 9 bytes
+  +31  section code        : 0a = 10
+  +32  section length      : 2b = 43
+Section: Code
+Decode Section {HEX} - {HEX}
+  +33  functions count     : 01 = 1
+  +34  body size           : 29 = 41
+  +35  function body       : 41 bytes
+  +33  skip                : 43 bytes
+  +76  section code        : 00 = 0
+  +77  section length      : 0f = 15
+  +78  string length       : 04 = 4
+  +79  section name        : 4 bytes
+  +71  section name        : "name"
+Section: name
+Decode Section {HEX} - {HEX}
+  +83  name type           : 01 = 1
+  +84  name payload length : 08 = 8
+  +85  functions count     : 01 = 1
+  +86  function index      : 00 = 0
+  +87  string length       : 05 = 5
+  +88  function name       : 5 bytes
+  +83  skip                : 10 bytes
+  +35  local decls count   : 01 = 1
+local decls count: 1
+  +36  local count         : 02 = 2
+  +37  local type          : 7f = 127
+{set_env = {HEX}, state = R, control = #1:Start}
+wasm-decode {HEX}...{HEX} (module+38, 41 bytes)
+{set_env = {HEX}, state = R, control = #1:Start}
+  @3        #i32.const           | B1 |  i@3:i32.const[1]
+  @5        #set_local           | B1 |
+  @7        #loop                |{set_env = {HEX}, state = R, control = #25:Merge}
+ B1L1 |
+  @9        #block               |{set_env = {HEX}, state = R, control = #25:Merge}
+ B1L1B0 |
+  @11       #get_local           | B1L1B0 |  i@11:get_local[0]
+  @13       #br_if               | B1L1B0 |
+  @15       #get_local           | B1L1B0 |  i@15:get_local[1]
+  @17       #return              | B1L1B0* |
+  @18       #end                 |{set_env = {HEX}, state = R, control = #30:IfTrue}
+ B1L1 |
+  @19       #get_local           | B1L1 |  i@19:get_local[1]
+  @21       #get_local           | B1L1 |  i@19:get_local[1] i@21:get_local[2]
+  @23       #i32.add             | B1L1 |  i@23:i32.add
+  @24       #get_local           | B1L1 |  i@23:i32.add i@24:get_local[2]
+  @26       #set_local           | B1L1 |  i@23:i32.add
+  @28       #set_local           | B1L1 |
+  @30       #get_local           | B1L1 |  i@30:get_local[0]
+  @32       #i32.const           | B1L1 |  i@30:get_local[0] i@32:i32.const[1]
+  @34       #i32.sub             | B1L1 |  i@34:i32.sub
+  @35       #set_local           | B1L1 |
+  @37       #br                  | B1L1* |
+  @39       #end                 | B1# |  i@39:end
+  @40       #end                 |  @40       #xx:(implicit) return   |
+{set_env = {HEX}, state = U}
+  |
+wasm-decode ok
