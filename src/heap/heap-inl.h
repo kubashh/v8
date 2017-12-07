@@ -251,9 +251,10 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
   DCHECK(AllowHeapAllocation::IsAllowed());
   DCHECK(gc_state_ == NOT_IN_GC);
 #ifdef DEBUG
-  if (FLAG_gc_interval >= 0 && !always_allocate() &&
-      Heap::allocation_timeout_-- <= 0) {
-    return AllocationResult::Retry(space);
+  if (FLAG_stress_atomic_gc > 0 || FLAG_gc_interval >= 0) {
+    if (!always_allocate() && Heap::allocation_timeout_-- <= 0) {
+      return AllocationResult::Retry(space);
+    }
   }
   isolate_->counters()->objs_since_last_full()->Increment();
   isolate_->counters()->objs_since_last_young()->Increment();
@@ -329,6 +330,11 @@ void Heap::OnAllocationEvent(HeapObject* object, int size_in_bytes) {
       isolate()->PrintStack(stdout, Isolate::kPrintStackConcise);
     }
   }
+
+  if (FLAG_fuzzer_gc_analysis && !FLAG_verify_predictable &&
+      FLAG_trace_allocation_stack_interval <= 0) {
+    ++allocations_count_;
+  }
 }
 
 
@@ -356,9 +362,10 @@ void Heap::OnMoveEvent(HeapObject* target, HeapObject* source,
     if (allocations_count_ % FLAG_dump_allocations_digest_at_alloc == 0) {
       PrintAllocationsHash();
     }
+  } else if (FLAG_fuzzer_gc_analysis) {
+    ++allocations_count_;
   }
 }
-
 
 void Heap::UpdateAllocationsHash(HeapObject* object) {
   Address object_address = object->address();
