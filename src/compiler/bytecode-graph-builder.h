@@ -234,6 +234,7 @@ class BytecodeGraphBuilder {
   // Helper function to compute call frequency from the recorded type
   // feedback.
   CallFrequency ComputeCallFrequency(int slot_id) const;
+  bool GetNoOptimizeFlag(int slot_id) const;
 
   // Control flow plumbing.
   void BuildJump();

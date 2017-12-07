@@ -1610,7 +1610,8 @@ void BytecodeGraphBuilder::BuildCall(ConvertReceiverMode receiver_mode,
 
   CallFrequency frequency = ComputeCallFrequency(slot_id);
   const Operator* op =
-      javascript()->Call(arg_count, frequency, feedback, receiver_mode);
+      javascript()->Call(arg_count, frequency, feedback, receiver_mode,
+                         GetNoOptimizeFlag(slot_id));
   JSTypeHintLowering::LoweringResult lowering = TryBuildSimplifiedCall(
       op, args, static_cast<int>(arg_count), feedback.slot());
   if (lowering.IsExit()) return;
@@ -2103,6 +2104,11 @@ CallFrequency BytecodeGraphBuilder::ComputeCallFrequency(int slot_id) const {
   CallICNexus nexus(feedback_vector(), feedback_vector()->ToSlot(slot_id));
   return CallFrequency(nexus.ComputeCallFrequency() *
                        invocation_frequency_.value());
+}
+
+bool BytecodeGraphBuilder::GetNoOptimizeFlag(int slot_id) const {
+  CallICNexus nexus(feedback_vector(), feedback_vector()->ToSlot(slot_id));
+  return nexus.GetNoOptimizeFlag();
 }
 
 void BytecodeGraphBuilder::VisitBitwiseNot() {
