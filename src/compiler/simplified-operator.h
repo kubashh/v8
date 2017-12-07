@@ -8,6 +8,7 @@
 #include <iosfwd>
 
 #include "src/base/compiler-specific.h"
+#include "src/compiler/js-operator.h"
 #include "src/compiler/operator.h"
 #include "src/compiler/types.h"
 #include "src/deoptimize-reason.h"
@@ -158,16 +159,21 @@ size_t hash_value(MapsParameterInfo const&);
 // A descriptor for map checks.
 class CheckMapsParameters final {
  public:
-  CheckMapsParameters(CheckMapsFlags flags, ZoneHandleSet<Map> const& maps)
-      : flags_(flags), maps_info_(maps) {}
+  CheckMapsParameters(CheckMapsFlags flags, ZoneHandleSet<Map> const& maps,
+                      const VectorSlotPair& feedback)
+      : flags_(flags), maps_info_(maps), feedback_(feedback) {}
 
   CheckMapsFlags flags() const { return flags_; }
   ZoneHandleSet<Map> const& maps() const { return maps_info_.maps(); }
   MapsParameterInfo const& maps_info() const { return maps_info_; }
+  VectorSlotPair const& feedback() const { return feedback_; }
+  bool HasFeedback() const { return feedback_.IsValid(); }
+  bool Subsumes(CheckMapsParameters const& other) const;
 
  private:
   CheckMapsFlags const flags_;
   MapsParameterInfo const maps_info_;
+  VectorSlotPair const feedback_;
 };
 
 bool operator==(CheckMapsParameters const&, CheckMapsParameters const&);
@@ -438,7 +444,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
 
   const Operator* CheckIf(DeoptimizeReason deoptimize_reason);
   const Operator* CheckBounds();
-  const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>);
+  const Operator* CheckMaps(CheckMapsFlags, ZoneHandleSet<Map>,
+                            const VectorSlotPair& = VectorSlotPair());
   const Operator* CompareMaps(ZoneHandleSet<Map>);
   const Operator* MapGuard(ZoneHandleSet<Map> maps);
 
