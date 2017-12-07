@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3450d7e5_7eea8de4",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T12:45:49Z",
+      "side": 1,
+      "message": "Certainly, It\u0027s call runtime and all of important process did in runtime.\nI\u0027ll use previous JSReceiver functions.",
+      "parentUuid": "90a1c4ad_9b103f96",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a64b64b_ee606326",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-07T10:25:53Z",
       "side": 1,
       "message": "It is probably faster to bail out after each test directly, this way you won\u0027t do additional work for the slow path.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b92e31ff_bba99dfd",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T12:45:49Z",
+      "side": 1,
+      "message": "Sorry, I need some help.\nI wrote bunch of GotoIf in previous version, but pointed that has performance issue.\nSo should I rollback previous version which has bunch of GotoIf? or some other options?",
+      "parentUuid": "8a64b64b_ee606326",
       "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4957bdc2_d0f6b45f",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T12:45:49Z",
+      "side": 1,
+      "message": "Right. This path is not necessary for slow path.\nI\u0027ll fix it.",
+      "parentUuid": "2e286bfc_33237fcd",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5855d90f_fd043f6d",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2017-12-07T10:25:53Z",
       "side": 1,
       "message": "I think at this point you\u0027re already going to be slower than doing the original runtime call.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432f826b_0d5ff6a6",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-07T12:45:49Z",
+      "side": 1,
+      "message": "I understand. I\u0027ll fix it to call runtime directly.",
+      "parentUuid": "5855d90f_fd043f6d",
       "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
