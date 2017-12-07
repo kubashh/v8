@@ -35,5 +35,8 @@
   # Modules which are only meant to be imported from by other tests, not to be
   # tested standalone.
   'fail/modules-skip*': [SKIP],
+
+  # The --trace-wasm-decoder flag is non-functional in release mode.
+  'wasm-trace-decoder': [PASS, ['mode == release', FAIL]],
 }],  # ALWAYS
 ]
