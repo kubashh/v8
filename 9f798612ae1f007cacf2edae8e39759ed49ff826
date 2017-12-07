@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90a1c4ad_9b103f96",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T10:25:53Z",
+      "side": 1,
+      "message": "I\u0027d drop this branch and resort to the runtime implementation instead.\nSwitching context from JavaScript to C++ is what makes runtime calls rather slow. Given that you j\u003dhave several runtime calls in this branch (even in a loop) you will end up with a much slower implementation for the slow path.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a64b64b_ee606326",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T10:25:53Z",
+      "side": 1,
+      "message": "It is probably faster to bail out after each test directly, this way you won\u0027t do additional work for the slow path.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e286bfc_33237fcd",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T10:25:53Z",
+      "side": 1,
+      "message": "I\u0027d defer this to after we\u0027re sure that stay on the fast path.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5855d90f_fd043f6d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T10:25:53Z",
+      "side": 1,
+      "message": "I think at this point you\u0027re already going to be slower than doing the original runtime call.",
+      "revId": "9f798612ae1f007cacf2edae8e39759ed49ff826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
