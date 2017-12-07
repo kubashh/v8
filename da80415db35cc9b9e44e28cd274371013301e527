@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06140ef6_b7e916f9",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "nit: enum class CollectType { ... }; since you don\u0027t need the actual byte value.",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "904a99e4_9b0e05b7",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "nit: please rename to if_no_properties",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3740789_637b175c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "Please group the complete fast-path in one place:\n\n  {\n    Label if_no_properties(this); \n\n    ... \u003d  FastGetOwnValuesOrEntries(...);\n    Return(...);\n   \n    BIND(if_no_properties) \n    {\n      ...;\n      Return(empty_js_array);\n    }\n  }",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55d4e3d3_9f095baa",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "this is a bit a confusing name :), how about: call_runtime_with_fast_path ?",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3039b5af_775d4cc1",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "rename to GotoIfOnlyHasSimpleProperties since you don\u0027t close the basic block here with a last Goto.",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13fcb16c_1f266967",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "GotoIf(IsSpecialReceiverMap(map), ...);",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cc5e91_3aa55126",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "nit: s/unenumerable/non-enumerable/",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c457fac5_e0e63a4b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "What happens if there is a getter that deletes properties?",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b63cf51f_5e9b09b3",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "I think you use key_instance_type only once, so you can shorten this to:\n   \n  GotoIf(IsSymbol(next_key), ...)",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67195261_eaadfbc0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 7181,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-07T17:16:27Z",
+      "side": 1,
+      "message": "You can simplify this a little bit:\n\n  return DecodeWord32\u003cMap::HasHiddenPrototype\u003e(bit_field3);",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
