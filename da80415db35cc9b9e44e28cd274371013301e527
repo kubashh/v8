@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf48b286_b2e21561",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "Sure. I\u0027ll fix it.",
+      "parentUuid": "06140ef6_b7e916f9",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "904a99e4_9b0e05b7",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-07T17:16:27Z",
       "side": 1,
       "message": "nit: please rename to if_no_properties",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5610831c_05bf3ca0",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll rename to that.",
+      "parentUuid": "904a99e4_9b0e05b7",
       "revId": "da80415db35cc9b9e44e28cd274371013301e527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "389aa6a3_8797fdac",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I guess so, it looks like more clear.",
+      "parentUuid": "e3740789_637b175c",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55d4e3d3_9f095baa",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 8
@@ -64,6 +118,24 @@
       "writtenOn": "2017-12-07T17:16:27Z",
       "side": 1,
       "message": "this is a bit a confusing name :), how about: call_runtime_with_fast_path ?",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52533db3_a887a10a",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "OK. Maybe it\u0027s bit a confusing.\nI\u0027ll rename it to name you suggested.",
+      "parentUuid": "55d4e3d3_9f095baa",
       "revId": "da80415db35cc9b9e44e28cd274371013301e527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "7a87db9f_e595d038",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I\u0027ll fix it.",
+      "parentUuid": "3039b5af_775d4cc1",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13fcb16c_1f266967",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 8
@@ -98,6 +188,24 @@
       "writtenOn": "2017-12-07T17:16:27Z",
       "side": 1,
       "message": "GotoIf(IsSpecialReceiverMap(map), ...);",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d25ff80_3feb0f13",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I\u0027ll fix it.",
+      "parentUuid": "13fcb16c_1f266967",
       "revId": "da80415db35cc9b9e44e28cd274371013301e527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "9ba7d9fe_125d35e9",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I\u0027ll fix it.",
+      "parentUuid": "b4cc5e91_3aa55126",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c457fac5_e0e63a4b",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 8
@@ -132,6 +258,24 @@
       "writtenOn": "2017-12-07T17:16:27Z",
       "side": 1,
       "message": "What happens if there is a getter that deletes properties?",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62014e2a_566d594b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I think that if getter function delete properties, we would update map and descriptor array in loop header it\u0027s not a problem and if proxy object passed to Object.entries, it not enter to fast path, so it\u0027s not a problem too.\nBut, am I misunderstanding anything?",
+      "parentUuid": "c457fac5_e0e63a4b",
       "revId": "da80415db35cc9b9e44e28cd274371013301e527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "629d6624_d81d27bf",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "Oh. I miss it. Thanks.",
+      "parentUuid": "b63cf51f_5e9b09b3",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67195261_eaadfbc0",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 8
@@ -166,6 +328,24 @@
       "writtenOn": "2017-12-07T17:16:27Z",
       "side": 1,
       "message": "You can simplify this a little bit:\n\n  return DecodeWord32\u003cMap::HasHiddenPrototype\u003e(bit_field3);",
+      "revId": "da80415db35cc9b9e44e28cd274371013301e527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03a0a55_08c288a9",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 7181,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-08T02:08:48Z",
+      "side": 1,
+      "message": "I miss it.\nI\u0027ll fix it.",
+      "parentUuid": "67195261_eaadfbc0",
       "revId": "da80415db35cc9b9e44e28cd274371013301e527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
