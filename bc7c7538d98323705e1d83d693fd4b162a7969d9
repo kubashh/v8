@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68bf85ea_35da72c1",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-08T10:37:39Z",
+      "side": 1,
+      "message": "If the incoming object has the enum_length set you can use that an upper bound for the entries. This way you lower the chances that you overallocate the resulting backing store.\nSee ObjectKeys in builtins-object-gen.cc",
+      "revId": "bc7c7538d98323705e1d83d693fd4b162a7969d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0221be7e_57e14db5",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-08T10:37:39Z",
+      "side": 1,
+      "message": "If this ever happens I think your performance will suffer quite a bit.\nFast arrays can have slack, which is not really a problem if it\u0027s initialized properly (which is what you do).\nSee JSArray::JSArrayVerify,",
+      "revId": "bc7c7538d98323705e1d83d693fd4b162a7969d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
