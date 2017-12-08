@@ -1915,6 +1915,32 @@ Maybe<PropertyAttributes> GetPropertyAttributesWithInterceptorInternal(
       CHECK(result->ToInt32(&value));
       return Just(static_cast<PropertyAttributes>(value));
     }
+  } else if (!interceptor->descriptor()->IsUndefined(isolate)) {
+    Handle<Object> result;
+    if (it->IsElement()) {
+      uint32_t index = it->index();
+      v8::IndexedPropertyDescriptorCallback descriptorCallback =
+          v8::ToCData<v8::IndexedPropertyDescriptorCallback>(
+              interceptor->descriptor());
+
+      result = args.Call(descriptorCallback, index);
+    } else {
+      Handle<Name> name = it->name();
+      DCHECK(!name->IsPrivate());
+      v8::GenericNamedPropertyDescriptorCallback descriptorCallback =
+          v8::ToCData<v8::GenericNamedPropertyDescriptorCallback>(
+              interceptor->descriptor());
+      result = args.Call(descriptorCallback, name);
+    }
+    if (!result.is_null()) {
+      PropertyDescriptor desc;
+      Utils::ApiCheck(
+          PropertyDescriptor::ToPropertyDescriptor(isolate, result, &desc),
+          it->IsElement() ? "v8::IndexedPropertyDescriptorCallback"
+                          : "v8::NamedPropertyDescriptorCallback",
+          "Invalid property descriptor.");
+      return Just(desc.ToAttributes());
+    }
   } else if (!interceptor->getter()->IsUndefined(isolate)) {
     // TODO(verwaest): Use GetPropertyWithInterceptor?
     Handle<Object> result;
@@ -7654,13 +7680,17 @@ namespace {
 
 Maybe<bool> GetPropertyDescriptorWithInterceptor(LookupIterator* it,
                                                  PropertyDescriptor* desc) {
-  bool has_access = true;
   if (it->state() == LookupIterator::ACCESS_CHECK) {
-    has_access = it->HasAccess() || JSObject::AllCanRead(it);
-    it->Next();
+    if (it->HasAccess()) {
+      it->Next();
+    } else if (!JSObject::AllCanRead(it) ||
+               it->state() != LookupIterator::INTERCEPTOR) {
+      it->Restart();
+      return Just(false);
+    }
   }
 
-  if (has_access && it->state() == LookupIterator::INTERCEPTOR) {
+  if (it->state() == LookupIterator::INTERCEPTOR) {
     Isolate* isolate = it->isolate();
     Handle<InterceptorInfo> interceptor = it->GetInterceptor();
     if (!interceptor->descriptor()->IsUndefined(isolate)) {
@@ -7702,9 +7732,9 @@ Maybe<bool> GetPropertyDescriptorWithInterceptor(LookupIterator* it,
 
         return Just(true);
       }
+      it->Next();
     }
   }
-  it->Restart();
   return Just(false);
 }
 }  // namespace
