@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aceba0fb_5842120d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-08T09:03:42Z",
+      "side": 1,
+      "message": "nit: long line",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 80
+      },
+      "revId": "80ff883df231edfdce3aa23c04542cb51dd63f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364d1d02_5b04d96f",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-08T09:03:42Z",
+      "side": 1,
+      "message": "nit: Maybe make this an else if to above\u0027s if (FLAG_verify_predictable) {",
+      "range": {
+        "startLine": 334,
+        "startChar": 33,
+        "endLine": 334,
+        "endChar": 57
+      },
+      "revId": "80ff883df231edfdce3aa23c04542cb51dd63f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
