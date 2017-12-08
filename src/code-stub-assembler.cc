@@ -4348,6 +4348,13 @@ Node* CodeStubAssembler::IsName(Node* object) {
                               Int32Constant(LAST_NAME_TYPE));
 }
 
+Node* CodeStubAssembler::IsStringWrapperElementsKind(SloppyTNode<Map> map) {
+  Node* kind = LoadMapElementsKind(map);
+  return Word32Or(
+      Word32Equal(kind, Int32Constant(FAST_STRING_WRAPPER_ELEMENTS)),
+      Word32Equal(kind, Int32Constant(SLOW_STRING_WRAPPER_ELEMENTS)));
+}
+
 Node* CodeStubAssembler::IsString(Node* object) {
   return IsStringInstanceType(LoadInstanceType(object));
 }
@@ -7166,6 +7173,11 @@ void CodeStubAssembler::TryPrototypeChainLookup(
       Goto(&loop);
     }
   }
+}
+
+Node* CodeStubAssembler::HasHiddenPrototype(SloppyTNode<Map> map) {
+  Node* bit_field3 = LoadMapBitField3(map);
+  return DecodeWord32<Map::HasHiddenPrototype>(bit_field3);
 }
 
 Node* CodeStubAssembler::HasInPrototypeChain(Node* context, Node* object,
