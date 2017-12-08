@@ -5,6 +5,7 @@
 #include "src/compiler/redundancy-elimination.h"
 
 #include "src/compiler/node-properties.h"
+#include "src/compiler/simplified-operator.h"
 
 namespace v8 {
 namespace internal {
@@ -129,6 +130,12 @@ bool IsCompatibleCheck(Node const* a, Node const* b) {
     if (a->opcode() == IrOpcode::kCheckInternalizedString &&
         b->opcode() == IrOpcode::kCheckString) {
       // CheckInternalizedString(node) implies CheckString(node)
+    } else if (a->opcode() == IrOpcode::kCheckMaps &&
+               b->opcode() == IrOpcode::kCheckMaps) {
+      if (CheckMapsParametersOf(a->op()).Subsumes(
+              CheckMapsParametersOf(b->op()))) {
+        // {a}'s check subsumes {b}'s check.
+      }
     } else {
       return false;
     }
