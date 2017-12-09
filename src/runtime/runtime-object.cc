@@ -7,6 +7,7 @@
 #include "src/arguments.h"
 #include "src/bootstrapper.h"
 #include "src/debug/debug.h"
+#include "src/elements.h"
 #include "src/isolate-inl.h"
 #include "src/messages.h"
 #include "src/objects/property-descriptor-object.h"
@@ -439,6 +440,41 @@ RUNTIME_FUNCTION(Runtime_OptimizeObjectForAddingMultipleProperties) {
   return *object;
 }
 
+RUNTIME_FUNCTION(Runtime_ObjectValues) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+
+  CONVERT_ARG_HANDLE_CHECKED(Object, object, 0);
+  CONVERT_SMI_ARG_CHECKED(try_fast_path, 1);
+
+  Handle<JSReceiver> receiver;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver,
+                                     Object::ToObject(isolate, object));
+  Handle<FixedArray> entries;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, entries,
+      JSReceiver::GetOwnValues(receiver, PropertyFilter::ENUMERABLE_STRINGS,
+                               static_cast<bool>(try_fast_path)));
+  return *isolate->factory()->NewJSArrayWithElements(entries);
+}
+
+RUNTIME_FUNCTION(Runtime_ObjectEntries) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+
+  CONVERT_ARG_HANDLE_CHECKED(Object, object, 0);
+  CONVERT_SMI_ARG_CHECKED(try_fast_path, 1);
+
+  Handle<JSReceiver> receiver;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver,
+                                     Object::ToObject(isolate, object));
+  Handle<FixedArray> entries;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, entries,
+      JSReceiver::GetOwnEntries(receiver, PropertyFilter::ENUMERABLE_STRINGS,
+                                static_cast<bool>(try_fast_path)));
+  return *isolate->factory()->NewJSArrayWithElements(entries);
+}
 
 RUNTIME_FUNCTION(Runtime_GetProperty) {
   HandleScope scope(isolate);
