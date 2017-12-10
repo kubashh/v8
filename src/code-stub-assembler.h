@@ -1100,6 +1100,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsPrivateSymbol(Node* object);
   Node* IsPropertyArray(Node* object);
   Node* IsPropertyCell(Node* object);
+  TNode<BoolT> IsPropertyEnumerable(SloppyTNode<Int32T> details);
+  TNode<BoolT> IsPropertyKindAccessor(SloppyTNode<Uint32T> kind);
+  TNode<BoolT> IsPropertyKindData(SloppyTNode<Uint32T> kind);
   Node* IsPrototypeInitialArrayPrototype(Node* context, Node* map);
   Node* IsSequentialStringInstanceType(Node* instance_type);
   Node* IsShortExternalStringInstanceType(Node* instance_type);
@@ -1107,6 +1110,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsSpecialReceiverMap(Node* map);
   Node* IsSpeciesProtectorCellInvalid();
   Node* IsStringInstanceType(Node* instance_type);
+  Node* IsStringWrapperElementsKind(SloppyTNode<Map> map);
   Node* IsString(Node* object);
   Node* IsSymbolInstanceType(Node* instance_type);
   Node* IsSymbol(Node* object);
@@ -1432,6 +1436,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                            kKeyToValueOffset);
   }
 
+  TNode<Uint32T> LoadPropertyKind(SloppyTNode<Int32T> details) {
+    return DecodeWord32<PropertyDetails::KindField>(details);
+  }
+
   // Calculate a valid size for the a hash table.
   TNode<IntPtrT> HashTableComputeCapacity(
       SloppyTNode<IntPtrT> at_least_space_for);
@@ -1558,6 +1566,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                                   Node* name_index, Variable* var_details,
                                   Variable* var_value);
 
+  void LoadPropertyFromFastObject(Node* object, Node* map, Node* descriptors,
+                                  Node* name_index, Node* details,
+                                  Variable* var_value);
+
   void LoadPropertyFromNameDictionary(Node* dictionary, Node* entry,
                                       Variable* var_details,
                                       Variable* var_value);
@@ -1617,6 +1629,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // chain, otherwise false is returned. Might cause arbitrary side effects
   // due to [[GetPrototypeOf]] invocations.
   Node* HasInPrototypeChain(Node* context, Node* object, Node* prototype);
+  Node* HasHiddenPrototype(SloppyTNode<Map> map);
   // ES6 section 7.3.19 OrdinaryHasInstance (C, O)
   Node* OrdinaryHasInstance(Node* context, Node* callable, Node* object);
 
@@ -1866,6 +1879,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* DescriptorArrayToKeyIndex(Node* descriptor_number);
   // Implements DescriptorArray::GetKey.
   Node* DescriptorArrayGetKey(Node* descriptors, Node* descriptor_number);
+  // Implements DescriptorArray::GetValue.
+  Node* DescriptorArrayGetValue(
+      SloppyTNode<DescriptorArray> descriptors,
+      SloppyTNode<Int32T> index);
 
   Node* CallGetterIfAccessor(Node* value, Node* details, Node* context,
                              Node* receiver, Label* if_bailout,
