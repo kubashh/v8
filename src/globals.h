@@ -1282,6 +1282,7 @@ class BinaryOperationFeedback {
 // kSignedSmall        -> kNumber   -> kAny
 // kInternalizedString -> kString   -> kAny
 //                        kSymbol   -> kAny
+//                        kBigInt   -> kAny
 //                        kReceiver -> kAny
 // TODO(epertoso): consider unifying this with BinaryOperationFeedback.
 class CompareOperationFeedback {
@@ -1294,6 +1295,7 @@ class CompareOperationFeedback {
     kInternalizedString = 0x8,
     kString = 0x18,
     kSymbol = 0x20,
+    kBigInt = 0x30,
     kReceiver = 0x40,
     kAny = 0xff
   };
