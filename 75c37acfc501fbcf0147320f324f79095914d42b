@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd483a94_e0482f00",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "Exactly. This method name is invalid. So I rename it to GotoIfMapHasSlowProperties.",
+      "parentUuid": "3443dda2_100e7212",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90f721e7_afde2f79",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-11T09:29:38Z",
       "side": 1,
       "message": "nit: Maybe add a little comment why you\u0027d do this extra branch",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d5c79fb_144b6015",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "OK. I\u0027ll add some comments.",
+      "parentUuid": "90f721e7_afde2f79",
       "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ff3c0b7b_ceb9da74",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "I see.\nI\u0027ll change this jump to runtime call and if I will do that, some labels removable, thus I remove some ineffective labels too.",
+      "parentUuid": "ce2f1cb8_b100bf3c",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa0ca648_92f90cb0",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 12
@@ -64,6 +118,24 @@
       "writtenOn": "2017-12-11T09:29:38Z",
       "side": 1,
       "message": "nit: maybe rename to var_result_index",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ed2589_d6668b0a",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "I\u0027ll fix it.",
+      "parentUuid": "fa0ca648_92f90cb0",
       "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6154f7f8_ca693978",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "I see.\nI\u0027ll fix it.",
+      "parentUuid": "647f523a_758b8b2a",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ca8d08a_61bd6aed",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 12
@@ -98,6 +188,24 @@
       "writtenOn": "2017-12-11T09:29:38Z",
       "side": 1,
       "message": "var_property_value can be defined inside the loop (the value is not used across multiple loop iterations).",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e03216_a8b8e848",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "I guess so.\nI\u0027ll move this variable to before LoadPropertyFromFastObject.",
+      "parentUuid": "3ca8d08a_61bd6aed",
       "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "86fb99c2_49c206a3",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "Certainly.\nI\u0027ll add it.",
+      "parentUuid": "8b696ac1_6627bd5b",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1974ab47_af63571d",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 12
@@ -132,6 +258,24 @@
       "writtenOn": "2017-12-11T09:29:38Z",
       "side": 1,
       "message": "The descriptor array holds the property description already in insertion order, which equals the iteration order. Here you end up most of the time with a linear lookup starting from the start of the scriptor array every time.\n\nInstead directly iterate over the descriptor array:\n- start index: 0 \n- the end index: var_array_size.value()\n\nThis means that you can directly do the LoadPropertyFromFastObject with the var_index.value().",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f48c5ee_41a1bc68",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-11T11:09:34Z",
+      "side": 1,
+      "message": "Oh I understand.\nDescriptorLookup is useless in this case.\nI\u0027ll fix it to direct call of LoadPropertyFromFastObject.",
+      "parentUuid": "1974ab47_af63571d",
       "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
