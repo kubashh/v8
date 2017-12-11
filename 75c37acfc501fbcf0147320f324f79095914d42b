@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3443dda2_100e7212",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "nit: The name GotoIfOnlyHasSimpleProperties is suggesting somehow the opposite of what the method does.",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90f721e7_afde2f79",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "nit: Maybe add a little comment why you\u0027d do this extra branch",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce2f1cb8_b100bf3c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "For a future CL:\nMaybe we should even jump to the runtime here and do take the fast-slow path. The runtime can then initialize the EnumCache which in turn can be used for subsequent fast calls.",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa0ca648_92f90cb0",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "nit: maybe rename to var_result_index",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647f523a_758b8b2a",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "nit: maybe rename to var_descriptor_index",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca8d08a_61bd6aed",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "var_property_value can be defined inside the loop (the value is not used across multiple loop iterations).",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b696ac1_6627bd5b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "This is a side-effect-free implementation for now (we don\u0027t invoke getters). Hence just CSA_ASSERT this.\n\n  // No side-effects can happen in this loop.\n  CSA_ASSERT(this, WordEqual(map, LoadMap(object));",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1974ab47_af63571d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-11T09:29:38Z",
+      "side": 1,
+      "message": "The descriptor array holds the property description already in insertion order, which equals the iteration order. Here you end up most of the time with a linear lookup starting from the start of the scriptor array every time.\n\nInstead directly iterate over the descriptor array:\n- start index: 0 \n- the end index: var_array_size.value()\n\nThis means that you can directly do the LoadPropertyFromFastObject with the var_index.value().",
+      "revId": "75c37acfc501fbcf0147320f324f79095914d42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
