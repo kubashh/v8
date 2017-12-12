@@ -41,10 +41,6 @@
 #include "src/utils.h"
 #include "src/v8.h"
 
-#if defined(LEAK_SANITIZER)
-#include <sanitizer/lsan_interface.h>
-#endif
-
 #if !defined(_WIN32) && !defined(_WIN64)
 #include <unistd.h>  // NOLINT
 #else
@@ -83,7 +79,7 @@ class ArrayBufferAllocatorBase : public v8::ArrayBuffer::Allocator {
     size_t alloc_length = GetAllocLength(length);
     // TODO(titzer): allocations should fail if >= 2gb because array buffers
     // store their lengths as a SMI internally.
-    if (alloc_length > kTwoGB) return nullptr;
+    if (alloc_length >= kTwoGB) return nullptr;
 #if V8_OS_AIX && _LINUX_SOURCE_COMPAT
     // Work around for GCC bug on AIX
     // See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79839
@@ -99,7 +95,7 @@ class ArrayBufferAllocatorBase : public v8::ArrayBuffer::Allocator {
     size_t alloc_length = GetAllocLength(length);
     // TODO(titzer): allocations should fail if >= 2gb because array buffers
     // store their lengths as a SMI internally.
-    if (alloc_length > kTwoGB) return nullptr;
+    if (alloc_length >= kTwoGB) return nullptr;
 #if V8_OS_AIX && _LINUX_SOURCE_COMPAT
     // Work around for GCC bug on AIX
     // See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79839
@@ -2235,7 +2231,7 @@ Local<String> Shell::ReadFile(Isolate* isolate, const char* name) {
   char* chars = ReadChars(name, &size);
   if (chars == nullptr) return Local<String>();
   Local<String> result;
-  if (i::FLAG_use_external_strings && internal::String::IsAscii(chars, size)) {
+  if (i::FLAG_use_external_strings && i::String::IsAscii(chars, size)) {
     String::ExternalOneByteStringResource* resource =
         new ExternalOwningOneByteStringResource(
             std::unique_ptr<const char[]>(chars), size);
