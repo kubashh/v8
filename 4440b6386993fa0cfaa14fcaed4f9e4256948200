@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "038ee7f8_b5201c5a",
+        "filename": "src/globals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2017-12-12T01:02:48Z",
+      "side": 1,
+      "message": "I think this needs to be 0x80 to make the bitwise OR-ing work (with 0x30, we\u0027d have kSymbol + kBigInt \u003d\u003d kBigInt, which seems wrong).",
+      "range": {
+        "startLine": 1304,
+        "startChar": 14,
+        "endLine": 1304,
+        "endChar": 18
+      },
+      "revId": "4440b6386993fa0cfaa14fcaed4f9e4256948200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
