@@ -586,6 +586,9 @@ DEFINE_BOOL(experimental_new_space_growth_heuristic, false,
 DEFINE_INT(max_old_space_size, 0, "max size of the old space (in Mbytes)")
 DEFINE_INT(initial_old_space_size, 0, "initial old space size (in Mbytes)")
 DEFINE_BOOL(gc_global, false, "always perform global GCs")
+DEFINE_INT(stress_atomic_gc, 0,
+           "Collect garbage after random(0, X) allocations. It overrides "
+           "gc_interval.")
 DEFINE_INT(gc_interval, -1, "garbage collect after <n> allocations")
 DEFINE_INT(retain_maps_for_n_gc, 2,
            "keeps maps alive for <n> old space garbage collections")
@@ -640,9 +643,7 @@ DEFINE_BOOL(parallel_pointer_update, true,
             "use parallel pointer update during compaction")
 DEFINE_BOOL(trace_incremental_marking, false,
             "trace progress of the incremental marking")
-DEFINE_BOOL(trace_stress_marking, false, "trace progress if the stress marking")
-DEFINE_BOOL(trace_stress_scavenge, false,
-            "trace progress of the stress scavenge")
+DEFINE_BOOL(trace_scavenge, false, "trace progress of the scavenge")
 DEFINE_BOOL(track_gc_object_stats, false,
             "track object counts and memory usage")
 DEFINE_BOOL(trace_gc_object_stats, false,
@@ -694,8 +695,8 @@ DEFINE_BOOL(stress_incremental_marking, false,
             "force incremental marking for small heaps and run it more often")
 
 DEFINE_BOOL(fuzzer_gc_analysis, false,
-            "enables analysis mode for gc fuzz testing, e.g. --stress-marking, "
-            "--stress-scavenge")
+            "prints number of allocations and enables analysis mode for gc "
+            "fuzz testing, e.g. --stress-marking, --stress-scavenge")
 DEFINE_INT(stress_marking, 0,
            "force marking at random points between 0 and X (inclusive) percent "
            "of the regular marking start limit")

@@ -1257,12 +1257,15 @@ bool Heap::CollectGarbage(AllocationSpace space,
   GarbageCollector collector = SelectGarbageCollector(space, &collector_reason);
 
 #ifdef DEBUG
-  // Reset the allocation timeout to the GC interval, but make sure to
-  // allow at least a few allocations after a collection. The reason
-  // for this is that we have a lot of allocation sequences and we
-  // assume that a garbage collection will allow the subsequent
-  // allocation attempts to go through.
-  allocation_timeout_ = Max(6, FLAG_gc_interval);
+  // Reset the allocation timeout, but make sure to allow at least a few
+  // allocations after a collection. The reason for this is that we have a lot
+  // of allocation sequences and we assume that a garbage collection will allow
+  // the subsequent allocation attempts to go through.
+  {
+    if (FLAG_stress_atomic_gc > 0 || FLAG_gc_interval >= 0) {
+      allocation_timeout_ = Max(6, NextAllocationTimeout(allocation_timeout_));
+    }
+  }
 #endif
 
   EnsureFillerObjectAtTop();
@@ -5507,18 +5510,15 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
     if (bytes_to_limit > 0) {
       double current_percent = (gained_since_last_gc / bytes_to_limit) * 100.0;
 
-      if (FLAG_trace_stress_marking) {
+      if (FLAG_trace_incremental_marking) {
         isolate()->PrintWithTimestamp(
             "[IncrementalMarking] %.2lf%% of the memory limit reached\n",
             current_percent);
       }
 
       if (FLAG_fuzzer_gc_analysis) {
-        // Skips values >=100% since they already trigger marking.
-        if (current_percent < 100.0) {
-          max_marking_limit_reached_ =
-              std::max(max_marking_limit_reached_, current_percent);
-        }
+        max_marking_limit_reached_ =
+            std::max(max_marking_limit_reached_, current_percent);
       } else if (static_cast<int>(current_percent) >=
                  stress_marking_percentage_) {
         stress_marking_percentage_ = NextStressMarkingLimit();
@@ -5571,7 +5571,7 @@ void Heap::DisableInlineAllocation() {
 
 bool Heap::SetUp() {
 #ifdef DEBUG
-  allocation_timeout_ = FLAG_gc_interval;
+  allocation_timeout_ = NextAllocationTimeout();
 #endif
 
   // Initialize heap spaces and initial maps and objects. Whenever something
@@ -5718,6 +5718,19 @@ void Heap::ClearStackLimits() {
   roots_[kRealStackLimitRootIndex] = Smi::kZero;
 }
 
+int Heap::NextAllocationTimeout(int current_timeout) {
+  if (FLAG_stress_atomic_gc > 0) {
+    // If current timeout hasn't reached 0 the GC was caused by something
+    // different than --stress-atomic-gc flag and we don't update the timeout.
+    if (current_timeout <= 0) {
+      return isolate()->fuzzer_rng()->NextInt(FLAG_stress_atomic_gc + 1);
+    } else {
+      return current_timeout;
+    }
+  }
+  return FLAG_gc_interval;
+}
+
 void Heap::PrintAllocationsHash() {
   uint32_t hash = StringHasher::GetHashCore(raw_allocations_hash_);
   PrintF("\n### Allocations = %u, hash = 0x%08x\n", allocations_count(), hash);
@@ -5795,7 +5808,7 @@ void Heap::TearDown() {
 
   UpdateMaximumCommitted();
 
-  if (FLAG_verify_predictable) {
+  if (FLAG_verify_predictable || FLAG_fuzzer_gc_analysis) {
     PrintAllocationsHash();
   }
 

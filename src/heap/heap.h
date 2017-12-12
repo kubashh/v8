@@ -1893,6 +1893,7 @@ class Heap {
                                 GCIdleTimeHeapState heap_state, double start_ms,
                                 double deadline_in_ms);
 
+  int NextAllocationTimeout(int current_timeout = 0);
   inline void UpdateAllocationsHash(HeapObject* object);
   inline void UpdateAllocationsHash(uint32_t value);
   void PrintAllocationsHash();
@@ -2425,9 +2426,8 @@ class Heap {
   // Observer that can cause early scavenge start.
   StressScavengeObserver* stress_scavenge_observer_;
 
-  // What was the maximum percent of the marking limit reached wihout causing
-  // marking. This is tracked when specyfing --fuzzer-analysis --stress-marking
-  // X.
+  // What was the maximum percent of the marking limit reached. This is tracked
+  // when specyfing --fuzzer-analysis --stress-marking X.
   double max_marking_limit_reached_;
 
   // How many mark-sweep collections happened.
