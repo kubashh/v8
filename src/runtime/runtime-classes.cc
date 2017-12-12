@@ -591,6 +591,14 @@ MaybeHandle<Object> DefineClass(Isolate* isolate,
     DCHECK(isolate->has_pending_exception());
     return MaybeHandle<Object>();
   }
+  if (FLAG_trace_maps) {
+    LOG(isolate,
+        MapEvent("InitialMap", nullptr, constructor->map(),
+                 "init class constructor", constructor->shared()->DebugName()));
+    LOG(isolate, MapEvent("InitialMap", nullptr, prototype->map(),
+                          "init class prototype"));
+  }
+
   return prototype;
 }
 
