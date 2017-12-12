@@ -4316,6 +4316,23 @@ Node* CodeStubAssembler::IsPropertyCell(Node* object) {
   return IsPropertyCellMap(LoadMap(object));
 }
 
+TNode<BoolT> CodeStubAssembler::IsPropertyEnumerable(
+    SloppyTNode<Int32T> details) {
+  Node* attributes =
+    DecodeWord32<PropertyDetails::AttributesField>(details);
+  Node* dont_enum = Int32Constant(PropertyAttributes::DONT_ENUM);
+  return WordEqual(WordAnd(attributes, dont_enum), IntPtrConstant(0));
+}
+
+TNode<BoolT> CodeStubAssembler::IsPropertyKindAccessor(
+    SloppyTNode<Uint32T> kind) {
+  return Word32Equal(kind, Int32Constant(PropertyKind::kAccessor));
+}
+
+TNode<BoolT> CodeStubAssembler::IsPropertyKindData(SloppyTNode<Uint32T> kind) {
+  return Word32Equal(kind, Int32Constant(PropertyKind::kData));
+}
+
 Node* CodeStubAssembler::IsAccessorInfo(Node* object) {
   return IsAccessorInfoMap(LoadMap(object));
 }
@@ -4347,6 +4364,13 @@ Node* CodeStubAssembler::IsFeedbackVector(Node* object) {
 Node* CodeStubAssembler::IsName(Node* object) {
   return Int32LessThanOrEqual(LoadInstanceType(object),
                               Int32Constant(LAST_NAME_TYPE));
+}
+
+Node* CodeStubAssembler::IsStringWrapperElementsKind(SloppyTNode<Map> map) {
+  Node* kind = LoadMapElementsKind(map);
+  return Word32Or(
+      Word32Equal(kind, Int32Constant(FAST_STRING_WRAPPER_ELEMENTS)),
+      Word32Equal(kind, Int32Constant(SLOW_STRING_WRAPPER_ELEMENTS)));
 }
 
 Node* CodeStubAssembler::IsString(Node* object) {
@@ -6394,26 +6418,23 @@ Node* CodeStubAssembler::DescriptorArrayNumberOfEntries(Node* descriptors) {
       descriptors, IntPtrConstant(DescriptorArray::kDescriptorLengthIndex));
 }
 
-namespace {
-
-Node* DescriptorNumberToIndex(CodeStubAssembler* a, Node* descriptor_number) {
-  Node* descriptor_size = a->Int32Constant(DescriptorArray::kEntrySize);
-  Node* index = a->Int32Mul(descriptor_number, descriptor_size);
-  return a->ChangeInt32ToIntPtr(index);
+Node* CodeStubAssembler::DescriptorNumberToIndex(
+    SloppyTNode<Uint32T> descriptor_number) {
+  Node* descriptor_size = Int32Constant(DescriptorArray::kEntrySize);
+  Node* index = Int32Mul(descriptor_number, descriptor_size);
+  return ChangeInt32ToIntPtr(index);
 }
-
-}  // namespace
 
 Node* CodeStubAssembler::DescriptorArrayToKeyIndex(Node* descriptor_number) {
   return IntPtrAdd(IntPtrConstant(DescriptorArray::ToKeyIndex(0)),
-                   DescriptorNumberToIndex(this, descriptor_number));
+                   DescriptorNumberToIndex(descriptor_number));
 }
 
 Node* CodeStubAssembler::DescriptorArrayGetSortedKeyIndex(
     Node* descriptors, Node* descriptor_number) {
   const int details_offset = DescriptorArray::ToDetailsIndex(0) * kPointerSize;
   Node* details = LoadAndUntagToWord32FixedArrayElement(
-      descriptors, DescriptorNumberToIndex(this, descriptor_number),
+      descriptors, DescriptorNumberToIndex(descriptor_number),
       details_offset);
   return DecodeWord32<PropertyDetails::DescriptorPointer>(details);
 }
@@ -6422,7 +6443,24 @@ Node* CodeStubAssembler::DescriptorArrayGetKey(Node* descriptors,
                                                Node* descriptor_number) {
   const int key_offset = DescriptorArray::ToKeyIndex(0) * kPointerSize;
   return LoadFixedArrayElement(descriptors,
-                               DescriptorNumberToIndex(this, descriptor_number),
+                               DescriptorNumberToIndex(descriptor_number),
+                               key_offset);
+}
+
+Node* CodeStubAssembler::DescriptorArrayGetDetails(
+    Node* descriptors, Node* descriptor_number) {
+  const int details_offset = DescriptorArray::ToDetailsIndex(0) * kPointerSize;
+  return LoadFixedArrayElement(
+      descriptors, DescriptorNumberToIndex(descriptor_number),
+      details_offset);
+}
+
+Node* CodeStubAssembler::DescriptorArrayGetValue(
+    SloppyTNode<DescriptorArray> descriptors,
+    SloppyTNode<Uint32T> descriptor_number) {
+  const int key_offset = DescriptorArray::ToValueIndex(0) * kPointerSize;
+  return LoadFixedArrayElement(descriptors,
+                               DescriptorNumberToIndex(descriptor_number),
                                key_offset);
 }
 
@@ -6628,6 +6666,15 @@ void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
       LoadDetailsByKeyIndex<DescriptorArray>(descriptors, name_index);
   var_details->Bind(details);
 
+  LoadPropertyFromFastObject(
+      object, map, descriptors, name_index, details, var_value);
+}
+
+void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
+                                                   Node* descriptors,
+                                                   Node* name_index,
+                                                   Node* details,
+                                                   Variable* var_value) {
   Node* location = DecodeWord32<PropertyDetails::LocationField>(details);
 
   Label if_in_field(this), if_in_descriptor(this), done(this);
@@ -7167,6 +7214,11 @@ void CodeStubAssembler::TryPrototypeChainLookup(
       Goto(&loop);
     }
   }
+}
+
+Node* CodeStubAssembler::HasHiddenPrototype(SloppyTNode<Map> map) {
+  Node* bit_field3 = LoadMapBitField3(map);
+  return DecodeWord32<Map::HasHiddenPrototypeBit>(bit_field3);
 }
 
 Node* CodeStubAssembler::HasInPrototypeChain(Node* context, Node* object,
