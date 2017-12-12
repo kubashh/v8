@@ -1041,6 +1041,12 @@ Handle<Object> LiveEdit::ChangeScriptSource(Handle<Script> original_script,
 
   // Drop line ends so that they will be recalculated.
   original_script->set_line_ends(isolate->heap()->undefined_value());
+  if (isolate->NeedsSourcePositionsForProfiling()) {
+    Script::InitLineEnds(original_script);
+    if (old_script_object->IsScript()) {
+      Script::InitLineEnds(Handle<Script>::cast(old_script_object));
+    }
+  }
 
   return old_script_object;
 }
