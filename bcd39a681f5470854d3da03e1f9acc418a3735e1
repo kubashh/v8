@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e85277e_91daca05",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2017-12-13T18:55:51Z",
+      "side": 1,
+      "message": "GCTracer::Scope::Name and this one should be in sync. UNREACHABLE SGTM for both.",
+      "range": {
+        "startLine": 93,
+        "startChar": 19,
+        "endLine": 93,
+        "endChar": 20
+      },
+      "revId": "bcd39a681f5470854d3da03e1f9acc418a3735e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
