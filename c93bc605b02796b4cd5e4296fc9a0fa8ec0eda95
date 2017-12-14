@@ -22,6 +22,30 @@
       "revId": "c93bc605b02796b4cd5e4296fc9a0fa8ec0eda95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1179c4a5_3108f13a",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T14:15:24Z",
+      "side": 1,
+      "message": "`flags` was just created with the default ctor 3 lines above, I don\u0027t think a DCHECK is necessary. Maybe clearer: `flags \u003d NEGATED`. I\u0027ll do that instead.",
+      "parentUuid": "ee7d7349_aa118ed3",
+      "range": {
+        "startLine": 354,
+        "startChar": 24,
+        "endLine": 354,
+        "endChar": 25
+      },
+      "revId": "c93bc605b02796b4cd5e4296fc9a0fa8ec0eda95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
