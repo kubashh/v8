@@ -1,0 +1,412 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a82a3bf_e17f4f8d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "What about moving this, together with new methods below, to a subclass of ObjectBuiltinsAssembler? See e.g. StringIncludesIndexOfAssembler for an example of what I mean.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdc88896_e5fa15c0",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: Also here, replace all SloppyTNode\u003cT\u003e with TNode\u003cT\u003e.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d48da6b_081537d2",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "TNode\u003cMap\u003e",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0386b655_3ecef973",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "TNode\u003cFixedArrayBase\u003e",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33dad160_7bc08a77",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: \u0027If the object has elements\u0027",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7249255_9169cdc8",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Just AllocateJSArray(PACKED_ELEMENTS, array_map, IntPtrConstant(0), SmiConstant(0)) ?",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b15cac0_e9ca0f1b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "This may be simpler if we don\u0027t use var_call_runtime_with_fast_path and just add e.g. Runtime::kObjectEntriesSkipFastPath instead. Then we can Return(CallRuntime(...)) here instead of updating a variable, jumping to another block, and calling to runtime there.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2560ad2_a17add37",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Simpler:\n\nif (...) {\n  Return(CallRuntime(Runtime::kObjectEntries, ...));\n} else {\n  DCHECK(collect_type \u003d\u003d CollectType::kValues);\n  Return(CallRuntime(...));\n}",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b75b50_da9c493c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "What do you think about moving all these helpers from code-stub-assembler.h to the new ObjectBuiltinsAssembler subclass (as suggested above)?",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a5d28a_e792edff",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Looks to me like this would be better as IntPtr instead of Smi. Currently you untag at every use site.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "743c6d99_0ac7d5ac",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884688ba_b81d2ca0",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "If you pass SMI_PARAMETERS you don\u0027t need to untag explicitly. Alternatively, skip repeating default values \u0027UPDATE_WRITE_BARRIER, 0, INTPTR_PARAMETERS\u0027.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b54d1f_4ac2d765",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "No need for this type-assertion, it\u0027s already implicit in the typed node.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a199d923_82a9d051",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "IntPtrEqual",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5e2696_fd563a7b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: Looks like unrelated changes, please revert to reduce CL noise.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24b86110_a4fe0df7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 4322,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: Couldn\u0027t this be IsSetWord32\u003cPropertyAttributes::DONT_ENUM\u003e(attributes)?",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4cb5af_252bd094",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 6658,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "This comment should probably move to the inner function as well.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed9930c_0ac30e3a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 7215,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "TNode\u003cUint32T\u003e and cast to TNode\u003cBoolT\u003e on the next line. Also please put this next to other Map helper methods.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0598dbb6_f417e424",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: Also TNode\u003cBoolT\u003e here (and in general typed signatures for new code). And can we make arguments here and elsewhere just TNode\u003c..\u003e instead of SloppyTNode\u003c..\u003e?",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ac7e9e_4a3d706e",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1632,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: This seems a strange place to put the declaration. What about next to other Map helpers, e.g. IsDictionaryMap? Also, a fully typed signature.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d36eb7e8_7a37d374",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: Is this needed?",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf73ed1a_cdfec5cb",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Please DCHECK that try_fast_path is either 0 or 1. Also below.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57242382_8b84f9db",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "AFAICS this has already been done in the CSA builtin. We could just CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0) above. Same below.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a13af889_b52e7594",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-14T16:52:45Z",
+      "side": 1,
+      "message": "Nit: values",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
