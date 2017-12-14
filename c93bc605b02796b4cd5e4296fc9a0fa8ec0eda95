@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee7d7349_aa118ed3",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2017-12-14T13:01:46Z",
+      "side": 1,
+      "message": "Should this be ^\u003d   ?\nOr should we assert that it was not already set?",
+      "range": {
+        "startLine": 354,
+        "startChar": 24,
+        "endLine": 354,
+        "endChar": 25
+      },
+      "revId": "c93bc605b02796b4cd5e4296fc9a0fa8ec0eda95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
