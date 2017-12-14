@@ -161,6 +161,8 @@ class AsyncCompileJob {
 
   void StartBackgroundTask();
 
+  void FinishBackgroundTasks();
+
   void RestartBackgroundTasks();
 
   // Switches to the compilation step {Step} and starts a foreground task to
@@ -198,6 +200,7 @@ class AsyncCompileJob {
   Handle<FixedArray> code_table_;
   size_t outstanding_units_ = 0;
   std::unique_ptr<CompileStep> step_;
+  bool background_tasks_finished_ = false;
   CancelableTaskManager background_task_manager_;
 
   std::shared_ptr<v8::TaskRunner> foreground_task_runner_;

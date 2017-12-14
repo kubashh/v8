@@ -3619,7 +3619,7 @@ void AsyncCompileJob::Start() {
 }
 
 void AsyncCompileJob::Abort() {
-  background_task_manager_.CancelAndWait();
+  FinishBackgroundTasks();
   if (num_pending_foreground_tasks_ == 0) {
     // No task is pending, we can just remove the AsyncCompileJob.
     isolate_->wasm_engine()->compilation_manager()->RemoveJob(this);
@@ -3675,7 +3675,7 @@ std::shared_ptr<StreamingDecoder> AsyncCompileJob::CreateStreamingDecoder() {
 }
 
 AsyncCompileJob::~AsyncCompileJob() {
-  background_task_manager_.CancelAndWait();
+  FinishBackgroundTasks();
   for (auto d : deferred_handles_) delete d;
 }
 
@@ -3762,7 +3762,16 @@ void AsyncCompileJob::StartBackgroundTask() {
       base::make_unique<CompileTask>(this, false));
 }
 
+void AsyncCompileJob::FinishBackgroundTasks() {
+  // Background tasks have already been finished.
+  if (background_tasks_finished_) return;
+  background_tasks_finished_ = true;
+  background_task_manager_.CancelAndWait();
+}
+
 void AsyncCompileJob::RestartBackgroundTasks() {
+  // Background work has already finished, no need to restart tasks.
+  if (background_tasks_finished_) return;
   size_t num_restarts = stopped_tasks_.Value();
   stopped_tasks_.Decrement(num_restarts);
 
@@ -4030,7 +4039,7 @@ class AsyncCompileJob::ExecuteAndFinishCompilationUnits : public CompileStep {
     job_->compiler_->SetFinisherIsRunning(false);
     if (thrower.error()) {
       // Make sure all compilation tasks stopped running.
-      job_->background_task_manager_.CancelAndWait();
+      job_->FinishBackgroundTasks();
 
       // Close the CodeSpaceMemoryModificationScope before we reject the promise
       // in AsyncCompileFailed. Promise::Reject calls directly into JavaScript.
@@ -4039,7 +4048,7 @@ class AsyncCompileJob::ExecuteAndFinishCompilationUnits : public CompileStep {
     }
     if (job_->outstanding_units_ == 0) {
       // Make sure all compilation tasks stopped running.
-      job_->background_task_manager_.CancelAndWait();
+      job_->FinishBackgroundTasks();
       if (job_->DecrementAndCheckFinisherCount()) job_->DoSync<FinishCompile>();
     }
   }
@@ -4152,7 +4161,7 @@ AsyncStreamingProcessor::AsyncStreamingProcessor(AsyncCompileJob* job)
 void AsyncStreamingProcessor::FinishAsyncCompileJobWithError(ResultBase error) {
   // Make sure all background tasks stopped executing before we change the state
   // of the AsyncCompileJob to DecodeFail.
-  job_->background_task_manager_.CancelAndWait();
+  job_->FinishBackgroundTasks();
 
   // Create a ModuleResult from the result we got as parameter. Since there was
   // no error, we don't have to provide a real wasm module to the ModuleResult.
