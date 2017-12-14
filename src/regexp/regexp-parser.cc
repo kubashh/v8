@@ -348,8 +348,13 @@ RegExpTree* RegExpParser::ParseDisjunction() {
                 if (!ParsePropertyClass(ranges, p == 'P')) {
                   return ReportError(CStrVector("Invalid property name"));
                 }
-                RegExpCharacterClass* cc =
-                    new (zone()) RegExpCharacterClass(ranges, builder->flags());
+                RegExpCharacterClass::CharacterClassFlags flags;
+                if (ranges->length() == 0) {
+                  ranges->Add(CharacterRange::Everything(), zone());
+                  flags = RegExpCharacterClass::NEGATED;
+                }
+                RegExpCharacterClass* cc = new (zone())
+                    RegExpCharacterClass(ranges, builder->flags(), flags);
                 builder->AddCharacterClass(cc);
               } else {
                 // With /u, no identity escapes except for syntax characters
@@ -1255,7 +1260,13 @@ bool LookupSpecialPropertyValueName(const char* name,
                                     ZoneList<CharacterRange>* result,
                                     bool negate, Zone* zone) {
   if (NameEquals(name, "Any")) {
-    if (!negate) result->Add(CharacterRange::Everything(), zone);
+    if (negate) {
+      // Leave the list of character ranges empty, since the negation of 'Any'
+      // is the empty set. Callers must ensure that the RegExpCharacterClass is
+      // created as the negation of CharacterRange::Everything().
+    } else {
+      result->Add(CharacterRange::Everything(), zone);
+    }
   } else if (NameEquals(name, "ASCII")) {
     result->Add(negate ? CharacterRange::Range(0x80, String::kMaxCodePoint)
                        : CharacterRange::Range(0x0, 0x7F),

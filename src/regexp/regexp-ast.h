@@ -310,7 +310,9 @@ class RegExpCharacterClass final : public RegExpTree {
       CharacterClassFlags character_class_flags = CharacterClassFlags())
       : set_(ranges),
         flags_(flags),
-        character_class_flags_(character_class_flags) {}
+        character_class_flags_(character_class_flags) {
+    DCHECK(!ranges->is_empty());
+  }
   RegExpCharacterClass(uc16 type, JSRegExp::Flags flags)
       : set_(type),
         flags_(flags),
