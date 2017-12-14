@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "363356c2_010cca9d",
+        "filename": "src/simulator-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-14T10:14:39Z",
+      "side": 1,
+      "message": "All typedefs for {Instr} are int32_t or uint32_t. Why not just use uint32_t?",
+      "parentUuid": "3bd0800e_a4c07649",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "54ae48ae851347af9bbbefdca03e7050a1e6c253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc957599_b405209b",
         "filename": "src/simulator-base.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "54ae48ae851347af9bbbefdca03e7050a1e6c253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2489547e_2a4b88ae",
+        "filename": "src/simulator-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-14T10:14:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc957599_b405209b",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "54ae48ae851347af9bbbefdca03e7050a1e6c253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
