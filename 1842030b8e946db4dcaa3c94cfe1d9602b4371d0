@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec27981b_81f1c329",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-12-15T17:36:41Z",
+      "side": 1,
+      "message": "when the switch has no case statements, the following check fails. So, I made it a special case with value_range 0. value_range is used to compute the size of the table. We always add 1 for default so I think value_range should be 0 when there are no cases.",
+      "revId": "1842030b8e946db4dcaa3c94cfe1d9602b4371d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54c16591_16d6b37c",
+        "filename": "test/mjsunit/regress/regress-794825.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2017-12-15T17:36:41Z",
+      "side": 1,
+      "message": "This generates a Switch bytecode without any case statements, since yield gets eliminated.",
+      "revId": "1842030b8e946db4dcaa3c94cfe1d9602b4371d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
