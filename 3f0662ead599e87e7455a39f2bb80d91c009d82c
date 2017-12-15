@@ -352,6 +352,24 @@
     },
     {
       "key": {
+        "uuid": "dfdc7476_3febc926",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-15T07:22:19Z",
+      "side": 1,
+      "message": "Yeah, see CSA::TruncateWordToWord32.",
+      "parentUuid": "b8602809_74f4c594",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "743c6d99_0ac7d5ac",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 16
