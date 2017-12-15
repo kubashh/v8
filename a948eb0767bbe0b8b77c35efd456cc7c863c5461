@@ -22,6 +22,30 @@
       "revId": "a948eb0767bbe0b8b77c35efd456cc7c863c5461",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e77ccd5_8097eae2",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-15T13:47:01Z",
+      "side": 1,
+      "message": "It\u0027s reachable though, through \u0027\\P{Any}\u0027 - it just doesn\u0027t do anything, the result list is left empty. Maybe I misunderstood your comment? :)",
+      "parentUuid": "a7e52346_f7085c17",
+      "range": {
+        "startLine": 1263,
+        "startChar": 8,
+        "endLine": 1263,
+        "endChar": 14
+      },
+      "revId": "a948eb0767bbe0b8b77c35efd456cc7c863c5461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
