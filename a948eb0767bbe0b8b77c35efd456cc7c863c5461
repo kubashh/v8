@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7e52346_f7085c17",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2017-12-15T13:39:06Z",
+      "side": 1,
+      "message": "Does it make sense to make this UNREACHABLE?",
+      "range": {
+        "startLine": 1263,
+        "startChar": 8,
+        "endLine": 1263,
+        "endChar": 14
+      },
+      "revId": "a948eb0767bbe0b8b77c35efd456cc7c863c5461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
