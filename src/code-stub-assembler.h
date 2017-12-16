@@ -1101,11 +1101,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsPrivateSymbol(Node* object);
   Node* IsPropertyArray(Node* object);
   Node* IsPropertyCell(Node* object);
+  TNode<BoolT> IsPropertyEnumerable(TNode<Uint32T> details);
+  TNode<BoolT> IsPropertyKindAccessor(TNode<Uint32T> kind);
+  TNode<BoolT> IsPropertyKindData(TNode<Uint32T> kind);
   Node* IsPrototypeInitialArrayPrototype(Node* context, Node* map);
   Node* IsSequentialStringInstanceType(Node* instance_type);
   Node* IsShortExternalStringInstanceType(Node* instance_type);
   Node* IsSpecialReceiverInstanceType(Node* instance_type);
-  Node* IsSpecialReceiverMap(Node* map);
   Node* IsSpeciesProtectorCellInvalid();
   Node* IsStringInstanceType(Node* instance_type);
   Node* IsString(Node* object);
@@ -1433,6 +1435,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                            kKeyToValueOffset);
   }
 
+  TNode<Uint32T> LoadPropertyKind(TNode<Uint32T> details) {
+    return DecodeWord32<PropertyDetails::KindField>(details);
+  }
+
   // Calculate a valid size for the a hash table.
   TNode<IntPtrT> HashTableComputeCapacity(
       SloppyTNode<IntPtrT> at_least_space_for);
@@ -1557,6 +1563,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   void LoadPropertyFromFastObject(Node* object, Node* map, Node* descriptors,
                                   Node* name_index, Variable* var_details,
+                                  Variable* var_value);
+
+  void LoadPropertyFromFastObject(Node* object, Node* map, Node* descriptors,
+                                  Node* name_index, Node* details,
                                   Variable* var_value);
 
   void LoadPropertyFromNameDictionary(Node* dictionary, Node* entry,
@@ -1869,11 +1879,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void DescriptorLookupBinary(Node* unique_name, Node* descriptors, Node* nof,
                               Label* if_found, Variable* var_name_index,
                               Label* if_not_found);
+  Node* DescriptorNumberToIndex(SloppyTNode<Uint32T> descriptor_number);
   // Implements DescriptorArray::ToKeyIndex.
   // Returns an untagged IntPtr.
   Node* DescriptorArrayToKeyIndex(Node* descriptor_number);
   // Implements DescriptorArray::GetKey.
   Node* DescriptorArrayGetKey(Node* descriptors, Node* descriptor_number);
+  // Implements DescriptorArray::GetKey.
+  TNode<Uint32T> DescriptorArrayGetDetails(TNode<DescriptorArray> descriptors,
+                                           TNode<Uint32T> descriptor_number);
 
   Node* CallGetterIfAccessor(Node* value, Node* details, Node* context,
                              Node* receiver, Label* if_bailout,
