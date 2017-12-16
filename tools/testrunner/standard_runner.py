@@ -92,7 +92,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           except Exception:
             pass
 
-      suite_paths = utils.GetSuitePaths(join(base_runner.BASE_DIR, "test"))
+      suite_paths = utils.GetSuitePaths(join(self.basedir, "test"))
 
       # Use default tests if no test configuration was provided at the cmd line.
       if len(args) == 0:
@@ -119,7 +119,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         if options.verbose:
           print '>>> Loading test suite: %s' % root
         suite = testsuite.TestSuite.LoadTestSuite(
-            os.path.join(base_runner.BASE_DIR, "test", root))
+            os.path.join(self.basedir, "test", root))
         if suite:
           suites.append(suite)
 
@@ -508,8 +508,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           print "Merging sancov files."
           subprocess.check_call([
             sys.executable,
-            join(
-              base_runner.BASE_DIR, "tools", "sanitizers", "sancov_merger.py"),
+            join(self.basedir, "tools", "sanitizers", "sancov_merger.py"),
             "--coverage-dir=%s" % self.sancov_dir])
         except:
           print >> sys.stderr, "Error: Merging sancov files failed."
