@@ -211,6 +211,8 @@ class BaseTestRunner(object):
     return parser
 
   def _add_parser_default_options(self, parser):
+    parser.add_option("--basedir", help="Base directory (for testing only)",
+                      default=BASE_DIR)
     parser.add_option("--gn", help="Scan out.gn for the last built"
                       " configuration",
                       default=False, action="store_true")
@@ -233,6 +235,7 @@ class BaseTestRunner(object):
 
   def _parse_args(self, parser):
     options, args = parser.parse_args()
+    self.basedir = options.basedir
 
     if any(map(lambda v: v and ',' in v,
                 [options.arch, options.mode])):
@@ -274,14 +277,14 @@ class BaseTestRunner(object):
                           '%s.%s' % (options.arch, options.mode))
 
     for outdir in outdirs():
-      yield os.path.join(BASE_DIR, outdir)
+      yield os.path.join(self.basedir, outdir)
 
       # buildbot option
       if options.mode:
-        yield os.path.join(BASE_DIR, outdir, options.mode)
+        yield os.path.join(self.basedir, outdir, options.mode)
 
   def _get_gn_outdir(self):
-    gn_out_dir = os.path.join(BASE_DIR, DEFAULT_OUT_GN)
+    gn_out_dir = os.path.join(self.basedir, DEFAULT_OUT_GN)
     latest_timestamp = -1
     latest_config = None
     for gn_config in os.listdir(gn_out_dir):
@@ -364,7 +367,7 @@ class BaseTestRunner(object):
 
   def _setup_env(self):
     # Use the v8 root as cwd as some test cases use "load" with relative paths.
-    os.chdir(BASE_DIR)
+    os.chdir(self.basedir)
 
     # Many tests assume an English interface.
     os.environ['LANG'] = 'en_US.UTF-8'
@@ -403,7 +406,7 @@ class BaseTestRunner(object):
 
     if self.build_config.tsan:
       suppressions_file = os.path.join(
-          BASE_DIR,
+          self.basedir,
           'tools',
           'sanitizers',
           'tsan_suppressions.txt')
@@ -418,7 +421,7 @@ class BaseTestRunner(object):
 
   def _get_external_symbolizer_option(self):
     external_symbolizer_path = os.path.join(
-        BASE_DIR,
+        self.basedir,
         'third_party',
         'llvm-build',
         'Release+Asserts',
