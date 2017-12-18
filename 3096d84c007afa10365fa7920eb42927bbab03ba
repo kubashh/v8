@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f32b928_57f9559d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-18T11:45:08Z",
+      "side": 1,
+      "message": "I\u0027ll fix it.",
+      "parentUuid": "d6b8e273_cbb6aca1",
+      "revId": "3096d84c007afa10365fa7920eb42927bbab03ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5dca2032_ea23eaf0",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 20
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-18T10:23:58Z",
       "side": 1,
       "message": "Check out TVARIABLE :) It\u0027ll make most casts and .value() calls below unnecessary.",
+      "revId": "3096d84c007afa10365fa7920eb42927bbab03ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61bdc959_74d40421",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-18T11:45:08Z",
+      "side": 1,
+      "message": "I see. TVARIABLE will make it better.",
+      "parentUuid": "5dca2032_ea23eaf0",
       "revId": "3096d84c007afa10365fa7920eb42927bbab03ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

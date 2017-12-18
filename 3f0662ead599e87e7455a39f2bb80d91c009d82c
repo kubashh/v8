@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "ed950a86_4d8784f1",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-18T11:45:08Z",
+      "side": 1,
+      "message": "Oh. It seems that is my jump to a conclusion.\nI\u0027ll fix it.",
+      "parentUuid": "9cac43b7_75497e2a",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdc88896_e5fa15c0",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 16
@@ -504,6 +522,24 @@
       "writtenOn": "2017-12-18T10:23:58Z",
       "side": 1,
       "message": "Please keep this assert. Unlike IsFixedArray, it\u0027s not covered by typed nodes.",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1f3c295_cfbe471c",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-18T11:45:08Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "79574c62_1159b38d",
       "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
