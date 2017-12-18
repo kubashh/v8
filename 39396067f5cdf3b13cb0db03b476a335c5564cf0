@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4656d7e4_661841d4",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-18T11:51:01Z",
+      "side": 1,
+      "message": "For some reason we count test as \"expected that we should fix\" only if FAIL is one and only outcome in the statusfile.",
+      "range": {
+        "startLine": 266,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 58
+      },
+      "revId": "39396067f5cdf3b13cb0db03b476a335c5564cf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
