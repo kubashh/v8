@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76abf4bb_ad36c84a",
+        "filename": "test/js-perf-test/TypedArrays/slice-nospecies.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-18T08:37:44Z",
+      "side": 1,
+      "message": "It seems a bit strange to me that this mixes microbenchmarking together with correctness testing. No changes needed though since it\u0027s very similar in other existing js-perf-tests.",
+      "revId": "d61e461834a825c079434ffd2d24c20b8909d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
