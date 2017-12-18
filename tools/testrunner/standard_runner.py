@@ -71,8 +71,8 @@ PREDICTABLE_WRAPPER = os.path.join(
 
 
 class StandardTestRunner(base_runner.BaseTestRunner):
-    def __init__(self):
-        super(StandardTestRunner, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(StandardTestRunner, self).__init__(*args, **kwargs)
 
         self.sancov_dir = None
 
@@ -92,7 +92,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           except Exception:
             pass
 
-      suite_paths = utils.GetSuitePaths(join(base_runner.BASE_DIR, "test"))
+      suite_paths = utils.GetSuitePaths(join(self.basedir, "test"))
 
       # Use default tests if no test configuration was provided at the cmd line.
       if len(args) == 0:
@@ -119,7 +119,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         if options.verbose:
           print '>>> Loading test suite: %s' % root
         suite = testsuite.TestSuite.LoadTestSuite(
-            os.path.join(base_runner.BASE_DIR, "test", root))
+            os.path.join(self.basedir, "test", root))
         if suite:
           suites.append(suite)
 
@@ -255,13 +255,13 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       if options.novfp3:
         options.extra_flags.append("--noenable-vfp3")
 
-      if options.no_variants:
+      if options.no_variants:  # pragma: no cover
         print ("Option --no-variants is deprecated. "
                "Pass --variants=default instead.")
         assert not options.variants
         options.variants = "default"
 
-      if options.exhaustive_variants:
+      if options.exhaustive_variants:  # pragma: no cover
         # TODO(machenbach): Switch infra to --variants=exhaustive after M65.
         print ("Option --exhaustive-variants is deprecated. "
                "Pass --variants=exhaustive instead.")
@@ -508,8 +508,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           print "Merging sancov files."
           subprocess.check_call([
             sys.executable,
-            join(
-              base_runner.BASE_DIR, "tools", "sanitizers", "sancov_merger.py"),
+            join(self.basedir, "tools", "sanitizers", "sancov_merger.py"),
             "--coverage-dir=%s" % self.sancov_dir])
         except:
           print >> sys.stderr, "Error: Merging sancov files failed."
