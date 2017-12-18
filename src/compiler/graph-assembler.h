@@ -39,6 +39,7 @@ namespace compiler {
   V(Word32Or)                             \
   V(Word32And)                            \
   V(Word32Xor)                            \
+  V(Word32Sar)                            \
   V(Word32Shr)                            \
   V(Word32Shl)                            \
   V(IntAdd)                               \

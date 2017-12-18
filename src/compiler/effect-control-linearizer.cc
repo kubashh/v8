@@ -1317,6 +1317,12 @@ Node* EffectControlLinearizer::LowerCheckBounds(Node* node, Node* frame_state) {
   Node* check = __ Uint32LessThan(index, limit);
   __ DeoptimizeIfNot(DeoptimizeReason::kOutOfBounds, params.feedback(), check,
                      frame_state);
+
+  Node* mask = __ Word32Sar(__ Word32Or(__ Int32Sub(limit, index), index),
+                            __ Int32Constant(31));
+  mask = __ Word32Xor(mask, __ Int32Constant(-1));
+  index = __ Word32And(index, mask);
+
   return index;
 }
 
