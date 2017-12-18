@@ -2383,19 +2383,33 @@ void BytecodeGenerator::BuildArrayLiteralSpread(Spread* spread,
   Register next_result = args[1];
 
   builder()->SetExpressionAsStatementPosition(spread->expression());
-  IteratorRecord iterator =
-      BuildGetIteratorRecord(spread->expression(), IteratorType::kNormal);
+  BuildGetIterator(spread->expression(), IteratorType::kNormal);
+  Register iterator = register_allocator()->NewRegister();
+  builder()->StoreAccumulatorInRegister(iterator);
+
   LoopBuilder loop_builder(builder(), nullptr, nullptr);
   loop_builder.LoopHeader();
-
-  // Call the iterator's .next() method. Break from the loop if the `done`
-  // property is truthy, otherwise load the value from the iterator result and
-  // append the argument.
-  BuildIteratorNext(iterator, next_result);
-  builder()->LoadNamedProperty(
-      next_result, ast_string_constants()->done_string(),
-      feedback_index(feedback_spec()->AddLoadICSlot()));
-  loop_builder.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
+  {
+    // Call the iterator's .next() method. Break from the loop if the `done`
+    // property is truthy, otherwise load the value from the iterator result and
+    // append the argument.
+    RegisterAllocationScope register_scope(this);
+    Register iterator_next = register_allocator()->NewRegister();
+    BytecodeLabel is_object;
+    builder()
+        ->LoadNamedProperty(iterator, ast_string_constants()->next_string(),
+                            feedback_index(feedback_spec()->AddLoadICSlot()))
+        .StoreAccumulatorInRegister(iterator_next)
+        .CallProperty(iterator_next, RegisterList(iterator),
+                      feedback_index(feedback_spec()->AddCallICSlot()))
+        .StoreAccumulatorInRegister(next_result)
+        .JumpIfJSReceiver(&is_object)
+        .CallRuntime(Runtime::kThrowIteratorResultNotAnObject)
+        .Bind(&is_object)
+        .LoadNamedProperty(next_result, ast_string_constants()->done_string(),
+                           feedback_index(feedback_spec()->AddLoadICSlot()));
+    loop_builder.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
+  }
 
   loop_builder.LoopBody();
   builder()
