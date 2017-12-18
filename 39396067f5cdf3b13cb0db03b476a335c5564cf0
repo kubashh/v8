@@ -46,6 +46,30 @@
       "revId": "39396067f5cdf3b13cb0db03b476a335c5564cf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "916326d7_7e9df069",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-18T12:24:27Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/832026",
+      "parentUuid": "9ac50410_0e49827c",
+      "range": {
+        "startLine": 266,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 58
+      },
+      "revId": "39396067f5cdf3b13cb0db03b476a335c5564cf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
