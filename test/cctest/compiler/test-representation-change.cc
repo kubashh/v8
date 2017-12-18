@@ -444,11 +444,13 @@ TEST(SignednessInWord32) {
 static void TestMinusZeroCheck(IrOpcode::Value expected, Type* from_type) {
   RepresentationChangerTester r;
 
-  CheckChange(expected, MachineRepresentation::kFloat64, from_type,
-              UseInfo::CheckedSignedSmallAsWord32(kDistinguishZeros));
+  CheckChange(
+      expected, MachineRepresentation::kFloat64, from_type,
+      UseInfo::CheckedSignedSmallAsWord32(kDistinguishZeros, VectorSlotPair()));
 
-  CheckChange(expected, MachineRepresentation::kFloat64, from_type,
-              UseInfo::CheckedSignedSmallAsWord32(kIdentifyZeros));
+  CheckChange(
+      expected, MachineRepresentation::kFloat64, from_type,
+      UseInfo::CheckedSignedSmallAsWord32(kIdentifyZeros, VectorSlotPair()));
 
   CheckChange(expected, MachineRepresentation::kFloat64, from_type,
               UseInfo::CheckedSigned32AsWord32(kDistinguishZeros));
