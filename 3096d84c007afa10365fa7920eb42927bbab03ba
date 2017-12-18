@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6b8e273_cbb6aca1",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-18T10:23:58Z",
+      "side": 1,
+      "message": "This needs a bit of tweaking. Since we potentially pass in non-JSObjects, the type of {object} needs to be TNode\u003cObject\u003e. And we need to use the return value of ToObject.\n\nI\u0027d suggest renaming the {object} parameter to {maybe_object} and then assigning\n\n  TNode\u003cJSObject\u003e object \u003d CallBuiltin(..., maybe_object);",
+      "revId": "3096d84c007afa10365fa7920eb42927bbab03ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dca2032_ea23eaf0",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-18T10:23:58Z",
+      "side": 1,
+      "message": "Check out TVARIABLE :) It\u0027ll make most casts and .value() calls below unnecessary.",
+      "revId": "3096d84c007afa10365fa7920eb42927bbab03ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

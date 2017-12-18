@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9cac43b7_75497e2a",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-18T10:23:58Z",
+      "side": 1,
+      "message": "Please take a look at https://cs.chromium.org/chromium/src/v8/src/builtins/builtins-string-gen.h?l\u003d99\u0026rcl\u003d62729327a2ac79da305d047df20949e075c8cd9a, the implementation of StringIncludesIndexOfAssembler I mentioned above.\n\nI meant something like:\n\n  class ObjectKeysValuesAssembler : public ObjectBuiltinsAssembler {\n   public:\n    explicit ObjectKeysValuesAssembler(compiler::CodeAssemblerState* state)\n        : ObjectBuiltinsAssembler(state) {}\n  \n   protected:\n    enum CollectType { ... };\n  \n    // All new helper methods go here, and do not pollute\n    // ObjectBuiltinsAssembler.\n  };",
+      "parentUuid": "21232746_2f6682ee",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdc88896_e5fa15c0",
         "filename": "src/builtins/builtins-object-gen.cc",
         "patchSetId": 16
@@ -469,6 +487,23 @@
       "side": 1,
       "message": "OK. I\u0027ll remove it.",
       "parentUuid": "d4b54d1f_4ac2d765",
+      "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79574c62_1159b38d",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-18T10:23:58Z",
+      "side": 1,
+      "message": "Please keep this assert. Unlike IsFixedArray, it\u0027s not covered by typed nodes.",
       "revId": "3f0662ead599e87e7455a39f2bb80d91c009d82c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
