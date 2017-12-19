@@ -1248,23 +1248,22 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Returns a node that contains a decoded (unsigned!) value of a bit
   // field |BitField| in |word|. Returns result as a word-size node.
   template <typename BitField>
-  TNode<UintPtrT> DecodeWord(SloppyTNode<WordT> word) {
+  Node* DecodeWord(Node* word) {
     return DecodeWord(word, BitField::kShift, BitField::kMask);
   }
 
   // Returns a node that contains a decoded (unsigned!) value of a bit
   // field |BitField| in |word32|. Returns result as a word-size node.
   template <typename BitField>
-  TNode<UintPtrT> DecodeWordFromWord32(SloppyTNode<Word32T> word32) {
+  Node* DecodeWordFromWord32(Node* word32) {
     return DecodeWord<BitField>(ChangeUint32ToWord(word32));
   }
 
   // Returns a node that contains a decoded (unsigned!) value of a bit
   // field |BitField| in |word|. Returns result as an uint32 node.
   template <typename BitField>
-  TNode<Uint32T> DecodeWord32FromWord(SloppyTNode<WordT> word) {
-    return UncheckedCast<Uint32T>(
-        TruncateWordToWord32(Signed(DecodeWord<BitField>(word))));
+  Node* DecodeWord32FromWord(Node* word) {
+    return TruncateWordToWord32(DecodeWord<BitField>(word));
   }
 
   // Decodes an unsigned (!) value from |word32| to an uint32 node.
@@ -1272,8 +1271,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                               uint32_t mask);
 
   // Decodes an unsigned (!) value from |word| to a word-size node.
-  TNode<UintPtrT> DecodeWord(SloppyTNode<WordT> word, uint32_t shift,
-                             uint32_t mask);
+  Node* DecodeWord(Node* word, uint32_t shift, uint32_t mask);
 
   // Returns a node that contains the updated values of a |BitField|.
   template <typename BitField>
@@ -1665,8 +1663,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   }
 
   // Loads script context from the script context table.
-  TNode<Context> LoadScriptContext(TNode<Context> context,
-                                   TNode<IntPtrT> context_index);
+  Node* LoadScriptContext(Node* context, int context_index);
 
   Node* Int32ToUint8Clamped(Node* int32_value);
   Node* Float64ToUint8Clamped(Node* float64_value);

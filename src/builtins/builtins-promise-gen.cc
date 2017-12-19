@@ -366,6 +366,8 @@ Node* PromiseBuiltinsAssembler::InternalPromiseThen(Node* context,
   VARIABLE(var_deferred_on_resolve, MachineRepresentation::kTagged);
   VARIABLE(var_deferred_on_reject, MachineRepresentation::kTagged);
 
+  GotoIfForceSlowPath(&promise_capability);
+
   Branch(WordEqual(promise_fun, constructor), &fast_promise_capability,
          &promise_capability);
 
@@ -1486,6 +1488,8 @@ TF_BUILTIN(PromiseReject, PromiseBuiltinsAssembler) {
 
   Label if_nativepromise(this), if_custompromise(this, Label::kDeferred);
   Node* const native_context = LoadNativeContext(context);
+
+  GotoIfForceSlowPath(&if_custompromise);
 
   Node* const promise_fun =
       LoadContextElement(native_context, Context::PROMISE_FUNCTION_INDEX);

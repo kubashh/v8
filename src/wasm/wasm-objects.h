@@ -426,13 +426,16 @@ class WasmCompiledModule : public FixedArray {
 
 #define WCM_OBJECT_OR_WEAK(TYPE, NAME, ID, TYPE_CHECK, SETTER_MODIFIER) \
  public:                                                                \
-  inline TYPE* maybe_##NAME() const;                                    \
-  inline TYPE* NAME() const;                                            \
+  inline Handle<TYPE> NAME() const;                                     \
+  inline MaybeHandle<TYPE> maybe_##NAME() const;                        \
+  inline TYPE* maybe_ptr_to_##NAME() const;                             \
+  inline TYPE* ptr_to_##NAME() const;                                   \
   inline bool has_##NAME() const;                                       \
   inline void reset_##NAME();                                           \
                                                                         \
   SETTER_MODIFIER:                                                      \
-  inline void set_##NAME(TYPE* value);
+  inline void set_##NAME(Handle<TYPE> value);                           \
+  inline void set_ptr_to_##NAME(TYPE* value);
 
 #define WCM_OBJECT(TYPE, NAME) \
   WCM_OBJECT_OR_WEAK(TYPE, NAME, kID_##NAME, obj->Is##TYPE(), public)
@@ -455,7 +458,7 @@ class WasmCompiledModule : public FixedArray {
                      public)                                               \
                                                                            \
  public:                                                                   \
-  inline TYPE* NAME() const;
+  inline Handle<TYPE> NAME() const;
 
 // Add values here if they are required for creating new instances or
 // for deserialization, and if they are serializable.
@@ -463,7 +466,7 @@ class WasmCompiledModule : public FixedArray {
 // we embed the generated code with a value, then we track that value here.
 #define CORE_WCM_PROPERTY_TABLE(MACRO)                  \
   MACRO(WASM_OBJECT, WasmSharedModuleData, shared)      \
-  MACRO(WEAK_LINK, Context, native_context)             \
+  MACRO(OBJECT, Context, native_context)                \
   MACRO(CONST_OBJECT, FixedArray, export_wrappers)      \
   MACRO(OBJECT, FixedArray, weak_exported_functions)    \
   MACRO(WASM_OBJECT, WasmCompiledModule, next_instance) \

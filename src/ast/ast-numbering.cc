@@ -16,7 +16,10 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
  public:
   AstNumberingVisitor(uintptr_t stack_limit, Zone* zone,
                       Compiler::EagerInnerFunctionLiterals* eager_literals)
-      : zone_(zone), eager_literals_(eager_literals), suspend_count_(0) {
+      : zone_(zone),
+        eager_literals_(eager_literals),
+        suspend_count_(0),
+        dont_optimize_reason_(kNoReason) {
     InitializeAstVisitor(stack_limit);
   }
 
@@ -36,12 +39,19 @@ class AstNumberingVisitor final : public AstVisitor<AstNumberingVisitor> {
   void VisitArguments(ZoneList<Expression*>* arguments);
   void VisitLiteralProperty(LiteralProperty* property);
 
+  void DisableOptimization(BailoutReason reason) {
+    dont_optimize_reason_ = reason;
+  }
+
+  BailoutReason dont_optimize_reason() const { return dont_optimize_reason_; }
+
   Zone* zone() const { return zone_; }
 
   Zone* zone_;
   Compiler::EagerInnerFunctionLiterals* eager_literals_;
   int suspend_count_;
   FunctionKind function_kind_;
+  BailoutReason dont_optimize_reason_;
 
   DEFINE_AST_VISITOR_SUBCLASS_MEMBERS();
   DISALLOW_COPY_AND_ASSIGN(AstNumberingVisitor);
@@ -70,6 +80,7 @@ void AstNumberingVisitor::VisitDebuggerStatement(DebuggerStatement* node) {
 
 void AstNumberingVisitor::VisitNativeFunctionLiteral(
     NativeFunctionLiteral* node) {
+  DisableOptimization(kNativeFunctionLiteral);
 }
 
 void AstNumberingVisitor::VisitDoExpression(DoExpression* node) {
@@ -315,6 +326,11 @@ void AstNumberingVisitor::VisitObjectLiteral(ObjectLiteral* node) {
   for (int i = 0; i < node->properties()->length(); i++) {
     VisitLiteralProperty(node->properties()->at(i));
   }
+  node->InitDepthAndFlags();
+  // Mark all computed expressions that are bound to a key that
+  // is shadowed by a later occurrence of the same key. For the
+  // marked expressions, no store code will be is emitted.
+  node->CalculateEmitStore(zone_);
 }
 
 void AstNumberingVisitor::VisitLiteralProperty(LiteralProperty* node) {
@@ -326,6 +342,7 @@ void AstNumberingVisitor::VisitArrayLiteral(ArrayLiteral* node) {
   for (int i = 0; i < node->values()->length(); i++) {
     Visit(node->values()->at(i));
   }
+  node->InitDepthAndFlags();
 }
 
 void AstNumberingVisitor::VisitCall(Call* node) {
@@ -385,6 +402,7 @@ bool AstNumberingVisitor::Renumber(FunctionLiteral* node) {
   VisitDeclarations(scope->declarations());
   VisitStatements(node->body());
 
+  node->set_dont_optimize_reason(dont_optimize_reason());
   node->set_suspend_count(suspend_count_);
 
   return !HasStackOverflow();

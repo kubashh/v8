@@ -147,18 +147,13 @@ inline std::ostream& operator<<(std::ostream& os, TypeCheckKind type_check) {
 //    to the preferred representation. The preferred representation might be
 //    insufficient to do the conversion (e.g. word32->float64 conv), so we also
 //    need the signedness information to produce the correct value.
-//    Additionally, use info may contain {CheckParameters} which contains
-//    information for the deoptimizer such as a CallIC on which speculation
-//    should be disallowed if the check fails.
 class UseInfo {
  public:
   UseInfo(MachineRepresentation representation, Truncation truncation,
-          TypeCheckKind type_check = TypeCheckKind::kNone,
-          const VectorSlotPair& feedback = VectorSlotPair())
+          TypeCheckKind type_check = TypeCheckKind::kNone)
       : representation_(representation),
         truncation_(truncation),
-        type_check_(type_check),
-        feedback_(feedback) {}
+        type_check_(type_check) {}
   static UseInfo TruncatingWord32() {
     return UseInfo(MachineRepresentation::kWord32, Truncation::Word32());
   }
@@ -192,16 +187,14 @@ class UseInfo {
     return UseInfo(MachineRepresentation::kTaggedPointer, Truncation::Any(),
                    TypeCheckKind::kHeapObject);
   }
-  static UseInfo CheckedSignedSmallAsTaggedSigned(
-      const VectorSlotPair& feedback) {
+  static UseInfo CheckedSignedSmallAsTaggedSigned() {
     return UseInfo(MachineRepresentation::kTaggedSigned, Truncation::Any(),
-                   TypeCheckKind::kSignedSmall, feedback);
+                   TypeCheckKind::kSignedSmall);
   }
-  static UseInfo CheckedSignedSmallAsWord32(IdentifyZeros identify_zeros,
-                                            const VectorSlotPair& feedback) {
+  static UseInfo CheckedSignedSmallAsWord32(IdentifyZeros identify_zeros) {
     return UseInfo(MachineRepresentation::kWord32,
-                   Truncation::Any(identify_zeros), TypeCheckKind::kSignedSmall,
-                   feedback);
+                   Truncation::Any(identify_zeros),
+                   TypeCheckKind::kSignedSmall);
   }
   static UseInfo CheckedSigned32AsWord32(IdentifyZeros identify_zeros) {
     return UseInfo(MachineRepresentation::kWord32,
@@ -245,13 +238,11 @@ class UseInfo {
                ? CheckForMinusZeroMode::kDontCheckForMinusZero
                : CheckForMinusZeroMode::kCheckForMinusZero;
   }
-  const VectorSlotPair& feedback() const { return feedback_; }
 
  private:
   MachineRepresentation representation_;
   Truncation truncation_;
   TypeCheckKind type_check_;
-  VectorSlotPair feedback_;
 };
 
 // Contains logic related to changing the representation of values for constants

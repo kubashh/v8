@@ -90,10 +90,6 @@ inline bool IsKeyedStoreICKind(FeedbackSlotKind kind) {
          kind == FeedbackSlotKind::kStoreKeyedStrict;
 }
 
-inline bool IsGlobalICKind(FeedbackSlotKind kind) {
-  return IsLoadGlobalICKind(kind) || IsStoreGlobalICKind(kind);
-}
-
 inline bool IsTypeProfileKind(FeedbackSlotKind kind) {
   return kind == FeedbackSlotKind::kTypeProfile;
 }
@@ -212,7 +208,6 @@ class FeedbackVector : public HeapObject {
   bool Name(FeedbackSlot slot) const { return Name##Kind(GetKind(slot)); }
 
   DEFINE_SLOT_KIND_PREDICATE(IsCallIC)
-  DEFINE_SLOT_KIND_PREDICATE(IsGlobalIC)
   DEFINE_SLOT_KIND_PREDICATE(IsLoadIC)
   DEFINE_SLOT_KIND_PREDICATE(IsLoadGlobalIC)
   DEFINE_SLOT_KIND_PREDICATE(IsKeyedLoadIC)
@@ -681,6 +676,35 @@ class LoadICNexus : public FeedbackNexus {
   InlineCacheState StateFromFeedback() const override;
 };
 
+class LoadGlobalICNexus : public FeedbackNexus {
+ public:
+  LoadGlobalICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
+      : FeedbackNexus(vector, slot) {
+    DCHECK(vector->IsLoadGlobalIC(slot));
+  }
+  LoadGlobalICNexus(FeedbackVector* vector, FeedbackSlot slot)
+      : FeedbackNexus(vector, slot) {
+    DCHECK(vector->IsLoadGlobalIC(slot));
+  }
+
+  int ExtractMaps(MapHandles* maps) const final {
+    // LoadGlobalICs don't record map feedback.
+    return 0;
+  }
+  MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
+    return MaybeHandle<Code>();
+  }
+  bool FindHandlers(ObjectHandles* code_list, int length = -1) const final {
+    return length == 0;
+  }
+
+  void ConfigureUninitialized() override;
+  void ConfigurePropertyCellMode(Handle<PropertyCell> cell);
+  void ConfigureHandlerMode(Handle<Object> handler);
+
+  InlineCacheState StateFromFeedback() const override;
+};
+
 class KeyedLoadICNexus : public FeedbackNexus {
  public:
   KeyedLoadICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
@@ -716,20 +740,19 @@ class StoreICNexus : public FeedbackNexus {
   InlineCacheState StateFromFeedback() const override;
 };
 
-// Base class for LoadGlobalICNexus and StoreGlobalICNexus.
-class GlobalICNexus : public FeedbackNexus {
+class StoreGlobalICNexus : public FeedbackNexus {
  public:
-  GlobalICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
+  StoreGlobalICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
       : FeedbackNexus(vector, slot) {
-    DCHECK(vector->IsGlobalIC(slot));
+    DCHECK(vector->IsStoreGlobalIC(slot));
   }
-  GlobalICNexus(FeedbackVector* vector, FeedbackSlot slot)
+  StoreGlobalICNexus(FeedbackVector* vector, FeedbackSlot slot)
       : FeedbackNexus(vector, slot) {
-    DCHECK(vector->IsGlobalIC(slot));
+    DCHECK(vector->IsStoreGlobalIC(slot));
   }
 
   int ExtractMaps(MapHandles* maps) const final {
-    // Load/StoreGlobalICs don't record map feedback.
+    // StoreGlobalICs don't record map feedback.
     return 0;
   }
   MaybeHandle<Object> FindHandlerForMap(Handle<Map> map) const final {
@@ -741,47 +764,9 @@ class GlobalICNexus : public FeedbackNexus {
 
   void ConfigureUninitialized() override;
   void ConfigurePropertyCellMode(Handle<PropertyCell> cell);
-  // Returns false if given combination of indices is not allowed.
-  bool ConfigureLexicalVarMode(int script_context_index,
-                               int context_slot_index);
   void ConfigureHandlerMode(Handle<Object> handler);
 
   InlineCacheState StateFromFeedback() const override;
-
-// Bit positions in a smi that encodes lexical environment variable access.
-#define LEXICAL_MODE_BIT_FIELDS(V, _)  \
-  V(ContextIndexBits, unsigned, 12, _) \
-  V(SlotIndexBits, unsigned, 19, _)
-
-  DEFINE_BIT_FIELDS(LEXICAL_MODE_BIT_FIELDS)
-#undef LEXICAL_MODE_BIT_FIELDS
-
-  // Make sure we don't overflow the smi.
-  STATIC_ASSERT(LEXICAL_MODE_BIT_FIELDS_Ranges::kBitsCount <= kSmiValueSize);
-};
-
-class LoadGlobalICNexus : public GlobalICNexus {
- public:
-  LoadGlobalICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : GlobalICNexus(vector, slot) {
-    DCHECK(vector->IsLoadGlobalIC(slot));
-  }
-  LoadGlobalICNexus(FeedbackVector* vector, FeedbackSlot slot)
-      : GlobalICNexus(vector, slot) {
-    DCHECK(vector->IsLoadGlobalIC(slot));
-  }
-};
-
-class StoreGlobalICNexus : public GlobalICNexus {
- public:
-  StoreGlobalICNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : GlobalICNexus(vector, slot) {
-    DCHECK(vector->IsStoreGlobalIC(slot));
-  }
-  StoreGlobalICNexus(FeedbackVector* vector, FeedbackSlot slot)
-      : GlobalICNexus(vector, slot) {
-    DCHECK(vector->IsStoreGlobalIC(slot));
-  }
 };
 
 // TODO(ishell): Currently we use StoreOwnIC only for storing properties that

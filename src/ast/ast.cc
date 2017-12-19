@@ -516,11 +516,10 @@ bool ArrayLiteral::is_empty() const {
 int ArrayLiteral::InitDepthAndFlags() {
   if (is_initialized()) return depth();
 
-  int constants_length =
-      first_spread_index_ >= 0 ? first_spread_index_ : values()->length();
+  int constants_length = values()->length();
 
   // Fill in the literals.
-  bool is_simple = first_spread_index_ < 0;
+  bool is_simple = true;
   int depth_acc = 1;
   int array_index = 0;
   for (; array_index < constants_length; array_index++) {

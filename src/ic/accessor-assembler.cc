@@ -31,22 +31,13 @@ Node* AccessorAssembler::LoadHandlerDataField(Node* handler, int data_index) {
                       InstanceTypeEqual(instance_type, STORE_HANDLER_TYPE)));
   int offset = 0;
   int minimum_size = 0;
-  switch (data_index) {
-    case 1:
-      offset = DataHandler::kData1Offset;
-      minimum_size = DataHandler::kSizeWithData1;
-      break;
-    case 2:
-      offset = DataHandler::kData2Offset;
-      minimum_size = DataHandler::kSizeWithData2;
-      break;
-    case 3:
-      offset = DataHandler::kData3Offset;
-      minimum_size = DataHandler::kSizeWithData3;
-      break;
-    default:
-      UNREACHABLE();
-      break;
+  if (data_index == 1) {
+    offset = DataHandler::kData1Offset;
+    minimum_size = DataHandler::kSizeWithData1;
+  } else {
+    DCHECK_EQ(2, data_index);
+    offset = DataHandler::kData2Offset;
+    minimum_size = DataHandler::kSizeWithData2;
   }
   USE(minimum_size);
   CSA_ASSERT(this, UintPtrGreaterThanOrEqual(
@@ -181,8 +172,7 @@ void AccessorAssembler::HandleLoadICHandlerCase(
   BIND(&if_smi_handler);
   {
     HandleLoadICSmiHandlerCase(p, var_holder.value(), var_smi_handler.value(),
-                               handler, miss, exit_point, false,
-                               support_elements);
+                               miss, exit_point, false, support_elements);
   }
 
   BIND(&try_proto_handler);
@@ -256,9 +246,8 @@ Node* AccessorAssembler::LoadDescriptorValue(Node* map, Node* descriptor) {
 }
 
 void AccessorAssembler::HandleLoadICSmiHandlerCase(
-    const LoadICParameters* p, Node* holder, Node* smi_handler, Node* handler,
-    Label* miss, ExitPoint* exit_point,
-    bool throw_reference_error_if_nonexistent,
+    const LoadICParameters* p, Node* holder, Node* smi_handler, Label* miss,
+    ExitPoint* exit_point, bool throw_reference_error_if_nonexistent,
     ElementSupport support_elements) {
   VARIABLE(var_double_value, MachineRepresentation::kFloat64);
   Label rebox_double(this, &var_double_value);
@@ -461,18 +450,11 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
   BIND(&api_getter);
   {
     Comment("api_getter");
-    CSA_ASSERT(this, TaggedIsNotSmi(handler));
-    Node* call_handler_info = holder;
+    Node* context = LoadWeakCellValueUnchecked(
+        LoadObjectField(holder, Tuple2::kValue1Offset));
+    Node* call_handler_info = LoadWeakCellValueUnchecked(
+        LoadObjectField(holder, Tuple2::kValue2Offset));
 
-    // Context is stored either in data2 or data3 field depending on whether
-    // the access check is enabled for this handler or not.
-    Node* context_cell = Select(
-        IsSetWord<LoadHandler::DoAccessCheckOnReceiverBits>(handler_word),
-        [=] { return LoadHandlerDataField(handler, 3); },
-        [=] { return LoadHandlerDataField(handler, 2); },
-        MachineRepresentation::kTagged);
-
-    Node* context = LoadWeakCellValueUnchecked(context_cell);
     Node* foreign =
         LoadObjectField(call_handler_info, CallHandlerInfo::kJsCallbackOffset);
     Node* callback = LoadObjectField(foreign, Foreign::kForeignAddressOffset,
@@ -728,13 +710,25 @@ void AccessorAssembler::HandleLoadICProtoHandler(
 
   BIND(&load_from_cached_holder);
   {
-    // For regular holders, having passed the receiver map check and the
-    // validity cell check implies that |holder| is alive. However, for
-    // global object receivers, the |maybe_holder_cell| may be cleared.
-    Node* holder = LoadWeakCellValue(maybe_holder_cell, miss);
+    Label unwrap_cell(this), bind_holder(this);
+    Branch(IsWeakCell(maybe_holder_cell), &unwrap_cell, &bind_holder);
 
-    var_holder->Bind(holder);
-    Goto(&done);
+    BIND(&unwrap_cell);
+    {
+      // For regular holders, having passed the receiver map check and the
+      // validity cell check implies that |holder| is alive. However, for
+      // global object receivers, the |maybe_holder_cell| may be cleared.
+      Node* holder = LoadWeakCellValue(maybe_holder_cell, miss);
+
+      var_holder->Bind(holder);
+      Goto(&done);
+    }
+
+    BIND(&bind_holder);
+    {
+      var_holder->Bind(maybe_holder_cell);
+      Goto(&done);
+    }
   }
 
   BIND(&done);
@@ -780,8 +774,8 @@ void AccessorAssembler::HandleLoadGlobalICHandlerCase(
                            ICMode::kGlobalIC);
   BIND(&if_smi_handler);
   HandleLoadICSmiHandlerCase(
-      &p, var_holder.value(), var_smi_handler.value(), handler, miss,
-      exit_point, throw_reference_error_if_nonexistent, kOnlyProperties);
+      &p, var_holder.value(), var_smi_handler.value(), miss, exit_point,
+      throw_reference_error_if_nonexistent, kOnlyProperties);
 }
 
 void AccessorAssembler::JumpIfDataProperty(Node* details, Label* writable,
@@ -979,20 +973,30 @@ void AccessorAssembler::HandleStoreICProtoHandler(
       },
       miss, ic_mode);
 
+  VARIABLE(var_transition_map_or_holder, MachineRepresentation::kTagged);
   Label if_transition_map(this), if_holder_object(this);
 
-  Node* maybe_transition_or_holder_cell = LoadHandlerDataField(handler, 1);
-  Node* maybe_transition_or_holder =
-      LoadWeakCellValue(maybe_transition_or_holder_cell, miss);
-  Branch(IsMap(maybe_transition_or_holder), &if_transition_map,
-         &if_holder_object);
+  {
+    Node* maybe_transition_cell = LoadHandlerDataField(handler, 1);
+    var_transition_map_or_holder.Bind(maybe_transition_cell);
+
+    Label unwrap_cell(this);
+    Branch(IsWeakCell(maybe_transition_cell), &unwrap_cell, &if_holder_object);
+
+    BIND(&unwrap_cell);
+    {
+      Node* maybe_transition = LoadWeakCellValue(maybe_transition_cell, miss);
+      var_transition_map_or_holder.Bind(maybe_transition);
+      Branch(IsMap(maybe_transition), &if_transition_map, &if_holder_object);
+    }
+  }
 
   BIND(&if_transition_map);
   {
     Label if_transition_to_constant(this), if_store_normal(this);
 
     Node* holder = p->receiver;
-    Node* transition_map = maybe_transition_or_holder;
+    Node* transition_map = var_transition_map_or_holder.value();
 
     GotoIf(IsDeprecatedMap(transition_map), miss);
     Node* handler_word = SmiUntag(smi_handler);
@@ -1066,7 +1070,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
   {
     Label if_store_global_proxy(this), if_api_setter(this), if_accessor(this),
         if_native_data_property(this);
-    Node* holder = maybe_transition_or_holder;
+    Node* holder = var_transition_map_or_holder.value();
 
     CSA_ASSERT(this, TaggedIsSmi(smi_handler));
     Node* handler_word = SmiUntag(smi_handler);
@@ -1102,18 +1106,10 @@ void AccessorAssembler::HandleStoreICProtoHandler(
     BIND(&if_api_setter);
     {
       Comment("api_setter");
-      CSA_ASSERT(this, TaggedIsNotSmi(handler));
-      Node* call_handler_info = holder;
-
-      // Context is stored either in data2 or data3 field depending on whether
-      // the access check is enabled for this handler or not.
-      Node* context_cell = Select(
-          IsSetWord<LoadHandler::DoAccessCheckOnReceiverBits>(handler_word),
-          [=] { return LoadHandlerDataField(handler, 3); },
-          [=] { return LoadHandlerDataField(handler, 2); },
-          MachineRepresentation::kTagged);
-
-      Node* context = LoadWeakCellValueUnchecked(context_cell);
+      Node* context = LoadWeakCellValueUnchecked(
+          LoadObjectField(holder, Tuple2::kValue1Offset));
+      Node* call_handler_info = LoadWeakCellValueUnchecked(
+          LoadObjectField(holder, Tuple2::kValue2Offset));
 
       Node* foreign = LoadObjectField(call_handler_info,
                                       CallHandlerInfo::kJsCallbackOffset);
@@ -2309,41 +2305,20 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
 }
 
 void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
-    SloppyTNode<Context> context, Node* vector, Node* slot,
-    ExitPoint* exit_point, Label* try_handler, Label* miss,
-    ParameterMode slot_mode) {
+    Node* vector, Node* slot, ExitPoint* exit_point, Label* try_handler,
+    Label* miss, ParameterMode slot_mode) {
   Comment("LoadGlobalIC_TryPropertyCellCase");
 
-  Label if_lexical_var(this), if_property_cell(this);
-  Node* maybe_weak_cell = LoadFeedbackVectorSlot(vector, slot, 0, slot_mode);
-  Branch(TaggedIsSmi(maybe_weak_cell), &if_lexical_var, &if_property_cell);
+  Node* weak_cell = LoadFeedbackVectorSlot(vector, slot, 0, slot_mode);
+  CSA_ASSERT(this, HasInstanceType(weak_cell, WEAK_CELL_TYPE));
 
-  BIND(&if_property_cell);
-  {
-    Node* weak_cell = maybe_weak_cell;
-    CSA_ASSERT(this, HasInstanceType(weak_cell, WEAK_CELL_TYPE));
+  // Load value or try handler case if the {weak_cell} is cleared.
+  Node* property_cell = LoadWeakCellValue(weak_cell, try_handler);
+  CSA_ASSERT(this, IsPropertyCell(property_cell));
 
-    // Load value or try handler case if the {weak_cell} is cleared.
-    Node* property_cell = LoadWeakCellValue(weak_cell, try_handler);
-    CSA_ASSERT(this, IsPropertyCell(property_cell));
-
-    Node* value = LoadObjectField(property_cell, PropertyCell::kValueOffset);
-    GotoIf(WordEqual(value, TheHoleConstant()), miss);
-    exit_point->Return(value);
-  }
-
-  BIND(&if_lexical_var);
-  {
-    Comment("Load lexical variable");
-    TNode<IntPtrT> lexical_handler = SmiUntag(maybe_weak_cell);
-    TNode<IntPtrT> context_index =
-        Signed(DecodeWord<GlobalICNexus::ContextIndexBits>(lexical_handler));
-    TNode<IntPtrT> slot_index =
-        Signed(DecodeWord<GlobalICNexus::SlotIndexBits>(lexical_handler));
-    TNode<Context> script_context = LoadScriptContext(context, context_index);
-    TNode<Object> result = LoadContextElement(script_context, slot_index);
-    exit_point->Return(result);
-  }
+  Node* value = LoadObjectField(property_cell, PropertyCell::kValueOffset);
+  GotoIf(WordEqual(value, TheHoleConstant()), miss);
+  exit_point->Return(value);
 }
 
 void AccessorAssembler::LoadGlobalIC_TryHandlerCase(const LoadICParameters* pp,
@@ -2363,8 +2338,6 @@ void AccessorAssembler::LoadGlobalIC_TryHandlerCase(const LoadICParameters* pp,
 
   bool throw_reference_error_if_nonexistent = typeof_mode == NOT_INSIDE_TYPEOF;
 
-  // TODO(ishell): revisit if this way of code organization still improves
-  // things given that we don't have array handlers anymore.
   {
     LoadICParameters p = *pp;
     DCHECK_NULL(p.receiver);
@@ -2372,7 +2345,7 @@ void AccessorAssembler::LoadGlobalIC_TryHandlerCase(const LoadICParameters* pp,
     p.receiver =
         LoadContextElement(native_context, Context::GLOBAL_PROXY_INDEX);
     Node* holder = LoadContextElement(native_context, Context::EXTENSION_INDEX);
-    HandleLoadICSmiHandlerCase(&p, holder, handler, handler, miss, exit_point,
+    HandleLoadICSmiHandlerCase(&p, holder, handler, miss, exit_point,
                                throw_reference_error_if_nonexistent,
                                kOnlyProperties);
   }
@@ -2409,7 +2382,7 @@ void AccessorAssembler::LoadGlobalIC(const LoadICParameters* p,
   ExitPoint direct_exit(this);
 
   Label try_handler(this), miss(this);
-  LoadGlobalIC_TryPropertyCellCase(p->context, p->vector, p->slot, &direct_exit,
+  LoadGlobalIC_TryPropertyCellCase(p->vector, p->slot, &direct_exit,
                                    &try_handler, &miss);
 
   BIND(&try_handler);
@@ -2678,57 +2651,37 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
 }
 
 void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
-  Label if_lexical_var(this), if_property_cell(this);
-  Node* maybe_weak_cell =
+  Label try_handler(this), miss(this, Label::kDeferred);
+
+  Node* feedback =
       LoadFeedbackVectorSlot(pp->vector, pp->slot, 0, SMI_PARAMETERS);
-  Branch(TaggedIsSmi(maybe_weak_cell), &if_lexical_var, &if_property_cell);
+  Node* property_cell = LoadWeakCellValue(feedback, &try_handler);
 
-  BIND(&if_property_cell);
+  ExitPoint direct_exit(this);
+  StoreGlobalIC_PropertyCellCase(property_cell, pp->value, &direct_exit, &miss);
+
+  BIND(&try_handler);
   {
-    Label try_handler(this), miss(this, Label::kDeferred);
-    Node* property_cell = LoadWeakCellValue(maybe_weak_cell, &try_handler);
+    Comment("StoreGlobalIC_try_handler");
+    Node* handler = LoadFeedbackVectorSlot(pp->vector, pp->slot, kPointerSize,
+                                           SMI_PARAMETERS);
 
-    ExitPoint direct_exit(this);
-    StoreGlobalIC_PropertyCellCase(property_cell, pp->value, &direct_exit,
-                                   &miss);
+    GotoIf(WordEqual(handler, LoadRoot(Heap::kuninitialized_symbolRootIndex)),
+           &miss);
 
-    BIND(&try_handler);
-    {
-      Comment("StoreGlobalIC_try_handler");
-      Node* handler = LoadFeedbackVectorSlot(pp->vector, pp->slot, kPointerSize,
-                                             SMI_PARAMETERS);
+    StoreICParameters p = *pp;
+    DCHECK_NULL(p.receiver);
+    Node* native_context = LoadNativeContext(p.context);
+    p.receiver =
+        LoadContextElement(native_context, Context::GLOBAL_PROXY_INDEX);
 
-      GotoIf(WordEqual(handler, LoadRoot(Heap::kuninitialized_symbolRootIndex)),
-             &miss);
-
-      StoreICParameters p = *pp;
-      DCHECK_NULL(p.receiver);
-      Node* native_context = LoadNativeContext(p.context);
-      p.receiver =
-          LoadContextElement(native_context, Context::GLOBAL_PROXY_INDEX);
-
-      HandleStoreICHandlerCase(&p, handler, &miss, ICMode::kGlobalIC);
-    }
-
-    BIND(&miss);
-    {
-      TailCallRuntime(Runtime::kStoreGlobalIC_Miss, pp->context, pp->value,
-                      pp->slot, pp->vector, pp->name);
-    }
+    HandleStoreICHandlerCase(&p, handler, &miss, ICMode::kGlobalIC);
   }
 
-  BIND(&if_lexical_var);
+  BIND(&miss);
   {
-    Comment("Store lexical variable");
-    TNode<IntPtrT> lexical_handler = SmiUntag(maybe_weak_cell);
-    TNode<IntPtrT> context_index =
-        Signed(DecodeWord<GlobalICNexus::ContextIndexBits>(lexical_handler));
-    TNode<IntPtrT> slot_index =
-        Signed(DecodeWord<GlobalICNexus::SlotIndexBits>(lexical_handler));
-    TNode<Context> script_context =
-        LoadScriptContext(CAST(pp->context), context_index);
-    StoreContextElement(script_context, slot_index, CAST(pp->value));
-    Return(pp->value);
+    TailCallRuntime(Runtime::kStoreGlobalIC_Miss, pp->context, pp->value,
+                    pp->slot, pp->vector, pp->name);
   }
 }
 

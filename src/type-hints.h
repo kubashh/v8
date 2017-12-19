@@ -20,7 +20,6 @@ enum class BinaryOperationHint : uint8_t {
   kNumber,
   kNumberOrOddball,
   kString,
-  kBigInt,
   kAny
 };
 

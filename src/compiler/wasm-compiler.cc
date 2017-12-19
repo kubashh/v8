@@ -3724,58 +3724,23 @@ Node* WasmGraphBuilder::StoreMem(MachineRepresentation mem_rep, Node* index,
   return store;
 }
 
-namespace {
-Node* GetAsmJsOOBValue(MachineRepresentation rep, JSGraph* jsgraph) {
-  switch (rep) {
-    case MachineRepresentation::kWord8:
-    case MachineRepresentation::kWord16:
-    case MachineRepresentation::kWord32:
-      return jsgraph->Int32Constant(0);
-    case MachineRepresentation::kWord64:
-      return jsgraph->Int64Constant(0);
-    case MachineRepresentation::kFloat32:
-      return jsgraph->Float32Constant(std::numeric_limits<float>::quiet_NaN());
-    case MachineRepresentation::kFloat64:
-      return jsgraph->Float64Constant(std::numeric_limits<double>::quiet_NaN());
-    default:
-      UNREACHABLE();
-  }
-}
-}  // namespace
-
 Node* WasmGraphBuilder::BuildAsmjsLoadMem(MachineType type, Node* index) {
+  // TODO(turbofan): fold bounds checks for constant asm.js loads.
+  // asm.js semantics use CheckedLoad (i.e. OOB reads return 0ish).
   DCHECK_NOT_NULL(context_cache_);
   Node* mem_start = context_cache_->mem_start;
   Node* mem_size = context_cache_->mem_size;
   DCHECK_NOT_NULL(mem_start);
   DCHECK_NOT_NULL(mem_size);
-
-  // Asm.js semantics are defined along the lines of typed arrays, hence OOB
-  // reads return {undefined} coerced to the result type (0 for integers, NaN
-  // for float and double).
-  // Note that we check against the memory size ignoring the size of the
-  // stored value, which is conservative if misaligned. Technically, asm.js
-  // should never have misaligned accesses.
-  Diamond bounds_check(
-      graph(), jsgraph()->common(),
-      graph()->NewNode(jsgraph()->machine()->Uint32LessThan(), index, mem_size),
-      BranchHint::kTrue);
-  bounds_check.Chain(*control_);
-
   if (jsgraph()->machine()->Is64()) {
     index =
         graph()->NewNode(jsgraph()->machine()->ChangeUint32ToUint64(), index);
   }
-  Node* load = graph()->NewNode(jsgraph()->machine()->Load(type), mem_start,
-                                index, *effect_, bounds_check.if_true);
-  Node* value_phi =
-      bounds_check.Phi(type.representation(), load,
-                       GetAsmJsOOBValue(type.representation(), jsgraph()));
-  Node* effect_phi = graph()->NewNode(jsgraph()->common()->EffectPhi(2), load,
-                                      *effect_, bounds_check.merge);
-  *effect_ = effect_phi;
-  *control_ = bounds_check.merge;
-  return value_phi;
+  const Operator* op = jsgraph()->machine()->CheckedLoad(type);
+  Node* load =
+      graph()->NewNode(op, mem_start, index, mem_size, *effect_, *control_);
+  *effect_ = load;
+  return load;
 }
 
 Node* WasmGraphBuilder::BuildAsmjsStoreMem(MachineType type, Node* index,
@@ -3785,23 +3750,24 @@ Node* WasmGraphBuilder::BuildAsmjsStoreMem(MachineType type, Node* index,
   Node* mem_size = context_cache_->mem_size;
   DCHECK_NOT_NULL(mem_start);
   DCHECK_NOT_NULL(mem_size);
+  const Operator* cmp_op = jsgraph()->machine()->Uint32LessThan();
+  if (jsgraph()->machine()->Is64()) {
+    index =
+        graph()->NewNode(jsgraph()->machine()->ChangeUint32ToUint64(), index);
+    cmp_op = jsgraph()->machine()->Uint64LessThan();
+  }
 
   // Asm.js semantics are to ignore OOB writes.
   // Note that we check against the memory size ignoring the size of the
   // stored value, which is conservative if misaligned. Technically, asm.js
   // should never have misaligned accesses.
-  Diamond bounds_check(
-      graph(), jsgraph()->common(),
-      graph()->NewNode(jsgraph()->machine()->Uint32LessThan(), index, mem_size),
-      BranchHint::kTrue);
+  Diamond bounds_check(graph(), jsgraph()->common(),
+                       graph()->NewNode(cmp_op, index, mem_size),
+                       BranchHint::kTrue);
   bounds_check.Chain(*control_);
 
   const Operator* store_op = jsgraph()->machine()->Store(StoreRepresentation(
       type.representation(), WriteBarrierKind::kNoWriteBarrier));
-  if (jsgraph()->machine()->Is64()) {
-    index =
-        graph()->NewNode(jsgraph()->machine()->ChangeUint32ToUint64(), index);
-  }
   Node* store = graph()->NewNode(store_op, mem_start, index, val, *effect_,
                                  bounds_check.if_true);
   Node* effect_phi = graph()->NewNode(jsgraph()->common()->EffectPhi(2), store,
@@ -4477,7 +4443,7 @@ void ValidateImportWrapperReferencesImmovables(Handle<Code> wrapper) {
       default:
         UNREACHABLE();
     }
-    DCHECK_NOT_NULL(target);
+    CHECK_NOT_NULL(target);
     bool is_immovable =
         target->IsSmi() || Heap::IsImmovable(HeapObject::cast(target));
     bool is_allowed_stub = false;
@@ -4487,7 +4453,7 @@ void ValidateImportWrapperReferencesImmovables(Handle<Code> wrapper) {
           code->kind() == Code::STUB &&
           CodeStub::MajorKeyFromKey(code->stub_key()) == CodeStub::DoubleToI;
     }
-    DCHECK(is_immovable || is_allowed_stub);
+    CHECK(is_immovable || is_allowed_stub);
   }
 #endif
 }
@@ -5099,15 +5065,6 @@ WasmCodeWrapper WasmCompilationUnit::FinishTurbofanCompilation(
              static_cast<unsigned>(func_body_.end - func_body_.start),
              codegen_ms);
     }
-
-#ifdef ENABLE_DISASSEMBLER
-    if (FLAG_print_code || FLAG_print_wasm_code) {
-      // TODO(wasm): Use proper log files, here and elsewhere.
-      PrintF("--- Native Wasm code ---\n");
-      code->Print(isolate_);
-      PrintF("--- End code ---\n");
-    }
-#endif
 
     Handle<ByteArray> source_positions =
         tf_.job_->compilation_info()->wasm_code_desc()->source_positions_table;

@@ -172,7 +172,9 @@ BinaryOperationHint BinaryOperationHintFromFeedback(int type_feedback) {
     case BinaryOperationFeedback::kString:
       return BinaryOperationHint::kString;
     case BinaryOperationFeedback::kBigInt:
-      return BinaryOperationHint::kBigInt;
+    // TODO(jarin/jkummerow/neis): Support BigInts in TF.
+    // Fall through for now.
+    case BinaryOperationFeedback::kAny:
     default:
       return BinaryOperationHint::kAny;
   }
