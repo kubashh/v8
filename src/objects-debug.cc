@@ -1357,9 +1357,6 @@ void DataHandler::DataHandlerVerify() {
   if (data_count >= 2) {
     VerifyObjectField(kData2Offset);
   }
-  if (data_count >= 3) {
-    VerifyObjectField(kData3Offset);
-  }
 }
 
 void LoadHandler::LoadHandlerVerify() {

@@ -648,12 +648,14 @@ TEST(EquivalenceOfLoggingAndTraversal) {
     v8::Local<v8::Script> script = CompileWithOrigin(source_str, "");
     if (script.IsEmpty()) {
       v8::String::Utf8Value exception(isolate, try_catch.Exception());
-      FATAL("compile: %s\n", *exception);
+      printf("compile: %s\n", *exception);
+      CHECK(false);
     }
     v8::Local<v8::Value> result;
     if (!script->Run(logger.env()).ToLocal(&result)) {
       v8::String::Utf8Value exception(isolate, try_catch.Exception());
-      FATAL("run: %s\n", *exception);
+      printf("run: %s\n", *exception);
+      CHECK(false);
     }
     // The result either be the "true" literal or problem description.
     if (!result->IsTrue()) {
@@ -661,7 +663,10 @@ TEST(EquivalenceOfLoggingAndTraversal) {
       i::ScopedVector<char> data(s->Utf8Length() + 1);
       CHECK(data.start());
       s->WriteUtf8(data.start());
-      FATAL("%s\n", data.start());
+      printf("%s\n", data.start());
+      // Make sure that our output is written prior crash due to CHECK failure.
+      fflush(stdout);
+      CHECK(false);
     }
   }
   isolate->Dispose();

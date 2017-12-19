@@ -437,11 +437,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       LanguageMode language_mode,
       ZoneList<const AstRawString*>* arguments_for_wrapped_function, bool* ok);
 
-  ObjectLiteral* InitializeObjectLiteral(ObjectLiteral* object_literal) {
-    object_literal->CalculateEmitStore(main_zone());
-    return object_literal;
-  }
-
   // Check if the scope has conflicting var/let declarations from different
   // scopes. This covers for example
   //

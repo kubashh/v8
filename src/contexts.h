@@ -450,8 +450,15 @@ class ScriptContextTable : public FixedArray {
   static Handle<ScriptContextTable> Extend(Handle<ScriptContextTable> table,
                                            Handle<Context> script_context);
 
-  static const int kUsedSlotIndex = 0;
-  static const int kFirstContextSlotIndex = 1;
+  static int GetContextOffset(int context_index) {
+    return kFirstContextOffset + context_index * kPointerSize;
+  }
+
+ private:
+  static const int kUsedSlot = 0;
+  static const int kFirstContextSlot = kUsedSlot + 1;
+  static const int kFirstContextOffset =
+      FixedArray::kHeaderSize + kFirstContextSlot * kPointerSize;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(ScriptContextTable);
 };

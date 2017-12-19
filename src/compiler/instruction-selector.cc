@@ -693,27 +693,20 @@ void InstructionSelector::InitializeCallBuffer(Node* call, CallBuffer* buffer,
                                                bool is_tail_call,
                                                int stack_param_delta) {
   OperandGenerator g(this);
-  size_t ret_count = buffer->descriptor->ReturnCount();
-  DCHECK_LE(call->op()->ValueOutputCount(), ret_count);
+  DCHECK_LE(call->op()->ValueOutputCount(),
+            static_cast<int>(buffer->descriptor->ReturnCount()));
   DCHECK_EQ(
       call->op()->ValueInputCount(),
       static_cast<int>(buffer->input_count() + buffer->frame_state_count()));
 
-  if (ret_count > 0) {
+  if (buffer->descriptor->ReturnCount() > 0) {
     // Collect the projections that represent multiple outputs from this call.
-    if (ret_count == 1) {
+    if (buffer->descriptor->ReturnCount() == 1) {
       PushParameter result = {call, buffer->descriptor->GetReturnLocation(0)};
       buffer->output_nodes.push_back(result);
     } else {
-      buffer->output_nodes.resize(ret_count);
+      buffer->output_nodes.resize(buffer->descriptor->ReturnCount());
       int stack_count = 0;
-      for (size_t i = 0; i < ret_count; ++i) {
-        LinkageLocation location = buffer->descriptor->GetReturnLocation(i);
-        buffer->output_nodes[i] = PushParameter(nullptr, location);
-        if (location.IsCallerFrameSlot()) {
-          stack_count += location.GetSizeInPointers();
-        }
-      }
       for (Edge const edge : call->use_edges()) {
         if (!NodeProperties::IsValueEdge(edge)) continue;
         Node* node = edge.from();
@@ -722,7 +715,13 @@ void InstructionSelector::InitializeCallBuffer(Node* call, CallBuffer* buffer,
 
         DCHECK_LT(index, buffer->output_nodes.size());
         DCHECK(!buffer->output_nodes[index].node);
-        buffer->output_nodes[index].node = node;
+        PushParameter result = {node,
+                                buffer->descriptor->GetReturnLocation(index)};
+        buffer->output_nodes[index] = result;
+
+        if (result.location.IsCallerFrameSlot()) {
+          stack_count += result.location.GetSizeInPointers();
+        }
       }
       frame_->EnsureReturnSlots(stack_count);
     }
@@ -971,7 +970,7 @@ void InstructionSelector::VisitControl(BasicBlock* block) {
               << "only one predecessor." << std::endl
               << "# Current Block: " << *successor << std::endl
               << "#          Node: " << *node;
-          FATAL("%s", str.str().c_str());
+          FATAL(str.str().c_str());
         }
       }
     }

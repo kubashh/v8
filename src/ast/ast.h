@@ -1361,7 +1361,6 @@ class ObjectLiteral final : public AggregateLiteral {
                   HasRestPropertyField::encode(has_rest_property) |
                   FastElementsField::encode(false) |
                   HasNullPrototypeField::encode(false);
-    InitDepthAndFlags();
   }
 
   void InitFlagsForPendingNullPrototype(int i);
@@ -1466,9 +1465,7 @@ class ArrayLiteral final : public AggregateLiteral {
   ArrayLiteral(ZoneList<Expression*>* values, int first_spread_index, int pos)
       : AggregateLiteral(pos, kArrayLiteral),
         first_spread_index_(first_spread_index),
-        values_(values) {
-    InitDepthAndFlags();
-  }
+        values_(values) {}
 
   int first_spread_index_;
   Handle<ConstantElementsPair> constant_elements_;

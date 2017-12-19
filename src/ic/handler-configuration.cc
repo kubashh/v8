@@ -23,15 +23,14 @@ Handle<Smi> SetBitFieldValue(Isolate* isolate, Handle<Smi> smi_handler,
 
 // TODO(ishell): Remove templatezation once we move common bits from
 // Load/StoreHandler to the base class.
-template <typename ICHandler, bool fill_handler = true>
-int InitPrototypeChecksImpl(Isolate* isolate, Handle<ICHandler> handler,
-                            Handle<Smi>* smi_handler, Handle<Map> receiver_map,
-                            Handle<JSReceiver> holder, Handle<Object> data1,
-                            MaybeHandle<Object> maybe_data2) {
-  int checks_count = 0;
-  // Holder-is-receiver case itself does not add entries unless there is an
-  // optional data2 value provided.
+template <typename ICHandler, bool fill_array = true>
+int InitPrototypeChecks(Isolate* isolate, Handle<Map> receiver_map,
+                        Handle<JSReceiver> holder, Handle<Name> name,
+                        Handle<ICHandler> handler,
+                        Handle<Smi>* smi_handler = nullptr) {
+  if (!holder.is_null() && holder->map() == *receiver_map) return 0;
 
+  int checks_count = 0;
   if (receiver_map->IsPrimitiveMap() ||
       receiver_map->is_access_check_needed()) {
     DCHECK(!receiver_map->IsJSGlobalObjectMap());
@@ -41,7 +40,7 @@ int InitPrototypeChecksImpl(Isolate* isolate, Handle<ICHandler> handler,
     // be used in other native context through the megamorphic stub cache.
     // So we record the original native context to which this handler
     // corresponds.
-    if (fill_handler) {
+    if (fill_array) {
       Handle<Context> native_context = isolate->native_context();
       handler->set_data2(native_context->self_weak_cell());
     } else {
@@ -52,28 +51,11 @@ int InitPrototypeChecksImpl(Isolate* isolate, Handle<ICHandler> handler,
     checks_count++;
   } else if (receiver_map->is_dictionary_map() &&
              !receiver_map->IsJSGlobalObjectMap()) {
-    if (!fill_handler) {
+    if (!fill_array) {
       // Enable lookup on receiver.
       typedef typename ICHandler::LookupOnReceiverBits Bit;
       *smi_handler = SetBitFieldValue<Bit>(isolate, *smi_handler, true);
     }
-  }
-  if (fill_handler) {
-    handler->set_data1(*data1);
-  }
-  Handle<Object> data2;
-  if (maybe_data2.ToHandle(&data2)) {
-    if (fill_handler) {
-      // This value will go either to data2 or data3 slot depending on whether
-      // data2 slot is already occupied by native context.
-      if (checks_count == 0) {
-        handler->set_data2(*data2);
-      } else {
-        DCHECK_EQ(1, checks_count);
-        handler->set_data3(*data2);
-      }
-    }
-    checks_count++;
   }
   return checks_count;
 }
@@ -85,23 +67,12 @@ int InitPrototypeChecksImpl(Isolate* isolate, Handle<ICHandler> handler,
 // Returns -1 if the handler has to be compiled or the number of prototype
 // checks otherwise.
 template <typename ICHandler>
-int GetPrototypeCheckCount(
-    Isolate* isolate, Handle<Smi>* smi_handler, Handle<Map> receiver_map,
-    Handle<JSReceiver> holder, Handle<Object> data1,
-    MaybeHandle<Object> maybe_data2 = MaybeHandle<Object>()) {
+int GetPrototypeCheckCount(Isolate* isolate, Handle<Map> receiver_map,
+                           Handle<JSReceiver> holder, Handle<Name> name,
+                           Handle<Smi>* smi_handler) {
   DCHECK_NOT_NULL(smi_handler);
-  return InitPrototypeChecksImpl<ICHandler, false>(isolate, Handle<ICHandler>(),
-                                                   smi_handler, receiver_map,
-                                                   holder, data1, maybe_data2);
-}
-
-template <typename ICHandler>
-void InitPrototypeChecks(
-    Isolate* isolate, Handle<ICHandler> handler, Handle<Map> receiver_map,
-    Handle<JSReceiver> holder, Handle<Object> data1,
-    MaybeHandle<Object> maybe_data2 = MaybeHandle<Object>()) {
-  InitPrototypeChecksImpl<ICHandler, true>(
-      isolate, handler, nullptr, receiver_map, holder, data1, maybe_data2);
+  return InitPrototypeChecks<ICHandler, false>(
+      isolate, receiver_map, holder, name, Handle<ICHandler>(), smi_handler);
 }
 
 }  // namespace
@@ -110,28 +81,28 @@ void InitPrototypeChecks(
 Handle<Object> LoadHandler::LoadFromPrototype(Isolate* isolate,
                                               Handle<Map> receiver_map,
                                               Handle<JSReceiver> holder,
+                                              Handle<Name> name,
                                               Handle<Smi> smi_handler,
-                                              MaybeHandle<Object> maybe_data1,
-                                              MaybeHandle<Object> maybe_data2) {
-  Handle<Object> data1;
-  if (!maybe_data1.ToHandle(&data1)) {
-    data1 = Map::GetOrCreatePrototypeWeakCell(holder, isolate);
-  }
-
+                                              MaybeHandle<Object> maybe_data) {
   int checks_count = GetPrototypeCheckCount<LoadHandler>(
-      isolate, &smi_handler, receiver_map, holder, data1, maybe_data2);
+      isolate, receiver_map, holder, name, &smi_handler);
 
   Handle<Cell> validity_cell =
       Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate);
   DCHECK(!validity_cell.is_null());
+
+  Handle<Object> data;
+  if (!maybe_data.ToHandle(&data)) {
+    data = Map::GetOrCreatePrototypeWeakCell(holder, isolate);
+  }
 
   int data_count = 1 + checks_count;
   Handle<LoadHandler> handler = isolate->factory()->NewLoadHandler(data_count);
 
   handler->set_smi_handler(*smi_handler);
   handler->set_validity_cell(*validity_cell);
-  InitPrototypeChecks(isolate, handler, receiver_map, holder, data1,
-                      maybe_data2);
+  handler->set_data1(*data);
+  InitPrototypeChecks(isolate, receiver_map, holder, name, handler);
   return handler;
 }
 
@@ -139,11 +110,11 @@ Handle<Object> LoadHandler::LoadFromPrototype(Isolate* isolate,
 Handle<Object> LoadHandler::LoadFullChain(Isolate* isolate,
                                           Handle<Map> receiver_map,
                                           Handle<Object> holder,
+                                          Handle<Name> name,
                                           Handle<Smi> smi_handler) {
-  Handle<JSReceiver> end;  // null handle, means full prototype chain lookup.
-  Handle<Object> data1 = holder;
+  Handle<JSReceiver> end;  // null handle
   int checks_count = GetPrototypeCheckCount<LoadHandler>(
-      isolate, &smi_handler, receiver_map, end, data1);
+      isolate, receiver_map, end, name, &smi_handler);
 
   Handle<Object> validity_cell =
       Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate);
@@ -159,7 +130,8 @@ Handle<Object> LoadHandler::LoadFullChain(Isolate* isolate,
 
   handler->set_smi_handler(*smi_handler);
   handler->set_validity_cell(*validity_cell);
-  InitPrototypeChecks(isolate, handler, receiver_map, end, data1);
+  handler->set_data1(*holder);
+  InitPrototypeChecks(isolate, receiver_map, end, name, handler);
   return handler;
 }
 
@@ -227,15 +199,10 @@ Handle<Smi> StoreHandler::StoreTransition(Isolate* isolate,
 // static
 Handle<Object> StoreHandler::StoreThroughPrototype(
     Isolate* isolate, Handle<Map> receiver_map, Handle<JSReceiver> holder,
-    Handle<Smi> smi_handler, MaybeHandle<Object> maybe_data1,
-    MaybeHandle<Object> maybe_data2) {
-  Handle<Object> data1;
-  if (!maybe_data1.ToHandle(&data1)) {
-    data1 = Map::GetOrCreatePrototypeWeakCell(holder, isolate);
-  }
-
+    Handle<Name> name, Handle<Smi> smi_handler,
+    MaybeHandle<Object> maybe_data) {
   int checks_count = GetPrototypeCheckCount<StoreHandler>(
-      isolate, &smi_handler, receiver_map, holder, data1, maybe_data2);
+      isolate, receiver_map, holder, name, &smi_handler);
 
   Handle<Object> validity_cell =
       Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate);
@@ -244,14 +211,19 @@ Handle<Object> StoreHandler::StoreThroughPrototype(
     validity_cell = handle(Smi::kZero, isolate);
   }
 
+  Handle<Object> data;
+  if (!maybe_data.ToHandle(&data)) {
+    data = Map::GetOrCreatePrototypeWeakCell(holder, isolate);
+  }
+
   int data_count = 1 + checks_count;
   Handle<StoreHandler> handler =
       isolate->factory()->NewStoreHandler(data_count);
 
   handler->set_smi_handler(*smi_handler);
   handler->set_validity_cell(*validity_cell);
-  InitPrototypeChecks(isolate, handler, receiver_map, holder, data1,
-                      maybe_data2);
+  handler->set_data1(*data);
+  InitPrototypeChecks(isolate, receiver_map, holder, name, handler);
   return handler;
 }
 
@@ -265,11 +237,12 @@ Handle<Object> StoreHandler::StoreGlobal(Isolate* isolate,
 Handle<Object> StoreHandler::StoreProxy(Isolate* isolate,
                                         Handle<Map> receiver_map,
                                         Handle<JSProxy> proxy,
-                                        Handle<JSReceiver> receiver) {
+                                        Handle<JSReceiver> receiver,
+                                        Handle<Name> name) {
   Handle<Smi> smi_handler = StoreProxy(isolate);
   if (receiver.is_identical_to(proxy)) return smi_handler;
   Handle<WeakCell> holder_cell = isolate->factory()->NewWeakCell(proxy);
-  return StoreThroughPrototype(isolate, receiver_map, proxy, smi_handler,
+  return StoreThroughPrototype(isolate, receiver_map, proxy, name, smi_handler,
                                holder_cell);
 }
 

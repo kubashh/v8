@@ -1164,18 +1164,18 @@ void AsmJsParser::DoStatement() {
   RECURSE(ValidateStatement());
   EXPECT_TOKEN(TOK(while));
   End();
-  //     }  // end c
+  //     }
   EXPECT_TOKEN('(');
   RECURSE(Expression(AsmType::Int()));
-  //     if (!CONDITION) break a;
+  //     if (CONDITION) break a;
   current_function_builder_->Emit(kExprI32Eqz);
   current_function_builder_->EmitWithU8(kExprBrIf, 1);
   //     continue b;
   current_function_builder_->EmitWithU8(kExprBr, 0);
   EXPECT_TOKEN(')');
-  //   }  // end b
+  //   }
   End();
-  // }  // end a
+  // }
   End();
   SkipSemicolon();
 }
@@ -1195,16 +1195,13 @@ void AsmJsParser::ForStatement() {
   // a: block {
   Begin(pending_label_);
   //   b: loop {
-  Loop();
-  //     c: block {  // but treated like loop so continue works
-  BareBegin(BlockKind::kLoop, pending_label_);
-  current_function_builder_->EmitWithU8(kExprBlock, kLocalVoid);
+  Loop(pending_label_);
   pending_label_ = 0;
   if (!Peek(';')) {
-    //       if (!CONDITION) break a;
+    // if (CONDITION) break a;
     RECURSE(Expression(AsmType::Int()));
     current_function_builder_->Emit(kExprI32Eqz);
-    current_function_builder_->EmitWithU8(kExprBrIf, 2);
+    current_function_builder_->EmitWithU8(kExprBrIf, 1);
   }
   EXPECT_TOKEN(';');
   // Race past INCREMENT
@@ -1213,21 +1210,18 @@ void AsmJsParser::ForStatement() {
   EXPECT_TOKEN(')');
   //       BODY
   RECURSE(ValidateStatement());
-  //     }  // end c
-  End();
-  //     INCREMENT
+  //       INCREMENT
   size_t end_position = scanner_.Position();
   scanner_.Seek(increment_position);
   if (!Peek(')')) {
     RECURSE(Expression(nullptr));
     // NOTE: No explicit drop because below break is an implicit drop.
   }
-  //     continue b;
   current_function_builder_->EmitWithU8(kExprBr, 0);
   scanner_.Seek(end_position);
-  //   }  // end b
+  //   }
   End();
-  // }  // end a
+  // }
   End();
 }
 

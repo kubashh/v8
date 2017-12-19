@@ -1459,9 +1459,6 @@ void LoadHandler::LoadHandlerPrint(std::ostream& os) {  // NOLINT
   if (data_count >= 2) {
     os << "\n - data2: " << Brief(data2());
   }
-  if (data_count >= 3) {
-    os << "\n - data3: " << Brief(data3());
-  }
   os << "\n";
 }
 
@@ -1476,9 +1473,6 @@ void StoreHandler::StoreHandlerPrint(std::ostream& os) {  // NOLINT
   }
   if (data_count >= 2) {
     os << "\n - data2: " << Brief(data2());
-  }
-  if (data_count >= 3) {
-    os << "\n - data3: " << Brief(data3());
   }
   os << "\n";
 }
