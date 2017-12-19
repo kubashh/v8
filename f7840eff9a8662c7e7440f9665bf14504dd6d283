@@ -70,6 +70,30 @@
       "revId": "f7840eff9a8662c7e7440f9665bf14504dd6d283",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71155ca2_f7301f8d",
+        "filename": "tools/testrunner/local/verbose.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-19T15:57:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86165485_ca65e59e",
+      "range": {
+        "startLine": 64,
+        "startChar": 21,
+        "endLine": 64,
+        "endChar": 32
+      },
+      "revId": "f7840eff9a8662c7e7440f9665bf14504dd6d283",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
