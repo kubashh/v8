@@ -1533,10 +1533,15 @@ int DisassemblerIA32::InstructionDecode(v8::internal::Vector<char> out_buffer,
       }
 
       case SHORT_IMMEDIATE_INSTR: {
-        byte* addr =
-            reinterpret_cast<byte*>(*reinterpret_cast<int32_t*>(data + 1));
-        AppendToBuffer("%s eax,%s", idesc.mnem, NameOfAddress(addr));
-        data += 5;
+        int32_t imm;
+        if (operand_size() == OPERAND_WORD_SIZE) {
+          imm = *reinterpret_cast<int16_t*>(data + 1);
+          data += 3;
+        } else {
+          imm = *reinterpret_cast<int32_t*>(data + 1);
+          data += 5;
+        }
+        AppendToBuffer("%s eax,0x%x", idesc.mnem, imm);
         break;
       }
 
