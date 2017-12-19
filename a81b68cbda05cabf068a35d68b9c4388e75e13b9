@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fcaa2fe_8ad23b94",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-12-19T18:02:59Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the correct one, I think this has to use the kFastArrayPush id.\nThis is highly confusing, so maybe as a first step we should fix the naming here, i.e. kFastArrayPush-\u003ekArrayPrototypePush and kArrayPush-\u003ekArrayPrototypePushFallback, similar for the others. Let\u0027s look into that tomorrow together.",
+      "range": {
+        "startLine": 2161,
+        "startChar": 23,
+        "endLine": 2161,
+        "endChar": 33
+      },
+      "revId": "a81b68cbda05cabf068a35d68b9c4388e75e13b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
