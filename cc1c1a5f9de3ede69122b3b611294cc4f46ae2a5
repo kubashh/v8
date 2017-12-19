@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "918bee4e_52c9f16f",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-12-19T10:23:16Z",
+      "side": 1,
+      "message": "Why can\u0027t you just say 1u here?",
+      "range": {
+        "startLine": 207,
+        "startChar": 19,
+        "endLine": 207,
+        "endChar": 50
+      },
+      "revId": "cc1c1a5f9de3ede69122b3b611294cc4f46ae2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b69b6409_9d282bee",
+        "filename": "src/compiler/persistent-map.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2017-12-19T10:23:16Z",
+      "side": 1,
+      "message": "Please explain in a comment",
+      "range": {
+        "startLine": 299,
+        "startChar": 4,
+        "endLine": 299,
+        "endChar": 59
+      },
+      "revId": "cc1c1a5f9de3ede69122b3b611294cc4f46ae2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
