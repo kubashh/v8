@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f74f543a_6a197327",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-12-19T16:40:46Z",
+      "side": 1,
+      "message": "Not present in this CL, but in an earlier prototype of this, I saw a roughly 5% (it was about a 10-15ms difference) increase from using the %_IsJSReceiver() intrinsic + CompareOperation(EQ_STRICT), which I\u0027m guessing is from the compare operation feedback. (probably replaces the branch with a CheckMap or something, didn\u0027t really pay attention to the resulting graph with that change...), which might be better in practice for the actual generated code.\n\nGiven that, it might make sense for JumpIfJSReceiver and similar tests to collect information so that they can speculate whether the IfFalse will ever be taken in optimized code, or use the intrinsic + compare operation more often instead of the smaller bytecode.\n\nObviously not as important as fixing optimization of the next() call, bit it\u0027s something to think about.",
+      "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
