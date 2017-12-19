@@ -16,6 +16,24 @@
       "revId": "ddb0d40272e4ae678391ece97bf07caa41816959",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a421f23e_9f97038c",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2017-12-19T13:47:45Z",
+      "side": 1,
+      "message": "Yup, or just a templated Parameter() that returns TNode\u003cT\u003e.",
+      "parentUuid": "939710ab_3c484aac",
+      "revId": "ddb0d40272e4ae678391ece97bf07caa41816959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
