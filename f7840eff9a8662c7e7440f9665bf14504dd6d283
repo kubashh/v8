@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a42fe474_5403431c",
+        "filename": "tools/testrunner/local/verbose.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-19T15:25:01Z",
+      "side": 1,
+      "message": "hopefully :)\n\ni.e. nobody expecting FAIL and CRASH",
+      "range": {
+        "startLine": 64,
+        "startChar": 21,
+        "endLine": 64,
+        "endChar": 32
+      },
+      "revId": "f7840eff9a8662c7e7440f9665bf14504dd6d283",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
