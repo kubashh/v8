@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "939710ab_3c484aac",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-19T13:43:11Z",
+      "side": 1,
+      "message": "Future CL: we should probably add a Parameter\u003cContext\u003e(...) helper.",
+      "revId": "ddb0d40272e4ae678391ece97bf07caa41816959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
