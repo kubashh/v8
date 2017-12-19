@@ -54,7 +54,6 @@ class V8_EXPORT_PRIVATE JSBuiltinReducer final
   Reduction ReduceTypedArrayToStringTag(Node* node);
   Reduction ReduceArrayIsArray(Node* node);
   Reduction ReduceArrayPop(Node* node);
-  Reduction ReduceArrayPush(Node* node);
   Reduction ReduceArrayShift(Node* node);
   Reduction ReduceCollectionIterator(Node* node,
                                      InstanceType collection_instance_type,
