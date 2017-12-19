@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1754413f_6930d178",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 6394,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-19T19:01:37Z",
+      "side": 1,
+      "message": "Can you use DescriptorArrayGetDetails in the above DescriptorArrayGetSortedKeyIndex method? This way we don\u0027t have needless code duplication.",
+      "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e993bb07_bd44f576",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-19T19:01:37Z",
+      "side": 1,
+      "message": "nit: This is only used in builtins-object-gen.cc, maybe move it there as well.",
+      "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
