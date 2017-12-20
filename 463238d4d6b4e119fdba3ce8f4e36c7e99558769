@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9071bc7d_fa058a2b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3775,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-20T14:16:38Z",
+      "side": 1,
+      "message": "Just use Is32() here.",
+      "range": {
+        "startLine": 3775,
+        "startChar": 29,
+        "endLine": 3775,
+        "endChar": 33
+      },
+      "revId": "463238d4d6b4e119fdba3ce8f4e36c7e99558769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
