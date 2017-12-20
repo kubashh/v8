@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90d4c689_05ba95f0",
+        "filename": "test/mozilla/testcfg.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-20T12:40:08Z",
+      "side": 1,
+      "message": "yet another premature optimization comment :)\n\nMaybe two subclasses NegativeOutProg and DefaultOutProc. Both overwrite the _is_negative method and can return a constant. Also no constructor needed.",
+      "range": {
+        "startLine": 126,
+        "startChar": 11,
+        "endLine": 126,
+        "endChar": 25
+      },
+      "revId": "285d5584e87b3d355e446ef085b64abe59c26b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
