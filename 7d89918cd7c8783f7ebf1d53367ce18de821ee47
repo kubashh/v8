@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "439b6956_c7fee992",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 6398,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-20T11:36:15Z",
+      "side": 1,
+      "message": "Please leave the DescriptorArrayGetDetails method in the code.",
+      "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43d04b6f_e67ced28",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 22

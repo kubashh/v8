@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05adc0d7_c47d2d5b",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-20T11:36:15Z",
+      "side": 1,
+      "message": "Maybe I was giving not the right indication: DescriptorArrayGetDetails was the correct method here.",
+      "revId": "5a30b0f551a364b58f48ae5da2ca706831af544c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1433c9ae_a00a0e50",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6371,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2017-12-20T11:36:15Z",
+      "side": 1,
+      "message": "I meant that you use DescriptorArrayGetDetails here for loading the details:\n\n  Node* CodeStubAssembler::DescriptorArrayGetSortedKeyIndex(\n      Node* descriptors, Node* descriptor_number) {\n    Node* details \u003d DescriptorArrayGetDetails(descriptors, descriptor_number);\n  ...\n}",
+      "revId": "5a30b0f551a364b58f48ae5da2ca706831af544c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
