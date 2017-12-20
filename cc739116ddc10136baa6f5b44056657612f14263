@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30fb8143_24fccf78",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2017-12-20T10:58:43Z",
+      "side": 1,
+      "message": "Do we need three separate opcodes do to this? Maybe this can be written to mirror the kArmPush implementation by selecting the instruction according to the type of the output register, what do you think?",
+      "revId": "cc739116ddc10136baa6f5b44056657612f14263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
