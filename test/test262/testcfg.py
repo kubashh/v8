@@ -238,17 +238,21 @@ class TestCase(testcase.TestCase):
       return path
     return os.path.join(self.suite.testroot, filename)
 
-  def _output_proc_class(self):
-    return OutProc
+  def get_output_proc(self):
+    expected_exception = (
+        self.test_record
+          .get('negative', {})
+          .get('type', None)
+    )
+    if expected_exception is None:
+      return OutProc.NO_EXCEPTION
+    return OutProc(expected_exception, str(self))
 
 
 class OutProc(outproc.OutProc):
-  def __init__(self, test):
-    self._expected_exception = (
-      test.test_record
-      .get('negative', {})
-      .get('type', None))
-    self._test_str = str(test)
+  def __init__(self, expected_exception=None, test_str=None):
+    self._expected_exception = expected_exception
+    self._test_str = test_str
 
   def _is_failure_output(self, output):
     if output.exit_code != 0:
@@ -271,6 +275,9 @@ class OutProc(outproc.OutProc):
 
   def _is_negative(self):
     return False
+
+
+OutProc.NO_EXCEPTION = OutProc()
 
 
 def GetSuite(name, root):
