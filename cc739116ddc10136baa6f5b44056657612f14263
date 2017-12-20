@@ -16,6 +16,24 @@
       "revId": "cc739116ddc10136baa6f5b44056657612f14263",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6ad6d13_20ca2a5d",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-20T12:02:31Z",
+      "side": 1,
+      "message": "Indeed, I was not aware of this. I removed the other opcodes now.",
+      "parentUuid": "30fb8143_24fccf78",
+      "revId": "cc739116ddc10136baa6f5b44056657612f14263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
