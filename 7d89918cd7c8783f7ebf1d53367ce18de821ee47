@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "acca008e_dbda9e48",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 6394,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-20T02:18:38Z",
+      "side": 1,
+      "message": "Oh, I\u0027ve missed that. I\u0027ll fix it.",
+      "parentUuid": "1754413f_6930d178",
+      "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e993bb07_bd44f576",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 22
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-19T19:01:37Z",
       "side": 1,
       "message": "nit: This is only used in builtins-object-gen.cc, maybe move it there as well.",
+      "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dcd81fe_65ed4391",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1248723
+      },
+      "writtenOn": "2017-12-20T02:18:38Z",
+      "side": 1,
+      "message": "OK, I\u0027ll move it.",
+      "parentUuid": "e993bb07_bd44f576",
       "revId": "7d89918cd7c8783f7ebf1d53367ce18de821ee47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
