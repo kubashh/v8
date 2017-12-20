@@ -106,13 +106,15 @@ class TestCase(testcase.TestCase):
   def _get_source_path(self):
     return os.path.join(self.suite.testroot, self.path + self._get_suffix())
 
-  def _output_proc_class(self):
-    return OutProc
+  def get_output_proc(self):
+    if self.path.endswith('-n'):
+      return OutProc.NEGATIVE
+    return OutProc.DEFAULT
 
 
 class OutProc(outproc.OutProc):
-  def __init__(self, test):
-    self._negative = test.path.endswith('-n')
+  def __init__(self, is_negative):
+    self._negative = is_negative
 
   def _is_failure_output(self, output):
     return (
@@ -122,6 +124,10 @@ class OutProc(outproc.OutProc):
 
   def _is_negative(self):
     return self._negative
+
+
+OutProc.DEFAULT = OutProc(is_negative=False)
+OutProc.NEGATIVE = OutProc(is_negative=True)
 
 
 def GetSuite(name, root):
