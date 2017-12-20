@@ -279,22 +279,6 @@ void TurboAssembler::Ret(int drop, Condition cond) {
   Ret(cond);
 }
 
-
-void MacroAssembler::Swap(Register reg1,
-                          Register reg2,
-                          Register scratch,
-                          Condition cond) {
-  if (scratch == no_reg) {
-    eor(reg1, reg1, Operand(reg2), LeaveCC, cond);
-    eor(reg2, reg2, Operand(reg1), LeaveCC, cond);
-    eor(reg1, reg1, Operand(reg2), LeaveCC, cond);
-  } else {
-    mov(scratch, reg1, LeaveCC, cond);
-    mov(reg1, reg2, LeaveCC, cond);
-    mov(reg2, scratch, LeaveCC, cond);
-  }
-}
-
 void TurboAssembler::Call(Label* target) { bl(target); }
 
 void TurboAssembler::Push(Handle<HeapObject> handle) {
@@ -341,6 +325,14 @@ void TurboAssembler::Move(QwNeonRegister dst, QwNeonRegister src) {
   if (dst != src) {
     vmov(dst, src);
   }
+}
+
+void TurboAssembler::Swap(Register srcdst0, Register srcdst1) {
+  UseScratchRegisterScope temps(this);
+  Register scratch = temps.Acquire();
+  mov(scratch, srcdst0);
+  mov(srcdst0, srcdst1);
+  mov(srcdst1, scratch);
 }
 
 void TurboAssembler::Swap(DwVfpRegister srcdst0, DwVfpRegister srcdst1) {

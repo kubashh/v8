@@ -482,6 +482,7 @@ class TurboAssembler : public Assembler {
   void VmovExtended(const MemOperand& dst, int src_code);
 
   // Register swap.
+  void Swap(Register srcdst0, Register srcdst1);
   void Swap(DwVfpRegister srcdst0, DwVfpRegister srcdst1);
   void Swap(QwNeonRegister srcdst0, QwNeonRegister srcdst1);
 
@@ -582,11 +583,6 @@ class MacroAssembler : public TurboAssembler {
   // Used for patching in calls to the deoptimizer.
   void CallDeoptimizer(Address target);
   static int CallDeoptimizerSize();
-
-  // Swap two registers.  If the scratch register is omitted then a slightly
-  // less efficient form using xor instead of mov is emitted.
-  void Swap(Register reg1, Register reg2, Register scratch = no_reg,
-            Condition cond = al);
 
   void Mls(Register dst, Register src1, Register src2, Register srcA,
            Condition cond = al);
