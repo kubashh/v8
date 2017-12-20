@@ -16,6 +16,24 @@
       "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "407c079b_c8b5812b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2017-12-20T19:45:02Z",
+      "side": 1,
+      "message": "With https://chromium-review.googlesource.com/#/c/v8/v8/+/837484 applied, this doesn\u0027t make as much of a diffference, but it does still consistently score higher on benchmarks. In either case, I don\u0027t see ObjectIsReceiver in any turbolizer graphs, so it probably only speeds up the baseline case.\n\nIt might not be enough of a difference to be worth worrying about it though.",
+      "parentUuid": "f74f543a_6a197327",
+      "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
