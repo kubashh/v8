@@ -124,6 +124,9 @@ namespace compiler {
   V(ArmStr)                        \
   V(ArmPush)                       \
   V(ArmPoke)                       \
+  V(ArmPeek)                       \
+  V(ArmPeekFloat32)                \
+  V(ArmPeekFloat64)                \
   V(ArmF32x4Splat)                 \
   V(ArmF32x4ExtractLane)           \
   V(ArmF32x4ReplaceLane)           \
