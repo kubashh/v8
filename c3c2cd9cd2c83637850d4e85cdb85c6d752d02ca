@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bbd6440_c6d5b487",
+        "filename": "src/arm/macro-assembler-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-12-21T18:40:26Z",
+      "side": 1,
+      "message": "Should we check srcdst0 \u003d\u003d srcdst1 to avoid redundant moves? If that\u0027s not expected, should we DCHECK that they\u0027re distinct?\n\nSame comment for arm64 Swap methods.",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 63
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b3c71e0_dc34cb89",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-12-21T18:40:26Z",
+      "side": 1,
+      "message": "Implementing as if - else would eliminate a lot of unnecessary comparisons.",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 491,
+        "endChar": 56
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a75b4a_51e1e4af",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-12-21T18:40:26Z",
+      "side": 1,
+      "message": "Won\u0027t this DCHECK always succeed given the code before it? It seems like the only way it wouldn\u0027t is if none of the source/destination predicates are true, in which case type \u003d\u003d 0.",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 500,
+        "endChar": 0
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23df564a_0cccb481",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2017-12-21T18:40:26Z",
+      "side": 1,
+      "message": "nit: functions",
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
