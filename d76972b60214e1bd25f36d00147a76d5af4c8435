@@ -34,6 +34,24 @@
       "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "770660ec_7028eb48",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2017-12-21T07:28:52Z",
+      "side": 1,
+      "message": "It would be nice to understand what exactly changes, as this shouldn\u0027t make any difference in the end. If you could figure out why it changes the performance profile at all, but with low priority, that\u0027d be really handy.",
+      "parentUuid": "407c079b_c8b5812b",
+      "revId": "d76972b60214e1bd25f36d00147a76d5af4c8435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
