@@ -190,6 +190,7 @@ namespace internal {
   TFC(NumberToString, TypeConversion, 1)                                       \
   TFC(ToString, TypeConversion, 1)                                             \
   TFC(ToInteger, TypeConversion, 1)                                            \
+  TFC(ToInteger_TruncateMinusZero, TypeConversion, 1)                          \
   TFC(ToLength, TypeConversion, 1)                                             \
   TFC(ClassOf, Typeof, 1)                                                      \
   TFC(Typeof, Typeof, 1)                                                       \
@@ -204,7 +205,7 @@ namespace internal {
   TFH(KeyedLoadIC_Slow, LoadWithVector)                                        \
   TFH(KeyedStoreIC_Megamorphic, StoreWithVector)                               \
   TFH(KeyedStoreIC_Slow, StoreWithVector)                                      \
-  TFH(LoadGlobalIC_Slow, LoadGlobalWithVector)                                 \
+  TFH(LoadGlobalIC_Slow, LoadWithVector)                                       \
   TFH(LoadField, LoadField)                                                    \
   TFH(LoadIC_FunctionPrototype, LoadWithVector)                                \
   TFH(LoadIC_Slow, LoadWithVector)                                             \
@@ -302,6 +303,10 @@ namespace internal {
   /* ES6 #sec-array.prototype.reduce */                                        \
   TFS(ArrayReduceLoopContinuation, kReceiver, kCallbackFn, kThisArg,           \
       kAccumulator, kObject, kInitialK, kLength, kTo)                          \
+  TFJ(ArrayReduceLoopEagerDeoptContinuation, 4, kCallbackFn, kInitialK,        \
+      kLength, kAccumulator)                                                   \
+  TFJ(ArrayReduceLoopLazyDeoptContinuation, 4, kCallbackFn, kInitialK,         \
+      kLength, kResult)                                                        \
   TFJ(ArrayReduce, SharedFunctionInfo::kDontAdaptArgumentsSentinel)            \
   /* ES6 #sec-array.prototype.reduceRight */                                   \
   TFS(ArrayReduceRightLoopContinuation, kReceiver, kCallbackFn, kThisArg,      \
@@ -763,6 +768,8 @@ namespace internal {
   CPP(ObjectPrototypePropertyIsEnumerable)                                     \
   CPP(ObjectPrototypeGetProto)                                                 \
   CPP(ObjectPrototypeSetProto)                                                 \
+  /* ES #sec-object.prototype.tolocalestring */                                \
+  TFJ(ObjectPrototypeToLocaleString, 0)                                        \
   CPP(ObjectSeal)                                                              \
   CPP(ObjectValues)                                                            \
                                                                                \

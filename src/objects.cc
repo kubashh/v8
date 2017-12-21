@@ -1895,6 +1895,22 @@ Maybe<PropertyAttributes> GetPropertyAttributesWithInterceptorInternal(
       CHECK(result->ToInt32(&value));
       return Just(static_cast<PropertyAttributes>(value));
     }
+  } else if (!interceptor->descriptor()->IsUndefined(isolate)) {
+    Handle<Object> result;
+    if (it->IsElement()) {
+      result = args.CallIndexedDescriptor(interceptor, it->index());
+    } else {
+      result = args.CallNamedDescriptor(interceptor, it->name());
+    }
+    if (!result.is_null()) {
+      PropertyDescriptor desc;
+      Utils::ApiCheck(
+          PropertyDescriptor::ToPropertyDescriptor(isolate, result, &desc),
+          it->IsElement() ? "v8::IndexedPropertyDescriptorCallback"
+                          : "v8::NamedPropertyDescriptorCallback",
+          "Invalid property descriptor.");
+      return Just(desc.ToAttributes());
+    }
   } else if (!interceptor->getter()->IsUndefined(isolate)) {
     // TODO(verwaest): Use GetPropertyWithInterceptor?
     Handle<Object> result;
@@ -7622,13 +7638,17 @@ namespace {
 
 Maybe<bool> GetPropertyDescriptorWithInterceptor(LookupIterator* it,
                                                  PropertyDescriptor* desc) {
-  bool has_access = true;
   if (it->state() == LookupIterator::ACCESS_CHECK) {
-    has_access = it->HasAccess() || JSObject::AllCanRead(it);
-    it->Next();
+    if (it->HasAccess()) {
+      it->Next();
+    } else if (!JSObject::AllCanRead(it) ||
+               it->state() != LookupIterator::INTERCEPTOR) {
+      it->Restart();
+      return Just(false);
+    }
   }
 
-  if (has_access && it->state() == LookupIterator::INTERCEPTOR) {
+  if (it->state() == LookupIterator::INTERCEPTOR) {
     Isolate* isolate = it->isolate();
     Handle<InterceptorInfo> interceptor = it->GetInterceptor();
     if (!interceptor->descriptor()->IsUndefined(isolate)) {
@@ -7660,9 +7680,9 @@ Maybe<bool> GetPropertyDescriptorWithInterceptor(LookupIterator* it,
 
         return Just(true);
       }
+      it->Next();
     }
   }
-  it->Restart();
   return Just(false);
 }
 }  // namespace
@@ -13163,7 +13183,8 @@ Handle<String> JSFunction::ToString(Handle<JSFunction> function) {
   }
 
   if (FLAG_harmony_function_tostring) {
-    return Handle<String>::cast(shared_info->GetSourceCodeHarmony());
+    return Handle<String>::cast(
+        SharedFunctionInfo::GetSourceCodeHarmony(shared_info));
   }
 
   IncrementalStringBuilder builder(isolate);
@@ -13194,7 +13215,22 @@ Handle<String> JSFunction::ToString(Handle<JSFunction> function) {
       builder.AppendString(handle(shared_info->name(), isolate));
     }
   }
-  builder.AppendString(Handle<String>::cast(shared_info->GetSourceCode()));
+  if (shared_info->is_wrapped()) {
+    builder.AppendCharacter('(');
+    Handle<FixedArray> args(
+        Script::cast(shared_info->script())->wrapped_arguments());
+    int argc = args->length();
+    for (int i = 0; i < argc; i++) {
+      if (i > 0) builder.AppendCString(", ");
+      builder.AppendString(Handle<String>(String::cast(args->get(i))));
+    }
+    builder.AppendCString(") {\n");
+  }
+  builder.AppendString(
+      Handle<String>::cast(SharedFunctionInfo::GetSourceCode(shared_info)));
+  if (shared_info->is_wrapped()) {
+    builder.AppendCString("\n}");
+  }
   return builder.Finish().ToHandleChecked();
 }
 
@@ -13225,10 +13261,10 @@ int Script::GetEvalPosition() {
     // Due to laziness, the position may not have been translated from code
     // offset yet, which would be encoded as negative integer. In that case,
     // translate and set the position.
-    if (eval_from_shared()->IsUndefined(GetIsolate())) {
+    if (!has_eval_from_shared()) {
       position = 0;
     } else {
-      SharedFunctionInfo* shared = SharedFunctionInfo::cast(eval_from_shared());
+      SharedFunctionInfo* shared = eval_from_shared();
       position = shared->abstract_code()->SourcePosition(-position);
     }
     DCHECK_GE(position, 0);
@@ -13313,8 +13349,8 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
     Handle<WasmCompiledModule> compiled_module(
         WasmCompiledModule::cast(wasm_compiled_module()));
     DCHECK_LE(0, position);
-    return compiled_module->GetPositionInfo(static_cast<uint32_t>(position),
-                                            info);
+    return compiled_module->shared()->GetPositionInfo(
+        static_cast<uint32_t>(position), info);
   }
 
   if (line_ends()->IsUndefined(GetIsolate())) {
@@ -13673,22 +13709,41 @@ bool SharedFunctionInfo::HasSourceCode() const {
          !reinterpret_cast<Script*>(script())->source()->IsUndefined(isolate);
 }
 
-
-Handle<Object> SharedFunctionInfo::GetSourceCode() {
-  if (!HasSourceCode()) return GetIsolate()->factory()->undefined_value();
-  Handle<String> source(String::cast(Script::cast(script())->source()));
-  return GetIsolate()->factory()->NewSubString(
-      source, start_position(), end_position());
+// static
+Handle<Object> SharedFunctionInfo::GetSourceCode(
+    Handle<SharedFunctionInfo> shared) {
+  Isolate* isolate = shared->GetIsolate();
+  if (!shared->HasSourceCode()) return isolate->factory()->undefined_value();
+  Handle<String> source(String::cast(Script::cast(shared->script())->source()));
+  return isolate->factory()->NewSubString(source, shared->start_position(),
+                                          shared->end_position());
 }
 
-Handle<Object> SharedFunctionInfo::GetSourceCodeHarmony() {
-  Isolate* isolate = GetIsolate();
-  if (!HasSourceCode()) return isolate->factory()->undefined_value();
-  Handle<String> script_source(String::cast(Script::cast(script())->source()));
-  int start_pos = function_token_position();
-  if (start_pos == kNoSourcePosition) start_pos = start_position();
-  return isolate->factory()->NewSubString(script_source, start_pos,
-                                          end_position());
+// static
+Handle<Object> SharedFunctionInfo::GetSourceCodeHarmony(
+    Handle<SharedFunctionInfo> shared) {
+  Isolate* isolate = shared->GetIsolate();
+  if (!shared->HasSourceCode()) return isolate->factory()->undefined_value();
+  Handle<String> script_source(
+      String::cast(Script::cast(shared->script())->source()));
+  int start_pos = shared->function_token_position();
+  if (start_pos == kNoSourcePosition) start_pos = shared->start_position();
+  Handle<String> source = isolate->factory()->NewSubString(
+      script_source, start_pos, shared->end_position());
+  if (!shared->is_wrapped()) return source;
+
+  IncrementalStringBuilder builder(isolate);
+  builder.AppendCString("function (");
+  Handle<FixedArray> args(Script::cast(shared->script())->wrapped_arguments());
+  int argc = args->length();
+  for (int i = 0; i < argc; i++) {
+    if (i > 0) builder.AppendCString(", ");
+    builder.AppendString(Handle<String>(String::cast(args->get(i))));
+  }
+  builder.AppendCString(") {\n");
+  builder.AppendString(source);
+  builder.AppendCString("\n}");
+  return builder.Finish().ToHandleChecked();
 }
 
 bool SharedFunctionInfo::IsInlineable() {
@@ -13818,6 +13873,7 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   shared_info->set_inferred_name(*lit->inferred_name());
   shared_info->set_allows_lazy_compilation(lit->AllowsLazyCompilation());
   shared_info->set_language_mode(lit->language_mode());
+  shared_info->set_is_wrapped(lit->is_wrapped());
   //  shared_info->set_kind(lit->kind());
   // FunctionKind must have already been set.
   DCHECK(lit->kind() == shared_info->kind());
@@ -15262,13 +15318,10 @@ static bool ShouldConvertToSlowElements(JSObject* object, uint32_t capacity,
 
 
 bool JSObject::WouldConvertToSlowElements(uint32_t index) {
-  if (HasFastElements()) {
-    Handle<FixedArrayBase> backing_store(FixedArrayBase::cast(elements()));
-    uint32_t capacity = static_cast<uint32_t>(backing_store->length());
-    uint32_t new_capacity;
-    return ShouldConvertToSlowElements(this, capacity, index, &new_capacity);
-  }
-  return false;
+  if (!HasFastElements()) return false;
+  uint32_t capacity = static_cast<uint32_t>(elements()->length());
+  uint32_t new_capacity;
+  return ShouldConvertToSlowElements(this, capacity, index, &new_capacity);
 }
 
 
@@ -18960,7 +19013,7 @@ void JSArrayBuffer::Setup(Handle<JSArrayBuffer> array_buffer, Isolate* isolate,
   // already been promoted.
   array_buffer->set_backing_store(data);
 
-  array_buffer->set_allocation_base(data);
+  array_buffer->set_allocation_base(allocation_base);
   array_buffer->set_allocation_length(allocation_length);
 
   if (data && !is_external) {
