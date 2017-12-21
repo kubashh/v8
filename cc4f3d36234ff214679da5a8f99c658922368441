@@ -46,6 +46,30 @@
       "revId": "cc4f3d36234ff214679da5a8f99c658922368441",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fec78b6_a975ba0b",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T08:16:39Z",
+      "side": 1,
+      "message": "But won\u0027t they trigger experimental LUCI builds as a result and those would affect the prod builder? Depends on how large the LUCI experiment percentage is for those...",
+      "parentUuid": "08c21db6_8563acf0",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "cc4f3d36234ff214679da5a8f99c658922368441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
