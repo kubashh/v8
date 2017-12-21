@@ -34,7 +34,6 @@ namespace internal {
   V(kExpectedAllocationSite, "Expected allocation site")                       \
   V(kExpectedBooleanValue, "Expected boolean value")                           \
   V(kExpectedFeedbackVector, "Expected feedback vector")                       \
-  V(kExpectedHeapNumber, "Expected HeapNumber")                                \
   V(kExpectedNonIdenticalObjects, "Expected non-identical objects")            \
   V(kExpectedOptimizationSentinel,                                             \
     "Expected optimized code cell or optimization sentinel")                   \

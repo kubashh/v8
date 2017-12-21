@@ -414,7 +414,6 @@ ZoneVector<MachineType> const* MachineTypesOf(Operator const* op) {
 
 #define CACHED_DEOPTIMIZE_LIST(V)                        \
   V(Eager, MinusZero)                                    \
-  V(Eager, NoReason)                                     \
   V(Eager, WrongMap)                                     \
   V(Soft, InsufficientTypeFeedbackForGenericKeyedAccess) \
   V(Soft, InsufficientTypeFeedbackForGenericNamedAccess)
@@ -429,7 +428,6 @@ ZoneVector<MachineType> const* MachineTypesOf(Operator const* op) {
 #define CACHED_DEOPTIMIZE_UNLESS_LIST(V) \
   V(Eager, LostPrecision)                \
   V(Eager, LostPrecisionOrNaN)           \
-  V(Eager, NoReason)                     \
   V(Eager, NotAHeapNumber)               \
   V(Eager, NotANumberOrOddball)          \
   V(Eager, NotASmi)                      \
