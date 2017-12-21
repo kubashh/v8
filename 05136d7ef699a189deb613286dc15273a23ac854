@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d4dafadc_5e2d93c0",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "I thought the conclusion was that we discontinue to move V8 to the flakiness surface. But no real need for this TODO here. Will remove.\n\nI\u0027m just somewhat happy that the option and the underlying results processor are dead and untested code ATM. This just might cause bit rot.",
+      "parentUuid": "824b36ba_a0aaec55",
+      "range": {
+        "startLine": 196,
+        "startChar": 48,
+        "endLine": 196,
+        "endChar": 53
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90de7c45_d0e3e978",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 18
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-21T03:02:36Z",
       "side": 1,
       "message": "Assert would prevent all tests from being run. Or is this behavior not desired on the bots? Printing may still be useful for users running this locally.",
+      "range": {
+        "startLine": 546,
+        "startChar": 46,
+        "endLine": 546,
+        "endChar": 52
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45e82249_1eab8e97",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "These values should just never be wrong. And if they are ever, we need to fix asap. Aka critical error.\n\nAnother option would be a larger refactoring of this code, so that we can provide a return code !\u003d 0 in the end. Updated the TODO.",
+      "parentUuid": "90de7c45_d0e3e978",
       "range": {
         "startLine": 546,
         "startChar": 46,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bf04646c_8e094526",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efe3797a_d79c6d5a",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 42
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bc2a58f_57b9d579",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 18
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bc7925e6_16c9a667",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bc2a58f_57b9d579",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 25
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "752d61b6_35146446",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 18
@@ -105,6 +201,30 @@
       "writtenOn": "2017-12-21T03:02:36Z",
       "side": 1,
       "message": "Can this be a dir? shutil.copy seems to only copy files.",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 15
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78bb5a90_daad6905",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "Not for now. If I ever add one this will fail and I will revisit this.",
+      "parentUuid": "752d61b6_35146446",
       "range": {
         "startLine": 78,
         "startChar": 10,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "abaca032_d59bfcc2",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "Done, but seems to not make any difference.",
+      "parentUuid": "dad36bd3_ed3b5e35",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 26
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6194605c_950cf818",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 18
@@ -151,6 +295,30 @@
       "writtenOn": "2017-12-21T03:02:36Z",
       "side": 1,
       "message": "Is this guaranteed? Can it happen that each share will contain 2 variants of an be of the tests?",
+      "range": {
+        "startLine": 195,
+        "startChar": 10,
+        "endLine": 195,
+        "endChar": 58
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0860a5ff_246db39a",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "This is just capturing the current behavior (like a dumb expectation file). If that behavior changes, we need to change the expectation, as it\u0027s no necessarily wrong. But at least we will see.\n\nThe behavior ATM is: We first enumerate each test and each variant as:\nT1V1\nT1V2\nT2V1\nT2V2\nThen we distribute modulo shard num.",
+      "parentUuid": "6194605c_950cf818",
       "range": {
         "startLine": 195,
         "startChar": 10,
@@ -200,6 +368,30 @@
       "revId": "05136d7ef699a189deb613286dc15273a23ac854",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ad891c_29338cf9",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa489abf_d27ee958",
+      "range": {
+        "startLine": 258,
+        "startChar": 4,
+        "endLine": 258,
+        "endChar": 9
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

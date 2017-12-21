@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5c3f06e0_be9014ea",
+        "filename": "tools/unittests/testdata/testroot1/test/sweet/sweet.status",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 0,
+      "message": "Michal, since you know it a bit better by now, could you have a look at it?",
+      "parentUuid": "998210b1_1e863769",
+      "revId": "efb260cb478464a0d55de7b479853ab2e5cb5a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4662ad6a_b3169f96",
         "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
         "patchSetId": 18
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-21T03:02:36Z",
       "side": 0,
       "message": "Can\u0027t review this one since I do not know the format.",
+      "revId": "efb260cb478464a0d55de7b479853ab2e5cb5a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4564ff7_96abd9b4",
+        "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2017-12-21T10:01:13Z",
+      "side": 0,
+      "message": "Michal: same here.\n\nHint: it\u0027s somewhat self explanatory. Each flag describes a property of the built executables. E.g. if is_msan is true, we\u0027ve made an msan build. The less obvious ones are:\ndcheck_always_on: release build with dchecks used on trybots\nis_component_build: uses dynamic libraries (.so or .dll)\nv8_enable_i18n_support: has internationalization support linked in (and hence can run corresponding tests)\nv8_enable_verify_predictable: built with the gn switch v8_enable_verify_predictable which will use the verify-predictable wrapper when testing\nv8_use_snapshot: heap snapshot is on-disk or linked in.",
+      "parentUuid": "4662ad6a_b3169f96",
       "revId": "efb260cb478464a0d55de7b479853ab2e5cb5a25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
