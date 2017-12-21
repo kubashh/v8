@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "03b1c2c1_73e5f056",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Will do that in a separate CL.",
+      "parentUuid": "47906a7d_01970759",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4be4bae1_3814ba08",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e501e896_6a7d82c8",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Registers are only put in the {used_registers_} once they are put in the CacheState (to hold locals or stack values). Hence, the {limit} register is not considered used, and does not have to be freed.",
+      "parentUuid": "4be4bae1_3814ba08",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "964f3a8d_507b0db7",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Yes, that\u0027s OK, this just has to match with PopRegisters.\nThis also means that the use of {kStackSlotSize} below is misleading. I replaced it by {sizeof(double)}.",
+      "parentUuid": "eb54eb14_b92a73ee",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa1769e4_33b34c1f",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "196e695f_4eacad55",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "aa1769e4_33b34c1f",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "6f2ec060_4425ebd2",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Good catch! Fixed.",
+      "parentUuid": "839b55af_13907a82",
+      "range": {
+        "startLine": 355,
+        "startChar": 4,
+        "endLine": 355,
+        "endChar": 7
+      },
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f455acd_022ad446",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -107,6 +203,24 @@
       "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e32ca74b_ebf8ddf3",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s postpone that discussion.",
+      "parentUuid": "6f455acd_022ad446",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -133,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "1742e541_c39be284",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "We cannot omit the \"!runtime_exception_support_\" check above, because we should not even emit the stack check code if there is no runtime available. But I refactored everything in this method as proposed.",
+      "parentUuid": "f2f964a7_bbe4dba6",
+      "range": {
+        "startLine": 288,
+        "startChar": 16,
+        "endLine": 288,
+        "endChar": 54
+      },
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8ca60c5_1396b3dd",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -147,6 +285,24 @@
       "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a52ee7a_6457cba7",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8ca60c5_1396b3dd",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -167,6 +323,24 @@
     },
     {
       "key": {
+        "uuid": "10cd572b_975be5cf",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ad798f3_d52d2827",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e88a1a3c_f8123903",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 3
@@ -181,6 +355,24 @@
       "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d983b54d_0966b601",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2017-12-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e88a1a3c_f8123903",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
