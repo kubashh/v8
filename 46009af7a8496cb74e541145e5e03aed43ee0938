@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47906a7d_01970759",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "I think you should put UNIMPLEMENTED() in here, so that it gets detected when people forget to implement single functions.",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be4bae1_3814ba08",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "Would it help to free the {limit} register here again, so that you don\u0027t spill it in the ool code?",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb54eb14_b92a73ee",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "This push is not kStackSlotSize. Is this okay with the invariants you have elsewhere?",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1769e4_33b34c1f",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "As discussed offline, I think it could be nicer to iterate over the registers and increment the offset in the loop, instead of iterating over the offset. This would be more consistent with the code for the GP registers.",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "839b55af_13907a82",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "I think this should be an add.",
+      "range": {
+        "startLine": 355,
+        "startChar": 4,
+        "endLine": 355,
+        "endChar": 7
+      },
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f455acd_022ad446",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "How much slower is the Arm64 implementation here? Is this really worth the maintenance overhead of having this code duplication here?",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2f964a7_bbe4dba6",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "Could you just say\nif (!runtime_exception_support_ \u0026\u0026 ool.builtin !\u003d Builtins::kWasmStackGuard)?\nThen you would not need the \nif (!runtime_exception_support_)\ncondition in the StackCheck code above.",
+      "range": {
+        "startLine": 288,
+        "startChar": 16,
+        "endLine": 288,
+        "endChar": 54
+      },
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8ca60c5_1396b3dd",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "If you create this variable above, you can use it already in the DCHECK (or in the if, as I mentioned in the comment).",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad798f3_d52d2827",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "I think this condition should not be inside the \nif (is_stack_check).\nIf you think it should be like that, then also the call to PushRegisters above should be guarded by\nif (is_stack_check).",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e88a1a3c_f8123903",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2017-12-21T10:40:52Z",
+      "side": 1,
+      "message": "I think this should be an add.",
+      "revId": "46009af7a8496cb74e541145e5e03aed43ee0938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
