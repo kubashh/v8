@@ -245,17 +245,17 @@ constexpr WasmCodePosition kNoCodePosition = -1;
 
 // For compatibility with Asm.js.
 #define FOREACH_ASMJS_COMPAT_OPCODE(V) \
-  V(F64Acos, 0xc2, d_d)                \
-  V(F64Asin, 0xc3, d_d)                \
-  V(F64Atan, 0xc4, d_d)                \
-  V(F64Cos, 0xc5, d_d)                 \
-  V(F64Sin, 0xc6, d_d)                 \
-  V(F64Tan, 0xc7, d_d)                 \
-  V(F64Exp, 0xc8, d_d)                 \
-  V(F64Log, 0xc9, d_d)                 \
-  V(F64Atan2, 0xca, d_dd)              \
-  V(F64Pow, 0xcb, d_dd)                \
-  V(F64Mod, 0xcc, d_dd)                \
+  V(F64Acos, 0xc5, d_d)                \
+  V(F64Asin, 0xc6, d_d)                \
+  V(F64Atan, 0xc7, d_d)                \
+  V(F64Cos, 0xc8, d_d)                 \
+  V(F64Sin, 0xc9, d_d)                 \
+  V(F64Tan, 0xca, d_d)                 \
+  V(F64Exp, 0xcb, d_d)                 \
+  V(F64Log, 0xcc, d_d)                 \
+  V(F64Atan2, 0xcd, d_dd)              \
+  V(F64Pow, 0xce, d_dd)                \
+  V(F64Mod, 0xcf, d_dd)                \
   V(I32AsmjsDivS, 0xd0, i_ii)          \
   V(I32AsmjsDivU, 0xd1, i_ii)          \
   V(I32AsmjsRemS, 0xd2, i_ii)          \
