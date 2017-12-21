@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "998210b1_1e863769",
+        "filename": "tools/unittests/testdata/testroot1/test/sweet/sweet.status",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 0,
+      "message": "Can\u0027t review this one since I do not know the format.",
+      "revId": "efb260cb478464a0d55de7b479853ab2e5cb5a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4662ad6a_b3169f96",
+        "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 0,
+      "message": "Can\u0027t review this one since I do not know the format.",
+      "revId": "efb260cb478464a0d55de7b479853ab2e5cb5a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

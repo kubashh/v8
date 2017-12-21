@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "824b36ba_a0aaec55",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Why again? Why deprecate?",
+      "range": {
+        "startLine": 196,
+        "startChar": 48,
+        "endLine": 196,
+        "endChar": 53
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90de7c45_d0e3e978",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Assert would prevent all tests from being run. Or is this behavior not desired on the bots? Printing may still be useful for users running this locally.",
+      "range": {
+        "startLine": 546,
+        "startChar": 46,
+        "endLine": 546,
+        "endChar": 52
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efe3797a_d79c6d5a",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Not used. Also no need to call os.makedirs(outdir) below. Will be created automatically by os.makedirs(builddir)",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 42
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bc2a58f_57b9d579",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Not needed. Will be created when creating subdirs in the loop below.",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 25
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "752d61b6_35146446",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Can this be a dir? shutil.copy seems to only copy files.",
+      "range": {
+        "startLine": 78,
+        "startChar": 10,
+        "endLine": 78,
+        "endChar": 15
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad36bd3_ed3b5e35",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be before import statement above to allow overriding global var?",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 26
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6194605c_950cf818",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Is this guaranteed? Can it happen that each share will contain 2 variants of an be of the tests?",
+      "range": {
+        "startLine": 195,
+        "startChar": 10,
+        "endLine": 195,
+        "endChar": 58
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "154ac9d7_6800141a",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Reviewed until here. Will continue tomorrow.",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa489abf_d27ee958",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T03:02:36Z",
+      "side": 1,
+      "message": "Nit: typo",
+      "range": {
+        "startLine": 258,
+        "startChar": 4,
+        "endLine": 258,
+        "endChar": 9
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
