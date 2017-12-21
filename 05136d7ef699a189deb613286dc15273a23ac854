@@ -392,6 +392,98 @@
       "revId": "05136d7ef699a189deb613286dc15273a23ac854",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfd658fd_4693fd85",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-21T10:48:12Z",
+      "side": 1,
+      "message": "Unused by the testrunner.",
+      "range": {
+        "startLine": 263,
+        "startChar": 58,
+        "endLine": 263,
+        "endChar": 74
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "509449bd_25ee2eb1",
+        "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-21T10:48:12Z",
+      "side": 1,
+      "message": "I think this one is unused in the testrunner.",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 22
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eea7f13f_8ad643d7",
+        "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-21T10:48:12Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 29
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf7099d_7f7830a6",
+        "filename": "tools/unittests/testdata/testroot1/v8_build_config.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2017-12-21T10:48:12Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 12,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
