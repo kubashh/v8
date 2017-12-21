@@ -580,10 +580,11 @@ class ArrayBuiltinCodeStubAssembler : public CodeStubAssembler {
       if (missing_property_mode == MissingPropertyMode::kSkip) {
         // b. Let kPresent be HasProperty(O, Pk).
         // c. ReturnIfAbrupt(kPresent).
-        Node* k_present = HasProperty(o(), k(), context(), kHasProperty);
+        TNode<Oddball> k_present =
+            HasProperty(o(), k(), context(), kHasProperty);
 
         // d. If kPresent is true, then
-        GotoIf(WordNotEqual(k_present, TrueConstant()), &done_element);
+        GotoIf(IsFalse(k_present), &done_element);
       }
 
       // i. Let kValue be Get(O, Pk).
@@ -1263,11 +1264,11 @@ class FastArraySliceCodeStubAssembler : public CodeStubAssembler {
   void CopyOneElement(Node* context, Node* o, Node* a, Node* p_k, Variable& n) {
     // b. Let kPresent be HasProperty(O, Pk).
     // c. ReturnIfAbrupt(kPresent).
-    Node* k_present = HasProperty(o, p_k, context, kHasProperty);
+    TNode<Oddball> k_present = HasProperty(o, p_k, context, kHasProperty);
 
     // d. If kPresent is true, then
     Label done_element(this);
-    GotoIf(WordNotEqual(k_present, TrueConstant()), &done_element);
+    GotoIf(IsFalse(k_present), &done_element);
 
     // i. Let kValue be Get(O, Pk).
     // ii. ReturnIfAbrupt(kValue).
@@ -1285,7 +1286,7 @@ class FastArraySliceCodeStubAssembler : public CodeStubAssembler {
 TF_BUILTIN(FastArraySlice, FastArraySliceCodeStubAssembler) {
   Node* const argc =
       ChangeInt32ToIntPtr(Parameter(BuiltinDescriptor::kArgumentsCount));
-  Node* const context = Parameter(BuiltinDescriptor::kContext);
+  TNode<Context> context = CAST(Parameter(BuiltinDescriptor::kContext));
   Label slow(this, Label::kDeferred), fast_elements_kind(this);
 
   CodeStubArguments args(this, argc);
@@ -1357,8 +1358,8 @@ TF_BUILTIN(FastArraySlice, FastArraySliceCodeStubAssembler) {
 
   // 5. Let relativeStart be ToInteger(start).
   // 6. ReturnIfAbrupt(relativeStart).
-  Node* arg0 = args.GetOptionalArgumentValue(0, SmiConstant(0));
-  Node* relative_start = ToInteger(context, arg0);
+  TNode<Object> arg0 = CAST(args.GetOptionalArgumentValue(0, SmiConstant(0)));
+  Node* relative_start = ToInteger_Inline(context, arg0);
 
   // 7. If relativeStart < 0, let k be max((len + relativeStart),0);
   //    else let k be min(relativeStart, len.value()).
@@ -1376,11 +1377,12 @@ TF_BUILTIN(FastArraySlice, FastArraySliceCodeStubAssembler) {
   // 8. If end is undefined, let relativeEnd be len;
   //    else let relativeEnd be ToInteger(end).
   // 9. ReturnIfAbrupt(relativeEnd).
-  Node* end = args.GetOptionalArgumentValue(1, UndefinedConstant());
+  TNode<Object> end =
+      CAST(args.GetOptionalArgumentValue(1, UndefinedConstant()));
   Label end_undefined(this), end_done(this);
   VARIABLE(relative_end, MachineRepresentation::kTagged);
   GotoIf(WordEqual(end, UndefinedConstant()), &end_undefined);
-  relative_end.Bind(ToInteger(context, end));
+  relative_end.Bind(ToInteger_Inline(context, end));
   Goto(&end_done);
   BIND(&end_undefined);
   relative_end.Bind(len.value());
@@ -2115,6 +2117,36 @@ TF_BUILTIN(ArrayReduceLoopContinuation, ArrayBuiltinCodeStubAssembler) {
       &ArrayBuiltinCodeStubAssembler::ReduceProcessor,
       &ArrayBuiltinCodeStubAssembler::ReducePostLoopAction,
       MissingPropertyMode::kSkip);
+}
+
+TF_BUILTIN(ArrayReduceLoopEagerDeoptContinuation,
+           ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* accumulator = Parameter(Descriptor::kAccumulator);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+
+  Callable stub(
+      Builtins::CallableFor(isolate(), Builtins::kArrayReduceLoopContinuation));
+  Return(CallStub(stub, context, receiver, callbackfn, UndefinedConstant(),
+                  accumulator, receiver, initial_k, len, UndefinedConstant()));
+}
+
+TF_BUILTIN(ArrayReduceLoopLazyDeoptContinuation,
+           ArrayBuiltinCodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* callbackfn = Parameter(Descriptor::kCallbackFn);
+  Node* initial_k = Parameter(Descriptor::kInitialK);
+  Node* len = Parameter(Descriptor::kLength);
+  Node* result = Parameter(Descriptor::kResult);
+
+  Callable stub(
+      Builtins::CallableFor(isolate(), Builtins::kArrayReduceLoopContinuation));
+  Return(CallStub(stub, context, receiver, callbackfn, UndefinedConstant(),
+                  result, receiver, initial_k, len, UndefinedConstant()));
 }
 
 TF_BUILTIN(ArrayReduce, ArrayBuiltinCodeStubAssembler) {
