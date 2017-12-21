@@ -331,6 +331,23 @@
     },
     {
       "key": {
+        "uuid": "0245c4ed_9e0ce459",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "Replace all the checks below with comparing to expected JSON after\n - replacing timings with some constant\n - sorting keys",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "154ac9d7_6800141a",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 18
@@ -463,6 +480,97 @@
       "revId": "05136d7ef699a189deb613286dc15273a23ac854",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98933bc8_f9f15ef6",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "Please write this as\n\n\n      expect_text \u003d (\n          \u0027\u003e\u003e\u003e Autodetected:\\n\u0027\n          \u0027asan\\n\u0027\n          \u0027cfi_vptr\\n\u0027\n          \u0027dcheck_always_on\\n\u0027\n          \u0027msan\\n\u0027\n          \u0027no_i18n\\n\u0027\n          \u0027no_snap\\n\u0027\n          \u0027tsan\\n\u0027\n          \u0027ubsan_vptr\\n\u0027\n          \u0027\u003e\u003e\u003e Running tests for ia32.release\u0027)",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a41e4f_8ae1e4f4",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "Should this assert that the correct mode has been detected? If returncode\u003d\u003d0 is an indicator of that, please add a comment.",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65de8285_1fc4b6a2",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "Would this be different for real tests? If so, please add a TODO to make it more realistic.",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5df84b6a_4df4e299",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "does not crash.",
+      "range": {
+        "startLine": 437,
+        "startChar": 44,
+        "endLine": 437,
+        "endChar": 45
+      },
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2790e470_847e6e45",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2017-12-21T14:02:31Z",
+      "side": 1,
+      "message": "This comment probably needs to be updated.",
+      "revId": "05136d7ef699a189deb613286dc15273a23ac854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
