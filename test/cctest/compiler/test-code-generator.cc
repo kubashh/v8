@@ -904,19 +904,25 @@ TEST(FuzzAssembleMove) {
   CodeGeneratorTester c(&env);
 
   Handle<FixedArray> state_in = env.GenerateInitialState();
-  ParallelMove* moves = env.GenerateRandomMoves(1000);
+  puts("Prosao 1");
+  ParallelMove* moves = env.GenerateRandomMoves(0);
+  puts("Prosao 2");
 
   for (auto m : *moves) {
     c.CheckAssembleMove(&m->source(), &m->destination());
   }
+  puts("Prosao 3");
 
   Handle<Code> test = c.FinalizeForExecuting();
+  puts("Prosao 4");
   if (FLAG_print_code) {
     test->Print();
   }
 
   Handle<FixedArray> actual = env.Run(test, state_in);
+  puts("Prosao 5");
   Handle<FixedArray> expected = env.SimulateMoves(moves, state_in);
+  puts("Prosao 6");
   env.CheckState(actual, expected);
 }
 

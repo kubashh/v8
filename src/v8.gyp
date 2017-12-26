@@ -2578,6 +2578,8 @@
             'is_tsan=<(tsan)',
             # Not available in gyp.
             'is_ubsan_vptr=0',
+            'mips_arch_variant=<(mips_arch_variant)',
+            'mips_use_msa=<(mips_use_msa)',
             'target_cpu=<(target_arch)',
             'v8_enable_i18n_support=<(v8_enable_i18n_support)',
             'v8_enable_verify_predictable=<(v8_enable_verify_predictable)',

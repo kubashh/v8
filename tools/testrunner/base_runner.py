@@ -142,6 +142,8 @@ class BuildConfig(object):
     self.cfi_vptr = build_config['is_cfi']
     self.dcheck_always_on = build_config['dcheck_always_on']
     self.gcov_coverage = build_config['is_gcov_coverage']
+    self.mips_arch_variant = build_config['mips_arch_variant']
+    self.mips_use_msa = build_config['mips_use_msa']
     self.msan = build_config['is_msan']
     self.no_i18n = not build_config['v8_enable_i18n_support']
     self.no_snap = not build_config['v8_use_snapshot']
