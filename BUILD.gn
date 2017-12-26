@@ -385,6 +385,9 @@ config("toolchain") {
         "_MIPS_ARCH_MIPS32R6",
         "FPU_MODE_FP64",
       ]
+      if (mips_use_msa) {
+        defines += [ "_MIPS_MSA" ]
+      }
     } else if (mips_arch_variant == "r2") {
       defines += [ "_MIPS_ARCH_MIPS32R2" ]
       if (mips_fpu_mode == "fp64") {
@@ -872,6 +875,8 @@ action("v8_dump_build_config") {
     "is_msan=$is_msan",
     "is_tsan=$is_tsan",
     "is_ubsan_vptr=$is_ubsan_vptr",
+    "mips_arch_variant=\"$mips_arch_variant\"",
+    "mips_use_msa=$mips_use_msa",
     "target_cpu=\"$target_cpu\"",
     "v8_current_cpu=\"$v8_current_cpu\"",
     "v8_enable_i18n_support=$v8_enable_i18n_support",
