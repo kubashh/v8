@@ -80,7 +80,13 @@ void CpuFeatures::ProbeImpl(bool cross_compile) {
   // Probe for additional features at runtime.
   base::CPU cpu;
   if (cpu.has_fpu()) supported_ |= 1u << FPU;
+#if defined(_MIPS_ARCH_MIPS64R6)
+#if defined(_MIPS_MSA)
+  supported_ |= 1u << MIPS_SIMD;
+#else
   if (cpu.has_msa()) supported_ |= 1u << MIPS_SIMD;
+#endif
+#endif
 #endif
 }
 
