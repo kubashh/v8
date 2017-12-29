@@ -76,9 +76,8 @@ void CpuFeatures::ProbeImpl(bool cross_compile) {
 #ifndef __mips__
   // For the simulator build, use FPU.
   supported_ |= 1u << FPU;
-#if defined(_MIPS_ARCH_MIPS32R6)
-  // FP64 mode is implied on r6.
-  supported_ |= 1u << FP64FPU;
+#if defined(_MIPS_ARCH_MIPS64R6) && defined(_MIPS_MSA)
+  supported_ |= 1u << MIPS_SIMD;
 #endif
 #if defined(FPU_MODE_FP64)
   supported_ |= 1u << FP64FPU;
@@ -91,7 +90,13 @@ void CpuFeatures::ProbeImpl(bool cross_compile) {
   if (cpu.is_fp64_mode()) supported_ |= 1u << FP64FPU;
 #elif defined(FPU_MODE_FP64)
   supported_ |= 1u << FP64FPU;
+#if defined(_MIPS_ARCH_MIPS32R6)
+#if defined(_MIPS_MSA)
+  supported_ |= 1u << MIPS_SIMD;
+#else
   if (cpu.has_msa()) supported_ |= 1u << MIPS_SIMD;
+#endif
+#endif
 #endif
 #if defined(_MIPS_ARCH_MIPS32RX)
   if (cpu.architecture() == 6) {
