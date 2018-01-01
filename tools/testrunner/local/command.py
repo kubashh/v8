@@ -45,7 +45,7 @@ def win_error_mode():
     set_error_mode(prev_error_mode)
 
 
-class Command(object):
+class BaseCommand(object):
   def __init__(self, shell, args=None, cmd_prefix=None, timeout=60, env=None,
                verbose=False):
     assert(timeout > 0)
@@ -179,3 +179,20 @@ class Command(object):
 
   def _to_args_list(self):
     return self.cmd_prefix + [self.shell] + self.args
+
+
+class PosixCommand(BaseCommand):
+  pass
+
+
+class MacOSCommand(PosixCommand):
+  pass
+
+
+class WindowsCommand(BaseCommand):
+  pass
+
+
+# Set the Command class to the OS-specific version.
+_COMMAND_CLASSES = {'macos': MacOSCommand, 'windows': WindowsCommand}
+Command = _COMMAND_CLASSES.get(utils.GuessOS(), PosixCommand)
