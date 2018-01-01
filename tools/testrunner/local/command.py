@@ -45,7 +45,7 @@ def win_error_mode():
     set_error_mode(prev_error_mode)
 
 
-class Command(object):
+class BaseCommand(object):
   def __init__(self, shell, args=None, cmd_prefix=None, timeout=60, env=None,
                verbose=False):
     assert(timeout > 0)
@@ -122,23 +122,28 @@ class Command(object):
     except OSError:
       sys.stderr.write('Error: Process %s already ended.\n' % process.pid)
 
-  def _kill_process_windows(self, process):
-    if self.verbose:
-      print 'Attempting to kill process %d' % process.pid
-      sys.stdout.flush()
-    tk = subprocess.Popen(
-        'taskkill /T /F /PID %d' % process.pid,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    stdout, stderr = tk.communicate()
-    if self.verbose:
-      print 'Taskkill results for %d' % process.pid
-      print stdout
-      print stderr
-      print 'Return code: %d' % tk.returncode
-      sys.stdout.flush()
+  def __str__(self):
+    return self.to_string()
 
+  def to_string(self, relative=False):
+    def escape(part):
+      # Escape spaces. We may need to escape more characters for this to work
+      # properly.
+      if ' ' in part:
+        return '"%s"' % part
+      return part
+
+    parts = map(escape, self._to_args_list())
+    cmd = ' '.join(parts)
+    if relative:
+      cmd = cmd.replace(os.getcwd() + os.sep, '')
+    return cmd
+
+  def _to_args_list(self):
+    return self.cmd_prefix + [self.shell] + self.args
+
+
+class PosixCommand(BaseCommand):
   def _kill_process_posix(self, process):
     if utils.GuessOS() == 'macos':
       # TODO(machenbach): Temporary output for investigating hanging test
@@ -160,22 +165,36 @@ class Command(object):
       print 'Return code after signalling the kill: %s' % process.returncode
       sys.stdout.flush()
 
-  def __str__(self):
-    return self.to_string()
 
-  def to_string(self, relative=False):
-    def escape(part):
-      # Escape spaces. We may need to escape more characters for this to work
-      # properly.
-      if ' ' in part:
-        return '"%s"' % part
-      return part
+class MacOSCommand(PosixCommand):
+  pass
 
-    parts = map(escape, self._to_args_list())
-    cmd = ' '.join(parts)
-    if relative:
-      cmd = cmd.replace(os.getcwd() + os.sep, '')
-    return cmd
 
-  def _to_args_list(self):
-    return self.cmd_prefix + [self.shell] + self.args
+class WindowsCommand(BaseCommand):
+  def _get_popen_args(self):
+    args = self._to_args_list()
+    if utils.IsWindows():
+      return subprocess.list2cmdline(args)
+    return args
+
+  def _kill_process_windows(self, process):
+    if self.verbose:
+      print 'Attempting to kill process %d' % process.pid
+      sys.stdout.flush()
+    tk = subprocess.Popen(
+        'taskkill /T /F /PID %d' % process.pid,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    stdout, stderr = tk.communicate()
+    if self.verbose:
+      print 'Taskkill results for %d' % process.pid
+      print stdout
+      print stderr
+      print 'Return code: %d' % tk.returncode
+      sys.stdout.flush()
+
+
+# Set the Command class to the OS-specific version.
+_COMMAND_CLASSES = {'macos': MacOSCommand, 'windows': WindowsCommand}
+Command = _COMMAND_CLASSES.get(utils.GuessOS(), PosixCommand)
