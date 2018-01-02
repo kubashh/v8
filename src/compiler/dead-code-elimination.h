@@ -53,15 +53,15 @@ class V8_EXPORT_PRIVATE DeadCodeElimination final
 
   void TrimMergeOrPhi(Node* node, int size);
 
+  Node* DeadValue(Node* none_node);
+
   Graph* graph() const { return graph_; }
   CommonOperatorBuilder* common() const { return common_; }
   Node* dead() const { return dead_; }
-  Node* dead_value() const { return dead_value_; }
 
   Graph* const graph_;
   CommonOperatorBuilder* const common_;
   Node* const dead_;
-  Node* const dead_value_;
   Zone* zone_;
 
   DISALLOW_COPY_AND_ASSIGN(DeadCodeElimination);

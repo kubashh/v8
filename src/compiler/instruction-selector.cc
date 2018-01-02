@@ -1147,6 +1147,9 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kUnreachable:
       VisitUnreachable(node);
       return;
+    case IrOpcode::kDeadValue:
+      VisitDeadValue(node);
+      return;
     case IrOpcode::kComment:
       VisitComment(node);
       return;
@@ -2619,6 +2622,8 @@ void InstructionSelector::VisitUnreachable(Node* node) {
   OperandGenerator g(this);
   Emit(kArchDebugBreak, g.NoOutput());
 }
+
+void InstructionSelector::VisitDeadValue(Node* node) { VisitUnreachable(node); }
 
 void InstructionSelector::VisitComment(Node* node) {
   OperandGenerator g(this);
