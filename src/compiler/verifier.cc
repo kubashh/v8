@@ -236,10 +236,11 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       // Dead is never connected to the graph.
       UNREACHABLE();
     case IrOpcode::kDeadValue:
+      CheckValueInputIs(node, 0, Type::None());
       CheckTypeIs(node, Type::None());
       break;
     case IrOpcode::kUnreachable:
-      CheckNotTyped(node);
+      CheckTypeIs(node, Type::None());
       break;
     case IrOpcode::kBranch: {
       // Branch uses are IfTrue and IfFalse.
