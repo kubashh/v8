@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "75d1866b_a1553da2",
+        "filename": "src/arm/macro-assembler-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-02T13:18:08Z",
+      "side": 1,
+      "message": "I\u0027ve added DCHECKs to make sure operands are distinct. At the moment, this is only used as a result of a swap from the gap resolver so registers should be distinct. So adding assertions seem like the right thing to do.",
+      "parentUuid": "6bbd6440_c6d5b487",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 63
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b3c71e0_dc34cb89",
         "filename": "src/compiler/code-generator.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4ed927_b6563d00",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-02T13:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b3c71e0_dc34cb89",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 491,
+        "endChar": 56
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1275ad46_52bc061b",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-02T13:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8a75b4a_51e1e4af",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 500,
+        "endChar": 0
+      },
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23df564a_0cccb481",
         "filename": "src/compiler/code-generator.h",
         "patchSetId": 5
@@ -85,6 +157,24 @@
       "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d9613a_5e53c74e",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-02T13:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23df564a_0cccb481",
+      "revId": "c3c2cd9cd2c83637850d4e85cdb85c6d752d02ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
