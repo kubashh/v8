@@ -880,7 +880,7 @@ std::pair<uint32_t, uint32_t> StackEffect(const WasmModule* module,
 
 void PrintRawWasmCode(const byte* start, const byte* end) {
   AccountingAllocator allocator;
-  PrintRawWasmCode(&allocator, FunctionBodyForTesting(start, end), nullptr);
+  PrintRawWasmCode(&allocator, FunctionBody::ForTesting(start, end), nullptr);
 }
 
 namespace {
