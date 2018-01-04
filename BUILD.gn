@@ -135,8 +135,6 @@ declare_args() {
   # Temporary flag to allow embedders to update their microtasks scopes
   # while rolling in a new version of V8.
   v8_check_microtasks_scopes_consistency = ""
-
-  v8_monolithic = false
 }
 
 # Derived defaults.
