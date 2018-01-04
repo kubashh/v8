@@ -711,6 +711,8 @@
         'compiler/common-operator-reducer.h',
         'compiler/common-operator.cc',
         'compiler/common-operator.h',
+        'compiler/common-utils.cc',
+        'compiler/common-utils.h',
         'compiler/control-equivalence.cc',
         'compiler/control-equivalence.h',
         'compiler/control-flow-optimizer.cc',
