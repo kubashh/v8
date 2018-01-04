@@ -16,6 +16,24 @@
       "revId": "b62c8a40fdb9acba7383267cf40754b3ca486d65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1460930_798bcedf",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-04T16:10:21Z",
+      "side": 1,
+      "message": "Yeah, we can either remove it now (and live with the warning until I undo the finch code) or I can remove it after the finch code. I\u0027m happy to do the latter once this lands.",
+      "parentUuid": "61fce1a3_1c6c2eca",
+      "revId": "b62c8a40fdb9acba7383267cf40754b3ca486d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
