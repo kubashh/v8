@@ -10,6 +10,7 @@
 #include "src/compilation-dependencies.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/allocation-builder.h"
+#include "src/compiler/common-utils.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/node-matchers.h"
@@ -108,18 +109,6 @@ JSBuiltinReducer::JSBuiltinReducer(Editor* editor, JSGraph* jsgraph,
       type_cache_(TypeCache::Get()) {}
 
 namespace {
-
-MaybeHandle<Map> GetMapWitness(Node* node) {
-  ZoneHandleSet<Map> maps;
-  Node* receiver = NodeProperties::GetValueInput(node, 1);
-  Node* effect = NodeProperties::GetEffectInput(node);
-  NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(receiver, effect, &maps);
-  if (result == NodeProperties::kReliableReceiverMaps && maps.size() == 1) {
-    return maps[0];
-  }
-  return MaybeHandle<Map>();
-}
 
 Maybe<InstanceType> GetInstanceTypeWitness(Node* node) {
   ZoneHandleSet<Map> maps;
