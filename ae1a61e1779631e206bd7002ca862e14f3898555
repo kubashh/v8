@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cea4bfb9_217e2dc9",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-04T09:45:58Z",
+      "side": 1,
+      "message": "I think result \u003d\u003d NodeProperties::kNoReceiverMaps and receiver_maps.size() !\u003d 0 would be an error. What do you think about DCHECK\u0027ing that receiver_maps.size() \u003d\u003d 0?\n\n(Applies throughout the file)",
+      "range": {
+        "startLine": 819,
+        "startChar": 79,
+        "endLine": 819,
+        "endChar": 0
+      },
+      "revId": "ae1a61e1779631e206bd7002ca862e14f3898555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "378cb918_6f25794d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-04T09:45:58Z",
+      "side": 1,
+      "message": "I would prefer inlining this constant into the conditional below, since it is only used once.\n\n(Applies throughout the file)",
+      "revId": "ae1a61e1779631e206bd7002ca862e14f3898555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
