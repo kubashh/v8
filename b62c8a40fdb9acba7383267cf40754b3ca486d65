@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61fce1a3_1c6c2eca",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-04T12:38:32Z",
+      "side": 1,
+      "message": "@Ross: Any problem with just removing this flag? It seems that the finch experiment passes \"--extra-masking\" or \"--no-extra-masking\" to {FlagList::SetFlagsFromString}, which would output a warning to stderr if the flag does not exist.",
+      "revId": "b62c8a40fdb9acba7383267cf40754b3ca486d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
