@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30bdccfc_4a589b82",
+        "filename": "src/arm/simulator-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-05T14:15:32Z",
+      "side": 1,
+      "message": "Note: I would like to define this method in execution.h directly, but this requires including simulator.h from execution.h, which would generate a cycle. I am working on removing this cycle, which includes extracting ExternalReference to it\u0027s own header.",
+      "revId": "5d85091bf8bdba27d106920f844a30bba11f6b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
