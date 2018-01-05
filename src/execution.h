@@ -8,6 +8,7 @@
 #include "src/allocation.h"
 #include "src/base/atomicops.h"
 #include "src/globals.h"
+#include "src/objects/code.h"
 #include "src/utils.h"
 
 namespace v8 {
@@ -234,6 +235,49 @@ class V8_EXPORT_PRIVATE StackGuard final {
   friend class PostponeInterruptsScope;
 
   DISALLOW_COPY_AND_ASSIGN(StackGuard);
+};
+
+// Use this class either as {GeneratedCode<ret, arg1, arg2>} or
+// {GeneratedCode<ret(arg1, arg2)>} (see specialization below).
+template <typename Return, typename... Args>
+class GeneratedCode {
+ public:
+  using Signature = Return(Args...);
+
+  template <typename T>
+  static GeneratedCode FromAddress(Isolate* isolate, T* addr) {
+    return GeneratedCode(isolate, reinterpret_cast<Signature*>(addr));
+  }
+
+  static GeneratedCode FromCode(Code* code) {
+    return FromAddress(code->GetIsolate(), code->entry());
+  }
+
+#ifdef USE_SIMULATOR
+  // Define this method in the platform specific simulator.
+  inline Return Call(Args... args);
+#else
+  // When running without a simulator we call the entry directly.
+  Return Call(Args... args) { return fn_ptr_(args...); }
+#endif
+
+ private:
+  friend class GeneratedCode<Return(Args...)>;
+  Isolate* isolate_;
+  Signature* fn_ptr_;
+  GeneratedCode(Isolate* isolate, Signature* fn_ptr)
+      : isolate_(isolate), fn_ptr_(fn_ptr) {}
+};
+
+// Allow to use {GeneratedCode<ret(arg1, arg2)>} instead of
+// {GeneratedCode<ret, arg1, arg2>}.
+template <typename Return, typename... Args>
+class GeneratedCode<Return(Args...)> : public GeneratedCode<Return, Args...> {
+ public:
+  // Automatically convert from {GeneratedCode<ret, arg1, arg2>} to
+  // {GeneratedCode<ret(arg1, arg2)>}.
+  GeneratedCode(GeneratedCode<Return, Args...> other)
+      : GeneratedCode<Return, Args...>(other.isolate_, other.fn_ptr_) {}
 };
 
 }  // namespace internal
