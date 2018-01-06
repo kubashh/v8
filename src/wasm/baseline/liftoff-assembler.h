@@ -223,6 +223,8 @@ class LiftoffAssembler : public TurboAssembler {
     cache_state_.stack_state.emplace_back(type, reg);
   }
 
+  void SpillRegister(LiftoffRegister);
+
   uint32_t GetNumUses(LiftoffRegister reg) {
     return cache_state_.get_use_count(reg);
   }
@@ -257,6 +259,11 @@ class LiftoffAssembler : public TurboAssembler {
   void Spill(uint32_t index);
   void SpillLocals();
 
+  // Load parameters into the right registers / stack slots for the call.
+  void PrepareCall(wasm::FunctionSig*, compiler::CallDescriptor*);
+  // Process return values of the call.
+  void FinishCall(wasm::FunctionSig*, compiler::CallDescriptor*);
+
   ////////////////////////////////////
   // Platform-specific part.        //
   ////////////////////////////////////
@@ -266,6 +273,7 @@ class LiftoffAssembler : public TurboAssembler {
   inline void LoadConstant(LiftoffRegister, WasmValue);
   inline void LoadFromContext(Register dst, uint32_t offset, int size);
   inline void SpillContext(Register context);
+  inline void FillContextInto(Register dst);
   inline void Load(LiftoffRegister dst, Register src_addr, Register offset_reg,
                    uint32_t offset_imm, LoadType type,
                    LiftoffRegList pinned = {});
@@ -309,6 +317,9 @@ class LiftoffAssembler : public TurboAssembler {
   inline void CallTrapCallbackForTesting();
 
   inline void AssertUnreachable(AbortReason reason);
+
+  // Push a value to the stack (will become a caller frame slot).
+  inline void PushCallerFrameSlot(const VarState& src, uint32_t src_index);
 
   inline void PushRegisters(LiftoffRegList);
   inline void PopRegisters(LiftoffRegList);

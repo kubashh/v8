@@ -20,6 +20,8 @@ void LiftoffAssembler::LoadFromContext(Register dst, uint32_t offset,
 
 void LiftoffAssembler::SpillContext(Register context) {}
 
+void LiftoffAssembler::FillContextInto(Register dst) {}
+
 void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
                             Register offset_reg, uint32_t offset_imm,
                             LoadType type, LiftoffRegList pinned) {}
@@ -78,6 +80,9 @@ void LiftoffAssembler::StackCheck(Label* ool_code) {}
 void LiftoffAssembler::CallTrapCallbackForTesting() {}
 
 void LiftoffAssembler::AssertUnreachable(AbortReason reason) {}
+
+void LiftoffAssembler::PushCallerFrameSlot(const VarState& src,
+                                           uint32_t src_index) {}
 
 void LiftoffAssembler::PushRegisters(LiftoffRegList regs) {}
 
