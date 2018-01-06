@@ -240,11 +240,6 @@ void LiftoffAssembler::emit_i32_add(Register dst, Register lhs, Register rhs) {
   }
 }
 
-void LiftoffAssembler::emit_ptrsize_add(Register dst, Register lhs,
-                                        Register rhs) {
-  emit_i32_add(dst, lhs, rhs);
-}
-
 void LiftoffAssembler::emit_i32_sub(Register dst, Register lhs, Register rhs) {
   if (dst == rhs) {
     neg(dst);
@@ -274,6 +269,83 @@ COMMUTATIVE_I32_BINOP(xor, xor_)
 // clang-format on
 
 #undef COMMUTATIVE_I32_BINOP
+
+void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
+  test(src, src);
+  setcc(zero, dst);
+  movzx_b(dst, dst);
+}
+
+void LiftoffAssembler::emit_i32_clz(Register dst, Register src) {
+  Label nonzero_input;
+  Label continuation;
+  test(src, src);
+  j(not_zero, &nonzero_input, Label::kNear);
+  mov(dst, Immediate(32));
+  jmp(&continuation, Label::kNear);
+
+  bind(&nonzero_input);
+  // Get most significant bit set (MSBS).
+  bsr(dst, src);
+  // CLZ = 31 - MSBS = MSBS ^ 31.
+  xor_(dst, 31);
+
+  bind(&continuation);
+}
+
+void LiftoffAssembler::emit_i32_ctz(Register dst, Register src) {
+  Label nonzero_input;
+  Label continuation;
+  test(src, src);
+  j(not_zero, &nonzero_input, Label::kNear);
+  mov(dst, Immediate(32));
+  jmp(&continuation, Label::kNear);
+
+  bind(&nonzero_input);
+  // Get least significant bit set, which equals number of trailing zeros.
+  bsf(dst, src);
+
+  bind(&continuation);
+}
+
+void LiftoffAssembler::emit_i32_popcnt(Register dst, Register src) {
+  // We need two registers holding the input value.
+  // If dst == src, get a new register and fill it with a copy of the input.
+  if (dst == src) {
+    src = GetUnusedRegister(kGpReg).gp();
+    mov(src, dst);
+  } else {
+    mov(dst, src);
+  }
+
+  // Linear Algorithm taken from "Hacker's Delight" (by Henry S. Warren, Jr.),
+  // figure 5-2, with little optimizations as shown at the top of page 85.
+  // This is also what LLVM implements for __builtin_popcnt.
+  shr(dst, 1);
+  and_(dst, 0x55555555);
+  sub(src, dst);
+  // Now we have two-bit-sums in two-bit-buckets src.
+  mov(dst, src);
+  and_(dst, 0x33333333);
+  shr(src, 2);
+  and_(src, 0x33333333);
+  add(dst, src);
+  // Now we have four-bit-sums in four-bit-buckets dst.
+  mov(src, dst);
+  shr(src, 4);
+  add(dst, src);
+  and_(dst, 0x0f0f0f0f);
+  // Now we have eight-bit-sums in four-bit-buckets in dst.
+  // Add each bucket to all buckets above using a multiply.
+  imul(dst, dst, 0x01010101);
+  // Shift the result from the top bucket back to the bottom.
+  shr(dst, 24);
+}
+
+void LiftoffAssembler::emit_ptrsize_add(Register dst, Register lhs,
+                                        Register rhs) {
+  emit_i32_add(dst, lhs, rhs);
+}
 
 void LiftoffAssembler::emit_f32_add(DoubleRegister dst, DoubleRegister lhs,
                                     DoubleRegister rhs) {
