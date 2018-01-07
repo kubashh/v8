@@ -5,6 +5,7 @@
 #ifndef V8_WASM_BASELINE_LIFTOFF_ASSEMBLER_H_
 #define V8_WASM_BASELINE_LIFTOFF_ASSEMBLER_H_
 
+#include <iosfwd>
 #include <memory>
 
 // Clients of this interface shouldn't depend on lots of compiler internals.
@@ -373,6 +374,8 @@ class LiftoffAssembler : public TurboAssembler {
   LiftoffRegister SpillOneRegister(LiftoffRegList candidates,
                                    LiftoffRegList pinned);
 };
+
+std::ostream& operator<<(std::ostream& os, LiftoffAssembler::VarState);
 
 }  // namespace wasm
 }  // namespace internal
