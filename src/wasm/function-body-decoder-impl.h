@@ -1478,8 +1478,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
               this->error(this->pc_, "else already present for if");
               break;
             }
-            c->kind = kControlIfElse;
             FallThruTo(c);
+            c->kind = kControlIfElse;
             CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
             PushMergeValues(c, &c->start_merge);
             c->reachability = control_at(1)->innerReachability();
@@ -1498,6 +1498,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             if (c->is_onearmed_if()) {
               // Emulate empty else arm.
               FallThruTo(c);
+              if (this->failed()) break;
               CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
               PushMergeValues(c, &c->start_merge);
               c->reachability = control_at(1)->innerReachability();
