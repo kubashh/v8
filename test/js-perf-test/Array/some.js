@@ -13,6 +13,8 @@ benchy('DoubleSome', DoubleSome, DoubleSomeSetup);
 benchy('SmiSome', SmiSome, SmiSomeSetup);
 benchy('FastSome', FastSome, FastSomeSetup);
 benchy('OptFastSome', OptFastSome, FastSomeSetup);
+benchy('OptUnreliableSome', OptUnreliableSome, FastSomeSetup);
+
 
 var array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -49,6 +51,12 @@ function RunOptFastSome(multiple) {
 // to be used in the callback.
 %NeverOptimizeFunction(OptFastSome);
 function OptFastSome() { RunOptFastSome(3); }
+
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliableSome() {
+  result = array.some(func, side_effect(array));
+}
 
 function SmiSomeSetup() {
   array = new Array();

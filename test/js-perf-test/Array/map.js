@@ -17,6 +17,8 @@ benchy('SmiMap', SmiMap, SmiMapSetup);
 benchy('FastMap', FastMap, FastMapSetup);
 benchy('GenericMap', GenericMap, ObjectMapSetup);
 benchy('OptFastMap', OptFastMap, FastMapSetup);
+benchy('OptUnreliableMap', OptUnreliableMap, FastMapSetup);
+
 
 var array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -63,6 +65,12 @@ function NaiveMap() {
     result[index] = func(array[index], index, array)
   }
   return result
+}
+
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliableMap() {
+  result = array.map(func, side_effect(array));
 }
 
 
