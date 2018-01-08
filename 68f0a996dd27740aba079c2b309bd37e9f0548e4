@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a189653_3e55e0d1",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-01-08T09:07:14Z",
+      "side": 1,
+      "message": "I am not convinced by this \"ForTesting\" function, since it is not obvious that PrintRawWasmCode is also just a testing function (is it, actually?). I think it would be better to remove the \"ForTesting\" function, and to inline it here.",
+      "revId": "68f0a996dd27740aba079c2b309bd37e9f0548e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
