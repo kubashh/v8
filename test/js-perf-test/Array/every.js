@@ -13,6 +13,8 @@ benchy('DoubleEvery', DoubleEvery, DoubleEverySetup);
 benchy('SmiEvery', SmiEvery, SmiEverySetup);
 benchy('FastEvery', FastEvery, FastEverySetup);
 benchy('OptFastEvery', OptFastEvery, FastEverySetup);
+benchy('OptUnreliableEvery', OptUnreliableEvery, FastEverySetup);
+
 
 var array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -49,6 +51,13 @@ function RunOptFastEvery(multiple) {
 // to be used in the callback.
 %NeverOptimizeFunction(OptFastEvery);
 function OptFastEvery() { RunOptFastEvery(3); }
+
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliableEvery() {
+  result = array.every(func, side_effect(array));
+}
+
 
 function SmiEverySetup() {
   array = new Array();

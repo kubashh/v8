@@ -835,10 +835,7 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-  if (result != NodeProperties::kReliableReceiverMaps) {
-    return NoChange();
-  }
-  if (receiver_maps.size() == 0) return NoChange();
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   // By ensuring that {kind} is object or double, we can be polymorphic
   // on different elements kinds.
@@ -865,6 +862,14 @@ Reduction JSCallReducer::ReduceArrayForEach(Handle<JSFunction> function,
   // Install code dependencies on the {receiver} prototype maps and the
   // global array protector cell.
   dependencies()->AssumePropertyCell(factory()->no_elements_protector());
+
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   Node* k = jsgraph()->ZeroConstant();
 
@@ -1013,6 +1018,8 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
                          ? NodeProperties::GetValueInput(node, 2)
                          : jsgraph()->UndefinedConstant();
 
+  // TODO(mvstanton): When ReduceArrayReduce is enabled, handle unreliable
+  // receiver maps.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
@@ -1240,6 +1247,8 @@ Reduction JSCallReducer::ReduceArrayReduceRight(Handle<JSFunction> function,
                          ? NodeProperties::GetValueInput(node, 2)
                          : jsgraph()->UndefinedConstant();
 
+  // TODO(mvstanton): When ReduceArrayReduceRight is enabled, handle unreliable
+  // receiver maps.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
@@ -1475,14 +1484,10 @@ Reduction JSCallReducer::ReduceArrayMap(Handle<JSFunction> function,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-  if (result != NodeProperties::kReliableReceiverMaps) {
-    return NoChange();
-  }
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   // Ensure that any changes to the Array species constructor cause deopt.
   if (!isolate()->IsArraySpeciesLookupChainIntact()) return NoChange();
-
-  if (receiver_maps.size() == 0) return NoChange();
 
   const ElementsKind kind = receiver_maps[0]->elements_kind();
 
@@ -1504,10 +1509,13 @@ Reduction JSCallReducer::ReduceArrayMap(Handle<JSFunction> function,
 
   Node* k = jsgraph()->ZeroConstant();
 
-  // Make sure the map hasn't changed before we construct the output array.
-  effect = graph()->NewNode(
-      simplified()->CheckMaps(CheckMapsFlag::kNone, receiver_maps), receiver,
-      effect, control);
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   Node* original_length = effect = graph()->NewNode(
       simplified()->LoadField(AccessBuilder::ForJSArrayLength(kind)), receiver,
@@ -1676,14 +1684,10 @@ Reduction JSCallReducer::ReduceArrayFilter(Handle<JSFunction> function,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-  if (result != NodeProperties::kReliableReceiverMaps) {
-    return NoChange();
-  }
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   // And ensure that any changes to the Array species constructor cause deopt.
   if (!isolate()->IsArraySpeciesLookupChainIntact()) return NoChange();
-
-  if (receiver_maps.size() == 0) return NoChange();
 
   const ElementsKind kind = receiver_maps[0]->elements_kind();
   // The output array is packed (filter doesn't visit holes).
@@ -1706,10 +1710,13 @@ Reduction JSCallReducer::ReduceArrayFilter(Handle<JSFunction> function,
   Node* k = jsgraph()->ZeroConstant();
   Node* to = jsgraph()->ZeroConstant();
 
-  // Make sure the map hasn't changed before we construct the output array.
-  effect = graph()->NewNode(
-      simplified()->CheckMaps(CheckMapsFlag::kNone, receiver_maps), receiver,
-      effect, control);
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   Node* a;  // Construct the output array.
   {
@@ -1952,9 +1959,7 @@ Reduction JSCallReducer::ReduceArrayFind(ArrayFindVariant variant,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-
-  if (result != NodeProperties::kReliableReceiverMaps) return NoChange();
-  if (receiver_maps.size() == 0) return NoChange();
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   const ElementsKind kind = receiver_maps[0]->elements_kind();
 
@@ -1973,6 +1978,14 @@ Reduction JSCallReducer::ReduceArrayFind(ArrayFindVariant variant,
   // Install code dependencies on the {receiver} prototype maps and the
   // global array protector cell.
   dependencies()->AssumePropertyCell(factory()->no_elements_protector());
+
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   Node* k = jsgraph()->ZeroConstant();
 
@@ -2264,14 +2277,10 @@ Reduction JSCallReducer::ReduceArrayEvery(Handle<JSFunction> function,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-  if (result != NodeProperties::kReliableReceiverMaps) {
-    return NoChange();
-  }
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   // And ensure that any changes to the Array species constructor cause deopt.
   if (!isolate()->IsArraySpeciesLookupChainIntact()) return NoChange();
-
-  if (receiver_maps.size() == 0) return NoChange();
 
   const ElementsKind kind = receiver_maps[0]->elements_kind();
 
@@ -2283,6 +2292,14 @@ Reduction JSCallReducer::ReduceArrayEvery(Handle<JSFunction> function,
   }
 
   dependencies()->AssumePropertyCell(factory()->species_protector());
+
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   Node* k = jsgraph()->ZeroConstant();
 
@@ -2480,9 +2497,7 @@ Reduction JSCallReducer::ReduceArraySome(Handle<JSFunction> function,
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
       NodeProperties::InferReceiverMaps(receiver, effect, &receiver_maps);
-  if (result != NodeProperties::kReliableReceiverMaps) {
-    return NoChange();
-  }
+  if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
   // And ensure that any changes to the Array species constructor cause deopt.
   if (!isolate()->IsArraySpeciesLookupChainIntact()) return NoChange();
@@ -2506,6 +2521,14 @@ Reduction JSCallReducer::ReduceArraySome(Handle<JSFunction> function,
   dependencies()->AssumePropertyCell(factory()->species_protector());
 
   Node* k = jsgraph()->ZeroConstant();
+
+  // If we have unreliable maps, we need a map check.
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    effect =
+        graph()->NewNode(simplified()->CheckMaps(CheckMapsFlag::kNone,
+                                                 receiver_maps, p.feedback()),
+                         receiver, effect, control);
+  }
 
   // Make sure the map hasn't changed before we construct the output array.
   effect = graph()->NewNode(
