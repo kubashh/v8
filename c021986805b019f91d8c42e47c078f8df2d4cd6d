@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "42498cfc_2be87f42",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-08T15:46:41Z",
+      "side": 1,
+      "message": "Makes, sense, will rename to ElseState.",
+      "parentUuid": "7956f37c_42c49a6c",
+      "revId": "c021986805b019f91d8c42e47c078f8df2d4cd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "778c35f3_df032b2d",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-01-08T14:59:12Z",
       "side": 1,
       "message": "IIUC if blocks don\u0027t have a start merge, so I think the first part of the condition cannot happen.",
+      "revId": "c021986805b019f91d8c42e47c078f8df2d4cd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364f9589_c629b2b9",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-08T15:46:41Z",
+      "side": 1,
+      "message": "I thought that multi-value allows arbitrary signatures on arbitrary blocks, no?",
+      "parentUuid": "778c35f3_df032b2d",
       "revId": "c021986805b019f91d8c42e47c078f8df2d4cd6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
