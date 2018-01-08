@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7785876e_23181364",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-01-08T11:30:31Z",
+      "side": 1,
+      "message": "I took a look at InferReceiverMaps and am satisfied it\u0027s returning an empty receiver_maps if we get kNoReceiverMaps back, so I just simplified the condition.",
+      "parentUuid": "cea4bfb9_217e2dc9",
+      "range": {
+        "startLine": 819,
+        "startChar": 79,
+        "endLine": 819,
+        "endChar": 0
+      },
+      "revId": "ae1a61e1779631e206bd7002ca862e14f3898555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "378cb918_6f25794d",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "ae1a61e1779631e206bd7002ca862e14f3898555",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3de5d03_1879ace2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-01-08T11:30:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "378cb918_6f25794d",
+      "revId": "ae1a61e1779631e206bd7002ca862e14f3898555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
