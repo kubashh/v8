@@ -69,6 +69,24 @@
       "revId": "c021986805b019f91d8c42e47c078f8df2d4cd6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5319f822_acc6c498",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-08T15:48:48Z",
+      "side": 1,
+      "message": "Example from the proposal: https://github.com/WebAssembly/multi-value/blob/master/proposals/multi-value/Overview.md#blocks-with-inputs",
+      "parentUuid": "364f9589_c629b2b9",
+      "revId": "c021986805b019f91d8c42e47c078f8df2d4cd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
