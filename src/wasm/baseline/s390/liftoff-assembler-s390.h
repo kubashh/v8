@@ -28,13 +28,15 @@ void LiftoffAssembler::FillContextInto(Register dst) { UNIMPLEMENTED(); }
 
 void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
                             Register offset_reg, uint32_t offset_imm,
-                            LoadType type, LiftoffRegList pinned) {
+                            LoadType type, LiftoffRegList pinned,
+                            uint32_t* protected_load_pc) {
   UNIMPLEMENTED();
 }
 
 void LiftoffAssembler::Store(Register dst_addr, Register offset_reg,
                              uint32_t offset_imm, LiftoffRegister src,
-                             StoreType type, LiftoffRegList pinned) {
+                             StoreType type, LiftoffRegList pinned,
+                             uint32_t* protected_store_pc) {
   UNIMPLEMENTED();
 }
 
