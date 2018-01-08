@@ -15,6 +15,8 @@ benchy('SmiFilter', SmiFilter, SmiFilterSetup);
 benchy('FastFilter', FastFilter, FastFilterSetup);
 benchy('GenericFilter', GenericFilter, ObjectFilterSetup);
 benchy('OptFastFilter', OptFastFilter, FastFilterSetup);
+benchy('OptUnreliableFilter', OptUnreliableFilter, FastFilterSetup);
+
 
 var array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -52,6 +54,11 @@ function RunOptFastFilter(multiple) {
 %NeverOptimizeFunction(OptFastFilter);
 function OptFastFilter() { RunOptFastFilter(3); }
 
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliableFilter() {
+  result = array.filter(func, side_effect(array));
+}
 
 function GenericFilter() {
   result = Array.prototype.filter.call(array, func, this_arg);

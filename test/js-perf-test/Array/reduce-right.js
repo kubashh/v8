@@ -13,6 +13,8 @@ benchy('DoubleReduceRight', DoubleReduceRight, DoubleReduceRightSetup);
 benchy('SmiReduceRight', SmiReduceRight, SmiReduceRightSetup);
 benchy('FastReduceRight', FastReduceRight, FastReduceRightSetup);
 benchy('OptFastReduceRight', OptFastReduceRight, FastReduceRightSetup);
+benchy('OptUnreliableReduceRight', OptUnreliableReduceRight, FastReduceRightSetup);
+
 
 var array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -49,6 +51,13 @@ function RunOptFastReduceRight(multiple) {
 // to be used in the callback.
 %NeverOptimizeFunction(OptFastReduceRight);
 function OptFastReduceRight() { RunOptFastReduceRight(3); }
+
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliableReduceRight() {
+  result = array.reduceRight(func, side_effect(array));
+}
+
 
 function SmiReduceRightSetup() {
   array = new Array();
