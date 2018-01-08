@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a3d4a69_3434e4a2",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-01-08T09:23:45Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 137,
+        "startChar": 25,
+        "endLine": 137,
+        "endChar": 26
+      },
+      "revId": "ec4ef4a36ab8af800890f0c23182c148c9a47cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
