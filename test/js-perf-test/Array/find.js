@@ -16,6 +16,8 @@ benchy('SmiFind', Smi, SmiSetup);
 benchy('FastFind', Fast, FastSetup);
 benchy('GenericFind', Generic, ObjectSetup);
 benchy('OptFastFind', OptFast, FastSetup);
+benchy('OptUnreliableFind', OptUnreliable, FastSetup);
+
 
 let array;
 // Initialize func variable to ensure the first test doesn't benefit from
@@ -52,6 +54,13 @@ function RunOptFast(multiple) {
 // to be used in the callback.
 %NeverOptimizeFunction(OptFast);
 function OptFast() { RunOptFast(max_index); }
+
+function side_effect(a) { return a; }
+%NeverOptimizeFunction(side_effect);
+function OptUnreliable() {
+  result = array.find(func, side_effect(array));
+}
+
 
 function Naive() {
   let index = -1;

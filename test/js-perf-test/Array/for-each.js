@@ -1,4 +1,4 @@
-// Copyright 2017 the V8 project authors. All rights reserved.
+// Copyright 2018 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 (() => {
@@ -10,13 +10,13 @@ function benchy(name, test, testSetup) {
       ]);
 }
 
-benchy('NaiveFindIndexReplacement', Naive, NaiveSetup);
-benchy('DoubleFindIndex', Double, DoubleSetup);
-benchy('SmiFindIndex', Smi, SmiSetup);
-benchy('FastFindIndex', Fast, FastSetup);
-benchy('GenericFindIndex', Generic, ObjectSetup);
-benchy('OptFastFindIndex', OptFast, FastSetup);
-benchy('OptUnreliableFindIndex', OptUnreliable, FastSetup);
+benchy('NaiveForEachReplacement', Naive, NaiveSetup);
+benchy('DoubleForEach', Double, DoubleSetup);
+benchy('SmiForEach', Smi, SmiSetup);
+benchy('FastForEach', Fast, FastSetup);
+benchy('GenericForEach', Generic, ObjectSetup);
+benchy('OptFastForEach', OptFast, FastSetup);
+benchy('OptUnreliableForEach', OptUnreliable, FastSetup);
 
 
 let array;
@@ -30,13 +30,13 @@ const max_index = array_size - 1;
 // Although these functions have the same code, they are separated for
 // clean IC feedback.
 function Double() {
-  result = array.findIndex(func);
+  result = array.forEach(func);
 }
 function Smi() {
-  result = array.findIndex(func);
+  result = array.forEach(func);
 }
 function Fast() {
-  result = array.findIndex(func);
+  result = array.forEach(func);
 }
 
 // Make sure we inline the callback, pick up all possible TurboFan
@@ -47,7 +47,7 @@ function RunOptFast(multiple) {
   //
   // Also, the arrow function requires inlining based on
   // SharedFunctionInfo.
-  result = array.findIndex((v, i, a) => v === `value ${multiple}`);
+  result = array.forEach((v, i, a) => v === `value ${multiple}`);
 }
 
 // Don't optimize because I want to optimize RunOptFast with a parameter
@@ -58,7 +58,7 @@ function OptFast() { RunOptFast(max_index); }
 function side_effect(a) { return a; }
 %NeverOptimizeFunction(side_effect);
 function OptUnreliable() {
-  result = array.findIndex(func, side_effect(array));
+  result = array.forEach(func, side_effect(array));
 }
 
 
@@ -76,7 +76,7 @@ function Naive() {
 }
 
 function Generic() {
-  result = Array.prototype.findIndex.call(array, func);
+  result = Array.prototype.forEach.call(array, func);
 }
 
 function NaiveSetup() {

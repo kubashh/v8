@@ -10,6 +10,7 @@ load('map.js');
 load('every.js');
 load('join.js');
 load('some.js');
+load('for-each.js');
 load('reduce.js');
 load('reduce-right.js');
 load('to-string.js');
