@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7bf4be6_ee7277d8",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-01-09T15:01:27Z",
+      "side": 1,
+      "message": "How about calling it --random_gc_interval to stay close to the original.",
+      "range": {
+        "startLine": 589,
+        "startChar": 11,
+        "endLine": 589,
+        "endChar": 27
+      },
+      "revId": "5db497e8e58c1f34bb875e8be949453371bdbe53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

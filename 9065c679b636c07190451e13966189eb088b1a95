@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c9567bc_9b4a040f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-01-09T15:01:27Z",
+      "side": 1,
+      "message": "Why the extra scope?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 3,
+        "endLine": 1224,
+        "endChar": 0
+      },
+      "revId": "9065c679b636c07190451e13966189eb088b1a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
