@@ -34,6 +34,24 @@
       "revId": "5d85091bf8bdba27d106920f844a30bba11f6b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39ff01e_1e192eb9",
+        "filename": "src/arm/simulator-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-09T09:51:42Z",
+      "side": 1,
+      "message": "Yes, that solves it nicely for now. Done.",
+      "parentUuid": "77f5ffa1_59aabc50",
+      "revId": "5d85091bf8bdba27d106920f844a30bba11f6b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

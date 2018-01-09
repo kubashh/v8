@@ -22,6 +22,30 @@
       "revId": "ef46c10d7af7a4db6ba9f3e9d5bbca18189dfd48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29f4613f_948f21b0",
+        "filename": "test/cctest/assembler-helper-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-09T09:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd386742_9867c48b",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 29
+      },
+      "revId": "ef46c10d7af7a4db6ba9f3e9d5bbca18189dfd48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
