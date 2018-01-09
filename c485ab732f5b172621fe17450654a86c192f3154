@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73fbca85_cc486524",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-09T17:40:38Z",
+      "side": 0,
+      "message": "List of buckets must be sorted, otherwise LUCI validator fails.",
+      "revId": "c485ab732f5b172621fe17450654a86c192f3154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
