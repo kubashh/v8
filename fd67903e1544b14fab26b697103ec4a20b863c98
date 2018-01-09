@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a38ff4c_d7a40274",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-09T09:52:53Z",
+      "side": 1,
+      "message": "Note: this is needed because of a false positive in a presubmit check.",
+      "range": {
+        "startLine": 291,
+        "startChar": 41,
+        "endLine": 291,
+        "endChar": 71
+      },
+      "revId": "fd67903e1544b14fab26b697103ec4a20b863c98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
