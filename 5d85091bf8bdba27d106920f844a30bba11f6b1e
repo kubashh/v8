@@ -16,6 +16,24 @@
       "revId": "5d85091bf8bdba27d106920f844a30bba11f6b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f5ffa1_59aabc50",
+        "filename": "src/arm/simulator-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-01-09T09:13:42Z",
+      "side": 1,
+      "message": "As discussed offline: An alternative idea would be to move the enture {GeneratedCode} class into the simulator.h file. WDYT?",
+      "parentUuid": "30bdccfc_4a589b82",
+      "revId": "5d85091bf8bdba27d106920f844a30bba11f6b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

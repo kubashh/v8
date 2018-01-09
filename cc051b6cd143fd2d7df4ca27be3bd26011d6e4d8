@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cf70092_1c4bade6",
+        "filename": "src/arm64/simulator-arm64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-01-09T09:13:42Z",
+      "side": 0,
+      "message": "nit: Why this change?",
+      "range": {
+        "startLine": 2350,
+        "startChar": 36,
+        "endLine": 2350,
+        "endChar": 43
+      },
+      "revId": "cc051b6cd143fd2d7df4ca27be3bd26011d6e4d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
