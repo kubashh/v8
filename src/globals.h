@@ -1090,115 +1090,133 @@ enum MinusZeroMode {
 
 enum Signedness { kSigned, kUnsigned };
 
-enum FunctionKind : uint16_t {
+enum FunctionKind : uint8_t {
   kNormalFunction = 0,
-  kArrowFunction = 1 << 0,
-  kGeneratorFunction = 1 << 1,
-  kConciseMethod = 1 << 2,
-  kDefaultConstructor = 1 << 3,
-  kDerivedConstructor = 1 << 4,
-  kBaseConstructor = 1 << 5,
-  kGetterFunction = 1 << 6,
-  kSetterFunction = 1 << 7,
-  kAsyncFunction = 1 << 8,
-  kModule = 1 << 9,
-  kClassFieldsInitializerFunction = 1 << 10 | kConciseMethod,
-  kLastFunctionKind = kClassFieldsInitializerFunction,
 
-  kConciseGeneratorMethod = kGeneratorFunction | kConciseMethod,
-  kAccessorFunction = kGetterFunction | kSetterFunction,
-  kDefaultBaseConstructor = kDefaultConstructor | kBaseConstructor,
-  kDefaultDerivedConstructor = kDefaultConstructor | kDerivedConstructor,
+  kAccessorFunction,
+  kArrowFunction,
+  kAsyncArrowFunction,
+  kAsyncConciseGeneratorMethod,
+  kAsyncConciseMethod,
+  kAsyncFunction,
+  kAsyncGeneratorFunction,
+  kClassFieldsInitializerFunction,
+  kConciseGeneratorMethod,
+  kConciseMethod,
+  kGeneratorFunction,
+  kGetterFunction,
+  kModule,
+  kSetterFunction,
+
+  // We need individual bits for these three because we create a
+  // mask and do a quick test in JSConstructoStubGeneric.
+  //
+  // New function kinds should be added before these and the below
+  // indices should be incrememted if required.
+  kBaseConstructor = 1 << 4,
+  kDerivedConstructor = 1 << 5,
+  kDefaultConstructor = 1 << 6,
+  kDefaultBaseConstructor = kBaseConstructor | kDefaultConstructor,
+  kDefaultDerivedConstructor = kDerivedConstructor | kDefaultConstructor,
   kClassConstructor =
       kBaseConstructor | kDerivedConstructor | kDefaultConstructor,
-  kAsyncArrowFunction = kArrowFunction | kAsyncFunction,
-  kAsyncConciseMethod = kAsyncFunction | kConciseMethod,
 
-  // https://tc39.github.io/proposal-async-iteration/
-  kAsyncConciseGeneratorMethod = kAsyncFunction | kConciseGeneratorMethod,
-  kAsyncGeneratorFunction = kAsyncFunction | kGeneratorFunction
+  kLastFunctionKind
 };
 
+#define CONCISE_FUNCTION_LIST(V)    \
+  V(AsyncConciseMethod)             \
+  V(AsyncConciseGeneratorMethod)    \
+  V(ClassFieldsInitializerFunction) \
+  V(ConciseGeneratorMethod)         \
+  V(ConciseMethod)
+
+#define ARROW_FUNCTION_LIST(V) \
+  V(AsyncArrowFunction)        \
+  V(ArrowFunction)
+
+#define ASYNC_FUNCTION_LIST(V)   \
+  V(AsyncArrowFunction)          \
+  V(AsyncConciseMethod)          \
+  V(AsyncConciseGeneratorMethod) \
+  V(AsyncGeneratorFunction)      \
+  V(AsyncFunction)
+
+#define GENERATOR_FUNCTION_LIST(V) \
+  V(AsyncConciseGeneratorMethod)   \
+  V(AsyncGeneratorFunction)        \
+  V(ConciseGeneratorMethod)        \
+  V(GeneratorFunction)
+
+#define ASYNC_GENERATOR_FUNCTION_LIST(V) \
+  V(AsyncConciseGeneratorMethod)         \
+  V(AsyncGeneratorFunction)
+
+#define GETTER_FUNCTION_LIST(V) \
+  V(AccessorFunction)           \
+  V(GetterFunction)
+
+#define SETTER_FUNCTION_LIST(V) \
+  V(AccessorFunction)           \
+  V(SetterFunction)
+
+#define ACCESSOR_FUNCTION_LIST(V) \
+  V(GetterFunction)               \
+  V(SetterFunction)
+
 inline bool IsValidFunctionKind(FunctionKind kind) {
-  return kind == FunctionKind::kNormalFunction ||
-         kind == FunctionKind::kArrowFunction ||
-         kind == FunctionKind::kGeneratorFunction ||
-         kind == FunctionKind::kModule ||
-         kind == FunctionKind::kConciseMethod ||
-         kind == FunctionKind::kConciseGeneratorMethod ||
-         kind == FunctionKind::kGetterFunction ||
-         kind == FunctionKind::kSetterFunction ||
-         kind == FunctionKind::kAccessorFunction ||
-         kind == FunctionKind::kDefaultBaseConstructor ||
-         kind == FunctionKind::kDefaultDerivedConstructor ||
-         kind == FunctionKind::kBaseConstructor ||
-         kind == FunctionKind::kDerivedConstructor ||
-         kind == FunctionKind::kAsyncFunction ||
-         kind == FunctionKind::kAsyncArrowFunction ||
-         kind == FunctionKind::kAsyncConciseMethod ||
-         kind == FunctionKind::kAsyncConciseGeneratorMethod ||
-         kind == FunctionKind::kAsyncGeneratorFunction ||
-         kind == FunctionKind::kClassFieldsInitializerFunction;
+  CHECK_LT(kind, FunctionKind::kLastFunctionKind);
+  CHECK_GE(kind, FunctionKind::kNormalFunction);
+  return kind != FunctionKind::kLastFunctionKind;
 }
 
+#define FUNCTION_KIND_CASE(V) \
+  case k##V:                  \
+    return true;
 
-inline bool IsArrowFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kArrowFunction) != 0;
-}
+#define FUNCTION_KIND_ACCESSORS(V, K)    \
+  inline bool Is##V(FunctionKind kind) { \
+    DCHECK(IsValidFunctionKind(kind));   \
+    switch (kind) {                      \
+      K(FUNCTION_KIND_CASE)              \
+      default:                           \
+        return false;                    \
+    }                                    \
+  }
 
+#define DEFINE_ACCESSORS(V)                                \
+  V(ArrowFunction, ARROW_FUNCTION_LIST)                    \
+  V(AsyncFunction, ASYNC_FUNCTION_LIST)                    \
+  V(AsyncGeneratorFunction, ASYNC_GENERATOR_FUNCTION_LIST) \
+  V(ConciseMethod, CONCISE_FUNCTION_LIST)                  \
+  V(GeneratorFunction, GENERATOR_FUNCTION_LIST)            \
+  V(GetterFunction, GETTER_FUNCTION_LIST)                  \
+  V(SetterFunction, SETTER_FUNCTION_LIST)                  \
+  V(AccessorFunction, ACCESSOR_FUNCTION_LIST)
 
-inline bool IsGeneratorFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kGeneratorFunction) != 0;
-}
+DEFINE_ACCESSORS(FUNCTION_KIND_ACCESSORS);
+#undef FUNCTION_KIND_CASE
+#undef FUNCTION_KIND_ACCESSORS
+#undef DEFINE_ACCESSORS
 
 inline bool IsModule(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kModule) != 0;
-}
-
-inline bool IsAsyncFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kAsyncFunction) != 0;
-}
-
-inline bool IsAsyncGeneratorFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  const FunctionKind kMask = FunctionKind::kAsyncGeneratorFunction;
-  return (kind & kMask) == kMask;
+  return kind == FunctionKind::kModule;
 }
 
 inline bool IsResumableFunction(FunctionKind kind) {
   return IsGeneratorFunction(kind) || IsAsyncFunction(kind) || IsModule(kind);
 }
 
-inline bool IsConciseMethod(FunctionKind kind) {
+inline bool IsClassConstructor(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kConciseMethod) != 0;
+  return (kind & FunctionKind::kClassConstructor) != 0;
 }
-
-inline bool IsGetterFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kGetterFunction) != 0;
-}
-
-inline bool IsSetterFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kSetterFunction) != 0;
-}
-
-inline bool IsAccessorFunction(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kAccessorFunction) != 0;
-}
-
 
 inline bool IsDefaultConstructor(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
   return (kind & FunctionKind::kDefaultConstructor) != 0;
 }
-
 
 inline bool IsBaseConstructor(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
@@ -1208,12 +1226,6 @@ inline bool IsBaseConstructor(FunctionKind kind) {
 inline bool IsDerivedConstructor(FunctionKind kind) {
   DCHECK(IsValidFunctionKind(kind));
   return (kind & FunctionKind::kDerivedConstructor) != 0;
-}
-
-
-inline bool IsClassConstructor(FunctionKind kind) {
-  DCHECK(IsValidFunctionKind(kind));
-  return (kind & FunctionKind::kClassConstructor) != 0;
 }
 
 inline bool IsClassFieldsInitializerFunction(FunctionKind kind) {
