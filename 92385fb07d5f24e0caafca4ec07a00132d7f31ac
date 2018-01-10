@@ -22,6 +22,30 @@
       "revId": "92385fb07d5f24e0caafca4ec07a00132d7f31ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c1c9d1_4b198bbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-10T15:44:03Z",
+      "side": 1,
+      "message": "These are added automatically by a script of mine. But it seems like v8_presubmit works out of the box with this new presubmit. Awesome!",
+      "parentUuid": "4645f8c2_7ffc4ad1",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 18
+      },
+      "revId": "92385fb07d5f24e0caafca4ec07a00132d7f31ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
