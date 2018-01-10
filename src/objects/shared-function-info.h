@@ -469,7 +469,7 @@ class SharedFunctionInfo : public HeapObject {
   V(IsNativeBit, bool, 1, _)                             \
   V(IsStrictBit, bool, 1, _)                             \
   V(IsWrappedBit, bool, 1, _)                            \
-  V(FunctionKindBits, FunctionKind, 11, _)               \
+  V(FunctionKindBits, FunctionKind, 7, _)                \
   V(HasDuplicateParametersBit, bool, 1, _)               \
   V(AllowLazyCompilationBit, bool, 1, _)                 \
   V(NeedsHomeObjectBit, bool, 1, _)                      \
