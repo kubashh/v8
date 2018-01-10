@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7bc4cf7_6856f658",
+        "filename": "src/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-10T12:44:19Z",
+      "side": 1,
+      "message": "Why do we need this class, as opposed to merging it into ElementsAccessorBase?",
+      "range": {
+        "startLine": 522,
+        "startChar": 6,
+        "endLine": 522,
+        "endChar": 30
+      },
+      "revId": "0c7b2dd0a41937fcf61c82f1509a31eadea5076e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff411299_d1c9fd75",
+        "filename": "src/elements.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-10T12:44:19Z",
+      "side": 1,
+      "message": "I think this should remain \"entry\".",
+      "range": {
+        "startLine": 126,
+        "startChar": 53,
+        "endLine": 126,
+        "endChar": 58
+      },
+      "revId": "0c7b2dd0a41937fcf61c82f1509a31eadea5076e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29ea48a1_a07d3442",
+        "filename": "test/mjsunit/es8/object-entries.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-10T12:44:19Z",
+      "side": 1,
+      "message": "nit: supported",
+      "range": {
+        "startLine": 330,
+        "startChar": 45,
+        "endLine": 330,
+        "endChar": 52
+      },
+      "revId": "0c7b2dd0a41937fcf61c82f1509a31eadea5076e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
