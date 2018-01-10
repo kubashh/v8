@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1ebde4f_4081b179",
+        "filename": "src/globals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-01-10T13:33:46Z",
+      "side": 1,
+      "message": "FYI, JSC used to do something like this, but switched to the bitfield for performance reasons. Unclear if it would make a big difference in v8, but it was a factor in parser performance.",
+      "revId": "004a998d82ae068f8fc792674b5fc972eae4baa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
