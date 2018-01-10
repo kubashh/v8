@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aa85e2d_9c75a42a",
+        "filename": "tools/foozzie/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-10T12:36:17Z",
+      "side": 1,
+      "message": "FYI: I updated the correctness fuzzer as well, which runs now trusted and trusted_opt each in 5% of the cases.",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "a43af00861410c24e9f18bc810fe24e65fb77612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
