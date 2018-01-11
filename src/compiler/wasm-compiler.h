@@ -482,11 +482,22 @@ class WasmGraphBuilder {
 
   Node* BuildF32CopySign(Node* left, Node* right);
   Node* BuildF64CopySign(Node* left, Node* right);
+  template <typename IntConv, typename FloatConv>
+  Node* BuildI32ConvertOp(Node* input, wasm::WasmCodePosition position,
+                          NumericImplementation impl, const Operator* op,
+                          wasm::WasmOpcode check_op);
+  template <typename IntConv, typename FloatConv>
+  Node* BuildConvertCheck(Node* test, Node* result, Node* input,
+                          wasm::WasmCodePosition position,
+                          NumericImplementation impl);
   Node* BuildI32SConvertF32(Node* input, wasm::WasmCodePosition position,
                             NumericImplementation impl);
-  Node* BuildI32SConvertF64(Node* input, wasm::WasmCodePosition position);
-  Node* BuildI32UConvertF32(Node* input, wasm::WasmCodePosition position);
-  Node* BuildI32UConvertF64(Node* input, wasm::WasmCodePosition position);
+  Node* BuildI32SConvertF64(Node* input, wasm::WasmCodePosition position,
+                            NumericImplementation impl);
+  Node* BuildI32UConvertF32(Node* input, wasm::WasmCodePosition position,
+                            NumericImplementation impl);
+  Node* BuildI32UConvertF64(Node* input, wasm::WasmCodePosition position,
+                            NumericImplementation impl);
   Node* BuildI32Ctz(Node* input);
   Node* BuildI32Popcnt(Node* input);
   Node* BuildI64Ctz(Node* input);
