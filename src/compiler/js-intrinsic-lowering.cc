@@ -41,6 +41,10 @@ Reduction JSIntrinsicLowering::Reduce(Node* node) {
       return ReduceCreateJSGeneratorObject(node);
     case Runtime::kInlineGeneratorGetInputOrDebugPos:
       return ReduceGeneratorGetInputOrDebugPos(node);
+    case Runtime::kInlineAsyncFunctionPromiseRelease:
+      return ReduceAsyncFunctionPromiseRelease(node);
+    case Runtime::kInlineAsyncFunctionPromiseCreate:
+      return ReduceAsyncFunctionPromiseCreate(node);
     case Runtime::kInlineAsyncGeneratorReject:
       return ReduceAsyncGeneratorReject(node);
     case Runtime::kInlineAsyncGeneratorResolve:
@@ -181,6 +185,23 @@ Reduction JSIntrinsicLowering::ReduceGeneratorGetInputOrDebugPos(Node* node) {
       AccessBuilder::ForJSGeneratorObjectInputOrDebugPos());
 
   return Change(node, op, generator, effect, control);
+}
+
+Reduction JSIntrinsicLowering::ReduceAsyncFunctionPromiseCreate(Node* node) {
+  return Change(
+      node,
+      Builtins::CallableFor(isolate(), Builtins::kAsyncFunctionPromiseCreate),
+      0);
+}
+
+Reduction JSIntrinsicLowering::ReduceAsyncFunctionPromiseRelease(Node* node) {
+  // The %AsyncFunctionPromiseRelease() intrinsic is a no-op in TurboFan
+  // since it's only concerned with popping the promise from the catch
+  // prediction stack if the debugger is active, but we can never execute
+  // in optimized code while the debugger is active.
+  Node* const value = jsgraph()->UndefinedConstant();
+  ReplaceWithValue(node, value);
+  return Replace(value);
 }
 
 Reduction JSIntrinsicLowering::ReduceAsyncGeneratorReject(Node* node) {

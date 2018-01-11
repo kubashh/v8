@@ -241,20 +241,22 @@ namespace internal {
   F(IsFunction, 1, 1)                      \
   F(FunctionToString, 1, 1)
 
-#define FOR_EACH_INTRINSIC_GENERATOR(F) \
-  F(CreateJSGeneratorObject, 2, 1)      \
-  F(GeneratorClose, 1, 1)               \
-  F(GeneratorGetFunction, 1, 1)         \
-  F(GeneratorGetReceiver, 1, 1)         \
-  F(GeneratorGetContext, 1, 1)          \
-  F(GeneratorGetInputOrDebugPos, 1, 1)  \
-  F(AsyncGeneratorResolve, 3, 1)        \
-  F(AsyncGeneratorReject, 2, 1)         \
-  F(AsyncGeneratorYield, 3, 1)          \
-  F(GeneratorGetContinuation, 1, 1)     \
-  F(GeneratorGetSourcePosition, 1, 1)   \
-  F(GeneratorGetResumeMode, 1, 1)       \
-  F(AsyncGeneratorHasCatchHandlerForPC, 1, 1)
+#define FOR_EACH_INTRINSIC_GENERATOR(F)       \
+  F(CreateJSGeneratorObject, 2, 1)            \
+  F(GeneratorClose, 1, 1)                     \
+  F(GeneratorGetFunction, 1, 1)               \
+  F(GeneratorGetReceiver, 1, 1)               \
+  F(GeneratorGetContext, 1, 1)                \
+  F(GeneratorGetInputOrDebugPos, 1, 1)        \
+  F(AsyncGeneratorResolve, 3, 1)              \
+  F(AsyncGeneratorReject, 2, 1)               \
+  F(AsyncGeneratorYield, 3, 1)                \
+  F(GeneratorGetContinuation, 1, 1)           \
+  F(GeneratorGetSourcePosition, 1, 1)         \
+  F(GeneratorGetResumeMode, 1, 1)             \
+  F(AsyncGeneratorHasCatchHandlerForPC, 1, 1) \
+  F(AsyncFunctionPromiseCreate, 0, 1)         \
+  F(AsyncFunctionPromiseRelease, 0, 1)
 
 #ifdef V8_INTL_SUPPORT
 #define FOR_EACH_INTRINSIC_INTL(F)           \

@@ -135,5 +135,17 @@ RUNTIME_FUNCTION(Runtime_AsyncGeneratorHasCatchHandlerForPC) {
   return isolate->heap()->ToBoolean(catch_prediction == HandlerTable::CAUGHT);
 }
 
+RUNTIME_FUNCTION(Runtime_AsyncFunctionPromiseCreate) {
+  // Runtime call is implemented in InterpreterIntrinsics and lowered in
+  // JSIntrinsicLowering
+  UNREACHABLE();
+}
+
+RUNTIME_FUNCTION(Runtime_AsyncFunctionPromiseRelease) {
+  // Runtime call is implemented in InterpreterIntrinsics and lowered in
+  // JSIntrinsicLowering
+  UNREACHABLE();
+}
+
 }  // namespace internal
 }  // namespace v8
