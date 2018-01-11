@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38d81d7a_e51ad6c8",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-01-11T15:49:55Z",
+      "side": 1,
+      "message": "nit of the day: Please capitalize comments.",
+      "range": {
+        "startLine": 159,
+        "startChar": 39,
+        "endLine": 159,
+        "endChar": 40
+      },
+      "revId": "9f13bfac0373438b15fa369c3cc251a96b183c5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
