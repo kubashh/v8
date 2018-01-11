@@ -16,6 +16,24 @@
       "revId": "9f4f756471f1340c85fe6c133cb6a939093fdfa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b037610a_3310ca16",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-01-11T18:41:28Z",
+      "side": 1,
+      "message": "My read is that we need to detach when using Memory.Grow because that\u0027s specified in the JS API spec [1]. The behavior of the bytecode is specified by the Wasm core spec [2], which does not know anything about detaching because this is a JavaScript-ism.\n\nSo basically, whether we detach from the opcode is currently unspecified, meaning we can do either. We should probably specify this though. Could the JS API or Web Embedding specs note changes in the behavior of different opcodes that make sense for specific environments?\n\n[1]: https://webassembly.github.io/spec/js-api/index.html#dom-memory-grow\n[2]: https://webassembly.github.io/spec/core/exec/instructions.html#exec-grow-memory",
+      "parentUuid": "fd7db630_79e26de8",
+      "revId": "9f4f756471f1340c85fe6c133cb6a939093fdfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
