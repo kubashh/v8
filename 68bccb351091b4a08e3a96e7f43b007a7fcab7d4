@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a857e23_72907d76",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-01-11T17:47:44Z",
+      "side": 1,
+      "message": "Please add a comment to be consistent with the rest of the file.",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c9fb255_40f69eae",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-01-11T17:47:44Z",
+      "side": 1,
+      "message": "omit",
+      "range": {
+        "startLine": 217,
+        "startChar": 46,
+        "endLine": 217,
+        "endChar": 62
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ada4e909_759498fb",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-01-11T17:47:44Z",
+      "side": 1,
+      "message": "I see that, unlike the chromium implementation, you are omitting adding a thread id and using AddTraceEventWithThreadIdAndTimestamp.\n\nI see that we have not adopted the thread_id anywhere else in this file, wondering if it is needed for your use case or if it is irrelevant.",
+      "range": {
+        "startLine": 223,
+        "startChar": 29,
+        "endLine": 223,
+        "endChar": 55
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bca1c45_95602746",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-01-11T17:47:44Z",
+      "side": 1,
+      "message": "AddTraceEvemtWithTimestamp?",
+      "range": {
+        "startLine": 592,
+        "startChar": 26,
+        "endLine": 592,
+        "endChar": 39
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
