@@ -564,38 +564,12 @@ Handle<WasmInstanceObject> WasmInstanceObject::New(
   return instance;
 }
 
-int32_t WasmInstanceObject::GetMemorySize() {
-  if (!has_memory_object()) return 0;
-  uint32_t bytes = memory_object()->array_buffer()->byte_length()->Number();
-  DCHECK_EQ(0, bytes % WasmModule::kPageSize);
-  return bytes / WasmModule::kPageSize;
-}
-
 int32_t WasmInstanceObject::GrowMemory(Isolate* isolate,
                                        Handle<WasmInstanceObject> instance,
                                        uint32_t pages) {
-  if (pages == 0) return instance->GetMemorySize();
   DCHECK(instance->has_memory_object());
   return WasmMemoryObject::Grow(
       isolate, handle(instance->memory_object(), isolate), pages);
-}
-
-uint32_t WasmInstanceObject::GetMaxMemoryPages() {
-  if (has_memory_object()) {
-    if (memory_object()->has_maximum_pages()) {
-      uint32_t maximum =
-          static_cast<uint32_t>(memory_object()->maximum_pages());
-      if (maximum < FLAG_wasm_max_mem_pages) return maximum;
-    }
-  }
-  uint32_t module_maximum_pages =
-      compiled_module()->shared()->module()->maximum_pages;
-  Isolate* isolate = GetIsolate();
-  DCHECK(compiled_module()->shared()->module()->is_wasm());
-  isolate->counters()->wasm_wasm_max_mem_pages_count()->AddSample(
-      module_maximum_pages);
-  if (module_maximum_pages != 0) return module_maximum_pages;
-  return FLAG_wasm_max_mem_pages;
 }
 
 WasmInstanceObject* WasmInstanceObject::GetOwningInstance(
