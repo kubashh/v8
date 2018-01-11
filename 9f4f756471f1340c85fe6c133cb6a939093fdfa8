@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd7db630_79e26de8",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-11T18:34:38Z",
+      "side": 1,
+      "message": "Not sure if I\u0027m missing something here, but my read of the spec is that we only Detach when calling Memory.Grow from the js-api, and the buffer is not detached when called through the bytecode.",
+      "revId": "9f4f756471f1340c85fe6c133cb6a939093fdfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
