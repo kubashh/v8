@@ -22,6 +22,30 @@
       "revId": "1b419839e8a56c8637abee913d745a4a5eee9e84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f355cfae_88292cde",
+        "filename": "test/cctest/heap/test-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-01-11T14:11:44Z",
+      "side": 1,
+      "message": "I changed the last check and removed the first two checks (segfault is better than crash). Done.",
+      "parentUuid": "465011eb_a040d23c",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 34
+      },
+      "revId": "1b419839e8a56c8637abee913d745a4a5eee9e84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
