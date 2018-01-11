@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ccdeb0c_a9b1139a",
+        "filename": "test/mjsunit/wasm/grow-memory-detaching.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-01-11T15:14:04Z",
+      "side": 1,
+      "message": "As discussed offline: It seems that {growMem} is never called.",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 13
+      },
+      "revId": "18768526ae8ef82362f001cf9b964a636c42e96e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
