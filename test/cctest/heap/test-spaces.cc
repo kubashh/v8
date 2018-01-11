@@ -230,7 +230,7 @@ TEST(MemoryAllocator) {
         NOT_EXECUTABLE);
 
     first_page->InsertAfter(faked_space.anchor()->prev_page());
-    CHECK(Page::IsValid(first_page));
+    CHECK_NE(first_page, nullptr);
     CHECK(first_page->next_page() == faked_space.anchor());
     total_pages++;
 
@@ -242,7 +242,7 @@ TEST(MemoryAllocator) {
     Page* other = memory_allocator->AllocatePage(
         faked_space.AreaSize(), static_cast<PagedSpace*>(&faked_space),
         NOT_EXECUTABLE);
-    CHECK(Page::IsValid(other));
+    CHECK_NE(other, nullptr);
     total_pages++;
     other->InsertAfter(first_page);
     int page_count = 0;
@@ -253,7 +253,7 @@ TEST(MemoryAllocator) {
     CHECK(total_pages == page_count);
 
     Page* second_page = first_page->next_page();
-    CHECK(Page::IsValid(second_page));
+    CHECK_NE(second_page, nullptr);
 
     // OldSpace's destructor will tear down the space and free up all pages.
   }
