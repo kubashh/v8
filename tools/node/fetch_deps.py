@@ -60,7 +60,14 @@ def EnsureGit(v8_path):
                         cwd=v8_path)
   return True
 
-def FetchDeps(v8_path, depot_tools):
+def FetchDeps(v8_path):
+  # Verify path.
+  v8_path = os.path.abspath(v8_path)
+  assert os.path.isdir(v8_path)
+
+  # Check out depot_tools if necessary.
+  depot_tools = node_common.EnsureDepotTools(v8_path, True)
+
   temporary_git = EnsureGit(v8_path)
   try:
     print "Fetching dependencies."
@@ -77,19 +84,5 @@ def FetchDeps(v8_path, depot_tools):
     if temporary_git:
       node_common.UninitGit(v8_path)
 
-def Main(v8_path):
-  # Verify paths.
-  v8_path = os.path.abspath(v8_path)
-  assert os.path.isdir(v8_path)
-
-  # Check out depot_tools if necessary.
-  depot_tools = node_common.EnsureDepotTools(v8_path, True)
-
-  # Fetch dependencies with gclient.
-  FetchDeps(v8_path, depot_tools)
-
 if __name__ == "__main__":
-  if len(sys.argv) > 2 and sys.argv[2] == "force":
-    Main(sys.argv[1])
-  else:
-    print "Disabled for now unless 'force' is passed as second argument."
+  FetchDeps(sys.argv[1])
