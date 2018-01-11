@@ -413,17 +413,6 @@ const int kCodeAlignmentBits = 5;
 const intptr_t kCodeAlignment = 1 << kCodeAlignmentBits;
 const intptr_t kCodeAlignmentMask = kCodeAlignment - 1;
 
-// The owner field of a page is tagged with the page header tag. We need that
-// to find out if a slot is part of a large object. If we mask out the lower
-// 0xfffff bits (1M pages), go to the owner offset, and see that this field
-// is tagged with the page header tag, we can just look up the owner.
-// Otherwise, we know that we are somewhere (not within the first 1M) in a
-// large object.
-const int kPageHeaderTag = 3;
-const int kPageHeaderTagSize = 2;
-const intptr_t kPageHeaderTagMask = (1 << kPageHeaderTagSize) - 1;
-
-
 // Zap-value: The value used for zapping dead objects.
 // Should be a recognizable hex value tagged as a failure.
 #ifdef V8_HOST_ARCH_64_BIT
