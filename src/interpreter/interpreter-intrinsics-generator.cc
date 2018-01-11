@@ -451,6 +451,20 @@ Node* IntrinsicsGenerator::GetImportMetaObject(Node* args_reg, Node* arg_count,
   return return_value.value();
 }
 
+Node* IntrinsicsGenerator::AsyncFunctionPromiseCreate(Node* input,
+                                                      Node* arg_count,
+                                                      Node* context) {
+  return IntrinsicAsBuiltinCall(input, context,
+                                Builtins::kAsyncFunctionPromiseCreate);
+}
+
+Node* IntrinsicsGenerator::AsyncFunctionPromiseRelease(Node* input,
+                                                       Node* arg_count,
+                                                       Node* context) {
+  return IntrinsicAsBuiltinCall(input, context,
+                                Builtins::kAsyncFunctionPromiseRelease);
+}
+
 Node* IntrinsicsGenerator::AsyncGeneratorReject(Node* input, Node* arg_count,
                                                 Node* context) {
   return IntrinsicAsBuiltinCall(input, context,

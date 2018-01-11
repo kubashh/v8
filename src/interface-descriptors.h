@@ -350,6 +350,7 @@ class V8_EXPORT_PRIVATE VoidDescriptor : public CallInterfaceDescriptor {
 
 class ContextOnlyDescriptor : public CallInterfaceDescriptor {
  public:
+  DEFINE_EMPTY_PARAMETERS()
   DECLARE_DESCRIPTOR(ContextOnlyDescriptor, CallInterfaceDescriptor)
 };
 

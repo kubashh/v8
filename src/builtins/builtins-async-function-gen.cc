@@ -161,7 +161,6 @@ TF_BUILTIN(AsyncFunctionAwaitUncaught, AsyncFunctionBuiltinsAssembler) {
 }
 
 TF_BUILTIN(AsyncFunctionPromiseCreate, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 0);
   Node* const context = Parameter(Descriptor::kContext);
 
   Node* const promise = AllocateAndInitJSPromise(context);
@@ -185,8 +184,6 @@ TF_BUILTIN(AsyncFunctionPromiseCreate, AsyncFunctionBuiltinsAssembler) {
 }
 
 TF_BUILTIN(AsyncFunctionPromiseRelease, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 1);
-  Node* const promise = Parameter(Descriptor::kPromise);
   Node* const context = Parameter(Descriptor::kContext);
 
   Label if_is_debug_active(this, Label::kDeferred);
@@ -200,7 +197,7 @@ TF_BUILTIN(AsyncFunctionPromiseRelease, AsyncFunctionBuiltinsAssembler) {
     // Pop the Promise under construction in an async function on
     // from catch prediction stack.
     CallRuntime(Runtime::kDebugPopPromise, context);
-    Return(promise);
+    Return(UndefinedConstant());
   }
 }
 
