@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "95241b31_b67fd70b",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-01-11T19:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a857e23_72907d76",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c9fb255_40f69eae",
         "filename": "src/tracing/trace-event.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b10bd36_57ea19ec",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-01-11T19:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c9fb255_40f69eae",
+      "range": {
+        "startLine": 217,
+        "startChar": 46,
+        "endLine": 217,
+        "endChar": 62
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0a596cf8_5113910f",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-01-11T19:48:32Z",
+      "side": 1,
+      "message": "I don\u0027t have a use-case for a user provided thread id just yet. The libplatform default of using the current thread id works for all the use cases at present.",
+      "parentUuid": "ada4e909_759498fb",
+      "range": {
+        "startLine": 223,
+        "startChar": 29,
+        "endLine": 223,
+        "endChar": 55
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bca1c45_95602746",
         "filename": "src/tracing/trace-event.h",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55a4b5a5_beb3d3fe",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-01-11T19:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bca1c45_95602746",
+      "range": {
+        "startLine": 592,
+        "startChar": 26,
+        "endLine": 592,
+        "endChar": 39
+      },
+      "revId": "68bccb351091b4a08e3a96e7f43b007a7fcab7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
