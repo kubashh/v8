@@ -75,6 +75,9 @@ class TestSuite(testsuite.TestSuite):
   def _VariantGeneratorFactory(self):
     return testsuite.StandardVariantGenerator
 
+  def _variants_gen_class(self):
+    return VariantsGenerator
+
 
 class TestCase(testcase.TestCase):
   def __init__(self, suite, path, name, source, template_flags):
@@ -103,6 +106,11 @@ class TestCase(testcase.TestCase):
 
   def get_source(self):
     return self._source
+
+
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _get_variants(self, test):
+    return self._standard_variant
 
 
 def GetSuite(name, root):

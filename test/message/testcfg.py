@@ -62,6 +62,9 @@ class TestSuite(testsuite.TestSuite):
     return super(TestSuite, self).CreateVariantGenerator(
         variants + ["preparser"])
 
+  def create_variant_proc(self, variants):
+    return super(TestSuite, self).create_variant_proc(variants + ['preparser'])
+
 
 class TestCase(testcase.TestCase):
   def __init__(self, *args, **kwargs):

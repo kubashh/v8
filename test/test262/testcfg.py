@@ -195,6 +195,9 @@ class TestSuite(testsuite.TestSuite):
   def _VariantGeneratorFactory(self):
     return VariantGenerator
 
+  def _variants_gen_class(self):
+    return VariantsGenerator
+
 
 class TestCase(testcase.TestCase):
   def __init__(self, *args, **kwargs):
@@ -255,6 +258,24 @@ class TestCase(testcase.TestCase):
     return test262.NoExceptionOutProc(self.expected_outcomes)
 
 
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _variants_gen(self, test):
+    flags_set = self._get_flags_set(test)
+    test_record = test.test_record
+    for n, variant in enumerate(self._get_variants(test)):
+      flags = flags_set[variant][0]
+      if 'noStrict' in test_record:
+        yield (variant, flags, str(n))
+      elif 'onlyStrict' in test_record:
+        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
+      else:
+        yield (variant, flags, str(n))
+        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
+
+  def _get_flags_set(self, test):
+    if test.only_fast_variants:
+      return testsuite.FAST_VARIANTS_FLAGS
+    return testsuite.ALL_VARIANT_FLAGS
 
 
 def GetSuite(name, root):

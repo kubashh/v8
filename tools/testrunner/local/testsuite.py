@@ -62,6 +62,32 @@ class VariantGenerator(object):
       return ALL_VARIANT_FLAGS[variant]
 
 
+class VariantsGenerator(object):
+  def __init__(self, variants):
+    self._all_variants = [v for v in variants if v in ALL_VARIANTS]
+    self._fast_variants = [v for v in variants if v in FAST_VARIANTS]
+    self._standard_variant = [v for v in variants if v in STANDARD_VARIANT]
+
+  def gen(self, test):
+    """Generator producing (variant, flags, procid suffix) tuples."""
+    flags_set = self._get_flags_set(test)
+    for n, variant in enumerate(self._get_variants(test)):
+      yield (variant, flags_set[variant][0], n)
+
+  def _get_flags_set(self, test):
+    if test.only_fast_variants:
+      return FAST_VARIANT_FLAGS
+    else:
+      return ALL_VARIANT_FLAGS
+
+  def _get_variants(self, test):
+    if test.only_standard_variant:
+      return self._standard_variant
+    if test.only_fast_variants:
+      return self._fast_variants
+    return self._all_variants
+
+
 class TestSuite(object):
   @staticmethod
   def LoadTestSuite(root):
@@ -101,6 +127,12 @@ class TestSuite(object):
     Returns: An object of type VariantGenerator.
     """
     return self._VariantGeneratorFactory()(self, set(variants))
+
+  def get_variants_gen(self, variants):
+    return self._variants_gen_class()(variants)
+
+  def _variants_gen_class(self):
+    return VariantsGenerator
 
   def ReadStatusFile(self, variables):
     self.statusfile = statusfile.StatusFile(self.status_file(), variables)

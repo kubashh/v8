@@ -117,6 +117,9 @@ class TestSuite(testsuite.TestSuite):
   def _test_class(self):
     return TestCase
 
+  def _variants_gen_class(self):
+    return VariantsGenerator
+
   def _VariantGeneratorFactory(self):
     return VariantGenerator
 
@@ -147,6 +150,16 @@ class TestCase(testcase.TestCase):
 
   def _get_source_path(self):
     return os.path.join(self.suite.testroot, self.path + self._get_suffix())
+
+
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _get_flags_set(self, test):
+    return testsuite.FAST_VARIANT_FLAGS
+
+  def _get_variants(self, test):
+    if test.only_standard_variant:
+      return self._standard_variant
+    return self._fast_variants
 
 
 def GetSuite(name, root):
