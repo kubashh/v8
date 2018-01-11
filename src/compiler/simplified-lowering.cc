@@ -2944,7 +2944,6 @@ class RepresentationSelector {
         }
         ProcessRemainingInputs(node, 1);
         SetOutput(node, representation);
-        if (lower()) DeferReplacement(node, node->InputAt(0));
         return;
       }
 
