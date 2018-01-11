@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40a8e85d_ee08ef01",
+        "filename": "tools/node/fetch_deps.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-11T15:06:36Z",
+      "side": 1,
+      "message": "nit: Maybe surround this with os.normpath. It\u0027ll translate e.g. a/b/../c into a/c. The former might get problems on windows.",
+      "range": {
+        "startLine": 87,
+        "startChar": 22,
+        "endLine": 87,
+        "endChar": 74
+      },
+      "revId": "f7257403c91014e016c09cebb4fb2a209dffb1bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
