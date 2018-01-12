@@ -34,6 +34,24 @@
       "revId": "9f4f756471f1340c85fe6c133cb6a939093fdfa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94ec7722_844c3feb",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-01-12T13:22:34Z",
+      "side": 1,
+      "message": "I think that the grow_memory bytecode should detach; otherwise we cannot guarantee prompt reclamation of the prior storage for the underlying memory, and technically, if we have guard regions, we\u0027d have two array buffers that alias the same storage, which would be a leak of an implementation detail. I\u0027ve filed https://github.com/WebAssembly/spec/issues/646 to resolve this in the specification.",
+      "parentUuid": "b037610a_3310ca16",
+      "revId": "9f4f756471f1340c85fe6c133cb6a939093fdfa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
