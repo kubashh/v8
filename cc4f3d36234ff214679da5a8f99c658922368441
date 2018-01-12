@@ -70,6 +70,30 @@
       "revId": "cc4f3d36234ff214679da5a8f99c658922368441",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55559592_8031cf5d",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-12T15:12:02Z",
+      "side": 1,
+      "message": "They will, but LUCI builds have lower priority and it takes a LOT of builds to have their priority be upgraded from 100 to 30.",
+      "parentUuid": "1fec78b6_a975ba0b",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "cc4f3d36234ff214679da5a8f99c658922368441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
