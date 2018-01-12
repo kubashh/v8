@@ -444,7 +444,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           verbose.PrintTestSource(s.tests)
           continue
         if not options.infra_staging:
-          variant_gen = s.CreateLegacyVariantsGenerator(VARIANTS)
+          variant_gen = s.CreateVariantGenerator(VARIANTS)
           variant_tests = [ t.create_variant(v, flags)
                             for t in s.tests
                             for v in variant_gen.FilterVariantsByTest(t)

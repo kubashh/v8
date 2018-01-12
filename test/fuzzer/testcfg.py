@@ -8,21 +8,13 @@ from testrunner.local import testsuite
 from testrunner.objects import testcase
 
 
-class LegacyVariantsGenerator(testsuite.LegacyVariantsGenerator):
+class VariantGenerator(testsuite.VariantGenerator):
   # Only run the fuzzer with standard variant.
   def FilterVariantsByTest(self, test):
     return self.standard_variant
 
   def GetFlagSets(self, test, variant):
     return testsuite.FAST_VARIANT_FLAGS[variant]
-
-
-class VariantsGenerator(testsuite.VariantsGenerator):
-  def _get_flags_set(self, test):
-    return testsuite.FAST_VARIANT_FLAGS
-
-  def _get_variants(self, test):
-    return self._standard_variant
 
 
 class TestSuite(testsuite.TestSuite):
@@ -49,8 +41,8 @@ class TestSuite(testsuite.TestSuite):
   def _variants_gen_class(self):
     return VariantsGenerator
 
-  def _LegacyVariantsGeneratorFactory(self):
-    return LegacyVariantsGenerator
+  def _VariantGeneratorFactory(self):
+    return VariantGenerator
 
 
 class TestCase(testcase.TestCase):
@@ -70,6 +62,14 @@ class TestCase(testcase.TestCase):
   def get_shell(self):
     group, _ = self.path.split('/', 1)
     return 'v8_simple_%s_fuzzer' % group
+
+
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _get_flags_set(self, test):
+    return testsuite.FAST_VARIANT_FLAGS
+
+  def _get_variants(self, test):
+    return self._standard_variant
 
 
 def GetSuite(name, root):

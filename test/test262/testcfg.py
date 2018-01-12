@@ -105,7 +105,7 @@ FAST_VARIANTS = {
   'both': FAST_VARIANT_FLAGS_BOTH,
 }
 
-class LegacyVariantsGenerator(testsuite.LegacyVariantsGenerator):
+class VariantGenerator(testsuite.VariantGenerator):
   def GetFlagSets(self, test, variant):
     if test.only_fast_variants:
       variant_flags = FAST_VARIANTS
@@ -118,26 +118,6 @@ class LegacyVariantsGenerator(testsuite.LegacyVariantsGenerator):
     if "onlyStrict" in test_record:
       return variant_flags["strict"][variant]
     return variant_flags["both"][variant]
-
-
-class VariantsGenerator(testsuite.VariantsGenerator):
-  def _variants_gen(self, test):
-    flags_set = self._get_flags_set(test)
-    test_record = test.test_record
-    for n, variant in enumerate(self._get_variants(test)):
-      flags = flags_set[variant][0]
-      if 'noStrict' in test_record:
-        yield (variant, flags, str(n))
-      elif 'onlyStrict' in test_record:
-        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
-      else:
-        yield (variant, flags, str(n))
-        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
-
-  def _get_flags_set(self, test):
-    if test.only_fast_variants:
-      return testsuite.FAST_VARIANTS_FLAGS
-    return testsuite.ALL_VARIANT_FLAGS
 
 
 class TestSuite(testsuite.TestSuite):
@@ -212,8 +192,8 @@ class TestSuite(testsuite.TestSuite):
   def _test_class(self):
     return TestCase
 
-  def _LegacyVariantsGeneratorFactory(self):
-    return LegacyVariantsGenerator
+  def _VariantGeneratorFactory(self):
+    return VariantGenerator
 
   def _variants_gen_class(self):
     return VariantsGenerator
@@ -276,6 +256,26 @@ class TestCase(testcase.TestCase):
     if self.expected_outcomes == outproc.OUTCOMES_PASS:
       return test262.PASS_NO_EXCEPTION
     return test262.NoExceptionOutProc(self.expected_outcomes)
+
+
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _variants_gen(self, test):
+    flags_set = self._get_flags_set(test)
+    test_record = test.test_record
+    for n, variant in enumerate(self._get_variants(test)):
+      flags = flags_set[variant][0]
+      if 'noStrict' in test_record:
+        yield (variant, flags, str(n))
+      elif 'onlyStrict' in test_record:
+        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
+      else:
+        yield (variant, flags, str(n))
+        yield (variant, flags + ['--use-strict'], 'strict-%d' % n)
+
+  def _get_flags_set(self, test):
+    if test.only_fast_variants:
+      return testsuite.FAST_VARIANTS_FLAGS
+    return testsuite.ALL_VARIANT_FLAGS
 
 
 def GetSuite(name, root):

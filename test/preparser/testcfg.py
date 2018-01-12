@@ -32,11 +32,6 @@ from testrunner.local import testsuite
 from testrunner.objects import testcase
 
 
-class VariantsGenerator(testsuite.VariantsGenerator):
-  def _get_variants(self, test):
-    return self._standard_variant
-
-
 class TestSuite(testsuite.TestSuite):
   def _ParsePythonTestTemplates(self, result, filename):
     pathname = os.path.join(self.root, filename + ".pyt")
@@ -77,8 +72,8 @@ class TestSuite(testsuite.TestSuite):
   def _test_class(self):
     return TestCase
 
-  def _LegacyVariantsGeneratorFactory(self):
-    return testsuite.StandardLegacyVariantsGenerator
+  def _VariantGeneratorFactory(self):
+    return testsuite.StandardVariantGenerator
 
   def _variants_gen_class(self):
     return VariantsGenerator
@@ -111,6 +106,11 @@ class TestCase(testcase.TestCase):
 
   def get_source(self):
     return self._source
+
+
+class VariantsGenerator(testsuite.VariantsGenerator):
+  def _get_variants(self, test):
+    return self._standard_variant
 
 
 def GetSuite(name, root):

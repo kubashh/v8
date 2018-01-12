@@ -41,7 +41,7 @@ FAST_VARIANTS = set(["default", "turbofan"])
 STANDARD_VARIANT = set(["default"])
 
 
-class LegacyVariantsGenerator(object):
+class VariantGenerator(object):
   def __init__(self, suite, variants):
     self.suite = suite
     self.all_variants = ALL_VARIANTS & variants
@@ -60,11 +60,6 @@ class LegacyVariantsGenerator(object):
       return FAST_VARIANT_FLAGS[variant]
     else:
       return ALL_VARIANT_FLAGS[variant]
-
-
-class StandardLegacyVariantsGenerator(LegacyVariantsGenerator):
-  def FilterVariantsByTest(self, testcase):
-    return self.standard_variant
 
 
 class VariantsGenerator(object):
@@ -119,19 +114,19 @@ class TestSuite(object):
   def ListTests(self, context):
     raise NotImplementedError
 
-  def _LegacyVariantsGeneratorFactory(self):
+  def _VariantGeneratorFactory(self):
     """The variant generator class to be used."""
-    return LegacyVariantsGenerator
+    return VariantGenerator
 
-  def CreateLegacyVariantsGenerator(self, variants):
+  def CreateVariantGenerator(self, variants):
     """Return a generator for the testing variants of this suite.
 
     Args:
       variants: List of variant names to be run as specified by the test
                 runner.
-    Returns: An object of type LegacyVariantsGenerator.
+    Returns: An object of type VariantGenerator.
     """
-    return self._LegacyVariantsGeneratorFactory()(self, set(variants))
+    return self._VariantGeneratorFactory()(self, set(variants))
 
   def get_variants_gen(self, variants):
     return self._variants_gen_class()(variants)
@@ -219,3 +214,8 @@ class TestSuite(object):
     if utils.IsWindows():
       return path.replace("\\", "/")
     return path
+
+
+class StandardVariantGenerator(VariantGenerator):
+  def FilterVariantsByTest(self, testcase):
+    return self.standard_variant
