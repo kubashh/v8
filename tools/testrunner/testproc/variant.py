@@ -5,6 +5,7 @@
 from . import base
 
 from ..local.variants import ALL_VARIANTS, ALL_VARIANT_FLAGS, FAST_VARIANT_FLAGS
+from .result import GroupedResult
 
 
 FAST_VARIANTS = set(["default", "turbofan"])
@@ -27,38 +28,39 @@ class VariantProc(base.TestProcProducer):
   def __init__(self, variants):
     super(VariantProc, self).__init__('VariantProc')
     self._next_test_iter = {}
+    self._results = {}
     self._variant_gens = {}
     self._variants = variants
 
   def _next_test(self, test):
     self._init_test(test)
-    return self._try_send_new_subtest(test)
+    result = self._try_send_new_subtest(test)
+    if result:
+      self._send_result(test, result)
 
-  def _result_for(self, test, subtest, result, is_last):
-    if not is_last:
-      self._send_result(subtest, result, is_last=False)
-      return
-
-    has_sent = self._try_send_new_subtest(test)
-    self._send_result(subtest, result, is_last=not has_sent)
+  def _result_for(self, test, subtest, result):
+    self._results[test.procid].append((subtest, result))
+    results = self._try_send_new_subtest(test)
+    if results:
+      self._send_result(subtest, results)
 
   def _init_test(self, test):
+    self._results[test.procid] = []
     self._next_test_iter[test.procid] = iter(self._variants_gen(test))
 
   def _try_send_new_subtest(self, test):
-    # Keep trying until variant is not ignored by the next processors or there
-    # is no more variants to generate.
-    while True:
-      try:
-        variant, flags, suffix = next(self._next_test_iter[test.procid])
-      except StopIteration:
-        del self._next_test_iter[test.procid]
-        return False
+    # Returns GroupedResult/DummyResult when finished. None until then.
+    try:
+      variant, flags, suffix = next(self._next_test_iter[test.procid])
+    except StopIteration:
+      del self._next_test_iter[test.procid]
+      result = GroupedResult.create(self._results[test.procid])
+      del self._results[test.procid]
+      return result
 
-      subtest = self._create_subtest(test, '%s-%s' % (variant, suffix),
-                                     variant=variant, flags=flags)
-      if self._send_test(subtest):
-        return True
+    subtest = self._create_subtest(test, '%s-%s' % (variant, suffix),
+                                   variant=variant, flags=flags)
+    self._send_test(subtest)
 
   def _variants_gen(self, test):
     """Generator producing (variant, flags, procid suffix) tuples."""
