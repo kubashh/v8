@@ -368,8 +368,8 @@ namespace internal {
   TFJ(AsyncFunctionAwaitUncaught, 3, kGenerator, kAwaited, kOuterPromise)      \
   TFJ(AsyncFunctionAwaitRejectClosure, 1, kSentError)                          \
   TFJ(AsyncFunctionAwaitResolveClosure, 1, kSentValue)                         \
-  TFJ(AsyncFunctionPromiseCreate, 0)                                           \
-  TFJ(AsyncFunctionPromiseRelease, 1, kPromise)                                \
+  TFC(AsyncFunctionPromiseCreate, ContextOnly, 1)                              \
+  TFS(AsyncFunctionPromiseRelease, kPromise)                                   \
                                                                                \
   /* BigInt */                                                                 \
   CPP(BigIntConstructor)                                                       \

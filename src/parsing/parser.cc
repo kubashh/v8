@@ -3070,22 +3070,22 @@ Scope* Parser::NewHiddenCatchScope() {
 }
 
 Block* Parser::BuildRejectPromiseOnException(Block* inner_block) {
-  // .promise = %AsyncFunctionPromiseCreate();
+  // .promise = %_AsyncFunctionPromiseCreate();
   // try {
   //   <inner_block>
   // } catch (.catch) {
   //   %RejectPromise(.promise, .catch);
   //   return .promise;
   // } finally {
-  //   %AsyncFunctionPromiseRelease(.promise);
+  //   %_AsyncFunctionPromiseRelease();
   // }
   Block* result = factory()->NewBlock(2, true);
 
-  // .promise = %AsyncFunctionPromiseCreate();
+  // .promise = %_AsyncFunctionPromiseCreate();
   Statement* set_promise;
   {
     Expression* create_promise = factory()->NewCallRuntime(
-        Context::ASYNC_FUNCTION_PROMISE_CREATE_INDEX,
+        Runtime::kInlineAsyncFunctionPromiseCreate,
         new (zone()) ZoneList<Expression*>(0, zone()), kNoSourcePosition);
     Assignment* assign_promise = factory()->NewAssignment(
         Token::ASSIGN, factory()->NewVariableProxy(PromiseVariable()),
@@ -3111,13 +3111,12 @@ Block* Parser::BuildRejectPromiseOnException(Block* inner_block) {
   // There is no TryCatchFinally node, so wrap it in an outer try/finally
   Block* outer_try_block = IgnoreCompletion(try_catch_statement);
 
-  // finally { %AsyncFunctionPromiseRelease(.promise) }
+  // finally { %_AsyncFunctionPromiseRelease() }
   Block* finally_block;
   {
-    ZoneList<Expression*>* args = new (zone()) ZoneList<Expression*>(1, zone());
-    args->Add(factory()->NewVariableProxy(PromiseVariable()), zone());
     Expression* call_promise_release = factory()->NewCallRuntime(
-        Context::ASYNC_FUNCTION_PROMISE_RELEASE_INDEX, args, kNoSourcePosition);
+        Runtime::kInlineAsyncFunctionPromiseRelease,
+        new (zone()) ZoneList<Expression*>(0, zone()), kNoSourcePosition);
     Statement* promise_release = factory()->NewExpressionStatement(
         call_promise_release, kNoSourcePosition);
     finally_block = IgnoreCompletion(promise_release);
