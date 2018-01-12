@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9d7f63e_79a5591f",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "How is it now with this method? Shouldn\u0027t after this simplification all subtests be created by this processor? So maybe the while loop can be removed now and the whole method inlined?",
+      "range": {
+        "startLine": 139,
+        "startChar": 6,
+        "endLine": 139,
+        "endChar": 25
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63a73b0e_d7117441",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "If call stack becomes a problem maybe we\u0027d need something like twistd deferred? I hope we don\u0027t...",
+      "range": {
+        "startLine": 153,
+        "startChar": 11,
+        "endLine": 153,
+        "endChar": 23
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8e3bb74_a9da3f24",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "nit: Maybe rename to SKIPPED",
+      "range": {
+        "startLine": 153,
+        "startChar": 37,
+        "endLine": 153,
+        "endChar": 49
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e4b6005_a4d1aa4f",
+        "filename": "tools/testrunner/testproc/rerun.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "How often is this called and what result is this? It looks like it\u0027s only called once after all reruns (or if none are needed), but the result it the last result, right?\n\nBut IIUC, the json progress indicator is to the right of this and gets all the intermediate results, right?",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6da2c50_ea2e2a74",
+        "filename": "tools/testrunner/testproc/result.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "nit: by",
+      "range": {
+        "startLine": 25,
+        "startChar": 59,
+        "endLine": 25,
+        "endChar": 61
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d254d5_93e2a009",
+        "filename": "tools/testrunner/testproc/result.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "nit: meaningful",
+      "range": {
+        "startLine": 54,
+        "startChar": 24,
+        "endLine": 54,
+        "endChar": 33
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b6426ce_9e4a54c8",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "nit: call result just like the other? Grouped results are still a result.\n\nAlso those three lines and lines 37-39 are equal. Maybe extract?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 11
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "660d05d0_8fff1fbb",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "Should this not be test?",
+      "range": {
+        "startLine": 45,
+        "startChar": 24,
+        "endLine": 45,
+        "endChar": 31
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f41e80_5c670089",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "nit: Maybe use collections.defaultdict and use defaultdict(list)?",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8f87831_f829dba4",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:20:49Z",
+      "side": 1,
+      "message": "Please add a TODO to figure out if we need this at all. I have a hunch that the processors to the left of the variants processor don\u0027t really care about the results.",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 63
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
