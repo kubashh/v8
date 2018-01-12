@@ -229,6 +229,30 @@
       "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561b8ea9_b73191af",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T10:52:16Z",
+      "side": 1,
+      "message": "Summarizing offline discussion: Future scenario might be:\n- every processor indicates what it needs from the right, e.g. a listener indicates it needs results, and their detail, e.g. if raw output on PASS is required.\n- every processor only returns (meaningful and expensive) results if a processor to the left indicated that it needs them\n- the configuration of what each processor needs from the right and maybe expects from the left could be passed around once initially when wiring everything together.",
+      "parentUuid": "e8f87831_f829dba4",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 63
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
