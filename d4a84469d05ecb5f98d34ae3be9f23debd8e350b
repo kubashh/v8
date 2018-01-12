@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4eee8aa1_fb5fcc6c",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9d7f63e_79a5591f",
+      "range": {
+        "startLine": 139,
+        "startChar": 6,
+        "endLine": 139,
+        "endChar": 25
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63a73b0e_d7117441",
         "filename": "tools/testrunner/testproc/base.py",
         "patchSetId": 1
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "df90ed20_77fa28b5",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8e3bb74_a9da3f24",
+      "range": {
+        "startLine": 153,
+        "startChar": 37,
+        "endLine": 153,
+        "endChar": 49
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d9904c9_64f380f0",
+        "filename": "tools/testrunner/testproc/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "If it\u0027s a problem we can just return result from the next_test if the result is available immediately (so it\u0027s probably skipped). The same for calling next_test from result_for.\n\nI would leave it for now since the code is much simpler without return values.",
+      "parentUuid": "63a73b0e_d7117441",
+      "range": {
+        "startLine": 153,
+        "startChar": 11,
+        "endLine": 153,
+        "endChar": 23
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e4b6005_a4d1aa4f",
         "filename": "tools/testrunner/testproc/rerun.py",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-12T10:20:49Z",
       "side": 1,
       "message": "How often is this called and what result is this? It looks like it\u0027s only called once after all reruns (or if none are needed), but the result it the last result, right?\n\nBut IIUC, the json progress indicator is to the right of this and gets all the intermediate results, right?",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa6f8b8_eeb826c4",
+        "filename": "tools/testrunner/testproc/rerun.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Yes, it\u0027s only called once for each test and rerun results are not passed to the previous processor, only the last one. Currently json progress indicator doesn\u0027t know about reruns, but it\u0027s fixed in the next CL: https://chromium-review.googlesource.com/c/v8/v8/+/863623",
+      "parentUuid": "7e4b6005_a4d1aa4f",
       "range": {
         "startLine": 27,
         "startChar": 5,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "c10f4038_fa9bce16",
+        "filename": "tools/testrunner/testproc/result.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6da2c50_ea2e2a74",
+      "range": {
+        "startLine": 25,
+        "startChar": 59,
+        "endLine": 25,
+        "endChar": 61
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30d254d5_93e2a009",
         "filename": "tools/testrunner/testproc/result.py",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5946d063_847c2eb3",
+        "filename": "tools/testrunner/testproc/result.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30d254d5_93e2a009",
+      "range": {
+        "startLine": 54,
+        "startChar": 24,
+        "endLine": 54,
+        "endChar": 33
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "81d5eb48_3d84f292",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b6426ce_9e4a54c8",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 11
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "660d05d0_8fff1fbb",
         "filename": "tools/testrunner/testproc/variant.py",
         "patchSetId": 1
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "8559d0ab_46f651d4",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "660d05d0_8fff1fbb",
+      "range": {
+        "startLine": 45,
+        "startChar": 24,
+        "endLine": 45,
+        "endChar": 31
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9f41e80_5c670089",
         "filename": "tools/testrunner/testproc/variant.py",
         "patchSetId": 1
@@ -206,6 +398,30 @@
       "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e2befa6_8007c6b4",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9f41e80_5c670089",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -253,6 +469,30 @@
       "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb7f313b_3c28037b",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-12T12:06:22Z",
+      "side": 1,
+      "message": "TODO added.",
+      "parentUuid": "561b8ea9_b73191af",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 63
+      },
+      "revId": "d4a84469d05ecb5f98d34ae3be9f23debd8e350b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
