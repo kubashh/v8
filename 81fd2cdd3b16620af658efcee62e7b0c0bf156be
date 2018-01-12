@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec95f682_d31c3074",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T13:14:55Z",
+      "side": 1,
+      "message": "I\u0027m a premature-optimization junkie, so you can ignore the following comment for now and just put it to your notes somewhere :)\n\nWe could:\n- Pass the iterator as optional parameter to this function and use it in none-None case. E.g. in _next_test we could pass the freshly generated iterator. This saves one lookup of it.\n- We could keep the result and the iterator in the same substructure in one dict. Like that we\u0027d look-up only once instead of separate calls to self._next_test_iter[test.procid] and self._results[test.procid].\n- Combine the two approaches and pass the one structure to _try_send_new_subtest from either _next_test (where it was created and stored) or _result_for, where it was looked up once.\n\nI hope under the hood python optimizes this already enough, so we probably won\u0027t see the difference. So only consider it if the code doesn\u0027t suffer from readability.",
+      "range": {
+        "startLine": 47,
+        "startChar": 36,
+        "endLine": 47,
+        "endChar": 69
+      },
+      "revId": "81fd2cdd3b16620af658efcee62e7b0c0bf156be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3bc3ec2_d07519f5",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-12T13:14:55Z",
+      "side": 1,
+      "message": "I assume this is not rebased to https://chromium-review.googlesource.com/c/v8/v8/+/857376/12/tools/testrunner/testproc/variant.py yet.",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "81fd2cdd3b16620af658efcee62e7b0c0bf156be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
