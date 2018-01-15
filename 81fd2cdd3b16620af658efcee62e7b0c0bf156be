@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e501a6d_bca0283b",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-15T07:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec95f682_d31c3074",
+      "range": {
+        "startLine": 47,
+        "startChar": 36,
+        "endLine": 47,
+        "endChar": 69
+      },
+      "revId": "81fd2cdd3b16620af658efcee62e7b0c0bf156be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3bc3ec2_d07519f5",
         "filename": "tools/testrunner/testproc/variant.py",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "81fd2cdd3b16620af658efcee62e7b0c0bf156be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b130afeb_aad170dc",
+        "filename": "tools/testrunner/testproc/variant.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-15T07:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3bc3ec2_d07519f5",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "81fd2cdd3b16620af658efcee62e7b0c0bf156be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
