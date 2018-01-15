@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5819d736_e64f5eec",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T15:07:16Z",
+      "side": 0,
+      "message": "oh boy. good that this code goes away. For reference: I think it\u0027s mine :(",
+      "range": {
+        "startLine": 113,
+        "startChar": 17,
+        "endLine": 113,
+        "endChar": 64
+      },
+      "revId": "36ade3d8a56430b127784ee27ca155e1cd302e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

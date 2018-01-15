@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b491670c_01ffff2f",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T15:07:16Z",
+      "side": 1,
+      "message": "nit: Maybe turn this into \"not args\"?",
+      "range": {
+        "startLine": 460,
+        "startChar": 7,
+        "endLine": 460,
+        "endChar": 21
+      },
+      "revId": "b3a8912d8f7401c810b12d4ab8f289b5d291c765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc2f9ea_9a0fbb5f",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T15:07:16Z",
+      "side": 1,
+      "message": "In the old code, we\u0027d ignore None cases. Is there any valid scenario for the method returning None, or was that just a bug?",
+      "range": {
+        "startLine": 484,
+        "startChar": 13,
+        "endLine": 484,
+        "endChar": 46
+      },
+      "revId": "b3a8912d8f7401c810b12d4ab8f289b5d291c765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
