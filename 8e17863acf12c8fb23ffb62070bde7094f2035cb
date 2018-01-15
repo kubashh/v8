@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0ea52604_e63d5308",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 7
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T14:39:47Z",
+      "side": 1,
+      "message": "nit: real integer, 0 not \u00270\u0027",
+      "parentUuid": "39a6a52f_f4e5b4ea",
+      "range": {
+        "startLine": 432,
+        "startChar": 21,
+        "endLine": 432,
+        "endChar": 28
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db1c23c0_2b31ed3a",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 7
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I changed cctest.status file and listed only tests that were skipped before.",
       "parentUuid": "db1c23c0_2b31ed3a",
+      "range": {
+        "startLine": 379,
+        "startChar": 6,
+        "endLine": 379,
+        "endChar": 10
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d484dc75_1b9d78db",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T14:39:47Z",
+      "side": 1,
+      "message": "I don\u0027t understand. How were these listed tests skipped before on e.g. ppc? Do you have a link pointing to that code?",
+      "parentUuid": "cddaa66c_62b06618",
       "range": {
         "startLine": 379,
         "startChar": 6,
