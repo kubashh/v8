@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import fnmatch
+
 from . import base
 
 
@@ -43,3 +45,28 @@ class StatusFileFilterProc(base.TestProcFilter):
       (self._pass_fail_tests_mode == 'run' and not is_pass_fail) or
       (self._pass_fail_tests_mode == 'skip' and is_pass_fail)
     )
+
+
+class NameFilterProc(base.TestProcFilter):
+  """Filters tests based on command-line arguments.
+
+  args can be a glob: asterisks in any position of the name
+  represent zero or more characters. Without asterisks, only exact matches
+  will be used with the exeption of the test-suite name as argument.
+  """
+  def __init__(self, args):
+    super(NameFilterProc, self).__init__()
+
+    self._globs = []
+    for a in args:
+      argpath = a.split('/')
+      suitename = argpath[0]
+      path = '/'.join(argpath[1:])
+      self._globs.append((suitename, path))
+
+  def _filter(self, test):
+    for suitename, g in self._globs:
+      if (test.suite.name == suitename and
+          (not g or g == '*' or fnmatch.fnmatch(test.path, g))):
+        return False
+    return True
