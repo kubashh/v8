@@ -7,7 +7,6 @@ from ..local.variants import ALL_VARIANTS, ALL_VARIANT_FLAGS, FAST_VARIANT_FLAGS
 from .result import GroupedResult
 
 
-FAST_VARIANTS = set(["default", "turbofan"])
 STANDARD_VARIANT = set(["default"])
 
 
