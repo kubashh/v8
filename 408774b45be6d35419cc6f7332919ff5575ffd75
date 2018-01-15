@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "563d90af_db9ccd73",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-15T17:43:58Z",
+      "side": 1,
+      "message": "Sure, I will implement it in a separate CL.",
+      "parentUuid": "311a856b_3dcba2f0",
+      "range": {
+        "startLine": 607,
+        "startChar": 8,
+        "endLine": 607,
+        "endChar": 29
+      },
+      "revId": "408774b45be6d35419cc6f7332919ff5575ffd75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5392c333_903897d9",
         "filename": "tools/testrunner/testproc/filter.py",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-15T13:00:39Z",
       "side": 1,
       "message": "This loop might be less efficient now, compared to before. In the standard case we resolve bot_default to a set of 7 suites. Here we\u0027d loop over 7 things for each tests, while before each suite had its own filter.\n\nI like the new architecture better, so lets hope this is negligible.\n\nMaybe evaluate the following: Could we deploy a better method per suite and then call test.suite.bettermethod here? Maybe not, since it can\u0027t access the args initialization.",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 36
+      },
+      "revId": "408774b45be6d35419cc6f7332919ff5575ffd75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c19a6890_d8a52d7d",
+        "filename": "tools/testrunner/testproc/filter.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-15T17:43:58Z",
+      "side": 1,
+      "message": "For now I\u0027ve created a dictionary suite -\u003e globs. If it\u0027s still too slow I will work on something faster.",
+      "parentUuid": "5392c333_903897d9",
       "range": {
         "startLine": 68,
         "startChar": 4,
