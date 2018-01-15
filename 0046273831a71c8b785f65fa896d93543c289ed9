@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83a72033_a45cce5c",
+        "filename": "tools/testrunner/testproc/filter.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T20:19:38Z",
+      "side": 1,
+      "message": "I guess this is dead code, but keep it for theoretical correctness. Since we load suites based on args, we only have test from loaded suites here, and there will be at least one arg per loaded suite.",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 17
+      },
+      "revId": "0046273831a71c8b785f65fa896d93543c289ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
