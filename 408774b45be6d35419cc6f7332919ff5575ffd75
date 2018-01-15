@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "311a856b_3dcba2f0",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T13:00:39Z",
+      "side": 1,
+      "message": "Could you maybe make an explicit shard proc as well, which sits in a well-defined place in this chain?\n\nRight now, one must always reason what might change if sharding is done before or after some filtering...",
+      "range": {
+        "startLine": 607,
+        "startChar": 8,
+        "endLine": 607,
+        "endChar": 29
+      },
+      "revId": "408774b45be6d35419cc6f7332919ff5575ffd75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5392c333_903897d9",
+        "filename": "tools/testrunner/testproc/filter.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T13:00:39Z",
+      "side": 1,
+      "message": "This loop might be less efficient now, compared to before. In the standard case we resolve bot_default to a set of 7 suites. Here we\u0027d loop over 7 things for each tests, while before each suite had its own filter.\n\nI like the new architecture better, so lets hope this is negligible.\n\nMaybe evaluate the following: Could we deploy a better method per suite and then call test.suite.bettermethod here? Maybe not, since it can\u0027t access the args initialization.",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 36
+      },
+      "revId": "408774b45be6d35419cc6f7332919ff5575ffd75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
