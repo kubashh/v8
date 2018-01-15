@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39a6a52f_f4e5b4ea",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 7
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-01-15T14:26:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "443fe321_1f8fb956",
+      "range": {
+        "startLine": 432,
+        "startChar": 21,
+        "endLine": 432,
+        "endChar": 28
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db1c23c0_2b31ed3a",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-29T14:48:50Z",
       "side": 1,
       "message": "What about x64, ia32, ppc, s390? The tests weren\u0027t skipped for those before?\n\nMaybe make a simpler negated switch called no_simd instead?",
+      "range": {
+        "startLine": 379,
+        "startChar": 6,
+        "endLine": 379,
+        "endChar": 10
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cddaa66c_62b06618",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-01-15T14:26:25Z",
+      "side": 1,
+      "message": "I changed cctest.status file and listed only tests that were skipped before.",
+      "parentUuid": "db1c23c0_2b31ed3a",
       "range": {
         "startLine": 379,
         "startChar": 6,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c4f39936_b185ca95",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-01-15T14:26:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c6ea0d44_f4e10636",
+      "range": {
+        "startLine": 381,
+        "startChar": 8,
+        "endLine": 381,
+        "endChar": 9
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9aafd15_9ef15404",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d635d3c1_0181a7f6",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-01-15T14:26:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9aafd15_9ef15404",
+      "range": {
+        "startLine": 413,
+        "startChar": 8,
+        "endLine": 413,
+        "endChar": 21
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
