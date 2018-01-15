@@ -439,6 +439,9 @@
                     'cflags': ['-mips32r6'],
                     'ldflags': ['-mips32r6'],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'conditions': [
                       [ 'mips_fpu_mode=="fp64"', {
@@ -507,6 +510,9 @@
                       'FPU_MODE_FP64',
                     ],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'conditions': [
                       [ 'mips_fpu_mode=="fp64"', {
@@ -557,6 +563,9 @@
                   '_MIPS_ARCH_MIPS32R6',
                   'FPU_MODE_FP64',
                 ],
+              }],
+              ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                'defines': [ '_MIPS_MSA' ],
               }],
               ['mips_arch_variant=="r2"', {
                 'conditions': [
@@ -640,6 +649,9 @@
                     'cflags': ['-mips32r6'],
                     'ldflags': ['-mips32r6'],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'conditions': [
                       [ 'mips_fpu_mode=="fp64"', {
@@ -721,6 +733,9 @@
                       'FPU_MODE_FP64',
                     ],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'conditions': [
                       [ 'mips_fpu_mode=="fp64"', {
@@ -777,6 +792,9 @@
                   '_MIPS_ARCH_MIPS32R6',
                   'FPU_MODE_FP64',
                 ],
+              }],
+              ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                'defines': [ '_MIPS_MSA' ],
               }],
               ['mips_arch_variant=="r2"', {
                 'conditions': [
@@ -877,6 +895,9 @@
                     'cflags': ['-mips64r6', '-mabi=64'],
                     'ldflags': ['-mips64r6', '-mabi=64'],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'defines': ['_MIPS_ARCH_MIPS64R2',],
                     'conditions': [
@@ -895,6 +916,9 @@
                   ['mips_arch_variant=="r6"', {
                     'defines': ['_MIPS_ARCH_MIPS64R6',],
                   }],
+                  ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                    'defines': [ '_MIPS_MSA' ],
+                  }],
                   ['mips_arch_variant=="r2"', {
                     'defines': ['_MIPS_ARCH_MIPS64R2',],
                   }],
@@ -906,6 +930,9 @@
             'conditions': [
               ['mips_arch_variant=="r6"', {
                 'defines': ['_MIPS_ARCH_MIPS64R6',],
+              }],
+              ['mips_arch_variant=="r6" and mips_use_msa=="true"', {
+                'defines': [ '_MIPS_MSA' ],
               }],
               ['mips_arch_variant=="r2"', {
                 'defines': ['_MIPS_ARCH_MIPS64R2',],

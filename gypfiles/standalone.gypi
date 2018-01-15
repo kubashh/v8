@@ -429,6 +429,7 @@
     # fpxx - compatibility mode, it chooses fp32 or fp64 depending on runtime
     #        detection
     'mips_fpu_mode%': 'fp32',
+    'mips_use_msa%': '0',
   },
   'target_defaults': {
     'variables': {
