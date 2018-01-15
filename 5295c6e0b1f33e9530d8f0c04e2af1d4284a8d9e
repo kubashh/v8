@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfec3390_ea5ad570",
+        "filename": "tools/foozzie/testdata/failure_output.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T11:14:18Z",
+      "side": 1,
+      "message": "The python unittest passes a random-seed. The experiment leads to this pseudo-random, but deterministic test output.",
+      "range": {
+        "startLine": 14,
+        "startChar": 170,
+        "endLine": 14,
+        "endChar": 192
+      },
+      "revId": "5295c6e0b1f33e9530d8f0c04e2af1d4284a8d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daeba858_a371ac0f",
+        "filename": "tools/foozzie/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-15T11:14:18Z",
+      "side": 1,
+      "message": "Won\u0027t add --random-gc-interval here, since the correctness fuzzer only runs in release mode.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 16
+      },
+      "revId": "5295c6e0b1f33e9530d8f0c04e2af1d4284a8d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
