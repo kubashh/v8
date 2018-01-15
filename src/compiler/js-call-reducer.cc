@@ -1068,27 +1068,31 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
                                 &control, &check_fail, &check_throw);
 
   // Set initial accumulator value
-  Node* cur = nullptr;
+  Node* cur = jsgraph()->TheHoleConstant();
 
   Node* initial_element_check_fail = nullptr;
   Node* initial_element_check_throw = nullptr;
   if (node->op()->ValueInputCount() > 3) {
     cur = NodeProperties::GetValueInput(node, 3);
   } else {
-    Node* check = graph()->NewNode(simplified()->NumberEqual(), original_length,
-                                   jsgraph()->SmiConstant(0));
-    Node* check_branch =
-        graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
-    initial_element_check_fail =
-        graph()->NewNode(common()->IfTrue(), check_branch);
-    initial_element_check_throw = graph()->NewNode(
-        javascript()->CallRuntime(Runtime::kThrowTypeError, 2),
-        jsgraph()->Constant(MessageTemplate::kReduceNoInitial), fncallback,
-        context, check_frame_state, effect, initial_element_check_fail);
-    control = graph()->NewNode(common()->IfFalse(), check_branch);
+    if (IsHoleyElementsKind(kind)) {
+    } else {
+      Node* check =
+          graph()->NewNode(simplified()->NumberEqual(), original_length, k);
+      Node* check_branch = graph()->NewNode(
+          common()->Branch(BranchHint::kFalse), check, control);
+      initial_element_check_fail =
+          graph()->NewNode(common()->IfTrue(), check_branch);
+      initial_element_check_throw = graph()->NewNode(
+          javascript()->CallRuntime(Runtime::kThrowTypeError, 2),
+          jsgraph()->Constant(MessageTemplate::kReduceNoInitial), fncallback,
+          context, check_frame_state, effect, initial_element_check_fail);
+      control = graph()->NewNode(common()->IfFalse(), check_branch);
 
-    cur = SafeLoadElement(kind, receiver, control, &effect, &k, p.feedback());
-    k = jsgraph()->OneConstant();
+      cur = SafeLoadElement(kind, receiver, control, &effect, &k, p.feedback());
+      k = graph()->NewNode(simplified()->NumberAdd(), k,
+                           jsgraph()->OneConstant());
+    }
   }
 
   // Start the loop.
@@ -1184,6 +1188,9 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
     control = graph()->NewNode(common()->Merge(2), control, after_call_control);
     effect = graph()->NewNode(common()->EffectPhi(2), effect, after_call_effect,
                               control);
+    next_cur =
+        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2), cur,
+                         next_cur, control);
   }
 
   k = next_k;
@@ -1414,6 +1421,9 @@ Reduction JSCallReducer::ReduceArrayReduceRight(Handle<JSFunction> function,
     control = graph()->NewNode(common()->Merge(2), control, after_call_control);
     effect = graph()->NewNode(common()->EffectPhi(2), effect, after_call_effect,
                               control);
+    next_cur =
+        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2), cur,
+                         next_cur, control);
   }
 
   k = next_k;
@@ -3104,6 +3114,10 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
           return ReduceArrayMap(function, node);
         case Builtins::kArrayFilter:
           return ReduceArrayFilter(function, node);
+        case Builtins::kArrayReduce:
+          return ReduceArrayReduce(function, node);
+        case Builtins::kArrayReduceRight:
+          return ReduceArrayReduceRight(function, node);
         case Builtins::kArrayPrototypeFind:
           return ReduceArrayFind(ArrayFindVariant::kFind, function, node);
         case Builtins::kArrayPrototypeFindIndex:
