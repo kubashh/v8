@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffc5bdf1_de408d9a",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-16T14:41:56Z",
+      "side": 1,
+      "message": "Hi Predrag,\n\nConcerning 32-bit Arm, SIMD is supported only if NEON is available, and we still support platforms for which it isn\u0027t. However, I might be mistaken but I believe WASM SIMD tests should still run if SIMD instructions are not available. In that case, SimdScalarLowering should generate alternative scalar instruction sequences. For instance, has done here in the cctests: https://chromium.googlesource.com/v8/v8/+/master/test/cctest/wasm/wasm-run-utils.cc#281\n\nIs this correct? Sorry if I\u0027ve got it all wrong.\n\nThanks,\nPierre",
+      "revId": "29999927622997bcc57b8d92506aa1582fcfe0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
