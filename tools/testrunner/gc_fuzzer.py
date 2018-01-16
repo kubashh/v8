@@ -283,6 +283,7 @@ class GCFuzzer(base_runner.BaseTestRunner):
       "no_snap": self.build_config.no_snap,
       "novfp3": False,
       "predictable": self.build_config.predictable,
+      "simd": True,
       "simulator": utils.UseSimulator(self.build_config.arch),
       "simulator_run": False,
       "system": utils.GuessOS(),
