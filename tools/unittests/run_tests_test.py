@@ -274,6 +274,54 @@ class SystemTest(unittest.TestCase):
       # This is redundant to the command. Needs investigation.
       self.assertEqual(json_output, expected_test_results, pretty_json)
 
+  def testFlakeWithRerunAndJSONProc(self):
+    self.testFlakeWithRerunAndJSON(infra_staging=True)
+
+  def testFlakeWithRerunAndJSON(self, infra_staging=False):
+    """Test re-running a failing test and output to json."""
+    with temp_base(baseroot='testroot2') as basedir:
+      json_path = os.path.join(basedir, 'out.json')
+      result = run_tests(
+          basedir,
+          '--mode=Release',
+          '--progress=verbose',
+          '--variants=default',
+          '--rerun-failures-count=2',
+          '--random-seed=123',
+          '--json-test-results', json_path,
+          'sweet',
+          infra_staging=infra_staging,
+      )
+      self.assertIn('Running 1 tests', result.stdout, result)
+      self.assertIn(
+          'Done running sweet/bananaflakes: FAIL', result.stdout, result)
+      self.assertIn('1 tests failed', result.stdout, result)
+      self.assertEqual(0, result.returncode, result)
+
+      # Check relevant properties of the json output.
+      with open(json_path) as f:
+        json_output = json.load(f)[0]
+        pretty_json = json.dumps(json_output, indent=2, sort_keys=True)
+
+      # Replace duration in actual output as it's non-deterministic. Also
+      # replace the python executable prefix as it has a different absolute
+      # path dependent on where this runs.
+      def replace_variable_data(data):
+        data['duration'] = 1
+        data['command'] = ' '.join(
+            ['/usr/bin/python'] + data['command'].split()[1:])
+      for data in json_output['slowest_tests']:
+        replace_variable_data(data)
+      for data in json_output['results']:
+        replace_variable_data(data)
+      json_output['duration_mean'] = 1
+
+      expected_results_name = 'expected_test_results2.json'
+      with open(os.path.join(TEST_DATA_ROOT, expected_results_name)) as f:
+        expected_test_results = json.load(f)
+
+      self.assertEqual(json_output, expected_test_results, pretty_json)
+
   def testAutoDetect(self):
     """Fake a build with several auto-detected options.
 
