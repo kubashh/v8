@@ -4797,6 +4797,12 @@ ParserBase<Impl>::ParseStatementList(StatementListT body, int end_token,
   bool directive_prologue = true;  // Parsing directive prologue.
 
   while (peek() != end_token) {
+    if (peek() == Token::EOS && end_token == Token::RBRACE) {
+      ReportMessage(MessageTemplate::kMissingBraceAfterFunctionBody);
+      *ok = false;
+      return kLazyParsingComplete;
+    }
+
     if (directive_prologue && peek() != Token::STRING) {
       directive_prologue = false;
     }
