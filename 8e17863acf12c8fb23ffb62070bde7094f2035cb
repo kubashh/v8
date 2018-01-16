@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "79746ac8_6c502e38",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-01-16T08:29:21Z",
+      "side": 1,
+      "message": "In test/cctest/wasm/test-run-wasm-simd.cc I removed conditional compilation directives for compilation for only arm and mips platforms.",
+      "parentUuid": "d484dc75_1b9d78db",
+      "range": {
+        "startLine": 379,
+        "startChar": 6,
+        "endLine": 379,
+        "endChar": 10
+      },
+      "revId": "8e17863acf12c8fb23ffb62070bde7094f2035cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6ea0d44_f4e10636",
         "filename": "tools/testrunner/standard_runner.py",
         "patchSetId": 7
