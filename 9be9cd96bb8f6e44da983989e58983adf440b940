@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "e7223f8a_f8aebae3",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-16T13:12:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e592924_cbb65c5c",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 31
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42151e08_680740bc",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-16T13:12:11Z",
+      "side": 1,
+      "message": "Since are comparing dicts, I\u0027d recommend using assertDictEqual. Then you also don\u0027t need pretty_json. The assertDictEqual will print a formatted error message with a diff, e.g.\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nFAIL: test_foo (__main__.X)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"1.py\", line 15, in test_foo\n    self.assertDictEqual(A, B)\nAssertionError: {\u0027very_long_key_in_the_Python_dict_that_makes_no_sense_anyhow\u0027: 2, \u0027absolute_val [truncated]... !\u003d {\u0027very_long_key_in_the_Python_dict_that_makes_no_sense_anyhow\u0027: 3, \u0027another_key\u0027 [truncated]...\n- {\u0027absolute_value\u0027: 1,\n+ {\u0027another_key\u0027: 4,\n-  \u0027very_long_key_in_the_Python_dict_that_makes_no_sense_anyhow\u0027: 2}\n?                                                                 ^\n\n+  \u0027very_long_key_in_the_Python_dict_that_makes_no_sense_anyhow\u0027: 3}\n?                                                                 ^\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nFAILED (failures\u003d1)",
+      "range": {
+        "startLine": 242,
+        "startChar": 9,
+        "endLine": 242,
+        "endChar": 20
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48363ecd_819c81ea",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 5
@@ -71,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "84b801d6_4eee756f",
+        "filename": "tools/unittests/testdata/testroot2/d8_mocked.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-16T13:12:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ede3e272_c3a38cd8",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17806e8c_74e8010e",
         "filename": "tools/unittests/testdata/testroot2/test/sweet/testcfg.py",
         "patchSetId": 5
@@ -94,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "d03aeb88_b8d24981",
+        "filename": "tools/unittests/testdata/testroot2/test/sweet/testcfg.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-16T13:12:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "17806e8c_74e8010e",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e23af37_1353abf4",
         "filename": "tools/unittests/testdata/testroot2/v8_build_config.json",
         "patchSetId": 5
@@ -114,6 +209,30 @@
       "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af3a639_f9559b5a",
+        "filename": "tools/unittests/testdata/testroot2/v8_build_config.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-16T13:12:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5e23af37_1353abf4",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
