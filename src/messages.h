@@ -342,6 +342,7 @@ class ErrorUtils : public AllStatic {
   T(IteratorResultNotAnObject, "Iterator result % is not an object")           \
   T(IteratorValueNotAnObject, "Iterator value % is not an entry object")       \
   T(LanguageID, "Language ID should be string or object.")                     \
+  T(MissingBraceAfterFunctionBody, "missing '}' after function body.")         \
   T(MethodCalledOnWrongObject,                                                 \
     "Method % called on a non-object or on a wrong type of object.")           \
   T(MethodInvokedOnNullOrUndefined,                                            \
