@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46eb6819_caa9bc04",
+        "filename": "gypfiles/standalone.gypi",
+        "patchSetId": 9
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T08:47:20Z",
+      "side": 1,
+      "message": "I wonder if this default should better be located in toolchain.gypi? Otherwise this might not work for embedders that don\u0027t use the standalone.gypi file.",
+      "range": {
+        "startLine": 432,
+        "startChar": 4,
+        "endLine": 432,
+        "endChar": 23
+      },
+      "revId": "d419ab5c42f514f49200229ab045739ffde38c31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f9fba7_7c4ab362",
+        "filename": "gypfiles/toolchain.gypi",
+        "patchSetId": 9
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T08:47:20Z",
+      "side": 1,
+      "message": "mips_use_msa\u003d\u003d1\nalso below",
+      "range": {
+        "startLine": 442,
+        "startChar": 48,
+        "endLine": 442,
+        "endChar": 68
+      },
+      "revId": "d419ab5c42f514f49200229ab045739ffde38c31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
