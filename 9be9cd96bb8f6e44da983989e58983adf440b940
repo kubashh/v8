@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8b2cd1d4_f834284c",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T14:22:47Z",
+      "side": 1,
+      "message": "Yes, but I basically use the pretty json as a bootstrapper for my initial expected json file. I can nicely c/p the json from terminal to source code.\n\nI\u0027ll use both",
+      "parentUuid": "42151e08_680740bc",
+      "range": {
+        "startLine": 242,
+        "startChar": 9,
+        "endLine": 242,
+        "endChar": 20
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48363ecd_819c81ea",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 5
