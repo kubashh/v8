@@ -22,6 +22,30 @@
       "revId": "0046273831a71c8b785f65fa896d93543c289ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04bd70f9_52a8ba30",
+        "filename": "tools/testrunner/testproc/filter.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-16T08:48:01Z",
+      "side": 1,
+      "message": "Yes, I didn\u0027t want to comment here that in some very different place in the code we\u0027re doing something with args and because of that I can omit this check.",
+      "parentUuid": "83a72033_a45cce5c",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 17
+      },
+      "revId": "0046273831a71c8b785f65fa896d93543c289ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
