@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20bdb7e8_b87ea631",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-01-16T18:14:16Z",
+      "side": 0,
+      "message": "If we do end up with a style that avoids non-header templatized things, this one seems like it\u0027s there as an ergonomic affordance (to make the method variadic). The list of args and init of the array inside could be moved here, and a private helper that takes a void* list for the rest of the work.\nBut we should figure out a philosophy on these.",
+      "revId": "73253d428c07fafb2996146cb35965241f24a799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
