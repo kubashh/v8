@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e592924_cbb65c5c",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T12:52:32Z",
+      "side": 1,
+      "message": "1:1 moved from below in patchset 3",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 31
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48363ecd_819c81ea",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T12:52:32Z",
+      "side": 1,
+      "message": "@Michal: FYI",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 80
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ede3e272_c3a38cd8",
+        "filename": "tools/unittests/testdata/testroot2/d8_mocked.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T12:52:32Z",
+      "side": 1,
+      "message": "This is basically c/p from the predictable runner, where we also fake non-determinism.",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17806e8c_74e8010e",
+        "filename": "tools/unittests/testdata/testroot2/test/sweet/testcfg.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T12:52:32Z",
+      "side": 1,
+      "message": "1:1 c/p from the other fake test suite, with only this one test.",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e23af37_1353abf4",
+        "filename": "tools/unittests/testdata/testroot2/v8_build_config.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-16T12:52:32Z",
+      "side": 1,
+      "message": "1:1 c/p",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "9be9cd96bb8f6e44da983989e58983adf440b940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
