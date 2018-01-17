@@ -87,6 +87,24 @@
       "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1664ec16_2e74235a",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-01-17T10:21:32Z",
+      "side": 1,
+      "message": "Oh sorry, yes. This is the bytecode offset (was thinking machine code offset). I guess the problem is that frame-\u003eposition() returns an module-relative bytecode offset, while TraceMemoryOperation prints a function-relative bytecode offset. In that case, let\u0027s just leave the above TODO as a reminder that maybe we want to fix that later.",
+      "parentUuid": "c43ef3eb_8c570dc9",
+      "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
