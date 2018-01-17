@@ -33,6 +33,24 @@
       "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d63618b0_5704c458",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-17T10:04:33Z",
+      "side": 1,
+      "message": "I could add a method there, but wasm-code-wrapper.cc does not include wasm-module.h currently, so I am not sure if that would improve anything.",
+      "parentUuid": "2180e284_67e0db9e",
+      "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
