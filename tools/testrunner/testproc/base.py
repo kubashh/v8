@@ -119,7 +119,8 @@ class TestProc(object):
 
   def _send_result(self, test, result):
     """Helper method for sending result to the previous processor."""
-    result = self._reduce_result(result)
+    # if not test.keep_output:
+    #   result = self._reduce_result(result)
     self._prev_proc.result_for(test, result)
 
 
@@ -163,9 +164,11 @@ class TestProcProducer(TestProc):
     self._name = name
 
   def next_test(self, test):
+    print '%s: next test: %s' % (self._name, test.procid)
     self._next_test(test)
 
   def result_for(self, subtest, result):
+    print '%s: result for: %s' % (self._name, subtest.procid)
     self._result_for(subtest.origin, subtest, result)
 
   ### Implementation
