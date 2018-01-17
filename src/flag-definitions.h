@@ -475,6 +475,13 @@ DEFINE_BOOL(untrusted_code_mitigations, V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS,
             "Enable mitigations for executing untrusted code")
 #undef V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS
 
+DEFINE_BOOL(turbo_add_speculation_fence_branch, false,
+            "add speculation fence instructions at every branch point")
+DEFINE_BOOL(turbo_add_speculation_fence_call, false,
+            "add speculation fence instructions after every call")
+DEFINE_BOOL(turbo_add_speculation_fence_deopt, false,
+            "add speculation fence instructions after every deopt check")
+
 // Flags to help platform porters
 DEFINE_BOOL(minimal, false,
             "simplifies execution model to make porting "

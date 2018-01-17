@@ -939,11 +939,22 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
   // Visit code in reverse control flow order, because architecture-specific
   // matching may cover more than one node at a time.
   for (auto node : base::Reversed(*block)) {
-    // Skip nodes that are unused or already defined.
-    if (!IsUsed(node) || IsDefined(node)) continue;
     // Generate code for this node "top down", but schedule the code "bottom
     // up".
     int current_node_end = current_num_instructions();
+    switch (node->opcode()) {
+      case IrOpcode::kIfValue:
+      case IrOpcode::kIfDefault:
+      case IrOpcode::kIfTrue:
+      case IrOpcode::kIfFalse:
+        if (FLAG_turbo_add_speculation_fence_branch)
+          VisitSpeculationFence(nullptr);
+      default:
+        break;
+    }
+    // Skip nodes that are unused or already defined.
+    if (!IsUsed(node) || IsDefined(node)) continue;
+
     VisitNode(node);
     if (!FinishEmittedInstructions(node, current_node_end)) return;
   }
@@ -1071,16 +1082,16 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kLoop:
     case IrOpcode::kEnd:
     case IrOpcode::kBranch:
-    case IrOpcode::kIfTrue:
-    case IrOpcode::kIfFalse:
     case IrOpcode::kIfSuccess:
     case IrOpcode::kSwitch:
-    case IrOpcode::kIfValue:
-    case IrOpcode::kIfDefault:
     case IrOpcode::kEffectPhi:
     case IrOpcode::kMerge:
     case IrOpcode::kTerminate:
     case IrOpcode::kBeginRegion:
+    case IrOpcode::kIfValue:
+    case IrOpcode::kIfDefault:
+    case IrOpcode::kIfTrue:
+    case IrOpcode::kIfFalse:
       // No code needed for these graph artifacts.
       return;
     case IrOpcode::kIfException:
@@ -1125,9 +1136,15 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kCallWithCallerSavedRegisters:
       return VisitCallWithCallerSavedRegisters(node);
     case IrOpcode::kDeoptimizeIf:
-      return VisitDeoptimizeIf(node);
+      VisitDeoptimizeIf(node);
+      if (FLAG_turbo_add_speculation_fence_deopt)
+        VisitSpeculationFence(nullptr);
+      return;
     case IrOpcode::kDeoptimizeUnless:
-      return VisitDeoptimizeUnless(node);
+      VisitDeoptimizeUnless(node);
+      if (FLAG_turbo_add_speculation_fence_deopt)
+        VisitSpeculationFence(nullptr);
+      return;
     case IrOpcode::kTrapIf:
       return VisitTrapIf(node, static_cast<Runtime::FunctionId>(
                                    OpParameter<int32_t>(node->op())));
@@ -2418,6 +2435,11 @@ void InstructionSelector::VisitCall(Node* node, BasicBlock* handler) {
   call_instr->MarkAsCall();
 
   EmitPrepareResults(&(buffer.output_nodes), descriptor, node);
+
+  if (FLAG_turbo_add_speculation_fence_call &&
+      this->linkage()->GetIncomingDescriptor()->kind() !=
+          CallDescriptor::kCallWasmFunction)
+    VisitSpeculationFence(nullptr);
 }
 
 void InstructionSelector::VisitCallWithCallerSavedRegisters(
