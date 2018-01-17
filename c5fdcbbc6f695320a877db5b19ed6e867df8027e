@@ -51,6 +51,24 @@
       "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e038ea9f_4450ddf4",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-01-17T10:06:38Z",
+      "side": 1,
+      "message": "Unless I am missing something, we shouldn\u0027t need wasm-module.h; func_start is just the start of the instructions in the code, needed to compute the offset below.",
+      "parentUuid": "d63618b0_5704c458",
+      "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
