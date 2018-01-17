@@ -781,7 +781,10 @@ Node* WasmGraphBuilder::Unop(wasm::WasmOpcode opcode, Node* input,
       op = m->RoundUint64ToFloat64();
       break;
     case wasm::kExprI64SConvertF32:
-      return BuildI64SConvertF32(input, position);
+      return BuildI64SConvertF32(input, position, NumericImplementation::kTrap);
+    case wasm::kExprI64SConvertSatF32:
+      return BuildI64SConvertF32(input, position,
+                                 NumericImplementation::kSaturate);
     case wasm::kExprI64SConvertF64:
       return BuildI64SConvertF64(input, position);
     case wasm::kExprI64UConvertF32:
@@ -1375,10 +1378,9 @@ Node* WasmGraphBuilder::BuildF64CopySign(Node* left, Node* right) {
 
 // Helper classes for float to int conversions.
 struct WasmGraphBuilder::IntConvertOps {
-  MachineRepresentation word_rep() const {
-    return MachineRepresentation::kWord32;
-  }
-  Node* zero() const { return builder_->Int32Constant(0); }
+  virtual MachineRepresentation word_rep() const = 0;
+  virtual wasm::WasmOpcode ne_op() const = 0;
+  virtual Node* zero() const = 0;
   virtual Node* min() const = 0;
   virtual Node* max() const = 0;
   virtual ~IntConvertOps() = default;
@@ -1389,9 +1391,22 @@ struct WasmGraphBuilder::IntConvertOps {
   DISALLOW_IMPLICIT_CONSTRUCTORS(IntConvertOps);
 };
 
-struct I32SConvertOps final : public WasmGraphBuilder::IntConvertOps {
-  explicit I32SConvertOps(WasmGraphBuilder* builder)
+struct Int32ConvertOps : public WasmGraphBuilder::IntConvertOps {
+  MachineRepresentation word_rep() const final {
+    return MachineRepresentation::kWord32;
+  }
+  wasm::WasmOpcode ne_op() const final { return wasm::kExprI32Ne; }
+  Node* zero() const final { return builder_->Int32Constant(0); }
+
+ protected:
+  explicit Int32ConvertOps(WasmGraphBuilder* builder)
       : WasmGraphBuilder::IntConvertOps(builder) {}
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Int32ConvertOps);
+};
+
+struct I32SConvertOps final : public Int32ConvertOps {
+  explicit I32SConvertOps(WasmGraphBuilder* builder)
+      : Int32ConvertOps(builder) {}
   ~I32SConvertOps() = default;
   Node* min() const {
     return builder_->Int32Constant(std::numeric_limits<int32_t>::min());
@@ -1402,9 +1417,9 @@ struct I32SConvertOps final : public WasmGraphBuilder::IntConvertOps {
   DISALLOW_IMPLICIT_CONSTRUCTORS(I32SConvertOps);
 };
 
-struct I32UConvertOps final : public WasmGraphBuilder::IntConvertOps {
+struct I32UConvertOps final : public Int32ConvertOps {
   explicit I32UConvertOps(WasmGraphBuilder* builder)
-      : WasmGraphBuilder::IntConvertOps(builder) {}
+      : Int32ConvertOps(builder) {}
   ~I32UConvertOps() = default;
   Node* min() const {
     return builder_->Int32Constant(std::numeric_limits<uint32_t>::min());
@@ -1413,6 +1428,45 @@ struct I32UConvertOps final : public WasmGraphBuilder::IntConvertOps {
     return builder_->Int32Constant(std::numeric_limits<uint32_t>::max());
   }
   DISALLOW_IMPLICIT_CONSTRUCTORS(I32UConvertOps);
+};
+
+struct Int64ConvertOps : public WasmGraphBuilder::IntConvertOps {
+  MachineRepresentation word_rep() const final {
+    return MachineRepresentation::kWord64;
+  }
+  wasm::WasmOpcode ne_op() const final { return wasm::kExprI64Ne; }
+  Node* zero() const final { return builder_->Int64Constant(0); }
+
+ protected:
+  explicit Int64ConvertOps(WasmGraphBuilder* builder)
+      : IntConvertOps(builder) {}
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Int64ConvertOps);
+};
+
+struct I64SConvertOps final : public Int64ConvertOps {
+  explicit I64SConvertOps(WasmGraphBuilder* builder)
+      : Int64ConvertOps(builder) {}
+  ~I64SConvertOps() = default;
+  Node* min() const {
+    return builder_->Int64Constant(std::numeric_limits<int64_t>::min());
+  }
+  Node* max() const {
+    return builder_->Int64Constant(std::numeric_limits<int64_t>::max());
+  }
+  DISALLOW_IMPLICIT_CONSTRUCTORS(I64SConvertOps);
+};
+
+struct I64UConvertOps final : public Int64ConvertOps {
+  explicit I64UConvertOps(WasmGraphBuilder* builder)
+      : Int64ConvertOps(builder) {}
+  ~I64UConvertOps() = default;
+  Node* min() const {
+    return builder_->Int64Constant(std::numeric_limits<uint64_t>::min());
+  }
+  Node* max() const {
+    return builder_->Int64Constant(std::numeric_limits<uint64_t>::max());
+  }
+  DISALLOW_IMPLICIT_CONSTRUCTORS(I64UConvertOps);
 };
 
 struct WasmGraphBuilder::FloatConvertOps {
@@ -1798,11 +1852,74 @@ Node* WasmGraphBuilder::BuildIntToFloatConversionInstruction(
 }
 
 Node* WasmGraphBuilder::BuildI64SConvertF32(Node* input,
-                                            wasm::WasmCodePosition position) {
+                                            wasm::WasmCodePosition position,
+                                            NumericImplementation impl) {
+  I64SConvertOps int_ops(this);
+  F32ConvertOps float_ops(this);
   if (jsgraph()->machine()->Is32()) {
+#if 0
     return BuildFloatToIntConversionInstruction(
         input, ExternalReference::wasm_float32_to_int64(jsgraph()->isolate()),
         MachineRepresentation::kFloat32, MachineType::Int64(), position);
+#else
+    ExternalReference ref =
+        ExternalReference::wasm_float32_to_int64(jsgraph()->isolate());
+    MachineRepresentation parameter_representation =  // make local
+        MachineRepresentation::kFloat32;
+    const MachineType result_type = MachineType::Int64();  // make local
+    //---
+    Node* stack_slot_param = graph()->NewNode(
+        jsgraph()->machine()->StackSlot(parameter_representation));
+    Node* stack_slot_result = graph()->NewNode(
+        jsgraph()->machine()->StackSlot(result_type.representation()));
+    const Operator* store_op = jsgraph()->machine()->Store(
+        StoreRepresentation(parameter_representation, kNoWriteBarrier));
+    *effect_ = graph()->NewNode(store_op, stack_slot_param,
+                                jsgraph()->Int32Constant(0), input, *effect_,
+                                *control_);
+    MachineSignature::Builder sig_builder(jsgraph()->zone(), 1, 2);
+    sig_builder.AddReturn(MachineType::Int32());
+    sig_builder.AddParam(MachineType::Pointer());
+    sig_builder.AddParam(MachineType::Pointer());
+    Node* function =
+        graph()->NewNode(jsgraph()->common()->ExternalConstant(ref));
+    Node* overflow = BuildCCall(sig_builder.Build(), function, stack_slot_param,
+                                stack_slot_result);
+    switch (impl) {
+      case NumericImplementation::kTrap: {
+        ZeroCheck32(wasm::kTrapFloatUnrepresentable, overflow, position);
+        const Operator* load_op = jsgraph()->machine()->Load(result_type);
+        Node* load =
+            graph()->NewNode(load_op, stack_slot_result,
+                             jsgraph()->Int32Constant(0), *effect_, *control_);
+        *effect_ = load;
+        return load;
+      }
+      case NumericImplementation::kSaturate: {
+        Diamond tl_d(
+            graph(), jsgraph()->common(),
+            Binop(wasm::kExprI32Eq, overflow, Int32Constant(0), position),
+            BranchHint::kFalse);
+        tl_d.Chain(*control_);
+        Diamond nan_d(graph(), jsgraph()->common(),
+                      Binop(float_ops.ne_op(), input, input),  // Checks if NaN.
+                      BranchHint::kFalse);
+        nan_d.Nest(tl_d, true);
+        Diamond sat_d(graph(), jsgraph()->common(),
+                      Binop(float_ops.lt_op(), input, float_ops.zero()),
+                      BranchHint::kNone);
+        sat_d.Nest(nan_d, false);
+        Node* sat_val =
+            sat_d.Phi(int_ops.word_rep(), int_ops.min(), int_ops.max());
+        Node* nan_val = nan_d.Phi(int_ops.word_rep(), int_ops.zero(), sat_val);
+        const Operator* load_op = jsgraph()->machine()->Load(result_type);
+        Node* load =
+            graph()->NewNode(load_op, stack_slot_result,
+                             jsgraph()->Int32Constant(0), *effect_, *control_);
+        return tl_d.Phi(MachineRepresentation::kWord64, nan_val, load);
+      }
+    }
+#endif
   } else {
     Node* trunc = graph()->NewNode(
         jsgraph()->machine()->TryTruncateFloat32ToInt64(), input);
@@ -1810,9 +1927,33 @@ Node* WasmGraphBuilder::BuildI64SConvertF32(Node* input,
                                     graph()->start());
     Node* overflow = graph()->NewNode(jsgraph()->common()->Projection(1), trunc,
                                       graph()->start());
-    ZeroCheck64(wasm::kTrapFloatUnrepresentable, overflow, position);
-    return result;
+    switch (impl) {
+      case NumericImplementation::kTrap:
+        ZeroCheck64(wasm::kTrapFloatUnrepresentable, overflow, position);
+        return result;
+      case NumericImplementation::kSaturate: {
+        Diamond tl_d(graph(), jsgraph()->common(),
+                     Binop(wasm::kExprI64Eq, overflow, Int64Constant(0)),
+                     BranchHint::kFalse);
+        tl_d.Chain(*control_);
+        Diamond nan_d(graph(), jsgraph()->common(),
+                      Binop(float_ops.ne_op(), input, input),  // Checks if NaN.
+                      BranchHint::kFalse);
+        nan_d.Nest(tl_d, true);
+        Diamond sat_d(graph(), jsgraph()->common(),
+                      Binop(float_ops.lt_op(), input, float_ops.zero()),
+                      BranchHint::kNone);
+        sat_d.Nest(nan_d, false);
+        Node* sat_val =
+            sat_d.Phi(int_ops.word_rep(),
+                      Int64Constant(std::numeric_limits<int64_t>::min()),
+                      Int64Constant(std::numeric_limits<int64_t>::max()));
+        Node* nan_val = nan_d.Phi(int_ops.word_rep(), int_ops.zero(), sat_val);
+        return tl_d.Phi(MachineRepresentation::kWord64, nan_val, result);
+      }
+    }
   }
+  UNREACHABLE();
 }
 
 Node* WasmGraphBuilder::BuildI64UConvertF32(Node* input,
