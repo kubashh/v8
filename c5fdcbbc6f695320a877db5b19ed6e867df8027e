@@ -69,6 +69,24 @@
       "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43ef3eb_8c570dc9",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-01-17T10:10:59Z",
+      "side": 1,
+      "message": "But where do we get that from, if not from the {WasmFunction} defined in wasm-module.h?",
+      "parentUuid": "e038ea9f_4450ddf4",
+      "revId": "c5fdcbbc6f695320a877db5b19ed6e867df8027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
