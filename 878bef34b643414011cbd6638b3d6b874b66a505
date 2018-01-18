@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "799acde7_24d035e7",
+        "filename": "tools/node/build_gn.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T09:20:58Z",
+      "side": 1,
+      "message": "nit: Maybe call GenerateBuildFiles, since this executes gn",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "878bef34b643414011cbd6638b3d6b874b66a505",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb06131_6d132a9f",
+        "filename": "tools/node/build_gn.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T09:20:58Z",
+      "side": 1,
+      "message": "nit: I\u0027d turn all those\nassert X is not None\ninto\nassert X\nsince e.g. an empty string would also be bad.",
+      "range": {
+        "startLine": 90,
+        "startChar": 9,
+        "endLine": 90,
+        "endChar": 36
+      },
+      "revId": "878bef34b643414011cbd6638b3d6b874b66a505",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
