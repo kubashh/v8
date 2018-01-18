@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a4ef993_6755cacb",
+        "filename": "tools/testrunner/gc_fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "nit: but",
+      "range": {
+        "startLine": 92,
+        "startChar": 43,
+        "endLine": 92,
+        "endChar": 46
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95ca6b7c_844bfd08",
+        "filename": "tools/testrunner/gc_fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "This is still unused... Didn\u0027t look at FlagAppenderProc and SeedAppenderProc since they seem to be in an early state.",
+      "range": {
+        "startLine": 304,
+        "startChar": 6,
+        "endLine": 304,
+        "endChar": 22
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec224b1c_5edd4174",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "High level question: Do we need to make a proc based two-step fuzzer (aka separate analysis and then fuzzing phase).\n\nHow about only making a one-step fuzzer that has only one chain-to-execution above? Or are you planning to turn this implementation into one later?",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11453beb_f1265401",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "This looks like two exclusive implementations in one class. How about some sort of adapter? E.g. let _next_test and _result_for just forward to some internal object and exchange this object on start_analysis/finish_analysis.\n\nAnother option would be a separate analysisproc and fuzzerproc and then use above in the chain only analysis procs in analysis phase. Between the phases, they could exchange relevant data.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83690e32_f7ac5ae3",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "Could we not instead filter the tests between analysis and fuzzing phase? Since you already pass a fixed test set from saver to \"loader\".",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 35
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bba8eccc_aca43019",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "nit: Maybe differentiate the name. There is _analysis_data which is per test and this here is _get_analysis_data per result.",
+      "range": {
+        "startLine": 87,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 24
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ef4d04_371952b4",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "I wonder if we should increase/reduce count a bit based on max_limit. Are only int\u0027s supported for the flag?",
+      "range": {
+        "startLine": 118,
+        "startChar": 47,
+        "endLine": 118,
+        "endChar": 58
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f793167_2a798050",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "Food for thought: I was thinking about an easier way to specify which flag combinations would be used. One simple way would be with probabilities, just like in the clusterfuzz trials, e.g.:\n0.1: --stress-marking\u003d%d\n0.2: --stress-compaction-random\n...\n\nWe could normalize the added probabilities to 100% and then choose one initial flag from this distribution. Additionally we\u0027d choose other flags based on their probs. But maybe that\u0027s too far from the current approach.",
+      "range": {
+        "startLine": 123,
+        "startChar": 7,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e11d6354_50b553a8",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-18T10:34:54Z",
+      "side": 1,
+      "message": "This seems to be shared somehow between the CompactionFuzzerProc and the TwoStepFuzzerProc. Maybe move it to the superclass somehow? Also _try_send_next_test.",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 14
+      },
+      "revId": "d16311630772c4f1d042222e6d403bd8aa84742a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
