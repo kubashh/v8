@@ -346,9 +346,22 @@ class TurboAssembler : public Assembler {
   void Call(Label* target) { call(target); }
 
   void RetpolineCall(Register reg);
+  void call(Register reg) {
+    if (FLAG_turbo_retpoline) return RetpolineCall(reg);
+    return Assembler::call(reg);
+  }
+
+  using Assembler::call;
+
   void RetpolineCall(Address destination, RelocInfo::Mode rmode);
 
   void RetpolineJump(Register reg);
+
+  void jmp(Register reg) {
+    if (FLAG_turbo_retpoline) return RetpolineJump(reg);
+    return Assembler::jmp(reg);
+  }
+  using Assembler::jmp;
 
   void CallForDeoptimization(Address target, RelocInfo::Mode rmode) {
     call(target, rmode);

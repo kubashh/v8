@@ -1608,8 +1608,8 @@ void MacroAssembler::Jump(ExternalReference ext) {
   jmp(kScratchRegister);
 }
 
-
 void MacroAssembler::Jump(const Operand& op) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   if (kPointerSize == kInt64Size) {
     jmp(op);
   } else {
@@ -1617,7 +1617,6 @@ void MacroAssembler::Jump(const Operand& op) {
     jmp(kScratchRegister);
   }
 }
-
 
 void MacroAssembler::Jump(Address destination, RelocInfo::Mode rmode) {
   Move(kScratchRegister, destination, rmode);
@@ -1646,6 +1645,7 @@ void TurboAssembler::Call(ExternalReference ext) {
 }
 
 void TurboAssembler::Call(const Operand& op) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   if (kPointerSize == kInt64Size && !CpuFeatures::IsSupported(ATOM)) {
     call(op);
   } else {
@@ -1706,7 +1706,7 @@ void TurboAssembler::RetpolineCall(Address destination, RelocInfo::Mode rmode) {
 void TurboAssembler::RetpolineJump(Register reg) {
   Label setup_target, capture_spec;
 
-  call(&setup_target);
+  Assembler::call(&setup_target);
 
   bind(&capture_spec);
   pause();
@@ -2004,14 +2004,9 @@ void MacroAssembler::PopStackHandler() {
 void TurboAssembler::Ret() { ret(0); }
 
 void TurboAssembler::Ret(int bytes_dropped, Register scratch) {
-  if (is_uint16(bytes_dropped)) {
-    ret(bytes_dropped);
-  } else {
-    PopReturnAddressTo(scratch);
-    addp(rsp, Immediate(bytes_dropped));
-    PushReturnAddressFrom(scratch);
-    ret(0);
-  }
+  PopReturnAddressTo(scratch);
+  addp(rsp, Immediate(bytes_dropped));
+  RetpolineJump(scratch);
 }
 
 void MacroAssembler::CmpObjectType(Register heap_object,

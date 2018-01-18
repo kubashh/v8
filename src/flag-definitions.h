@@ -475,6 +475,11 @@ DEFINE_BOOL(untrusted_code_mitigations, V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS,
             "Enable mitigations for executing untrusted code")
 #undef V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS
 
+DEFINE_BOOL(
+    turbo_retpoline, false,
+    "replace call, jmp and ret with retpoline for all generated code (x64)")
+DEFINE_IMPLICATION(untrusted_code_mitigations, turbo_retpoline)
+
 // Flags to help platform porters
 DEFINE_BOOL(minimal, false,
             "simplifies execution model to make porting "

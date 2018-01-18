@@ -983,13 +983,13 @@ void Assembler::near_jmp(Address addr, RelocInfo::Mode rmode) {
 }
 
 void Assembler::call(Register adr) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   EnsureSpace ensure_space(this);
   // Opcode: FF /2 r64.
   emit_optional_rex_32(adr);
   emit(0xFF);
   emit_modrm(0x2, adr);
 }
-
 
 void Assembler::call(const Operand& op) {
   EnsureSpace ensure_space(this);
@@ -1474,8 +1474,8 @@ void Assembler::jmp(Handle<Code> target, RelocInfo::Mode rmode) {
   emit_code_target(target, rmode);
 }
 
-
 void Assembler::jmp(Register target) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   EnsureSpace ensure_space(this);
   // Opcode FF/4 r64.
   emit_optional_rex_32(target);
@@ -1483,15 +1483,14 @@ void Assembler::jmp(Register target) {
   emit_modrm(0x4, target);
 }
 
-
 void Assembler::jmp(const Operand& src) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   EnsureSpace ensure_space(this);
   // Opcode FF/4 m64.
   emit_optional_rex_32(src);
   emit(0xFF);
   emit_operand(0x4, src);
 }
-
 
 void Assembler::emit_lea(Register dst, const Operand& src, int size) {
   EnsureSpace ensure_space(this);
