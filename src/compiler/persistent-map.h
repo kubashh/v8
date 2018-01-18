@@ -210,7 +210,7 @@ class PersistentMap<Key, Value, Hasher>::HashValue {
   }
 
   bool operator<(HashValue other) const {
-    static_assert(sizeof(*this) <= sizeof(unsigned long), "");  // NOLINT
+    DCHECK(bits_.size() <= sizeof(unsigned long) * 8);  // NOLINT
     return bits_.to_ulong() < other.bits_.to_ulong();
   }
   bool operator==(HashValue other) const { return bits_ == other.bits_; }
