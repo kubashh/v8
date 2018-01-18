@@ -1436,6 +1436,8 @@ v8_source_set("v8_base") {
     "src/compiler/js-inlining.h",
     "src/compiler/js-intrinsic-lowering.cc",
     "src/compiler/js-intrinsic-lowering.h",
+    "src/compiler/js-math-builtin-reducer.cc",
+    "src/compiler/js-math-builtin-reducer.h",
     "src/compiler/js-native-context-specialization.cc",
     "src/compiler/js-native-context-specialization.h",
     "src/compiler/js-operator.cc",

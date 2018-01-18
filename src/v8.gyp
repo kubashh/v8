@@ -770,6 +770,8 @@
         'compiler/js-inlining-heuristic.h',
         'compiler/js-intrinsic-lowering.cc',
         'compiler/js-intrinsic-lowering.h',
+        'compiler/js-math-builtin-reducer.cc',
+        'compiler/js-math-builtin-reducer.h',
         'compiler/js-native-context-specialization.cc',
         'compiler/js-native-context-specialization.h',
         'compiler/js-operator.cc',

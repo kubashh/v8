@@ -118,6 +118,8 @@ class AdvancedReducer : public Reducer {
     ReplaceWithValue(node, node, node, nullptr);
   }
 
+  Editor* editor() const { return editor_; }
+
  private:
   Editor* const editor_;
 };

@@ -12,6 +12,7 @@
 #include "src/compiler/access-builder.h"
 #include "src/compiler/allocation-builder.h"
 #include "src/compiler/js-graph.h"
+#include "src/compiler/js-math-builtin-reducer.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/simplified-operator.h"
@@ -3095,6 +3096,12 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
 
       // Don't inline cross native context.
       if (function->native_context() != *native_context()) return NoChange();
+
+      JSMathBuiltinReducer math_reducer(editor(), jsgraph(), native_context(),
+                                        dependencies());
+
+      Reduction red = math_reducer.ReduceJSCall(node, function, shared);
+      if (red.Changed()) return red;
 
       // Check for known builtin functions.
       switch (shared->code()->builtin_index()) {
