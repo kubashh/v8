@@ -1950,6 +1950,7 @@ static void TestBuildGraphForSimpleExpression(WasmOpcode opcode) {
   Zone zone(isolate->allocator(), ZONE_NAME);
   HandleScope scope(isolate);
   // Enable all optional operators.
+  EXPERIMENTAL_FLAG_SCOPE(se);
   compiler::CommonOperatorBuilder common(&zone);
   compiler::MachineOperatorBuilder machine(
       &zone, MachineType::PointerRepresentation(),

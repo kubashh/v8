@@ -219,6 +219,7 @@
       'wasm/test-run-wasm-js.cc',
       'wasm/test-run-wasm-module.cc',
       'wasm/test-run-wasm-relocation.cc',
+      'wasm/test-run-wasm-sign-extension.cc',
       'wasm/test-run-wasm-simd.cc',
       'wasm/test-wasm-breakpoints.cc',
       "wasm/test-wasm-codegen.cc",
