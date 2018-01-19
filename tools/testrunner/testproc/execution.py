@@ -33,8 +33,8 @@ class Job(object):
   def run(self, process_ctx):
     output = self.cmd.execute()
     result = self.outproc.process(output)
-    if not self.keep_output:
-      result = process_ctx.reduce_result_f(result)
+    # if not self.keep_output:
+    #   result = process_ctx.reduce_result_f(result)
     return JobResult(self.test_id, result)
 
 
