@@ -7738,20 +7738,26 @@ Node* CodeStubAssembler::PrepareValueForWriteToTypedArray(
   return var_result.value();
 }
 
+Node* CodeStubAssembler::HasFixedCOWArrayMap(Node* object) {
+  return WordEqual(LoadMap(object), LoadRoot(Heap::kFixedCOWArrayMapRootIndex));
+}
+
 void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
                                          bool is_jsarray,
                                          ElementsKind elements_kind,
                                          KeyedAccessStoreMode store_mode,
                                          Label* bailout) {
   CSA_ASSERT(this, Word32BinaryNot(IsJSProxy(object)));
+
   Node* elements = LoadElements(object);
-  if (IsSmiOrObjectElementsKind(elements_kind) &&
-      store_mode != STORE_NO_TRANSITION_HANDLE_COW) {
-    // Bailout in case of COW elements.
-    GotoIf(WordNotEqual(LoadMap(elements),
-                        LoadRoot(Heap::kFixedArrayMapRootIndex)),
-           bailout);
+  CSA_ASSERT(this,
+             Word32Or(Word32BinaryNot(HasFixedCOWArrayMap(elements)),
+                      Int32Constant(IsSmiOrObjectElementsKind(elements_kind))));
+  if (!IsCOWHandlingStoreMode(store_mode) &&
+      IsSmiOrObjectElementsKind(elements_kind)) {
+    GotoIf(HasFixedCOWArrayMap(elements), bailout);
   }
+
   // TODO(ishell): introduce TryToIntPtrOrSmi() and use OptimalParameterMode().
   ParameterMode parameter_mode = INTPTR_PARAMETERS;
   key = TryToIntptr(key, bailout);
@@ -7817,25 +7823,43 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
   }
 
   if (IsGrowStoreMode(store_mode)) {
-    elements = CheckForCapacityGrow(object, elements, elements_kind, length,
-                                    key, parameter_mode, is_jsarray, bailout);
+    elements =
+        CheckForCapacityGrow(object, elements, elements_kind, store_mode,
+                             length, key, parameter_mode, is_jsarray, bailout);
   } else {
     GotoIfNot(UintPtrLessThan(key, length), bailout);
-
-    if ((store_mode == STORE_NO_TRANSITION_HANDLE_COW) &&
-        IsSmiOrObjectElementsKind(elements_kind)) {
-      elements = CopyElementsOnWrite(object, elements, elements_kind, length,
-                                     parameter_mode, bailout);
-    }
   }
+
+  CSA_ASSERT(this,
+             Word32Or(Word32BinaryNot(HasFixedCOWArrayMap(elements)),
+                      Int32Constant(IsSmiOrObjectElementsKind(elements_kind))));
+  if (IsCOWHandlingStoreMode(store_mode) &&
+      IsSmiOrObjectElementsKind(elements_kind)) {
+    elements = CopyElementsOnWrite(object, elements, elements_kind, length,
+                                   parameter_mode, bailout);
+  }
+
+  // Update .length if necessary.
+  if (IsGrowStoreMode(store_mode) && is_jsarray) {
+    Label length_uptodate(this);
+    GotoIf(UintPtrLessThan(key, length), &length_uptodate);
+    Node* new_length = IntPtrAdd(key, IntPtrOrSmiConstant(1, parameter_mode));
+    StoreObjectFieldNoWriteBarrier(
+        object, JSArray::kLengthOffset,
+        ParameterToTagged(new_length, parameter_mode));
+    Goto(&length_uptodate);
+    BIND(&length_uptodate);
+  }
+
+  CSA_ASSERT(this, WordNotEqual(LoadMap(elements),
+                                LoadRoot(Heap::kFixedCOWArrayMapRootIndex)));
   StoreElement(elements, elements_kind, key, value, parameter_mode);
 }
 
-Node* CodeStubAssembler::CheckForCapacityGrow(Node* object, Node* elements,
-                                              ElementsKind kind, Node* length,
-                                              Node* key, ParameterMode mode,
-                                              bool is_js_array,
-                                              Label* bailout) {
+Node* CodeStubAssembler::CheckForCapacityGrow(
+    Node* object, Node* elements, ElementsKind kind,
+    KeyedAccessStoreMode store_mode, Node* length, Node* key,
+    ParameterMode mode, bool is_js_array, Label* bailout) {
   VARIABLE(checked_elements, MachineRepresentation::kTagged);
   Label grow_case(this), no_grow_case(this), done(this);
 
@@ -7843,6 +7867,7 @@ Node* CodeStubAssembler::CheckForCapacityGrow(Node* object, Node* elements,
   if (IsHoleyOrDictionaryElementsKind(kind)) {
     condition = UintPtrGreaterThanOrEqual(key, length);
   } else {
+    // We don't support growing here unless the value is being appended.
     condition = WordEqual(key, length);
   }
   Branch(condition, &grow_case, &no_grow_case);
@@ -7851,25 +7876,12 @@ Node* CodeStubAssembler::CheckForCapacityGrow(Node* object, Node* elements,
   {
     Node* current_capacity =
         TaggedToParameter(LoadFixedArrayBaseLength(elements), mode);
+    checked_elements.Bind(elements);  // XXX
+    GotoIf(UintPtrLessThan(key, current_capacity), &done);
 
-    checked_elements.Bind(elements);
-
-    Label fits_capacity(this);
-    GotoIf(UintPtrLessThan(key, current_capacity), &fits_capacity);
-    {
-      Node* new_elements = TryGrowElementsCapacity(
-          object, elements, kind, key, current_capacity, mode, bailout);
-
-      checked_elements.Bind(new_elements);
-      Goto(&fits_capacity);
-    }
-    BIND(&fits_capacity);
-
-    if (is_js_array) {
-      Node* new_length = IntPtrAdd(key, IntPtrOrSmiConstant(1, mode));
-      StoreObjectFieldNoWriteBarrier(object, JSArray::kLengthOffset,
-                                     ParameterToTagged(new_length, mode));
-    }
+    Node* new_elements = TryGrowElementsCapacity(
+        object, elements, kind, key, current_capacity, mode, bailout);
+    checked_elements.Bind(new_elements);
     Goto(&done);
   }
 
@@ -7891,15 +7903,12 @@ Node* CodeStubAssembler::CopyElementsOnWrite(Node* object, Node* elements,
   VARIABLE(new_elements_var, MachineRepresentation::kTagged, elements);
   Label done(this);
 
-  GotoIfNot(
-      WordEqual(LoadMap(elements), LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
-      &done);
+  GotoIfNot(HasFixedCOWArrayMap(elements), &done);
   {
     Node* capacity =
         TaggedToParameter(LoadFixedArrayBaseLength(elements), mode);
     Node* new_elements = GrowElementsCapacity(object, elements, kind, kind,
                                               length, capacity, mode, bailout);
-
     new_elements_var.Bind(new_elements);
     Goto(&done);
   }

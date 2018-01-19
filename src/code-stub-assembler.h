@@ -500,6 +500,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Determines whether the Array Iterator's prototype has changed.
   TNode<BoolT> HasInitialArrayIteratorPrototypeMap(
       TNode<Context> native_context);
+  Node* HasFixedCOWArrayMap(Node* object);
   Node* DoesntHaveInstanceType(Node* object, InstanceType type);
   Node* TaggedDoesntHaveInstanceType(Node* any_tagged, InstanceType type);
   // Load the properties backing store of a JSObject.
@@ -1721,8 +1722,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                         KeyedAccessStoreMode store_mode, Label* bailout);
 
   Node* CheckForCapacityGrow(Node* object, Node* elements, ElementsKind kind,
-                             Node* length, Node* key, ParameterMode mode,
-                             bool is_js_array, Label* bailout);
+                             KeyedAccessStoreMode store_mode, Node* length,
+                             Node* key, ParameterMode mode, bool is_js_array,
+                             Label* bailout);
 
   Node* CopyElementsOnWrite(Node* object, Node* elements, ElementsKind kind,
                             Node* length, ParameterMode mode, Label* bailout);
