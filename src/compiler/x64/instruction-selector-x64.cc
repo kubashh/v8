@@ -2522,6 +2522,31 @@ void InstructionSelector::VisitS128Select(Node* node) {
        g.UseRegister(node->InputAt(2)));
 }
 
+void InstructionSelector::VisitSignExtendWord8ToInt32(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64Movsxbl, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitSignExtendWord16ToInt32(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64Movsxwl, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitSignExtendWord8ToInt64(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64Movsxbq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitSignExtendWord16ToInt64(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64Movsxwq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitSignExtendWord32ToInt64(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64Movsxlq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
 void InstructionSelector::VisitInt32AbsWithOverflow(Node* node) {
   UNREACHABLE();
 }
