@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eff31a0a_3452c320",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T17:23:05Z",
+      "side": 1,
+      "message": "Wonder if this triggered the new error on test262? I assume with normal test runner the variant_flags should always be empty before right? Maybe still check for that and just keep flags in this case?",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 59
+      },
+      "revId": "61c562b026a69b4d7052a20a1b529852bb3dcbfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
