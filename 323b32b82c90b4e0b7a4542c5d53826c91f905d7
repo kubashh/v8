@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f631de3_bdc52c16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-19T15:29:37Z",
+      "side": 1,
+      "message": "Runtime::NewArray",
+      "range": {
+        "startLine": 10,
+        "startChar": 32,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "323b32b82c90b4e0b7a4542c5d53826c91f905d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2645ddb4_f6623c70",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-19T15:29:37Z",
+      "side": 1,
+      "message": "As mentioned earlier, could you use Branch here and have both sides wrapped in a scope to avoid variable defined in the fast-case (e.g., array_map) being visible in the runtime scope where they would be invalid to access via CSA.",
+      "range": {
+        "startLine": 1872,
+        "startChar": 6,
+        "endLine": 1872,
+        "endChar": 12
+      },
+      "revId": "323b32b82c90b4e0b7a4542c5d53826c91f905d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
