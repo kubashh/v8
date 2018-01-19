@@ -1967,6 +1967,16 @@ SIMD_OTHER_UNOP_LIST(VISIT_SIMD_OTHER_UNOP)
 SIMD_BINOP_LIST(VISIT_SIMD_BINOP)
 #undef VISIT_SIMD_BINOP
 
+void InstructionSelector::VisitSignExtendWord8ToInt32(Node* node) {
+  IA32OperandGenerator g(this);
+  Emit(kIA32Movsxbl, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitSignExtendWord16ToInt32(Node* node) {
+  IA32OperandGenerator g(this);
+  Emit(kIA32Movsxwl, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
 void InstructionSelector::VisitInt32AbsWithOverflow(Node* node) {
   UNREACHABLE();
 }
