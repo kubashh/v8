@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f454975_61c5d7d1",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T15:08:05Z",
+      "side": 1,
+      "message": "nit: Maybe floatify everything? E.g. probabilities all in [0,1] then you could call just random() which returns [0,1) and compare random \u003c p.",
+      "range": {
+        "startLine": 109,
+        "startChar": 11,
+        "endLine": 109,
+        "endChar": 41
+      },
+      "revId": "9104127c0cf20c93580aef6e03992989fb1591fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43a48490_8aaae8d9",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T15:08:05Z",
+      "side": 1,
+      "message": "I assume the minimum is 6 in V8 internally?",
+      "range": {
+        "startLine": 187,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 31
+      },
+      "revId": "9104127c0cf20c93580aef6e03992989fb1591fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
