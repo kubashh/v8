@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b93298b_2d3e53a8",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-19T14:39:58Z",
+      "side": 0,
+      "message": "This TODO still applies, no?",
+      "range": {
+        "startLine": 1873,
+        "startChar": 5,
+        "endLine": 1874,
+        "endChar": 65
+      },
+      "revId": "af31c67dfe4ff21f592bc1dbc7d46567b892810b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

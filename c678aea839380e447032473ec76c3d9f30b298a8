@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17c2c8be_a00f086e",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-19T14:39:58Z",
+      "side": 1,
+      "message": "This isn\u0027t calling into the runtime now, it\u0027s just calling the Array constructor. I\u0027m not entirely sure this is what we want here, I think you need to call Runtime::kNewArray.",
+      "range": {
+        "startLine": 1884,
+        "startChar": 12,
+        "endLine": 1884,
+        "endChar": 19
+      },
+      "revId": "c678aea839380e447032473ec76c3d9f30b298a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c454a720_5d54ca09",
+        "filename": "test/mjsunit/es6/array-of.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-19T14:39:58Z",
+      "side": 1,
+      "message": "I\u0027d prefer that this test lived in a seperate regression test (it\u0027s not really testing the spec, it\u0027s testing an implementation detail given our heap layout). Could you create a file mjsunit/regress/regress-803750.js and move this test there please.",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 70
+      },
+      "revId": "c678aea839380e447032473ec76c3d9f30b298a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
