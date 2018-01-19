@@ -28,7 +28,7 @@ import subprocess
 import sys
 
 BUILD_OPTS_DEFAULT = ""
-BUILD_OPTS_GOMA = "-j1000 -l%d" % (multiprocessing.cpu_count() + 2)
+BUILD_OPTS_GOMA = ""
 BUILD_TARGETS_TEST = ["d8", "cctest", "unittests"]
 BUILD_TARGETS_ALL = ["all"]
 
@@ -251,9 +251,9 @@ class Config(object):
     # The implementation of mksnapshot failure detection relies on
     # the "pty" module and GDB presence, so skip it on non-Linux.
     if "linux" not in sys.platform:
-      return _Call("ninja -C %s %s %s" % (path, build_opts, targets))
+      return _Call("autoninja -C %s %s %s" % (path, build_opts, targets))
 
-    return_code, output = _CallWithOutput("ninja -C %s %s %s" %
+    return_code, output = _CallWithOutput("autoninja -C %s %s %s" %
                                           (path, build_opts, targets))
     if return_code != 0 and "FAILED: gen/snapshot.cc" in output:
       csa_trap = re.compile("Specify option( --csa-trap-on-node=[^ ]*)")
