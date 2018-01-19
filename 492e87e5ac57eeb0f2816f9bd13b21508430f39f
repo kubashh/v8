@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5f5b686_518ac7fd",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "nit: unused import",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceca6194_3595899e",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "nit: now that these are both empty, just drop them",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 20
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd743b9e_8daca97b",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "nit: drop this too",
+      "range": {
+        "startLine": 234,
+        "startChar": 2,
+        "endLine": 234,
+        "endChar": 22
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d1f6545_65097175",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "drop",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 76
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94b300dd_b6a2cf45",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "drop",
+      "range": {
+        "startLine": 254,
+        "startChar": 52,
+        "endLine": 254,
+        "endChar": 62
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d01ed918_45afa532",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-19T19:00:09Z",
+      "side": 1,
+      "message": "drop",
+      "range": {
+        "startLine": 257,
+        "startChar": 49,
+        "endLine": 257,
+        "endChar": 59
+      },
+      "revId": "492e87e5ac57eeb0f2816f9bd13b21508430f39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
