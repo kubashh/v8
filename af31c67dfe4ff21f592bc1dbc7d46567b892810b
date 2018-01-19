@@ -22,6 +22,30 @@
       "revId": "af31c67dfe4ff21f592bc1dbc7d46567b892810b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b6e642f_7bd5cd0b",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-01-19T15:19:39Z",
+      "side": 0,
+      "message": "I misunderstood. I\u0027ve put it back.",
+      "parentUuid": "4b93298b_2d3e53a8",
+      "range": {
+        "startLine": 1873,
+        "startChar": 5,
+        "endLine": 1874,
+        "endChar": 65
+      },
+      "revId": "af31c67dfe4ff21f592bc1dbc7d46567b892810b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
