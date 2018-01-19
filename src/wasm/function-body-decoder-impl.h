@@ -41,7 +41,7 @@ struct WasmException;
   DCHECK(!this->module_ || !this->module_->is_asm_js());                       \
   if (!FLAG_experimental_wasm_##flag) {                                        \
     this->error("Invalid opcode (enable with --experimental-wasm-" #flag ")"); \
-    break;                                                                     \
+    return;                                                                    \
   }
 
 #define OPCODE_ERROR(opcode, message)                                 \
@@ -2344,6 +2344,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
   }
 
   inline void BuildSimpleOperator(WasmOpcode opcode, FunctionSig* sig) {
+    if (WasmOpcodes::IsSignExtensionOpcode(opcode)) CHECK_PROTOTYPE_OPCODE(se);
     switch (sig->parameter_count()) {
       case 1: {
         auto val = Pop(0, sig->GetParam(0));

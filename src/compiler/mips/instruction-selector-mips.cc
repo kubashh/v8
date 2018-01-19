@@ -2263,9 +2263,29 @@ void InstructionSelector::VisitS8x16Shuffle(Node* node) {
        g.UseImmediate(Pack4Lanes(shuffle + 12, mask)));
 }
 
+void InstructionSelector::VisitSignExtendWord8ToInt32(Node* node) {
+  UNIMPLEMENTED()
+}
+
+void InstructionSelector::VisitSignExtendWord16ToInt32(Node* node) {
+  UNIMPLEMENTED()
+}
+
+void InstructionSelector::VisitSignExtendWord8ToInt64(Node* node) {
+  UNIMPLEMENTED()
+}
+
+void InstructionSelector::VisitSignExtendWord16ToInt64(Node* node) {
+  UNIMPLEMENTED()
+}
+
+void InstructionSelector::VisitSignExtendWord32ToInt64(Node* node) {
+  UNIMPLEMENTED()
+}
+
 // static
 MachineOperatorBuilder::Flags
-InstructionSelector::SupportedMachineOperatorFlags() {
+    InstructionSelector::SupportedMachineOperatorFlags() {
   MachineOperatorBuilder::Flags flags = MachineOperatorBuilder::kNoFlags;
   if ((IsMipsArchVariant(kMips32r2) || IsMipsArchVariant(kMips32r6)) &&
       IsFp64Mode()) {
