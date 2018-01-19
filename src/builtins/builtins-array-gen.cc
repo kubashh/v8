@@ -1867,6 +1867,12 @@ TF_BUILTIN(ArrayOf, ArrayBuiltinCodeStubAssembler) {
 
     BIND(&is_not_constructor);
     {
+      Label runtime(this);
+
+      GotoIf(
+          SmiAbove(length, SmiConstant(JSArray::kInitialMaxFastElementArray)),
+          &runtime);
+
       TNode<Map> array_map = CAST(LoadContextElement(
           context, Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX));
 
@@ -1876,6 +1882,16 @@ TF_BUILTIN(ArrayOf, ArrayBuiltinCodeStubAssembler) {
                                    SmiConstant(0), nullptr,
                                    ParameterMode::SMI_PARAMETERS));
       Goto(&next);
+
+      BIND(&runtime);
+      {
+        TNode<Context> native_context = LoadNativeContext(context);
+        TNode<JSFunction> array_function = CAST(
+            LoadContextElement(native_context, Context::ARRAY_FUNCTION_INDEX));
+        array = CallRuntime(Runtime::kNewArray, context, array_function, length,
+                            array_function, UndefinedConstant());
+        Goto(&next);
+      }
     }
 
     BIND(&next);
