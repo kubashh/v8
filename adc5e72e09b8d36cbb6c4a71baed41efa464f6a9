@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6548b6e3_d64b013b",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T14:53:26Z",
+      "side": 1,
+      "message": "nit: based",
+      "range": {
+        "startLine": 41,
+        "startChar": 41,
+        "endLine": 41,
+        "endChar": 45
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2c2f34_20f7d18e",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T14:53:26Z",
+      "side": 1,
+      "message": "So, result in only not None when it\u0027s the result of an analysis run of the test?\n\nWhat do the other tests return? Will they all have None results?",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f056ae6_4e517f78",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T14:53:26Z",
+      "side": 1,
+      "message": "Can analysis_result be None here? It\u0027s set as default and there\u0027s no early bailout. And in do_analysis you directly access values on it.",
+      "range": {
+        "startLine": 87,
+        "startChar": 60,
+        "endLine": 87,
+        "endChar": 75
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5debe94_0533b501",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T14:53:26Z",
+      "side": 1,
+      "message": "If this continue is hit, the i down there will be larger than what\u0027s appended. This could make the access to gens[main_index] fail.",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6369d177_d998adc5",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T14:53:26Z",
+      "side": 1,
+      "message": "Maybe rather implement this with a single float somehow? E.g. sum up all these p values, normalize to 100% and then just compare to random.random()?",
+      "range": {
+        "startLine": 93,
+        "startChar": 6,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
