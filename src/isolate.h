@@ -419,6 +419,7 @@ typedef std::vector<HeapObject*> DebugObjectCache;
   /* Assembler state. */                                                      \
   V(FatalErrorCallback, exception_behavior, nullptr)                          \
   V(OOMErrorCallback, oom_behavior, nullptr)                                  \
+  V(BloatedHeapCallback, bloated_heap_callback, nullptr)                      \
   V(LogEventCallback, event_logger, nullptr)                                  \
   V(AllowCodeGenerationFromStringsCallback, allow_code_gen_callback, nullptr) \
   V(AllowWasmCodeGenerationCallback, allow_wasm_code_gen_callback, nullptr)   \

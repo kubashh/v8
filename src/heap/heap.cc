@@ -1301,6 +1301,13 @@ bool Heap::CollectGarbage(AllocationSpace space,
         kNoGCFlags, kGCCallbackScheduleIdleGarbageCollection);
   }
 
+  if (OldGenerationCapacity() > 10 * MB) {
+    v8::Isolate* isolate = reinterpret_cast<v8::Isolate*>(isolate_);
+    v8::HandleScope scope(isolate);
+    Handle<Context> context(isolate_->context(), isolate_);
+    Utils::ReportBloatedHeap(isolate, Utils::ToLocal(context));
+  }
+
   return next_gc_likely_to_collect_more;
 }
 
