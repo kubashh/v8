@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e86af52d_880aa799",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-01-19T15:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f631de3_bdc52c16",
+      "range": {
+        "startLine": 10,
+        "startChar": 32,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "323b32b82c90b4e0b7a4542c5d53826c91f905d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2645ddb4_f6623c70",
         "filename": "src/builtins/builtins-array-gen.cc",
         "patchSetId": 5
