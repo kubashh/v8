@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ba2c417_20a27059",
+        "filename": "src/profiler/sampling-heap-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1144939
+      },
+      "writtenOn": "2018-01-19T22:53:14Z",
+      "side": 1,
+      "message": "A bit shorter name might be good so that it fits various UI clients better. Maybe just \"(deopt allocated)\" or something like that?",
+      "revId": "434778d56128098a4b8eff60d0c9291e617f89ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
