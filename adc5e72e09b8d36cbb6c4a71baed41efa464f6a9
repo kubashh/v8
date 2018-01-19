@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "07d0d6d7_d9287542",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6548b6e3_d64b013b",
+      "range": {
+        "startLine": 41,
+        "startChar": 41,
+        "endLine": 41,
+        "endChar": 45
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca2c2f34_20f7d18e",
         "filename": "tools/testrunner/testproc/fuzzer.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-19T14:53:26Z",
       "side": 1,
       "message": "So, result in only not None when it\u0027s the result of an analysis run of the test?\n\nWhat do the other tests return? Will they all have None results?",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29649e10_578f753c",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "Yes, because of passing DROP_RESULT during setup(). Analysis phase is an exception since I\u0027m setting keep_output\u003dTrue.",
+      "parentUuid": "ca2c2f34_20f7d18e",
       "range": {
         "startLine": 73,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bf0c2b66_184f2f9a",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "No, analysis_result can be None only when we\u0027re calling _create_gen from _next_test and we don\u0027t run any fuzzer that needs analysis phase. fuzzer_config.analyzer is None \u003d\u003d analysis_result is None here.",
+      "parentUuid": "3f056ae6_4e517f78",
+      "range": {
+        "startLine": 87,
+        "startChar": 60,
+        "endLine": 87,
+        "endChar": 75
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5debe94_0533b501",
         "filename": "tools/testrunner/testproc/fuzzer.py",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "eadd5b82_a60145c3",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "Fixed in the next patchset.",
+      "parentUuid": "f5debe94_0533b501",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6369d177_d998adc5",
         "filename": "tools/testrunner/testproc/fuzzer.py",
         "patchSetId": 2
@@ -105,6 +201,30 @@
       "writtenOn": "2018-01-19T14:53:26Z",
       "side": 1,
       "message": "Maybe rather implement this with a single float somehow? E.g. sum up all these p values, normalize to 100% and then just compare to random.random()?",
+      "range": {
+        "startLine": 93,
+        "startChar": 6,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "adc5e72e09b8d36cbb6c4a71baed41efa464f6a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e7047d8_275c1d2b",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "As discussed offline I\u0027m lowering accuracy to 10% and indexes list will have at most 40 elements.",
+      "parentUuid": "6369d177_d998adc5",
       "range": {
         "startLine": 93,
         "startChar": 6,

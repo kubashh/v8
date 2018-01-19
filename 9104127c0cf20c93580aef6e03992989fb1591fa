@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65d6deed_87e04d65",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8f454975_61c5d7d1",
+      "range": {
+        "startLine": 109,
+        "startChar": 11,
+        "endLine": 109,
+        "endChar": 41
+      },
+      "revId": "9104127c0cf20c93580aef6e03992989fb1591fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43a48490_8aaae8d9",
         "filename": "tools/testrunner/testproc/fuzzer.py",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "9104127c0cf20c93580aef6e03992989fb1591fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fe95b2b_dda1c011",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T15:39:20Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "43a48490_8aaae8d9",
+      "range": {
+        "startLine": 187,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 31
+      },
+      "revId": "9104127c0cf20c93580aef6e03992989fb1591fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
