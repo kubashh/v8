@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc3fb5b_84d17eba",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-19T11:35:15Z",
+      "side": 1,
+      "message": "It\u0027s missing now on clusterfuzz builders after adding the test dependency:\nhttps://build.chromium.org/p/client.v8.clusterfuzz/builders/V8%20Linux64%20TSAN%20-%20release%20builder/builds/1416",
+      "range": {
+        "startLine": 2827,
+        "startChar": 6,
+        "endLine": 2827,
+        "endChar": 28
+      },
+      "revId": "950cdcef2f9a562c8216728948619d3bc85486c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
