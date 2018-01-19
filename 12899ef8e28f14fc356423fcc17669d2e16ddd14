@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf920e39_8d61162e",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-01-19T22:04:06Z",
+      "side": 1,
+      "message": "VisitRO here and below?",
+      "range": {
+        "startLine": 1972,
+        "startChar": 0,
+        "endLine": 1972,
+        "endChar": 72
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "816280f5_5e228444",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-01-19T22:04:06Z",
+      "side": 1,
+      "message": "I couldn\u0027t find the unimplemented stubs. Are they implemented on all archs?",
+      "range": {
+        "startLine": 1542,
+        "startChar": 0,
+        "endLine": 1542,
+        "endChar": 67
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4444e7a1_918beeb5",
+        "filename": "src/compiler/mips/instruction-selector-mips.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-01-19T22:04:06Z",
+      "side": 1,
+      "message": "Should you do this for PPC and S390 as well?",
+      "range": {
+        "startLine": 2266,
+        "startChar": 0,
+        "endLine": 2266,
+        "endChar": 67
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036f2bad_85c18170",
+        "filename": "src/compiler/x64/instruction-selector-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-01-19T22:04:06Z",
+      "side": 1,
+      "message": "VisitRO?",
+      "range": {
+        "startLine": 2527,
+        "startChar": 0,
+        "endLine": 2527,
+        "endChar": 71
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb40658_b8a52a23",
+        "filename": "test/cctest/wasm/test-run-wasm-sign-extension.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-01-19T22:04:06Z",
+      "side": 1,
+      "message": "Add some other \"interesting\" values, like 0, 1, -1.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 32
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
