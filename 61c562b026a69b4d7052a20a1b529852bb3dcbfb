@@ -22,6 +22,30 @@
       "revId": "61c562b026a69b4d7052a20a1b529852bb3dcbfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f0722f_2bd8b65e",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-19T18:01:52Z",
+      "side": 1,
+      "message": "The problem is that when we\u0027re calculating expected outcomes we look at the variant_flags, so I should firstly set variant_flags and then call _prepare_outcomes.\nfix:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/876364",
+      "parentUuid": "eff31a0a_3452c320",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 59
+      },
+      "revId": "61c562b026a69b4d7052a20a1b529852bb3dcbfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
