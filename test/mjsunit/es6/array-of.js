@@ -172,6 +172,9 @@ assertThrows(function() { new Array.of() }, TypeError);  // not a constructor
     assertEquals(Array.isArray(Array.of.call(val, val)), true);
 });
 
+// Verify that very large arrays can be constructed.
+assertEquals(Array.isArray(Array.of.apply(Array, Array(65536))), true);
+assertEquals(Array.isArray(Array.of.apply(null, Array(65536))), true);
 
 (function testBoundConstructor() {
   var boundFn = (function() {}).bind(null);
