@@ -172,7 +172,6 @@ assertThrows(function() { new Array.of() }, TypeError);  // not a constructor
     assertEquals(Array.isArray(Array.of.call(val, val)), true);
 });
 
-
 (function testBoundConstructor() {
   var boundFn = (function() {}).bind(null);
   var instance = Array.of.call(boundFn, 1, 2, 3);
