@@ -3154,6 +3154,12 @@ WASM_EXEC_TEST(IfInsideUnreachable) {
   CHECK_EQ(17, r.Call());
 }
 
+WASM_COMPILED_EXEC_TEST(I32SExtendI8) {
+  WasmRunner<int32_t, int32_t> r(execution_mode);
+  BUILD(r, WASM_I32_SIGN_EXT_I8(WASM_GET_LOCAL(0)));
+  CHECK_EQ(0x7f, r.Call(0x7f));
+}
+
 #undef B1
 #undef B2
 #undef RET
