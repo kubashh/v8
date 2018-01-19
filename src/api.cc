@@ -436,6 +436,17 @@ void Utils::ReportOOMFailure(const char* location, bool is_heap_oom) {
   isolate->SignalFatalError();
 }
 
+bool Utils::ReportBloatedHeap(v8::Isolate* isolate,
+                              v8::Local<v8::Context> context) {
+  BloatedHeapCallback callback =
+      reinterpret_cast<i::Isolate*>(isolate)->bloated_heap_callback();
+  if (callback == nullptr) {
+    return false;
+  }
+  callback(isolate, context);
+  return true;
+}
+
 static inline bool IsExecutionTerminatingCheck(i::Isolate* isolate) {
   if (isolate->has_scheduled_exception()) {
     return isolate->scheduled_exception() ==
@@ -8881,6 +8892,7 @@ void Isolate::GetCodeRange(void** start, size_t* length_in_bytes) {
 
 CALLBACK_SETTER(FatalErrorHandler, FatalErrorCallback, exception_behavior)
 CALLBACK_SETTER(OOMErrorHandler, OOMErrorCallback, oom_behavior)
+CALLBACK_SETTER(BloatedHeapCallback, BloatedHeapCallback, bloated_heap_callback)
 CALLBACK_SETTER(AllowCodeGenerationFromStringsCallback,
                 AllowCodeGenerationFromStringsCallback, allow_code_gen_callback)
 CALLBACK_SETTER(AllowWasmCodeGenerationCallback,
