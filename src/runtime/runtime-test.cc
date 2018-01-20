@@ -638,8 +638,18 @@ RUNTIME_FUNCTION(Runtime_SetAllocationTimeout) {
 
 
 RUNTIME_FUNCTION(Runtime_DebugPrint) {
-  SealHandleScope shs(isolate);
+  HandleScope hs(isolate);
   DCHECK_EQ(1, args.length());
+
+  if (args[0]->IsSmi()) {
+    v8::Isolate* iso = reinterpret_cast<v8::Isolate*>(isolate);
+    v8::HandleScope scope(iso);
+    Handle<Context> context(isolate->context(), isolate);
+    PrintF("INVOKING bloated heap\n");
+    Utils::ReportBloatedHeap(iso, Utils::ToLocal(context));
+    PrintF("DONE INVOKING bloated heap\n");
+    return args[0];
+  }
 
   OFStream os(stdout);
 #ifdef DEBUG

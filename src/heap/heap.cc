@@ -1301,6 +1301,9 @@ bool Heap::CollectGarbage(AllocationSpace space,
         kNoGCFlags, kGCCallbackScheduleIdleGarbageCollection);
   }
 
+  if (OldGenerationCapacity() > 10 * MB) {
+  }
+
   return next_gc_likely_to_collect_more;
 }
 

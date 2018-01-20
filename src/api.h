@@ -125,6 +125,8 @@ class Utils {
     return condition;
   }
   static void ReportOOMFailure(const char* location, bool is_heap_oom);
+  static bool ReportBloatedHeap(v8::Isolate* isolate,
+                                v8::Local<v8::Context> context);
 
   static inline Local<Context> ToLocal(
       v8::internal::Handle<v8::internal::Context> obj);
