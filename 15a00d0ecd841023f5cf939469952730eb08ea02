@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6677f9b5_061740fb",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-01-22T09:03:27Z",
+      "side": 1,
+      "message": "I think we should use the names ChangeIntXToIntY(), because their semantics match the existing ChangeInt32ToInt64 operation.",
+      "revId": "15a00d0ecd841023f5cf939469952730eb08ea02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
