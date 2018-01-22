@@ -16,6 +16,24 @@
       "revId": "434778d56128098a4b8eff60d0c9291e617f89ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7638af9b_d70384f7",
+        "filename": "src/profiler/sampling-heap-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-01-22T19:29:37Z",
+      "side": 1,
+      "message": "I abbreviated it. I am not sure \u0027deopt allocated\u0027 is very meaningful to users, so I went to an even short \u0027deopt\u0027. To the users this would imply that a \u0027(deopt)\u0027 was on the stack, whatever that is, which is more accurate that \u0027(deopt allocated)\u0027 being on the stack.",
+      "parentUuid": "3ba2c417_20a27059",
+      "revId": "434778d56128098a4b8eff60d0c9291e617f89ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
