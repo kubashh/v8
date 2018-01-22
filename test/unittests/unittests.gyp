@@ -206,10 +206,10 @@
       'dependencies': [
         '../../testing/gmock.gyp:gmock',
         '../../testing/gtest.gyp:gtest',
-        '../../src/v8.gyp:v8',
-        '../../src/v8.gyp:v8_libbase',
-        '../../src/v8.gyp:v8_libplatform',
-        '../../src/v8.gyp:v8_maybe_snapshot',
+        '../../gypfiles/v8.gyp:v8',
+        '../../gypfiles/v8.gyp:v8_libbase',
+        '../../gypfiles/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_maybe_snapshot',
       ],
       'include_dirs': [
         '../..',
@@ -278,7 +278,7 @@
           ],
         }],
         ['v8_use_snapshot=="true"', {
-          'dependencies': ['../../src/v8.gyp:v8_initializers'],
+          'dependencies': ['../../gypfiles/v8.gyp:v8_initializers'],
         }],
       ],
     },
