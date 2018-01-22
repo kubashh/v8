@@ -32,7 +32,7 @@
     'v8_enable_vtunejit%': 0,
     'v8_enable_i18n_support%': 1,
   },
-  'includes': ['../gypfiles/toolchain.gypi', '../gypfiles/features.gypi'],
+  'includes': ['toolchain.gypi', 'features.gypi'],
   'targets': [
     {
       'target_name': 'd8',
@@ -48,10 +48,10 @@
         '<(DEPTH)',
       ],
       'sources': [
-        'd8.h',
-        'd8.cc',
-        'd8-console.h',
-        'd8-console.cc',
+        '../src/d8.h',
+        '../src/d8.cc',
+        '../src/d8-console.h',
+        '../src/d8-console.cc',
         '<(SHARED_INTERMEDIATE_DIR)/d8-js.cc',
       ],
       'conditions': [
@@ -68,10 +68,10 @@
         ['(OS=="linux" or OS=="mac" or OS=="freebsd" or OS=="netbsd" \
            or OS=="openbsd" or OS=="solaris" or OS=="android" \
            or OS=="qnx" or OS=="aix")', {
-             'sources': [ 'd8-posix.cc', ]
+             'sources': [ '../src/d8-posix.cc', ]
            }],
         [ 'OS=="win"', {
-          'sources': [ 'd8-windows.cc', ]
+          'sources': [ '../src/d8-windows.cc', ]
         }],
         [ 'component!="shared_library"', {
           'conditions': [
@@ -86,7 +86,7 @@
         }],
         ['v8_enable_vtunejit==1', {
           'dependencies': [
-            '../src/third_party/vtune/v8vtune.gyp:v8_vtune',
+            'v8vtune.gyp:v8_vtune',
           ],
         }],
         ['v8_enable_i18n_support==1', {
@@ -107,8 +107,8 @@
       'type': 'none',
       'variables': {
         'js_files': [
-          'd8.js',
-          'js/macros.py',
+          '../src/d8.js',
+          '../src/js/macros.py',
         ],
       },
       'conditions': [
@@ -149,7 +149,7 @@
             'd8',
           ],
           'includes': [
-            '../gypfiles/isolate.gypi',
+            'isolate.gypi',
           ],
           'sources': [
             'd8.isolate',
