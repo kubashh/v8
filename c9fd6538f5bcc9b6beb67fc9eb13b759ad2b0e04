@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2144f4d_cca9d788",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7759,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-22T12:07:02Z",
+      "side": 1,
+      "message": "The IsSmiOrObjectElementsKind condition is redundant (as witnessed by the CSA_ASSERT), but it helps emitting the jump only when it can possibly be taken. Not sure if it\u0027s worth it here (there\u0027s another situation like this further down but there it\u0027s much more code that gets emitted).",
+      "revId": "c9fd6538f5bcc9b6beb67fc9eb13b759ad2b0e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
