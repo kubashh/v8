@@ -1061,9 +1061,10 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
       left ? jsgraph()->ZeroConstant()
            : graph()->NewNode(simplified()->NumberSubtract(), original_length,
                               jsgraph()->OneConstant());
+  Node* k = initial_index;
+
   const Operator* next_op =
       left ? simplified()->NumberAdd() : simplified()->NumberSubtract();
-  Node* k = initial_index;
 
   std::vector<Node*> checkpoint_params({receiver, fncallback, k,
                                         original_length,
@@ -1071,16 +1072,16 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
   const int stack_parameters = static_cast<int>(checkpoint_params.size());
 
   Builtins::Name builtin =
-      left ? Builtins::kArrayReduceLoopLazyDeoptContinuation
-           : Builtins::kArrayReduceRightLoopLazyDeoptContinuation;
+      left ? Builtins::kArrayReduceLoopEagerDeoptContinuation
+           : Builtins::kArrayReduceRightLoopEagerDeoptContinuation;
 
   // Check whether the given callback function is callable. Note that
   // this has to happen outside the loop to make sure we also throw on
   // empty arrays.
   Node* check_frame_state = CreateJavaScriptBuiltinContinuationFrameState(
       jsgraph(), function, builtin, node->InputAt(0), context,
-      &checkpoint_params[0], stack_parameters - 1, outer_frame_state,
-      ContinuationFrameStateMode::LAZY);
+      &checkpoint_params[0], stack_parameters, outer_frame_state,
+      ContinuationFrameStateMode::EAGER);
   Node* check_fail = nullptr;
   Node* check_throw = nullptr;
   WireInCallbackIsCallableCheck(fncallback, context, check_frame_state, effect,
@@ -1104,8 +1105,9 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
                                 original_length)
              : graph()->NewNode(simplified()->NumberLessThanOrEqual(),
                                 jsgraph()->ZeroConstant(), k);
-    effect = graph()->NewNode(simplified()->CheckIf(DeoptimizeReason::kUnknown),
-                              continue_test, effect, control);
+    effect = graph()->NewNode(
+        simplified()->CheckIf(DeoptimizeReason::kNoInitialElement),
+        continue_test, effect, control);
 
     cur = SafeLoadElement(kind, receiver, control, &effect, &k, p.feedback());
 
