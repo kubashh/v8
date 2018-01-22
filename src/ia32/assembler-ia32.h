@@ -235,7 +235,7 @@ class Immediate BASE_EMBEDDED {
  public:
   inline explicit Immediate(int x) {
     value_.immediate = x;
-    rmode_ = RelocInfo::NONE32;
+    rmode_ = RelocInfo::NONE;
   }
   inline explicit Immediate(const ExternalReference& ext) {
     value_.immediate = reinterpret_cast<int32_t>(ext.address());
@@ -247,11 +247,11 @@ class Immediate BASE_EMBEDDED {
   }
   inline explicit Immediate(Smi* value) {
     value_.immediate = reinterpret_cast<intptr_t>(value);
-    rmode_ = RelocInfo::NONE32;
+    rmode_ = RelocInfo::NONE;
   }
   inline explicit Immediate(Address addr) {
     value_.immediate = reinterpret_cast<int32_t>(addr);
-    rmode_ = RelocInfo::NONE32;
+    rmode_ = RelocInfo::NONE;
   }
   inline explicit Immediate(Address x, RelocInfo::Mode rmode) {
     value_.immediate = reinterpret_cast<int32_t>(x);
@@ -356,20 +356,15 @@ class Operand BASE_EMBEDDED {
 
   // [base + disp/r]
   explicit Operand(Register base, int32_t disp,
-                   RelocInfo::Mode rmode = RelocInfo::NONE32);
+                   RelocInfo::Mode rmode = RelocInfo::NONE);
 
   // [base + index*scale + disp/r]
-  explicit Operand(Register base,
-                   Register index,
-                   ScaleFactor scale,
-                   int32_t disp,
-                   RelocInfo::Mode rmode = RelocInfo::NONE32);
+  explicit Operand(Register base, Register index, ScaleFactor scale,
+                   int32_t disp, RelocInfo::Mode rmode = RelocInfo::NONE);
 
   // [index*scale + disp/r]
-  explicit Operand(Register index,
-                   ScaleFactor scale,
-                   int32_t disp,
-                   RelocInfo::Mode rmode = RelocInfo::NONE32);
+  explicit Operand(Register index, ScaleFactor scale, int32_t disp,
+                   RelocInfo::Mode rmode = RelocInfo::NONE);
 
   static Operand JumpTable(Register index, ScaleFactor scale, Label* table) {
     return Operand(index, scale, reinterpret_cast<int32_t>(table),
