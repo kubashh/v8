@@ -16,6 +16,24 @@
       "revId": "15a00d0ecd841023f5cf939469952730eb08ea02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c3ae0d5_b8128254",
+        "filename": "src/compiler/machine-operator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-01-22T21:39:22Z",
+      "side": 1,
+      "message": "Scratch that, the names you have are fine. I realized that ChangeInt32ToInt64 expects no information in the upper 32 bits, whereas these operations overwrite information in the upper bits.",
+      "parentUuid": "6677f9b5_061740fb",
+      "revId": "15a00d0ecd841023f5cf939469952730eb08ea02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
