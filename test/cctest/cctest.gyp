@@ -325,8 +325,8 @@
       'type': 'executable',
       'dependencies': [
         'resources',
-        '../../src/v8.gyp:v8_libbase',
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libbase',
+        '../../gypfiles/v8.gyp:v8_libplatform',
       ],
       'include_dirs': [
         '../..',
@@ -424,13 +424,13 @@
         ['component=="shared_library"', {
           # cctest can't be built against a shared library, so we need to
           # depend on the underlying static target in that case.
-          'dependencies': ['../../src/v8.gyp:v8_maybe_snapshot'],
+          'dependencies': ['../../gypfiles/v8.gyp:v8_maybe_snapshot'],
           'defines': [ 'BUILDING_V8_SHARED', ]
         }, {
-          'dependencies': ['../../src/v8.gyp:v8'],
+          'dependencies': ['../../gypfiles/v8.gyp:v8'],
         }],
         ['v8_use_snapshot=="true"', {
-          'dependencies': ['../../src/v8.gyp:v8_initializers'],
+          'dependencies': ['../../gypfiles/v8.gyp:v8_initializers'],
         }],
       ],
     },
@@ -474,9 +474,9 @@
       'target_name': 'generate-bytecode-expectations',
       'type': 'executable',
       'dependencies': [
-        '../../src/v8.gyp:v8',
-        '../../src/v8.gyp:v8_libbase',
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8',
+        '../../gypfiles/v8.gyp:v8_libbase',
+        '../../gypfiles/v8.gyp:v8_libplatform',
       ],
       'include_dirs+': [
         '../..',
