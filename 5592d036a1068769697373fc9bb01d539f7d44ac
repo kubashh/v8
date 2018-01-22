@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36c4cea0_663b8da1",
+        "filename": "gypfiles/inspector.gyp",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-22T15:04:53Z",
+      "side": 0,
+      "message": "Removing this is rather independent of this CL, right? We could have always written the left side as:\n../../third_party/inspector_protocol/inspector_protocol.gypi",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "5592d036a1068769697373fc9bb01d539f7d44ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac9627e8_4c65b40b",
+        "filename": "tools/gcmole/gcmole.lua",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-22T15:04:53Z",
+      "side": 0,
+      "message": "All those markers could be removed from the gyp files as well.",
+      "range": {
+        "startLine": 201,
+        "startChar": 24,
+        "endLine": 201,
+        "endChar": 47
+      },
+      "revId": "5592d036a1068769697373fc9bb01d539f7d44ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "231ed944_7ea8eda5",
+        "filename": "gypfiles/v8.gyp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-22T15:04:53Z",
+      "side": 1,
+      "message": "nit: Maybe the moved files should get new short copyright headers with current year?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 6
+      },
+      "revId": "495d987a671daf0914787e6765007ea79d20bbed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fd9ce15_683a601d",
+        "filename": "gypfiles/v8.gyp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2623,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-22T15:04:53Z",
+      "side": 1,
+      "message": "This has moved here, but is also still part of the old file. Why?",
+      "range": {
+        "startLine": 2587,
+        "startChar": 4,
+        "endLine": 2623,
+        "endChar": 6
+      },
+      "revId": "495d987a671daf0914787e6765007ea79d20bbed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
