@@ -25,7 +25,7 @@
       'target_name': 'json_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -52,7 +52,7 @@
       'target_name': 'parser_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -79,7 +79,7 @@
       'target_name': 'regexp_builtins_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -107,7 +107,7 @@
       'target_name': 'regexp_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -134,7 +134,7 @@
       'target_name': 'multi_return_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -164,7 +164,7 @@
       'target_name': 'wasm_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -195,7 +195,7 @@
       'target_name': 'wasm_async_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -226,7 +226,7 @@
       'target_name': 'wasm_call_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -258,7 +258,7 @@
       'target_name': 'wasm_code_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -290,7 +290,7 @@
       'target_name': 'wasm_compile_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -322,7 +322,7 @@
       'target_name': 'wasm_data_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -353,7 +353,7 @@
       'target_name': 'wasm_function_sigs_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -384,7 +384,7 @@
       'target_name': 'wasm_globals_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -415,7 +415,7 @@
       'target_name': 'wasm_imports_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -446,7 +446,7 @@
       'target_name': 'wasm_memory_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -477,7 +477,7 @@
       'target_name': 'wasm_names_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -508,7 +508,7 @@
       'target_name': 'wasm_types_section_fuzzer_lib',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8_libplatform',
         'fuzzer_support',
       ],
       'include_dirs': [
@@ -526,9 +526,9 @@
       'target_name': 'fuzzer_support',
       'type': 'static_library',
       'dependencies': [
-        '../../src/v8.gyp:v8',
-        '../../src/v8.gyp:v8_libbase',
-        '../../src/v8.gyp:v8_libplatform',
+        '../../gypfiles/v8.gyp:v8',
+        '../../gypfiles/v8.gyp:v8_libbase',
+        '../../gypfiles/v8.gyp:v8_libplatform',
       ],
       'include_dirs': [
         '../..',
