@@ -31,13 +31,13 @@
     'v8_enable_i18n_support%': 1,
     'v8_toolset_for_shell%': 'target',
   },
-  'includes': ['../gypfiles/toolchain.gypi', '../gypfiles/features.gypi'],
+  'includes': ['toolchain.gypi', 'features.gypi'],
   'target_defaults': {
     'type': 'executable',
     'dependencies': [
-      '../src/v8.gyp:v8',
-      '../src/v8.gyp:v8_libbase',
-      '../src/v8.gyp:v8_libplatform',
+      'v8.gyp:v8',
+      'v8.gyp:v8_libbase',
+      'v8.gyp:v8_libplatform',
     ],
     'include_dirs': [
       '..',
@@ -60,7 +60,7 @@
     {
       'target_name': 'v8_shell',
       'sources': [
-        'shell.cc',
+        '../samples/shell.cc',
       ],
       'conditions': [
         [ 'want_separate_host_toolset==1', {
@@ -71,13 +71,13 @@
     {
       'target_name': 'hello-world',
       'sources': [
-        'hello-world.cc',
+        '../samples/hello-world.cc',
       ],
     },
     {
       'target_name': 'process',
       'sources': [
-        'process.cc',
+        '../samples/process.cc',
       ],
     },
   ],
