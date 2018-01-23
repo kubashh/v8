@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "63b05f93_a4399c24",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 7742,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-23T10:54:43Z",
+      "side": 1,
+      "message": "Thanks, good to know. Done.",
+      "parentUuid": "1a199cfc_db0efaf8",
+      "range": {
+        "startLine": 7742,
+        "startChar": 25,
+        "endLine": 7742,
+        "endChar": 44
+      },
+      "revId": "967c3d9ad72674ce12ca1a57a047124166922267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d264282b_84b06aff",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 6
@@ -36,6 +60,24 @@
       "writtenOn": "2018-01-23T04:15:02Z",
       "side": 1,
       "message": "Looking at this now, this seems pretty brittle. Let\u0027s move it back to CheckForCapacityGrow. I just checked the verifier and it shouldn\u0027t complain about length being updated later. Also there\u0027s no GC between the grow and the store here, so this is safe.",
+      "revId": "967c3d9ad72674ce12ca1a57a047124166922267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13e836c4_977c88bb",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 7845,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-23T10:54:43Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "d264282b_84b06aff",
       "revId": "967c3d9ad72674ce12ca1a57a047124166922267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
