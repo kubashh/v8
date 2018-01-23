@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7c6b331f_411c5e5d",
+        "filename": "gypfiles/v8.gyp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-01-23T09:06:24Z",
+      "side": 1,
+      "message": "I replaced the copyright headers with the short version, but I don\u0027t think we should update the year because we moved the file.",
+      "parentUuid": "231ed944_7ea8eda5",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 6
+      },
+      "revId": "495d987a671daf0914787e6765007ea79d20bbed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0fd9ce15_683a601d",
         "filename": "gypfiles/v8.gyp",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-22T15:04:53Z",
       "side": 1,
       "message": "This has moved here, but is also still part of the old file. Why?",
+      "range": {
+        "startLine": 2587,
+        "startChar": 4,
+        "endLine": 2623,
+        "endChar": 6
+      },
+      "revId": "495d987a671daf0914787e6765007ea79d20bbed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "352aba4d_89596482",
+        "filename": "gypfiles/v8.gyp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2623,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-01-23T09:06:24Z",
+      "side": 1,
+      "message": "Node.js\u0027 gyp files hard-code the path to v8.gyp. I have to perform a two-sided commit here so that the Node.js bots do not break in the meantime. After this CL lands, I will change Node.js, and then delete the old v8.gyp.",
+      "parentUuid": "0fd9ce15_683a601d",
       "range": {
         "startLine": 2587,
         "startChar": 4,
