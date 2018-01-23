@@ -51,7 +51,6 @@ function ForOfSet() {
   for (const x of input) {
     result[result.length] = x;
   }
-  if (result.length != 11) throw 666;
 }
 
 
