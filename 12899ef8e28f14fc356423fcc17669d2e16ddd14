@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c4d7576d_9eb74220",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-23T01:18:15Z",
+      "side": 1,
+      "message": "Thanks for the pointer, merged visitors with the VisitRO macro above.",
+      "parentUuid": "bf920e39_8d61162e",
+      "range": {
+        "startLine": 1972,
+        "startChar": 0,
+        "endLine": 1972,
+        "endChar": 72
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "816280f5_5e228444",
         "filename": "src/compiler/instruction-selector.cc",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-19T22:04:06Z",
       "side": 1,
       "message": "I couldn\u0027t find the unimplemented stubs. Are they implemented on all archs?",
+      "range": {
+        "startLine": 1542,
+        "startChar": 0,
+        "endLine": 1542,
+        "endChar": 67
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157de9b6_1e5c4ba5",
+        "filename": "src/compiler/instruction-selector.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-23T01:18:15Z",
+      "side": 1,
+      "message": "They are implemented on x64, ia32, Arm, Arm64. Added unimplemented stubs for mips.",
+      "parentUuid": "816280f5_5e228444",
       "range": {
         "startLine": 1542,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8b014591_c3cd4720",
+        "filename": "src/compiler/mips/instruction-selector-mips.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-23T01:18:15Z",
+      "side": 1,
+      "message": "Looks like the PPC and S390 bots currently fail on compile, so haven\u0027t added to them, added mips stubs to appease bots.",
+      "parentUuid": "4444e7a1_918beeb5",
+      "range": {
+        "startLine": 2266,
+        "startChar": 0,
+        "endLine": 2266,
+        "endChar": 67
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "036f2bad_85c18170",
         "filename": "src/compiler/x64/instruction-selector-x64.cc",
         "patchSetId": 10
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-19T22:04:06Z",
       "side": 1,
       "message": "VisitRO?",
+      "range": {
+        "startLine": 2527,
+        "startChar": 0,
+        "endLine": 2527,
+        "endChar": 71
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a9dc7d_715dae36",
+        "filename": "src/compiler/x64/instruction-selector-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-23T01:18:15Z",
+      "side": 1,
+      "message": "Thanks for the pointer, merged with VisitRO macro above.",
+      "parentUuid": "036f2bad_85c18170",
       "range": {
         "startLine": 2527,
         "startChar": 0,
