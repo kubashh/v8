@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eff9e53c_75af53a4",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-01-23T12:41:01Z",
+      "side": 1,
+      "message": "nit: Should we use {!IsAnonymous()} instead here?",
+      "range": {
+        "startLine": 215,
+        "startChar": 6,
+        "endLine": 215,
+        "endChar": 21
+      },
+      "revId": "8995d01da882048c736013b09b1f1d869e4e8606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
