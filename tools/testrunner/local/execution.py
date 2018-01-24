@@ -39,6 +39,7 @@ from . import statusfile
 from . import utils
 from . pool import Pool
 from ..objects import predictable
+from ..testproc.result import Result
 
 
 # Base dir of the v8 checkout.
@@ -230,6 +231,7 @@ class Runner(object):
         test_map[test.id] = test
         try:
           yield [
+              test,
               TestJob(test.id, test.cmd, self.outproc_factory(test), test.run)
           ]
         except Exception, e:
@@ -237,46 +239,50 @@ class Runner(object):
           # all other tests have had a chance to run).
           queued_exception[0] = e, traceback.format_exc()
           continue
-    try:
-      it = pool.imap_unordered(
-          fn=run_job,
-          gen=gen_tests(),
-          process_context_fn=MakeProcessContext,
-          process_context_args=[self.context.sancov_dir],
-      )
-      for result in it:
-        if result.heartbeat:
-          self.indicator.Heartbeat()
-          continue
 
-        job_result = result.value
-        test_id = job_result.id
-        outproc_result = job_result.outproc_result
+    for test, job in gen_tests():
+      self._ProcessTest(test, Result(false, None, test.cmd), pool)
 
-        test = test_map[test_id]
-        update_perf = self._ProcessTest(test, outproc_result, pool)
-        if update_perf:
-          self._RunPerfSafe(lambda: self.perfdata.UpdatePerfData(
-              test, outproc_result.output.duration))
-    except KeyboardInterrupt:
-      raise
-    except:
-      traceback.print_exc()
-      raise
-    finally:
-      self._VerbosePrint("Closing process pool.")
-      pool.terminate()
-      self._VerbosePrint("Closing database connection.")
-      self._RunPerfSafe(self.perf_data_manager.close)
-      if self.perf_failures:
-        # Nuke perf data in case of failures. This might not work on windows as
-        # some files might still be open.
-        print "Deleting perf test data due to db corruption."
-        shutil.rmtree(self.datapath)
-    if queued_exception[0]:
-      e, stacktrace = queued_exception[0]
-      print stacktrace
-      raise e
+    # try:
+    #   it = pool.imap_unordered(
+    #       fn=run_job,
+    #       gen=gen_tests(),
+    #       process_context_fn=MakeProcessContext,
+    #       process_context_args=[self.context.sancov_dir],
+    #   )
+    #   for result in it:
+    #     if result.heartbeat:
+    #       self.indicator.Heartbeat()
+    #       continue
+
+    #     job_result = result.value
+    #     test_id = job_result.id
+    #     outproc_result = job_result.outproc_result
+
+    #     test = test_map[test_id]
+    #     update_perf = self._ProcessTest(test, outproc_result, pool)
+    #     if update_perf:
+    #       self._RunPerfSafe(lambda: self.perfdata.UpdatePerfData(
+    #           test, outproc_result.output.duration))
+    # except KeyboardInterrupt:
+    #   raise
+    # except:
+    #   traceback.print_exc()
+    #   raise
+    # finally:
+    #   self._VerbosePrint("Closing process pool.")
+    #   pool.terminate()
+    #   self._VerbosePrint("Closing database connection.")
+    #   self._RunPerfSafe(self.perf_data_manager.close)
+    #   if self.perf_failures:
+    #     # Nuke perf data in case of failures. This might not work on windows as
+    #     # some files might still be open.
+    #     print "Deleting perf test data due to db corruption."
+    #     shutil.rmtree(self.datapath)
+    # if queued_exception[0]:
+    #   e, stacktrace = queued_exception[0]
+    #   print stacktrace
+    #   raise e
 
   def _VerbosePrint(self, text):
     if self.context.verbose:

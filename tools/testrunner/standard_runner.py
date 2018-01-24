@@ -617,7 +617,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       print '>>> Running %d base tests' % tests_counter.total
       tests_counter.remove_from_chain()
 
-      execproc.start()
+      # execproc.start()
 
       for indicator in indicators:
         indicator.finished()

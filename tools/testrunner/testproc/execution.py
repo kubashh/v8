@@ -7,6 +7,7 @@ import traceback
 
 from . import base
 from ..local import pool
+from .result import Result
 
 
 # Global function for multiprocessing, because pickling a static method doesn't
@@ -85,7 +86,8 @@ class ExecutionProc(base.TestProc):
 
     # TODO(majeski): Needs factory for outproc as in local/execution.py
     outproc = test.output_proc
-    self._pool.add([Job(test_id, cmd, outproc, test.keep_output)])
+    self._send_result(test, Result(False, None, cmd))
+    # self._pool.add([Job(test_id, cmd, outproc, test.keep_output)])
 
   def result_for(self, test, result):
     assert False, 'ExecutionProc cannot receive results'
