@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c20defc_e60e3efe",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-01-24T15:01:06Z",
+      "side": 0,
+      "message": "I guess this was done earlier.",
+      "revId": "c0a6e85153f148f051b6e3d90de8a3f1bf59fc69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
