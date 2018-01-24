@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2b10a189_4080d96c",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T15:31:55Z",
+      "side": 1,
+      "message": "I think having the check is a good idea, but it needs to be more concise. :)\n\nIf you want you can implement\n\n```\nbool InstructionOperand::\n  IsCompatibleLocation(InstructionOperand*) const\n\n```\n\nwhich makes sure that either both are non-float registers, or they have the same representation. You can use that helper in a short DCHECK then.\n\nAlso\n\n```\nif (destination-\u003eIsAnyRegister()) {                                                                                                                                                                                                                                          \n      DCHECK(destination-\u003eIsRegister() || destination-\u003eIsFloatRegister() ||                                                                                                                                                                                                      \n             destination-\u003eIsDoubleRegister());       \n```\n\nis not necessary as it would check the implementation of IsAnyRegister, which we don\u0027t need to test here. The DCHECK in the associated else branch is also not needed I think.",
+      "parentUuid": "6677a761_daecac57",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4891d9c2_07768424",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 11
@@ -48,6 +66,24 @@
       "writtenOn": "2018-01-24T12:33:09Z",
       "side": 1,
       "message": "See above.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd1e6aa4_03c8ec19",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T15:31:55Z",
+      "side": 1,
+      "message": "Actually, I just realized that ToSimd128Register does the DCHECK, so no check necessary here.",
+      "parentUuid": "4891d9c2_07768424",
       "revId": "ced77d312a502f80d12b7da6540a24b421175404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "667a6708_9999b2b3",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3033,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T15:31:55Z",
+      "side": 1,
+      "message": "Actually, I just realized that ToDoubleRegister does the DCHECK, so no check necessary here.",
+      "parentUuid": "ccc68f09_75921bfc",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09112d42_a787d471",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 11
@@ -82,6 +136,24 @@
       "writtenOn": "2018-01-24T12:33:09Z",
       "side": 1,
       "message": "See above.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c396ad4_7d01dfed",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3099,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T15:31:55Z",
+      "side": 1,
+      "message": "Actually, I just realized that ToSimd128Register does the DCHECK, so no check necessary here.",
+      "parentUuid": "09112d42_a787d471",
       "revId": "ced77d312a502f80d12b7da6540a24b421175404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
