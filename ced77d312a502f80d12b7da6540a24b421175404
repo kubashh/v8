@@ -120,6 +120,23 @@
       "revId": "ced77d312a502f80d12b7da6540a24b421175404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd786c20_1a5ae4ff",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-01-24T14:53:05Z",
+      "side": 1,
+      "message": "I just realized this case is not supported. A swap has to be canonicalized to have the register as the source and never the destination. I\u0027ll remove this case and add a DCHECK(destination-\u003eIsAnyStackSlot());",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
