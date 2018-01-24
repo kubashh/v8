@@ -456,13 +456,13 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         progress_indicator.Register(progress.FlakinessTestProgressIndicator(
             options.flakiness_results))
 
-      if options.infra_staging:
-        for s in suites:
-          s.ReadStatusFile(variables)
-          s.ReadTestCases(ctx)
+      # if options.infra_staging:
+      #   for s in suites:
+      #     s.ReadStatusFile(variables)
+      #     s.ReadTestCases(ctx)
 
-        return self._run_test_procs(suites, args, options, progress_indicator,
-                                    ctx)
+      #   return self._run_test_procs(suites, args, options, progress_indicator,
+      #                               ctx)
 
       all_tests = []
       num_tests = 0
