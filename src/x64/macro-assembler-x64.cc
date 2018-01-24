@@ -1608,8 +1608,8 @@ void MacroAssembler::Jump(ExternalReference ext) {
   jmp(kScratchRegister);
 }
 
-
 void MacroAssembler::Jump(const Operand& op) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   if (kPointerSize == kInt64Size) {
     jmp(op);
   } else {
@@ -1617,7 +1617,6 @@ void MacroAssembler::Jump(const Operand& op) {
     jmp(kScratchRegister);
   }
 }
-
 
 void MacroAssembler::Jump(Address destination, RelocInfo::Mode rmode) {
   Move(kScratchRegister, destination, rmode);
@@ -1646,6 +1645,7 @@ void TurboAssembler::Call(ExternalReference ext) {
 }
 
 void TurboAssembler::Call(const Operand& op) {
+  if (FLAG_turbo_retpoline) UNREACHABLE();
   if (kPointerSize == kInt64Size && !CpuFeatures::IsSupported(ATOM)) {
     call(op);
   } else {
@@ -1675,21 +1675,22 @@ void TurboAssembler::Call(Handle<Code> code_object, RelocInfo::Mode rmode) {
 void TurboAssembler::RetpolineCall(Register reg) {
   Label setup_return, setup_target, inner_indirect_branch, capture_spec;
 
-  jmp(&setup_return);  // Jump past the entire retpoline below.
+  Assembler::jmp(&setup_return);  // Jump past the entire retpoline below.
 
   bind(&inner_indirect_branch);
-  call(&setup_target);
+  Assembler::call(&setup_target);
 
   bind(&capture_spec);
   pause();
-  jmp(&capture_spec);
+  Assembler::jmp(&capture_spec);
 
   bind(&setup_target);
   movq(Operand(rsp, 0), reg);
-  ret(0);
+  Assembler::ret(0);
 
   bind(&setup_return);
-  call(&inner_indirect_branch);  // Callee will return after this instruction.
+  Assembler::call(
+      &inner_indirect_branch);  // Callee will return after this instruction.
 }
 
 void TurboAssembler::RetpolineCall(Address destination, RelocInfo::Mode rmode) {
@@ -1706,15 +1707,15 @@ void TurboAssembler::RetpolineCall(Address destination, RelocInfo::Mode rmode) {
 void TurboAssembler::RetpolineJump(Register reg) {
   Label setup_target, capture_spec;
 
-  call(&setup_target);
+  Assembler::call(&setup_target);
 
   bind(&capture_spec);
   pause();
-  jmp(&capture_spec);
+  Assembler::jmp(&capture_spec);
 
   bind(&setup_target);
   movq(Operand(rsp, 0), reg);
-  ret(0);
+  Assembler::ret(0);
 }
 
 void TurboAssembler::Pextrd(Register dst, XMMRegister src, int8_t imm8) {
@@ -2001,9 +2002,22 @@ void MacroAssembler::PopStackHandler() {
   addp(rsp, Immediate(StackHandlerConstants::kSize - kPointerSize));
 }
 
-void TurboAssembler::Ret() { ret(0); }
+void TurboAssembler::Ret() {
+  if (FLAG_turbo_retpoline) {
+    PopReturnAddressTo(kScratchRegister);
+    RetpolineJump(kScratchRegister);
+    return;
+  }
+  ret(0);
+}
 
 void TurboAssembler::Ret(int bytes_dropped, Register scratch) {
+  if (FLAG_turbo_retpoline) {
+    PopReturnAddressTo(scratch);
+    addp(rsp, Immediate(bytes_dropped));
+    RetpolineJump(scratch);
+    return;
+  }
   if (is_uint16(bytes_dropped)) {
     ret(bytes_dropped);
   } else {
