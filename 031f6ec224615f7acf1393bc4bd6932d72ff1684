@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d21093d_539ed329",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-01-24T10:41:24Z",
+      "side": 1,
+      "message": "Accidental change. I commented out this line for testing. Restored.",
+      "parentUuid": "33a601cc_943ded60",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "031f6ec224615f7acf1393bc4bd6932d72ff1684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e590382_e0034a84",
         "filename": "gypfiles/cctest.gyp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "031f6ec224615f7acf1393bc4bd6932d72ff1684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d2a6cb_e55a67ca",
+        "filename": "gypfiles/cctest.gyp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-01-24T10:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e590382_e0034a84",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 59
+      },
+      "revId": "031f6ec224615f7acf1393bc4bd6932d72ff1684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
