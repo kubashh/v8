@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e5747aa_9caaa7fa",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-24T09:12:34Z",
+      "side": 1,
+      "message": "Should we also guard this?\nWould it be better to move the guard into InlineAllocationStep?",
+      "range": {
+        "startLine": 2218,
+        "startChar": 2,
+        "endLine": 2218,
+        "endChar": 22
+      },
+      "revId": "3b1fa80d6e2a6b32dfa81ca497c44ad68b13dcd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
