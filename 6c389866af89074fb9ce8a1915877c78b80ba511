@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec01e5e6_8867c53a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7860,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-24T12:23:34Z",
+      "side": 0,
+      "message": "It\u0027s nicer to mark CSA blocks of code with C++ blocks.",
+      "revId": "6c389866af89074fb9ce8a1915877c78b80ba511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

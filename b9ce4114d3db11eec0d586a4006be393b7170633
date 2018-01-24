@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c45ff9ef_3e08efbd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7752,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-24T12:23:34Z",
+      "side": 1,
+      "message": "elements_kind is known statically, so the whole thing can be just \n  if (!IsSmiOrObjectElementsKind(elements_kind)) {\n    CSA_ASSERT(this, Word32BinaryNot(IsFixedCOWArrayMap(LoadMap(elements))));\n  }\n\nor the !IsSmiOrObjectElementsKind(elements_kind) may be combined with the \"if\" below.",
+      "revId": "b9ce4114d3db11eec0d586a4006be393b7170633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa49a0be_54149847",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7834,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-24T12:23:34Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "b9ce4114d3db11eec0d586a4006be393b7170633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef68cfe6_55d209d6",
+        "filename": "src/objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-24T12:23:34Z",
+      "side": 1,
+      "message": "Maybe it also makes sense to update GetModifier(KeyedAccessStoreMode mode) in ic.cc to return \".GROW-OR-COW\" or something similar for this mode.",
+      "revId": "b9ce4114d3db11eec0d586a4006be393b7170633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
