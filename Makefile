@@ -37,7 +37,7 @@ ANDROID_V8 ?= /data/local/tmp/v8
 $(warning Make (gyp) is deprecated. Please use GN instead.)
 $(warning See https://github.com/v8/v8/wiki/Building-with-GN)
 $(warning Or contact yangguo@chromium.org.)
-$(error Expect the Makefile to be removed soon)
+#$(error Expect the Makefile to be removed soon)
 
 # Special build flags. Use them like this: "make library=shared"
 
@@ -277,7 +277,7 @@ GYPFILES = third_party/icu/icu.gypi third_party/icu/icu.gyp \
 	   gypfiles/shim_headers.gypi gypfiles/features.gypi \
            gypfiles/standalone.gypi \
 	   gypfiles/toolchain.gypi gypfiles/all.gyp gypfiles/mac/asan.gyp \
-	   test/cctest/cctest.gyp test/fuzzer/fuzzer.gyp \
+	   gypfiles/cctest.gyp test/fuzzer/fuzzer.gyp \
 	   test/unittests/unittests.gyp gypfiles/v8.gyp \
 	   tools/parser-shell.gyp testing/gmock.gyp testing/gtest.gyp \
 	   gypfiles/samples.gyp gypfiles/v8vtune.gyp gypfiles/d8.gyp
