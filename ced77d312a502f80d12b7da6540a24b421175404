@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d41b9f4_afa57870",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T12:33:09Z",
+      "side": 1,
+      "message": "The last case seems to assume source-\u003eIsSimd128Register(). How about adding the DCHECK in the else-case?\n\nAnother possibility would be to have the if(source-\u003eIsSimd128Register()) and put UNREACHABLE in the final else case. This would add code in the release build, but would make sure that one of the cases is taken.\n\nThis argument applies to several conditionals in your CL.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4891d9c2_07768424",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T12:33:09Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccc68f09_75921bfc",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3033,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T12:33:09Z",
+      "side": 1,
+      "message": "I\u0027d like DCHECK(destination-\u003eIsDoubleRegister()) here.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09112d42_a787d471",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3099,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T12:33:09Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9156e9a9_8e0eb80a",
+        "filename": "src/compiler/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2544,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-01-24T12:33:09Z",
+      "side": 1,
+      "message": "Which cases does the else handle? All stack slots that are not Simd128?",
+      "revId": "ced77d312a502f80d12b7da6540a24b421175404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
