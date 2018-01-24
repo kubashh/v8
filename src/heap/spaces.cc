@@ -1344,12 +1344,17 @@ void Space::ResumeAllocationObservers() {
 
 void Space::AllocationStep(int bytes_since_last, Address soon_object,
                            int size) {
-  if (AllocationObserversActive()) {
-    heap()->CreateFillerObjectAt(soon_object, size, ClearRecordedSlots::kNo);
-    for (AllocationObserver* observer : allocation_observers_) {
-      observer->AllocationStep(bytes_since_last, soon_object, size);
-    }
+  if (!AllocationObserversActive()) {
+    return;
   }
+
+  DCHECK(!allocation_step_in_progress_);
+  allocation_step_in_progress_ = true;
+  heap()->CreateFillerObjectAt(soon_object, size, ClearRecordedSlots::kNo);
+  for (AllocationObserver* observer : allocation_observers_) {
+    observer->AllocationStep(bytes_since_last, soon_object, size);
+  }
+  allocation_step_in_progress_ = false;
 }
 
 intptr_t Space::GetNextInlineAllocationStepSize() {
@@ -2174,6 +2179,11 @@ bool NewSpace::EnsureAllocation(int size_in_bytes,
 }
 
 void SpaceWithLinearArea::StartNextInlineAllocationStep() {
+  if (allocation_step_in_progress_) {
+    // If we are mid-way through an existing step, don't start a new one.
+    return;
+  }
+
   if (AllocationObserversActive()) {
     top_on_previous_step_ = top();
     UpdateInlineAllocationLimit(0);
@@ -2183,7 +2193,10 @@ void SpaceWithLinearArea::StartNextInlineAllocationStep() {
 }
 
 void SpaceWithLinearArea::AddAllocationObserver(AllocationObserver* observer) {
-  InlineAllocationStep(top(), top(), nullptr, 0);
+  if (!allocation_step_in_progress_) {
+    // Do not trigger a step if we are mid way through an existing step.
+    InlineAllocationStep(top(), top(), nullptr, 0);
+  }
   Space::AddAllocationObserver(observer);
   DCHECK_IMPLIES(top_on_previous_step_, AllocationObserversActive());
 }
@@ -2192,7 +2205,10 @@ void SpaceWithLinearArea::RemoveAllocationObserver(
     AllocationObserver* observer) {
   Address top_for_next_step =
       allocation_observers_.size() == 1 ? nullptr : top();
-  InlineAllocationStep(top(), top_for_next_step, nullptr, 0);
+  if (!allocation_step_in_progress_) {
+    // Do not trigger a step if we are mid way through an existing one.
+    InlineAllocationStep(top(), top_for_next_step, nullptr, 0);
+  }
   Space::RemoveAllocationObserver(observer);
   DCHECK_IMPLIES(top_on_previous_step_, AllocationObserversActive());
 }
