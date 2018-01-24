@@ -581,9 +581,11 @@ TNode<Object> CodeStubAssembler::NumberMin(SloppyTNode<Object> a,
   return TNode<Object>::UncheckedCast(result.value());
 }
 
-void CodeStubAssembler::ConvertToRelativeIndex(Node* context,
-                                               Variable* var_result,
-                                               Node* index, Node* length) {
+TNode<Smi> CodeStubAssembler::ConvertToRelativeIndex(TNode<Context> context,
+                                                     TNode<Object> index,
+                                                     TNode<Smi> length) {
+  TVARIABLE(Smi, result);
+
   TNode<Object> const index_int =
       ToInteger(context, index, CodeStubAssembler::kTruncateMinusZero);
   TNode<Smi> const zero = SmiConstant(0);
@@ -595,11 +597,11 @@ void CodeStubAssembler::ConvertToRelativeIndex(Node* context,
   BIND(&if_issmi);
   {
     TNode<Smi> const start_int_smi = CAST(index_int);
-    var_result->Bind(
-        Select(SmiLessThan(start_int_smi, zero),
-               [&] { return SmiMax(SmiAdd(length, start_int_smi), zero); },
-               [&] { return SmiMin(start_int_smi, length); },
-               MachineRepresentation::kTagged));
+    result =
+        Select<Smi>(SmiLessThan(start_int_smi, zero),
+                    [&] { return SmiMax(SmiAdd(length, start_int_smi), zero); },
+                    [&] { return SmiMin(start_int_smi, length); },
+                    MachineRepresentation::kTagged);
     Goto(&done);
   }
 
@@ -611,11 +613,12 @@ void CodeStubAssembler::ConvertToRelativeIndex(Node* context,
     TNode<HeapNumber> const start_int_hn = CAST(index_int);
     TNode<Float64T> const float_zero = Float64Constant(0.);
     TNode<Float64T> const start_float = LoadHeapNumberValue(start_int_hn);
-    var_result->Bind(SelectTaggedConstant<Smi>(
-        Float64LessThan(start_float, float_zero), zero, length));
+    result = SelectTaggedConstant<Smi>(Float64LessThan(start_float, float_zero),
+                                       zero, length);
     Goto(&done);
   }
   BIND(&done);
+  return result;
 }
 
 Node* CodeStubAssembler::SmiMod(Node* a, Node* b) {
