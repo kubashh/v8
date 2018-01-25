@@ -228,6 +228,12 @@ class CompactionFuzzer(Fuzzer):
       yield ['--stress-compaction-random']
 
 
+class InterruptBudgetFuzzer(Fuzzer):
+  def create_flags_generator(self, rng, test, analysis_value):
+    while True:
+      yield ['--interrupt-budget=%d' % rng.randint(1, 1)]
+
+
 class DeoptAnalyzer(Analyzer):
   MAX_DEOPT=1000000000
 
@@ -270,6 +276,7 @@ FUZZERS = {
   'marking': (MarkingAnalyzer, MarkingFuzzer),
   'gc_interval': (GcIntervalAnalyzer, GcIntervalFuzzer),
   'compaction': (None, CompactionFuzzer),
+  'interrupt_budget': (None, InterruptBudgetFuzzer),
   'deopt': (DeoptAnalyzer, DeoptFuzzer),
 }
 
