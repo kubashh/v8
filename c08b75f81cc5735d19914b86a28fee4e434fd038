@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3aa8b7c6_9da25b0e",
+        "filename": "src/conversions.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-25T19:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38e4d845_25a5336f",
+      "range": {
+        "startLine": 855,
+        "startChar": 6,
+        "endLine": 855,
+        "endChar": 26
+      },
+      "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a19a1b67_0bef2883",
         "filename": "test/mjsunit/harmony/bigint/comparisons.js",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd48a12e_ad804e4b",
+        "filename": "test/mjsunit/harmony/bigint/comparisons.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-01-25T19:48:45Z",
+      "side": 1,
+      "message": "Can\u0027t; this compares BigInts with Numbers.",
+      "parentUuid": "a19a1b67_0bef2883",
+      "range": {
+        "startLine": 431,
+        "startChar": 34,
+        "endLine": 431,
+        "endChar": 35
+      },
+      "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
