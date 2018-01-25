@@ -854,12 +854,7 @@ double StringToInt(Isolate* isolate, Handle<String> string, int radix) {
 
 class BigIntParseIntHelper : public StringToIntHelper {
  public:
-  enum class Behavior { kParseInt, kStringToBigInt, kLiteral };
-
-  // Used for BigInt.parseInt API, where the input is a Heap-allocated String.
-  BigIntParseIntHelper(Isolate* isolate, Handle<String> string, int radix)
-      : StringToIntHelper(isolate, string, radix),
-        behavior_(Behavior::kParseInt) {}
+  enum class Behavior { kStringToBigInt, kLiteral };
 
   // Used for StringToBigInt operation (BigInt constructor and == operator).
   BigIntParseIntHelper(Isolate* isolate, Handle<String> string)
@@ -884,9 +879,7 @@ class BigIntParseIntHelper : public StringToIntHelper {
       return MaybeHandle<BigInt>();
     }
     if (state() == kEmpty) {
-      if (behavior_ == Behavior::kParseInt) {
-        set_state(kJunk);
-      } else if (behavior_ == Behavior::kStringToBigInt) {
+      if (behavior_ == Behavior::kStringToBigInt) {
         set_state(kZero);
       } else {
         UNREACHABLE();
@@ -938,19 +931,11 @@ class BigIntParseIntHelper : public StringToIntHelper {
   }
 
  private:
-  ShouldThrow should_throw() const {
-    return behavior_ == Behavior::kParseInt ? kThrowOnError : kDontThrow;
-  }
+  ShouldThrow should_throw() const { return kDontThrow; }
 
   Handle<FreshlyAllocatedBigInt> result_;
   Behavior behavior_;
 };
-
-MaybeHandle<BigInt> BigIntParseInt(Isolate* isolate, Handle<String> string,
-                                   int radix) {
-  BigIntParseIntHelper helper(isolate, string, radix);
-  return helper.GetResult();
-}
 
 MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string) {
   string = String::Flatten(string);
