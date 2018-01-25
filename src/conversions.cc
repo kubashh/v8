@@ -946,12 +946,6 @@ class BigIntParseIntHelper : public StringToIntHelper {
   Behavior behavior_;
 };
 
-MaybeHandle<BigInt> BigIntParseInt(Isolate* isolate, Handle<String> string,
-                                   int radix) {
-  BigIntParseIntHelper helper(isolate, string, radix);
-  return helper.GetResult();
-}
-
 MaybeHandle<BigInt> StringToBigInt(Isolate* isolate, Handle<String> string) {
   string = String::Flatten(string);
   BigIntParseIntHelper helper(isolate, string);
