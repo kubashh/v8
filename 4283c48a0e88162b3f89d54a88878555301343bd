@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0b4ff483_d4e06b12",
+        "filename": "src/objects/dictionary.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-01-25T13:13:34Z",
+      "side": 1,
+      "message": "Unfortunately neither works. FWIW this is code restored from the CL that initially removed UnseededNumberDictionary.",
+      "parentUuid": "c61fad5e_901099fe",
+      "revId": "4283c48a0e88162b3f89d54a88878555301343bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "041de59b_88d2ed57",
         "filename": "src/objects/dictionary.h",
         "patchSetId": 3
