@@ -618,6 +618,8 @@ void CodeStubAssembler::ConvertToRelativeIndex(Node* context,
   BIND(&done);
 }
 
+TEST
+
 Node* CodeStubAssembler::SmiMod(Node* a, Node* b) {
   VARIABLE(var_result, MachineRepresentation::kTagged);
   Label return_result(this, &var_result),
