@@ -16,6 +16,24 @@
       "revId": "412485e15a45b710607c7c9fffe3cdde4f8b5c6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95c5974c_23c46b2c",
+        "filename": "src/compiler/mips/instruction-selector-mips.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-25T22:51:15Z",
+      "side": 1,
+      "message": "Not with this patch, I\u0027ve disabled the tests on MIPS, and filed issue - https://bugs.chromium.org/p/chromium/issues/detail?id\u003d806078.",
+      "parentUuid": "9c76dbad_4aa0f72e",
+      "revId": "412485e15a45b710607c7c9fffe3cdde4f8b5c6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

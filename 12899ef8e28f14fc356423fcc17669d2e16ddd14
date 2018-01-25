@@ -210,6 +210,30 @@
       "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2095990d_5b1f0cf3",
+        "filename": "test/cctest/wasm/test-run-wasm-sign-extension.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-01-25T22:51:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0eb40658_b8a52a23",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 32
+      },
+      "revId": "12899ef8e28f14fc356423fcc17669d2e16ddd14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
