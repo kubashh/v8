@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38e4d845_25a5336f",
+        "filename": "src/conversions.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-25T10:15:01Z",
+      "side": 1,
+      "message": "Maybe this is a good opportunity to rename BigIntParseIntHelper to StringToBigIntHelper.",
+      "range": {
+        "startLine": 855,
+        "startChar": 6,
+        "endLine": 855,
+        "endChar": 26
+      },
+      "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a19a1b67_0bef2883",
+        "filename": "test/mjsunit/harmony/bigint/comparisons.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-25T10:15:01Z",
+      "side": 1,
+      "message": "Nit (below too): Put the n directly into the string here.",
+      "range": {
+        "startLine": 431,
+        "startChar": 34,
+        "endLine": 431,
+        "endChar": 35
+      },
+      "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
