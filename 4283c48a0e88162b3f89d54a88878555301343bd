@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c61fad5e_901099fe",
+        "filename": "src/objects/dictionary.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-25T09:49:19Z",
+      "side": 1,
+      "message": "Please try to put the details accessors to private section and/or remove the function body to turn this into a compile-time error.",
+      "revId": "4283c48a0e88162b3f89d54a88878555301343bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041de59b_88d2ed57",
+        "filename": "src/objects/dictionary.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-01-25T09:49:19Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4283c48a0e88162b3f89d54a88878555301343bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
