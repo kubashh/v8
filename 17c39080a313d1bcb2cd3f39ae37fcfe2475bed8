@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c50100b_6fd379ef",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-25T17:59:03Z",
+      "side": 1,
+      "message": "Hi interpreter folks. I\u0027m trying to restore the interrupt budget as a flag in order to fuzz it. Would that be the way to do it?\n\nThis is still WIP otherwise. I had a look at the CL when the flag was removed. The fuzzer would stress this flag only on no-snapshot builds.",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 31
+      },
+      "revId": "17c39080a313d1bcb2cd3f39ae37fcfe2475bed8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
