@@ -491,6 +491,20 @@ class LocationOperand : public InstructionOperand {
     UNREACHABLE();
   }
 
+  // Return true if the locations can be moved to one another.
+  bool IsCompatible(LocationOperand* op) {
+    if (IsRegister() || IsStackSlot()) {
+      return op->IsRegister() || op->IsStackSlot();
+    } else if (IsFloatRegister() || IsFloatStackSlot()) {
+      return op->IsFloatRegister() || op->IsFloatStackSlot();
+    } else if (IsDoubleRegister() || IsDoubleStackSlot()) {
+      return op->IsDoubleRegister() || op->IsDoubleStackSlot();
+    } else {
+      return (IsSimd128Register() || IsSimd128StackSlot()) &&
+             (op->IsSimd128Register() || op->IsSimd128StackSlot());
+    }
+  }
+
   static LocationOperand* cast(InstructionOperand* op) {
     DCHECK(op->IsAnyLocationOperand());
     return static_cast<LocationOperand*>(op);
