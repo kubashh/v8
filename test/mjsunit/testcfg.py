@@ -28,8 +28,10 @@
 import os
 import re
 
+from testrunner.local import statusfile
 from testrunner.local import testsuite
 from testrunner.objects import testcase
+from testrunner.outproc import base as outproc
 
 FILES_PATTERN = re.compile(r"//\s+Files:(.*)")
 ENV_PATTERN = re.compile(r"//\s+Environment Variables:(.*)")
@@ -56,7 +58,10 @@ class TestSuite(testsuite.TestSuite):
     return tests
 
   def _test_class(self):
-    return TestCase
+    if self.suppress_internals:
+      return SuppressedTestCase
+    else:
+      return TestCase
 
 
 class TestCase(testcase.TestCase):
@@ -120,12 +125,25 @@ class TestCase(testcase.TestCase):
       files += ['--isolate'] + files
 
     return files
+  def _get_fuzzer_suppressions(self):
+    return [os.path.join(self.suite.root, "mjsunit_suppressions.js")]
 
   def _get_cmd_env(self):
     return self._env
 
   def _get_source_path(self):
     return os.path.join(self.suite.root, self.path + self._get_suffix())
+
+
+class SuppressedTestCase(TestCase):
+  """The same as a standard mjsunit test case with all asserts as no-ops."""
+  def __init__(self, *args, **kwargs):
+    super(SuppressedTestCase, self).__init__(*args, **kwargs)
+    self._mjsunit_files.append(
+        os.path.join(self.suite.root, "mjsunit_suppressions.js"))
+    if (statusfile.FAIL in self._statusfile_outcomes and
+        not statusfile.SKIP in self._statusfile_outcomes):
+      self._statusfile_outcomes.append(statusfile.SKIP)
 
 
 def GetSuite(name, root):
