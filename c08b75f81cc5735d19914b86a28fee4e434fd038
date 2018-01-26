@@ -93,6 +93,30 @@
       "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ee6d128_66c3fce9",
+        "filename": "test/mjsunit/harmony/bigint/comparisons.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-01-26T08:27:34Z",
+      "side": 1,
+      "message": "Oops, had missed the other occurrences of unsafe.",
+      "parentUuid": "bd48a12e_ad804e4b",
+      "range": {
+        "startLine": 431,
+        "startChar": 34,
+        "endLine": 431,
+        "endChar": 35
+      },
+      "revId": "c08b75f81cc5735d19914b86a28fee4e434fd038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
