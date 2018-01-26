@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e9d3974_42f8a74a",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-26T16:20:17Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 22
+      },
+      "revId": "a2a3db3f883c9447244abf597242a6aeaf30cebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
