@@ -402,6 +402,7 @@ void TurboAssembler::AssertUnreachable(AbortReason reason) {
 void TurboAssembler::Check(Condition cc, AbortReason reason) {
   Label L;
   j(cc, &L, Label::kNear);
+  int3();
   Abort(reason);
   // Control will not return here.
   bind(&L);
@@ -2306,6 +2307,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
     // We call indirectly through the code field in the function to
     // allow recompilation to take effect without changing any of the
     // call sites.
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
     movp(rcx, FieldOperand(function, JSFunction::kCodeOffset));
     addp(rcx, Immediate(Code::kHeaderSize - kHeapObjectTag));
     if (flag == CALL_FUNCTION) {

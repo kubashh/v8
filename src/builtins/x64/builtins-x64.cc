@@ -115,7 +115,7 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
     __ Push(rdi);
 
     __ CallRuntime(function_id, 1);
-    __ movp(rbx, rax);
+    __ movp(rcx, rax);
 
     // Restore target function and new target.
     __ Pop(rdx);
@@ -123,8 +123,9 @@ static void GenerateTailCallToReturnedCode(MacroAssembler* masm,
     __ Pop(rax);
     __ SmiToInteger32(rax, rax);
   }
-  __ leap(rbx, FieldOperand(rbx, Code::kHeaderSize));
-  __ jmp(rbx);
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+  __ leap(rcx, FieldOperand(rcx, Code::kHeaderSize));
+  __ jmp(rcx);
 }
 
 namespace {
@@ -660,6 +661,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
     // We abuse new.target both to indicate that this is a resume call and to
     // pass in the generator object.  In ordinary calls, new.target is always
     // undefined because generator functions are non-constructable.
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
     __ movp(rcx, FieldOperand(rdi, JSFunction::kCodeOffset));
     __ addp(rcx, Immediate(Code::kHeaderSize - kHeapObjectTag));
     __ jmp(rcx);
@@ -2018,6 +2020,7 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   // rax : expected number of arguments
   // rdx : new target (passed through to callee)
   // rdi : function (passed through to callee)
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   __ movp(rcx, FieldOperand(rdi, JSFunction::kCodeOffset));
   __ addp(rcx, Immediate(Code::kHeaderSize - kHeapObjectTag));
   __ call(rcx);
@@ -2033,6 +2036,7 @@ void Builtins::Generate_ArgumentsAdaptorTrampoline(MacroAssembler* masm) {
   // Dont adapt arguments.
   // -------------------------------------------
   __ bind(&dont_adapt_arguments);
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   __ movp(rcx, FieldOperand(rdi, JSFunction::kCodeOffset));
   __ addp(rcx, Immediate(Code::kHeaderSize - kHeapObjectTag));
   __ jmp(rcx);

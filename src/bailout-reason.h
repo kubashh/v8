@@ -87,7 +87,8 @@ namespace internal {
     "Wrong address or value passed to RecordWrite")                            \
   V(kWrongArgumentCountForInvokeIntrinsic,                                     \
     "Wrong number of arguments for intrinsic")                                 \
-  V(kWrongFunctionContext, "Wrong context passed to function")
+  V(kWrongFunctionContext, "Wrong context passed to function")                 \
+  V(kWrongFunctionTarget, "Wrong value in target register passed to function")
 
 #define BAILOUT_MESSAGES_LIST(V)                                            \
   V(kNoReason, "no reason")                                                 \
