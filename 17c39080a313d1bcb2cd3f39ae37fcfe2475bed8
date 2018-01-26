@@ -22,6 +22,30 @@
       "revId": "17c39080a313d1bcb2cd3f39ae37fcfe2475bed8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e90b2fa_13a36c42",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-01-26T10:53:32Z",
+      "side": 1,
+      "message": "This should be fine as long as this is a no-snapshot build, can we add that as an explicit requirement for the command line flag to exist?",
+      "parentUuid": "3c50100b_6fd379ef",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 31
+      },
+      "revId": "17c39080a313d1bcb2cd3f39ae37fcfe2475bed8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
