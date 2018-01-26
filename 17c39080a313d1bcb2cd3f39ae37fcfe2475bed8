@@ -46,6 +46,30 @@
       "revId": "17c39080a313d1bcb2cd3f39ae37fcfe2475bed8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3327a5eb_b57aba35",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-01-26T11:02:54Z",
+      "side": 1,
+      "message": "+1 to Leszek\u0027s suggestion of hiding the command line flag on snapshot builds. \n\nAs an alternative - we could modify the logic so that interrupt_budget isn\u0027t hard-coded into the snapshot (i.e., having the flag update a memory location which is known to Ignition and used by Ignition as the value to reset the interrupt budget, rather than being hard-coded into the machine-code. This would take a bit more work, so I\u0027m fine with landing as a no-snapshot only flag in the meantime if you want to fuzz this.",
+      "parentUuid": "6e90b2fa_13a36c42",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 31
+      },
+      "revId": "17c39080a313d1bcb2cd3f39ae37fcfe2475bed8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
