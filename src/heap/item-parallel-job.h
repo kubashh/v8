@@ -9,6 +9,7 @@
 
 #include "src/base/platform/semaphore.h"
 #include "src/cancelable-task.h"
+#include "src/utils.h"
 #include "src/v8.h"
 
 namespace v8 {
@@ -132,17 +133,31 @@ class ItemParallelJob {
   int NumberOfTasks() const { return static_cast<int>(tasks_.size()); }
 
   void Run() {
-    DCHECK_GE(tasks_.size(), 0);
-    const size_t num_tasks = tasks_.size();
+    DCHECK_GT(tasks_.size(), 0);
     const size_t num_items = items_.size();
+
+    // Special case |num_items == 0| to avoid divide-by-zero below.
+    if (num_items == 0) {
+      // FIXME why doesn't this worrkkk
+
+      for (auto& task : tasks_) {
+        auto aborted = cancelable_task_manager_->TryAbort(task->id());
+        DCHECK_EQ(CancelableTaskManager::kTaskAborted, aborted);
+      }
+      return;
+    }
+
+    // TODO(gab): Make it impossible to have more |tasks_| than |items_| in the
+    // first place. Note: Tasks that are never started will be trivially aborted
+    // the end.
+    const size_t num_tasks = Min(num_items, tasks_.size());
     const size_t items_per_task = (num_items + num_tasks - 1) / num_tasks;
     CancelableTaskManager::Id* task_ids =
         new CancelableTaskManager::Id[num_tasks];
-    size_t start_index = 0;
     Task* main_task = nullptr;
-    Task* task = nullptr;
-    for (size_t i = 0; i < num_tasks; i++, start_index += items_per_task) {
-      task = tasks_[i];
+    for (size_t i = 0, start_index = 0; i < num_tasks;
+         i++, start_index += items_per_task) {
+      Task* task = tasks_[i];
       if (start_index >= num_items) {
         start_index -= num_items;
       }
@@ -155,6 +170,7 @@ class ItemParallelJob {
         main_task = task;
       }
     }
+
     // Contribute on main thread.
     main_task->Run();
     delete main_task;
