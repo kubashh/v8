@@ -545,17 +545,23 @@ void CodeGenerator::AssembleTailCallAfterGap(Instruction* instr,
 void CodeGenerator::BailoutIfDeoptimized() {
   UseScratchRegisterScope temps(tasm());
   Register scratch = temps.AcquireX();
-  {
-    // Since we always emit a bailout check at the very beginning we can be
-    // certain that the distance between here and the {CodeDataContainer} is
-    // fixed and always in range of a load.
-    int data_container_offset =
-        (Code::kCodeDataContainerOffset - Code::kHeaderSize) - __ pc_offset();
-    DCHECK_GE(0, data_container_offset);
-    DCHECK_EQ(0, data_container_offset % 4);
-    InstructionAccurateScope scope(tasm());
-    __ ldr_pcrel(scratch, data_container_offset >> 2);
+  if (FLAG_debug_code) {
+    // Check that {kJavaScriptCallCodeStartRegister} is correct.
+    {
+      // Since we always emit a bailout check at the very beginning we can be
+      // certain that the distance between here and the {CodeDataContainer} is
+      // fixed and always in range of a load.
+      int data_container_offset =
+          (Code::kCodeDataContainerOffset - Code::kHeaderSize) - __ pc_offset();
+      DCHECK_GE(0, data_container_offset);
+      DCHECK_EQ(0, data_container_offset % 4);
+      InstructionAccurateScope scope(tasm());
+      __ ldr_pcrel(scratch, data_container_offset >> 2);
+    }
   }
+
+  int offset = Code::kCodeDataContainerOffset - Code::kHeaderSize;
+  __ Ldr(scratch, MemOperand(kJavaScriptCallCodeStartRegister, offset));
   __ Ldr(scratch,
          FieldMemOperand(scratch, CodeDataContainer::kKindSpecificFlagsOffset));
   Label not_deoptimized;
@@ -678,9 +684,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ cmp(cp, temp);
         __ Assert(eq, AbortReason::kWrongFunctionContext);
       }
-      __ Ldr(x10, FieldMemOperand(func, JSFunction::kCodeOffset));
-      __ Add(x10, x10, Operand(Code::kHeaderSize - kHeapObjectTag));
-      __ Call(x10);
+      static_assert(kJavaScriptCallCodeStartRegister == x2, "ABI mismatch");
+      __ Ldr(x2, FieldMemOperand(func, JSFunction::kCodeOffset));
+      __ Add(x2, x2, Operand(Code::kHeaderSize - kHeapObjectTag));
+      __ Call(x2);
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
       break;
