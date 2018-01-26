@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdf0ae3f_69d6d6e2",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-26T15:01:44Z",
+      "side": 1,
+      "message": "@interpreter folks, PTAL at the way I make the flag only available to nosnap builds. It should be readonly otherwise.\n\nThe python parts of the fuzzer are still under construction.",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 22
+      },
+      "revId": "d1982e7f7bfbc7aadc52b5551a81008477f00179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
