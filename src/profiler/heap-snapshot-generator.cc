@@ -1983,6 +1983,62 @@ void V8HeapExplorer::TagGlobalObjects() {
   }
 }
 
+class EmbedderGraphImpl : public EmbedderGraph {
+ public:
+  struct Edge {
+    Node* from;
+    Node* to;
+  };
+
+  class V8NodeImpl : public Node {
+   public:
+    explicit V8NodeImpl(Object* object) : object_(object) {}
+    Object* GetObject() { return object_; }
+
+    // Node overrides.
+    bool IsEmbedderNode() override { return false; }
+    const char* Name() override {
+      // The name should be retrieved via GetObject().
+      UNREACHABLE();
+      return "";
+    }
+    size_t SizeInBytes() override {
+      // The size should be retrieved via GetObject().
+      UNREACHABLE();
+      return 0;
+    }
+
+   private:
+    Object* object_;
+  };
+
+  explicit EmbedderGraphImpl(DisallowHeapAllocation& promise) {}
+  ~EmbedderGraphImpl() final {
+    for (auto node : nodes_) {
+      delete node;
+    }
+  }
+
+  Node* V8Node(const v8::Local<v8::Value>& value) final {
+    Handle<Object> object = v8::Utils::OpenHandle(*value);
+    DCHECK(!object.is_null());
+    return new V8NodeImpl(*object);
+  }
+
+  void AddEdge(Node* from, Node* to) final {
+    nodes_.insert(from);
+    nodes_.insert(to);
+    edges_.push_back({from, to});
+  }
+
+  const std::set<Node*>& nodes() { return nodes_; }
+  const std::vector<Edge>& edges() { return edges_; }
+
+ private:
+  std::set<Node*> nodes_;
+  std::vector<Edge> edges_;
+};
+
 class GlobalHandlesExtractor : public PersistentHandleVisitor {
  public:
   explicit GlobalHandlesExtractor(NativeObjectsExplorer* explorer)
@@ -2034,6 +2090,35 @@ HeapEntry* BasicHeapEntriesAllocator::AllocateEntry(HeapThing ptr) {
       0);
 }
 
+class EmbedderGraphEntriesAllocator : public HeapEntriesAllocator {
+ public:
+  EmbedderGraphEntriesAllocator(HeapSnapshot* snapshot,
+                                HeapEntry::Type entries_type)
+      : snapshot_(snapshot),
+        names_(snapshot_->profiler()->names()),
+        heap_object_map_(snapshot_->profiler()->heap_object_map()),
+        entries_type_(entries_type) {}
+  virtual HeapEntry* AllocateEntry(HeapThing ptr);
+
+ private:
+  HeapSnapshot* snapshot_;
+  StringsStorage* names_;
+  HeapObjectsMap* heap_object_map_;
+  HeapEntry::Type entries_type_;
+};
+
+HeapEntry* EmbedderGraphEntriesAllocator::AllocateEntry(HeapThing ptr) {
+  EmbedderGraphImpl::Node* node =
+      reinterpret_cast<EmbedderGraphImpl::Node*>(ptr);
+  DCHECK(node->IsEmbedderNode());
+  const char* name = names_->GetCopy(node->Name());
+  size_t size = node->SizeInBytes();
+  return snapshot_->AddEntry(
+      entries_type_, name,
+      static_cast<SnapshotObjectId>(reinterpret_cast<uintptr_t>(node) << 1),
+      static_cast<int>(size), 0);
+}
+
 NativeObjectsExplorer::NativeObjectsExplorer(
     HeapSnapshot* snapshot, SnapshottingProgressReportingInterface* progress)
     : isolate_(snapshot->profiler()->heap_object_map()->heap()->isolate()),
@@ -2047,6 +2132,8 @@ NativeObjectsExplorer::NativeObjectsExplorer(
       new BasicHeapEntriesAllocator(snapshot, HeapEntry::kSynthetic);
   native_entries_allocator_ =
       new BasicHeapEntriesAllocator(snapshot, HeapEntry::kNative);
+  embedder_graph_entries_allocator_ =
+      new EmbedderGraphEntriesAllocator(snapshot, HeapEntry::kNative);
 }
 
 
@@ -2139,25 +2226,63 @@ std::vector<HeapObject*>* NativeObjectsExplorer::GetVectorMaybeDisposeInfo(
   return reinterpret_cast<std::vector<HeapObject*>*>(entry->value);
 }
 
+HeapEntry* NativeObjectsExplorer::EntryForEmbedderGraphNode(
+    EmbedderGraphImpl::Node* node) {
+  if (node->IsEmbedderNode()) {
+    return filler_->FindOrAddEntry(node, embedder_graph_entries_allocator_);
+  } else {
+    EmbedderGraphImpl::V8NodeImpl* v8_node =
+        static_cast<EmbedderGraphImpl::V8NodeImpl*>(node);
+    Object* object = v8_node->GetObject();
+    if (object->IsSmi()) return nullptr;
+    HeapEntry* entry = filler_->FindEntry(HeapObject::cast(object));
+    return entry;
+  }
+}
 
 bool NativeObjectsExplorer::IterateAndExtractReferences(
     SnapshotFiller* filler) {
   filler_ = filler;
-  FillRetainedObjects();
-  FillEdges();
-  if (EstimateObjectsCount() > 0) {
-    for (base::HashMap::Entry* p = objects_by_info_.Start(); p != nullptr;
-         p = objects_by_info_.Next(p)) {
-      v8::RetainedObjectInfo* info =
-          reinterpret_cast<v8::RetainedObjectInfo*>(p->key);
-      SetNativeRootReference(info);
-      std::vector<HeapObject*>* objects =
-          reinterpret_cast<std::vector<HeapObject*>*>(p->value);
-      for (HeapObject* object : *objects) {
-        SetWrapperNativeReferences(object, info);
+
+  if (FLAG_heap_profiler_embedder_graph) {
+    v8::HandleScope scope(reinterpret_cast<v8::Isolate*>(isolate_));
+    DisallowHeapAllocation no_allocation;
+    EmbedderGraphImpl graph(no_allocation);
+    snapshot_->profiler()->BuildEmbedderGraph(isolate_, &graph);
+    // Fill root nodes of the graph.
+    for (auto node : graph.nodes()) {
+      if (node->IsRootNode()) {
+        filler_->SetIndexedAutoIndexReference(HeapGraphEdge::kElement,
+                                              snapshot_->root()->index(),
+                                              EntryForEmbedderGraphNode(node));
       }
     }
-    SetRootNativeRootsReference();
+    // Fill edges of the graph.
+    for (auto edge : graph.edges()) {
+      HeapEntry* from = EntryForEmbedderGraphNode(edge.from);
+      HeapEntry* to = EntryForEmbedderGraphNode(edge.to);
+      if (from && to) {
+        filler_->SetIndexedAutoIndexReference(HeapGraphEdge::kElement,
+                                              from->index(), to);
+      }
+    }
+  } else {
+    FillRetainedObjects();
+    FillEdges();
+    if (EstimateObjectsCount() > 0) {
+      for (base::HashMap::Entry* p = objects_by_info_.Start(); p != nullptr;
+           p = objects_by_info_.Next(p)) {
+        v8::RetainedObjectInfo* info =
+            reinterpret_cast<v8::RetainedObjectInfo*>(p->key);
+        SetNativeRootReference(info);
+        std::vector<HeapObject*>* objects =
+            reinterpret_cast<std::vector<HeapObject*>*>(p->value);
+        for (HeapObject* object : *objects) {
+          SetWrapperNativeReferences(object, info);
+        }
+      }
+      SetRootNativeRootsReference();
+    }
   }
   filler_ = nullptr;
   return true;

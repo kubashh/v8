@@ -626,6 +626,49 @@ class V8_EXPORT AllocationProfile {
   static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
 
+/**
+ * An object graph consisting of embedder objects and V8 objects.
+ * Edges of the graph are strong references between the objects.
+ * The embedder can build this graph during heap snapshot generation
+ * to include the embedder objects in the heap snapshot.
+ * Usage:
+ * 1) Define derived class of EmbedderGraph::Node for embedder objects.
+ * 2) Set the build embedder graph callback on the heap profiler using
+ *    HeapProfiler::SetBuildEmbedderGraphCallback.
+ * 3) In the callback use graph->AddEdge(node1, node2) to add an edge from
+ *    node1 to node2.
+ * 4) To represent references from/to V8 object, construct V8 nodes using
+ *    graph->V8Node(value).
+ */
+class V8_EXPORT EmbedderGraph {
+ public:
+  class Node {
+   public:
+    Node() {}
+    virtual ~Node() {}
+    virtual const char* Name() = 0;
+    virtual size_t SizeInBytes() = 0;
+    virtual bool IsRootNode() { return false; }
+    /** Must return true for non-V8 nodes. */
+    virtual bool IsEmbedderNode() { return true; }
+
+   private:
+    Node(const Node&);
+    Node& operator=(const Node&);
+  };
+
+  /** Returns a node corresponding to the given V8 value. */
+  virtual Node* V8Node(const v8::Local<v8::Value>& value) = 0;
+
+  /**
+   * Adds an edge that represents a strong reference from the
+   * given node |from| to the given node |to|. The ownership of
+   * nodes is transfered to EmbedderGraph.
+   */
+  virtual void AddEdge(Node* from, Node* to) = 0;
+
+  virtual ~EmbedderGraph() {}
+};
 
 /**
  * Interface for controlling heap profiling. Instance of the
@@ -664,6 +707,15 @@ class V8_EXPORT HeapProfiler {
    */
   typedef RetainedObjectInfo* (*WrapperInfoCallback)(uint16_t class_id,
                                                      Local<Value> wrapper);
+
+  /**
+   * Callback function invoked during heap snapshot generation to retrieve
+   * the embedder object graph. The callback should use graph->AddEdge(..) to
+   * add references between the objects.
+   * The callback must not trigger garbage collection in V8.
+   */
+  typedef void (*BuildEmbedderGraphCallback)(v8::Isolate* isolate,
+                                             v8::EmbedderGraph* graph);
 
   /** Returns the number of snapshots taken. */
   int GetSnapshotCount();
@@ -809,6 +861,7 @@ class V8_EXPORT HeapProfiler {
       WrapperInfoCallback callback);
 
   void SetGetRetainerInfosCallback(GetRetainerInfosCallback callback);
+  void SetBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback);
 
   /**
    * Default value of persistent handle class ID. Must not be used to

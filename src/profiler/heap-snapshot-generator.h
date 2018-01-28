@@ -514,6 +514,8 @@ class NativeObjectsExplorer {
 
   NativeGroupRetainedObjectInfo* FindOrAddGroupInfo(const char* label);
 
+  HeapEntry* EntryForEmbedderGraphNode(EmbedderGraph::Node* node);
+
   Isolate* isolate_;
   HeapSnapshot* snapshot_;
   StringsStorage* names_;
@@ -524,6 +526,7 @@ class NativeObjectsExplorer {
   base::CustomMatcherHashMap native_groups_;
   HeapEntriesAllocator* synthetic_entries_allocator_;
   HeapEntriesAllocator* native_entries_allocator_;
+  HeapEntriesAllocator* embedder_graph_entries_allocator_;
   // Used during references extraction.
   SnapshotFiller* filler_;
   v8::HeapProfiler::RetainerEdges edges_;
