@@ -18,7 +18,8 @@ HeapProfiler::HeapProfiler(Heap* heap)
     : ids_(new HeapObjectsMap(heap)),
       names_(new StringsStorage(heap)),
       is_tracking_object_moves_(false),
-      get_retainer_infos_callback_(nullptr) {}
+      get_retainer_infos_callback_(nullptr),
+      build_embedder_graph_callback_(nullptr) {}
 
 static void DeleteHeapSnapshot(HeapSnapshot* snapshot_ptr) {
   delete snapshot_ptr;
@@ -73,6 +74,18 @@ v8::HeapProfiler::RetainerInfos HeapProfiler::GetRetainerInfos(
     infos =
         get_retainer_infos_callback_(reinterpret_cast<v8::Isolate*>(isolate));
   return infos;
+}
+
+void HeapProfiler::SetBuildEmbedderGraphCallback(
+    v8::HeapProfiler::BuildEmbedderGraphCallback callback) {
+  build_embedder_graph_callback_ = callback;
+}
+
+void HeapProfiler::BuildEmbedderGraph(Isolate* isolate,
+                                      v8::EmbedderGraph* graph) {
+  if (build_embedder_graph_callback_ != nullptr)
+    build_embedder_graph_callback_(reinterpret_cast<v8::Isolate*>(isolate),
+                                   graph);
 }
 
 HeapSnapshot* HeapProfiler::TakeSnapshot(
