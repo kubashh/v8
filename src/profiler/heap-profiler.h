@@ -65,8 +65,11 @@ class HeapProfiler {
 
   void SetGetRetainerInfosCallback(
       v8::HeapProfiler::GetRetainerInfosCallback callback);
-
   v8::HeapProfiler::RetainerInfos GetRetainerInfos(Isolate* isolate);
+
+  void SetBuildEmbedderGraphCallback(
+      v8::HeapProfiler::BuildEmbedderGraphCallback callback);
+  void BuildEmbedderGraph(Isolate* isolate, v8::EmbedderGraph* graph);
 
   bool is_tracking_object_moves() const { return is_tracking_object_moves_; }
   bool is_tracking_allocations() const { return !!allocation_tracker_; }
@@ -93,6 +96,7 @@ class HeapProfiler {
   base::Mutex profiler_mutex_;
   std::unique_ptr<SamplingHeapProfiler> sampling_heap_profiler_;
   v8::HeapProfiler::GetRetainerInfosCallback get_retainer_infos_callback_;
+  v8::HeapProfiler::BuildEmbedderGraphCallback build_embedder_graph_callback_;
 
   DISALLOW_COPY_AND_ASSIGN(HeapProfiler);
 };

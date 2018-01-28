@@ -893,6 +893,8 @@ DEFINE_INT(histogram_interval, 600000,
            "time interval in ms for aggregating memory histograms")
 
 // heap-snapshot-generator.cc
+DEFINE_BOOL(heap_profiler_embedder_graph, false,
+            "Include embedder graph in the heap snapshot")
 DEFINE_BOOL(heap_profiler_trace_objects, false,
             "Dump heap object allocations/movements/size_updates")
 
