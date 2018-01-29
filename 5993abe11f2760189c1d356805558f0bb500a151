@@ -22,6 +22,30 @@
       "revId": "5993abe11f2760189c1d356805558f0bb500a151",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18520da8_26ace8f7",
+        "filename": "src/heap/item-parallel-job.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-01-29T13:15:13Z",
+      "side": 1,
+      "message": "Actually, control is always handed over to the scheduler here. Aborting means that we just set a flag that the inner Run method bails out immediately.\n\nThis delete should be wrong. Can you please check?",
+      "parentUuid": "1b4159ae_7d595bef",
+      "range": {
+        "startLine": 152,
+        "startChar": 6,
+        "endLine": 153,
+        "endChar": 26
+      },
+      "revId": "5993abe11f2760189c1d356805558f0bb500a151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
