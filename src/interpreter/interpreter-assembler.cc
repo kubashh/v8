@@ -1231,7 +1231,7 @@ void InterpreterAssembler::UpdateInterruptBudget(Node* weight, bool backward) {
     BIND(&interrupt_check);
     {
       CallRuntime(Runtime::kInterrupt, GetContext());
-      new_budget.Bind(Int32Constant(Interpreter::kInterruptBudget));
+      new_budget.Bind(Int32Constant(Interpreter::InterruptBudget()));
       Goto(&ok);
     }
 

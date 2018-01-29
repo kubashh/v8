@@ -117,9 +117,18 @@ class TestSuite(object):
     self.root = root  # string containing path
     self.tests = None  # list of TestCase objects
     self.statusfile = None
+    self._suppress_internals = False
 
   def status_file(self):
     return "%s/%s.status" % (self.root, self.name)
+
+  def suppress_internals(self):
+    """Specifies if this test suite should suppress asserts based on internals.
+
+    Internals are e.g. testing against the outcome of native runtime functions.
+    This is switched off on some fuzzers that violate these contracts.
+    """
+    self._suppress_internals = True
 
   def ListTests(self, context):
     raise NotImplementedError
