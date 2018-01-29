@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1625491_935997cf",
+        "filename": "test/unittests/heap/item-parallel-job-unittest.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-01-29T10:49:38Z",
+      "side": 1,
+      "message": "nit: drop not needed explicit.",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 10
+      },
+      "revId": "6f7f774fbf5ab0e0ff8bbb52a8ad0d3f1fc04b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
