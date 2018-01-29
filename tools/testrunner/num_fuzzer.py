@@ -108,6 +108,11 @@ class NumFuzzer(base_runner.BaseTestRunner):
                       help="extends --stress-deopt to have minimum interval "
                            "between deopt points")
 
+    # Stress interrupt budget
+    parser.add_option("--stress-interrupt-budget", default=0, type="int",
+                      help="probability [0-10] of adding --interrupt-budget "
+                           "flag to the test")
+
     # Combine multiple tests
     parser.add_option("--combine-tests", default=False, action="store_true",
                       help="Combine multiple tests as one and run with "
@@ -151,6 +156,8 @@ class NumFuzzer(base_runner.BaseTestRunner):
                                            self.mode_name))
 
     ctx = self._create_context(options)
+    for suite in suites:
+      suite.suppress_internals()
     tests = self._load_tests(options, suites, ctx)
     progress_indicator = progress.IndicatorNotifier()
     progress_indicator.Register(
@@ -312,6 +319,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     add('marking', options.stress_marking)
     add('scavenge', options.stress_scavenge)
     add('gc_interval', options.stress_gc)
+    add('interrupt_budget', options.stress_interrupt_budget)
     add('deopt', options.stress_deopt, options.stress_deopt_min)
     return fuzzers
 
