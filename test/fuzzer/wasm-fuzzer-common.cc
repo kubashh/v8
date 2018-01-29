@@ -7,7 +7,6 @@
 #include "include/v8.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
-#include "src/wasm/wasm-api.h"
 #include "src/wasm/wasm-engine.h"
 #include "src/wasm/wasm-module-builder.h"
 #include "src/wasm/wasm-module.h"
@@ -67,7 +66,7 @@ int FuzzWasmSection(SectionCode section, const uint8_t* data, size_t size) {
 
 void InterpretAndExecuteModule(i::Isolate* isolate,
                                Handle<WasmModuleObject> module_object) {
-  ScheduledErrorThrower thrower(isolate, "WebAssembly Instantiation");
+  ErrorThrower thrower(isolate, "WebAssembly Instantiation");
   // Try to instantiate and interpret the module_object.
   MaybeHandle<WasmInstanceObject> maybe_instance =
       isolate->wasm_engine()->SyncInstantiate(
