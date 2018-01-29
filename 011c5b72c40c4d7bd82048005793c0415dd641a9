@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "38c07864_0fa8a70a",
+        "filename": "test/mjsunit/testcfg.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-29T11:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c525f0bb_a7d404c1",
+      "range": {
+        "startLine": 220,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 55
+      },
+      "revId": "011c5b72c40c4d7bd82048005793c0415dd641a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "478567d4_4d41b4de",
         "filename": "tools/testrunner/num_fuzzer.py",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "60f42a56_cc7b03c7",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-29T11:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "478567d4_4d41b4de",
+      "range": {
+        "startLine": 85,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 57
+      },
+      "revId": "011c5b72c40c4d7bd82048005793c0415dd641a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86d5edbb_88b99d68",
         "filename": "tools/testrunner/num_fuzzer.py",
         "patchSetId": 13
@@ -59,6 +107,30 @@
       "writtenOn": "2018-01-29T11:39:36Z",
       "side": 1,
       "message": "nit: I\u0027m trying to keep the functions below their usage to be able to read the code from top to bottom.",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 309,
+        "endChar": 67
+      },
+      "revId": "011c5b72c40c4d7bd82048005793c0415dd641a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71cef736_5f3b792b",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-29T11:51:55Z",
+      "side": 1,
+      "message": "Done. Also reordered the others...",
+      "parentUuid": "86d5edbb_88b99d68",
       "range": {
         "startLine": 307,
         "startChar": 2,
