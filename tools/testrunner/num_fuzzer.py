@@ -82,6 +82,9 @@ class NumFuzzer(base_runner.BaseTestRunner):
                            "value 0 to provide infinite number of subtests. "
                            "When --combine-tests is set it indicates how many "
                            "tests to create in total")
+    parser.add_option("--disable-analysis",
+                      help="Skip analysis phase and use default fuzz values.",
+                      default=False, action="store_true")
     parser.add_option("--total-timeout-sec", default=0, type="int",
                       help="How long should fuzzer run. It overrides "
                            "--tests-count")
@@ -107,6 +110,11 @@ class NumFuzzer(base_runner.BaseTestRunner):
     parser.add_option("--stress-deopt-min", default=1, type="int",
                       help="extends --stress-deopt to have minimum interval "
                            "between deopt points")
+
+    # Stress interrupt budget
+    parser.add_option("--stress-interrupt-budget", default=0, type="int",
+                      help="probability [0-10] of adding --interrupt-budget "
+                           "flag to the test")
 
     # Combine multiple tests
     parser.add_option("--combine-tests", default=False, action="store_true",
@@ -151,6 +159,8 @@ class NumFuzzer(base_runner.BaseTestRunner):
                                            self.mode_name))
 
     ctx = self._create_context(options)
+    for suite in suites:
+      suite.suppress_internals()
     tests = self._load_tests(options, suites, ctx)
     progress_indicator = progress.IndicatorNotifier()
     progress_indicator.Register(
@@ -294,7 +304,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
       disable_analysis = True
     else:
       count = options.tests_count
-      disable_analysis = False
+      disable_analysis = options.disable_analysis
     return fuzzer.FuzzerProc(
         rng,
         count,
@@ -312,6 +322,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     add('marking', options.stress_marking)
     add('scavenge', options.stress_scavenge)
     add('gc_interval', options.stress_gc)
+    add('interrupt_budget', options.stress_interrupt_budget)
     add('deopt', options.stress_deopt, options.stress_deopt_min)
     return fuzzers
 
