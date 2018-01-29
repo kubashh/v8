@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15eb7a4b_e204a474",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-29T14:25:04Z",
+      "side": 1,
+      "message": "I think it should be do_suppress_internals()",
+      "range": {
+        "startLine": 247,
+        "startChar": 14,
+        "endLine": 247,
+        "endChar": 32
+      },
+      "revId": "b92b45dd3fc8ae5192929bf97d23cb87aa33978f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
