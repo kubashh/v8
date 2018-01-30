@@ -1186,6 +1186,24 @@ Handle<Script> Factory::NewScript(Handle<String> source) {
   return script;
 }
 
+Handle<CallableTask> Factory::NewCallableTask(Handle<JSReceiver> callable) {
+  DCHECK(callable->IsCallable());
+  Handle<CallableTask> microtask =
+      Handle<CallableTask>::cast(NewStruct(CALLABLE_TASK_TYPE));
+  microtask->set_context(*isolate()->native_context());
+  microtask->set_callable(*callable);
+  return microtask;
+}
+
+Handle<CallbackTask> Factory::NewCallbackTask(Handle<Foreign> callback,
+                                              Handle<Foreign> data) {
+  Handle<CallbackTask> microtask =
+      Handle<CallbackTask>::cast(NewStruct(CALLBACK_TASK_TYPE));
+  microtask->set_context(*isolate()->native_context());
+  microtask->set_callback(*callback);
+  microtask->set_data(*data);
+  return microtask;
+}
 
 Handle<Foreign> Factory::NewForeign(Address addr, PretenureFlag pretenure) {
   CALL_HEAP_FUNCTION(isolate(),
