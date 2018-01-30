@@ -58,10 +58,11 @@ static constexpr int kBitsPerLiftoffRegCode =
     32 - base::bits::CountLeadingZeros<uint32_t>(kAfterMaxLiftoffRegCode - 1);
 static constexpr int kBitsPerGpRegCode =
     32 - base::bits::CountLeadingZeros<uint32_t>(kMaxGpRegCode);
+static constexpr int kBitsPerGpRegPair = 1 + 2 * kBitsPerGpRegCode;
 
 class LiftoffRegister {
   static constexpr int needed_bits =
-      kNeedI64RegPair ? 1 + 2 * kBitsPerGpRegCode : kBitsPerLiftoffRegCode;
+      std::max(kNeedI64RegPair ? kBitsPerGpRegPair : 0, kBitsPerLiftoffRegCode);
   using storage_t = std::conditional<
       needed_bits <= 8, uint8_t,
       std::conditional<needed_bits <= 16, uint16_t, uint32_t>::type>::type;

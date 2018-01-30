@@ -23,8 +23,13 @@ constexpr int32_t kFirstStackSlotOffset =
     kConstantStackSpace + LiftoffAssembler::kStackSlotSize;
 
 inline Operand GetStackSlot(uint32_t index) {
-  return Operand(
-      ebp, -kFirstStackSlotOffset - index * LiftoffAssembler::kStackSlotSize);
+  int32_t offset = index * LiftoffAssembler::kStackSlotSize;
+  return Operand(ebp, -kFirstStackSlotOffset - offset);
+}
+
+inline Operand GetHalfStackSlot(uint32_t half_index) {
+  int32_t offset = half_index * (LiftoffAssembler::kStackSlotSize / 2);
+  return Operand(ebp, -kFirstStackSlotOffset - offset);
 }
 
 // TODO(clemensh): Make this a constexpr variable once Operand is constexpr.
@@ -57,6 +62,11 @@ void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value,
       TurboAssembler::Move(
           reg.gp(),
           Immediate(reinterpret_cast<Address>(value.to_i32()), rmode));
+      break;
+    case kWasmI64:
+      DCHECK(RelocInfo::IsNone(rmode));
+      TurboAssembler::Move(reg.fst_gp(), Immediate(value.to_i64()));
+      TurboAssembler::Move(reg.snd_gp(), Immediate(value.to_i64() >> 32));
       break;
     case kWasmF32: {
       Register tmp = GetUnusedRegister(kGpReg).gp();
@@ -206,7 +216,9 @@ void LiftoffAssembler::MoveToReturnRegister(LiftoffRegister reg) {
   // TODO(wasm): Extract the destination register from the CallDescriptor.
   // TODO(wasm): Add multi-return support.
   LiftoffRegister dst =
-      reg.is_gp() ? LiftoffRegister(eax) : LiftoffRegister(xmm1);
+      reg.is_pair()
+          ? LiftoffRegister::ForPair(LiftoffRegister(eax), LiftoffRegister(edx))
+          : reg.is_gp() ? LiftoffRegister(eax) : LiftoffRegister(xmm1);
   if (reg != dst) Move(dst, reg);
 }
 
@@ -216,8 +228,10 @@ void LiftoffAssembler::Move(LiftoffRegister dst, LiftoffRegister src) {
   // method.
   DCHECK_NE(dst, src);
   DCHECK_EQ(dst.reg_class(), src.reg_class());
-  // TODO(clemensh): Handle different sizes here.
-  if (dst.is_gp()) {
+  if (src.is_pair()) {
+    if (dst.fst_gp() != src.fst_gp()) mov(dst.fst_gp(), src.fst_gp());
+    if (dst.snd_gp() != src.snd_gp()) mov(dst.snd_gp(), src.snd_gp());
+  } else if (dst.is_gp()) {
     mov(dst.gp(), src.gp());
   } else {
     movsd(dst.fp(), src.fp());
@@ -230,6 +244,10 @@ void LiftoffAssembler::Spill(uint32_t index, LiftoffRegister reg,
   switch (type) {
     case kWasmI32:
       mov(dst, reg.gp());
+      break;
+    case kWasmI64:
+      mov(dst, reg.fst_gp());
+      mov(liftoff::GetHalfStackSlot(2 * index + 1), reg.snd_gp());
       break;
     case kWasmF32:
       movss(dst, reg.fp());
@@ -263,6 +281,10 @@ void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index,
     case kWasmI32:
       mov(reg.gp(), src);
       break;
+    case kWasmI64:
+      mov(reg.fst_gp(), src);
+      mov(reg.snd_gp(), liftoff::GetHalfStackSlot(2 * index + 1));
+      break;
     case kWasmF32:
       movss(reg.fp(), src);
       break;
@@ -272,6 +294,10 @@ void LiftoffAssembler::Fill(LiftoffRegister reg, uint32_t index,
     default:
       UNREACHABLE();
   }
+}
+
+void LiftoffAssembler::FillI64Half(Register reg, uint32_t half_index) {
+  mov(reg, liftoff::GetHalfStackSlot(half_index));
 }
 
 void LiftoffAssembler::emit_i32_add(Register dst, Register lhs, Register rhs) {
@@ -502,14 +528,18 @@ void LiftoffAssembler::AssertUnreachable(AbortReason reason) {
 }
 
 void LiftoffAssembler::PushCallerFrameSlot(const VarState& src,
-                                           uint32_t src_index) {
+                                           uint32_t src_index,
+                                           bool is_snd_i64_half) {
   switch (src.loc()) {
     case VarState::kStack:
       DCHECK_NE(kWasmF64, src.type());  // TODO(clemensh): Implement this.
-      push(liftoff::GetStackSlot(src_index));
+      push(liftoff::GetHalfStackSlot(2 * src_index + is_snd_i64_half));
       break;
     case VarState::kRegister:
-      PushCallerFrameSlot(src.reg());
+      PushCallerFrameSlot(
+          src.type() == kWasmI64
+              ? (is_snd_i64_half ? src.reg().snd() : src.reg().fst())
+              : src.reg());
       break;
     case VarState::kI32Const:
       push(Immediate(src.i32_const()));
