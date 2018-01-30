@@ -12,6 +12,10 @@ class SignalProc(base.TestProcObserver):
     super(SignalProc, self).__init__()
     self._ctrlc = False
 
+  def setup(self, *args, **kwargs):
+    super(SignalProc, self).setup(*args, **kwargs)
+    # It should be called after processors are chained together to not loose
+    # catched signal.
     signal.signal(signal.SIGINT, self._on_ctrlc)
 
   def _on_next_test(self, _test):
