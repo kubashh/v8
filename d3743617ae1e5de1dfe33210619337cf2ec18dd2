@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cbf3326f_460c37fd",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-30T11:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e5f9786_bc515d82",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9ac4152_0894447b",
         "filename": "include/v8-profiler.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41473dc7_2afd2a6c",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-30T11:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9ac4152_0894447b",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "16263abf_a4d9a061",
+        "filename": "src/profiler/heap-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-30T11:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "994b6859_86582f6e",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c5085f2_d1092b2d",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "2e6b8ec0_939e8d63",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-30T11:13:57Z",
+      "side": 1,
+      "message": "I added AddNode(std::unique_ptr\u003cNode) method to the EmbedderGraph.\n\nThis ensures transfer of node ownership.",
+      "parentUuid": "1c5085f2_d1092b2d",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8bea2ec_69ee10e4",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2d6d57a_cfb19f4d",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-30T11:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8bea2ec_69ee10e4",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
