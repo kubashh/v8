@@ -42,9 +42,9 @@ class TestSuite(testsuite.TestSuite):
     if utils.IsWindows():
       shell += ".exe"
     cmd = command.Command(
-        cmd_prefix=context.command_prefix,
+        cmd_prefix=self.test_config.command_prefix,
         shell=shell,
-        args=["--list"] + context.extra_flags)
+        args=["--list"] + self.test_config.extra_flags)
     output = cmd.execute()
     if output.exit_code != 0:
       print cmd
