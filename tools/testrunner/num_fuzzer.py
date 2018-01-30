@@ -7,7 +7,6 @@
 
 import multiprocessing
 import random
-import shlex
 import sys
 
 # Adds testrunner to the path hence it has to be imported at the beggining.
@@ -41,15 +40,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     super(NumFuzzer, self).__init__(*args, **kwargs)
 
   def _add_parser_options(self, parser):
-    parser.add_option("--command-prefix",
-                      help="Prepended to each shell command used to run a test",
-                      default="")
     parser.add_option("--dump-results-file", help="Dump maximum limit reached")
-    parser.add_option("--extra-flags",
-                      help="Additional flags to pass to each test command",
-                      default="")
-    parser.add_option("--isolates", help="Whether to test isolates",
-                      default=False, action="store_true")
     parser.add_option("-j", help="The number of parallel tasks to run",
                       default=0, type="int")
     parser.add_option("--json-test-results",
@@ -123,8 +114,6 @@ class NumFuzzer(base_runner.BaseTestRunner):
 
 
   def _process_options(self, options):
-    options.command_prefix = shlex.split(options.command_prefix)
-    options.extra_flags = shlex.split(options.extra_flags)
     if options.j == 0:
       options.j = multiprocessing.cpu_count()
     if not options.fuzzer_random_seed:

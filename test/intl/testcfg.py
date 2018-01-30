@@ -68,7 +68,7 @@ class TestCase(testcase.TestCase):
         'regexp-assert.js',
     ])
 
-    if ctx.isolates:
+    if self._test_config.isolates:
       files += ['--isolate'] + files
     return files
 

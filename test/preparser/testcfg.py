@@ -94,7 +94,7 @@ class TestCase(testcase.TestCase):
   def _get_cmd_params(self, ctx):
     return (
         self._get_files_params(ctx) +
-        self._get_extra_flags(ctx) +
+        self._get_extra_flags() +
         ['-e', self._source] +
         self._template_flags +
         self._get_variant_flags() +

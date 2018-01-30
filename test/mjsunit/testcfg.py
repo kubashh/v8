@@ -126,7 +126,7 @@ class TestCase(testcase.TestCase):
     if not ctx.no_harness:
       files += self._mjsunit_files
     files += self._files_suffix
-    if ctx.isolates:
+    if self._test_config.isolates:
       files += ['--isolate'] + files
 
     return files
