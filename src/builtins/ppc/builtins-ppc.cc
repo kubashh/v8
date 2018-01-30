@@ -1021,9 +1021,11 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ mov(kInterpreterDispatchTableRegister,
          Operand(ExternalReference::interpreter_dispatch_table_address(
              masm->isolate())));
-  __ lbzx(r4, MemOperand(kInterpreterBytecodeArrayRegister,
-                         kInterpreterBytecodeOffsetRegister));
-  __ ShiftLeftImm(ip, r4, Operand(kPointerSizeLog2));
+  __ lbzx(kInterpreterTargetBytecodeRegister,
+          MemOperand(kInterpreterBytecodeArrayRegister,
+                     kInterpreterBytecodeOffsetRegister));
+  __ ShiftLeftImm(ip, kInterpreterTargetBytecodeRegister,
+                  Operand(kPointerSizeLog2));
   __ LoadPX(ip, MemOperand(kInterpreterDispatchTableRegister, ip));
   __ Call(ip);
 
@@ -1254,9 +1256,11 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ SmiUntag(kInterpreterBytecodeOffsetRegister);
 
   // Dispatch to the target bytecode.
-  __ lbzx(r4, MemOperand(kInterpreterBytecodeArrayRegister,
-                         kInterpreterBytecodeOffsetRegister));
-  __ ShiftLeftImm(ip, r4, Operand(kPointerSizeLog2));
+  __ lbzx(kInterpreterTargetBytecodeRegister,
+          MemOperand(kInterpreterBytecodeArrayRegister,
+                     kInterpreterBytecodeOffsetRegister));
+  __ ShiftLeftImm(ip, kInterpreterTargetBytecodeRegister,
+                  Operand(kPointerSizeLog2));
   __ LoadPX(ip, MemOperand(kInterpreterDispatchTableRegister, ip));
   __ Jump(ip);
 }
