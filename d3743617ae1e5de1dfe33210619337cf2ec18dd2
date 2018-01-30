@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e5f9786_bc515d82",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-30T07:49:19Z",
+      "side": 1,
+      "message": "nit: \u003d default;",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ac4152_0894447b",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-30T07:49:19Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "994b6859_86582f6e",
+        "filename": "src/profiler/heap-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-30T07:49:19Z",
+      "side": 1,
+      "message": "nit: \u003d nullptr",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c5085f2_d1092b2d",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-30T07:49:19Z",
+      "side": 1,
+      "message": "It should return smart pointer if it passes ownership to the caller. Or you can insert it into nodes_ right away.\nSee ownership section of C++ styleguide https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8bea2ec_69ee10e4",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-30T07:49:19Z",
+      "side": 1,
+      "message": "Where is this guy deleted? Can you convert it and friends into smartptrs please?",
+      "revId": "d3743617ae1e5de1dfe33210619337cf2ec18dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
