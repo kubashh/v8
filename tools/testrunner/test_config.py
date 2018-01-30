@@ -4,15 +4,14 @@
 
 import random
 
+from .utils import random_utils
+
 
 # TODO(majeski): Move the rest of stuff from context
 class TestConfig(object):
-  def __init__(self, random_seed):
-    # random_seed is always not None.
-    self.random_seed = random_seed or self._gen_random_seed()
+  def __init__(self, command_prefix, extra_flags, random_seed):
+    self.command_prefix = command_prefix
+    self.extra_flags = extra_flags
 
-  def _gen_random_seed(self):
-    seed = None
-    while not seed:
-      seed = random.SystemRandom().randint(-2147483648, 2147483647)
-    return seed
+    # random_seed is always not None.
+    self.random_seed = random_seed or random_utils.random_seed()
