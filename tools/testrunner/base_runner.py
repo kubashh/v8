@@ -7,6 +7,7 @@ from collections import OrderedDict
 import json
 import optparse
 import os
+import shlex
 import sys
 
 
@@ -260,6 +261,16 @@ class BaseTestRunner(object):
     parser.add_option("--total-timeout-sec", default=0, type="int",
                       help="How long should fuzzer run")
 
+    parser.add_option("--command-prefix", default="",
+                      help="Prepended to each shell command used to run a test")
+    parser.add_option("--extra-flags", action="append", default=[],
+                      help="Additional flags to pass to each test command")
+    parser.add_option("--isolates", action="store_true", default=False,
+                      help="Whether to test isolates")
+    parser.add_option("--no-harness", "--noharness",
+                      default=False, action="store_true",
+                      help="Run without test harness of a given suite")
+
     # TODO(machenbach): Temporary options for rolling out new test runner
     # features.
     parser.add_option("--mastername", default='',
@@ -391,6 +402,9 @@ class BaseTestRunner(object):
       print('Warning: --shell-dir is deprecated. Searching for executables in '
             'build directory (%s) instead.' % self.outdir)
 
+    options.command_prefix = shlex.split(options.command_prefix)
+    options.extra_flags = sum(map(shlex.split, options.extra_flags), [])
+
   def _buildbot_to_v8_mode(self, config):
     """Convert buildbot build configs to configs understood by the v8 runner.
 
@@ -511,7 +525,14 @@ class BaseTestRunner(object):
     return map(load_suite, names)
 
   def _create_test_config(self, options):
-    return TestConfig(options.random_seed)
+    return TestConfig(
+        command_prefix=options.command_prefix,
+        extra_flags=options.extra_flags,
+        isolates=options.isolates,
+        mode_flags=self.mode_options.flags,
+        no_harness=options.no_harness,
+        random_seed=options.random_seed,
+    )
 
   # TODO(majeski): remove options & args parameters
   def _do_execute(self, suites, args, options):
