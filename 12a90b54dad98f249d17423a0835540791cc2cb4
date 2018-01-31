@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a129cfb_ea8eb1ab",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-01-31T19:53:19Z",
+      "side": 1,
+      "message": "Please add a comment here. I.e., that the embedder may point to a Smi which does not have a node.",
+      "range": {
+        "startLine": 2257,
+        "startChar": 10,
+        "endLine": 2257,
+        "endChar": 14
+      },
+      "revId": "12a90b54dad98f249d17423a0835540791cc2cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
