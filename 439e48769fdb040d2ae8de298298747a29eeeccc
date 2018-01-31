@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64914d61_564758ad",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "Where are these defined? If you want to disallow copy \u0026 assign use:\nNode(const Node\u0026) \u003d delete;",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16998b4e_f2966d4e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "s/transfers/takes/",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d9b034d_f15140c9",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "\u003d default;\n\nAlso what is the argument used for?\nIs it to ensure the allocations are disallowed by the caller?\nCan you just make it the member of EmbedderGraphImpl?",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd02319_800912e1",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "Out of curiosity, why do you need that short living handle?",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "685a7814_31eb6948",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "This looks weird. You release the unique_ptr to insert it into the set.\nIf it retains ownership of nodes it should rather be std::set\u003cstd::unique_ptr\u003cNode\u003e\u003e\nThis way it will take care of ownership automatically.",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf090071_01ef76e3",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like you really need std::set here. std::vector is a better fit.",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec8c7ca4_cc70e6d2",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "Thanks for doing this!",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e2772f9_48e00632",
+        "filename": "test/cctest/test-heap-profiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "GetRootChild?",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1340a103_15c0b763",
+        "filename": "test/cctest/test-heap-profiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-01-31T18:28:28Z",
+      "side": 1,
+      "message": "nit: you can write it in a single line.",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
