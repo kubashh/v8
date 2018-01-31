@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3dbf53c_71e31274",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 1,
+      "message": "This can be JSReceiver, right?",
+      "range": {
+        "startLine": 2978,
+        "startChar": 40,
+        "endLine": 2978,
+        "endChar": 50
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77130ed6_26b8b70f",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 1,
+      "message": "Can we static assert that all the four offsets + size of PromiseReaction and PromiseReactionJobTask line up correctly?",
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f71f385_2002925e",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3085,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 1,
+      "message": "This can also be JSReciever, right?",
+      "range": {
+        "startLine": 3085,
+        "startChar": 40,
+        "endLine": 3085,
+        "endChar": 50
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ffa1ce3_b9f982e3",
+        "filename": "src/runtime/runtime-promise.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 1,
+      "message": "Can this be removed entirely?",
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

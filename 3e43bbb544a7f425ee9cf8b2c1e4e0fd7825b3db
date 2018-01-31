@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a9a7882_da58b98e",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 0,
+      "message": "Were these not required previously?",
+      "revId": "3e43bbb544a7f425ee9cf8b2c1e4e0fd7825b3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b156e9_09a680c2",
+        "filename": "test/webkit/fast/js/Promise-resolve-with-then-exception-expected.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T02:30:05Z",
+      "side": 0,
+      "message": "Why did the test expectation change?",
+      "revId": "3e43bbb544a7f425ee9cf8b2c1e4e0fd7825b3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
