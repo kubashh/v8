@@ -164,7 +164,7 @@ class TestSuite(testsuite.TestSuite):
                                                 os.walk(self.localtestroot)):
       for dotted in [x for x in dirs if x.startswith(".")]:
         dirs.remove(dotted)
-      if context.noi18n and "intl402" in dirs:
+      if self.test_config.noi18n and "intl402" in dirs:
         dirs.remove("intl402")
       dirs.sort()
       files.sort()
