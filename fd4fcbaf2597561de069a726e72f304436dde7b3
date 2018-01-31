@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "75589887_059b742b",
+        "filename": "test/mjsunit/testcfg.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-31T12:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74153508_f824911c",
+      "range": {
+        "startLine": 124,
+        "startChar": 28,
+        "endLine": 124,
+        "endChar": 33
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27c04028_dee243e1",
         "filename": "test/test262/testcfg.py",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-31T11:30:39Z",
       "side": 1,
       "message": "is it with or without _?",
+      "range": {
+        "startLine": 167,
+        "startChar": 14,
+        "endLine": 167,
+        "endChar": 25
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "828f6f50_e051e3f2",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-31T12:02:37Z",
+      "side": 1,
+      "message": "test suite: test_config\ntest case: _test_config\n\nMaybe I should rename the one in the test suite since it\u0027s not accessed from anywhere else.",
+      "parentUuid": "27c04028_dee243e1",
       "range": {
         "startLine": 167,
         "startChar": 14,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b8920841_83550fbc",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-31T12:02:37Z",
+      "side": 1,
+      "message": "I left it to clean up later, but there is no much to clean, I can do it now.\nDone.",
+      "parentUuid": "c18938bb_c02dea2c",
+      "range": {
+        "startLine": 198,
+        "startChar": 31,
+        "endLine": 198,
+        "endChar": 34
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd83c301_cae21238",
         "filename": "tools/testrunner/test_config.py",
         "patchSetId": 10
@@ -82,6 +154,30 @@
       "writtenOn": "2018-01-31T11:30:39Z",
       "side": 1,
       "message": "Maybe we should allow the options object to be passed? How about we move this class to the base runner file?",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4659a8fe_2d136860",
+        "filename": "tools/testrunner/test_config.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1246262
+      },
+      "writtenOn": "2018-01-31T12:02:37Z",
+      "side": 1,
+      "message": "Some things are not from options, some are but they\u0027re changed before passing to test config (e.g. timeout), that\u0027s why I\u0027ve made it explicit.\n\nIf I move it to the base runner then we have circular (logical, not import) dependencies:\nbase runner \u003c(uses)\u003d test suite \u003c\u003d test case \u003c\u003d base runner (test config). By keeping it separate I think is much easier to find what is actually in the test config.",
+      "parentUuid": "bd83c301_cae21238",
       "range": {
         "startLine": 12,
         "startChar": 15,
