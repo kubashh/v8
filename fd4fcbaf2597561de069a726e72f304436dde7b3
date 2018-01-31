@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74153508_f824911c",
+        "filename": "test/mjsunit/testcfg.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-31T11:30:39Z",
+      "side": 1,
+      "message": "can this be removed?",
+      "range": {
+        "startLine": 124,
+        "startChar": 28,
+        "endLine": 124,
+        "endChar": 33
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27c04028_dee243e1",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-31T11:30:39Z",
+      "side": 1,
+      "message": "is it with or without _?",
+      "range": {
+        "startLine": 167,
+        "startChar": 14,
+        "endLine": 167,
+        "endChar": 25
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18938bb_c02dea2c",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-31T11:30:39Z",
+      "side": 1,
+      "message": "Why not remove all of them? What\u0027s left?",
+      "range": {
+        "startLine": 198,
+        "startChar": 31,
+        "endLine": 198,
+        "endChar": 34
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd83c301_cae21238",
+        "filename": "tools/testrunner/test_config.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-01-31T11:30:39Z",
+      "side": 1,
+      "message": "Maybe we should allow the options object to be passed? How about we move this class to the base runner file?",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "fd4fcbaf2597561de069a726e72f304436dde7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
