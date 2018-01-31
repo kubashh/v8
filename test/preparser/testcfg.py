@@ -94,16 +94,16 @@ class TestCase(testcase.TestCase):
   def _get_cmd_params(self, ctx):
     return (
         self._get_files_params(ctx) +
-        self._get_extra_flags(ctx) +
+        self._get_extra_flags() +
         ['-e', self._source] +
         self._template_flags +
         self._get_variant_flags() +
         self._get_statusfile_flags() +
-        self._get_mode_flags(ctx) +
+        self._get_mode_flags() +
         self._get_source_flags()
     )
 
-  def _get_mode_flags(self, ctx):
+  def _get_mode_flags(self):
     return []
 
   def is_source_available(self):
