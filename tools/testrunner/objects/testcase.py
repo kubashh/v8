@@ -198,10 +198,10 @@ class TestCase(object):
     return (
         self._get_files_params(ctx) +
         self._get_random_seed_flags() +
-        self._get_extra_flags(ctx) +
+        self._get_extra_flags() +
         self._get_variant_flags() +
         self._get_statusfile_flags() +
-        self._get_mode_flags(ctx) +
+        self._get_mode_flags() +
         self._get_source_flags() +
         self._get_suite_flags(ctx)
     )
@@ -219,8 +219,8 @@ class TestCase(object):
   def random_seed(self):
     return self._random_seed or self._test_config.random_seed
 
-  def _get_extra_flags(self, ctx):
-    return ctx.extra_flags
+  def _get_extra_flags(self):
+    return self._test_config.extra_flags
 
   def _get_variant_flags(self):
     return self.variant_flags
@@ -232,8 +232,8 @@ class TestCase(object):
     """
     return self._statusfile_flags
 
-  def _get_mode_flags(self, ctx):
-    return ctx.mode_flags
+  def _get_mode_flags(self):
+    return self._test_config.mode_flags
 
   def _get_source_flags(self):
     return []
@@ -268,8 +268,8 @@ class TestCase(object):
 
   def _create_cmd(self, shell, params, env, timeout, ctx):
     return command.Command(
-      cmd_prefix=ctx.command_prefix,
-      shell=os.path.abspath(os.path.join(ctx.shell_dir, shell)),
+      cmd_prefix=self._test_config.command_prefix,
+      shell=os.path.abspath(os.path.join(self._test_config.shell_dir, shell)),
       args=params,
       env=env,
       timeout=timeout,
