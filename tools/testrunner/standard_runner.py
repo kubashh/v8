@@ -11,7 +11,6 @@ import multiprocessing
 import os
 import random
 import re
-import shlex
 import subprocess
 import sys
 import time
@@ -139,13 +138,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       parser.add_option("--random-gc-stress",
                         help="Switch on random GC stress mode",
                         default=False, action="store_true")
-      parser.add_option("--command-prefix",
-                        help="Prepended to each shell command used to run a"
-                        " test",
-                        default="")
-      parser.add_option("--extra-flags",
-                        help="Additional flags to pass to each test command",
-                        action="append", default=[])
       parser.add_option("--infra-staging", help="Use new test runner features",
                         dest='infra_staging', default=None,
                         action="store_true")
@@ -153,13 +145,8 @@ class StandardTestRunner(base_runner.BaseTestRunner):
                         help="Opt out of new test runner features",
                         dest='infra_staging', default=None,
                         action="store_false")
-      parser.add_option("--isolates", help="Whether to test isolates",
-                        default=False, action="store_true")
       parser.add_option("-j", help="The number of parallel tasks to run",
                         default=0, type="int")
-      parser.add_option("--no-harness", "--noharness",
-                        help="Run without test harness of a given suite",
-                        default=False, action="store_true")
       parser.add_option("--no-presubmit", "--nopresubmit",
                         help='Skip presubmit checks (deprecated)',
                         default=False, dest="no_presubmit", action="store_true")
@@ -250,9 +237,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         if not os.path.exists(self.sancov_dir):
           print("sancov-dir %s doesn't exist" % self.sancov_dir)
           raise base_runner.TestRunnerError()
-
-      options.command_prefix = shlex.split(options.command_prefix)
-      options.extra_flags = sum(map(shlex.split, options.extra_flags), [])
 
       if options.gc_stress:
         options.extra_flags += GC_STRESS_FLAGS
