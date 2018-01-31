@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "08fbb851_3e6b682f",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 0,
+      "message": "The spec doesn\u0027t mention this and I couldn\u0027t find a proper reason of why we had to clear these fields. The promise capability is unrooted anyways (unless someone keeps a link to the executor), so there\u0027s also no issue memory wise.",
+      "parentUuid": "5a9a7882_da58b98e",
+      "revId": "3e43bbb544a7f425ee9cf8b2c1e4e0fd7825b3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46b156e9_09a680c2",
         "filename": "test/webkit/fast/js/Promise-resolve-with-then-exception-expected.txt",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-01-31T02:30:05Z",
       "side": 0,
       "message": "Why did the test expectation change?",
+      "revId": "3e43bbb544a7f425ee9cf8b2c1e4e0fd7825b3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78397625_3fd37c17",
+        "filename": "test/webkit/fast/js/Promise-resolve-with-then-exception-expected.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 0,
+      "message": "The implementation incorrectly called \"then\" before creating the PromiseResolveThenableJob, and this expectation was cementing the wrong behavior.",
+      "parentUuid": "46b156e9_09a680c2",
       "revId": "3e43bbb544a7f425ee9cf8b2c1e4e0fd7825b3db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

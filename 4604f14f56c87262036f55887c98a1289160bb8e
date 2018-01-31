@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6496e656_a58f5319",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 1,
+      "message": "Because it\u0027s an immortal, immovable root.",
+      "parentUuid": "89338b64_3e9cccef",
+      "range": {
+        "startLine": 761,
+        "startChar": 8,
+        "endLine": 761,
+        "endChar": 30
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3dbf53c_71e31274",
         "filename": "src/objects.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-31T02:30:05Z",
       "side": 1,
       "message": "This can be JSReceiver, right?",
+      "range": {
+        "startLine": 2978,
+        "startChar": 40,
+        "endLine": 2978,
+        "endChar": 50
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78ddd548_c2484766",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 1,
+      "message": "No, a PromiseCapability is a Struct, whereas a JSPromise is a JSReceiver. The best we can do here is HeapObject.",
+      "parentUuid": "c3dbf53c_71e31274",
       "range": {
         "startLine": 2978,
         "startChar": 40,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "5d65001e_68aa5a22",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 1,
+      "message": "Those STATIC_ASSERTs are in builtins-promise-gen.cc where we actually utilize this information for morphing.",
+      "parentUuid": "77130ed6_26b8b70f",
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f71f385_2002925e",
         "filename": "src/objects.h",
         "patchSetId": 4
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "7cb0241c_b60a8513",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 3085,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 1,
+      "message": "Same as above, the PromiseCapability is a Struct.",
+      "parentUuid": "1f71f385_2002925e",
+      "range": {
+        "startLine": 3085,
+        "startChar": 40,
+        "endLine": 3085,
+        "endChar": 50
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ffa1ce3_b9f982e3",
         "filename": "src/runtime/runtime-promise.cc",
         "patchSetId": 4
@@ -99,6 +189,24 @@
       "writtenOn": "2018-01-31T02:30:05Z",
       "side": 1,
       "message": "Can this be removed entirely?",
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7defe9db_7dd4e753",
+        "filename": "src/runtime/runtime-promise.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-01-31T05:41:43Z",
+      "side": 1,
+      "message": "We use this from mjsunit tests.",
+      "parentUuid": "4ffa1ce3_b9f982e3",
       "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
