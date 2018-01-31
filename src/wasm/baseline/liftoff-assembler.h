@@ -164,10 +164,7 @@ class LiftoffAssembler : public TurboAssembler {
     }
 
     bool is_used(LiftoffRegister reg) const {
-      if (reg.is_pair()) {
-        DCHECK_EQ(is_used(reg.low()), is_used(reg.high()));
-        reg = reg.low();
-      }
+      if (reg.is_pair()) return is_used(reg.low()) || is_used(reg.high());
       bool used = used_registers.has(reg);
       DCHECK_EQ(used, register_use_count[reg.liftoff_code()] != 0);
       return used;
@@ -255,6 +252,7 @@ class LiftoffAssembler : public TurboAssembler {
       LiftoffRegister high = GetUnusedRegister(candidates, pinned);
       return LiftoffRegister::ForPair(low, high);
     }
+    DCHECK(rc == kGpReg || rc == kFpReg);
     LiftoffRegList candidates = GetCacheRegList(rc);
     return GetUnusedRegister(candidates, pinned);
   }
@@ -323,6 +321,7 @@ class LiftoffAssembler : public TurboAssembler {
   inline void Spill(uint32_t index, LiftoffRegister, ValueType);
   inline void Spill(uint32_t index, WasmValue);
   inline void Fill(LiftoffRegister, uint32_t index, ValueType);
+  inline void FillI64Half(Register, uint32_t half_index);
 
   // i32 binops.
   inline void emit_i32_add(Register dst, Register lhs, Register rhs);
@@ -367,7 +366,8 @@ class LiftoffAssembler : public TurboAssembler {
   inline void AssertUnreachable(AbortReason reason);
 
   // Push a value to the stack (will become a caller frame slot).
-  inline void PushCallerFrameSlot(const VarState& src, uint32_t src_index);
+  inline void PushCallerFrameSlot(const VarState& src, uint32_t src_index,
+                                  bool is_i64_high_word);
   inline void PushCallerFrameSlot(LiftoffRegister reg);
   inline void PushRegisters(LiftoffRegList);
   inline void PopRegisters(LiftoffRegList);
