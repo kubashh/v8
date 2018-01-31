@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2ef473cb_e1912009",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64914d61_564758ad",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16998b4e_f2966d4e",
         "filename": "include/v8-profiler.h",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78d4fae7_a8ff9a8e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16998b4e_f2966d4e",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d8233a2a_e58d3524",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d9b034d_f15140c9",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd02319_800912e1",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2018-01-31T18:28:28Z",
       "side": 1,
       "message": "Out of curiosity, why do you need that short living handle?",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78373074_8907d5b6",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "AFAIK, OpenHandle reuses the location of the given v8::Local. So no new handle is created in the handle scope.\n\nOr are you suggesting to just inline v8::Utils::OpenHandle(*value) in new V8NodeImpl?",
+      "parentUuid": "afd02319_800912e1",
       "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "15f18631_ee43a1c0",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "685a7814_31eb6948",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf090071_01ef76e3",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 6
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "f1ddb0f6_32577f9f",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done. It was used for DCHECKs in AddEdge, but they are not critical.",
+      "parentUuid": "bf090071_01ef76e3",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec8c7ca4_cc70e6d2",
         "filename": "src/profiler/heap-snapshot-generator.h",
         "patchSetId": 6
@@ -115,6 +223,24 @@
       "writtenOn": "2018-01-31T18:28:28Z",
       "side": 1,
       "message": "Thanks for doing this!",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e94d5379_a29dcde4",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "np :)",
+      "parentUuid": "ec8c7ca4_cc70e6d2",
       "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "9da0cc4d_be9c674b",
+        "filename": "test/cctest/test-heap-profiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e2772f9_48e00632",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1340a103_15c0b763",
         "filename": "test/cctest/test-heap-profiler.cc",
         "patchSetId": 6
@@ -152,6 +296,24 @@
       "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59c3dcf3_b9faca6b",
+        "filename": "test/cctest/test-heap-profiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-01-31T19:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1340a103_15c0b763",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
