@@ -835,7 +835,8 @@ WASM_EXEC_TEST(F64UConvertI64) {
   }
 }
 
-WASM_EXEC_TEST(I64SConvertF32a) {
+WASM_EXEC_TEST(I64SConvertF32) {
+  REQUIRE(I64SConvertF32);
   WasmRunner<int64_t, float> r(execution_mode);
   BUILD(r, WASM_I64_SCONVERT_F32(WASM_GET_LOCAL(0)));
 
@@ -849,7 +850,8 @@ WASM_EXEC_TEST(I64SConvertF32a) {
   }
 }
 
-WASM_EXEC_TEST(I64SConvertSatF32a) {
+WASM_EXEC_TEST(I64SConvertSatF32) {
+  REQUIRE(I64SConvertSatF32);
   EXPERIMENTAL_FLAG_SCOPE(sat_f2i_conversions);
   WasmRunner<int64_t, float> r(execution_mode);
   BUILD(r, WASM_I64_SCONVERT_SAT_F32(WASM_GET_LOCAL(0)));
@@ -870,7 +872,8 @@ WASM_EXEC_TEST(I64SConvertSatF32a) {
   }
 }
 
-WASM_EXEC_TEST(I64SConvertF64a) {
+WASM_EXEC_TEST(I64SConvertF64) {
+  REQUIRE(I64SConvertF64);
   WasmRunner<int64_t, double> r(execution_mode);
   BUILD(r, WASM_I64_SCONVERT_F64(WASM_GET_LOCAL(0)));
 
@@ -884,7 +887,8 @@ WASM_EXEC_TEST(I64SConvertF64a) {
   }
 }
 
-WASM_EXEC_TEST(I64UConvertF32a) {
+WASM_EXEC_TEST(I64UConvertF32) {
+  REQUIRE(I64UConvertF32);
   WasmRunner<uint64_t, float> r(execution_mode);
   BUILD(r, WASM_I64_UCONVERT_F32(WASM_GET_LOCAL(0)));
 
@@ -1287,86 +1291,6 @@ WASM_EXEC_TEST(LoadStoreI64_sx) {
   }
 }
 
-WASM_EXEC_TEST(I64SConvertF32b) {
-  REQUIRE(I64SConvertF32);
-  WasmRunner<int64_t, float> r(execution_mode);
-  BUILD(r, WASM_I64_SCONVERT_F32(WASM_GET_LOCAL(0)));
-
-  FOR_FLOAT32_INPUTS(i) {
-    if (*i < static_cast<float>(INT64_MAX) &&
-        *i >= static_cast<float>(INT64_MIN)) {
-      CHECK_EQ(static_cast<int64_t>(*i), r.Call(*i));
-    } else {
-      CHECK_TRAP64(r.Call(*i));
-    }
-  }
-}
-
-WASM_EXEC_TEST(I64SConvertSatF32b) {
-  EXPERIMENTAL_FLAG_SCOPE(sat_f2i_conversions);
-  REQUIRE(I64SConvertSatF32);
-  WasmRunner<int64_t, float> r(execution_mode);
-  BUILD(r, WASM_I64_SCONVERT_SAT_F32(WASM_GET_LOCAL(0)));
-
-  FOR_FLOAT32_INPUTS(i) {
-    int64_t expected;
-    if (*i < static_cast<float>(INT64_MAX) &&
-        *i >= static_cast<float>(INT64_MIN)) {
-      expected = static_cast<int64_t>(*i);
-    } else if (std::isnan(*i)) {
-      expected = static_cast<int64_t>(0);
-    } else if (*i < 0.0) {
-      expected = INT64_MIN;
-    } else {
-      expected = INT64_MAX;
-    }
-    int64_t found = r.Call(*i);
-    CHECK_EQ(expected, found);
-  }
-}
-
-WASM_EXEC_TEST(I64SConvertF64b) {
-  REQUIRE(I64SConvertF64);
-  WasmRunner<int64_t, double> r(execution_mode);
-  BUILD(r, WASM_I64_SCONVERT_F64(WASM_GET_LOCAL(0)));
-
-  FOR_FLOAT64_INPUTS(i) {
-    if (*i < static_cast<double>(INT64_MAX) &&
-        *i >= static_cast<double>(INT64_MIN)) {
-      CHECK_EQ(static_cast<int64_t>(*i), r.Call(*i));
-    } else {
-      CHECK_TRAP64(r.Call(*i));
-    }
-  }
-}
-
-WASM_EXEC_TEST(I64UConvertF32b) {
-  REQUIRE(I64UConvertF32);
-  WasmRunner<uint64_t, float> r(execution_mode);
-  BUILD(r, WASM_I64_UCONVERT_F32(WASM_GET_LOCAL(0)));
-
-  FOR_FLOAT32_INPUTS(i) {
-    if (*i < static_cast<float>(UINT64_MAX) && *i > -1) {
-      CHECK_EQ(static_cast<uint64_t>(*i), r.Call(*i));
-    } else {
-      CHECK_TRAP64(r.Call(*i));
-    }
-  }
-}
-
-WASM_EXEC_TEST(I64UConvertF64b) {
-  REQUIRE(I64UConvertF64);
-  WasmRunner<uint64_t, double> r(execution_mode);
-  BUILD(r, WASM_I64_UCONVERT_F64(WASM_GET_LOCAL(0)));
-
-  FOR_FLOAT64_INPUTS(i) {
-    if (*i < static_cast<float>(UINT64_MAX) && *i > -1) {
-      CHECK_EQ(static_cast<uint64_t>(*i), r.Call(*i));
-    } else {
-      CHECK_TRAP64(r.Call(*i));
-    }
-  }
-}
 
 WASM_EXEC_TEST(I64ReinterpretF64) {
   REQUIRE(I64ReinterpretF64);
