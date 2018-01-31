@@ -64,7 +64,7 @@ class TestCase(testcase.TestCase):
 
   def _get_files_params(self, ctx):
     files = self._source_files
-    if ctx.isolates:
+    if self._test_config.isolates:
       files = files + ['--isolate'] + files
     return files
 

@@ -123,10 +123,10 @@ class TestCase(testcase.TestCase):
 
   def _get_files_params(self, ctx):
     files = list(self._source_files)
-    if not ctx.no_harness:
+    if not self._test_config.no_harness:
       files += self._mjsunit_files
     files += self._files_suffix
-    if ctx.isolates:
+    if self._test_config.isolates:
       files += ['--isolate'] + files
 
     return files
