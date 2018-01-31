@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "89338b64_3e9cccef",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-01-31T03:31:55Z",
+      "side": 1,
+      "message": "Why do we not have a write barrier for this?",
+      "range": {
+        "startLine": 761,
+        "startChar": 8,
+        "endLine": 761,
+        "endChar": 30
+      },
+      "revId": "4604f14f56c87262036f55887c98a1289160bb8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3dbf53c_71e31274",
         "filename": "src/objects.h",
         "patchSetId": 4
