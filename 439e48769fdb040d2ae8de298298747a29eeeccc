@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "802018a6_165b3dd5",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-02-01T01:12:03Z",
+      "side": 1,
+      "message": "Sorry, nevermind. I thought there is a direct way to go from v8::Local to Object*",
+      "parentUuid": "78373074_8907d5b6",
+      "revId": "439e48769fdb040d2ae8de298298747a29eeeccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "685a7814_31eb6948",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 6
