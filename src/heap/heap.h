@@ -2303,6 +2303,11 @@ class Heap {
                Movability movability, uint32_t stub_key, bool is_turbofanned,
                int stack_slots, int safepoint_table_offset);
 
+  AllocationResult AllocateJSPromiseFromMap(Map* map, PretenureFlag pretenure);
+
+  MUST_USE_RESULT AllocationResult AllocateJSPromise(
+      JSFunction* constructor, PretenureFlag pretenure = NOT_TENURED);
+
   void set_force_oom(bool value) { force_oom_ = value; }
 
   // ===========================================================================

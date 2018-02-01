@@ -3100,6 +3100,14 @@ Handle<Map> Factory::CreateClassFunctionMap(Handle<JSFunction> empty_function) {
   return map;
 }
 
+Handle<JSPromise> Factory::NewJSPromise(Handle<JSFunction> constructor,
+                                        PretenureFlag pretenure) {
+  JSFunction::EnsureHasInitialMap(constructor);
+  CALL_HEAP_FUNCTION(
+      isolate(), isolate()->heap()->AllocateJSPromise(*constructor, pretenure),
+      JSPromise);
+}
+
 // static
 NewFunctionArgs NewFunctionArgs::ForWasm(Handle<String> name, Handle<Code> code,
                                          Handle<Map> map) {
