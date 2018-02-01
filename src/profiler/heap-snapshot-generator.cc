@@ -1866,20 +1866,6 @@ void V8HeapExplorer::SetGcSubrootReference(
                                             child_entry);
     }
   }
-
-  // Add a shortcut to JS global object reference at snapshot root.
-  // That allows the user to easily find global objects. They are
-  // also used as starting points in distance calculations.
-  if (is_weak || !child_obj->IsNativeContext()) return;
-
-  JSGlobalObject* global = Context::cast(child_obj)->global_object();
-  if (!global->IsJSGlobalObject()) return;
-
-  if (heap_->isolate()->debug()->IsDebugGlobal(global)) return;
-  if (user_roots_.Contains(global)) return;
-
-  user_roots_.Insert(global);
-  SetUserGlobalReference(global);
 }
 
 const char* V8HeapExplorer::GetStrongGcSubrootName(Object* object) {
