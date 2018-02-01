@@ -1379,7 +1379,7 @@ PagedSpace::PagedSpace(Heap* heap, AllocationSpace space,
                        Executability executable)
     : SpaceWithLinearArea(heap, space, executable),
       anchor_(this),
-      free_list_(this) {
+      free_list_() {
   area_size_ = MemoryAllocator::PageAreaSize(space);
   accounting_stats_.Clear();
 }
@@ -1582,7 +1582,7 @@ bool PagedSpace::Expand() {
   // Pages created during bootstrapping may contain immortal immovable objects.
   if (!heap()->deserialization_complete()) page->MarkNeverEvacuate();
   AddPage(page);
-  Free(page->area_start(), page->area_size());
+  Free(page->area_start(), page->area_size(), kSpaceAccounted);
   DCHECK(Capacity() <= heap()->MaxOldGenerationSize());
   return true;
 }
@@ -1618,7 +1618,7 @@ void PagedSpace::DecreaseLimit(Address new_limit) {
   DCHECK_GE(old_limit, new_limit);
   if (new_limit != old_limit) {
     SetTopAndLimit(top(), new_limit);
-    Free(new_limit, old_limit - new_limit);
+    Free(new_limit, old_limit - new_limit, kSpaceAccounted);
     if (heap()->incremental_marking()->black_allocation()) {
       Page::FromAllocationAreaAddress(new_limit)->DestroyBlackArea(new_limit,
                                                                    old_limit);
@@ -1704,7 +1704,7 @@ void PagedSpace::FreeLinearAllocationArea() {
   InlineAllocationStep(current_top, nullptr, nullptr, 0);
   SetTopAndLimit(nullptr, nullptr);
   DCHECK_GE(current_limit, current_top);
-  Free(current_top, current_limit - current_top);
+  Free(current_top, current_limit - current_top, kSpaceAccounted);
 }
 
 void PagedSpace::ReleasePage(Page* page) {
@@ -1800,7 +1800,7 @@ bool PagedSpace::RefillLinearAllocationAreaFromFreeList(size_t size_in_bytes) {
   DCHECK_LE(limit, end);
   DCHECK_LE(size_in_bytes, limit - start);
   if (limit != end) {
-    Free(limit, end - limit);
+    Free(limit, end - limit, kSpaceAccounted);
   }
   SetLinearAllocationArea(start, limit);
 
@@ -2713,7 +2713,7 @@ void FreeListCategory::Relink() {
   owner()->AddCategory(this);
 }
 
-FreeList::FreeList(PagedSpace* owner) : owner_(owner), wasted_bytes_(0) {
+FreeList::FreeList() : wasted_bytes_(0) {
   for (int i = kFirstCategory; i < kNumberOfCategories; i++) {
     categories_[i] = nullptr;
   }
@@ -2731,11 +2731,6 @@ void FreeList::Reset() {
 }
 
 size_t FreeList::Free(Address start, size_t size_in_bytes, FreeMode mode) {
-  if (size_in_bytes == 0) return 0;
-
-  owner()->heap()->CreateFillerObjectAt(start, static_cast<int>(size_in_bytes),
-                                        ClearRecordedSlots::kNo);
-
   Page* page = Page::FromAddress(start);
   page->DecreaseAllocatedBytes(size_in_bytes);
 
@@ -3331,7 +3326,7 @@ void LargeObjectSpace::FreeUnmarkedObjects() {
         previous->set_next_page(current);
       }
 
-      // Free the chunk.
+      // AccountedFree the chunk.
       size_ -= static_cast<int>(page->size());
       AccountUncommitted(page->size());
       page_count_--;
