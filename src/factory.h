@@ -854,6 +854,9 @@ class V8_EXPORT_PRIVATE Factory final {
   // Converts the given ToPrimitive hint to it's string representation.
   Handle<String> ToPrimitiveHintString(ToPrimitiveHint hint);
 
+  Handle<JSPromise> NewJSPromise(Handle<JSFunction> constructor,
+                                 PretenureFlag pretenure = NOT_TENURED);
+
  private:
   Isolate* isolate() { return reinterpret_cast<Isolate*>(this); }
 
