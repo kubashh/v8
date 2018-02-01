@@ -3405,6 +3405,43 @@ AllocationResult Heap::Allocate(Map* map, AllocationSpace space,
   return result;
 }
 
+AllocationResult Heap::AllocateJSPromiseFromMap(Map* map,
+                                                PretenureFlag pretenure) {
+  AllocationSpace space = SelectSpace(pretenure);
+  JSPromise* promise = nullptr;
+  AllocationResult allocation = Allocate(map, space);
+  if (!allocation.To(&promise)) return allocation;
+
+  // JSObject fields
+  promise->set_raw_properties_or_hash(empty_fixed_array());
+  promise->set_elements(empty_fixed_array());
+
+  // JSPromise fields
+  promise->set_reactions_or_result(Smi::kZero);
+  promise->set_flags(0);
+  for (int i = 0; i < v8::Promise::kEmbedderFieldCount; i++) {
+    promise->SetEmbedderField(i, Smi::kZero);
+  }
+
+  isolate()->RunPromiseHook(PromiseHookType::kInit, handle(promise),
+                            handle(undefined_value()));
+
+  // Debug Push Promise
+
+  return promise;
+}
+
+AllocationResult Heap::AllocateJSPromise(JSFunction* constructor,
+                                         PretenureFlag pretenure) {
+  DCHECK(constructor->has_initial_map());
+
+  // Allocate the promise based on the constructors initial map.
+  AllocationResult allocation =
+      AllocateJSPromiseFromMap(constructor->initial_map(), pretenure);
+
+  return allocation;
+}
+
 void Heap::InitializeJSObjectFromMap(JSObject* obj, Object* properties,
                                      Map* map) {
   obj->set_raw_properties_or_hash(properties);

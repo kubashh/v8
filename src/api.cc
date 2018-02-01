@@ -7372,14 +7372,13 @@ Local<Array> Set::AsArray() const {
 
 
 MaybeLocal<Promise::Resolver> Promise::Resolver::New(Local<Context> context) {
-  PREPARE_FOR_EXECUTION(context, Promise_Resolver, New, Resolver);
-  i::Handle<i::Object> result;
-  has_pending_exception =
-      !i::Execution::Call(isolate, isolate->promise_internal_constructor(),
-                          isolate->factory()->undefined_value(), 0, nullptr)
-           .ToHandle(&result);
-  RETURN_ON_FAILED_EXECUTION(Promise::Resolver);
-  RETURN_ESCAPED(Local<Promise::Resolver>::Cast(Utils::ToLocal(result)));
+  auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  LOG_API(isolate, Promise_Resolver, New);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
+
+  i::Handle<i::Object> result =
+      isolate->factory()->NewJSPromise(isolate->promise_function());
+  return Local<Promise::Resolver>::Cast(Utils::ToLocal(result));
 }
 
 
