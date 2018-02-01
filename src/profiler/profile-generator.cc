@@ -86,7 +86,6 @@ CodeEntry* CodeEntry::UnresolvedEntryCreateTrait::Create() {
 }
 
 CodeEntry::~CodeEntry() {
-  delete line_info_;
   for (auto location : inline_locations_) {
     for (auto entry : location.second) {
       delete entry;

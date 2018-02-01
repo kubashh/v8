@@ -57,7 +57,7 @@ class CodeEntry {
   const char* resource_name() const { return resource_name_; }
   int line_number() const { return line_number_; }
   int column_number() const { return column_number_; }
-  const JITLineInfoTable* line_info() const { return line_info_; }
+  const JITLineInfoTable* line_info() const { return line_info_.get(); }
   int script_id() const { return script_id_; }
   void set_script_id(int script_id) { script_id_ = script_id; }
   int position() const { return position_; }
@@ -160,7 +160,7 @@ class CodeEntry {
   const char* bailout_reason_;
   const char* deopt_reason_;
   int deopt_id_;
-  JITLineInfoTable* line_info_;
+  std::unique_ptr<JITLineInfoTable> line_info_;
   Address instruction_start_;
   // Should be an unordered_map, but it doesn't currently work on Win & MacOS.
   std::map<int, std::vector<CodeEntry*>> inline_locations_;
