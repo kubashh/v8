@@ -127,12 +127,6 @@ class PromiseBuiltinsAssembler : public CodeStubAssembler {
 
   void InternalResolvePromise(Node* context, Node* promise, Node* result);
 
-  void BranchIfFastPath(Node* context, Node* promise, Label* if_isunmodified,
-                        Label* if_ismodified);
-
-  void BranchIfFastPath(Node* native_context, Node* promise_fun, Node* promise,
-                        Label* if_isunmodified, Label* if_ismodified);
-
   Node* CreatePromiseContext(Node* native_context, int slots);
   void PromiseFulfill(Node* context, Node* promise, Node* result,
                       v8::Promise::PromiseState status);
