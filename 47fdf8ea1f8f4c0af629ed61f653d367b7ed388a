@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "176a1515_0bb3e25d",
+        "filename": "src/allocation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-02T08:38:18Z",
+      "side": 1,
+      "message": "Thanks for adding the comment; could be a live saver at some point.",
+      "range": {
+        "startLine": 264,
+        "startChar": 5,
+        "endLine": 264,
+        "endChar": 14
+      },
+      "revId": "47fdf8ea1f8f4c0af629ed61f653d367b7ed388a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
