@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "15e8a9bb_b0209c12",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-02-02T13:49:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a1e3293_96549ac6",
+      "revId": "f0c8856a2a62c047b4cdb95501b8c5dcb69f0a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "654faf16_90c377f0",
         "filename": "tools/heap-stats/categories.js",
         "patchSetId": 2
