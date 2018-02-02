@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "517ee8e6_e4c0c79c",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-02-02T12:53:37Z",
+      "side": 1,
+      "message": "fyi clemens for skipped wasm tests",
+      "range": {
+        "startLine": 654,
+        "startChar": 2,
+        "endLine": 662,
+        "endChar": 41
+      },
+      "revId": "a010a22bbfd9fac766ad1796ce52d798c2c5335b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
