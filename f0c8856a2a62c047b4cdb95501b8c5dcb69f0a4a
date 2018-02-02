@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "5a1e3293_96549ac6",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-02T12:24:31Z",
+      "side": 1,
+      "message": "That would be awesome. Make it a CHECK as we care for consistency and not performance.",
+      "parentUuid": "f2d4766b_7a151f58",
+      "revId": "f0c8856a2a62c047b4cdb95501b8c5dcb69f0a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "654faf16_90c377f0",
         "filename": "tools/heap-stats/categories.js",
         "patchSetId": 2
