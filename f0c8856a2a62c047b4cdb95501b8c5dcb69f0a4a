@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d49c54a5_81cca8c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-02T12:12:15Z",
+      "side": 1,
+      "message": "Bug: v8:7266",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "f0c8856a2a62c047b4cdb95501b8c5dcb69f0a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d732ba3d_c6e80ccd",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-02T12:12:15Z",
+      "side": 1,
+      "message": "Is it (easily) possible to add a CHECK that all sections of a vector are accounted? E.g., how can we make sure that nobody adds a section besides header and entries and we still catch it.",
+      "revId": "f0c8856a2a62c047b4cdb95501b8c5dcb69f0a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "654faf16_90c377f0",
+        "filename": "tools/heap-stats/categories.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-02T12:12:15Z",
+      "side": 1,
+      "message": "Merge artifact.",
+      "range": {
+        "startLine": 166,
+        "startChar": 7,
+        "endLine": 166,
+        "endChar": 34
+      },
+      "revId": "f0c8856a2a62c047b4cdb95501b8c5dcb69f0a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
