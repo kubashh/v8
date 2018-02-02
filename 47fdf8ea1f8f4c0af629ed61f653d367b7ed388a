@@ -22,6 +22,30 @@
       "revId": "47fdf8ea1f8f4c0af629ed61f653d367b7ed388a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af069d86_59f849d0",
+        "filename": "src/allocation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-02-02T13:51:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "176a1515_0bb3e25d",
+      "range": {
+        "startLine": 264,
+        "startChar": 5,
+        "endLine": 264,
+        "endChar": 14
+      },
+      "revId": "47fdf8ea1f8f4c0af629ed61f653d367b7ed388a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
