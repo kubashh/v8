@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2be5546_c107e399",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-03T00:34:38Z",
+      "side": 1,
+      "message": "Can you add GotoIfForceSlowPath(if_slow) to get coverage from our slow path fuzzers?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c32c22c3_2266edc3",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-03T00:34:38Z",
+      "side": 1,
+      "message": "Can you add GotoIfForceSlowPath(if_slow) here as well to get coverage from our slow path fuzzers?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35fe1980_0698002c",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-03T00:34:38Z",
+      "side": 1,
+      "message": "All of this new code is duplicated -- I\u0027m kinda worried someone extending promises in the future can forget do these check. Would it be better to put the logic in the BranchIfFastPath and call that here?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0f32ad7_ef8a664e",
+        "filename": "test/mjsunit/compiler/promise-prototype-catch-custom-then-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-03T00:34:38Z",
+      "side": 1,
+      "message": "Can you add tests with a subclass? and with a promise.finally()?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
