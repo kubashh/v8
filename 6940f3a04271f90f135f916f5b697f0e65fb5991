@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ffd794f9_18993950",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-04T08:24:16Z",
+      "side": 1,
+      "message": "I just realized that that doesn\u0027t make sense. So added GotoIfForceSlowPath here.",
+      "parentUuid": "cfc2ac3c_32927701",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c32c22c3_2266edc3",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 3
