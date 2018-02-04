@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cfc2ac3c_32927701",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-04T08:06:56Z",
+      "side": 1,
+      "message": "That\u0027s pretty brittle. Let\u0027s just initialize the protector cells to Invalid if V8_ENABLE_FORCE_SLOW_PATH is active. Will do a follow-up CL.",
+      "parentUuid": "a2be5546_c107e399",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c32c22c3_2266edc3",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-03T00:34:38Z",
       "side": 1,
       "message": "Can you add GotoIfForceSlowPath(if_slow) here as well to get coverage from our slow path fuzzers?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "891c62f2_de4ed82b",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-04T08:06:56Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "c32c22c3_2266edc3",
       "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "12fbc18f_196e3bc5",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-04T08:06:56Z",
+      "side": 1,
+      "message": "Makes sense. Added BranchIfPromiseThenLookupChainIntact() which encapsulates this logic, including the instance type check.",
+      "parentUuid": "35fe1980_0698002c",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0f32ad7_ef8a664e",
         "filename": "test/mjsunit/compiler/promise-prototype-catch-custom-then-1.js",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2018-02-03T00:34:38Z",
       "side": 1,
       "message": "Can you add tests with a subclass? and with a promise.finally()?",
+      "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dd26f27_4188a9c0",
+        "filename": "test/mjsunit/compiler/promise-prototype-catch-custom-then-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-04T08:06:56Z",
+      "side": 1,
+      "message": "Done. I\u0027ll do Promise#finally in a separate CL, utilizing the Promise#then protector as well, and adding TurboFan support.",
+      "parentUuid": "e0f32ad7_ef8a664e",
       "revId": "6940f3a04271f90f135f916f5b697f0e65fb5991",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
