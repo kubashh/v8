@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f03d1bf5_bb33c8d6",
+        "filename": "test/mjsunit/regress/regress-crbug-808980.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185094
+      },
+      "writtenOn": "2018-02-05T15:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "717e1562_ac076598",
+      "revId": "c342ec758785e9d1451735455a442637b63ae3eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97c8e4f6_645c004e",
         "filename": "test/mjsunit/regress/regress-crbug-808980.js",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-05T14:56:44Z",
       "side": 1,
       "message": "Please wrap this in {assertThrows} to check that we throw here and not somewhere above. Remove the \"--throws\" then.\n\nBonus points: Add the type of the expected exception.",
+      "revId": "c342ec758785e9d1451735455a442637b63ae3eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43e4b877_486d6bd9",
+        "filename": "test/mjsunit/regress/regress-crbug-808980.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1185094
+      },
+      "writtenOn": "2018-02-05T15:13:11Z",
+      "side": 1,
+      "message": "I tried to use assertThrows, but then the crash is not reproduced if I wrap the code in try-catch clause. This crash is due to uninitialized wasm_compiled_module in WasmScript, and this test case accesses the wasm_compiled_module() in Script::GetPositionInfo, which is called to print stack trace. I guess it should try to access source position information of the wasm script, though I don\u0027t know details of internals.",
+      "parentUuid": "97c8e4f6_645c004e",
       "revId": "c342ec758785e9d1451735455a442637b63ae3eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
