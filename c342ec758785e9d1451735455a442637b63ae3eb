@@ -69,6 +69,24 @@
       "revId": "c342ec758785e9d1451735455a442637b63ae3eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "912c9980_9bd44744",
+        "filename": "test/mjsunit/regress/regress-crbug-808980.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T16:01:15Z",
+      "side": 1,
+      "message": "Ack. It\u0027s ok as is then.",
+      "parentUuid": "43e4b877_486d6bd9",
+      "revId": "c342ec758785e9d1451735455a442637b63ae3eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
