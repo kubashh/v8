@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73ab39a6_89a8da2b",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-02-05T18:24:12Z",
+      "side": 1,
+      "message": "It looks to me like this is entering a context where we weren\u0027t before. This looks suspicious to me, since we\u0027re not always in a context when running microtasks from Blink.",
+      "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
