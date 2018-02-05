@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a02a2b01_ba0c5177",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "Could you add a high_word/low_word enum instead of this bool?",
+      "range": {
+        "startLine": 155,
+        "startChar": 43,
+        "endLine": 155,
+        "endChar": 47
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be9bf469_83652d73",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "Don\u0027t you need a cast here?",
+      "range": {
+        "startLine": 68,
+        "startChar": 51,
+        "endLine": 68,
+        "endChar": 65
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77319559_e539b28a",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "Please add a comment which describes {kHalfStack}.",
+      "range": {
+        "startLine": 40,
+        "startChar": 49,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03833759_7ebab2c6",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "This looks weird. What is the .gp() about? Can you add a comment?",
+      "range": {
+        "startLine": 133,
+        "startChar": 28,
+        "endLine": 133,
+        "endChar": 39
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b5e1d4_63409999",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "The code in this for loop was hard to understand. Do you think comments could help?",
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b73ad5c_48fe1900",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-05T17:35:59Z",
+      "side": 1,
+      "message": "Can you add a comment why you have this special handling for pairs here?",
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
