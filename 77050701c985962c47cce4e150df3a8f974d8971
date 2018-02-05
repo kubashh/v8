@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a234f9c9_e2886afe",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a02a2b01_ba0c5177",
+      "range": {
+        "startLine": 155,
+        "startChar": 43,
+        "endLine": 155,
+        "endChar": 47
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be9bf469_83652d73",
         "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "77050701c985962c47cce4e150df3a8f974d8971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d511ce26_3b2703c5",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "We obviously don\u0027t need one ;)\n(but I will add one anyway)",
+      "parentUuid": "be9bf469_83652d73",
+      "range": {
+        "startLine": 68,
+        "startChar": 51,
+        "endLine": 68,
+        "endChar": 65
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c2db3659_8849d372",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77319559_e539b28a",
+      "range": {
+        "startLine": 40,
+        "startChar": 49,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03833759_7ebab2c6",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3757b70f_fae0c478",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "This is one of the two basic accessors of a {LiftoffRegister}. {gp} converts to Register, {fp} converts to {DoubleRegister}. We cannot add a comment to each use. Or do you propose to pass the {LiftoffRegister} to {FillI64Half} instead of a {Register}?\n\nEDIT:\nAfter offline discussion: Left as is and added a comment.",
+      "parentUuid": "03833759_7ebab2c6",
+      "range": {
+        "startLine": 133,
+        "startChar": 28,
+        "endLine": 133,
+        "endChar": 39
+      },
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4b5e1d4_63409999",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 7
@@ -111,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "e9f30271_5bb8d0a9",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "I added two lines of comment for the whole loop. Hope that helps.",
+      "parentUuid": "f4b5e1d4_63409999",
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b73ad5c_48fe1900",
         "filename": "src/wasm/baseline/liftoff-assembler.cc",
         "patchSetId": 7
@@ -125,6 +239,24 @@
       "revId": "77050701c985962c47cce4e150df3a8f974d8971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78741823_e55c78f8",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-05T18:37:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b73ad5c_48fe1900",
+      "revId": "77050701c985962c47cce4e150df3a8f974d8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
