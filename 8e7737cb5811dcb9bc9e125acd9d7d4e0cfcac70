@@ -16,6 +16,23 @@
       "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c04a00f6_92ba50b8",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-02-05T19:10:45Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/895528 makes this unsafe in DEBUG builds.\n\nSo, couple options\n\n1) get rid of the DCHECKs and let the caller determine validity with IsSmi checks\n2) keep the DCHECKs and let the caller determine validity before calling by testing status() !\u003d v8::Promise::kPending\n3) remove reactions/result accessors and add `static MaybeHandle\u003cPromiseReaction\u003e Reactions(Handle\u003cJSPromise\u003e);` and something similar for the result?",
+      "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
