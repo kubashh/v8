@@ -810,7 +810,8 @@ void V8Debugger::externalAsyncTaskFinished(const V8StackTraceId& parent) {
 
 void V8Debugger::asyncTaskScheduled(const StringView& taskName, void* task,
                                     bool recurring) {
-  asyncTaskScheduledForStack(toString16(taskName), task, recurring);
+  if (m_maxAsyncCallStackDepth)
+    asyncTaskScheduledForStack(toString16(taskName), task, recurring);
   asyncTaskCandidateForStepping(task, true);
 }
 
@@ -886,8 +887,8 @@ void V8Debugger::asyncTaskFinishedForStack(void* task) {
 }
 
 void V8Debugger::asyncTaskCandidateForStepping(void* task, bool isLocal) {
-  int contextGroupId = currentContextGroupId();
-  if (m_pauseOnAsyncCall && contextGroupId) {
+  if (m_pauseOnAsyncCall && currentContextGroupId()) {
+    int contextGroupId = currentContextGroupId();
     if (isLocal) {
       m_scheduledAsyncCall = v8_inspector::V8StackTraceId(
           reinterpret_cast<uintptr_t>(task), std::make_pair(0, 0));
@@ -901,6 +902,7 @@ void V8Debugger::asyncTaskCandidateForStepping(void* task, bool isLocal) {
   }
   if (!m_stepIntoAsyncCallback) return;
   DCHECK(m_targetContextGroupId);
+  int contextGroupId = currentContextGroupId();
   if (contextGroupId != m_targetContextGroupId) return;
   m_taskWithScheduledBreak = task;
   v8::debug::ClearStepping(m_isolate);
