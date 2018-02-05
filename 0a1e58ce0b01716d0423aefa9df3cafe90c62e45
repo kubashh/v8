@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba90a3c7_7c377708",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-02-05T17:11:53Z",
+      "side": 1,
+      "message": "minor nit: use full 80 columns for comment",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 56
+      },
+      "revId": "0a1e58ce0b01716d0423aefa9df3cafe90c62e45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
