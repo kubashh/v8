@@ -52,6 +52,8 @@ class JSCallReducer final : public AdvancedReducer {
   void Finalize() final;
 
  private:
+  friend class JSBuiltinReducerHelper;
+  class JSMathBuiltinReducer;
   enum ArrayReduceDirection { kArrayReduceLeft, kArrayReduceRight };
   Reduction ReduceArrayConstructor(Node* node);
   Reduction ReduceBooleanConstructor(Node* node);
