@@ -33,6 +33,24 @@
       "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ccc1672_28cb0e1b",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-06T05:42:26Z",
+      "side": 1,
+      "message": "Great catch. This will not only screw debug builds, but also explains crashes in release builds. Do you have a repro for this case? Because what I\u0027m wondering is how on earth do we hit %DebugPromiseReject with a promise that is already settled?",
+      "parentUuid": "c04a00f6_92ba50b8",
+      "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
