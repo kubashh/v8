@@ -51,6 +51,24 @@
       "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18933cc1_01dd2687",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-02-06T05:47:15Z",
+      "side": 1,
+      "message": "I managed to find this with\n\n```\nfunction sleep() {\n  return new Promise(resolve \u003d\u003e setTimeout(resolve, 1));\n}\nasync function thrower() {\n  await sleep();\n  throw \"a\"; // Exception a\n}\n\n(async function() { /* await */ thrower(); })();\n```\n\nwith a debug listener and break_on_uncaught_exceptions.\n\nI think in release builds it\u0027s safe so long as result/reactions is Smi(0) (which I believe it is ordinarily in this situation), but maybe there are cases where that\u0027s not the case.",
+      "parentUuid": "3ccc1672_28cb0e1b",
+      "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
