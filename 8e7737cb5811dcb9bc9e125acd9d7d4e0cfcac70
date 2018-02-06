@@ -69,6 +69,24 @@
       "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7693e5f_8a8dc3ec",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-06T06:05:57Z",
+      "side": 1,
+      "message": "Did you get that in Chrome or in d8? It does seem to work fine with latest Chrome for me, but I\u0027m probably holding it wrong.",
+      "parentUuid": "18933cc1_01dd2687",
+      "revId": "8e7737cb5811dcb9bc9e125acd9d7d4e0cfcac70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
