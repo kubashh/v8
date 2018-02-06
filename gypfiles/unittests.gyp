@@ -69,6 +69,7 @@
       '../test/unittests/compiler/js-builtin-reducer-unittest.cc',
       '../test/unittests/compiler/js-create-lowering-unittest.cc',
       '../test/unittests/compiler/js-intrinsic-lowering-unittest.cc',
+      '../test/unittests/compiler/js-math-builtin-reducer-unittest.cc',
       '../test/unittests/compiler/js-operator-unittest.cc',
       '../test/unittests/compiler/js-typed-lowering-unittest.cc',
       '../test/unittests/compiler/linkage-tail-call-unittest.cc',
