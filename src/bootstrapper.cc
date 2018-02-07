@@ -2420,15 +2420,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     Handle<Map> prototype_map(prototype->map());
     Map::SetShouldBeFastPrototypeMap(prototype_map, true, isolate);
 
-    {  // Internal: PromiseInternalConstructor
-       // Also exposed as extrasUtils.createPromise.
-      Handle<JSFunction> function =
-          SimpleCreateFunction(isolate, factory->empty_string(),
-                               Builtins::kPromiseInternalConstructor, 1, true);
-      function->shared()->set_native(false);
-      native_context()->set_promise_internal_constructor(*function);
-    }
-
     {  // Internal: IsPromise
       Handle<JSFunction> function = SimpleCreateFunction(
           isolate, factory->empty_string(), Builtins::kIsPromise, 1, false);
@@ -4647,7 +4638,11 @@ bool Genesis::InstallNatives(GlobalContextType context_type) {
 
   InstallInternalArray(extras_utils, "InternalPackedArray", PACKED_ELEMENTS);
 
-  InstallFunction(extras_utils, isolate()->promise_internal_constructor(),
+  Handle<JSFunction> promise_internal_constructor =
+      SimpleCreateFunction(isolate(), factory()->empty_string(),
+                           Builtins::kPromiseInternalConstructor, 1, true);
+  promise_internal_constructor->shared()->set_native(false);
+  InstallFunction(extras_utils, promise_internal_constructor,
                   factory()->NewStringFromAsciiChecked("createPromise"));
   InstallFunction(extras_utils, isolate()->promise_resolve(),
                   factory()->NewStringFromAsciiChecked("resolvePromise"));
