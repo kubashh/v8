@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "86001685_29b96e93",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-07T16:21:34Z",
+      "side": 1,
+      "message": "I saw that and thought it\u0027s just testing these functions, but maybe it\u0027s exporting them to other tests? In any case it shouldn\u0027t affect this CL.",
+      "parentUuid": "bbdd5db1_c8643d14",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d85002d6_fd0f58de",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
