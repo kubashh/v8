@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "775f0cff_3c22c124",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-02-07T13:53:42Z",
+      "side": 1,
+      "message": "Any reason why this is not an array? (Rather than a vector?)\n\nI mean something like:\n\nNode* checkpoint_params[] \u003d {receiver, fncallback, original_length};\nconst int stack_parameters \u003d arraysize(checkpoint_params);",
+      "range": {
+        "startLine": 1101,
+        "startChar": 4,
+        "endLine": 1103,
+        "endChar": 76
+      },
+      "revId": "8a008dd2f63a6cb156fb21d4b3e78c6b158cd2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
