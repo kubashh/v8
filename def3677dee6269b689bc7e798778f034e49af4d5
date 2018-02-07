@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4f1b9e14_3d095839",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-02-07T12:54:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a54f3be7_10fd8b15",
+      "range": {
+        "startLine": 315,
+        "startChar": 51,
+        "endLine": 316,
+        "endChar": 27
+      },
+      "revId": "def3677dee6269b689bc7e798778f034e49af4d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1eb69dd0_957b0452",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "def3677dee6269b689bc7e798778f034e49af4d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "705a5f83_91c6f70b",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-02-07T12:54:36Z",
+      "side": 1,
+      "message": "I locked down the variables used to create each deopt point to make it crystal clear that each one stands alone, with arguments and a continuation chosen right there.\n\nNow, there isn\u0027t shadowing, but there is re-use of names within tight scopes.",
+      "parentUuid": "1eb69dd0_957b0452",
+      "range": {
+        "startLine": 1099,
+        "startChar": 19,
+        "endLine": 1099,
+        "endChar": 32
+      },
+      "revId": "def3677dee6269b689bc7e798778f034e49af4d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
