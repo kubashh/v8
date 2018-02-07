@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3565dbbf_a98d49f5",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-07T15:48:24Z",
+      "side": 1,
+      "message": "Looks like these three aren\u0027t actually used anymore, would you mind removing them as well?",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d85002d6_fd0f58de",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-07T15:48:24Z",
+      "side": 1,
+      "message": "I think you should use JSObject::initialize_elements() here, or DCHECK that the map expects fast elements. Actually, can\u0027t you just use AllocateJSObjectFromMap or even AllocateJSObject? And then only add the JSPromise things.",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cd13016_948775a4",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3431,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-07T15:48:24Z",
+      "side": 1,
+      "message": "What\u0027s this about?",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "133ee91b_ae7fb2b5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3444,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-07T15:48:24Z",
+      "side": 1,
+      "message": "I\u0027d drop the comment and the local variable. Maybe even inline the other function here since it\u0027s not used elsewhere and probably never will.",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
