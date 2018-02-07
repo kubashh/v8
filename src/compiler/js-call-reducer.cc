@@ -1092,21 +1092,28 @@ Reduction JSCallReducer::ReduceArrayReduce(Handle<JSFunction> function,
   // Set initial accumulator value
   Node* cur = jsgraph()->TheHoleConstant();
 
-  Node* initial_element_frame_state =
-      CreateJavaScriptBuiltinContinuationFrameState(
-          jsgraph(), function, builtin_eager, node->InputAt(0), context,
-          checkpoint_params.data(), stack_parameters, outer_frame_state,
-          ContinuationFrameStateMode::EAGER);
-
   if (node->op()->ValueInputCount() > 3) {
     cur = NodeProperties::GetValueInput(node, 3);
   } else {
-    // Find first/last non holey element.
+    // Find first/last non holey element. In case the search fails, we need a
+    // deopt continuation.
+    Builtins::Name builtin_eager =
+        left ? Builtins::kArrayReducePreLoopEagerDeoptContinuation
+             : Builtins::kArrayReduceRightPreLoopEagerDeoptContinuation;
+    const std::vector<Node*> checkpoint_params(
+        {receiver, fncallback, original_length});
+    const int stack_parameters = static_cast<int>(checkpoint_params.size());
+    Node* find_first_element_frame_state =
+        CreateJavaScriptBuiltinContinuationFrameState(
+            jsgraph(), function, builtin_eager, node->InputAt(0), context,
+            checkpoint_params.data(), stack_parameters, outer_frame_state,
+            ContinuationFrameStateMode::EAGER);
+
     Node* vloop = k = WireInLoopStart(k, &control, &effect);
     Node* loop = control;
     Node* eloop = effect;
     effect = graph()->NewNode(common()->Checkpoint(),
-                              initial_element_frame_state, effect, control);
+                              find_first_element_frame_state, effect, control);
     Node* continue_test =
         left ? graph()->NewNode(simplified()->NumberLessThan(), k,
                                 original_length)
