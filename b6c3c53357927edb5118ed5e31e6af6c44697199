@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bbdd5db1_c8643d14",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-07T16:15:01Z",
+      "side": 1,
+      "message": "I think they are used, e.g. here:\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/test-extra.js?q\u003dtest-extra.js\u0026dr\u0026l\u003d53",
+      "parentUuid": "3565dbbf_a98d49f5",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d85002d6_fd0f58de",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "864b9bc3_e64e965e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-07T16:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d85002d6_fd0f58de",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ee09605_e0ee6747",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3431,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-07T16:15:01Z",
+      "side": 1,
+      "message": "Oops, nevermind.",
+      "parentUuid": "9cd13016_948775a4",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "133ee91b_ae7fb2b5",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d67fe6e_d3e1a729",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3444,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-07T16:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "133ee91b_ae7fb2b5",
+      "revId": "b6c3c53357927edb5118ed5e31e6af6c44697199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
