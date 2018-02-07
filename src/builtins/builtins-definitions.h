@@ -312,6 +312,8 @@ namespace internal {
   /* ES6 #sec-array.prototype.reduce */                                        \
   TFS(ArrayReduceLoopContinuation, kReceiver, kCallbackFn, kThisArg,           \
       kAccumulator, kObject, kInitialK, kLength, kTo)                          \
+  TFJ(ArrayReducePreLoopEagerDeoptContinuation, 4, kCallbackFn, kInitialK,     \
+      kLength, kAccumulator)                                                   \
   TFJ(ArrayReduceLoopEagerDeoptContinuation, 4, kCallbackFn, kInitialK,        \
       kLength, kAccumulator)                                                   \
   TFJ(ArrayReduceLoopLazyDeoptContinuation, 4, kCallbackFn, kInitialK,         \
@@ -320,6 +322,8 @@ namespace internal {
   /* ES6 #sec-array.prototype.reduceRight */                                   \
   TFS(ArrayReduceRightLoopContinuation, kReceiver, kCallbackFn, kThisArg,      \
       kAccumulator, kObject, kInitialK, kLength, kTo)                          \
+  TFJ(ArrayReduceRightPreLoopEagerDeoptContinuation, 4, kCallbackFn,           \
+      kInitialK, kLength, kAccumulator)                                        \
   TFJ(ArrayReduceRightLoopEagerDeoptContinuation, 4, kCallbackFn, kInitialK,   \
       kLength, kAccumulator)                                                   \
   TFJ(ArrayReduceRightLoopLazyDeoptContinuation, 4, kCallbackFn, kInitialK,    \
