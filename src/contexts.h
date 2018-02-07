@@ -66,8 +66,6 @@ enum ContextLookupFlags {
   V(MATH_FLOOR_INDEX, JSFunction, math_floor)                               \
   V(MATH_POW_INDEX, JSFunction, math_pow)                                   \
   V(NEW_PROMISE_CAPABILITY_INDEX, JSFunction, new_promise_capability)       \
-  V(PROMISE_INTERNAL_CONSTRUCTOR_INDEX, JSFunction,                         \
-    promise_internal_constructor)                                           \
   V(PROMISE_INTERNAL_REJECT_INDEX, JSFunction, promise_internal_reject)     \
   V(IS_PROMISE_INDEX, JSFunction, is_promise)                               \
   V(PROMISE_RESOLVE_INDEX, JSFunction, promise_resolve)                     \
