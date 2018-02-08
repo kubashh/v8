@@ -117,6 +117,30 @@
       "revId": "5068d1133961c8c1ead4edecada29d41b96bbf33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32011f77_669d3758",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-08T15:18:40Z",
+      "side": 1,
+      "message": "Thanks. The split is not really clear but usually heap is really just for allocation and anything that goes on top is then in factory. As always, there are exceptions :)",
+      "parentUuid": "b52af36e_1ead482d",
+      "range": {
+        "startLine": 3423,
+        "startChar": 13,
+        "endLine": 3423,
+        "endChar": 27
+      },
+      "revId": "5068d1133961c8c1ead4edecada29d41b96bbf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
