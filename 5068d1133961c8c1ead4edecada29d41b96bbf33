@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "12e4faef_12352ed6",
+        "filename": "src/factory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-08T02:25:16Z",
+      "side": 1,
+      "message": "Drive by: why pass the constructor here? is it possible to have a jspromise that has a different constructor?",
+      "range": {
+        "startLine": 3104,
+        "startChar": 40,
+        "endLine": 3104,
+        "endChar": 70
+      },
+      "revId": "5068d1133961c8c1ead4edecada29d41b96bbf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27906e53_4b1e829d",
         "filename": "src/heap/heap.cc",
         "patchSetId": 6
