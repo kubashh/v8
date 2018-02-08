@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da349e03_6a904a5f",
+        "filename": "src/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9857,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T21:43:03Z",
+      "side": 1,
+      "message": "I believe that it is already done. We use [1] in inspector.\nWe do not use debug context in inspector. I can remove it if cloud is ready. WDYT?\n\n[1] https://cs.chromium.org/chromium/src/v8/src/debug/debug-stack-trace-iterator.cc?rcl\u003d90cba65ee41675cf0d3186d76506031dcaea757b\u0026l\u003d171",
+      "parentUuid": "bb49fae8_35af6f16",
+      "range": {
+        "startLine": 9857,
+        "startChar": 29,
+        "endLine": 9857,
+        "endChar": 43
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c0bfb96_74cb490d",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-08T19:39:24Z",
       "side": 1,
       "message": "I think the comment is outdated and also not necessary.",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2be0a5b2_949dfd3d",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T21:43:03Z",
+      "side": 1,
+      "message": "We can pass context from inspector (otherwise we indirectly set it using Context::Scope) but I am not sure how Execution::Call works, does this method expect that current context is set to correct one?",
+      "parentUuid": "3c0bfb96_74cb490d",
       "range": {
         "startLine": 26,
         "startChar": 5,
