@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b43153e_04a7fcf1",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-08T01:08:09Z",
+      "side": 0,
+      "message": "Question: The old way goes through Evaluate()\u0027s global proxy check.  This doesn\u0027t seem necessary, since the V8 tests pass without it.  But is it an optimization that we want to keep in Global()?\n\nIt was introduced long ago: https://codereview.chromium.org/123021",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 4
+      },
+      "revId": "5918a23a3d571b9625e5cce246bdd5b46ff7cd8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "554f456a_6687634b",
+        "filename": "src/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 9860,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-08T01:08:09Z",
+      "side": 1,
+      "message": "Not sure if these macros are the preferred way, but I copied this pattern from a similar function \u0027debug::CompileInspectorScript\u0027\nhttps://cs.chromium.org/chromium/src/v8/src/api.cc?type\u003dcs\u0026l\u003d9665",
+      "range": {
+        "startLine": 9860,
+        "startChar": 2,
+        "endLine": 9860,
+        "endChar": 52
+      },
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
