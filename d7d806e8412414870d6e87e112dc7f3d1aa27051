@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d120f5b_bc0a89dd",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2018-02-08T22:26:49Z",
+      "side": 1,
+      "message": "Based on discussion w/ jamesr@ on IRC the thread-read-state API is definitely unsuitable for use asynchronously, which makes sense if the sampler is expecting to be able to walk the thread\u0027s stack (see the SampleStack() call below!).\n\nReading the MSDN SuspendThread/GetThreadContext API docs, it seems to be implied that if you call them in that sequence then they should work, with no need to explicitly wait. Perhaps the impl is internally arranging to pre-empt the thread, if necessary, and so it can wait to synchronize with it, and assume that won\u0027t take long to complete?\n\nTo harden this a little I\u0027ve added ZX_THREAD_TERMINATED to the signals we wait for, and imposed a 100ms deadline to ensure we don\u0027t hang entirely (in the case of someone else resume()ing the thread after we have suspended it, so that the SUSPENDED signal gets cleared), and added a comment to explain.",
+      "parentUuid": "d5a7b25a_ab523da3",
+      "revId": "d7d806e8412414870d6e87e112dc7f3d1aa27051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d70434e3_6cd6fa6b",
         "filename": "src/libsampler/sampler.cc",
         "patchSetId": 6
@@ -30,6 +48,30 @@
       "writtenOn": "2018-02-08T16:08:47Z",
       "side": 1,
       "message": "Looking at the docs for this, it doesn\u0027t stack like Windows Suspend/Resume either, so someone else resuming after you suspend would mean getting inconsistent state too... thus making me lean away from waiting for suspension.",
+      "range": {
+        "startLine": 736,
+        "startChar": 2,
+        "endLine": 736,
+        "endChar": 16
+      },
+      "revId": "d7d806e8412414870d6e87e112dc7f3d1aa27051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a8759ea_cb00bb82",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2018-02-08T22:26:49Z",
+      "side": 1,
+      "message": "My understanding is that [the intention is that] zx_thread_read_state will fail in that case.  There is a bug filed for improving the suspend/resume API to support multiple callers cleanly, FWIW.",
+      "parentUuid": "d70434e3_6cd6fa6b",
       "range": {
         "startLine": 736,
         "startChar": 2,
