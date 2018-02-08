@@ -565,6 +565,9 @@ static void TestClassHierarchy(const std::vector<int>& hierarchy_desc, int n) {
     std::string class_name = GetClassName(cur_class);
     int fields_count_at_current_level = hierarchy_desc[cur_class];
     fields_count += fields_count_at_current_level;
+    PrintF(
+        "# %i field_count=%i ----------------------------------------------\n",
+        cur_class, fields_count);
 
     // This test is not suitable for in-object properties count overflow case.
     CHECK_LT(fields_count, kMaxInobjectProperties);
@@ -575,6 +578,10 @@ static void TestClassHierarchy(const std::vector<int>& hierarchy_desc, int n) {
     Handle<JSFunction> func = GetLexical<JSFunction>(class_name);
 
     Handle<JSObject> obj = RunI<JSObject>(new_script);
+
+    obj->map()->Print();
+    obj->Print();
+    PrintF("# ----------------------------------------------\n");
 
     CHECK(func->has_initial_map());
     Handle<Map> initial_map(func->initial_map());
@@ -622,6 +629,12 @@ static void TestSubclassChain(const std::vector<int>& hierarchy_desc) {
   TestClassHierarchy(hierarchy_desc, static_cast<int>(hierarchy_desc.size()));
 }
 
+TEST(Subclasses) {
+  std::vector<int> hierarchy_desc;
+  hierarchy_desc.push_back(50);
+  hierarchy_desc.push_back(128);
+  TestSubclassChain(hierarchy_desc);
+}
 
 TEST(LongSubclassChain1) {
   std::vector<int> hierarchy_desc;
