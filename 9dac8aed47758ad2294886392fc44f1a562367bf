@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb49fae8_35af6f16",
+        "filename": "src/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9857,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-08T19:39:24Z",
+      "side": 1,
+      "message": "Out of scope for this CL, but... it would be awesome if we could have EvaluateLocal like this too so that we don\u0027t have to go through the debug context (which we want to get rid of).",
+      "range": {
+        "startLine": 9857,
+        "startChar": 29,
+        "endLine": 9857,
+        "endChar": 43
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c0bfb96_74cb490d",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-08T19:39:24Z",
+      "side": 1,
+      "message": "I think the comment is outdated and also not necessary.",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
