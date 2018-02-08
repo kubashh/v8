@@ -16,6 +16,24 @@
       "revId": "5e72118c765b4163d3c78d4d94a67ac301ce6b1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64c65093_4de312d8",
+        "filename": "src/wasm/baseline/liftoff-assembler-defs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-02-08T12:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d14174b_22108e15",
+      "revId": "5e72118c765b4163d3c78d4d94a67ac301ce6b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
