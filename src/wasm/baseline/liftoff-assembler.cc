@@ -567,15 +567,20 @@ void LiftoffAssembler::PrepareCall(wasm::FunctionSig* sig,
 
 void LiftoffAssembler::FinishCall(wasm::FunctionSig* sig,
                                   compiler::CallDescriptor* call_desc) {
-  size_t return_count = call_desc->ReturnCount();
-  DCHECK_EQ(return_count, sig->return_count());
+  const size_t return_count = sig->return_count();
   if (return_count != 0) {
     DCHECK_EQ(1, return_count);
-    compiler::LinkageLocation return_loc = call_desc->GetReturnLocation(0);
-    int return_reg_code = return_loc.AsRegister();
     ValueType return_type = sig->GetReturn(0);
-    LiftoffRegister return_reg =
-        LiftoffRegister::from_code(reg_class_for(return_type), return_reg_code);
+    const bool need_pair = kNeedI64RegPair && return_type == kWasmI64;
+    DCHECK_EQ(need_pair ? 2 : 1, call_desc->ReturnCount());
+    RegClass rc = need_pair ? kGpReg : reg_class_for(return_type);
+    LiftoffRegister return_reg = LiftoffRegister::from_code(
+        rc, call_desc->GetReturnLocation(0).AsRegister());
+    if (need_pair) {
+      LiftoffRegister high_reg = LiftoffRegister::from_code(
+          rc, call_desc->GetReturnLocation(1).AsRegister());
+      return_reg = LiftoffRegister::ForPair(return_reg, high_reg);
+    }
     DCHECK(!cache_state_.is_used(return_reg));
     PushRegister(return_type, return_reg);
   }
