@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7f5c1b6_b87e3f36",
+        "filename": "src/factory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-08T10:13:50Z",
+      "side": 1,
+      "message": "We had planned to use this from PromiseConstructor in CSA for non-fastpath where new_target !\u003d the promise function, but we can just add that later if we need it.",
+      "parentUuid": "12e4faef_12352ed6",
+      "range": {
+        "startLine": 3104,
+        "startChar": 40,
+        "endLine": 3104,
+        "endChar": 70
+      },
+      "revId": "5068d1133961c8c1ead4edecada29d41b96bbf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27906e53_4b1e829d",
         "filename": "src/heap/heap.cc",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-07T16:55:26Z",
       "side": 1,
       "message": "Can we move this out of heap? \n\nE.g. have NewJSPromiseWithoutHook and NewJSPromise on Factory that do the right thing?",
+      "range": {
+        "startLine": 3423,
+        "startChar": 13,
+        "endLine": 3423,
+        "endChar": 27
+      },
+      "revId": "5068d1133961c8c1ead4edecada29d41b96bbf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d72cc5_25f62d4c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-08T10:13:50Z",
+      "side": 1,
+      "message": "It kind of looks like we can\u0027t... All the factory functions use CALL_HEAP_FUNCTION for the allocation retry logic, which returns, so I can\u0027t put the promise hook in factory without changing something major there.\n\nIn general it seems like the split of responsibility between factory/heap is not clear, most of the factory functions just forward the arguments to the heap function of the same name and inline the retry logic via the CALL_HEAP_FUNCTION macro. Maybe its time for a cleanup there?",
+      "parentUuid": "27906e53_4b1e829d",
       "range": {
         "startLine": 3423,
         "startChar": 13,
