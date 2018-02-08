@@ -22,6 +22,109 @@
       "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59db0299_98b77cef",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T01:22:47Z",
+      "side": 1,
+      "message": "I believe that since debug context is deprecated and DevTools do not use it anymore, we can remove this context lookup and assume that caller of this function set correct context using v8::Context::Scope or we can pass Handle\u003cContext\u003e instead of Isolate* as an argument to this method.\n\nSo could we remove code from line 31 to line 37?",
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a4b353_4d534ac7",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T01:22:47Z",
+      "side": 1,
+      "message": "Could you check that you need isOpaque flag?",
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7addca31_1dfe4bec",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T01:22:47Z",
+      "side": 1,
+      "message": "nit: shared or shared_info is more common name for SharedFunctionInfo that I have seen in code base.",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 42
+      },
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b515f70_a4d0e99f",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T01:22:47Z",
+      "side": 1,
+      "message": "nit: inline it",
+      "range": {
+        "startLine": 59,
+        "startChar": 39,
+        "endLine": 59,
+        "endChar": 47
+      },
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c40f3a5_44470d01",
+        "filename": "src/debug/debug-interface.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-08T01:22:47Z",
+      "side": 1,
+      "message": "nit: v8::MaybeLocal",
+      "range": {
+        "startLine": 503,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 10
+      },
+      "revId": "d6f277221fab3a0dd99b28f8706183a4fd19bb67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
