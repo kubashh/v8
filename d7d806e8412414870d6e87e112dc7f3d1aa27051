@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5a7b25a_ab523da3",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1144260
+      },
+      "writtenOn": "2018-02-08T16:08:47Z",
+      "side": 1,
+      "message": "I realize this is necessary for correctness. I don\u0027t know really know if it\u0027s a good idea here or not. On Windows e.g. SuspendThread() is async too, but there\u0027s no way to know when it actually suspends, so we just get more-or-less the right thread state.\n\n(Mostly I don\u0027t know where this sampler is used and if it\u0027s a good idea to be blocking or not. Perhaps just a comment that this might be worth measuring and/or removing.)",
+      "revId": "d7d806e8412414870d6e87e112dc7f3d1aa27051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d70434e3_6cd6fa6b",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1144260
+      },
+      "writtenOn": "2018-02-08T16:08:47Z",
+      "side": 1,
+      "message": "Looking at the docs for this, it doesn\u0027t stack like Windows Suspend/Resume either, so someone else resuming after you suspend would mean getting inconsistent state too... thus making me lean away from waiting for suspension.",
+      "range": {
+        "startLine": 736,
+        "startChar": 2,
+        "endLine": 736,
+        "endChar": 16
+      },
+      "revId": "d7d806e8412414870d6e87e112dc7f3d1aa27051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
