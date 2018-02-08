@@ -28,7 +28,7 @@ class SimplifiedOperatorBuilder;
 
 // Performs strength reduction on {JSConstruct} and {JSCall} nodes,
 // which might allow inlining or other optimizations to be performed afterwards.
-class JSCallReducer final : public AdvancedReducer {
+class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
  public:
   // Flags that control the mode of operation.
   enum Flag { kNoFlags = 0u, kBailoutOnUninitialized = 1u << 0 };
@@ -103,6 +103,18 @@ class JSCallReducer final : public AdvancedReducer {
   Reduction ReduceAsyncFunctionPromiseRelease(Node* node);
 
   Reduction ReduceSoftDeoptimize(Node* node, DeoptimizeReason reason);
+
+  Reduction ReduceJSMathBuiltin(Node* node, Handle<JSFunction> function,
+                                Handle<SharedFunctionInfo> shared);
+
+  Reduction ReduceMathUnary(Node* node, const Operator* op,
+                            const VectorSlotPair& feedback);
+  Reduction ReduceMathBinary(Node* node, const Operator* op,
+                             const VectorSlotPair& feedback);
+  Reduction ReduceMathImul(Node* node, const VectorSlotPair& feedback);
+  Reduction ReduceMathClz32(Node* node, const VectorSlotPair& feedback);
+  Reduction ReduceMathMinMax(Node* node, const Operator* op, Node* empty_value,
+                             const VectorSlotPair& feedback);
 
   // Returns the updated {to} node, and updates control and effect along the
   // way.

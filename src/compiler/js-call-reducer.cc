@@ -24,6 +24,210 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+Reduction JSCallReducer::ReduceMathUnary(Node* node, const Operator* op,
+                                         const VectorSlotPair& feedback) {
+  if (node->op()->ValueInputCount() < 3) {
+    Node* value = jsgraph()->NaNConstant();
+    ReplaceWithValue(node, value);
+    return Replace(value);
+  }
+
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* input = NodeProperties::GetValueInput(node, 2);
+
+  input = effect = graph()->NewNode(
+      simplified()->SpeculativeToNumber(NumberOperationHint::kNumber, feedback),
+      input, effect, control);
+  Node* value = graph()->NewNode(op, input);
+  ReplaceWithValue(node, value, effect);
+  return Replace(value);
+}
+
+Reduction JSCallReducer::ReduceMathBinary(Node* node, const Operator* op,
+                                          const VectorSlotPair& feedback) {
+  if (node->op()->ValueInputCount() < 4) {
+    Node* value = jsgraph()->NaNConstant();
+    ReplaceWithValue(node, value);
+    return Replace(value);
+  }
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  Node* left = NodeProperties::GetValueInput(node, 2);
+  Node* right = NodeProperties::GetValueInput(node, 3);
+  left = effect =
+      graph()->NewNode(simplified()->SpeculativeToNumber(
+                           NumberOperationHint::kNumberOrOddball, feedback),
+                       left, effect, control);
+  right = effect =
+      graph()->NewNode(simplified()->SpeculativeToNumber(
+                           NumberOperationHint::kNumberOrOddball, feedback),
+                       right, effect, control);
+  Node* value = graph()->NewNode(op, left, right);
+  ReplaceWithValue(node, value, effect);
+  return Replace(value);
+}
+
+// ES6 section 20.2.2.19 Math.imul ( x, y )
+Reduction JSCallReducer::ReduceMathImul(Node* node,
+                                        const VectorSlotPair& feedback) {
+  if (node->op()->ValueInputCount() < 4) {
+    Node* value = jsgraph()->ZeroConstant();
+    ReplaceWithValue(node, value);
+    return Replace(value);
+  }
+  Node* left = NodeProperties::GetValueInput(node, 2);
+  Node* right = NodeProperties::GetValueInput(node, 3);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  left = effect =
+      graph()->NewNode(simplified()->SpeculativeToNumber(
+                           NumberOperationHint::kNumberOrOddball, feedback),
+                       left, effect, control);
+  right = effect =
+      graph()->NewNode(simplified()->SpeculativeToNumber(
+                           NumberOperationHint::kNumberOrOddball, feedback),
+                       right, effect, control);
+  left = graph()->NewNode(simplified()->NumberToUint32(), left);
+  right = graph()->NewNode(simplified()->NumberToUint32(), right);
+  Node* value = graph()->NewNode(simplified()->NumberImul(), left, right);
+  ReplaceWithValue(node, value, effect);
+  return Replace(value);
+}
+
+// ES6 section 20.2.2.11 Math.clz32 ( x )
+Reduction JSCallReducer::ReduceMathClz32(Node* node,
+                                         const VectorSlotPair& feedback) {
+  if (node->op()->ValueInputCount() < 3) {
+    Node* value = jsgraph()->Int32Constant(32);
+    ReplaceWithValue(node, value);
+    return Replace(value);
+  }
+  Node* input = NodeProperties::GetValueInput(node, 2);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  input = effect = graph()->NewNode(
+      simplified()->SpeculativeToNumber(NumberOperationHint::kNumber, feedback),
+      input, effect, control);
+  input = graph()->NewNode(simplified()->NumberToUint32(), input);
+  Node* value = graph()->NewNode(simplified()->NumberClz32(), input);
+  ReplaceWithValue(node, value, effect);
+  return Replace(value);
+}
+
+// ES6 section 20.2.2.24 Math.max ( value1, value2, ...values )
+// and
+// ES6 section 20.2.2.25 Math.min ( value1, value2, ...values )
+Reduction JSCallReducer::ReduceMathMinMax(Node* node, const Operator* op,
+                                          Node* empty_value,
+                                          const VectorSlotPair& feedback) {
+  if (node->op()->ValueInputCount() <= 2) {
+    ReplaceWithValue(node, empty_value);
+    return Replace(empty_value);
+  }
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* value = effect = graph()->NewNode(
+      simplified()->SpeculativeToNumber(NumberOperationHint::kNumber, feedback),
+      NodeProperties::GetValueInput(node, 2), effect, control);
+  for (int i = 3; i < node->op()->ValueInputCount(); i++) {
+    Node* input = effect = graph()->NewNode(
+        simplified()->SpeculativeToNumber(NumberOperationHint::kNumber,
+                                          feedback),
+        NodeProperties::GetValueInput(node, i), effect, control);
+    value = graph()->NewNode(op, value, input);
+  }
+
+  ReplaceWithValue(node, value, effect);
+  return Replace(value);
+}
+
+Reduction JSCallReducer::ReduceJSMathBuiltin(
+    Node* node, Handle<JSFunction> function,
+    Handle<SharedFunctionInfo> shared) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return NoChange();
+  }
+  switch (shared->code()->builtin_index()) {
+    case Builtins::kMathAbs:
+      return ReduceMathUnary(node, simplified()->NumberAbs(), p.feedback());
+    case Builtins::kMathAcos:
+      return ReduceMathUnary(node, simplified()->NumberAcos(), p.feedback());
+    case Builtins::kMathAcosh:
+      return ReduceMathUnary(node, simplified()->NumberAcosh(), p.feedback());
+    case Builtins::kMathAsin:
+      return ReduceMathUnary(node, simplified()->NumberAsin(), p.feedback());
+    case Builtins::kMathAsinh:
+      return ReduceMathUnary(node, simplified()->NumberAsinh(), p.feedback());
+    case Builtins::kMathAtan:
+      return ReduceMathUnary(node, simplified()->NumberAtan(), p.feedback());
+    case Builtins::kMathAtanh:
+      return ReduceMathUnary(node, simplified()->NumberAtanh(), p.feedback());
+    case Builtins::kMathCbrt:
+      return ReduceMathUnary(node, simplified()->NumberCbrt(), p.feedback());
+    case Builtins::kMathCeil:
+      return ReduceMathUnary(node, simplified()->NumberCeil(), p.feedback());
+    case Builtins::kMathCos:
+      return ReduceMathUnary(node, simplified()->NumberCos(), p.feedback());
+    case Builtins::kMathCosh:
+      return ReduceMathUnary(node, simplified()->NumberCosh(), p.feedback());
+    case Builtins::kMathExp:
+      return ReduceMathUnary(node, simplified()->NumberExp(), p.feedback());
+    case Builtins::kMathExpm1:
+      return ReduceMathUnary(node, simplified()->NumberExpm1(), p.feedback());
+    case Builtins::kMathFloor:
+      return ReduceMathUnary(node, simplified()->NumberFloor(), p.feedback());
+    case Builtins::kMathFround:
+      return ReduceMathUnary(node, simplified()->NumberFround(), p.feedback());
+    case Builtins::kMathLog:
+      return ReduceMathUnary(node, simplified()->NumberLog(), p.feedback());
+    case Builtins::kMathLog1p:
+      return ReduceMathUnary(node, simplified()->NumberLog1p(), p.feedback());
+    case Builtins::kMathLog10:
+      return ReduceMathUnary(node, simplified()->NumberLog10(), p.feedback());
+    case Builtins::kMathLog2:
+      return ReduceMathUnary(node, simplified()->NumberLog2(), p.feedback());
+    case Builtins::kMathRound:
+      return ReduceMathUnary(node, simplified()->NumberRound(), p.feedback());
+    case Builtins::kMathSign:
+      return ReduceMathUnary(node, simplified()->NumberSign(), p.feedback());
+    case Builtins::kMathSin:
+      return ReduceMathUnary(node, simplified()->NumberSin(), p.feedback());
+    case Builtins::kMathSinh:
+      return ReduceMathUnary(node, simplified()->NumberSinh(), p.feedback());
+    case Builtins::kMathSqrt:
+      return ReduceMathUnary(node, simplified()->NumberSqrt(), p.feedback());
+    case Builtins::kMathTan:
+      return ReduceMathUnary(node, simplified()->NumberTan(), p.feedback());
+    case Builtins::kMathTanh:
+      return ReduceMathUnary(node, simplified()->NumberTanh(), p.feedback());
+    case Builtins::kMathTrunc:
+      return ReduceMathUnary(node, simplified()->NumberTrunc(), p.feedback());
+    case Builtins::kMathAtan2:
+      return ReduceMathBinary(node, simplified()->NumberAtan2(), p.feedback());
+    case Builtins::kMathPow:
+      return ReduceMathBinary(node, simplified()->NumberPow(), p.feedback());
+    case Builtins::kMathClz32:
+      return ReduceMathClz32(node, p.feedback());
+    case Builtins::kMathImul:
+      return ReduceMathImul(node, p.feedback());
+    case Builtins::kMathMax:
+      return ReduceMathMinMax(node, simplified()->NumberMax(),
+                              jsgraph()->Constant(-V8_INFINITY), p.feedback());
+    case Builtins::kMathMin:
+      return ReduceMathMinMax(node, simplified()->NumberMin(),
+                              jsgraph()->Constant(V8_INFINITY), p.feedback());
+    default:
+      break;
+  }
+  return NoChange();
+}
+
 Reduction JSCallReducer::Reduce(Node* node) {
   switch (node->opcode()) {
     case IrOpcode::kJSConstruct:
@@ -2897,6 +3101,9 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
 
       // Don't inline cross native context.
       if (function->native_context() != *native_context()) return NoChange();
+
+      Reduction red = ReduceJSMathBuiltin(node, function, shared);
+      if (red.Changed()) return red;
 
       // Check for known builtin functions.
       switch (shared->code()->builtin_index()) {
