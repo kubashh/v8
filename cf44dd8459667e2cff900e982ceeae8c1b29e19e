@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11726f1f_3b738f28",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-09T10:26:48Z",
+      "side": 1,
+      "message": "How about putting this logic into the four helpers above and completely avoiding the separate ReduceJSMathBuiltin method? So just add these to the main switch below like this:\n\n```\ncase Builtins::kMathAbs:\n  return ReduceMathUnary(node, simplified()-\u003eNumberAbs());\ncase Builtins::kMathAcos:\n  return ReduceMathUnary(node, simplified()-\u003eNumberAcos());\n...\n```",
+      "revId": "cf44dd8459667e2cff900e982ceeae8c1b29e19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
