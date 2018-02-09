@@ -2303,11 +2303,12 @@ TEST(DebugEvaluateWithCodeGenerationDisallowed) {
     "  return local + x;\n"
     "}",
     "foo");
-  checkGlobalEvalFunction = CompileFunction(&env,
-    "function checkGlobalEval(exec_state) {\n"
-    "  return exec_state.evaluateGlobal('global').value() === 'Global';\n"
-    "}",
-    "checkGlobalEval");
+  checkGlobalEvalFunction = CompileFunction(
+      &env,
+      "function checkGlobalEval(exec_state) {\n"
+      "  return exec_state.evaluateGlobal('\"foo\"').value() === 'foo';\n"
+      "}",
+      "checkGlobalEval");
 
   checkFrameEvalFunction = CompileFunction(&env,
     "function checkFrameEval(exec_state) {\n"
