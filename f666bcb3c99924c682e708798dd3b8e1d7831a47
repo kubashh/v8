@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dce82a2f_4c8dbb22",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T14:01:07Z",
+      "side": 1,
+      "message": "LiftoffRegList::has is a lot more readable than this. Couldn\u0027t RegList also provide a {has} function?",
+      "range": {
+        "startLine": 209,
+        "startChar": 10,
+        "endLine": 209,
+        "endChar": 38
+      },
+      "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
