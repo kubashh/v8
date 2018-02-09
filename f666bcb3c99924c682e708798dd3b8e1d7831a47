@@ -70,6 +70,30 @@
       "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6bb26c8f_4c61a7e3",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:19:41Z",
+      "side": 1,
+      "message": "This code pattern appears all over the place in the different assemblers (outside of liftoff, I mean). If we want to fix this, I think we should refactor it properly everywhere.",
+      "parentUuid": "40220edf_7ddaeccf",
+      "range": {
+        "startLine": 209,
+        "startChar": 10,
+        "endLine": 209,
+        "endChar": 38
+      },
+      "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
