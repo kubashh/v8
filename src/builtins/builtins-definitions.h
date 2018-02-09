@@ -173,6 +173,7 @@ namespace internal {
   /* Debugger */                                                               \
   ASM(FrameDropperTrampoline)                                                  \
   ASM(HandleDebuggerStatement)                                                 \
+  TFS(CheckDebugHook, kFunction)                                               \
                                                                                \
   /* Type conversions */                                                       \
   TFC(ToObject, TypeConversion, 1)                                             \

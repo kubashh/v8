@@ -8,6 +8,7 @@
 #include "src/code-stub-assembler.h"
 #include "src/heap/heap-inl.h"
 #include "src/macro-assembler.h"
+#include "src/objects/debug-objects.h"
 #include "src/objects/shared-function-info.h"
 #include "src/runtime/runtime.h"
 
@@ -1053,6 +1054,42 @@ TF_BUILTIN(RunMicrotasks, InternalBuiltinsAssembler) {
       Branch(IntPtrLessThan(index, num_tasks), &loop, &init_queue_loop);
     }
   }
+}
+
+TF_BUILTIN(CheckDebugHook, InternalBuiltinsAssembler) {
+  Node* function = Parameter(Descriptor::kFunction);
+  Node* context = Parameter(Descriptor::kContext);
+
+  Label done(this);
+  Label call_debugger(this);
+
+  auto debug_hook_active =
+      ExternalReference::debug_hook_on_function_call_address(isolate());
+  TNode<Int32T> debug_hook_value = TNode<Int32T>::UncheckedCast(
+      Load(MachineType::Int32(), ExternalConstant(debug_hook_active)));
+
+  GotoIf(debug_hook_value, &call_debugger);
+
+  TNode<HeapObject> shared = TNode<HeapObject>::UncheckedCast(
+      LoadObjectField(function, JSFunction::kSharedFunctionInfoOffset));
+  TNode<Object> debug_info =
+      LoadObjectField(shared, SharedFunctionInfo::kDebugInfoOffset);
+  GotoIf(TaggedIsSmi(debug_info), &done);
+
+  TNode<Smi> flags_smi = TNode<Smi>::UncheckedCast(LoadObjectField(
+      TNode<HeapObject>::UncheckedCast(debug_info), DebugInfo::kFlagsOffset));
+
+  TNode<Word32T> flags = SmiToWord32(flags_smi);
+  TNode<Word32T> masked =
+      Word32And(flags, Int32Constant(DebugInfo::kBreakAtEntry));
+  Branch(masked, &call_debugger, &done);
+
+  BIND(&call_debugger);
+  CallRuntime(Runtime::kDebugOnFunctionCall, context, function);
+  Goto(&done);
+
+  BIND(&done);
+  Return(function);
 }
 
 TF_BUILTIN(AbortJS, CodeStubAssembler) {
