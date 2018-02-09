@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51a5ca40_76270079",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Hm, basing the condition on the pointer size makes more sense IMO. We want to lower on all 32-bit platforms, not \"all platforms which require register pairs for i64 values\", even though this is technically the same.",
+      "parentUuid": "2566a580_2812ab3e",
+      "range": {
+        "startLine": 70,
+        "startChar": 9,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ffb404f3_7fc688dd",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "bd69748e_255b175c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Thought about this, and indeed we can refactor this to just return the number of processed inputs, and then increase the input_location externally. Done.",
+      "parentUuid": "7f3fa1ae_0ba7382e",
+      "range": {
+        "startLine": 206,
+        "startChar": 54,
+        "endLine": 206,
+        "endChar": 68
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95da85d6_05673622",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Thanks, that makes sense. Done.",
+      "parentUuid": "ffb404f3_7fc688dd",
+      "range": {
+        "startLine": 206,
+        "startChar": 24,
+        "endLine": 206,
+        "endChar": 42
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b50059fc_9534a206",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -85,6 +157,24 @@
       "revId": "de89c805175663493b5246c64a1e499dde4de743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92c15dd5_cb294b29",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Refactored to avoid the ternary operator overall :)",
+      "parentUuid": "b50059fc_9534a206",
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "66266131_db4fd77c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "This is gone after the refactoring.",
+      "parentUuid": "6bbc94c4_7020128f",
+      "range": {
+        "startLine": 214,
+        "startChar": 39,
+        "endLine": 214,
+        "endChar": 58
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55d3a5c3_99b64333",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -122,6 +236,30 @@
       "writtenOn": "2018-02-09T10:49:05Z",
       "side": 1,
       "message": "maybe add the same comment as above?",
+      "range": {
+        "startLine": 215,
+        "startChar": 31,
+        "endLine": 215,
+        "endChar": 69
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f996b30c_d4da8673",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Done. If we add more code like this, we should think about having a {LiftoffRegister::no_reg}. I had this in the beginning, but Ben asked me to remove it unless we really need it. What\u0027s your opinion on this?",
+      "parentUuid": "55d3a5c3_99b64333",
       "range": {
         "startLine": 215,
         "startChar": 31,
@@ -154,6 +292,30 @@
       "revId": "de89c805175663493b5246c64a1e499dde4de743",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c84f991_cef2039a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:40:21Z",
+      "side": 1,
+      "message": "Oh, only reading this now. Refactored as described above: Does return the number of processed inputs now.",
+      "parentUuid": "89a3caa2_dc921c32",
+      "range": {
+        "startLine": 275,
+        "startChar": 34,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
