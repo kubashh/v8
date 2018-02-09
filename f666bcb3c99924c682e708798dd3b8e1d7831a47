@@ -46,6 +46,30 @@
       "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40220edf_7ddaeccf",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T14:18:04Z",
+      "side": 1,
+      "message": "In that case, can you add a wrapper function for this for now?",
+      "parentUuid": "008c7220_272f7860",
+      "range": {
+        "startLine": 209,
+        "startChar": 10,
+        "endLine": 209,
+        "endChar": 38
+      },
+      "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
