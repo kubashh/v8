@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2566a580_2812ab3e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "why don\u0027t you use kNeedI64RegPair here?",
+      "range": {
+        "startLine": 70,
+        "startChar": 9,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb404f3_7fc688dd",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "I think it would be better to pass in the ValueType instead of the param_idx. The reason is that  param_idx gives this function more information than needed, and it makes the interface weird because it seems like it requires the same information twice.",
+      "range": {
+        "startLine": 206,
+        "startChar": 24,
+        "endLine": 206,
+        "endChar": 42
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f3fa1ae_0ba7382e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "this name suggests that one passes in the location of an input. However, it is actually an out-parameter. Is it really necessary to use an out-parameter here?",
+      "range": {
+        "startLine": 206,
+        "startChar": 54,
+        "endLine": 206,
+        "endChar": 68
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50059fc_9534a206",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "you still don\u0027t like to use parenthesis ;P",
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bbc94c4_7020128f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "I think inlining this increment is bad for readability. I would prefer if you incremented it in the next line, maybe even with a comment that we prepare the input_location for the second value of a RegPair.",
+      "range": {
+        "startLine": 214,
+        "startChar": 39,
+        "endLine": 214,
+        "endChar": 58
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55d3a5c3_99b64333",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "maybe add the same comment as above?",
+      "range": {
+        "startLine": 215,
+        "startChar": 31,
+        "endLine": 215,
+        "endChar": 69
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89a3caa2_dc921c32",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-09T10:49:05Z",
+      "side": 1,
+      "message": "I wonder if this looked better if it were called next_index, and if ProcessParameter returns the value instead of updating the parameter.",
+      "range": {
+        "startLine": 275,
+        "startChar": 34,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "de89c805175663493b5246c64a1e499dde4de743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
