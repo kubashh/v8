@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "293dca02_f76e3c3f",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-02-09T11:03:49Z",
+      "side": 1,
+      "message": "See CSA::IsSetWord32",
+      "revId": "b428438e141a8ccb75d7036ee37997d524ae7432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3117978f_152bf5a9",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-02-09T11:03:49Z",
+      "side": 1,
+      "message": "I suppose this is just to save one register around the call?",
+      "revId": "b428438e141a8ccb75d7036ee37997d524ae7432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d645730_4aec0f86",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2418,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-02-09T11:03:49Z",
+      "side": 1,
+      "message": "Should we push/pop RegisterParameter(0) around the call, or assert it doesn\u0027t clobber otherwise?\n\nIs fun \u003d\u003d RegisterParameter(0)?",
+      "revId": "b428438e141a8ccb75d7036ee37997d524ae7432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
