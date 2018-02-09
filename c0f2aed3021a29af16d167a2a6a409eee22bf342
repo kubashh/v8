@@ -70,6 +70,30 @@
       "revId": "c0f2aed3021a29af16d167a2a6a409eee22bf342",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f1b25db_d0e26390",
+        "filename": "src/compiler/js-builtin-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-02-09T21:38:47Z",
+      "side": 1,
+      "message": "This is possible now with the new machinery. You can insert a CheckSmi with a feedback argument. See https://cs.chromium.org/chromium/src/v8/src/compiler/js-call-reducer.cc?rcl\u003dc476c5a5cd243532877f6014a4144ff1db0398cd\u0026l\u003d3367 for an example. The effect of providing the feedback argument is that TurboFan will notice if the deopt happens and learn from it: It will not inline Array#indexOf on that particular call site again.",
+      "parentUuid": "c041b488_9e8945e7",
+      "range": {
+        "startLine": 1282,
+        "startChar": 8,
+        "endLine": 1282,
+        "endChar": 18
+      },
+      "revId": "c0f2aed3021a29af16d167a2a6a409eee22bf342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
