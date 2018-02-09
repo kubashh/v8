@@ -22,6 +22,30 @@
       "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "008c7220_272f7860",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-09T14:06:59Z",
+      "side": 1,
+      "message": "I totally agree. Currently, {RegList} is just a typedef to {uint32_t} or {uint64_t}. Making this a real class would be nice IMO. One problem is that {RegList} can either store gp reg codes, or fp reg codes. Making it type safe is not that easy. We might need to templatize it, such that it knows whether it\u0027s supposed to store gp or fp register codes.\nAdding it to the code health backlog :)",
+      "parentUuid": "dce82a2f_4c8dbb22",
+      "range": {
+        "startLine": 209,
+        "startChar": 10,
+        "endLine": 209,
+        "endChar": 38
+      },
+      "revId": "f666bcb3c99924c682e708798dd3b8e1d7831a47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
