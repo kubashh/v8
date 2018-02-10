@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee9c714a_ed4bcac3",
+        "filename": "test/cctest/test-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-10T07:13:40Z",
+      "side": 1,
+      "message": "I\u0027m curious why this change avoids the failure.",
+      "range": {
+        "startLine": 2309,
+        "startChar": 45,
+        "endLine": 2309,
+        "endChar": 48
+      },
+      "revId": "363a33b82aa304be205d43d782ae8dc2a34a3e67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
