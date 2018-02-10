@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "d0c73d4f_8f4140c3",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-10T07:11:50Z",
+      "side": 1,
+      "message": "The test is not designed to test context walking logic. I would be fine with porting that test to the new API, no longer using the debug context and mirrors.",
+      "parentUuid": "dca0f7eb_62f08192",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac09fe8a_b3c4a7d1",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 5
