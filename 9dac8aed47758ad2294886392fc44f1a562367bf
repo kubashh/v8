@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "dca0f7eb_62f08192",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-10T00:04:40Z",
+      "side": 1,
+      "message": "\u003e comment no longer makes sense\nDone, removed, since the context-restoration logic was removed.\n\n\u003e does this method expect that current context is set to correct one?\nExecution::Call seems to expect the function we pass it to hold the correct context (function created by `NewFunctionFromSharedFunctionInfo(shared_info, correct_context)`).  So it\u0027s fine if we assume that we are in a good context when we call EvaluateGlobal().\n\n\u003e we should already be doing the right thing\nInspector already sets a InjectedScript::ContextScope\n\nIt appears that the \"restore context before debugger\" walking logic was essential to one failing test [1].  The test calls our mirror evaluateGlobal() when paused, and fails to evaluate a variable outside the current context.  Since the test goes through mirrors, I believe the closest C++ location where we could try to set the context is [2], which shouldn\u0027t know about evaluateGlobal()\u0027s assumption.\n\nSince the point of the test is to ensure that evaluate local/global still work when allow_code_gen_from_strings \u003d\u003d false, I\u0027ve changed the test to call evaluateGlobal() with input that doesn\u0027t depend on its global logic.  Wdyt?\n\n[1] https://cs.chromium.org/chromium/src/v8/test/cctest/test-debug.cc?l\u003d2400\n[2] https://cs.chromium.org/chromium/src/v8/src/runtime/runtime-debug.cc?type\u003dcs\u0026q\u003dDebugEvaluateGlobal\u0026l\u003d1251",
+      "parentUuid": "eace7d25_76b9839a",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac09fe8a_b3c4a7d1",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 5
@@ -164,6 +188,30 @@
       "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c7fed57_4bae73b6",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-10T00:04:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac09fe8a_b3c4a7d1",
+      "range": {
+        "startLine": 33,
+        "startChar": 33,
+        "endLine": 33,
+        "endChar": 58
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
