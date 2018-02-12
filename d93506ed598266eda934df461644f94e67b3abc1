@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a693c50_eb31696d",
+        "filename": "test/mjsunit/es6/promise-resolve-thenable-job.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-12T19:51:58Z",
+      "side": 1,
+      "message": "All of these hit the fast path, can you add tests for the slow path?",
+      "revId": "d93506ed598266eda934df461644f94e67b3abc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
