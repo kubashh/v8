@@ -5213,13 +5213,16 @@ WasmCodeWrapper WasmCompilationUnit::FinishTurbofanCompilation(
     if (!code) {
       return WasmCodeWrapper(code);
     }
-    // TODO(mtrofin): add CodeEventListener call - see the non-native case.
     if (FLAG_trace_wasm_decode_time) {
       double codegen_ms = codegen_timer.Elapsed().InMillisecondsF();
       PrintF("wasm-code-generation ok: %u bytes, %0.3f ms code generation\n",
              static_cast<unsigned>(func_body_.end - func_body_.start),
              codegen_ms);
     }
+
+    // TODO(herhut): Which tag to use here? Should this be a LOG_CODE_EVENT?
+    PROFILE(isolate_, CodeCreateEvent(CodeEventListener::FUNCTION_TAG, code,
+                                      &func_name_));
 
     Handle<ByteArray> source_positions =
         tf_.job_->compilation_info()->wasm_code_desc()->source_positions_table;

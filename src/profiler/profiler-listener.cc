@@ -9,6 +9,7 @@
 #include "src/profiler/cpu-profiler.h"
 #include "src/profiler/profile-generator-inl.h"
 #include "src/source-position-table.h"
+#include "src/wasm/wasm-code-manager.h"
 
 namespace v8 {
 namespace internal {
@@ -107,6 +108,21 @@ void ProfilerListener::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
   RecordDeoptInlinedFrames(rec->entry, abstract_code);
   rec->entry->FillFunctionInfo(shared);
   rec->size = abstract_code->ExecutableSize();
+  DispatchCodeEvent(evt_rec);
+}
+
+void ProfilerListener::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
+                                       wasm::WasmCode* code,
+                                       Vector<const char>* name) {
+  CodeEventsContainer evt_rec(CodeEventRecord::CODE_CREATION);
+  CodeCreateEventRecord* rec = &evt_rec.CodeCreateEventRecord_;
+  rec->start = code->instructions().start();
+  rec->entry = NewCodeEntry(tag, name->start(), CodeEntry::kEmptyNamePrefix,
+                            CodeEntry::kEmptyResourceName,
+                            CpuProfileNode::kNoLineNumberInfo,
+                            CpuProfileNode::kNoColumnNumberInfo, nullptr,
+                            code->instructions().start());
+  rec->size = code->instructions().length();
   DispatchCodeEvent(evt_rec);
 }
 

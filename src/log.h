@@ -75,6 +75,10 @@ class ProfilerListener;
 class RuntimeCallTimer;
 class Ticker;
 
+namespace wasm {
+class WasmCode;
+}
+
 #undef LOG
 #define LOG(isolate, Call)                              \
   do {                                                  \
@@ -176,6 +180,8 @@ class Logger : public CodeEventListener {
   void CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
                        AbstractCode* code, SharedFunctionInfo* shared,
                        Name* source, int line, int column);
+  void CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
+                       wasm::WasmCode* code, Vector<const char>* name);
   // Emits a code deoptimization event.
   void CodeDisableOptEvent(AbstractCode* code, SharedFunctionInfo* shared);
   void CodeMovingGCEvent();
@@ -379,6 +385,9 @@ class CodeEventLogger : public CodeEventListener {
   void CodeCreateEvent(LogEventsAndTags tag, AbstractCode* code,
                        SharedFunctionInfo* shared, Name* source, int line,
                        int column) override;
+  void CodeCreateEvent(LogEventsAndTags tag, wasm::WasmCode* code,
+                       Vector<const char>* name) override;
+
   void RegExpCodeCreateEvent(AbstractCode* code, String* source) override;
 
   void CallbackEvent(Name* name, Address entry_point) override {}
@@ -394,6 +403,8 @@ class CodeEventLogger : public CodeEventListener {
 
   virtual void LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo* shared,
                                  const char* name, int length) = 0;
+  virtual void LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                                 int length) = 0;
 
   NameBuffer* name_buffer_;
 };

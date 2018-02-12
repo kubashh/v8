@@ -30,6 +30,7 @@
 #include "src/tracing/tracing-category-observer.h"
 #include "src/unicode-inl.h"
 #include "src/vm-state-inl.h"
+#include "src/wasm/wasm-code-manager.h"
 
 #include "src/utils.h"
 #include "src/version.h"
@@ -200,6 +201,20 @@ void CodeEventLogger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
   LogRecordedBuffer(code, shared, name_buffer_->get(), name_buffer_->size());
 }
 
+void CodeEventLogger::CodeCreateEvent(LogEventsAndTags tag,
+                                      wasm::WasmCode* code,
+                                      Vector<const char>* name) {
+  name_buffer_->Init(tag);
+  if (name->start() == nullptr) {
+    name_buffer_->AppendBytes("<wasm-unknown>");
+  } else {
+    name_buffer_->AppendBytes(name->start(), name->length());
+  }
+  name_buffer_->AppendByte('-');
+  name_buffer_->AppendInt(code->index());
+  LogRecordedBuffer(code, name_buffer_->get(), name_buffer_->size());
+}
+
 void CodeEventLogger::RegExpCodeCreateEvent(AbstractCode* code,
                                             String* source) {
   name_buffer_->Init(CodeEventListener::REG_EXP_TAG);
@@ -221,6 +236,10 @@ class PerfBasicLogger : public CodeEventLogger {
  private:
   void LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo* shared,
                          const char* name, int length) override;
+  void LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                         int length) override;
+  void WriteLogRecordedBuffer(uintptr_t address, int size, const char* name,
+                              int name_length);
 
   // Extension added to V8 log file name to get the low-level log name.
   static const char kFilenameFormatString[];
@@ -254,6 +273,19 @@ PerfBasicLogger::~PerfBasicLogger() {
   perf_output_handle_ = nullptr;
 }
 
+void PerfBasicLogger::WriteLogRecordedBuffer(uintptr_t address, int size,
+                                             const char* name,
+                                             int name_length) {
+  // Linux perf expects hex literals without a leading 0x, while some
+  // implementations of printf might prepend one when using the %p format
+  // for pointers, leading to wrongly formatted JIT symbols maps.
+  //
+  // Instead, we use V8PRIxPTR format string and cast pointer to uintpr_t,
+  // so that we have control over the exact output format.
+  base::OS::FPrint(perf_output_handle_, "%" V8PRIxPTR " %x %.*s\n", address,
+                   size, name_length, name);
+}
+
 void PerfBasicLogger::LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
                                         const char* name, int length) {
   if (FLAG_perf_basic_prof_only_functions &&
@@ -262,15 +294,15 @@ void PerfBasicLogger::LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
     return;
   }
 
-  // Linux perf expects hex literals without a leading 0x, while some
-  // implementations of printf might prepend one when using the %p format
-  // for pointers, leading to wrongly formatted JIT symbols maps.
-  //
-  // Instead, we use V8PRIxPTR format string and cast pointer to uintpr_t,
-  // so that we have control over the exact output format.
-  base::OS::FPrint(perf_output_handle_, "%" V8PRIxPTR " %x %.*s\n",
-                   reinterpret_cast<uintptr_t>(code->instruction_start()),
-                   code->instruction_size(), length, name);
+  WriteLogRecordedBuffer(reinterpret_cast<uintptr_t>(code->instruction_start()),
+                         code->instruction_size(), name, length);
+}
+
+void PerfBasicLogger::LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                                        int length) {
+  WriteLogRecordedBuffer(
+      reinterpret_cast<uintptr_t>(code->instructions().start()),
+      code->instructions().length(), name, length);
 }
 
 // Low-level logging support.
@@ -290,6 +322,8 @@ class LowLevelLogger : public CodeEventLogger {
  private:
   void LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo* shared,
                          const char* name, int length) override;
+  void LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                         int length) override;
 
   // Low-level profiling event structures.
   struct CodeCreateStruct {
@@ -386,6 +420,18 @@ void LowLevelLogger::LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
       code->instruction_size());
 }
 
+void LowLevelLogger::LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                                       int length) {
+  CodeCreateStruct event;
+  event.name_size = length;
+  event.code_address = code->instructions().start();
+  event.code_size = code->instructions().length();
+  LogWriteStruct(event);
+  LogWriteBytes(name, length);
+  LogWriteBytes(reinterpret_cast<const char*>(code->instructions().start()),
+                code->instructions().length());
+}
+
 void LowLevelLogger::CodeMoveEvent(AbstractCode* from, Address to) {
   CodeMoveStruct event;
   event.from_address = from->instruction_start();
@@ -425,6 +471,8 @@ class JitLogger : public CodeEventLogger {
  private:
   void LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo* shared,
                          const char* name, int length) override;
+  void LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                         int length) override;
 
   JitCodeEventHandler code_event_handler_;
   base::Mutex logger_mutex_;
@@ -448,6 +496,18 @@ void JitLogger::LogRecordedBuffer(AbstractCode* code,
     shared_function_handle = Handle<SharedFunctionInfo>(shared);
   }
   event.script = ToApiHandle<v8::UnboundScript>(shared_function_handle);
+  event.name.str = name;
+  event.name.len = length;
+  code_event_handler_(&event);
+}
+
+void JitLogger::LogRecordedBuffer(wasm::WasmCode* code, const char* name,
+                                  int length) {
+  JitCodeEvent event;
+  memset(&event, 0, sizeof(event));
+  event.type = JitCodeEvent::CODE_ADDED;
+  event.code_start = code->instructions().start();
+  event.code_len = code->instructions().length();
   event.name.str = name;
   event.name.len = length;
   code_event_handler_(&event);
@@ -979,12 +1039,20 @@ namespace {
 
 void AppendCodeCreateHeader(Log::MessageBuilder& msg,
                             CodeEventListener::LogEventsAndTags tag,
-                            AbstractCode* code, base::ElapsedTimer* timer) {
+                            AbstractCode::Kind kind, uint8_t* address, int size,
+                            base::ElapsedTimer* timer) {
   msg << kLogEventsNames[CodeEventListener::CODE_CREATION_EVENT]
-      << Logger::kNext << kLogEventsNames[tag] << Logger::kNext << code->kind()
+      << Logger::kNext << kLogEventsNames[tag] << Logger::kNext << kind
       << Logger::kNext << timer->Elapsed().InMicroseconds() << Logger::kNext
-      << reinterpret_cast<void*>(code->instruction_start()) << Logger::kNext
-      << code->instruction_size() << Logger::kNext;
+      << reinterpret_cast<void*>(address) << Logger::kNext << size
+      << Logger::kNext;
+}
+
+void AppendCodeCreateHeader(Log::MessageBuilder& msg,
+                            CodeEventListener::LogEventsAndTags tag,
+                            AbstractCode* code, base::ElapsedTimer* timer) {
+  AppendCodeCreateHeader(msg, tag, code->kind(), code->instruction_start(),
+                         code->instruction_size(), timer);
 }
 
 }  // namespace
@@ -1026,6 +1094,21 @@ void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
   msg.WriteToLogFile();
 }
 
+void Logger::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
+                             wasm::WasmCode* code, Vector<const char>* name) {
+  if (!is_logging_code_events()) return;
+  if (!FLAG_log_code || !log_->IsEnabled()) return;
+  Log::MessageBuilder msg(log_);
+  AppendCodeCreateHeader(msg, tag, AbstractCode::Kind::WASM_FUNCTION,
+                         code->instructions().start(),
+                         code->instructions().length(), &timer_);
+  if (name->is_empty()) {
+    msg << "<unknown wasm>";
+  } else {
+    msg << name->start();
+  }
+  msg.WriteToLogFile();
+}
 
 // Although, it is possible to extract source and line from
 // the SharedFunctionInfo object, we left it to caller
