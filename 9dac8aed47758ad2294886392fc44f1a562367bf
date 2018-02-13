@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "be264a70_3f69d264",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-13T23:50:39Z",
+      "side": 1,
+      "message": "I\u0027ve migrated the `DebugEvaluateWithCodeGenerationDisallowed` test to an inspector test.  Instead of calling evaluateGlobal and evaluateLocal mirror fn\u0027s, it calls Runtime.evaluate and Debugger.evaluateOnCallFrame, which will internally use debug::Global and debug::Local.\n\nI also checked that disabling the lines in the original CL [1], now found here [2] will break the test\u0027s Runtime.evaluate case.\n[1] https://codereview.chromium.org/11111015/diff/1/src/runtime.cc\n[2] https://cs.chromium.org/chromium/src/v8/src/inspector/v8-runtime-agent-impl.cc?l\u003d253",
+      "parentUuid": "d0c73d4f_8f4140c3",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "9dac8aed47758ad2294886392fc44f1a562367bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac09fe8a_b3c4a7d1",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 5

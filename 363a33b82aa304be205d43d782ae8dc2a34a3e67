@@ -22,6 +22,30 @@
       "revId": "363a33b82aa304be205d43d782ae8dc2a34a3e67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21423dc_c1354731",
+        "filename": "test/cctest/test-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-13T23:50:39Z",
+      "side": 1,
+      "message": "Presumably, this invocation doesn\u0027t set the correct context, so evaluating \u0027Global\u0027 fails.",
+      "parentUuid": "ee9c714a_ed4bcac3",
+      "range": {
+        "startLine": 2309,
+        "startChar": 45,
+        "endLine": 2309,
+        "endChar": 48
+      },
+      "revId": "363a33b82aa304be205d43d782ae8dc2a34a3e67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
