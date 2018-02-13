@@ -391,6 +391,11 @@ void IsolateData::SetLogMaxAsyncCallStackDepthChanged(bool log) {
   log_max_async_call_stack_depth_changed_ = log;
 }
 
+void IsolateData::SetAllowCodeGenerationFromStrings(int context_group_id,
+                                                    bool allow) {
+  GetContext(context_group_id)->AllowCodeGenerationFromStrings(allow);
+}
+
 v8::MaybeLocal<v8::Value> IsolateData::memoryInfo(v8::Isolate* isolate,
                                                   v8::Local<v8::Context>) {
   if (memory_info_.IsEmpty()) return v8::MaybeLocal<v8::Value>();

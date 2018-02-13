@@ -301,6 +301,10 @@ class UtilsExtension : public IsolateData::SetupGlobalTask {
         ToV8String(isolate, "setLogMaxAsyncCallStackDepthChanged"),
         v8::FunctionTemplate::New(
             isolate, &UtilsExtension::SetLogMaxAsyncCallStackDepthChanged));
+    utils->Set(
+        ToV8String(isolate, "setAllowCodeGenerationFromStrings"),
+        v8::FunctionTemplate::New(
+            isolate, &UtilsExtension::SetAllowCodeGenerationFromStrings));
     utils->Set(ToV8String(isolate, "createContextGroup"),
                v8::FunctionTemplate::New(isolate,
                                          &UtilsExtension::CreateContextGroup));
@@ -499,6 +503,18 @@ class UtilsExtension : public IsolateData::SetupGlobalTask {
     }
     backend_runner_->data()->SetLogMaxAsyncCallStackDepthChanged(
         args[0].As<v8::Boolean>()->Value());
+  }
+
+  static void SetAllowCodeGenerationFromStrings(
+      const v8::FunctionCallbackInfo<v8::Value>& args) {
+    if (args.Length() != 2 || !args[0]->IsInt32() || !args[1]->IsBoolean()) {
+      fprintf(stderr,
+              "Internal error: setAllowCodeGenerationFromStrings("
+              "context_group_id, allow).");
+      Exit();
+    }
+    backend_runner_->data()->SetAllowCodeGenerationFromStrings(
+        args[0].As<v8::Int32>()->Value(), args[1].As<v8::Boolean>()->Value());
   }
 
   static void CreateContextGroup(
