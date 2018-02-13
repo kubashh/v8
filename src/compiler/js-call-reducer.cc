@@ -3156,6 +3156,18 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
         case Builtins::kStringPrototypeCodePointAt:
           return ReduceStringPrototypeStringAt(
               simplified()->StringCodePointAt(UnicodeEncoding::UTF32), node);
+        case Builtins::kStringPrototypeToLowerCaseIntl:
+          return ReduceStringPrototypeToLowerCaseIntl(node);
+        case Builtins::kStringPrototypeToUpperCaseIntl:
+          return ReduceStringPrototypeToUpperCaseIntl(node);
+        case Builtins::kStringFromCharCode:
+          return ReduceStringFromCharCode(node);
+        case Builtins::kStringPrototypeConcat:
+          return ReduceStringPrototypeConcat(node);
+        case Builtins::kStringPrototypeIterator:
+          return ReduceStringPrototypeIterator(node);
+        case Builtins::kStringIteratorPrototypeNext:
+          return ReduceStringIteratorPrototypeNext(node);
         case Builtins::kAsyncFunctionPromiseCreate:
           return ReduceAsyncFunctionPromiseCreate(node);
         case Builtins::kAsyncFunctionPromiseRelease:
@@ -3517,44 +3529,6 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
     return reduction.Changed() ? reduction : Changed(node);
   }
 
-  return NoChange();
-}
-
-// ES6 String.prototype.indexOf(searchString [, position])
-// #sec-string.prototype.indexof
-Reduction JSCallReducer::ReduceStringPrototypeIndexOf(
-    Handle<JSFunction> function, Node* node) {
-  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
-  CallParameters const& p = CallParametersOf(node->op());
-
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
-  if (node->op()->ValueInputCount() >= 3) {
-    Node* receiver = NodeProperties::GetValueInput(node, 1);
-    Node* new_receiver = effect = graph()->NewNode(
-        simplified()->CheckString(p.feedback()), receiver, effect, control);
-
-    Node* search_string = NodeProperties::GetValueInput(node, 2);
-    Node* new_search_string = effect =
-        graph()->NewNode(simplified()->CheckString(p.feedback()), search_string,
-                         effect, control);
-
-    Node* new_position = jsgraph()->ZeroConstant();
-    if (node->op()->ValueInputCount() >= 4) {
-      Node* position = NodeProperties::GetValueInput(node, 3);
-      new_position = effect = graph()->NewNode(
-          simplified()->CheckSmi(p.feedback()), position, effect, control);
-    }
-
-    NodeProperties::ReplaceEffectInput(node, effect);
-    RelaxEffectsAndControls(node);
-    node->ReplaceInput(0, new_receiver);
-    node->ReplaceInput(1, new_search_string);
-    node->ReplaceInput(2, new_position);
-    node->TrimInputCount(3);
-    NodeProperties::ChangeOp(node, simplified()->StringIndexOf());
-    return Changed(node);
-  }
   return NoChange();
 }
 
@@ -4039,6 +4013,44 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
     return Replace(value);
 }
 
+// ES6 String.prototype.indexOf(searchString [, position])
+// #sec-string.prototype.indexof
+Reduction JSCallReducer::ReduceStringPrototypeIndexOf(
+    Handle<JSFunction> function, Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  if (node->op()->ValueInputCount() >= 3) {
+    Node* receiver = NodeProperties::GetValueInput(node, 1);
+    Node* new_receiver = effect = graph()->NewNode(
+        simplified()->CheckString(p.feedback()), receiver, effect, control);
+
+    Node* search_string = NodeProperties::GetValueInput(node, 2);
+    Node* new_search_string = effect =
+        graph()->NewNode(simplified()->CheckString(p.feedback()), search_string,
+                         effect, control);
+
+    Node* new_position = jsgraph()->ZeroConstant();
+    if (node->op()->ValueInputCount() >= 4) {
+      Node* position = NodeProperties::GetValueInput(node, 3);
+      new_position = effect = graph()->NewNode(
+          simplified()->CheckSmi(p.feedback()), position, effect, control);
+    }
+
+    NodeProperties::ReplaceEffectInput(node, effect);
+    RelaxEffectsAndControls(node);
+    node->ReplaceInput(0, new_receiver);
+    node->ReplaceInput(1, new_search_string);
+    node->ReplaceInput(2, new_position);
+    node->TrimInputCount(3);
+    NodeProperties::ChangeOp(node, simplified()->StringIndexOf());
+    return Changed(node);
+  }
+  return NoChange();
+}
+
 // ES6 section 21.1.3.1 String.prototype.charAt ( pos )
 // and
 // ES6 section 21.1.3.2 String.prototype.charCodeAt ( pos )
@@ -4079,6 +4091,188 @@ Reduction JSCallReducer::ReduceStringPrototypeStringAt(
 
   ReplaceWithValue(node, value, effect, control);
   return Replace(value);
+}
+
+Reduction JSCallReducer::ReduceStringPrototypeToLowerCaseIntl(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  Node* receiver = effect =
+      graph()->NewNode(simplified()->CheckString(p.feedback()),
+                       NodeProperties::GetValueInput(node, 1), effect, control);
+
+  NodeProperties::ReplaceEffectInput(node, effect);
+  RelaxEffectsAndControls(node);
+  node->ReplaceInput(0, receiver);
+  node->TrimInputCount(1);
+  NodeProperties::ChangeOp(node, simplified()->StringToLowerCaseIntl());
+  NodeProperties::SetType(node, Type::String());
+  return Changed(node);
+}
+
+Reduction JSCallReducer::ReduceStringPrototypeToUpperCaseIntl(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  Node* receiver = effect =
+      graph()->NewNode(simplified()->CheckString(p.feedback()),
+                       NodeProperties::GetValueInput(node, 1), effect, control);
+
+  NodeProperties::ReplaceEffectInput(node, effect);
+  RelaxEffectsAndControls(node);
+  node->ReplaceInput(0, receiver);
+  node->TrimInputCount(1);
+  NodeProperties::ChangeOp(node, simplified()->StringToUpperCaseIntl());
+  NodeProperties::SetType(node, Type::String());
+  return Changed(node);
+}
+
+// ES6 section 21.1.2.1 String.fromCharCode ( ...codeUnits )
+Reduction JSCallReducer::ReduceStringFromCharCode(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  if (node->op()->ValueInputCount() == 3) {
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+    Node* input = NodeProperties::GetValueInput(node, 2);
+
+    input = effect = graph()->NewNode(
+        simplified()->SpeculativeToNumber(NumberOperationHint::kNumberOrOddball,
+                                          p.feedback()),
+        input, effect, control);
+
+    Node* value = graph()->NewNode(simplified()->StringFromCharCode(), input);
+    ReplaceWithValue(node, value, effect);
+    return Replace(value);
+  }
+  return NoChange();
+}
+
+// ES6 String.prototype.concat(...args)
+// #sec-string.prototype.concat
+Reduction JSCallReducer::ReduceStringPrototypeConcat(Node* node) {
+  if (node->op()->ValueInputCount() != 4) return NoChange();
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  CallParameters const& p = CallParametersOf(node->op());
+  Node* receiver = effect =
+      graph()->NewNode(simplified()->CheckString(p.feedback()),
+                       NodeProperties::GetValueInput(node, 2), effect, control);
+  // TODO(turbofan): Massage the FrameState of the {node} here once we
+  // have an artificial builtin frame type, so that it looks like the
+  // exception from StringAdd overflow came from String.prototype.concat
+  // builtin instead of the calling function.
+  Callable const callable =
+      CodeFactory::StringAdd(isolate(), STRING_ADD_CONVERT_RIGHT, NOT_TENURED);
+  CallDescriptor const* const desc = Linkage::GetStubCallDescriptor(
+      isolate(), graph()->zone(), callable.descriptor(), 0,
+      CallDescriptor::kNeedsFrameState,
+      Operator::kNoDeopt | Operator::kNoWrite);
+  node->ReplaceInput(0, jsgraph()->HeapConstant(callable.code()));
+  node->ReplaceInput(1, receiver);
+  NodeProperties::ReplaceEffectInput(node, effect);
+  NodeProperties::ChangeOp(node, common()->Call(desc));
+  return Changed(node);
+}
+
+Reduction JSCallReducer::ReduceStringPrototypeIterator(Node* node) {
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  CallParameters const& p = CallParametersOf(node->op());
+  Node* receiver = effect =
+      graph()->NewNode(simplified()->CheckString(p.feedback()),
+                       NodeProperties::GetValueInput(node, 1), effect, control);
+
+  Node* map = jsgraph()->HeapConstant(
+      handle(native_context()->string_iterator_map(), isolate()));
+
+  // Allocate new iterator and attach the iterator to this string.
+  AllocationBuilder a(jsgraph(), effect, control);
+  a.Allocate(JSStringIterator::kSize, NOT_TENURED, Type::OtherObject());
+  a.Store(AccessBuilder::ForMap(), map);
+  a.Store(AccessBuilder::ForJSObjectPropertiesOrHash(),
+          jsgraph()->EmptyFixedArrayConstant());
+  a.Store(AccessBuilder::ForJSObjectElements(),
+          jsgraph()->EmptyFixedArrayConstant());
+  a.Store(AccessBuilder::ForJSStringIteratorString(), receiver);
+  a.Store(AccessBuilder::ForJSStringIteratorIndex(), jsgraph()->SmiConstant(0));
+  Node* value = effect = a.Finish();
+
+  // Replace it.
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(value);
+}
+
+Reduction JSCallReducer::ReduceStringIteratorPrototypeNext(Node* node) {
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* context = NodeProperties::GetContextInput(node);
+  if (NodeProperties::HasInstanceTypeWitness(receiver, effect,
+                                             JS_STRING_ITERATOR_TYPE)) {
+    Node* string = effect = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForJSStringIteratorString()),
+        receiver, effect, control);
+    Node* index = effect = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForJSStringIteratorIndex()),
+        receiver, effect, control);
+    Node* length = graph()->NewNode(simplified()->StringLength(), string);
+
+    // branch0: if (index < length)
+    Node* check0 =
+        graph()->NewNode(simplified()->NumberLessThan(), index, length);
+    Node* branch0 =
+        graph()->NewNode(common()->Branch(BranchHint::kTrue), check0, control);
+
+    Node* etrue0 = effect;
+    Node* if_true0 = graph()->NewNode(common()->IfTrue(), branch0);
+    Node* done_true;
+    Node* vtrue0;
+    {
+      done_true = jsgraph()->FalseConstant();
+      Node* codepoint = etrue0 = graph()->NewNode(
+          simplified()->StringCodePointAt(UnicodeEncoding::UTF16), string,
+          index, etrue0, if_true0);
+      vtrue0 = graph()->NewNode(
+          simplified()->StringFromCodePoint(UnicodeEncoding::UTF16), codepoint);
+
+      // Update iterator.[[NextIndex]]
+      Node* char_length =
+          graph()->NewNode(simplified()->StringLength(), vtrue0);
+      index = graph()->NewNode(simplified()->NumberAdd(), index, char_length);
+      etrue0 = graph()->NewNode(
+          simplified()->StoreField(AccessBuilder::ForJSStringIteratorIndex()),
+          receiver, index, etrue0, if_true0);
+    }
+
+    Node* if_false0 = graph()->NewNode(common()->IfFalse(), branch0);
+    Node* done_false;
+    Node* vfalse0;
+    {
+      vfalse0 = jsgraph()->UndefinedConstant();
+      done_false = jsgraph()->TrueConstant();
+    }
+
+    control = graph()->NewNode(common()->Merge(2), if_true0, if_false0);
+    effect = graph()->NewNode(common()->EffectPhi(2), etrue0, effect, control);
+    Node* value =
+        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                         vtrue0, vfalse0, control);
+    Node* done =
+        graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                         done_true, done_false, control);
+
+    value = effect = graph()->NewNode(javascript()->CreateIterResultObject(),
+                                      value, done, context, effect);
+
+    ReplaceWithValue(node, value, effect, control);
+    return Replace(value);
+  }
+  return NoChange();
 }
 
 Reduction JSCallReducer::ReduceAsyncFunctionPromiseCreate(Node* node) {
