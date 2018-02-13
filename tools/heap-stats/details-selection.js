@@ -102,6 +102,7 @@ class DetailsSelection extends HTMLElement {
     this.populateSelect(
         '#isolate-select', Object.keys(this.data).map(v => [v, v]));
     this.handleIsolateChange();
+    this.$('#dataSelectionSection').style.display = 'block';
   }
 
   resetUI(resetIsolateSelect) {
