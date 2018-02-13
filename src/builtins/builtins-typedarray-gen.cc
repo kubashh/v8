@@ -1553,8 +1553,7 @@ TF_BUILTIN(TypedArrayOf, TypedArrayBuiltinsAssembler) {
   CodeStubArguments args(this, length, nullptr, ParameterMode::SMI_PARAMETERS,
                          CodeStubArguments::ReceiverMode::kHasReceiver);
 
-  Label if_not_constructor(this, Label::kDeferred),
-      unreachable(this, Label::kDeferred);
+  Label if_not_constructor(this, Label::kDeferred);
 
   // 3. Let C be the this value.
   // 4. If IsConstructor(C) is false, throw a TypeError exception.
@@ -1574,39 +1573,23 @@ TF_BUILTIN(TypedArrayOf, TypedArrayBuiltinsAssembler) {
   //  b. Let Pk be ! ToString(k).
   //  c. Perform ? Set(newObj, Pk, kValue, true).
   //  d. Increase k by 1.
-  DispatchTypedArrayByElementsKind(
-      elements_kind,
-      [&](ElementsKind kind, int size, int typed_array_fun_index) {
-        BuildFastLoop(
-            SmiConstant(0), length,
-            [&](Node* index) {
-              TNode<Object> item =
-                  args.AtIndex(index, ParameterMode::SMI_PARAMETERS);
-              TNode<Number> number = ToNumber_Inline(context, item);
 
-              // ToNumber may execute JavaScript code, but it cannot access
-              // arguments array and new typed array.
-              DebugSanityCheckTypedArrayIndex(new_typed_array, index);
+  BuildFastLoop(
+      SmiConstant(0), length,
+      [&](Node* index) {
+        TNode<Object> item = args.AtIndex(index, ParameterMode::SMI_PARAMETERS);
+        TNode<Number> number = ToNumber_Inline(context, item);
 
-              // Since we can guarantee that "number" is Number type,
-              // PrepareValueForWriteToTypedArray cannot bail out.
-              Node* value =
-                  PrepareValueForWriteToTypedArray(number, kind, &unreachable);
+        // ToNumber may execute JavaScript code, but it cannot access
+        // arguments array and new typed array.
+        DebugSanityCheckTypedArrayIndex(new_typed_array, index);
 
-              // GC may move backing store in ToNumber, thus load backing store
-              // everytime in this loop.
-              TNode<IntPtrT> backing_store =
-                  UncheckedCast<IntPtrT>(LoadDataPtr(new_typed_array));
-              StoreElement(backing_store, kind, index, value, SMI_PARAMETERS);
-            },
-            1, ParameterMode::SMI_PARAMETERS, IndexAdvanceMode::kPost);
-      });
+        WriteToTypedArray(number, new_typed_array, index, elements_kind);
+      },
+      1, ParameterMode::SMI_PARAMETERS, IndexAdvanceMode::kPost);
 
   // 8. Return newObj.
   args.PopAndReturn(new_typed_array);
-
-  BIND(&unreachable);
-  Unreachable();
 
   BIND(&if_not_constructor);
   ThrowTypeError(context, MessageTemplate::kNotConstructor, receiver);

@@ -1734,6 +1734,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* Int32ToUint8Clamped(Node* int32_value);
   Node* Float64ToUint8Clamped(Node* float64_value);
 
+  void WriteToTypedArray(TNode<Number> input, TNode<JSTypedArray> typed_array,
+                         Node* index, TNode<Word32T> elements_kind);
+
   Node* PrepareValueForWriteToTypedArray(Node* key, ElementsKind elements_kind,
                                          Label* bailout);
 
