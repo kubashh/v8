@@ -7828,6 +7828,194 @@ Node* CodeStubAssembler::Float64ToUint8Clamped(Node* float64_value) {
   return var_value.value();
 }
 
+void CodeStubAssembler::WriteToTypedArray(TNode<Number> input,
+                                          TNode<JSTypedArray> typed_array,
+                                          Node* index,
+                                          TNode<Word32T> elements_kind) {
+  Label if_heapnumber(this), if_smi(this), done(this);
+
+  Node* elements = LoadElements(typed_array);
+  CSA_ASSERT(this, IsFixedTypedArray(elements));
+  Node* base_pointer = BitcastTaggedToWord(
+      LoadObjectField(elements, FixedTypedArrayBase::kBasePointerOffset));
+  Node* external_pointer = BitcastTaggedToWord(
+      LoadObjectField(elements, FixedTypedArrayBase::kExternalPointerOffset));
+  Node* backing_store = IntPtrAdd(base_pointer, external_pointer);
+
+  Branch(TaggedIsSmi(input), &if_smi, &if_heapnumber);
+
+  BIND(&if_heapnumber);
+  {
+    Label store_64(this), store_32(this), store_uint8_clamped(this),
+        convert_to_word32(this);
+
+    TNode<HeapNumber> heap_number_input = CAST(input);
+    Node* value = LoadHeapNumberValue(heap_number_input);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(FLOAT64_ELEMENTS)),
+           &store_64);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(FLOAT32_ELEMENTS)),
+           &store_32);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(UINT8_CLAMPED_ELEMENTS)),
+           &store_uint8_clamped);
+    Goto(&convert_to_word32);
+
+    BIND(&store_64);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, FLOAT64_ELEMENTS, SMI_PARAMETERS);
+      StoreNoWriteBarrier(MachineRepresentation::kFloat64, backing_store,
+                          offset, value);
+      Goto(&done);
+    }
+
+    BIND(&store_32);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, FLOAT32_ELEMENTS, SMI_PARAMETERS);
+      Node* converted_value = TruncateFloat64ToFloat32(value);
+      StoreNoWriteBarrier(MachineRepresentation::kFloat32, backing_store,
+                          offset, converted_value);
+      Goto(&done);
+    }
+
+    BIND(&store_uint8_clamped);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, UINT8_CLAMPED_ELEMENTS, SMI_PARAMETERS);
+      Node* converted_value = Float64ToUint8Clamped(value);
+      StoreNoWriteBarrier(MachineRepresentation::kWord8, backing_store, offset,
+                          converted_value);
+      Goto(&done);
+    }
+
+    BIND(&convert_to_word32);
+    {
+      Label store_8(this), store_16(this), store_32(this);
+      Node* converted_value = TruncateFloat64ToWord32(value);
+      GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT8_ELEMENTS)),
+             &store_8);
+
+      GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT16_ELEMENTS)),
+             &store_16);
+
+      GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT32_ELEMENTS)),
+             &store_32);
+      Unreachable();
+
+      BIND(&store_8);
+      {
+        Node* offset =
+            ElementOffsetFromIndex(index, UINT8_ELEMENTS, SMI_PARAMETERS);
+        StoreNoWriteBarrier(MachineRepresentation::kWord8, backing_store,
+                            offset, converted_value);
+        Goto(&done);
+      }
+
+      BIND(&store_16);
+      {
+        Node* offset =
+            ElementOffsetFromIndex(index, UINT16_ELEMENTS, SMI_PARAMETERS);
+        StoreNoWriteBarrier(MachineRepresentation::kWord16, backing_store,
+                            offset, converted_value);
+        Goto(&done);
+      }
+
+      BIND(&store_32);
+      {
+        Node* offset =
+            ElementOffsetFromIndex(index, UINT32_ELEMENTS, SMI_PARAMETERS);
+        StoreNoWriteBarrier(MachineRepresentation::kWord32, backing_store,
+                            offset, converted_value);
+        Goto(&done);
+      }
+    }
+  }
+
+  BIND(&if_smi);
+  {
+    Label store_float64(this), store_float32(this), store_uint8_clamped(this),
+        store_8(this), store_16(this), store_32(this);
+
+    TNode<Smi> smi_input = CAST(input);
+    Node* value = SmiToWord32(smi_input);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(FLOAT64_ELEMENTS)),
+           &store_float64);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(FLOAT32_ELEMENTS)),
+           &store_float32);
+    GotoIf(Word32Equal(elements_kind, Int32Constant(UINT8_CLAMPED_ELEMENTS)),
+           &store_uint8_clamped);
+
+    GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT8_ELEMENTS)),
+           &store_8);
+
+    GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT16_ELEMENTS)),
+           &store_16);
+
+    GotoIf(Int32LessThanOrEqual(elements_kind, Int32Constant(INT32_ELEMENTS)),
+           &store_32);
+    Unreachable();
+
+    BIND(&store_float64);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, FLOAT64_ELEMENTS, SMI_PARAMETERS);
+      Node* converted_value = ChangeInt32ToFloat64(value);
+      StoreNoWriteBarrier(MachineRepresentation::kFloat64, backing_store,
+                          offset, converted_value);
+      Goto(&done);
+    }
+
+    BIND(&store_float32);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, FLOAT32_ELEMENTS, SMI_PARAMETERS);
+      Node* converted_value = RoundInt32ToFloat32(value);
+      StoreNoWriteBarrier(MachineRepresentation::kFloat32, backing_store,
+                          offset, converted_value);
+      Goto(&done);
+    }
+
+    BIND(&store_uint8_clamped);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, UINT8_CLAMPED_ELEMENTS, SMI_PARAMETERS);
+      Node* converted_value = Int32ToUint8Clamped(value);
+      StoreNoWriteBarrier(MachineRepresentation::kWord8, backing_store, offset,
+                          converted_value);
+      Goto(&done);
+    }
+
+    BIND(&store_8);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, UINT8_ELEMENTS, SMI_PARAMETERS);
+      StoreNoWriteBarrier(MachineRepresentation::kWord8, backing_store, offset,
+                          value);
+      Goto(&done);
+    }
+
+    BIND(&store_16);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, UINT16_ELEMENTS, SMI_PARAMETERS);
+      StoreNoWriteBarrier(MachineRepresentation::kWord16, backing_store, offset,
+                          value);
+      Goto(&done);
+    }
+
+    BIND(&store_32);
+    {
+      Node* offset =
+          ElementOffsetFromIndex(index, UINT32_ELEMENTS, SMI_PARAMETERS);
+      StoreNoWriteBarrier(MachineRepresentation::kWord32, backing_store, offset,
+                          value);
+      Goto(&done);
+    }
+  }
+
+  BIND(&done);
+}
+
 Node* CodeStubAssembler::PrepareValueForWriteToTypedArray(
     Node* input, ElementsKind elements_kind, Label* bailout) {
   DCHECK(IsFixedTypedArrayElementsKind(elements_kind));
