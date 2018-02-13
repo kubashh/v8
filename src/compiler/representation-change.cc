@@ -468,6 +468,14 @@ Node* RepresentationChanger::GetTaggedRepresentationFor(
       return TypeError(node, output_rep, output_type,
                        MachineRepresentation::kTagged);
     }
+  } else if (output_rep == MachineRepresentation::kWord64) {
+    if (output_type->Is(Type::BigInt())) {
+      // TODO(neis/jkummerow): Allocate a BigInt.
+      UNIMPLEMENTED();
+    } else {
+      return TypeError(node, output_rep, output_type,
+                       MachineRepresentation::kTagged);
+    }
   } else {
     return TypeError(node, output_rep, output_type,
                      MachineRepresentation::kTagged);
