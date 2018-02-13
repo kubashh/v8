@@ -2072,19 +2072,16 @@ HeapEntry* BasicHeapEntriesAllocator::AllocateEntry(HeapThing ptr) {
 
 class EmbedderGraphEntriesAllocator : public HeapEntriesAllocator {
  public:
-  EmbedderGraphEntriesAllocator(HeapSnapshot* snapshot,
-                                HeapEntry::Type entries_type)
+  explicit EmbedderGraphEntriesAllocator(HeapSnapshot* snapshot)
       : snapshot_(snapshot),
         names_(snapshot_->profiler()->names()),
-        heap_object_map_(snapshot_->profiler()->heap_object_map()),
-        entries_type_(entries_type) {}
+        heap_object_map_(snapshot_->profiler()->heap_object_map()) {}
   virtual HeapEntry* AllocateEntry(HeapThing ptr);
 
  private:
   HeapSnapshot* snapshot_;
   StringsStorage* names_;
   HeapObjectsMap* heap_object_map_;
-  HeapEntry::Type entries_type_;
 };
 
 HeapEntry* EmbedderGraphEntriesAllocator::AllocateEntry(HeapThing ptr) {
@@ -2093,8 +2090,10 @@ HeapEntry* EmbedderGraphEntriesAllocator::AllocateEntry(HeapThing ptr) {
   DCHECK(node->IsEmbedderNode());
   const char* name = names_->GetCopy(node->Name());
   size_t size = node->SizeInBytes();
+  HeapEntry::Type entry_type =
+      node->IsDetachedNode() ? HeapEntry::kDetached : HeapEntry::kNative;
   return snapshot_->AddEntry(
-      entries_type_, name,
+      entry_type, name,
       static_cast<SnapshotObjectId>(reinterpret_cast<uintptr_t>(node) << 1),
       static_cast<int>(size), 0);
 }
@@ -2112,7 +2111,7 @@ NativeObjectsExplorer::NativeObjectsExplorer(
       native_entries_allocator_(
           new BasicHeapEntriesAllocator(snapshot, HeapEntry::kNative)),
       embedder_graph_entries_allocator_(
-          new EmbedderGraphEntriesAllocator(snapshot, HeapEntry::kNative)),
+          new EmbedderGraphEntriesAllocator(snapshot)),
       filler_(nullptr) {}
 
 NativeObjectsExplorer::~NativeObjectsExplorer() {
