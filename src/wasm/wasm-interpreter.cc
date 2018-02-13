@@ -1444,15 +1444,15 @@ class ThreadImpl {
   }
 
   pc_t ReturnPc(Decoder* decoder, InterpreterCode* code, pc_t pc) {
-    switch (code->orig_start[pc]) {
+    switch (const byte opcode = code->orig_start[pc]) {
       case kExprCallFunction: {
-        CallFunctionOperand<Decoder::kNoValidate> operand(decoder,
-                                                          code->at(pc));
+        CallFunctionOperand<Decoder::kNoValidate> operand(decoder, code->at(pc),
+                                                          false);
         return pc + 1 + operand.length;
       }
       case kExprCallIndirect: {
-        CallIndirectOperand<Decoder::kNoValidate> operand(decoder,
-                                                          code->at(pc));
+        CallIndirectOperand<Decoder::kNoValidate> operand(decoder, code->at(pc),
+                                                          false);
         return pc + 1 + operand.length;
       }
       default:
@@ -1951,8 +1951,8 @@ class ThreadImpl {
           break;
         }
         case kExprCallFunction: {
-          CallFunctionOperand<Decoder::kNoValidate> operand(&decoder,
-                                                            code->at(pc));
+          CallFunctionOperand<Decoder::kNoValidate> operand(
+              &decoder, code->at(pc), false);
           InterpreterCode* target = codemap()->GetCode(operand.index);
           if (target->function->imported) {
             CommitPc(pc);
@@ -1984,8 +1984,8 @@ class ThreadImpl {
           continue;  // don't bump pc
         } break;
         case kExprCallIndirect: {
-          CallIndirectOperand<Decoder::kNoValidate> operand(&decoder,
-                                                            code->at(pc));
+          CallIndirectOperand<Decoder::kNoValidate> operand(
+              &decoder, code->at(pc), false);
           uint32_t entry_index = Pop().to<uint32_t>();
           // Assume only one table for now.
           DCHECK_LE(module()->function_tables.size(), 1u);

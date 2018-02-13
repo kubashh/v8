@@ -999,16 +999,20 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
         os << " // entries=" << operand.table_count;
         break;
       }
-      case kExprCallIndirect: {
-        CallIndirectOperand<Decoder::kNoValidate> operand(&i, i.pc());
+      case kExprCallIndirect:
+      case kExprReturnCallIndirect: {
+        CallIndirectOperand<Decoder::kNoValidate> operand(
+            &i, i.pc(), opcode == kExprReturnCallIndirect);
         os << "   // sig #" << operand.sig_index;
         if (decoder.Complete(i.pc(), operand)) {
           os << ": " << *operand.sig;
         }
         break;
       }
-      case kExprCallFunction: {
-        CallFunctionOperand<Decoder::kNoValidate> operand(&i, i.pc());
+      case kExprCallFunction:
+      case kExprReturnCallFunction: {
+        CallFunctionOperand<Decoder::kNoValidate> operand(
+            &i, i.pc(), opcode == kExprReturnCallFunction);
         os << " // function #" << operand.index;
         if (decoder.Complete(i.pc(), operand)) {
           os << ": " << *operand.sig;

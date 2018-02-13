@@ -132,14 +132,25 @@ void PrintWasmText(const WasmModule* module, const ModuleWireBytes& wire_bytes,
         break;
       }
       case kExprCallIndirect: {
-        CallIndirectOperand<Decoder::kNoValidate> operand(&i, i.pc());
+        CallIndirectOperand<Decoder::kNoValidate> operand(&i, i.pc(), false);
         DCHECK_EQ(0, operand.table_index);
         os << "call_indirect " << operand.sig_index;
         break;
       }
+      case kExprReturnCallIndirect: {
+        CallIndirectOperand<Decoder::kNoValidate> operand(&i, i.pc(), true);
+        DCHECK_EQ(0, operand.table_index);
+        os << "return_call_indirect " << operand.sig_index;
+        break;
+      }
       case kExprCallFunction: {
-        CallFunctionOperand<Decoder::kNoValidate> operand(&i, i.pc());
+        CallFunctionOperand<Decoder::kNoValidate> operand(&i, i.pc(), false);
         os << "call " << operand.index;
+        break;
+      }
+      case kExprReturnCallFunction: {
+        CallFunctionOperand<Decoder::kNoValidate> operand(&i, i.pc(), true);
+        os << "return_call " << operand.index;
         break;
       }
       case kExprGetLocal:

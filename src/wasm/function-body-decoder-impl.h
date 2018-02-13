@@ -255,7 +255,9 @@ struct CallIndirectOperand {
   uint32_t sig_index;
   FunctionSig* sig = nullptr;
   unsigned length = 0;
-  inline CallIndirectOperand(Decoder* decoder, const byte* pc) {
+  bool tail_call;
+  inline CallIndirectOperand(Decoder* decoder, const byte* pc, bool tail_call)
+      : tail_call(tail_call) {
     unsigned len = 0;
     sig_index = decoder->read_u32v<validate>(pc + 1, &len, "signature index");
     if (!VALIDATE(decoder->ok())) return;
@@ -273,7 +275,9 @@ struct CallFunctionOperand {
   uint32_t index;
   FunctionSig* sig = nullptr;
   unsigned length;
-  inline CallFunctionOperand(Decoder* decoder, const byte* pc) {
+  bool tail_call;
+  inline CallFunctionOperand(Decoder* decoder, const byte* pc, bool tail_call)
+      : tail_call(tail_call) {
     index = decoder->read_u32v<validate>(pc + 1, &length, "function index");
   }
 };
@@ -929,12 +933,16 @@ class WasmDecoder : public Decoder {
         return 1 + operand.length;
       }
 
-      case kExprCallFunction: {
-        CallFunctionOperand<validate> operand(decoder, pc);
+      case kExprCallFunction:
+      case kExprReturnCallFunction: {
+        CallFunctionOperand<validate> operand(
+            decoder, pc, opcode == kExprReturnCallFunction);
         return 1 + operand.length;
       }
-      case kExprCallIndirect: {
-        CallIndirectOperand<validate> operand(decoder, pc);
+      case kExprCallIndirect:
+      case kExprReturnCallIndirect: {
+        CallIndirectOperand<validate> operand(
+            decoder, pc, opcode == kExprReturnCallIndirect);
         return 1 + operand.length;
       }
 
@@ -1066,16 +1074,28 @@ class WasmDecoder : public Decoder {
       case kExprMemorySize:
         return {0, 1};
       case kExprCallFunction: {
-        CallFunctionOperand<validate> operand(this, pc);
+        CallFunctionOperand<validate> operand(this, pc, false);
         CHECK(Complete(pc, operand));
         return {operand.sig->parameter_count(), operand.sig->return_count()};
       }
+      case kExprReturnCallFunction: {
+        CallFunctionOperand<validate> operand(this, pc, true);
+        CHECK(Complete(pc, operand));
+        // Acts like return instruction after call.
+        return {0, 0};
+      }
       case kExprCallIndirect: {
-        CallIndirectOperand<validate> operand(this, pc);
+        CallIndirectOperand<validate> operand(this, pc, false);
         CHECK(Complete(pc, operand));
         // Indirect calls pop an additional argument for the table index.
         return {operand.sig->parameter_count() + 1,
                 operand.sig->return_count()};
+      }
+      case kExprReturnCallIndirect: {
+        CallIndirectOperand<validate> operand(this, pc, true);
+        CHECK(Complete(pc, operand));
+        // Acts like return instruction after call.
+        return {0, 0};
       }
       case kExprBr:
       case kExprBlock:
@@ -1772,7 +1792,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             break;
           }
           case kExprCallFunction: {
-            CallFunctionOperand<validate> operand(this, this->pc_);
+            CallFunctionOperand<validate> operand(this, this->pc_, false);
             len = 1 + operand.length;
             if (!this->Validate(this->pc_, operand)) break;
             // TODO(clemensh): Better memory management.
@@ -1783,7 +1803,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             break;
           }
           case kExprCallIndirect: {
-            CallIndirectOperand<validate> operand(this, this->pc_);
+            CallIndirectOperand<validate> operand(this, this->pc_, false);
             len = 1 + operand.length;
             if (!this->Validate(this->pc_, operand)) break;
             auto index = Pop(0, kWasmI32);
@@ -1793,6 +1813,11 @@ class WasmFullDecoder : public WasmDecoder<validate> {
                                         args_.data(), returns);
             break;
           }
+          case kExprReturnCallFunction:
+          case kExprReturnCallIndirect:
+            CHECK_PROTOTYPE_OPCODE(tail_calls);
+            OPCODE_ERROR(opcode, "tail calls not implemented yet");
+            break;
           case kNumericPrefix: {
             CHECK_PROTOTYPE_OPCODE(sat_f2i_conversions);
             ++len;

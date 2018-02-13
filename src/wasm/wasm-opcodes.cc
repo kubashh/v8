@@ -134,6 +134,8 @@ const char* WasmOpcodes::OpcodeName(WasmOpcode opcode) {
     CASE_OP(Return, "return")
     CASE_OP(CallFunction, "call")
     CASE_OP(CallIndirect, "call_indirect")
+    CASE_OP(ReturnCallFunction, "return_call")
+    CASE_OP(ReturnCallIndirect, "return_call_indirect")
     CASE_OP(Drop, "drop")
     CASE_OP(Select, "select")
     CASE_OP(GetLocal, "get_local")
