@@ -10,6 +10,7 @@
 #include "src/assembler-inl.h"
 #include "src/ast/prettyprinter.h"
 #include "src/callable.h"
+#include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/disasm.h"
 #include "src/frames-inl.h"
 #include "src/global-handles.h"
@@ -275,6 +276,11 @@ void Deoptimizer::DeoptimizeAll(Isolate* isolate) {
   if (FLAG_trace_deopt) {
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintF(scope.file(), "[deoptimize all code in all contexts]\n");
+  }
+  // Prevent existing compile jobs from producing optimized code.
+  if (isolate->concurrent_recompilation_enabled()) {
+    isolate->optimizing_compile_dispatcher()->Flush(
+        OptimizingCompileDispatcher::BlockingBehavior::kBlock);
   }
   DisallowHeapAllocation no_allocation;
   // For all contexts, mark all code, then deoptimize.
