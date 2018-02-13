@@ -16,6 +16,24 @@
       "revId": "d93506ed598266eda934df461644f94e67b3abc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79182649_47ab460f",
+        "filename": "test/mjsunit/es6/promise-resolve-thenable-job.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-13T04:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a693c50_eb31696d",
+      "revId": "d93506ed598266eda934df461644f94e67b3abc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
