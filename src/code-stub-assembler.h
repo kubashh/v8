@@ -751,6 +751,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Allocate a HeapNumber with a specific value.
   TNode<HeapNumber> AllocateHeapNumberWithValue(SloppyTNode<Float64T> value,
                                                 MutableMode mode = IMMUTABLE);
+  // Allocate a BigInt with {length} digits. Does not initialize the digits.
+  TNode<BigInt> AllocateBigInt(TNode<IntPtrT> length);
+  // Like above, but allowing custom bitfield initialization.
+  TNode<BigInt> AllocateRawBigInt(TNode<IntPtrT> length);
+  void StoreBigIntBitfield(TNode<BigInt> bigint, TNode<WordT> bitfield);
+  void StoreBigIntDigit(TNode<BigInt> bigint, int digit_index,
+                        TNode<UintPtrT> digit);
   // Allocate a SeqOneByteString with the given length.
   Node* AllocateSeqOneByteString(int length, AllocationFlags flags = kNone);
   Node* AllocateSeqOneByteString(Node* context, TNode<Smi> length,
@@ -1254,6 +1261,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Number> ToNumber_Inline(SloppyTNode<Context> context,
                                 SloppyTNode<Object> input);
 
+  // Convert any object to a BigInt.
+  // https://tc39.github.io/proposal-bigint/#sec-to-bigint
+  TNode<BigInt> ToBigInt(SloppyTNode<Context> context,
+                         SloppyTNode<Object> input);
+
   // Converts |input| to one of 2^32 integer values in the range 0 through
   // 2^32-1, inclusive.
   // ES#sec-touint32
@@ -1748,7 +1760,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   void EmitElementStore(Node* object, Node* key, Node* value, bool is_jsarray,
                         ElementsKind elements_kind,
-                        KeyedAccessStoreMode store_mode, Label* bailout);
+                        KeyedAccessStoreMode store_mode, Label* bailout,
+                        Node* context);
 
   Node* CheckForCapacityGrow(Node* object, Node* elements, ElementsKind kind,
                              KeyedAccessStoreMode store_mode, Node* length,

@@ -289,10 +289,8 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
 
     BIND(&unimplemented_elements_kind);
     {
-      // Smi handlers should only be installed for supported elements kinds.
-      // Crash if we get here.
-      DebugBreak();
-      Goto(miss);
+      exit_point->ReturnCallRuntime(Runtime::kKeyedGetProperty, p->context,
+                                    holder, p->name);
     }
 
     BIND(&if_oob);
@@ -1625,15 +1623,18 @@ void AccessorAssembler::EmitElementLoad(
 
     Label uint8_elements(this), int8_elements(this), uint16_elements(this),
         int16_elements(this), uint32_elements(this), int32_elements(this),
-        float32_elements(this), float64_elements(this);
+        float32_elements(this), float64_elements(this), bigint64_elements(this),
+        biguint64_elements(this);
     Label* elements_kind_labels[] = {
-        &uint8_elements,  &uint8_elements,   &int8_elements,
-        &uint16_elements, &int16_elements,   &uint32_elements,
-        &int32_elements,  &float32_elements, &float64_elements};
+        &uint8_elements,    &uint8_elements,    &int8_elements,
+        &uint16_elements,   &int16_elements,    &uint32_elements,
+        &int32_elements,    &float32_elements,  &float64_elements,
+        &bigint64_elements, &biguint64_elements};
     int32_t elements_kinds[] = {
-        UINT8_ELEMENTS,  UINT8_CLAMPED_ELEMENTS, INT8_ELEMENTS,
-        UINT16_ELEMENTS, INT16_ELEMENTS,         UINT32_ELEMENTS,
-        INT32_ELEMENTS,  FLOAT32_ELEMENTS,       FLOAT64_ELEMENTS};
+        UINT8_ELEMENTS,    UINT8_CLAMPED_ELEMENTS, INT8_ELEMENTS,
+        UINT16_ELEMENTS,   INT16_ELEMENTS,         UINT32_ELEMENTS,
+        INT32_ELEMENTS,    FLOAT32_ELEMENTS,       FLOAT64_ELEMENTS,
+        BIGINT64_ELEMENTS, BIGUINT64_ELEMENTS};
     const size_t kTypedElementsKindCount =
         LAST_FIXED_TYPED_ARRAY_ELEMENTS_KIND -
         FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND + 1;
@@ -1696,6 +1697,18 @@ void AccessorAssembler::EmitElementLoad(
       Node* element = Load(MachineType::Float64(), backing_store, index);
       var_double_value->Bind(element);
       Goto(rebox_double);
+    }
+    BIND(&bigint64_elements);
+    {
+      Comment("BIGINT64_ELEMENTS");
+      exit_point->Return(LoadFixedTypedArrayElementAsTagged(
+          backing_store, intptr_index, BIGINT64_ELEMENTS, INTPTR_PARAMETERS));
+    }
+    BIND(&biguint64_elements);
+    {
+      Comment("BIGUINT64_ELEMENTS");
+      exit_point->Return(LoadFixedTypedArrayElementAsTagged(
+          backing_store, intptr_index, BIGUINT64_ELEMENTS, INTPTR_PARAMETERS));
     }
   }
 }
