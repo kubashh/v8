@@ -434,6 +434,7 @@ class ScopeIterator {
   virtual ScopeType GetType() = 0;
   virtual v8::Local<v8::Object> GetObject() = 0;
   virtual v8::Local<v8::Function> GetFunction() = 0;
+  virtual v8::Local<v8::Value> GetFunctionName() = 0;
   virtual debug::Location GetStartLocation() = 0;
   virtual debug::Location GetEndLocation() = 0;
 

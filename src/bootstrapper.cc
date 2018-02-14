@@ -616,6 +616,7 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
       NewFunctionArgs::ForBuiltin(factory->empty_string(), code,
                                   empty_function_map, Builtins::kEmptyFunction);
   Handle<JSFunction> empty_function = factory->NewFunction(args);
+  native_context()->set_empty_function(*empty_function);
 
   // --- E m p t y ---
   Handle<String> source = factory->NewStringFromStaticChars("() {}");

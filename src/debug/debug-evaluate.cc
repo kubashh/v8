@@ -42,7 +42,8 @@ MaybeHandle<Object> DebugEvaluate::Global(Isolate* isolate,
   // debugger was invoked.
   Handle<Context> context = isolate->native_context();
   Handle<JSObject> receiver(context->global_proxy());
-  Handle<SharedFunctionInfo> outer_info(context->closure()->shared(), isolate);
+  Handle<SharedFunctionInfo> outer_info(context->empty_function()->shared(),
+                                        isolate);
   return Evaluate(isolate, outer_info, context, receiver, source, false);
 }
 
