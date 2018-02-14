@@ -124,6 +124,10 @@ InspectorTest.ContextGroup = class {
     utils.compileAndRunWithOrigin(this.id, string, url, lineOffset || 0, columnOffset || 0, true);
   }
 
+  setAllowCodeGenerationFromStrings(allow) {
+    utils.setAllowCodeGenerationFromStrings(this.id, allow);
+  }
+
   loadScript(fileName) {
     this.addScript(utils.read(fileName));
   }
