@@ -71,6 +71,7 @@ class IsolateData : public v8_inspector::V8InspectorClient {
   void SetMemoryInfo(v8::Local<v8::Value> memory_info);
   void SetLogConsoleApiMessageCalls(bool log);
   void SetLogMaxAsyncCallStackDepthChanged(bool log);
+  void SetAllowCodeGenerationFromStrings(int context_group_id, bool allow);
   void SetMaxAsyncTaskStacksForTest(int limit);
   void DumpAsyncTaskStacksStateForTest();
   void FireContextCreated(v8::Local<v8::Context> context, int context_group_id);
