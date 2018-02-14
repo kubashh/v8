@@ -656,6 +656,7 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
       VectorSlotPair const& feedback = VectorSlotPair(),
       PretenureFlag pretenure = NOT_TENURED);
   const Operator* CreateIterResultObject();
+  const Operator* CreateStringIterator();
   const Operator* CreateKeyValueArray();
   const Operator* CreatePromise();
   const Operator* CreateLiteralArray(Handle<ConstantElementsPair> constant,

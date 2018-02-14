@@ -67,6 +67,20 @@ class JSCallReducerTest : public TypedGraphTest {
             .ToHandleChecked());
     return HeapConstant(f);
   }
+
+  Node* StringFunction(const char* name) {
+    Handle<Object> m =
+        JSObject::GetProperty(
+            isolate()->global_object(),
+            isolate()->factory()->NewStringFromAsciiChecked("String"))
+            .ToHandleChecked();
+    Handle<JSFunction> f = Handle<JSFunction>::cast(
+        Object::GetProperty(
+            m, isolate()->factory()->NewStringFromAsciiChecked(name))
+            .ToHandleChecked());
+    return HeapConstant(f);
+  }
+
   JSOperatorBuilder* javascript() { return &javascript_; }
 
   std::string op_name_for(const char* fnc) {
@@ -293,6 +307,43 @@ TEST_F(JSCallReducerTest, MathMaxWithTwoArguments) {
   ASSERT_TRUE(r.Changed());
   EXPECT_THAT(r.replacement(), IsNumberMax(IsSpeculativeToNumber(p0),
                                            IsSpeculativeToNumber(p1)));
+}
+
+// -----------------------------------------------------------------------------
+// String.fromCharCode
+
+TEST_F(JSCallReducerTest, StringFromCharCodeWithNumber) {
+  Node* function = StringFunction("fromCharCode");
+
+  Node* effect = graph()->start();
+  Node* control = graph()->start();
+  Node* context = UndefinedConstant();
+  Node* frame_state = graph()->start();
+  Node* p0 = Parameter(Type::Any(), 0);
+  Node* call =
+      graph()->NewNode(javascript()->Call(3), function, UndefinedConstant(), p0,
+                       context, frame_state, effect, control);
+  Reduction r = Reduce(call);
+
+  ASSERT_TRUE(r.Changed());
+  EXPECT_THAT(r.replacement(), IsStringFromCharCode(IsSpeculativeToNumber(p0)));
+}
+
+TEST_F(JSCallReducerTest, StringFromCharCodeWithPlainPrimitive) {
+  Node* function = StringFunction("fromCharCode");
+
+  Node* effect = graph()->start();
+  Node* control = graph()->start();
+  Node* context = UndefinedConstant();
+  Node* frame_state = graph()->start();
+  Node* p0 = Parameter(Type::PlainPrimitive(), 0);
+  Node* call =
+      graph()->NewNode(javascript()->Call(3), function, UndefinedConstant(), p0,
+                       context, frame_state, effect, control);
+  Reduction r = Reduce(call);
+
+  ASSERT_TRUE(r.Changed());
+  EXPECT_THAT(r.replacement(), IsStringFromCharCode(IsSpeculativeToNumber(p0)));
 }
 
 }  // namespace compiler
