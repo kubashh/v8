@@ -116,6 +116,11 @@ static size_t GetSize(const v8::HeapGraphNode* node) {
       ->self_size();
 }
 
+static i::HeapEntry::Type GetType(const v8::HeapGraphNode* node) {
+  return const_cast<i::HeapEntry*>(reinterpret_cast<const i::HeapEntry*>(node))
+      ->type();
+}
+
 static const v8::HeapGraphNode* GetChildByName(const v8::HeapGraphNode* node,
                                                const char* name) {
   for (int i = 0, count = node->GetChildrenCount(); i < count; ++i) {
@@ -2816,21 +2821,23 @@ TEST(JSPromise) {
 
 class EmbedderNode : public v8::EmbedderGraph::Node {
  public:
-  explicit EmbedderNode(const char* name, size_t size)
-      : name_(name), size_(size) {}
+  explicit EmbedderNode(const char* name, size_t size, bool is_detached)
+      : name_(name), size_(size), is_detached_(is_detached) {}
 
   // Graph::Node overrides.
   const char* Name() override { return name_; }
   size_t SizeInBytes() override { return size_; }
+  bool IsDetachedNode() override { return is_detached_; }
 
  private:
   const char* name_;
   size_t size_;
+  bool is_detached_;
 };
 
 class EmbedderRootNode : public EmbedderNode {
  public:
-  explicit EmbedderRootNode(const char* name) : EmbedderNode(name, 0) {}
+  explicit EmbedderRootNode(const char* name) : EmbedderNode(name, 0, false) {}
   // Graph::Node override.
   bool IsRootNode() { return true; }
 };
@@ -2844,11 +2851,11 @@ void BuildEmbedderGraph(v8::Isolate* v8_isolate, v8::EmbedderGraph* graph) {
   using Node = v8::EmbedderGraph::Node;
   Node* global_node = graph->V8Node(*global_object_pointer);
   Node* embedder_node_A = graph->AddNode(
-      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeA", 10)));
+      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeA", 10, false)));
   Node* embedder_node_B = graph->AddNode(
-      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeB", 20)));
+      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeB", 20, false)));
   Node* embedder_node_C = graph->AddNode(
-      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeC", 30)));
+      std::unique_ptr<Node>(new EmbedderNode("EmbedderNodeC", 30, false)));
   Node* embedder_root = graph->AddNode(
       std::unique_ptr<Node>(new EmbedderRootNode("EmbedderRoot")));
   graph->AddEdge(global_node, embedder_node_A);
@@ -2891,6 +2898,40 @@ TEST(EmbedderGraph) {
   const v8::HeapSnapshot* snapshot = heap_profiler->TakeHeapSnapshot();
   CHECK(ValidateSnapshot(snapshot));
   CheckEmbedderGraphSnapshot(env->GetIsolate(), snapshot);
+}
+
+void BuildEmbedderGraphWithDetachedNode(v8::Isolate* v8_isolate,
+                                        v8::EmbedderGraph* graph) {
+  using Node = v8::EmbedderGraph::Node;
+  Node* global_node = graph->V8Node(*global_object_pointer);
+  Node* detached_node = graph->AddNode(
+      std::unique_ptr<Node>(new EmbedderNode("DetachedNode", 10, true)));
+  Node* native_node = graph->AddNode(
+      std::unique_ptr<Node>(new EmbedderNode("NativeNode", 10, false)));
+  graph->AddEdge(global_node, detached_node);
+  graph->AddEdge(global_node, native_node);
+}
+
+TEST(EmbedderGraphWithDetachedNode) {
+  i::FLAG_heap_profiler_use_embedder_graph = true;
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(env->GetIsolate());
+  v8::Local<v8::Value> global_object =
+      v8::Utils::ToLocal(i::Handle<i::JSObject>(
+          (isolate->context()->native_context()->global_object())));
+  global_object_pointer = &global_object;
+  v8::HeapProfiler* heap_profiler = env->GetIsolate()->GetHeapProfiler();
+  heap_profiler->SetBuildEmbedderGraphCallback(
+      BuildEmbedderGraphWithDetachedNode);
+  const v8::HeapSnapshot* snapshot = heap_profiler->TakeHeapSnapshot();
+  CHECK(ValidateSnapshot(snapshot));
+  const v8::HeapGraphNode* global = GetGlobalObject(snapshot);
+  const v8::HeapGraphNode* detached_node =
+      GetChildByName(global, "Detached DetachedNode");
+  CHECK_EQ(i::HeapEntry::kNative, GetType(detached_node));
+  const v8::HeapGraphNode* native_node = GetChildByName(global, "NativeNode");
+  CHECK_EQ(i::HeapEntry::kNative, GetType(native_node));
 }
 
 static inline i::Address ToAddress(int n) {

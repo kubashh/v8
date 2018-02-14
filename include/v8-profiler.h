@@ -648,6 +648,12 @@ class V8_EXPORT EmbedderGraph {
     virtual ~Node() = default;
     virtual const char* Name() = 0;
     virtual size_t SizeInBytes() = 0;
+    /**
+     * Returns true if the node is considered detached from the main root.
+     * Detached nodes indicate potential memory leak. DevTools front-end
+     * shows detached nodes in special color.
+     */
+    virtual bool IsDetachedNode() { return false; }
     virtual bool IsRootNode() { return false; }
     /** Must return true for non-V8 nodes. */
     virtual bool IsEmbedderNode() { return true; }

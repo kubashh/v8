@@ -2093,7 +2093,9 @@ HeapEntry* EmbedderGraphEntriesAllocator::AllocateEntry(HeapThing ptr) {
   EmbedderGraphImpl::Node* node =
       reinterpret_cast<EmbedderGraphImpl::Node*>(ptr);
   DCHECK(node->IsEmbedderNode());
-  const char* name = names_->GetCopy(node->Name());
+  const char* name = node->IsDetachedNode()
+                         ? names_->GetFormatted("Detached %s", node->Name())
+                         : names_->GetCopy(node->Name());
   size_t size = node->SizeInBytes();
   return snapshot_->AddEntry(
       entries_type_, name,
