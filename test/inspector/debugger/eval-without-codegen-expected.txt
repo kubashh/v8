@@ -1,0 +1,19 @@
+Tests that evaluation works when code generation from strings is not allowed.
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : Global
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : Local
+        }
+    }
+}
