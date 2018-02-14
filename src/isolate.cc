@@ -2658,7 +2658,7 @@ void Isolate::Deinit() {
   delete heap_profiler_;
   heap_profiler_ = nullptr;
 
-  compiler_dispatcher_->AbortAll(CompilerDispatcher::BlockingBehavior::kBlock);
+  compiler_dispatcher_->AbortAll(BlockingBehavior::kBlock);
   delete compiler_dispatcher_;
   compiler_dispatcher_ = nullptr;
 
@@ -3269,6 +3269,11 @@ void Isolate::DumpAndResetStats() {
   }
 }
 
+void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {
+  if (concurrent_recompilation_enabled()) {
+    optimizing_compile_dispatcher()->Flush(behavior);
+  }
+}
 
 CompilationStatistics* Isolate::GetTurboStatistics() {
   if (turbo_statistics() == nullptr)
