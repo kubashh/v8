@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98c41244_43924bfe",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4161,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-14T11:42:13Z",
+      "side": 1,
+      "message": "As per offline discussion: Please drop String#concat from this CL, and do it separately, not lowering directly to a stub call.",
+      "revId": "2d5f82fbc48d8e409c833b77efeae6de3f88bd98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd28661c_9554050d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-14T11:42:13Z",
+      "side": 1,
+      "message": "As per offline discussion: Please introduce JSCreateStringIterator(receiver) here.",
+      "revId": "2d5f82fbc48d8e409c833b77efeae6de3f88bd98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
