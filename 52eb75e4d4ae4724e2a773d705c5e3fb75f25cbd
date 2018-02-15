@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3251ff50_06ea0afe",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-02-15T03:57:25Z",
+      "side": 1,
+      "message": "It seems to be a concept related to the DOM tree. I wonder if we can make the front-end deduct it based on the graph?",
+      "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
