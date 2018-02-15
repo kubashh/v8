@@ -539,10 +539,7 @@ RUNTIME_FUNCTION(Runtime_GrowArrayElements) {
   DCHECK_EQ(2, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSObject, object, 0);
   CONVERT_NUMBER_CHECKED(int, key, Int32, args[1]);
-
-  if (key < 0) {
-    return object->elements();
-  }
+  CHECK_GE(key, 0);
 
   uint32_t capacity = static_cast<uint32_t>(object->elements()->length());
   uint32_t index = static_cast<uint32_t>(key);
