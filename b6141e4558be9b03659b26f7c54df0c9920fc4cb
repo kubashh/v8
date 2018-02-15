@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26bad35d_c80543f6",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-15T18:37:05Z",
+      "side": 1,
+      "message": "nit: move enum before ctor (decl order)",
+      "range": {
+        "startLine": 55,
+        "startChar": 13,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "475d076a_243efee0",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-15T18:37:05Z",
+      "side": 1,
+      "message": "Did you check with Ulan on this? I find some of the initializers here confusing. Especially, since we still have the initializer list.",
+      "range": {
+        "startLine": 96,
+        "startChar": 36,
+        "endLine": 96,
+        "endChar": 37
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd777b7c_221694b5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-15T18:37:05Z",
+      "side": 1,
+      "message": "I think you can remove this TODO here. This caller definitely wants to wait until the worker threads have finished.",
+      "range": {
+        "startLine": 904,
+        "startChar": 7,
+        "endLine": 904,
+        "endChar": 11
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
