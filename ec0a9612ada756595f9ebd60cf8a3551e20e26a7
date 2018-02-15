@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56f85f01_104062e6",
+        "filename": "test/inspector/debugger/eval-without-codegen.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-15T01:17:15Z",
+      "side": 1,
+      "message": "I believe that something like following pattern should work.\n{params:{callFrames:[{callFramesId}]}}",
+      "revId": "ec0a9612ada756595f9ebd60cf8a3551e20e26a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91c11a3a_0f793a40",
+        "filename": "test/inspector/debugger/eval-without-codegen.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-15T01:17:15Z",
+      "side": 1,
+      "message": "nit: single quote",
+      "range": {
+        "startLine": 22,
+        "startChar": 48,
+        "endLine": 22,
+        "endChar": 49
+      },
+      "revId": "ec0a9612ada756595f9ebd60cf8a3551e20e26a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec0a4988_f3ef0831",
+        "filename": "test/inspector/debugger/eval-without-codegen.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-15T01:17:15Z",
+      "side": 1,
+      "message": "Please check separately that not on pause Runtime.evaluate works just find with setAllowCodeGenerationFromStrings(false)",
+      "revId": "ec0a9612ada756595f9ebd60cf8a3551e20e26a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deb7eb68_a3c10477",
+        "filename": "test/inspector/debugger/eval-without-codegen.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-15T01:17:15Z",
+      "side": 1,
+      "message": "Please do not mix .then and await.\nInspectorTest.logMessage(await Protocol.Runtime.evaluate(...))",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 23,
+        "endChar": 11
+      },
+      "revId": "ec0a9612ada756595f9ebd60cf8a3551e20e26a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8111971f_83fff153",
+        "filename": "test/inspector/runtime/evaluate-run-microtasks.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-02-15T01:17:15Z",
+      "side": 1,
+      "message": "please run \"git cl format --js .\" to get all string wrapped by 80 characters.",
+      "revId": "ec0a9612ada756595f9ebd60cf8a3551e20e26a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
