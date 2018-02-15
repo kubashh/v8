@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37ece6c6_3e47c026",
+        "filename": "src/factory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-02-15T23:53:56Z",
+      "side": 1,
+      "message": "Sorry missed it, but this should be private (.. we don\u0027t want any promises created without running the hook)",
+      "revId": "5bc393606f27bc2028e9c8914fc0ced643cdf464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
