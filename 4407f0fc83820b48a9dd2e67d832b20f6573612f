@@ -16,6 +16,24 @@
       "revId": "4407f0fc83820b48a9dd2e67d832b20f6573612f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d3a57e4_ab94946b",
+        "filename": "src/code-events.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-02-15T13:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88be7072_fd776e5e",
+      "revId": "4407f0fc83820b48a9dd2e67d832b20f6573612f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
