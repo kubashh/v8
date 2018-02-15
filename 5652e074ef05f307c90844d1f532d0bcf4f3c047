@@ -1,0 +1,430 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74d74171_73d1a5b6",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Not sure if we want to expose those already, given that we haven\u0027t exposed anything else about BigInts yet.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99b638e0_f932ad15",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Maybe it\u0027s a good idea to make the sign bit explicit also in the other uses of StoreBigIntBitfield (where it\u0027s false).",
+      "range": {
+        "startLine": 1766,
+        "startChar": 43,
+        "endLine": 1766,
+        "endChar": 75
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bfdb668_1271c1a7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I\u0027d call this simply \"negative\".",
+      "range": {
+        "startLine": 1789,
+        "startChar": 14,
+        "endLine": 1789,
+        "endChar": 27
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "830fc24b_ebc03c6a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I need to have another look at this part.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba7641f_ac3236d3",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Please put a newline here or even move the BigInt code into a separate function (then you can also share the done and the if_zero blocks).",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6399a3d_ea1dff8a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Please also assert that length is not negative, perhaps simply by using UIntPtrLessThan.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d6da4c_0252abfc",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "non-negative",
+      "range": {
+        "startLine": 754,
+        "startChar": 5,
+        "endLine": 754,
+        "endChar": 43
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f8400e9_a8324414",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Maybe say \"Try to convert an object to a BigInt. Throws on failure (e.g. for Numbers).\"",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20386544_59679c9a",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Please remove this again. In access-info.cc CanInlineElementAccess, we should return false for BigInt typed arrays. Maybe this is even enough for avoiding the --no-opt flag in tests?",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac2e1fe3_18f7b465",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Please put UNIMPLEMENTED here instead.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ddef48f_19182c43",
+        "filename": "src/compiler/type-cache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "We should use Type::BigInt until we have something more precise. Range types are for Numbers only so these definitions don\u0027t make sense. Are these definitions actually used currently? If not, please just remove them.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa2738d_3acc2459",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3069,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you\u0027re doing here. When can this happen?",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "181378bc_bc99a67d",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Nit: add an empty line after this.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a794bbe0_a154cabd",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Is this a bugfix?",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d916419_ee11912f",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2089,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I think this line already assumes something about the possible values for kDigitBits, so maybe put a 32-or-64-DCHECK above it and remove the DCHECK further down. (Same in FromUint64 below).",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a79a6bae_bbba600d",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I think it\u0027s worth defining a helper for these 7 lines, they appear in a few places.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c566928d_39e3a382",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2136,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I think this line already assumes something about the possible values for kDigitBits, so maybe put a 32-or-64-DCHECK above it and remove the DCHECK further down.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1bc3711_b4e9cd39",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "You can move this out of the branches.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc67a99e_5b6da74a",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Can\u0027t you just do: return x-\u003esign() ? -raw : raw;",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7246b9e_71d7873b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2153,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "I think this can just be a static_cast (or even nothing?). Don\u0027t need the macro header then.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19578917_137f5c2a",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Glad that this is neither used nor defined.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3a48fa_b583ab86",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Can\u0027t you just use a static_cast here and below?",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c076cb8_5ec9740c",
+        "filename": "src/runtime/runtime-typedarray.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Maybe it\u0027s worth defining a JSTypedArray::IsBigIntArray (or similar) function. Can be used also in one or more other files of this CL.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b60665ba_5c8ceee1",
+        "filename": "src/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-02-15T16:58:30Z",
+      "side": 1,
+      "message": "Could you explain why this is needed?",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
