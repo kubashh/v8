@@ -34,6 +34,41 @@
       "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef29e837_dac1efbe",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-02-16T17:38:39Z",
+      "side": 1,
+      "message": "I meant can we avoid having this method on the interface at all? See my comment below.",
+      "parentUuid": "b8d43abc_7124c8aa",
+      "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8868497_e56ec8e7",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-02-16T17:38:39Z",
+      "side": 1,
+      "message": "Is it possible to make embedder to provide the right name, i.e. IsDetachedNode could be a part of Node::Name implementation. wdyt?",
+      "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
