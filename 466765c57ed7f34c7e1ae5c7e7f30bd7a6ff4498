@@ -22,6 +22,30 @@
       "revId": "466765c57ed7f34c7e1ae5c7e7f30bd7a6ff4498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4507b6aa_362a0787",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-02-16T08:37:26Z",
+      "side": 0,
+      "message": "It was only used for the PauseScope (which would obtain each Lock as a way to know it successfully paused them; as well as use the associated CV to unpause them). This is no longer required.",
+      "parentUuid": "ccb022c8_f2a8e4e5",
+      "range": {
+        "startLine": 494,
+        "startChar": 35,
+        "endLine": 494,
+        "endChar": 40
+      },
+      "revId": "466765c57ed7f34c7e1ae5c7e7f30bd7a6ff4498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

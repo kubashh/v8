@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "75fb0164_308e3c12",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-02-16T08:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26bad35d_c80543f6",
+      "range": {
+        "startLine": 55,
+        "startChar": 13,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "475d076a_243efee0",
         "filename": "src/heap/concurrent-marking.h",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "64959630_0e809ad4",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-02-16T08:37:26Z",
+      "side": 1,
+      "message": "I did not, but this is the best way to zero-initialize an array in C++ : http://en.cppreference.com/w/c/language/array_initialization\n\nSometimes you\u0027ll see \"\u003d {0}\" but all that means is \"explicitly initialize the first value to 0 and the rest to default-value (which is zero)\". e.g. \" \u003d {3}\" would result in [3,0,0,0,0,0,0,0].\n\nLeaving it to the compiler is for sure more efficient than looping in the constructor to zero-initialize.\n\nAs for inline member initialization, this is a C++11ism. I strongly prefer it and have been doing in all code I touch. Prior to this I find I would regularly forget to initialize new POD members (the initializer list in the .cc is so far).\nThe initializer list is still required for members provided by the caller however (i.e. Heap*/MarkingWorklist*/WeakObjects* above but I just updated this CL to mark those pointers as const to make it obvious they\u0027re initialized in the constructor).\n\nWith this all members are either const, default initialized inline, or non-POD types that are default initialized as well. IMO this is strictly better for readability and less error-prone, but let me know if you\u0027d rather I don\u0027t do this in the v8 codebase.",
+      "parentUuid": "475d076a_243efee0",
+      "range": {
+        "startLine": 96,
+        "startChar": 36,
+        "endLine": 96,
+        "endChar": 37
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd777b7c_221694b5",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 8
@@ -68,6 +116,30 @@
       "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "828ec320_e793cdfa",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-02-16T08:37:26Z",
+      "side": 1,
+      "message": "No, as highlighted in the CL description, one of them wants to wait but the other one wants to stop ASAP (discussed and agreed with Ulan). I\u0027ll follow-up with a CL for this shortly, just wanted to keep this CL minimal in case either change trips a bot.",
+      "parentUuid": "cd777b7c_221694b5",
+      "range": {
+        "startLine": 904,
+        "startChar": 7,
+        "endLine": 904,
+        "endChar": 11
+      },
+      "revId": "b6141e4558be9b03659b26f7c54df0c9920fc4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
