@@ -1674,6 +1674,11 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
     case IrOpcode::kAtomicAnd:
     case IrOpcode::kAtomicOr:
     case IrOpcode::kAtomicXor:
+    case IrOpcode::kInt64AtomicAdd:
+    case IrOpcode::kInt64AtomicSub:
+    case IrOpcode::kInt64AtomicAnd:
+    case IrOpcode::kInt64AtomicOr:
+    case IrOpcode::kInt64AtomicXor:
     case IrOpcode::kSpeculationFence:
     case IrOpcode::kSignExtendWord8ToInt32:
     case IrOpcode::kSignExtendWord16ToInt32:
