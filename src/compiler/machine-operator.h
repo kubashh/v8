@@ -627,6 +627,16 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* AtomicOr(MachineType rep);
   // atomic-xor [base + index], value
   const Operator* AtomicXor(MachineType rep);
+  // atomic-load [base + index]
+  const Operator* Int64AtomicAdd(MachineType rep);
+  // atomic-sub [base + index], value
+  const Operator* Int64AtomicSub(MachineType rep);
+  // atomic-and [base + index], value
+  const Operator* Int64AtomicAnd(MachineType rep);
+  // atomic-or [base + index], value
+  const Operator* Int64AtomicOr(MachineType rep);
+  // atomic-xor [base + index], value
+  const Operator* Int64AtomicXor(MachineType rep);
 
   const OptionalOperator SpeculationFence();
 

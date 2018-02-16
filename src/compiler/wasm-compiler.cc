@@ -4503,6 +4503,28 @@ Node* WasmGraphBuilder::Simd8x16ShuffleOp(const uint8_t shuffle[16],
   V(I32AtomicXor16U, Xor, Uint16)         \
   V(I32AtomicExchange16U, Exchange, Uint16)
 
+#define ATOMIC64_BINOP_LIST(V)    \
+  V(I64AtomicAdd, Add, Uint64)    \
+  V(I64AtomicSub, Sub, Uint64)    \
+  V(I64AtomicAnd, And, Uint64)    \
+  V(I64AtomicOr, Or, Uint64)      \
+  V(I64AtomicXor, Xor, Uint64)    \
+  V(I64AtomicAdd8U, Add, Uint8)   \
+  V(I64AtomicSub8U, Sub, Uint8)   \
+  V(I64AtomicAnd8U, And, Uint8)   \
+  V(I64AtomicOr8U, Or, Uint8)     \
+  V(I64AtomicXor8U, Xor, Uint8)   \
+  V(I64AtomicAdd16U, Add, Uint16) \
+  V(I64AtomicSub16U, Sub, Uint16) \
+  V(I64AtomicAnd16U, And, Uint16) \
+  V(I64AtomicOr16U, Or, Uint16)   \
+  V(I64AtomicXor16U, Xor, Uint16) \
+  V(I64AtomicAdd32U, Add, Uint32) \
+  V(I64AtomicSub32U, Sub, Uint32) \
+  V(I64AtomicAnd32U, And, Uint32) \
+  V(I64AtomicOr32U, Or, Uint32)   \
+  V(I64AtomicXor32U, Xor, Uint32)
+
 #define ATOMIC_TERNARY_LIST(V)                          \
   V(I32AtomicCompareExchange, CompareExchange, Uint32)  \
   V(I32AtomicCompareExchange8U, CompareExchange, Uint8) \
@@ -4536,6 +4558,19 @@ Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
   }
     ATOMIC_BINOP_LIST(BUILD_ATOMIC_BINOP)
 #undef BUILD_ATOMIC_BINOP
+
+#define BUILD_ATOMIC64_BINOP(Name, Operation, Type)                        \
+  case wasm::kExpr##Name: {                                                \
+    Node* index =                                                          \
+        BoundsCheckMem(wasm::WasmOpcodes::MemSize(MachineType::Type()),    \
+                       inputs[0], offset, position, kNeedsBoundsCheck);    \
+    node = graph()->NewNode(                                               \
+        jsgraph()->machine()->Int64Atomic##Operation(MachineType::Type()), \
+        MemBuffer(offset), index, inputs[1], *effect_, *control_);         \
+    break;                                                                 \
+  }
+    ATOMIC64_BINOP_LIST(BUILD_ATOMIC64_BINOP)
+#undef BUILD_ATOMIC64_BINOP
 
 #define BUILD_ATOMIC_TERNARY_OP(Name, Operation, Type)                        \
   case wasm::kExpr##Name: {                                                   \
@@ -4583,6 +4618,7 @@ Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
 }
 
 #undef ATOMIC_BINOP_LIST
+#undef ATOMIC64_BINOP_LIST
 #undef ATOMIC_TERNARY_LIST
 #undef ATOMIC_LOAD_LIST
 #undef ATOMIC_STORE_LIST
