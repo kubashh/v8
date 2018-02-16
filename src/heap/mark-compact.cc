@@ -901,7 +901,10 @@ void MarkCompactCollector::Prepare() {
 
 void MarkCompactCollector::FinishConcurrentMarking() {
   if (FLAG_concurrent_marking) {
-    heap()->concurrent_marking()->EnsureCompleted();
+    // TODO(gab): Some callers could take advantage of
+    // StopRequest::PREEMPT_TASKS.
+    heap()->concurrent_marking()->Stop(
+        ConcurrentMarking::StopRequest::COMPLETE_TASKS);
     heap()->concurrent_marking()->FlushLiveBytes(non_atomic_marking_state());
   }
 }
