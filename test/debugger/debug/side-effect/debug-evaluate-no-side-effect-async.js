@@ -30,6 +30,9 @@ function listener(event, exec_state, event_data, data) {
     fail("generator()");
     fail("g.next()");
     fail("async()");
+    fail("Promise.resolve()");
+    fail("(async function() {})()");
+    fail("(async function() { await 1; })()");
   } catch (e) {
     exception = e;
     print(e, e.stack);

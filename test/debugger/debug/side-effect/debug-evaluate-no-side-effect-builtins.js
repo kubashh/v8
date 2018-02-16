@@ -8,6 +8,7 @@ var exception = null;
 var object_with_symbol_key = {[Symbol("a")]: 1};
 var object_with_callbacks = { toString: () => "string", valueOf: () => 3};
 var symbol_for_a = Symbol.for("a");
+var typed_array = new Uint8Array();
 
 function listener(event, exec_state, event_data, data) {
   if (event != Debug.DebugEvent.Break) return;
@@ -81,6 +82,39 @@ function listener(event, exec_state, event_data, data) {
       }
     }
 
+    // Test TypedArray functions.
+    success({}, `new Uint8Array()`);
+    success({0: 0, 1: 0}, `new Uint8Array(2)`);
+    fail(`new Uint8Array([10])`);
+    function_param = [
+      "forEach", "every", "some", "reduce", "reduceRight", "find", "filter",
+      "map", "findIndex"
+    ];
+    fails = ["constructor", "toString", "join", "toLocaleString", "pop", "push",
+      "reverse", "shift", "unshift", "slice", "splice", "sort", "filter",
+      "map", "copyWithin", "fill", "concat", "entries", "keys", "values",
+      "forEach", "every", "some", "reduce", "reduceRight", "find", "filter",
+      "map", "findIndex", "includes", "indexOf", "lastIndexOf",
+      "set",
+      "subarray"
+    ];
+    var typed_proto_proto = Object.getPrototypeOf(Object.getPrototypeOf(new Uint8Array()));
+    for (f of Object.getOwnPropertyNames(typed_proto_proto)) {
+      if (typeof typed_array[f] === "function") {
+        if (fails.includes(f)) {
+          if (function_param.includes(f)) {
+            // fail(`typed_array.${f}(()=>{});`);
+          } else {
+            // fail(`typed_array.${f}();`);
+          }
+        } else if (function_param.includes(f)) {
+          exec_state.frame(0).evaluate(`typed_array.${f}(()=>{});`, true);
+        } else {
+          exec_state.frame(0).evaluate(`typed_array.${f}();`, true);
+        }
+      }
+    }
+
     // Test Math functions.
     for (f of Object.getOwnPropertyNames(Math)) {
       if (typeof Math[f] === "function") {
@@ -139,6 +173,12 @@ function listener(event, exec_state, event_data, data) {
     fail("'abcd'.replace(/a/)");
     fail("'abcd'.search(/a/)");
     fail("'abcd'.split(/a/)");
+
+    // Test RegExp functions.
+    fail(`/a/.compile()`);
+    fail(`/a/.exec('abc')`);
+    fail(`/a/.test('abc')`);
+    fail(`/a/.toString()`);
 
     // Test JSON functions.
     success('{"abc":[1,2]}', "JSON.stringify(JSON.parse('{\"abc\":[1,2]}'))");
