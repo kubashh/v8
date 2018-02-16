@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c998253_3e1226ae",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-02-16T13:50:56Z",
+      "side": 1,
+      "message": "return Smi::FromInt(Min(limit, ...-\u003elength()));",
+      "revId": "47f78600dabd93e61769e8de9faa6ae6edca3638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f304e1ed_b80c872e",
+        "filename": "test/mjsunit/array-sort.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-02-16T13:50:56Z",
+      "side": 1,
+      "message": "Please define the same test with the newly added length property exceeding the backing store length.",
+      "revId": "47f78600dabd93e61769e8de9faa6ae6edca3638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
