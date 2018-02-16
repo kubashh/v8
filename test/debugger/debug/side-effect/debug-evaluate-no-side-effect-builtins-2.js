@@ -7,6 +7,10 @@ Debug = debug.Debug
 var exception = null;
 var date = new Date();
 var map = new Map().set("a", "b").set("c", "d");
+var set = new Set([1, 2]);
+var weak_map_key = [];
+var weak_map = new WeakMap().set(weak_map_key, "a").set({}, "b");
+var weak_set = new WeakSet([[], {}]);
 
 function listener(event, exec_state, event_data, data) {
   if (event != Debug.DebugEvent.Break) return;
@@ -65,11 +69,45 @@ function listener(event, exec_state, event_data, data) {
     success(undefined, `map.keys()`);
     success(undefined, `map.values()`);
     success(2, `map.size`);
+    fail(`new Map([[1, 2]])`);
     fail(`map.has("c")`);  // This sets a hash on the object.
     fail(`map.forEach(()=>1)`);
     fail(`map.delete("a")`);
     fail(`map.clear()`);
     fail(`map.set("x", "y")`);
+
+    // Test Set functions.
+    success(undefined, `new Set()`);
+    success("[object Set]", `set.toString()`);
+    success(undefined, `set.entries()`);
+    success(undefined, `set.keys()`);
+    success(undefined, `set.values()`);
+    success(2, `set.size`);
+    fail(`new Set([1])`);
+    fail(`set.add(2)`);
+    fail(`set.has(1)`);
+    fail(`set.forEach(()=>1)`);
+    fail(`set.delete(1)`);
+    fail(`set.clear()`);
+
+    // Test WeakMap functions.
+    success(undefined, `new WeakMap()`);
+    success("[object WeakMap]", `weak_map.toString()`);
+    success("a", `weak_map.get(weak_map_key)`);
+    success(true, `weak_map.get([]) === undefined`);
+    fail(`new WeakMap([[[], {}]])`);
+    fail(`weak_map.has("c")`);
+    fail(`weak_map.delete("a")`);
+    fail(`weak_map.set("x", "y")`);
+
+    // Test WeakSet functions.
+    success(undefined, `new WeakSet()`);
+    success("[object WeakSet]", `weak_set.toString()`);
+    fail(`new WeakSet([[], {}])`);
+    fail(`weak_set.add([])`);
+    fail(`weak_set.has("c")`);
+    fail(`weak_set.delete("a")`);
+
   } catch (e) {
     exception = e;
     print(e, e.stack);
