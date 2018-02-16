@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "b4933d04_933e44b3",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T20:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53078e3e_6ff9ba64",
+      "range": {
+        "startLine": 754,
+        "startChar": 5,
+        "endLine": 754,
+        "endChar": 43
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f8400e9_a8324414",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 4
@@ -739,6 +763,24 @@
       "side": 1,
       "message": "Yes it\u0027s unsigned, and that\u0027s why unary minus does exactly what you want.",
       "parentUuid": "4fcbbe3b_c9dff4d2",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0812efaa_c689520c",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T20:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "694f2d1d_8717844f",
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
