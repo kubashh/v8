@@ -267,6 +267,28 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kLFence:
       return kHasSideEffect;
 
+    case kX64Int64AtomicAddUint8:
+    case kX64Int64AtomicAddUint16:
+    case kX64Int64AtomicAddUint32:
+    case kX64Int64AtomicAddUint64:
+    case kX64Int64AtomicSubUint8:
+    case kX64Int64AtomicSubUint16:
+    case kX64Int64AtomicSubUint32:
+    case kX64Int64AtomicSubUint64:
+    case kX64Int64AtomicAndUint8:
+    case kX64Int64AtomicAndUint16:
+    case kX64Int64AtomicAndUint32:
+    case kX64Int64AtomicAndUint64:
+    case kX64Int64AtomicOrUint8:
+    case kX64Int64AtomicOrUint16:
+    case kX64Int64AtomicOrUint32:
+    case kX64Int64AtomicOrUint64:
+    case kX64Int64AtomicXorUint8:
+    case kX64Int64AtomicXorUint16:
+    case kX64Int64AtomicXorUint32:
+    case kX64Int64AtomicXorUint64:
+      return kHasSideEffect;
+
 #define CASE(Name) case k##Name:
     COMMON_ARCH_OPCODE_LIST(CASE)
 #undef CASE
