@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a07b5ac2_30d11399",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Due to widespread macro usage, things don\u0027t compile if we don\u0027t add these types. We can add a comment discouraging their use for now. Then again we are hoping to turn them on soon anyway.",
+      "parentUuid": "74d74171_73d1a5b6",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99b638e0_f932ad15",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce60ce1_49c76abe",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99b638e0_f932ad15",
+      "range": {
+        "startLine": 1766,
+        "startChar": 43,
+        "endLine": 1766,
+        "endChar": 75
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9db2a34c_061f790e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bfdb668_1271c1a7",
+      "range": {
+        "startLine": 1789,
+        "startChar": 14,
+        "endLine": 1789,
+        "endChar": 27
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "830fc24b_ebc03c6a",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -76,6 +142,24 @@
       "writtenOn": "2018-02-15T16:58:30Z",
       "side": 1,
       "message": "I need to have another look at this part.",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4093f8a9_f35f5c9d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "I\u0027ve added some comments to help with that :-)",
+      "parentUuid": "830fc24b_ebc03c6a",
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "a5e4a0ce_5336f254",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Adding a newline and a TODO for now; I\u0027d like to refactor this entire function in a follow-up.",
+      "parentUuid": "eba7641f_ac3236d3",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6399a3d_ea1dff8a",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -113,6 +215,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "468a276a_733b2cfa",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6399a3d_ea1dff8a",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "1db854f4_ebbe5523",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d6da4c_0252abfc",
+      "range": {
+        "startLine": 754,
+        "startChar": 5,
+        "endLine": 754,
+        "endChar": 43
+      },
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f8400e9_a8324414",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 4
@@ -153,6 +297,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3ad64be_811442fc",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f8400e9_a8324414",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -173,6 +335,24 @@
     },
     {
       "key": {
+        "uuid": "3723e917_4cca29f9",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done. Thanks for the suggestion! That seems to do the trick.",
+      "parentUuid": "20386544_59679c9a",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac2e1fe3_18f7b465",
         "filename": "src/compiler/simplified-lowering.cc",
         "patchSetId": 4
@@ -187,6 +367,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "631aa78c_c4b94be5",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac2e1fe3_18f7b465",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -207,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "25c163a2_86db15ef",
+        "filename": "src/compiler/type-cache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done. (TypeLoadTypedElement in typer.cc needs them, via TYPED_ARRAYS macro.)",
+      "parentUuid": "2ddef48f_19182c43",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa2738d_3acc2459",
         "filename": "src/elements.cc",
         "patchSetId": 4
@@ -221,6 +437,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09e912ab_50680a81",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3069,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "This is taken from .indexOf, see old code lines 3108ff. I\u0027ve tried to unify the implementations as much as possible (given the differences in the spec). This particular check shortcuts looking for, say, 1.5 in an integer array: no need to check every element if the elements\u0027 type can\u0027t even represent the search value. It\u0027s a conceptual extension of the lowest()/max() check above.",
+      "parentUuid": "3fa2738d_3acc2459",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -241,6 +475,24 @@
     },
     {
       "key": {
+        "uuid": "13bf92ee_0d347738",
+        "filename": "src/elements.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "181378bc_bc99a67d",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a794bbe0_a154cabd",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -255,6 +507,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "146a4fff_5e2d5301",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "No, it\u0027s an undefined-behavior fix that is currently unobservable.",
+      "parentUuid": "a794bbe0_a154cabd",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -275,6 +545,24 @@
     },
     {
       "key": {
+        "uuid": "bf18577a_9737c5d9",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2089,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d916419_ee11912f",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a79a6bae_bbba600d",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -289,6 +577,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "661c449b_1696436b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a79a6bae_bbba600d",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -309,6 +615,24 @@
     },
     {
       "key": {
+        "uuid": "3b182a8c_7f09aa6d",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2136,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c566928d_39e3a382",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1bc3711_b4e9cd39",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -323,6 +647,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a7893a_c7f0d83f",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2139,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1bc3711_b4e9cd39",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -343,6 +685,24 @@
     },
     {
       "key": {
+        "uuid": "4fcbbe3b_c9dff4d2",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "{raw} is an unsigned value. But I can move the branch into the return statement.",
+      "parentUuid": "fc67a99e_5b6da74a",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7246b9e_71d7873b",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 4
@@ -357,6 +717,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dae8b3cc_f8501c2d",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2153,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done. (Just checked, it\u0027s not UB.)",
+      "parentUuid": "a7246b9e_71d7873b",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -377,6 +755,24 @@
     },
     {
       "key": {
+        "uuid": "19b29bb5_7da71d45",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Ah, yes, a leftover from the spec back-and-forth. Done.",
+      "parentUuid": "19578917_137f5c2a",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec3a48fa_b583ab86",
         "filename": "src/objects/fixed-array-inl.h",
         "patchSetId": 4
@@ -391,6 +787,24 @@
       "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f0254b8_df857921",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-16T03:11:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec3a48fa_b583ab86",
+      "revId": "5652e074ef05f307c90844d1f532d0bcf4f3c047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
