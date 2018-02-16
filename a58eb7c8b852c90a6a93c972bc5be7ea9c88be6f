@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddc0d61e_e8bc27a8",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5325,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-16T12:17:11Z",
+      "side": 1,
+      "message": "No I think PROFILE is the right thing to use. But for wasm we used to use the STUB_TAG. See Logger::LogCodeObject in log.cc. Maybe we should use something consistent.",
+      "range": {
+        "startLine": 5325,
+        "startChar": 61,
+        "endLine": 5325,
+        "endChar": 75
+      },
+      "revId": "a58eb7c8b852c90a6a93c972bc5be7ea9c88be6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
