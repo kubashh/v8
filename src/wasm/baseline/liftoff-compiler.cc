@@ -906,7 +906,7 @@ class LiftoffCompiler {
     if (end_offset >= min_size_) {
       __ emit_cond_jump(kUnsignedGreaterEqual, trap_label, kWasmI32,
                         end_offset_reg.gp(), mem_size.gp());
-    }
+    };
 
     // Just reuse the end_offset register for computing the effective size.
     LiftoffRegister effective_size_reg = end_offset_reg;
