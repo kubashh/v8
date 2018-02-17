@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "579c77c5_3b85a57a",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "Called by ArrayBufferPrototypeSlice",
+      "range": {
+        "startLine": 562,
+        "startChar": 19,
+        "endLine": 562,
+        "endChar": 34
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547bf64b_7fb40b1e",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-async.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "Are promises unsafe because we cannot guarantee that deferred code will run under a NoSideEffectScope?",
+      "range": {
+        "startLine": 35,
+        "startChar": 10,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1c0ba1a_5668933f",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins-2.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "(Weak)Map/Set.p.has() having a side-effect is not obvious, and the side-effect is not JS-visible.  Are we worried that unsafe evaluation will affect performance?",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 61
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1112dfe_b44a7d0e",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "It\u0027s strange that this fails (due to StaCurrentContextSlot) while the case above succeeds.",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 8
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39da0f0_20c2b816",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "For some reason, regular ArrayFilter seems fine, but TypedArrayPrototypeFilter uses \u0027StaKeyedProperty\u0027.",
+      "range": {
+        "startLine": 119,
+        "startChar": 29,
+        "endLine": 119,
+        "endChar": 35
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe3bdf3d_0e0c94e9",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-17T00:10:41Z",
+      "side": 1,
+      "message": "This is a really unfortunate imo, since cases such as [].reduce((a,b) \u003d\u003e [a]) rely on it.",
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
