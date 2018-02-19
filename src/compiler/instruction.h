@@ -868,6 +868,11 @@ class V8_EXPORT_PRIVATE Instruction final {
     return this;
   }
   bool IsCall() const { return IsCallField::decode(bit_field_); }
+  Instruction* MarkAsCatch() {
+    bit_field_ = IsCatchField::update(bit_field_, true);
+    return this;
+  }
+  bool IsCatch() const { return IsCatchField::decode(bit_field_); }
   bool NeedsReferenceMap() const { return IsCall(); }
   bool HasReferenceMap() const { return reference_map_ != nullptr; }
 
@@ -969,6 +974,7 @@ class V8_EXPORT_PRIVATE Instruction final {
               InstructionOperand* temps);
 
   typedef BitField<bool, 30, 1> IsCallField;
+  typedef BitField<bool, 31, 1> IsCatchField;
 
   InstructionCode opcode_;
   uint32_t bit_field_;

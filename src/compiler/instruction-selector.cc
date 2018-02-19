@@ -2303,7 +2303,7 @@ LinkageLocation ExceptionLocation() {
 void InstructionSelector::VisitIfException(Node* node) {
   OperandGenerator g(this);
   DCHECK_EQ(IrOpcode::kCall, node->InputAt(1)->opcode());
-  Emit(kArchNop, g.DefineAsLocation(node, ExceptionLocation()));
+  Emit(kArchNop, g.DefineAsLocation(node, ExceptionLocation()))->MarkAsCatch();
 }
 
 

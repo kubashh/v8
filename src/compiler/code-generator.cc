@@ -683,7 +683,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
   }
 
   // TODO(jarin) We should thread the flag through rather than set it.
-  if (instr->IsCall()) {
+  if (instr->IsCall() || instr->IsCatch()) {
     InitializePoisonForLoadsIfNeeded();
   }
 

@@ -318,7 +318,8 @@ ExplicitOperand::ExplicitOperand(LocationKind kind, MachineRepresentation rep,
 Instruction::Instruction(InstructionCode opcode)
     : opcode_(opcode),
       bit_field_(OutputCountField::encode(0) | InputCountField::encode(0) |
-                 TempCountField::encode(0) | IsCallField::encode(false)),
+                 TempCountField::encode(0) | IsCallField::encode(false) |
+                 IsCatchField::encode(false)),
       reference_map_(nullptr),
       block_(nullptr) {
   parallel_moves_[0] = nullptr;

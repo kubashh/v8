@@ -825,4 +825,10 @@
   'string-replace-gc': [SKIP],
 }],  # variant == slow_path
 
+##############################################################################
+# Skip tests that depend on --branch-load-poisoning being implemented.
+['arch != x64 and arch != arm', {
+  'compiler/try-catch-branch-load-poisoning': [SKIP],
+}], # arch != x64 and arch != arm
+
 ]
