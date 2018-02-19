@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c42b1f1b_d7280c46",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "This must not be whitelisted.",
+      "range": {
+        "startLine": 305,
+        "startChar": 4,
+        "endLine": 305,
+        "endChar": 22
+      },
+      "revId": "1d5e135c6970d8bd0eb9a44027f08090ba7c0c4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

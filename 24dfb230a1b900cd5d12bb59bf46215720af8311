@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "501451d7_a430419e",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "579c77c5_3b85a57a",
+      "range": {
+        "startLine": 562,
+        "startChar": 19,
+        "endLine": 562,
+        "endChar": 34
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "547bf64b_7fb40b1e",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-async.js",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-17T00:10:41Z",
       "side": 1,
       "message": "Are promises unsafe because we cannot guarantee that deferred code will run under a NoSideEffectScope?",
+      "range": {
+        "startLine": 35,
+        "startChar": 10,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e1b3b2_d636fbb4",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-async.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "Yes. Also Promise methods change the Promise\u0027s state.",
+      "parentUuid": "547bf64b_7fb40b1e",
       "range": {
         "startLine": 35,
         "startChar": 10,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b24da683_148a853d",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins-2.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "This, and a lot of other builtins were originally implemented in JavaScript. As such, we checked their bytecodes to look for side-effects. Storing a hash on the object constitutes a side-effect even though that\u0027s a false positive.\n\nWe should revisit the builtins that are false positives because many of them have been ported to CSA or C++ since I first added these tests.",
+      "parentUuid": "e1c0ba1a_5668933f",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 61
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1112dfe_b44a7d0e",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2018-02-17T00:10:41Z",
       "side": 1,
       "message": "It\u0027s strange that this fails (due to StaCurrentContextSlot) while the case above succeeds.",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 8
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dca10186_075693d7",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "Can you retry? We recently migrated some of the typed array constructors from JS to CSA. On tip-of-tree I wasn\u0027t able to reproduce this.",
+      "parentUuid": "e1112dfe_b44a7d0e",
       "range": {
         "startLine": 110,
         "startChar": 4,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "43661d06_a354f12f",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "That\u0027s because TypedArray.prototype.filter was implemented in JavaScript when you tested.\n\nTry again: https://chromium-review.googlesource.com/912989",
+      "parentUuid": "f39da0f0_20c2b816",
+      "range": {
+        "startLine": 119,
+        "startChar": 29,
+        "endLine": 119,
+        "endChar": 35
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe3bdf3d_0e0c94e9",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect.js",
         "patchSetId": 2
@@ -131,6 +251,24 @@
       "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2978666_9fa61edb",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-19T08:37:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fe3bdf3d_0e0c94e9",
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
