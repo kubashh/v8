@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "78154dd3_8486c50a",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-02-19T09:01:04Z",
+      "side": 1,
+      "message": "Ah, I see. Replied in the comment.",
+      "parentUuid": "ef29e837_dac1efbe",
+      "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8868497_e56ec8e7",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 5
@@ -66,6 +84,24 @@
       "writtenOn": "2018-02-16T17:38:39Z",
       "side": 1,
       "message": "Is it possible to make embedder to provide the right name, i.e. IsDetachedNode could be a part of Node::Name implementation. wdyt?",
+      "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65655e1b_9e96d6a2",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-02-19T09:01:04Z",
+      "side": 1,
+      "message": "It is possible. But there is an implementation quirk: currently all names of DOM nodes are static strings (0 allocation). If we move \"Detached\" to Name() we would need to allocate, de-duplicate, and manage life-time of strings in Blink (basically duplicating the StringsStorage). It would be nice to avoid that complexity.\n\nHow about replacing IsDetachedNode() with general NamePrefix() method?",
+      "parentUuid": "e8868497_e56ec8e7",
       "revId": "52eb75e4d4ae4724e2a773d705c5e3fb75f25cbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
