@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c46f8ed_ede7f0ab",
+        "filename": "src/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-19T16:50:01Z",
+      "side": 1,
+      "message": "Can we make all these const?",
+      "range": {
+        "startLine": 224,
+        "startChar": 2,
+        "endLine": 227,
+        "endChar": 18
+      },
+      "revId": "7fb63a2c577ffec3303eea9203c1f42168e814f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
