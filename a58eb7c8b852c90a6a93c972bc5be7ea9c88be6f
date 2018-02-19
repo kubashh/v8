@@ -22,6 +22,30 @@
       "revId": "a58eb7c8b852c90a6a93c972bc5be7ea9c88be6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62f1500_969c1267",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5325,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-02-19T09:39:40Z",
+      "side": 1,
+      "message": "Thanks!\n\nI ended up with FUNCTION_TAG as all existing logging code in wasm-compiler.cc also used FUNCTION_TAG. What do these mean anyway? Naively, I could somewhat understand that js2wasm and wasm2js adapters get a STUB_TAG, but why ordinary wasm functions?\n\nTo make it consistent, how about we use STUB_TAG for the adapters and FUNCTION_TAG for actual functions?",
+      "parentUuid": "ddc0d61e_e8bc27a8",
+      "range": {
+        "startLine": 5325,
+        "startChar": 61,
+        "endLine": 5325,
+        "endChar": 75
+      },
+      "revId": "a58eb7c8b852c90a6a93c972bc5be7ea9c88be6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
