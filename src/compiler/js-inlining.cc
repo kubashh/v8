@@ -7,6 +7,7 @@
 #include "src/ast/ast.h"
 #include "src/compilation-info.h"
 #include "src/compiler.h"
+#include "src/compiler/access-builder.h"
 #include "src/compiler/all-nodes.h"
 #include "src/compiler/bytecode-graph-builder.h"
 #include "src/compiler/common-operator.h"
@@ -329,6 +330,10 @@ bool JSInliner::DetermineCallTarget(
 
     shared_info_out = p.shared_info();
     return true;
+  } else if (match.IsCheckClosure()) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(match.op());
+    shared_info_out = p.shared_info();
+    return true;
   }
 
   return false;
@@ -370,6 +375,18 @@ void JSInliner::DetermineCallContext(
     // The inlinee uses the locally provided context at instantiation.
     context_out = NodeProperties::GetContextInput(match.node());
     feedback_vector_out = handle(FeedbackVector::cast(cell->value()));
+    return;
+  } else if (match.IsCheckClosure()) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(match.op());
+
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+    context_out = effect = graph()->NewNode(
+        simplified()->LoadField(AccessBuilder::ForJSFunctionContext()),
+        match.node(), effect, control);
+    NodeProperties::ReplaceEffectInput(node, effect);
+
+    feedback_vector_out = p.feedback_vector();
     return;
   }
 

@@ -2867,7 +2867,7 @@ namespace {
 
 bool ShouldUseCallICFeedback(Node* node) {
   HeapObjectMatcher m(node);
-  if (m.HasValue() || m.IsJSCreateClosure()) {
+  if (m.HasValue() || m.IsCheckClosure() || m.IsJSCreateClosure()) {
     // Don't use CallIC feedback when we know the function
     // being called, i.e. either know the closure itself or
     // at least the SharedFunctionInfo.
@@ -2949,8 +2949,12 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
   // just immediately try to inline based on the SharedFunctionInfo,
   // since TurboFan generally doesn't inline cross-context, and hence
   // the {target} must have the same native context as the call site.
+  // Same if the {target} is the result of a CheckClosure operation.
   if (target->opcode() == IrOpcode::kJSCreateClosure) {
     CreateClosureParameters const& p = CreateClosureParametersOf(target->op());
+    return ReduceJSCall(node, p.shared_info());
+  } else if (target->opcode() == IrOpcode::kCheckClosure) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(target->op());
     return ReduceJSCall(node, p.shared_info());
   }
 
@@ -3024,6 +3028,23 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
       // Try to further reduce the JSCall {node}.
       Reduction const reduction = ReduceJSCall(node);
       return reduction.Changed() ? reduction : Changed(node);
+    } else if (cell->value()->IsCell()) {
+      Handle<Cell> feedback_vector_cell(Cell::cast(cell->value()), isolate());
+      if (feedback_vector_cell->value()->IsFeedbackVector()) {
+        // Check that {target} is a closure with given {feedback_vector_cell},
+        // which uniquely identifies a given function inside a native context.
+        Node* target_closure = effect =
+            graph()->NewNode(simplified()->CheckClosure(feedback_vector_cell),
+                             target, effect, control);
+
+        // Specialize the JSCall node to the {target_closure}.
+        NodeProperties::ReplaceValueInput(node, target_closure, 0);
+        NodeProperties::ReplaceEffectInput(node, effect);
+
+        // Try to further reduce the JSCall {node}.
+        Reduction const reduction = ReduceJSCall(node);
+        return reduction.Changed() ? reduction : Changed(node);
+      }
     }
   }
   return NoChange();
