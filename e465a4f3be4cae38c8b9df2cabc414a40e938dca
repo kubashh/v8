@@ -22,6 +22,30 @@
       "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82318044_026132c2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6660,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-20T21:20:27Z",
+      "side": 0,
+      "message": "Because it\u0027s redundant. Because of the case line:\n\nsrc \u003d OLD_SPACE \n\nso you basically have:\n\n(dst \u003d\u003d OLD_SPACE) \u0026\u0026 ( dst \u003d\u003d OLD_SPACE || x || y)\n\nunless X or Y have side effects, this is quite redundant.\n\n(The redundancy was introduced with https://codereview.chromium.org/1051233002/diff/1/src/heap/heap-inl.h when merging OLD_DATA_SPACE and OLD_POINTER_SPACE).",
+      "parentUuid": "287307f1_0395f71a",
+      "range": {
+        "startLine": 6660,
+        "startChar": 11,
+        "endLine": 6660,
+        "endChar": 78
+      },
+      "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

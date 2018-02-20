@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "375e4df5_380c8bcb",
+        "filename": "src/globals.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-20T21:20:27Z",
+      "side": 1,
+      "message": "It\u0027s required because of https://cs.chromium.org/chromium/src/v8/src/address-map.h?q\u003dsrc/address-map.h\u0026sq\u003dpackage:chromium\u0026dr\u0026l\u003d187\n\nFrom the comment above that, it appears there are 3 special values that are also encoded in the space index. Previously we had 5+3 possible values and 3 bits were good enough. Now we have 6+3 and need 4 bits.",
+      "parentUuid": "d058f50e_e9c40fd0",
+      "range": {
+        "startLine": 538,
+        "startChar": 30,
+        "endLine": 538,
+        "endChar": 31
+      },
+      "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "773b56ca_74a4a702",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fdb708ec_2264dbe9",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4844,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-20T21:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "773b56ca_74a4a702",
+      "range": {
+        "startLine": 4844,
+        "startChar": 28,
+        "endLine": 4844,
+        "endChar": 35
+      },
+      "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb022805_e6f9f8b5",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd5a2f80_90a86103",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-20T21:20:27Z",
+      "side": 1,
+      "message": "I\u0027ve removed the call to this function (as well as this DCHECK change):\nCollectEvacuationCandidates(heap()-\u003eread_only_space());\n\nwhich clearly should never be needed.",
+      "parentUuid": "cb022805_e6f9f8b5",
+      "range": {
+        "startLine": 698,
+        "startChar": 9,
+        "endLine": 698,
+        "endChar": 38
+      },
+      "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
