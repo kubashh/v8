@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16089119_406e0f38",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-02-20T12:16:52Z",
+      "side": 1,
+      "message": "What about a register pair for the I64 case?",
+      "revId": "ebc6c7a258d8f63fa1e6d4304e1fd8e864598341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
