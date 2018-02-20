@@ -664,6 +664,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kMaskIndexWithBound:
       result = LowerMaskIndexWithBound(node);
       break;
+    case IrOpcode::kCheckClosure:
+      result = LowerCheckClosure(node, frame_state);
+      break;
     case IrOpcode::kCheckMaps:
       LowerCheckMaps(node, frame_state);
       break;
@@ -1319,6 +1322,31 @@ Node* EffectControlLinearizer::LowerMaskIndexWithBound(Node* node) {
     index = __ Word32And(index, mask);
   }
   return index;
+}
+
+Node* EffectControlLinearizer::LowerCheckClosure(Node* node,
+                                                 Node* frame_state) {
+  CheckClosureParameters const& p = CheckClosureParametersOf(node->op());
+  Node* value = node->InputAt(0);
+
+  // Check that {value} is actually a JSFunction.
+  Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
+  Node* value_instance_type =
+      __ LoadField(AccessBuilder::ForMapInstanceType(), value_map);
+  Node* check_instance_type =
+      __ Word32Equal(value_instance_type, __ Int32Constant(JS_FUNCTION_TYPE));
+  __ DeoptimizeIfNot(DeoptimizeReason::kWrongCallTarget, VectorSlotPair(),
+                     check_instance_type, frame_state);
+
+  // Check that the {value}s feedback vector cell matches the one
+  // we recorded before.
+  Node* value_cell =
+      __ LoadField(AccessBuilder::ForJSFunctionFeedbackVector(), value);
+  Node* check_cell =
+      __ WordEqual(value_cell, __ HeapConstant(p.feedback_vector_cell()));
+  __ DeoptimizeIfNot(DeoptimizeReason::kWrongCallTarget, VectorSlotPair(),
+                     check_cell, frame_state);
+  return value;
 }
 
 void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
