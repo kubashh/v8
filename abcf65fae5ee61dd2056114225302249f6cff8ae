@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8066ad3c_a4791d96",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-20T20:06:47Z",
+      "side": 1,
+      "message": "I thought this was only needed for \"and\" and \"or\", because clang-format would somehow treat them as keywords and format them specially. Did you try it without \"clang-format off\"?",
+      "revId": "abcf65fae5ee61dd2056114225302249f6cff8ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "335df8e8_c6597a6f",
+        "filename": "src/wasm/baseline/mips64/liftoff-assembler-mips64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-20T20:06:47Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "abcf65fae5ee61dd2056114225302249f6cff8ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
