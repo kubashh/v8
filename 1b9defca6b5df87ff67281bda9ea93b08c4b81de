@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a18865e3_6a7d6fd4",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 3009,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-20T06:36:51Z",
+      "side": 1,
+      "message": "Thinking about this again: This might not play well with JSCall nodes that don\u0027t have a feedback vector slot associated with them. In that case the current default is to allow speculation, which would then lead to deopt loops. If we change the default to disallow speculation, we no longer optimize the cases where we don\u0027t depend on the speculation bit.\n\nSo we should probably leave the check where it was before.",
+      "revId": "1b9defca6b5df87ff67281bda9ea93b08c4b81de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
