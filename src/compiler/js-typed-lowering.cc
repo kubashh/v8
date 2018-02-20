@@ -1651,8 +1651,6 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   Type* target_type = NodeProperties::GetType(target);
   Node* receiver = NodeProperties::GetValueInput(node, 1);
   Type* receiver_type = NodeProperties::GetType(receiver);
-  Node* effect = NodeProperties::GetEffectInput(node);
-  Node* control = NodeProperties::GetControlInput(node);
 
   // Try to infer receiver {convert_mode} from {receiver} type.
   if (receiver_type->Is(Type::NullOrUndefined())) {
@@ -1666,71 +1664,16 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       target_type->AsHeapConstant()->Value()->IsJSFunction()) {
     Handle<JSFunction> function =
         Handle<JSFunction>::cast(target_type->AsHeapConstant()->Value());
-    Handle<SharedFunctionInfo> shared(function->shared(), isolate());
+    return ReduceJSCall(node, handle(function->shared(), isolate()));
+  }
 
-    if (function->shared()->HasBreakInfo()) {
-      // Do not inline the call if we need to check whether to break at entry.
-      return NoChange();
-    }
-
-    const int builtin_index = shared->code()->builtin_index();
-    const bool is_builtin = (builtin_index != -1);
-
-    // Class constructors are callable, but [[Call]] will raise an exception.
-    // See ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList ).
-    if (IsClassConstructor(shared->kind())) return NoChange();
-
-    // Load the context from the {target}.
-    Node* context = effect = graph()->NewNode(
-        simplified()->LoadField(AccessBuilder::ForJSFunctionContext()), target,
-        effect, control);
-    NodeProperties::ReplaceContextInput(node, context);
-
-    // Check if we need to convert the {receiver}.
-    if (is_sloppy(shared->language_mode()) && !shared->native() &&
-        !receiver_type->Is(Type::Receiver())) {
-      Node* global_proxy =
-          jsgraph()->HeapConstant(handle(function->global_proxy()));
-      receiver = effect =
-          graph()->NewNode(simplified()->ConvertReceiver(convert_mode),
-                           receiver, global_proxy, effect, control);
-      NodeProperties::ReplaceValueInput(node, receiver, 1);
-    }
-
-    // Update the effect dependency for the {node}.
-    NodeProperties::ReplaceEffectInput(node, effect);
-
-    // Compute flags for the call.
-    CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
-    Node* new_target = jsgraph()->UndefinedConstant();
-    Node* argument_count = jsgraph()->Constant(arity);
-
-    if (NeedsArgumentAdaptorFrame(shared, arity)) {
-      // Patch {node} to an indirect call via the ArgumentsAdaptorTrampoline.
-      Callable callable = CodeFactory::ArgumentAdaptor(isolate());
-      node->InsertInput(graph()->zone(), 0,
-                        jsgraph()->HeapConstant(callable.code()));
-      node->InsertInput(graph()->zone(), 2, new_target);
-      node->InsertInput(graph()->zone(), 3, argument_count);
-      node->InsertInput(
-          graph()->zone(), 4,
-          jsgraph()->Constant(shared->internal_formal_parameter_count()));
-      NodeProperties::ChangeOp(
-          node, common()->Call(Linkage::GetStubCallDescriptor(
-                    isolate(), graph()->zone(), callable.descriptor(),
-                    1 + arity, flags)));
-    } else if (is_builtin && Builtins::HasCppImplementation(builtin_index)) {
-      // Patch {node} to a direct CEntryStub call.
-      ReduceBuiltin(isolate(), jsgraph(), node, builtin_index, arity, flags);
-    } else {
-      // Patch {node} to a direct call.
-      node->InsertInput(graph()->zone(), arity + 2, new_target);
-      node->InsertInput(graph()->zone(), arity + 3, argument_count);
-      NodeProperties::ChangeOp(node,
-                               common()->Call(Linkage::GetJSCallDescriptor(
-                                   graph()->zone(), false, 1 + arity, flags)));
-    }
-    return Changed(node);
+  // Check if {target} is the result of a JSCreateClosure or CheckClosure.
+  if (target->opcode() == IrOpcode::kJSCreateClosure) {
+    CreateClosureParameters const& p = CreateClosureParametersOf(target->op());
+    return ReduceJSCall(node, p.shared_info());
+  } else if (target->opcode() == IrOpcode::kCheckClosure) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(target->op());
+    return ReduceJSCall(node, p.shared_info());
   }
 
   // Check if {target} is a JSFunction.
@@ -1758,6 +1701,106 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
   }
 
   return NoChange();
+}
+
+Reduction JSTypedLowering::ReduceJSCall(Node* node,
+                                        Handle<SharedFunctionInfo> shared) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  CallParameters const& p = CallParametersOf(node->op());
+  int const arity = static_cast<int>(p.arity() - 2);
+  ConvertReceiverMode convert_mode = p.convert_mode();
+  Node* target = NodeProperties::GetValueInput(node, 0);
+  Type* target_type = NodeProperties::GetType(target);
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Type* receiver_type = NodeProperties::GetType(receiver);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  // Try to infer receiver {convert_mode} from {receiver} type.
+  if (receiver_type->Is(Type::NullOrUndefined())) {
+    convert_mode = ConvertReceiverMode::kNullOrUndefined;
+  } else if (!receiver_type->Maybe(Type::NullOrUndefined())) {
+    convert_mode = ConvertReceiverMode::kNotNullOrUndefined;
+  }
+
+  // Do not inline the call if we need to check whether to break at entry.
+  if (shared->HasBreakInfo()) return NoChange();
+
+  const int builtin_index = shared->code()->builtin_index();
+  const bool is_builtin = (builtin_index != -1);
+
+  // Class constructors are callable, but [[Call]] will raise an exception.
+  // See ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList ).
+  if (IsClassConstructor(shared->kind())) return NoChange();
+
+  // Load the context from the {target}.
+  Node* context = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForJSFunctionContext()), target,
+      effect, control);
+  NodeProperties::ReplaceContextInput(node, context);
+
+  // Check if we need to convert the {receiver}.
+  if (is_sloppy(shared->language_mode()) && !shared->native() &&
+      !receiver_type->Is(Type::Receiver())) {
+    // Figure out the proper JSGlobalProxy for the {target}.
+    Node* global_proxy;
+    if (target_type->IsHeapConstant()) {
+      Handle<JSFunction> function =
+          Handle<JSFunction>::cast(target_type->AsHeapConstant()->Value());
+      global_proxy =
+          jsgraph()->HeapConstant(handle(function->global_proxy(), isolate()));
+    } else {
+      Node* native_context = effect = graph()->NewNode(
+          simplified()->LoadField(
+              AccessBuilder::ForContextSlot(Context::NATIVE_CONTEXT_INDEX)),
+          context, effect, control);
+      global_proxy = effect = graph()->NewNode(
+          simplified()->LoadField(
+              AccessBuilder::ForContextSlot(Context::GLOBAL_PROXY_INDEX)),
+          native_context, effect, control);
+    }
+
+    // Convert the {receiver} appropriately.
+    receiver = effect =
+        graph()->NewNode(simplified()->ConvertReceiver(convert_mode), receiver,
+                         global_proxy, effect, control);
+    NodeProperties::ReplaceValueInput(node, receiver, 1);
+  }
+
+  // Update the effect dependency for the {node}.
+  NodeProperties::ReplaceEffectInput(node, effect);
+
+  // Compute flags for the call.
+  CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
+  Node* new_target = jsgraph()->UndefinedConstant();
+  Node* argument_count = jsgraph()->Constant(arity);
+
+  if (NeedsArgumentAdaptorFrame(shared, arity)) {
+    // Patch {node} to an indirect call via the ArgumentsAdaptorTrampoline.
+    Callable callable = CodeFactory::ArgumentAdaptor(isolate());
+    node->InsertInput(graph()->zone(), 0,
+                      jsgraph()->HeapConstant(callable.code()));
+    node->InsertInput(graph()->zone(), 2, new_target);
+    node->InsertInput(graph()->zone(), 3, argument_count);
+    node->InsertInput(
+        graph()->zone(), 4,
+        jsgraph()->Constant(shared->internal_formal_parameter_count()));
+    NodeProperties::ChangeOp(
+        node, common()->Call(Linkage::GetStubCallDescriptor(
+                  isolate(), graph()->zone(), callable.descriptor(), 1 + arity,
+                  flags)));
+  } else if (is_builtin && Builtins::HasCppImplementation(builtin_index)) {
+    // Patch {node} to a direct CEntryStub call.
+    ReduceBuiltin(isolate(), jsgraph(), node, builtin_index, arity, flags);
+  } else {
+    // Patch {node} to a direct call.
+    node->InsertInput(graph()->zone(), arity + 2, new_target);
+    node->InsertInput(graph()->zone(), arity + 3, argument_count);
+    NodeProperties::ChangeOp(node,
+                             common()->Call(Linkage::GetJSCallDescriptor(
+                                 graph()->zone(), false, 1 + arity, flags)));
+  }
+  return Changed(node);
 }
 
 Reduction JSTypedLowering::ReduceJSForInNext(Node* node) {

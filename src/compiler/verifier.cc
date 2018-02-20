@@ -1349,6 +1349,11 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckValueInputIs(node, 1, Type::Unsigned31());
       CheckTypeIs(node, Type::Unsigned32());
       break;
+    case IrOpcode::kCheckClosure:
+      // Any -> Function
+      CheckValueInputIs(node, 0, Type::Any());
+      CheckTypeIs(node, Type::Function());
+      break;
     case IrOpcode::kCheckHeapObject:
       CheckValueInputIs(node, 0, Type::Any());
       break;

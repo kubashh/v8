@@ -4397,7 +4397,7 @@ Node* CodeStubAssembler::IsCallable(Node* object) {
 }
 
 Node* CodeStubAssembler::IsCell(Node* object) {
-  return WordEqual(LoadMap(object), LoadRoot(Heap::kCellMapRootIndex));
+  return HasInstanceType(object, CELL_TYPE);
 }
 
 Node* CodeStubAssembler::IsCode(Node* object) {

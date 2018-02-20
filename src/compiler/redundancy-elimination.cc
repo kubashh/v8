@@ -20,6 +20,7 @@ Reduction RedundancyElimination::Reduce(Node* node) {
   if (node_checks_.Get(node)) return NoChange();
   switch (node->opcode()) {
     case IrOpcode::kCheckBounds:
+    case IrOpcode::kCheckClosure:
     case IrOpcode::kCheckEqualsInternalizedString:
     case IrOpcode::kCheckEqualsSymbol:
     case IrOpcode::kCheckFloat64Hole:

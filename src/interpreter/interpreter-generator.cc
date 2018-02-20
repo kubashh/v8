@@ -1812,7 +1812,8 @@ IGNITION_HANDLER(TestInstanceOf, InterpreterAssembler) {
   Node* context = GetContext();
 
   // Record feedback for the {callable} in the {feedback_vector}.
-  CollectCallableFeedback(callable, context, feedback_vector, slot_id);
+  CollectCallableFeedback(callable, context, feedback_vector, slot_id,
+                          CallableFeedbackMode::kDontCollectSharedFunctionInfo);
 
   // Perform the actual instanceof operation.
   SetAccumulator(InstanceOf(object, callable, context));

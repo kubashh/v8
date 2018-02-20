@@ -148,9 +148,14 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   // Collect the callable |target| feedback for either a CALL_IC or
   // an INSTANCEOF_IC in the |feedback_vector| at |slot_id|.
+  enum class CallableFeedbackMode {
+    kCollectSharedFunctionInfo,
+    kDontCollectSharedFunctionInfo
+  };
   void CollectCallableFeedback(compiler::Node* target, compiler::Node* context,
                                compiler::Node* feedback_vector,
-                               compiler::Node* slot_id);
+                               compiler::Node* slot_id,
+                               CallableFeedbackMode mode);
 
   // Collect CALL_IC feedback for |target| function in the
   // |feedback_vector| at |slot_id|, and the call counts in
