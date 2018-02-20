@@ -4,6 +4,7 @@
 
 #include "src/heap/heap.h"
 
+#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -165,6 +166,7 @@ Heap::Heap()
       number_of_disposed_maps_(0),
       new_space_(nullptr),
       old_space_(nullptr),
+      read_only_space_(nullptr),
       code_space_(nullptr),
       map_space_(nullptr),
       lo_space_(nullptr),
@@ -322,7 +324,8 @@ bool Heap::CanExpandOldGeneration(size_t size) {
 
 bool Heap::HasBeenSetUp() {
   return old_space_ != nullptr && code_space_ != nullptr &&
-         map_space_ != nullptr && lo_space_ != nullptr;
+         map_space_ != nullptr && lo_space_ != nullptr &&
+         read_only_space_ != nullptr;
 }
 
 
@@ -608,6 +611,8 @@ const char* Heap::GetSpaceName(int idx) {
       return "new_space";
     case OLD_SPACE:
       return "old_space";
+    case RO_SPACE:
+      return "read_only_space";
     case MAP_SPACE:
       return "map_space";
     case CODE_SPACE:
@@ -4693,7 +4698,7 @@ bool Heap::Contains(HeapObject* value) {
   return HasBeenSetUp() &&
          (new_space_->ToSpaceContains(value) || old_space_->Contains(value) ||
           code_space_->Contains(value) || map_space_->Contains(value) ||
-          lo_space_->Contains(value));
+          lo_space_->Contains(value) || read_only_space_->Contains(value));
 }
 
 bool Heap::ContainsSlow(Address addr) {
@@ -4703,7 +4708,8 @@ bool Heap::ContainsSlow(Address addr) {
   return HasBeenSetUp() &&
          (new_space_->ToSpaceContainsSlow(addr) ||
           old_space_->ContainsSlow(addr) || code_space_->ContainsSlow(addr) ||
-          map_space_->ContainsSlow(addr) || lo_space_->ContainsSlow(addr));
+          map_space_->ContainsSlow(addr) || lo_space_->ContainsSlow(addr) ||
+          read_only_space_->Contains(addr));
 }
 
 bool Heap::InSpace(HeapObject* value, AllocationSpace space) {
@@ -4717,6 +4723,8 @@ bool Heap::InSpace(HeapObject* value, AllocationSpace space) {
       return new_space_->ToSpaceContains(value);
     case OLD_SPACE:
       return old_space_->Contains(value);
+    case RO_SPACE:
+      return read_only_space_->Contains(value);
     case CODE_SPACE:
       return code_space_->Contains(value);
     case MAP_SPACE:
@@ -4738,6 +4746,8 @@ bool Heap::InSpaceSlow(Address addr, AllocationSpace space) {
       return new_space_->ToSpaceContainsSlow(addr);
     case OLD_SPACE:
       return old_space_->ContainsSlow(addr);
+    case RO_SPACE:
+      return read_only_space_->ContainsSlow(addr);
     case CODE_SPACE:
       return code_space_->ContainsSlow(addr);
     case MAP_SPACE:
@@ -4753,6 +4763,7 @@ bool Heap::IsValidAllocationSpace(AllocationSpace space) {
   switch (space) {
     case NEW_SPACE:
     case OLD_SPACE:
+    case RO_SPACE:
     case CODE_SPACE:
     case MAP_SPACE:
     case LO_SPACE:
@@ -4781,6 +4792,37 @@ bool Heap::RootIsImmortalImmovable(int root_index) {
 }
 
 #ifdef VERIFY_HEAP
+class VerifyReadOnlyPointersVisitor : public ObjectVisitor, public RootVisitor {
+ public:
+  void VisitPointers(HeapObject* host, Object** start, Object** end) {
+    VerifyPointers(start, end);
+  }
+
+  void VisitRootPointers(Root root, const char* description, Object** start,
+                         Object** end) {
+    VerifyPointers(start, end);
+  }
+
+ private:
+  void VerifyPointers(Object** start, Object** end) {
+    for (Object** current = start; current < end; current++) {
+      if ((*current)->IsHeapObject()) {
+        HeapObject* object = HeapObject::cast(*current);
+        if (!object->GetIsolate()->heap()->read_only_space()->Contains(
+                object)) {
+          printf("Read-only space points to object not in read-only space:\n");
+          object->PrintHeader(std::cout, nullptr);
+          printf(": ");
+          object->HeapObjectPrint(std::cout);
+
+          CHECK(object->GetIsolate()->heap()->read_only_space()->Contains(
+              object));
+        }
+      }
+    }
+  }
+};
+
 void Heap::Verify() {
   CHECK(HasBeenSetUp());
   HandleScope scope(isolate());
@@ -4789,6 +4831,7 @@ void Heap::Verify() {
   mark_compact_collector()->EnsureSweepingCompleted();
 
   VerifyPointersVisitor visitor;
+  VerifyReadOnlyPointersVisitor baked_visitor;
   IterateRoots(&visitor, VISIT_ONLY_STRONG);
 
   VerifySmisVisitor smis_visitor;
@@ -4798,6 +4841,8 @@ void Heap::Verify() {
 
   old_space_->Verify(&visitor);
   map_space_->Verify(&visitor);
+  read_only_space_->Verify(&visitor);
+  read_only_space_->Verify(&baked_visitor);
 
   VerifyPointersVisitor no_dirty_regions_visitor;
   code_space_->Verify(&no_dirty_regions_visitor);
@@ -5646,6 +5691,10 @@ bool Heap::SetUp() {
       new OldSpace(this, OLD_SPACE, NOT_EXECUTABLE);
   if (!old_space_->SetUp()) return false;
 
+  space_[RO_SPACE] = read_only_space_ =
+      new ReadOnlySpace(this, RO_SPACE, NOT_EXECUTABLE);
+  if (!read_only_space_->SetUp()) return false;
+
   space_[CODE_SPACE] = code_space_ = new OldSpace(this, CODE_SPACE, EXECUTABLE);
   if (!code_space_->SetUp()) return false;
 
@@ -5921,6 +5970,11 @@ void Heap::TearDown() {
   if (old_space_ != nullptr) {
     delete old_space_;
     old_space_ = nullptr;
+  }
+
+  if (read_only_space_ != nullptr) {
+    delete read_only_space_;
+    read_only_space_ = nullptr;
   }
 
   if (code_space_ != nullptr) {
@@ -6210,6 +6264,8 @@ PagedSpace* PagedSpaces::next() {
   switch (counter_++) {
     case OLD_SPACE:
       return heap_->old_space();
+    case RO_SPACE:
+      return heap_->read_only_space();
     case CODE_SPACE:
       return heap_->code_space();
     case MAP_SPACE:
@@ -6593,6 +6649,8 @@ const char* AllocationSpaceName(AllocationSpace space) {
       return "NEW_SPACE";
     case OLD_SPACE:
       return "OLD_SPACE";
+    case RO_SPACE:
+      return "RO_SPACE";
     case CODE_SPACE:
       return "CODE_SPACE";
     case MAP_SPACE:
@@ -6658,6 +6716,10 @@ bool Heap::AllowedToBeMigrated(HeapObject* obj, AllocationSpace dst) {
     case OLD_SPACE:
       return dst == src &&
              (dst == OLD_SPACE || obj->IsFiller() || obj->IsExternalString());
+    case RO_SPACE:
+      // TODO(delphick): ...?
+      return dst == src &&
+             (dst == RO_SPACE || obj->IsFiller() || obj->IsExternalString());
     case CODE_SPACE:
       return dst == src && type == CODE_TYPE;
     case MAP_SPACE:
