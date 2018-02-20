@@ -124,11 +124,12 @@ class Sweeper {
   class SweeperTask;
 
   static const int kNumberOfSweepingSpaces = LAST_PAGED_SPACE + 1;
-  static const int kMaxSweeperTasks = 3;
+  static const int kMaxSweeperTasks = 4;
 
   template <typename Callback>
   void ForAllSweepingSpaces(Callback callback) const {
     callback(OLD_SPACE);
+    callback(RO_SPACE);
     callback(CODE_SPACE);
     callback(MAP_SPACE);
   }

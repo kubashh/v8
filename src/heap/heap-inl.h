@@ -284,6 +284,10 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
     } else {
       allocation = old_space_->AllocateRaw(size_in_bytes, alignment);
     }
+  } else if (RO_SPACE == space) {
+    // TODO(delphick): DCHECK that only allocating here during boot strap
+    CHECK(!large_object);
+    allocation = read_only_space_->AllocateRaw(size_in_bytes, alignment);
   } else if (CODE_SPACE == space) {
     if (size_in_bytes <= code_space()->AreaSize()) {
       allocation = code_space_->AllocateRawUnaligned(size_in_bytes);

@@ -493,6 +493,7 @@ class NewSpace;
 class Object;
 class OldSpace;
 class ParameterCount;
+class ReadOnlySpace;
 class Foreign;
 class Scope;
 class DeclarationScope;
@@ -520,10 +521,11 @@ typedef bool (*WeakSlotCallbackWithHeap)(Heap* heap, Object** pointer);
 
 // NOTE: SpaceIterator depends on AllocationSpace enumeration values being
 // consecutive.
-// Keep this enum in sync with the ObjectSpace enum in v8.h
+// Keep this enum in sync with the ObjectSpace enum in include/v8.h
 enum AllocationSpace {
   NEW_SPACE,   // Semispaces collected with copying collector.
   OLD_SPACE,   // May contain pointers to new space.
+  RO_SPACE,    // Immortal, Immovable and Immutable objects.
   CODE_SPACE,  // No pointers to new space, marked executable.
   MAP_SPACE,   // Only and all map objects.
   LO_SPACE,    // Promoted large objects.
@@ -533,7 +535,7 @@ enum AllocationSpace {
   FIRST_PAGED_SPACE = OLD_SPACE,
   LAST_PAGED_SPACE = MAP_SPACE
 };
-constexpr int kSpaceTagSize = 3;
+constexpr int kSpaceTagSize = 4;
 
 enum AllocationAlignment { kWordAligned, kDoubleAligned, kDoubleUnaligned };
 
