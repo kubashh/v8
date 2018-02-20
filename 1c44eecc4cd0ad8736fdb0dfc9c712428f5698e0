@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f20446b_25a8489d",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-02-20T17:45:45Z",
+      "side": 1,
+      "message": "Remove?",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 251,
+        "endChar": 15
+      },
+      "revId": "1c44eecc4cd0ad8736fdb0dfc9c712428f5698e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "470073dd_2d13d43a",
+        "filename": "src/tracing/trace-event.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-02-20T17:45:45Z",
+      "side": 1,
+      "message": "You don\u0027t seem to be using the thread_id anywhere which is confusing and misleading.\n\nI understand that you are adding the implementation here since TRACE_EVENT_COPY_NESTABLE_ASYNC_*_WITH_TIMESTAMP0 calls into that macro.\n\nAnd you cannot change the call-site since it is in the universally shared trace_event_common.h file.\n\nI would recommend moving the implementation to INTERNAL_TRACE_EVENT_ADD_WITH_ID_AND_TIMESTAMP, and define this macro as a redirection to the other one, with a comment stating that we don\u0027t care about the thread_id, so we are using the version without.",
+      "range": {
+        "startLine": 253,
+        "startChar": 37,
+        "endLine": 253,
+        "endChar": 46
+      },
+      "revId": "1c44eecc4cd0ad8736fdb0dfc9c712428f5698e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
