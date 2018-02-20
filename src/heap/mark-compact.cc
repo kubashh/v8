@@ -150,6 +150,7 @@ class FullMarkingVerifier : public MarkingVerifier {
     VerifyRoots(VISIT_ONLY_STRONG);
     VerifyMarking(heap_->new_space());
     VerifyMarking(heap_->old_space());
+    VerifyMarking(heap_->baked_space());
     VerifyMarking(heap_->code_space());
     VerifyMarking(heap_->map_space());
 
@@ -305,6 +306,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->baked_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -332,6 +334,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL_IN_SCAVENGE);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->baked_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -521,6 +524,7 @@ bool MarkCompactCollector::StartCompaction() {
     DCHECK(evacuation_candidates_.empty());
 
     CollectEvacuationCandidates(heap()->old_space());
+    CollectEvacuationCandidates(heap()->baked_space());
 
     if (FLAG_compact_code_space) {
       CollectEvacuationCandidates(heap()->code_space());
@@ -577,6 +581,7 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
 
 void MarkCompactCollector::VerifyMarkbitsAreClean() {
   VerifyMarkbitsAreClean(heap_->old_space());
+  VerifyMarkbitsAreClean(heap_->baked_space());
   VerifyMarkbitsAreClean(heap_->code_space());
   VerifyMarkbitsAreClean(heap_->map_space());
   VerifyMarkbitsAreClean(heap_->new_space());
@@ -618,6 +623,7 @@ void MarkCompactCollector::ClearMarkbitsInNewSpace(NewSpace* space) {
 void MarkCompactCollector::ClearMarkbits() {
   ClearMarkbitsInPagedSpace(heap_->code_space());
   ClearMarkbitsInPagedSpace(heap_->map_space());
+  ClearMarkbitsInPagedSpace(heap_->baked_space());
   ClearMarkbitsInPagedSpace(heap_->old_space());
   ClearMarkbitsInNewSpace(heap_->new_space());
   heap_->lo_space()->ClearMarkingStateOfLiveObjects();
@@ -628,6 +634,7 @@ void MarkCompactCollector::EnsureSweepingCompleted() {
 
   sweeper()->EnsureCompleted();
   heap()->old_space()->RefillFreeList();
+  heap()->baked_space()->RefillFreeList();
   heap()->code_space()->RefillFreeList();
   heap()->map_space()->RefillFreeList();
 
@@ -688,7 +695,8 @@ void MarkCompactCollector::ComputeEvacuationHeuristics(
 }
 
 void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
-  DCHECK(space->identity() == OLD_SPACE || space->identity() == CODE_SPACE);
+  DCHECK(space->identity() == OLD_SPACE || space->identity() == CODE_SPACE ||
+         space->identity() == RO_SPACE);
 
   int number_of_pages = space->CountTotalPages();
   size_t area_size = space->AreaSize();
@@ -921,6 +929,7 @@ void MarkCompactCollector::VerifyMarking() {
 #endif
 #ifdef VERIFY_HEAP
   heap()->old_space()->VerifyLiveBytes();
+  heap()->baked_space()->VerifyLiveBytes();
   heap()->map_space()->VerifyLiveBytes();
   heap()->code_space()->VerifyLiveBytes();
 #endif
@@ -3925,6 +3934,8 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->old_space(), RememberedSetUpdatingMode::ALL);
     remembered_set_pages += CollectRememberedSetUpdatingItems(
+        &updating_job, heap()->baked_space(), RememberedSetUpdatingMode::ALL);
+    remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->code_space(), RememberedSetUpdatingMode::ALL);
     remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->lo_space(), RememberedSetUpdatingMode::ALL);
@@ -4005,6 +4016,9 @@ void MinorMarkCompactCollector::UpdatePointersAfterEvacuation() {
   int remembered_set_pages = 0;
   remembered_set_pages += CollectRememberedSetUpdatingItems(
       &updating_job, heap()->old_space(),
+      RememberedSetUpdatingMode::OLD_TO_NEW_ONLY);
+  remembered_set_pages += CollectRememberedSetUpdatingItems(
+      &updating_job, heap()->baked_space(),
       RememberedSetUpdatingMode::OLD_TO_NEW_ONLY);
   remembered_set_pages += CollectRememberedSetUpdatingItems(
       &updating_job, heap()->code_space(),
@@ -4182,6 +4196,11 @@ void MarkCompactCollector::StartSweepSpaces() {
       GCTracer::Scope sweep_scope(heap()->tracer(),
                                   GCTracer::Scope::MC_SWEEP_OLD);
       StartSweepSpace(heap()->old_space());
+    }
+    {
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_CODE);
+      StartSweepSpace(heap()->baked_space());
     }
     {
       GCTracer::Scope sweep_scope(heap()->tracer(),

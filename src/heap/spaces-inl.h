@@ -364,6 +364,7 @@ AllocationResult PagedSpace::AllocateRawAligned(int size_in_bytes,
 
 AllocationResult PagedSpace::AllocateRaw(int size_in_bytes,
                                          AllocationAlignment alignment) {
+  // printf("AllocateRaw: %d\n", size_in_bytes);
   if (top_on_previous_step_ && top() < top_on_previous_step_ &&
       SupportsInlineAllocation()) {
     // Generated code decreased the top() pointer to do folded allocations.
@@ -396,7 +397,6 @@ AllocationResult PagedSpace::AllocateRaw(int size_in_bytes,
   }
   return result;
 }
-
 
 // -----------------------------------------------------------------------------
 // NewSpace
