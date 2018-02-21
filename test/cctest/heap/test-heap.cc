@@ -1331,7 +1331,7 @@ TEST(CompilationCacheCachingBehavior) {
   }
 
   // The script should be in the cache now.
-  InfoVectorPair pair = compilation_cache->LookupScript(
+  InfoCellPair pair = compilation_cache->LookupScript(
       source, Handle<Object>(), 0, 0, v8::ScriptOriginOptions(true, false),
       native_context, language_mode);
   CHECK(pair.has_shared());

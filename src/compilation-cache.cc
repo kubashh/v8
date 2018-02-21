@@ -123,11 +123,11 @@ bool CompilationCacheScript::HasOrigin(Handle<SharedFunctionInfo> function_info,
 // be cached in the same script generation. Currently the first use
 // will be cached, but subsequent code from different source / line
 // won't.
-InfoVectorPair CompilationCacheScript::Lookup(
+InfoCellPair CompilationCacheScript::Lookup(
     Handle<String> source, MaybeHandle<Object> name, int line_offset,
     int column_offset, ScriptOriginOptions resource_options,
     Handle<Context> context, LanguageMode language_mode) {
-  InfoVectorPair result;
+  InfoCellPair result;
 
   // Probe the script generation tables. Make sure not to leak handles
   // into the caller's handle scope.
@@ -135,19 +135,19 @@ InfoVectorPair CompilationCacheScript::Lookup(
     const int generation = 0;
     DCHECK_EQ(generations(), 1);
     Handle<CompilationCacheTable> table = GetTable(generation);
-    InfoVectorPair probe = table->LookupScript(source, context, language_mode);
+    InfoCellPair probe = table->LookupScript(source, context, language_mode);
     if (probe.has_shared()) {
       Handle<SharedFunctionInfo> function_info(probe.shared(), isolate());
-      Handle<Cell> vector_handle;
-      if (probe.has_vector()) {
-        vector_handle = Handle<Cell>(probe.vector(), isolate());
+      Handle<FeedbackCell> cell;
+      if (probe.has_cell()) {
+        cell = handle(probe.cell(), isolate());
       }
       // Break when we've found a suitable shared function info that
       // matches the origin.
       if (HasOrigin(function_info, name, line_offset, column_offset,
                     resource_options)) {
-        result = InfoVectorPair(*function_info,
-                                probe.has_vector() ? *vector_handle : nullptr);
+        result =
+            InfoCellPair(*function_info, probe.has_cell() ? *cell : nullptr);
       }
     }
   }
@@ -160,14 +160,13 @@ InfoVectorPair CompilationCacheScript::Lookup(
     // Since HasOrigin can allocate, we need to protect the SharedFunctionInfo
     // and the FeedbackVector with handles during the call.
     Handle<SharedFunctionInfo> shared(result.shared(), isolate());
-    Handle<Cell> vector_handle;
-    if (result.has_vector()) {
-      vector_handle = Handle<Cell>(result.vector(), isolate());
+    Handle<FeedbackCell> cell;
+    if (result.has_cell()) {
+      cell = handle(result.cell(), isolate());
     }
     DCHECK(
         HasOrigin(shared, name, line_offset, column_offset, resource_options));
-    result =
-        InfoVectorPair(*shared, result.has_vector() ? *vector_handle : nullptr);
+    result = InfoCellPair(*shared, result.has_cell() ? *cell : nullptr);
 #endif
     isolate()->counters()->compilation_cache_hits()->Increment();
   } else {
@@ -179,21 +178,23 @@ InfoVectorPair CompilationCacheScript::Lookup(
 void CompilationCacheScript::Put(Handle<String> source, Handle<Context> context,
                                  LanguageMode language_mode,
                                  Handle<SharedFunctionInfo> function_info,
-                                 Handle<Cell> literals) {
+                                 Handle<FeedbackCell> feedback_cell) {
   HandleScope scope(isolate());
   Handle<CompilationCacheTable> table = GetFirstTable();
   SetFirstTable(CompilationCacheTable::PutScript(
-      table, source, context, language_mode, function_info, literals));
+      table, source, context, language_mode, function_info, feedback_cell));
 }
 
-InfoVectorPair CompilationCacheEval::Lookup(
-    Handle<String> source, Handle<SharedFunctionInfo> outer_info,
-    Handle<Context> native_context, LanguageMode language_mode, int position) {
+InfoCellPair CompilationCacheEval::Lookup(Handle<String> source,
+                                          Handle<SharedFunctionInfo> outer_info,
+                                          Handle<Context> native_context,
+                                          LanguageMode language_mode,
+                                          int position) {
   HandleScope scope(isolate());
   // Make sure not to leak the table into the surrounding handle
   // scope. Otherwise, we risk keeping old tables around even after
   // having cleared the cache.
-  InfoVectorPair result;
+  InfoCellPair result;
   const int generation = 0;
   DCHECK_EQ(generations(), 1);
   Handle<CompilationCacheTable> table = GetTable(generation);
@@ -211,12 +212,13 @@ void CompilationCacheEval::Put(Handle<String> source,
                                Handle<SharedFunctionInfo> outer_info,
                                Handle<SharedFunctionInfo> function_info,
                                Handle<Context> native_context,
-                               Handle<Cell> literals, int position) {
+                               Handle<FeedbackCell> feedback_cell,
+                               int position) {
   HandleScope scope(isolate());
   Handle<CompilationCacheTable> table = GetFirstTable();
   table =
       CompilationCacheTable::PutEval(table, source, outer_info, function_info,
-                                     native_context, literals, position);
+                                     native_context, feedback_cell, position);
   SetFirstTable(table);
 }
 
@@ -263,21 +265,23 @@ void CompilationCache::Remove(Handle<SharedFunctionInfo> function_info) {
   script_.Remove(function_info);
 }
 
-InfoVectorPair CompilationCache::LookupScript(
+InfoCellPair CompilationCache::LookupScript(
     Handle<String> source, MaybeHandle<Object> name, int line_offset,
     int column_offset, ScriptOriginOptions resource_options,
     Handle<Context> context, LanguageMode language_mode) {
-  InfoVectorPair empty_result;
+  InfoCellPair empty_result;
   if (!IsEnabled()) return empty_result;
 
   return script_.Lookup(source, name, line_offset, column_offset,
                         resource_options, context, language_mode);
 }
 
-InfoVectorPair CompilationCache::LookupEval(
-    Handle<String> source, Handle<SharedFunctionInfo> outer_info,
-    Handle<Context> context, LanguageMode language_mode, int position) {
-  InfoVectorPair result;
+InfoCellPair CompilationCache::LookupEval(Handle<String> source,
+                                          Handle<SharedFunctionInfo> outer_info,
+                                          Handle<Context> context,
+                                          LanguageMode language_mode,
+                                          int position) {
+  InfoCellPair result;
   if (!IsEnabled()) return result;
 
   if (context->IsNativeContext()) {
@@ -303,28 +307,29 @@ MaybeHandle<FixedArray> CompilationCache::LookupRegExp(Handle<String> source,
 void CompilationCache::PutScript(Handle<String> source, Handle<Context> context,
                                  LanguageMode language_mode,
                                  Handle<SharedFunctionInfo> function_info,
-                                 Handle<Cell> literals) {
+                                 Handle<FeedbackCell> feedback_cell) {
   if (!IsEnabled()) return;
 
-  script_.Put(source, context, language_mode, function_info, literals);
+  script_.Put(source, context, language_mode, function_info, feedback_cell);
 }
 
 void CompilationCache::PutEval(Handle<String> source,
                                Handle<SharedFunctionInfo> outer_info,
                                Handle<Context> context,
                                Handle<SharedFunctionInfo> function_info,
-                               Handle<Cell> literals, int position) {
+                               Handle<FeedbackCell> feedback_cell,
+                               int position) {
   if (!IsEnabled()) return;
 
   HandleScope scope(isolate());
   if (context->IsNativeContext()) {
-    eval_global_.Put(source, outer_info, function_info, context, literals,
+    eval_global_.Put(source, outer_info, function_info, context, feedback_cell,
                      position);
   } else {
     DCHECK_NE(position, kNoSourcePosition);
     Handle<Context> native_context(context->native_context(), isolate());
     eval_contextual_.Put(source, outer_info, function_info, native_context,
-                         literals, position);
+                         feedback_cell, position);
   }
 }
 
