@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6f64005a_4ec226b1",
+        "filename": "src/compilation-cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-21T11:56:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "204f086b_80db05ce",
+      "range": {
+        "startLine": 89,
+        "startChar": 11,
+        "endLine": 89,
+        "endChar": 45
+      },
+      "revId": "75c9096d1c53300436fd5dbba2f96406f088f9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdbd244b_456ed68f",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-21T11:52:49Z",
       "side": 1,
       "message": "Any specific reason we have two runtime calls for this rather than just having the tenured argument like the old InterpreterNewClosure runtime call? It seems like more boilerplate this way to me.",
+      "range": {
+        "startLine": 2490,
+        "startChar": 33,
+        "endLine": 2490,
+        "endChar": 61
+      },
+      "revId": "75c9096d1c53300436fd5dbba2f96406f088f9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad39b986_1fab4b65",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-02-21T11:56:20Z",
+      "side": 1,
+      "message": "I just noticed that InterpreterNewClosure runtime call is redundant with the other runtime calls. My plan here is to also remove these runtime calls and just do the old space allocation in CSA, but that requires some more changes, so that\u0027s a separate CL.",
+      "parentUuid": "cdbd244b_456ed68f",
       "range": {
         "startLine": 2490,
         "startChar": 33,
