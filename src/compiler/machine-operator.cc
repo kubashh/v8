@@ -399,7 +399,14 @@ MachineType AtomicOpRepresentationOf(Operator const* op) {
   V(Int16)                  \
   V(Uint16)                 \
   V(Int32)                  \
-  V(Uint32)
+  V(Uint32)                 \
+  V(Uint64)
+
+#define ATOMIC64_TYPE_LIST(V) \
+  V(Uint8)                    \
+  V(Uint16)                   \
+  V(Uint32)                   \
+  V(Uint64)
 
 #define ATOMIC_REPRESENTATION_LIST(V) \
   V(kWord8)                           \
@@ -605,6 +612,14 @@ struct MachineOperatorGlobalCache {
   ATOMIC_OP(AtomicXor, type)
   ATOMIC_TYPE_LIST(ATOMIC_OP_LIST)
 #undef ATOMIC_OP_LIST
+#define ATOMIC64_OP_LIST(type)    \
+  ATOMIC_OP(Int64AtomicAdd, type) \
+  ATOMIC_OP(Int64AtomicSub, type) \
+  ATOMIC_OP(Int64AtomicAnd, type) \
+  ATOMIC_OP(Int64AtomicOr, type)  \
+  ATOMIC_OP(Int64AtomicXor, type)
+  ATOMIC64_TYPE_LIST(ATOMIC64_OP_LIST)
+#undef ATOMIC64_OP_LIST
 #undef ATOMIC_OP
 
 #define ATOMIC_COMPARE_EXCHANGE(Type)                                       \
@@ -939,6 +954,56 @@ const Operator* MachineOperatorBuilder::AtomicXor(MachineType rep) {
   UNREACHABLE();
 }
 
+const Operator* MachineOperatorBuilder::Int64AtomicAdd(MachineType rep) {
+#define ADD(kRep)                         \
+  if (rep == MachineType::kRep()) {       \
+    return &cache_.kInt64AtomicAdd##kRep; \
+  }
+  ATOMIC64_TYPE_LIST(ADD)
+#undef ADD
+  UNREACHABLE();
+}
+
+const Operator* MachineOperatorBuilder::Int64AtomicSub(MachineType rep) {
+#define SUB(kRep)                         \
+  if (rep == MachineType::kRep()) {       \
+    return &cache_.kInt64AtomicSub##kRep; \
+  }
+  ATOMIC64_TYPE_LIST(SUB)
+#undef SUB
+  UNREACHABLE();
+}
+
+const Operator* MachineOperatorBuilder::Int64AtomicAnd(MachineType rep) {
+#define AND(kRep)                         \
+  if (rep == MachineType::kRep()) {       \
+    return &cache_.kInt64AtomicAnd##kRep; \
+  }
+  ATOMIC64_TYPE_LIST(AND)
+#undef AND
+  UNREACHABLE();
+}
+
+const Operator* MachineOperatorBuilder::Int64AtomicOr(MachineType rep) {
+#define OR(kRep)                         \
+  if (rep == MachineType::kRep()) {      \
+    return &cache_.kInt64AtomicOr##kRep; \
+  }
+  ATOMIC64_TYPE_LIST(OR)
+#undef OR
+  UNREACHABLE();
+}
+
+const Operator* MachineOperatorBuilder::Int64AtomicXor(MachineType rep) {
+#define XOR(kRep)                         \
+  if (rep == MachineType::kRep()) {       \
+    return &cache_.kInt64AtomicXor##kRep; \
+  }
+  ATOMIC64_TYPE_LIST(XOR)
+#undef XOR
+  UNREACHABLE();
+}
+
 const OptionalOperator MachineOperatorBuilder::SpeculationFence() {
   return OptionalOperator(flags_ & kSpeculationFence,
                           &cache_.kSpeculationFence);
@@ -1001,6 +1066,7 @@ const Operator* MachineOperatorBuilder::S8x16Shuffle(
 #undef MACHINE_TYPE_LIST
 #undef MACHINE_REPRESENTATION_LIST
 #undef ATOMIC_TYPE_LIST
+#undef ATOMIC64_TYPE_LIST
 #undef ATOMIC_REPRESENTATION_LIST
 #undef SIMD_LANE_OP_LIST
 #undef SIMD_FORMAT_LIST

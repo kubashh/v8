@@ -1560,6 +1560,18 @@ void InstructionSelector::VisitNode(Node* node) {
       ATOMIC_CASE(Or)
       ATOMIC_CASE(Xor)
 #undef ATOMIC_CASE
+#define ATOMIC_CASE(name)                                    \
+  case IrOpcode::kInt64Atomic##name: {                       \
+    MachineType type = AtomicOpRepresentationOf(node->op()); \
+    MarkAsRepresentation(type.representation(), node);       \
+    return VisitInt64Atomic##name(node);                     \
+  }
+      ATOMIC_CASE(Add)
+      ATOMIC_CASE(Sub)
+      ATOMIC_CASE(And)
+      ATOMIC_CASE(Or)
+      ATOMIC_CASE(Xor)
+#undef ATOMIC_CASE
     case IrOpcode::kSpeculationFence:
       return VisitSpeculationFence(node);
     case IrOpcode::kProtectedLoad: {
@@ -2165,6 +2177,18 @@ void InstructionSelector::VisitF32x4UConvertI32x4(Node* node) {
 }
 #endif  // !V8_TARGET_ARCH_ARM && !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_MIPS
         // && !V8_TARGET_ARCH_MIPS64
+
+#if !V8_TARGET_ARCH_X64
+void InstructionSelector::VisitInt64AtomicAdd(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitInt64AtomicSub(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitInt64AtomicAnd(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitInt64AtomicOr(Node* node) { UNIMPLEMENTED(); }
+
+void InstructionSelector::VisitInt64AtomicXor(Node* node) { UNIMPLEMENTED(); }
+#endif  // !V8_TARGET_ARCH_X64
 
 #if !V8_TARGET_ARCH_ARM && !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_MIPS && \
     !V8_TARGET_ARCH_MIPS64 && !V8_TARGET_ARCH_X64
