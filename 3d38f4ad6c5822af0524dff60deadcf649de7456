@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a0d18242_20480d36",
+        "filename": "src/globals.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-21T12:11:05Z",
+      "side": 1,
+      "message": "FWIW we could also change the implementation in address-map.h to have a bit to encode whether it\u0027s a real space, and then use 3 bits to either encode a real space or the special values. That\u0027s probably the cleaner solution since I don\u0027t think we have this requirement anywhere else.",
+      "parentUuid": "d7271599_43c51ff6",
+      "range": {
+        "startLine": 538,
+        "startChar": 30,
+        "endLine": 538,
+        "endChar": 31
+      },
+      "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "773b56ca_74a4a702",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5

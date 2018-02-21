@@ -91,6 +91,29 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66e5d2e8_f7083166",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-21T12:11:05Z",
+      "side": 1,
+      "message": "Let\u0027s remove the default case then? I assume that we would then also be able to catch missed bytecode in UNUSED_SERIALIZER_BYTE_CODES because the compiler would complain.",
+      "range": {
+        "startLine": 664,
+        "startChar": 6,
+        "endLine": 664,
+        "endChar": 13
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
