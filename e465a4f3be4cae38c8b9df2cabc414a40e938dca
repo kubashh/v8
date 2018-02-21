@@ -94,6 +94,30 @@
       "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a8d6238_6faaa6bc",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6660,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-21T09:28:52Z",
+      "side": 0,
+      "message": "Will do. (Although the compiler should optimise this away completely so the net effect is only improved code simplicity).",
+      "parentUuid": "bdc919c6_568c28c3",
+      "range": {
+        "startLine": 6660,
+        "startChar": 11,
+        "endLine": 6660,
+        "endChar": 78
+      },
+      "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
