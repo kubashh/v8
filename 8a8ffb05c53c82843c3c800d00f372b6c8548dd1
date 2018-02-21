@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30d7bc28_9637d195",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-21T09:22:36Z",
+      "side": 1,
+      "message": "The reason why on intel architectures we use {get_bits} instead of {get_scalar} is that on some architectures the compiler is allowed to nondeterministically set the quiet-nan bit when passing float or double by value. Hence we always pass the bit pattern instead.\nIf this is also a problem on mips, you should consider refactoring TurboAssembler::Move to receive an int64_t instead of double (the double is bit_cast\u0027ed to int64_t anyway in that method), and then pass the bit pattern directly.",
+      "revId": "8a8ffb05c53c82843c3c800d00f372b6c8548dd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
