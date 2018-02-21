@@ -34,6 +34,24 @@
       "revId": "8a8ffb05c53c82843c3c800d00f372b6c8548dd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8afa5203_3f46d113",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-21T09:39:18Z",
+      "side": 1,
+      "message": "Sure. This is pure mips changes anyway, so you are the owner here :)",
+      "parentUuid": "580108d7_aba95e97",
+      "revId": "8a8ffb05c53c82843c3c800d00f372b6c8548dd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
