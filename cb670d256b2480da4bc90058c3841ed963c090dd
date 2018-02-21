@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1919320_355096e0",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-21T10:47:19Z",
+      "side": 1,
+      "message": "Can you avoid duplicating this code, and just have \"Goto(\u0026mark_megamorphic)\" in the kDontCollectSharedFunctionInfo side.",
+      "range": {
+        "startLine": 775,
+        "startChar": 6,
+        "endLine": 777,
+        "endChar": 34
+      },
+      "revId": "cb670d256b2480da4bc90058c3841ed963c090dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
