@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "99d8b277_a3e3625d",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 6205,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "I realize you have just change this to be here. Our internal mapping defines where it should live here though :)",
+      "range": {
+        "startLine": 6205,
+        "startChar": 2,
+        "endLine": 6205,
+        "endChar": 27
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "842d230c_74b61010",
         "filename": "src/globals.h",
         "patchSetId": 9
@@ -36,6 +59,30 @@
       "writtenOn": "2018-02-21T12:00:33Z",
       "side": 1,
       "message": "Being in between OLD and MAP space means that this page will be processed like a regular old space. Do you want to exclude the page from the sweeper right away? If so, you would need to move it behind map space.",
+      "range": {
+        "startLine": 528,
+        "startChar": 18,
+        "endLine": 528,
+        "endChar": 26
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19342aa1_41c200f0",
+        "filename": "src/globals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "+1, see LAST_PAGED_SPACE below. It should be outside that region.",
+      "parentUuid": "842d230c_74b61010",
       "range": {
         "startLine": 528,
         "startChar": 18,
@@ -71,6 +118,121 @@
     },
     {
       "key": {
+        "uuid": "67f1d32f_b26f08c8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4795,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "Could we rewrite this just using object-\u003eShortPrint() or Print()?\n\nE.g.\n  PrintIsolate(isolate, \"Object with pointers into non read-only space:\\n\");\n  object-\u003ePrint()\n  ...",
+      "range": {
+        "startLine": 4795,
+        "startChar": 10,
+        "endLine": 4795,
+        "endChar": 16
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7e3e27_252f4f69",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6710,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "Define what \"later\" means. E.g. Should returns false once XXX holds.\n\n(Historically we\u0027ve sometimes had these \"later\" comments in for years :))",
+      "range": {
+        "startLine": 6710,
+        "startChar": 35,
+        "endLine": 6710,
+        "endChar": 40
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ddd3668_01117bd9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "Make this virtual as you override its behavior below.",
+      "range": {
+        "startLine": 2723,
+        "startChar": 7,
+        "endLine": 2723,
+        "endChar": 21
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "449d065f_1db2ad73",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3963,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "IIUC, there should be no remembered set slots. E.g. You could check somewhere that the remembered set (typed and non-typed) is empty.",
+      "range": {
+        "startLine": 3963,
+        "startChar": 31,
+        "endLine": 3963,
+        "endChar": 46
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa09f12b_5ff6dfb9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4048,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 4048,
+        "startChar": 29,
+        "endLine": 4048,
+        "endChar": 44
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8ef6e6f_c1f3d99f",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -87,6 +249,52 @@
         "startChar": 51,
         "endLine": 4234,
         "endChar": 64
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cbab747_7f0eaed7",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "This should not be needed as we should not sweep those pages.",
+      "range": {
+        "startLine": 127,
+        "startChar": 19,
+        "endLine": 127,
+        "endChar": 35
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8c172b5_ae44cbed",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-02-21T13:07:07Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 132,
+        "startChar": 13,
+        "endLine": 132,
+        "endChar": 21
       },
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
