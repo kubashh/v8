@@ -4656,6 +4656,10 @@ Node* CodeStubAssembler::IsMutableHeapNumber(Node* object) {
   return IsMutableHeapNumberMap(LoadMap(object));
 }
 
+Node* CodeStubAssembler::IsFeedbackCell(Node* object) {
+  return HasInstanceType(object, FEEDBACK_CELL_TYPE);
+}
+
 Node* CodeStubAssembler::IsFeedbackVector(Node* object) {
   return IsFeedbackVectorMap(LoadMap(object));
 }
@@ -7745,8 +7749,10 @@ Node* CodeStubAssembler::ElementOffsetFromIndex(Node* index_node,
 }
 
 Node* CodeStubAssembler::LoadFeedbackVector(Node* closure) {
-  Node* cell = LoadObjectField(closure, JSFunction::kFeedbackVectorOffset);
-  return LoadObjectField(cell, Cell::kValueOffset);
+  Node* feedback_cell =
+      LoadObjectField(closure, JSFunction::kFeedbackCellOffset);
+  CSA_ASSERT(this, IsFeedbackCell(feedback_cell));
+  return LoadObjectField(feedback_cell, FeedbackCell::kValueOffset);
 }
 
 Node* CodeStubAssembler::LoadFeedbackVectorForStub() {
@@ -10913,8 +10919,8 @@ Node* CodeStubAssembler::AllocateFunctionWithMapAndContext(Node* map,
                        Heap::kEmptyFixedArrayRootIndex);
   StoreObjectFieldRoot(fun, JSObject::kElementsOffset,
                        Heap::kEmptyFixedArrayRootIndex);
-  StoreObjectFieldRoot(fun, JSFunction::kFeedbackVectorOffset,
-                       Heap::kUndefinedCellRootIndex);
+  StoreObjectFieldRoot(fun, JSFunction::kFeedbackCellOffset,
+                       Heap::kManyClosuresCellRootIndex);
   StoreObjectFieldNoWriteBarrier(fun, JSFunction::kSharedFunctionInfoOffset,
                                  shared_info);
   StoreObjectFieldNoWriteBarrier(fun, JSFunction::kContextOffset, context);

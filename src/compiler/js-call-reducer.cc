@@ -4163,7 +4163,8 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
       native_context()->promise_capability_default_resolve_shared_fun(),
       isolate());
   Node* resolve = effect =
-      graph()->NewNode(javascript()->CreateClosure(resolve_shared),
+      graph()->NewNode(javascript()->CreateClosure(
+                           resolve_shared, factory()->many_closures_cell()),
                        promise_context, effect, control);
 
   // Allocate the closure for the reject case.
@@ -4171,7 +4172,8 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
       native_context()->promise_capability_default_reject_shared_fun(),
       isolate());
   Node* reject = effect =
-      graph()->NewNode(javascript()->CreateClosure(reject_shared),
+      graph()->NewNode(javascript()->CreateClosure(
+                           reject_shared, factory()->many_closures_cell()),
                        promise_context, effect, control);
 
   // 9. Call executor with both resolving functions
@@ -4450,14 +4452,18 @@ Reduction JSCallReducer::ReducePromisePrototypeFinally(Node* node) {
     // Allocate the closure for the reject case.
     Handle<SharedFunctionInfo> catch_finally(
         native_context()->promise_catch_finally_shared_fun(), isolate());
-    catch_true = etrue = graph()->NewNode(
-        javascript()->CreateClosure(catch_finally), context, etrue, if_true);
+    catch_true = etrue =
+        graph()->NewNode(javascript()->CreateClosure(
+                             catch_finally, factory()->many_closures_cell()),
+                         context, etrue, if_true);
 
     // Allocate the closure for the fulfill case.
     Handle<SharedFunctionInfo> then_finally(
         native_context()->promise_then_finally_shared_fun(), isolate());
-    then_true = etrue = graph()->NewNode(
-        javascript()->CreateClosure(then_finally), context, etrue, if_true);
+    then_true = etrue =
+        graph()->NewNode(javascript()->CreateClosure(
+                             then_finally, factory()->many_closures_cell()),
+                         context, etrue, if_true);
   }
 
   Node* if_false = graph()->NewNode(common()->IfFalse(), branch);

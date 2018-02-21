@@ -138,9 +138,9 @@ InfoVectorPair CompilationCacheScript::Lookup(
     InfoVectorPair probe = table->LookupScript(source, context, language_mode);
     if (probe.has_shared()) {
       Handle<SharedFunctionInfo> function_info(probe.shared(), isolate());
-      Handle<Cell> vector_handle;
+      Handle<FeedbackCell> vector_handle;
       if (probe.has_vector()) {
-        vector_handle = Handle<Cell>(probe.vector(), isolate());
+        vector_handle = Handle<FeedbackCell>(probe.vector(), isolate());
       }
       // Break when we've found a suitable shared function info that
       // matches the origin.
@@ -160,9 +160,9 @@ InfoVectorPair CompilationCacheScript::Lookup(
     // Since HasOrigin can allocate, we need to protect the SharedFunctionInfo
     // and the FeedbackVector with handles during the call.
     Handle<SharedFunctionInfo> shared(result.shared(), isolate());
-    Handle<Cell> vector_handle;
+    Handle<FeedbackCell> vector_handle;
     if (result.has_vector()) {
-      vector_handle = Handle<Cell>(result.vector(), isolate());
+      vector_handle = Handle<FeedbackCell>(result.vector(), isolate());
     }
     DCHECK(
         HasOrigin(shared, name, line_offset, column_offset, resource_options));
@@ -179,11 +179,11 @@ InfoVectorPair CompilationCacheScript::Lookup(
 void CompilationCacheScript::Put(Handle<String> source, Handle<Context> context,
                                  LanguageMode language_mode,
                                  Handle<SharedFunctionInfo> function_info,
-                                 Handle<Cell> literals) {
+                                 Handle<FeedbackCell> feedback_cell) {
   HandleScope scope(isolate());
   Handle<CompilationCacheTable> table = GetFirstTable();
   SetFirstTable(CompilationCacheTable::PutScript(
-      table, source, context, language_mode, function_info, literals));
+      table, source, context, language_mode, function_info, feedback_cell));
 }
 
 InfoVectorPair CompilationCacheEval::Lookup(
@@ -211,12 +211,13 @@ void CompilationCacheEval::Put(Handle<String> source,
                                Handle<SharedFunctionInfo> outer_info,
                                Handle<SharedFunctionInfo> function_info,
                                Handle<Context> native_context,
-                               Handle<Cell> literals, int position) {
+                               Handle<FeedbackCell> feedback_cell,
+                               int position) {
   HandleScope scope(isolate());
   Handle<CompilationCacheTable> table = GetFirstTable();
   table =
       CompilationCacheTable::PutEval(table, source, outer_info, function_info,
-                                     native_context, literals, position);
+                                     native_context, feedback_cell, position);
   SetFirstTable(table);
 }
 
@@ -303,28 +304,29 @@ MaybeHandle<FixedArray> CompilationCache::LookupRegExp(Handle<String> source,
 void CompilationCache::PutScript(Handle<String> source, Handle<Context> context,
                                  LanguageMode language_mode,
                                  Handle<SharedFunctionInfo> function_info,
-                                 Handle<Cell> literals) {
+                                 Handle<FeedbackCell> feedback_cell) {
   if (!IsEnabled()) return;
 
-  script_.Put(source, context, language_mode, function_info, literals);
+  script_.Put(source, context, language_mode, function_info, feedback_cell);
 }
 
 void CompilationCache::PutEval(Handle<String> source,
                                Handle<SharedFunctionInfo> outer_info,
                                Handle<Context> context,
                                Handle<SharedFunctionInfo> function_info,
-                               Handle<Cell> literals, int position) {
+                               Handle<FeedbackCell> feedback_cell,
+                               int position) {
   if (!IsEnabled()) return;
 
   HandleScope scope(isolate());
   if (context->IsNativeContext()) {
-    eval_global_.Put(source, outer_info, function_info, context, literals,
+    eval_global_.Put(source, outer_info, function_info, context, feedback_cell,
                      position);
   } else {
     DCHECK_NE(position, kNoSourcePosition);
     Handle<Context> native_context(context->native_context(), isolate());
     eval_contextual_.Put(source, outer_info, function_info, native_context,
-                         literals, position);
+                         feedback_cell, position);
   }
 }
 

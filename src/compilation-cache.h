@@ -86,7 +86,7 @@ class CompilationCacheScript : public CompilationSubCache {
 
   void Put(Handle<String> source, Handle<Context> context,
            LanguageMode language_mode, Handle<SharedFunctionInfo> function_info,
-           Handle<Cell> literals);
+           Handle<FeedbackCell> feedback_cell);
 
  private:
   bool HasOrigin(Handle<SharedFunctionInfo> function_info,
@@ -121,7 +121,8 @@ class CompilationCacheEval: public CompilationSubCache {
 
   void Put(Handle<String> source, Handle<SharedFunctionInfo> outer_info,
            Handle<SharedFunctionInfo> function_info,
-           Handle<Context> native_context, Handle<Cell> literals, int position);
+           Handle<Context> native_context, Handle<FeedbackCell> feedback_cell,
+           int position);
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheEval);
@@ -176,14 +177,14 @@ class CompilationCache {
   void PutScript(Handle<String> source, Handle<Context> context,
                  LanguageMode language_mode,
                  Handle<SharedFunctionInfo> function_info,
-                 Handle<Cell> literals);
+                 Handle<FeedbackCell> feedback_cell);
 
   // Associate the (source, context->closure()->shared(), kind) triple
   // with the shared function info. This may overwrite an existing mapping.
   void PutEval(Handle<String> source, Handle<SharedFunctionInfo> outer_info,
                Handle<Context> context,
-               Handle<SharedFunctionInfo> function_info, Handle<Cell> literals,
-               int position);
+               Handle<SharedFunctionInfo> function_info,
+               Handle<FeedbackCell> feedback_cell, int position);
 
   // Associate the (source, flags) pair to the given regexp data.
   // This may overwrite an existing mapping.
