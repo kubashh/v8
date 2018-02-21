@@ -262,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "afb2ab12_3b5eb74d",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-21T12:54:10Z",
+      "side": 1,
+      "message": "These assertions are to test that whitelisted CSA builtins do not call into non-whitelisted intrinsics.\n\nFor these ones in particular it might make sense to introduce exceptions to this assertion.\n\nHow about we introduce a (debug-mode only) function that takes the builtin ID and the intrinsic ID and returns whether it\u0027s a special case where it\u0027s alright? E.g. for TypedArrayPrototypeFilter calls to TypedArrayCopyElements is fine.\n\nBut please make sure, by looking at the spec, that these builtins are indeed side-effect free in that they do not write to objects that are not allocated inside the builtin itself.",
+      "parentUuid": "04dd0027_1e3cfd88",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 8
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f39da0f0_20c2b816",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
         "patchSetId": 2
