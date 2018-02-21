@@ -16,6 +16,24 @@
       "revId": "8a8ffb05c53c82843c3c800d00f372b6c8548dd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "580108d7_aba95e97",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-02-21T09:34:52Z",
+      "side": 1,
+      "message": "I will refactor that then as a part of separate patch, since there would be files that are not related to liftoff that will be changed, if you agree?",
+      "parentUuid": "30d7bc28_9637d195",
+      "revId": "8a8ffb05c53c82843c3c800d00f372b6c8548dd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
