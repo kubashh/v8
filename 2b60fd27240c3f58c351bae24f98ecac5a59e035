@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3247d35_880ce3cd",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-21T06:37:30Z",
+      "side": 1,
+      "message": "A bit inconsistent to have LoSpace and ReadOnlySpace side-by-side.",
+      "range": {
+        "startLine": 6208,
+        "startChar": 2,
+        "endLine": 6208,
+        "endChar": 21
+      },
+      "revId": "2b60fd27240c3f58c351bae24f98ecac5a59e035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0450700f_6231d578",
+        "filename": "src/snapshot/serializer-common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-21T06:37:30Z",
+      "side": 1,
+      "message": "We are skipping 0x16 (and 0x36, 0x56, 0x76) here, but do not have it listed in the \"Misc, see below\" list.\n\nWe then later use 0x36 for kApiReference, but the other ones remain empty.\n\nI would prefer if we use 0x16 and 0x17 for kRootArray and kAttachedReference instead, and generally use as small values as possible for these byte codes.",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "2b60fd27240c3f58c351bae24f98ecac5a59e035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
