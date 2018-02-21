@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "204f086b_80db05ce",
+        "filename": "src/compilation-cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-21T11:52:49Z",
+      "side": 1,
+      "message": "I\u0027m removing saving of the feedback vector in CompilationCache in https://chromium-review.googlesource.com/c/v8/v8/+/924002/3 since it isn\u0027t actually ever used anywhere by compiler.cc. This should all be a noop after that CL lands.",
+      "range": {
+        "startLine": 89,
+        "startChar": 11,
+        "endLine": 89,
+        "endChar": 45
+      },
+      "revId": "75c9096d1c53300436fd5dbba2f96406f088f9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdbd244b_456ed68f",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-21T11:52:49Z",
+      "side": 1,
+      "message": "Any specific reason we have two runtime calls for this rather than just having the tenured argument like the old InterpreterNewClosure runtime call? It seems like more boilerplate this way to me.",
+      "range": {
+        "startLine": 2490,
+        "startChar": 33,
+        "endLine": 2490,
+        "endChar": 61
+      },
+      "revId": "75c9096d1c53300436fd5dbba2f96406f088f9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
