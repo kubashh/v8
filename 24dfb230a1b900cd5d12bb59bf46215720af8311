@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "3713ea43_4175a06b",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-async.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-21T10:07:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95e1b3b2_d636fbb4",
+      "range": {
+        "startLine": 35,
+        "startChar": 10,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1c0ba1a_5668933f",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins-2.js",
         "patchSetId": 2
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "2d4a0a8f_8965d838",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins-2.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-21T10:07:33Z",
+      "side": 1,
+      "message": "I see!  Quite a few methods have been ported to CSA/C++ in the past year: crbug.com/v8/5717.\n\nI\u0027ll focus this CL on just Array/TypedArray/Collections and include `has` in the whitelist.",
+      "parentUuid": "b24da683_148a853d",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 61
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1112dfe_b44a7d0e",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
         "patchSetId": 2
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "Can you retry? We recently migrated some of the typed array constructors from JS to CSA. On tip-of-tree I wasn\u0027t able to reproduce this.",
       "parentUuid": "e1112dfe_b44a7d0e",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 8
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04dd0027_1e3cfd88",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-21T10:07:33Z",
+      "side": 1,
+      "message": "I rebased on commit #51407 and #51416 and retried.  It works on non-debug build!  But I still found errors when I run with debug GN args:\nis_debug \u003d true\ntarget_cpu \u003d \"x64\"\nv8_enable_backtrace \u003d true\nv8_enable_slow_dchecks \u003d true\nv8_optimized_debug \u003d false\ndcheck_always_on \u003d true\n\nout.gn/x64.debug/d8 --test test/mjsunit/mjsunit.js test/debugger/test-api.js test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js --random-seed\u003d1830519789 --trace-side-effect-free-debug-evaluate --nohard-abort --enable-slow-asserts --verify-heap --enable-inspector --allow-natives-syntax\n\n[debug-evaluate] intrinsic CreateDataProperty may cause side effect.\nWhitelisted builtin ArrayFilter calls non-whitelisted intrinsic CreateDataProperty\n#\n# Fatal error in ../../src/debug/debug-evaluate.cc, line 841\n# Debug check failed: !failed.\n\n[debug-evaluate] intrinsic CreateDataProperty may cause side effect.\nWhitelisted builtin ArrayMap calls non-whitelisted intrinsic CreateDataProperty\n#\n# Fatal error in ../../src/debug/debug-evaluate.cc, line 840\n# Debug check failed: !failed.\n\n[debug-evaluate] intrinsic TypedArrayCopyElements may cause side effect.\nWhitelisted builtin TypedArrayPrototypeFilter calls non-whitelisted intrinsic TypedArrayCopyElements\n#\n# Fatal error in ../../src/debug/debug-evaluate.cc, line 838\n\n[debug-evaluate] intrinsic SetProperty may cause side effect.\nWhitelisted builtin TypedArrayPrototypeMap calls non-whitelisted intrinsic SetProperty\n#\n# Fatal error in ../../src/debug/debug-evaluate.cc, line 837",
+      "parentUuid": "dca10186_075693d7",
       "range": {
         "startLine": 110,
         "startChar": 4,
