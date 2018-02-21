@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d7271599_43c51ff6",
+        "filename": "src/globals.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-21T08:59:41Z",
+      "side": 1,
+      "message": "Ack, thanks for the explanation.",
+      "parentUuid": "375e4df5_380c8bcb",
+      "range": {
+        "startLine": 538,
+        "startChar": 30,
+        "endLine": 538,
+        "endChar": 31
+      },
+      "revId": "3d38f4ad6c5822af0524dff60deadcf649de7456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "773b56ca_74a4a702",
         "filename": "src/heap/heap.cc",
         "patchSetId": 5

@@ -46,6 +46,30 @@
       "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3570bb8_dcb64f11",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6660,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-21T08:59:41Z",
+      "side": 0,
+      "message": "Good cleanup, thanks :).",
+      "parentUuid": "82318044_026132c2",
+      "range": {
+        "startLine": 6660,
+        "startChar": 11,
+        "endLine": 6660,
+        "endChar": 78
+      },
+      "revId": "e465a4f3be4cae38c8b9df2cabc414a40e938dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
