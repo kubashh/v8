@@ -297,6 +297,8 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(TrySliceSimpleNonFastElements)       \
   V(HasComplexElements)                  \
   V(EstimateNumberOfElements)            \
+  V(TypedArraySlice)                     \
+  V(TypedArrayGetBuffer)                 \
   /* Errors */                           \
   V(ReThrow)                             \
   V(ThrowReferenceError)                 \
@@ -513,6 +515,8 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kObjectPrototypePropertyIsEnumerable:
     case Builtins::kObjectPrototypeToString:
     // Array builtins.
+    case Builtins::kArrayIsArray:
+    case Builtins::kArrayOf:
     case Builtins::kArrayConstructor:
     case Builtins::kArrayIndexOf:
     case Builtins::kArrayPrototypeValues:
@@ -524,8 +528,55 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kArrayForEach:
     case Builtins::kArrayEvery:
     case Builtins::kArraySome:
+    case Builtins::kArrayConcat:
+    case Builtins::kArraySlice:
+    case Builtins::kArrayFilter:
+    case Builtins::kArrayMap:
     case Builtins::kArrayReduce:
     case Builtins::kArrayReduceRight:
+    // TypedArray builtins.
+    case Builtins::kTypedArrayOf:
+    case Builtins::kTypedArrayConstructor:
+    case Builtins::kTypedArrayPrototypeBuffer:
+    case Builtins::kTypedArrayPrototypeByteLength:
+    case Builtins::kTypedArrayPrototypeByteOffset:
+    case Builtins::kTypedArrayPrototypeLength:
+    case Builtins::kTypedArrayPrototypeEntries:
+    case Builtins::kTypedArrayPrototypeKeys:
+    case Builtins::kTypedArrayPrototypeValues:
+    case Builtins::kTypedArrayPrototypeFind:
+    case Builtins::kTypedArrayPrototypeFindIndex:
+    case Builtins::kTypedArrayPrototypeIncludes:
+    case Builtins::kTypedArrayPrototypeIndexOf:
+    case Builtins::kTypedArrayPrototypeLastIndexOf:
+    case Builtins::kTypedArrayPrototypeSlice:
+    case Builtins::kTypedArrayPrototypeSubArray:
+    case Builtins::kTypedArrayPrototypeEvery:
+    case Builtins::kTypedArrayPrototypeSome:
+    case Builtins::kTypedArrayPrototypeFilter:
+    case Builtins::kTypedArrayPrototypeMap:
+    case Builtins::kTypedArrayPrototypeReduce:
+    case Builtins::kTypedArrayPrototypeReduceRight:
+    case Builtins::kTypedArrayPrototypeForEach:
+    // ArrayBuffer builtins.
+    case Builtins::kArrayBufferConstructor:
+    case Builtins::kArrayBufferPrototypeGetByteLength:
+    case Builtins::kArrayBufferIsView:
+    case Builtins::kArrayBufferPrototypeSlice:
+    case Builtins::kReturnReceiver:
+    // DataView builtins.
+    case Builtins::kDataViewConstructor:
+    case Builtins::kDataViewPrototypeGetBuffer:
+    case Builtins::kDataViewPrototypeGetByteLength:
+    case Builtins::kDataViewPrototypeGetByteOffset:
+    case Builtins::kDataViewPrototypeGetInt8:
+    case Builtins::kDataViewPrototypeGetUint8:
+    case Builtins::kDataViewPrototypeGetInt16:
+    case Builtins::kDataViewPrototypeGetUint16:
+    case Builtins::kDataViewPrototypeGetInt32:
+    case Builtins::kDataViewPrototypeGetUint32:
+    case Builtins::kDataViewPrototypeGetFloat32:
+    case Builtins::kDataViewPrototypeGetFloat64:
     // Boolean bulitins.
     case Builtins::kBooleanConstructor:
     case Builtins::kBooleanPrototypeToString:
@@ -564,10 +615,15 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     // Map builtins.
     case Builtins::kMapConstructor:
     case Builtins::kMapPrototypeGet:
+    case Builtins::kMapPrototypeHas:
     case Builtins::kMapPrototypeEntries:
     case Builtins::kMapPrototypeGetSize:
     case Builtins::kMapPrototypeKeys:
     case Builtins::kMapPrototypeValues:
+    // WeakMap builtins.
+    case Builtins::kWeakMapConstructor:
+    case Builtins::kWeakMapGet:
+    case Builtins::kWeakMapHas:
     // Math builtins.
     case Builtins::kMathAbs:
     case Builtins::kMathAcos:
@@ -621,7 +677,11 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kSetConstructor:
     case Builtins::kSetPrototypeEntries:
     case Builtins::kSetPrototypeGetSize:
+    case Builtins::kSetPrototypeHas:
     case Builtins::kSetPrototypeValues:
+    // WeakSet builtins.
+    case Builtins::kWeakSetConstructor:
+    case Builtins::kWeakSetHas:
     // String builtins. Strings are immutable.
     case Builtins::kStringFromCharCode:
     case Builtins::kStringFromCodePoint:
