@@ -380,6 +380,8 @@ bool Deserializer<AllocatorT>::ReadData(Object** current, Object** limit,
   CASE_BODY(where, how, within, NEW_SPACE)       \
   CASE_STATEMENT(where, how, within, OLD_SPACE)  \
   V8_FALLTHROUGH;                                \
+  CASE_STATEMENT(where, how, within, RO_SPACE)   \
+  V8_FALLTHROUGH;                                \
   CASE_STATEMENT(where, how, within, CODE_SPACE) \
   V8_FALLTHROUGH;                                \
   CASE_STATEMENT(where, how, within, MAP_SPACE)  \
@@ -646,6 +648,14 @@ bool Deserializer<AllocatorT>::ReadData(Object** current, Object** limit,
         for (int i = 0; i < repeats; i++) UnalignedCopy(current++, &object);
         break;
       }
+
+#ifdef DEBUG
+#define UNUSED_CASE(byte_code) \
+  case byte_code:              \
+    UNREACHABLE();
+      UNUSED_SERIALIZER_BYTE_CODES(UNUSED_CASE)
+#endif
+#undef UNUSED_CASE
 
 #undef SIXTEEN_CASES
 #undef FOUR_CASES
