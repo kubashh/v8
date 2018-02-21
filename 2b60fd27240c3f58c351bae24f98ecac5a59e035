@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "12fc73db_3b4a752b",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-21T11:45:26Z",
+      "side": 1,
+      "message": "For me, the problem with RoSpace next to LoSpace is that you might think that the \"o\" stood for the same thing. Further, I called the AllocationSpace enum RO_SPACE, so that\u0027s just as inconsistent.\n\nI see several possibilities:\na) Leave as is.\nb) Rename kObjectSpaceReadOnlySpace to kObjectSpaceRoSpace\nc) Rename RO_SPACE to READ_ONLY_SPACE (and possibly LO_SPACE to LARGE_OBJECT_SPACE)\nd) Rename kObjectSpaceLoSpace to kObjectSpaceLargeObjectSpace\ne) (c) + (d)\n\nOption (e) is closest to the style guide, which strongly discourages abbreviations.\n\nWe could also make ObjectSpace a enum class, which means we could change it to:\nenum class ObjectSpace {\n  kNewSpace \u003d 1 \u003c\u003c 0,\n  kOldSpace \u003d 1 \u003c\u003c 1,\n  kReadOnlySpace \u003d 1 \u003c\u003c 2,\n...\n}\n\nor even:\n\nenum class ObjectSpace {\n  kNew \u003d 1 \u003c\u003c 0,\n  kOld \u003d 1 \u003c\u003c 1,\n  kReadOnly \u003d 1 \u003c\u003c 2,\n...\n}\n\nwhich gives:\nObjectSpace::kNew\nvs\nkObjectSpaceNewSpace\n\nCould do the same with AllocationSpace, but that won\u0027t yield any typing benefits...",
+      "parentUuid": "b3247d35_880ce3cd",
+      "range": {
+        "startLine": 6208,
+        "startChar": 2,
+        "endLine": 6208,
+        "endChar": 21
+      },
+      "revId": "2b60fd27240c3f58c351bae24f98ecac5a59e035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0450700f_6231d578",
         "filename": "src/snapshot/serializer-common.h",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "2b60fd27240c3f58c351bae24f98ecac5a59e035",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387dc14c_3d19bd17",
+        "filename": "src/snapshot/serializer-common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-21T11:45:26Z",
+      "side": 1,
+      "message": "Done.\n\nI\u0027ve also created a macro to declare the unused serializer byte codes rather than having a comment. The macro creates case statements (in debug only) which would clash with any declared byte codes with the same value.\n\n(Assuming you\u0027re happy with that I can also factor that out into a separate change).\n\nFrustratingly clang won\u0027t detect holes in the switch statement (even though the type is byte) so it\u0027s still possible for the unused byte code macro to be missing values.",
+      "parentUuid": "0450700f_6231d578",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "2b60fd27240c3f58c351bae24f98ecac5a59e035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
