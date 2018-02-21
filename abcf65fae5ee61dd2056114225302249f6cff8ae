@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cb83deff_d3b2b9ae",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-02-21T08:37:47Z",
+      "side": 1,
+      "message": "Oh, I understood that it had a purpose of preventing some formation.\n\n`The code between a comment // clang-format off or /* clang-format off */ up to a comment // clang-format on or /* clang-format on */ will not be formatted. The comments themselves will be formatted (aligned) normally.` \n\nThis led me to misconclusion. I\u0027ve added the same comment around shiftops, so will try to remove them as well.",
+      "parentUuid": "8066ad3c_a4791d96",
+      "revId": "abcf65fae5ee61dd2056114225302249f6cff8ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "335df8e8_c6597a6f",
         "filename": "src/wasm/baseline/mips64/liftoff-assembler-mips64.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-20T20:06:47Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "abcf65fae5ee61dd2056114225302249f6cff8ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "626b63bf_c05cc12f",
+        "filename": "src/wasm/baseline/mips64/liftoff-assembler-mips64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-02-21T08:37:47Z",
+      "side": 1,
+      "message": "Same",
+      "parentUuid": "335df8e8_c6597a6f",
       "revId": "abcf65fae5ee61dd2056114225302249f6cff8ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
