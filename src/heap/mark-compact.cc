@@ -149,6 +149,7 @@ class FullMarkingVerifier : public MarkingVerifier {
     VerifyRoots(VISIT_ONLY_STRONG);
     VerifyMarking(heap_->new_space());
     VerifyMarking(heap_->old_space());
+    VerifyMarking(heap_->read_only_space());
     VerifyMarking(heap_->code_space());
     VerifyMarking(heap_->map_space());
 
@@ -304,6 +305,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->read_only_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -331,6 +333,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL_IN_SCAVENGE);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->read_only_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -576,6 +579,7 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
 
 void MarkCompactCollector::VerifyMarkbitsAreClean() {
   VerifyMarkbitsAreClean(heap_->old_space());
+  VerifyMarkbitsAreClean(heap_->read_only_space());
   VerifyMarkbitsAreClean(heap_->code_space());
   VerifyMarkbitsAreClean(heap_->map_space());
   VerifyMarkbitsAreClean(heap_->new_space());
@@ -617,6 +621,7 @@ void MarkCompactCollector::ClearMarkbitsInNewSpace(NewSpace* space) {
 void MarkCompactCollector::ClearMarkbits() {
   ClearMarkbitsInPagedSpace(heap_->code_space());
   ClearMarkbitsInPagedSpace(heap_->map_space());
+  ClearMarkbitsInPagedSpace(heap_->read_only_space());
   ClearMarkbitsInPagedSpace(heap_->old_space());
   ClearMarkbitsInNewSpace(heap_->new_space());
   heap_->lo_space()->ClearMarkingStateOfLiveObjects();
@@ -627,6 +632,7 @@ void MarkCompactCollector::EnsureSweepingCompleted() {
 
   sweeper()->EnsureCompleted();
   heap()->old_space()->RefillFreeList();
+  heap()->read_only_space()->RefillFreeList();
   heap()->code_space()->RefillFreeList();
   heap()->map_space()->RefillFreeList();
 
@@ -923,6 +929,7 @@ void MarkCompactCollector::VerifyMarking() {
 #endif
 #ifdef VERIFY_HEAP
   heap()->old_space()->VerifyLiveBytes();
+  heap()->read_only_space()->VerifyLiveBytes();
   heap()->map_space()->VerifyLiveBytes();
   heap()->code_space()->VerifyLiveBytes();
 #endif
@@ -3953,6 +3960,9 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->old_space(), RememberedSetUpdatingMode::ALL);
     remembered_set_pages += CollectRememberedSetUpdatingItems(
+        &updating_job, heap()->read_only_space(),
+        RememberedSetUpdatingMode::ALL);
+    remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->code_space(), RememberedSetUpdatingMode::ALL);
     remembered_set_pages += CollectRememberedSetUpdatingItems(
         &updating_job, heap()->lo_space(), RememberedSetUpdatingMode::ALL);
@@ -4033,6 +4043,9 @@ void MinorMarkCompactCollector::UpdatePointersAfterEvacuation() {
   int remembered_set_pages = 0;
   remembered_set_pages += CollectRememberedSetUpdatingItems(
       &updating_job, heap()->old_space(),
+      RememberedSetUpdatingMode::OLD_TO_NEW_ONLY);
+  remembered_set_pages += CollectRememberedSetUpdatingItems(
+      &updating_job, heap()->read_only_space(),
       RememberedSetUpdatingMode::OLD_TO_NEW_ONLY);
   remembered_set_pages += CollectRememberedSetUpdatingItems(
       &updating_job, heap()->code_space(),
@@ -4210,6 +4223,11 @@ void MarkCompactCollector::StartSweepSpaces() {
       GCTracer::Scope sweep_scope(heap()->tracer(),
                                   GCTracer::Scope::MC_SWEEP_OLD);
       StartSweepSpace(heap()->old_space());
+    }
+    {
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_CODE);
+      StartSweepSpace(heap()->read_only_space());
     }
     {
       GCTracer::Scope sweep_scope(heap()->tracer(),

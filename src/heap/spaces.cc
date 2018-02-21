@@ -45,6 +45,7 @@ HeapObjectIterator::HeapObjectIterator(Page* page)
 #ifdef DEBUG
   Space* owner = page->owner();
   DCHECK(owner == page->heap()->old_space() ||
+         owner == page->heap()->read_only_space() ||
          owner == page->heap()->map_space() ||
          owner == page->heap()->code_space());
 #endif  // DEBUG
@@ -1370,6 +1371,8 @@ STATIC_ASSERT(static_cast<ObjectSpace>(1 << AllocationSpace::NEW_SPACE) ==
               ObjectSpace::kObjectSpaceNewSpace);
 STATIC_ASSERT(static_cast<ObjectSpace>(1 << AllocationSpace::OLD_SPACE) ==
               ObjectSpace::kObjectSpaceOldSpace);
+STATIC_ASSERT(static_cast<ObjectSpace>(1 << AllocationSpace::RO_SPACE) ==
+              ObjectSpace::kObjectSpaceReadOnlySpace);
 STATIC_ASSERT(static_cast<ObjectSpace>(1 << AllocationSpace::CODE_SPACE) ==
               ObjectSpace::kObjectSpaceCodeSpace);
 STATIC_ASSERT(static_cast<ObjectSpace>(1 << AllocationSpace::MAP_SPACE) ==
@@ -1448,7 +1451,7 @@ void PagedSpace::RefillFreeList() {
   // Any PagedSpace might invoke RefillFreeList. We filter all but our old
   // generation spaces out.
   if (identity() != OLD_SPACE && identity() != CODE_SPACE &&
-      identity() != MAP_SPACE) {
+      identity() != RO_SPACE && identity() != MAP_SPACE) {
     return;
   }
   MarkCompactCollector* collector = heap()->mark_compact_collector();
