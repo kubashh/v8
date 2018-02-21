@@ -322,6 +322,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da269951_9f387a6a",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-02-21T13:17:24Z",
+      "side": 1,
+      "message": "I\u0027ll remove this anyway since the compiler might catch up. I will also pull out this change from the wider CL since it\u0027s independent but in answer to your question:\n\nUnfortunately not. I tried it and clang only complains for missing cases when the type is an enum.\n\nIf we really wanted to catch that case, I think you could do it by making every case return a value and then have no return statement at the end. The compiler would then complain it was possible to leave the function without returning a value. Similarly you could make every case set a previously undefined value and then access it after the switch.\n\nBut that relies on the compiler actually checking that all the 256 possible values are covered. I did an experiment: \n\nint foo(unsigned char x) {\n  switch (x) {\n    case 0:\n    case 1:\n...\n    case 255:\n      return 1;\n  }\n}\n\nand clang warns even though I\u0027ve covered every single value. gcc is better here. It doesn\u0027t warn on this, but does if I remove one of the case-statements.",
+      "parentUuid": "66e5d2e8_f7083166",
+      "range": {
+        "startLine": 664,
+        "startChar": 6,
+        "endLine": 664,
+        "endChar": 13
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
