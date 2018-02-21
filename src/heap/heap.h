@@ -200,7 +200,7 @@ using v8::MemoryPressureLevel;
     EmptyFixedBigUint64Array)                                                  \
   V(FixedTypedArrayBase, empty_fixed_bigint64_array, EmptyFixedBigInt64Array)  \
   V(Script, empty_script, EmptyScript)                                         \
-  V(Cell, undefined_cell, UndefinedCell)                                       \
+  V(FeedbackCell, many_closures_cell, ManyClosuresCell)                        \
   V(FixedArray, empty_sloppy_arguments_elements, EmptySloppyArgumentsElements) \
   V(NumberDictionary, empty_slow_element_dictionary,                           \
     EmptySlowElementDictionary)                                                \
@@ -348,6 +348,7 @@ using v8::MemoryPressureLevel;
   V(JsConstructEntryCode)               \
   V(JsEntryCode)                        \
   V(JSMessageObjectMap)                 \
+  V(ManyClosuresCell)                   \
   V(ManyClosuresCellMap)                \
   V(MetaMap)                            \
   V(MinusInfinityValue)                 \
@@ -386,7 +387,6 @@ using v8::MemoryPressureLevel;
   V(TransitionArrayMap)                 \
   V(TrueValue)                          \
   V(TwoPointerFillerMap)                \
-  V(UndefinedCell)                      \
   V(UndefinedMap)                       \
   V(UndefinedValue)                     \
   V(UninitializedMap)                   \
@@ -2281,6 +2281,10 @@ class Heap {
 
   // Allocate a tenured simple cell.
   MUST_USE_RESULT AllocationResult AllocateCell(Object* value);
+
+  // Allocate a tenured simple feedback cell.
+  MUST_USE_RESULT AllocationResult AllocateFeedbackCell(Map* map,
+                                                        HeapObject* value);
 
   // Allocate a tenured JS global property cell initialized with the hole.
   MUST_USE_RESULT AllocationResult AllocatePropertyCell(Name* name);
