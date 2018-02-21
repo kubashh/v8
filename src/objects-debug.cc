@@ -133,6 +133,9 @@ void HeapObject::HeapObjectVerify() {
     case FREE_SPACE_TYPE:
       FreeSpace::cast(this)->FreeSpaceVerify();
       break;
+    case FEEDBACK_CELL_TYPE:
+      FeedbackCell::cast(this)->FeedbackCellVerify();
+      break;
     case FEEDBACK_VECTOR_TYPE:
       FeedbackVector::cast(this)->FeedbackVectorVerify();
       break;
@@ -333,6 +336,13 @@ void BytecodeArray::BytecodeArrayVerify() {
 
 void FreeSpace::FreeSpaceVerify() {
   CHECK(IsFreeSpace());
+}
+
+void FeedbackCell::FeedbackCellVerify() {
+  CHECK(IsFeedbackCell());
+  Isolate* const isolate = GetIsolate();
+  VerifyHeapPointer(value());
+  CHECK(value()->IsUndefined(isolate) || value()->IsFeedbackVector());
 }
 
 void FeedbackVector::FeedbackVectorVerify() { CHECK(IsFeedbackVector()); }
@@ -762,6 +772,9 @@ void JSBoundFunction::JSBoundFunctionVerify() {
 
 void JSFunction::JSFunctionVerify() {
   CHECK(IsJSFunction());
+  JSObjectVerify();
+  VerifyHeapPointer(feedback_cell());
+  CHECK(feedback_cell()->IsFeedbackCell());
   CHECK(code()->IsCode());
   CHECK(map()->is_callable());
   if (has_prototype_slot()) {

@@ -40,18 +40,18 @@ class CompilationCacheShape : public BaseShape<HashTableKey*> {
 class InfoVectorPair {
  public:
   InfoVectorPair() : shared_(nullptr), vector_cell_(nullptr) {}
-  InfoVectorPair(SharedFunctionInfo* shared, Cell* vector_cell)
+  InfoVectorPair(SharedFunctionInfo* shared, FeedbackCell* vector_cell)
       : shared_(shared), vector_cell_(vector_cell) {}
 
   SharedFunctionInfo* shared() const { return shared_; }
-  Cell* vector() const { return vector_cell_; }
+  FeedbackCell* vector() const { return vector_cell_; }
 
   bool has_shared() const { return shared_ != nullptr; }
   bool has_vector() const { return vector_cell_ != nullptr; }
 
  private:
   SharedFunctionInfo* shared_;
-  Cell* vector_cell_;
+  FeedbackCell* vector_cell_;
 };
 
 // This cache is used in two different variants. For regexp caching, it simply
@@ -86,11 +86,12 @@ class CompilationCacheTable
   static Handle<CompilationCacheTable> PutScript(
       Handle<CompilationCacheTable> cache, Handle<String> src,
       Handle<Context> context, LanguageMode language_mode,
-      Handle<SharedFunctionInfo> value, Handle<Cell> literals);
+      Handle<SharedFunctionInfo> value, Handle<FeedbackCell> feedback_cell);
   static Handle<CompilationCacheTable> PutEval(
       Handle<CompilationCacheTable> cache, Handle<String> src,
       Handle<SharedFunctionInfo> outer_info, Handle<SharedFunctionInfo> value,
-      Handle<Context> native_context, Handle<Cell> literals, int position);
+      Handle<Context> native_context, Handle<FeedbackCell> feedback_cell,
+      int position);
   static Handle<CompilationCacheTable> PutRegExp(
       Handle<CompilationCacheTable> cache, Handle<String> src,
       JSRegExp::Flags flags, Handle<FixedArray> value);
