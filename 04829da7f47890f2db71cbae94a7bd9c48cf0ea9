@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f19cb15_e1f22991",
+        "filename": "test/mjsunit/wasm/copy-code-verify-liftoff.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-22T08:42:00Z",
+      "side": 1,
+      "message": "Thanks for writing a test for this! Please move it to the existing test/mjsunit/wasm/liftoff.js file, it fits there pretty nicely.\nAn similar to the existing functions, please add a \"print(arguments.callee.name);\" at the beginning of your test function.",
+      "revId": "04829da7f47890f2db71cbae94a7bd9c48cf0ea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
