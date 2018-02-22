@@ -1390,22 +1390,9 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   if (state() != UNINITIALIZED) {
     JSObject::MakePrototypesFast(object, kStartAtPrototype, isolate());
   }
-  MaybeHandle<Object> cached_handler;
-  Handle<Map> transition_map;
-  if (object->IsJSReceiver()) {
-    name = isolate()->factory()->InternalizeName(name);
-    TransitionsAccessor transitions(receiver_map());
-    Object* maybe_handler = transitions.SearchHandler(*name, &transition_map);
-    if (maybe_handler != nullptr) {
-      cached_handler = MaybeHandle<Object>(maybe_handler, isolate());
-    }
-  }
-
-  LookupIterator it = LookupIterator::ForTransitionHandler(
-      isolate(), object, name, value, cached_handler, transition_map);
-
   bool use_ic = FLAG_use_ic;
 
+  LookupIterator it(object, name);
   if (name->IsPrivate()) {
     if (name->IsPrivateField() && !it.IsFound()) {
       return TypeError(MessageTemplate::kInvalidPrivateFieldAccess, object,
@@ -1418,8 +1405,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       use_ic = false;
     }
   }
-
-  if (use_ic) UpdateCaches(&it, value, store_mode, cached_handler);
+  if (use_ic) UpdateCaches(&it, value, store_mode);
 
   MAYBE_RETURN_NULL(
       Object::SetProperty(&it, value, language_mode(), store_mode));
@@ -1427,8 +1413,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
 }
 
 void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
-                           JSReceiver::StoreFromKeyed store_mode,
-                           MaybeHandle<Object> cached_handler) {
+                           JSReceiver::StoreFromKeyed store_mode) {
   if (state() == UNINITIALIZED && !IsStoreGlobalIC()) {
     // This is the first time we execute this inline cache. Set the target to
     // the pre monomorphic stub to delay setting the monomorphic state.
@@ -1439,9 +1424,7 @@ void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
   }
 
   Handle<Object> handler;
-  if (!cached_handler.is_null()) {
-    handler = cached_handler.ToHandleChecked();
-  } else if (LookupForWrite(lookup, value, store_mode)) {
+  if (LookupForWrite(lookup, value, store_mode)) {
     if (IsStoreGlobalIC()) {
       if (lookup->state() == LookupIterator::DATA &&
           lookup->GetReceiver().is_identical_to(lookup->GetHolder<Object>())) {
@@ -1493,31 +1476,13 @@ Handle<Object> StoreIC::ComputeHandler(LookupIterator* lookup) {
             isolate(), receiver_map(), store_target, smi_handler, cell);
         return handler;
       }
-      // Currently not handled by CompileStoreTransition.
-      if (!holder->HasFastProperties()) {
-        TRACE_GENERIC_IC("transition from slow");
-        TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
-        return slow_stub();
-      }
+      // Dictionary-to-fast transitions are not expected and not supported.
+      DCHECK_IMPLIES(!lookup->transition_map()->is_dictionary_map(),
+                     !receiver_map()->is_dictionary_map());
 
       DCHECK(lookup->IsCacheableTransition());
-      Handle<Map> transition = lookup->transition_map();
 
-      Handle<Smi> smi_handler;
-      if (transition->is_dictionary_map()) {
-        TRACE_HANDLER_STATS(isolate(), StoreIC_StoreNormalDH);
-        smi_handler = StoreHandler::StoreNormal(isolate());
-      } else {
-        TRACE_HANDLER_STATS(isolate(), StoreIC_StoreTransitionDH);
-        smi_handler = StoreHandler::StoreTransition(isolate(), transition);
-      }
-
-      Handle<WeakCell> cell = Map::WeakCellForMap(transition);
-      Handle<Object> handler = StoreHandler::StoreThroughPrototype(
-          isolate(), receiver_map(), holder, smi_handler, cell);
-      TransitionsAccessor(receiver_map())
-          .UpdateHandler(*lookup->name(), *handler);
-      return handler;
+      return StoreHandler::StoreTransition(isolate(), lookup->transition_map());
     }
 
     case LookupIterator::INTERCEPTOR: {
