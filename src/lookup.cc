@@ -77,9 +77,13 @@ LookupIterator LookupIterator::PropertyOrElement(Isolate* isolate,
 // static
 LookupIterator LookupIterator::ForTransitionHandler(
     Isolate* isolate, Handle<Object> receiver, Handle<Name> name,
-    Handle<Object> value, MaybeHandle<Object> handler,
-    Handle<Map> transition_map) {
-  if (handler.is_null()) return LookupIterator(receiver, name);
+    Handle<Object> value, MaybeHandle<Map> maybe_transition_map) {
+  Handle<Map> transition_map;
+  if (!maybe_transition_map.ToHandle(&transition_map) ||
+      !transition_map->IsPrototypeValidityCellValid()) {
+    // This map is not a valid transition handler, so full lookup is required.
+    return LookupIterator(receiver, name);
+  }
 
   PropertyDetails details = PropertyDetails::Empty();
   bool has_property;
@@ -90,6 +94,7 @@ LookupIterator LookupIterator::ForTransitionHandler(
     details = transition_map->GetLastDescriptorDetails();
     has_property = true;
   }
+  DCHECK_EQ(details.attributes(), NONE);
   LookupIterator it(isolate, receiver, name, transition_map, details,
                     has_property);
 
@@ -406,6 +411,14 @@ void LookupIterator::ReconfigureDataProperty(Handle<Object> value,
 
   if (!IsElement() && !holder->HasFastProperties()) {
     PropertyDetails details(kData, attributes, PropertyCellType::kMutable);
+    if (holder->map()->is_prototype_map() &&
+        (property_details_.attributes() & READ_ONLY) == 0 &&
+        (attributes & READ_ONLY) != 0) {
+      // Invalidate prototype validity cell when a property is reconfigured
+      // from writable to read-only as this may invalidate transitioning store
+      // IC handlers.
+      JSObject::InvalidatePrototypeChains(holder->map());
+    }
     if (holder->IsJSGlobalObject()) {
       Handle<GlobalDictionary> dictionary(
           JSGlobalObject::cast(*holder)->global_dictionary());
@@ -523,6 +536,20 @@ void LookupIterator::ApplyTransitionToDataProperty(Handle<JSObject> receiver) {
   }
   Handle<Map> transition = transition_map();
   bool simple_transition = transition->GetBackPointer() == receiver->map();
+
+  if (configuration_ == DEFAULT && !transition->is_dictionary_map() &&
+      !transition->IsPrototypeValidityCellValid()) {
+    // Only LookupIterator instances with DEFAULT (full prototype chain)
+    // configuration can produce valid transition handler maps.
+    Handle<Cell> validity_cell =
+        Map::GetOrCreatePrototypeChainValidityCell(transition, isolate());
+    if (validity_cell.is_null()) {
+      validity_cell = isolate()->factory()->NewCell(
+          handle(Smi::FromInt(Map::kPrototypeChainValid), isolate()));
+    }
+    transition->set_prototype_validity_cell(*validity_cell);
+  }
+
   JSObject::MigrateToMap(receiver, transition);
 
   if (simple_transition) {

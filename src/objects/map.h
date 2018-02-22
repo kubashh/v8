@@ -572,6 +572,10 @@ class Map : public HeapObject {
   // prototype.
   DECL_ACCESSORS(prototype_validity_cell, Object)
 
+  // Returns true if prototype validity cell is present and contains "valid"
+  // sentinel.
+  inline bool IsPrototypeValidityCellValid() const;
+
   inline PropertyDetails GetLastDescriptorDetails() const;
 
   inline int LastAdded() const;

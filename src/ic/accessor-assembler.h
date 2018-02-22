@@ -99,11 +99,28 @@ class AccessorAssembler : public CodeStubAssembler {
   void HandleStoreICHandlerCase(
       const StoreICParameters* p, Node* handler, Label* miss, ICMode ic_mode,
       ElementSupport support_elements = kOnlyProperties);
+  void HandleStoreICTransitionToFastMap(const StoreICParameters* p,
+                                        Node* transition_map, Node* bitfield3,
+                                        Label* miss,
+                                        bool validate_transition_handler);
+  void HandleStoreICTransitionMapHandlerCase(const StoreICParameters* p,
+                                             Node* transition_map, Label* miss);
+
   void JumpIfDataProperty(Node* details, Label* writable, Label* readonly);
 
   void BranchIfStrictMode(Node* vector, Node* slot, Label* if_strict);
 
   void InvalidateValidityCellIfPrototype(Node* map, Node* bitfield2 = nullptr);
+
+  void OverwriteExistingFastDataProperty(Node* object, Node* object_map,
+                                         Node* descriptors,
+                                         Node* descriptor_name_index,
+                                         Node* details, Node* value,
+                                         Label* slow,
+                                         bool do_transitioning_store);
+
+  void CheckFieldType(Node* descriptors, Node* name_index, Node* representation,
+                      Node* value, Label* bailout);
 
  private:
   // Stub generation entry points.
@@ -184,16 +201,14 @@ class AccessorAssembler : public CodeStubAssembler {
   void HandleStoreICProtoHandler(const StoreICParameters* p, Node* handler,
                                  Label* miss, ICMode ic_mode,
                                  ElementSupport support_elements);
-  // If |transition| is nullptr then the normal field store is generated or
-  // transitioning store otherwise.
   void HandleStoreICSmiHandlerCase(Node* handler_word, Node* holder,
-                                   Node* value, Node* transition, Label* miss);
-  // If |transition| is nullptr then the normal field store is generated or
-  // transitioning store otherwise.
+                                   Node* value, Label* miss);
   void HandleStoreFieldAndReturn(Node* handler_word, Node* holder,
                                  Representation representation, Node* value,
-                                 Node* transition, Label* miss);
+                                 Label* miss);
 
+  void CheckTransitionMapHandlerValidityCell(Node* transition_map, Label* miss,
+                                             bool expect_no_validity_cell);
   void HandleStoreICNativeDataProperty(const StoreICParameters* p, Node* holder,
                                        Node* handler_word);
 
@@ -229,15 +244,16 @@ class AccessorAssembler : public CodeStubAssembler {
   Node* GetLanguageMode(Node* vector, Node* slot);
 
   Node* PrepareValueForStore(Node* handler_word, Node* holder,
-                             Representation representation, Node* transition,
-                             Node* value, Label* bailout);
+                             Representation representation, Node* value,
+                             Label* bailout);
 
-  // Extends properties backing store by JSObject::kFieldsAdded elements.
-  void ExtendPropertiesBackingStore(Node* object, Node* handler_word);
+  // Extends properties backing store by JSObject::kFieldsAdded elements,
+  // returns updated properties backing store.
+  Node* ExtendPropertiesBackingStore(Node* object, Node* index);
 
   void StoreNamedField(Node* handler_word, Node* object, bool is_inobject,
                        Representation representation, Node* value,
-                       bool transition_to_field, Label* bailout);
+                       Label* bailout);
 
   void EmitFastElementsBoundsCheck(Node* object, Node* elements,
                                    Node* intptr_index,
