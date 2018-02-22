@@ -483,6 +483,8 @@ void Map::MapVerify() {
     DCHECK(prototype_info() == Smi::kZero ||
            prototype_info()->IsPrototypeInfo());
   }
+  CHECK(prototype_validity_cell()->IsSmi() ||
+        prototype_validity_cell()->IsCell());
 }
 
 
@@ -1398,7 +1400,6 @@ void PrototypeInfo::PrototypeInfoVerify() {
   } else {
     CHECK(prototype_users()->IsSmi());
   }
-  CHECK(validity_cell()->IsSmi() || validity_cell()->IsCell());
 }
 
 void Tuple2::Tuple2Verify() {
