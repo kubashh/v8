@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df35ca6d_12508717",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-02-22T07:32:34Z",
+      "side": 1,
+      "message": "I\u0027m not all that convinced that having a second-order macro makes this code shorter and easier to read, but then again I don\u0027t have a strong opinion on this.",
+      "range": {
+        "startLine": 398,
+        "startChar": 8,
+        "endLine": 398,
+        "endChar": 35
+      },
+      "revId": "937b2c1cdbbc983a9860025ebbc10304537fcc95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
