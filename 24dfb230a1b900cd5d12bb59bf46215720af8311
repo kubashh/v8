@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "63138262_e474afc0",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-02-22T06:39:49Z",
+      "side": 1,
+      "message": "Done.  I\u0027ve checked each added method in the spec, and to the best of my knowledge there are no side effects.",
+      "parentUuid": "afb2ab12_3b5eb74d",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 8
+      },
+      "revId": "24dfb230a1b900cd5d12bb59bf46215720af8311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f39da0f0_20c2b816",
         "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
         "patchSetId": 2
