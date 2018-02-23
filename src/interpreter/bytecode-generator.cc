@@ -1342,9 +1342,6 @@ void BytecodeGenerator::VisitIfStatement(IfStatement* stmt) {
       Visit(stmt->else_statement());
     }
   } else {
-    // TODO(oth): If then statement is BreakStatement or
-    // ContinueStatement we can reduce number of generated
-    // jump/jump_ifs here. See BasicLoops test.
     VisitForTest(stmt->condition(), conditional_builder.then_labels(),
                  conditional_builder.else_labels(), TestFallthrough::kThen);
 
@@ -2789,8 +2786,6 @@ void BytecodeGenerator::VisitAssignment(Assignment* expr) {
   builder()->SetExpressionPosition(expr);
   switch (assign_type) {
     case VARIABLE: {
-      // TODO(oth): The BuildVariableAssignment() call is hard to reason about.
-      // Is the value in the accumulator safe? Yes, but scary.
       VariableProxy* proxy = expr->target()->AsVariableProxy();
       BuildVariableAssignment(proxy->var(), expr->op(),
                               proxy->hole_check_mode(),
@@ -4031,7 +4026,7 @@ void BytecodeGenerator::BuildGetIterator(Expression* iterable,
         obj, feedback_index(feedback_spec()->AddLoadICSlot()));
 
     BytecodeLabel async_iterator_undefined, async_iterator_null, done;
-    // TODO(ignition): Add a single opcode for JumpIfNullOrUndefined
+    // TODO(ignition): Add JumpIfUndetectable for checking null or undefined.
     builder()->JumpIfUndefined(&async_iterator_undefined);
     builder()->JumpIfNull(&async_iterator_null);
 
