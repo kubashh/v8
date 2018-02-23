@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2906ee24_ca275258",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-02-23T16:09:55Z",
+      "side": 0,
+      "message": "If I remember right, we tried this but was complicated without much performance benefit. I will revert this back if what I remember is incorrect.",
+      "revId": "0b9b48b59d9683ec5bd7e246c13279821157a577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

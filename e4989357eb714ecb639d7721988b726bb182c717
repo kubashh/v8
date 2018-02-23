@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "774f7778_c85f23d3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4029,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-02-23T16:09:55Z",
+      "side": 1,
+      "message": "If I understand correctly TestUndetectable is true for null or undefined. So I think it is Ok to use JumpIfUndetectable to mean JumpIfNullOrUndefined. I will revert this if I got it wrong.",
+      "revId": "e4989357eb714ecb639d7721988b726bb182c717",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
