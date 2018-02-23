@@ -170,6 +170,10 @@ bool StackTraceFrameIterator::IsValidFrame(StackFrame* frame) const {
 namespace {
 
 bool IsInterpreterFramePc(Isolate* isolate, Address pc) {
+  // TODO(jgruber,v8:6666): Update logic once builtin is off-heap-safe.
+  DCHECK(!Builtins::IsOffHeapSafe(Builtins::kInterpreterEntryTrampoline));
+  DCHECK(!Builtins::IsOffHeapSafe(Builtins::kInterpreterEnterBytecodeAdvance));
+  DCHECK(!Builtins::IsOffHeapSafe(Builtins::kInterpreterEnterBytecodeDispatch));
   Code* interpreter_entry_trampoline =
       isolate->builtins()->builtin(Builtins::kInterpreterEntryTrampoline);
   Code* interpreter_bytecode_advance =
@@ -390,8 +394,10 @@ Code* GetContainingCode(Isolate* isolate, Address pc) {
 
 Code* StackFrame::LookupCode() const {
   Code* result = GetContainingCode(isolate(), pc());
+#ifndef V8_EMBEDDED_BUILTINS
   DCHECK_GE(pc(), result->instruction_start());
   DCHECK_LT(pc(), result->instruction_end());
+#endif
   return result;
 }
 
