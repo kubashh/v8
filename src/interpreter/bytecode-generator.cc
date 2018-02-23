@@ -2789,8 +2789,6 @@ void BytecodeGenerator::VisitAssignment(Assignment* expr) {
   builder()->SetExpressionPosition(expr);
   switch (assign_type) {
     case VARIABLE: {
-      // TODO(oth): The BuildVariableAssignment() call is hard to reason about.
-      // Is the value in the accumulator safe? Yes, but scary.
       VariableProxy* proxy = expr->target()->AsVariableProxy();
       BuildVariableAssignment(proxy->var(), expr->op(),
                               proxy->hole_check_mode(),
