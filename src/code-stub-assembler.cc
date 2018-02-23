@@ -6120,7 +6120,7 @@ TNode<Smi> CodeStubAssembler::ToSmiIndex(TNode<Object> input,
 
   BIND(&defined);
   TNode<Object> integer_input =
-      ToInteger_Inline(context, input, CodeStubAssembler::kTruncateMinusZero);
+      CallBuiltin(Builtins::kToInteger_TruncateMinusZero, context, input);
   GotoIfNot(TaggedIsSmi(integer_input), range_error);
   result = CAST(integer_input);
   Goto(&negative_check);
