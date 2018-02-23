@@ -136,11 +136,6 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildHoleCheckForVariableAssignment(Variable* variable, Token::Value op);
   void BuildThrowIfHole(Variable* variable);
 
-  // Build jump to targets[value], where
-  // start_index <= value < start_index + size.
-  void BuildIndexedJump(Register value, size_t start_index, size_t size,
-                        ZoneVector<BytecodeLabel>& targets);
-
   void BuildNewLocalActivationContext();
   void BuildLocalActivationContextInitialization();
   void BuildNewLocalBlockContext(Scope* scope);

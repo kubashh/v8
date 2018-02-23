@@ -741,7 +741,7 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
   // Returns the size of the i-th operand of |bytecode|.
   static OperandSize GetOperandSize(Bytecode bytecode, int i,
                                     OperandScale operand_scale) {
-    CHECK_LT(i, NumberOfOperands(bytecode));
+    DCHECK_LT(i, NumberOfOperands(bytecode));
     return GetOperandSizes(bytecode, operand_scale)[i];
   }
 
