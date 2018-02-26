@@ -541,6 +541,12 @@ class LiftoffCompiler {
       __ emit_##fn(dst.gp(), src.gp());                                \
     });                                                                \
     break;
+#define CASE_F32_UNOP(opcode, fn)                                      \
+  case WasmOpcode::kExpr##opcode:                                      \
+    EmitUnOp<kWasmF32>([=](LiftoffRegister dst, LiftoffRegister src) { \
+      __ emit_##fn(dst.fp(), src.fp());                                \
+    });                                                                \
+    break;
     switch (opcode) {
       CASE_I32_UNOP(I32Clz, i32_clz)
       CASE_I32_UNOP(I32Ctz, i32_ctz)
@@ -553,10 +559,12 @@ class LiftoffCompiler {
           __ emit_i32_set_cond(kEqual, dst.gp(), src.gp());
         });
         break;
+        CASE_F32_UNOP(F32Neg, f32_neg)
       default:
         return unsupported(decoder, WasmOpcodes::OpcodeName(opcode));
     }
 #undef CASE_I32_UNOP
+#undef CASE_F32_UNOP
   }
 
   template <ValueType type, typename EmitFn>
