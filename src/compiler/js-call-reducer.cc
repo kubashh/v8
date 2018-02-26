@@ -3327,6 +3327,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node,
           simplified()->StringCodePointAt(UnicodeEncoding::UTF32), node);
     case Builtins::kStringPrototypeSubstring:
       return ReduceStringPrototypeSubstring(node);
+    case Builtins::kStringPrototypeSlice:
+      return ReduceStringPrototypeSlice(node);
 #ifdef V8_INTL_SUPPORT
     case Builtins::kStringPrototypeToLowerCaseIntl:
       return ReduceStringPrototypeToLowerCaseIntl(node);
@@ -3711,6 +3713,86 @@ Reduction JSCallReducer::ReduceStringPrototypeSubstring(Node* node) {
 
   Node* value =
       graph()->NewNode(simplified()->StringSubstring(), receiver, from, to);
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(node);
+}
+
+// #sec-string.prototype.slice
+Reduction JSCallReducer::ReduceStringPrototypeSlice(Node* node) {
+  if (node->op()->ValueInputCount() < 3) return NoChange();
+  CallParameters const& p = CallParametersOf(node->op());
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return NoChange();
+  }
+
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* receiver = NodeProperties::GetValueInput(node, 1);
+  Node* start = NodeProperties::GetValueInput(node, 2);
+  Node* end = node->op()->ValueInputCount() > 3
+                  ? NodeProperties::GetValueInput(node, 3)
+                  : jsgraph()->UndefinedConstant();
+
+  receiver = effect = graph()->NewNode(simplified()->CheckString(p.feedback()),
+                                       receiver, effect, control);
+
+  start = effect = graph()->NewNode(simplified()->CheckSmi(p.feedback()), start,
+                                    effect, control);
+
+  Node* length = graph()->NewNode(simplified()->StringLength(), receiver);
+
+  Node* check = graph()->NewNode(simplified()->ReferenceEqual(), end,
+                                 jsgraph()->UndefinedConstant());
+  Node* branch =
+      graph()->NewNode(common()->Branch(BranchHint::kFalse), check, control);
+
+  Node* if_true = graph()->NewNode(common()->IfTrue(), branch);
+  Node* etrue = effect;
+  Node* vtrue = length;
+
+  Node* if_false = graph()->NewNode(common()->IfFalse(), branch);
+  Node* efalse = effect;
+  Node* vfalse = efalse = graph()->NewNode(simplified()->CheckSmi(p.feedback()),
+                                           end, efalse, if_false);
+
+  control = graph()->NewNode(common()->Merge(2), if_true, if_false);
+  effect = graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
+  end = graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2),
+                         vtrue, vfalse, control);
+
+  Node* from = graph()->NewNode(
+      common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
+      graph()->NewNode(simplified()->NumberLessThan(), start,
+                       jsgraph()->ZeroConstant()),
+      graph()->NewNode(
+          simplified()->NumberMax(),
+          graph()->NewNode(simplified()->NumberAdd(), length, start),
+          jsgraph()->ZeroConstant()),
+      graph()->NewNode(simplified()->NumberMin(), start, length));
+  // {from} is always in non-negative Smi range, but our typer cannot
+  // figure that out yet.
+  from = effect = graph()->NewNode(common()->TypeGuard(Type::UnsignedSmall()),
+                                   from, effect, control);
+
+  Node* to = graph()->NewNode(
+      common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
+      graph()->NewNode(simplified()->NumberLessThan(), end,
+                       jsgraph()->ZeroConstant()),
+      graph()->NewNode(simplified()->NumberMax(),
+                       graph()->NewNode(simplified()->NumberAdd(), length, end),
+                       jsgraph()->ZeroConstant()),
+      graph()->NewNode(simplified()->NumberMin(), end, length));
+  // {to} is always in non-negative Smi range, but our typer cannot
+  // figure that out yet.
+  to = effect = graph()->NewNode(common()->TypeGuard(Type::UnsignedSmall()), to,
+                                 effect, control);
+
+  Node* substring =
+      graph()->NewNode(simplified()->StringSubstring(), receiver, from, to);
+  Node* value = graph()->NewNode(
+      common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
+      graph()->NewNode(simplified()->NumberLessThan(), from, to), substring,
+      jsgraph()->EmptyStringConstant());
   ReplaceWithValue(node, value, effect, control);
   return Replace(node);
 }
