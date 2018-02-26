@@ -93,12 +93,20 @@ Reduction TypedOptimization::Reduce(Node* node) {
       return ReduceCheckEqualsSymbol(node);
     case IrOpcode::kLoadField:
       return ReduceLoadField(node);
+    case IrOpcode::kNumberAdd:
+      return ReduceNumberAdd(node);
     case IrOpcode::kNumberCeil:
     case IrOpcode::kNumberRound:
     case IrOpcode::kNumberTrunc:
       return ReduceNumberRoundop(node);
     case IrOpcode::kNumberFloor:
       return ReduceNumberFloor(node);
+    case IrOpcode::kNumberMin:
+      return ReduceNumberMin(node);
+    case IrOpcode::kNumberMax:
+      return ReduceNumberMax(node);
+    case IrOpcode::kNumberLessThan:
+      return ReduceNumberLessThan(node);
     case IrOpcode::kNumberToUint8Clamped:
       return ReduceNumberToUint8Clamped(node);
     case IrOpcode::kPhi:
@@ -115,6 +123,8 @@ Reduction TypedOptimization::Reduce(Node* node) {
       return ReduceToBoolean(node);
     case IrOpcode::kSpeculativeToNumber:
       return ReduceSpeculativeToNumber(node);
+    case IrOpcode::kTypeGuard:
+      return ReduceTypeGuard(node);
     default:
       break;
   }
@@ -269,6 +279,16 @@ Reduction TypedOptimization::ReduceLoadField(Node* node) {
   return NoChange();
 }
 
+Reduction TypedOptimization::ReduceNumberAdd(Node* node) {
+  Node* input_left = node->InputAt(0);
+  Node* input_right = node->InputAt(1);
+  if (input_right->opcode() == IrOpcode::kNumberSubtract &&
+      input_left == input_right->InputAt(1)) {
+    return Replace(input_right->InputAt(0));
+  }
+  return NoChange();
+}
+
 Reduction TypedOptimization::ReduceNumberFloor(Node* node) {
   Node* const input = NodeProperties::GetValueInput(node, 0);
   Type* const input_type = NodeProperties::GetType(input);
@@ -318,6 +338,131 @@ Reduction TypedOptimization::ReduceNumberToUint8Clamped(Node* node) {
   Type* const input_type = NodeProperties::GetType(input);
   if (input_type->Is(type_cache_.kUint8)) {
     return Replace(input);
+  }
+  return NoChange();
+}
+
+Reduction TypedOptimization::ReduceNumberMin(Node* node) {
+  const int n = node->op()->ValueInputCount();
+  if (n < 1) return Replace(jsgraph()->Constant(V8_INFINITY));
+
+  Node* least = NodeProperties::GetValueInput(node, 0);
+  Type* least_type = NodeProperties::GetType(least);
+  if (least_type->Is(Type::PlainNumber()) && !least_type->IsNone()) {
+    for (int i = 1; i < n; ++i) {
+      Node* const cur = NodeProperties::GetValueInput(node, i);
+      Type* cur_type = NodeProperties::GetType(cur);
+      if (cur_type->IsNone() || !cur_type->Is(Type::PlainNumber())) {
+        least = nullptr;
+        break;
+      }
+      if (least_type->Max() <= cur_type->Min()) {
+        continue;
+      } else if (cur_type->Max() <= least_type->Min()) {
+        least = cur;
+        least_type = NodeProperties::GetType(least);
+      } else {
+        least = nullptr;
+        break;
+      }
+    }
+    if (least) {
+      return Replace(least);
+    }
+  }
+
+  if (n == 2) {
+    Node* input_right = node->InputAt(1);
+    if (input_right->opcode() == IrOpcode::kNumberSubtract &&
+        input_right->InputAt(0) == node->InputAt(0) &&
+        NodeProperties::GetType(input_right->InputAt(1))
+            ->Is(type_cache_.kSingletonOne)) {
+      return Replace(input_right);
+    }
+  }
+
+  Node* const first = NodeProperties::GetValueInput(node, 0);
+  for (int i = 1; i < n; ++i) {
+    Node* const cur = NodeProperties::GetValueInput(node, i);
+    if (first != cur) return NoChange();
+  }
+  return Replace(first);
+}
+
+Reduction TypedOptimization::ReduceNumberMax(Node* node) {
+  const int n = node->op()->ValueInputCount();
+  if (n < 1) return Replace(jsgraph()->Constant(-V8_INFINITY));
+
+  Node* greatest = NodeProperties::GetValueInput(node, 0);
+  Type* greatest_type = NodeProperties::GetType(greatest);
+  if (greatest_type->Is(Type::PlainNumber()) && !greatest_type->IsNone()) {
+    for (int i = 1; i < n; ++i) {
+      Node* const cur = NodeProperties::GetValueInput(node, i);
+      Type* cur_type = NodeProperties::GetType(cur);
+      if (cur_type->IsNone() || !cur_type->Is(Type::PlainNumber())) {
+        greatest = nullptr;
+        break;
+      }
+      if (cur_type->Max() <= greatest_type->Min()) {
+        continue;
+      } else if (greatest_type->Max() <= cur_type->Min()) {
+        greatest = cur;
+        greatest_type = NodeProperties::GetType(greatest);
+      } else {
+        greatest = nullptr;
+        break;
+      }
+    }
+    if (greatest) {
+      return Replace(greatest);
+    }
+  }
+
+  Node* const first = NodeProperties::GetValueInput(node, 0);
+  for (int i = 1; i < n; ++i) {
+    Node* const cur = NodeProperties::GetValueInput(node, i);
+    if (first != cur) return NoChange();
+  }
+  return Replace(first);
+}
+
+Reduction TypedOptimization::ReduceNumberLessThan(Node* node) {
+  // This optimization is here for String.p.slice(-1).
+  Node* const left = NodeProperties::GetValueInput(node, 0);
+  Node* const right = NodeProperties::GetValueInput(node, 1);
+  Type* const type_left = NodeProperties::GetType(left);
+  Type* const type_right = NodeProperties::GetType(right);
+
+  if (type_left->Is(Type::PlainNumber()) && !type_left->IsNone() &&
+      type_right->Is(Type::PlainNumber()) && !type_right->IsNone() &&
+      type_left->Max() < type_right->Min()) {
+    return Replace(jsgraph()->TrueConstant());
+  }
+
+  if (left->opcode() == IrOpcode::kNumberMax) {
+    Node* const left_left = NodeProperties::GetValueInput(left, 0);
+    Node* const left_right = NodeProperties::GetValueInput(left, 1);
+    if (left_left->opcode() == IrOpcode::kNumberAdd &&
+        NodeProperties::GetType(left_right)->Is(type_cache_.kSingletonZero)) {
+      Node* const left_left_left = NodeProperties::GetValueInput(left_left, 0);
+      Node* const left_left_right = NodeProperties::GetValueInput(left_left, 1);
+      if (NodeProperties::GetType(left_left_right)
+              ->Is(type_cache_.kSingletonMinusOne) &&
+          left_left_left == right) {
+        NodeProperties::ReplaceValueInput(node, left_right, 0);
+        return Changed(node);
+      }
+    }
+  }
+  return NoChange();
+}
+
+Reduction TypedOptimization::ReduceTypeGuard(Node* node) {
+  Type* type = TypeGuardTypeOf(node->op());
+  Node* input_node = node->InputAt(0);
+  Type* input_type = NodeProperties::GetType(input_node);
+  if (input_type->Is(type)) {
+    ReplaceWithValue(node, input_node);
   }
   return NoChange();
 }
@@ -439,6 +584,36 @@ Reduction TypedOptimization::ReduceSelect(Node* node) {
     type = Type::Intersect(node_type, type, graph()->zone());
     NodeProperties::SetType(node, type);
     return Changed(node);
+  }
+  // This optimization is here for String.p.slice(-1).
+  if (vtrue->opcode() == IrOpcode::kStringSubstring &&
+      condition->opcode() == IrOpcode::kNumberLessThan) {
+    Node* le_left = condition->InputAt(0);
+    Node* le_right = condition->InputAt(1);
+    if (NodeProperties::GetType(le_left)->Is(type_cache_.kSingletonZero) &&
+        le_right->opcode() == IrOpcode::kStringLength) {
+      Node* string = le_right->InputAt(0);
+      if (vtrue->InputAt(0) == string) {
+        Node* from = vtrue->InputAt(1);
+        if (from->opcode() == IrOpcode::kNumberMax &&
+            from->op()->ValueInputCount() == 2 && from->UseCount() == 1) {
+          Node* max_left = from->InputAt(0);
+          Type* max_right_type = NodeProperties::GetType(from->InputAt(1));
+          if (max_left->opcode() == IrOpcode::kNumberAdd &&
+              max_right_type->Is(type_cache_.kSingletonZero)) {
+            Node* add_left = max_left->InputAt(0);
+            Node* add_right = max_left->InputAt(1);
+            if (NodeProperties::GetType(add_right)->Is(
+                    type_cache_.kSingletonMinusOne) &&
+                add_left->opcode() == IrOpcode::kStringLength) {
+              if (add_left->InputAt(0) == string) {
+                ReplaceWithValue(from, max_left);
+              }
+            }
+          }
+        }
+      }
+    }
   }
   return NoChange();
 }
