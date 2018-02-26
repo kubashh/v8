@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df0351b6_76142c92",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-26T18:50:41Z",
+      "side": 1,
+      "message": "You can initialize this variable right at the definition (merge with the next line).",
+      "revId": "c95569066ebfb1255aa9c623b57e8420be9bd8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
