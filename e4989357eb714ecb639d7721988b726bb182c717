@@ -16,6 +16,24 @@
       "revId": "e4989357eb714ecb639d7721988b726bb182c717",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8e6baaa_b759e133",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4029,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-02-26T12:34:19Z",
+      "side": 1,
+      "message": "Unfortunately I\u0027d don\u0027t think this is true, since in sloppy mode the Document.all object is also \"undertectable\". I\u0027m not sure if that impacts the code here though.",
+      "parentUuid": "774f7778_c85f23d3",
+      "revId": "e4989357eb714ecb639d7721988b726bb182c717",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
