@@ -398,13 +398,13 @@ Code* StackFrame::LookupCode() const {
 #ifdef DEBUG
   Address start = result->instruction_start();
   Address end = result->instruction_end();
-  if (FLAG_stress_off_heap_code) {
+  if (FLAG_stress_off_heap_code && Builtins::IsBuiltin(result) &&
+      Builtins::IsOffHeapSafe(result->builtin_index())) {
     InstructionStream* stream =
         InstructionStream::TryLookupInstructionStream(isolate(), result);
-    if (stream != nullptr) {
-      start = stream->bytes();
-      end = start + stream->byte_length();
-    }
+    DCHECK_NOT_NULL(stream);
+    start = stream->bytes();
+    end = start + stream->byte_length();
   }
   DCHECK_GE(pc(), start);
   DCHECK_LT(pc(), end);
@@ -999,8 +999,20 @@ int StubFrame::LookupExceptionHandlerInTable(int* stack_slots) {
   Code* code = LookupCode();
   DCHECK(code->is_turbofanned());
   DCHECK_EQ(code->kind(), Code::BUILTIN);
+
+  Address instruction_start = code->instruction_start();
+#ifdef V8_EMBEDDED_BUILTINS
+  if (FLAG_stress_off_heap_code && Builtins::IsBuiltin(code) &&
+      Builtins::IsOffHeapSafe(code->builtin_index())) {
+    InstructionStream* stream =
+        InstructionStream::TryLookupInstructionStream(isolate(), code);
+    DCHECK(stream->Contains(pc()));
+    instruction_start = stream->bytes();
+  }
+#endif
+
   HandlerTable* table = HandlerTable::cast(code->handler_table());
-  int pc_offset = static_cast<int>(pc() - code->entry());
+  int pc_offset = static_cast<int>(pc() - instruction_start);
   *stack_slots = code->stack_slots();
   return table->LookupReturn(pc_offset);
 }
@@ -1522,7 +1534,19 @@ int OptimizedFrame::LookupExceptionHandlerInTable(
   DCHECK_NULL(prediction);
   Code* code = LookupCode();
   HandlerTable* table = HandlerTable::cast(code->handler_table());
-  int pc_offset = static_cast<int>(pc() - code->entry());
+  Address instruction_start = code->instruction_start();
+
+#ifdef V8_EMBEDDED_BUILTINS
+  if (FLAG_stress_off_heap_code && Builtins::IsBuiltin(code) &&
+      Builtins::IsOffHeapSafe(code->builtin_index())) {
+    InstructionStream* stream =
+        InstructionStream::TryLookupInstructionStream(isolate(), code);
+    DCHECK(stream->Contains(pc()));
+    instruction_start = stream->bytes();
+  }
+#endif
+
+  int pc_offset = static_cast<int>(pc() - instruction_start);
   if (stack_slots) *stack_slots = code->stack_slots();
 
   // When the return pc has been replaced by a trampoline there won't be

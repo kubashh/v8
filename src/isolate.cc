@@ -1335,7 +1335,17 @@ Object* Isolate::UnwindAndFindHandler() {
           set_deoptimizer_lazy_throw(true);
         }
 
-        return FoundHandler(nullptr, code->instruction_start(), offset,
+        Address instruction_start = code->instruction_start();
+#ifdef V8_EMBEDDED_BUILTINS
+        if (FLAG_stress_off_heap_code && Builtins::IsBuiltin(code) &&
+            Builtins::IsOffHeapSafe(code->builtin_index())) {
+          InstructionStream* stream =
+              InstructionStream::TryLookupInstructionStream(this, code);
+          instruction_start = stream->bytes();
+        }
+#endif
+
+        return FoundHandler(nullptr, instruction_start, offset,
                             code->constant_pool(), return_sp, frame->fp());
       }
 
@@ -1359,7 +1369,17 @@ Object* Isolate::UnwindAndFindHandler() {
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
                             stack_slots * kPointerSize;
 
-        return FoundHandler(nullptr, code->instruction_start(), offset,
+        Address instruction_start = code->instruction_start();
+#ifdef V8_EMBEDDED_BUILTINS
+        if (FLAG_stress_off_heap_code && Builtins::IsBuiltin(code) &&
+            Builtins::IsOffHeapSafe(code->builtin_index())) {
+          InstructionStream* stream =
+              InstructionStream::TryLookupInstructionStream(this, code);
+          instruction_start = stream->bytes();
+        }
+#endif
+
+        return FoundHandler(nullptr, instruction_start, offset,
                             code->constant_pool(), return_sp, frame->fp());
       }
 
