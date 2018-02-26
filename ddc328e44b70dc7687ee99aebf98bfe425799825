@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64b279dd_f587d9a9",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-26T10:42:50Z",
+      "side": 1,
+      "message": "Could you store this lambda in a temporary variable? I think this would improve readability. you could call the parameter asm_fn and the temporary variable emit_fn, or you can think of better names yourself ;)",
+      "range": {
+        "startLine": 528,
+        "startChar": 23,
+        "endLine": 533,
+        "endChar": 5
+      },
+      "revId": "ddc328e44b70dc7687ee99aebf98bfe425799825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
