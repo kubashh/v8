@@ -1120,10 +1120,11 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
   Address adaptor_trampoline_entry = adaptor_trampoline->instruction_start();
 #ifdef V8_EMBEDDED_BUILTINS
   if (FLAG_stress_off_heap_code) {
-    DCHECK(Builtins::IsOffHeapSafe(Builtins::kArgumentsAdaptorTrampoline));
-    InstructionStream* stream = InstructionStream::TryLookupInstructionStream(
-        isolate(), adaptor_trampoline);
-    adaptor_trampoline_entry = stream->bytes();
+    if (Builtins::IsOffHeapSafe(Builtins::kArgumentsAdaptorTrampoline)) {
+      InstructionStream* stream = InstructionStream::TryLookupInstructionStream(
+          isolate(), adaptor_trampoline);
+      adaptor_trampoline_entry = stream->bytes();
+    }
   }
 #endif  // V8_EMBEDDED_BUILTINS
   intptr_t pc_value = reinterpret_cast<intptr_t>(
@@ -1705,15 +1706,23 @@ void Deoptimizer::DoComputeBuiltinContinuation(
                        Builtins::kContinueToCodeStubBuiltinWithResult)
                  : isolate()->builtins()->builtin(
                        Builtins::kContinueToCodeStubBuiltin));
-  // TODO(jgruber,v8:6666): Update logic once builtin is off-heap-safe.
-  DCHECK(!Builtins::IsOffHeapSafe(continue_to_builtin->builtin_index()));
-  output_frame->SetPc(
-      reinterpret_cast<intptr_t>(continue_to_builtin->instruction_start()));
+  Address continue_to_builtin_entry = continue_to_builtin->instruction_start();
+#ifdef V8_EMBEDDED_BUILTINS
+  if (FLAG_stress_off_heap_code) {
+    if (Builtins::IsOffHeapSafe(continue_to_builtin->builtin_index())) {
+      InstructionStream* stream = InstructionStream::TryLookupInstructionStream(
+          isolate(), continue_to_builtin);
+      continue_to_builtin_entry = stream->bytes();
+    }
+  }
+#endif  // V8_EMBEDDED_BUILTINS
+  output_frame->SetPc(reinterpret_cast<intptr_t>(continue_to_builtin_entry));
 
   Code* continuation =
       isolate()->builtins()->builtin(Builtins::kNotifyDeoptimized);
-  output_frame->SetContinuation(
-      reinterpret_cast<intptr_t>(continuation->entry()));
+  Address continuation_entry = continuation->instruction_start();
+  DCHECK(!Builtins::IsOffHeapSafe(continuation->builtin_index()));
+  output_frame->SetContinuation(reinterpret_cast<intptr_t>(continuation_entry));
 }
 
 void Deoptimizer::MaterializeHeapObjects() {
@@ -2307,6 +2316,8 @@ DeoptimizedFrameInfo::DeoptimizedFrameInfo(TranslatedState* state,
 
 
 Deoptimizer::DeoptInfo Deoptimizer::GetDeoptInfo(Code* code, Address pc) {
+  DCHECK(!Builtins::IsBuiltin(code) ||
+         !Builtins::IsOffHeapSafe(code->builtin_index()));
   CHECK(code->instruction_start() <= pc && pc <= code->instruction_end());
   SourcePosition last_position = SourcePosition::Unknown();
   DeoptimizeReason last_reason = DeoptimizeReason::kUnknown;
