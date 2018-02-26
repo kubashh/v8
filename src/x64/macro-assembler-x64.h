@@ -136,51 +136,6 @@ class TurboAssembler : public Assembler {
     return code_object_;
   }
 
-#define AVX_OP2_WITH_TYPE(macro_name, name, src_type) \
-  void macro_name(XMMRegister dst, src_type src) {    \
-    if (CpuFeatures::IsSupported(AVX)) {              \
-      CpuFeatureScope scope(this, AVX);               \
-      v##name(dst, dst, src);                         \
-    } else {                                          \
-      name(dst, src);                                 \
-    }                                                 \
-  }
-#define AVX_OP2_X(macro_name, name) \
-  AVX_OP2_WITH_TYPE(macro_name, name, XMMRegister)
-#define AVX_OP2_O(macro_name, name) AVX_OP2_WITH_TYPE(macro_name, name, Operand)
-#define AVX_OP2_XO(macro_name, name) \
-  AVX_OP2_X(macro_name, name)        \
-  AVX_OP2_O(macro_name, name)
-
-  AVX_OP2_XO(Subsd, subsd)
-  AVX_OP2_XO(Divss, divss)
-  AVX_OP2_XO(Divsd, divsd)
-  AVX_OP2_XO(Xorpd, xorpd)
-  AVX_OP2_X(Pcmpeqd, pcmpeqd)
-  AVX_OP2_WITH_TYPE(Psllq, psllq, byte)
-  AVX_OP2_WITH_TYPE(Psrlq, psrlq, byte)
-
-#undef AVX_OP2_O
-#undef AVX_OP2_X
-#undef AVX_OP2_XO
-#undef AVX_OP2_WITH_TYPE
-
-  void Xorps(XMMRegister dst, XMMRegister src);
-  void Xorps(XMMRegister dst, Operand src);
-
-  void Movd(XMMRegister dst, Register src);
-  void Movd(XMMRegister dst, Operand src);
-  void Movd(Register dst, XMMRegister src);
-  void Movq(XMMRegister dst, Register src);
-  void Movq(Register dst, XMMRegister src);
-
-  void Movsd(XMMRegister dst, XMMRegister src);
-  void Movsd(XMMRegister dst, Operand src);
-  void Movsd(Operand dst, XMMRegister src);
-  void Movss(XMMRegister dst, XMMRegister src);
-  void Movss(XMMRegister dst, Operand src);
-  void Movss(Operand dst, XMMRegister src);
-
   void PushReturnAddressFrom(Register src) { pushq(src); }
   void PopReturnAddressTo(Register dst) { popq(dst); }
 
@@ -738,22 +693,38 @@ class MacroAssembler : public TurboAssembler {
   void Pop(Operand dst);
   void PopQuad(Operand dst);
 
-#define AVX_OP2_WITH_TYPE(macro_name, name, src_type) \
-  void macro_name(XMMRegister dst, src_type src) {    \
-    if (CpuFeatures::IsSupported(AVX)) {              \
-      CpuFeatureScope scope(this, AVX);               \
-      v##name(dst, dst, src);                         \
-    } else {                                          \
-      name(dst, src);                                 \
-    }                                                 \
+#define AVX_OP2_WITH_TYPE(macro_name, name, dst_type, src_type) \
+  void macro_name(dst_type dst, src_type src) {                 \
+    if (CpuFeatures::IsSupported(AVX)) {                        \
+      CpuFeatureScope scope(this, AVX);                         \
+      v##name(dst, dst, src);                                   \
+    } else {                                                    \
+      name(dst, src);                                           \
+    }                                                           \
   }
 #define AVX_OP2_X(macro_name, name) \
-  AVX_OP2_WITH_TYPE(macro_name, name, XMMRegister)
-#define AVX_OP2_O(macro_name, name) AVX_OP2_WITH_TYPE(macro_name, name, Operand)
+  AVX_OP2_WITH_TYPE(macro_name, name, XMMRegister, XMMRegister)
+#define AVX_OP2_O(macro_name, name) \
+  AVX_OP2_WITH_TYPE(macro_name, name, XMMRegister, Operand)
 #define AVX_OP2_XO(macro_name, name) \
   AVX_OP2_X(macro_name, name)        \
   AVX_OP2_O(macro_name, name)
 
+  AVX_OP2_XO(Subsd, subsd)
+  AVX_OP2_XO(Divss, divss)
+  AVX_OP2_XO(Divsd, divsd)
+  AVX_OP2_XO(Xorps, xorps)
+  AVX_OP2_XO(Xorpd, xorpd)
+  AVX_OP2_O(Movd, movd)
+  AVX_OP2_WITH_TYPE(Movd, movd, XMMRegister, Register)
+  AVX_OP2_WITH_TYPE(Movd, movd, Register, XMMRegister)
+  AVX_OP2_XO(Movss, movss)
+  AVX_OP2_WITH_TYPE(Movss, movss, Operand, XMMRegister)
+  AVX_OP2_XO(Movsd, movsd)
+  AVX_OP2_WITH_TYPE(Movsd, movsd, Operand, XMMRegister)
+  AVX_OP2_X(Pcmpeqd, pcmpeqd)
+  AVX_OP2_WITH_TYPE(Psllq, psllq, XMMRegister, byte)
+  AVX_OP2_WITH_TYPE(Psrlq, psrlq, XMMRegister, byte)
   AVX_OP2_XO(Addsd, addsd)
   AVX_OP2_XO(Mulsd, mulsd)
   AVX_OP2_XO(Andps, andps)

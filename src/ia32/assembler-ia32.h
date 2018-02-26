@@ -1056,7 +1056,8 @@ class Assembler : public AssemblerBase {
   void mulsd(XMMRegister dst, const Operand& src);
   void divsd(XMMRegister dst, XMMRegister src) { divsd(dst, Operand(src)); }
   void divsd(XMMRegister dst, const Operand& src);
-  void xorpd(XMMRegister dst, XMMRegister src);
+  void xorpd(XMMRegister dst, XMMRegister src) { xorpd(dst, Operand(src)); }
+  void xorpd(XMMRegister dst, const Operand& src);
   void sqrtsd(XMMRegister dst, XMMRegister src) { sqrtsd(dst, Operand(src)); }
   void sqrtsd(XMMRegister dst, const Operand& src);
 
@@ -1584,9 +1585,7 @@ class Assembler : public AssemblerBase {
   }
 
   PACKED_OP_LIST(AVX_PACKED_OP_DECLARE);
-  void vps(byte op, XMMRegister dst, XMMRegister src1, XMMRegister src2);
   void vps(byte op, XMMRegister dst, XMMRegister src1, const Operand& src2);
-  void vpd(byte op, XMMRegister dst, XMMRegister src1, XMMRegister src2);
   void vpd(byte op, XMMRegister dst, XMMRegister src1, const Operand& src2);
 
   void vcmpps(XMMRegister dst, XMMRegister src1, const Operand& src2,

@@ -1247,60 +1247,6 @@ void TurboAssembler::Movsd(Operand dst, XMMRegister src) {
   }
 }
 
-void TurboAssembler::Movss(XMMRegister dst, XMMRegister src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovss(dst, dst, src);
-  } else {
-    movss(dst, src);
-  }
-}
-
-void TurboAssembler::Movss(XMMRegister dst, Operand src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovss(dst, src);
-  } else {
-    movss(dst, src);
-  }
-}
-
-void TurboAssembler::Movss(Operand dst, XMMRegister src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovss(dst, src);
-  } else {
-    movss(dst, src);
-  }
-}
-
-void TurboAssembler::Movd(XMMRegister dst, Register src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovd(dst, src);
-  } else {
-    movd(dst, src);
-  }
-}
-
-void TurboAssembler::Movd(XMMRegister dst, Operand src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovd(dst, src);
-  } else {
-    movd(dst, src);
-  }
-}
-
-void TurboAssembler::Movd(Register dst, XMMRegister src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vmovd(dst, src);
-  } else {
-    movd(dst, src);
-  }
-}
-
 void TurboAssembler::Movq(XMMRegister dst, Register src) {
   if (CpuFeatures::IsSupported(AVX)) {
     CpuFeatureScope scope(this, AVX);
@@ -1334,24 +1280,6 @@ void TurboAssembler::Movmskpd(Register dst, XMMRegister src) {
     vmovmskpd(dst, src);
   } else {
     movmskpd(dst, src);
-  }
-}
-
-void TurboAssembler::Xorps(XMMRegister dst, XMMRegister src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vxorps(dst, dst, src);
-  } else {
-    xorps(dst, src);
-  }
-}
-
-void TurboAssembler::Xorps(XMMRegister dst, Operand src) {
-  if (CpuFeatures::IsSupported(AVX)) {
-    CpuFeatureScope scope(this, AVX);
-    vxorps(dst, dst, src);
-  } else {
-    xorps(dst, src);
   }
 }
 
