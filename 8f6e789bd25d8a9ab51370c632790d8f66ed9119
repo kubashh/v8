@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3926435f_6ca11bc4",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-26T08:51:16Z",
+      "side": 1,
+      "message": "This cast isn\u0027t needed as far as I can tell.",
+      "range": {
+        "startLine": 200,
+        "startChar": 31,
+        "endLine": 200,
+        "endChar": 35
+      },
+      "revId": "8f6e789bd25d8a9ab51370c632790d8f66ed9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0e35f92_19044449",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-26T08:51:16Z",
+      "side": 1,
+      "message": "Nit: You could use LoadObjectField\u003cSmi\u003e(typed_array, JSTypedArray::kLengthOffset).\nThe length field is always a Smi on typed arrays unless something is really broken.",
+      "range": {
+        "startLine": 504,
+        "startChar": 16,
+        "endLine": 504,
+        "endChar": 31
+      },
+      "revId": "8f6e789bd25d8a9ab51370c632790d8f66ed9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1dafb5_70e8e532",
+        "filename": "src/builtins/builtins-array-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-02-26T08:51:16Z",
+      "side": 1,
+      "message": "How about changing this to TNode\u003cNumber\u003e, because there is only one caller.",
+      "range": {
+        "startLine": 137,
+        "startChar": 34,
+        "endLine": 137,
+        "endChar": 45
+      },
+      "revId": "8f6e789bd25d8a9ab51370c632790d8f66ed9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
