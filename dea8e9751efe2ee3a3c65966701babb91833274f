@@ -16,6 +16,24 @@
       "revId": "dea8e9751efe2ee3a3c65966701babb91833274f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c24d592d_2346009d",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-27T10:19:39Z",
+      "side": 1,
+      "message": "In order to load -0.0 we would emit exactly the same instruction.\nI could compute kSignBit as \"bit_cast\u003cuint64_t\u003e(-0.)\", but the current version is more clear IMO.",
+      "parentUuid": "bf6f17d8_8c7f5223",
+      "revId": "dea8e9751efe2ee3a3c65966701babb91833274f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
