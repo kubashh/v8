@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af4ecace_c49dda78",
+        "filename": "src/profiler/cpu-profiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1267803
+      },
+      "writtenOn": "2018-02-27T13:28:45Z",
+      "side": 1,
+      "message": "I have the feeling the else is missing. So for long timeouts no wait at all is done.",
+      "revId": "15c0c3a8ba69d5b2cc521f7b380d59f76834eb53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
