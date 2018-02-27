@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf6f17d8_8c7f5223",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-02-27T10:07:56Z",
+      "side": 1,
+      "message": "would it be faster/smaller to load -0.0 instead of this 64bit bit pattern?",
+      "revId": "dea8e9751efe2ee3a3c65966701babb91833274f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
