@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2124325c_84c40bbc",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-27T18:41:42Z",
+      "side": 0,
+      "message": "Hah, we discussed this line for so long, but it\u0027s still totally wrong :)\nIt should be exactly the opposite: If either offset_imm or max_offset do *not* fit in uint31, then load it to a register instead...\n\nThis bug makes the generated code wrong, but it will never be executed anyway, since we always have a bounds check on ia32, and that will trap.\nAnd since this code will always be dead code, the best solution of course is to not generate it in the first place :)",
+      "revId": "8b0e6cc3263cbd34c85c2091cc910bb79d51391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
