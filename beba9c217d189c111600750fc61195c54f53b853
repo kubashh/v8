@@ -16,6 +16,24 @@
       "revId": "beba9c217d189c111600750fc61195c54f53b853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef2b453e_8ff5b20b",
+        "filename": "test/unittests/value-serializer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-02-27T01:27:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7366c517_cff532c2",
+      "revId": "beba9c217d189c111600750fc61195c54f53b853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
