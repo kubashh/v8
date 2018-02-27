@@ -93,6 +93,12 @@ struct has_output_operator {
   using ptr_t = typename std::add_pointer<T>::type;
   static constexpr bool value = sizeof(__check_operator(ptr_t{nullptr})) == 1;
 };
+// Specialize for function pointer types since passing these to << like the
+// default has_output_operator does can produce warnings.
+template <typename T, typename... Args>
+struct has_output_operator<T(*)(Args...)> {
+  static constexpr bool value = true;
+};
 
 namespace detail {
 
