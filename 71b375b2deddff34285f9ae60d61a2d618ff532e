@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37ee4aef_df1f58c4",
+        "filename": "src/compiler/x64/instruction-selector-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-02-27T08:21:06Z",
+      "side": 1,
+      "message": "Ideally I\u0027d like to find a good way to merge this and the function above, but I\u0027d like to defer additional refactor of this, and machine-operator.cc to a separate change.",
+      "revId": "71b375b2deddff34285f9ae60d61a2d618ff532e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
