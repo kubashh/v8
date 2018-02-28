@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59c2ce36_b261d073",
+        "filename": "src/base/template-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-28T14:49:13Z",
+      "side": 1,
+      "message": "Neat! :)",
+      "revId": "33e30b1ab8e356f71216b505ca145db86b4f9a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3a5177c_c36de461",
+        "filename": "test/unittests/base/template-utils-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-02-28T14:49:13Z",
+      "side": 1,
+      "message": "It seems that the changed definition of has_output_operator does not treat this as an output operator any more without the \"const\". Can you explain why?\nWould it still work if we would receive TestClass2 by value (I hope so)? If yes, please add a test for that.",
+      "revId": "33e30b1ab8e356f71216b505ca145db86b4f9a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
