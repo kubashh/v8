@@ -574,6 +574,7 @@ InjectedScript.prototype = {
     /**
      * @param {*} obj
      * @return {?string}
+     * @suppress {checkTypes}
      */
     _describe: function(obj)
     {
@@ -647,6 +648,9 @@ InjectedScript.prototype = {
                 return "Symbol";
             }
         }
+
+        if (typeof obj === "bigint")
+            return toString(obj) + "n";
 
         if (InjectedScriptHost.subtype(obj) === "error") {
             try {
