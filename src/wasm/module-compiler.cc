@@ -3777,6 +3777,10 @@ class AsyncCompileJob::ExecuteAndFinishCompilationUnits : public CompileStep {
     };
 
     TRACE_COMPILE("(3) Compiling...\n");
+
+    // We execute for 1 ms and then reschedule the task, same as the GC.
+    double deadline = MonotonicallyIncreasingTimeInMs() + 1.0;
+
     while (job_->compiler_->CanAcceptWork()) {
       if (failed_) break;
       DisallowHandleAllocation no_handle;
@@ -3784,6 +3788,14 @@ class AsyncCompileJob::ExecuteAndFinishCompilationUnits : public CompileStep {
       if (!job_->compiler_->FetchAndExecuteCompilationUnit(
               StartFinishCompilationUnit)) {
         break;
+      }
+
+      if (deadline < MonotonicallyIncreasingTimeInMs()) {
+        // We reached the deadline. We reschedule this task and return
+        // immediately. Since we reschedule this task already here, we do not
+        // increment the stopped_tasks_ counter.
+        job_->StartBackgroundTask();
+        return;
       }
     }
     job_->stopped_tasks_.Increment(1);
