@@ -33,6 +33,24 @@
       "revId": "33e30b1ab8e356f71216b505ca145db86b4f9a2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f73b2e8_5c1f91e3",
+        "filename": "test/unittests/base/template-utils-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-02-28T15:02:32Z",
+      "side": 1,
+      "message": "The expression SFINAE constructs a temporary object passed to operator\u003c\u003c. Temporaries can\u0027t bind to non-const references:\n\nthakis@thakis:~/src/chrome/src$ cat test.cc\nclass C {};\nvoid f(C\u0026);\nvoid g(const C\u0026);\nvoid h(C);\n\nvoid r() {\n  f(C());\n  g(C());  // Ok\n  h(C());  // Ok\n}\nthakis@thakis:~/src/chrome/src$ third_party/llvm-build/Release+Asserts/bin/clang -c test.cc\ntest.cc:7:3: error: no matching function for call to \u0027f\u0027\n  f(C());\n  ^\ntest.cc:2:6: note: candidate function not viable: expects an l-value for 1st argument\nvoid f(C\u0026);\n     ^\n1 error generated.\n\n\nhttps://herbsutter.com/2008/01/01/gotw-88-a-candidate-for-the-most-important-const/ has some more words about a topic in that vicinity.\n\nAdded a test for a by-value op\u003c\u003c.",
+      "parentUuid": "b3a5177c_c36de461",
+      "revId": "33e30b1ab8e356f71216b505ca145db86b4f9a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
