@@ -200,28 +200,33 @@ Handle<Object> StoreHandler::StoreElementTransition(
   return handler;
 }
 
-Handle<Smi> StoreHandler::StoreTransition(Isolate* isolate,
-                                          Handle<Map> transition_map) {
-  int descriptor = transition_map->LastAdded();
-  Handle<DescriptorArray> descriptors(transition_map->instance_descriptors());
-  PropertyDetails details = descriptors->GetDetails(descriptor);
-  Representation representation = details.representation();
-  DCHECK(!representation.IsNone());
-
+Handle<Object> StoreHandler::StoreTransition(Isolate* isolate,
+                                             Handle<Map> transition_map) {
+#ifdef DEBUG
+  if (!transition_map->is_dictionary_map()) {
+    int descriptor = transition_map->LastAdded();
+    Handle<DescriptorArray> descriptors(transition_map->instance_descriptors());
+    PropertyDetails details = descriptors->GetDetails(descriptor);
+    Representation representation = details.representation();
+    DCHECK(!representation.IsNone());
+  }
+#endif
   // Declarative handlers don't support access checks.
   DCHECK(!transition_map->is_access_check_needed());
 
-  DCHECK_EQ(kData, details.kind());
-  if (details.location() == PropertyLocation::kDescriptor) {
-    return TransitionToConstant(isolate, descriptor);
+  // Ensure the transition map contains a valid prototype validity cell.
+  if (!transition_map->IsPrototypeValidityCellValid()) {
+    Handle<Cell> validity_cell =
+        Map::GetOrCreatePrototypeChainValidityCell(transition_map, isolate);
+    if (validity_cell.is_null()) {
+      validity_cell = isolate->factory()->NewCell(
+          handle(Smi::FromInt(Map::kPrototypeChainValid), isolate));
+    }
+    transition_map->set_prototype_validity_cell(*validity_cell);
   }
-  DCHECK_EQ(PropertyLocation::kField, details.location());
-  bool extend_storage =
-      Map::cast(transition_map->GetBackPointer())->UnusedPropertyFields() == 0;
 
-  FieldIndex index = FieldIndex::ForDescriptor(*transition_map, descriptor);
-  return TransitionToField(isolate, descriptor, index, representation,
-                           extend_storage);
+  Handle<WeakCell> cell = Map::WeakCellForMap(transition_map);
+  return cell;
 }
 
 // static
