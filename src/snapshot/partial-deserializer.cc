@@ -78,8 +78,11 @@ void PartialDeserializer::DeserializeEmbedderFields(
     // TODO(yangguo,jgruber): Turn this into a reusable shared buffer.
     byte* data = new byte[size];
     source()->CopyRaw(data, size);
+    StartupData startup_data;
+    startup_data.data = reinterpret_cast<char*>(data);
+    startup_data.raw_size = size;
     embedder_fields_deserializer.callback(v8::Utils::ToLocal(obj), index,
-                                          {reinterpret_cast<char*>(data), size},
+                                          startup_data,
                                           embedder_fields_deserializer.data);
     delete[] data;
   }

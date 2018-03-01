@@ -7828,8 +7828,12 @@ class V8_EXPORT Isolate {
 
 class V8_EXPORT StartupData {
  public:
-  const char* data;
-  int raw_size;
+  const char* data = nullptr;
+  int raw_size = 0;
+#ifdef V8_EMBEDDED_BUILTINS
+  const char* embedded_data = nullptr;
+  int embedded_size = 0;
+#endif
 };
 
 
@@ -7885,7 +7889,8 @@ class V8_EXPORT V8 {
    * Returns { NULL, 0 } on failure.
    * The caller acquires ownership of the data array in the return value.
    */
-  static StartupData CreateSnapshotDataBlob(const char* embedded_source = NULL);
+  static StartupData CreateSnapshotDataBlob(
+      const char* script_source = NULL, bool generate_embedded_blob = false);
 
   /**
    * Bootstrap an isolate and a context from the cold startup blob, run the
@@ -8090,6 +8095,12 @@ class V8_EXPORT SnapshotCreator {
    * \returns the isolate prepared by the snapshot creator.
    */
   Isolate* GetIsolate();
+
+  /**
+   * Sets whether the embedded data blob should be generated. If true, it is
+   * stored within StartupData and the caller must take care to free it.
+   */
+  void SetGenerateEmbeddedBlob(bool generate_embedded_blob);
 
   /**
    * Set the default context to be included in the snapshot blob.
