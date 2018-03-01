@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f2cd36a_aaa1333b",
+        "filename": "test/unittests/base/macros-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-03-01T17:55:38Z",
+      "side": 1,
+      "message": "Hello, this leads to gcc an static assertion failure on Ubuntu 16.04 with stock gcc 5.4.\n\nIn file included from ../../v8/test/unittests/base/macros-unittest.cc:5:0:\n../../v8/src/base/macros.h:258:3: error: static assertion failed: NonCopyableshould not be trivially copyable\n   static_assert(!::v8::base::is_trivially_copyable\u003cT\u003e::value, \\\n   ^\n../../v8/test/unittests/base/macros-unittest.cc:40:1: note: in expansion of macro \u0027ASSERT_NOT_TRIVIALLY_COPYABLE\u0027\n ASSERT_NOT_TRIVIALLY_COPYABLE(NonCopyable);\n ^",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 43
+      },
+      "revId": "9dd6f0d089e3ae73487859fe2f457c6863c35d4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
