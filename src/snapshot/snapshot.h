@@ -79,6 +79,45 @@ class BuiltinSnapshotData final : public SnapshotData {
   // ... list of builtins offsets
 };
 
+#ifdef V8_EMBEDDED_BUILTINS
+class EmbeddedData final {
+ public:
+  static EmbeddedData FromIsolate(Isolate* isolate);
+  static EmbeddedData FromBlob(const uint8_t* data, uint32_t size);
+
+  const uint8_t* data() const { return data_; }
+  uint32_t size() const { return size_; }
+
+  const uint8_t* InstructionStartOfBuiltin(int i) const;
+  uint32_t InstructionSizeOfBuiltin(int i) const;
+
+ private:
+  EmbeddedData(const uint8_t* data, uint32_t size) : data_(data), size_(size) {}
+
+  const uint32_t* Offsets() const {
+    return reinterpret_cast<const uint32_t*>(data_ + OffsetsOffset());
+  }
+  const uint32_t* Lengths() const {
+    return reinterpret_cast<const uint32_t*>(data_ + LengthsOffset());
+  }
+  const uint8_t* RawData() const { return data_ + RawDataOffset(); }
+
+  static constexpr uint32_t kTableSize = Builtins::builtin_count;
+  static constexpr uint32_t OffsetsOffset() { return 0; }
+  static constexpr uint32_t OffsetsSize() { return kUInt32Size * kTableSize; }
+  static constexpr uint32_t LengthsOffset() {
+    return OffsetsOffset() + OffsetsSize();
+  }
+  static constexpr uint32_t LengthsSize() { return kUInt32Size * kTableSize; }
+  static constexpr uint32_t RawDataOffset() {
+    return RoundUp(LengthsOffset() + LengthsSize(), kCodeAlignment);
+  }
+
+  const uint8_t* data_;
+  uint32_t size_;
+};
+#endif
+
 class Snapshot : public AllStatic {
  public:
   // ---------------- Deserialization ----------------
@@ -120,6 +159,19 @@ class Snapshot : public AllStatic {
       const BuiltinSnapshotData* builtin_snapshot,
       const std::vector<SnapshotData*>& context_snapshots,
       bool can_be_rehashed);
+
+#ifdef V8_EMBEDDED_BUILTINS
+  // Embedded blob layout:
+  // [0] offset table size in bytes
+  // [1] offset to instruction stream 0
+  // [2] length of instruction stream 0
+  // ...
+  // ... offset to instruction stream N - 1
+  // ... length of instruction stream N - 1
+  // ... raw binary instruction stream data
+  static void CreateEmbeddedBlob(Isolate* isolate,
+                                 v8::StartupData* startup_data);
+#endif
 
 #ifdef DEBUG
   static bool SnapshotIsValid(const v8::StartupData* snapshot_blob);
