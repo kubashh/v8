@@ -3777,12 +3777,22 @@ class AsyncCompileJob::ExecuteAndFinishCompilationUnits : public CompileStep {
     };
 
     TRACE_COMPILE("(3) Compiling...\n");
+
+    // We execute for 1 ms and then reschedule the task, same as the GC.
+    double deadline = MonotonicallyIncreasingTimeInMs() + 1.0;
+
     while (job_->compiler_->CanAcceptWork()) {
       if (failed_) break;
       DisallowHandleAllocation no_handle;
       DisallowHeapAllocation no_allocation;
       if (!job_->compiler_->FetchAndExecuteCompilationUnit(
               StartFinishCompilationUnit)) {
+        break;
+      }
+
+      if (deadline < MonotonicallyIncreasingTimeInMs()) {
+        // We reached the deadline. We stop this task and wait for the load
+        // balancing to restart the compilation thread again.
         break;
       }
     }
