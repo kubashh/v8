@@ -543,6 +543,7 @@ struct SnapshotCreatorData {
   SerializeInternalFieldsCallback default_embedder_fields_serializer_;
   PersistentValueVector<Context> contexts_;
   std::vector<SerializeInternalFieldsCallback> embedder_fields_serializers_;
+  bool generate_embedded_blob_ = false;
   bool created_;
 };
 
@@ -580,6 +581,12 @@ SnapshotCreator::~SnapshotCreator() {
 
 Isolate* SnapshotCreator::GetIsolate() {
   return SnapshotCreatorData::cast(data_)->isolate_;
+}
+
+void SnapshotCreator::SetGenerateEmbeddedBlob(bool generate_embedded_blob) {
+  SnapshotCreatorData* data = SnapshotCreatorData::cast(data_);
+  DCHECK(!data->created_);
+  data->generate_embedded_blob_ = generate_embedded_blob;
 }
 
 void SnapshotCreator::SetDefaultContext(
@@ -784,6 +791,12 @@ StartupData SnapshotCreator::CreateBlob(
   StartupData result = i::Snapshot::CreateSnapshotBlob(
       &startup_snapshot, &builtin_snapshot, context_snapshots, can_be_rehashed);
 
+#ifdef V8_EMBEDDED_BUILTINS
+  if (data->generate_embedded_blob_) {
+    i::Snapshot::CreateEmbeddedBlob(isolate, &result);
+  }
+#endif
+
   // Delete heap-allocated context snapshot instances.
   for (const auto context_snapshot : context_snapshots) {
     delete context_snapshot;
@@ -793,10 +806,11 @@ StartupData SnapshotCreator::CreateBlob(
   return result;
 }
 
-StartupData V8::CreateSnapshotDataBlob(const char* embedded_source) {
+StartupData V8::CreateSnapshotDataBlob(const char* script_source,
+                                       bool generate_embedded_blob) {
   // Create a new isolate and a new context from scratch, optionally run
   // a script to embed, and serialize to create a snapshot blob.
-  StartupData result = {nullptr, 0};
+  StartupData result;
   base::ElapsedTimer timer;
   timer.Start();
   {
@@ -805,12 +819,15 @@ StartupData V8::CreateSnapshotDataBlob(const char* embedded_source) {
     {
       HandleScope scope(isolate);
       Local<Context> context = Context::New(isolate);
-      if (embedded_source != nullptr &&
-          !RunExtraCode(isolate, context, embedded_source, "<embedded>")) {
+      if (script_source != nullptr &&
+          !RunExtraCode(isolate, context, script_source, "<embedded>")) {
         return result;
       }
       snapshot_creator.SetDefaultContext(context);
     }
+#ifdef V8_EMBEDDED_BUILTINS
+    snapshot_creator.SetGenerateEmbeddedBlob(generate_embedded_blob);
+#endif
     result = snapshot_creator.CreateBlob(
         SnapshotCreator::FunctionCodeHandling::kClear);
   }
@@ -833,7 +850,7 @@ StartupData V8::WarmUpSnapshotDataBlob(StartupData cold_snapshot_blob,
   //    compilation of executed functions.
   //  - Create a new context. This context will be unpolluted.
   //  - Serialize the isolate and the second context into a new snapshot blob.
-  StartupData result = {nullptr, 0};
+  StartupData result;
   base::ElapsedTimer timer;
   timer.Start();
   {
@@ -855,6 +872,11 @@ StartupData V8::WarmUpSnapshotDataBlob(StartupData cold_snapshot_blob,
     result = snapshot_creator.CreateBlob(
         SnapshotCreator::FunctionCodeHandling::kKeep);
   }
+
+#ifdef V8_EMBEDDED_BUILTINS
+  result.embedded_data = cold_snapshot_blob.embedded_data;
+  result.embedded_size = cold_snapshot_blob.embedded_size;
+#endif
 
   if (i::FLAG_profile_deserialization) {
     i::PrintF("Warming up snapshot took %0.3f ms\n",
