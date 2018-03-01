@@ -68,11 +68,14 @@ function toString(obj)
 /**
  * @param {*} obj
  * @return {string}
+ * @suppress {checkTypes}
  */
 function toStringDescription(obj)
 {
     if (typeof obj === "number" && obj === 0 && 1 / obj < 0)
         return "-0"; // Negative zero.
+    if (typeof obj === "bigint")
+        return toString(obj) + "n";
     return toString(obj);
 }
 
@@ -167,6 +170,7 @@ InjectedScript.primitiveTypes = {
     "boolean": true,
     "number": true,
     "string": true,
+    "bigint": true,
     __proto__: null
 }
 
@@ -725,8 +729,8 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
         this.type = "object";
 
     if (injectedScript.isPrimitiveValue(object) || object === null || forceValueType) {
-        // We don't send undefined values over JSON.
-        if (this.type !== "undefined")
+        // We don't send undefined/bigint values over JSON.
+        if (this.type !== "undefined" && this.type !== "bigint")
             this.value = object;
 
         // Null object is object with 'null' subtype.
@@ -745,6 +749,8 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
                 this.unserializableValue = this.description;
                 break;
             }
+        } else if (this.type === "bigint") {
+            this.description = toStringDescription(object);
         }
 
         return;
