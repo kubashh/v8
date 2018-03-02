@@ -4181,6 +4181,75 @@ void BytecodeGenerator::VisitGetTemplateObject(GetTemplateObject* expr) {
   builder()->GetTemplateObject(entry, feedback_index(literal_slot));
 }
 
+void BytecodeGenerator::VisitTemplateLiteral(TemplateLiteral* expr) {
+  builder()->SetExpressionPosition(expr);
+  using StringList = TemplateLiteral::StringList;
+  using ExpressionList = TemplateLiteral::ExpressionList;
+
+  const StringList* parts = expr->string_parts();
+  const ExpressionList* substitutions = expr->substitutions();
+  DCHECK_EQ(parts->length(), substitutions->length() + 1);
+
+  const AstRawString* first_part = parts->at(0);
+  if (parts->length() == 1) {
+    if (execution_result()->IsEffect()) return;
+    builder()->LoadLiteral(first_part);
+    return;
+  }
+
+  if (execution_result()->IsEffect()) {
+    // Discarding the value, so just evaluate substitutions without performing
+    // ADDs
+    for (Expression* sub : *substitutions) {
+      VisitForStringValue(sub);
+    }
+    return;
+  }
+
+  // Generate string concatenation
+  int i = 0;
+  RegisterAllocationScope register_scope(this);
+  Register result_reg = register_allocator()->NewRegister();
+  FeedbackSlot slot;
+  if (!first_part->IsEmpty()) {
+    builder()->LoadLiteral(first_part);
+  } else {
+    // If the first string is empty, possibly add the next template span
+    // outside of the loop, to keep the loop logic simple.
+    Expression* sub = substitutions->at(0);
+    builder()->SetExpressionPosition(sub);
+    VisitForStringValue(sub);
+
+    const AstRawString* second_part = parts->at(1);
+    if (!second_part->IsEmpty()) {
+      if (slot.IsInvalid()) slot = feedback_spec()->AddBinaryOpICSlot();
+      builder()->StoreAccumulatorInRegister(result_reg);
+      builder()->LoadLiteral(second_part);
+      builder()->BinaryOperation(Token::ADD, result_reg, feedback_index(slot));
+    }
+    i = 1;
+  }
+
+  while (i < substitutions->length()) {
+    Expression* sub = substitutions->at(i++);
+    if (!sub->IsStringLiteral() ||
+        !sub->AsLiteral()->AsRawString()->IsEmpty()) {
+      if (slot.IsInvalid()) slot = feedback_spec()->AddBinaryOpICSlot();
+      builder()->StoreAccumulatorInRegister(result_reg);
+      builder()->SetExpressionPosition(sub);
+      VisitForStringValue(sub);
+      builder()->BinaryOperation(Token::ADD, result_reg, feedback_index(slot));
+    }
+
+    const AstRawString* tail_part = parts->at(i);
+    if (!tail_part->IsEmpty()) {
+      if (slot.IsInvalid()) slot = feedback_spec()->AddBinaryOpICSlot();
+      builder()->LoadLiteral(tail_part);
+      builder()->BinaryOperation(Token::ADD, result_reg, feedback_index(slot));
+    }
+  }
+}
+
 void BytecodeGenerator::VisitThisFunction(ThisFunction* expr) {
   builder()->LoadAccumulatorWithRegister(Register::function_closure());
 }
@@ -4757,6 +4826,36 @@ void BytecodeGenerator::VisitAndPushIntoRegisterList(Expression* expr,
   // in registers.
   Register destination = register_allocator()->GrowRegisterList(reg_list);
   builder()->StoreAccumulatorInRegister(destination);
+}
+
+void BytecodeGenerator::VisitForStringValue(Expression* expr) {
+  if (expr->IsLiteral()) {
+    Literal* literal = expr->AsLiteral();
+    if (execution_result()->IsEffect() && literal->type() != Literal::kSymbol) {
+      return;
+    }
+
+    // TODO(caitp): also eliminate ToString call for boolean and null literals
+    switch (literal->type()) {
+      case Literal::kString: {
+        builder()->LoadLiteral(literal->AsRawString());
+        return;
+      }
+      case Literal::kUndefined: {
+        builder()->LoadLiteral(ast_string_constants()->undefined_string());
+        return;
+      }
+      case Literal::kTheHole: {
+        UNREACHABLE();
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  VisitForAccumulatorValue(expr);
+  builder()->ToString();
 }
 
 void BytecodeGenerator::BuildTest(ToBooleanMode mode,

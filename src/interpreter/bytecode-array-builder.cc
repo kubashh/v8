@@ -998,6 +998,11 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::ToName(Register out) {
   return *this;
 }
 
+BytecodeArrayBuilder& BytecodeArrayBuilder::ToString() {
+  OutputToString();
+  return *this;
+}
+
 BytecodeArrayBuilder& BytecodeArrayBuilder::ToNumber(int feedback_slot) {
   OutputToNumber(feedback_slot);
   return *this;
