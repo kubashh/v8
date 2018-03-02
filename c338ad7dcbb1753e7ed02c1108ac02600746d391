@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4ccbc45_67cc892f",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-03-02T18:28:37Z",
+      "side": 1,
+      "message": "Rather than making this a template parameter, please just pass it as an argument to the function. Since this is only for the error case, the extra cost in binary size of using templates isn\u0027t a good tradeoff for the runtime branch.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 28,
+        "endLine": 1026,
+        "endChar": 52
+      },
+      "revId": "c338ad7dcbb1753e7ed02c1108ac02600746d391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
