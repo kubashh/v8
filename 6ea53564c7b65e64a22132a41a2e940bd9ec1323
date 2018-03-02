@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5d4998a_7e4de621",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-03-02T12:10:58Z",
+      "side": 1,
+      "message": "Until the BigInt proposal is not merged into the spec, \u003chttps://tc39.github.io/proposal-bigint/#sec-number-constructor-number-value\u003e must also be consulted.",
+      "revId": "6ea53564c7b65e64a22132a41a2e940bd9ec1323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c524155_0165fc2b",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-03-02T12:10:58Z",
+      "side": 1,
+      "message": "Note: It would be nice to have a ToNumeric helper. The current approach feels a little magical.",
+      "revId": "6ea53564c7b65e64a22132a41a2e940bd9ec1323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
