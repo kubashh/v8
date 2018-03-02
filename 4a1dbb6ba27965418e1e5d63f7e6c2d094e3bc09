@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57674cce_eb9ceb63",
+        "filename": "test/mjsunit/regress/wasm/regress-817380.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-02T09:00:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure this kExprUnreachable is intentional here ;-)",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "4a1dbb6ba27965418e1e5d63f7e6c2d094e3bc09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
