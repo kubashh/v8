@@ -36,6 +36,40 @@
     },
     {
       "key": {
+        "uuid": "30e6c7ee_d94dcb85",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-02T21:40:53Z",
+      "side": 1,
+      "message": "You need extra \". Don\u0027t you?\nAlso consider checking the last symbol is \u0027n\u0027.",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5735fa4_7023a502",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-02T21:40:53Z",
+      "side": 1,
+      "message": "NaN is not a number. ;-)",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29529d79_b90bb98a",
         "filename": "src/inspector/js_protocol.pdl",
         "patchSetId": 7
@@ -53,6 +87,40 @@
         "endLine": 827,
         "endChar": 27
       },
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55cc5c27_c85e5165",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-02T21:40:53Z",
+      "side": 1,
+      "message": "Don\u0027t you need comma before and?",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c987d81c_28467b84",
+        "filename": "src/inspector/v8-console-message.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-02T21:40:53Z",
+      "side": 1,
+      "message": "Why IgnoreUndefined? What does it append if bigint is undefined?",
       "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
