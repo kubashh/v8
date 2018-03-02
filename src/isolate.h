@@ -1248,10 +1248,15 @@ class Isolate {
     off_heap_code_.emplace_back(stream);
   }
 
+  std::vector<InstructionStream*>* off_heap_code() { return &off_heap_code_; }
+
 #ifdef V8_EMBEDDED_BUILTINS
   BuiltinsConstantsTableBuilder* builtins_constants_table_builder() const {
     return builtins_constants_table_builder_;
   }
+
+  const uint8_t* embedded_blob() const;
+  uint32_t embedded_blob_size() const;
 #endif
 
   void set_array_buffer_allocator(v8::ArrayBuffer::Allocator* allocator) {
@@ -1624,7 +1629,7 @@ class Isolate {
   // Stores off-heap instruction streams. Only used if --stress-off-heap-code
   // is enabled.
   // TODO(jgruber,v8:6666): Remove once isolate-independent builtins are
-  // implemented. Also remove friend class below.
+  // implemented.
   std::vector<InstructionStream*> off_heap_code_;
 
 #ifdef V8_EMBEDDED_BUILTINS
@@ -1661,7 +1666,6 @@ class Isolate {
   friend class ExecutionAccess;
   friend class HandleScopeImplementer;
   friend class heap::HeapTester;
-  friend class InstructionStream;
   friend class OptimizingCompileDispatcher;
   friend class Simulator;
   friend class StackGuard;
