@@ -494,7 +494,7 @@ class Scanner {
   const int kMaxAscii = 127;
 
   // Scans octal escape sequence. Also accepts "\0" decimal escape sequence.
-  template <bool capture_raw>
+  template <bool capture_raw, bool in_template_literal>
   uc32 ScanOctalEscape(uc32 c, int length);
 
   // Call this after setting source_ to the input.
