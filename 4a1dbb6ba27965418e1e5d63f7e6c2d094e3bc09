@@ -22,6 +22,30 @@
       "revId": "4a1dbb6ba27965418e1e5d63f7e6c2d094e3bc09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b011480e_986cdc31",
+        "filename": "test/mjsunit/regress/wasm/regress-817380.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-02T09:05:33Z",
+      "side": 1,
+      "message": "Hm, no, I guess there should be a kExprGetLocal before that :)\nDoes not really matter, but fixing anyway. Thanks!",
+      "parentUuid": "57674cce_eb9ceb63",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "4a1dbb6ba27965418e1e5d63f7e6c2d094e3bc09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
