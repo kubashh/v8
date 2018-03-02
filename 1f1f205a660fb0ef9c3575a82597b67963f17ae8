@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4a6a499_614707b6",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-02T18:34:22Z",
+      "side": 1,
+      "message": "In this CL `BasicCallNamedGetterCallback` supports side effect check, but these do not:\nBasicCallIndexedGetterCallback\nCallNamedGetter\nCallNamedDescriptor\n\nJust to confirm, is the only reason the latter are not supporting side effect check right now because they require InterceptorInfo support?",
+      "range": {
+        "startLine": 110,
+        "startChar": 42,
+        "endLine": 110,
+        "endChar": 70
+      },
+      "revId": "1f1f205a660fb0ef9c3575a82597b67963f17ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
