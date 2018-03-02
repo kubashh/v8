@@ -64,7 +64,9 @@ class Code : public HeapObject {
   // off-heap instruction stream rather than the on-heap trampoline located
   // at instruction_start.
   inline int InstructionSize();
+#ifdef V8_EMBEDDED_BUILTINS
   int OffHeapInstructionSize();
+#endif
 
   // [relocation_info]: Code relocation information
   DECL_ACCESSORS(relocation_info, ByteArray)
@@ -335,6 +337,10 @@ class Code : public HeapObject {
   enum VerifyMode { kNoContextSpecificPointers, kNoContextRetainingPointers };
   void VerifyEmbeddedObjects(VerifyMode mode = kNoContextRetainingPointers);
 #endif  // DEBUG
+
+#ifdef V8_EMBEDDED_BUILTINS
+  bool IsProcessIndependent();
+#endif
 
   inline bool CanContainWeakObjects();
 
