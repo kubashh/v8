@@ -63,7 +63,6 @@ class CompilerDispatcher;
 class ContextSlotCache;
 class Counters;
 class CpuFeatures;
-class CpuProfiler;
 class Debug;
 class DeoptimizerData;
 class DescriptorLookupCache;
@@ -833,10 +832,6 @@ class Isolate {
   inline Handle<Context> native_context();
   inline Context* raw_native_context();
 
-  // Returns the native context of the calling JavaScript code.  That
-  // is, the native context of the top-most JavaScript frame.
-  Handle<Context> GetCallingNativeContext();
-
   Handle<Context> GetIncumbentContext();
 
   void RegisterTryCatchHandler(v8::TryCatch* that);
@@ -1474,10 +1469,6 @@ class Isolate {
     return "";
   }
 
-  // TODO(alph): Remove along with the deprecated GetCpuProfiler().
-  friend v8::CpuProfiler* v8::Isolate::GetCpuProfiler();
-  CpuProfiler* cpu_profiler() const { return cpu_profiler_; }
-
   base::Atomic32 id_;
   EntryStackItem* entry_stack_;
   int stack_trace_nesting_level_;
@@ -1557,7 +1548,6 @@ class Isolate {
 #endif
 
   Debug* debug_;
-  CpuProfiler* cpu_profiler_;
   HeapProfiler* heap_profiler_;
   std::unique_ptr<CodeEventDispatcher> code_event_dispatcher_;
   FunctionEntryHook function_entry_hook_;

@@ -2143,15 +2143,6 @@ MaybeLocal<Value> Script::Run(Local<Context> context) {
 }
 
 
-Local<Value> Script::Run() {
-  auto self = Utils::OpenHandle(this, true);
-  // If execution is terminating, Compile(..)->Run() requires this
-  // check.
-  if (self.is_null()) return Local<Value>();
-  auto context = ContextFromHeapObject(self);
-  RETURN_TO_LOCAL_UNCHECKED(Run(context), Value);
-}
-
 Local<Value> ScriptOrModule::GetResourceName() {
   i::Handle<i::Script> obj = Utils::OpenHandle(this);
   i::Isolate* isolate = obj->GetIsolate();
@@ -2544,18 +2535,6 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
   RETURN_ESCAPED(Utils::CallableToLocal(result));
 }
 
-
-Local<Function> ScriptCompiler::CompileFunctionInContext(
-    Isolate* v8_isolate, Source* source, Local<Context> v8_context,
-    size_t arguments_count, Local<String> arguments[],
-    size_t context_extension_count, Local<Object> context_extensions[]) {
-  RETURN_TO_LOCAL_UNCHECKED(
-      CompileFunctionInContext(v8_context, source, arguments_count, arguments,
-                               context_extension_count, context_extensions),
-      Function);
-}
-
-
 ScriptCompiler::ScriptStreamingTask* ScriptCompiler::StartStreamingScript(
     Isolate* v8_isolate, StreamedSource* source, CompileOptions options) {
   if (!i::FLAG_script_streaming) {
@@ -2655,24 +2634,6 @@ MaybeLocal<Script> Script::Compile(Local<Context> context, Local<String> source,
   ScriptCompiler::Source script_source(source);
   return ScriptCompiler::Compile(context, &script_source);
 }
-
-
-Local<Script> Script::Compile(v8::Local<String> source,
-                              v8::ScriptOrigin* origin) {
-  auto str = Utils::OpenHandle(*source);
-  auto context = ContextFromHeapObject(str);
-  RETURN_TO_LOCAL_UNCHECKED(Compile(context, source, origin), Script);
-}
-
-
-Local<Script> Script::Compile(v8::Local<String> source,
-                              v8::Local<String> file_name) {
-  auto str = Utils::OpenHandle(*source);
-  auto context = ContextFromHeapObject(str);
-  ScriptOrigin origin(file_name);
-  return Compile(context, source, &origin).FromMaybe(Local<Script>());
-}
-
 
 // --- E x c e p t i o n s ---
 
@@ -2778,13 +2739,6 @@ MaybeLocal<Value> v8::TryCatch::StackTrace(Local<Context> context) const {
   RETURN_ESCAPED(result);
 }
 
-
-v8::Local<Value> v8::TryCatch::StackTrace() const {
-  auto context = reinterpret_cast<v8::Isolate*>(isolate_)->GetCurrentContext();
-  RETURN_TO_LOCAL_UNCHECKED(StackTrace(context), Value);
-}
-
-
 v8::Local<v8::Message> v8::TryCatch::Message() const {
   i::Object* message = reinterpret_cast<i::Object*>(message_obj_);
   DCHECK(message->IsJSMessageObject() || message->IsTheHole(isolate_));
@@ -2876,13 +2830,6 @@ Maybe<int> Message::GetLineNumber(Local<Context> context) const {
   return Just(msg->GetLineNumber());
 }
 
-
-int Message::GetLineNumber() const {
-  auto context = ContextFromHeapObject(Utils::OpenHandle(this));
-  return GetLineNumber(context).FromMaybe(0);
-}
-
-
 int Message::GetStartPosition() const {
   auto self = Utils::OpenHandle(this);
   return self->start_position();
@@ -2907,14 +2854,6 @@ Maybe<int> Message::GetStartColumn(Local<Context> context) const {
   auto msg = i::Handle<i::JSMessageObject>::cast(self);
   return Just(msg->GetColumnNumber());
 }
-
-
-int Message::GetStartColumn() const {
-  auto context = ContextFromHeapObject(Utils::OpenHandle(this));
-  const int default_value = kNoColumnInfo;
-  return GetStartColumn(context).FromMaybe(default_value);
-}
-
 
 Maybe<int> Message::GetEndColumn(Local<Context> context) const {
   auto self = Utils::OpenHandle(this);
@@ -2959,13 +2898,6 @@ MaybeLocal<String> Message::GetSourceLine(Local<Context> context) const {
   auto msg = i::Handle<i::JSMessageObject>::cast(self);
   RETURN_ESCAPED(Utils::ToLocal(msg->GetSourceLine()));
 }
-
-
-Local<String> Message::GetSourceLine() const {
-  auto context = ContextFromHeapObject(Utils::OpenHandle(this));
-  RETURN_TO_LOCAL_UNCHECKED(GetSourceLine(context), String)
-}
-
 
 void Message::PrintCurrentStackTrace(Isolate* isolate, FILE* out) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
@@ -7040,15 +6972,6 @@ MaybeLocal<v8::RegExp> v8::RegExp::New(Local<Context> context,
   RETURN_ESCAPED(result);
 }
 
-
-Local<v8::RegExp> v8::RegExp::New(Local<String> pattern, Flags flags) {
-  auto isolate =
-      reinterpret_cast<Isolate*>(Utils::OpenHandle(*pattern)->GetIsolate());
-  auto context = isolate->GetCurrentContext();
-  RETURN_TO_LOCAL_UNCHECKED(New(context, pattern, flags), RegExp);
-}
-
-
 Local<v8::String> v8::RegExp::GetSource() const {
   i::Handle<i::JSRegExp> obj = Utils::OpenHandle(this);
   return Utils::ToLocal(i::Handle<i::String>(obj->Pattern()));
@@ -7335,13 +7258,6 @@ MaybeLocal<Promise::Resolver> Promise::Resolver::New(Local<Context> context) {
   RETURN_ESCAPED(result);
 }
 
-
-Local<Promise::Resolver> Promise::Resolver::New(Isolate* isolate) {
-  RETURN_TO_LOCAL_UNCHECKED(New(isolate->GetCurrentContext()),
-                            Promise::Resolver);
-}
-
-
 Local<Promise> Promise::Resolver::GetPromise() {
   i::Handle<i::JSReceiver> promise = Utils::OpenHandle(this);
   return Local<Promise>::Cast(Utils::ToLocal(promise));
@@ -7366,13 +7282,6 @@ Maybe<bool> Promise::Resolver::Resolve(Local<Context> context,
   return Just(true);
 }
 
-
-void Promise::Resolver::Resolve(Local<Value> value) {
-  auto context = ContextFromHeapObject(Utils::OpenHandle(this));
-  USE(Resolve(context, value));
-}
-
-
 Maybe<bool> Promise::Resolver::Reject(Local<Context> context,
                                       Local<Value> value) {
   auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
@@ -7390,13 +7299,6 @@ Maybe<bool> Promise::Resolver::Reject(Local<Context> context,
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return Just(true);
 }
-
-
-void Promise::Resolver::Reject(Local<Value> value) {
-  auto context = ContextFromHeapObject(Utils::OpenHandle(this));
-  USE(Reject(context, value));
-}
-
 
 MaybeLocal<Promise> Promise::Catch(Local<Context> context,
                                    Local<Function> handler) {
@@ -8115,14 +8017,6 @@ HeapProfiler* Isolate::GetHeapProfiler() {
   return reinterpret_cast<HeapProfiler*>(heap_profiler);
 }
 
-
-CpuProfiler* Isolate::GetCpuProfiler() {
-  i::CpuProfiler* cpu_profiler =
-      reinterpret_cast<i::Isolate*>(this)->cpu_profiler();
-  return reinterpret_cast<CpuProfiler*>(cpu_profiler);
-}
-
-
 bool Isolate::InContext() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   return isolate->context() != nullptr;
@@ -8137,15 +8031,6 @@ v8::Local<v8::Context> Isolate::GetCurrentContext() {
   if (native_context == nullptr) return Local<Context>();
   return Utils::ToLocal(i::Handle<i::Context>(native_context));
 }
-
-
-v8::Local<v8::Context> Isolate::GetCallingContext() {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
-  i::Handle<i::Object> calling = isolate->GetCallingNativeContext();
-  if (calling.is_null()) return Local<Context>();
-  return Utils::ToLocal(i::Handle<i::Context>::cast(calling));
-}
-
 
 v8::Local<v8::Context> Isolate::GetEnteredContext() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
@@ -8614,22 +8499,9 @@ void Isolate::AddCallCompletedCallback(CallCompletedCallback callback) {
   isolate->AddCallCompletedCallback(callback);
 }
 
-
 void Isolate::RemoveCallCompletedCallback(CallCompletedCallback callback) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->RemoveCallCompletedCallback(callback);
-}
-
-void Isolate::AddCallCompletedCallback(
-    DeprecatedCallCompletedCallback callback) {
-  AddCallCompletedCallback(reinterpret_cast<CallCompletedCallback>(callback));
-}
-
-
-void Isolate::RemoveCallCompletedCallback(
-    DeprecatedCallCompletedCallback callback) {
-  RemoveCallCompletedCallback(
-      reinterpret_cast<CallCompletedCallback>(callback));
 }
 
 void Isolate::SetPromiseHook(PromiseHook hook) {
@@ -8664,18 +8536,6 @@ void Isolate::EnqueueMicrotask(MicrotaskCallback callback, void* data) {
       isolate->factory()->NewForeign(reinterpret_cast<i::Address>(data)));
   isolate->EnqueueMicrotask(microtask);
 }
-
-
-void Isolate::SetAutorunMicrotasks(bool autorun) {
-  SetMicrotasksPolicy(
-      autorun ? MicrotasksPolicy::kAuto : MicrotasksPolicy::kExplicit);
-}
-
-
-bool Isolate::WillAutorunMicrotasks() const {
-  return GetMicrotasksPolicy() == MicrotasksPolicy::kAuto;
-}
-
 
 void Isolate::SetMicrotasksPolicy(MicrotasksPolicy policy) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
@@ -9023,9 +8883,6 @@ String::Utf8Value::Utf8Value(v8::Isolate* isolate, v8::Local<v8::Value> obj)
   str->WriteUtf8(str_);
 }
 
-String::Utf8Value::Utf8Value(v8::Local<v8::Value> obj)
-    : String::Utf8Value::Utf8Value(Isolate::GetCurrent(), obj) {}
-
 String::Utf8Value::~Utf8Value() {
   i::DeleteArray(str_);
 }
@@ -9044,9 +8901,6 @@ String::Value::Value(v8::Isolate* isolate, v8::Local<v8::Value> obj)
   str_ = i::NewArray<uint16_t>(length_ + 1);
   str->Write(str_);
 }
-
-String::Value::Value(v8::Local<v8::Value> obj)
-    : String::Value::Value(v8::Isolate::GetCurrent(), obj) {}
 
 String::Value::~Value() {
   i::DeleteArray(str_);
@@ -10097,10 +9951,6 @@ void CpuProfiler::SetSamplingInterval(int us) {
   DCHECK_GE(us, 0);
   return reinterpret_cast<i::CpuProfiler*>(this)->set_sampling_interval(
       base::TimeDelta::FromMicroseconds(us));
-}
-
-void CpuProfiler::CollectSample() {
-  reinterpret_cast<i::CpuProfiler*>(this)->CollectSample();
 }
 
 void CpuProfiler::StartProfiling(Local<String> title, bool record_samples) {

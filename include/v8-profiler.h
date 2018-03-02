@@ -325,14 +325,6 @@ class V8_EXPORT CpuProfiler {
   CpuProfile* StopProfiling(Local<String> title);
 
   /**
-   * Force collection of a sample. Must be called on the VM thread.
-   * Recording the forced sample does not contribute to the aggregated
-   * profile statistics.
-   */
-  V8_DEPRECATED("Use static CollectSample(Isolate*) instead.",
-                void CollectSample());
-
-  /**
    * Tells the profiler whether the embedder is idle.
    */
   void SetIdle(bool is_idle);
