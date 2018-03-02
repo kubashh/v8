@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42681440_1a8e487d",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-03-02T20:27:37Z",
+      "side": 1,
+      "message": "No need for else?",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a633a77_77f7a4d7",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-03-02T20:27:37Z",
+      "side": 1,
+      "message": "Let\u0027s have constants and/or helper method for unserializable numbers.",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29529d79_b90bb98a",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-03-02T20:27:37Z",
+      "side": 1,
+      "message": "bigint literals.",
+      "range": {
+        "startLine": 827,
+        "startChar": 20,
+        "endLine": 827,
+        "endChar": 27
+      },
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
