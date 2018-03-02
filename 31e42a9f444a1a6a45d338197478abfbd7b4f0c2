@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ee19eb7_d0d30459",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-02T16:32:44Z",
+      "side": 0,
+      "message": "This moved to snapshot/ where we generate the embedded blob.",
+      "revId": "31e42a9f444a1a6a45d338197478abfbd7b4f0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eb33943_2e9dd4d2",
+        "filename": "test/cctest/test-isolate-independent-builtins.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-02T16:32:44Z",
+      "side": 0,
+      "message": "Removed since testing off-heap-but-not-isolate-independent builtins will become irrelevant once embedding has landed. We will only test the final embedded shipping mechanism.",
+      "revId": "31e42a9f444a1a6a45d338197478abfbd7b4f0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

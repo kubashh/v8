@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "007900ef_8be0d89a",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-02T16:32:44Z",
+      "side": 1,
+      "message": "Yang, I suppose we should also inline this and mark it and V8::CreateSnapshotDataBlob deprecated?",
+      "revId": "e091cbf66fe165b91271d5d7a7669eaca3154ab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
