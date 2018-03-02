@@ -2180,15 +2180,6 @@ void AdvanceWhileDebugContext(JavaScriptFrameIterator& it, Debug* debug) {
 }
 }  // namespace
 
-Handle<Context> Isolate::GetCallingNativeContext() {
-  JavaScriptFrameIterator it(this);
-  AdvanceWhileDebugContext(it, debug_);
-  if (it.done()) return Handle<Context>::null();
-  JavaScriptFrame* frame = it.frame();
-  Context* context = Context::cast(frame->context());
-  return Handle<Context>(context->native_context(), this);
-}
-
 Handle<Context> Isolate::GetIncumbentContext() {
   JavaScriptFrameIterator it(this);
   AdvanceWhileDebugContext(it, debug_);
@@ -2484,7 +2475,6 @@ Isolate::Isolate(bool enable_serializer)
       initialized_from_snapshot_(false),
       is_tail_call_elimination_enabled_(true),
       is_isolate_in_background_(false),
-      cpu_profiler_(nullptr),
       heap_profiler_(nullptr),
       code_event_dispatcher_(new CodeEventDispatcher()),
       function_entry_hook_(nullptr),
@@ -2616,10 +2606,6 @@ void Isolate::Deinit() {
     PrintF(stdout, "=== Stress deopt counter: %u\n", stress_deopt_count_);
   }
 
-  if (cpu_profiler_) {
-    cpu_profiler_->DeleteAllProfiles();
-  }
-
   // We must stop the logger before we tear down other components.
   sampler::Sampler* sampler = logger_->sampler();
   if (sampler && sampler->IsActive()) sampler->Stop();
@@ -2659,9 +2645,6 @@ void Isolate::Deinit() {
 
   delete ast_string_constants_;
   ast_string_constants_ = nullptr;
-
-  delete cpu_profiler_;
-  cpu_profiler_ = nullptr;
 
   code_event_dispatcher_.reset();
 
@@ -2990,7 +2973,6 @@ bool Isolate::Init(StartupDeserializer* des) {
   date_cache_ = new DateCache();
   call_descriptor_data_ =
       new CallInterfaceDescriptorData[CallDescriptors::NUMBER_OF_DESCRIPTORS];
-  cpu_profiler_ = new CpuProfiler(this);
   heap_profiler_ = new HeapProfiler(heap());
   interpreter_ = new interpreter::Interpreter(this);
   compiler_dispatcher_ =
