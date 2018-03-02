@@ -66,6 +66,8 @@ function toString(obj)
 }
 
 /**
+ * TODO(luoe): remove type-check suppression once bigint is supported by closure.
+ * @suppress {checkTypes}
  * @param {*} obj
  * @return {string}
  */
@@ -73,6 +75,8 @@ function toStringDescription(obj)
 {
     if (typeof obj === "number" && obj === 0 && 1 / obj < 0)
         return "-0"; // Negative zero.
+    if (typeof obj === "bigint")
+        return toString(obj) + "n";
     return toString(obj);
 }
 
@@ -167,6 +171,7 @@ InjectedScript.primitiveTypes = {
     "boolean": true,
     "number": true,
     "string": true,
+    "bigint": true,
     __proto__: null
 }
 
@@ -745,6 +750,10 @@ InjectedScript.RemoteObject = function(object, objectGroupName, doNotBind, force
                 this.unserializableValue = this.description;
                 break;
             }
+        } else if (this.type === "bigint") {
+            delete this.value;
+            this.description = toStringDescription(object);
+            this.unserializableValue = this.description;
         }
 
         return;
