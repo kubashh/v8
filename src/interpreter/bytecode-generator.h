@@ -241,6 +241,10 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   TypeHint VisitForAccumulatorValue(Expression* expr);
   void VisitForAccumulatorValueOrTheHole(Expression* expr);
   MUST_USE_RESULT Register VisitForRegisterValue(Expression* expr);
+  // Visit the subexpression expr, and perform `ToString` if necessary.
+  // If {out} is not invalid, the result is stored in it (otherwise, it is
+  // stored in the accumulator)
+  void VisitForStringValue(Expression* expr);
   INLINE(void VisitForRegisterValue(Expression* expr, Register destination));
   void VisitAndPushIntoRegisterList(Expression* expr, RegisterList* reg_list);
   void VisitForEffect(Expression* expr);
