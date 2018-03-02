@@ -511,6 +511,8 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
   DISALLOW_COPY_AND_ASSIGN(CommonOperatorBuilder);
 };
 
+const FrameStateInfo& FrameStateInfoOf(const Operator* op);
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
