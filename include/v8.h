@@ -600,8 +600,7 @@ template <class T> class PersistentBase {
   V8_INLINE bool IsWeak() const;
 
   /**
-   * Assigns a wrapper class ID to the handle. See RetainedObjectInfo interface
-   * description in v8-profiler.h for details.
+   * Assigns a wrapper class ID to the handle.
    */
   V8_INLINE void SetWrapperClassId(uint16_t class_id);
 
@@ -6560,9 +6559,6 @@ class V8_EXPORT HeapCodeStatistics {
 
   friend class Isolate;
 };
-
-class RetainedObjectInfo;
-
 
 /**
  * FunctionEntryHook is the type of the profile entry hook called at entry to
