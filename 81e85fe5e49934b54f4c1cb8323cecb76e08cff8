@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cc5af19_01425157",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2539,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-03-05T10:22:05Z",
+      "side": 1,
+      "message": "This control input should go away; Operator::kEliminatable calls are not control nodes.",
+      "range": {
+        "startLine": 2539,
+        "startChar": 63,
+        "endLine": 2539,
+        "endChar": 70
+      },
+      "revId": "81e85fe5e49934b54f4c1cb8323cecb76e08cff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
