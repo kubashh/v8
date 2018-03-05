@@ -33,6 +33,24 @@
       "revId": "fb822a5246574152565f2db1ba77e778be7c9b37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "817aa597_cbf17c9f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1002541
+      },
+      "writtenOn": "2018-03-05T12:52:05Z",
+      "side": 1,
+      "message": "Thanks for looking into the kEliminatable issue and explaining it to me!\n\nWas the need to update effect with the new call node triggered by ReplaceWithValue, or should it already have been there before?\n(I must admit I\u0027m still a bit struggling to understand sea-of-nodes properly.)",
+      "parentUuid": "2afd248d_913f3750",
+      "revId": "fb822a5246574152565f2db1ba77e778be7c9b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
