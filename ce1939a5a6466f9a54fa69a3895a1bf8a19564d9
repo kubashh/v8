@@ -16,6 +16,24 @@
       "revId": "ce1939a5a6466f9a54fa69a3895a1bf8a19564d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7235e474_14bef792",
+        "filename": "test/unittests/base/platform/time-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1115914
+      },
+      "writtenOn": "2018-03-05T21:30:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ceda84_89a0d07b",
+      "revId": "ce1939a5a6466f9a54fa69a3895a1bf8a19564d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
