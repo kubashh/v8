@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94ceda84_89a0d07b",
+        "filename": "test/unittests/base/platform/time-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2018-03-05T21:17:45Z",
+      "side": 1,
+      "message": "If it takes more than two calls to OS::Sleep() I\u0027d like to know about it so consider lowering this threshold to two.\n\nAlso, I think this should be ++iterations_count, otherwise you are allowing 11 attempts before failing. Not that it actually matters, but the code might as well match the comment.",
+      "revId": "ce1939a5a6466f9a54fa69a3895a1bf8a19564d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
