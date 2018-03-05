@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2afd248d_913f3750",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-03-05T08:32:39Z",
+      "side": 1,
+      "message": "You can use kEliminatable for the call, but some other small change is necessary for that.\n\nAt the end, I\u0027d recommend\n\n  ReplaceWithValue(node, replacement_node, effect);\n  return Replace(replacement_node);\n\nReplaceWithValue ensures that {node} is correctly removed from the effect AND control chain (all dependents will be rewired). {Changed} and {Replace} unfortunately will not do this, and this was likely causing the problem you describe above. Keep in mind that {effect} needs to be updated from the call then, i.e. \n\n  Node* replacement_node \u003d effect \u003d graph()-\u003eNewNode( ...",
+      "revId": "fb822a5246574152565f2db1ba77e778be7c9b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
