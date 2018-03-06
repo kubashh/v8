@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10b49873_c058b943",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Can you add a test-bytecode-generator test for template literals (as a separate CL that can be landed before this one) so we can see the impact on the bytecode output.",
+      "range": {
+        "startLine": 4184,
+        "startChar": 24,
+        "endLine": 4184,
+        "endChar": 44
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8c2b459_6d82f42d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4198,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Can we just roll this into the code below rather than special casing the length \u003d\u003d 1 case (from what I see, the result should be the same if !first_part-\u003eIsEmpty() and the parts-\u003elength() \u003d\u003d 1 which means substitutions-\u003elength \u003d\u003d 0, so the while loop gets skipped). \n\nEven better, could we desugger the parts \u003d\u003d 1 case in the parser and just emit the LoadLiteral AST node directly?",
+      "range": {
+        "startLine": 4193,
+        "startChar": 1,
+        "endLine": 4198,
+        "endChar": 3
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e8300e7_630086c0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4207,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Is there any real-world examples of template literals being used only for effect? If not, I\u0027d rather drop the IsEffect code entirely since it won\u0027t get tested much and adds unecessary complexity.",
+      "range": {
+        "startLine": 4200,
+        "startChar": 2,
+        "endLine": 4207,
+        "endChar": 3
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f5d752b_acf3309a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Unneeded for top level visitors (they always get their own RegisterAllocationScope before being visited)",
+      "range": {
+        "startLine": 4211,
+        "startChar": 2,
+        "endLine": 4211,
+        "endChar": 47
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45c2de3c_b383209b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "This isn\u0027t really the result (the accumulator is the result) so I think the name is a bit confusing - comment below for suggestion.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 2,
+        "endLine": 4212,
+        "endChar": 60
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55380ce_e2dd7784",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "substitution (no abbreviations in style guide)",
+      "range": {
+        "startLine": 4234,
+        "startChar": 16,
+        "endLine": 4234,
+        "endChar": 20
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81d54d2e_96dbbaf2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4250,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Would this be simpler if done the other way round - i.e., something like (assuming we desugar the part-\u003elength \u003d\u003d 1 case in the parser as above):\n\nFeedbackSlot slot \u003d feedback_spec()-\u003eAddBinaryOpICSlot();\nRegister last_part \u003d register_allocator()-\u003eNewRegister();\nbool last_part_valid \u003d false;\n\nfor (int i \u003d 0; i \u003c substitutions-\u003elength(); i++) {\n  if (i !\u003d 0) {\n    builder()-\u003eStoreAccumulatorInRegister(last_part);\n    last_part_valid \u003d true;\n  }\n\n  if (!parts[i]-\u003eIsEmpty()) {\n    builder()-\u003eLoadLiteral(parts[i]);\n    if (last_part_valid) {\n      builder()-\u003eBinaryOperation(Token::ADD, last_part, feedback_index(slot));\n    } \n    builder()-\u003eStoreAccumulatorInRegister(last_part);\n    last_part_valid \u003d true;\n  }\n\n  VisitForStringValue(substitutions-\u003eat(i));\n  if (last_part_valid) {\n    builder()-\u003eBinaryOperation(Token::ADD, last_part, feedback_index(slot));\n  }\n  last_part_valid \u003d false;\n}\n\nif (!parts-\u003eback-\u003eIsEmpty()) {  \n  if (parts-\u003elength() \u003e 1) {\n    builder()-\u003eStoreAccumulatorInRegister(last_part);\n    last_part_valid \u003d true;\n  }\n  builder()-\u003eLoadLiteral(parts-\u003eback);\n\n  if (last_part_valid) {\n    builder()-\u003eBinaryOperation(Token::ADD, last_part, feedback_index(slot));\n  }\n}",
+      "range": {
+        "startLine": 4214,
+        "startChar": 0,
+        "endLine": 4250,
+        "endChar": 3
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94e7349c_90b820ed",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4831,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Rather than adding this, can we add support in VisitForAccumulatorForValue for returning a String TypeHint (initially just for string literals), and use that explicitly in above to add the ToString iff the result isn\u0027t a string type?",
+      "range": {
+        "startLine": 4831,
+        "startChar": 24,
+        "endLine": 4831,
+        "endChar": 43
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c22f0ad_6be51016",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Ditto with above - I\u0027d rather avoid the IsEffect case unless we actually see a need for it.",
+      "range": {
+        "startLine": 4834,
+        "startChar": 4,
+        "endLine": 4836,
+        "endChar": 5
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79b8eb12_960f76f7",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4847,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "I\u0027d rather leave this for a seperate CL. Do we expect it to be a common case?",
+      "range": {
+        "startLine": 4843,
+        "startChar": 7,
+        "endLine": 4847,
+        "endChar": 7
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ddcb33_497a6aed",
+        "filename": "src/interpreter/bytecode-generator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-06T18:27:38Z",
+      "side": 1,
+      "message": "Drop comment (the second half seems do refer to a different approach)",
+      "range": {
+        "startLine": 244,
+        "startChar": 2,
+        "endLine": 246,
+        "endChar": 31
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
