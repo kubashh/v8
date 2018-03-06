@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ba43349_aee49b5d",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-06T02:27:31Z",
+      "side": 1,
+      "message": "What\u0027s the point of keeping this method? It\u0027s not virtual.",
+      "revId": "d7462ea23cf476216ddd6ce43bebbb500922fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eaba073_4daf8661",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-06T02:27:31Z",
+      "side": 1,
+      "message": "just drop it?",
+      "revId": "d7462ea23cf476216ddd6ce43bebbb500922fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
