@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7c6a88e5_aeb9ef37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bc023c0_81fd005a",
+      "range": {
+        "startLine": 14,
+        "startChar": 12,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99d8b277_a3e3625d",
         "filename": "include/v8.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e8acea_4102648f",
+        "filename": "include/v8.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 6205,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "This enum has now been removed in a separate change since it was never used.",
+      "parentUuid": "99d8b277_a3e3625d",
+      "range": {
+        "startLine": 6205,
+        "startChar": 2,
+        "endLine": 6205,
+        "endChar": 27
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "92762903_eba3d15c",
+        "filename": "src/globals.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19342aa1_41c200f0",
+      "range": {
+        "startLine": 528,
+        "startChar": 18,
+        "endLine": 528,
+        "endChar": 26
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa91d77d_38844e3e",
         "filename": "src/heap/heap-inl.h",
         "patchSetId": 9
@@ -115,6 +187,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e8c8a5d_ab901534",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "I think this is the right way to write this DCHECK, but please check it over.",
+      "parentUuid": "aa91d77d_38844e3e",
+      "range": {
+        "startLine": 288,
+        "startChar": 7,
+        "endLine": 288,
+        "endChar": 11
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "2c004479_ad6d3136",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4795,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done. (Not sure if you\u0027re suggesting changing all PrintFs to PrintIsolate or just the first one).",
+      "parentUuid": "67f1d32f_b26f08c8",
+      "range": {
+        "startLine": 4795,
+        "startChar": 10,
+        "endLine": 4795,
+        "endChar": 16
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b7e3e27_252f4f69",
         "filename": "src/heap/heap.cc",
         "patchSetId": 9
@@ -161,6 +281,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88bf34e7_af907186",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6710,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "I\u0027ve clarified and changed the TODO to be the bug for this feature. I.e. this will be completed before this feature is launched.",
+      "parentUuid": "1b7e3e27_252f4f69",
+      "range": {
+        "startLine": 6710,
+        "startChar": 35,
+        "endLine": 6710,
+        "endChar": 40
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "cb1b0d2b_6ac9e564",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ddd3668_01117bd9",
+      "range": {
+        "startLine": 2723,
+        "startChar": 7,
+        "endLine": 2723,
+        "endChar": 21
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "449d065f_1db2ad73",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -207,6 +375,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05ba8aad_12e78fd1",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3963,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "449d065f_1db2ad73",
+      "range": {
+        "startLine": 3963,
+        "startChar": 31,
+        "endLine": 3963,
+        "endChar": 46
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -233,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "12b33ebe_9f82d015",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4048,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa09f12b_5ff6dfb9",
+      "range": {
+        "startLine": 4048,
+        "startChar": 29,
+        "endLine": 4048,
+        "endChar": 44
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8ef6e6f_c1f3d99f",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -253,6 +469,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0a9da0_a53e9a9f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "I\u0027ve removed sweeping for this space so this code went away.",
+      "parentUuid": "a8ef6e6f_c1f3d99f",
+      "range": {
+        "startLine": 4234,
+        "startChar": 51,
+        "endLine": 4234,
+        "endChar": 64
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -279,6 +519,30 @@
     },
     {
       "key": {
+        "uuid": "e1bfd1eb_1ff44c3e",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cbab747_7f0eaed7",
+      "range": {
+        "startLine": 127,
+        "startChar": 19,
+        "endLine": 127,
+        "endChar": 35
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8c172b5_ae44cbed",
         "filename": "src/heap/sweeper.h",
         "patchSetId": 9
@@ -299,6 +563,30 @@
       "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca7508f_a9b7dfea",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-06T16:38:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8c172b5_ae44cbed",
+      "range": {
+        "startLine": 132,
+        "startChar": 13,
+        "endLine": 132,
+        "endChar": 21
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
