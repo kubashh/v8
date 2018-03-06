@@ -249,7 +249,7 @@ class ActualScript : public V8DebuggerScript {
                                    id);
   }
 
-  const String16& hash() override {
+  const String16& hash() const override {
     if (m_hash.isEmpty()) m_hash = calculateHash(source());
     DCHECK(!m_hash.isEmpty());
     return m_hash;
@@ -373,7 +373,7 @@ class WasmVirtualScript : public V8DebuggerScript {
     return true;
   }
 
-  const String16& hash() override {
+  const String16& hash() const override {
     if (m_hash.isEmpty()) {
       m_hash = m_wasmTranslation->GetHash(m_id, m_functionIndex);
     }
