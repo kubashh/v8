@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34806893_4d138ad9",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Ack, will do.",
+      "parentUuid": "10b49873_c058b943",
+      "range": {
+        "startLine": 4184,
+        "startChar": 24,
+        "endLine": 4184,
+        "endChar": 44
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8c2b459_6d82f42d",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-03-06T18:27:38Z",
       "side": 1,
       "message": "Can we just roll this into the code below rather than special casing the length \u003d\u003d 1 case (from what I see, the result should be the same if !first_part-\u003eIsEmpty() and the parts-\u003elength() \u003d\u003d 1 which means substitutions-\u003elength \u003d\u003d 0, so the while loop gets skipped). \n\nEven better, could we desugger the parts \u003d\u003d 1 case in the parser and just emit the LoadLiteral AST node directly?",
+      "range": {
+        "startLine": 4193,
+        "startChar": 1,
+        "endLine": 4198,
+        "endChar": 3
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47f1781c_49d126f5",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4198,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "changed to desugar the parts-\u003elength() \u003d\u003d 1 case in the parser, and changed VisitTemplateLiteral to be just the loop + the tail string",
+      "parentUuid": "f8c2b459_6d82f42d",
       "range": {
         "startLine": 4193,
         "startChar": 1,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "433e5287_7fdbbf47",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4207,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Probably not often in practice, fair enough",
+      "parentUuid": "8e8300e7_630086c0",
+      "range": {
+        "startLine": 4200,
+        "startChar": 2,
+        "endLine": 4207,
+        "endChar": 3
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f5d752b_acf3309a",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "954d8846_599ed1de",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f5d752b_acf3309a",
+      "range": {
+        "startLine": 4211,
+        "startChar": 2,
+        "endLine": 4211,
+        "endChar": 47
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "495d0833_5535fa61",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45c2de3c_b383209b",
+      "range": {
+        "startLine": 4212,
+        "startChar": 2,
+        "endLine": 4212,
+        "endChar": 60
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f55380ce_e2dd7784",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f51b6a8d_db56e11a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Done (the refactoring makes it pointless)",
+      "parentUuid": "f55380ce_e2dd7784",
+      "range": {
+        "startLine": 4234,
+        "startChar": 16,
+        "endLine": 4234,
+        "endChar": 20
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "1cc7901a_16743d9a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4831,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94e7349c_90b820ed",
+      "range": {
+        "startLine": 4831,
+        "startChar": 24,
+        "endLine": 4831,
+        "endChar": 43
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c22f0ad_6be51016",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -209,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "1289cc52_358e2cee",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c22f0ad_6be51016",
+      "range": {
+        "startLine": 4834,
+        "startChar": 4,
+        "endLine": 4836,
+        "endChar": 5
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79b8eb12_960f76f7",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 1
@@ -220,6 +412,30 @@
       "writtenOn": "2018-03-06T18:27:38Z",
       "side": 1,
       "message": "I\u0027d rather leave this for a seperate CL. Do we expect it to be a common case?",
+      "range": {
+        "startLine": 4843,
+        "startChar": 7,
+        "endLine": 4847,
+        "endChar": 7
+      },
+      "revId": "806c2ea706e35ba430a05938932ca63c5f2e5b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e70e95_45d7b0a4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4847,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T19:58:09Z",
+      "side": 1,
+      "message": "Probably not, removed all this.",
+      "parentUuid": "79b8eb12_960f76f7",
       "range": {
         "startLine": 4843,
         "startChar": 7,
