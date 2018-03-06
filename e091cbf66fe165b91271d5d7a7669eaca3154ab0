@@ -34,6 +34,24 @@
       "revId": "e091cbf66fe165b91271d5d7a7669eaca3154ab0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f058346_aa6eb15b",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-06T10:01:43Z",
+      "side": 1,
+      "message": "Ack. Will do the deprecation in a follow-up since that\u0027ll also affect cctests.",
+      "parentUuid": "45fb64e0_8f75fb25",
+      "revId": "e091cbf66fe165b91271d5d7a7669eaca3154ab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

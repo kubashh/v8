@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00624a4b_318e4072",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-06T10:01:43Z",
+      "side": 1,
+      "message": "No, there\u0027s a slight difference. Offsets include padding so each instruction stream is kCodeAlignment-aligned. Lengths are just instruction_size (without padding).",
+      "parentUuid": "acd958ee_43d3b4f4",
+      "range": {
+        "startLine": 355,
+        "startChar": 15,
+        "endLine": 355,
+        "endChar": 34
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "114a3f19_178b1dd1",
         "filename": "src/snapshot/snapshot-common.cc",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d0e0cd98_4299cdf6",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-06T10:01:43Z",
+      "side": 1,
+      "message": "I like that idea, will do in a follow-up.",
+      "parentUuid": "114a3f19_178b1dd1",
+      "range": {
+        "startLine": 369,
+        "startChar": 21,
+        "endLine": 369,
+        "endChar": 72
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b34f9e4_9877a976",
         "filename": "src/snapshot/snapshot.h",
         "patchSetId": 6
@@ -68,6 +116,30 @@
       "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b550625c_6c5a00cc",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-06T10:01:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b34f9e4_9877a976",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
