@@ -389,6 +389,8 @@
   V(NumberIsFloat64Hole)                \
   V(NumberIsFinite)                     \
   V(ObjectIsFiniteNumber)               \
+  V(NumberIsInteger)                    \
+  V(ObjectIsInteger)                    \
   V(ObjectIsArrayBufferView)            \
   V(ObjectIsBigInt)                     \
   V(ObjectIsCallable)                   \
