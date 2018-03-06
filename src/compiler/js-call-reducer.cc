@@ -3423,6 +3423,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node,
     case Builtins::kMathMin:
       return ReduceMathMinMax(node, simplified()->NumberMin(),
                               jsgraph()->Constant(V8_INFINITY));
+    case Builtins::kNumberIsFinite:
+      return ReduceNumberIsFinite(node);
     case Builtins::kReturnReceiver:
       return ReduceReturnReceiver(node);
     case Builtins::kStringPrototypeIndexOf:
@@ -5792,6 +5794,19 @@ Reduction JSCallReducer::ReducePromiseResolveTrampoline(Node* node) {
   node->TrimInputCount(6);
   NodeProperties::ChangeOp(node, javascript()->PromiseResolve());
   return Changed(node);
+}
+
+// ES #sec-number.isfinite
+Reduction JSCallReducer::ReduceNumberIsFinite(Node* node) {
+  if (node->op()->ValueInputCount() < 3) {
+    Node* value = jsgraph()->FalseConstant();
+    ReplaceWithValue(node, value);
+    return Replace(value);
+  }
+  Node* input = NodeProperties::GetValueInput(node, 2);
+  Node* value = graph()->NewNode(simplified()->ObjectIsFiniteNumber(), input);
+  ReplaceWithValue(node, value);
+  return Replace(value);
 }
 
 Graph* JSCallReducer::graph() const { return jsgraph()->graph(); }
