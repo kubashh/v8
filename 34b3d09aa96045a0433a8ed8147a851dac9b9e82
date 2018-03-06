@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ec51b1e_ab2a3587",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Number/Boolean/Undefined do not grow arbitrarily large, but strings and bigints do.  This truncates both.",
+      "range": {
+        "startLine": 1019,
+        "startChar": 39,
+        "endLine": 1019,
+        "endChar": 56
+      },
+      "revId": "34b3d09aa96045a0433a8ed8147a851dac9b9e82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

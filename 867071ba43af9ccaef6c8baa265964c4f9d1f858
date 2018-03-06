@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7734fc37_63ca1028",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42681440_1a8e487d",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a633a77_77f7a4d7",
         "filename": "src/inspector/injected-script.cc",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-02T20:27:37Z",
       "side": 1,
       "message": "Let\u0027s have constants and/or helper method for unserializable numbers.",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c041cc08_aa3254a4",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Done, added to the anonymous namespace at the top.",
+      "parentUuid": "8a633a77_77f7a4d7",
       "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "43ef8934_502feaff",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Interestingly `BigInt(1n)` works, while `BigInt(\"1n\")` does not.  `Number(-0)`, `Number(NaN)`, `Number(Infinity)`, and `Number(-Infinity)` all work without the quotes also, so we can be consistent and drop quotes for both cases.\n\nDone, last character checked.",
+      "parentUuid": "30e6c7ee_d94dcb85",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5735fa4_7023a502",
         "filename": "src/inspector/js_protocol.pdl",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb2649c2_0dab3341",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "True, although `typeof NaN \u003d\u003d\u003d \u0027number\u0027`. I\u0027ve changed s/numbers/values.\n\n[1] https://imgur.com/gallery/gRk1uZm",
+      "parentUuid": "c5735fa4_7023a502",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +182,48 @@
     },
     {
       "key": {
+        "uuid": "365070eb_c39fd332",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29529d79_b90bb98a",
+      "range": {
+        "startLine": 827,
+        "startChar": 20,
+        "endLine": 827,
+        "endChar": 27
+      },
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c10cd53f_3244dcff",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55cc5c27_c85e5165",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c987d81c_28467b84",
         "filename": "src/inspector/v8-console-message.cc",
         "patchSetId": 7
@@ -121,6 +235,24 @@
       "writtenOn": "2018-03-02T21:40:53Z",
       "side": 1,
       "message": "Why IgnoreUndefined? What does it append if bigint is undefined?",
+      "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9576cb4f_6d7d00fe",
+        "filename": "src/inspector/v8-console-message.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "Good catch, the \u0027IgnoreUndefined\u0027 is unnecessary.\nI checked with jkummerow@ and believe that ToString() for bigint primitive and wrapped objects is always defined.",
+      "parentUuid": "c987d81c_28467b84",
       "revId": "867071ba43af9ccaef6c8baa265964c4f9d1f858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

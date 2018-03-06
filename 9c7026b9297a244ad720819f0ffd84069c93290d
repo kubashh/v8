@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1081f41_786be832",
+        "filename": "src/inspector/v8-console-message.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-06T22:42:21Z",
+      "side": 1,
+      "message": "This tryCatch\u0027s guards ToString() which may throw RangeError or InvalidStringLengthError\nhttps://cs.chromium.org/chromium/src/v8/src/objects/bigint.cc?sq\u003dpackage:chromium\u0026dr\u003dCSs\u0026l\u003d1768",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 18
+      },
+      "revId": "9c7026b9297a244ad720819f0ffd84069c93290d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
