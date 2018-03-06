@@ -34,6 +34,24 @@
       "revId": "3ce5b0055d297ebe37522a808680ceb08f487dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1114387_29d8a74b",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-03-06T20:16:28Z",
+      "side": 1,
+      "message": "I don\u0027t feel strongly, but I think my reluctance is related to the fact that we already have both of these types spread out throughout the codebase, so having TemplateLiteral::StringList makes me think that it\u0027s something \"special\", rather than just another ZoneList\u003cconst AstRawString*\u003e.\n\nThere\u0027s actually a whole separate conversation about whether we should be using ZoneVector for these things nowadays...but that\u0027s rather orthogonal.",
+      "parentUuid": "ce50de12_11016645",
+      "revId": "3ce5b0055d297ebe37522a808680ceb08f487dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
