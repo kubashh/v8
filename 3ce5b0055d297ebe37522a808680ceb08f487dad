@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d9b84d9_f77f24aa",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-03-06T20:03:32Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s worth having these types. It doesn\u0027t even really shorten the callers much, since they also have using-declarations.",
+      "revId": "3ce5b0055d297ebe37522a808680ceb08f487dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
