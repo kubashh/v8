@@ -16,6 +16,24 @@
       "revId": "3ce5b0055d297ebe37522a808680ceb08f487dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce50de12_11016645",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-06T20:14:33Z",
+      "side": 1,
+      "message": "I dunno, I think type aliases are a bit easier to read, but I\u0027ll remove them if people have trouble with it. I wouldn\u0027t be upset if we had a global alias for common ones like ZoneList\u003cExpression*\u003e, and used it instead of the harder to read version.",
+      "parentUuid": "0d9b84d9_f77f24aa",
+      "revId": "3ce5b0055d297ebe37522a808680ceb08f487dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
