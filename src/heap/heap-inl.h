@@ -12,6 +12,7 @@
 #include "src/heap/heap.h"
 
 #include "src/base/platform/platform.h"
+#include "src/bootstrapper.h"
 #include "src/counters-inl.h"
 #include "src/feedback-vector.h"
 // TODO(mstarzinger): There are 3 more includes to remove in order to no longer
@@ -285,6 +286,10 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
     } else {
       allocation = old_space_->AllocateRaw(size_in_bytes, alignment);
     }
+  } else if (RO_SPACE == space) {
+    DCHECK(isolate_->bootstrapper()->IsActive());
+    CHECK(!large_object);
+    allocation = read_only_space_->AllocateRaw(size_in_bytes, alignment);
   } else if (CODE_SPACE == space) {
     if (size_in_bytes <= code_space()->AreaSize()) {
       allocation = code_space_->AllocateRawUnaligned(size_in_bytes);

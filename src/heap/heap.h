@@ -994,6 +994,7 @@ class Heap {
 
   NewSpace* new_space() { return new_space_; }
   OldSpace* old_space() { return old_space_; }
+  ReadOnlySpace* read_only_space() { return read_only_space_; }
   OldSpace* code_space() { return code_space_; }
   MapSpace* map_space() { return map_space_; }
   LargeObjectSpace* lo_space() { return lo_space_; }
@@ -2401,6 +2402,7 @@ class Heap {
 
   NewSpace* new_space_;
   OldSpace* old_space_;
+  ReadOnlySpace* read_only_space_;
   OldSpace* code_space_;
   MapSpace* map_space_;
   LargeObjectSpace* lo_space_;
@@ -2737,8 +2739,9 @@ class VerifyPointersVisitor : public ObjectVisitor, public RootVisitor {
   void VisitRootPointers(Root root, const char* description, Object** start,
                          Object** end) override;
 
- private:
-  void VerifyPointers(MaybeObject** start, MaybeObject** end);
+ protected:
+  virtual void VerifyPointers(HeapObject* host, MaybeObject** start,
+                              MaybeObject** end);
 };
 
 
