@@ -16,6 +16,24 @@
       "revId": "e091cbf66fe165b91271d5d7a7669eaca3154ab0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45fb64e0_8f75fb25",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-06T09:01:45Z",
+      "side": 1,
+      "message": "\u003e Yang, I suppose we should also inline this and mark it and V8::CreateSnapshotDataBlob deprecated?\n\nLet\u0027s deprecate CreateSnapshotDataBlob. The implementation for WarmUpSnapshotDataBlob is not obvious so let\u0027s leave it for now.",
+      "parentUuid": "007900ef_8be0d89a",
+      "revId": "e091cbf66fe165b91271d5d7a7669eaca3154ab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

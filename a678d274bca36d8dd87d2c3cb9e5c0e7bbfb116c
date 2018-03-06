@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acd958ee_43d3b4f4",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-06T09:01:45Z",
+      "side": 1,
+      "message": "Why do we need both the length and the offsets? Can\u0027t we compute the length from the offsets?",
+      "range": {
+        "startLine": 355,
+        "startChar": 15,
+        "endLine": 355,
+        "endChar": 34
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114a3f19_178b1dd1",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-06T09:01:45Z",
+      "side": 1,
+      "message": "Should we insert int3 between two builtins just to be safe?",
+      "range": {
+        "startLine": 369,
+        "startChar": 21,
+        "endLine": 369,
+        "endChar": 72
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b34f9e4_9877a976",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-06T09:01:45Z",
+      "side": 1,
+      "message": "Can we have a comment to describe the layout of this?",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "a678d274bca36d8dd87d2c3cb9e5c0e7bbfb116c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
