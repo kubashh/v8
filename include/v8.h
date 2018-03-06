@@ -7905,7 +7905,9 @@ class V8_EXPORT V8 {
    * Returns { NULL, 0 } on failure.
    * The caller acquires ownership of the data array in the return value.
    */
-  static StartupData CreateSnapshotDataBlob(const char* embedded_source = NULL);
+  V8_DEPRECATED("Use the SnapshotCreator.",
+                static StartupData CreateSnapshotDataBlob(
+                    const char* embedded_source = NULL));
 
   /**
    * Bootstrap an isolate and a context from the cold startup blob, run the
