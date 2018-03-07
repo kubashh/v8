@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a9f519e_2de25cc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "Could you put this in a bug rather than the commit message please.",
+      "range": {
+        "startLine": 10,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8684b26a_98133232",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "I think this part is no longer the case.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed993d92_c39570cb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4017,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "Please pull the type-hint out into a variable rather than doing the VisitForAccumulatorValue in the if condition.",
+      "range": {
+        "startLine": 4017,
+        "startChar": 5,
+        "endLine": 4017,
+        "endChar": 79
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb355afd_4917fb36",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4028,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "nit - fullstop (also for comments below).",
+      "range": {
+        "startLine": 4028,
+        "startChar": 65,
+        "endLine": 4028,
+        "endChar": 0
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd84f9a_af991ee1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "Can you do this for VisitArithmeticExpression as well please",
+      "range": {
+        "startLine": 4027,
+        "startChar": 2,
+        "endLine": 4030,
+        "endChar": 3
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d383601c_dcccdc84",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "nit - could you move this down to be just before the loop.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 2,
+        "endLine": 4212,
+        "endChar": 41
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d704d73f_af1d3db3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4215,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "Please drop these - they are only used by the next two lines.",
+      "range": {
+        "startLine": 4213,
+        "startChar": 2,
+        "endLine": 4215,
+        "endChar": 0
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d8f9b20_3d066610",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-07T15:18:22Z",
+      "side": 1,
+      "message": "ditto with making type_hint a variable and moving VisitForAccumulatorValue out of the if condition.",
+      "range": {
+        "startLine": 4243,
+        "startChar": 8,
+        "endLine": 4243,
+        "endChar": 32
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
