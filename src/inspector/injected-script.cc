@@ -50,6 +50,14 @@ namespace v8_inspector {
 namespace {
 static const char privateKeyName[] = "v8-inspector#injectedScript";
 static const char kGlobalHandleLabel[] = "DevTools console";
+static const String16 unserializableNumberLikes[] = {"-0", "Infinity",
+                                                     "-Infinity", "NaN"};
+static bool isUnserializableNumberLike(String16 query) {
+  for (String16 number : unserializableNumberLikes) {
+    if (number == query) return true;
+  }
+  return false;
+}
 }  // namespace
 
 using protocol::Array;
@@ -530,10 +538,19 @@ Response InjectedScript::resolveCallArgument(
     return findObject(*remoteObjectId, result);
   }
   if (callArgument->hasValue() || callArgument->hasUnserializableValue()) {
-    String16 value =
-        callArgument->hasValue()
-            ? "(" + callArgument->getValue(nullptr)->serialize() + ")"
-            : "Number(\"" + callArgument->getUnserializableValue("") + "\")";
+    String16 value;
+    if (callArgument->hasValue()) {
+      value = "(" + callArgument->getValue(nullptr)->serialize() + ")";
+    } else {
+      String16 unserializableValue = callArgument->getUnserializableValue("");
+      size_t length = unserializableValue.length();
+      if (isUnserializableNumberLike(unserializableValue))
+        value = "Number(" + unserializableValue + ")";
+      else if (length > 1 && unserializableValue[length - 1] == 'n')
+        value = "BigInt(" + unserializableValue + ")";
+      else
+        value = unserializableValue;
+    }
     if (!m_context->inspector()
              ->compileAndRunInternalScript(
                  m_context->context(), toV8String(m_context->isolate(), value))
