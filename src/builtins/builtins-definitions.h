@@ -171,6 +171,7 @@ namespace internal {
   TFC(NewArgumentsElements, NewArgumentsElements, 1)                           \
                                                                                \
   /* Debugger */                                                               \
+  ASM(DebugBreakTrampoline)                                                    \
   ASM(FrameDropperTrampoline)                                                  \
   ASM(HandleDebuggerStatement)                                                 \
                                                                                \

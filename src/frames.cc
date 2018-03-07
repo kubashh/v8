@@ -481,7 +481,8 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
             if (code_obj->is_interpreter_trampoline_builtin()) {
               return INTERPRETED;
             }
-            if (code_obj->is_turbofanned()) {
+            if (code_obj->is_turbofanned() ||
+                code_obj->is_debug_break_trampoline()) {
               // TODO(bmeurer): We treat frames for BUILTIN Code objects as
               // OptimizedFrame for now (all the builtins with JavaScript
               // linkage are actually generated with TurboFan currently, so

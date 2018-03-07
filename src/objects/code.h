@@ -119,6 +119,9 @@ class Code : public HeapObject {
   // Testers for interpreter builtins.
   inline bool is_interpreter_trampoline_builtin() const;
 
+  // Testers for interpreter builtins.
+  inline bool is_debug_break_trampoline() const;
+
   // Tells whether the code checks the optimization marker in the function's
   // feedback vector.
   inline bool checks_optimization_marker() const;

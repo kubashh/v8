@@ -46,6 +46,33 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
   __ InvokeFunction(rdi, no_reg, dummy, dummy, JUMP_FUNCTION);
 }
 
+void DebugCodegen::GenerateDebugBreakTrampoline(MacroAssembler* masm) {
+  {
+    FrameScope scope(masm, StackFrame::MANUAL);
+    // Manually construct frame.
+    __ pushq(rbp);
+    __ movp(rbp, rsp);
+    __ pushq(rsi);
+    __ pushq(rdi);
+    __ pushq(rax);  // Preserve number of arguments.
+    __ pushq(rdx);  // Preserve new target.
+    // Call runtime function with target function as argument.
+    __ pushq(rdi);
+    __ CallRuntime(Runtime::kDebugBreakAtEntry);
+    // Collect return value.
+    __ movp(rcx, rax);
+    __ popq(rdx);
+    __ popq(rax);
+    __ popq(rdi);
+    __ popq(rsi);
+    // Tear down frame.
+    __ movp(rsp, rbp);
+    __ popq(rbp);
+  }
+  __ leap(rcx, FieldOperand(rcx, Code::kHeaderSize));
+  __ jmp(rcx);
+}
+
 const bool LiveEdit::kFrameDropperSupported = true;
 
 #undef __

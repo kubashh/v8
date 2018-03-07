@@ -10,6 +10,7 @@
 #include "src/arguments.h"
 #include "src/assembler-inl.h"
 #include "src/bootstrapper.h"
+#include "src/builtins/builtins.h"
 #include "src/code-stubs.h"
 #include "src/compilation-cache.h"
 #include "src/compiler.h"
@@ -1146,6 +1147,7 @@ void Debug::PrepareFunctionForBreakPoints(Handle<SharedFunctionInfo> shared) {
   if (debug_info->CanBreakAtEntry()) {
     // Deopt everything in case the function is inlined anywhere.
     Deoptimizer::DeoptimizeAll(isolate_);
+    InstallDebugBreakTrampoline();
   } else {
     DeoptimizeFunction(shared);
     // Update PCs on the stack to point to recompiled code.
@@ -1156,6 +1158,27 @@ void Debug::PrepareFunctionForBreakPoints(Handle<SharedFunctionInfo> shared) {
 
   debug_info->set_flags(debug_info->flags() |
                         DebugInfo::kPreparedForBreakpoints);
+}
+
+void Debug::InstallDebugBreakTrampoline() {
+  // Check the list of debug infos whether the debug break trampoline needs to
+  // be installed. If that's the case, iterate the heap for functions to rewire
+  // to the trampoline.
+  for (DebugInfoListNode* current = debug_info_list_; current != nullptr;
+       current = current->next()) {
+    if (current->debug_info()->CanBreakAtEntry()) {
+      HeapIterator iterator(isolate_->heap());
+      while (HeapObject* obj = iterator.next()) {
+        if (!obj->IsJSFunction()) continue;
+        JSFunction* fun = JSFunction::cast(obj);
+        SharedFunctionInfo* shared = fun->shared();
+        if (!shared->HasDebugInfo()) continue;
+        if (!shared->GetDebugInfo()->CanBreakAtEntry()) continue;
+        fun->set_code(*BUILTIN_CODE(isolate_, DebugBreakTrampoline));
+      }
+      return;
+    }
+  }
 }
 
 namespace {
@@ -2005,7 +2028,6 @@ void Debug::UpdateHookOnFunctionCall() {
   STATIC_ASSERT(LastStepAction == StepIn);
   hook_on_function_call_ = thread_local_.last_step_action_ == StepIn ||
                            isolate_->needs_side_effect_check();
-  DCHECK_IMPLIES(hook_on_function_call_, is_active_);
 }
 
 MaybeHandle<Object> Debug::Call(Handle<Object> fun, Handle<Object> data) {

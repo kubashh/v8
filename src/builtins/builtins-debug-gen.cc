@@ -18,5 +18,9 @@ void Builtins::Generate_HandleDebuggerStatement(MacroAssembler* masm) {
   DebugCodegen::GenerateHandleDebuggerStatement(masm);
 }
 
+void Builtins::Generate_DebugBreakTrampoline(MacroAssembler* masm) {
+  DebugCodegen::GenerateDebugBreakTrampoline(masm);
+}
+
 }  // namespace internal
 }  // namespace v8

@@ -328,6 +328,11 @@ inline bool Code::is_interpreter_trampoline_builtin() const {
   return is_interpreter_trampoline;
 }
 
+inline bool Code::is_debug_break_trampoline() const {
+  Builtins* builtins = GetIsolate()->builtins();
+  return this == builtins->builtin(Builtins::kDebugBreakTrampoline);
+}
+
 inline bool Code::checks_optimization_marker() const {
   Builtins* builtins = GetIsolate()->builtins();
   bool checks_marker =
