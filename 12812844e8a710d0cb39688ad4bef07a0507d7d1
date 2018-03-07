@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c74fb31_febe73f1",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-03-07T13:25:09Z",
+      "side": 1,
+      "message": "Can you indent this in a { } block?",
+      "revId": "12812844e8a710d0cb39688ad4bef07a0507d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
