@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "840fd3b2_1ac20b1f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4017,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed993d92_c39570cb",
+      "range": {
+        "startLine": 4017,
+        "startChar": 5,
+        "endLine": 4017,
+        "endChar": 79
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb355afd_4917fb36",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -91,6 +115,30 @@
       "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eefce3a9_822e23a4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4028,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb355afd_4917fb36",
+      "range": {
+        "startLine": 4028,
+        "startChar": 65,
+        "endLine": 4028,
+        "endChar": 0
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "6cf6d3ed_c99c5ac0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "For now, I\u0027ve gone without adding the helper, but I\u0027ve added type hinting to VisitArithmeticExpression.",
+      "parentUuid": "fa7b0e78_a703ead2",
+      "range": {
+        "startLine": 4027,
+        "startChar": 2,
+        "endLine": 4030,
+        "endChar": 3
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d383601c_dcccdc84",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -161,6 +233,30 @@
       "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfdedf08_564575ff",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d383601c_dcccdc84",
+      "range": {
+        "startLine": 4212,
+        "startChar": 2,
+        "endLine": 4212,
+        "endChar": 41
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "e10bb712_0b74efe2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4215,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d704d73f_af1d3db3",
+      "range": {
+        "startLine": 4213,
+        "startChar": 2,
+        "endLine": 4215,
+        "endChar": 0
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8f9b20_3d066610",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
@@ -207,6 +327,30 @@
       "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca87cb2_8e88b204",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T17:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d8f9b20_3d066610",
+      "range": {
+        "startLine": 4243,
+        "startChar": 8,
+        "endLine": 4243,
+        "endChar": 32
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
