@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e718ff72_004215cc",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-07T23:31:02Z",
+      "side": 1,
+      "message": "The \\\" is not necessary.  `Number(-0)` \u003d\u003d\u003d `Number(\"-0\")`, so the new tests check behavior, but pass regardless of quotes.\n\nThis change is only to make both cases consistent.  `BigInt(1n)` !\u003d\u003d `BigInt(\"1n\")` since the latter throws.",
+      "parentUuid": "40042502_a929d75c",
+      "revId": "9c7026b9297a244ad720819f0ffd84069c93290d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1081f41_786be832",
         "filename": "src/inspector/v8-console-message.cc",
         "patchSetId": 9
@@ -62,6 +80,30 @@
       "revId": "9c7026b9297a244ad720819f0ffd84069c93290d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11cc4f1b_1f8ecaaa",
+        "filename": "test/inspector/runtime/evaluate-with-generate-preview.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-03-07T23:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27608a94_404babe4",
+      "range": {
+        "startLine": 69,
+        "startChar": 44,
+        "endLine": 69,
+        "endChar": 47
+      },
+      "revId": "9c7026b9297a244ad720819f0ffd84069c93290d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
