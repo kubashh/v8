@@ -255,6 +255,7 @@ bool Builtins::IsLazy(int index) {
     case kAsyncGeneratorAwaitUncaught:          // https://crbug.com/v8/6786.
     case kCheckOptimizationMarker:
     case kCompileLazy:
+    case kDebugBreakTrampoline:
     case kDeserializeLazy:
     case kFunctionPrototypeHasInstance:  // https://crbug.com/v8/6786.
     case kHandleApiCall:

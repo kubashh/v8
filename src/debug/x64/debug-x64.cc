@@ -46,6 +46,45 @@ void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
   __ InvokeFunction(rdi, no_reg, dummy, dummy, JUMP_FUNCTION);
 }
 
+// void DebugCodegen::GenerateDebugBreakTrampoline(MacroAssembler* masm) {
+//  Label skip;
+//  // Check whether the flag is set.
+//  __ movp(rcx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
+//  __ movp(rcx, FieldOperand(rcx, SharedFunctionInfo::kDebugInfoOffset));
+//  __ JumpIfSmi(rcx, &skip);
+//  __ movp(rcx, FieldOperand(rcx, DebugInfo::kFlagsOffset));
+//  __ SmiToInteger32(rcx, rcx);
+//  __ testp(rcx, Immediate(DebugInfo::kBreakAtEntry));
+//  __ j(zero, &skip);
+//  {
+//    FrameScope scope(masm, StackFrame::MANUAL);
+//    // Manually construct frame.
+//    __ pushq(rbp);
+//    __ movp(rbp, rsp);
+//    __ pushq(rsi);
+//    __ pushq(rdi);
+//    __ pushq(rax);  // Preserve number of arguments.
+//    __ pushq(rdx);  // Preserve new target.
+//    // Call runtime function with target function as argument.
+//    __ pushq(rdi);
+//    __ CallRuntime(Runtime::kDebugBreakAtEntry);
+//    // Ignore return value.
+//    __ popq(rdx);
+//    __ popq(rax);
+//    __ popq(rdi);
+//    __ popq(rsi);
+//    // Tear down frame.
+//    __ movp(rsp, rbp);
+//    __ popq(rbp);
+//  }
+//  __ bind(&skip);
+//  // Tail call code on the shared function info.
+//  __ movp(rcx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
+//  __ movp(rcx, FieldOperand(rcx, SharedFunctionInfo::kCodeOffset));
+//  __ leap(rcx, FieldOperand(rcx, Code::kHeaderSize));
+//  __ jmp(rcx);
+//}
+
 const bool LiveEdit::kFrameDropperSupported = true;
 
 #undef __
