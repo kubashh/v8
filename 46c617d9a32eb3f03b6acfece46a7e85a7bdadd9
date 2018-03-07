@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "fa7b0e78_a703ead2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-03-07T16:16:08Z",
+      "side": 1,
+      "message": "Since it will live in 2 places, I\u0027m considering adding a helper for typing arithmetic ops:\n\nSomething like this. But it seems unrelated to this, so I\u0027d rather split it out into a separate\nthing if it seems reasonable. Maybe it\u0027s a bit much since there\u0027s no use for Number types yet.\n\n```\nBytecodeGenerator::TypeHint BytecodeGenerator::TypeArithmeticOperation(\n    Token::Value op, TypeHint lhs_type, TypeHint rhs_type) {\n  switch (op) {\n    case Token::ADD:\n      if (lhs_type \u003d\u003d TypeHint::kString || rhs_type \u003d\u003d TypeHint::kString) {\n        return TypeHint::kString\n      }\n\n      if (lhs_type \u003d\u003d TypeHint::kAny || rhs_type \u003d\u003d TypeHint::kAny) {\n        return TypeHint::kAny;\n      }\n      V8_FALLTHROUGH;\n\n    case Token::BIT_OR:\n    case Token::BIT_XOR:\n    case Token::BIT_AND:\n    case Token::SHL:\n    case Token::SAR:\n    case Token::SHR:\n    case Token::SUB:\n    case Token::MUL:\n    case Token::DIV:\n    case Token::MOD:\n      return TypeHint::kNumber;\n\n    default:\n      break;\n  }\n\n  UNREACHABLE();\n  return Token::kAny;\n}\n```",
+      "parentUuid": "2cd84f9a_af991ee1",
+      "range": {
+        "startLine": 4027,
+        "startChar": 2,
+        "endLine": 4030,
+        "endChar": 3
+      },
+      "revId": "46c617d9a32eb3f03b6acfece46a7e85a7bdadd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d383601c_dcccdc84",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 8
