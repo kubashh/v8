@@ -155,6 +155,7 @@ class FullMarkingVerifier : public MarkingVerifier {
     VerifyRoots(VISIT_ONLY_STRONG);
     VerifyMarking(heap_->new_space());
     VerifyMarking(heap_->old_space());
+    VerifyMarking(heap_->read_only_space());
     VerifyMarking(heap_->code_space());
     VerifyMarking(heap_->map_space());
 
@@ -339,6 +340,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->read_only_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -377,6 +379,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
     VerifyRoots(VISIT_ALL_IN_SCAVENGE);
     VerifyEvacuation(heap_->new_space());
     VerifyEvacuation(heap_->old_space());
+    VerifyEvacuation(heap_->read_only_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
   }
@@ -624,6 +627,7 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
 
 void MarkCompactCollector::VerifyMarkbitsAreClean() {
   VerifyMarkbitsAreClean(heap_->old_space());
+  VerifyMarkbitsAreClean(heap_->read_only_space());
   VerifyMarkbitsAreClean(heap_->code_space());
   VerifyMarkbitsAreClean(heap_->map_space());
   VerifyMarkbitsAreClean(heap_->new_space());
@@ -665,6 +669,7 @@ void MarkCompactCollector::ClearMarkbitsInNewSpace(NewSpace* space) {
 void MarkCompactCollector::ClearMarkbits() {
   ClearMarkbitsInPagedSpace(heap_->code_space());
   ClearMarkbitsInPagedSpace(heap_->map_space());
+  ClearMarkbitsInPagedSpace(heap_->read_only_space());
   ClearMarkbitsInPagedSpace(heap_->old_space());
   ClearMarkbitsInNewSpace(heap_->new_space());
   heap_->lo_space()->ClearMarkingStateOfLiveObjects();
@@ -969,6 +974,7 @@ void MarkCompactCollector::VerifyMarking() {
 #endif
 #ifdef VERIFY_HEAP
   heap()->old_space()->VerifyLiveBytes();
+  heap()->read_only_space()->VerifyLiveBytes();
   heap()->map_space()->VerifyLiveBytes();
   heap()->code_space()->VerifyLiveBytes();
 #endif
