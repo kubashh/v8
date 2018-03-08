@@ -248,10 +248,10 @@ Response buildScopes(v8::debug::ScopeIterator* iterator,
                      .setType(scopeType(iterator->GetType()))
                      .setObject(std::move(object))
                      .build();
+    String16 name = toProtocolStringWithTypeCheck(iterator->GetFunctionName());
+    if (!name.isEmpty()) scope->setName(name);
     v8::Local<v8::Function> closure = iterator->GetFunction();
     if (!closure.IsEmpty()) {
-      String16 name = toProtocolStringWithTypeCheck(closure->GetDebugName());
-      if (!name.isEmpty()) scope->setName(name);
       String16 scriptId = String16::fromInteger(closure->ScriptId());
       v8::debug::Location start = iterator->GetStartLocation();
       scope->setStartLocation(protocol::Debugger::Location::create()

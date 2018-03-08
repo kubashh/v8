@@ -141,6 +141,7 @@ enum ContextLookupFlags {
   V(DATA_VIEW_FUN_INDEX, JSFunction, data_view_fun)                            \
   V(DATE_FUNCTION_INDEX, JSFunction, date_function)                            \
   V(DEBUG_CONTEXT_ID_INDEX, Object, debug_context_id)                          \
+  V(EMPTY_FUNCTION_INDEX, JSFunction, empty_function)                          \
   V(ERROR_MESSAGE_FOR_CODE_GEN_FROM_STRINGS_INDEX, Object,                     \
     error_message_for_code_gen_from_strings)                                   \
   V(ERRORS_THROWN_INDEX, Smi, errors_thrown)                                   \
@@ -488,6 +489,7 @@ class Context: public FixedArray {
   inline void set_extension(HeapObject* object);
   JSObject* extension_object();
   JSReceiver* extension_receiver();
+  ScopeInfo* raw_scope_info();
   ScopeInfo* scope_info();
   String* catch_name();
 
