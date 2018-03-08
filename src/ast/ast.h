@@ -97,6 +97,7 @@ namespace internal {
   V(ResolvedProperty)           \
   V(RewritableExpression)       \
   V(Spread)                     \
+  V(StoreInArrayLiteral)        \
   V(SuperCallReference)         \
   V(SuperPropertyReference)     \
   V(ThisFunction)               \
@@ -1946,6 +1947,26 @@ class Spread final : public Expression {
   Expression* expression_;
 };
 
+class StoreInArrayLiteral final : public Expression {
+ public:
+  Expression* array() const { return array_; }
+  Expression* index() const { return index_; }
+  Expression* value() const { return value_; }
+
+ private:
+  friend class AstNodeFactory;
+
+  StoreInArrayLiteral(Expression* array, Expression* index, Expression* value,
+                      int position)
+      : Expression(position, kStoreInArrayLiteral),
+        array_(array),
+        index_(index),
+        value_(value) {}
+
+  Expression* array_;
+  Expression* index_;
+  Expression* value_;
+};
 
 class Conditional final : public Expression {
  public:
@@ -3068,6 +3089,12 @@ class AstNodeFactory final BASE_EMBEDDED {
 
   Spread* NewSpread(Expression* expression, int pos, int expr_pos) {
     return new (zone_) Spread(expression, pos, expr_pos);
+  }
+
+  StoreInArrayLiteral* NewStoreInArrayLiteral(Expression* array,
+                                              Expression* index,
+                                              Expression* value, int pos) {
+    return new (zone_) StoreInArrayLiteral(array, index, value, pos);
   }
 
   Conditional* NewConditional(Expression* condition,
