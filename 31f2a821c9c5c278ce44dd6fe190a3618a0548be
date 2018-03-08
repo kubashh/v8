@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b07e9261_9079b94f",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-08T15:14:37Z",
+      "side": 1,
+      "message": "FYI I discussed removing tailcall-from-js-linkage-callers support with Michi a while back and it\u0027s still on my TODO list. I think this new usage is the only place where we can\u0027t just replace it by a standard call :(",
+      "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
