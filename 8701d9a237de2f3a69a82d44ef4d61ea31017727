@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "4010ea89_8c35635f",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-08T09:45:55Z",
+      "side": 1,
+      "message": "Talked to Jakob and he set me straight.",
+      "parentUuid": "0e8c8a5d_ab901534",
+      "range": {
+        "startLine": 288,
+        "startChar": 7,
+        "endLine": 288,
+        "endChar": 11
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67f1d32f_b26f08c8",
         "filename": "src/heap/heap.cc",
         "patchSetId": 9
