@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3689aad_a91918aa",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-08T18:19:20Z",
+      "side": 1,
+      "message": "nit: use auto\u0026 to avoid string copy.",
+      "revId": "426824796e6b151680e99ec6d7bc228e841fbf95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "762fe94f_ab22cdea",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-08T18:19:20Z",
+      "side": 1,
+      "message": "What\u0027s the point of wrapping it with BigInt? Isn\u0027t it already bigint within the parentheses. Same for Number.",
+      "revId": "426824796e6b151680e99ec6d7bc228e841fbf95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
