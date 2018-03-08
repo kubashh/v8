@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9115fed_1deb32e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-08T17:44:03Z",
+      "side": 1,
+      "message": "[heap] should have been [wasm] IMO.",
+      "revId": "e816d2bad040bf1ee31b1723734bfa3ed1198f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
