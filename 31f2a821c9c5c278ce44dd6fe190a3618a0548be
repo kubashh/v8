@@ -16,6 +16,24 @@
       "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90dfb01c_391dd608",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-08T16:42:48Z",
+      "side": 1,
+      "message": "The alternative would be to implement this as handwritten assembly. But that sounded less elegant than this :[",
+      "parentUuid": "b07e9261_9079b94f",
+      "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
