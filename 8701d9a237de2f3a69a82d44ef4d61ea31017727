@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "2a445e4c_b4daa4df",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-08T09:57:49Z",
+      "side": 1,
+      "message": "What I said was that \n\n DCHECK(isolate_-\u003ebootstrapper()-\u003eIsActive())\n\nisn\u0027t equivalent to `DCHECK(currently_in_mksnapshot)`. `isolate-\u003eserializer_enabled()` is closer, but it can also be set if other embedders are creating a snapshot.\n\n`Bootstrapper::IsActive()` does seem like the right call to make if you\u0027re trying to assert we\u0027re bootstrapping. Is that what you want?",
+      "parentUuid": "4010ea89_8c35635f",
+      "range": {
+        "startLine": 288,
+        "startChar": 7,
+        "endLine": 288,
+        "endChar": 11
+      },
+      "revId": "8701d9a237de2f3a69a82d44ef4d61ea31017727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67f1d32f_b26f08c8",
         "filename": "src/heap/heap.cc",
         "patchSetId": 9
