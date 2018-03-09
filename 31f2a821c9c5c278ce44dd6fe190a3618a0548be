@@ -34,6 +34,23 @@
       "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e648851_3e6ca065",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-09T14:39:13Z",
+      "side": 1,
+      "message": "Looked at this again due to the failing FYI test (https://logs.chromium.org/v/?s\u003dchromium%2Fbb%2Fclient.v8%2FV8_Linux64_-_debug_-_fyi%2F1457%2F%2B%2Frecipes%2Fsteps%2FCheck_-_stress_off_heap_code%2F0%2Flogs%2FBreakPointBuiltin%2F0).\n\nThe DCHECK (and comment above) used to hold when this code was in Runtime_DeserializeLazy.\n\nIt doesn\u0027t hold anymore in this new use. We need to check if the builtins table contains a deserialized version, and if so just copy it over to the SFI.\n\nAnd another nit: going by the \u0027Ensure...\u0027 function name, I\u0027d expect it to be a nop if either FLAG_lazy_deserialization is set or the passed SFI doesn\u0027t have DeserializeLazy as the code object.",
+      "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
