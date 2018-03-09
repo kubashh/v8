@@ -626,6 +626,8 @@ struct ControlWithNamedConstructors : public ControlBase<Value> {
   F(GrowMemory, const Value& value, Value* result)                             \
   F(CallDirect, const CallFunctionOperand<validate>& operand,                  \
     const Value args[], Value returns[])                                       \
+  F(TailCallDirect, const CallFunctionOperand<validate>& operand,              \
+    const Value args[])                                                        \
   F(CallIndirect, const Value& index,                                          \
     const CallIndirectOperand<validate>& operand, const Value args[],          \
     Value returns[])                                                           \
@@ -805,6 +807,16 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
+  inline bool CanTailCall(CallFunctionOperand<validate>& operand) {
+    if (operand.sig == nullptr) return false;
+    size_t num_returns = sig_->return_count();
+    if (num_returns != operand.sig->return_count()) return false;
+    for (size_t i = 0; i < num_returns; ++i) {
+      if (sig_->GetReturn(i) != operand.sig->GetReturn(i)) return false;
+    }
+    return true;
+  }
+
   inline bool Complete(const byte* pc, CallFunctionOperand<validate>& operand) {
     if (!VALIDATE(module_ != nullptr &&
                   operand.index < module_->functions.size())) {
@@ -958,11 +970,13 @@ class WasmDecoder : public Decoder {
         return 1 + operand.length;
       }
 
-      case kExprCallFunction: {
+      case kExprCallFunction:
+      case kExprReturnCallFunction: {
         CallFunctionOperand<validate> operand(decoder, pc);
         return 1 + operand.length;
       }
-      case kExprCallIndirect: {
+      case kExprCallIndirect:
+      case kExprReturnCallIndirect: {
         CallIndirectOperand<validate> operand(decoder, pc);
         return 1 + operand.length;
       }
@@ -1099,12 +1113,24 @@ class WasmDecoder : public Decoder {
         CHECK(Complete(pc, operand));
         return {operand.sig->parameter_count(), operand.sig->return_count()};
       }
+      case kExprReturnCallFunction: {
+        CallFunctionOperand<validate> operand(this, pc);
+        CHECK(Complete(pc, operand));
+        // Acts like return instruction after call.
+        return {operand.sig->parameter_count(), 0};
+      }
       case kExprCallIndirect: {
         CallIndirectOperand<validate> operand(this, pc);
         CHECK(Complete(pc, operand));
         // Indirect calls pop an additional argument for the table index.
         return {operand.sig->parameter_count() + 1,
                 operand.sig->return_count()};
+      }
+      case kExprReturnCallIndirect: {
+        CallIndirectOperand<validate> operand(this, pc);
+        CHECK(Complete(pc, operand));
+        // Acts like return instruction after call.
+        return {0, 0};
       }
       case kExprBr:
       case kExprBlock:
@@ -1830,6 +1856,18 @@ class WasmFullDecoder : public WasmDecoder<validate> {
                                         returns);
             break;
           }
+          case kExprReturnCallFunction: {
+            CHECK_PROTOTYPE_OPCODE(tail_calls);
+            CallFunctionOperand<validate> operand(this, this->pc_);
+            len = 1 + operand.length;
+            if (!this->Validate(this->pc_, operand)) break;
+            if (!this->CanTailCall(operand))
+              OPCODE_ERROR(opcode, "tail call return types mismatch");
+            PopArgs(operand.sig);
+            CALL_INTERFACE_IF_REACHABLE(TailCallDirect, operand, args_.data());
+            EndControl();
+            break;
+          }
           case kExprCallIndirect: {
             CallIndirectOperand<validate> operand(this, this->pc_);
             len = 1 + operand.length;
@@ -1841,6 +1879,10 @@ class WasmFullDecoder : public WasmDecoder<validate> {
                                         args_.data(), returns);
             break;
           }
+          case kExprReturnCallIndirect:
+            CHECK_PROTOTYPE_OPCODE(tail_calls);
+            OPCODE_ERROR(opcode, "tail call indirect not implemented yet");
+            break;
           case kNumericPrefix: {
             CHECK_PROTOTYPE_OPCODE(sat_f2i_conversions);
             ++len;

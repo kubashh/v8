@@ -1244,6 +1244,12 @@ class LiftoffCompiler {
     __ FinishCall(operand.sig, call_descriptor);
   }
 
+  void TailCallDirect(Decoder* decoder,
+                      const CallFunctionOperand<validate>& operand,
+                      const Value args[]) {
+    unsupported(decoder, "tail_call_direct");
+  }
+
   void CallIndirect(Decoder* decoder, const Value& index_val,
                     const CallIndirectOperand<validate>& operand,
                     const Value args[], Value returns[]) {

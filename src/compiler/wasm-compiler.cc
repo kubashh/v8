@@ -2575,6 +2575,38 @@ Node* WasmGraphBuilder::BuildWasmCall(wasm::FunctionSig* sig, Node** args,
   return call;
 }
 
+void WasmGraphBuilder::BuildWasmTailCall(wasm::FunctionSig* sig, Node** args,
+                                         wasm::WasmCodePosition position,
+                                         Node* wasm_context,
+                                         bool use_retpoline) {
+  if (wasm_context == nullptr) {
+    DCHECK_NOT_NULL(wasm_context_);
+    wasm_context = wasm_context_.get();
+  }
+  SetNeedsStackCheck();
+  const size_t params = sig->parameter_count();
+  const size_t extra = 3;  // wasm_context, effect, and control.
+  const size_t count = 1 + params + extra;
+
+  // Reallocate the buffer to make space for extra inputs.
+  args = Realloc(args, 1 + params, count);
+
+  // Make room for the wasm_context parameter at index 1, just after code.
+  memmove(&args[2], &args[1], params * sizeof(Node*));
+  args[1] = wasm_context;
+
+  // Add effect and control inputs.
+  args[params + 2] = *effect_;
+  args[params + 3] = *control_;
+
+  auto call_descriptor =
+      GetWasmCallDescriptor(jsgraph()->zone(), sig, use_retpoline);
+  const Operator* op = jsgraph()->common()->TailCall(call_descriptor);
+  Node* call = graph()->NewNode(op, static_cast<int>(count), args);
+  SetSourcePosition(call, position);
+  MergeControlToEnd(jsgraph(), call);
+}
+
 Node* WasmGraphBuilder::CallDirect(uint32_t index, Node** args, Node*** rets,
                                    wasm::WasmCodePosition position) {
   DCHECK_NULL(args[0]);
@@ -2595,6 +2627,27 @@ Node* WasmGraphBuilder::CallDirect(uint32_t index, Node** args, Node*** rets,
   }
 
   return BuildWasmCall(sig, args, rets, position);
+}
+
+void WasmGraphBuilder::TailCallDirect(uint32_t index, Node** args,
+                                      wasm::WasmCodePosition position) {
+  DCHECK_NULL(args[0]);
+  wasm::FunctionSig* sig = env_->module->functions[index].sig;
+  if (FLAG_wasm_jit_to_native) {
+    // Just encode the function index. This will be patched at instantiation.
+    Address code = reinterpret_cast<Address>(index);
+    args[0] = jsgraph()->RelocatableIntPtrConstant(
+        reinterpret_cast<intptr_t>(code), RelocInfo::WASM_CALL);
+  } else {
+    // Add code object as constant.
+    Handle<Code> code = index < env_->function_code.size()
+                            ? env_->function_code[index]
+                            : env_->default_function_code;
+
+    DCHECK(!code.is_null());
+    args[0] = HeapConstant(code);
+  }
+  BuildWasmTailCall(sig, args, position);
 }
 
 Node* WasmGraphBuilder::CallIndirect(uint32_t sig_index, Node** args,
