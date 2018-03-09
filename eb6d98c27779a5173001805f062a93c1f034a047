@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e9d06bbb_00a606b1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-03-09T12:43:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2b98b6eb_52799db8",
+      "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a8e0110_31ba8023",
         "filename": "src/parsing/pattern-rewriter.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-09T12:32:33Z",
       "side": 1,
       "message": "Previously the index was calculated at runtime but now it happens at parse time, does that have any effect on behavior?",
+      "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71f1faf0_32cbefa3",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-03-09T12:43:05Z",
+      "side": 1,
+      "message": "The index needed to be made explicit but it\u0027s still calculated at runtime, by the increment in the loop. There\u0027s no difference in behavior.",
+      "parentUuid": "3a8e0110_31ba8023",
       "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
