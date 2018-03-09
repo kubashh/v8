@@ -157,6 +157,7 @@ class FullMarkingVerifier : public MarkingVerifier {
     VerifyMarking(heap_->old_space());
     VerifyMarking(heap_->code_space());
     VerifyMarking(heap_->map_space());
+    VerifyMarking(heap_->read_only_space());
 
     LargeObjectIterator it(heap_->lo_space());
     for (HeapObject* obj = it.Next(); obj != nullptr; obj = it.Next()) {
@@ -341,6 +342,7 @@ class FullEvacuationVerifier : public EvacuationVerifier {
     VerifyEvacuation(heap_->old_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
+    VerifyEvacuation(heap_->read_only_space());
   }
 
  protected:
@@ -379,6 +381,7 @@ class YoungGenerationEvacuationVerifier : public EvacuationVerifier {
     VerifyEvacuation(heap_->old_space());
     VerifyEvacuation(heap_->code_space());
     VerifyEvacuation(heap_->map_space());
+    VerifyEvacuation(heap_->read_only_space());
   }
 
  protected:
@@ -627,6 +630,7 @@ void MarkCompactCollector::VerifyMarkbitsAreClean() {
   VerifyMarkbitsAreClean(heap_->code_space());
   VerifyMarkbitsAreClean(heap_->map_space());
   VerifyMarkbitsAreClean(heap_->new_space());
+  VerifyMarkbitsAreClean(heap_->read_only_space());
 
   LargeObjectIterator it(heap_->lo_space());
   for (HeapObject* obj = it.Next(); obj != nullptr; obj = it.Next()) {
@@ -666,6 +670,7 @@ void MarkCompactCollector::ClearMarkbits() {
   ClearMarkbitsInPagedSpace(heap_->code_space());
   ClearMarkbitsInPagedSpace(heap_->map_space());
   ClearMarkbitsInPagedSpace(heap_->old_space());
+  ClearMarkbitsInPagedSpace(heap_->read_only_space());
   ClearMarkbitsInNewSpace(heap_->new_space());
   heap_->lo_space()->ClearMarkingStateOfLiveObjects();
 }
@@ -971,6 +976,7 @@ void MarkCompactCollector::VerifyMarking() {
   heap()->old_space()->VerifyLiveBytes();
   heap()->map_space()->VerifyLiveBytes();
   heap()->code_space()->VerifyLiveBytes();
+  heap()->read_only_space()->VerifyLiveBytes();
 #endif
 }
 
