@@ -87,6 +87,24 @@
       "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be5899bc_92cd70bf",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-03-09T13:16:26Z",
+      "side": 1,
+      "message": "Right, now the loop is doing the counting. We could instead read the array\u0027s length property in each iteration but I doubt that\u0027s cheaper.",
+      "parentUuid": "8644b0cb_3418b9ea",
+      "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
