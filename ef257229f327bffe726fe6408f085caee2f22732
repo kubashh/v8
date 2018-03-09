@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d251a38b_2f3a4ec9",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-03-09T17:53:34Z",
+      "side": 1,
+      "message": "nit: Consider just:\nstatic bool isResolvableNumberLike(String16 query) {\n  return query \u003d\u003d \"Infinity\" || query \u003d\u003d \"-Infinity\" || query \u003d\u003d \"NaN\";\n}",
+      "revId": "ef257229f327bffe726fe6408f085caee2f22732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
