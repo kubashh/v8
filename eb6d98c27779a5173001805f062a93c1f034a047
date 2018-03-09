@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b98b6eb_52799db8",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-03-09T12:09:02Z",
+      "side": 1,
+      "message": "I think SetExpressionPosition should be sufficient here. We need statement positions only if we were to break there and in this case, I don\u0027t think we need to break here.",
+      "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
