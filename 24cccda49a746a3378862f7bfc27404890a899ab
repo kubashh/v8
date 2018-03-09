@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a95c876_8ffb145d",
+        "filename": "src/globals.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b2e58f8_6d2944c5",
+      "range": {
+        "startLine": 530,
+        "startChar": 28,
+        "endLine": 530,
+        "endChar": 37
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "515cd0c3_3b03bdea",
         "filename": "src/heap/heap-inl.h",
         "patchSetId": 15
@@ -39,6 +63,24 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb1a8ddc_18b01b39",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "515cd0c3_3b03bdea",
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "b8e9421c_6349beb0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd80290b_7a46b52a",
+      "range": {
+        "startLine": 617,
+        "startChar": 18,
+        "endLine": 617,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8166dcb8_15fd50fa",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "3f35f379_5efed154",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4754,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8166dcb8_15fd50fa",
+      "range": {
+        "startLine": 4754,
+        "startChar": 13,
+        "endLine": 4754,
+        "endChar": 29
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d95e064b_6ece8379",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -102,6 +192,24 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b66ce2a8_f6c3131f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d95e064b_6ece8379",
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "2608667b_410688c4",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4793,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "077f8181_05d372a3",
+      "range": {
+        "startLine": 4793,
+        "startChar": 9,
+        "endLine": 4793,
+        "endChar": 17
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf3a3ded_dfa43be6",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -148,6 +280,30 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ee63398_ee8a914c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4833,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf3a3ded_dfa43be6",
+      "range": {
+        "startLine": 4833,
+        "startChar": 7,
+        "endLine": 4833,
+        "endChar": 19
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "c9aafcee_5103acf7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4862,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cc5a703_7676d8ab",
+      "range": {
+        "startLine": 4862,
+        "startChar": 2,
+        "endLine": 4862,
+        "endChar": 31
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a51eecc3_e8a061ca",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -194,6 +374,30 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f9bafd_5a2631e2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5735,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a51eecc3_e8a061ca",
+      "range": {
+        "startLine": 5735,
+        "startChar": 21,
+        "endLine": 5735,
+        "endChar": 37
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "25d09fef_a292a5ab",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6018,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b189f3e_f934b986",
+      "range": {
+        "startLine": 6018,
+        "startChar": 4,
+        "endLine": 6018,
+        "endChar": 20
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30a9ea5a_fa065c40",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -240,6 +468,30 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3535d96_c5318f6b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6704,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30a9ea5a_fa065c40",
+      "range": {
+        "startLine": 6704,
+        "startChar": 18,
+        "endLine": 6704,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -289,6 +541,54 @@
     },
     {
       "key": {
+        "uuid": "f1693622_3bea9efb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "This function is only used in debugging. Its return value is always used as part of a DCHECK. I could just make it return false now. WDYT?",
+      "parentUuid": "66178985_47c5c17a",
+      "range": {
+        "startLine": 6780,
+        "startChar": 33,
+        "endLine": 6780,
+        "endChar": 34
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "380fa5d8_9a86ccc3",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0a0b93f_8c54b94d",
+      "range": {
+        "startLine": 6780,
+        "startChar": 24,
+        "endLine": 6780,
+        "endChar": 30
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "976460c5_e8ea8f5b",
         "filename": "src/heap/heap.h",
         "patchSetId": 15
@@ -309,6 +609,30 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "075a805e_b93103e6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "976460c5_e8ea8f5b",
+      "range": {
+        "startLine": 997,
+        "startChar": 17,
+        "endLine": 997,
+        "endChar": 32
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -335,6 +659,30 @@
     },
     {
       "key": {
+        "uuid": "8bab7888_77a1af9d",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a2dde48_a51e6306",
+      "range": {
+        "startLine": 2405,
+        "startChar": 34,
+        "endLine": 2406,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b11ce3cf_15282f1c",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 15
@@ -346,6 +694,30 @@
       "writtenOn": "2018-03-09T13:29:37Z",
       "side": 1,
       "message": "Add a TODO here, we should never mark in RO space.",
+      "range": {
+        "startLine": 672,
+        "startChar": 2,
+        "endLine": 672,
+        "endChar": 27
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83daf96e_c9572d28",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-09T16:00:46Z",
+      "side": 1,
+      "message": "I could just remove all these VerifyMarking, VerifyMarkbitsAreClean, VerifyEvacuation and ClearMarkbitsInPagedSpace now. WDYT?\n\nI guess we could have a TODO in VerifyMarkbitsAreClean(?), that said the mark bits for read_only_space() are always dirty.",
+      "parentUuid": "b11ce3cf_15282f1c",
       "range": {
         "startLine": 672,
         "startChar": 2,
