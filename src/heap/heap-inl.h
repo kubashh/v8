@@ -12,6 +12,7 @@
 #include "src/heap/heap.h"
 
 #include "src/base/platform/platform.h"
+#include "src/bootstrapper.h"
 #include "src/counters-inl.h"
 #include "src/feedback-vector.h"
 // TODO(mstarzinger): There are 3 more includes to remove in order to no longer
@@ -296,6 +297,12 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
     allocation = lo_space_->AllocateRaw(size_in_bytes, NOT_EXECUTABLE);
   } else if (MAP_SPACE == space) {
     allocation = map_space_->AllocateRawUnaligned(size_in_bytes);
+  } else if (RO_SPACE == space) {
+#ifdef V8_USE_SNAPSHOT
+    DCHECK(isolate_->serializer_enabled());
+#endif
+    CHECK(!large_object);
+    allocation = read_only_space_->AllocateRaw(size_in_bytes, alignment);
   } else {
     // NEW_SPACE is not allowed here.
     UNREACHABLE();

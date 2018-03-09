@@ -1017,6 +1017,7 @@ class Heap {
   OldSpace* code_space() { return code_space_; }
   MapSpace* map_space() { return map_space_; }
   LargeObjectSpace* lo_space() { return lo_space_; }
+  ReadOnlySpace* read_only_space() { return read_only_space_; }
 
   inline PagedSpace* paged_space(int idx);
   inline Space* space(int idx);
@@ -2427,6 +2428,7 @@ class Heap {
   OldSpace* code_space_;
   MapSpace* map_space_;
   LargeObjectSpace* lo_space_;
+  ReadOnlySpace* read_only_space_;
   // Map from the space id to the space.
   Space* space_[LAST_SPACE + 1];
 
@@ -2775,8 +2777,9 @@ class VerifyPointersVisitor : public ObjectVisitor, public RootVisitor {
   void VisitRootPointers(Root root, const char* description, Object** start,
                          Object** end) override;
 
- private:
-  void VerifyPointers(MaybeObject** start, MaybeObject** end);
+ protected:
+  virtual void VerifyPointers(HeapObject* host, MaybeObject** start,
+                              MaybeObject** end);
 };
 
 
