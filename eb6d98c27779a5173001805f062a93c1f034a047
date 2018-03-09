@@ -141,6 +141,24 @@
       "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "620ba243_9dd79c97",
+        "filename": "src/parsing/pattern-rewriter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-03-09T13:39:27Z",
+      "side": 1,
+      "message": "More offline discussion has led to the conclusion that this is indeed safe. LGTM",
+      "parentUuid": "f2be535e_820e43c5",
+      "revId": "eb6d98c27779a5173001805f062a93c1f034a047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
