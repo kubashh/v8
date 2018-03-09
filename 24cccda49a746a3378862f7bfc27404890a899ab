@@ -1,0 +1,360 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b2e58f8_6d2944c5",
+        "filename": "src/globals.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "Lower case for immovable and immutable. Also mention that memory in this space will be mapped read-only (add a TODO for that).",
+      "range": {
+        "startLine": 530,
+        "startChar": 28,
+        "endLine": 530,
+        "endChar": 37
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "515cd0c3_3b03bdea",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.\n\nI stop writing this now: please everywhere :)",
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd80290b_7a46b52a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 617,
+        "startChar": 18,
+        "endLine": 617,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8166dcb8_15fd50fa",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4754,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 4754,
+        "startChar": 13,
+        "endLine": 4754,
+        "endChar": 29
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d95e064b_6ece8379",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "077f8181_05d372a3",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4793,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 4793,
+        "startChar": 9,
+        "endLine": 4793,
+        "endChar": 17
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf3a3ded_dfa43be6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4833,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this object_print section. We will open gdb anyway when this breaks :)\n\nLet\u0027s turn the if case into a CHECK.",
+      "range": {
+        "startLine": 4833,
+        "startChar": 7,
+        "endLine": 4833,
+        "endChar": 19
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cc5a703_7676d8ab",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4862,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "Move this down to right before it is used.",
+      "range": {
+        "startLine": 4862,
+        "startChar": 2,
+        "endLine": 4862,
+        "endChar": 31
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51eecc3_e8a061ca",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5735,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 5735,
+        "startChar": 21,
+        "endLine": 5735,
+        "endChar": 37
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b189f3e_f934b986",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6018,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 6018,
+        "startChar": 4,
+        "endLine": 6018,
+        "endChar": 20
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a9ea5a_fa065c40",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6704,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 6704,
+        "startChar": 18,
+        "endLine": 6704,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a0b93f_8c54b94d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "order nit again.",
+      "range": {
+        "startLine": 6780,
+        "startChar": 24,
+        "endLine": 6780,
+        "endChar": 30
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66178985_47c5c17a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "This should become a check because we will never allow to move into this space.",
+      "range": {
+        "startLine": 6780,
+        "startChar": 33,
+        "endLine": 6780,
+        "endChar": 34
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "976460c5_e8ea8f5b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "nit: let\u0027s keep maintain the same order as in the AllocationSpace enum.",
+      "range": {
+        "startLine": 997,
+        "startChar": 17,
+        "endLine": 997,
+        "endChar": 32
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a2dde48_a51e6306",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "same nit here",
+      "range": {
+        "startLine": 2405,
+        "startChar": 34,
+        "endLine": 2406,
+        "endChar": 0
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b11ce3cf_15282f1c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-09T13:29:37Z",
+      "side": 1,
+      "message": "Add a TODO here, we should never mark in RO space.",
+      "range": {
+        "startLine": 672,
+        "startChar": 2,
+        "endLine": 672,
+        "endChar": 27
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
