@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faf4936c_e4b03400",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-09T11:58:45Z",
+      "side": 1,
+      "message": "This is just KeyedStoreGenericAssembler::CheckFieldType() moved here.",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b732865e_f2943e18",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-09T11:58:45Z",
+      "side": 1,
+      "message": "This is mostly a former KeyedStoreGenericAssembler::OverwriteExistingFastProperty() with added support for kDescriptor location and transitioning stores.",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
