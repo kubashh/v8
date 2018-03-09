@@ -372,6 +372,12 @@ class WasmGraphBuildingInterface {
     DoCall(decoder, nullptr, operand.sig, operand.index, args, returns);
   }
 
+  void TailCallDirect(Decoder* decoder,
+                      const CallFunctionOperand<validate>& operand,
+                      const Value args[]) {
+    DoTailCall(decoder, nullptr, operand.sig, operand.index, args);
+  }
+
   void CallIndirect(Decoder* decoder, const Value& index,
                     const CallIndirectOperand<validate>& operand,
                     const Value args[], Value returns[]) {
@@ -807,6 +813,23 @@ class WasmGraphBuildingInterface {
     // reload mem_size and mem_start.
     LoadContextIntoSsa(ssa_env_);
   }
+
+  void DoTailCall(
+      WasmFullDecoder<validate, WasmGraphBuildingInterface>* decoder,
+      TFNode* index_node, FunctionSig* sig, uint32_t index,
+      const Value args[]) {
+    int param_count = static_cast<int>(sig->parameter_count());
+    TFNode** arg_nodes = builder_->Buffer(param_count + 1);
+    arg_nodes[0] = index_node;
+    for (int i = 0; i < param_count; ++i) {
+      arg_nodes[i + 1] = args[i].node;
+    }
+    if (index_node) {
+      decoder->error("Tail call indirect not implemented");
+    } else {
+      builder_->TailCallDirect(index, arg_nodes, decoder->position());
+    }
+  }
 };
 
 }  // namespace
@@ -999,7 +1022,8 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
         os << " // entries=" << operand.table_count;
         break;
       }
-      case kExprCallIndirect: {
+      case kExprCallIndirect:
+      case kExprReturnCallIndirect: {
         CallIndirectOperand<Decoder::kNoValidate> operand(&i, i.pc());
         os << "   // sig #" << operand.sig_index;
         if (decoder.Complete(i.pc(), operand)) {
@@ -1007,7 +1031,8 @@ bool PrintRawWasmCode(AccountingAllocator* allocator, const FunctionBody& body,
         }
         break;
       }
-      case kExprCallFunction: {
+      case kExprCallFunction:
+      case kExprReturnCallFunction: {
         CallFunctionOperand<Decoder::kNoValidate> operand(&i, i.pc());
         os << " // function #" << operand.index;
         if (decoder.Complete(i.pc(), operand)) {

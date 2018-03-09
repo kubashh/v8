@@ -199,6 +199,37 @@ WASM_EXEC_TEST(CollectDetailedWasmStack_WasmError) {
   }
 }
 
+WASM_EXEC_TEST(TailCallFactorial) {
+  EXPERIMENTAL_FLAG_SCOPE(tail_calls);
+  int test_values[] = {1, 2, 5, 10, 20};
+  for (int v : test_values) {
+    // TODO(kschimpf): Fix to work for wasm interpreter.
+    WasmRunner<int32_t> r(kExecuteTurbofan);
+    WasmFunctionCompiler& fact_fn = r.NewFunction<int32_t, int32_t>("fact");
+    WasmFunctionCompiler& fact_aux_fn =
+        r.NewFunction<int32_t, int32_t, int32_t>("fact_aux");
+    BUILD(r, WASM_CALL_FUNCTION(fact_fn.function_index(), WASM_I32V(v)));
+
+    BUILD(fact_fn, WASM_RETURN_CALL_FUNCTION(fact_aux_fn.function_index(),
+                                             WASM_GET_LOCAL(0), WASM_I32V(1)));
+
+    BUILD(fact_aux_fn,
+          WASM_IF_ELSE_I(
+              WASM_I32_EQ(WASM_I32V(1), WASM_GET_LOCAL(0)), WASM_GET_LOCAL(1),
+              WASM_RETURN_CALL_FUNCTION(
+                  fact_aux_fn.function_index(),
+                  WASM_I32_SUB(WASM_GET_LOCAL(0), WASM_I32V(1)),
+                  WASM_I32_MUL(WASM_GET_LOCAL(0), WASM_GET_LOCAL(1)))));
+
+    int32_t expected = 1;
+    for (int32_t i = v; i > 1; i--) {
+      expected *= i;
+    }
+    int32_t found = r.Call();
+    CHECK_EQ(expected, found);
+  }
+}
+
 }  // namespace test_wasm_stack
 }  // namespace wasm
 }  // namespace internal
