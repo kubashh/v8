@@ -363,7 +363,10 @@ inline WasmOpcode LoadStoreOpcodeOf(MachineType type, bool store) {
 #define WASM_CALL_FUNCTION0(index) kExprCallFunction, static_cast<byte>(index)
 #define WASM_CALL_FUNCTION(index, ...) \
   __VA_ARGS__, kExprCallFunction, static_cast<byte>(index)
-
+#define WASM_RETURN_CALL_FUNCTION0(index) \
+  kExprReturnCallFunction, static_cast<byte>(index)
+#define WASM_RETURN_CALL_FUNCTION(index, ...) \
+  __VA_ARGS__, kExprReturnCallFunction, static_cast<byte>(index)
 #define TABLE_ZERO 0
 
 // TODO(titzer): change usages of these macros to put func last.

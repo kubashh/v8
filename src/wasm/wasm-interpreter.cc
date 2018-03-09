@@ -32,6 +32,13 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+#define UNKNOWN_OPCODE_ERROR(message)                                \
+  do {                                                               \
+    FATAL("Unknown or unimplemented opcode #%d:%s", code->start[pc], \
+          OpcodeName(code->start[pc]));                              \
+    UNREACHABLE();                                                   \
+  } while (false)
+
 #define TRACE(...)                                        \
   do {                                                    \
     if (FLAG_trace_wasm_interpreter) PrintF(__VA_ARGS__); \
@@ -1631,9 +1638,7 @@ class ThreadImpl {
         Push(WasmValue(ExecuteI64UConvertSatF64(Pop().to<double>())));
         return true;
       default:
-        FATAL("Unknown or unimplemented opcode #%d:%s", code->start[pc],
-              OpcodeName(code->start[pc]));
-        UNREACHABLE();
+        UNKNOWN_OPCODE_ERROR();
     }
     return false;
   }
@@ -2020,6 +2025,9 @@ class ThreadImpl {
               return;
           }
         } break;
+        case kExprReturnCallFunction:
+        case kExprReturnCallIndirect:
+          UNKNOWN_OPCODE_ERROR();
         case kExprGetGlobal: {
           GlobalIndexOperand<Decoder::kNoValidate> operand(&decoder,
                                                            code->at(pc));
@@ -2242,9 +2250,7 @@ class ThreadImpl {
 #undef EXECUTE_UNOP
 
         default:
-          FATAL("Unknown or unimplemented opcode #%d:%s", code->start[pc],
-                OpcodeName(code->start[pc]));
-          UNREACHABLE();
+          UNKNOWN_OPCODE_ERROR();
       }
 
 #ifdef DEBUG
@@ -3038,6 +3044,7 @@ WasmInterpreter::HeapObjectsScope::~HeapObjectsScope() {
 #undef FOREACH_OTHER_BINOP
 #undef FOREACH_I32CONV_FLOATOP
 #undef FOREACH_OTHER_UNOP
+#undef UNKNOWN_OPCODE_ERROR
 
 }  // namespace wasm
 }  // namespace internal

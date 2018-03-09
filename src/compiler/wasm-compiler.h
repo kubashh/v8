@@ -348,6 +348,8 @@ class WasmGraphBuilder {
 
   Node* CallDirect(uint32_t index, Node** args, Node*** rets,
                    wasm::WasmCodePosition position);
+  void TailCallDirect(uint32_t index, Node** args,
+                      wasm::WasmCodePosition position);
   Node* CallIndirect(uint32_t index, Node** args, Node*** rets,
                      wasm::WasmCodePosition position);
 
@@ -509,6 +511,10 @@ class WasmGraphBuilder {
   Node* BuildWasmCall(wasm::FunctionSig* sig, Node** args, Node*** rets,
                       wasm::WasmCodePosition position,
                       Node* wasm_context = nullptr, bool use_retpoline = false);
+  void BuildWasmTailCall(wasm::FunctionSig* sig, Node** args,
+                         wasm::WasmCodePosition position,
+                         Node* wasm_context = nullptr,
+                         bool use_retpoline = false);
 
   Node* BuildF32CopySign(Node* left, Node* right);
   Node* BuildF64CopySign(Node* left, Node* right);
