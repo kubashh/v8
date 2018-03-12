@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "3daefe6c_4f625cd9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T12:26:49Z",
+      "side": 1,
+      "message": "Can you assert IsWeakCell(map_or_property_cell) here?",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "675e7c0e_9f8247ae",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T12:26:49Z",
+      "side": 1,
+      "message": "Maybe type transition_map here?",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "faf4936c_e4b03400",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
