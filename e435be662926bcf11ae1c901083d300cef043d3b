@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63e5b8dd_14f7e411",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6809,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-03-12T10:10:04Z",
+      "side": 1,
+      "message": "We don\u0027t collect evacuation candidates (MCC:CollectEvacuationCandidates) for this space, so we should be able to return false here already.",
+      "range": {
+        "startLine": 6809,
+        "startChar": 13,
+        "endLine": 6809,
+        "endChar": 16
+      },
+      "revId": "e435be662926bcf11ae1c901083d300cef043d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414714d2_9a01f6ec",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-03-12T10:10:04Z",
+      "side": 1,
+      "message": "I guess you want to mark all those pages as black in the next CL? Because we wouldn\u0027t need the live bytes and markbit verification (and clearing) in this case.",
+      "range": {
+        "startLine": 979,
+        "startChar": 29,
+        "endLine": 979,
+        "endChar": 44
+      },
+      "revId": "e435be662926bcf11ae1c901083d300cef043d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
