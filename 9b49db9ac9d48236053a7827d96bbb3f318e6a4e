@@ -135,6 +135,40 @@
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "618432d6_04aaaf6f",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6628,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-03-12T17:07:11Z",
+      "side": 1,
+      "message": "Why is this necessary now?",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fbfdf19_94fc858e",
+        "filename": "src/transitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-03-12T17:07:11Z",
+      "side": 1,
+      "message": "Different CL?",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
