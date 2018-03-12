@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9622fec8_9609e242",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-12T09:43:27Z",
+      "side": 1,
+      "message": "I think it would be better to implement the interpreter before this CL. If you leave the interpreter unimplemented, it will disable our fuzzers until you fix it. Could you at least provide a dummy implementation, e.g. by just using the normal call and call-indirect implementations?",
+      "revId": "93b1eba2daeeb49f63fe8d1b7431613518fb39e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b9a245a_0c6c4340",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-12T09:43:27Z",
+      "side": 1,
+      "message": "Can you also add tests with different return types?",
+      "revId": "93b1eba2daeeb49f63fe8d1b7431613518fb39e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5343d05c_cc101787",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-12T09:43:27Z",
+      "side": 1,
+      "message": "If you get rid of the outer-most wrapper, as I suggest below, you can move this loop down after the construction of the test functions, which would speed up this test significantly I think.",
+      "revId": "93b1eba2daeeb49f63fe8d1b7431613518fb39e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad9b52f4_cfa6cd88",
+        "filename": "test/cctest/wasm/test-wasm-stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-12T09:43:27Z",
+      "side": 1,
+      "message": "Is this wrapper really necessary? Could you not just call fact_fn directly from C++?",
+      "revId": "93b1eba2daeeb49f63fe8d1b7431613518fb39e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
