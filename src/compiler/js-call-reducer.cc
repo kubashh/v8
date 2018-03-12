@@ -3611,44 +3611,47 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
       // Don't inline cross native context.
       if (function->native_context() != *native_context()) return NoChange();
 
-      // Check for the ArrayConstructor.
-      if (*function == function->native_context()->array_function()) {
-        // TODO(bmeurer): Deal with Array subclasses here.
-        Handle<AllocationSite> site;
-        // Turn the {node} into a {JSCreateArray} call.
-        for (int i = arity; i > 0; --i) {
-          NodeProperties::ReplaceValueInput(
-              node, NodeProperties::GetValueInput(node, i), i + 1);
-        }
-        NodeProperties::ReplaceValueInput(node, new_target, 1);
-        NodeProperties::ChangeOp(node, javascript()->CreateArray(arity, site));
-        return Changed(node);
-      }
-
-      // Check for the ObjectConstructor.
-      if (*function == function->native_context()->object_function()) {
-        // If no value is passed, we can immediately lower to a simple
-        // JSCreate and don't need to do any massaging of the {node}.
-        if (arity == 0) {
-          NodeProperties::ChangeOp(node, javascript()->Create());
+      // Check for known builtin functions.
+      switch (function->shared()->code()->builtin_index()) {
+        case Builtins::kArrayConstructor: {
+          // TODO(bmeurer): Deal with Array subclasses here.
+          Handle<AllocationSite> site;
+          // Turn the {node} into a {JSCreateArray} call.
+          for (int i = arity; i > 0; --i) {
+            NodeProperties::ReplaceValueInput(
+                node, NodeProperties::GetValueInput(node, i), i + 1);
+          }
+          NodeProperties::ReplaceValueInput(node, new_target, 1);
+          NodeProperties::ChangeOp(node,
+                                   javascript()->CreateArray(arity, site));
           return Changed(node);
         }
+        case Builtins::kObjectConstructor: {
+          // If no value is passed, we can immediately lower to a simple
+          // JSCreate and don't need to do any massaging of the {node}.
+          if (arity == 0) {
+            NodeProperties::ChangeOp(node, javascript()->Create());
+            return Changed(node);
+          }
 
-        // Otherwise we can only lower to JSCreate if we know that
-        // the value parameter is ignored, which is only the case if
-        // the {new_target} and {target} are definitely not identical.
-        HeapObjectMatcher mnew_target(new_target);
-        if (mnew_target.HasValue() && *mnew_target.Value() != *function) {
-          // Drop the value inputs.
-          for (int i = arity; i > 0; --i) node->RemoveInput(i);
-          NodeProperties::ChangeOp(node, javascript()->Create());
-          return Changed(node);
+          // Otherwise we can only lower to JSCreate if we know that
+          // the value parameter is ignored, which is only the case if
+          // the {new_target} and {target} are definitely not identical.
+          HeapObjectMatcher mnew_target(new_target);
+          if (mnew_target.HasValue() && *mnew_target.Value() != *function) {
+            // Drop the value inputs.
+            for (int i = arity; i > 0; --i) node->RemoveInput(i);
+            NodeProperties::ChangeOp(node, javascript()->Create());
+            return Changed(node);
+          }
+          break;
         }
-      }
-
-      // Check for the PromiseConstructor
-      if (*function == function->native_context()->promise_function()) {
-        return ReducePromiseConstructor(node);
+        case Builtins::kPromiseConstructor:
+          return ReducePromiseConstructor(node);
+        case Builtins::kTypedArrayConstructor:
+          return ReduceTypedArrayConstructor(node);
+        default:
+          break;
       }
     } else if (m.Value()->IsJSBoundFunction()) {
       Handle<JSBoundFunction> function =
@@ -5793,6 +5796,33 @@ Reduction JSCallReducer::ReducePromiseResolveTrampoline(Node* node) {
   node->TrimInputCount(6);
   NodeProperties::ChangeOp(node, javascript()->PromiseResolve());
   return Changed(node);
+}
+
+// ES #sec-typedarray-constructors
+Reduction JSCallReducer::ReduceTypedArrayConstructor(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSConstruct, node->opcode());
+  ConstructParameters const& p = ConstructParametersOf(node->op());
+  int arity = static_cast<int>(p.arity() - 2);
+  Node* target = NodeProperties::GetValueInput(node, 0);
+  Node* arg1 = (arity >= 1) ? NodeProperties::GetValueInput(node, 1)
+                            : jsgraph()->UndefinedConstant();
+  Node* arg2 = (arity >= 2) ? NodeProperties::GetValueInput(node, 2)
+                            : jsgraph()->UndefinedConstant();
+  Node* arg3 = (arity >= 3) ? NodeProperties::GetValueInput(node, 3)
+                            : jsgraph()->UndefinedConstant();
+  Node* new_target = NodeProperties::GetValueInput(node, arity + 1);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+
+  // TODO(bmeurer): Massage the frame state to include the Construct/Call
+  // frames.
+
+  Node* result =
+      graph()->NewNode(javascript()->CreateTypedArray(), target, new_target,
+                       arg1, arg2, arg3, context, frame_state, effect, control);
+  return Replace(result);
 }
 
 Graph* JSCallReducer::graph() const { return jsgraph()->graph(); }
