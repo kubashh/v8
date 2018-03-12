@@ -589,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "ffe62970_aab44049",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-12T09:26:02Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "f1693622_3bea9efb",
+      "range": {
+        "startLine": 6780,
+        "startChar": 33,
+        "endLine": 6780,
+        "endChar": 34
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "976460c5_e8ea8f5b",
         "filename": "src/heap/heap.h",
         "patchSetId": 15
@@ -718,6 +742,30 @@
       "side": 1,
       "message": "I could just remove all these VerifyMarking, VerifyMarkbitsAreClean, VerifyEvacuation and ClearMarkbitsInPagedSpace now. WDYT?\n\nI guess we could have a TODO in VerifyMarkbitsAreClean(?), that said the mark bits for read_only_space() are always dirty.",
       "parentUuid": "b11ce3cf_15282f1c",
+      "range": {
+        "startLine": 672,
+        "startChar": 2,
+        "endLine": 672,
+        "endChar": 27
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3228b331_5b2c1e21",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-12T09:26:02Z",
+      "side": 1,
+      "message": "Yes.\n\nWe probably should make the RO space pages black right away during initialization. Then we would need to verify that the mark bitmap remains always black.",
+      "parentUuid": "83daf96e_c9572d28",
       "range": {
         "startLine": 672,
         "startChar": 2,
