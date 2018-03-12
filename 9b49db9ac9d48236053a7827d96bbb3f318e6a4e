@@ -36,6 +36,40 @@
     },
     {
       "key": {
+        "uuid": "cb78b4bd_1c63f01f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T13:09:21Z",
+      "side": 1,
+      "message": "You could use DescriptorArrayToKeyIndex(...) directly here (but you\u0027d have to Int32Sub(nof, Int32Constant(1)) before though.",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a290cff_0ee6742c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T13:09:21Z",
+      "side": 1,
+      "message": "nit push this out and reuse for the CSA_ASSERT below.",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "faf4936c_e4b03400",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
@@ -64,6 +98,40 @@
       "writtenOn": "2018-03-09T11:58:45Z",
       "side": 1,
       "message": "This is mostly a former KeyedStoreGenericAssembler::OverwriteExistingFastProperty() with added support for kDescriptor location and transitioning stores.",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cc7ec5_e2f94ca6",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T13:09:21Z",
+      "side": 1,
+      "message": "It would be nice to have kXXX for the magic constant here :P",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80185e4a_86896659",
+        "filename": "src/lookup.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-12T13:09:21Z",
+      "side": 1,
+      "message": "Not sure if prettier, but one handle less :P:\n\nif (..) {\n  transition-\u003eset_prototype_validity_cell(Smi::FromInt(...))\n} else {\n  transition-\u003eset_prototype_validity_cell(*validity_cell);\n}",
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
