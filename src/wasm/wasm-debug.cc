@@ -140,12 +140,13 @@ class InterpreterHandle {
   }
 
  public:
+  // TODO XXX the instance handle needs to be a weak global handle.
   InterpreterHandle(Isolate* isolate, WasmDebugInfo* debug_info)
       : isolate_(isolate),
         module_(
             debug_info->wasm_instance()->compiled_module()->shared()->module()),
         interpreter_(isolate, module_, GetBytes(debug_info),
-                     debug_info->wasm_instance()->wasm_context()->get()) {}
+                     handle(debug_info->wasm_instance())) {}
 
   ~InterpreterHandle() { DCHECK_EQ(0, activations_.size()); }
 

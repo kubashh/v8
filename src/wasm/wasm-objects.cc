@@ -253,33 +253,21 @@ void WasmTableObject::Grow(Isolate* isolate, uint32_t count) {
   Handle<FixedArray> dispatch_tables(this->dispatch_tables());
   DCHECK_EQ(0, dispatch_tables->length() % kDispatchTableNumElements);
   uint32_t old_size = functions()->length();
-  constexpr int kInvalidSigIndex = -1;
 
-  if (WASM_CONTEXT_TABLES) {
-    // If tables are stored in the WASM context, no code patching is
-    // necessary. We simply have to grow the raw tables in the WasmContext
-    // for each instance that has imported this table.
+  if (WASM_INSTANCE_TABLES) {
+    // If tables are stored in the instance object, no code patching is
+    // necessary. We simply have to grow the raw tables in each instance
+    // that has imported this table.
 
     // TODO(titzer): replace the dispatch table with a weak list of all
     // the instances that import a given table.
     for (int i = 0; i < dispatch_tables->length();
          i += kDispatchTableNumElements) {
-      // TODO(titzer): potentially racy update of WasmContext::table
-      WasmContext* wasm_context =
-          WasmInstanceObject::cast(dispatch_tables->get(i))
-              ->wasm_context()
-              ->get();
-      DCHECK_EQ(old_size, wasm_context->table_size);
+      WasmInstanceObject* instance =
+          WasmInstanceObject::cast(dispatch_tables->get(i));
+      DCHECK_EQ(old_size, instance->ift_size());
       uint32_t new_size = old_size + count;
-      wasm_context->table = reinterpret_cast<IndirectFunctionTableEntry*>(
-          realloc(wasm_context->table,
-                  new_size * sizeof(IndirectFunctionTableEntry)));
-      for (uint32_t j = old_size; j < new_size; j++) {
-        wasm_context->table[j].sig_id = kInvalidSigIndex;
-        wasm_context->table[j].context = nullptr;
-        wasm_context->table[j].target = nullptr;
-      }
-      wasm_context->table_size = new_size;
+      instance->EnsureIftWithMinimumSize(new_size);
     }
     return;
   }
@@ -305,7 +293,7 @@ void WasmTableObject::Grow(Isolate* isolate, uint32_t count) {
                          *new_function_table);
 
     // Patch the code of the respective instance.
-    if (!WASM_CONTEXT_TABLES) {
+    if (!WASM_INSTANCE_TABLES) {
       DisallowHeapAllocation no_gc;
       wasm::CodeSpecialization code_specialization(isolate,
                                                    &specialization_zone);
@@ -351,9 +339,9 @@ void WasmTableObject::UpdateDispatchTables(
     Isolate* isolate, Handle<WasmTableObject> table, int table_index,
     wasm::FunctionSig* sig, Handle<WasmInstanceObject> from_instance,
     WasmCodeWrapper wasm_code, int func_index) {
-  if (WASM_CONTEXT_TABLES) {
-    // We simply need to update the WASM contexts for each instance
-    // that imports this table.
+  if (WASM_INSTANCE_TABLES) {
+    // We simply need to update the IFTs for each instance that imports
+    // this table.
     DisallowHeapAllocation no_gc;
     FixedArray* dispatch_tables = table->dispatch_tables();
     DCHECK_EQ(0, dispatch_tables->length() % kDispatchTableNumElements);
@@ -365,15 +353,22 @@ void WasmTableObject::UpdateDispatchTables(
       WasmInstanceObject* to_instance = WasmInstanceObject::cast(
           dispatch_tables->get(i + kDispatchTableInstanceOffset));
       auto sig_id = to_instance->module()->signature_map.Find(sig);
-      auto& entry = to_instance->wasm_context()->get()->table[table_index];
-      entry.sig_id = sig_id;
-      entry.context = from_instance->wasm_context()->get();
-      entry.target = wasm_code.instructions().start();
+      auto entry = to_instance->ift_entry_at(table_index);
+      entry->sig_id = sig_id;
+      entry->instance = *from_instance;
+      entry->target = wasm_code.instructions().start();
     }
   } else {
-    // We may need to compile a new WASM->WASM wrapper for this.
-    Handle<Object> code_or_foreign = wasm::GetOrCreateIndirectCallWrapper(
-        isolate, from_instance, wasm_code, func_index, sig);
+    // We need to compile a new WASM->WASM wrapper for this.
+    Handle<Code> wrapper_code;
+    {
+      CHECK(wasm_code.IsCodeObject());
+      CodeSpaceMemoryModificationScope gc_modification_scope(isolate->heap());
+      wrapper_code =
+          compiler::CompileWasmToWasmWrapper(isolate, wasm_code, sig);
+      AttachWasmFunctionInfo(isolate, wrapper_code, from_instance,
+                             static_cast<int>(func_index));
+    }
 
     DisallowHeapAllocation no_gc;
     FixedArray* dispatch_tables = table->dispatch_tables();
@@ -393,7 +388,7 @@ void WasmTableObject::UpdateDispatchTables(
       function_table->set(compiler::FunctionTableSigOffset(table_index),
                           Smi::FromInt(sig_id));
       function_table->set(compiler::FunctionTableCodeOffset(table_index),
-                          *code_or_foreign);
+                          *wrapper_code);
     }
   }
 }
@@ -405,15 +400,15 @@ void WasmTableObject::ClearDispatchTables(Handle<WasmTableObject> table,
   DCHECK_EQ(0, dispatch_tables->length() % kDispatchTableNumElements);
   for (int i = 0; i < dispatch_tables->length();
        i += kDispatchTableNumElements) {
-    if (WASM_CONTEXT_TABLES) {
+    if (WASM_INSTANCE_TABLES) {
       constexpr int kInvalidSigIndex = -1;  // TODO(titzer): move to header.
-      WasmInstanceObject* to_instance = WasmInstanceObject::cast(
+      WasmInstanceObject* target_instance = WasmInstanceObject::cast(
           dispatch_tables->get(i + kDispatchTableInstanceOffset));
-      DCHECK_LT(index, to_instance->wasm_context()->get()->table_size);
-      auto& entry = to_instance->wasm_context()->get()->table[index];
-      entry.sig_id = kInvalidSigIndex;
-      entry.context = nullptr;
-      entry.target = nullptr;
+      DCHECK_LT(index, target_instance->ift_size());
+      auto entry = target_instance->ift_entry_at(index);
+      entry->sig_id = kInvalidSigIndex;
+      entry->instance = target_instance;
+      entry->target = nullptr;
     } else {
       FixedArray* function_table = FixedArray::cast(
           dispatch_tables->get(i + kDispatchTableFunctionTableOffset));
@@ -502,16 +497,17 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
 // May GC, because SetSpecializationMemInfoFrom may GC
 void SetInstanceMemory(Isolate* isolate, Handle<WasmInstanceObject> instance,
                        Handle<JSArrayBuffer> buffer) {
-  auto wasm_context = instance->wasm_context()->get();
-  wasm_context->SetRawMemory(reinterpret_cast<byte*>(buffer->backing_store()),
-                             buffer->byte_length()->Number());
+  instance->SetRawMemory(reinterpret_cast<byte*>(buffer->backing_store()),
+                         buffer->byte_length()->Number());
 #if DEBUG
   // To flush out bugs earlier, in DEBUG mode, check that all pages of the
   // memory are accessible by reading and writing one byte on each page.
-  for (uint32_t offset = 0; offset < wasm_context->mem_size;
-       offset += wasm::kWasmPageSize) {
-    byte val = wasm_context->mem_start[offset];
-    wasm_context->mem_start[offset] = val;
+  byte* mem_start = instance->memory_start();
+  uintptr_t mem_size = instance->memory_size();
+  for (uint32_t offset = 0; offset < mem_size; offset += wasm::kWasmPageSize) {
+    byte val = mem_start[offset];
+    USE(val);
+    mem_start[offset] = val;
   }
 #endif
 }
@@ -615,6 +611,50 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
   return old_size / wasm::kWasmPageSize;
 }
 
+bool WasmInstanceObject::EnsureIftWithMinimumSize(size_t minimum_size) {
+  constexpr int kInvalidSigIndex = -1;
+  uintptr_t old_size = ift_size();
+  if (old_size >= minimum_size) return false;  // Nothing to do.
+
+  size_t new_size = minimum_size;
+  IndirectFunctionTableEntry* new_storage;
+  if (ift()) {
+    // Reallocate the old storage.
+    new_storage = reinterpret_cast<IndirectFunctionTableEntry*>(
+        realloc(ift(), new_size * sizeof(IndirectFunctionTableEntry)));
+  } else {
+    // Allocate new storage.
+    new_storage = reinterpret_cast<IndirectFunctionTableEntry*>(
+        calloc(new_size, sizeof(IndirectFunctionTableEntry)));
+  }
+  // Initialize new entries.
+  for (size_t j = old_size; j < new_size; j++) {
+    auto entry = ift_entry_at(static_cast<int>(j));
+    entry->sig_id = kInvalidSigIndex;
+    entry->instance = nullptr;
+    entry->target = nullptr;
+  }
+  set_ift_size(new_size);
+  set_ift(new_storage);
+  return true;
+}
+
+IndirectFunctionTableEntry* WasmInstanceObject::ift_entry_at(int i) {
+  DCHECK_GE(i, 0);
+  DCHECK_LT(i, ift_size());
+  return &ift()[i];
+}
+
+void WasmInstanceObject::SetRawMemory(byte* mem_start, size_t mem_size) {
+  DCHECK_LE(mem_size, wasm::kV8MaxWasmMemoryPages * wasm::kWasmPageSize);
+  uint64_t mem_size64 = mem_size;
+  uint64_t mem_mask64 = base::bits::RoundUpToPowerOfTwo64(mem_size) - 1;
+  DCHECK_LE(mem_size, mem_mask64 + 1);
+  set_memory_start(mem_start);
+  set_memory_size(static_cast<uintptr_t>(mem_size64));
+  set_memory_mask(static_cast<uintptr_t>(mem_mask64));
+}
+
 WasmModuleObject* WasmInstanceObject::module_object() {
   return compiled_module()->wasm_module();
 }
@@ -641,11 +681,10 @@ Handle<WasmInstanceObject> WasmInstanceObject::New(
   Handle<WasmInstanceObject> instance(
       reinterpret_cast<WasmInstanceObject*>(*instance_object), isolate);
 
-  auto wasm_context = Managed<WasmContext>::Allocate(isolate);
-  wasm_context->get()->SetRawMemory(nullptr, 0);
-  wasm_context->get()->globals_start = nullptr;
-  instance->set_wasm_context(*wasm_context);
-
+  instance->SetRawMemory(nullptr, 0);
+  instance->set_globals_start(nullptr);
+  instance->set_ift_size(0);
+  instance->set_ift(nullptr);
   instance->set_compiled_module(*compiled_module);
   return instance;
 }
@@ -1652,7 +1691,7 @@ void WasmCompiledModule::ReinitializeAfterDeserialization(
     // addresses. Produce new global handles for the empty tables, then reset,
     // which will relocate the code. We end up with a WasmCompiledModule as-if
     // it were just compiled.
-    if (!WASM_CONTEXT_TABLES) {
+    if (!WASM_INSTANCE_TABLES) {
       DCHECK(compiled_module->has_function_tables());
       Handle<FixedArray> function_tables(
           compiled_module->empty_function_tables(), isolate);

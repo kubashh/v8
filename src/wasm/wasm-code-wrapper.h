@@ -13,7 +13,6 @@ class WasmCode;
 }  // namespace wasm
 
 class Code;
-struct WasmContext;
 class WasmInstanceObject;
 
 // TODO(mtrofin): remove once we remove FLAG_wasm_jit_to_native
@@ -32,7 +31,6 @@ class WasmCodeWrapper {
   Vector<uint8_t> instructions() const;
 
   WasmInstanceObject* wasm_instance() const;
-  WasmContext* wasm_context() const;
 
 #ifdef ENABLE_DISASSEMBLER
   void Disassemble(const char* name, Isolate* isolate, std::ostream& os) const;

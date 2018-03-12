@@ -15,7 +15,7 @@ namespace wasm {
 
 namespace liftoff {
 
-// sp-8 holds the stack marker, sp-16 is the wasm context, first stack slot
+// sp-8 holds the stack marker, sp-16 is the liftoff assembler, first stack slot
 // is located at sp-24.
 constexpr int32_t kConstantStackSpace = 16;
 constexpr int32_t kFirstStackSlotOffset =

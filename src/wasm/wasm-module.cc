@@ -154,42 +154,6 @@ WasmFunction* GetWasmFunctionForExport(Isolate* isolate,
   return nullptr;
 }
 
-Handle<Object> GetOrCreateIndirectCallWrapper(
-    Isolate* isolate, Handle<WasmInstanceObject> owning_instance,
-    WasmCodeWrapper wasm_code, uint32_t func_index, FunctionSig* sig) {
-  Address new_context_address =
-      reinterpret_cast<Address>(owning_instance->wasm_context()->get());
-  if (!wasm_code.IsCodeObject()) {
-    DCHECK_NE(wasm_code.GetWasmCode()->kind(),
-              wasm::WasmCode::kWasmToWasmWrapper);
-    wasm::NativeModule* native_module = wasm_code.GetWasmCode()->owner();
-    // The only reason we pass owning_instance is for the GC case. Check
-    // that the values match.
-    DCHECK_EQ(owning_instance->compiled_module()->GetNativeModule(),
-              native_module);
-    // We create the wrapper on the module exporting the function. This
-    // wrapper will only be called as indirect call.
-    wasm::WasmCode* exported_wrapper =
-        native_module->GetExportedWrapper(wasm_code.GetWasmCode()->index());
-    if (exported_wrapper == nullptr) {
-      wasm::NativeModuleModificationScope native_modification_scope(
-          native_module);
-      Handle<Code> new_wrapper = compiler::CompileWasmToWasmWrapper(
-          isolate, wasm_code, sig, new_context_address);
-      exported_wrapper = native_module->AddExportedWrapper(
-          new_wrapper, wasm_code.GetWasmCode()->index());
-    }
-    Address target = exported_wrapper->instructions().start();
-    return isolate->factory()->NewForeign(target, TENURED);
-  }
-  CodeSpaceMemoryModificationScope gc_modification_scope(isolate->heap());
-  Handle<Code> code = compiler::CompileWasmToWasmWrapper(
-      isolate, wasm_code, sig, new_context_address);
-  AttachWasmFunctionInfo(isolate, code, owning_instance,
-                         static_cast<int>(func_index));
-  return code;
-}
-
 bool IsWasmCodegenAllowed(Isolate* isolate, Handle<Context> context) {
   // TODO(wasm): Once wasm has its own CSP policy, we should introduce a
   // separate callback that includes information about the module about to be

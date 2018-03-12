@@ -68,9 +68,5 @@ WasmInstanceObject* WasmCodeWrapper::wasm_instance() const {
   return GetWasmCode()->owner()->compiled_module()->owning_instance();
 }
 
-WasmContext* WasmCodeWrapper::wasm_context() const {
-  return wasm_instance()->wasm_context()->get();
-}
-
 }  // namespace internal
 }  // namespace v8

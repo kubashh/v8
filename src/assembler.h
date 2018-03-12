@@ -362,11 +362,11 @@ class RelocInfo {
     // Please note the order is important (see IsCodeTarget, IsGCRelocMode).
     CODE_TARGET,
     EMBEDDED_OBJECT,
-    // Wasm entries are to relocate pointers into the wasm memory embedded in
-    // wasm code. Everything after WASM_CONTEXT_REFERENCE (inclusive) is not
-    // GC'ed.
-    WASM_CONTEXT_REFERENCE,
-    WASM_FUNCTION_TABLE_SIZE_REFERENCE,
+    // Wasm entries are to relocate various types of references in
+    // wasm code. Nothing after WASM_CONTEXT_REFERENCE (inclusive) is a
+    // tagged pointer.
+    WASM_CONTEXT_REFERENCE,              // TODO(titzer): remove
+    WASM_FUNCTION_TABLE_SIZE_REFERENCE,  // TODO(titzer): remove
     WASM_GLOBAL_HANDLE,
     WASM_CALL,
     JS_TO_WASM_CALL,

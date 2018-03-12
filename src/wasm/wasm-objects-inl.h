@@ -28,6 +28,20 @@ CAST_ACCESSOR(WasmTableObject)
   }                                                              \
   ACCESSORS(holder, name, type, offset)
 
+#define READ_PRIMITIVE_FIELD(p, type, offset) \
+  (*reinterpret_cast<type const*>(FIELD_ADDR_CONST(p, offset)))
+
+#define WRITE_PRIMITIVE_FIELD(p, type, offset, value) \
+  (*reinterpret_cast<type*>(FIELD_ADDR(p, offset)) = value)
+
+#define PRIMITIVE_ACCESSORS(holder, name, type, offset) \
+  type holder::name() const {                           \
+    return READ_PRIMITIVE_FIELD(this, type, offset);    \
+  }                                                     \
+  void holder::set_##name(type value) {                 \
+    WRITE_PRIMITIVE_FIELD(this, type, offset, value);   \
+  }
+
 // WasmModuleObject
 ACCESSORS(WasmModuleObject, compiled_module, WasmCompiledModule,
           kCompiledModuleOffset)
@@ -44,8 +58,17 @@ OPTIONAL_ACCESSORS(WasmMemoryObject, instances, FixedArrayOfWeakCells,
                    kInstancesOffset)
 
 // WasmInstanceObject
-ACCESSORS(WasmInstanceObject, wasm_context, Managed<WasmContext>,
-          kWasmContextOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_start, byte*, kMemoryStartOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_size, uintptr_t,
+                    kMemorySizeOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_mask, uintptr_t,
+                    kMemoryMaskOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, globals_start, byte*,
+                    kGlobalsStartOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, ift, IndirectFunctionTableEntry*,
+                    kIftOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, ift_size, uintptr_t, kIftSizeOffset)
+
 ACCESSORS(WasmInstanceObject, compiled_module, WasmCompiledModule,
           kCompiledModuleOffset)
 ACCESSORS(WasmInstanceObject, exports_object, JSObject, kExportsObjectOffset)

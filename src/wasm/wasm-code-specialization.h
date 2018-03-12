@@ -28,8 +28,6 @@ class CodeSpecialization {
   CodeSpecialization(Isolate*, Zone*);
   ~CodeSpecialization();
 
-  // Update WasmContext references.
-  void RelocateWasmContextReferences(Address new_context);
   // Update function table size.
   // TODO(wasm): Prepare this for more than one indirect function table.
   void PatchTableSize(uint32_t old_size, uint32_t new_size);
@@ -47,8 +45,6 @@ class CodeSpecialization {
                        ICacheFlushMode = FLUSH_ICACHE_IF_NEEDED);
 
  private:
-  Address new_wasm_context_address_ = 0;
-
   uint32_t old_function_table_size_ = 0;
   uint32_t new_function_table_size_ = 0;
 

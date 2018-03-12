@@ -441,6 +441,25 @@ class SeqTwoByteString::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+/** TODO XXX
+class WasmInstanceObject::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static const int kStartOffset = JSReceiver::kPropertiesOrHashOffset;
+
+  static bool IsValidSlot(HeapObject* obj, int offset) { UNIMPLEMENTED(); }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(HeapObject* obj, int object_size,
+                                 ObjectVisitor* v) {
+    UNIMPLEMENTED();
+  }
+
+  static inline int SizeOf(Map* map, HeapObject* object) {
+    return map->instance_size();
+  }
+};
+**/
+
 template <typename Op, typename ReturnType, typename T1, typename T2,
           typename T3>
 ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3) {
@@ -517,6 +536,9 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3) {
     case JS_MESSAGE_OBJECT_TYPE:
     case JS_BOUND_FUNCTION_TYPE:
     case WASM_INSTANCE_TYPE:
+    /** TODO XXX
+    return Op::template apply<WasmInstanceObject::BodyDescriptor>(p1, p2, p3);
+    **/
     case WASM_MEMORY_TYPE:
     case WASM_MODULE_TYPE:
     case WASM_TABLE_TYPE:
