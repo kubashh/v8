@@ -1481,7 +1481,6 @@ void WasmCompiledModule::WasmCompiledModuleVerify() {
   VerifyObjectField(kCodeTableOffset);
   VerifyObjectField(kFunctionTablesOffset);
   VerifyObjectField(kEmptyFunctionTablesOffset);
-  VerifyObjectField(kInstanceIdOffset);
 }
 
 void WasmDebugInfo::WasmDebugInfoVerify() {
