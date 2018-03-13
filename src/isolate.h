@@ -1628,6 +1628,9 @@ class Isolate {
   // Used during builtins compilation to build the builtins constants table,
   // which is stored on the root list prior to serialization.
   BuiltinsConstantsTableBuilder* builtins_constants_table_builder_ = nullptr;
+
+  const uint8_t* embedded_blob_;
+  uint32_t embedded_blob_size_;
 #endif
 
   v8::ArrayBuffer::Allocator* array_buffer_allocator_;
