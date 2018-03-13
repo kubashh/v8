@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37753f39_14a6d72c",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-13T12:15:22Z",
+      "side": 1,
+      "message": "We only need snapshot.cc for the internal snapshot (the external snapshot uses the .bin file). I don\u0027t see that we use both snapshot.cc flavors, but if we did, that would cause name collisions during linking, I think.",
+      "range": {
+        "startLine": 842,
+        "startChar": 35,
+        "endLine": 842,
+        "endChar": 55
+      },
+      "revId": "12d41f9e297c38d291dfa339c2fa17ce2a1fc346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
