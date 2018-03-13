@@ -806,8 +806,8 @@ action("postmortem-metadata") {
          rebase_path(sources, root_build_dir)
 }
 
-if (v8_use_snapshot) {
-  action("run_mksnapshot") {
+template("run_mksnapshot") {
+  action("run_mksnapshot_" + target_name) {
     visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
     deps = [
@@ -819,12 +819,8 @@ if (v8_use_snapshot) {
     sources = []
 
     outputs = [
-      "$target_gen_dir/snapshot.cc",
+      "$target_gen_dir/snapshot${invoker.suffix}.cc",
     ]
-
-    if (v8_enable_embedded_builtins) {
-      outputs += [ "$target_gen_dir/embedded.cc" ]
-    }
 
     args = [
       "./" + rebase_path(get_label_info(":mksnapshot($v8_snapshot_toolchain)",
@@ -832,13 +828,16 @@ if (v8_use_snapshot) {
                          root_build_dir),
       "--turbo_instruction_scheduling",
       "--startup_src",
-      rebase_path("$target_gen_dir/snapshot.cc", root_build_dir),
+      rebase_path("$target_gen_dir/snapshot${invoker.suffix}.cc",
+                  root_build_dir),
     ]
 
     if (v8_enable_embedded_builtins) {
+      outputs += [ "$target_gen_dir/embedded${invoker.suffix}.cc" ]
       args += [
         "--embedded_src",
-        rebase_path("$target_gen_dir/embedded.cc", root_build_dir),
+        rebase_path("$target_gen_dir/embedded${invoker.suffix}.cc",
+                    root_build_dir),
       ]
     }
 
@@ -861,10 +860,11 @@ if (v8_use_snapshot) {
     }
 
     if (v8_use_external_startup_data) {
-      outputs += [ "$root_out_dir/snapshot_blob.bin" ]
+      outputs += [ "$root_out_dir/snapshot_blob${invoker.suffix}.bin" ]
       args += [
         "--startup_blob",
-        rebase_path("$root_out_dir/snapshot_blob.bin", root_build_dir),
+        rebase_path("$root_out_dir/snapshot_blob${invoker.suffix}.bin",
+                    root_build_dir),
       ]
     }
 
@@ -879,6 +879,12 @@ if (v8_use_snapshot) {
         "--no-turbo-verify-allocation",
       ]
     }
+  }
+}
+
+if (v8_use_snapshot) {
+  run_mksnapshot("default") {
+    suffix = ""
   }
 }
 
@@ -987,7 +993,7 @@ if (v8_use_snapshot) {
     public_deps = [
       # This should be public so downstream targets can declare the snapshot
       # output file as their inputs.
-      ":run_mksnapshot",
+      ":run_mksnapshot_default",
     ]
 
     sources = [
@@ -1027,7 +1033,7 @@ if (v8_use_external_startup_data) {
     ]
     public_deps = [
       ":natives_blob",
-      ":run_mksnapshot",
+      ":run_mksnapshot_default",
     ]
 
     sources = [
