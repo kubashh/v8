@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08729c1e_0db9dc29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-13T10:49:02Z",
+      "side": 1,
+      "message": "Please add \"BUG\u003dv8:7549\".",
+      "revId": "04ae824df9406d1bf2013df1a87856fc3efb7ff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
