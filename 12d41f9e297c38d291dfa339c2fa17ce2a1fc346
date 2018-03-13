@@ -22,6 +22,30 @@
       "revId": "12d41f9e297c38d291dfa339c2fa17ce2a1fc346",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6eb54e4_c613cb1d",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-13T12:20:52Z",
+      "side": 1,
+      "message": "For now I just added this to external_snapshot behavior. There, the snapshot.cc is lying around unused anyways. Now there\u0027d be two unused files.",
+      "parentUuid": "37753f39_14a6d72c",
+      "range": {
+        "startLine": 842,
+        "startChar": 35,
+        "endLine": 842,
+        "endChar": 55
+      },
+      "revId": "12d41f9e297c38d291dfa339c2fa17ce2a1fc346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
