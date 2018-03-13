@@ -20,7 +20,7 @@ class Smi;
 class MaybeObject {
  public:
   bool IsSmi() const { return HAS_SMI_TAG(this); }
-  inline bool IsSmi(Smi** value);
+  inline bool ToSmi(Smi** value);
 
   bool IsClearedWeakHeapObject() {
     return Internals::IsClearedWeakHeapObject(this);

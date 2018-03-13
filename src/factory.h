@@ -121,6 +121,11 @@ class V8_EXPORT_PRIVATE Factory final {
   Handle<FixedArray> NewUninitializedFixedArray(
       int length, PretenureFlag pretenure = NOT_TENURED);
 
+  // Allocates an uninitialized fixed array which may contain in-place weak
+  // references. It must be filled by the caller.
+  Handle<WeakFixedArray> NewUninitializedWeakFixedArray(
+      int length, PretenureFlag pretenure = NOT_TENURED);
+
   // Allocates a feedback vector whose slots are initialized with undefined
   // values.
   Handle<FeedbackVector> NewFeedbackVector(

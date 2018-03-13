@@ -10071,6 +10071,63 @@ bool FixedArray::IsEqualTo(FixedArray* other) {
 
 
 // static
+Handle<WeakFixedArraySet> WeakFixedArraySet::Add(
+    Handle<Object> maybe_array, Handle<HeapObject> value, int* assigned_index) {
+  Handle<WeakFixedArraySet> array =
+      (maybe_array.is_null() || !maybe_array->IsWeakFixedArraySet())
+          ? Allocate(value->GetIsolate(), 1,
+                     Handle<WeakFixedArraySet>::null())
+          : Handle<WeakFixedArraySet>::cast(maybe_array);
+  // Try to store the new entry if there's room. Optimize for consecutive
+  // accesses.
+  int first_index = array->last_used_index();
+  int length = array->length();
+  if (length > 0) {
+    for (int i = first_index;;) {
+      if (array->IsEmptySlot((i))) {
+        array->Set(i, HeapObjectReference::Weak(*value));
+        if (assigned_index != nullptr) *assigned_index = i;
+        return array;
+      }
+      i = (i + 1) % length;
+      if (i == first_index) break;
+    }
+  }
+
+  // No usable slot found, grow the array.
+  int new_length = length == 0 ? 1 : length + (length >> 1) + 4;
+  Handle<WeakFixedArraySet> new_array =
+      Allocate(array->GetIsolate(), new_length, array);
+  new_array->Set(length, HeapObjectReference::Weak(*value));
+  if (assigned_index != nullptr) *assigned_index = length;
+  return new_array;
+}
+
+// static
+Handle<WeakFixedArraySet> WeakFixedArraySet::Allocate(
+    Isolate* isolate, int size, Handle<WeakFixedArraySet> initialize_from) {
+  DCHECK_LE(0, size);
+  Handle<WeakFixedArray> result =
+      isolate->factory()->NewUninitializedWeakFixedArray(size + kFirstIndex);
+  int index = 0;
+  if (!initialize_from.is_null()) {
+    DCHECK(initialize_from->length() <= size);
+    // Copy the entries without compacting, since the PrototypeInfo relies on
+    // the index of the entries not to change.
+    while (index < initialize_from->length()) {
+      result->Set(index, initialize_from->Get(index));
+      index++;
+    }
+  }
+  while (index < result->length()) {
+    result->Set(index, HeapObjectReference::Strong(isolate->heap()->undefined_value()));
+    index++;
+  }
+  return Handle<WeakFixedArraySet>::cast(result);
+}
+
+
+// static
 void FixedArrayOfWeakCells::Set(Handle<FixedArrayOfWeakCells> array, int index,
                                 Handle<HeapObject> value) {
   DCHECK(array->IsEmptySlot(index));  // Don't overwrite anything.
@@ -10080,7 +10137,6 @@ void FixedArrayOfWeakCells::Set(Handle<FixedArrayOfWeakCells> array, int index,
   Handle<FixedArray>::cast(array)->set(index + kFirstIndex, *cell);
   array->set_last_used_index(index);
 }
-
 
 // static
 Handle<FixedArrayOfWeakCells> FixedArrayOfWeakCells::Add(

@@ -250,6 +250,19 @@ Handle<FixedArray> Factory::NewUninitializedFixedArray(
                      FixedArray);
 }
 
+Handle<WeakFixedArray> Factory::NewUninitializedWeakFixedArray(
+    int length, PretenureFlag pretenure) {
+  DCHECK_LE(0, length);
+  if (length == 0) return empty_weak_fixed_array();
+
+  // TODO(ulan): As an experiment this temporarily returns an initialized fixed
+  // array. After getting canary/performance coverage, either remove the
+  // function or revert to returning uninitilized array.
+  CALL_HEAP_FUNCTION(isolate(),
+                     isolate()->heap()->AllocateWeakFixedArray(length, pretenure),
+                     WeakFixedArray);
+}
+
 Handle<FeedbackVector> Factory::NewFeedbackVector(
     Handle<SharedFunctionInfo> shared, PretenureFlag pretenure) {
   CALL_HEAP_FUNCTION(

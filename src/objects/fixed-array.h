@@ -273,21 +273,46 @@ class WeakFixedArray : public HeapObject {
   typedef BodyDescriptor BodyDescriptorWeak;
 
   static const int kLengthOffset = HeapObject::kHeaderSize;
-  static const int kHeaderSize = kLengthOffset + kPointerSize;
+  // kLastUsedIndexOffset only used by subclasses.
+  static const int kLastUsedIndexOffset = kLengthOffset + kPointerSize;
+  static const int kHeaderSize = kLastUsedIndexOffset + kPointerSize;
 
   static const int kMaxLength =
       (FixedArray::kMaxSize - kHeaderSize) / kPointerSize;
 
- private:
+ protected:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
 
-  friend class Heap;
+  static const int kLastUsedIndexIndex = 1;
+  static const int kFirstIndex = 2;
 
-  static const int kFirstIndex = 1;
-
+ private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(WeakFixedArray);
+
+  friend class Heap;
+};
+
+// A WeakFixedArray which is used as a set.
+class WeakFixedArraySet : public WeakFixedArray {
+ public:
+  DECL_CAST(WeakFixedArraySet)
+
+  static Handle<WeakFixedArraySet> Add(Handle<Object> maybe_array,
+                                       Handle<HeapObject> value,
+                                       int* assigned_index = nullptr);
+  inline bool IsEmptySlot(int index) const;
+
+ private:
+  static Handle<WeakFixedArraySet> Allocate(
+      Isolate* isolate, int size,
+      Handle<WeakFixedArraySet> initialize_from);
+
+  inline int last_used_index() const;
+  inline void set_last_used_index(int index);
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakFixedArraySet);
 };
 
 // Deprecated. Use WeakFixedArray instead.

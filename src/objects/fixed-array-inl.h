@@ -18,6 +18,7 @@ TYPE_CHECKER(FixedArrayExact, FIXED_ARRAY_TYPE)
 TYPE_CHECKER(FixedDoubleArray, FIXED_DOUBLE_ARRAY_TYPE)
 TYPE_CHECKER(FixedArrayOfWeakCells, FIXED_ARRAY_TYPE)
 TYPE_CHECKER(WeakFixedArray, WEAK_FIXED_ARRAY_TYPE)
+TYPE_CHECKER(WeakFixedArraySet, WEAK_FIXED_ARRAY_SET_TYPE)
 
 CAST_ACCESSOR(ArrayList)
 CAST_ACCESSOR(ByteArray)
@@ -28,6 +29,7 @@ CAST_ACCESSOR(FixedTypedArrayBase)
 CAST_ACCESSOR(TemplateList)
 CAST_ACCESSOR(FixedArrayOfWeakCells)
 CAST_ACCESSOR(WeakFixedArray)
+CAST_ACCESSOR(WeakFixedArraySet)
 
 SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
 SYNCHRONIZED_SMI_ACCESSORS(FixedArrayBase, length, kLengthOffset)
@@ -227,6 +229,10 @@ MaybeObject* WeakFixedArray::Get(int index) const {
 void WeakFixedArray::Set(int index, MaybeObject* value) {
   DCHECK_GE(index, 0);
   DCHECK_LT(index, length());
+#ifdef DEBUG
+  HeapObject* heap_object;
+  DCHECK(value->IsWeakHeapObject() || (value->ToStrongHeapObject(&heap_object) && heap_object->IsUndefined(GetIsolate())));
+#endif
   int offset = OffsetOfElementAt(index);
   RELAXED_WRITE_FIELD(this, offset, value);
   WEAK_WRITE_BARRIER(GetHeap(), this, offset, value);
@@ -234,6 +240,29 @@ void WeakFixedArray::Set(int index, MaybeObject* value) {
 
 MaybeObject** WeakFixedArray::data_start() {
   return HeapObject::RawMaybeWeakField(this, kHeaderSize);
+}
+
+// FIXME: update last index
+int WeakFixedArraySet::last_used_index() const {
+  Smi* smi;
+  bool success = Get(kLastUsedIndexIndex)->ToSmi(&smi);
+  USE(success);
+  DCHECK(success);
+  return Smi::ToInt(smi);
+}
+
+void WeakFixedArraySet::set_last_used_index(int index) {
+  Set(kLastUsedIndexIndex, MaybeObject::FromSmi(Smi::FromInt(index)));
+}
+
+bool WeakFixedArraySet::IsEmptySlot(int index) const {
+  DCHECK(index < length());
+  MaybeObject* object = Get(index);
+#ifdef DEBUG
+  HeapObject* heap_object;
+  DCHECK(object->IsWeakHeapObject() || object->IsClearedWeakHeapObject() || (object->ToStrongHeapObject(&heap_object) && heap_object->IsUndefined(GetIsolate())));
+#endif
+  return !object->IsWeakHeapObject();
 }
 
 Object* FixedArrayOfWeakCells::Get(int index) const {

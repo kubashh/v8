@@ -127,6 +127,7 @@ void HeapObject::HeapObjectVerify() {
       FixedArray::cast(this)->FixedArrayVerify();
       break;
     case WEAK_FIXED_ARRAY_TYPE:
+    case WEAK_FIXED_ARRAY_SET_TYPE: // FIXME?
       WeakFixedArray::cast(this)->WeakFixedArrayVerify();
       break;
     case FIXED_DOUBLE_ARRAY_TYPE:
