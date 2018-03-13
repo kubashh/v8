@@ -70,11 +70,14 @@ base::Atomic32 ThreadId::highest_thread_id_ = 0;
 extern const uint8_t* DefaultEmbeddedBlob();
 extern uint32_t DefaultEmbeddedBlobSize();
 
-const uint8_t* Isolate::embedded_blob() const { return DefaultEmbeddedBlob(); }
+#ifdef V8_MULTI_SNAPSHOTS
+extern const uint8_t* DefaultEmbeddedBlobTrusted();
+extern uint32_t DefaultEmbeddedBlobSizeTrusted();
+#endif
 
-uint32_t Isolate::embedded_blob_size() const {
-  return DefaultEmbeddedBlobSize();
-}
+const uint8_t* Isolate::embedded_blob() const { return embedded_blob_; }
+
+uint32_t Isolate::embedded_blob_size() const { return embedded_blob_size_; }
 #endif
 
 int ThreadId::AllocateThreadId() {
@@ -2540,6 +2543,21 @@ Isolate::Isolate(bool enable_serializer)
   debug_ = new Debug(this);
 
   init_memcopy_functions(this);
+
+#ifdef V8_EMBEDDED_BUILTINS
+#ifdef V8_MULTI_SNAPSHOTS
+  if (FLAG_untrusted_code_mitigations) {
+    embedded_blob_ = DefaultEmbeddedBlob();
+    embedded_blob_size_ = DefaultEmbeddedBlobSize();
+  } else {
+    embedded_blob_ = DefaultEmbeddedBlobTrusted();
+    embedded_blob_size_ = DefaultEmbeddedBlobSizeTrusted();
+  }
+#else
+  embedded_blob_ = DefaultEmbeddedBlob();
+  embedded_blob_size_ = DefaultEmbeddedBlobSize();
+#endif
+#endif
 }
 
 
