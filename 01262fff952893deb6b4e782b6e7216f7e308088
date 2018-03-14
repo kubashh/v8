@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00e95602_e15ea95a",
+        "filename": "test/mjsunit/compiler/typed-array-constructor.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-03-14T14:46:19Z",
+      "side": 1,
+      "message": "What about BigInt arrays too?",
+      "revId": "01262fff952893deb6b4e782b6e7216f7e308088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb904aa9_204ba94e",
+        "filename": "test/mjsunit/compiler/typed-array-constructor.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-03-14T14:46:19Z",
+      "side": 1,
+      "message": "Can you use %MaxSmi() + 1 instead of magic?",
+      "range": {
+        "startLine": 9,
+        "startChar": 24,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "01262fff952893deb6b4e782b6e7216f7e308088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
