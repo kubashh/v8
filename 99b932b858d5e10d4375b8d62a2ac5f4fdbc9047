@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15b2aad7_e8bc4c08",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-14T14:27:42Z",
+      "side": 1,
+      "message": "anything special about this one?",
+      "range": {
+        "startLine": 289,
+        "startChar": 60,
+        "endLine": 289,
+        "endChar": 74
+      },
+      "revId": "99b932b858d5e10d4375b8d62a2ac5f4fdbc9047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
