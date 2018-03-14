@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d6a7b5c_9555fec8",
+        "filename": "gni/v8.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-14T10:20:39Z",
+      "side": 1,
+      "message": "What\u0027s \"\"? Is it a trick to determine whether a value has been manually set in args.gn?",
+      "revId": "d3d093ed7461e4a01ffd51643a38f1fee96764b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
