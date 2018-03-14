@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "407069cb_6e0fb6c5",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-03-14T11:45:25Z",
+      "side": 0,
+      "message": "nit: Would it make sense to preserve this XOR special case?",
+      "range": {
+        "startLine": 3296,
+        "startChar": 0,
+        "endLine": 3298,
+        "endChar": 18
+      },
+      "revId": "cc862e69c9deb4c48aec613c8595a2029bdddec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
