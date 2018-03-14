@@ -82,12 +82,6 @@ void CodeSpecialization::RelocateWasmContextReferences(Address new_context) {
   new_wasm_context_address_ = new_context;
 }
 
-void CodeSpecialization::PatchTableSize(uint32_t old_size, uint32_t new_size) {
-  DCHECK(old_function_table_size_ == 0 && new_function_table_size_ == 0);
-  old_function_table_size_ = old_size;
-  new_function_table_size_ = new_size;
-}
-
 void CodeSpecialization::RelocateDirectCalls(
     Handle<WasmInstanceObject> instance) {
   DCHECK(relocate_direct_calls_instance_.is_null());
@@ -179,7 +173,6 @@ bool CodeSpecialization::ApplyToWasmCode(WasmCodeWrapper code,
     DCHECK_EQ(wasm::WasmCode::kFunction, code.GetWasmCode()->kind());
   }
 
-  bool patch_table_size = old_function_table_size_ || new_function_table_size_;
   bool reloc_direct_calls = !relocate_direct_calls_instance_.is_null();
   bool reloc_pointers = pointers_to_relocate_.size() > 0;
 
@@ -187,7 +180,6 @@ bool CodeSpecialization::ApplyToWasmCode(WasmCodeWrapper code,
   auto add_mode = [&reloc_mode](bool cond, RelocInfo::Mode mode) {
     if (cond) reloc_mode |= RelocInfo::ModeMask(mode);
   };
-  add_mode(patch_table_size, RelocInfo::WASM_FUNCTION_TABLE_SIZE_REFERENCE);
   if (code.IsCodeObject()) {
     add_mode(reloc_direct_calls, RelocInfo::CODE_TARGET);
   } else {
@@ -243,13 +235,6 @@ bool CodeSpecialization::ApplyToWasmCode(WasmCodeWrapper code,
           changed = true;
         }
       } break;
-      case RelocInfo::WASM_FUNCTION_TABLE_SIZE_REFERENCE:
-        DCHECK(patch_table_size);
-        it.rinfo()->update_wasm_function_table_size_reference(
-            old_function_table_size_, new_function_table_size_,
-            icache_flush_mode);
-        changed = true;
-        break;
       default:
         UNREACHABLE();
     }
