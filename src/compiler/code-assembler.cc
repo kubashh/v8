@@ -245,14 +245,7 @@ TNode<HeapObject> CodeAssembler::LookupConstant(Handle<HeapObject> object) {
       isolate()->builtins_constants_table_builder();
   uint32_t index = builder->AddObject(object);
 
-  // The builtins constants table is loaded through the root register on all
-  // supported platforms. This is checked by the
-  // VerifyBuiltinsIsolateIndependence cctest, which disallows embedded objects
-  // in isolate-independent builtins.
-  DCHECK(isolate()->heap()->RootCanBeTreatedAsConstant(
-      Heap::kBuiltinsConstantsTableRootIndex));
-  TNode<FixedArray> builtins_constants_table = UncheckedCast<FixedArray>(
-      LoadRoot(Heap::kBuiltinsConstantsTableRootIndex));
+  TNode<FixedArray> builtins_constants_table = load_builtins_constants_table();
 
   // Generate the lookup.
   const int32_t header_size = FixedArray::kHeaderSize - kHeapObjectTag;
@@ -274,14 +267,7 @@ TNode<ExternalReference> CodeAssembler::LookupExternalReference(
       isolate()->builtins_constants_table_builder();
   uint32_t index = builder->AddExternalReference(reference);
 
-  // The builtins constants table is loaded through the root register on all
-  // supported platforms. This is checked by the
-  // VerifyBuiltinsIsolateIndependence cctest, which disallows embedded objects
-  // in isolate-independent builtins.
-  DCHECK(isolate()->heap()->RootCanBeTreatedAsConstant(
-      Heap::kBuiltinsConstantsTableRootIndex));
-  TNode<FixedArray> builtins_constants_table = UncheckedCast<FixedArray>(
-      LoadRoot(Heap::kBuiltinsConstantsTableRootIndex));
+  TNode<FixedArray> builtins_constants_table = load_builtins_constants_table();
 
   // Generate the lookup.
   const int32_t header_size = FixedArray::kHeaderSize - kHeapObjectTag;
@@ -292,6 +278,20 @@ TNode<ExternalReference> CodeAssembler::LookupExternalReference(
   return UncheckedCast<ExternalReference>(
       Load(MachineType::Pointer(), foreign,
            IntPtrConstant(Foreign::kForeignAddressOffset - kHeapObjectTag)));
+}
+
+TNode<FixedArray> CodeAssembler::load_builtins_constants_table() {
+  // The builtins constants table is loaded through the root register on all
+  // supported platforms. This is checked by the
+  // VerifyBuiltinsIsolateIndependence cctest, which disallows embedded objects
+  // in isolate-independent builtins.
+  DCHECK(isolate()->heap()->RootCanBeTreatedAsConstant(
+      Heap::kBuiltinsConstantsTableRootIndex));
+  if (!load_builtins_constants_table_) {
+    load_builtins_constants_table_ =
+        LoadRoot(Heap::kBuiltinsConstantsTableRootIndex);
+  }
+  return UncheckedCast<FixedArray>(load_builtins_constants_table_);
 }
 #endif  // V8_EMBEDDED_BUILTINS
 
@@ -481,10 +481,18 @@ void CodeAssembler::Comment(const char* format, ...) {
   raw_assembler()->Comment(copy);
 }
 
-void CodeAssembler::Bind(Label* label) { return label->Bind(); }
+void CodeAssembler::Bind(Label* label) {
+#ifdef V8_EMBEDDED_BUILTINS
+  load_builtins_constants_table_ = nullptr;
+#endif
+  return label->Bind();
+}
 
 #if DEBUG
 void CodeAssembler::Bind(Label* label, AssemblerDebugInfo debug_info) {
+#ifdef V8_EMBEDDED_BUILTINS
+  load_builtins_constants_table_ = nullptr;
+#endif
   return label->Bind(debug_info);
 }
 #endif  // DEBUG
