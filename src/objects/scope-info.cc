@@ -127,6 +127,10 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
       // Always reserve space for the debug name in the scope info.
       function_name_info = UNUSED;
     }
+  } else if (scope->is_module_scope() || scope->is_script_scope() ||
+             scope->is_eval_scope()) {
+    // Always reserve space for the debug name in the scope info.
+    function_name_info = UNUSED;
   } else {
     function_name_info = NONE;
   }
@@ -495,12 +499,13 @@ bool ScopeInfo::HasFunctionName() const {
   }
 }
 
-bool ScopeInfo::HasPendingFunctionName() const {
-  return HasFunctionName() && get(FunctionNameInfoIndex()) == Smi::kZero;
+bool ScopeInfo::HasSharedFunctionName() const {
+  return FunctionName() != SharedFunctionInfo::kNoSharedNameSentinel;
 }
 
-void ScopeInfo::SetPendingFunctionName(String* name) {
-  DCHECK(HasPendingFunctionName());
+void ScopeInfo::SetFunctionName(Object* name) {
+  DCHECK(HasFunctionName());
+  DCHECK(name->IsString() || name == SharedFunctionInfo::kNoSharedNameSentinel);
   set(FunctionNameInfoIndex(), name);
 }
 
@@ -531,9 +536,9 @@ void ScopeInfo::SetIsDebugEvaluateScope() {
 
 bool ScopeInfo::HasContext() const { return ContextLength() > 0; }
 
-String* ScopeInfo::FunctionName() const {
+Object* ScopeInfo::FunctionName() const {
   DCHECK(HasFunctionName());
-  return String::cast(get(FunctionNameInfoIndex()));
+  return get(FunctionNameInfoIndex());
 }
 
 ScopeInfo* ScopeInfo::OuterScopeInfo() const {
