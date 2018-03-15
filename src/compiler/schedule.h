@@ -272,6 +272,8 @@ class V8_EXPORT_PRIVATE Schedule final : public NON_EXPORTED_BASE(ZoneObject) {
   friend class BasicBlockInstrumentor;
   friend class RawMachineAssembler;
 
+  // Ensure phi nodes all have more than one input.
+  void EnsurePhiNodeMultiplicity();
   // Ensure properties of the CFG assumed by further stages.
   void EnsureCFGWellFormedness();
   // Ensure split-edge form for a hand-assembled schedule.

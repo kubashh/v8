@@ -338,6 +338,23 @@ void Schedule::InsertSwitch(BasicBlock* block, BasicBlock* end, Node* sw,
   SetControlInput(block, sw);
 }
 
+void Schedule::EnsurePhiNodeMultiplicity() {
+  // Ensure that useless phi nodes in blocks that only have a single predecessor
+  // -- which can happen with the automatically generated code in the CSA and
+  // torque -- are pruned.
+  for (auto block : all_blocks_) {
+    if (block->PredecessorCount() == 1) {
+      for (size_t i = 0; i < block->NodeCount(); ++i) {
+        Node* node = block->NodeAt(i);
+        if (node->opcode() == IrOpcode::kPhi) {
+          node->ReplaceUses(node->InputAt(0));
+          block->RemoveNode(block->begin() + i);
+        }
+      }
+    }
+  }
+}
+
 void Schedule::EnsureCFGWellFormedness() {
   // Make a copy of all the blocks for the iteration, since adding the split
   // edges will allocate new blocks.
