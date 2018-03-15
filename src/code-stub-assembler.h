@@ -670,6 +670,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Load the "prototype" property of a JSFunction.
   Node* LoadJSFunctionPrototype(Node* function, Label* if_bailout);
 
+  TNode<String> LoadSharedFunctionInfoName(TNode<SharedFunctionInfo> sfi);
+  TNode<String> LoadScopeInfoFunctionName(TNode<ScopeInfo> scope_info);
+
   // Store the floating point value of a HeapNumber.
   void StoreHeapNumberValue(SloppyTNode<HeapNumber> object,
                             SloppyTNode<Float64T> value);
@@ -1185,6 +1188,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   inline Node* IsSharedFunctionInfo(Node* object) {
     return IsSharedFunctionInfoMap(LoadMap(object));
   }
+  TNode<BoolT> IsScopeInfo(TNode<Object> object);
 
   Node* IsPromiseResolveProtectorCellInvalid();
   Node* IsPromiseThenProtectorCellInvalid();
