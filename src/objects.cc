@@ -2853,7 +2853,7 @@ void JSObject::JSObjectShortPrint(StringStream* accumulator) {
             accumulator->Add("!!!INVALID SHARED ON CONSTRUCTOR!!!");
           } else {
             String* constructor_name =
-                JSFunction::cast(constructor)->shared()->name();
+                JSFunction::cast(constructor)->shared()->Name();
             if (constructor_name->length() > 0) {
               accumulator->Add(global_object ? "<GlobalObject " : "<");
               accumulator->Put(constructor_name);
@@ -5810,7 +5810,7 @@ Handle<Object> JSFunction::GetName(Isolate* isolate,
   if (function->shared()->name_should_print_as_anonymous()) {
     return isolate->factory()->anonymous_string();
   }
-  return handle(function->shared()->name(), isolate);
+  return handle(function->shared()->Name(), isolate);
 }
 
 // static
@@ -13043,7 +13043,7 @@ Handle<String> NativeCodeFunctionSourceString(
   Isolate* const isolate = shared_info->GetIsolate();
   IncrementalStringBuilder builder(isolate);
   builder.AppendCString("function ");
-  builder.AppendString(handle(shared_info->name(), isolate));
+  builder.AppendString(handle(shared_info->Name(), isolate));
   builder.AppendCString("() { [native code] }");
   return builder.Finish().ToHandleChecked();
 }
@@ -13116,7 +13116,7 @@ Handle<String> JSFunction::ToString(Handle<JSFunction> function) {
     if (shared_info->name_should_print_as_anonymous()) {
       builder.AppendCString("anonymous");
     } else if (!shared_info->is_anonymous_expression()) {
-      builder.AppendString(handle(shared_info->name(), isolate));
+      builder.AppendString(handle(shared_info->Name(), isolate));
     }
   }
   if (shared_info->is_wrapped()) {
@@ -13556,8 +13556,8 @@ void SharedFunctionInfo::set_debugger_hints(int value) {
 }
 
 String* SharedFunctionInfo::DebugName() {
-  if (name()->length() == 0) return inferred_name();
-  return name();
+  if (Name()->length() == 0) return inferred_name();
+  return Name();
 }
 
 // static
@@ -13638,7 +13638,7 @@ Handle<Object> SharedFunctionInfo::GetSourceCodeHarmony(
   DCHECK(!shared->name_should_print_as_anonymous());
   IncrementalStringBuilder builder(isolate);
   builder.AppendCString("function ");
-  builder.AppendString(Handle<String>(shared->name(), isolate));
+  builder.AppendString(Handle<String>(shared->Name(), isolate));
   builder.AppendCString("(");
   Handle<FixedArray> args(Script::cast(shared->script())->wrapped_arguments());
   int argc = args->length();
@@ -13749,7 +13749,7 @@ std::ostream& operator<<(std::ostream& os, const SourceCodeOf& v) {
 
   if (!s->is_toplevel()) {
     os << "function ";
-    String* name = s->name();
+    String* name = s->Name();
     if (name->length() > 0) {
       name->PrintUC16(os);
     }
