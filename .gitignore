@@ -58,6 +58,7 @@
 /testing/gmock
 /testing/gtest
 /third_party/*
+!/third_party/antlr4
 !/third_party/binutils
 !/third_party/eu-strip
 !/third_party/inspector_protocol
