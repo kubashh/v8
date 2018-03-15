@@ -1118,6 +1118,11 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   CodeAssemblerState* state_;
 
+#ifdef V8_EMBEDDED_BUILTINS
+  TNode<FixedArray> load_builtins_constants_table();
+  Node* load_builtins_constants_table_ = nullptr;
+#endif
+
   DISALLOW_COPY_AND_ASSIGN(CodeAssembler);
 };
 
