@@ -613,6 +613,30 @@
     },
     {
       "key": {
+        "uuid": "2ca0e842_06f0f435",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-15T12:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffe62970_aab44049",
+      "range": {
+        "startLine": 6780,
+        "startChar": 33,
+        "endLine": 6780,
+        "endChar": 34
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "976460c5_e8ea8f5b",
         "filename": "src/heap/heap.h",
         "patchSetId": 15
@@ -775,6 +799,30 @@
       "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12279bc9_3fa51789",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-15T12:54:28Z",
+      "side": 1,
+      "message": "Done. Sort of.\n\nI\u0027ve marked all the objects black, but the bitmap is not entirely 1s, so I can\u0027t just do a AllBitsSet check. Is that sufficient or should I try to initialize the bitmap to 1s on creation? (I can do that in a follow-up).",
+      "parentUuid": "3228b331_5b2c1e21",
+      "range": {
+        "startLine": 672,
+        "startChar": 2,
+        "endLine": 672,
+        "endChar": 27
+      },
+      "revId": "24cccda49a746a3378862f7bfc27404890a899ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

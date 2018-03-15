@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34cd9d27_b5045f87",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 6809,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-15T12:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63e5b8dd_14f7e411",
+      "range": {
+        "startLine": 6809,
+        "startChar": 13,
+        "endLine": 6809,
+        "endChar": 16
+      },
+      "revId": "e435be662926bcf11ae1c901083d300cef043d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "414714d2_9a01f6ec",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "e435be662926bcf11ae1c901083d300cef043d3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab534ab6_6295a49b",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-15T12:54:28Z",
+      "side": 1,
+      "message": "I\u0027ve marked them all black in this CL and remove the changes in this file.",
+      "parentUuid": "414714d2_9a01f6ec",
+      "range": {
+        "startLine": 979,
+        "startChar": 29,
+        "endLine": 979,
+        "endChar": 44
+      },
+      "revId": "e435be662926bcf11ae1c901083d300cef043d3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
