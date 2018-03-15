@@ -495,6 +495,8 @@ class TurboAssembler : public Assembler {
 
   DEFINE_INSTRUCTION(Slt);
   DEFINE_INSTRUCTION(Sltu);
+  DEFINE_INSTRUCTION(Sgt);
+  DEFINE_INSTRUCTION(Sgtu);
 
   // MIPS32 R2 instruction macro.
   DEFINE_INSTRUCTION(Ror);
@@ -755,6 +757,13 @@ class TurboAssembler : public Assembler {
   void Move(FPURegister dst, double imm) { Move(dst, bit_cast<uint64_t>(imm)); }
   void Move(FPURegister dst, uint32_t src);
   void Move(FPURegister dst, uint64_t src);
+
+  void DaddOverflow(Register dst, Register left, const Operand& right,
+                    Register overflow);
+  void DsubOverflow(Register dst, Register left, const Operand& right,
+                    Register overflow);
+  void MulOverflow(Register dst, Register left, const Operand& right,
+                   Register overflow);
 
   inline void MulBranchOvf(Register dst, Register left, const Operand& right,
                            Label* overflow_label, Register scratch = at) {
