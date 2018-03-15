@@ -34,6 +34,29 @@
       "revId": "d3d093ed7461e4a01ffd51643a38f1fee96764b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "174c9d9f_965b2bc0",
+        "filename": "src/startup-data-util.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-15T10:54:09Z",
+      "side": 1,
+      "message": "How about: \n\n  const char* snapshot_name \u003d \"snapshot_blob.bin\";\n#ifdef V8_MULTI_SNAPSHOTS\n  if (FLAG_untrusted_code_mitigations) {\n    snapshot_name \u003d \"snapshot_blob_trusted.bin\";\n  }\n#endif\n  LoadFromFiles(....);",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 5
+      },
+      "revId": "d3d093ed7461e4a01ffd51643a38f1fee96764b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
