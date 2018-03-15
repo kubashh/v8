@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c790449c_fd08dee9",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-15T17:11:00Z",
+      "side": 1,
+      "message": "DCHECK",
+      "range": {
+        "startLine": 340,
+        "startChar": 4,
+        "endLine": 340,
+        "endChar": 9
+      },
+      "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b7957f_225448e8",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-15T17:11:00Z",
+      "side": 1,
+      "message": "Hmm, I guess if we mark objects black we should mark only the object start. How about calling MarkBlack here?\n\nOtherwise, I would mark the whole bitmap black during page initialization of black pages.",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 10
+      },
+      "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
