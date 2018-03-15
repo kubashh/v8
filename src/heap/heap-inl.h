@@ -333,6 +333,12 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
     allocation = lo_space_->AllocateRaw(size_in_bytes, NOT_EXECUTABLE);
   } else if (MAP_SPACE == space) {
     allocation = map_space_->AllocateRawUnaligned(size_in_bytes);
+  } else if (RO_SPACE == space) {
+#ifdef V8_USE_SNAPSHOT
+    DCHECK(isolate_->serializer_enabled());
+#endif
+    CHECK(!large_object);
+    allocation = read_only_space_->AllocateRaw(size_in_bytes, alignment);
   } else {
     // NEW_SPACE is not allowed here.
     UNREACHABLE();
@@ -344,6 +350,14 @@ AllocationResult Heap::AllocateRaw(int size_in_bytes, AllocationSpace space,
       // already.
       UnprotectAndRegisterMemoryChunk(object);
       ZapCodeObject(object->address(), size_in_bytes);
+    } else if (space == RO_SPACE) {
+      Address address = object->address();
+      Page* page = Page::FromAddress(address);
+      incremental_marking()
+          ->marking_state()
+          ->bitmap(Page::FromAllocationAreaAddress(address))
+          ->SetRange(page->AddressToMarkbitIndex(address),
+                     page->AddressToMarkbitIndex(address + size_in_bytes));
     }
     OnAllocationEvent(object, size_in_bytes);
   }
