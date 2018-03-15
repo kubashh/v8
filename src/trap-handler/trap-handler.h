@@ -71,7 +71,7 @@ void EnableTrapHandler();
 
 inline bool IsTrapHandlerEnabled() {
   DCHECK_IMPLIES(g_is_trap_handler_enabled, V8_TRAP_HANDLER_SUPPORTED);
-  return FLAG_wasm_trap_handler || g_is_trap_handler_enabled;
+  return g_is_trap_handler_enabled;
 }
 
 extern THREAD_LOCAL int g_thread_in_wasm_code;
