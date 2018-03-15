@@ -156,8 +156,10 @@ std::ostream& operator<<(std::ostream& os,
           return os << "(S)";
         case UnallocatedOperand::SAME_AS_FIRST_INPUT:
           return os << "(1)";
-        case UnallocatedOperand::ANY:
+        case UnallocatedOperand::REGISTER_OR_SLOT:
           return os << "(-)";
+        case UnallocatedOperand::ANY:
+          return os << "(*)";
       }
     }
     case InstructionOperand::CONSTANT:

@@ -170,6 +170,7 @@ class UnallocatedOperand final : public InstructionOperand {
 
   enum ExtendedPolicy {
     NONE,
+    REGISTER_OR_SLOT,
     ANY,
     FIXED_REGISTER,
     FIXED_FP_REGISTER,
@@ -236,6 +237,10 @@ class UnallocatedOperand final : public InstructionOperand {
   }
 
   // Predicates for the operand policy.
+  bool HasRegisterOrSlotPolicy() const {
+    return basic_policy() == EXTENDED_POLICY &&
+           extended_policy() == REGISTER_OR_SLOT;
+  }
   bool HasAnyPolicy() const {
     return basic_policy() == EXTENDED_POLICY && extended_policy() == ANY;
   }
