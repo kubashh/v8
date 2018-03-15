@@ -1096,7 +1096,7 @@ void JSFunction::JSFunctionPrint(std::ostream& os) {  // NOLINT
     os << "<no-prototype-slot>";
   }
   os << "\n - shared_info: " << Brief(shared());
-  os << "\n - name: " << Brief(shared()->name());
+  os << "\n - name: " << Brief(shared()->Name());
 
   // Print Builtin name for builtin functions
   int builtin_index = code()->builtin_index();
@@ -1156,8 +1156,8 @@ void SharedFunctionInfo::PrintSourceCode(std::ostream& os) {
 void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "SharedFunctionInfo");
   os << "\n - name: ";
-  if (has_shared_name()) {
-    os << Brief(raw_name());
+  if (HasSharedName()) {
+    os << Brief(Name());
   } else {
     os << "<no-shared-name>";
   }

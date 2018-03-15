@@ -2063,6 +2063,28 @@ Node* CodeStubAssembler::LoadJSFunctionPrototype(Node* function,
   return var_result.value();
 }
 
+TNode<String> CodeStubAssembler::LoadSharedFunctionInfoName(
+    TNode<SharedFunctionInfo> sfi) {
+  Label done(this);
+  TVARIABLE(Object, name);
+
+  name = LoadObjectField(sfi, SharedFunctionInfo::kNameOrScopeInfoOffset);
+  GotoIfNot(IsScopeInfo(name.value()), &done);
+
+  TNode<ScopeInfo> scope_info = CAST(name.value());
+  name = LoadScopeInfoFunctionName(scope_info);
+  Goto(&done);
+
+  BIND(&done);
+  return CAST(name.value());
+}
+
+TNode<String> CodeStubAssembler::LoadScopeInfoFunctionName(
+    TNode<ScopeInfo> scope_info) {
+  // TODO(cbruni): fix decoding...
+  return CAST(LoadFixedArrayElement(scope_info, IntPtrConstant(0)));
+}
+
 void CodeStubAssembler::StoreHeapNumberValue(SloppyTNode<HeapNumber> object,
                                              SloppyTNode<Float64T> value) {
   StoreObjectFieldNoWriteBarrier(object, HeapNumber::kValueOffset, value,
@@ -4749,6 +4771,13 @@ Node* CodeStubAssembler::IsFixedTypedArray(Node* object) {
 
 Node* CodeStubAssembler::IsJSRegExp(Node* object) {
   return HasInstanceType(object, JS_REGEXP_TYPE);
+}
+
+TNode<BoolT> CodeStubAssembler::IsScopeInfo(TNode<Object> object) {
+  return Select<BoolT>(
+      TaggedIsSmi(object), [=] { return Int32FalseConstant(); },
+      [=] { return HasInstanceType(CAST(object), SCOPE_INFO_TYPE); },
+      MachineRepresentation::kWord32);
 }
 
 Node* CodeStubAssembler::IsNumeric(Node* object) {

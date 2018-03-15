@@ -495,12 +495,9 @@ bool ScopeInfo::HasFunctionName() const {
   }
 }
 
-bool ScopeInfo::HasPendingFunctionName() const {
-  return HasFunctionName() && get(FunctionNameInfoIndex()) == Smi::kZero;
-}
-
-void ScopeInfo::SetPendingFunctionName(String* name) {
-  DCHECK(HasPendingFunctionName());
+void ScopeInfo::SetFunctionName(Object* name) {
+  DCHECK(HasFunctionName());
+  DCHECK(name->IsString() || name == SharedFunctionInfo::kNoSharedNameSentinel);
   set(FunctionNameInfoIndex(), name);
 }
 
@@ -531,9 +528,9 @@ void ScopeInfo::SetIsDebugEvaluateScope() {
 
 bool ScopeInfo::HasContext() const { return ContextLength() > 0; }
 
-String* ScopeInfo::FunctionName() const {
+Object* ScopeInfo::FunctionName() const {
   DCHECK(HasFunctionName());
-  return String::cast(get(FunctionNameInfoIndex()));
+  return get(FunctionNameInfoIndex());
 }
 
 ScopeInfo* ScopeInfo::OuterScopeInfo() const {

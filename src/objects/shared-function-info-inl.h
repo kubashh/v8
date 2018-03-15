@@ -23,7 +23,8 @@ TYPE_CHECKER(SharedFunctionInfo, SHARED_FUNCTION_INFO_TYPE)
 CAST_ACCESSOR(SharedFunctionInfo)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(SharedFunctionInfo, Object)
 
-ACCESSORS(SharedFunctionInfo, raw_name, Object, kNameOffset)
+ACCESSORS(SharedFunctionInfo, name_or_scope_info, Object,
+          kNameOrScopeInfoOffset)
 ACCESSORS(SharedFunctionInfo, construct_stub, Code, kConstructStubOffset)
 ACCESSORS(SharedFunctionInfo, feedback_metadata, FeedbackMetadata,
           kFeedbackMetadataOffset)
@@ -55,18 +56,34 @@ INT_ACCESSORS(SharedFunctionInfo, function_token_position,
               kFunctionTokenPositionOffset)
 INT_ACCESSORS(SharedFunctionInfo, compiler_hints, kCompilerHintsOffset)
 
-bool SharedFunctionInfo::has_shared_name() const {
-  return raw_name() != kNoSharedNameSentinel;
+bool SharedFunctionInfo::HasSharedName() const {
+  Object* value = name_or_scope_info();
+  if (value->IsScopeInfo()) {
+    if (!ScopeInfo::cast(value)->HasFunctionName()) return true;
+    value = ScopeInfo::cast(value)->FunctionName();
+  }
+  return value != kNoSharedNameSentinel;
 }
 
-String* SharedFunctionInfo::name() const {
-  if (!has_shared_name()) return GetHeap()->empty_string();
-  DCHECK(raw_name()->IsString());
-  return String::cast(raw_name());
+String* SharedFunctionInfo::Name() const {
+  if (!HasSharedName()) return GetHeap()->empty_string();
+  Object* value = name_or_scope_info();
+  if (value->IsScopeInfo()) {
+    if (ScopeInfo::cast(value)->HasFunctionName()) {
+      return String::cast(ScopeInfo::cast(value)->FunctionName());
+    }
+    return GetHeap()->empty_string();
+  }
+  return String::cast(value);
 }
 
-void SharedFunctionInfo::set_name(String* name) {
-  set_raw_name(name);
+void SharedFunctionInfo::SetName(String* name) {
+  Object* maybe_scope_info = name_or_scope_info();
+  if (maybe_scope_info->IsScopeInfo()) {
+    ScopeInfo::cast(maybe_scope_info)->SetFunctionName(name);
+  } else {
+    set_name_or_scope_info(name);
+  }
   UpdateFunctionMapIndex();
 }
 
@@ -167,7 +184,7 @@ void SharedFunctionInfo::clear_padding() {
 
 void SharedFunctionInfo::UpdateFunctionMapIndex() {
   int map_index = Context::FunctionMapIndex(
-      language_mode(), kind(), true, has_shared_name(), needs_home_object());
+      language_mode(), kind(), true, HasSharedName(), needs_home_object());
   set_function_map_index(map_index);
 }
 
@@ -219,14 +236,28 @@ bool SharedFunctionInfo::IsInterpreted() const {
 }
 
 ScopeInfo* SharedFunctionInfo::scope_info() const {
-  return reinterpret_cast<ScopeInfo*>(READ_FIELD(this, kScopeInfoOffset));
+  Object* maybe_scope_info = name_or_scope_info();
+  if (maybe_scope_info->IsScopeInfo()) {
+    return ScopeInfo::cast(maybe_scope_info);
+  }
+  return ScopeInfo::Empty(GetIsolate());
 }
 
-void SharedFunctionInfo::set_scope_info(ScopeInfo* value,
+void SharedFunctionInfo::set_scope_info(ScopeInfo* scope_info,
                                         WriteBarrierMode mode) {
-  WRITE_FIELD(this, kScopeInfoOffset, reinterpret_cast<Object*>(value));
-  CONDITIONAL_WRITE_BARRIER(GetHeap(), this, kScopeInfoOffset,
-                            reinterpret_cast<Object*>(value), mode);
+  // Move the existing name onto the ScopeInfo.
+  Object* maybe_name = name_or_scope_info();
+  DCHECK(!maybe_name->IsScopeInfo());
+  // Only set the function name for function scopes.
+  if (scope_info->HasFunctionName()) {
+    scope_info->SetFunctionName(maybe_name);
+  } else {
+    DCHECK_EQ(0, String::cast(maybe_name)->length());
+  }
+  WRITE_FIELD(this, kNameOrScopeInfoOffset,
+              reinterpret_cast<Object*>(scope_info));
+  CONDITIONAL_WRITE_BARRIER(GetHeap(), this, kNameOrScopeInfoOffset,
+                            reinterpret_cast<Object*>(scope_info), mode);
 }
 
 ACCESSORS(SharedFunctionInfo, outer_scope_info, HeapObject,
