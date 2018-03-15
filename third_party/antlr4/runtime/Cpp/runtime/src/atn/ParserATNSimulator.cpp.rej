@@ -1,0 +1,17 @@
+***************
+*** 53,59 ****
+  
+  ParserATNSimulator::ParserATNSimulator(Parser *parser, const ATN &atn, std::vector<dfa::DFA> &decisionToDFA,
+                                         PredictionContextCache &sharedContextCache)
+- : ATNSimulator(atn, sharedContextCache), parser(parser), decisionToDFA(decisionToDFA) {
+    InitializeInstanceFields();
+  }
+  
+--- 53,59 ----
+  
+  ParserATNSimulator::ParserATNSimulator(Parser *parser, const ATN &atn, std::vector<dfa::DFA> &decisionToDFA,
+                                         PredictionContextCache &sharedContextCache)
++ : ATNSimulator(atn, sharedContextCache), decisionToDFA(decisionToDFA), parser(parser) {
+    InitializeInstanceFields();
+  }
+  
