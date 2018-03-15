@@ -66,8 +66,13 @@ void ReleaseHandlerData(int index);
 #define THREAD_LOCAL __thread
 #endif
 
+extern bool g_is_trap_handler_enabled;
+void EnableTrapHandler();
+
 inline bool IsTrapHandlerEnabled() {
-  return FLAG_wasm_trap_handler && V8_TRAP_HANDLER_SUPPORTED;
+  DCHECK_IMPLIES(g_is_trap_handler_enabled, V8_TRAP_HANDLER_SUPPORTED);
+  return (V8_TRAP_HANDLER_SUPPORTED && FLAG_wasm_trap_handler) ||
+         g_is_trap_handler_enabled;
 }
 
 extern THREAD_LOCAL int g_thread_in_wasm_code;
