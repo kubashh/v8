@@ -58,6 +58,7 @@ Schedule* RawMachineAssembler::Export() {
     PrintF("--- RAW SCHEDULE -------------------------------------------\n");
     os << *schedule_;
   }
+  schedule_->EnsurePhiNodeMultiplicity();
   schedule_->EnsureCFGWellFormedness();
   Scheduler::ComputeSpecialRPO(zone(), schedule_);
   schedule_->PropagateDeferredMark();
