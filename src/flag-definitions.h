@@ -594,7 +594,7 @@ DEFINE_BOOL(wasm_no_bounds_checks, false,
 DEFINE_BOOL(wasm_no_stack_checks, false,
             "disable stack checks (performance testing only)")
 
-DEFINE_BOOL(wasm_trap_handler, false,
+DEFINE_BOOL(wasm_trap_handler, true,
             "use signal handlers to catch out of bounds memory access in wasm"
             " (currently Linux x86_64 only)")
 DEFINE_BOOL(wasm_fuzzer_gen_test, false,
