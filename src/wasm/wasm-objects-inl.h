@@ -58,8 +58,6 @@ OPTIONAL_ACCESSORS(WasmMemoryObject, instances, FixedArrayOfWeakCells,
                    kInstancesOffset)
 
 // WasmInstanceObject
-ACCESSORS(WasmInstanceObject, wasm_context, Managed<WasmContext>,
-          kWasmContextOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_start, byte*, kMemoryStartOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_size, uintptr_t,
                     kMemorySizeOffset)

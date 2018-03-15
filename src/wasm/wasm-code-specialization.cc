@@ -76,10 +76,13 @@ CodeSpecialization::CodeSpecialization(Isolate* isolate, Zone* zone) {}
 
 CodeSpecialization::~CodeSpecialization() {}
 
-void CodeSpecialization::RelocateWasmContextReferences(Address new_context) {
-  DCHECK_NOT_NULL(new_context);
-  DCHECK_NULL(new_wasm_context_address_);
-  new_wasm_context_address_ = new_context;
+void CodeSpecialization::UpdateInstanceReferences(
+    Handle<HeapObject> old_instance_placeholder,
+    Handle<HeapObject> new_instance_placeholder) {
+  DCHECK(!old_instance_placeholder.is_null());
+  DCHECK(!new_instance_placeholder.is_null());
+  old_instance_placeholder_ = old_instance_placeholder;
+  new_instance_placeholder_ = new_instance_placeholder;
 }
 
 void CodeSpecialization::RelocateDirectCalls(NativeModule* native_module) {
@@ -119,18 +122,21 @@ bool CodeSpecialization::ApplyToWholeModule(NativeModule* native_module,
     changed |= ApplyToWasmCode(wasm_function, icache_flush_mode);
   }
 
+  bool patch_wasm_instance_placeholders =
+      !old_instance_placeholder_.is_identical_to(new_instance_placeholder_);
+
   // Patch all exported functions (JS_TO_WASM_FUNCTION).
   int reloc_mode = 0;
-  // We need to patch WASM_CONTEXT_REFERENCE to put the correct address.
-  if (new_wasm_context_address_) {
-    reloc_mode |= RelocInfo::ModeMask(RelocInfo::WASM_CONTEXT_REFERENCE);
-  }
   // Patch CODE_TARGET if we shall relocate direct calls. If we patch direct
   // calls, the instance registered for that (relocate_direct_calls_module_)
   // should match the instance we currently patch (instance).
   if (relocate_direct_calls_module_ != nullptr) {
     DCHECK_EQ(native_module, relocate_direct_calls_module_);
     reloc_mode |= RelocInfo::ModeMask(RelocInfo::JS_TO_WASM_CALL);
+  }
+  // Instance references are simply embedded objects.
+  if (patch_wasm_instance_placeholders) {
+    reloc_mode |= RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
   }
   if (!reloc_mode) return changed;
   int wrapper_index = 0;
@@ -142,14 +148,18 @@ bool CodeSpecialization::ApplyToWholeModule(NativeModule* native_module,
     for (RelocIterator it(export_wrapper, reloc_mode); !it.done(); it.next()) {
       RelocInfo::Mode mode = it.rinfo()->rmode();
       switch (mode) {
-        case RelocInfo::WASM_CONTEXT_REFERENCE:
-          it.rinfo()->set_wasm_context_reference(new_wasm_context_address_,
-                                                 icache_flush_mode);
-          break;
         case RelocInfo::JS_TO_WASM_CALL: {
           const WasmCode* new_code = native_module->GetCode(exp.index);
           it.rinfo()->set_js_to_wasm_address(new_code->instructions().start(),
                                              icache_flush_mode);
+        } break;
+        case RelocInfo::EMBEDDED_OBJECT: {
+          const HeapObject* old = it.rinfo()->target_object();
+          if (*old_instance_placeholder_ == old) {
+            it.rinfo()->set_target_object(
+                *new_instance_placeholder_,
+                WriteBarrierMode::UPDATE_WRITE_BARRIER, icache_flush_mode);
+          }
         } break;
         default:
           UNREACHABLE();

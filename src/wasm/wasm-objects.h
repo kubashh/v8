@@ -42,48 +42,13 @@ class WasmInstanceObject;
   INLINE(bool has_##name());                \
   DECL_ACCESSORS(name, type)
 
-// An entry in an indirect dispatch table.
+// An entry in an indirect function table (IFT).
 struct IndirectFunctionTableEntry {
-  int32_t sig_id = 0;
-  WasmContext* context = nullptr;
+  int32_t sig_id = 0;  // TODO(titzer): should be uintptr_t
+  WasmInstanceObject* instance = nullptr;
   Address target = nullptr;
 
   MOVE_ONLY_WITH_DEFAULT_CONSTRUCTORS(IndirectFunctionTableEntry)
-};
-
-// Wasm context used to store the mem_size and mem_start address of the linear
-// memory. These variables can be accessed at C++ level at graph build time
-// (e.g., initialized during instance building / changed at runtime by
-// grow_memory). The address of the WasmContext is provided to the wasm entry
-// functions using a RelocatableIntPtrConstant, then the address is passed as
-// parameter to the other wasm functions.
-// Note that generated code can directly read from instances of this struct.
-struct WasmContext {
-  byte* mem_start = nullptr;
-  uint32_t mem_size = 0;  // TODO(titzer): uintptr_t?
-  uint32_t mem_mask = 0;  // TODO(titzer): uintptr_t?
-  byte* globals_start = nullptr;
-  // TODO(wasm): pad these entries to a power of two.
-  IndirectFunctionTableEntry* table = nullptr;
-  uint32_t table_size = 0;
-
-  void SetRawMemory(void* mem_start, size_t mem_size) {
-    DCHECK_LE(mem_size, wasm::kV8MaxWasmMemoryPages * wasm::kWasmPageSize);
-    this->mem_start = static_cast<byte*>(mem_start);
-    this->mem_size = static_cast<uint32_t>(mem_size);
-    this->mem_mask = base::bits::RoundUpToPowerOfTwo32(this->mem_size) - 1;
-    DCHECK_LE(mem_size, this->mem_mask + 1);
-  }
-
-  ~WasmContext() {
-    if (table) free(table);
-    mem_start = nullptr;
-    mem_size = 0;
-    mem_mask = 0;
-    globals_start = nullptr;
-    table = nullptr;
-    table_size = 0;
-  }
 };
 
 // Representation of a WebAssembly.Module JavaScript-level object.
@@ -161,14 +126,12 @@ class WasmMemoryObject : public JSObject {
   DECL_ACCESSORS(array_buffer, JSArrayBuffer)
   DECL_INT_ACCESSORS(maximum_pages)
   DECL_OPTIONAL_ACCESSORS(instances, FixedArrayOfWeakCells)
-  DECL_ACCESSORS(wasm_context, Managed<WasmContext>)
 
 // Layout description.
 #define WASM_MEMORY_OBJECT_FIELDS(V)   \
   V(kArrayBufferOffset, kPointerSize)  \
   V(kMaximumPagesOffset, kPointerSize) \
   V(kInstancesOffset, kPointerSize)    \
-  V(kWasmContextOffset, kPointerSize)  \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
@@ -195,7 +158,6 @@ class WasmInstanceObject : public JSObject {
  public:
   DECL_CAST(WasmInstanceObject)
 
-  DECL_ACCESSORS(wasm_context, Managed<WasmContext>)
   DECL_ACCESSORS(compiled_module, WasmCompiledModule)
   DECL_ACCESSORS(exports_object, JSObject)
   DECL_OPTIONAL_ACCESSORS(memory_object, WasmMemoryObject)
@@ -419,23 +381,6 @@ class WasmSharedModuleData : public Struct {
 
 // This represents the set of wasm compiled functions, together
 // with all the information necessary for re-specializing them.
-//
-// We specialize wasm functions to their instance by embedding:
-//   - raw pointer to the wasm_context, that contains the size of the
-//     memory and the pointer to the backing store of the array buffer
-//     used as memory of a particular WebAssembly.Instance object. This
-//     information are then used at runtime to access memory / verify bounds
-//     check limits.
-//   - the objects representing the function tables and signature tables
-//
-// Even without instantiating, we need values for all of these parameters.
-// We need to track these values to be able to create new instances and
-// to be able to serialize/deserialize.
-// The design decisions for how we track these values is not too immediate,
-// and it deserves a summary. The "tricky" ones are: memory, globals, and
-// the tables (signature and functions).
-// For tables, we need to hold a reference to the JS Heap object, because
-// we embed them as objects, and they may move.
 class WasmCompiledModule : public Struct {
  public:
   DECL_CAST(WasmCompiledModule)
@@ -518,7 +463,8 @@ class WasmCompiledModule : public Struct {
 
   static Handle<WasmCompiledModule> Clone(Isolate* isolate,
                                           Handle<WasmCompiledModule> module);
-  static void Reset(Isolate* isolate, WasmCompiledModule* module);
+  static void Reset(Isolate* isolate, WasmCompiledModule* module,
+                    WasmInstanceObject* instance);
 
   wasm::NativeModule* GetNativeModule() const;
   void InsertInChain(WasmModuleObject*);

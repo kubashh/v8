@@ -277,13 +277,9 @@ class WasmFunctionWrapper : private compiler::GraphAndBuilders {
                : common()->Int64Constant(static_cast<int64_t>(value));
   }
 
-  void SetContextAddress(uintptr_t value) {
-    auto rmode = RelocInfo::WASM_CONTEXT_REFERENCE;
-    auto op = kPointerSize == 8 ? common()->RelocatableInt64Constant(
-                                      static_cast<int64_t>(value), rmode)
-                                : common()->RelocatableInt32Constant(
-                                      static_cast<int32_t>(value), rmode);
-    compiler::NodeProperties::ChangeOp(context_address_, op);
+  void SetInstance(Handle<WasmInstanceObject> instance) {
+    compiler::NodeProperties::ChangeOp(context_address_,
+                                       common()->HeapConstant(instance));
   }
 
   Handle<Code> GetWrapperCode();
@@ -455,10 +451,8 @@ class WasmRunner : public WasmRunnerBase {
     set_trap_callback_for_testing(trap_callback);
 
     wrapper_.SetInnerCode(builder_.GetFunctionCode(0));
-    WasmContext* wasm_context =
-        builder().instance_object()->wasm_context()->get();
-    wrapper_.SetContextAddress(reinterpret_cast<uintptr_t>(wasm_context));
-    builder().Link();
+    wrapper_.SetInstance(builder_.instance_object());
+    builder_.Link();
     Handle<Code> wrapper_code = wrapper_.GetWrapperCode();
     compiler::CodeRunner<int32_t> runner(CcTest::InitIsolateOnce(),
                                          wrapper_code, wrapper_.signature());

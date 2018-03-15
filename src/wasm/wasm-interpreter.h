@@ -16,7 +16,6 @@ class AccountingAllocator;
 
 namespace internal {
 class WasmInstanceObject;
-struct WasmContext;
 
 namespace wasm {
 
@@ -181,7 +180,8 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
   };
 
   WasmInterpreter(Isolate* isolate, const WasmModule* module,
-                  const ModuleWireBytes& wire_bytes, WasmContext* wasm_context);
+                  const ModuleWireBytes& wire_bytes,
+                  Handle<WasmInstanceObject> instance);
   ~WasmInterpreter();
 
   //==========================================================================

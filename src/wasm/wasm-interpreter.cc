@@ -1183,9 +1183,10 @@ class ThreadImpl {
   };
 
  public:
-  ThreadImpl(Zone* zone, CodeMap* codemap, WasmContext* wasm_context)
+  ThreadImpl(Zone* zone, CodeMap* codemap,
+             Handle<WasmInstanceObject> wasm_instance)
       : codemap_(codemap),
-        wasm_context_(wasm_context),
+        wasm_instance_(wasm_instance),
         zone_(zone),
         frames_(zone),
         activations_(zone) {}
@@ -1345,7 +1346,7 @@ class ThreadImpl {
   friend class InterpretedFrameImpl;
 
   CodeMap* codemap_;
-  WasmContext* wasm_context_;
+  Handle<WasmInstanceObject> wasm_instance_;
   Zone* zone_;
   WasmValue* stack_start_ = nullptr;  // Start of allocated stack space.
   WasmValue* stack_limit_ = nullptr;  // End of allocated stack space.
@@ -1502,14 +1503,14 @@ class ThreadImpl {
 
   template <typename mtype>
   inline byte* BoundsCheckMem(uint32_t offset, uint32_t index) {
-    uint32_t mem_size = wasm_context_->mem_size;
+    size_t mem_size = wasm_instance_->memory_size();
     if (sizeof(mtype) > mem_size) return nullptr;
     if (offset > (mem_size - sizeof(mtype))) return nullptr;
     if (index > (mem_size - sizeof(mtype) - offset)) return nullptr;
     // Compute the effective address of the access, making sure to condition
     // the index even in the in-bounds case.
-    return wasm_context_->mem_start + offset +
-           (index & wasm_context_->mem_mask);
+    return wasm_instance_->memory_start() + offset +
+           (index & wasm_instance_->memory_mask());
   }
 
   template <typename ctype, typename mtype>
@@ -1533,7 +1534,7 @@ class ThreadImpl {
       wasm::MemoryTracingInfo info(operand.offset + index, false, rep);
       TraceMemoryOperation(ExecutionEngine::kInterpreter, &info,
                            code->function->func_index, static_cast<int>(pc),
-                           wasm_context_->mem_start);
+                           wasm_instance_->memory_start());
     }
 
     return true;
@@ -1559,7 +1560,7 @@ class ThreadImpl {
       wasm::MemoryTracingInfo info(operand.offset + index, true, rep);
       TraceMemoryOperation(ExecutionEngine::kInterpreter, &info,
                            code->function->func_index, static_cast<int>(pc),
-                           wasm_context_->mem_start);
+                           wasm_instance_->memory_start());
     }
 
     return true;
@@ -2003,7 +2004,7 @@ class ThreadImpl {
           GlobalIndexOperand<Decoder::kNoValidate> operand(&decoder,
                                                            code->at(pc));
           const WasmGlobal* global = &module()->globals[operand.index];
-          byte* ptr = wasm_context_->globals_start + global->offset;
+          byte* ptr = wasm_instance_->globals_start() + global->offset;
           WasmValue val;
           switch (global->type) {
 #define CASE_TYPE(wasm, ctype)                       \
@@ -2023,7 +2024,7 @@ class ThreadImpl {
           GlobalIndexOperand<Decoder::kNoValidate> operand(&decoder,
                                                            code->at(pc));
           const WasmGlobal* global = &module()->globals[operand.index];
-          byte* ptr = wasm_context_->globals_start + global->offset;
+          byte* ptr = wasm_instance_->globals_start() + global->offset;
           WasmValue val = Pop();
           switch (global->type) {
 #define CASE_TYPE(wasm, ctype)                        \
@@ -2131,7 +2132,6 @@ class ThreadImpl {
           uint32_t delta_pages = Pop().to<uint32_t>();
           Handle<WasmInstanceObject> instance =
               codemap()->maybe_instance().ToHandleChecked();
-          DCHECK_EQ(wasm_context_, instance->wasm_context()->get());
           Isolate* isolate = instance->GetIsolate();
           int32_t result =
               WasmInstanceObject::GrowMemory(isolate, instance, delta_pages);
@@ -2145,8 +2145,8 @@ class ThreadImpl {
         case kExprMemorySize: {
           MemoryIndexOperand<Decoder::kNoValidate> operand(&decoder,
                                                            code->at(pc));
-          Push(WasmValue(
-              static_cast<uint32_t>(wasm_context_->mem_size / kWasmPageSize)));
+          Push(WasmValue(static_cast<uint32_t>(wasm_instance_->memory_size() /
+                                               kWasmPageSize)));
           len = 1 + operand.length;
           break;
         }
@@ -2455,7 +2455,7 @@ class ThreadImpl {
       arg_buffer.resize(return_size);
     }
 
-    // Wrap the arg_buffer data pointer and the WasmContext* in a handle. As
+    // Wrap the arg_buffer data pointer in a handle. As
     // this is an aligned pointer, to the GC it will look like a Smi.
     Handle<Object> arg_buffer_obj(reinterpret_cast<Object*>(arg_buffer.data()),
                                   isolate);
@@ -2464,16 +2464,10 @@ class ThreadImpl {
     static_assert(compiler::CWasmEntryParameters::kNumParameters == 3,
                   "code below needs adaption");
     Handle<Object> args[compiler::CWasmEntryParameters::kNumParameters];
-    WasmContext* context = code->native_module()
-                               ->compiled_module()
-                               ->owning_instance()
-                               ->wasm_context()
-                               ->get();
-    Handle<Object> context_obj(reinterpret_cast<Object*>(context), isolate);
-    DCHECK(!context_obj->IsHeapObject());
     args[compiler::CWasmEntryParameters::kCodeObject] = Handle<Object>::cast(
         isolate->factory()->NewForeign(code->instructions().start(), TENURED));
-    args[compiler::CWasmEntryParameters::kWasmContext] = context_obj;
+    args[compiler::CWasmEntryParameters::kWasmInstance] =
+        handle(code->native_module()->compiled_module()->owning_instance());
     args[compiler::CWasmEntryParameters::kArgumentsBuffer] = arg_buffer_obj;
 
     Handle<Object> receiver = isolate->factory()->undefined_value();
@@ -2592,19 +2586,20 @@ class ThreadImpl {
       // TODO(wasm): the wasm interpreter currently supports only one table.
       CHECK_EQ(0, table_index);
       // Bounds check against table size.
-      if (entry_index >= wasm_context_->table_size) {
+      if (entry_index >= wasm_instance_->indirect_function_table_size()) {
         return {ExternalCallResult::INVALID_FUNC};
       }
       // Signature check.
-      int32_t entry_sig = wasm_context_->table[entry_index].sig_id;
-      if (entry_sig != static_cast<int32_t>(canonical_sig_index)) {
+      auto entry =
+          wasm_instance_->indirect_function_table_entry_at(entry_index);
+      if (entry->sig_id != static_cast<int32_t>(canonical_sig_index)) {
         return {ExternalCallResult::SIGNATURE_MISMATCH};
       }
       // Load the target address (first instruction of code).
-      Address first_instr = wasm_context_->table[entry_index].target;
-      // TODO(titzer): load the wasm context instead of relying on the
+      Address first_instr = entry->target;
+      // TODO(titzer): load the instance object instead of relying on the
       // target code being specialized to the target instance.
-      // Get code object.
+      // Lookup code object.
       target = isolate->wasm_engine()->code_manager()->GetCodeFromStartAddress(
           first_instr);
     }
@@ -2813,11 +2808,11 @@ class WasmInterpreterInternals : public ZoneObject {
   WasmInterpreterInternals(Isolate* isolate, Zone* zone,
                            const WasmModule* module,
                            const ModuleWireBytes& wire_bytes,
-                           WasmContext* wasm_context)
+                           Handle<WasmInstanceObject> wasm_instance)
       : module_bytes_(wire_bytes.start(), wire_bytes.end(), zone),
         codemap_(isolate, module, module_bytes_.data(), zone),
         threads_(zone) {
-    threads_.emplace_back(zone, &codemap_, wasm_context);
+    threads_.emplace_back(zone, &codemap_, wasm_instance);
   }
 };
 
@@ -2826,10 +2821,10 @@ class WasmInterpreterInternals : public ZoneObject {
 //============================================================================
 WasmInterpreter::WasmInterpreter(Isolate* isolate, const WasmModule* module,
                                  const ModuleWireBytes& wire_bytes,
-                                 WasmContext* wasm_context)
+                                 Handle<WasmInstanceObject> wasm_instance)
     : zone_(isolate->allocator(), ZONE_NAME),
       internals_(new (&zone_) WasmInterpreterInternals(
-          isolate, &zone_, module, wire_bytes, wasm_context)) {}
+          isolate, &zone_, module, wire_bytes, wasm_instance)) {}
 
 WasmInterpreter::~WasmInterpreter() { internals_->~WasmInterpreterInternals(); }
 

@@ -232,12 +232,6 @@ namespace {
 
 class JSToWasmWrapperCache {
  public:
-  void SetContextAddress(Address context_address) {
-    // Prevent to have different context addresses in the cache.
-    DCHECK(code_cache_.empty());
-    context_address_ = context_address;
-  }
-
   Handle<Code> CloneOrCompileJSToWasmWrapper(Isolate* isolate,
                                              wasm::WasmModule* module,
                                              wasm::WasmCode* wasm_code,
@@ -255,8 +249,9 @@ class JSToWasmWrapperCache {
       return code;
     }
 
-    Handle<Code> code = compiler::CompileJSToWasmWrapper(
-        isolate, module, wasm_code, index, context_address_, use_trap_handler);
+    Handle<Code> code =
+        compiler::CompileJSToWasmWrapper(isolate, module, instance_placeholder_,
+                                         wasm_code, index, use_trap_handler);
     uint32_t new_cache_idx = sig_map_.FindOrInsert(func->sig);
     DCHECK_EQ(code_cache_.size(), new_cache_idx);
     USE(new_cache_idx);
@@ -264,11 +259,19 @@ class JSToWasmWrapperCache {
     return code;
   }
 
+  // The instance placeholder can either be a reference directly to a
+  // {WasmInstanceObject} instance, or a reference to the {WasmCompiledModule}
+  // which is used as a placeholder when the wrapper is not specialized yet
+  // to an instance.
+  void SetInstancePlaceholder(Handle<HeapObject> instance_placeholder) {
+    instance_placeholder_ = instance_placeholder;
+  }
+
  private:
   // sig_map_ maps signatures to an index in code_cache_.
   wasm::SignatureMap sig_map_;
   std::vector<Handle<Code>> code_cache_;
-  Address context_address_ = nullptr;
+  Handle<HeapObject> instance_placeholder_;
 };
 
 // A helper class to simplify instantiating a module from a compiled module.
@@ -358,7 +361,7 @@ class InstanceBuilder {
   uint32_t EvalUint32InitExpr(const WasmInitExpr& expr);
 
   // Load data segments into the memory.
-  void LoadDataSegments(WasmContext* wasm_context);
+  void LoadDataSegments(Handle<WasmInstanceObject> instance);
 
   void WriteGlobalValue(WasmGlobal& global, Handle<Object> value);
 
@@ -417,14 +420,10 @@ class SetOfNativeModuleModificationScopes final {
   std::unordered_set<NativeModule*> native_modules_;
 };
 
-void EnsureWasmContextTable(WasmContext* wasm_context, int table_size) {
-  if (wasm_context->table) return;
-  wasm_context->table_size = table_size;
-  wasm_context->table = reinterpret_cast<IndirectFunctionTableEntry*>(
-      calloc(table_size, sizeof(IndirectFunctionTableEntry)));
-  for (int i = 0; i < table_size; i++) {
-    wasm_context->table[i].sig_id = kInvalidSigIndex;
-  }
+void EnsureInstanceIndirectFunctionTable(Handle<WasmInstanceObject> instance,
+                                         int table_size) {
+  if (instance->indirect_function_table()) return;
+  instance->EnsureIndirectFunctionTableWithMinimumSize(table_size);
 }
 
 }  // namespace
@@ -551,7 +550,7 @@ Address CompileLazy(Isolate* isolate) {
 
       // TODO(titzer): patching of function tables for lazy compilation
       // only works for a single instance.
-      instance->wasm_context()->get()->table[exp_index].target = target;
+      instance->indirect_function_table_entry_at(exp_index)->target = target;
     }
     // After processing, remove the list of exported entries, such that we don't
     // do the patching redundantly.
@@ -1302,7 +1301,7 @@ wasm::WasmCode* EnsureTableExportLazyDeoptData(
   return code;
 }
 
-bool in_bounds(uint32_t offset, uint32_t size, uint32_t upper) {
+bool in_bounds(uint32_t offset, size_t size, size_t upper) {
   return offset + size <= upper && offset + size >= offset;
 }
 
@@ -1318,17 +1317,13 @@ wasm::WasmCode* MakeWasmToWasmWrapper(
   Handle<WasmInstanceObject> imported_instance(imported_function->instance(),
                                                isolate);
   imported_instances->Set(imported_instance, imported_instance);
-  WasmContext* new_wasm_context = imported_instance->wasm_context()->get();
-  Address new_wasm_context_address =
-      reinterpret_cast<Address>(new_wasm_context);
   *sig = imported_instance->module()
              ->functions[imported_function->function_index()]
              .sig;
   if (expected_sig && !expected_sig->Equals(*sig)) return {};
 
   Handle<Code> code = compiler::CompileWasmToWasmWrapper(
-      isolate, imported_function->GetWasmCode(), *sig,
-      new_wasm_context_address);
+      isolate, imported_function->GetWasmCode(), *sig);
   return instance->compiled_module()->GetNativeModule()->AddCodeCopy(
       code, wasm::WasmCode::kWasmToWasmWrapper, index);
 }
@@ -1565,7 +1560,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   // Reuse the compiled module (if no owner), otherwise clone.
   //--------------------------------------------------------------------------
-  Handle<FixedArray> wrapper_table;
+  Handle<FixedArray> export_wrappers;
   wasm::NativeModule* native_module = nullptr;
   // Root the old instance, if any, in case later allocation causes GC,
   // to prevent the finalizer running for the old instance.
@@ -1584,19 +1579,19 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
       TRACE("Cloning from %zu\n", original->GetNativeModule()->instance_id);
       compiled_module_ = WasmCompiledModule::Clone(isolate_, original);
       native_module = compiled_module_->GetNativeModule();
-      wrapper_table = handle(compiled_module_->export_wrappers(), isolate_);
-      for (int i = 0; i < wrapper_table->length(); ++i) {
-        Handle<Code> orig_code(Code::cast(wrapper_table->get(i)), isolate_);
+      export_wrappers = handle(compiled_module_->export_wrappers(), isolate_);
+      for (int i = 0; i < export_wrappers->length(); ++i) {
+        Handle<Code> orig_code(Code::cast(export_wrappers->get(i)), isolate_);
         DCHECK_EQ(orig_code->kind(), Code::JS_TO_WASM_FUNCTION);
         Handle<Code> code = factory->CopyCode(orig_code);
-        wrapper_table->set(i, *code);
+        export_wrappers->set(i, *code);
       }
       RecordStats(native_module, counters());
-      RecordStats(wrapper_table, counters());
+      RecordStats(export_wrappers, counters());
     } else {
       // No instance owned the original compiled module.
       compiled_module_ = original;
-      wrapper_table = handle(compiled_module_->export_wrappers(), isolate_);
+      export_wrappers = handle(compiled_module_->export_wrappers(), isolate_);
       native_module = compiled_module_->GetNativeModule();
       TRACE("Reusing existing instance %zu\n",
             compiled_module_->GetNativeModule()->instance_id);
@@ -1618,11 +1613,23 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   CodeSpecialization code_specialization(isolate_, &instantiation_zone);
   Handle<WasmInstanceObject> instance =
       WasmInstanceObject::New(isolate_, compiled_module_);
+  js_to_wasm_cache_.SetInstancePlaceholder(instance);
+
+  // Update any references in the old JSToWasmWrappers.
+  if (old_instance.is_null()) {
+    // There was no previous instance, so these wrappers have a placeholder
+    // which is a reference to the compiled module instead of an instance.
+    code_specialization.UpdateInstanceReferences(compiled_module_, instance);
+  } else {
+    // The wrappers were cloned from a previous instance, so update these
+    // references to point to the new instance.
+    Handle<WasmInstanceObject> handle = old_instance.ToHandleChecked();
+    code_specialization.UpdateInstanceReferences(handle, instance);
+  }
 
   //--------------------------------------------------------------------------
   // Set up the globals for the new instance.
   //--------------------------------------------------------------------------
-  WasmContext* wasm_context = instance->wasm_context()->get();
   MaybeHandle<JSArrayBuffer> old_globals;
   uint32_t globals_size = module_->globals_size;
   if (globals_size > 0) {
@@ -1634,8 +1641,8 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
       thrower_->RangeError("Out of memory: wasm globals");
       return {};
     }
-    wasm_context->globals_start =
-        reinterpret_cast<byte*>(global_buffer->backing_store());
+    instance->set_globals_start(
+        reinterpret_cast<byte*>(global_buffer->backing_store()));
     instance->set_globals_buffer(*global_buffer);
   }
 
@@ -1704,12 +1711,12 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     WasmMemoryObject::AddInstance(isolate_, memory_object, instance);
 
     if (!memory_.is_null()) {
-      // Double-check the {memory} array buffer matches the context.
+      // Double-check the {memory} array buffer matches the instance.
       Handle<JSArrayBuffer> memory = memory_.ToHandleChecked();
       uint32_t mem_size = 0;
       CHECK(memory->byte_length()->ToUint32(&mem_size));
-      CHECK_EQ(wasm_context->mem_size, mem_size);
-      CHECK_EQ(wasm_context->mem_start, memory->backing_store());
+      CHECK_EQ(instance->memory_size(), mem_size);
+      CHECK_EQ(instance->memory_start(), memory->backing_store());
     }
   }
 
@@ -1734,18 +1741,11 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   for (WasmDataSegment& seg : module_->data_segments) {
     uint32_t base = EvalUint32InitExpr(seg.dest_addr);
-    if (!in_bounds(base, seg.source.length(), wasm_context->mem_size)) {
+    if (!in_bounds(base, seg.source.length(), instance->memory_size())) {
       thrower_->LinkError("data segment is out of bounds");
       return {};
     }
   }
-
-  // Set the WasmContext address in wrappers.
-  // TODO(wasm): the wasm context should only appear as a constant in wrappers;
-  //             this code specialization is applied to the whole instance.
-  Address wasm_context_address = reinterpret_cast<Address>(wasm_context);
-  code_specialization.RelocateWasmContextReferences(wasm_context_address);
-  js_to_wasm_cache_.SetContextAddress(wasm_context_address);
 
   //--------------------------------------------------------------------------
   // Set up the exports object for the new instance.
@@ -1764,7 +1764,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   // Initialize the memory by loading data segments.
   //--------------------------------------------------------------------------
   if (module_->data_segments.size() > 0) {
-    LoadDataSegments(wasm_context);
+    LoadDataSegments(instance);
   }
 
   // Patch all code with the relocations registered in code_specialization.
@@ -1772,7 +1772,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   code_specialization.ApplyToWholeModule(native_module, SKIP_ICACHE_FLUSH);
 
   FlushICache(native_module);
-  FlushICache(wrapper_table);
+  FlushICache(export_wrappers);
 
   //--------------------------------------------------------------------------
   // Unpack and notify signal handler of protected instructions.
@@ -1942,7 +1942,7 @@ uint32_t InstanceBuilder::EvalUint32InitExpr(const WasmInitExpr& expr) {
 }
 
 // Load data segments into the memory.
-void InstanceBuilder::LoadDataSegments(WasmContext* wasm_context) {
+void InstanceBuilder::LoadDataSegments(Handle<WasmInstanceObject> instance) {
   Handle<SeqOneByteString> module_bytes(
       compiled_module_->shared()->module_bytes(), isolate_);
   for (const WasmDataSegment& segment : module_->data_segments) {
@@ -1950,8 +1950,8 @@ void InstanceBuilder::LoadDataSegments(WasmContext* wasm_context) {
     // Segments of size == 0 are just nops.
     if (source_size == 0) continue;
     uint32_t dest_offset = EvalUint32InitExpr(segment.dest_addr);
-    DCHECK(in_bounds(dest_offset, source_size, wasm_context->mem_size));
-    byte* dest = wasm_context->mem_start + dest_offset;
+    DCHECK(in_bounds(dest_offset, source_size, instance->memory_size()));
+    byte* dest = instance->memory_start() + dest_offset;
     const byte* src = reinterpret_cast<const byte*>(
         module_bytes->GetCharsAddress() + segment.source.offset());
     memcpy(dest, src, source_size);
@@ -2137,8 +2137,7 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
              i += kFunctionTableEntrySize) {
           table_instance.function_table->set(i, Smi::FromInt(kInvalidSigIndex));
         }
-        WasmContext* wasm_context = instance->wasm_context()->get();
-        EnsureWasmContextTable(wasm_context, imported_cur_size);
+        EnsureInstanceIndirectFunctionTable(instance, imported_cur_size);
         // Initialize the dispatch table with the (foreign) JS functions
         // that are already in the table.
         for (int i = 0; i < imported_cur_size; ++i) {
@@ -2162,10 +2161,10 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
           FunctionSig* sig = imported_instance->module()
                                  ->functions[exported_code->index()]
                                  .sig;
-          auto& entry = wasm_context->table[i];
-          entry.context = imported_instance->wasm_context()->get();
-          entry.sig_id = module_->signature_map.Find(sig);
-          entry.target = exported_code->instructions().start();
+          auto entry = instance->indirect_function_table_entry_at(i);
+          entry->instance = *imported_instance;  // TODO XXX write barrier
+          entry->sig_id = module_->signature_map.Find(sig);
+          entry->target = exported_code->instructions().start();
         }
 
         num_imported_tables++;
@@ -2350,8 +2349,8 @@ bool InstanceBuilder::NeedsWrappers() const {
 void InstanceBuilder::ProcessExports(
     Handle<WasmInstanceObject> instance,
     Handle<WasmCompiledModule> compiled_module) {
-  Handle<FixedArray> wrapper_table(compiled_module->export_wrappers(),
-                                   isolate_);
+  Handle<FixedArray> export_wrappers(compiled_module->export_wrappers(),
+                                     isolate_);
   if (NeedsWrappers()) {
     // Fill the table to cache the exported JSFunction wrappers.
     js_wrappers_.insert(js_wrappers_.begin(), module_->functions.size(),
@@ -2430,7 +2429,7 @@ void InstanceBuilder::ProcessExports(
         if (js_function.is_null()) {
           // Wrap the exported code as a JSFunction.
           Handle<Code> export_code =
-              wrapper_table->GetValueChecked<Code>(isolate_, export_index);
+              export_wrappers->GetValueChecked<Code>(isolate_, export_index);
           MaybeHandle<String> func_name;
           if (module_->is_asm_js()) {
             // For modules arising from asm.js, honor the names section.
@@ -2550,8 +2549,7 @@ void InstanceBuilder::InitializeTables(
     int num_table_entries = static_cast<int>(table.initial_size);
     int table_size = compiler::kFunctionTableEntrySize * num_table_entries;
 
-    WasmContext* wasm_context = instance->wasm_context()->get();
-    EnsureWasmContextTable(wasm_context, num_table_entries);
+    EnsureInstanceIndirectFunctionTable(instance, num_table_entries);
 
     if (table_instance.function_table.is_null()) {
       // Create a new dispatch table if necessary.
@@ -2637,11 +2635,10 @@ void InstanceBuilder::LoadTableSegments(Handle<WasmInstanceObject> instance) {
         table_instance.function_table->set(
             compiler::FunctionTableCodeOffset(table_index), *as_foreign);
 
-        WasmContext* wasm_context = instance->wasm_context()->get();
-        auto& entry = wasm_context->table[table_index];
-        entry.sig_id = sig_id;
-        entry.context = wasm_context;
-        entry.target = wasm_code->instructions().start();
+        auto entry = instance->indirect_function_table_entry_at(table_index);
+        entry->sig_id = sig_id;
+        entry->instance = *instance;  // TODO XXX WRITE BARRIER
+        entry->target = wasm_code->instructions().start();
 
         if (!table_instance.table_object.is_null()) {
           // Update the table object's other dispatch tables.
@@ -3386,6 +3383,7 @@ void CompileJsToWasmWrappers(Isolate* isolate,
                              Handle<WasmCompiledModule> compiled_module,
                              Counters* counters) {
   JSToWasmWrapperCache js_to_wasm_cache;
+  js_to_wasm_cache.SetInstancePlaceholder(compiled_module);
   int wrapper_index = 0;
   Handle<FixedArray> export_wrappers(compiled_module->export_wrappers(),
                                      isolate);

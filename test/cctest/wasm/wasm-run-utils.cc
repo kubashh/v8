@@ -61,7 +61,7 @@ byte* TestingModuleBuilder::AddMemory(uint32_t size) {
   // TODO(wasm): Delete the following two lines when test-run-wasm will use a
   // multiple of kPageSize as memory size. At the moment, the effect of these
   // two lines is used to shrink the memory for testing purposes.
-  instance_object_->wasm_context()->get()->SetRawMemory(mem_start_, mem_size_);
+  instance_object_->SetRawMemory(mem_start_, mem_size_);
   return mem_start_;
 }
 
@@ -106,12 +106,8 @@ Handle<JSFunction> TestingModuleBuilder::WrapCode(uint32_t index) {
   // Wrap the code so it can be called as a JS function.
   Link();
   wasm::WasmCode* code = native_module_->GetCode(index);
-  byte* context_address =
-      test_module_.has_memory
-          ? reinterpret_cast<byte*>(instance_object_->wasm_context()->get())
-          : nullptr;
   Handle<Code> ret_code = compiler::CompileJSToWasmWrapper(
-      isolate_, &test_module_, code, index, context_address,
+      isolate_, &test_module_, instance_object(), code, index,
       trap_handler::IsTrapHandlerEnabled());
   Handle<JSFunction> ret = WasmExportedFunction::New(
       isolate_, instance_object(), MaybeHandle<String>(),
@@ -150,19 +146,13 @@ void TestingModuleBuilder::AddIndirectFunctionTable(
   function_tables_.push_back(
       isolate_->global_handles()->Create(func_table).address());
 
-  WasmContext* wasm_context = instance_object()->wasm_context()->get();
-  wasm_context->table = reinterpret_cast<IndirectFunctionTableEntry*>(
-      calloc(table_size, sizeof(IndirectFunctionTableEntry)));
-  wasm_context->table_size = table_size;
-  for (uint32_t i = 0; i < table_size; i++) {
-    wasm_context->table[i].sig_id = -1;
-  }
+  instance_object()->EnsureIndirectFunctionTableWithMinimumSize(table_size);
 }
 
 void TestingModuleBuilder::PopulateIndirectFunctionTable() {
   if (interpret()) return;
   // Initialize the fixed arrays in instance->function_tables.
-  WasmContext* wasm_context = instance_object()->wasm_context()->get();
+  auto instance = instance_object();
   for (uint32_t i = 0; i < function_tables_.size(); i++) {
     WasmIndirectFunctionTable& table = test_module_.function_tables[i];
     Handle<FixedArray> function_table(
@@ -175,9 +165,10 @@ void TestingModuleBuilder::PopulateIndirectFunctionTable() {
                           Smi::FromInt(sig_id));
       auto start =
           native_module_->GetCode(function.func_index)->instructions().start();
-      wasm_context->table[j].context = wasm_context;
-      wasm_context->table[j].sig_id = sig_id;
-      wasm_context->table[j].target = start;
+      auto entry = instance->indirect_function_table_entry_at(j);
+      entry->sig_id = sig_id;
+      entry->instance = *instance;
+      entry->target = start;
     }
   }
 }
@@ -243,7 +234,7 @@ Handle<WasmInstanceObject> TestingModuleBuilder::InitInstanceObject() {
   DCHECK(compiled_module->IsWasmCompiledModule());
   script->set_wasm_compiled_module(*compiled_module);
   auto instance = WasmInstanceObject::New(isolate_, compiled_module);
-  instance->wasm_context()->get()->globals_start = globals_data_;
+  instance->set_globals_start(globals_data_);
   Handle<WeakCell> weak_instance = isolate()->factory()->NewWeakCell(instance);
   compiled_module->set_weak_owning_instance(*weak_instance);
   return instance;
