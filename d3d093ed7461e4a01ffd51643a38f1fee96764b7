@@ -57,6 +57,30 @@
       "revId": "d3d093ed7461e4a01ffd51643a38f1fee96764b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "746e78d9_cc52579a",
+        "filename": "src/startup-data-util.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-16T07:43:01Z",
+      "side": 1,
+      "message": "Done. But I added another \"!\" in front of the flag. I was worried about exactly this kind of flag flips :)",
+      "parentUuid": "174c9d9f_965b2bc0",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 5
+      },
+      "revId": "d3d093ed7461e4a01ffd51643a38f1fee96764b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
