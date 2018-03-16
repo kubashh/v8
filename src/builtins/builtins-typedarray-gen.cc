@@ -654,16 +654,15 @@ TF_BUILTIN(CreateTypedArray, TypedArrayBuiltinsAssembler) {
 
   GotoIf(TaggedIsSmi(arg1), &if_arg1isnumber);
   GotoIf(IsJSArrayBuffer(arg1), &if_arg1isbuffer);
-  GotoIf(IsJSTypedArray(arg1), &if_arg1istypedarray);
+  GotoIf(IsJSTypedArray(arg1), &if_ag1istypedarray);
   GotoIf(IsJSReceiver(arg1), &if_arg1isreceiver);
   Goto(&if_arg1isnumber);
 
   // https://tc39.github.io/ecma262/#sec-typedarray-buffer-byteoffset-length
   BIND(&if_arg1isbuffer);
   {
-    ConstructByArrayBuffer(context, result, CAST(arg1), arg2, arg3,
-                           element_size);
-    Goto(&return_result);
+    TNode<String> name = StringConstant("TypedArray");
+    ThrowTypeError(context, MessageTemplate::kConstructorNotFunction, name);
   }
 
   // https://tc39.github.io/ecma262/#sec-typedarray-typedarray

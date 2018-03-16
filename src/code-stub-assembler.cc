@@ -4751,6 +4751,13 @@ Node* CodeStubAssembler::IsJSRegExp(Node* object) {
   return HasInstanceType(object, JS_REGEXP_TYPE);
 }
 
+TNode<BoolT> CodeStubAssembler::IsScopeInfo(TNode<Object> object) {
+  return Select<BoolT>(
+      TaggedIsSmi(object), [=] { return Int32FalseConstant(); },
+      [=] { return HasInstanceType(CAST(object), SCOPE_INFO_TYPE); },
+      MachineRepresentation::kWord32);
+}
+
 Node* CodeStubAssembler::IsNumeric(Node* object) {
   return Select(
       TaggedIsSmi(object), [=] { return Int32Constant(1); },
