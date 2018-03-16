@@ -45,6 +45,30 @@
       "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a406cbbb_753c850c",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-03-16T08:29:40Z",
+      "side": 1,
+      "message": "+1 to marking the whole bitmap black during page init.",
+      "parentUuid": "28b7957f_225448e8",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 10
+      },
+      "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
