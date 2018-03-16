@@ -263,6 +263,9 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   FeedbackSlot GetCachedLoadGlobalICSlot(TypeofMode typeof_mode,
                                          Variable* variable);
   FeedbackSlot GetCachedCreateClosureSlot(FunctionLiteral* literal);
+  FeedbackSlot GetCachedLoadICSlot(Register object,
+                                   const AstRawString* variable);
+  FeedbackSlot GetCachedStoreICSlot(Register object, const AstRawString* name);
 
   void AddToEagerLiteralsIfEager(FunctionLiteral* literal);
 

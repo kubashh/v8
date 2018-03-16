@@ -799,9 +799,9 @@ class BytecodeGenerator::CurrentScope final {
 
 class BytecodeGenerator::FeedbackSlotCache : public ZoneObject {
  public:
-  typedef std::pair<TypeofMode, void*> Key;
+  typedef std::pair<int, const void*> Key;
 
-  explicit FeedbackSlotCache(Zone* zone) : map_(zone) {}
+  explicit FeedbackSlotCache(Zone* zone) : map_(zone), store_ic_map_(zone) {}
 
   void Put(TypeofMode typeof_mode, Variable* variable, FeedbackSlot slot) {
     Key key = std::make_pair(typeof_mode, variable);
@@ -812,6 +812,17 @@ class BytecodeGenerator::FeedbackSlotCache : public ZoneObject {
     Key key = std::make_pair(NOT_INSIDE_TYPEOF, node);
     auto entry = std::make_pair(key, slot);
     map_.insert(entry);
+  }
+  void Put(Register object, const AstRawString* name, FeedbackSlot slot) {
+    Key key = std::make_pair(object.index(), name);
+    auto entry = std::make_pair(key, slot);
+    map_.insert(entry);
+  }
+  void PutStoreICSlot(Register object, const AstRawString* name,
+                      FeedbackSlot slot) {
+    Key key = std::make_pair(object.index(), name);
+    auto entry = std::make_pair(key, slot);
+    store_ic_map_.insert(entry);
   }
 
   FeedbackSlot Get(TypeofMode typeof_mode, Variable* variable) const {
@@ -830,9 +841,26 @@ class BytecodeGenerator::FeedbackSlotCache : public ZoneObject {
     }
     return FeedbackSlot();
   }
+  FeedbackSlot Get(Register object, const AstRawString* name) const {
+    Key key = std::make_pair(object.index(), name);
+    auto iter = map_.find(key);
+    if (iter != map_.end()) {
+      return iter->second;
+    }
+    return FeedbackSlot();
+  }
+  FeedbackSlot GetStoreICSlot(Register object, const AstRawString* name) const {
+    Key key = std::make_pair(object.index(), name);
+    auto iter = store_ic_map_.find(key);
+    if (iter != store_ic_map_.end()) {
+      return iter->second;
+    }
+    return FeedbackSlot();
+  }
 
  private:
   ZoneMap<Key, FeedbackSlot> map_;
+  ZoneMap<Key, FeedbackSlot> store_ic_map_;
 };
 
 class BytecodeGenerator::IteratorRecord final {
@@ -1544,7 +1572,7 @@ void BytecodeGenerator::VisitForInAssignment(Expression* expr) {
       const AstRawString* name =
           property->key()->AsLiteral()->AsRawPropertyName();
       builder()->LoadAccumulatorWithRegister(value);
-      FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
+      FeedbackSlot slot = GetCachedStoreICSlot(object, name);
       builder()->StoreNamedProperty(object, name, feedback_index(slot),
                                     language_mode());
       builder()->LoadAccumulatorWithRegister(value);
@@ -2774,7 +2802,7 @@ void BytecodeGenerator::VisitAssignment(Assignment* expr) {
         break;
       }
       case NAMED_PROPERTY: {
-        FeedbackSlot slot = feedback_spec()->AddLoadICSlot();
+        FeedbackSlot slot = GetCachedLoadICSlot(object, name);
         builder()->LoadNamedProperty(object, name, feedback_index(slot));
         break;
       }
@@ -2825,7 +2853,7 @@ void BytecodeGenerator::VisitAssignment(Assignment* expr) {
       break;
     }
     case NAMED_PROPERTY: {
-      FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
+      FeedbackSlot slot = GetCachedStoreICSlot(object, name);
       Register value;
       if (!execution_result()->IsEffect()) {
         value = register_allocator()->NewRegister();
@@ -3301,7 +3329,8 @@ void BytecodeGenerator::VisitPropertyLoad(Register obj, Property* property) {
       builder()->SetExpressionPosition(property);
       builder()->LoadNamedProperty(
           obj, property->key()->AsLiteral()->AsRawPropertyName(),
-          feedback_index(feedback_spec()->AddLoadICSlot()));
+          feedback_index(GetCachedLoadICSlot(
+              obj, property->key()->AsLiteral()->AsRawPropertyName())));
       break;
     }
     case KEYED_PROPERTY: {
@@ -3781,8 +3810,8 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
     case NAMED_PROPERTY: {
       object = VisitForRegisterValue(property->obj());
       name = property->key()->AsLiteral()->AsRawPropertyName();
-      builder()->LoadNamedProperty(
-          object, name, feedback_index(feedback_spec()->AddLoadICSlot()));
+      FeedbackSlot slot = GetCachedLoadICSlot(object, name);
+      builder()->LoadNamedProperty(object, name, feedback_index(slot));
       break;
     }
     case KEYED_PROPERTY: {
@@ -3846,7 +3875,7 @@ void BytecodeGenerator::VisitCountOperation(CountOperation* expr) {
       break;
     }
     case NAMED_PROPERTY: {
-      FeedbackSlot slot = feedback_spec()->AddStoreICSlot(language_mode());
+      FeedbackSlot slot = GetCachedStoreICSlot(object, name);
       Register value;
       if (!execution_result()->IsEffect()) {
         value = register_allocator()->NewRegister();
@@ -4891,6 +4920,39 @@ FeedbackSlot BytecodeGenerator::GetCachedLoadGlobalICSlot(
   }
   slot = feedback_spec()->AddLoadGlobalICSlot(typeof_mode);
   feedback_slot_cache()->Put(typeof_mode, variable, slot);
+  return slot;
+}
+
+FeedbackSlot BytecodeGenerator::GetCachedLoadICSlot(Register object,
+                                                    const AstRawString* name) {
+  // TODO(mythria): Add a IsLocalRegister function.
+  if (object.index() >= builder()->fixed_register_count()) {
+    // Don't reuse slots for temporary registers. A simple scheme of checking
+    // for register id will lead to a lot of false-positives.
+    return feedback_spec()->AddLoadICSlot();
+  }
+  FeedbackSlot slot = feedback_slot_cache()->Get(object, name);
+  if (!slot.IsInvalid()) {
+    return slot;
+  }
+  slot = feedback_spec()->AddLoadICSlot();
+  feedback_slot_cache()->Put(object, name, slot);
+  return slot;
+}
+
+FeedbackSlot BytecodeGenerator::GetCachedStoreICSlot(Register object,
+                                                     const AstRawString* name) {
+  if (object.index() >= builder()->fixed_register_count()) {
+    // Don't reuse slots for temporary registers. A simple scheme of checking
+    // for register id will lead to a lot of false-positives.
+    return feedback_spec()->AddStoreICSlot(language_mode());
+  }
+  FeedbackSlot slot = feedback_slot_cache()->GetStoreICSlot(object, name);
+  if (!slot.IsInvalid()) {
+    return slot;
+  }
+  slot = feedback_spec()->AddStoreICSlot(language_mode());
+  feedback_slot_cache()->PutStoreICSlot(object, name, slot);
   return slot;
 }
 
