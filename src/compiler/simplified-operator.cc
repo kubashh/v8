@@ -147,6 +147,37 @@ CheckFloat64HoleMode CheckFloat64HoleModeOf(const Operator* op) {
   return OpParameter<CheckFloat64HoleMode>(op);
 }
 
+Handle<FeedbackVector> CheckClosureParameters::feedback_vector() const {
+  return handle(FeedbackVector::cast(feedback_cell()->value()));
+}
+
+Handle<SharedFunctionInfo> CheckClosureParameters::shared_info() const {
+  return handle(feedback_vector()->shared_function_info());
+}
+
+bool operator==(CheckClosureParameters const& lhs,
+                CheckClosureParameters const& rhs) {
+  return lhs.feedback_cell().location() == rhs.feedback_cell().location();
+}
+
+bool operator!=(CheckClosureParameters const& lhs,
+                CheckClosureParameters const& rhs) {
+  return !(lhs == rhs);
+}
+
+size_t hash_value(CheckClosureParameters const& p) {
+  return base::hash_combine(p.feedback_cell().location());
+}
+
+std::ostream& operator<<(std::ostream& os, CheckClosureParameters const& p) {
+  return os << Brief(*p.feedback_cell());
+}
+
+CheckClosureParameters const& CheckClosureParametersOf(Operator const* op) {
+  DCHECK_EQ(IrOpcode::kCheckClosure, op->opcode());
+  return OpParameter<CheckClosureParameters>(op);
+}
+
 CheckForMinusZeroMode CheckMinusZeroModeOf(const Operator* op) {
   DCHECK(op->opcode() == IrOpcode::kChangeFloat64ToTagged ||
          op->opcode() == IrOpcode::kCheckedInt32Mul);
@@ -1268,6 +1299,17 @@ const Operator* SimplifiedOperatorBuilder::CheckFloat64Hole(
       return &cache_.kCheckFloat64HoleNeverReturnHoleOperator;
   }
   UNREACHABLE();
+}
+
+const Operator* SimplifiedOperatorBuilder::CheckClosure(
+    Handle<FeedbackCell> feedback_cell) {
+  DCHECK(feedback_cell->value()->IsFeedbackVector());
+  return new (zone()) Operator1<CheckClosureParameters>(  // --
+      IrOpcode::kCheckClosure,                            // opcode
+      Operator::kNoThrow | Operator::kNoWrite,            // flags
+      "CheckClosure",                                     // name
+      1, 1, 1, 1, 1, 0,                                   // counts
+      CheckClosureParameters(feedback_cell));             // parameter
 }
 
 const Operator* SimplifiedOperatorBuilder::SpeculativeToNumber(

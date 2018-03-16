@@ -125,6 +125,34 @@ std::ostream& operator<<(std::ostream&, CheckFloat64HoleMode);
 
 CheckFloat64HoleMode CheckFloat64HoleModeOf(const Operator*) WARN_UNUSED_RESULT;
 
+// The parameters for the CheckClosure nodes. We carry the FeedbackCell
+// pointing to the feedback vector of the target function, as that
+// uniquely identifies a given function in a given native context, and
+// provides us with access to both the SharedFunctionInfo and the
+// FeedbackVector.
+class CheckClosureParameters final {
+ public:
+  explicit CheckClosureParameters(Handle<FeedbackCell> feedback_cell)
+      : feedback_cell_(feedback_cell) {}
+
+  Handle<FeedbackCell> feedback_cell() const { return feedback_cell_; }
+  Handle<FeedbackVector> feedback_vector() const;
+  Handle<SharedFunctionInfo> shared_info() const;
+
+ private:
+  Handle<FeedbackCell> const feedback_cell_;
+};
+
+bool operator==(CheckClosureParameters const&, CheckClosureParameters const&);
+bool operator!=(CheckClosureParameters const&, CheckClosureParameters const&);
+
+size_t hash_value(CheckClosureParameters const&);
+
+std::ostream& operator<<(std::ostream&, CheckClosureParameters const&);
+
+CheckClosureParameters const& CheckClosureParametersOf(Operator const*)
+    WARN_UNUSED_RESULT;
+
 enum class CheckTaggedInputMode : uint8_t {
   kNumber,
   kNumberOrOddball,
@@ -565,6 +593,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* MapGuard(ZoneHandleSet<Map> maps);
 
   const Operator* CheckBounds(const VectorSlotPair& feedback);
+  const Operator* CheckClosure(Handle<FeedbackCell> feedback_cell);
   const Operator* CheckEqualsInternalizedString();
   const Operator* CheckEqualsSymbol();
   const Operator* CheckFloat64Hole(CheckFloat64HoleMode);

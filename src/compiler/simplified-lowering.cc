@@ -2950,6 +2950,11 @@ class RepresentationSelector {
         VisitUnop(node, UseInfo::AnyTagged(), MachineRepresentation::kTagged);
         return;
       }
+      case IrOpcode::kCheckClosure: {
+        VisitUnop(node, UseInfo::CheckedHeapObjectAsTaggedPointer(),
+                  MachineRepresentation::kTaggedPointer);
+        return;
+      }
       case IrOpcode::kConvertTaggedHoleToUndefined: {
         if (InputIs(node, Type::NumberOrOddball()) &&
             truncation.IsUsedAsWord32()) {
