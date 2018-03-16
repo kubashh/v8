@@ -386,6 +386,8 @@ bool Deserializer<AllocatorT>::ReadData(Object** current, Object** limit,
   CASE_STATEMENT(where, how, within, MAP_SPACE)  \
   V8_FALLTHROUGH;                                \
   CASE_STATEMENT(where, how, within, LO_SPACE)   \
+  V8_FALLTHROUGH;                                \
+  CASE_STATEMENT(where, how, within, RO_SPACE)   \
   CASE_BODY(where, how, within, kAnyOldSpace)
 
 #define FOUR_CASES(byte_code) \
