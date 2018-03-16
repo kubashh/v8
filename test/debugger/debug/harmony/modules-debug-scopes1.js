@@ -155,7 +155,7 @@ function CheckScopeChainPositions(positions, exec_state) {
     assertEquals(position.end, scope.details().endPosition())
   }
 }
-
+/*
 // Simple empty local scope.
 BeginTest("Local 1");
 
@@ -717,6 +717,7 @@ listener_delegate = function(exec_state) {
 })();
 
 EndTest();
+*/
 
 BeginTest("Scope positions");
 var code1 = "function f() {        \n" +
