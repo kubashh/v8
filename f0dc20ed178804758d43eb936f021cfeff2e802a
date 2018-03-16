@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2d13d7c_0fc91a50",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2884,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Why do we check here eq or ne with zero reg, while for Add and Sub we check ge and lt? Can you add a comment that describes the difference?",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e273e38f_d0683dd3",
+        "filename": "src/compiler/mips64/code-generator-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3100,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d38099_05fbb241",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Can rs be at as well? Maybe it would be better to use HasAvailable() method of UseScratchRegisterScope class instead.",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a3e00de_c3c74845",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f613ec8e_2c0e3630",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "874d9e65_4b5a252d",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-03-16T08:49:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f0dc20ed178804758d43eb936f021cfeff2e802a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
