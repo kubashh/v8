@@ -661,9 +661,8 @@ TF_BUILTIN(CreateTypedArray, TypedArrayBuiltinsAssembler) {
   // https://tc39.github.io/ecma262/#sec-typedarray-buffer-byteoffset-length
   BIND(&if_arg1isbuffer);
   {
-    ConstructByArrayBuffer(context, result, CAST(arg1), arg2, arg3,
-                           element_size);
-    Goto(&return_result);
+    TNode<String> name = StringConstant("TypedArray");
+    ThrowTypeError(context, MessageTemplate::kConstructorNotFunction, name);
   }
 
   // https://tc39.github.io/ecma262/#sec-typedarray-typedarray
@@ -746,9 +745,7 @@ TF_BUILTIN(TypedArrayConstructor, TypedArrayBuiltinsAssembler) {
 
   BIND(&throwtypeerror);
   {
-    Node* shared =
-        LoadObjectField(target, JSFunction::kSharedFunctionInfoOffset);
-    Node* name = LoadObjectField(shared, SharedFunctionInfo::kNameOffset);
+    Node* name = CallRuntime(Runtime::kGetFunctionName, target);
     ThrowTypeError(context, MessageTemplate::kConstructorNotFunction, name);
   }
 }
