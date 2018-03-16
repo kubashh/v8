@@ -1185,6 +1185,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   inline Node* IsSharedFunctionInfo(Node* object) {
     return IsSharedFunctionInfoMap(LoadMap(object));
   }
+  TNode<BoolT> IsScopeInfo(TNode<Object> object);
 
   Node* IsPromiseResolveProtectorCellInvalid();
   Node* IsPromiseThenProtectorCellInvalid();
