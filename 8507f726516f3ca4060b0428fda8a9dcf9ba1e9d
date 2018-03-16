@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a845fe92_6615760f",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-16T10:44:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c790449c_fd08dee9",
+      "range": {
+        "startLine": 340,
+        "startChar": 4,
+        "endLine": 340,
+        "endChar": 9
+      },
+      "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28b7957f_225448e8",
         "filename": "src/heap/heap-inl.h",
         "patchSetId": 18
@@ -69,6 +93,30 @@
       "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "167f38bf_3ca9488c",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-16T10:44:53Z",
+      "side": 1,
+      "message": "I\u0027ve marked the RO_SPACE pages black in MemoryChunk::Initialize() where it would normally mark them white.",
+      "parentUuid": "28b7957f_225448e8",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 10
+      },
+      "revId": "8507f726516f3ca4060b0428fda8a9dcf9ba1e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
