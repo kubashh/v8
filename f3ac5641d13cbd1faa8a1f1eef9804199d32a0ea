@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e45a9aa2_20ebea7b",
+        "filename": "src/compiler/schedule.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-03-16T09:38:09Z",
+      "side": 1,
+      "message": "Mutating a data-structure while iterating it is a dangerous endeavor, this doesn\u0027t work in the presence of multiple phi nodes. Please use proper iterators here. Please also add a test that covers this. The bug can be reproduced with the following test ...\n\nTEST(SingleInputPhiElimination) {\n  Isolate* isolate(CcTest::InitIsolateOnce());\n  const int kNumParams \u003d 2;\n  CodeAssemblerTester asm_tester(isolate, kNumParams);\n  {\n    CodeStubAssembler m(asm_tester.state());\n    Variable temp1(\u0026m, MachineRepresentation::kTagged);\n    Variable temp2(\u0026m, MachineRepresentation::kTagged);\n    Label temp_label(\u0026m, {\u0026temp1, \u0026temp2});\n    Label end_label(\u0026m, {\u0026temp1, \u0026temp2});\n    temp1.Bind(m.Parameter(1));\n    temp2.Bind(m.Parameter(1));\n    m.Branch(m.WordEqual(m.Parameter(0), m.Parameter(1)), \u0026end_label,\n             \u0026temp_label);\n    temp1.Bind(m.Parameter(2));\n    temp2.Bind(m.Parameter(2));\n    m.BIND(\u0026temp_label);\n    m.Goto(\u0026end_label);\n    m.BIND(\u0026end_label);\n    m.Return(temp1.value());\n  }\n  FunctionTester ft(asm_tester.GenerateCode(), kNumParams);\n  // Generating code without an assert is enough to make sure that the\n  // single-input phi is properly eliminated.\n}",
+      "range": {
+        "startLine": 370,
+        "startChar": 8,
+        "endLine": 370,
+        "endChar": 46
+      },
+      "revId": "f3ac5641d13cbd1faa8a1f1eef9804199d32a0ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
