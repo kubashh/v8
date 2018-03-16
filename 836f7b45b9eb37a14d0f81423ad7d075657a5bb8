@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f878c7f4_0cc2d679",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-16T11:44:36Z",
+      "side": 1,
+      "message": "The new_object is of Object* type. It must not have the weak bit set. That is the actual bug.",
+      "range": {
+        "startLine": 800,
+        "startChar": 41,
+        "endLine": 800,
+        "endChar": 51
+      },
+      "revId": "836f7b45b9eb37a14d0f81423ad7d075657a5bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
