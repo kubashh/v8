@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cabf7a87_4915512c",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-03-16T14:52:13Z",
+      "side": 1,
+      "message": "Maybe add assert here: maybe_scope_info is either the sentinel or a string.",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 26
+      },
+      "revId": "f92ae1f8e544e755536f2a1390e941f77ed2836d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24bb5025_e7d33b2a",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-03-16T14:52:13Z",
+      "side": 1,
+      "message": "Offline discussion: assert here it\u0027s the sentinel or the string.",
+      "range": {
+        "startLine": 275,
+        "startChar": 4,
+        "endLine": 275,
+        "endChar": 5
+      },
+      "revId": "f92ae1f8e544e755536f2a1390e941f77ed2836d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
