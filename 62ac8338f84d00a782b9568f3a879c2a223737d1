@@ -16,6 +16,24 @@
       "revId": "62ac8338f84d00a782b9568f3a879c2a223737d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c93bebd_afec1fae",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-16T14:26:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c7dde241_246b1b41",
+      "revId": "62ac8338f84d00a782b9568f3a879c2a223737d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
