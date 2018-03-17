@@ -548,11 +548,53 @@ TF_BUILTIN(AsyncGeneratorYield, AsyncGeneratorBuiltinsAssembler) {
   Node* const request = LoadFirstAsyncGeneratorRequestFromQueue(generator);
   Node* const outer_promise = LoadPromiseFromAsyncGeneratorRequest(request);
 
+  // Mark the generator as "awaiting".
   SetGeneratorAwaiting(generator);
-  Await(context, generator, value, outer_promise,
-        Builtins::kAsyncGeneratorYieldFulfill,
-        Builtins::kAsyncGeneratorAwaitReject, is_caught);
-  Return(UndefinedConstant());
+
+  // We can skip the creation of a temporary promise and the whole
+  // [[Resolve]] logic if we already know that the {value} that's
+  // being yielded is a primitive, as in that case we will immediately
+  // fulfill the temporary promise anyways and schedule a fullfil
+  // reaction job. This gives a nice performance boost for async
+  // generators that yield only primitives, i.e. numbers or strings.
+  Label if_primitive(this), if_receiver(this);
+  GotoIf(TaggedIsSmi(value), &if_primitive);
+  Branch(IsJSReceiver(value), &if_receiver, &if_primitive);
+
+  BIND(&if_receiver);
+  {
+    Await(context, generator, value, outer_promise,
+          Builtins::kAsyncGeneratorYieldFulfill,
+          Builtins::kAsyncGeneratorAwaitReject, is_caught);
+    Return(UndefinedConstant());
+  }
+
+  BIND(&if_primitive);
+  {
+    Label if_debug(this, Label::kDeferred), do_enqueue(this);
+    Branch(IsDebugActive(), &if_debug, &do_enqueue);
+    BIND(&if_debug);
+    {
+      // When debugging, we need to link from the {generator} to the
+      // {outer_promise} of the async function/generator.
+      CallRuntime(Runtime::kSetProperty, context, generator,
+                  LoadRoot(Heap::kgenerator_outer_promise_symbolRootIndex),
+                  outer_promise, SmiConstant(LanguageMode::kStrict));
+    }
+    Goto(&do_enqueue);
+    BIND(&do_enqueue);
+
+    // For primitive {value}s we can skip the allocation of the temporary
+    // promise and the resolution of that, and directly allocate the fulfill
+    // reaction job.
+    Node* const microtask = AllocatePromiseReactionJobTask(
+        Heap::kPromiseFulfillReactionJobTaskMapRootIndex, context, value,
+        HeapConstant(Builtins::CallableFor(
+                         isolate(), Builtins::kAsyncGeneratorYieldFulfill)
+                         .code()),
+        generator);
+    TailCallBuiltin(Builtins::kEnqueueMicrotask, context, microtask);
+  }
 }
 
 TF_BUILTIN(AsyncGeneratorYieldFulfill, AsyncGeneratorBuiltinsAssembler) {
