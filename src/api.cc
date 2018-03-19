@@ -1835,15 +1835,6 @@ static void ObjectTemplateSetNamedPropertyHandler(
   cons->set_named_property_handler(*obj);
 }
 
-// TODO(cbruni) deprecate.
-void ObjectTemplate::SetNamedPropertyHandler(
-    NamedPropertyGetterCallback getter, NamedPropertySetterCallback setter,
-    NamedPropertyQueryCallback query, NamedPropertyDeleterCallback remover,
-    NamedPropertyEnumeratorCallback enumerator, Local<Value> data) {
-  ObjectTemplateSetNamedPropertyHandler(
-      this, getter, setter, query, nullptr, remover, enumerator, nullptr, data,
-      PropertyHandlerFlags::kOnlyInterceptStrings);
-}
 
 void ObjectTemplate::SetHandler(
     const NamedPropertyHandlerConfiguration& config) {

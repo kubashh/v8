@@ -5825,39 +5825,6 @@ class V8_EXPORT ObjectTemplate : public Template {
   /**
    * Sets a named property handler on the object template.
    *
-   * Whenever a property whose name is a string is accessed on objects created
-   * from this object template, the provided callback is invoked instead of
-   * accessing the property directly on the JavaScript object.
-   *
-   * SetNamedPropertyHandler() is different from SetHandler(), in
-   * that the latter can intercept symbol-named properties as well as
-   * string-named properties when called with a
-   * NamedPropertyHandlerConfiguration. New code should use SetHandler().
-   *
-   * \param getter The callback to invoke when getting a property.
-   * \param setter The callback to invoke when setting a property.
-   * \param query The callback to invoke to check if a property is present,
-   *   and if present, get its attributes.
-   * \param deleter The callback to invoke when deleting a property.
-   * \param enumerator The callback to invoke to enumerate all the named
-   *   properties of an object.
-   * \param data A piece of data that will be passed to the callbacks
-   *   whenever they are invoked.
-   */
-  V8_DEPRECATE_SOON(
-      "Use SetHandler(const NamedPropertyHandlerConfiguration) "
-      "with the kOnlyInterceptStrings flag set.",
-      void SetNamedPropertyHandler(
-          NamedPropertyGetterCallback getter,
-          NamedPropertySetterCallback setter = 0,
-          NamedPropertyQueryCallback query = 0,
-          NamedPropertyDeleterCallback deleter = 0,
-          NamedPropertyEnumeratorCallback enumerator = 0,
-          Local<Value> data = Local<Value>()));
-
-  /**
-   * Sets a named property handler on the object template.
-   *
    * Whenever a property whose name is a string or a symbol is accessed on
    * objects created from this object template, the provided callback is
    * invoked instead of accessing the property directly on the JavaScript
