@@ -2132,7 +2132,14 @@ MUST_USE_RESULT Maybe<bool> FastAssign(
     }
 
     if (use_set) {
-      LookupIterator it(target, next_key, target);
+      Handle<Map> target_map(target->map(), isolate);
+      MaybeHandle<Map> maybe_transition_map =
+          TransitionsAccessor(target_map)
+              .FindTransitionToDataProperty(next_key);
+
+      LookupIterator it = LookupIterator::ForTransitionHandler(
+          isolate, target, next_key, prop_value, maybe_transition_map);
+
       Maybe<bool> result =
           Object::SetProperty(&it, prop_value, LanguageMode::kStrict,
                               Object::CERTAINLY_NOT_STORE_FROM_KEYED);
@@ -6624,6 +6631,11 @@ void JSReceiver::DeleteNormalizedProperty(Handle<JSReceiver> object,
     dictionary = NameDictionary::DeleteEntry(dictionary, entry);
     object->SetProperties(*dictionary);
   }
+  if (object->map()->is_prototype_map()) {
+    // Invalidate prototype validity cell as this may invalidate transitioning
+    // store IC handlers.
+    JSObject::InvalidatePrototypeChains(object->map());
+  }
 }
 
 
@@ -9060,7 +9072,7 @@ Handle<Map> Map::Normalize(Handle<Map> fast_map, PropertyNormalizationMode mode,
 #ifdef ENABLE_SLOW_DCHECKS
     if (FLAG_enable_slow_asserts) {
       // The cached map should match newly created normalized map bit-by-bit,
-      // except for the code cache, which can contain some ics which can be
+      // except for the code cache, which can contain some ICs which can be
       // applied to the shared map, dependent code and weak cell cache.
       Handle<Map> fresh = Map::CopyNormalized(fast_map, mode);
 
@@ -9080,7 +9092,9 @@ Handle<Map> Map::Normalize(Handle<Map> fast_map, PropertyNormalizationMode mode,
       }
       STATIC_ASSERT(Map::kWeakCellCacheOffset ==
                     Map::kDependentCodeOffset + kPointerSize);
-      int offset = Map::kWeakCellCacheOffset + kPointerSize;
+      STATIC_ASSERT(Map::kPrototypeValidityCellOffset ==
+                    Map::kWeakCellCacheOffset + kPointerSize);
+      int offset = Map::kPrototypeValidityCellOffset + kPointerSize;
       DCHECK_EQ(0, memcmp(fresh->address() + offset,
                           new_map->address() + offset, Map::kSize - offset));
     }
