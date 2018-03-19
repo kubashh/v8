@@ -113,14 +113,20 @@ v8::Local<v8::Object> DebugScopeIterator::GetObject() {
 
 v8::Local<v8::Function> DebugScopeIterator::GetFunction() {
   DCHECK(!Done());
-  Handle<JSFunction> closure = iterator_.GetClosure();
+  Handle<JSFunction> closure = iterator_.GetFunction();
   if (closure.is_null()) return v8::Local<v8::Function>();
   return Utils::ToLocal(closure);
 }
 
+v8::Local<v8::Value> DebugScopeIterator::GetFunctionName() {
+  DCHECK(!Done());
+  Handle<Object> name = iterator_.GetFunctionName();
+  return Utils::ToLocal(name);
+}
+
 debug::Location DebugScopeIterator::GetStartLocation() {
   DCHECK(!Done());
-  Handle<JSFunction> closure = iterator_.GetClosure();
+  Handle<JSFunction> closure = iterator_.GetFunction();
   if (closure.is_null()) return debug::Location();
   Object* obj = closure->shared()->script();
   if (!obj->IsScript()) return debug::Location();
@@ -130,7 +136,7 @@ debug::Location DebugScopeIterator::GetStartLocation() {
 
 debug::Location DebugScopeIterator::GetEndLocation() {
   DCHECK(!Done());
-  Handle<JSFunction> closure = iterator_.GetClosure();
+  Handle<JSFunction> closure = iterator_.GetFunction();
   if (closure.is_null()) return debug::Location();
   Object* obj = closure->shared()->script();
   if (!obj->IsScript()) return debug::Location();
@@ -193,6 +199,11 @@ v8::Local<v8::Object> DebugWasmScopeIterator::GetObject() {
 v8::Local<v8::Function> DebugWasmScopeIterator::GetFunction() {
   DCHECK(!Done());
   return v8::Local<v8::Function>();
+}
+
+v8::Local<v8::Value> DebugWasmScopeIterator::GetFunctionName() {
+  DCHECK(!Done());
+  return Utils::ToLocal(isolate_->factory()->empty_string());
 }
 
 debug::Location DebugWasmScopeIterator::GetStartLocation() {
