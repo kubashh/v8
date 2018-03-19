@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8c49f81e_2819cb42",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-03-19T11:33:50Z",
+      "side": 1,
+      "message": "prove",
+      "range": {
+        "startLine": 524,
+        "startChar": 67,
+        "endLine": 524,
+        "endChar": 73
+      },
+      "revId": "1210b53ab6f59daf734ec13074683ff5dbcf2c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2e1092a_e2a79beb",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 2
@@ -31,6 +54,23 @@
       "side": 1,
       "message": "Exactly, the iterator_result_map check guards both the absence of the \"then\" property on the receiver as well as the fact that the [[Prototype]] is the %ObjectPrototype%.",
       "parentUuid": "b2e1092a_e2a79beb",
+      "revId": "1210b53ab6f59daf734ec13074683ff5dbcf2c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad8cf434_f1e93448",
+        "filename": "src/lookup.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-03-19T11:33:50Z",
+      "side": 1,
+      "message": "It would be nice to have a specification of these protectors somewhere else, where we say what protectors there are and what exactly they guarantee.",
       "revId": "1210b53ab6f59daf734ec13074683ff5dbcf2c97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
