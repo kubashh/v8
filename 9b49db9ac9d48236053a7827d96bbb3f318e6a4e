@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7de73cc1_c91762fd",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "StoreGlobalIC_PropertyCellCase() function asserts that the |map_or_property_cell| argument is a PropertyCell.",
+      "parentUuid": "3daefe6c_4f625cd9",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "675e7c0e_9f8247ae",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad498c6_c199ad3c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "I\u0027d prefer to type all the code in a separate CL.",
+      "parentUuid": "675e7c0e_9f8247ae",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "83a55a96_e9b0699a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "DescriptorArray::ToKeyIndex(-1) is basically a constant\n  DescriptorArray::kFirstIndex + DescriptorArray::kEntryKeyIndex - DescriptorArray::kEntrySize\nWe could have subtract one from |nof| but then it will be another instruction in the code.",
+      "parentUuid": "cb78b4bd_1c63f01f",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a290cff_0ee6742c",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
@@ -67,6 +121,24 @@
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2be155a_52a68538",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "We don\u0027t need the |key| and this code in release mode when |validate_transition_handler| is false.",
+      "parentUuid": "4a290cff_0ee6742c",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "bee4236d_92ff3ef0",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "\"1\" is exactly the \"index\" of a data field we want to load. Handler has some obligatory fields which we has fixed name/meaning and optional fields whose semantics depends on the handler kind.",
+      "parentUuid": "b4cc7ec5_e2f94ca6",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80185e4a_86896659",
         "filename": "src/lookup.cc",
         "patchSetId": 8
@@ -132,6 +222,24 @@
       "writtenOn": "2018-03-12T13:09:21Z",
       "side": 1,
       "message": "Not sure if prettier, but one handle less :P:\n\nif (..) {\n  transition-\u003eset_prototype_validity_cell(Smi::FromInt(...))\n} else {\n  transition-\u003eset_prototype_validity_cell(*validity_cell);\n}",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e5c2e1_0b479901",
+        "filename": "src/lookup.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "I\u0027m planning to change Map::GetOrCreatePrototypeChainValidityCell() in a follow-up CL to always return a non empty handle. So I\u0027d prefer to leave this code as is for now.",
+      "parentUuid": "80185e4a_86896659",
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -155,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "cf4b3545_615f4626",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6628,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "Previously we always used a slow stub for transitioning stores if the holder was not fast. On the other hand, if the prototype object is not a holder for the transitioning store handlers then those handlers stay valid even if some other property is deleted.\n\nAnother reason why this is necessary, is that now we are short-cutting full prototype chain lookups when executing transitioning stores on both C++ and CSA sides of IC system.\n\nI added a regression test for this case.",
+      "parentUuid": "618432d6_04aaaf6f",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fbfdf19_94fc858e",
         "filename": "src/transitions.h",
         "patchSetId": 8
@@ -169,6 +295,42 @@
       "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb5eefcb_5fb40727",
+        "filename": "src/transitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fbfdf19_94fc858e",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98eeeca6_55795a90",
+        "filename": "src/transitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-19T13:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fbfdf19_94fc858e",
+      "revId": "9b49db9ac9d48236053a7827d96bbb3f318e6a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
