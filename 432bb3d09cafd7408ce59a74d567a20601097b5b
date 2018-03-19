@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79e2f578_6251793f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-19T13:17:55Z",
+      "side": 1,
+      "message": "I think I would prefer that there was no default type for the result, as that forces the caller to be more explicit. Less magic.",
+      "revId": "432bb3d09cafd7408ce59a74d567a20601097b5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
