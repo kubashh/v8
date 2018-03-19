@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3d4dfed_338254c1",
+        "filename": "test/mjsunit/harmony/numeric-separator.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-03-19T13:18:44Z",
+      "side": 1,
+      "message": "Let’s add a legacy octal test: parseInt(\u0027017_123\u0027) \u003d\u003d\u003d 17 and not 15 (although `017_123` by itself should throw)",
+      "revId": "5c28ec81fd30134b3e237f77beadc87108e4dfd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
