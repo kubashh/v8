@@ -6186,6 +6186,8 @@ typedef void (*FatalErrorCallback)(const char* location, const char* message);
 
 typedef void (*OOMErrorCallback)(const char* location, bool is_heap_oom);
 
+typedef bool (*BloatedHeapCallback)(v8::Isolate* isolate);
+
 typedef void (*DcheckErrorCallback)(const char* file, int line,
                                     const char* message);
 
@@ -7699,6 +7701,8 @@ class V8_EXPORT Isolate {
 
   /** Set the callback to invoke in case of OOM errors. */
   void SetOOMErrorHandler(OOMErrorCallback that);
+
+  void SetBloatedHeapCallback(BloatedHeapCallback that);
 
   /**
    * Set the callback to invoke to check if code generation from

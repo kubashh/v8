@@ -182,6 +182,7 @@ Heap::Heap()
       max_marking_limit_reached_(0.0),
       ms_count_(0),
       gc_count_(0),
+      proompted_(false),
       mmap_region_base_(0),
       remembered_unmapped_pages_index_(0),
       old_generation_allocation_limit_(initial_old_generation_size_),
@@ -1163,9 +1164,6 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
   // Note: as weak callbacks can execute arbitrary code, we cannot
   // hope that eventually there will be no weak callbacks invocations.
   // Therefore stop recollecting after several attempts.
-  if (gc_reason == GarbageCollectionReason::kLastResort) {
-    InvokeOutOfMemoryCallback();
-  }
   RuntimeCallTimerScope runtime_timer(
       isolate(), RuntimeCallCounterId::kGC_Custom_AllAvailableGarbage);
 
@@ -1265,9 +1263,25 @@ void Heap::EnsureFillerObjectAtTop() {
   }
 }
 
+bool Heap::IsCloseToOutOfMemory(size_t slack) {
+  printf("old gen size %zu, max old gen size %zu\n", OldGenerationCapacity(),
+         MaxOldGenerationSize());
+  printf("memory_allocator()->Size() = %zu | max rezerved = %zu\n",
+         memory_allocator()->Size(), MaxReserved());
+  printf("delta %zuKB | unmapper chunks %dKB\n",
+         (memory_allocator()->Size() - OldGenerationCapacity()) / KB,
+         memory_allocator()->unmapper()->NumberOfChunks() * Page::kPageSize);
+  return OldGenerationCapacity() + slack >= MaxOldGenerationSize() ||
+         memory_allocator()->Size() + slack >= MaxReserved();
+}
+
 bool Heap::CollectGarbage(AllocationSpace space,
                           GarbageCollectionReason gc_reason,
                           const v8::GCCallbackFlags gc_callback_flags) {
+  if (IsCloseToOutOfMemory(new_space_->Capacity()) &&
+      max_old_generation_size_ == initial_max_old_generation_size_) {
+    InvokeOutOfMemoryCallback();
+  }
   // The VM is in the GC state until exiting this function.
   VMState<GC> state(isolate());
 
@@ -4676,6 +4690,11 @@ void Heap::SetOutOfMemoryCallback(v8::debug::OutOfMemoryCallback callback,
 void Heap::InvokeOutOfMemoryCallback() {
   if (out_of_memory_callback_) {
     out_of_memory_callback_(out_of_memory_callback_data_);
+  } else {
+    if (max_old_generation_size_ == initial_max_old_generation_size_ &&
+        Utils::ReportBloatedHeap(reinterpret_cast<v8::Isolate*>(isolate()))) {
+      max_old_generation_size_ = max_old_generation_size_ + 100 * MB;
+    }
   }
 }
 
