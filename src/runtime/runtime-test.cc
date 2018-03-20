@@ -508,8 +508,13 @@ RUNTIME_FUNCTION(Runtime_SetAllocationTimeout) {
 
 
 RUNTIME_FUNCTION(Runtime_DebugPrint) {
-  SealHandleScope shs(isolate);
+  HandleScope hs(isolate);
   DCHECK_EQ(1, args.length());
+
+  // if (args[0]->IsSmi()) {
+  //   Utils::ReportBloatedHeap(reinterpret_cast<v8::Isolate*>(isolate));
+  //   return args[0];
+  // }
 
   OFStream os(stdout);
 #ifdef DEBUG

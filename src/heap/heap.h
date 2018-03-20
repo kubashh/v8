@@ -2060,9 +2060,7 @@ class Heap {
 
   bool CanExpandOldGeneration(size_t size);
 
-  bool IsCloseToOutOfMemory(size_t slack) {
-    return OldGenerationCapacity() + slack >= MaxOldGenerationSize();
-  }
+  bool IsCloseToOutOfMemory(size_t slack);
 
   bool ShouldExpandOldGenerationOnSlowAllocation();
 
@@ -2482,6 +2480,8 @@ class Heap {
 
   // How many gc happened.
   unsigned int gc_count_;
+
+  bool proompted_;
 
   static const uintptr_t kMmapRegionMask = 0xFFFFFFFFu;
   uintptr_t mmap_region_base_;
