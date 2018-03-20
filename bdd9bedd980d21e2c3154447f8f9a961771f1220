@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f485291c_e18f6c1e",
+        "filename": "test/mjsunit/regress/regress-store-transition-dict.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-20T13:32:05Z",
+      "side": 1,
+      "message": "assertFalse(%HasFastProperties(o));",
+      "revId": "bdd9bedd980d21e2c3154447f8f9a961771f1220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aa831cf_002f1798",
+        "filename": "test/mjsunit/regress/regress-store-transition-dict.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-20T13:32:05Z",
+      "side": 1,
+      "message": "assertFalse(%HasFastProperties(p1));",
+      "revId": "bdd9bedd980d21e2c3154447f8f9a961771f1220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6180ef5_b411e65c",
+        "filename": "test/mjsunit/regress/regress-store-transition-dict.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-20T13:32:05Z",
+      "side": 1,
+      "message": "assertFalse(%HasFastProperties(p2));",
+      "revId": "bdd9bedd980d21e2c3154447f8f9a961771f1220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
