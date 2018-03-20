@@ -162,6 +162,8 @@ class Genesis BASE_EMBEDDED {
   void CreateRoots();
   // Creates the empty function.  Used for creating a context from scratch.
   Handle<JSFunction> CreateEmptyFunction(Isolate* isolate);
+  // Finishes initializing the empty function's ScopeInfo.
+  void InitializeEmptyFunctionScopeInfo();
   // Returns the %ThrowTypeError% intrinsic function.
   // See ES#sec-%throwtypeerror% for details.
   Handle<JSFunction> GetThrowTypeErrorIntrinsic();
@@ -613,6 +615,7 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
       NewFunctionArgs::ForBuiltin(factory->empty_string(), code,
                                   empty_function_map, Builtins::kEmptyFunction);
   Handle<JSFunction> empty_function = factory->NewFunction(args);
+  native_context()->set_empty_function(*empty_function);
 
   // --- E m p t y ---
   Handle<String> source = factory->NewStringFromStaticChars("() {}");
@@ -620,6 +623,7 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
   script->set_type(Script::TYPE_NATIVE);
   Handle<FixedArray> infos = factory->NewFixedArray(2);
   script->set_shared_function_infos(*infos);
+  // TODO(cbruni): fix position information here.
   empty_function->shared()->set_raw_start_position(0);
   empty_function->shared()->set_raw_end_position(source->length());
   empty_function->shared()->set_function_literal_id(1);
@@ -627,6 +631,23 @@ Handle<JSFunction> Genesis::CreateEmptyFunction(Isolate* isolate) {
   SharedFunctionInfo::SetScript(handle(empty_function->shared()), script);
 
   return empty_function;
+}
+
+void Genesis::InitializeEmptyFunctionScopeInfo() {
+  // Create a proper ScopeInfo for the empty_function by reusing it from a
+  // fully compiled temporary empty function.
+  Handle<JSFunction> empty_function = isolate()->empty_function();
+  Handle<String> source = factory()->NewStringFromStaticChars("(function(){})");
+
+  Handle<SharedFunctionInfo> info =
+      Compiler::GetSharedFunctionInfoForScript(
+          source, Compiler::ScriptDetails(factory()->empty_string()),
+          ScriptOriginOptions(), nullptr, nullptr,
+          ScriptCompiler::kNoCompileOptions, ScriptCompiler::kNoCacheNoReason,
+          NOT_NATIVES_CODE)
+          .ToHandleChecked();
+  empty_function->shared()->set_scope_info(info->scope_info());
+  DCHECK_EQ(empty_function->shared()->Name(), info->Name());
 }
 
 void Genesis::CreateSloppyModeFunctionMaps(Handle<JSFunction> empty) {
@@ -5398,6 +5419,8 @@ Genesis::Genesis(
     if (!InstallNatives(context_type)) return;
     if (!InstallExtraNatives()) return;
     if (!ConfigureGlobalObjects(global_proxy_template)) return;
+
+    InitializeEmptyFunctionScopeInfo();
 
     isolate->counters()->contexts_created_from_scratch()->Increment();
 
