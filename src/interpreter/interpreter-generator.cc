@@ -2388,7 +2388,15 @@ IGNITION_HANDLER(CreateEmptyArrayLiteral, InterpreterAssembler) {
   Node* result = constructor_assembler.EmitCreateEmptyArrayLiteral(
       feedback_vector, slot_id, context);
   SetAccumulator(result);
+  Label call_hook(this);
+  GotoIf(NeedsSideEffectCheck(), &call_hook);
   Dispatch();
+
+  BIND(&call_hook);
+  {
+    CallRuntime(Runtime::kDebugReceiverCreated, context, result);
+    Dispatch();
+  }
 }
 
 // CreateObjectLiteral <element_idx> <literal_idx> <flags>

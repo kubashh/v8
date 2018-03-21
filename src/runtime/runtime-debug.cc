@@ -1810,5 +1810,13 @@ RUNTIME_FUNCTION(Runtime_IncBlockCounter) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_DebugReceiverCreated) {
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0);
+  USE(receiver);
+  fprintf(stderr, "created!\n");
+  return isolate->heap()->undefined_value();
+}
 }  // namespace internal
 }  // namespace v8
