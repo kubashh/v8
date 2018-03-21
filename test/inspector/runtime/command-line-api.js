@@ -96,6 +96,38 @@ InspectorTest.runAsyncTestSuite([
     await Protocol.Runtime.evaluate({expression: 'this.undebug(foo)'});
     await Protocol.Runtime.evaluate({expression: 'foo()'});
 
+    // Test builtin.
+    await Protocol.Runtime.evaluate({expression: 'function toUpper(x) { return x.toUpperCase() }'});
+    await Protocol.Runtime.evaluate({expression: 'debug(String.prototype.toUpperCase)', includeCommandLineAPI: true});
+    Protocol.Runtime.evaluate({ expression: 'toUpper("first call")'});
+    message = await Protocol.Debugger.oncePaused();
+    session.logCallFrames(message.params.callFrames);
+    InspectorTest.logMessage(message.params.hitBreakpoints);
+    await Protocol.Debugger.resume();
+    await Protocol.Runtime.evaluate({expression: 'undebug(String.prototype.toUpperCase)', includeCommandLineAPI: true});
+    await Protocol.Runtime.evaluate({ expression: 'toUpper("second call")'});
+
+    // Test API callback.
+    await Protocol.Runtime.evaluate({expression: 'function callSetTimeout() { setTimeout(function(){}, 0) }'});
+    await Protocol.Runtime.evaluate({expression: 'debug(setTimeout)', includeCommandLineAPI: true});
+    Protocol.Runtime.evaluate({ expression: 'callSetTimeout()'});
+    message = await Protocol.Debugger.oncePaused();
+    session.logCallFrames(message.params.callFrames);
+    InspectorTest.logMessage(message.params.hitBreakpoints);
+    await Protocol.Debugger.resume();
+    await Protocol.Runtime.evaluate({expression: 'undebug(setTimeout)', includeCommandLineAPI: true});
+    await Protocol.Runtime.evaluate({ expression: 'callSetTimeout()'});
+
+    // Test condition.
+    await Protocol.Runtime.evaluate({expression: 'function fromCharCode(...args) { String.fromCharCode(...args) }'});
+    await Protocol.Runtime.evaluate({expression: 'debug(String.fromCharCode, "arguments.length == 3")'});
+    Protocol.Runtime.evaluate({ expression: 'fromCharCode("1", "2", "3")'});
+    message = await Protocol.Debugger.oncePaused();
+    session.logCallFrames(message.params.callFrames);
+    InspectorTest.logMessage(message.params.hitBreakpoints);
+    await Protocol.Runtime.evaluate({expression: 'undebug(String.fromCharCode)'});
+    await Protocol.Runtime.evaluate({ expression: 'fromCharCode()'});
+
     await Protocol.Debugger.disable();
   },
 
@@ -118,6 +150,13 @@ InspectorTest.runAsyncTestSuite([
     Protocol.Runtime.evaluate({ expression: 'foo(); console.log(\'after first call\')'});
     await Protocol.Runtime.evaluate({expression: 'this.unmonitor(foo)'});
     await Protocol.Runtime.evaluate({ expression: 'foo()'});
+
+    // Test builtin.
+    await Protocol.Runtime.evaluate({expression: 'function fromCharCode(...args) { String.fromCharCode(...args) }'});
+    await Protocol.Runtime.evaluate({expression: 'monitor(String.fromCharCode)'});
+    Protocol.Runtime.evaluate({ expression: 'fromCharCode("1", "2", "3")'});
+    await Protocol.Runtime.evaluate({expression: 'unmonitor(String.fromCharCode)'});
+    await Protocol.Runtime.evaluate({ expression: 'fromCharCode()'});
 
     Protocol.Runtime.onConsoleAPICalled(null);
     await Protocol.Debugger.disable();

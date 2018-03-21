@@ -97,6 +97,15 @@ String16 generateBreakpointId(BreakpointType type,
   return builder.toString();
 }
 
+String16 generateBreakpointId(BreakpointType type,
+                              v8::Local<v8::Function> function) {
+  String16Builder builder;
+  builder.appendNumber(static_cast<int>(type));
+  builder.append('#');
+  builder.appendNumber(v8::debug::GetDebuggingId(function));
+  return builder.toString();
+}
+
 bool parseBreakpointId(const String16& breakpointId, BreakpointType* type,
                        String16* scriptSelector = nullptr,
                        int* lineNumber = nullptr, int* columnNumber = nullptr) {
@@ -820,6 +829,19 @@ V8DebuggerAgentImpl::setBreakpointImpl(const String16& breakpointId,
       .setLineNumber(location.GetLineNumber())
       .setColumnNumber(location.GetColumnNumber())
       .build();
+}
+
+void V8DebuggerAgentImpl::setBreakpointImpl(const String16& breakpointId,
+                                            v8::Local<v8::Function> function,
+                                            v8::Local<v8::String> condition) {
+  v8::debug::BreakpointId debuggerBreakpointId;
+  if (!v8::debug::SetFunctionBreakpoint(function, condition,
+                                        &debuggerBreakpointId)) {
+    return;
+  }
+  m_debuggerBreakpointIdToBreakpointId[debuggerBreakpointId] = breakpointId;
+  m_breakpointIdToDebuggerBreakpointIds[breakpointId].push_back(
+      debuggerBreakpointId);
 }
 
 Response V8DebuggerAgentImpl::searchInContent(
@@ -1604,29 +1626,26 @@ void V8DebuggerAgentImpl::breakProgram(
   }
 }
 
-void V8DebuggerAgentImpl::setBreakpointAt(const String16& scriptId,
-                                          int lineNumber, int columnNumber,
-                                          BreakpointSource source,
-                                          const String16& condition) {
+void V8DebuggerAgentImpl::setBreakpointFor(v8::Local<v8::Function> function,
+                                           v8::Local<v8::String> condition,
+                                           BreakpointSource source) {
   String16 breakpointId = generateBreakpointId(
       source == DebugCommandBreakpointSource ? BreakpointType::kDebugCommand
                                              : BreakpointType::kMonitorCommand,
-      scriptId, lineNumber, columnNumber);
+      function);
   if (m_breakpointIdToDebuggerBreakpointIds.find(breakpointId) !=
       m_breakpointIdToDebuggerBreakpointIds.end()) {
     return;
   }
-  setBreakpointImpl(breakpointId, scriptId, condition, lineNumber,
-                    columnNumber);
+  setBreakpointImpl(breakpointId, function, condition);
 }
 
-void V8DebuggerAgentImpl::removeBreakpointAt(const String16& scriptId,
-                                             int lineNumber, int columnNumber,
-                                             BreakpointSource source) {
+void V8DebuggerAgentImpl::removeBreakpointFor(v8::Local<v8::Function> function,
+                                              BreakpointSource source) {
   String16 breakpointId = generateBreakpointId(
       source == DebugCommandBreakpointSource ? BreakpointType::kDebugCommand
                                              : BreakpointType::kMonitorCommand,
-      scriptId, lineNumber, columnNumber);
+      function);
   removeBreakpointImpl(breakpointId);
 }
 
