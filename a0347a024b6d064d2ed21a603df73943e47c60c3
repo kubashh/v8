@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f3f1eb3f_67f56dbf",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-21T14:28:30Z",
+      "side": 1,
+      "message": "Setting a private symbol on the function is the wrong thing to do. We would need to do it on the SharedFunctionInfo, but that is not a JSObject.",
+      "parentUuid": "08fc1a3c_0d2c8291",
+      "revId": "a0347a024b6d064d2ed21a603df73943e47c60c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4bd83944_3eb77d6d",
         "filename": "src/inspector/v8-debugger-agent-impl.cc",
         "patchSetId": 3
