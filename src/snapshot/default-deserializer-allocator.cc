@@ -122,9 +122,9 @@ HeapObject* DefaultDeserializerAllocator::GetObject(AllocationSpace space,
 
 void DefaultDeserializerAllocator::DecodeReservation(
     std::vector<SerializedData::Reservation> res) {
-  DCHECK_EQ(0, reservations_[NEW_SPACE].size());
-  STATIC_ASSERT(NEW_SPACE == 0);
-  int current_space = NEW_SPACE;
+  DCHECK_EQ(0, reservations_[RO_SPACE].size());
+  STATIC_ASSERT(RO_SPACE == 0);
+  int current_space = RO_SPACE;
   for (auto& r : res) {
     reservations_[current_space].push_back({r.chunk_size(), NULL, NULL});
     if (r.is_last()) current_space++;
@@ -135,7 +135,7 @@ void DefaultDeserializerAllocator::DecodeReservation(
 
 bool DefaultDeserializerAllocator::ReserveSpace() {
 #ifdef DEBUG
-  for (int i = NEW_SPACE; i < kNumberOfSpaces; ++i) {
+  for (int i = RO_SPACE; i < kNumberOfSpaces; ++i) {
     DCHECK_GT(reservations_[i].size(), 0);
   }
 #endif  // DEBUG
@@ -153,7 +153,7 @@ bool DefaultDeserializerAllocator::ReserveSpace() {
 bool DefaultDeserializerAllocator::ReserveSpace(
     StartupDeserializer* startup_deserializer,
     BuiltinDeserializer* builtin_deserializer) {
-  const int first_space = NEW_SPACE;
+  const int first_space = RO_SPACE;
   const int last_space = SerializerDeserializer::kNumberOfSpaces;
   Isolate* isolate = startup_deserializer->isolate();
 

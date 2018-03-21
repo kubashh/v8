@@ -159,7 +159,7 @@ class Sweeper {
   void MakeIterable(Page* page);
 
   bool IsValidIterabilitySpace(AllocationSpace space) {
-    return space == NEW_SPACE;
+    return space == NEW_SPACE || space == RO_SPACE;
   }
 
   bool IsValidSweepingSpace(AllocationSpace space) {
