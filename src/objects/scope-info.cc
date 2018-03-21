@@ -57,6 +57,7 @@ bool ScopeInfo::Equals(ScopeInfo* other) const {
 }
 #endif
 
+// static
 Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
                                     MaybeHandle<ScopeInfo> outer_scope) {
   // Collect variables.
@@ -311,6 +312,7 @@ Handle<ScopeInfo> ScopeInfo::Create(Isolate* isolate, Zone* zone, Scope* scope,
   return scope_info;
 }
 
+// static
 Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
     Isolate* isolate, MaybeHandle<ScopeInfo> outer_scope) {
   const bool has_outer_scope_info = !outer_scope.is_null();
@@ -354,36 +356,48 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
   return scope_info;
 }
 
+// static
 Handle<ScopeInfo> ScopeInfo::CreateGlobalThisBinding(Isolate* isolate) {
+  return CreateForBootstrapping(isolate, SCRIPT_SCOPE);
+}
+
+// static
+Handle<ScopeInfo> ScopeInfo::CreateForEmptyFunction(Isolate* isolate) {
+  return CreateForBootstrapping(isolate, FUNCTION_SCOPE);
+}
+
+// static
+Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
+                                                    ScopeType type) {
   DCHECK(isolate->bootstrapper()->IsActive());
+  DCHECK(type == SCRIPT_SCOPE || type == FUNCTION_SCOPE);
 
   const int stack_local_count = 0;
   const int context_local_count = 1;
-  const VariableAllocationInfo receiver_info = CONTEXT;
-  const VariableAllocationInfo function_name_info = NONE;
   const bool has_receiver = true;
   const bool has_position_info = true;
+  const bool has_function_name = type == FUNCTION_SCOPE;
   const int parameter_count = 0;
   const int length = kVariablePartIndex + parameter_count +
                      (1 + stack_local_count) + 2 * context_local_count +
                      (has_receiver ? 1 : 0) +
+                     (has_function_name ? kFunctionNameEntries : 0) +
                      (has_position_info ? kPositionInfoEntries : 0);
 
   Factory* factory = isolate->factory();
   Handle<ScopeInfo> scope_info = factory->NewScopeInfo(length);
 
   // Encode the flags.
-  int flags = ScopeTypeField::encode(SCRIPT_SCOPE) |
-              CallsSloppyEvalField::encode(false) |
-              LanguageModeField::encode(LanguageMode::kSloppy) |
-              DeclarationScopeField::encode(true) |
-              ReceiverVariableField::encode(receiver_info) |
-              FunctionVariableField::encode(function_name_info) |
-              AsmModuleField::encode(false) |
-              HasSimpleParametersField::encode(true) |
-              FunctionKindField::encode(FunctionKind::kNormalFunction) |
-              HasOuterScopeInfoField::encode(false) |
-              IsDebugEvaluateScopeField::encode(false);
+  int flags =
+      ScopeTypeField::encode(type) | CallsSloppyEvalField::encode(false) |
+      LanguageModeField::encode(LanguageMode::kSloppy) |
+      DeclarationScopeField::encode(true) |
+      ReceiverVariableField::encode(CONTEXT) |
+      FunctionVariableField::encode(has_function_name ? UNUSED : NONE) |
+      AsmModuleField::encode(false) | HasSimpleParametersField::encode(true) |
+      FunctionKindField::encode(FunctionKind::kNormalFunction) |
+      HasOuterScopeInfoField::encode(false) |
+      IsDebugEvaluateScopeField::encode(false);
   scope_info->SetFlags(flags);
   scope_info->SetParameterCount(parameter_count);
   scope_info->SetStackLocalCount(stack_local_count);
@@ -410,13 +424,17 @@ Handle<ScopeInfo> ScopeInfo::CreateGlobalThisBinding(Isolate* isolate) {
   scope_info->set(index++, Smi::FromInt(receiver_index));
 
   DCHECK_EQ(index, scope_info->FunctionNameInfoIndex());
+  if (has_function_name) {
+    scope_info->set(index++, *isolate->factory()->empty_string());
+    scope_info->set(index++, Smi::kZero);
+  }
   DCHECK_EQ(index, scope_info->PositionInfoIndex());
   // Store dummy position to be in sync with the {scope_type}.
   scope_info->set(index++, Smi::kZero);
   scope_info->set(index++, Smi::kZero);
   DCHECK_EQ(index, scope_info->OuterScopeInfoIndex());
   DCHECK_EQ(index, scope_info->length());
-  DCHECK_EQ(scope_info->ParameterCount(), 0);
+  DCHECK_EQ(scope_info->ParameterCount(), parameter_count);
   DCHECK_EQ(scope_info->ContextLength(), Context::MIN_CONTEXT_SLOTS + 1);
 
   return scope_info;

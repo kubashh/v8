@@ -6,6 +6,7 @@
 #include <iostream>
 #include <limits>
 
+#include "src/compiler.h"
 #include "src/objects-inl.h"
 #include "src/objects.h"
 #include "test/unittests/test-utils.h"
@@ -147,6 +148,27 @@ TEST_F(ObjectWithIsolate, DictionaryGrowth) {
   dict = NumberDictionary::New(isolate(), 1);
   dict = NumberDictionary::EnsureCapacity(dict, 30);
   CHECK_EQ(64, dict->Capacity());
+}
+
+TEST_F(TestWithNativeContext, EmptyFunctionScopeInfo) {
+  // Check that the empty_function has a properly set up ScopeInfo.
+  Handle<String> source = factory()->NewStringFromStaticChars("(function(){})");
+  Handle<SharedFunctionInfo> info =
+      Compiler::GetSharedFunctionInfoForScript(
+          source, Compiler::ScriptDetails(factory()->empty_string()),
+          ScriptOriginOptions(), nullptr, nullptr,
+          ScriptCompiler::kNoCompileOptions, ScriptCompiler::kNoCacheNoReason,
+          NOT_NATIVES_CODE)
+          .ToHandleChecked();
+
+  Handle<ScopeInfo> scope_info(info->scope_info());
+  Handle<ScopeInfo> empty_function_scope_info(
+      isolate()->empty_function()->shared()->scope_info());
+
+  EXPECT_EQ(scope_info->length(), empty_function_scope_info->length());
+  for (int i = 0; i < scope_info->length(); i++) {
+    EXPECT_EQ(scope_info->get(i), empty_function_scope_info->get(i));
+  }
 }
 
 }  // namespace internal

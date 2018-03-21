@@ -196,6 +196,7 @@ class ScopeInfo : public FixedArray {
                                   MaybeHandle<ScopeInfo> outer_scope);
   static Handle<ScopeInfo> CreateForWithScope(
       Isolate* isolate, MaybeHandle<ScopeInfo> outer_scope);
+  static Handle<ScopeInfo> CreateForEmptyFunction(Isolate* isolate);
   static Handle<ScopeInfo> CreateGlobalThisBinding(Isolate* isolate);
 
   // Serializes empty scope info.
@@ -285,6 +286,8 @@ class ScopeInfo : public FixedArray {
   int ModuleVariablesIndex() const;
 
   static bool NeedsPositionInfo(ScopeType type);
+  static Handle<ScopeInfo> CreateForBootstrapping(Isolate* isolate,
+                                                  ScopeType type);
 
   int Lookup(Handle<String> name, int start, int end, VariableMode* mode,
              VariableLocation* location, InitializationFlag* init_flag,
