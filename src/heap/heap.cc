@@ -1479,7 +1479,8 @@ bool Heap::ReserveSpace(Reservation* reservations, std::vector<Address>* maps) {
   static const int kThreshold = 20;
   while (gc_performed && counter++ < kThreshold) {
     gc_performed = false;
-    for (int space = NEW_SPACE; space < SerializerDeserializer::kNumberOfSpaces;
+    STATIC_ASSERT(RO_SPACE == 0);
+    for (int space = RO_SPACE; space < SerializerDeserializer::kNumberOfSpaces;
          space++) {
       Reservation* reservation = &reservations[space];
       DCHECK_LE(1, reservation->size());

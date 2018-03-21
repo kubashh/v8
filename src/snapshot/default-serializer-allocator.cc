@@ -86,7 +86,7 @@ std::vector<SerializedData::Reservation>
 DefaultSerializerAllocator::EncodeReservations() const {
   std::vector<SerializedData::Reservation> out;
 
-  STATIC_ASSERT(NEW_SPACE == 0);
+  STATIC_ASSERT(RO_SPACE == 0);
   for (int i = 0; i < kNumberOfPreallocatedSpaces; i++) {
     for (size_t j = 0; j < completed_chunks_[i].size(); j++) {
       out.emplace_back(completed_chunks_[i][j]);
@@ -106,9 +106,6 @@ DefaultSerializerAllocator::EncodeReservations() const {
   out.emplace_back(large_objects_total_size_);
   out.back().mark_as_last();
 
-  STATIC_ASSERT(RO_SPACE == LO_SPACE + 1);
-  out.emplace_back(0);
-  out.back().mark_as_last();
   return out;
 }
 
@@ -117,13 +114,13 @@ void DefaultSerializerAllocator::OutputStatistics() {
 
   PrintF("  Spaces (bytes):\n");
 
-  STATIC_ASSERT(NEW_SPACE == 0);
+  STATIC_ASSERT(RO_SPACE == 0);
   for (int space = 0; space < kNumberOfSpaces; space++) {
     PrintF("%16s", AllocationSpaceName(static_cast<AllocationSpace>(space)));
   }
   PrintF("\n");
 
-  STATIC_ASSERT(NEW_SPACE == 0);
+  STATIC_ASSERT(RO_SPACE == 0);
   for (int space = 0; space < kNumberOfPreallocatedSpaces; space++) {
     size_t s = pending_chunk_[space];
     for (uint32_t chunk_size : completed_chunks_[space]) s += chunk_size;
@@ -134,10 +131,7 @@ void DefaultSerializerAllocator::OutputStatistics() {
   PrintF("%16d", num_maps_ * Map::kSize);
 
   STATIC_ASSERT(LO_SPACE == MAP_SPACE + 1);
-  PrintF("%16d", large_objects_total_size_);
-
-  STATIC_ASSERT(RO_SPACE == LO_SPACE + 1);
-  PrintF("%16d\n", 0);
+  PrintF("%16d\n", large_objects_total_size_);
 }
 
 // static
