@@ -10769,6 +10769,14 @@ Node* CodeStubAssembler::IsDebugActive() {
   return Word32NotEqual(is_debug_active, Int32Constant(0));
 }
 
+Node* CodeStubAssembler::NeedsSideEffectCheck() {
+  Node* is_needs_side_effect_check =
+      Load(MachineType::Uint8(),
+           ExternalConstant(
+               ExternalReference::needs_side_effect_check_address(isolate())));
+  return Word32NotEqual(is_needs_side_effect_check, Int32Constant(0));
+}
+
 Node* CodeStubAssembler::IsPromiseHookEnabledOrDebugIsActive() {
   Node* const promise_hook_or_debug_is_active =
       Load(MachineType::Uint8(),
