@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08fc1a3c_0d2c8291",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-21T14:06:10Z",
+      "side": 1,
+      "message": "Just wondering. Since this id would be used by small amount of users, should we maintain it on inspector side and save 20 bits in debugger_hints for something else?\n- introduce last_function_breakpoint_id as a field on debugger agent,\n- set this id using SetPrivate/GetPrivate on v8::Function when we set breakpoint.",
+      "revId": "a0347a024b6d064d2ed21a603df73943e47c60c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
