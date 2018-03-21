@@ -339,6 +339,9 @@ class Debug {
 
   bool PerformSideEffectCheck(Handle<JSFunction> function);
   bool PerformSideEffectCheckForCallback(Object* callback_info);
+  // This instrumentation is called iff needs_side_effect_check is true.
+  void OnReceiverCreated(Handle<JSReceiver> receiver);
+  bool PerformSideEffectCheckForReceiver(Handle<JSReceiver> receiver);
 
   // Flags and states.
   DebugScope* debugger_entry() {

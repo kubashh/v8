@@ -134,6 +134,8 @@ function StackHas(stack, v) {
 // Global list of arrays visited during toString, toLocaleString and
 // join invocations.
 var visited_arrays = new Stack();
+%DebugReceiverCreated(visited_arrays);
+%DebugReceiverCreated(visited_arrays.values);
 
 function DoJoin(array, length, is_array, separator, use_locale) {
   if (UseSparseVariant(array, length, is_array, length)) {

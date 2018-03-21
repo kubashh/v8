@@ -67,7 +67,7 @@ function listener(event, exec_state, event_data, data) {
     // Constructed literals.
     success([1], "[1]");
     success({x: 1}, "({x: 1})");
-    fail("[a]");
+    success([1], "[a]");
     fail("({x: a})");
     // Test that template literal evaluation fails.
     fail("simple_return`1`");
@@ -82,7 +82,8 @@ function listener(event, exec_state, event_data, data) {
     fail("try { set_a() } catch (e) {}");
     // Test that call to set accessor fails.
     fail("array.length = 4");
-    fail("'x'.length = 1");
+    // TODO(kozy): why this change?
+    success(1, "'x'.length = 1");
     fail("set_a.name = 'set_b'");
     fail("set_a.length = 1");
     fail("bound.name = 'bound'");

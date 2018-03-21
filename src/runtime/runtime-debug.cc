@@ -1810,5 +1810,28 @@ RUNTIME_FUNCTION(Runtime_IncBlockCounter) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_DebugReceiverCreated) {
+  // DCHECK(isolate->needs_side_effect_check());
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0);
+  isolate->debug()->OnReceiverCreated(receiver);
+  return isolate->heap()->undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_DebugSideEffectCheck) {
+  DCHECK(isolate->needs_side_effect_check());
+  DCHECK_EQ(1, args.length());
+  if (!args[0]->IsJSReceiver()) {
+    // TODO(kozy): check why we need this?
+    return isolate->heap()->undefined_value();
+  }
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0);
+  if (!isolate->debug()->PerformSideEffectCheckForReceiver(receiver)) {
+    return isolate->heap()->exception();
+  }
+  return isolate->heap()->undefined_value();
+}
 }  // namespace internal
 }  // namespace v8

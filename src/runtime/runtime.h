@@ -148,8 +148,10 @@ namespace internal {
   F(DebugPropertyAttributesFromDetails, 1, 1)   \
   F(DebugPropertyKindFromDetails, 1, 1)         \
   F(DebugPushPromise, 1, 1)                     \
+  F(DebugReceiverCreated, 1, 1)                 \
   F(DebugReferencedBy, 3, 1)                    \
   F(DebugSetScriptSource, 2, 1)                 \
+  F(DebugSideEffectCheck, 1, 1)                 \
   F(DebugToggleBlockCoverage, 1, 1)             \
   F(DebugTogglePreciseCoverage, 1, 1)           \
   F(FunctionGetDebugName, 1, 1)                 \

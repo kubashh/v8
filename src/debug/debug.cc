@@ -2262,6 +2262,43 @@ bool Debug::PerformSideEffectCheckForCallback(Object* callback_info) {
   return false;
 }
 
+void Debug::OnReceiverCreated(Handle<JSReceiver> receiver) {
+  // DCHECK(isolate_->needs_side_effect_check());
+  Handle<Symbol> temporary_object_symbol =
+      isolate_->factory()->temporary_object_symbol();
+  JSObject::SetProperty(receiver, temporary_object_symbol,
+                        handle(isolate_->heap()->true_value(), isolate_),
+                        LanguageMode::kStrict)
+      .Assert();
+}
+
+bool Debug::PerformSideEffectCheckForReceiver(Handle<JSReceiver> receiver) {
+  DCHECK(isolate_->needs_side_effect_check());
+  Handle<Symbol> temporary_object_symbol =
+      isolate_->factory()->temporary_object_symbol();
+  bool is_temporary = JSReceiver::HasProperty(receiver, temporary_object_symbol)
+                          .FromMaybe(false);
+  if (is_temporary) return true;
+  if (FLAG_trace_side_effect_free_debug_evaluate) {
+    JavaScriptFrameIterator it(isolate_);
+    InterpretedFrame* interpreted_frame =
+        reinterpret_cast<InterpretedFrame*>(it.frame());
+    SharedFunctionInfo* shared = interpreted_frame->function()->shared();
+    BytecodeArray* bytecode_array = shared->bytecode_array();
+    int bytecode_offset = interpreted_frame->GetBytecodeOffset();
+    interpreter::Bytecode bytecode =
+        interpreter::Bytecodes::FromByte(bytecode_array->get(bytecode_offset));
+    PrintF("[debug-evaluate] %s failed runtime side effect check.\n",
+           interpreter::Bytecodes::ToString(bytecode));
+    receiver->Print();
+    shared->Print();
+  }
+  side_effect_check_failed_ = true;
+  // Throw an uncatchable termination exception.
+  isolate_->TerminateExecution();
+  return false;
+}
+
 void LegacyDebugDelegate::PromiseEventOccurred(
     v8::debug::PromiseDebugActionType type, int id, bool is_blackboxed) {
   DebugScope debug_scope(isolate_->debug());

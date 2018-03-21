@@ -71,7 +71,7 @@ function listener(event, exec_state, event_data, data) {
       "map", "findIndex"
     ];
     var fails = ["toString", "join", "toLocaleString", "pop", "push", "reverse",
-      "shift", "unshift", "splice", "sort", "copyWithin", "fill"];
+      "shift", "unshift", "splice", "sort", "copyWithin"];
     for (f of Object.getOwnPropertyNames(Array.prototype)) {
       if (typeof Array.prototype[f] === "function") {
         if (fails.includes(f)) {
