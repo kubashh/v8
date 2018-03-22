@@ -257,6 +257,10 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Returns the offset from the BytecodeArrayPointer of the current bytecode.
   compiler::Node* BytecodeOffset();
 
+  // Marks object as side effect free object if needs_side_effect_check is true.
+  void MarkObjectAsSideEffectFreeIfNeeded(compiler::Node* context,
+                                          compiler::Node* object, Label* after);
+
  protected:
   Bytecode bytecode() const { return bytecode_; }
   static bool TargetSupportsUnalignedAccess();
