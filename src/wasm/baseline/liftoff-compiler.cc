@@ -1079,7 +1079,8 @@ class LiftoffCompiler {
     }
 
     Label* trap_label = AddOutOfLineTrap(
-        decoder->position(), Builtins::kThrowWasmTrapMemOutOfBounds);
+        decoder->position(), Builtins::kThrowWasmTrapMemOutOfBounds,
+        env_->use_trap_handler ? __ pc_offset() : 0);
 
     if (statically_oob) {
       __ emit_jump(trap_label);
