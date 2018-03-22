@@ -291,6 +291,92 @@ WasmCode::~WasmCode() {
   }
 }
 
+NativeModule::CloneCodeHelper::CloneCodeHelper(
+    NativeModule* source_native_module, NativeModule* cloning_native_module)
+    : source_native_module_(source_native_module),
+      cloning_native_module_(cloning_native_module) {
+  CreateTrampolinesMapping();
+  CreateStubsMapping();
+}
+
+void NativeModule::CloneCodeHelper::AddCode(
+    std::pair<WasmCode*, uint32_t> code) {
+  code_to_clone_.emplace_back(code);
+}
+
+void NativeModule::CloneCodeHelper::CloneAndPatchCode(
+    bool patch_stub_to_stub_calls) {
+  if (patch_stub_to_stub_calls) {
+    PatchStubToStubCalls();
+  }
+
+  WasmCode* anonymous_lazy_builtin = nullptr;
+  for (auto& pair : code_to_clone_) {
+    WasmCode* original_code = pair.first;
+    uint32_t index = pair.second;
+    switch (original_code->kind()) {
+      case WasmCode::kLazyStub: {
+        // Use the first anonymous lazy compile stub hit in this loop as the
+        // canonical copy for all further ones by remembering it locally via
+        // the {anonymous_lazy_builtin} variable. All non-anonymous such stubs
+        // are just cloned directly via {CloneLazyBuiltinInto} below.
+        if (!original_code->IsAnonymous()) {
+          WasmCode* new_code = cloning_native_module_->CloneLazyBuiltinInto(
+              original_code, index, kNoFlushICache);
+          PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup_,
+                                      kFlushICache);
+          break;
+        }
+        if (anonymous_lazy_builtin == nullptr) {
+          WasmCode* new_code =
+              cloning_native_module_->CloneCode(original_code, kNoFlushICache);
+          PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup_,
+                                      kFlushICache);
+          anonymous_lazy_builtin = new_code;
+        }
+        cloning_native_module_->code_table_[index] = anonymous_lazy_builtin;
+      } break;
+      case WasmCode::kFunction: {
+        WasmCode* new_code =
+            cloning_native_module_->CloneCode(original_code, kNoFlushICache);
+        PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup_,
+                                    kFlushICache);
+      } break;
+      default:
+        UNREACHABLE();
+    }
+  }
+}
+
+void NativeModule::CloneCodeHelper::CreateTrampolinesMapping() {
+  for (auto& pair : source_native_module_->trampolines_) {
+    Address old_dest = pair.second;
+    auto local = cloning_native_module_->trampolines_.find(pair.first);
+    DCHECK(local != cloning_native_module_->trampolines_.end());
+    Address new_dest = local->second;
+    reverse_lookup_.emplace(old_dest, new_dest);
+  }
+}
+
+void NativeModule::CloneCodeHelper::CreateStubsMapping() {
+  for (auto& pair : source_native_module_->stubs_) {
+    Address old_dest = pair.second->instructions().start();
+    auto local = cloning_native_module_->stubs_.find(pair.first);
+    DCHECK(local != cloning_native_module_->stubs_.end());
+    Address new_dest = local->second->instructions().start();
+    reverse_lookup_.emplace(old_dest, new_dest);
+  }
+}
+
+void NativeModule::CloneCodeHelper::PatchStubToStubCalls() {
+  for (auto& pair : cloning_native_module_->stubs_) {
+    WasmCode* new_stub = pair.second;
+    WasmCode* old_stub = source_native_module_->stubs_.find(pair.first)->second;
+    PatchTrampolineAndStubCalls(old_stub, new_stub, reverse_lookup_,
+                                kFlushICache);
+  }
+}
+
 base::AtomicNumber<size_t> NativeModule::next_id_;
 
 NativeModule::NativeModule(uint32_t num_functions, uint32_t num_imports,
@@ -906,63 +992,13 @@ std::unique_ptr<NativeModule> NativeModule::Clone() {
   // needed yet.
   ret->CloneTrampolinesAndStubs(this, kNoFlushICache);
 
-  std::unordered_map<Address, Address, AddressHasher> reverse_lookup;
-  for (auto& pair : trampolines_) {
-    Address old_dest = pair.second;
-    auto local = ret->trampolines_.find(pair.first);
-    DCHECK(local != ret->trampolines_.end());
-    Address new_dest = local->second;
-    reverse_lookup.emplace(old_dest, new_dest);
-  }
-
-  for (auto& pair : stubs_) {
-    Address old_dest = pair.second->instructions().start();
-    auto local = ret->stubs_.find(pair.first);
-    DCHECK(local != ret->stubs_.end());
-    Address new_dest = local->second->instructions().start();
-    reverse_lookup.emplace(old_dest, new_dest);
-  }
-
-  for (auto& pair : ret->stubs_) {
-    WasmCode* new_stub = pair.second;
-    WasmCode* old_stub = stubs_.find(pair.first)->second;
-    PatchTrampolineAndStubCalls(old_stub, new_stub, reverse_lookup,
-                                kFlushICache);
-  }
-
-  WasmCode* anonymous_lazy_builtin = nullptr;
+  // Create a helper for cloning and patching code.
+  CloneCodeHelper helper(this, ret.get());
   for (uint32_t i = num_imported_functions(), e = FunctionCount(); i < e; ++i) {
-    const WasmCode* original_code = GetCode(i);
-    switch (original_code->kind()) {
-      case WasmCode::kLazyStub: {
-        // Use the first anonymous lazy compile stub hit in this loop as the
-        // canonical copy for all further ones by remembering it locally via
-        // the {anonymous_lazy_builtin} variable. All non-anonymous such stubs
-        // are just cloned directly via {CloneLazyBuiltinInto} below.
-        if (!original_code->IsAnonymous()) {
-          WasmCode* new_code =
-              ret->CloneLazyBuiltinInto(original_code, i, kNoFlushICache);
-          PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup,
-                                      kFlushICache);
-          break;
-        }
-        if (anonymous_lazy_builtin == nullptr) {
-          WasmCode* new_code = ret->CloneCode(original_code, kNoFlushICache);
-          PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup,
-                                      kFlushICache);
-          anonymous_lazy_builtin = new_code;
-        }
-        ret->code_table_[i] = anonymous_lazy_builtin;
-      } break;
-      case WasmCode::kFunction: {
-        WasmCode* new_code = ret->CloneCode(original_code, kNoFlushICache);
-        PatchTrampolineAndStubCalls(original_code, new_code, reverse_lookup,
-                                    kFlushICache);
-      } break;
-      default:
-        UNREACHABLE();
-    }
+    helper.AddCode(std::make_pair(GetCode(i), i));
   }
+  helper.CloneAndPatchCode(true);
+
   return ret;
 }
 
