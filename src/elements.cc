@@ -707,12 +707,13 @@ class ElementsAccessorBase : public InternalElementsAccessor {
   }
 
   uint32_t Unshift(Handle<JSArray> receiver, Arguments* args,
-                   uint32_t unshift_size) final {
-    return Subclass::UnshiftImpl(receiver, args, unshift_size);
+                   uint32_t unshindirect_function_table_size) final {
+    return Subclass::UnshiftImpl(receiver, args,
+                                 unshindirect_function_table_size);
   }
 
   static uint32_t UnshiftImpl(Handle<JSArray> receiver, Arguments* args,
-                              uint32_t unshift_size) {
+                              uint32_t unshindirect_function_table_size) {
     UNREACHABLE();
   }
 
@@ -2185,11 +2186,11 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
                                   AT_END);
   }
 
-  static uint32_t UnshiftImpl(Handle<JSArray> receiver,
-                              Arguments* args, uint32_t unshift_size) {
+  static uint32_t UnshiftImpl(Handle<JSArray> receiver, Arguments* args,
+                              uint32_t unshindirect_function_table_size) {
     Handle<FixedArrayBase> backing_store(receiver->elements());
-    return Subclass::AddArguments(receiver, backing_store, args, unshift_size,
-                                  AT_START);
+    return Subclass::AddArguments(receiver, backing_store, args,
+                                  unshindirect_function_table_size, AT_START);
   }
 
   static Handle<JSObject> SliceImpl(Handle<JSObject> receiver, uint32_t start,
