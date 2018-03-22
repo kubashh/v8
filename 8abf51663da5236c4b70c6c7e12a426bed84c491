@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2bab073_e0e2a65a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-22T15:41:16Z",
+      "side": 1,
+      "message": "I think we should just inline these methods, to make the interface to the CloneCodeHelper easier.",
+      "revId": "8abf51663da5236c4b70c6c7e12a426bed84c491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5df408d_99da5a6b",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-22T15:41:16Z",
+      "side": 1,
+      "message": "wouldn\u0027t uint32_t be easier to read here?",
+      "range": {
+        "startLine": 376,
+        "startChar": 7,
+        "endLine": 376,
+        "endChar": 12
+      },
+      "revId": "8abf51663da5236c4b70c6c7e12a426bed84c491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72ff86a_0d4b7033",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-22T15:41:16Z",
+      "side": 1,
+      "message": "std::vector is typically faster than std::list.",
+      "revId": "8abf51663da5236c4b70c6c7e12a426bed84c491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
