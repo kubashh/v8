@@ -348,7 +348,7 @@ WasmCode* NativeModule::AddOwnedCode(
   base::LockGuard<base::Mutex> lock(&allocation_mutex_);
   Address executable_buffer = AllocateForCode(orig_instructions.size());
   if (executable_buffer == nullptr) {
-    V8::FatalProcessOutOfMemory("NativeModule::AddOwnedCode");
+    V8::FatalProcessOutOfMemory(nullptr, "NativeModule::AddOwnedCode");
     UNREACHABLE();
   }
   memcpy(executable_buffer, orig_instructions.start(),
@@ -845,7 +845,8 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     return ret;
   }
 
-  V8::FatalProcessOutOfMemory("WasmCodeManager::NewNativeModule");
+  V8::FatalProcessOutOfMemory(reinterpret_cast<Isolate*>(isolate_),
+                              "WasmCodeManager::NewNativeModule");
   return nullptr;
 }
 
