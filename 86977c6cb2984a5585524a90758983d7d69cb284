@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c7a211ad_bf9f4d03",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T15:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb31d5f7_47773737",
+      "range": {
+        "startLine": 556,
+        "startChar": 10,
+        "endLine": 556,
+        "endChar": 22
+      },
+      "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e89d4746_38e666a3",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "48f1187d_537eabf5",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T15:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e89d4746_38e666a3",
+      "range": {
+        "startLine": 610,
+        "startChar": 8,
+        "endLine": 610,
+        "endChar": 20
+      },
+      "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d42eed8e_b2fa6d1e",
         "filename": "src/js/array.js",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2018-03-22T12:53:25Z",
       "side": 1,
       "message": "If we terminate inside of Join due to e.g. a side effect in ConvertToString, we could leave visited_arrays in a dirty state. The next call to Array.prototype.join could then wrongly assume that the array is cyclic.\n\nThe clean solution here would be to reinitialize visited_arrays every time. But that might affect performance.",
+      "range": {
+        "startLine": 137,
+        "startChar": 1,
+        "endLine": 137,
+        "endChar": 26
+      },
+      "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f847b3a_7ced7c93",
+        "filename": "src/js/array.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T15:43:39Z",
+      "side": 1,
+      "message": "This one sounds like the same problem as with Runtime.terminateExecution. So it would be nice non trivial example for lighting talk.\nI will try to reinitialize visited_arrays in preparation CL.",
+      "parentUuid": "d42eed8e_b2fa6d1e",
       "range": {
         "startLine": 137,
         "startChar": 1,
@@ -91,6 +163,30 @@
       "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bfdf6a4_0f9495fd",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T15:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0185fbb9_4e405c6d",
+      "range": {
+        "startLine": 1813,
+        "startChar": 17,
+        "endLine": 1813,
+        "endChar": 50
+      },
+      "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
