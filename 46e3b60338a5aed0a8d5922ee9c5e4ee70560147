@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aba65064_c4c1ac3c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 10774,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "I tried to understand what machine code would be generated here but failed.\nAt least I can say that three other flags that I found use the same MachineType to load bool value:\n- heap_is_marking_flag_address\n- debug_is_active_address\n- promise_hook_or_debug_is_active_address",
+      "parentUuid": "8ac5374e_c3e70642",
+      "range": {
+        "startLine": 10774,
+        "startChar": 24,
+        "endLine": 10774,
+        "endChar": 29
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b07bba01_c7d711d5",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b38ae62c_ca64ef4e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b07bba01_c7d711d5",
+      "range": {
+        "startLine": 554,
+        "startChar": 31,
+        "endLine": 554,
+        "endChar": 53
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f6869244_411862af",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8169396_076c6fa6",
+      "range": {
+        "startLine": 555,
+        "startChar": 4,
+        "endLine": 555,
+        "endChar": 10
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25885544_ab5ff2c3",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5ad1bd1_8a89d597",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25885544_ab5ff2c3",
+      "range": {
+        "startLine": 609,
+        "startChar": 2,
+        "endLine": 609,
+        "endChar": 8
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7ccd6eab_451b4ef7",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a4a270_97e88c5e",
+      "range": {
+        "startLine": 2407,
+        "startChar": 4,
+        "endLine": 2407,
+        "endChar": 15
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "063b8033_59bfa993",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 6
@@ -137,6 +257,30 @@
       "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c84e283_a33ab6f7",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T18:32:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "063b8033_59bfa993",
+      "range": {
+        "startLine": 2429,
+        "startChar": 4,
+        "endLine": 2429,
+        "endChar": 12
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
