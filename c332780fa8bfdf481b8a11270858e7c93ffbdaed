@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb04c0d1_cbcc3a65",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-22T18:22:28Z",
+      "side": 1,
+      "message": "My understanding is that creating the array like this is not observable in either Array.from or Array.of.\n\nArray.of is easiest to reason about since it doesn\u0027t call any non-default code. The setter code can\u0027t be overridden if we\u0027re on this path, so the undefined elements would never actually be visible to the user.\n\nArray.from does call other code, but that code can\u0027t get hold the allocated array since we only just created it and never pass it out.\n\nWDYT?\n\nTechnically this is creating a PACKED_SMI_ELEMENTS array filled with undefined. But since the undefined never escapes is this bad?\n\nAlternatively I could rework CSA::FillFixedArrayWithValue to allow Smi(0) as well. Not sure but I\u0027m guessing it uses root list indices so it can be sure that the object it\u0027s filling with can\u0027t be GCed and so it can use StoreNoWriteBarrier. It could instead take my enum which could be extended to a third value kSmi0.\n\nWDYT?",
+      "range": {
+        "startLine": 1937,
+        "startChar": 40,
+        "endLine": 1937,
+        "endChar": 64
+      },
+      "revId": "c332780fa8bfdf481b8a11270858e7c93ffbdaed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
