@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8b38dd_f054a16c",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-22T08:30:21Z",
+      "side": 1,
+      "message": "Maybe move this under the v8_use_multi_snapshots condition? If that one\u0027s false, the embedded_trusted parts don\u0027t exist.",
+      "range": {
+        "startLine": 1095,
+        "startChar": 6,
+        "endLine": 1100,
+        "endChar": 7
+      },
+      "revId": "754506e0600ad4c5af961e60b270046e264bebcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
