@@ -256,6 +256,7 @@
   V(sealed_symbol)                     \
   V(stack_trace_symbol)                \
   V(strict_function_transition_symbol) \
+  V(side_effect_free_symbol)           \
   V(wasm_function_index_symbol)        \
   V(wasm_instance_symbol)              \
   V(uninitialized_symbol)
