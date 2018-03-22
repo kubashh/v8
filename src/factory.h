@@ -797,7 +797,7 @@ class V8_EXPORT_PRIVATE Factory final {
 
   // Allocates a new SharedFunctionInfo object.
   Handle<SharedFunctionInfo> NewSharedFunctionInfo(
-      MaybeHandle<String> name, MaybeHandle<Code> code, bool is_constructor,
+      MaybeHandle<String> name, MaybeHandle<Code> code,
       FunctionKind kind = kNormalFunction,
       int maybe_builtin_index = Builtins::kNoBuiltinId);
 

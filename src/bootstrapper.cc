@@ -356,28 +356,11 @@ void Bootstrapper::DetachGlobal(Handle<Context> env) {
 
 namespace {
 
-// Non-construct case.
 V8_NOINLINE Handle<SharedFunctionInfo> SimpleCreateSharedFunctionInfo(
     Isolate* isolate, Builtins::Name builtin_id, Handle<String> name, int len) {
   Handle<Code> code = isolate->builtins()->builtin_handle(builtin_id);
-  const bool kNotConstructor = false;
   Handle<SharedFunctionInfo> shared = isolate->factory()->NewSharedFunctionInfo(
-      name, code, kNotConstructor, kNormalFunction, builtin_id);
-  shared->set_internal_formal_parameter_count(len);
-  shared->set_length(len);
-  return shared;
-}
-
-// Construct case.
-V8_NOINLINE Handle<SharedFunctionInfo>
-SimpleCreateConstructorSharedFunctionInfo(Isolate* isolate,
-                                          Builtins::Name builtin_id,
-                                          Handle<String> name, int len) {
-  Handle<Code> code = isolate->builtins()->builtin_handle(builtin_id);
-  const bool kIsConstructor = true;
-  Handle<SharedFunctionInfo> shared = isolate->factory()->NewSharedFunctionInfo(
-      name, code, kIsConstructor, kNormalFunction, builtin_id);
-  shared->SetConstructStub(*BUILTIN_CODE(isolate, JSBuiltinsConstructStub));
+      name, code, kNormalFunction, builtin_id);
   shared->set_internal_formal_parameter_count(len);
   shared->set_length(len);
   return shared;
@@ -2253,7 +2236,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
   }
 
   {
-    Handle<SharedFunctionInfo> info = SimpleCreateConstructorSharedFunctionInfo(
+    Handle<SharedFunctionInfo> info = SimpleCreateSharedFunctionInfo(
         isolate, Builtins::kPromiseGetCapabilitiesExecutor,
         factory->empty_string(), 2);
     native_context()->set_promise_get_capabilities_executor_shared_fun(*info);

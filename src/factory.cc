@@ -1617,9 +1617,8 @@ Handle<JSFunction> Factory::NewFunction(const NewFunctionArgs& args) {
   // Create the SharedFunctionInfo.
   Handle<Context> context(isolate()->native_context());
   Handle<Map> map = args.GetMap(isolate());
-  Handle<SharedFunctionInfo> info =
-      NewSharedFunctionInfo(args.name_, args.maybe_code_, map->is_constructor(),
-                            kNormalFunction, args.maybe_builtin_id_);
+  Handle<SharedFunctionInfo> info = NewSharedFunctionInfo(
+      args.name_, args.maybe_code_, kNormalFunction, args.maybe_builtin_id_);
 
   // Proper language mode in shared function info will be set later.
   DCHECK(is_sloppy(info->language_mode()));
@@ -2551,7 +2550,7 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfoForLiteral(
   Handle<Code> code = BUILTIN_CODE(isolate(), CompileLazy);
   FunctionKind kind = literal->kind();
   Handle<SharedFunctionInfo> shared =
-      NewSharedFunctionInfo(literal->name(), code, IsConstructable(kind), kind);
+      NewSharedFunctionInfo(literal->name(), code, kind);
   SharedFunctionInfo::InitFromFunctionLiteral(shared, literal);
   SharedFunctionInfo::SetScript(shared, script, false);
   return shared;
@@ -2579,7 +2578,7 @@ Handle<JSMessageObject> Factory::NewJSMessageObject(
 
 Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     MaybeHandle<String> maybe_name, MaybeHandle<Code> maybe_code,
-    bool is_constructor, FunctionKind kind, int maybe_builtin_index) {
+    FunctionKind kind, int maybe_builtin_index) {
   // Function names are assumed to be flat elsewhere. Must flatten before
   // allocating SharedFunctionInfo to avoid GC seeing the uninitialized SFI.
   Handle<String> shared_name;
@@ -2608,11 +2607,7 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     share->set_function_data(function_data, SKIP_WRITE_BARRIER);
     share->set_code(*code);
     share->set_outer_scope_info(*the_hole_value());
-    DCHECK(!Builtins::IsLazy(Builtins::kConstructedNonConstructable));
-    Handle<Code> construct_stub =
-        is_constructor ? isolate()->builtins()->JSConstructStubGeneric()
-                       : BUILTIN_CODE(isolate(), ConstructedNonConstructable);
-    share->SetConstructStub(*construct_stub);
+    share->SetConstructStub(*isolate()->builtins()->JSConstructStubGeneric());
     share->set_script(*undefined_value(), SKIP_WRITE_BARRIER);
     share->set_debug_info(Smi::kZero, SKIP_WRITE_BARRIER);
     share->set_function_identifier(*undefined_value(), SKIP_WRITE_BARRIER);
