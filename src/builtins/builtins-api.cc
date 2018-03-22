@@ -48,6 +48,8 @@ MUST_USE_RESULT MaybeHandle<Object> HandleApiCallHelper(
   Handle<JSObject> js_receiver;
   JSObject* raw_holder;
   if (is_construct) {
+    printf("HandleApiCallHelper: receiver: %p\n", *receiver);
+    printf("HandleApiCallHelper: args.receiver(): %p\n", *args.receiver());
     DCHECK(args.receiver()->IsTheHole(isolate));
     if (fun_data->instance_template()->IsUndefined(isolate)) {
       v8::Local<ObjectTemplate> templ =
@@ -126,10 +128,12 @@ BUILTIN(HandleApiCall) {
   HandleScope scope(isolate);
   Handle<JSFunction> function = args.target();
   Handle<Object> receiver = args.receiver();
+  printf("args.receiver(): %p\n", *args.receiver());
   Handle<HeapObject> new_target = args.new_target();
   Handle<FunctionTemplateInfo> fun_data(function->shared()->get_api_func_data(),
                                         isolate);
   if (new_target->IsJSReceiver()) {
+    printf("receiver: %p\n", *receiver);
     RETURN_RESULT_OR_FAILURE(
         isolate, HandleApiCallHelper<true>(isolate, function, new_target,
                                            fun_data, receiver, args));

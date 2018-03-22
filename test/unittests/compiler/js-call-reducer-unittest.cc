@@ -106,7 +106,7 @@ class JSCallReducerTest : public TypedGraphTest {
     Handle<FeedbackMetadata> metadata = FeedbackMetadata::New(isolate(), &spec);
     Handle<SharedFunctionInfo> shared =
         isolate()->factory()->NewSharedFunctionInfo(
-            isolate()->factory()->empty_string(), MaybeHandle<Code>(), false);
+            isolate()->factory()->empty_string(), MaybeHandle<Code>());
     shared->set_feedback_metadata(*metadata);
     Handle<FeedbackVector> vector = FeedbackVector::New(isolate(), shared);
     VectorSlotPair feedback(vector, FeedbackSlot(0));
