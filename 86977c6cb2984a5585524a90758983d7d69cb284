@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "2633abce_85e725d1",
+        "filename": "src/js/array.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-22T16:03:29Z",
+      "side": 1,
+      "message": "I thought about this a little more and removed premarking of visited_arrays since it is needed only in case when we call toString on array. As a result we can land this CL now and I can work on visited_arrays separately.",
+      "parentUuid": "6f847b3a_7ced7c93",
+      "range": {
+        "startLine": 137,
+        "startChar": 1,
+        "endLine": 137,
+        "endChar": 26
+      },
+      "revId": "86977c6cb2984a5585524a90758983d7d69cb284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0185fbb9_4e405c6d",
         "filename": "src/runtime/runtime-debug.cc",
         "patchSetId": 4
