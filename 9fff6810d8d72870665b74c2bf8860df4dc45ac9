@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d45cfaa_97be50a6",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-22T16:32:34Z",
+      "side": 1,
+      "message": "the \"1\" suffix (here and below) should not be needed.",
+      "range": {
+        "startLine": 369,
+        "startChar": 13,
+        "endLine": 369,
+        "endChar": 18
+      },
+      "revId": "9fff6810d8d72870665b74c2bf8860df4dc45ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
