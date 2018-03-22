@@ -1161,7 +1161,7 @@ void V8HeapExplorer::ExtractSharedFunctionInfoReferences(
                        "code", shared->code(),
                        SharedFunctionInfo::kCodeOffset);
   if (shared->name_or_scope_info()->IsScopeInfo()) {
-    TagObject(shared->name_or_scope_info(), "(function scope info)");
+    TagObject(shared->scope_info(), "(function scope info)");
   }
   SetInternalReference(obj, entry, "name_or_scope_info",
                        shared->name_or_scope_info(),
