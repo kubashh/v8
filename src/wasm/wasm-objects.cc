@@ -371,10 +371,8 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
       new_size > kMaxInt) {
     return Handle<JSArrayBuffer>::null();
   }
-  // Try to adjust the permissions and reuse the old backing store
-  if (((use_trap_handler && !old_buffer->is_external() &&
-        new_size < old_buffer->allocation_length()) ||
-       old_size == new_size) &&
+  if (!old_buffer->is_external() &&
+      ((new_size < old_buffer->allocation_length()) || old_size == new_size) &&
       old_size != 0) {
     DCHECK_NOT_NULL(old_buffer->backing_store());
     if (old_size != new_size) {
