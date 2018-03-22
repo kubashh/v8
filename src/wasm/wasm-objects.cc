@@ -369,8 +369,8 @@ Handle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
       new_size > kMaxInt) {
     return Handle<JSArrayBuffer>::null();
   }
-  if (((use_trap_handler && !old_buffer->is_external() &&
-        new_size < old_buffer->allocation_length()) ||
+  if (!old_buffer->is_external() &&
+      ((use_trap_handler && new_size < old_buffer->allocation_length()) ||
        old_size == new_size) &&
       old_size != 0) {
     DCHECK_NOT_NULL(old_buffer->backing_store());
