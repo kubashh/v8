@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0aae5b48_6d9757d9",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-03-22T22:23:06Z",
+      "side": 1,
+      "message": "Would it be possible to add a comment here to clarify that sharing the backing store of an externalized buffer messes with ArrayBuffer tracking on the blink side? Filing a bug, and referencing here would be okay too.",
+      "revId": "79b60e97d2526a8b16b279fff36e8e483244146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2284d73c_77655ccf",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-03-22T22:23:06Z",
+      "side": 1,
+      "message": "Nit: Move (old_size \u003d\u003d new_size) conditional up so that the top level conditionals are grouped together?",
+      "revId": "79b60e97d2526a8b16b279fff36e8e483244146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
