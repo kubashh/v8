@@ -51,6 +51,24 @@
       "revId": "a0347a024b6d064d2ed21a603df73943e47c60c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f76f3b5a_ce2327ae",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-22T13:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bd83944_3eb77d6d",
+      "revId": "a0347a024b6d064d2ed21a603df73943e47c60c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
