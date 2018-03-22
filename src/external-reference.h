@@ -107,6 +107,8 @@ class StatsCounter;
   V(log_enter_external_function, "Logger::EnterExternal")                      \
   V(log_leave_external_function, "Logger::LeaveExternal")                      \
   V(mod_two_doubles_operation, "mod_two_doubles")                              \
+  V(needs_side_effect_check_address,                                           \
+    "Isolate::needs_side_effect_check_address()")                              \
   V(new_deoptimizer_function, "Deoptimizer::New()")                            \
   V(new_space_allocation_limit_address,                                        \
     "Heap::NewSpaceAllocationLimitAddress()")                                  \

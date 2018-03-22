@@ -1754,6 +1754,12 @@ void InterpreterAssembler::DeserializeLazyAndDispatch() {
   DispatchToBytecodeHandler(target_handler, bytecode_offset, bytecode);
 }
 
+void InterpreterAssembler::MarkObjectAsSideEffectFreeIfNeeded(
+    compiler::Node* context, compiler::Node* object, Label* after) {
+  GotoIfNot(NeedsSideEffectCheck(), after);
+  CallRuntime(Runtime::kDebugMarkObjectAsSideEffectFree, context, object);
+  Goto(after);
+}
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8
