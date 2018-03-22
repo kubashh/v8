@@ -142,6 +142,7 @@ namespace internal {
   F(DebugGetPropertyDetails, 2, 1)              \
   F(DebugGetPrototype, 1, 1)                    \
   F(DebugIsActive, 0, 1)                        \
+  F(DebugMarkObjectAsSideEffectFree, 1, 1)      \
   F(DebugOnFunctionCall, 1, 1)                  \
   F(DebugPopPromise, 0, 1)                      \
   F(DebugPrepareStepInSuspendedGenerator, 0, 1) \
@@ -150,6 +151,7 @@ namespace internal {
   F(DebugPushPromise, 1, 1)                     \
   F(DebugReferencedBy, 3, 1)                    \
   F(DebugSetScriptSource, 2, 1)                 \
+  F(DebugCheckObjectForSideEffect, 1, 1)        \
   F(DebugToggleBlockCoverage, 1, 1)             \
   F(DebugTogglePreciseCoverage, 1, 1)           \
   F(FunctionGetDebugName, 1, 1)                 \

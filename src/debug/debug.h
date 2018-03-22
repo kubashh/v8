@@ -338,6 +338,9 @@ class Debug {
 
   bool PerformSideEffectCheck(Handle<JSFunction> function);
   bool PerformSideEffectCheckForCallback(Object* callback_info);
+  // Allow some bytecodes to be called with given object as a receiver.
+  void MarkObjectAsSideEffectFree(Handle<JSReceiver> receiver);
+  bool PerformSideEffectCheckForObject(Handle<Object> object);
 
   // Flags and states.
   DebugScope* debugger_entry() {

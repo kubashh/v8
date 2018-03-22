@@ -390,6 +390,8 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(RegExpInitializeAndCompile)          \
   V(StackGuard)                          \
   V(StringAdd)                           \
+  V(StringBuilderConcat)                 \
+  V(StringBuilderJoin)                   \
   V(StringCharCodeAt)                    \
   V(StringEqual)                         \
   V(StringIndexOfUnchecked)              \
@@ -548,6 +550,7 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     // Conversions.
     case Bytecode::kToObject:
     case Bytecode::kToNumber:
+    case Bytecode::kToNumeric:
     case Bytecode::kToName:
     case Bytecode::kToString:
     // Misc.
@@ -566,6 +569,9 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     case Bytecode::kStackCheck:
     case Bytecode::kReturn:
     case Bytecode::kSetPendingMessage:
+    // Bytecodes with runtime check.
+    case Bytecode::kStaKeyedProperty:
+    case Bytecode::kStaNamedProperty:
       return true;
     default:
       if (FLAG_trace_side_effect_free_debug_evaluate) {

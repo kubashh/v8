@@ -1810,5 +1810,23 @@ RUNTIME_FUNCTION(Runtime_IncBlockCounter) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_DebugMarkObjectAsSideEffectFree) {
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, receiver, 0);
+  isolate->debug()->MarkObjectAsSideEffectFree(receiver);
+  return isolate->heap()->undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_DebugCheckObjectForSideEffect) {
+  DCHECK(isolate->needs_side_effect_check());
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(Object, object, 0);
+  if (!isolate->debug()->PerformSideEffectCheckForObject(object)) {
+    return isolate->heap()->exception();
+  }
+  return isolate->heap()->undefined_value();
+}
 }  // namespace internal
 }  // namespace v8
