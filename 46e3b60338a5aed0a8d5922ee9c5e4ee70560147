@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ac5374e_c3e70642",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 10774,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "This type doesn\u0027t match the comparison type below, is this a problem?",
+      "range": {
+        "startLine": 10774,
+        "startChar": 24,
+        "endLine": 10774,
+        "endChar": 29
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b07bba01_c7d711d5",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "let\u0027s make these kDeferred",
+      "range": {
+        "startLine": 554,
+        "startChar": 31,
+        "endLine": 554,
+        "endChar": 53
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8169396_076c6fa6",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "Use a GotoIfNot(NeedsSideEffectCheck(), \u0026perform_store) here, and move the side effect check up, to make the control flow clearer. The kDeferred will push it to the end of the generated code.",
+      "range": {
+        "startLine": 555,
+        "startChar": 4,
+        "endLine": 555,
+        "endChar": 10
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25885544_ab5ff2c3",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 609,
+        "startChar": 2,
+        "endLine": 609,
+        "endChar": 8
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a4a270_97e88c5e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of these three dispatches...",
+      "range": {
+        "startLine": 2407,
+        "startChar": 4,
+        "endLine": 2407,
+        "endChar": 15
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "063b8033_59bfa993",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-03-22T16:31:25Z",
+      "side": 1,
+      "message": "similar to above, don\u0027t like having a separate Dispatch()\n\nIn fact, you could wrap up the Goto and runtime call in a MarkObjectSideEffectFree or similar method, and stick that in the interpreter assembler.",
+      "range": {
+        "startLine": 2429,
+        "startChar": 4,
+        "endLine": 2429,
+        "endChar": 12
+      },
+      "revId": "46e3b60338a5aed0a8d5922ee9c5e4ee70560147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
