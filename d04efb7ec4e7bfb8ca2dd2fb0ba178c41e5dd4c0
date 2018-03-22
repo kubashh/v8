@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "6a1ca883_3d26e407",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-03-22T15:45:39Z",
+      "side": 1,
+      "message": "Oh, one nit (because I like to nit about commit messages): The subject should be in active tense (i.e. \"Extract ...\").",
+      "revId": "d04efb7ec4e7bfb8ca2dd2fb0ba178c41e5dd4c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fade5f7_adf1a154",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 3
