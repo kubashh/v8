@@ -551,15 +551,25 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
     Node* smi_slot = SmiTag(raw_slot);
     Node* feedback_vector = LoadFeedbackVector();
     Node* context = GetContext();
-    Node* result = CallStub(ic.descriptor(), code_target, context, object, name,
-                            value, smi_slot, feedback_vector);
-    // To avoid special logic in the deoptimizer to re-materialize the value in
-    // the accumulator, we overwrite the accumulator after the IC call. It
-    // doesn't really matter what we write to the accumulator here, since we
-    // restore to the correct value on the outside. Storing the result means we
-    // don't need to keep unnecessary state alive across the callstub.
-    SetAccumulator(result);
-    Dispatch();
+    Label perform_store(this), call_side_effect_check(this);
+    Branch(NeedsSideEffectCheck(), &call_side_effect_check, &perform_store);
+    BIND(&perform_store);
+    {
+      Node* result = CallStub(ic.descriptor(), code_target, context, object,
+                              name, value, smi_slot, feedback_vector);
+      // To avoid special logic in the deoptimizer to re-materialize the value
+      // in the accumulator, we overwrite the accumulator after the IC call. It
+      // doesn't really matter what we write to the accumulator here, since we
+      // restore to the correct value on the outside. Storing the result means
+      // we don't need to keep unnecessary state alive across the callstub.
+      SetAccumulator(result);
+      Dispatch();
+    }
+    BIND(&call_side_effect_check);
+    {
+      CallRuntime(Runtime::kDebugCheckObjectForSideEffect, context, object);
+      Goto(&perform_store);
+    }
   }
 };
 
@@ -595,15 +605,25 @@ IGNITION_HANDLER(StaKeyedProperty, InterpreterAssembler) {
   Node* smi_slot = SmiTag(raw_slot);
   Node* feedback_vector = LoadFeedbackVector();
   Node* context = GetContext();
-  Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
-                             value, smi_slot, feedback_vector);
-  // To avoid special logic in the deoptimizer to re-materialize the value in
-  // the accumulator, we overwrite the accumulator after the IC call. It
-  // doesn't really matter what we write to the accumulator here, since we
-  // restore to the correct value on the outside. Storing the result means we
-  // don't need to keep unnecessary state alive across the callstub.
-  SetAccumulator(result);
-  Dispatch();
+  Label perform_store(this), call_side_effect_check(this);
+  Branch(NeedsSideEffectCheck(), &call_side_effect_check, &perform_store);
+  BIND(&perform_store);
+  {
+    Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
+                               value, smi_slot, feedback_vector);
+    // To avoid special logic in the deoptimizer to re-materialize the value in
+    // the accumulator, we overwrite the accumulator after the IC call. It
+    // doesn't really matter what we write to the accumulator here, since we
+    // restore to the correct value on the outside. Storing the result means we
+    // don't need to keep unnecessary state alive across the callstub.
+    SetAccumulator(result);
+    Dispatch();
+  }
+  BIND(&call_side_effect_check);
+  {
+    CallRuntime(Runtime::kDebugCheckObjectForSideEffect, context, object);
+    Goto(&perform_store);
+  }
 }
 
 // StaInArrayLiteral <array> <index> <slot>
@@ -2348,7 +2368,9 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
   Node* context = GetContext();
   Node* bytecode_flags = BytecodeOperandFlag(2);
 
-  Label fast_shallow_clone(this), call_runtime(this, Label::kDeferred);
+  Variable var_result(this, MachineRepresentation::kTagged);
+  Label fast_shallow_clone(this), call_runtime(this, Label::kDeferred),
+      call_debug_receiver_created(this);
   Branch(IsSetWord32<CreateArrayLiteralFlags::FastCloneSupportedBit>(
              bytecode_flags),
          &fast_shallow_clone, &call_runtime);
@@ -2356,10 +2378,11 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
   BIND(&fast_shallow_clone);
   {
     ConstructorBuiltinsAssembler constructor_assembler(state());
-    Node* result = constructor_assembler.EmitCreateShallowArrayLiteral(
+    var_result.Bind(constructor_assembler.EmitCreateShallowArrayLiteral(
         feedback_vector, slot_id, context, &call_runtime,
-        TRACK_ALLOCATION_SITE);
-    SetAccumulator(result);
+        TRACK_ALLOCATION_SITE));
+    SetAccumulator(var_result.value());
+    GotoIf(NeedsSideEffectCheck(), &call_debug_receiver_created);
     Dispatch();
   }
 
@@ -2369,10 +2392,18 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
         bytecode_flags);
     Node* flags = SmiTag(flags_raw);
     Node* constant_elements = LoadConstantPoolEntryAtOperandIndex(0);
-    Node* result =
-        CallRuntime(Runtime::kCreateArrayLiteral, context, feedback_vector,
-                    SmiTag(slot_id), constant_elements, flags);
-    SetAccumulator(result);
+    var_result.Bind(CallRuntime(Runtime::kCreateArrayLiteral, context,
+                                feedback_vector, SmiTag(slot_id),
+                                constant_elements, flags));
+    SetAccumulator(var_result.value());
+    GotoIf(NeedsSideEffectCheck(), &call_debug_receiver_created);
+    Dispatch();
+  }
+
+  BIND(&call_debug_receiver_created);
+  {
+    CallRuntime(Runtime::kDebugMarkObjectAsSideEffectFree, context,
+                var_result.value());
     Dispatch();
   }
 }
@@ -2388,7 +2419,15 @@ IGNITION_HANDLER(CreateEmptyArrayLiteral, InterpreterAssembler) {
   Node* result = constructor_assembler.EmitCreateEmptyArrayLiteral(
       feedback_vector, slot_id, context);
   SetAccumulator(result);
+  Label call_debug_receiver_created(this);
+  GotoIf(NeedsSideEffectCheck(), &call_debug_receiver_created);
   Dispatch();
+
+  BIND(&call_debug_receiver_created);
+  {
+    CallRuntime(Runtime::kDebugMarkObjectAsSideEffectFree, context, result);
+    Dispatch();
+  }
 }
 
 // CreateObjectLiteral <element_idx> <literal_idx> <flags>
