@@ -3009,11 +3009,15 @@ Node* CodeStubAssembler::AllocateUninitializedJSArray(Node* array_map,
 Node* CodeStubAssembler::AllocateJSArray(ElementsKind kind, Node* array_map,
                                          Node* capacity, Node* length,
                                          Node* allocation_site,
-                                         ParameterMode capacity_mode) {
+                                         ParameterMode capacity_mode,
+                                         FillElement fill_element) {
   CSA_SLOW_ASSERT(this, IsMap(array_map));
   CSA_SLOW_ASSERT(this, TaggedIsPositiveSmi(length));
   CSA_SLOW_ASSERT(this, MatchesParameterMode(capacity, capacity_mode));
 
+  Heap::RootListIndex fill_root_list_index =
+      fill_element == FillElement::kHole ? Heap::kTheHoleValueRootIndex
+                                         : Heap::kUndefinedValueRootIndex;
   int capacity_as_constant;
   Node *array = nullptr, *elements = nullptr;
   if (IsIntPtrOrSmiConstantZero(capacity, capacity_mode)) {
@@ -3032,7 +3036,7 @@ Node* CodeStubAssembler::AllocateJSArray(ElementsKind kind, Node* array_map,
     // Fill in the elements with holes.
     FillFixedArrayWithValue(kind, elements,
                             IntPtrOrSmiConstant(0, capacity_mode), capacity,
-                            Heap::kTheHoleValueRootIndex, capacity_mode);
+                            fill_root_list_index, capacity_mode);
   } else {
     Label out(this), empty(this), nonempty(this);
     VARIABLE(var_array, MachineRepresentation::kTagged);
@@ -3061,7 +3065,7 @@ Node* CodeStubAssembler::AllocateJSArray(ElementsKind kind, Node* array_map,
       // Fill in the elements with holes.
       FillFixedArrayWithValue(kind, elements,
                               IntPtrOrSmiConstant(0, capacity_mode), capacity,
-                              Heap::kTheHoleValueRootIndex, capacity_mode);
+                              fill_root_list_index, capacity_mode);
       Goto(&out);
     }
 

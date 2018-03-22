@@ -1932,9 +1932,9 @@ class ArrayPopulatorAssembler : public CodeStubAssembler {
       // TODO(delphick): Consider using
       // AllocateUninitializedJSArrayWithElements to avoid initializing an
       // array and then writing over it.
-      array = CAST(AllocateJSArray(PACKED_SMI_ELEMENTS, array_map, length,
-                                   SmiConstant(0), nullptr,
-                                   ParameterMode::SMI_PARAMETERS));
+      array = CAST(AllocateJSArray(
+          PACKED_SMI_ELEMENTS, array_map, length, SmiConstant(0), nullptr,
+          ParameterMode::SMI_PARAMETERS, FillElement::kUndefined));
       Goto(&done);
     }
 

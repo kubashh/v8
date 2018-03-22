@@ -840,11 +840,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   std::pair<Node*, Node*> AllocateUninitializedJSArrayWithElements(
       ElementsKind kind, Node* array_map, Node* length, Node* allocation_site,
       Node* capacity, ParameterMode capacity_mode = INTPTR_PARAMETERS);
-  // Allocate a JSArray and fill elements with the hole.
+
+  enum class FillElement { kHole, kUndefined };
+
+  // Allocate a JSArray and fill elements with the hole or undefined.
   // The ParameterMode argument is only used for the capacity parameter.
   Node* AllocateJSArray(ElementsKind kind, Node* array_map, Node* capacity,
                         Node* length, Node* allocation_site = nullptr,
-                        ParameterMode capacity_mode = INTPTR_PARAMETERS);
+                        ParameterMode capacity_mode = INTPTR_PARAMETERS,
+                        FillElement fill_element = FillElement::kHole);
 
   Node* CloneFastJSArray(Node* context, Node* array,
                          ParameterMode mode = INTPTR_PARAMETERS,
