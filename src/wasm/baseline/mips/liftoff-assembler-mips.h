@@ -556,24 +556,19 @@ void LiftoffAssembler::emit_cond_jump(Condition cond, Label* label,
 }
 
 void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
-  Label true_label;
-  if (dst != src) {
-    ori(dst, zero_reg, 0x1);
-  }
-
-  TurboAssembler::Branch(&true_label, eq, src, Operand(zero_reg));
-  // If not true, set on 0.
-  TurboAssembler::mov(dst, zero_reg);
-
-  if (dst != src) {
-    bind(&true_label);
+  if (dst == src) {
+    Register tmp = GetUnusedRegister(kGpReg, LiftoffRegList::ForRegs(src)).gp();
+    // Set result to 1.
+    addiu(tmp, zero_reg, 1);
+    // If src != 0, then set result to 0.
+    TurboAssembler::Movn(tmp, zero_reg, src);
+    // Move result to dst register.
+    TurboAssembler::Move(dst, tmp);
   } else {
-    Label end_label;
-    TurboAssembler::Branch(&end_label);
-    bind(&true_label);
-
-    ori(dst, zero_reg, 0x1);
-    bind(&end_label);
+    // Set result to 1.
+    addiu(dst, zero_reg, 1);
+    // If src != 0, then set result to 0.
+    TurboAssembler::Movn(dst, zero_reg, src);
   }
 }
 
@@ -601,7 +596,22 @@ void LiftoffAssembler::emit_i32_set_cond(Condition cond, Register dst,
 }
 
 void LiftoffAssembler::emit_i64_eqz(Register dst, LiftoffRegister src) {
-  BAILOUT("emit_i64_eqz");
+  if (liftoff::IsRegInRegPair(src, dst)) {
+    Register tmp = GetUnusedRegister(kGpReg, LiftoffRegList::ForRegs(src)).gp();
+    // Set result to 1.
+    addiu(tmp, zero_reg, 1);
+    // If low_gp != 0 or high != 0, set 0 as result.
+    TurboAssembler::Movn(tmp, zero_reg, src.low_gp());
+    TurboAssembler::Movn(tmp, zero_reg, src.high_gp());
+    // Move result to dst register.
+    TurboAssembler::Move(dst, tmp);
+  } else {
+    // Set result to 1.
+    addiu(dst, zero_reg, 1);
+    // If low_gp != 0 or high != 0, set 0 as result.
+    TurboAssembler::Movn(dst, zero_reg, src.low_gp());
+    TurboAssembler::Movn(dst, zero_reg, src.high_gp());
+  }
 }
 
 void LiftoffAssembler::emit_i64_set_cond(Condition cond, Register dst,
