@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "47912366_b6f8bc43",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-23T15:15:38Z",
+      "side": 1,
+      "message": "It sounds like I should instrument something like Dispatch. This instrumentation checks just finished bytecode or some flag somewhere and calls hook if needed.\nI am not sure how I can add this kind of instrumentation only when needs_side_effect is true since otherwise I will regress performance.",
+      "parentUuid": "305bef7d_229fc084",
+      "range": {
+        "startLine": 554,
+        "startChar": 3,
+        "endLine": 562,
+        "endChar": 25
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0256ab14_994b8036",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 9
