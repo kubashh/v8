@@ -45,6 +45,30 @@
       "revId": "dd3c69d754b11324b35f5c977a95db12df56a58e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81805742_b4441e9a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-23T12:03:16Z",
+      "side": 1,
+      "message": "Do you mean ignore the page header in the sense of not accounting it at all or including it into page capacity?\n\nTo be concrete:\n\nFor a page with have 3 sizes: page-size, area-size, used-size.\n\nMemoryAllocator::Size is a sum of page[i].page-size\nHeap::Space::Capacity is a sum of page[i].area-size\nHeap::Space::Size is a sum of page[i].used-size\n\nAre you wondering about changing Heap::Space::Capacity to page[i].page-size?\n\nThat would increase space fragmentation stats by page header size (~3%).\nOther than that I don\u0027t see any downside.",
+      "parentUuid": "53d38157_4fddeca3",
+      "range": {
+        "startLine": 254,
+        "startChar": 13,
+        "endLine": 254,
+        "endChar": 24
+      },
+      "revId": "dd3c69d754b11324b35f5c977a95db12df56a58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
