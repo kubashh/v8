@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c8614b03_c0b04af2",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-23T12:12:23Z",
+      "side": 1,
+      "message": "I picked the opcodes and instruction names from the spec to be in sync with the spec interpreter.\n\n0x45 is already used for kExprI32Eqz.",
+      "parentUuid": "baf66ae3_ae3980a8",
+      "revId": "6af8f4b94c1b45fd550f1de08e3ac0fa10af5f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7222fb69_3a95cc1a",
         "filename": "src/wasm/wasm-opcodes.h",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "6af8f4b94c1b45fd550f1de08e3ac0fa10af5f1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7598dad4_f03f0cfb",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-23T12:12:23Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "7222fb69_3a95cc1a",
+      "revId": "6af8f4b94c1b45fd550f1de08e3ac0fa10af5f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
