@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ff8eea6_140e9488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-23T09:05:18Z",
+      "side": 1,
+      "message": "Can you elaborate on this a bit? Is this something yet to be implemented?",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "be780f2e9bed1656e6ba73e006a0a9efbee821a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bb9c892_609a46c6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-23T09:05:18Z",
+      "side": 1,
+      "message": "Maybe we should use FIRST_SPACE here.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 21,
+        "endLine": 1483,
+        "endChar": 29
+      },
+      "revId": "be780f2e9bed1656e6ba73e006a0a9efbee821a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
