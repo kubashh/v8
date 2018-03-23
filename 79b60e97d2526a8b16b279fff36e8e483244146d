@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22ad734b_53b766cb",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-03-23T17:37:32Z",
+      "side": 1,
+      "message": "I added a comment and also opened https://crbug.com/825266. I\u0027m not exactly sure what the bug should say, but at least it\u0027s a starting point.",
+      "parentUuid": "0aae5b48_6d9757d9",
+      "revId": "79b60e97d2526a8b16b279fff36e8e483244146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2284d73c_77655ccf",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "79b60e97d2526a8b16b279fff36e8e483244146d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39c9fd8b_11f5dc72",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-03-23T17:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2284d73c_77655ccf",
+      "revId": "79b60e97d2526a8b16b279fff36e8e483244146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
