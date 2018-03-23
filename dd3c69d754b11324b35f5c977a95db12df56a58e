@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23692589_df3544a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-23T11:51:00Z",
+      "side": 1,
+      "message": "for",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "dd3c69d754b11324b35f5c977a95db12df56a58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d38157_4fddeca3",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-23T11:51:00Z",
+      "side": 1,
+      "message": "I am wondering if it wouldn\u0027t be simpler if we ignore the page header and consider it is meta data? Like when we call if for young generation GC, in the worst case we need to add the total amount of memory (young generation page headers and objects) to the old generation if the old generation is completely full. Should we make it a policy that we always talk about total size?",
+      "range": {
+        "startLine": 254,
+        "startChar": 13,
+        "endLine": 254,
+        "endChar": 24
+      },
+      "revId": "dd3c69d754b11324b35f5c977a95db12df56a58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
