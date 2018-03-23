@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8cd11ee_508ef302",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-23T10:26:56Z",
+      "side": 1,
+      "message": "Oh this is so broken (already before your CL) :)\nIt would be great if kNumberOfSweepingSpaces would be correct. Wanna change it in a follow-up cl?",
+      "range": {
+        "startLine": 126,
+        "startChar": 45,
+        "endLine": 126,
+        "endChar": 70
+      },
+      "revId": "3c8df5d8ae316f0948582a1ce0e0dc7360dbed23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
