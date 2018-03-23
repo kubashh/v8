@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de76c77c_3419a08c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-23T14:43:36Z",
+      "side": 1,
+      "message": "I\u0027m not keen on inserting these checks into the bytecode handlers. The perf implications don\u0027t worry me too much (though I have some comments on the evaluation in the linked doc), however it sprinkles the side-effect free evaluation checks into too many different parts of the codebase in my opinion.\n\nMy instinct is that the CallHookAndDispatchOriginal proposal in the doc is  a more scalable (and generic) approach which also keeps the side-effect checks more contained in the debugger. You mentioned \"requires generic logic to call original bytecode.\" as the only disadvantage to this approach, however we already have this logic for the DebugBreak bytecode handler, so I\u0027m not sure what the difficulty would be? In fact, couldn\u0027t we just use a  DebugBreak with a special code to implement this mechanism?",
+      "range": {
+        "startLine": 554,
+        "startChar": 3,
+        "endLine": 562,
+        "endChar": 25
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0256ab14_994b8036",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-23T14:43:36Z",
+      "side": 1,
+      "message": "I feel like we should do this when creating the object (i.e., always call through to the runtime to do the allocation if the NeedsSideEffectCheck is true, and have logic in Runtime::CreateArrayLiteral to mark as side effect free if necessary).",
+      "range": {
+        "startLine": 2399,
+        "startChar": 4,
+        "endLine": 2399,
+        "endChar": 38
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
