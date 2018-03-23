@@ -16,8 +16,8 @@ namespace wasm {
 
 namespace liftoff {
 
-// ebp-8 holds the stack marker, ebp-16 is the wasm context, first stack slot
-// is located at ebp-24.
+// ebp-8 holds the stack marker, ebp-16 is the instance parameter, first stack
+// slot is located at ebp-24.
 constexpr int32_t kConstantStackSpace = 16;
 constexpr int32_t kFirstStackSlotOffset =
     kConstantStackSpace + LiftoffAssembler::kStackSlotSize;

@@ -58,19 +58,21 @@ OPTIONAL_ACCESSORS(WasmMemoryObject, instances, FixedArrayOfWeakCells,
                    kInstancesOffset)
 
 // WasmInstanceObject
-ACCESSORS(WasmInstanceObject, wasm_context, Managed<WasmContext>,
-          kWasmContextOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_start, byte*, kMemoryStartOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_size, uintptr_t,
                     kMemorySizeOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_mask, uintptr_t,
                     kMemoryMaskOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, imported_function_targets, Address*,
+                    kImportedFunctionTargetsOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, globals_start, byte*,
                     kGlobalsStartOffset)
-PRIMITIVE_ACCESSORS(WasmInstanceObject, indirect_function_table,
-                    IndirectFunctionTableEntry*, kIndirectFunctionTableOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, indirect_function_table_size, uintptr_t,
                     kIndirectFunctionTableSizeOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, indirect_function_table_sig_ids,
+                    uint32_t*, kIndirectFunctionTableSigIdsOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, indirect_function_table_targets,
+                    Address*, kIndirectFunctionTableTargetsOffset)
 
 ACCESSORS(WasmInstanceObject, compiled_module, WasmCompiledModule,
           kCompiledModuleOffset)
@@ -83,12 +85,16 @@ OPTIONAL_ACCESSORS(WasmInstanceObject, debug_info, WasmDebugInfo,
                    kDebugInfoOffset)
 OPTIONAL_ACCESSORS(WasmInstanceObject, table_object, WasmTableObject,
                    kTableObjectOffset)
-OPTIONAL_ACCESSORS(WasmInstanceObject, function_tables, FixedArray,
-                   kFunctionTablesOffset)
-ACCESSORS(WasmInstanceObject, directly_called_instances, FixedArray,
-          kDirectlyCalledInstancesOffset)
-ACCESSORS(WasmInstanceObject, js_imports_table, FixedArray,
-          kJsImportsTableOffset)
+ACCESSORS(WasmInstanceObject, imported_function_instances, FixedArray,
+          kImportedFunctionInstancesOffset)
+ACCESSORS(WasmInstanceObject, imported_function_callables, FixedArray,
+          kImportedFunctionCallablesOffset)
+OPTIONAL_ACCESSORS(WasmInstanceObject, indirect_function_table_instances,
+                   FixedArray, kIndirectFunctionTableInstancesOffset)
+
+inline bool WasmInstanceObject::has_indirect_function_table() {
+  return indirect_function_table_sig_ids() != nullptr;
+}
 
 // WasmSharedModuleData
 ACCESSORS(WasmSharedModuleData, module_wrapper, Object, kModuleWrapperOffset)
@@ -162,7 +168,6 @@ WCM_WEAK_LINK(WasmInstanceObject, owning_instance, kOwningInstanceOffset)
 WCM_WEAK_LINK(WasmModuleObject, wasm_module, kWasmModuleOffset)
 WCM_OBJECT(FixedArray, source_positions, kSourcePositionsOffset)
 WCM_OBJECT(Foreign, native_module, kNativeModuleOffset)
-WCM_OBJECT(FixedArray, lazy_compile_data, kLazyCompileDataOffset)
 WCM_SMALL_CONST_NUMBER(bool, use_trap_handler, kUseTrapHandlerOffset)
 ACCESSORS(WasmCompiledModule, raw_next_instance, Object, kNextInstanceOffset);
 ACCESSORS(WasmCompiledModule, raw_prev_instance, Object, kPrevInstanceOffset);
@@ -178,6 +183,10 @@ ACCESSORS(WasmCompiledModule, raw_prev_instance, Object, kPrevInstanceOffset);
 uint32_t WasmTableObject::current_length() { return functions()->length(); }
 
 bool WasmMemoryObject::has_maximum_pages() { return maximum_pages() >= 0; }
+
+inline bool WasmCompiledModule::has_instance() const {
+  return !weak_owning_instance()->cleared();
+}
 
 #include "src/objects/object-macros-undef.h"
 

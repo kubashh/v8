@@ -350,6 +350,10 @@ WasmCode* NativeModule::GetCode(uint32_t index) const {
   return code_table_[index];
 }
 
+void NativeModule::SetCode(uint32_t index, WasmCode* wasm_code) {
+  code_table_[index] = wasm_code;
+}
+
 uint32_t NativeModule::FunctionCount() const {
   DCHECK_LE(code_table_.size(), std::numeric_limits<uint32_t>::max());
   return static_cast<uint32_t>(code_table_.size());
@@ -480,6 +484,9 @@ WasmCode* NativeModule::AddAnonymousCode(Handle<Code> code,
   // made while iterating over the RelocInfo above.
   Assembler::FlushICache(ret->instructions().start(),
                          ret->instructions().size());
+  if (FLAG_print_wasm_code) {
+    ret->Print(code->GetIsolate());
+  }
   return ret;
 }
 
