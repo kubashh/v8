@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e7bae83_56972d25",
+        "filename": "src/globals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-03-23T09:18:17Z",
+      "side": 1,
+      "message": "This breaks the semantics of the fields below:\nFIRST_PAGED_SPACE \u003d OLD_SPACE,\nLAST_PAGED_SPACE \u003d MAP_SPACE",
+      "range": {
+        "startLine": 527,
+        "startChar": 10,
+        "endLine": 527,
+        "endChar": 11
+      },
+      "revId": "d657a9a9fb260ecc02c5d7f0f6d0428352172807",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
