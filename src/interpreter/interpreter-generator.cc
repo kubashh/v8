@@ -551,6 +551,15 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
     Node* smi_slot = SmiTag(raw_slot);
     Node* feedback_vector = LoadFeedbackVector();
     Node* context = GetContext();
+    Label perform_store(this), call_side_effect_check(this, Label::kDeferred);
+    GotoIfNot(NeedsSideEffectCheck(), &perform_store);
+    Goto(&call_side_effect_check);
+
+    BIND(&call_side_effect_check);
+    CallRuntime(Runtime::kDebugCheckObjectForSideEffect, context, object);
+    Goto(&perform_store);
+
+    BIND(&perform_store);
     Node* result = CallStub(ic.descriptor(), code_target, context, object, name,
                             value, smi_slot, feedback_vector);
     // To avoid special logic in the deoptimizer to re-materialize the value in
@@ -595,6 +604,15 @@ IGNITION_HANDLER(StaKeyedProperty, InterpreterAssembler) {
   Node* smi_slot = SmiTag(raw_slot);
   Node* feedback_vector = LoadFeedbackVector();
   Node* context = GetContext();
+  Label perform_store(this), call_side_effect_check(this, Label::kDeferred);
+  GotoIfNot(NeedsSideEffectCheck(), &perform_store);
+  Goto(&call_side_effect_check);
+
+  BIND(&call_side_effect_check);
+  CallRuntime(Runtime::kDebugCheckObjectForSideEffect, context, object);
+  Goto(&perform_store);
+
+  BIND(&perform_store);
   Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
                              value, smi_slot, feedback_vector);
   // To avoid special logic in the deoptimizer to re-materialize the value in

@@ -1245,6 +1245,10 @@ class Isolate {
     return reinterpret_cast<Address>(&handle_scope_implementer_);
   }
 
+  Address needs_side_effect_check_address() {
+    return reinterpret_cast<Address>(&needs_side_effect_check_);
+  }
+
   void DebugStateUpdated();
 
   void SetPromiseHook(PromiseHook hook);
