@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "559851e4_d24d1d86",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-03-23T15:42:52Z",
+      "side": 1,
+      "message": "Sltiu(dst, src, 1) does the same thing",
+      "revId": "4f04fe37b3f6fcd01dbd86f59e8e37e964a6b36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fdbacd4_500d0d41",
+        "filename": "src/wasm/baseline/mips/liftoff-assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-03-23T15:42:52Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "4f04fe37b3f6fcd01dbd86f59e8e37e964a6b36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
