@@ -69,6 +69,30 @@
       "revId": "be780f2e9bed1656e6ba73e006a0a9efbee821a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2087b569_f92c9d7a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-03-23T10:04:47Z",
+      "side": 1,
+      "message": "I\u0027ve updated it and changed all the other uses to FIRST_SPACE as well where applicable (along with putting a single assert that is first in the header).",
+      "parentUuid": "9bb9c892_609a46c6",
+      "range": {
+        "startLine": 1483,
+        "startChar": 21,
+        "endLine": 1483,
+        "endChar": 29
+      },
+      "revId": "be780f2e9bed1656e6ba73e006a0a9efbee821a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
