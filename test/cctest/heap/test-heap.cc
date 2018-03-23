@@ -5931,6 +5931,46 @@ UNINITIALIZED_TEST(OutOfMemory) {
   }
 }
 
+double mu(Isolate* isolate, double factor) {
+  Factory* factory = isolate->factory();
+  Heap* heap = isolate->heap();
+  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
+  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
+  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
+  while (heap->PromotedSpaceSizeOfObjects() <
+         heap->MaxOldGenerationSize() * factor) {
+    factory->NewFixedArray(30000, TENURED);
+  }
+  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
+  int start_ms_count = heap->ms_count();
+  while (heap->ms_count() < start_ms_count + 5) {
+    HandleScope inner_scope(isolate);
+    factory->NewFixedArray(30000, TENURED);
+  }
+  return heap->tracer()->CurrentMutatorUtilization();
+}
+
+UNINITIALIZED_TEST(OutOfMemoryBusy) {
+  FLAG_max_old_space_size = 2000;
+  // FLAG_max_semi_space_size = 1;
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+  oom_isolate = i_isolate;
+  isolate->SetOOMErrorHandler(OOMCallback);
+  {
+    HandleScope handle_scope(i_isolate);
+    for (double f = 0.0; f <= 0.90; f += 0.05) {
+      printf("%.2f\t%.2f\n", f, mu(i_isolate, f));
+    }
+    for (double f = 0.91; f <= 0.92; f += 0.01) {
+      printf("%.2f\t%.2f\n", f, mu(i_isolate, f));
+    }
+  }
+  isolate->Dispose();
+}
+
 HEAP_TEST(Regress779503) {
   // The following regression test ensures that the Scavenger does not allocate
   // over invalid slots. More specific, the Scavenger should not sweep a page
