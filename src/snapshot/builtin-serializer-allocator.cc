@@ -49,13 +49,13 @@ void BuiltinSerializerAllocator::OutputStatistics() {
 
   PrintF("  Spaces (bytes):\n");
 
-  STATIC_ASSERT(NEW_SPACE == 0);
+  STATIC_ASSERT(RO_SPACE == 0);
   for (int space = 0; space < kNumberOfSpaces; space++) {
     PrintF("%16s", AllocationSpaceName(static_cast<AllocationSpace>(space)));
   }
   PrintF("\n");
 
-  STATIC_ASSERT(NEW_SPACE == 0);
+  STATIC_ASSERT(RO_SPACE == 0);
   for (int space = 0; space < kNumberOfSpaces; space++) {
     uint32_t space_size = (space == CODE_SPACE) ? virtual_chunk_size_ : 0;
     PrintF("%16d", space_size);
