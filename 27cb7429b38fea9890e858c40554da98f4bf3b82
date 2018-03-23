@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "305bef7d_229fc084",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-23T15:07:07Z",
+      "side": 1,
+      "message": "I added a comment in the doc - I agree post-hooks might be difficult, but I think we could get away with doing a pre-hook on the following bytecode instead of a post-hook on the current bytecode.\n\nIn the current case I don\u0027t think you need to know what the previous bytecode was (you just mark the value returned by the previous bytecode in the accumulator as side-effect-free). In the worst case the runtime could just iterate the bytecode to see what the preceeding bytecode was and perform the hook as-necessary based on this. WDYT?",
+      "parentUuid": "11bb99a2_94205646",
+      "range": {
+        "startLine": 554,
+        "startChar": 3,
+        "endLine": 562,
+        "endChar": 25
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0256ab14_994b8036",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 9
