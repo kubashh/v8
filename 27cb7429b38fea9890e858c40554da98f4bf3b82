@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "11bb99a2_94205646",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-23T15:03:54Z",
+      "side": 1,
+      "message": "I was worried about comment like this and I agree that I need to instrument a lot of places to make side effects work. So the original idea in the doc was to have DebugBreak-like mechanism for pre hooks, e.g. in case of stores and not existing yet post-hook mechanism to mark objects. Second one sounds like a hard to implement in generic way to me. We definitely can try hybrid approach: have DebugBreak-like way for pre hooks and instrument object (as well as context) creation for post hook.\nI will try to do it.",
+      "parentUuid": "de76c77c_3419a08c",
+      "range": {
+        "startLine": 554,
+        "startChar": 3,
+        "endLine": 562,
+        "endChar": 25
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0256ab14_994b8036",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2018-03-23T14:43:36Z",
       "side": 1,
       "message": "I feel like we should do this when creating the object (i.e., always call through to the runtime to do the allocation if the NeedsSideEffectCheck is true, and have logic in Runtime::CreateArrayLiteral to mark as side effect free if necessary).",
+      "range": {
+        "startLine": 2399,
+        "startChar": 4,
+        "endLine": 2399,
+        "endChar": 38
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b606bbfa_2a40be15",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-23T15:03:54Z",
+      "side": 1,
+      "message": "I added hybrid approach to doc and will try it.",
+      "parentUuid": "0256ab14_994b8036",
       "range": {
         "startLine": 2399,
         "startChar": 4,
