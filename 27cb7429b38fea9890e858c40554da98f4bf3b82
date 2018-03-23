@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "3fb1a9b0_528905f3",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-23T15:25:39Z",
+      "side": 1,
+      "message": "let\u0027s do the discussion on the design doc - I don\u0027t think you should add any instrumentation to the interpreter, I think we should be patching the bytecodes like we do for DebugBreak.",
+      "parentUuid": "47912366_b6f8bc43",
+      "range": {
+        "startLine": 554,
+        "startChar": 3,
+        "endLine": 562,
+        "endChar": 25
+      },
+      "revId": "27cb7429b38fea9890e858c40554da98f4bf3b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0256ab14_994b8036",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 9
