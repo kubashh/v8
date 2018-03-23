@@ -1154,7 +1154,7 @@ class Heap {
   // ===========================================================================
 
   // Indicates whether inline bump-pointer allocation has been disabled.
-  bool inline_allocation_disabled() { return inline_allocation_disabled_; }
+  bool inline_allocation_disabled() { return inline_allocation_disabled_ > 0; }
 
   // Switch whether inline bump-pointer allocation should be used.
   void EnableInlineAllocation();
@@ -2513,7 +2513,7 @@ class Heap {
 
   // Indicates that inline bump-pointer allocation has been globally disabled
   // for all spaces. This is used to disable allocations in generated code.
-  bool inline_allocation_disabled_;
+  int inline_allocation_disabled_;
 
   // Weak list heads, threaded through the objects.
   // List heads are initialized lazily and contain the undefined_value at start.

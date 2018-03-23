@@ -13,6 +13,7 @@
 
 #include "src/base/platform/platform.h"
 #include "src/counters-inl.h"
+#include "src/debug/debug.h"
 #include "src/feedback-vector.h"
 // TODO(mstarzinger): There are 3 more includes to remove in order to no longer
 // leak heap internals to users of this interface!
@@ -363,6 +364,9 @@ void Heap::OnAllocationEvent(HeapObject* object, int size_in_bytes) {
   if (profiler->is_tracking_allocations()) {
     profiler->AllocationEvent(object->address(), size_in_bytes);
   }
+  if (isolate_->needs_side_effect_check()) {
+    isolate_->debug()->OnAllocationEvent(object->address());
+  }
 
   if (FLAG_verify_predictable) {
     ++allocations_count_;
@@ -392,6 +396,9 @@ void Heap::OnMoveEvent(HeapObject* target, HeapObject* source,
   if (heap_profiler->is_tracking_object_moves()) {
     heap_profiler->ObjectMoveEvent(source->address(), target->address(),
                                    size_in_bytes);
+  }
+  if (isolate_->needs_side_effect_check()) {
+    isolate_->debug()->OnMoveEvent(source->address(), target->address());
   }
   if (target->IsSharedFunctionInfo()) {
     LOG_CODE_EVENT(isolate_, SharedFunctionInfoMoveEvent(source->address(),

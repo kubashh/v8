@@ -5689,8 +5689,9 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
 }
 
 void Heap::EnableInlineAllocation() {
-  if (!inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = false;
+  DCHECK_GT(inline_allocation_disabled_, 0);
+  --inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 0) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);
@@ -5698,8 +5699,8 @@ void Heap::EnableInlineAllocation() {
 
 
 void Heap::DisableInlineAllocation() {
-  if (inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = true;
+  ++inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 1) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);
