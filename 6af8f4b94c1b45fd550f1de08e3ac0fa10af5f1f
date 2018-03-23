@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baf66ae3_ae3980a8",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-23T11:43:29Z",
+      "side": 1,
+      "message": "It\u0027s probably OK to use 0x45 for this, to keep opcodes related to constants together.",
+      "revId": "6af8f4b94c1b45fd550f1de08e3ac0fa10af5f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7222fb69_3a95cc1a",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-23T11:43:29Z",
+      "side": 1,
+      "message": "Can you find numbers for these that don\u0027t require reshuffling the asm opcodes?\nAlso, what about \"EqNull\" vs \"IsNull\"?",
+      "revId": "6af8f4b94c1b45fd550f1de08e3ac0fa10af5f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
