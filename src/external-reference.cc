@@ -902,6 +902,11 @@ ExternalReference ExternalReference::debug_is_active_address(Isolate* isolate) {
   return ExternalReference(isolate->debug()->is_active_address());
 }
 
+ExternalReference ExternalReference::needs_side_effect_check_address(
+    Isolate* isolate) {
+  return ExternalReference(isolate->needs_side_effect_check_address());
+}
+
 ExternalReference ExternalReference::debug_hook_on_function_call_address(
     Isolate* isolate) {
   return ExternalReference(isolate->debug()->hook_on_function_call_address());

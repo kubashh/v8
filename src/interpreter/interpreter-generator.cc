@@ -551,6 +551,7 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
     Node* smi_slot = SmiTag(raw_slot);
     Node* feedback_vector = LoadFeedbackVector();
     Node* context = GetContext();
+    CheckObjectForSideEffect(context, object);
     Node* result = CallStub(ic.descriptor(), code_target, context, object, name,
                             value, smi_slot, feedback_vector);
     // To avoid special logic in the deoptimizer to re-materialize the value in
@@ -595,6 +596,7 @@ IGNITION_HANDLER(StaKeyedProperty, InterpreterAssembler) {
   Node* smi_slot = SmiTag(raw_slot);
   Node* feedback_vector = LoadFeedbackVector();
   Node* context = GetContext();
+  CheckObjectForSideEffect(context, object);
   Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
                              value, smi_slot, feedback_vector);
   // To avoid special logic in the deoptimizer to re-materialize the value in
