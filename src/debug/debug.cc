@@ -2237,6 +2237,19 @@ ReturnValueScope::~ReturnValueScope() {
   debug_->set_return_value(*return_value_);
 }
 
+void Debug::OnAllocationEvent(Address address) {
+  DCHECK(isolate_->needs_side_effect_check());
+  temporary_objects_.insert(address);
+}
+
+void Debug::OnMoveEvent(Address source, Address target) {
+  DCHECK(isolate_->needs_side_effect_check());
+  auto it = temporary_objects_.find(source);
+  if (it == temporary_objects_.end()) return;
+  temporary_objects_.erase(it);
+  temporary_objects_.insert(target);
+}
+
 bool Debug::PerformSideEffectCheck(Handle<JSFunction> function) {
   DCHECK(isolate_->needs_side_effect_check());
   DisallowJavascriptExecution no_js(isolate_);
@@ -2264,6 +2277,32 @@ bool Debug::PerformSideEffectCheckForCallback(Object* callback_info) {
   // Throw an uncatchable termination exception.
   isolate_->TerminateExecution();
   isolate_->OptionalRescheduleException(false);
+  return false;
+}
+
+bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
+  DCHECK(isolate_->needs_side_effect_check());
+  if (object->IsJSObject()) {
+    Address address = Handle<HeapObject>::cast(object)->address();
+    if (temporary_objects_.find(address) != temporary_objects_.end()) {
+      return true;
+    }
+  }
+  if (FLAG_trace_side_effect_free_debug_evaluate) {
+    JavaScriptFrameIterator it(isolate_);
+    InterpretedFrame* interpreted_frame =
+        reinterpret_cast<InterpretedFrame*>(it.frame());
+    SharedFunctionInfo* shared = interpreted_frame->function()->shared();
+    BytecodeArray* bytecode_array = shared->bytecode_array();
+    int bytecode_offset = interpreted_frame->GetBytecodeOffset();
+    interpreter::Bytecode bytecode =
+        interpreter::Bytecodes::FromByte(bytecode_array->get(bytecode_offset));
+    PrintF("[debug-evaluate] %s failed runtime side effect check.\n",
+           interpreter::Bytecodes::ToString(bytecode));
+  }
+  side_effect_check_failed_ = true;
+  // Throw an uncatchable termination exception.
+  isolate_->TerminateExecution();
   return false;
 }
 
@@ -2388,6 +2427,8 @@ NoSideEffectScope::~NoSideEffectScope() {
     isolate_->Throw(*isolate_->factory()->NewEvalError(
         MessageTemplate::kNoSideEffectDebugEvaluate));
   }
+  isolate_->debug()->temporary_objects_.swap(old_temporary_objects_);
+  isolate_->heap()->EnableInlineAllocation();
   isolate_->set_needs_side_effect_check(old_needs_side_effect_check_);
   isolate_->debug()->UpdateHookOnFunctionCall();
   isolate_->debug()->side_effect_check_failed_ = false;

@@ -1810,5 +1810,14 @@ RUNTIME_FUNCTION(Runtime_IncBlockCounter) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_DebugCheckObjectForSideEffect) {
+  DCHECK(isolate->needs_side_effect_check());
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(Object, object, 0);
+  return isolate->debug()->PerformSideEffectCheckForObject(object)
+             ? isolate->heap()->undefined_value()
+             : isolate->heap()->exception();
+}
 }  // namespace internal
 }  // namespace v8

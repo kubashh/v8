@@ -1754,6 +1754,23 @@ void InterpreterAssembler::DeserializeLazyAndDispatch() {
   DispatchToBytecodeHandler(target_handler, bytecode_offset, bytecode);
 }
 
+void InterpreterAssembler::CheckObjectForSideEffect(compiler::Node* context,
+                                                    compiler::Node* object) {
+  Label after_check(this), call_check(this, Label::kDeferred);
+
+  Node* needs_side_effect_check =
+      Load(MachineType::Uint8(),
+           ExternalConstant(
+               ExternalReference::needs_side_effect_check_address(isolate())));
+  Branch(Word32Equal(needs_side_effect_check, Int32Constant(0)), &after_check,
+         &call_check);
+
+  BIND(&call_check);
+  CallRuntime(Runtime::kDebugCheckObjectForSideEffect, context, object);
+  Goto(&after_check);
+
+  BIND(&after_check);
+}
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8
