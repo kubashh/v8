@@ -150,6 +150,7 @@ namespace internal {
   F(DebugPushPromise, 1, 1)                     \
   F(DebugReferencedBy, 3, 1)                    \
   F(DebugSetScriptSource, 2, 1)                 \
+  F(DebugCheckObjectForSideEffect, 1, 1)        \
   F(DebugToggleBlockCoverage, 1, 1)             \
   F(DebugTogglePreciseCoverage, 1, 1)           \
   F(FunctionGetDebugName, 1, 1)                 \

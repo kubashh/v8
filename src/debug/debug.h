@@ -338,6 +338,7 @@ class Debug {
 
   bool PerformSideEffectCheck(Handle<JSFunction> function);
   bool PerformSideEffectCheckForCallback(Object* callback_info);
+  bool PerformSideEffectCheckForObject(Handle<Object> object);
 
   // Flags and states.
   DebugScope* debugger_entry() {
@@ -396,6 +397,11 @@ class Debug {
   StepAction last_step_action() { return thread_local_.last_step_action_; }
 
   DebugFeatureTracker* feature_tracker() { return &feature_tracker_; }
+
+  // Debugger uses this events to track temporary objects during evaluation
+  // without side effects.
+  void OnAllocationEvent(Address address);
+  void OnMoveEvent(Address source, Address target);
 
   // For functions in which we cannot set a break point, use a canonical
   // source position for break points.
@@ -524,6 +530,9 @@ class Debug {
 
   // Used to collect histogram data on debugger feature usage.
   DebugFeatureTracker feature_tracker_;
+
+  // Used for side effect check to mark temporary objects.
+  std::unordered_set<Address> temporary_objects_;
 
   // Per-thread data.
   class ThreadLocal {
@@ -738,12 +747,15 @@ class NoSideEffectScope {
                                          disallow_side_effects);
     isolate->debug()->UpdateHookOnFunctionCall();
     isolate->debug()->side_effect_check_failed_ = false;
+    old_temporary_objects_.swap(isolate->debug()->temporary_objects_);
+    isolate->heap()->DisableInlineAllocation();
   }
   ~NoSideEffectScope();
 
  private:
   Isolate* isolate_;
   bool old_needs_side_effect_check_;
+  std::unordered_set<Address> old_temporary_objects_;
   DISALLOW_COPY_AND_ASSIGN(NoSideEffectScope);
 };
 
