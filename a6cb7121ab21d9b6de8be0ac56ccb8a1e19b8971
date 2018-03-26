@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "37139041_37be267e",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T10:47:54Z",
+      "side": 1,
+      "message": "The v8_dump_build_config is a copy target. And the copy output is implicitly added, similar to executable targets.",
+      "parentUuid": "b71caf6d_95e336cf",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 28
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "05634f38_f991c3b1",
         "filename": "tools/BUILD.gn",
         "patchSetId": 2
@@ -70,6 +94,30 @@
       "writtenOn": "2018-03-26T10:45:04Z",
       "side": 1,
       "message": "This was not in the config at https://cs.chromium.org/chromium/src/v8/tools/testrunner/testrunner.isolate",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c95d615b_e7e761ae",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T10:47:54Z",
+      "side": 1,
+      "message": "Yes, it\u0027s intentional. Now the testrunner contains all python scripts and the num-fuzzer depends on the test runner (in a follow up).",
+      "parentUuid": "05634f38_f991c3b1",
       "range": {
         "startLine": 44,
         "startChar": 5,
