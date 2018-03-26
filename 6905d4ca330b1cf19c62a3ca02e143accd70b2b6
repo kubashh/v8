@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8286531f_7244e766",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-26T11:00:39Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "d6e50a86_ed037b88",
+      "range": {
+        "startLine": 917,
+        "startChar": 42,
+        "endLine": 917,
+        "endChar": 43
+      },
+      "revId": "6905d4ca330b1cf19c62a3ca02e143accd70b2b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cce994b5_8b63f378",
         "filename": "src/heap/gc-tracer.h",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "Mhm, the scavenger does not influence GC scheduling and is in theory orthogonal to a full GC.",
       "parentUuid": "cce994b5_8b63f378",
+      "range": {
+        "startLine": 424,
+        "startChar": 24,
+        "endLine": 424,
+        "endChar": 31
+      },
+      "revId": "6905d4ca330b1cf19c62a3ca02e143accd70b2b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac094292_0744e011",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-26T11:00:39Z",
+      "side": 1,
+      "message": "I added a comment for the functions that they apply only to mark-compact.\n\nTaking scavenger into account makes this signal more noisy for mark-compact scheduling.",
+      "parentUuid": "acb0b115_d1fffc82",
       "range": {
         "startLine": 424,
         "startChar": 24,
