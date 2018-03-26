@@ -45,6 +45,30 @@
       "revId": "6905d4ca330b1cf19c62a3ca02e143accd70b2b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acb0b115_d1fffc82",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-03-26T10:44:58Z",
+      "side": 1,
+      "message": "Mhm, the scavenger does not influence GC scheduling and is in theory orthogonal to a full GC.",
+      "parentUuid": "cce994b5_8b63f378",
+      "range": {
+        "startLine": 424,
+        "startChar": 24,
+        "endLine": 424,
+        "endChar": 31
+      },
+      "revId": "6905d4ca330b1cf19c62a3ca02e143accd70b2b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
