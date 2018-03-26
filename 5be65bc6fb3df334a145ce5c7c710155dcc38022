@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e57438cc_0d369258",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "I don\u0027t really like this hidden initialization here. Could we not just have a getter for the instance node which initializes instance_node_ lazily, and then always pass a valid instance_node to this function?",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb46e794_5c970003",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2608,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "I would prefer to pass the instance_node to LOAD_INSTANCE_FIELD. The code reads weird, because it specifies what should be read, but not where it should read from.",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5195847e_2ffd5c5d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "I think you should assign target_node to *effect_, to build a nice effect chain.",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe40b59e_9a5123b3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "Could you not pass scaled_key here instead of Int32Const(0), and get rid of the Add-node above?",
+      "range": {
+        "startLine": 2694,
+        "startChar": 23,
+        "endLine": 2694,
+        "endChar": 39
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15b123f5_c35bf5ef",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "Also here, assign a new value to *effect_.",
+      "range": {
+        "startLine": 2694,
+        "startChar": 42,
+        "endLine": 2694,
+        "endChar": 49
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "858a7ef3_61490f64",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "also here, assign a new value to *effect_.",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cee8751d_6a558773",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 3064,
+        "startChar": 7,
+        "endLine": 3064,
+        "endChar": 14
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ac3868a_7af65252",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3237,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "just use undefined_node here?",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be7bb07_57482def",
+        "filename": "src/elements.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-03-26T13:09:16Z",
+      "side": 1,
+      "message": "Should \"unshindirect\" mean something? Why do you do the renaming in this CL?",
+      "range": {
+        "startLine": 141,
+        "startChar": 36,
+        "endLine": 141,
+        "endChar": 48
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
