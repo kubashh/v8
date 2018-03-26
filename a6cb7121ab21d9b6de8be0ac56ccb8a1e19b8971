@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "ed042caf_3a3d0b57",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T11:35:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a68ae5f3_8402713b",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 28
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05634f38_f991c3b1",
         "filename": "tools/BUILD.gn",
         "patchSetId": 2
@@ -166,6 +190,30 @@
       "side": 1,
       "message": "This is somewhat confusing that v8_testrunner has to explicitly list a file that can run specific test only. This file has to either be referenced by num-fuzzer target and be integrated into run-tests.py. Please add a comment to clean this up later.",
       "parentUuid": "c95d615b_e7e761ae",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f725254_570243f7",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T11:35:51Z",
+      "side": 1,
+      "message": "Added a comment.",
+      "parentUuid": "72d5b719_5b9d1c30",
       "range": {
         "startLine": 44,
         "startChar": 5,
