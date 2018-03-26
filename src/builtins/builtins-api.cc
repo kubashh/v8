@@ -179,6 +179,29 @@ MaybeHandle<Object> Builtins::InvokeApiFunction(Isolate* isolate,
     }
   }
 
+  if (function->IsFunctionTemplateInfo()) {
+    Handle<FunctionTemplateInfo> info =
+        Handle<FunctionTemplateInfo>::cast(function);
+    if (info->shared_function_info()->IsSharedFunctionInfo()) {
+      Handle<SharedFunctionInfo> shared(
+          SharedFunctionInfo::cast(info->shared_function_info()));
+      // If we need to break at function entry, go the long way. Instantiate the
+      // function, use the DebugBreakTrampoline, and call it through JS.
+      if (shared->BreakAtEntry()) {
+        DCHECK(!is_construct);
+        DCHECK(new_target->IsUndefined(isolate));
+        Handle<JSFunction> function;
+        ASSIGN_RETURN_ON_EXCEPTION(isolate, function,
+                                   ApiNatives::InstantiateFunction(
+                                       info, MaybeHandle<v8::internal::Name>()),
+                                   Object);
+        Handle<Code> trampoline = BUILTIN_CODE(isolate, DebugBreakTrampoline);
+        function->set_code(*trampoline);
+        return Execution::Call(isolate, function, receiver, argc, args);
+      }
+    }
+  }
+
   Handle<FunctionTemplateInfo> fun_data =
       function->IsFunctionTemplateInfo()
           ? Handle<FunctionTemplateInfo>::cast(function)
