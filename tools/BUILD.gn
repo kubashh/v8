@@ -7,14 +7,30 @@ import("../gni/isolate.gni")
 group("gn_all") {
   testonly = true
 
+  data_deps = [
+    ":v8_check_static_initializers",
+    "gcmole:v8_run_gcmole",
+    "jsfunfuzz:v8_jsfunfuzz",
+  ]
+
   if (v8_test_isolation_mode != "noop") {
-    deps = [
+    deps += [
       ":check-static-initializers_run",
       ":jsfunfuzz_run",
       ":run-gcmole_run",
       ":run-num-fuzzer_run",
     ]
   }
+}
+
+group("v8_check_static_initializers") {
+  data_deps = [
+    "..:d8",
+  ]
+
+  data = [
+    "check-static-initializers.sh",
+  ]
 }
 
 v8_isolate_run("check-static-initializers") {
