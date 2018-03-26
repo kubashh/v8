@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "a68ae5f3_8402713b",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-03-26T11:23:46Z",
+      "side": 1,
+      "message": "It\u0027s not a copy-target, it\u0027s action-target, but according to https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/reference.md#actions-and-copies, all outputs of actions and copies are included into targets that reference them as data-deps. Therefore this works :-)",
+      "parentUuid": "37139041_37be267e",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 28
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "05634f38_f991c3b1",
         "filename": "tools/BUILD.gn",
         "patchSetId": 2
@@ -118,6 +142,30 @@
       "side": 1,
       "message": "Yes, it\u0027s intentional. Now the testrunner contains all python scripts and the num-fuzzer depends on the test runner (in a follow up).",
       "parentUuid": "05634f38_f991c3b1",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d5b719_5b9d1c30",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-03-26T11:23:46Z",
+      "side": 1,
+      "message": "This is somewhat confusing that v8_testrunner has to explicitly list a file that can run specific test only. This file has to either be referenced by num-fuzzer target and be integrated into run-tests.py. Please add a comment to clean this up later.",
+      "parentUuid": "c95d615b_e7e761ae",
       "range": {
         "startLine": 44,
         "startChar": 5,
