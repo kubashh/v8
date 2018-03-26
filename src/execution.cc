@@ -4,6 +4,7 @@
 
 #include "src/execution.h"
 
+#include "src/api-natives.h"
 #include "src/api.h"
 #include "src/bootstrapper.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
@@ -74,11 +75,13 @@ MUST_USE_RESULT MaybeHandle<Object> Invoke(
   }
 #endif
 
-  // api callbacks can be called directly.
+  // api callbacks can be called directly, unless we want to take the detour
+  // through JS to set up a frame for break-at-entry.
   if (target->IsJSFunction()) {
     Handle<JSFunction> function = Handle<JSFunction>::cast(target);
     if ((!is_construct || function->IsConstructor()) &&
-        function->shared()->IsApiFunction()) {
+        function->shared()->IsApiFunction() &&
+        !function->shared()->BreakAtEntry()) {
       SaveContext save(isolate);
       isolate->set_context(function->context());
       DCHECK(function->context()->global_object()->IsJSGlobalObject());
@@ -192,6 +195,22 @@ MaybeHandle<Object> CallInternal(Isolate* isolate, Handle<Object> callable,
 }
 
 }  // namespace
+
+// static
+MaybeHandle<Object> Execution::CallInstantiatedFunctionTemplateInfo(
+    Isolate* isolate, Handle<FunctionTemplateInfo> info,
+    Handle<Object> receiver, int argc, Handle<Object> argv[]) {
+  Handle<JSFunction> function;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, function,
+      ApiNatives::InstantiateFunction(info, MaybeHandle<Name>()), Object);
+
+  const bool is_construct = false;
+  Handle<Object> undefined = isolate->factory()->undefined_value();
+  return Invoke(isolate, is_construct, function, receiver, argc, argv,
+                undefined, MessageHandling::kReport,
+                Execution::Target::kCallable);
+}
 
 // static
 MaybeHandle<Object> Execution::Call(Isolate* isolate, Handle<Object> callable,

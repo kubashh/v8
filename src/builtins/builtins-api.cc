@@ -179,6 +179,23 @@ MaybeHandle<Object> Builtins::InvokeApiFunction(Isolate* isolate,
     }
   }
 
+  if (function->IsFunctionTemplateInfo()) {
+    Handle<FunctionTemplateInfo> info =
+        Handle<FunctionTemplateInfo>::cast(function);
+    if (info->shared_function_info()->IsSharedFunctionInfo()) {
+      Handle<SharedFunctionInfo> shared(
+          SharedFunctionInfo::cast(info->shared_function_info()));
+      // If we need to break at function entry, go the long way. Instantiate the
+      // function and call it through JS.
+      if (shared->BreakAtEntry()) {
+        CHECK(!is_construct);
+        CHECK(new_target->IsUndefined(isolate));
+        return Execution::CallInstantiatedFunctionTemplateInfo(
+            isolate, is_construct, info, receiver, argc, args);
+      }
+    }
+  }
+
   Handle<FunctionTemplateInfo> fun_data =
       function->IsFunctionTemplateInfo()
           ? Handle<FunctionTemplateInfo>::cast(function)

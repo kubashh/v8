@@ -42,6 +42,14 @@ class Execution final : public AllStatic {
                                                  int argc,
                                                  Handle<Object> argv[]);
 
+  // For debug break at function entry we need to call the api callback
+  // as instantiated function from JS.
+  MUST_USE_RESULT static MaybeHandle<Object>
+  CallInstantiatedFunctionTemplateInfo(Isolate* isolate,
+                                       Handle<FunctionTemplateInfo> info,
+                                       Handle<Object> receiver, int argc,
+                                       Handle<Object> argv[]);
+
   // Call a function, just like Call(), but handle don't report exceptions
   // externally.
   // The return value is either the result of calling the function (if no
