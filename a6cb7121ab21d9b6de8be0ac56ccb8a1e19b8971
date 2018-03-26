@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "656de733_1e27ef61",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 2853,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T08:50:07Z",
+      "side": 1,
+      "message": "Migrates this:\nhttps://cs.chromium.org/chromium/src/v8/src/base.isolate?q\u003dbase.isol+file:%5Esrc/v8/+package:%5Echromium$\u0026l\u003d27\n\nData deps for https://cs.chromium.org/chromium/src/v8/src/base.isolate?q\u003dbase.isol+file:%5Esrc/v8/+package:%5Echromium$\u0026l\u003d34 is inherited from https://cs.chromium.org/chromium/src/build/config/sanitizers/BUILD.gn?type\u003dcs\u0026q\u003d%22tools/valgrind/asan%22\u0026l\u003d40",
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59df622b_80be5872",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T08:50:07Z",
+      "side": 1,
+      "message": "Migrates this:\nhttps://cs.chromium.org/chromium/src/v8/tools/testrunner/testrunner.isolate",
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cca1cf9_e87db0bf",
+        "filename": "tools/valgrind/asan/dummy",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-03-26T08:50:07Z",
+      "side": 1,
+      "message": "src/base has some more tools in there, which we don\u0027t use. But we need to have the folder so that the data deps we inherit doesn\u0027t error out:\nhttps://cs.chromium.org/chromium/src/build/config/sanitizers/BUILD.gn?type\u003dcs\u0026q\u003d%22tools/valgrind/asan%22\u0026l\u003d39",
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
