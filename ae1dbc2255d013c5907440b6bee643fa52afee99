@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "951661aa_2ec590c9",
+        "filename": "src/builtins/builtins-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-03-26T13:57:26Z",
+      "side": 1,
+      "message": "Signature seems to have changed in the meantime not to include is_construct",
+      "revId": "ae1dbc2255d013c5907440b6bee643fa52afee99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
