@@ -36,6 +36,52 @@
     },
     {
       "key": {
+        "uuid": "b71caf6d_95e336cf",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-03-26T10:45:04Z",
+      "side": 1,
+      "message": "I assume this is to replicate adding v8_build_config.json, but I don\u0027t see data_deps/data in v8_dump_build_config target. Are you adding it in some other CL?",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 28
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05634f38_f991c3b1",
+        "filename": "tools/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-03-26T10:45:04Z",
+      "side": 1,
+      "message": "This was not in the config at https://cs.chromium.org/chromium/src/v8/tools/testrunner/testrunner.isolate",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cca1cf9_e87db0bf",
         "filename": "tools/valgrind/asan/dummy",
         "patchSetId": 2
@@ -47,6 +93,24 @@
       "writtenOn": "2018-03-26T08:50:07Z",
       "side": 1,
       "message": "src/base has some more tools in there, which we don\u0027t use. But we need to have the folder so that the data deps we inherit doesn\u0027t error out:\nhttps://cs.chromium.org/chromium/src/build/config/sanitizers/BUILD.gn?type\u003dcs\u0026q\u003d%22tools/valgrind/asan%22\u0026l\u003d39",
+      "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ab05ec_5563be82",
+        "filename": "tools/valgrind/asan/dummy",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-03-26T10:45:04Z",
+      "side": 1,
+      "message": "Can you please add this comment inside this added file?",
+      "parentUuid": "1cca1cf9_e87db0bf",
       "revId": "a6cb7121ab21d9b6de8be0ac56ccb8a1e19b8971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
