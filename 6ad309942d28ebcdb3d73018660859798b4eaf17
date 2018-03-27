@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0b7fa8f_923d0222",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5704,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-03-27T12:05:37Z",
+      "side": 1,
+      "message": "I realize this is just a PoC, however you probably shouldn\u0027t do this scope checking here, but instead have some kind of scoped object that disables inline allocations (and does the counter checking internally, calling through to Enable / Disable allocations when necessary.",
+      "range": {
+        "startLine": 5704,
+        "startChar": 2,
+        "endLine": 5704,
+        "endChar": 32
+      },
+      "revId": "6ad309942d28ebcdb3d73018660859798b4eaf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
