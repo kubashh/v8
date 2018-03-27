@@ -1189,27 +1189,43 @@ void Debug::InstallDebugBreakTrampoline() {
   // be installed. If that's the case, iterate the heap for functions to rewire
   // to the trampoline.
   HandleScope scope(isolate_);
-  Handle<Code> trampoline = BUILTIN_CODE(isolate_, DebugBreakTrampoline);
-  std::vector<Handle<JSFunction>> needs_compile;
+  // If there is a breakpoint at function entry, we need to install trampoline.
+  bool needs_to_use_trampoline = false;
+  // If there we break at entry to an api callback, we need to clear ICs.
+  bool needs_to_clear_ic = false;
   for (DebugInfoListNode* current = debug_info_list_; current != nullptr;
        current = current->next()) {
     if (current->debug_info()->CanBreakAtEntry()) {
-      HeapIterator iterator(isolate_->heap());
-      while (HeapObject* obj = iterator.next()) {
-        if (!obj->IsJSFunction()) continue;
-        JSFunction* fun = JSFunction::cast(obj);
-        SharedFunctionInfo* shared = fun->shared();
-        if (!shared->HasDebugInfo()) continue;
-        if (!shared->GetDebugInfo()->CanBreakAtEntry()) continue;
-        if (!fun->is_compiled()) {
-          needs_compile.push_back(handle(fun));
-        } else {
-          fun->set_code(*trampoline);
-        }
+      needs_to_use_trampoline = true;
+      if (current->debug_info()->shared()->IsApiFunction()) {
+        needs_to_clear_ic = true;
+        break;
       }
-      break;
     }
   }
+
+  if (!needs_to_use_trampoline) return;
+
+  Handle<Code> trampoline = BUILTIN_CODE(isolate_, DebugBreakTrampoline);
+  std::vector<Handle<JSFunction>> needs_compile;
+  HeapIterator iterator(isolate_->heap());
+  while (HeapObject* obj = iterator.next()) {
+    if (needs_to_clear_ic && obj->IsFeedbackVector()) {
+      FeedbackVector::cast(obj)->ClearSlots(isolate_);
+      continue;
+    } else if (obj->IsJSFunction()) {
+      JSFunction* fun = JSFunction::cast(obj);
+      SharedFunctionInfo* shared = fun->shared();
+      if (!shared->HasDebugInfo()) continue;
+      if (!shared->GetDebugInfo()->CanBreakAtEntry()) continue;
+      if (!fun->is_compiled()) {
+        needs_compile.push_back(handle(fun));
+      } else {
+        fun->set_code(*trampoline);
+      }
+    }
+  }
+
   // By overwriting the function code with DebugBreakTrampoline, which tailcalls
   // to shared code, we bypass CompileLazy. Perform CompileLazy here instead.
   for (Handle<JSFunction> fun : needs_compile) {
