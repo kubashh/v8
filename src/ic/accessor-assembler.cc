@@ -17,17 +17,16 @@ namespace internal {
 
 using compiler::CodeAssemblerState;
 using compiler::Node;
-using compiler::TNode;
 using compiler::SloppyTNode;
 
 //////////////////// Private helpers.
 
 // Loads dataX field from the DataHandler object.
-TNode<Object> AccessorAssembler::LoadHandlerDataField(
+compiler::TNode<Object> AccessorAssembler::LoadHandlerDataField(
     SloppyTNode<DataHandler> handler, int data_index) {
 #ifdef DEBUG
-  TNode<Map> handler_map = LoadMap(handler);
-  TNode<Int32T> instance_type = LoadMapInstanceType(handler_map);
+  compiler::TNode<Map> handler_map = LoadMap(handler);
+  compiler::TNode<Int32T> instance_type = LoadMapInstanceType(handler_map);
 #endif
   CSA_ASSERT(this,
              Word32Or(InstanceTypeEqual(instance_type, LOAD_HANDLER_TYPE),
@@ -341,8 +340,8 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
       Node* intptr_index = TryToIntptr(p->name, miss);
       Node* length = LoadStringLengthAsWord(holder);
       GotoIf(UintPtrGreaterThanOrEqual(intptr_index, length), &if_oob);
-      TNode<Int32T> code = StringCharCodeAt(holder, intptr_index);
-      TNode<String> result = StringFromSingleCharCode(code);
+      compiler::TNode<Int32T> code = StringCharCodeAt(holder, intptr_index);
+      compiler::TNode<String> result = StringFromSingleCharCode(code);
       Return(result);
 
       BIND(&if_oob);
@@ -470,7 +469,7 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
 
     // Context is stored either in data2 or data3 field depending on whether
     // the access check is enabled for this handler or not.
-    TNode<Object> context_cell = Select<Object>(
+    compiler::TNode<Object> context_cell = Select<Object>(
         IsSetWord<LoadHandler::DoAccessCheckOnReceiverBits>(handler_word),
         [=] { return LoadHandlerDataField(handler, 3); },
         [=] { return LoadHandlerDataField(handler, 2); });
@@ -902,7 +901,7 @@ void AccessorAssembler::HandleStoreICTransitionMapHandlerCase(
       LoadObjectField(transition_map, Map::kPrototypeValidityCellOffset);
   CheckPrototypeValidityCell(maybe_validity_cell, miss);
 
-  TNode<Uint32T> bitfield3 = LoadMapBitField3(transition_map);
+  compiler::TNode<Uint32T> bitfield3 = LoadMapBitField3(transition_map);
   CSA_ASSERT(this, IsClearWord32<Map::IsDictionaryMapBit>(bitfield3));
   GotoIf(IsSetWord32<Map::IsDeprecatedBit>(bitfield3), miss);
 
@@ -1305,7 +1304,7 @@ void AccessorAssembler::HandleStoreICProtoHandler(
 
       // Context is stored either in data2 or data3 field depending on whether
       // the access check is enabled for this handler or not.
-      TNode<Object> context_cell = Select<Object>(
+      compiler::TNode<Object> context_cell = Select<Object>(
           IsSetWord<LoadHandler::DoAccessCheckOnReceiverBits>(handler_word),
           [=] { return LoadHandlerDataField(handler, 3); },
           [=] { return LoadHandlerDataField(handler, 2); });
@@ -2504,32 +2503,32 @@ void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
   BIND(&miss);
   {
     Comment("LoadGlobalIC_MissCase");
-    TNode<Context> context = lazy_context();
-    TNode<Name> name = lazy_name();
+    compiler::TNode<Context> context = lazy_context();
+    compiler::TNode<Name> name = lazy_name();
     exit_point->ReturnCallRuntime(Runtime::kLoadGlobalIC_Miss, context, name,
                                   ParameterToTagged(slot, slot_mode), vector);
   }
 }
 
 void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
-    TNode<FeedbackVector> vector, Node* slot,
+    compiler::TNode<FeedbackVector> vector, Node* slot,
     const LazyNode<Context>& lazy_context, ExitPoint* exit_point,
     Label* try_handler, Label* miss, ParameterMode slot_mode) {
   Comment("LoadGlobalIC_TryPropertyCellCase");
 
   Label if_lexical_var(this), if_property_cell(this);
-  TNode<Object> maybe_weak_cell =
+  compiler::TNode<Object> maybe_weak_cell =
       LoadFeedbackVectorSlot(vector, slot, 0, slot_mode);
   Branch(TaggedIsSmi(maybe_weak_cell), &if_lexical_var, &if_property_cell);
 
   BIND(&if_property_cell);
   {
-    TNode<WeakCell> weak_cell = CAST(maybe_weak_cell);
+    compiler::TNode<WeakCell> weak_cell = CAST(maybe_weak_cell);
 
     // Load value or try handler case if the {weak_cell} is cleared.
-    TNode<PropertyCell> property_cell =
+    compiler::TNode<PropertyCell> property_cell =
         CAST(LoadWeakCellValue(weak_cell, try_handler));
-    TNode<Object> value =
+    compiler::TNode<Object> value =
         LoadObjectField(property_cell, PropertyCell::kValueOffset);
     GotoIf(WordEqual(value, TheHoleConstant()), miss);
     exit_point->Return(value);
@@ -2538,20 +2537,22 @@ void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
   BIND(&if_lexical_var);
   {
     Comment("Load lexical variable");
-    TNode<IntPtrT> lexical_handler = SmiUntag(CAST(maybe_weak_cell));
-    TNode<IntPtrT> context_index =
+    compiler::TNode<IntPtrT> lexical_handler = SmiUntag(CAST(maybe_weak_cell));
+    compiler::TNode<IntPtrT> context_index =
         Signed(DecodeWord<FeedbackNexus::ContextIndexBits>(lexical_handler));
-    TNode<IntPtrT> slot_index =
+    compiler::TNode<IntPtrT> slot_index =
         Signed(DecodeWord<FeedbackNexus::SlotIndexBits>(lexical_handler));
-    TNode<Context> context = lazy_context();
-    TNode<Context> script_context = LoadScriptContext(context, context_index);
-    TNode<Object> result = LoadContextElement(script_context, slot_index);
+    compiler::TNode<Context> context = lazy_context();
+    compiler::TNode<Context> script_context =
+        LoadScriptContext(context, context_index);
+    compiler::TNode<Object> result =
+        LoadContextElement(script_context, slot_index);
     exit_point->Return(result);
   }
 }
 
 void AccessorAssembler::LoadGlobalIC_TryHandlerCase(
-    TNode<FeedbackVector> vector, Node* slot,
+    compiler::TNode<FeedbackVector> vector, Node* slot,
     const LazyNode<Context>& lazy_context, const LazyNode<Name>& lazy_name,
     TypeofMode typeof_mode, ExitPoint* exit_point, Label* miss,
     ParameterMode slot_mode) {
@@ -2567,9 +2568,9 @@ void AccessorAssembler::LoadGlobalIC_TryHandlerCase(
                                      ? OnNonExistent::kThrowReferenceError
                                      : OnNonExistent::kReturnUndefined;
 
-  TNode<Context> context = lazy_context();
-  TNode<Context> native_context = LoadNativeContext(context);
-  TNode<JSGlobalProxy> receiver =
+  compiler::TNode<Context> context = lazy_context();
+  compiler::TNode<Context> native_context = LoadNativeContext(context);
+  compiler::TNode<JSGlobalProxy> receiver =
       CAST(LoadContextElement(native_context, Context::GLOBAL_PROXY_INDEX));
   Node* holder = LoadContextElement(native_context, Context::EXTENSION_INDEX);
 
@@ -2880,12 +2881,12 @@ void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
   BIND(&if_lexical_var);
   {
     Comment("Store lexical variable");
-    TNode<IntPtrT> lexical_handler = SmiUntag(maybe_weak_cell);
-    TNode<IntPtrT> context_index =
+    compiler::TNode<IntPtrT> lexical_handler = SmiUntag(maybe_weak_cell);
+    compiler::TNode<IntPtrT> context_index =
         Signed(DecodeWord<FeedbackNexus::ContextIndexBits>(lexical_handler));
-    TNode<IntPtrT> slot_index =
+    compiler::TNode<IntPtrT> slot_index =
         Signed(DecodeWord<FeedbackNexus::SlotIndexBits>(lexical_handler));
-    TNode<Context> script_context =
+    compiler::TNode<Context> script_context =
         LoadScriptContext(CAST(pp->context), context_index);
     StoreContextElement(script_context, slot_index, CAST(pp->value));
     Return(pp->value);
