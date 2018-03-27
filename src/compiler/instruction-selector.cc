@@ -1974,7 +1974,9 @@ void InstructionSelector::VisitLoadParentFramePointer(Node* node) {
 
 void InstructionSelector::VisitLoadRootsPointer(Node* node) {
   OperandGenerator g(this);
-  Emit(kArchRootsPointer, g.DefineAsRegister(node));
+  Emit(kArchNop, g.DefineAsLocation(
+                     node, LinkageLocation::ForRegister(
+                               kRootRegister.code(), MachineType::UintPtr())));
 }
 
 void InstructionSelector::VisitFloat64Acos(Node* node) {
