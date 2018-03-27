@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a6161c4_73f15aab",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-03-27T15:23:05Z",
+      "side": 1,
+      "message": "StoreIC_SlowStub",
+      "range": {
+        "startLine": 1562,
+        "startChar": 41,
+        "endLine": 1562,
+        "endChar": 56
+      },
+      "revId": "7f95f579df927369536c73867b84197c97ced2ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
