@@ -14,8 +14,8 @@
 #include "src/frames-inl.h"
 #include "src/globals.h"
 #include "src/interpreter/bytecode-array-iterator.h"
-#include "src/interpreter/bytecodes.h"
 #include "src/isolate-inl.h"
+#include "src/objects/debug-objects-inl.h"
 #include "src/snapshot/snapshot.h"
 
 namespace v8 {
@@ -393,6 +393,8 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(RegExpInitializeAndCompile)          \
   V(StackGuard)                          \
   V(StringAdd)                           \
+  V(StringBuilderConcat)                 \
+  V(StringBuilderJoin)                   \
   V(StringCharCodeAt)                    \
   V(StringEqual)                         \
   V(StringIndexOfUnchecked)              \
@@ -551,6 +553,7 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     // Conversions.
     case Bytecode::kToObject:
     case Bytecode::kToNumber:
+    case Bytecode::kToNumeric:
     case Bytecode::kToName:
     case Bytecode::kToString:
     // Misc.
@@ -569,6 +572,22 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     case Bytecode::kStackCheck:
     case Bytecode::kReturn:
     case Bytecode::kSetPendingMessage:
+      return true;
+    default:
+      if (FLAG_trace_side_effect_free_debug_evaluate) {
+        PrintF("[debug-evaluate] bytecode %s may cause side effect.\n",
+               Bytecodes::ToString(bytecode));
+      }
+      return false;
+  }
+}
+
+bool BytecodeRequiresRuntimeCheck(interpreter::Bytecode bytecode) {
+  typedef interpreter::Bytecode Bytecode;
+  typedef interpreter::Bytecodes Bytecodes;
+  switch (bytecode) {
+    case Bytecode::kStaKeyedProperty:
+    case Bytecode::kStaNamedProperty:
       return true;
     default:
       if (FLAG_trace_side_effect_free_debug_evaluate) {
@@ -865,6 +884,7 @@ bool DebugEvaluate::FunctionHasNoSideEffect(Handle<SharedFunctionInfo> info) {
     // Check bytecodes against whitelist.
     Handle<BytecodeArray> bytecode_array(info->bytecode_array());
     if (FLAG_trace_side_effect_free_debug_evaluate) bytecode_array->Print();
+    bool require_runtime_check = false;
     for (interpreter::BytecodeArrayIterator it(bytecode_array); !it.done();
          it.Advance()) {
       interpreter::Bytecode bytecode = it.current_bytecode();
@@ -879,9 +899,29 @@ bool DebugEvaluate::FunctionHasNoSideEffect(Handle<SharedFunctionInfo> info) {
       }
 
       if (BytecodeHasNoSideEffect(bytecode)) continue;
-
+      if (BytecodeRequiresRuntimeCheck(bytecode)) {
+        require_runtime_check = true;
+        continue;
+      }
       // Did not match whitelist.
       return false;
+    }
+    if (require_runtime_check) {
+      Debug* debug = info->GetIsolate()->debug();
+      if (!debug->EnsureBreakInfo(info)) return false;
+      debug->PrepareFunctionForBreakPoints(info);
+      Handle<BytecodeArray> debug_bytecode_array(
+          info->GetDebugInfo()->DebugBytecodeArray());
+      for (interpreter::BytecodeArrayIterator it(debug_bytecode_array);
+           !it.done(); it.Advance()) {
+        interpreter::Bytecode bytecode = it.current_bytecode();
+        if (BytecodeRequiresRuntimeCheck(bytecode)) {
+          interpreter::Bytecode debugbreak =
+              interpreter::Bytecodes::GetDebugBreak(bytecode);
+          debug_bytecode_array->set(it.current_offset(),
+                                    interpreter::Bytecodes::ToByte(debugbreak));
+        }
+      }
     }
     return true;
   } else {
@@ -949,6 +989,5 @@ bool DebugEvaluate::CallbackHasNoSideEffect(Object* callback_info) {
   }
   return false;
 }
-
 }  // namespace internal
 }  // namespace v8

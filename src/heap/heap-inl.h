@@ -13,6 +13,7 @@
 
 #include "src/base/platform/platform.h"
 #include "src/counters-inl.h"
+#include "src/debug/debug.h"
 #include "src/feedback-vector.h"
 // TODO(mstarzinger): There are 3 more includes to remove in order to no longer
 // leak heap internals to users of this interface!

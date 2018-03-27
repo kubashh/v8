@@ -27,12 +27,41 @@
 #include "src/log.h"
 #include "src/messages.h"
 #include "src/objects/debug-objects-inl.h"
+#include "src/profiler/heap-profiler.h"
 #include "src/snapshot/natives.h"
 #include "src/snapshot/snapshot.h"
 #include "src/wasm/wasm-objects-inl.h"
 
 namespace v8 {
 namespace internal {
+
+class Debug::TemporaryObjectsTracker : public HeapProfiler::AllocationObserver {
+ public:
+  TemporaryObjectsTracker() = default;
+  ~TemporaryObjectsTracker() = default;
+
+  void AllocationEvent(Address addr) override {
+    objects_.LookupOrInsert(addr, ComputePointerHash(addr));
+  }
+
+  void ObjectMoveEvent(Address from, Address to) override {
+    if (from == to) return;
+    void* from_value = objects_.Remove(from, ComputePointerHash(from));
+    if (!from_value) return;
+    AllocationEvent(to);
+    return;
+  }
+
+  bool HasObject(Address addr) const {
+    base::HashMap::Entry* entry =
+        objects_.Lookup(addr, ComputePointerHash(addr));
+    return entry != nullptr;
+  }
+
+ private:
+  base::HashMap objects_;
+  DISALLOW_COPY_AND_ASSIGN(TemporaryObjectsTracker);
+};
 
 Debug::Debug(Isolate* isolate)
     : debug_context_(Handle<Context>()),
@@ -50,6 +79,8 @@ Debug::Debug(Isolate* isolate)
       isolate_(isolate) {
   ThreadInit();
 }
+
+Debug::~Debug() { DCHECK_NULL(debug_delegate_); }
 
 BreakLocation BreakLocation::FromFrame(Handle<DebugInfo> debug_info,
                                        JavaScriptFrame* frame) {
@@ -157,7 +188,7 @@ BreakIterator::BreakIterator(Handle<DebugInfo> debug_info)
   position_ = debug_info->shared()->StartPosition();
   statement_position_ = position_;
   // There is at least one break location.
-  DCHECK(!Done());
+  // DCHECK(!Done());
   Next();
 }
 
@@ -180,7 +211,7 @@ int BreakIterator::BreakIndexFromPosition(int source_position) {
 
 void BreakIterator::Next() {
   DisallowHeapAllocation no_gc;
-  DCHECK(!Done());
+  // DCHECK(!Done());
   bool first = break_index_ == -1;
   while (!Done()) {
     if (!first) source_position_iterator_.Advance();
@@ -1401,7 +1432,7 @@ Handle<Object> Debug::FindSharedFunctionInfoInScript(Handle<Script> script,
 bool Debug::EnsureBreakInfo(Handle<SharedFunctionInfo> shared) {
   // Return if we already have the break info for shared.
   if (shared->HasBreakInfo()) return true;
-  if (!shared->IsSubjectToDebugging() && !CanBreakAtEntry(shared)) {
+  if (!shared->HasBytecodeArray() && !CanBreakAtEntry(shared)) {
     return false;
   }
   if (!shared->is_compiled() &&
@@ -2267,6 +2298,44 @@ bool Debug::PerformSideEffectCheckForCallback(Object* callback_info) {
   return false;
 }
 
+bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
+  DCHECK(isolate_->needs_side_effect_check());
+  if (object->IsHeapObject()) {
+    Address address = Handle<HeapObject>::cast(object)->address();
+    if (temporary_objects_->HasObject(address)) {
+      return true;
+    }
+  }
+  if (FLAG_trace_side_effect_free_debug_evaluate) {
+    JavaScriptFrameIterator it(isolate_);
+    InterpretedFrame* interpreted_frame =
+        reinterpret_cast<InterpretedFrame*>(it.frame());
+    SharedFunctionInfo* shared = interpreted_frame->function()->shared();
+    BytecodeArray* bytecode_array = shared->bytecode_array();
+    int bytecode_offset = interpreted_frame->GetBytecodeOffset();
+    interpreter::Bytecode bytecode =
+        interpreter::Bytecodes::FromByte(bytecode_array->get(bytecode_offset));
+    PrintF("[debug-evaluate] %s failed runtime side effect check.\n",
+           interpreter::Bytecodes::ToString(bytecode));
+  }
+  side_effect_check_failed_ = true;
+  // Throw an uncatchable termination exception.
+  isolate_->TerminateExecution();
+  return false;
+}
+
+void Debug::StartTrackingTemporaryObjects() {
+  DCHECK(!temporary_objects_);
+  temporary_objects_.reset(new TemporaryObjectsTracker());
+  isolate_->heap_profiler()->SetAllocationObserver(temporary_objects_.get());
+}
+
+void Debug::StopTrackingTemporaryObjects() {
+  DCHECK(!!temporary_objects_);
+  isolate_->heap_profiler()->SetAllocationObserver(nullptr);
+  temporary_objects_.reset();
+}
+
 void LegacyDebugDelegate::PromiseEventOccurred(
     v8::debug::PromiseDebugActionType type, int id, bool is_blackboxed) {
   DebugScope debug_scope(isolate_->debug());
@@ -2377,6 +2446,17 @@ void NativeDebugDelegate::ProcessDebugEvent(v8::DebugEvent event,
   CHECK(!isolate->has_scheduled_exception());
 }
 
+NoSideEffectScope::NoSideEffectScope(Isolate* isolate,
+                                     bool disallow_side_effects)
+    : isolate_(isolate) {
+  // NoSideEffectScope is not re-entrant if already enabled.
+  CHECK(!isolate->needs_side_effect_check());
+  isolate->set_needs_side_effect_check(disallow_side_effects);
+  isolate->debug()->UpdateHookOnFunctionCall();
+  isolate->debug()->side_effect_check_failed_ = false;
+  isolate->debug()->StartTrackingTemporaryObjects();
+}
+
 NoSideEffectScope::~NoSideEffectScope() {
   if (isolate_->needs_side_effect_check() &&
       isolate_->debug()->side_effect_check_failed_) {
@@ -2391,6 +2471,7 @@ NoSideEffectScope::~NoSideEffectScope() {
   isolate_->set_needs_side_effect_check(false);
   isolate_->debug()->UpdateHookOnFunctionCall();
   isolate_->debug()->side_effect_check_failed_ = false;
+  isolate_->debug()->StopTrackingTemporaryObjects();
 }
 
 }  // namespace internal

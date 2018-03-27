@@ -338,6 +338,10 @@ class Debug {
 
   bool PerformSideEffectCheck(Handle<JSFunction> function);
   bool PerformSideEffectCheckForCallback(Object* callback_info);
+  bool PerformSideEffectCheckForObject(Handle<Object> object);
+
+  void StartTrackingTemporaryObjects();
+  void StopTrackingTemporaryObjects();
 
   // Flags and states.
   DebugScope* debugger_entry() {
@@ -403,7 +407,7 @@ class Debug {
 
  private:
   explicit Debug(Isolate* isolate);
-  ~Debug() { DCHECK_NULL(debug_delegate_); }
+  ~Debug();
 
   void UpdateState();
   void UpdateHookOnFunctionCall();
@@ -524,6 +528,10 @@ class Debug {
 
   // Used to collect histogram data on debugger feature usage.
   DebugFeatureTracker feature_tracker_;
+
+  // Used for side effect check to mark temporary objects.
+  class TemporaryObjectsTracker;
+  std::unique_ptr<TemporaryObjectsTracker> temporary_objects_;
 
   // Per-thread data.
   class ThreadLocal {
@@ -731,14 +739,7 @@ class SuppressDebug BASE_EMBEDDED {
 
 class NoSideEffectScope {
  public:
-  NoSideEffectScope(Isolate* isolate, bool disallow_side_effects)
-      : isolate_(isolate) {
-    // NoSideEffectScope is not re-entrant if already enabled.
-    CHECK(!isolate->needs_side_effect_check());
-    isolate->set_needs_side_effect_check(disallow_side_effects);
-    isolate->debug()->UpdateHookOnFunctionCall();
-    isolate->debug()->side_effect_check_failed_ = false;
-  }
+  NoSideEffectScope(Isolate* isolate, bool disallow_side_effects);
   ~NoSideEffectScope();
 
  private:
