@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62f850a8_8d2aa409",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-03-28T14:48:01Z",
+      "side": 1,
+      "message": "This is a drive-by fix.",
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c009debb_d300ec56",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-03-28T14:48:01Z",
+      "side": 1,
+      "message": "The cool thing about how things working right now is that we can use a builtin continuation without catching by supplying the exception argument ourselves (hole) and passing  ContinuationFrameStateMode::LAZY.",
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
