@@ -663,10 +663,22 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
       Node* maybe_handler =
           LoadObjectField(receiver_map, Map::kTransitionsOrPrototypeInfoOffset);
       GotoIf(TaggedIsSmi(maybe_handler), notfound);
-      GotoIf(IsWeakCell(maybe_handler), &found_simple_transition_handler);
+      TNode<Map> maybe_handler_map = LoadMap(maybe_handler);
+      GotoIf(IsWeakCellMap(maybe_handler_map),
+             &found_simple_transition_handler);
+      GotoIfNot(IsTransitionArrayMap(maybe_handler_map), notfound);
 
-      // TODO(jkummerow): Consider implementing TransitionArray search.
-      Goto(notfound);
+      {
+        TVARIABLE(Map, var_transition_map);
+        Label if_found(this);
+        TNode<TransitionArray> transitions = CAST(maybe_handler);
+        TransitionLookup(p->name, transitions, &if_found, &var_transition_map,
+                         notfound);
+
+        BIND(&if_found);
+        HandleStoreICTransitionMapHandlerCase(p, var_transition_map.value(),
+                                              slow, false);
+      }
 
       BIND(&found_simple_transition_handler);
       {

@@ -60,6 +60,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(StoreHandler0Map, store_handler0_map, StoreHandler0Map)              \
   V(SymbolMap, symbol_map, SymbolMap)                                    \
   V(TheHoleValue, the_hole_value, TheHole)                               \
+  V(TransitionArrayMap, transition_array_map, TransitionArrayMap)        \
   V(TrueValue, true_value, True)                                         \
   V(Tuple2Map, tuple2_map, Tuple2Map)                                    \
   V(Tuple3Map, tuple3_map, Tuple3Map)                                    \
@@ -1520,7 +1521,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     const int kKeyToValueOffset =
         (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
         kPointerSize;
-    return LoadFixedArrayElement(container, key_index, kKeyToValueOffset);
+    return UncheckedCast<Object>(
+        LoadFixedArrayElement(container, key_index, kKeyToValueOffset));
   }
 
   // Stores the details for the entry with the given key_index.
@@ -2015,6 +2017,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                         SloppyTNode<DescriptorArray> descriptors,
                         SloppyTNode<Uint32T> bitfield3, Label* if_found,
                         TVariable<IntPtrT>* var_name_index,
+                        Label* if_not_found);
+
+  void TransitionLookup(SloppyTNode<Name> unique_name,
+                        SloppyTNode<TransitionArray> transitions,
+                        Label* if_found, TVariable<Map>* var_transition_map,
                         Label* if_not_found);
 
   template <typename Array>
