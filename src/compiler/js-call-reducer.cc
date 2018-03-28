@@ -5344,6 +5344,7 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   Node* control = NodeProperties::GetControlInput(node);
 
   if (!FLAG_experimental_inline_promise_constructor) return NoChange();
+  if (!isolate()->IsPromiseHookProtectorIntact()) return NoChange();
 
   // Only handle builtins Promises, not subclasses.
   if (target != new_target) return NoChange();
@@ -5366,15 +5367,16 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   // This frame state doesn't ever call the deopt continuation, it's only
   // necessary to specifiy a continuation in order to handle the exceptional
   // case.
-  Node* checkpoint_params[] = {jsgraph()->UndefinedConstant(),
-                               jsgraph()->UndefinedConstant()};
-  const int stack_parameters = arraysize(checkpoint_params);
-
+  const std::vector<Node*> checkpoint_parameters(
+      {jsgraph()->UndefinedConstant(), jsgraph()->UndefinedConstant(),
+       jsgraph()->UndefinedConstant(), jsgraph()->TheHoleConstant()});
+  int checkpoint_parameters_size =
+      static_cast<int>(checkpoint_parameters.size());
   Node* frame_state = CreateJavaScriptBuiltinContinuationFrameState(
       jsgraph(), promise_shared,
       Builtins::kPromiseConstructorLazyDeoptContinuation, target, context,
-      &checkpoint_params[0], stack_parameters, constructor_frame_state,
-      ContinuationFrameStateMode::LAZY);
+      checkpoint_parameters.data(), checkpoint_parameters_size,
+      constructor_frame_state, ContinuationFrameStateMode::LAZY);
 
   // Check if executor is callable
   Node* check_fail = nullptr;
@@ -5422,9 +5424,10 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
                            handle(reject_shared->GetCode(), isolate())),
                        promise_context, effect, control);
 
-  // Re-use the params from above, but actually set the promise parameter now.
-  checkpoint_params[1] = promise;
-
+  const std::vector<Node*> checkpoint_parameters_continuation(
+      {jsgraph()->UndefinedConstant(), promise, reject});
+  int checkpoint_parameters_continuation_size =
+      static_cast<int>(checkpoint_parameters_continuation.size());
   // This simple continuation just returns the created promise.
   // TODO(petermarshall): If the executor function causes lazy deopt, and it
   // also throws an exception, we should catch the exception and call the reject
@@ -5432,8 +5435,9 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   frame_state = CreateJavaScriptBuiltinContinuationFrameState(
       jsgraph(), promise_shared,
       Builtins::kPromiseConstructorLazyDeoptContinuation, target, context,
-      &checkpoint_params[0], stack_parameters, constructor_frame_state,
-      ContinuationFrameStateMode::LAZY);
+      checkpoint_parameters_continuation.data(),
+      checkpoint_parameters_continuation_size, constructor_frame_state,
+      ContinuationFrameStateMode::LAZY_WITH_CATCH);
 
   // 9. Call executor with both resolving functions
   effect = control = graph()->NewNode(
