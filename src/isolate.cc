@@ -631,6 +631,7 @@ Handle<Object> Isolate::CaptureSimpleStackTrace(Handle<JSReceiver> error_object,
 
     switch (frame->type()) {
       case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION:
+      case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH:
       case StackFrame::OPTIMIZED:
       case StackFrame::INTERPRETED:
       case StackFrame::BUILTIN:
@@ -1449,6 +1450,30 @@ Object* Isolate::UnwindAndFindHandler() {
             WasmInterpreterEntryFrame::cast(frame);
         // TODO(wasm): Implement try-catch in the interpreter.
         interpreter_frame->debug_info()->Unwind(frame->fp());
+      } break;
+
+      case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH: {
+        // Builtin continuation frames with catch can handle exceptions.
+        if (!catchable_by_js) break;
+        Address exception_argument_slot =
+            frame->fp() + JavaScriptFrameConstants::kLastParameterOffset +
+            kPointerSize;  // Skip over return value slot.
+
+        Object** exception_argument =
+            reinterpret_cast<Object**>(exception_argument_slot);
+        CHECK_EQ(heap()->the_hole_value(), *exception_argument);
+        *exception_argument = exception;
+
+        Address height_slot =
+            frame->fp() +
+            BuiltinContinuationFrameConstants::kFrameSPtoFPDeltaAtDeoptimize;
+        ptrdiff_t height = *reinterpret_cast<ptrdiff_t*>(height_slot);
+        // Reconstructor stack pointer from the frame pointer.
+        Address return_sp = frame->fp() - height;
+
+        Code* code = frame->LookupCode();
+        return FoundHandler(nullptr, code->InstructionStart(), 0,
+                            code->constant_pool(), return_sp, frame->fp());
       } break;
 
       default:

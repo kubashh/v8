@@ -152,6 +152,7 @@ class TranslatedFrame {
     kConstructStub,
     kBuiltinContinuation,
     kJavaScriptBuiltinContinuation,
+    kJavaScriptBuiltinContinuationWithCatch,
     kInvalid
   };
 
@@ -223,6 +224,9 @@ class TranslatedFrame {
   static TranslatedFrame BuiltinContinuationFrame(
       BailoutId bailout_id, SharedFunctionInfo* shared_info, int height);
   static TranslatedFrame JavaScriptBuiltinContinuationFrame(
+      BailoutId bailout_id, SharedFunctionInfo* shared_info, int height);
+
+  static TranslatedFrame JavaScriptBuiltinContinuationWithCatchFrame(
       BailoutId bailout_id, SharedFunctionInfo* shared_info, int height);
   static TranslatedFrame InvalidFrame() {
     return TranslatedFrame(kInvalid, nullptr);
@@ -534,7 +538,8 @@ class Deoptimizer : public Malloced {
   void DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
                                    int frame_index);
   void DoComputeBuiltinContinuation(TranslatedFrame* translated_frame,
-                                    int frame_index, bool java_script_frame);
+                                    int frame_index, bool java_script_frame,
+                                    bool with_catch, bool handle_exception);
 
   void WriteTranslatedValueToOutput(
       TranslatedFrame::iterator* iterator, int* input_index, int frame_index,
@@ -868,30 +873,31 @@ class TranslationIterator BASE_EMBEDDED {
   int index_;
 };
 
-#define TRANSLATION_OPCODE_LIST(V)          \
-  V(BEGIN)                                  \
-  V(INTERPRETED_FRAME)                      \
-  V(BUILTIN_CONTINUATION_FRAME)             \
-  V(JAVA_SCRIPT_BUILTIN_CONTINUATION_FRAME) \
-  V(CONSTRUCT_STUB_FRAME)                   \
-  V(ARGUMENTS_ADAPTOR_FRAME)                \
-  V(DUPLICATED_OBJECT)                      \
-  V(ARGUMENTS_ELEMENTS)                     \
-  V(ARGUMENTS_LENGTH)                       \
-  V(CAPTURED_OBJECT)                        \
-  V(REGISTER)                               \
-  V(INT32_REGISTER)                         \
-  V(UINT32_REGISTER)                        \
-  V(BOOL_REGISTER)                          \
-  V(FLOAT_REGISTER)                         \
-  V(DOUBLE_REGISTER)                        \
-  V(STACK_SLOT)                             \
-  V(INT32_STACK_SLOT)                       \
-  V(UINT32_STACK_SLOT)                      \
-  V(BOOL_STACK_SLOT)                        \
-  V(FLOAT_STACK_SLOT)                       \
-  V(DOUBLE_STACK_SLOT)                      \
-  V(LITERAL)                                \
+#define TRANSLATION_OPCODE_LIST(V)                     \
+  V(BEGIN)                                             \
+  V(INTERPRETED_FRAME)                                 \
+  V(BUILTIN_CONTINUATION_FRAME)                        \
+  V(JAVA_SCRIPT_BUILTIN_CONTINUATION_FRAME)            \
+  V(JAVA_SCRIPT_BUILTIN_CONTINUATION_FRAME_WITH_CATCH) \
+  V(CONSTRUCT_STUB_FRAME)                              \
+  V(ARGUMENTS_ADAPTOR_FRAME)                           \
+  V(DUPLICATED_OBJECT)                                 \
+  V(ARGUMENTS_ELEMENTS)                                \
+  V(ARGUMENTS_LENGTH)                                  \
+  V(CAPTURED_OBJECT)                                   \
+  V(REGISTER)                                          \
+  V(INT32_REGISTER)                                    \
+  V(UINT32_REGISTER)                                   \
+  V(BOOL_REGISTER)                                     \
+  V(FLOAT_REGISTER)                                    \
+  V(DOUBLE_REGISTER)                                   \
+  V(STACK_SLOT)                                        \
+  V(INT32_STACK_SLOT)                                  \
+  V(UINT32_STACK_SLOT)                                 \
+  V(BOOL_STACK_SLOT)                                   \
+  V(FLOAT_STACK_SLOT)                                  \
+  V(DOUBLE_STACK_SLOT)                                 \
+  V(LITERAL)                                           \
   V(UPDATE_FEEDBACK)
 
 class Translation BASE_EMBEDDED {
@@ -924,6 +930,9 @@ class Translation BASE_EMBEDDED {
                                      unsigned height);
   void BeginJavaScriptBuiltinContinuationFrame(BailoutId bailout_id,
                                                int literal_id, unsigned height);
+  void BeginJavaScriptBuiltinContinuationWithCatchFrame(BailoutId bailout_id,
+                                                        int literal_id,
+                                                        unsigned height);
   void ArgumentsElements(CreateArgumentsType type);
   void ArgumentsLength(CreateArgumentsType type);
   void BeginCapturedObject(int length);
