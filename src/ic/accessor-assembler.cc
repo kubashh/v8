@@ -127,7 +127,7 @@ void AccessorAssembler::HandlePolymorphicCase(Node* receiver_map,
 
     Label next_entry(this);
     Node* cached_map =
-        LoadWeakCellValue(LoadFixedArrayElement(feedback, map_index));
+        LoadWeakCellValue(CAST(LoadFixedArrayElement(feedback, map_index)));
     GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
 
     // Found, now call handler.
@@ -147,7 +147,7 @@ void AccessorAssembler::HandlePolymorphicCase(Node* receiver_map,
       start_index, end_index,
       [this, receiver_map, feedback, if_handler, var_handler](Node* index) {
         Node* cached_map =
-            LoadWeakCellValue(LoadFixedArrayElement(feedback, index));
+            LoadWeakCellValue(CAST(LoadFixedArrayElement(feedback, index)));
 
         Label next_entry(this);
         GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
