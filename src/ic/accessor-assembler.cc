@@ -17,15 +17,15 @@ namespace internal {
 
 using compiler::CodeAssemblerState;
 using compiler::Node;
-using compiler::TNode;
 using compiler::SloppyTNode;
 
 //////////////////// Private helpers.
 
 // Loads dataX field from the DataHandler object.
-TNode<Object> AccessorAssembler::LoadHandlerDataField(
+compiler::TNode<Object> AccessorAssembler::LoadHandlerDataField(
     SloppyTNode<DataHandler> handler, int data_index) {
 #ifdef DEBUG
+  using compiler::TNode;
   TNode<Map> handler_map = LoadMap(handler);
   TNode<Int32T> instance_type = LoadMapInstanceType(handler_map);
 #endif
@@ -263,6 +263,8 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
     const LoadICParameters* p, Node* holder, Node* smi_handler, Node* handler,
     Label* miss, ExitPoint* exit_point, OnNonExistent on_nonexistent,
     ElementSupport support_elements) {
+  using compiler::TNode;
+
   VARIABLE(var_double_value, MachineRepresentation::kFloat64);
   Label rebox_double(this, &var_double_value);
 
@@ -898,6 +900,8 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 void AccessorAssembler::HandleStoreICTransitionMapHandlerCase(
     const StoreICParameters* p, Node* transition_map, Label* miss,
     bool validate_transition_handler) {
+  using compiler::TNode;
+
   Node* maybe_validity_cell =
       LoadObjectField(transition_map, Map::kPrototypeValidityCellOffset);
   CheckPrototypeValidityCell(maybe_validity_cell, miss);
@@ -1187,6 +1191,8 @@ void AccessorAssembler::HandleStoreAccessor(const StoreICParameters* p,
 void AccessorAssembler::HandleStoreICProtoHandler(
     const StoreICParameters* p, Node* handler, Label* miss, ICMode ic_mode,
     ElementSupport support_elements) {
+  using compiler::TNode;
+
   Comment("HandleStoreICProtoHandler");
 
   OnCodeHandler on_code_handler;
@@ -2487,12 +2493,12 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
   }
 }
 
-void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
-                                     const LazyNode<Context>& lazy_context,
-                                     const LazyNode<Name>& lazy_name,
-                                     TypeofMode typeof_mode,
-                                     ExitPoint* exit_point,
-                                     ParameterMode slot_mode) {
+void AccessorAssembler::LoadGlobalIC(
+    compiler::TNode<FeedbackVector> vector, Node* slot,
+    const LazyNode<Context>& lazy_context, const LazyNode<Name>& lazy_name,
+    TypeofMode typeof_mode, ExitPoint* exit_point, ParameterMode slot_mode) {
+  using compiler::TNode;
+
   Label try_handler(this, Label::kDeferred), miss(this, Label::kDeferred);
   LoadGlobalIC_TryPropertyCellCase(vector, slot, lazy_context, exit_point,
                                    &try_handler, &miss, slot_mode);
@@ -2512,9 +2518,11 @@ void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
 }
 
 void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
-    TNode<FeedbackVector> vector, Node* slot,
+    compiler::TNode<FeedbackVector> vector, Node* slot,
     const LazyNode<Context>& lazy_context, ExitPoint* exit_point,
     Label* try_handler, Label* miss, ParameterMode slot_mode) {
+  using compiler::TNode;
+
   Comment("LoadGlobalIC_TryPropertyCellCase");
 
   Label if_lexical_var(this), if_property_cell(this);
@@ -2551,10 +2559,12 @@ void AccessorAssembler::LoadGlobalIC_TryPropertyCellCase(
 }
 
 void AccessorAssembler::LoadGlobalIC_TryHandlerCase(
-    TNode<FeedbackVector> vector, Node* slot,
+    compiler::TNode<FeedbackVector> vector, Node* slot,
     const LazyNode<Context>& lazy_context, const LazyNode<Name>& lazy_name,
     TypeofMode typeof_mode, ExitPoint* exit_point, Label* miss,
     ParameterMode slot_mode) {
+  using compiler::TNode;
+
   Comment("LoadGlobalIC_TryHandlerCase");
 
   Label call_handler(this), non_smi(this);
@@ -2838,6 +2848,8 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
 }
 
 void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
+  using compiler::TNode;
+
   Label if_lexical_var(this), if_property_cell(this);
   Node* maybe_weak_cell =
       LoadFeedbackVectorSlot(pp->vector, pp->slot, 0, SMI_PARAMETERS);
