@@ -60,6 +60,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(StoreHandler0Map, store_handler0_map, StoreHandler0Map)              \
   V(SymbolMap, symbol_map, SymbolMap)                                    \
   V(TheHoleValue, the_hole_value, TheHole)                               \
+  V(TransitionArrayMap, transition_array_map, TransitionArrayMap)        \
   V(TrueValue, true_value, True)                                         \
   V(Tuple2Map, tuple2_map, Tuple2Map)                                    \
   V(Tuple3Map, tuple3_map, Tuple3Map)                                    \
@@ -599,26 +600,44 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                                   Label* if_cleared = nullptr);
 
   // Load an array element from a FixedArray.
-  Node* LoadFixedArrayElement(
-      Node* object, Node* index, int additional_offset = 0,
+  TNode<Object> LoadFixedArrayElement(
+      SloppyTNode<Object> object, Node* index, int additional_offset = 0,
       ParameterMode parameter_mode = INTPTR_PARAMETERS,
       LoadSensitivity needs_poisoning = LoadSensitivity::kSafe);
-  Node* LoadFixedArrayElement(Node* object, Node* index,
-                              LoadSensitivity needs_poisoning) {
+
+  TNode<Object> LoadFixedArrayElement(SloppyTNode<Object> object,
+                                      TNode<IntPtrT> index,
+                                      LoadSensitivity needs_poisoning) {
     return LoadFixedArrayElement(object, index, 0, INTPTR_PARAMETERS,
                                  needs_poisoning);
   }
-  Node* LoadFixedArrayElement(
-      Node* object, int index, int additional_offset = 0,
+
+  TNode<Object> LoadFixedArrayElement(
+      SloppyTNode<Object> object, TNode<IntPtrT> index,
+      int additional_offset = 0,
+      LoadSensitivity needs_poisoning = LoadSensitivity::kSafe) {
+    return LoadFixedArrayElement(object, index, additional_offset,
+                                 INTPTR_PARAMETERS, needs_poisoning);
+  }
+
+  TNode<Object> LoadFixedArrayElement(
+      SloppyTNode<Object> object, int index, int additional_offset = 0,
       LoadSensitivity needs_poisoning = LoadSensitivity::kSafe) {
     return LoadFixedArrayElement(object, IntPtrConstant(index),
                                  additional_offset, INTPTR_PARAMETERS,
                                  needs_poisoning);
   }
   // Load an array element from a FixedArray, untag it and return it as Word32.
-  Node* LoadAndUntagToWord32FixedArrayElement(
-      Node* object, Node* index, int additional_offset = 0,
+  TNode<Int32T> LoadAndUntagToWord32FixedArrayElement(
+      SloppyTNode<Object> object, Node* index, int additional_offset = 0,
       ParameterMode parameter_mode = INTPTR_PARAMETERS);
+
+  TNode<Int32T> LoadAndUntagToWord32FixedArrayElement(
+      SloppyTNode<Object> object, int index, int additional_offset = 0) {
+    return LoadAndUntagToWord32FixedArrayElement(
+        object, IntPtrConstant(index), additional_offset, INTPTR_PARAMETERS);
+  }
+
   // Load an array element from a FixedDoubleArray.
   Node* LoadFixedDoubleArrayElement(
       Node* object, Node* index, MachineType machine_type,
@@ -1487,22 +1506,23 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Loads the details for the entry with the given key_index.
   // Returns an untagged int32.
   template <class ContainerType>
-  Node* LoadDetailsByKeyIndex(Node* container, Node* key_index) {
+  TNode<Uint32T> LoadDetailsByKeyIndex(Node* container, Node* key_index) {
     const int kKeyToDetailsOffset =
         (ContainerType::kEntryDetailsIndex - ContainerType::kEntryKeyIndex) *
         kPointerSize;
-    return LoadAndUntagToWord32FixedArrayElement(container, key_index,
-                                                 kKeyToDetailsOffset);
+    return Unsigned(LoadAndUntagToWord32FixedArrayElement(container, key_index,
+                                                          kKeyToDetailsOffset));
   }
 
   // Loads the value for the entry with the given key_index.
   // Returns a tagged value.
   template <class ContainerType>
-  Node* LoadValueByKeyIndex(Node* container, Node* key_index) {
+  TNode<Object> LoadValueByKeyIndex(Node* container, Node* key_index) {
     const int kKeyToValueOffset =
         (ContainerType::kEntryValueIndex - ContainerType::kEntryKeyIndex) *
         kPointerSize;
-    return LoadFixedArrayElement(container, key_index, kKeyToValueOffset);
+    return UncheckedCast<Object>(
+        LoadFixedArrayElement(container, key_index, kKeyToValueOffset));
   }
 
   // Stores the details for the entry with the given key_index.
@@ -1688,7 +1708,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void TryLookupProperty(Node* object, Node* map, Node* instance_type,
                          Node* unique_name, Label* if_found_fast,
                          Label* if_found_dict, Label* if_found_global,
-                         Variable* var_meta_storage, Variable* var_name_index,
+                         TVariable<HeapObject>* var_meta_storage,
+                         TVariable<IntPtrT>* var_name_index,
                          Label* if_not_found, Label* if_bailout);
 
   // This method jumps to if_found if the element is known to exist. To
@@ -1867,19 +1888,20 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                                last_element_exclusive, body, mode, direction);
   }
 
-  Node* GetArrayAllocationSize(Node* element_count, ElementsKind kind,
-                               ParameterMode mode, int header_size) {
+  TNode<IntPtrT> GetArrayAllocationSize(Node* element_count, ElementsKind kind,
+                                        ParameterMode mode, int header_size) {
     return ElementOffsetFromIndex(element_count, kind, mode, header_size);
   }
 
-  Node* GetFixedArrayAllocationSize(Node* element_count, ElementsKind kind,
-                                    ParameterMode mode) {
+  TNode<IntPtrT> GetFixedArrayAllocationSize(Node* element_count,
+                                             ElementsKind kind,
+                                             ParameterMode mode) {
     return GetArrayAllocationSize(element_count, kind, mode,
                                   FixedArray::kHeaderSize);
   }
 
-  Node* GetPropertyArrayAllocationSize(Node* element_count,
-                                       ParameterMode mode) {
+  TNode<IntPtrT> GetPropertyArrayAllocationSize(Node* element_count,
+                                                ParameterMode mode) {
     return GetArrayAllocationSize(element_count, PACKED_ELEMENTS, mode,
                                   PropertyArray::kHeaderSize);
   }
@@ -1939,8 +1961,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // TypedArray/ArrayBuffer helpers
   Node* IsDetachedBuffer(Node* buffer);
 
-  Node* ElementOffsetFromIndex(Node* index, ElementsKind kind,
-                               ParameterMode mode, int base_size = 0);
+  TNode<IntPtrT> ElementOffsetFromIndex(Node* index, ElementsKind kind,
+                                        ParameterMode mode, int base_size = 0);
 
   // Load a builtin's code from the builtin array in the isolate.
   TNode<Code> LoadBuiltin(TNode<Smi> builtin_id);
@@ -1991,22 +2013,42 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void PerformStackCheck(Node* context);
 
  protected:
-  void DescriptorLookup(Node* unique_name, Node* descriptors, Node* bitfield3,
-                        Label* if_found, Variable* var_name_index,
+  void DescriptorLookup(SloppyTNode<Name> unique_name,
+                        SloppyTNode<DescriptorArray> descriptors,
+                        SloppyTNode<Uint32T> bitfield3, Label* if_found,
+                        TVariable<IntPtrT>* var_name_index,
                         Label* if_not_found);
-  void DescriptorLookupLinear(Node* unique_name, Node* descriptors, Node* nof,
-                              Label* if_found, Variable* var_name_index,
-                              Label* if_not_found);
-  void DescriptorLookupBinary(Node* unique_name, Node* descriptors, Node* nof,
-                              Label* if_found, Variable* var_name_index,
-                              Label* if_not_found);
-  Node* DescriptorNumberToIndex(SloppyTNode<Uint32T> descriptor_number);
-  // Implements DescriptorArray::ToKeyIndex.
-  // Returns an untagged IntPtr.
-  Node* DescriptorArrayToKeyIndex(Node* descriptor_number);
-  // Implements DescriptorArray::GetKey.
-  Node* DescriptorArrayGetKey(Node* descriptors, Node* descriptor_number);
-  // Implements DescriptorArray::GetKey.
+
+  void TransitionLookup(SloppyTNode<Name> unique_name,
+                        SloppyTNode<TransitionArray> transitions,
+                        Label* if_found, TVariable<Map>* var_transition_map,
+                        Label* if_not_found);
+
+  template <typename Array>
+  void Lookup(TNode<Name> unique_name, TNode<Array> array,
+              TNode<Uint32T> number_of_valid_entries, Label* if_found,
+              TVariable<IntPtrT>* var_name_index, Label* if_not_found);
+  template <typename Array>
+  void LookupLinear(TNode<Name> unique_name, TNode<Array> array,
+                    TNode<Uint32T> number_of_valid_entries, Label* if_found,
+                    TVariable<IntPtrT>* var_name_index, Label* if_not_found);
+  template <typename Array>
+  void LookupBinary(TNode<Name> unique_name, TNode<Array> array,
+                    TNode<Uint32T> number_of_valid_entries, Label* if_found,
+                    TVariable<IntPtrT>* var_name_index, Label* if_not_found);
+
+  template <typename Array>
+  TNode<IntPtrT> EntryIndexToIndex(TNode<Uint32T> entry_index);
+
+  // Implements [Descriptor/Transition]Array::ToKeyIndex.
+  template <typename Array>
+  TNode<IntPtrT> ToKeyIndex(TNode<Uint32T> entry_index);
+
+  // Implements [Descriptor/Transition]Array::GetKey.
+  template <typename Array>
+  TNode<Name> GetKey(TNode<Array> array, TNode<Uint32T> entry_index);
+
+  // Implements DescriptorArray::GetDetails.
   TNode<Uint32T> DescriptorArrayGetDetails(TNode<DescriptorArray> descriptors,
                                            TNode<Uint32T> descriptor_number);
 
@@ -2060,13 +2102,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* SelectImpl(TNode<BoolT> condition, const NodeGenerator& true_body,
                    const NodeGenerator& false_body, MachineRepresentation rep);
 
-  // Implements DescriptorArray::number_of_entries.
-  // Returns an untagged int32.
-  Node* DescriptorArrayNumberOfEntries(Node* descriptors);
-  // Implements DescriptorArray::GetSortedKeyIndex.
-  // Returns an untagged int32.
-  Node* DescriptorArrayGetSortedKeyIndex(Node* descriptors,
-                                         Node* descriptor_number);
+  // Implements [Descriptor/Transition]Array::number_of_entries.
+  template <typename Array>
+  TNode<Uint32T> NumberOfEntries(TNode<Array> array);
+
+  // Implements [Descriptor/Transition]Array::GetSortedKeyIndex.
+  template <typename Array>
+  TNode<Uint32T> GetSortedKeyIndex(TNode<Array> descriptors,
+                                   TNode<Uint32T> entry_index);
 
   Node* CollectFeedbackForString(Node* instance_type);
   void GenerateEqual_Same(Node* value, Label* if_equal, Label* if_notequal,

@@ -127,7 +127,7 @@ void AccessorAssembler::HandlePolymorphicCase(Node* receiver_map,
 
     Label next_entry(this);
     Node* cached_map =
-        LoadWeakCellValue(LoadFixedArrayElement(feedback, map_index));
+        LoadWeakCellValue(CAST(LoadFixedArrayElement(feedback, map_index)));
     GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
 
     // Found, now call handler.
@@ -147,7 +147,7 @@ void AccessorAssembler::HandlePolymorphicCase(Node* receiver_map,
       start_index, end_index,
       [this, receiver_map, feedback, if_handler, var_handler](Node* index) {
         Node* cached_map =
-            LoadWeakCellValue(LoadFixedArrayElement(feedback, index));
+            LoadWeakCellValue(CAST(LoadFixedArrayElement(feedback, index)));
 
         Label next_entry(this);
         GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
@@ -2058,7 +2058,7 @@ void AccessorAssembler::GenericPropertyLoad(Node* receiver, Node* receiver_map,
   Node* descriptors = LoadMapDescriptors(receiver_map);
 
   Label if_descriptor_found(this), stub_cache(this);
-  VARIABLE(var_name_index, MachineType::PointerRepresentation());
+  TVARIABLE(IntPtrT, var_name_index);
   Label* notfound =
       use_stub_cache == kUseStubCache ? &stub_cache : &lookup_prototype_chain;
   DescriptorLookup(p->name, descriptors, bitfield3, &if_descriptor_found,
