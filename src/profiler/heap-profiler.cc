@@ -154,6 +154,18 @@ void HeapProfiler::StopHeapObjectsTracking() {
   }
 }
 
+void HeapProfiler::SetAllocationObserver(AllocationObserver* observer) {
+  bool was_set = !!allocation_observer_;
+  if (!was_set && !observer) return;
+  allocation_observer_ = observer;
+  if (was_set && observer) return;
+  if (!was_set && observer) {
+    heap()->DisableInlineAllocation();
+  } else {
+    heap()->EnableInlineAllocation();
+  }
+}
+
 int HeapProfiler::GetSnapshotsCount() {
   return static_cast<int>(snapshots_.size());
 }
@@ -174,6 +186,9 @@ void HeapProfiler::ObjectMoveEvent(Address from, Address to, int size) {
   if (!known_object && allocation_tracker_) {
     allocation_tracker_->address_to_trace()->MoveObject(from, to, size);
   }
+  if (allocation_observer_) {
+    allocation_observer_->ObjectMoveEvent(from, to);
+  }
 }
 
 void HeapProfiler::AllocationEvent(Address addr, int size) {
@@ -181,8 +196,10 @@ void HeapProfiler::AllocationEvent(Address addr, int size) {
   if (allocation_tracker_) {
     allocation_tracker_->AllocationEvent(addr, size);
   }
+  if (allocation_observer_) {
+    allocation_observer_->AllocationEvent(addr);
+  }
 }
-
 
 void HeapProfiler::UpdateObjectSizeEvent(Address addr, int size) {
   ids_->UpdateObjectSize(addr, size);

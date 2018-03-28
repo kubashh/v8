@@ -196,6 +196,18 @@ bool DebugInfo::ClearCoverageInfo() {
   return flags() == kNone;
 }
 
+bool DebugInfo::HasSideEffectChecks() const {
+  return (flags() & kHasSideEffectChecks) != 0;
+}
+
+void DebugInfo::SetHasSideEffectChecks() {
+  set_flags(flags() | kHasSideEffectChecks);
+}
+
+void DebugInfo::ClearHasSideEffectChecks() {
+  set_flags(flags() & ~kHasSideEffectChecks);
+}
+
 namespace {
 bool IsEqual(BreakPoint* break_point1, BreakPoint* break_point2) {
   return break_point1->id() == break_point2->id();

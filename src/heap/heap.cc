@@ -185,7 +185,7 @@ Heap::Heap()
       mmap_region_base_(0),
       remembered_unmapped_pages_index_(0),
       old_generation_allocation_limit_(initial_old_generation_size_),
-      inline_allocation_disabled_(false),
+      inline_allocation_disabled_(0),
       tracer_(nullptr),
       promoted_objects_size_(0),
       promotion_ratio_(0),
@@ -5762,8 +5762,9 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
 }
 
 void Heap::EnableInlineAllocation() {
-  if (!inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = false;
+  DCHECK_GT(inline_allocation_disabled_, 0);
+  --inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 0) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);
@@ -5771,8 +5772,8 @@ void Heap::EnableInlineAllocation() {
 
 
 void Heap::DisableInlineAllocation() {
-  if (inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = true;
+  ++inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 1) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);
