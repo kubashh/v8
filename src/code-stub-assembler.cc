@@ -1406,7 +1406,7 @@ TNode<HeapObject> CodeStubAssembler::LoadSlowProperties(
     SloppyTNode<JSObject> object) {
   CSA_SLOW_ASSERT(this, IsDictionaryMap(LoadMap(object)));
   TNode<Object> properties =
-      LoadObjectField(object, JSObject::kPropertiesOrHashOffset);
+      LoadObjectField<Object>(object, JSObject::kPropertiesOrHashOffset);
   return SelectTaggedConstant<HeapObject>(TaggedIsSmi(properties),
                                           EmptyPropertyDictionaryConstant(),
                                           CAST(properties));
@@ -6754,6 +6754,20 @@ TNode<Uint32T> CodeStubAssembler::NumberOfEntries<DescriptorArray>(
       descriptors, IntPtrConstant(DescriptorArray::kDescriptorLengthIndex)));
 }
 
+template <>
+TNode<Uint32T> CodeStubAssembler::NumberOfEntries<TransitionArray>(
+    TNode<TransitionArray> transitions) {
+  TNode<IntPtrT> length = LoadAndUntagFixedArrayBaseLength(transitions);
+  return Select<Uint32T>(
+      UintPtrLessThan(length, IntPtrConstant(TransitionArray::kFirstIndex)),
+      [=] { return Unsigned(Int32Constant(0)); },
+      [=] {
+        return Unsigned(LoadAndUntagToWord32FixedArrayElement(
+            transitions,
+            IntPtrConstant(TransitionArray::kTransitionLengthIndex)));
+      });
+}
+
 template <typename Array>
 TNode<IntPtrT> CodeStubAssembler::EntryIndexToIndex(
     TNode<Uint32T> entry_index) {
@@ -6769,6 +6783,8 @@ TNode<IntPtrT> CodeStubAssembler::ToKeyIndex(TNode<Uint32T> entry_index) {
 }
 
 template TNode<IntPtrT> CodeStubAssembler::ToKeyIndex<DescriptorArray>(
+    TNode<Uint32T>);
+template TNode<IntPtrT> CodeStubAssembler::ToKeyIndex<TransitionArray>(
     TNode<Uint32T>);
 
 template <>
@@ -6795,6 +6811,8 @@ TNode<Name> CodeStubAssembler::GetKey(TNode<Array> array,
 
 template TNode<Name> CodeStubAssembler::GetKey<DescriptorArray>(
     TNode<DescriptorArray>, TNode<Uint32T>);
+template TNode<Name> CodeStubAssembler::GetKey<TransitionArray>(
+    TNode<TransitionArray>, TNode<Uint32T>);
 
 TNode<Uint32T> CodeStubAssembler::DescriptorArrayGetDetails(
     TNode<DescriptorArray> descriptors, TNode<Uint32T> descriptor_number) {
@@ -6884,6 +6902,84 @@ void CodeStubAssembler::DescriptorLookup(
   TNode<Uint32T> nof = DecodeWord32<Map::NumberOfOwnDescriptorsBits>(bitfield3);
   Lookup<DescriptorArray>(unique_name, descriptors, nof, if_found,
                           var_name_index, if_not_found);
+}
+
+void CodeStubAssembler::TransitionLookup(
+    SloppyTNode<Name> unique_name, SloppyTNode<TransitionArray> transitions,
+    Label* if_found, TVariable<Map>* var_transition_map, Label* if_not_found) {
+  Comment("TransitionArrayLookup");
+  TVARIABLE(IntPtrT, var_candidate_name_index);
+  Label if_candidate_found(this);
+  TNode<Uint32T> number_of_valid_transitions =
+      NumberOfEntries<TransitionArray>(transitions);
+  Lookup<TransitionArray>(unique_name, transitions, number_of_valid_transitions,
+                          &if_candidate_found, &var_candidate_name_index,
+                          if_not_found);
+
+  BIND(&if_candidate_found);
+  TNode<UintPtrT> limit = ChangeUint32ToWord(number_of_valid_transitions);
+  TNode<Uint32T> expected_attributes = Unsigned(
+      SelectInt32Constant(IsPrivateSymbol(unique_name), DONT_ENUM, NONE));
+
+  Label loop(this, {&var_candidate_name_index});
+  Goto(&loop);
+
+  // Iterate maps while name is still the same and we find proper details.
+  BIND(&loop);
+  {
+    const int kKeyToTargetOffset =
+        (TransitionArray::kTransitionTarget - TransitionArray::kTransitionKey) *
+        kPointerSize;
+    TNode<WeakCell> transition_map_weak_cell = CAST(LoadFixedArrayElement(
+        transitions, var_candidate_name_index.value(), kKeyToTargetOffset));
+    TNode<Map> transition_map =
+        CAST(LoadWeakCellValue(transition_map_weak_cell));
+    *var_transition_map = transition_map;
+
+    // Check details.
+    {
+      // Load last descriptor details.
+      TNode<Uint32T> bitfield3 = LoadMapBitField3(transition_map);
+      TNode<UintPtrT> nof =
+          DecodeWordFromWord32<Map::NumberOfOwnDescriptorsBits>(bitfield3);
+      CSA_ASSERT(this, WordNotEqual(nof, IntPtrConstant(0)));
+
+      TNode<IntPtrT> factor = IntPtrConstant(DescriptorArray::kEntrySize);
+      TNode<IntPtrT> last_key_index =
+          Signed(IntPtrAdd(IntPtrConstant(DescriptorArray::ToKeyIndex(-1)),
+                           IntPtrMul(nof, factor)));
+
+      TNode<DescriptorArray> descriptors = LoadMapDescriptors(transition_map);
+      TNode<Uint32T> details =
+          LoadDetailsByKeyIndex<DescriptorArray>(descriptors, last_key_index);
+
+      // Transitions with the same name are ordered by PropertyKind values, so
+      // if we are already looking at kAccessor property, then the result is
+      // "not found".
+      // See TransitionArray::CompareDetails() for details.
+      STATIC_ASSERT(kData == 0);
+      GotoIf(IsSetWord32<PropertyDetails::KindField>(details), if_not_found);
+
+      TNode<Uint32T> attributes =
+          DecodeWord32<PropertyDetails::KindField>(details);
+
+      GotoIf(Word32Equal(attributes, expected_attributes), if_found);
+
+      // Transitions with the same name and PropertyKind values are ordered by
+      // attributes values, so if we are already looking at attributes value
+      // greater that the one we are looking for then the result is "not
+      // found". See TransitionArray::CompareDetails() for details.
+      GotoIf(Uint32GreaterThan(attributes, expected_attributes), if_not_found);
+    }
+
+    Increment(&var_candidate_name_index, 1);
+    GotoIfNot(UintPtrLessThan(var_candidate_name_index.value(), limit),
+              if_not_found);
+
+    TNode<Name> next_name = CAST(LoadFixedArrayElement(
+        transitions, var_candidate_name_index.value(), 0));
+    Branch(WordEqual(next_name, unique_name), &loop, if_not_found);
+  }
 }
 
 template <typename Array>
