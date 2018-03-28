@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65ef822e_c0216738",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6761,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "no types here? :(",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff040b80_374cf0f4",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6776,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "descriptor_number \u003d\u003e entry_index? (not sure what\u0027s easier to understand in this context though).",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a349fdbe_f0b87ba6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6815,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "we should probably introduce a Uint32Constant() helper as well.",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55ffafd3_b07514fc",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6868,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "humm, we do have Int32GreaterThanOrEqual but not Uint32GreaterThanOrEqual :/",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb386bde_07db5208",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7259,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be cleaner to return a SloppyTNode\u003cObject\u003e for now?",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1b65337_c8e5973e",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-03-28T15:34:19Z",
+      "side": 1,
+      "message": "can you add a comment for this method as well? The rest is fine, just that this is the first one.",
+      "revId": "e2638288f74dad2d0a64a74c0b0caf6eed682402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
