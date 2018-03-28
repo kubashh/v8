@@ -44,7 +44,7 @@ class JSCallReduction {
     HeapObjectMatcher m(NodeProperties::GetValueInput(node_, 0));
     Handle<JSFunction> function = Handle<JSFunction>::cast(m.Value());
     // Do not inline if the builtin may have break points.
-    return !function->shared()->HasBreakInfo();
+    return !function->shared()->HasDebugBytecodeArray();
   }
 
   // Retrieves the BuiltinFunctionId as described above.

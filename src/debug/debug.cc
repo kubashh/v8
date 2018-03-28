@@ -5,6 +5,7 @@
 #include "src/debug/debug.h"
 
 #include <memory>
+#include <unordered_set>
 
 #include "src/api.h"
 #include "src/arguments.h"
@@ -27,12 +28,39 @@
 #include "src/log.h"
 #include "src/messages.h"
 #include "src/objects/debug-objects-inl.h"
+#include "src/profiler/heap-profiler.h"
 #include "src/snapshot/natives.h"
 #include "src/snapshot/snapshot.h"
 #include "src/wasm/wasm-objects-inl.h"
 
 namespace v8 {
 namespace internal {
+
+class Debug::TemporaryObjectsTracker : public HeapProfiler::AllocationObserver {
+ public:
+  TemporaryObjectsTracker() = default;
+  ~TemporaryObjectsTracker() = default;
+
+  void AllocationEvent(Address addr) override {
+    objects_.insert(addr);
+  }
+
+  void ObjectMoveEvent(Address from, Address to) override {
+    if (from == to) return;
+    auto it = objects_.find(from);
+    if (it == objects_.end()) return;
+    objects_.erase(it);
+    objects_.insert(to);
+  }
+
+  bool HasObject(Address addr) const {
+    return objects_.find(addr) != objects_.end();
+  }
+
+ private:
+  std::unordered_set<Address> objects_;
+  DISALLOW_COPY_AND_ASSIGN(TemporaryObjectsTracker);
+};
 
 Debug::Debug(Isolate* isolate)
     : debug_context_(Handle<Context>()),
@@ -50,6 +78,8 @@ Debug::Debug(Isolate* isolate)
       isolate_(isolate) {
   ThreadInit();
 }
+
+Debug::~Debug() { DCHECK_NULL(debug_delegate_); }
 
 BreakLocation BreakLocation::FromFrame(Handle<DebugInfo> debug_info,
                                        JavaScriptFrame* frame) {
@@ -1439,7 +1469,7 @@ void Debug::CreateBreakInfo(Handle<SharedFunctionInfo> shared) {
   flags |= DebugInfo::kHasBreakInfo;
   if (CanBreakAtEntry(shared)) flags |= DebugInfo::kCanBreakAtEntry;
   debug_info->set_flags(flags);
-  debug_info->set_debug_bytecode_array(*maybe_debug_bytecode_array);
+  debug_info->SetDebugBytecodeArray(*maybe_debug_bytecode_array);
   debug_info->set_break_points(*break_points);
 }
 
@@ -2237,6 +2267,37 @@ ReturnValueScope::~ReturnValueScope() {
   debug_->set_return_value(*return_value_);
 }
 
+void Debug::ClearAllSideEffectChecks() {
+  ClearAllDebugInfos([=](Handle<DebugInfo> info) {
+    if (!info->HasDebugBytecodeArray()) return false;
+    if (!info->HasBreakInfo()) {
+      info->SetDebugBytecodeArray(isolate_->heap()->undefined_value());
+    }
+    return info->IsEmpty();
+  });
+}
+
+bool Debug::PrepareFunctionForSideEffectCheck(Handle<SharedFunctionInfo> shared) {
+  HandleScope scope(isolate_);
+  Handle<DebugInfo> debug_info = GetOrCreateDebugInfo(shared);
+  if (!shared->HasBytecodeArray()) return false;
+  if (shared->HasDebugBytecodeArray()) return true;
+  Handle<BytecodeArray> original(shared->bytecode_array());
+  Handle<Object> maybe_debug_bytecode_array = isolate_->factory()->CopyBytecodeArray(original);
+  debug_info->SetDebugBytecodeArray(*maybe_debug_bytecode_array);
+
+  // To prepare bytecode for debugging, we already need to have the debug
+  // info (containing the debug copy) upfront, but since we do not recompile,
+  // preparing for break points cannot fail.
+  DCHECK(shared->is_compiled());
+  DeoptimizeFunction(shared);
+  // Update PCs on the stack to point to recompiled code.
+  RedirectActiveFunctions redirect_visitor(*shared);
+  redirect_visitor.VisitThread(isolate_, isolate_->thread_local_top());
+  isolate_->thread_manager()->IterateArchivedThreads(&redirect_visitor);
+  return true;
+}
+
 bool Debug::PerformSideEffectCheck(Handle<JSFunction> function) {
   DCHECK(isolate_->needs_side_effect_check());
   DisallowJavascriptExecution no_js(isolate_);
@@ -2265,6 +2326,46 @@ bool Debug::PerformSideEffectCheckForCallback(Object* callback_info) {
   isolate_->TerminateExecution();
   isolate_->OptionalRescheduleException(false);
   return false;
+}
+
+bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
+  DCHECK(isolate_->needs_side_effect_check());
+  if (object->IsHeapObject()) {
+    Address address = Handle<HeapObject>::cast(object)->address();
+    if (temporary_objects_->HasObject(address)) {
+      return true;
+    }
+  }
+  if (FLAG_trace_side_effect_free_debug_evaluate) {
+    JavaScriptFrameIterator it(isolate_);
+    InterpretedFrame* interpreted_frame =
+        reinterpret_cast<InterpretedFrame*>(it.frame());
+    SharedFunctionInfo* shared = interpreted_frame->function()->shared();
+    BytecodeArray* bytecode_array = shared->bytecode_array();
+    int bytecode_offset = interpreted_frame->GetBytecodeOffset();
+    interpreter::Bytecode bytecode =
+        interpreter::Bytecodes::FromByte(bytecode_array->get(bytecode_offset));
+    PrintF("[debug-evaluate] %s failed runtime side effect check.\n",
+           interpreter::Bytecodes::ToString(bytecode));
+    object->Print();
+    shared->Print();
+  }
+  side_effect_check_failed_ = true;
+  // Throw an uncatchable termination exception.
+  isolate_->TerminateExecution();
+  return false;
+}
+
+void Debug::StartTrackingTemporaryObjects() {
+  DCHECK(!temporary_objects_);
+  temporary_objects_.reset(new TemporaryObjectsTracker());
+  isolate_->heap_profiler()->SetAllocationObserver(temporary_objects_.get());
+}
+
+void Debug::StopTrackingTemporaryObjects() {
+  DCHECK(!!temporary_objects_);
+  isolate_->heap_profiler()->SetAllocationObserver(nullptr);
+  temporary_objects_.reset();
 }
 
 void LegacyDebugDelegate::PromiseEventOccurred(
@@ -2377,6 +2478,17 @@ void NativeDebugDelegate::ProcessDebugEvent(v8::DebugEvent event,
   CHECK(!isolate->has_scheduled_exception());
 }
 
+NoSideEffectScope::NoSideEffectScope(Isolate* isolate,
+                                     bool disallow_side_effects)
+    : isolate_(isolate) {
+  // NoSideEffectScope is not re-entrant if already enabled.
+  CHECK(!isolate->needs_side_effect_check());
+  isolate->set_needs_side_effect_check(disallow_side_effects);
+  isolate->debug()->UpdateHookOnFunctionCall();
+  isolate->debug()->side_effect_check_failed_ = false;
+  isolate->debug()->StartTrackingTemporaryObjects();
+}
+
 NoSideEffectScope::~NoSideEffectScope() {
   if (isolate_->needs_side_effect_check() &&
       isolate_->debug()->side_effect_check_failed_) {
@@ -2391,6 +2503,8 @@ NoSideEffectScope::~NoSideEffectScope() {
   isolate_->set_needs_side_effect_check(false);
   isolate_->debug()->UpdateHookOnFunctionCall();
   isolate_->debug()->side_effect_check_failed_ = false;
+  isolate_->debug()->StopTrackingTemporaryObjects();
+  isolate_->debug()->ClearAllSideEffectChecks();
 }
 
 }  // namespace internal

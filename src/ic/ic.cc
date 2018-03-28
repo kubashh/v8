@@ -821,7 +821,7 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
         }
 
         // When debugging we need to go the slow path to flood the accessor.
-        if (GetHostFunction()->shared()->HasBreakInfo()) {
+        if (GetHostFunction()->shared()->HasDebugBytecodeArray()) {
           TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
           return slow_stub();
         }

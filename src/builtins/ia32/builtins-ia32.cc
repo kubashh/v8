@@ -977,7 +977,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ mov(ecx, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
   __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
   __ SmiUntag(ebx);
-  __ test(ebx, Immediate(DebugInfo::kHasBreakInfo));
+  __ test(ebx, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ pop(ebx);
   __ j(zero, &bytecode_array_loaded);
   __ mov(kInterpreterBytecodeArrayRegister,

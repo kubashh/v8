@@ -1669,7 +1669,7 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
         Handle<JSFunction>::cast(target_type->AsHeapConstant()->Value());
     Handle<SharedFunctionInfo> shared(function->shared(), isolate());
 
-    if (function->shared()->HasBreakInfo()) {
+    if (function->shared()->HasDebugBytecodeArray()) {
       // Do not inline the call if we need to check whether to break at entry.
       return NoChange();
     }

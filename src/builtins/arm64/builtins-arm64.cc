@@ -1132,7 +1132,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // SharedFunctionInfo::kFunctionDataOffset.
   __ Bind(&maybe_load_debug_bytecode_array);
   __ Ldrsw(x10, UntagSmiFieldMemOperand(x11, DebugInfo::kFlagsOffset));
-  __ TestAndBranchIfAllClear(x10, DebugInfo::kHasBreakInfo,
+  __ TestAndBranchIfAllClear(x10, DebugInfo::kHasDebugBytecodeArray,
                              &bytecode_array_loaded);
   __ Ldr(kInterpreterBytecodeArrayRegister,
          FieldMemOperand(x11, DebugInfo::kDebugBytecodeArrayOffset));

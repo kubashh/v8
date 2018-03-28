@@ -44,6 +44,7 @@ class HeapProfiler {
   AllocationTracker* allocation_tracker() const {
     return allocation_tracker_.get();
   }
+
   HeapObjectsMap* heap_object_map() const { return ids_.get(); }
   StringsStorage* names() const { return names_.get(); }
 
@@ -78,8 +79,12 @@ class HeapProfiler {
     return build_embedder_graph_callback_ != nullptr;
   }
 
-  bool is_tracking_object_moves() const { return is_tracking_object_moves_; }
-  bool is_tracking_allocations() const { return !!allocation_tracker_; }
+  bool is_tracking_object_moves() const {
+    return is_tracking_object_moves_ || !!allocation_observer_;
+  }
+  bool is_tracking_allocations() const {
+    return !!allocation_tracker_ || !!allocation_observer_;
+  }
 
   Handle<HeapObject> FindHeapObjectById(SnapshotObjectId id);
   void ClearHeapObjectMap();
@@ -89,6 +94,14 @@ class HeapProfiler {
   void QueryObjects(Handle<Context> context,
                     debug::QueryObjectPredicate* predicate,
                     v8::PersistentValueVector<v8::Object>* objects);
+
+  class AllocationObserver {
+   public:
+    virtual void AllocationEvent(Address address) = 0;
+    virtual void ObjectMoveEvent(Address from, Address to) = 0;
+    virtual ~AllocationObserver() = default;
+  };
+  void SetAllocationObserver(AllocationObserver* allocation_observer);
 
  private:
   Heap* heap() const;
@@ -106,6 +119,7 @@ class HeapProfiler {
       nullptr;
   v8::HeapProfiler::BuildEmbedderGraphCallback build_embedder_graph_callback_ =
       nullptr;
+  AllocationObserver* allocation_observer_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(HeapProfiler);
 };

@@ -26,6 +26,7 @@ bool DebugInfo::ClearBreakInfo() {
   int new_flags = flags();
   new_flags &= ~kHasBreakInfo & ~kPreparedForBreakpoints;
   new_flags &= ~kBreakAtEntry & ~kCanBreakAtEntry;
+  new_flags &= ~kHasDebugBytecodeArray;
   set_flags(new_flags);
 
   return new_flags == kNone;

@@ -27,7 +27,8 @@ class DebugInfo : public Struct {
     kPreparedForBreakpoints = 1 << 1,
     kHasCoverageInfo = 1 << 2,
     kBreakAtEntry = 1 << 3,
-    kCanBreakAtEntry = 1 << 4
+    kCanBreakAtEntry = 1 << 4,
+    kHasDebugBytecodeArray = 1 << 5
   };
   typedef base::Flags<Flag> Flags;
 
@@ -82,6 +83,7 @@ class DebugInfo : public Struct {
   // Get the number of break points for this function.
   int GetBreakPointCount();
 
+  inline void SetDebugBytecodeArray(Object* maybe_debug_bytecode_array);
   inline bool HasDebugBytecodeArray();
 
   inline BytecodeArray* OriginalBytecodeArray();

@@ -33,8 +33,16 @@ ACCESSORS(BreakPointInfo, break_points, Object, kBreakPointsOffset)
 SMI_ACCESSORS(BreakPoint, id, kIdOffset)
 ACCESSORS(BreakPoint, condition, String, kConditionOffset)
 
+void DebugInfo::SetDebugBytecodeArray(Object* maybe_debug_bytecode_array) {
+  set_debug_bytecode_array(maybe_debug_bytecode_array);
+  int new_flags = maybe_debug_bytecode_array->IsBytecodeArray()
+                      ? (flags() | kHasDebugBytecodeArray)
+                      : (flags() & ~kHasDebugBytecodeArray);
+  set_flags(new_flags);
+}
+
 bool DebugInfo::HasDebugBytecodeArray() {
-  return debug_bytecode_array()->IsBytecodeArray();
+  return (flags() & kHasDebugBytecodeArray) != 0;
 }
 
 BytecodeArray* DebugInfo::OriginalBytecodeArray() {

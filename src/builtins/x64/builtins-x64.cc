@@ -1044,7 +1044,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
   __ SmiToInteger32(kScratchRegister,
                     FieldOperand(rcx, DebugInfo::kFlagsOffset));
-  __ testl(kScratchRegister, Immediate(DebugInfo::kHasBreakInfo));
+  __ testl(kScratchRegister, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ j(zero, &bytecode_array_loaded);
   __ movp(kInterpreterBytecodeArrayRegister,
           FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));

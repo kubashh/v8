@@ -654,7 +654,7 @@ MaybeHandle<Code> GetOptimizedCode(Handle<JSFunction> function,
   compilation_info->SetOptimizingForOsr(osr_offset, osr_frame);
 
   // Do not use TurboFan if we need to be able to set break points.
-  if (compilation_info->shared_info()->HasBreakInfo()) {
+  if (compilation_info->shared_info()->HasDebugBytecodeArray()) {
     compilation_info->AbortOptimization(BailoutReason::kFunctionBeingDebugged);
     return MaybeHandle<Code>();
   }
@@ -730,7 +730,7 @@ CompilationJob::Status FinalizeOptimizedCompilationJob(CompilationJob* job,
   // Reset profiler ticks, function is no longer considered hot.
   compilation_info->closure()->feedback_vector()->set_profiler_ticks(0);
 
-  DCHECK(!shared->HasBreakInfo());
+  DCHECK(!shared->HasDebugBytecodeArray());
 
   // 1) Optimization on the concurrent thread may have failed.
   // 2) The function may have already been optimized by OSR.  Simply continue.

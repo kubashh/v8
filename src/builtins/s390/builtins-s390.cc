@@ -1064,7 +1064,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ bind(&maybe_load_debug_bytecode_array);
   __ LoadP(ip, FieldMemOperand(r6, DebugInfo::kFlagsOffset));
   __ SmiUntag(ip);
-  __ tmll(ip, Operand(DebugInfo::kHasBreakInfo));
+  __ tmll(ip, Operand(DebugInfo::kHasDebugBytecodeArray));
   __ beq(&done);
   __ LoadP(kInterpreterBytecodeArrayRegister,
            FieldMemOperand(r6, DebugInfo::kDebugBytecodeArrayOffset));

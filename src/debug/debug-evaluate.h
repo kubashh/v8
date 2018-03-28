@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "src/frames.h"
+#include "src/interpreter/bytecodes.h"
 #include "src/objects.h"
 #include "src/objects/string-table.h"
 

@@ -208,6 +208,10 @@ class SharedFunctionInfo : public HeapObject {
   // to simplify access.
   bool HasBreakInfo() const;
 
+  // Debug bytecode arrays contained in DebugInfo, this is a convenince method
+  // to simplify access.
+  bool HasDebugBytecodeArray() const;
+
   // Coverage infos are contained in DebugInfo, this is a convenience method
   // to simplify access.
   bool HasCoverageInfo() const;
