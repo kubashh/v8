@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "592e584d_084cc9c9",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-03-28T23:56:45Z",
+      "side": 1,
+      "message": "Triggering a GC here, means that we can possibly a collection during instantiation, either when allocating globals or memory. Given that the instance, and it\u0027s associated objects have not been completely set up yet, this might lead to the instance having stale references. Currently we turn off all variants of gc-stress testing on mjsunit tests when wasm-traps are used, and the cctests aren\u0027t as thorough when testing different variations of Grow, instances sharing memory etc. Would it be possible to turn on at least a subset of the mjsunit+gcstress tests with this CL? This would increase confidence because: \n - It proves that this CL will resolve some of the memory exhaustion issues which were the reason the mjsunit tests were turned off. \n - Better testing for wasm traps + memory edge cases. \n\n+titzer@ in case my understanding of how we keep objects live during instantiation is incorrect.",
+      "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
