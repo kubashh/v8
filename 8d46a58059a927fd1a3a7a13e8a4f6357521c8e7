@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "208d6177_4073bd37",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-03-29T16:44:44Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. I was able to remove the second call to CollectGarbage and that seems to work fine.\n\nBased on current usage patterns, this is an extremely rare case. It\u0027s only needed after a page creates 128 wasm memories that weren\u0027t otherwise collected. For the most part, pages make 1 or 2 memories. We\u0027ve only hit this issue in some of our tests which create many wasm memories very rapidly to test small modules in isolation.",
+      "parentUuid": "48f6b2f7_d08df1ad",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 75
+      },
+      "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "592e584d_084cc9c9",
         "filename": "src/wasm/wasm-memory.cc",
         "patchSetId": 3
