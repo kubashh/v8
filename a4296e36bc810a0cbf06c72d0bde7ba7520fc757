@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21540d34_558d4b67",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-29T11:39:35Z",
+      "side": 1,
+      "message": "I would store the require_runtime_check bit on the DebugInfo and use it when switching between the debug execution modes.\n\nThe issue with doing the patching here is that it\u0027s hard to reason about in which mode the debug BytecodeArray should be in. That\u0027s why you require this weird logic in Debug::ClearAllSideEffectChecks to not only restore breakpoints, but also clear the flag for computed_has_no_side_effect so that we later need to run this code again, even though we just need to rerun PatchWithSideEffectChecks.",
+      "range": {
+        "startLine": 908,
+        "startChar": 14,
+        "endLine": 908,
+        "endChar": 35
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5757ce5_76d11a25",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-29T11:39:35Z",
+      "side": 1,
+      "message": "As explained below, I would like to not have this mixed into debug break logic.",
+      "range": {
+        "startLine": 718,
+        "startChar": 18,
+        "endLine": 718,
+        "endChar": 37
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e23a31_bc51af19",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2298,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-29T11:39:35Z",
+      "side": 1,
+      "message": "I would rename this function to PrepareFunctionForDebugExecution",
+      "range": {
+        "startLine": 2298,
+        "startChar": 2,
+        "endLine": 2298,
+        "endChar": 31
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ceeb0c_eaccff38",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-29T11:39:35Z",
+      "side": 1,
+      "message": "Mixing breakpoints with side effect checks is pretty confusing. I would like to strictly separate the mode where we break at breakpoints, and the mode where we perform side-effect checks.\n\nThis implies:\n- Introducing ClearSideEffectChecks and ApplySideEffectChecks as equivalents to ClearBreakPoints and ApplyBreakPoints.\n- Prior to using either mode, PrepareFunctionForDebugExecution (formerly PrepareFunctionForBreakPoints) needs to be called.\n- A central way to switch a debug BytecodeArray from side effect check mode and breakpoint mode, and a bit on the DebugInfo to store in which mode the BytecodeArray is currently in.\n- A central way to apply and clear patching, depending on what mode the DebugInfo is in.\n- Introduce a builtin LoadDebugBytecodeArray to be called from the InterpreterEntryTrampline if the function has DebugInfo.\n- If the mode stored on the DebugInfo does not match isolate-\u003eneeds_side_effect_check_ (maybe rename this into debug_execution_mode_), we go into runtime to switch the mode (by applying the appropriate patching).\n- Runtime_DebugBreakOnBytecode asserts that the mode on the DebugInfo matches isolate-\u003edebug_execution_mode_, and calls either into Debug::Break or Debug::PerformSideEffectCheck.\n\nThat way it is clear that we have two distinct ways to use the debug copy of the BytecodeArray, and don\u0027t mix them. Since we switch mode lazily, you would also not need to eagerly unpatch side effects, and we can be sure that we are executing in the correct debugging mode.",
+      "range": {
+        "startLine": 2302,
+        "startChar": 2,
+        "endLine": 2302,
+        "endChar": 18
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a36ac82_00e24867",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-03-29T11:39:35Z",
+      "side": 1,
+      "message": "Can we move these two into StartTrackingTemporaryObjects and rename it to StartSideEffectChecking? In fact, let\u0027s move this entire class into Debug.",
+      "range": {
+        "startLine": 2507,
+        "startChar": 0,
+        "endLine": 2508,
+        "endChar": 54
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
