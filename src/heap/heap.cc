@@ -185,7 +185,7 @@ Heap::Heap()
       mmap_region_base_(0),
       remembered_unmapped_pages_index_(0),
       old_generation_allocation_limit_(initial_old_generation_size_),
-      inline_allocation_disabled_(false),
+      inline_allocation_disabled_(0),
       tracer_(nullptr),
       promoted_objects_size_(0),
       promotion_ratio_(0),
@@ -440,6 +440,20 @@ void Heap::ReportStatisticsAfterGC() {
       isolate()->CountUsage(static_cast<v8::Isolate::UseCounterFeature>(i));
     }
   }
+}
+
+void Heap::AddHeapObjectAllocationTracker(
+    HeapObjectAllocationTracker* tracker) {
+  if (allocation_trackers_.empty()) DisableInlineAllocation();
+  allocation_trackers_.push_back(tracker);
+}
+
+void Heap::RemoveHeapObjectAllocationTracker(
+    HeapObjectAllocationTracker* tracker) {
+  allocation_trackers_.erase(std::remove(allocation_trackers_.begin(),
+                                         allocation_trackers_.end(), tracker),
+                             allocation_trackers_.end());
+  if (allocation_trackers_.empty()) EnableInlineAllocation();
 }
 
 void Heap::AddRetainingPathTarget(Handle<HeapObject> object,
@@ -1941,7 +1955,8 @@ static bool IsLogging(Isolate* isolate) {
   return FLAG_verify_predictable || isolate->logger()->is_logging() ||
          isolate->is_profiling() ||
          (isolate->heap_profiler() != nullptr &&
-          isolate->heap_profiler()->is_tracking_object_moves());
+          isolate->heap_profiler()->is_tracking_object_moves()) ||
+         isolate->heap()->has_heap_object_allocation_tracker();
 }
 
 class PageScavengingItem final : public ItemParallelJob::Item {
@@ -3149,9 +3164,8 @@ void Heap::RightTrimFixedArray(FixedArrayBase* object, int elements_to_trim) {
 
   // Notify the heap profiler of change in object layout. The array may not be
   // moved during GC, and size has to be adjusted nevertheless.
-  HeapProfiler* profiler = isolate()->heap_profiler();
-  if (profiler->is_tracking_allocations()) {
-    profiler->UpdateObjectSizeEvent(object->address(), object->Size());
+  for (auto& tracker : allocation_trackers_) {
+    tracker->UpdateObjectSizeEvent(object->address(), object->Size());
   }
 }
 
@@ -5762,8 +5776,9 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
 }
 
 void Heap::EnableInlineAllocation() {
-  if (!inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = false;
+  DCHECK_GT(inline_allocation_disabled_, 0);
+  --inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 0) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);
@@ -5771,8 +5786,8 @@ void Heap::EnableInlineAllocation() {
 
 
 void Heap::DisableInlineAllocation() {
-  if (inline_allocation_disabled_) return;
-  inline_allocation_disabled_ = true;
+  ++inline_allocation_disabled_;
+  if (inline_allocation_disabled_ > 1) return;
 
   // Update inline allocation limit for new space.
   new_space()->UpdateInlineAllocationLimit(0);

@@ -419,6 +419,7 @@ class GCIdleTimeAction;
 class GCIdleTimeHandler;
 class GCIdleTimeHeapState;
 class GCTracer;
+class HeapObjectAllocationTracker;
 class HeapObjectsFilter;
 class HeapStats;
 class HistogramTimer;
@@ -1146,7 +1147,7 @@ class Heap {
   // ===========================================================================
 
   // Indicates whether inline bump-pointer allocation has been disabled.
-  bool inline_allocation_disabled() { return inline_allocation_disabled_; }
+  bool inline_allocation_disabled() { return inline_allocation_disabled_ > 0; }
 
   // Switch whether inline bump-pointer allocation should be used.
   void EnableInlineAllocation();
@@ -1608,6 +1609,16 @@ class Heap {
   bool allocation_step_in_progress() { return allocation_step_in_progress_; }
   void set_allocation_step_in_progress(bool val) {
     allocation_step_in_progress_ = val;
+  }
+
+  // ===========================================================================
+  // Heap object allocation tracking. ==========================================
+  // ===========================================================================
+
+  void AddHeapObjectAllocationTracker(HeapObjectAllocationTracker* tracker);
+  void RemoveHeapObjectAllocationTracker(HeapObjectAllocationTracker* tracker);
+  bool has_heap_object_allocation_tracker() const {
+    return !allocation_trackers_.empty();
   }
 
   // ===========================================================================
@@ -2508,7 +2519,7 @@ class Heap {
 
   // Indicates that inline bump-pointer allocation has been globally disabled
   // for all spaces. This is used to disable allocations in generated code.
-  bool inline_allocation_disabled_;
+  int inline_allocation_disabled_;
 
   // Weak list heads, threaded through the objects.
   // List heads are initialized lazily and contain the undefined_value at start.
@@ -2661,6 +2672,8 @@ class Heap {
   // For each index inthe retaining_path_targets_ array this map
   // stores the option of the corresponding target.
   std::map<int, RetainingPathOption> retaining_path_target_option_;
+
+  std::vector<HeapObjectAllocationTracker*> allocation_trackers_;
 
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
@@ -2933,6 +2946,16 @@ class AllocationObserver {
 };
 
 V8_EXPORT_PRIVATE const char* AllocationSpaceName(AllocationSpace space);
+
+// -----------------------------------------------------------------------------
+// Allows observation of heap object allocations.
+class HeapObjectAllocationTracker {
+ public:
+  virtual void AllocationEvent(Address addr, int size) = 0;
+  virtual void MoveEvent(Address from, Address to, int size) {}
+  virtual void UpdateObjectSizeEvent(Address addr, int size) {}
+  virtual ~HeapObjectAllocationTracker() = default;
+};
 
 }  // namespace internal
 }  // namespace v8
