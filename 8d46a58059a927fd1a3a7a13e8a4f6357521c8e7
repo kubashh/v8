@@ -134,6 +134,24 @@
       "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dced09c_a97afa5f",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-03-29T21:38:54Z",
+      "side": 1,
+      "message": "Awesome, thanks!",
+      "parentUuid": "ae19b493_85a064e0",
+      "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
