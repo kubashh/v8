@@ -46,6 +46,30 @@
       "revId": "6ad309942d28ebcdb3d73018660859798b4eaf17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e23729d_799d8289",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5704,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-29T21:51:33Z",
+      "side": 1,
+      "message": "I introduced AllocationTracker. The problem is that heap_profiler by default needs only move event and enabled inline allocations, when it tracks allocations it needs allocation, move and update size events, and disabled inline allocations.\nDebugger requires allocation and moves events with disabled inline allocations. So I need to have all three event as part of tracker and additionally call MoveEvent on heap profiler when it is needed if I would like to use existing of tracker as trigger of inline allocations.\nPlease take a look!",
+      "parentUuid": "58293908_88e53cdb",
+      "range": {
+        "startLine": 5704,
+        "startChar": 2,
+        "endLine": 5704,
+        "endChar": 32
+      },
+      "revId": "6ad309942d28ebcdb3d73018660859798b4eaf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
