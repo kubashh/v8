@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "48f6b2f7_d08df1ad",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-29T09:59:42Z",
+      "side": 1,
+      "message": "MemoryPressureNotification forces GC in all spaces. The second GC should not be needed unless there is floating garbage due to finalizers.\n\nAndreas, Michael, and Ben recently converted multiple wasm finalized handles to phantom handles, which removed the floating garbage. Could you please re-check your scenario on TOT?\n\nIt could be that the failure is already fixed or that we don\u0027t need the second GC (heap-\u003eCollectGarbage)\n\nIf the second GC still helps, then let\u0027s replace heap-\u003eCollectGarbage with \n\"if (!ReserveAddressSpace()) MemoryPressureNotification();\"\n\nNote that GC triggered by MemoryPressureNotification is a non-incremental GC, which can take hundreds on milliseconds.  If this path is triggered frequently in common cases, then Chrome will become unresponsive.",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 75
+      },
+      "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "592e584d_084cc9c9",
         "filename": "src/wasm/wasm-memory.cc",
         "patchSetId": 3
@@ -49,6 +72,23 @@
       "side": 1,
       "message": "Thanks for kicking off the GC stress trybots! It would be good to re-enable all the tests for the configuration, but as a starting point I\u0027d be ok with enabling the memory specific tests, and the js-api tests under gc-stress here - https://cs.chromium.org/chromium/src/v8/test/mjsunit/mjsunit.status?q\u003dmjsunit.stat\u0026sq\u003dpackage:chromium\u0026l\u003d787). Specifically the memory related tests in test/mjsunit/wasm/(grow-memory*, memory*, import-memory.js, instance-memory-gc-stress.js, module-memory.js etc.) would be a good sanity check.",
       "parentUuid": "faf282d9_b43a61d7",
+      "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da76179a_3c5b9d22",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-29T09:59:42Z",
+      "side": 1,
+      "message": "There is DisallowHeapAllocation scope if you want to check that no GC happens while you are initializing the object.\n\nThat being said, it is better to write code that is not sensitive to GC timing. Because that is a bug farm.",
       "revId": "8d46a58059a927fd1a3a7a13e8a4f6357521c8e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
