@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16c147be_9b845917",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Ah, this one doesn\u0027t initialize the class field. In the case of an indirect call, which loads a target instance from a table, it passes an explicit node. This check here supplies the instance from the class field if none was passed.",
+      "parentUuid": "e57438cc_0d369258",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb46e794_5c970003",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "60b63cbc_62a0f39d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2608,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "I see your reasoning, so I could go either way. However, the LOAD_INSTANCE_FIELD macro should actually not be used with with other instances, and should only load from the \"this\" instance, which is a class field. Making it a parameter actually invites misuses. It is also more symmetric with the liftoff implementation.",
+      "parentUuid": "cb46e794_5c970003",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5195847e_2ffd5c5d",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-26T13:09:16Z",
       "side": 1,
       "message": "I think you should assign target_node to *effect_, to build a nice effect chain.",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "900375c8_91f0d946",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "This was intentional. Nothing needs to effect-depend on the load of an immutable field. In general, since we are generating a scheduled graph, we put in minimal dependencies and the scheduler will sort it out.",
+      "parentUuid": "5195847e_2ffd5c5d",
       "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +153,54 @@
     },
     {
       "key": {
+        "uuid": "4c2b5117_bc5811af",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Good idea.",
+      "parentUuid": "fe40b59e_9a5123b3",
+      "range": {
+        "startLine": 2694,
+        "startChar": 23,
+        "endLine": 2694,
+        "endChar": 39
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f4e4f0a_e3b467ce",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Also choosing to have more relaxed effects here, as was discussed in previous CLs. It is only necessary to make subsequent stores dependent on loads, but the following call will become the next effect dependency anyway and value-depends on these loads.",
+      "parentUuid": "15b123f5_c35bf5ef",
+      "range": {
+        "startLine": 2694,
+        "startChar": 42,
+        "endLine": 2694,
+        "endChar": 49
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "858a7ef3_61490f64",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
@@ -110,6 +212,24 @@
       "writtenOn": "2018-03-26T13:09:16Z",
       "side": 1,
       "message": "also here, assign a new value to *effect_.",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e53982_1ce605d6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "858a7ef3_61490f64",
       "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "ac41aab8_1433663c",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cee8751d_6a558773",
+      "range": {
+        "startLine": 3064,
+        "startChar": 7,
+        "endLine": 3064,
+        "endChar": 14
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ac3868a_7af65252",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "f5104772_1e0c2b13",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3237,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Good catch, which is why I introduced it :)",
+      "parentUuid": "0ac3868a_7af65252",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6be7bb07_57482def",
         "filename": "src/elements.h",
         "patchSetId": 7
@@ -167,6 +329,30 @@
       "writtenOn": "2018-03-26T13:09:16Z",
       "side": 1,
       "message": "Should \"unshindirect\" mean something? Why do you do the renaming in this CL?",
+      "range": {
+        "startLine": 141,
+        "startChar": 36,
+        "endLine": 141,
+        "endChar": 48
+      },
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce602c89_5cf80911",
+        "filename": "src/elements.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-03-29T14:39:35Z",
+      "side": 1,
+      "message": "Good catch. Was a result of sed-based refactoring :)\nThanks C++!",
+      "parentUuid": "6be7bb07_57482def",
       "range": {
         "startLine": 141,
         "startChar": 36,
