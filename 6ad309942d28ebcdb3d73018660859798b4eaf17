@@ -22,6 +22,30 @@
       "revId": "6ad309942d28ebcdb3d73018660859798b4eaf17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58293908_88e53cdb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5704,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-03-29T10:58:07Z",
+      "side": 1,
+      "message": "This inline allocation API works OK for a single user, but is fragile for multiple users. Because they have to coordinate enabling/disabling.\n\nI think it would be cleaner if heap would not expose the inline allocation state.\nInstead the heap should provide high-level API:\n\nHeap::AddAllocationTracker(AllocationTracker*);\nHeap::RemoveAllocationTracker(AllocationTracker*);\n\nIf there is at least one allocation tracker, then the heap disables inline allocation.\nThe heap calls AllocationTracker::OnMoveEvent, AllocationTracker::OnAllocationEvent for each registered allocation.\n\nWDYT?",
+      "parentUuid": "f0b7fa8f_923d0222",
+      "range": {
+        "startLine": 5704,
+        "startChar": 2,
+        "endLine": 5704,
+        "endChar": 32
+      },
+      "revId": "6ad309942d28ebcdb3d73018660859798b4eaf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
