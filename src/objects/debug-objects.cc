@@ -26,6 +26,7 @@ bool DebugInfo::ClearBreakInfo() {
   int new_flags = flags();
   new_flags &= ~kHasBreakInfo & ~kPreparedForBreakpoints;
   new_flags &= ~kBreakAtEntry & ~kCanBreakAtEntry;
+  new_flags &= ~kHasSideEffectChecks;
   set_flags(new_flags);
 
   return new_flags == kNone;
@@ -194,6 +195,18 @@ bool DebugInfo::ClearCoverageInfo() {
     set_flags(new_flags);
   }
   return flags() == kNone;
+}
+
+bool DebugInfo::HasSideEffectChecks() const {
+  return (flags() & kHasSideEffectChecks) != 0;
+}
+
+void DebugInfo::SetHasSideEffectChecks() {
+  set_flags(flags() | kHasSideEffectChecks);
+}
+
+void DebugInfo::ClearHasSideEffectChecks() {
+  set_flags(flags() & ~kHasSideEffectChecks);
 }
 
 namespace {
