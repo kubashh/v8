@@ -5,6 +5,7 @@
 #include "src/debug/debug.h"
 
 #include <memory>
+#include <unordered_set>
 
 #include "src/api.h"
 #include "src/arguments.h"
@@ -34,6 +35,36 @@
 namespace v8 {
 namespace internal {
 
+class Debug::TemporaryObjectsTracker : public HeapObjectAllocationTracker {
+ public:
+  TemporaryObjectsTracker() = default;
+  ~TemporaryObjectsTracker() = default;
+
+  void AllocationEvent(Address addr, int) override { objects_.insert(addr); }
+
+  void MoveEvent(Address from, Address to, int) override {
+    if (from == to) return;
+    auto it = objects_.find(from);
+    if (it == objects_.end()) {
+      // If temporary object was collected we can get MoveEvent which moves
+      // existing non temporary object to the address where we had temporary
+      // object. So we should mark new address as non temporary.
+      objects_.erase(to);
+      return;
+    }
+    objects_.erase(it);
+    objects_.insert(to);
+  }
+
+  bool HasObject(Address addr) const {
+    return objects_.find(addr) != objects_.end();
+  }
+
+ private:
+  std::unordered_set<Address> objects_;
+  DISALLOW_COPY_AND_ASSIGN(TemporaryObjectsTracker);
+};
+
 Debug::Debug(Isolate* isolate)
     : debug_context_(Handle<Context>()),
       is_active_(false),
@@ -50,6 +81,8 @@ Debug::Debug(Isolate* isolate)
       isolate_(isolate) {
   ThreadInit();
 }
+
+Debug::~Debug() { DCHECK_NULL(debug_delegate_); }
 
 BreakLocation BreakLocation::FromFrame(Handle<DebugInfo> debug_info,
                                        JavaScriptFrame* frame) {
@@ -156,9 +189,7 @@ BreakIterator::BreakIterator(Handle<DebugInfo> debug_info)
           debug_info->DebugBytecodeArray()->SourcePositionTable()) {
   position_ = debug_info->shared()->StartPosition();
   statement_position_ = position_;
-  // There is at least one break location.
-  DCHECK(!Done());
-  Next();
+  if (!Done()) Next();
 }
 
 int BreakIterator::BreakIndexFromPosition(int source_position) {
@@ -690,10 +721,14 @@ int Debug::FindBreakablePosition(Handle<DebugInfo> debug_info,
 }
 
 void Debug::ApplyBreakPoints(Handle<DebugInfo> debug_info) {
-  DisallowHeapAllocation no_gc;
-  if (debug_info->CanBreakAtEntry()) {
+  if (debug_info->HasSideEffectChecks()) {
+    DCHECK(debug_info->HasDebugBytecodeArray());
+    DebugEvaluate::PatchWithSideEffectChecks(
+        handle(debug_info->DebugBytecodeArray()));
+  } else if (debug_info->CanBreakAtEntry()) {
     debug_info->SetBreakAtEntry();
   } else {
+    DisallowHeapAllocation no_gc;
     if (!debug_info->HasDebugBytecodeArray()) return;
     FixedArray* break_points = debug_info->break_points();
     for (int i = 0; i < break_points->length(); i++) {
@@ -709,7 +744,13 @@ void Debug::ApplyBreakPoints(Handle<DebugInfo> debug_info) {
 }
 
 void Debug::ClearBreakPoints(Handle<DebugInfo> debug_info) {
-  if (debug_info->CanBreakAtEntry()) {
+  if (debug_info->HasSideEffectChecks()) {
+    DCHECK(debug_info->HasDebugBytecodeArray());
+    Handle<BytecodeArray> original(debug_info->OriginalBytecodeArray());
+    Handle<BytecodeArray> debug_copy(
+        isolate_->factory()->CopyBytecodeArray(original));
+    debug_info->set_debug_bytecode_array(*debug_copy);
+  } else if (debug_info->CanBreakAtEntry()) {
     debug_info->ClearBreakAtEntry();
   } else {
     // If we attempt to clear breakpoints but none exist, simply return. This
@@ -1418,7 +1459,8 @@ Handle<Object> Debug::FindSharedFunctionInfoInScript(Handle<Script> script,
 bool Debug::EnsureBreakInfo(Handle<SharedFunctionInfo> shared) {
   // Return if we already have the break info for shared.
   if (shared->HasBreakInfo()) return true;
-  if (!shared->IsSubjectToDebugging() && !CanBreakAtEntry(shared)) {
+  if (!shared->IsSubjectToDebugging() && !CanBreakAtEntry(shared) &&
+      !shared->HasBytecodeArray()) {
     return false;
   }
   if (!shared->is_compiled() &&
@@ -2254,6 +2296,19 @@ ReturnValueScope::~ReturnValueScope() {
   debug_->set_return_value(*return_value_);
 }
 
+bool Debug::PrepareFunctionForSideEffectChecks(
+    Handle<SharedFunctionInfo> shared, bool requires_runtime_check) {
+  DCHECK(shared->HasBytecodeArray());
+  if (!shared->HasBreakInfo() && !requires_runtime_check) return true;
+  if (!EnsureBreakInfo(shared)) return false;
+  PrepareFunctionForBreakPoints(shared);
+  Handle<DebugInfo> debug_info = GetOrCreateDebugInfo(shared);
+  ClearBreakPoints(debug_info);
+  debug_info->SetHasSideEffectChecks();
+  ApplyBreakPoints(debug_info);
+  return true;
+}
+
 bool Debug::PerformSideEffectCheck(Handle<JSFunction> function) {
   DCHECK(isolate_->needs_side_effect_check());
   DisallowJavascriptExecution no_js(isolate_);
@@ -2282,6 +2337,60 @@ bool Debug::PerformSideEffectCheckForCallback(Object* callback_info) {
   isolate_->TerminateExecution();
   isolate_->OptionalRescheduleException(false);
   return false;
+}
+
+void Debug::ClearAllSideEffectChecks() {
+  ClearAllDebugInfos([=](Handle<DebugInfo> info) {
+    if (!info->HasSideEffectChecks()) return false;
+    info->shared()->set_computed_has_no_side_effect(false);
+    ClearBreakPoints(info);
+    info->ClearHasSideEffectChecks();
+    if (info->BreakAtEntry() || info->GetBreakPointCount()) {
+      ApplyBreakPoints(info);
+      return false;
+    }
+    return info->ClearBreakInfo();
+  });
+}
+
+bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
+  DCHECK(isolate_->needs_side_effect_check());
+  if (object->IsHeapObject()) {
+    Address address = Handle<HeapObject>::cast(object)->address();
+    if (temporary_objects_->HasObject(address)) {
+      return true;
+    }
+  }
+  if (FLAG_trace_side_effect_free_debug_evaluate) {
+    JavaScriptFrameIterator it(isolate_);
+    InterpretedFrame* interpreted_frame =
+        reinterpret_cast<InterpretedFrame*>(it.frame());
+    SharedFunctionInfo* shared = interpreted_frame->function()->shared();
+    BytecodeArray* bytecode_array = shared->bytecode_array();
+    int bytecode_offset = interpreted_frame->GetBytecodeOffset();
+    interpreter::Bytecode bytecode =
+        interpreter::Bytecodes::FromByte(bytecode_array->get(bytecode_offset));
+    PrintF("[debug-evaluate] %s failed runtime side effect check.\n",
+           interpreter::Bytecodes::ToString(bytecode));
+    object->Print();
+    shared->Print();
+  }
+  side_effect_check_failed_ = true;
+  // Throw an uncatchable termination exception.
+  isolate_->TerminateExecution();
+  return false;
+}
+
+void Debug::StartTrackingTemporaryObjects() {
+  DCHECK(!temporary_objects_);
+  temporary_objects_.reset(new TemporaryObjectsTracker());
+  isolate_->heap()->AddHeapObjectAllocationTracker(temporary_objects_.get());
+}
+
+void Debug::StopTrackingTemporaryObjects() {
+  DCHECK(!!temporary_objects_);
+  isolate_->heap()->RemoveHeapObjectAllocationTracker(temporary_objects_.get());
+  temporary_objects_.reset();
 }
 
 void LegacyDebugDelegate::PromiseEventOccurred(
@@ -2394,7 +2503,20 @@ void NativeDebugDelegate::ProcessDebugEvent(v8::DebugEvent event,
   CHECK(!isolate->has_scheduled_exception());
 }
 
+NoSideEffectScope::NoSideEffectScope(Isolate* isolate,
+                                     bool disallow_side_effects)
+    : isolate_(isolate) {
+  // NoSideEffectScope is not re-entrant if already enabled.
+  CHECK(!isolate->needs_side_effect_check());
+  if (!disallow_side_effects) return;
+  isolate->set_needs_side_effect_check(disallow_side_effects);
+  isolate->debug()->UpdateHookOnFunctionCall();
+  isolate->debug()->side_effect_check_failed_ = false;
+  isolate->debug()->StartTrackingTemporaryObjects();
+}
+
 NoSideEffectScope::~NoSideEffectScope() {
+  if (!isolate_->needs_side_effect_check()) return;
   if (isolate_->needs_side_effect_check() &&
       isolate_->debug()->side_effect_check_failed_) {
     DCHECK(isolate_->has_pending_exception());
@@ -2408,6 +2530,8 @@ NoSideEffectScope::~NoSideEffectScope() {
   isolate_->set_needs_side_effect_check(false);
   isolate_->debug()->UpdateHookOnFunctionCall();
   isolate_->debug()->side_effect_check_failed_ = false;
+  isolate_->debug()->StopTrackingTemporaryObjects();
+  isolate_->debug()->ClearAllSideEffectChecks();
 }
 
 }  // namespace internal

@@ -27,7 +27,8 @@ class DebugInfo : public Struct {
     kPreparedForBreakpoints = 1 << 1,
     kHasCoverageInfo = 1 << 2,
     kBreakAtEntry = 1 << 3,
-    kCanBreakAtEntry = 1 << 4
+    kCanBreakAtEntry = 1 << 4,
+    kHasSideEffectChecks = 1 << 5
   };
   typedef base::Flags<Flag> Flags;
 
@@ -100,6 +101,13 @@ class DebugInfo : public Struct {
   // DebugInfo is now empty.
   bool ClearCoverageInfo();
   DECL_ACCESSORS(coverage_info, Object)
+
+  // --- Side effect checks ---
+  // --------------------------
+
+  bool HasSideEffectChecks() const;
+  void SetHasSideEffectChecks();
+  void ClearHasSideEffectChecks();
 
   DECL_CAST(DebugInfo)
 

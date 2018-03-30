@@ -39,6 +39,7 @@ class DebugEvaluate : public AllStatic {
 
   static bool FunctionHasNoSideEffect(Handle<SharedFunctionInfo> info);
   static bool CallbackHasNoSideEffect(Object* callback_info);
+  static void PatchWithSideEffectChecks(Handle<BytecodeArray> bytecode_array);
 
  private:
   // This class builds a context chain for evaluation of expressions
