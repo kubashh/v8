@@ -3778,12 +3778,16 @@ Node* WasmGraphBuilder::BoundsCheckMem(uint8_t access_size, Node* index,
   Node* cond = graph()->NewNode(m->Uint32LessThan(), index, effective_size);
   TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
 
+#if V8_TARGET_ARCH_32_BIT
+  // On 64-bit platforms, memories have guard regions, so masking the index is
+  // not needed.
   if (untrusted_code_mitigations_) {
     // In the fallthrough case, condition the index with the memory mask.
     Node* mem_mask = context_cache_->mem_mask;
     DCHECK_NOT_NULL(mem_mask);
     index = graph()->NewNode(m->Word32And(), index, mem_mask);
   }
+#endif
   return Uint32ToUintptr(index);
 }
 
