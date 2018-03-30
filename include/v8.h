@@ -1857,6 +1857,35 @@ class V8_EXPORT JSON {
 };
 
 /**
+ * Points to an unowned continous buffer holding a known number of elements.
+ *
+ * This is similar to std::span (under considation for C++20), but does not
+ * require advanced C++ support. In the (far) future, this may be replaced with
+ * or aliased to std::span.
+ *
+ * To facilitate future migration, this class exposes a subset of the interface
+ * implemented by std::span.
+ */
+template <typename T>
+class V8_EXPORT MemorySpan {
+ public:
+  /** The default constructor creates an empty span. */
+  constexpr V8_INLINE MemorySpan() : data_(nullptr), size_(0) {}
+
+  constexpr V8_INLINE MemorySpan(T* data, size_t size)
+      : data_(data), size_(size) {}
+
+  /** Returns a pointer to the beginning of the buffer. */
+  constexpr V8_INLINE T* data() const { return data_; }
+  /** Returns the number of elements that the buffer holds. */
+  constexpr V8_INLINE size_t size() const { return size_; }
+
+ private:
+  T* const data_;
+  const size_t size_;
+};
+
+/**
  * Value serialization compatible with the HTML structured clone algorithm.
  * The format is backward-compatible (i.e. safe to store to disk).
  *
