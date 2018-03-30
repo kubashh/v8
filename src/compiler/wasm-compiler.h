@@ -91,6 +91,33 @@ enum RuntimeExceptionSupport : bool {
   kNoRuntimeExceptionSupport = false
 };
 
+// Information about Wasm compilation that needs to be plumbed through the
+// different layers of the compiler.
+class WasmCompilationData {
+ public:
+  explicit WasmCompilationData(RuntimeExceptionSupport);
+
+  void AddProtectedInstruction(trap_handler::ProtectedInstructionData data);
+
+  std::unique_ptr<std::vector<trap_handler::ProtectedInstructionData>>&&
+  ReleaseProtectedInstructions() {
+    return std::move(protected_instructions_);
+  }
+
+  RuntimeExceptionSupport runtime_exception_support() const {
+    return runtime_exception_support_;
+  }
+
+ private:
+  std::unique_ptr<std::vector<trap_handler::ProtectedInstructionData>>
+      protected_instructions_;
+
+  // See WasmGraphBuilder::runtime_exception_support_.
+  const RuntimeExceptionSupport runtime_exception_support_;
+
+  DISALLOW_COPY_AND_ASSIGN(WasmCompilationData);
+};
+
 class WasmCompilationUnit final {
  public:
   enum class CompilationMode : uint8_t { kLiftoff, kTurbofan };
@@ -106,7 +133,8 @@ class WasmCompilationUnit final {
                       Handle<Code> centry_stub,
                       CompilationMode = GetDefaultCompilationMode(),
                       Counters* = nullptr,
-                      RuntimeExceptionSupport = kRuntimeExceptionSupport,
+                      RuntimeExceptionSupport runtime_exception_support =
+                          kRuntimeExceptionSupport,
                       bool lower_simd = false);
 
   ~WasmCompilationUnit();
@@ -163,14 +191,11 @@ class WasmCompilationUnit final {
   Counters* counters_;
   Handle<Code> centry_stub_;
   int func_index_;
-  // See WasmGraphBuilder::runtime_exception_support_.
-  RuntimeExceptionSupport runtime_exception_support_;
   bool ok_ = true;
   size_t memory_cost_ = 0;
   wasm::NativeModule* native_module_;
   bool lower_simd_;
-  std::unique_ptr<std::vector<trap_handler::ProtectedInstructionData>>
-      protected_instructions_;
+  WasmCompilationData wasm_compilation_data_;
   CompilationMode mode_;
   // {liftoff_} is valid if mode_ == kLiftoff, tf_ if mode_ == kTurbofan.
   union {
