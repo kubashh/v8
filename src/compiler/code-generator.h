@@ -10,6 +10,7 @@
 #include "src/compiler/instruction.h"
 #include "src/compiler/osr.h"
 #include "src/compiler/unwinding-info-writer.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/deoptimizer.h"
 #include "src/macro-assembler.h"
 #include "src/safepoint-table.h"
@@ -85,8 +86,7 @@ class CodeGenerator final : public GapResolver::Assembler {
                          Isolate* isolate, base::Optional<OsrHelper> osr_helper,
                          int start_source_position,
                          JumpOptimizationInfo* jump_opt,
-                         std::vector<trap_handler::ProtectedInstructionData>*
-                             protected_instructions,
+                         WasmCompilationData* wasm_compilation_data,
                          PoisoningMitigationLevel poisoning_enabled);
 
   // Generate native code. After calling AssembleCode, call FinalizeCode to
@@ -107,6 +107,11 @@ class CodeGenerator final : public GapResolver::Assembler {
 
   void AddProtectedInstructionLanding(uint32_t instr_offset,
                                       uint32_t landing_offset);
+
+  bool runtime_exception_support() const {
+    DCHECK(wasm_compilation_data_);
+    return wasm_compilation_data_->runtime_exception_support();
+  }
 
   SourcePosition start_source_position() const {
     return start_source_position_;
@@ -414,7 +419,7 @@ class CodeGenerator final : public GapResolver::Assembler {
   int osr_pc_offset_;
   int optimized_out_literal_id_;
   SourcePositionTableBuilder source_position_table_builder_;
-  std::vector<trap_handler::ProtectedInstructionData>* protected_instructions_;
+  WasmCompilationData* wasm_compilation_data_;
   CodeGenResult result_;
   PoisoningMitigationLevel poisoning_enabled_;
 };
