@@ -112,7 +112,9 @@ class WasmCompilationData {
   std::unique_ptr<std::vector<trap_handler::ProtectedInstructionData>>
       protected_instructions_;
 
-  // See WasmGraphBuilder::runtime_exception_support_.
+  // If the runtime doesn't support exception propagation,
+  // we won't generate stack checks, and trap handling will also
+  // be generated differently in the code generator.
   const RuntimeExceptionSupport runtime_exception_support_;
 
   DISALLOW_COPY_AND_ASSIGN(WasmCompilationData);
@@ -267,8 +269,7 @@ class WasmGraphBuilder {
 
   WasmGraphBuilder(ModuleEnv* env, Zone* zone, JSGraph* graph,
                    Handle<Code> centry_stub, wasm::FunctionSig* sig,
-                   compiler::SourcePositionTable* spt = nullptr,
-                   RuntimeExceptionSupport res = kRuntimeExceptionSupport);
+                   compiler::SourcePositionTable* spt = nullptr);
 
   Node** Buffer(size_t count) {
     if (count > cur_bufsize_) {
@@ -487,10 +488,6 @@ class WasmGraphBuilder {
   bool has_simd_ = false;
   bool needs_stack_check_ = false;
   const bool untrusted_code_mitigations_ = true;
-  // If the runtime doesn't support exception propagation,
-  // we won't generate stack checks, and trap handling will also
-  // be generated differently.
-  const RuntimeExceptionSupport runtime_exception_support_;
 
   wasm::FunctionSig* const sig_;
   SetOncePointer<const Operator> allocate_heap_number_operator_;

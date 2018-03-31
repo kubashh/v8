@@ -277,12 +277,12 @@ void TestBuildingGraph(
   if (module) {
     compiler::WasmGraphBuilder builder(
         module, zone, jsgraph, CEntryStub(jsgraph->isolate(), 1).GetCode(), sig,
-        source_position_table, runtime_exception_support);
+        source_position_table);
     TestBuildingGraphWithBuilder(&builder, zone, sig, start, end);
   } else {
     compiler::WasmGraphBuilder builder(
         nullptr, zone, jsgraph, CEntryStub(jsgraph->isolate(), 1).GetCode(),
-        sig, source_position_table, runtime_exception_support);
+        sig, source_position_table);
     TestBuildingGraphWithBuilder(&builder, zone, sig, start, end);
   }
 }

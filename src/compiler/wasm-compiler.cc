@@ -83,8 +83,7 @@ bool ContainsSimd(wasm::FunctionSig* sig) {
 WasmGraphBuilder::WasmGraphBuilder(
     ModuleEnv* env, Zone* zone, JSGraph* jsgraph, Handle<Code> centry_stub,
     wasm::FunctionSig* sig,
-    compiler::SourcePositionTable* source_position_table,
-    RuntimeExceptionSupport exception_support)
+    compiler::SourcePositionTable* source_position_table)
     : zone_(zone),
       jsgraph_(jsgraph),
       centry_stub_node_(jsgraph_->HeapConstant(centry_stub)),
@@ -94,7 +93,6 @@ WasmGraphBuilder::WasmGraphBuilder(
       cur_bufsize_(kDefaultBufferSize),
       has_simd_(ContainsSimd(sig)),
       untrusted_code_mitigations_(FLAG_untrusted_code_mitigations),
-      runtime_exception_support_(exception_support),
       sig_(sig),
       source_position_table_(source_position_table) {
   DCHECK_IMPLIES(use_trap_handler(), trap_handler::IsTrapHandlerEnabled());
@@ -205,7 +203,7 @@ void WasmGraphBuilder::StackCheck(wasm::WasmCodePosition position,
                                   Node** effect, Node** control) {
   // TODO(mtrofin): "!env_" happens when we generate a wrapper.
   // We should factor wrappers separately from wasm codegen.
-  if (FLAG_wasm_no_stack_checks || !env_ || !runtime_exception_support_) {
+  if (FLAG_wasm_no_stack_checks || !env_) {
     return;
   }
   if (effect == nullptr) effect = effect_;
@@ -860,13 +858,6 @@ Node* WasmGraphBuilder::BranchExpectFalse(Node* cond, Node** true_node,
 }
 
 Builtins::Name WasmGraphBuilder::GetBuiltinIdForTrap(wasm::TrapReason reason) {
-  if (runtime_exception_support_ == kNoRuntimeExceptionSupport) {
-    // We use Builtins::builtin_count as a marker to tell the code generator
-    // to generate a call to a testing c-function instead of a runtime
-    // function. This code should only be called from a cctest.
-    return Builtins::builtin_count;
-  }
-
   switch (reason) {
 #define TRAPREASON_TO_MESSAGE(name) \
   case wasm::k##name:               \
@@ -5059,8 +5050,7 @@ SourcePositionTable* WasmCompilationUnit::BuildGraphForWasmFunction(
   SourcePositionTable* source_position_table =
       new (tf_.jsgraph_->zone()) SourcePositionTable(tf_.jsgraph_->graph());
   WasmGraphBuilder builder(env_, tf_.jsgraph_->zone(), tf_.jsgraph_,
-                           centry_stub_, func_body_.sig, source_position_table,
-                           wasm_compilation_data_.runtime_exception_support());
+                           centry_stub_, func_body_.sig, source_position_table);
   tf_.graph_construction_result_ =
       wasm::BuildTFGraph(isolate_->allocator(), &builder, func_body_);
   if (tf_.graph_construction_result_.failed()) {
