@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c03e8108_1bd3a09b",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-03-31T00:00:30Z",
+      "side": 1,
+      "message": "I actually added this logic intentionally to cleanup debug bytecode array and debug info, to allow further function optimizations. I can avoid this stuff only if I introduce LoadDebugBytecodeArray and this function will properly patch bytecode if needed or remove debug_info if it is not needed any more.",
+      "parentUuid": "21540d34_558d4b67",
+      "range": {
+        "startLine": 908,
+        "startChar": 14,
+        "endLine": 908,
+        "endChar": 35
+      },
+      "revId": "a4296e36bc810a0cbf06c72d0bde7ba7520fc757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5757ce5_76d11a25",
         "filename": "src/debug/debug.cc",
         "patchSetId": 23
