@@ -143,6 +143,7 @@ namespace internal {
   F(DebugGetPrototype, 1, 1)                    \
   F(DebugIsActive, 0, 1)                        \
   F(DebugOnFunctionCall, 1, 1)                  \
+  F(DebugPatchBytecode, 1, 1)                   \
   F(DebugPopPromise, 0, 1)                      \
   F(DebugPrepareStepInSuspendedGenerator, 0, 1) \
   F(DebugPropertyAttributesFromDetails, 1, 1)   \

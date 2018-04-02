@@ -1044,11 +1044,26 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
   __ SmiToInteger32(kScratchRegister,
                     FieldOperand(rcx, DebugInfo::kFlagsOffset));
-  __ testl(kScratchRegister, Immediate(DebugInfo::kHasBreakInfo));
+  __ testl(kScratchRegister, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ j(zero, &bytecode_array_loaded);
+
+  Label patch_bytecode;
+  ExternalReference debug_execution_mode_address =
+      ExternalReference::debug_execution_mode_address(masm->isolate());
+  Operand debug_execution_mode =
+      masm->ExternalOperand(debug_execution_mode_address);
+  __ movb(kScratchRegister,
+          FieldOperand(kScratchRegister, DebugInfo::kDebugExecutionMode));
+  __ cmpw(kScratchRegister, debug_execution_mode);
+  __ j(not_equal, &patch_bytecode);
   __ movp(kInterpreterBytecodeArrayRegister,
           FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  __ bind(&patch_bytecode);
+  __ Push(closure);
+  __ CallRuntime(Runtime::kDebugPatchBytecode);
+  __ jmp(&maybe_load_debug_bytecode_array);
 }
 
 static void Generate_InterpreterPushArgs(MacroAssembler* masm,

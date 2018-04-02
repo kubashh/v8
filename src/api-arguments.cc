@@ -19,7 +19,7 @@ Handle<Object> FunctionCallbackArguments::Call(CallHandlerInfo* handler) {
   RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kFunctionCallback);
   v8::FunctionCallback f =
       v8::ToCData<v8::FunctionCallback>(handler->callback());
-  if (isolate->needs_side_effect_check() &&
+  if (isolate->debug_execution_mode() &&
       !isolate->debug()->PerformSideEffectCheckForCallback(handler)) {
     return Handle<Object>();
   }

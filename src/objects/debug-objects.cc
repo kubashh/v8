@@ -12,19 +12,35 @@ bool DebugInfo::IsEmpty() const { return flags() == kNone; }
 
 bool DebugInfo::HasBreakInfo() const { return (flags() & kHasBreakInfo) != 0; }
 
-bool DebugInfo::IsPreparedForBreakpoints() const {
-  DCHECK(HasBreakInfo());
-  return (flags() & kPreparedForBreakpoints) != 0;
+bool DebugInfo::IsPreparedForDebugExecution() const {
+  return (flags() & kPreparedForDebugExecution) != 0;
+}
+
+bool DebugInfo::DebugExecutionMode() const {
+  return (flags() & kDebugExecutionMode) != 0;
+}
+
+void DebugInfo::SetDebugExecutionMode(bool value) {
+  DCHECK(IsPreparedForDebugExecution());
+  set_flags(value ? (flags() | kDebugExecutionMode)
+                  : (flags() & ~kDebugExecutionMode));
+}
+
+void DebugInfo::SetDebugBytecodeArray(Object* maybe_debug_bytecode_array) {
+  set_debug_bytecode_array(maybe_debug_bytecode_array);
+  set_flags(maybe_debug_bytecode_array->IsBytecodeArray()
+                ? (flags() | kHasDebugBytecodeArray)
+                : (flags() & ~kHasDebugBytecodeArray));
 }
 
 bool DebugInfo::ClearBreakInfo() {
   Isolate* isolate = GetIsolate();
 
-  set_debug_bytecode_array(isolate->heap()->undefined_value());
+  SetDebugBytecodeArray(isolate->heap()->undefined_value());
   set_break_points(isolate->heap()->empty_fixed_array());
 
   int new_flags = flags();
-  new_flags &= ~kHasBreakInfo & ~kPreparedForBreakpoints;
+  new_flags &= ~kHasBreakInfo & ~kPreparedForDebugExecution;
   new_flags &= ~kBreakAtEntry & ~kCanBreakAtEntry;
   set_flags(new_flags);
 

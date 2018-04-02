@@ -24,7 +24,7 @@ namespace internal {
 
 #define PREPARE_CALLBACK_INFO(ISOLATE, F, RETURN_VALUE, API_RETURN_TYPE, \
                               CALLBACK_INFO)                             \
-  if (ISOLATE->needs_side_effect_check() &&                              \
+  if (ISOLATE->debug_execution_mode() &&                                 \
       !PerformSideEffectCheck(ISOLATE, CALLBACK_INFO)) {                 \
     return RETURN_VALUE();                                               \
   }                                                                      \
@@ -123,7 +123,7 @@ Handle<Object> PropertyCallbackArguments::CallNamedSetter(
   Isolate* isolate = this->isolate();
   RuntimeCallTimerScope timer(isolate,
                               RuntimeCallCounterId::kNamedSetterCallback);
-  DCHECK(!isolate->needs_side_effect_check());
+  DCHECK(!isolate->debug_execution_mode());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -143,7 +143,7 @@ Handle<Object> PropertyCallbackArguments::CallNamedDefiner(
   GenericNamedPropertyDefinerCallback f =
       ToCData<GenericNamedPropertyDefinerCallback>(interceptor->definer());
   // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
+  DCHECK(!isolate->debug_execution_mode());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -162,7 +162,7 @@ Handle<Object> PropertyCallbackArguments::CallIndexedSetter(
   IndexedPropertySetterCallback f =
       ToCData<IndexedPropertySetterCallback>(interceptor->setter());
   // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
+  DCHECK(!isolate->debug_execution_mode());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -182,7 +182,7 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDefiner(
   IndexedPropertyDefinerCallback f =
       ToCData<IndexedPropertyDefinerCallback>(interceptor->definer());
   // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
+  DCHECK(!isolate->debug_execution_mode());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -261,7 +261,7 @@ Handle<Object> PropertyCallbackArguments::CallAccessorSetter(
   AccessorNameSetterCallback f =
       ToCData<AccessorNameSetterCallback>(accessor_info->setter());
   // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
+  DCHECK(!isolate->debug_execution_mode());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, void,
                         side_effect_check_not_supported);

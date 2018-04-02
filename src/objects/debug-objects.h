@@ -24,10 +24,12 @@ class DebugInfo : public Struct {
   enum Flag {
     kNone = 0,
     kHasBreakInfo = 1 << 0,
-    kPreparedForBreakpoints = 1 << 1,
+    kPreparedForDebugExecution = 1 << 1,
     kHasCoverageInfo = 1 << 2,
     kBreakAtEntry = 1 << 3,
-    kCanBreakAtEntry = 1 << 4
+    kCanBreakAtEntry = 1 << 4,
+    kDebugExecutionMode = 1 << 5,
+    kHasDebugBytecodeArray = 1 << 6
   };
   typedef base::Flags<Flag> Flags;
 
@@ -43,12 +45,27 @@ class DebugInfo : public Struct {
   // DebugInfo can be detached from the SharedFunctionInfo iff it is empty.
   bool IsEmpty() const;
 
+  // --- Debug execution ---
+  // -----------------------
+
+  bool IsPreparedForDebugExecution() const;
+  // Returns current debug execution mode. Debug execution mode defines by
+  // applied to bytecode patching. False for breakpoints, true for side effect
+  // checks.
+  bool DebugExecutionMode() const;
+  void SetDebugExecutionMode(bool value);
+
+  void SetDebugBytecodeArray(Object* maybe_debug_bytecode_array);
+
+  inline bool HasDebugBytecodeArray();
+
+  inline BytecodeArray* OriginalBytecodeArray();
+  inline BytecodeArray* DebugBytecodeArray();
+
   // --- Break points ---
   // --------------------
 
   bool HasBreakInfo() const;
-
-  bool IsPreparedForBreakpoints() const;
 
   // Clears all fields related to break points. Returns true iff the
   // DebugInfo is now empty.
@@ -81,11 +98,6 @@ class DebugInfo : public Struct {
                                            Handle<BreakPoint> break_point);
   // Get the number of break points for this function.
   int GetBreakPointCount();
-
-  inline bool HasDebugBytecodeArray();
-
-  inline BytecodeArray* OriginalBytecodeArray();
-  inline BytecodeArray* DebugBytecodeArray();
 
   // Returns whether we should be able to break before entering the function.
   // This is true for functions with no source, e.g. builtins.

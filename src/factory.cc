@@ -2736,7 +2736,7 @@ Handle<DebugInfo> Factory::NewDebugInfo(Handle<SharedFunctionInfo> shared) {
   debug_info->set_flags(DebugInfo::kNone);
   debug_info->set_shared(*shared);
   debug_info->set_debugger_hints(shared->debugger_hints());
-  debug_info->set_debug_bytecode_array(heap->undefined_value());
+  debug_info->SetDebugBytecodeArray(heap->undefined_value());
   debug_info->set_break_points(heap->empty_fixed_array());
 
   // Link debug info to function.
