@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cf6cb927_206a3f8b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2663,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1dffa12_4475fc6b",
+      "range": {
+        "startLine": 2663,
+        "startChar": 47,
+        "endLine": 2663,
+        "endChar": 55
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c8b600f_9f59ff83",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e3deb7c_c2329fc0",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c8b600f_9f59ff83",
+      "range": {
+        "startLine": 2681,
+        "startChar": 59,
+        "endLine": 2681,
+        "endChar": 64
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e905b715_fdab1b68",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2689,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c8cc6fa_9d446ab3",
+      "range": {
+        "startLine": 2689,
+        "startChar": 32,
+        "endLine": 2689,
+        "endChar": 40
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20cf9c0c_cc9e9894",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 13
@@ -91,6 +163,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05250296_1a6ab311",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20cf9c0c_cc9e9894",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 76
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "50bf9845_3120d020",
+        "filename": "src/elements.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Yeah, whoopsie with the sed-sy.",
+      "parentUuid": "3288afa9_e088b322",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39d09720_479ef067",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 13
@@ -167,6 +281,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "849dbd69_31f63d66",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39d09720_479ef067",
+      "range": {
+        "startLine": 39,
+        "startChar": 5,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -193,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "1095e84b_ca9a7335",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5ba18e4_114ffb50",
+      "range": {
+        "startLine": 1286,
+        "startChar": 26,
+        "endLine": 1286,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bdfa2e0_ff5f2f36",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 13
@@ -213,6 +375,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ff54b2_5878a617",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bdfa2e0_ff5f2f36",
+      "range": {
+        "startLine": 1290,
+        "startChar": 26,
+        "endLine": 1290,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -239,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "46a4553c_db72306c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3875e94f_a9d63663",
+      "range": {
+        "startLine": 1375,
+        "startChar": 7,
+        "endLine": 1375,
+        "endChar": 19
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8c2c58c_581f158c",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 13
@@ -259,6 +469,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "653edd14_bf654892",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8c2c58c_581f158c",
+      "range": {
+        "startLine": 1390,
+        "startChar": 9,
+        "endLine": 1390,
+        "endChar": 21
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -285,6 +519,30 @@
     },
     {
       "key": {
+        "uuid": "b6b6480f_0fcac84b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "571aee52_e8d089f5",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 33
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ce81e4c_a4dc523b",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 13
@@ -296,6 +554,30 @@
       "writtenOn": "2018-04-03T11:15:25Z",
       "side": 1,
       "message": "Why don\u0027t you use !indirectly_called here?",
+      "range": {
+        "startLine": 485,
+        "startChar": 8,
+        "endLine": 485,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "498d645d_d118f14e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Technically yes, although the variables are set in slightly different circumstances. I\u0027d rather check the variable which is used in the branch rather than something which happens to be related to it, as it\u0027s more robust.",
+      "parentUuid": "0ce81e4c_a4dc523b",
       "range": {
         "startLine": 485,
         "startChar": 8,
@@ -331,6 +613,30 @@
     },
     {
       "key": {
+        "uuid": "be43939f_a33d7e58",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f04bf062_c18ce0c7",
+      "range": {
+        "startLine": 856,
+        "startChar": 13,
+        "endLine": 856,
+        "endChar": 27
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82336b5b_0323b039",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 13
@@ -351,6 +657,30 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f46246ec_00fd40e9",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82336b5b_0323b039",
+      "range": {
+        "startLine": 456,
+        "startChar": 2,
+        "endLine": 456,
+        "endChar": 13
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -389,6 +719,24 @@
     },
     {
       "key": {
+        "uuid": "d11a513a_ae9801e8",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3458f8a7_44c9d129",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1da0d90_c2d0a5dc",
         "filename": "src/wasm/wasm-code-specialization.cc",
         "patchSetId": 13
@@ -412,6 +760,30 @@
     },
     {
       "key": {
+        "uuid": "e95fcbdd_fbf8c246",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1da0d90_c2d0a5dc",
+      "range": {
+        "startLine": 138,
+        "startChar": 14,
+        "endLine": 138,
+        "endChar": 40
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0227a4d5_cbc7cd49",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 13
@@ -423,6 +795,30 @@
       "writtenOn": "2018-04-03T12:01:24Z",
       "side": 1,
       "message": "nit: It is dangerous for this constructor to take a raw pointer and then internally rely in handles. A transition from unhandlified to handlified code is not allowed. Please leave a TODO here that {debug_info} should be handlified.",
+      "range": {
+        "startLine": 143,
+        "startChar": 38,
+        "endLine": 143,
+        "endChar": 63
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe59cb4a_872c3559",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Agree. Added a TODO.",
+      "parentUuid": "0227a4d5_cbc7cd49",
       "range": {
         "startLine": 143,
         "startChar": 38,
@@ -458,6 +854,30 @@
     },
     {
       "key": {
+        "uuid": "2e445223_79f01b30",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2fe8b94_ed93d487",
+      "range": {
+        "startLine": 2395,
+        "startChar": 43,
+        "endLine": 2395,
+        "endChar": 55
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f33ca882_5d3c9104",
         "filename": "src/wasm/wasm-interpreter.cc",
         "patchSetId": 13
@@ -469,6 +889,24 @@
       "writtenOn": "2018-04-03T11:15:25Z",
       "side": 1,
       "message": "Do we need this finalizer here? Can we not just create a global handle without finalizer, see https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-code-manager.cc?sq\u003dpackage:chromium\u0026dr\u0026l\u003d534?",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e66976c7_05e51fa9",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2619,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T16:15:52Z",
+      "side": 1,
+      "message": "Yes, unfortunately, because we use an actual Handle\u003cWasmInstanceObject\u003e, whereas a phantom handle needs a single unique location where the pointer will be set to null (i.e. a ***). I think we can do that in the future, so I added a TODO.",
+      "parentUuid": "f33ca882_5d3c9104",
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
