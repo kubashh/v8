@@ -22,6 +22,30 @@
       "revId": "2e3d9a59a2b4be0ef1ce2ecf80f0b277e2149712",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff5c9ef_2cb86bd3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-04-03T22:54:23Z",
+      "side": 1,
+      "message": "I agree this would be good to have. Ideally we could check if the memory had guard regions on it, but unfortunately at compile time we don\u0027t always have access to the memory. I\u0027m not sure of a good way to do this, but I\u0027ll keep trying to think of a way.",
+      "parentUuid": "e04f974a_640b9283",
+      "range": {
+        "startLine": 3782,
+        "startChar": 0,
+        "endLine": 3783,
+        "endChar": 16
+      },
+      "revId": "2e3d9a59a2b4be0ef1ce2ecf80f0b277e2149712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
