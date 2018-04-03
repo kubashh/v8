@@ -278,6 +278,29 @@
     },
     {
       "key": {
+        "uuid": "2f428f63_2e50c068",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-04-03T09:15:24Z",
+      "side": 1,
+      "message": "Please make this and EnableInlineAllocation private.",
+      "range": {
+        "startLine": 447,
+        "startChar": 36,
+        "endLine": 447,
+        "endChar": 59
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bf54e89_76278d43",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 32
