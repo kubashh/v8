@@ -853,7 +853,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   // Get the bytecode array from the function object (or from the DebugInfo if
   // it is present) and load it into kInterpreterBytecodeArrayRegister.
-  Label maybe_load_debug_bytecode_array, bytecode_array_loaded;
+  Label maybe_load_debug_bytecode_array, bytecode_array_loaded,
+      apply_instrumentation;
   __ mov(eax, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
   __ mov(kInterpreterBytecodeArrayRegister,
          FieldOperand(eax, SharedFunctionInfo::kFunctionDataOffset));
@@ -974,15 +975,36 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // SharedFunctionInfo::kFunctionDataOffset.
   __ bind(&maybe_load_debug_bytecode_array);
   __ push(ebx);  // feedback_vector == ebx, so save it.
+  __ mov(eax, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
   __ mov(ecx, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
   __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
   __ SmiUntag(ebx);
-  __ test(ebx, Immediate(DebugInfo::kHasBreakInfo));
+  __ test(ebx, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ pop(ebx);
   __ j(zero, &bytecode_array_loaded);
+
+  __ push(ebx);
+  __ mov(eax, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
+  __ mov(ecx, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
+  __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
+  __ SmiUntag(ebx);
+  __ and_(ebx, Immediate(DebugInfo::kDebugExecutionMode));
+  __ cmp(ebx,
+         Operand::StaticVariable(
+             ExternalReference::debug_execution_mode_address(masm->isolate())));
+  __ j(not_equal, &apply_instrumentation);
+
+  __ pop(ebx);
   __ mov(kInterpreterBytecodeArrayRegister,
          FieldOperand(ecx, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  __ bind(&apply_instrumentation);
+  __ push(edi);
+  __ CallRuntime(Runtime::kDebugApplyInstrumentation);
+  __ pop(edi);
+  __ pop(ebx);
+  __ jmp(&maybe_load_debug_bytecode_array);
 }
 
 

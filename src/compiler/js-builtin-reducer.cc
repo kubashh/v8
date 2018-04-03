@@ -43,8 +43,9 @@ class JSCallReduction {
     DCHECK_EQ(IrOpcode::kJSCall, node_->opcode());
     HeapObjectMatcher m(NodeProperties::GetValueInput(node_, 0));
     Handle<JSFunction> function = Handle<JSFunction>::cast(m.Value());
-    // Do not inline if the builtin may have break points.
-    return !function->shared()->HasBreakInfo();
+    // Do not inline if the builtin may have break points or requires runtime
+    // side effect checks.
+    return !function->shared()->IsPreparedForDebugExecution();
   }
 
   // Retrieves the BuiltinFunctionId as described above.
