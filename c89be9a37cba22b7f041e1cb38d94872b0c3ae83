@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2824ad50_f9f2ac61",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6909,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-03T14:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb8d2888_fe0404f9",
+      "revId": "c89be9a37cba22b7f041e1cb38d94872b0c3ae83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a8e278f_b896839e",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-28T16:20:37Z",
       "side": 1,
       "message": "We could use GotoIfForceSlowPath here.",
+      "revId": "c89be9a37cba22b7f041e1cb38d94872b0c3ae83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef8af21f_ffd91fb9",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6910,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-03T14:54:28Z",
+      "side": 1,
+      "message": "We don\u0027t have a slow path for this code.",
+      "parentUuid": "3a8e278f_b896839e",
       "revId": "c89be9a37cba22b7f041e1cb38d94872b0c3ae83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "c89be9a37cba22b7f041e1cb38d94872b0c3ae83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff963075_08450ffe",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6947,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-03T14:54:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1c4e1417_e99d13a1",
+      "revId": "c89be9a37cba22b7f041e1cb38d94872b0c3ae83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
