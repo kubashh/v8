@@ -16,6 +16,24 @@
       "revId": "277cf2e7bd2468f45674b1ec93453ee832536d6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b19cc12_3ac58852",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T13:48:17Z",
+      "side": 1,
+      "message": "I thought about it, but since cctests cannot be parameterized, skipped it.\nBut we can also just write them all out individually. Will do before landing.",
+      "parentUuid": "84e61bae_c19dab8e",
+      "revId": "277cf2e7bd2468f45674b1ec93453ee832536d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
