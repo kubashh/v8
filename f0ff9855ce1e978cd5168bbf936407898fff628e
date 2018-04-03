@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52817b48_e226fa0a",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "This should be a DCHECK.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11b26e5_b03cda1c",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "I think just passing the two uint32_t is simpler.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf17299d_1259905b",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "This is a quite heavy-weight include. Please forward-declare WasmCompilationData instead.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56674750_d85ba441",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5313,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "No std::move needed here.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c15b24c3_83ad9b85",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5338,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "No std::move needed here.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14fa3f63_1431526d",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "Just return the unique_ptr, not a reference to it.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9afd04b_6689786a",
+        "filename": "src/compiler/x64/code-generator-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "The names are misleading. Both classes are wasm-specific.\nI propose \"WasmOutOfLineTrap\" for \"OutOfLineTrap\" and \"WasmProtectedInstructionTrap\" for \"WasmOutOfLineTrap\". But I am open for other suggestions.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c51a7d3_1164efdb",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T08:42:49Z",
+      "side": 1,
+      "message": "Unfortunately, this now needs curly braces. Or you split the condition into two separate ifs.",
+      "revId": "f0ff9855ce1e978cd5168bbf936407898fff628e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
