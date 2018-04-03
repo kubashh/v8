@@ -3272,8 +3272,9 @@ Reduction JSCallReducer::ReduceJSCall(Node* node,
   DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
   Node* target = NodeProperties::GetValueInput(node, 0);
 
-  // Do not reduce calls to functions with break points.
-  if (shared->HasBreakInfo()) return NoChange();
+  // Do not reduce calls to functions with break points or with runtime side
+  // effect checks.
+  if (shared->IsPreparedForDebugExecution()) return NoChange();
 
   // Raise a TypeError if the {target} is a "classConstructor".
   if (IsClassConstructor(shared->kind())) {
@@ -3622,8 +3623,9 @@ Reduction JSCallReducer::ReduceJSConstruct(Node* node) {
     if (m.Value()->IsJSFunction()) {
       Handle<JSFunction> function = Handle<JSFunction>::cast(m.Value());
 
-      // Do not reduce constructors with break points.
-      if (function->shared()->HasBreakInfo()) return NoChange();
+      // Do not reduce constructors with break points or with runtime side
+      // effect checks.
+      if (function->shared()->IsPreparedForDebugExecution()) return NoChange();
 
       // Don't inline cross native context.
       if (function->native_context() != *native_context()) return NoChange();

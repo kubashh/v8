@@ -412,11 +412,13 @@ Reduction JSInliner::ReduceJSCall(Node* node) {
     return NoChange();
   }
 
-  // Function contains break points.
-  if (shared_info->HasBreakInfo()) {
-    TRACE("Not inlining %s into %s because callee may contain break points\n",
-          shared_info->DebugName()->ToCString().get(),
-          info_->shared_info()->DebugName()->ToCString().get());
+  // Function contains break points or requires runtime side effect checks.
+  if (shared_info->IsPreparedForDebugExecution()) {
+    TRACE(
+        "Not inlining %s into %s because callee may contain break points or "
+        "requires runtime side effect checks\n",
+        shared_info->DebugName()->ToCString().get(),
+        info_->shared_info()->DebugName()->ToCString().get());
     return NoChange();
   }
 
