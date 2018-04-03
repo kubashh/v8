@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "072a33f7_6067a3f7",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "870546d3_5ba340de",
+      "range": {
+        "startLine": 978,
+        "startChar": 2,
+        "endLine": 978,
+        "endChar": 71
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aab6b0b_19d8ec90",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 32
@@ -45,6 +69,30 @@
       "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb67ff34_f025938c",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aab6b0b_19d8ec90",
+      "range": {
+        "startLine": 994,
+        "startChar": 32,
+        "endLine": 994,
+        "endChar": 60
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1002b4a1_5dff903c",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "I found that kInterpreterBytecodeArrayRegister is edi on ia32 and rewrite code taking this into account, please take another look.",
+      "parentUuid": "2b8dd0f3_fde6f1b0",
+      "range": {
+        "startLine": 997,
+        "startChar": 5,
+        "endLine": 997,
+        "endChar": 8
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f3abc6a_1a9a30dd",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 32
@@ -91,6 +163,30 @@
       "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5f33ead_47263223",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f3abc6a_1a9a30dd",
+      "range": {
+        "startLine": 1074,
+        "startChar": 5,
+        "endLine": 1074,
+        "endChar": 16
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "84d4fc6c_81d88437",
+        "filename": "src/compiler.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5ba193e_15f709e7",
+      "range": {
+        "startLine": 658,
+        "startChar": 39,
+        "endLine": 658,
+        "endChar": 66
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1525135_793b4e89",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 32
@@ -137,6 +257,30 @@
       "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74dea4b5_990c767a",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1525135_793b4e89",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "22f3b93a_4b075061",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "898faaf7_55dae041",
+      "range": {
+        "startLine": 904,
+        "startChar": 10,
+        "endLine": 904,
+        "endChar": 38
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7b30eb3_fc686a22",
         "filename": "src/debug/debug.cc",
         "patchSetId": 32
@@ -183,6 +351,30 @@
       "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ad725e_d46a65e3",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7b30eb3_fc686a22",
+      "range": {
+        "startLine": 728,
+        "startChar": 2,
+        "endLine": 728,
+        "endChar": 8
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "5d716706_52d0bc26",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eb17d1b_3d542461",
+      "range": {
+        "startLine": 1502,
+        "startChar": 4,
+        "endLine": 1502,
+        "endChar": 70
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c85a742_7051222b",
         "filename": "src/debug/debug.cc",
         "patchSetId": 32
@@ -220,6 +436,30 @@
       "writtenOn": "2018-04-03T09:05:50Z",
       "side": 1,
       "message": "This unnecessarily adds stress on the GC. Can we simply memcpy the content of the original BytecodeArray?",
+      "range": {
+        "startLine": 2350,
+        "startChar": 27,
+        "endLine": 2350,
+        "endChar": 44
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6735036_b696ec5e",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "3c85a742_7051222b",
       "range": {
         "startLine": 2350,
         "startChar": 27,
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "50e6c941_fb7d4927",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2372,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60c9f50e_cd13f561",
+      "range": {
+        "startLine": 2371,
+        "startChar": 2,
+        "endLine": 2372,
+        "endChar": 43
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aceb1e2a_e5836f22",
         "filename": "src/debug/debug.cc",
         "patchSetId": 32
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "fa40b2ba_6f8c7d64",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aceb1e2a_e5836f22",
+      "range": {
+        "startLine": 2375,
+        "startChar": 4,
+        "endLine": 2385,
+        "endChar": 5
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f428f63_2e50c068",
         "filename": "src/heap/heap.cc",
         "patchSetId": 32
@@ -289,6 +577,30 @@
       "writtenOn": "2018-04-03T09:15:24Z",
       "side": 1,
       "message": "Please make this and EnableInlineAllocation private.",
+      "range": {
+        "startLine": 447,
+        "startChar": 36,
+        "endLine": 447,
+        "endChar": 59
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b5d3b6_aa3eae21",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "We use these functions in tests. E.g. in TrackBumpPointerAllocations where we check that if we enable inline allocations during profiling we get less allocations and expose them as runtime function for tests: Runtime_SetAllocationTimeout. I can make these functions private and expose EnableInlineAllocationForTest and DisableInlineAllocationForTest if it sounds reasonable to you.",
+      "parentUuid": "2f428f63_2e50c068",
       "range": {
         "startLine": 447,
         "startChar": 36,
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "d552c4d2_3e4ef489",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bf54e89_76278d43",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5feb8159_e87e5be8",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 32
@@ -347,6 +683,30 @@
     },
     {
       "key": {
+        "uuid": "3b34cb31_c79a2caa",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5feb8159_e87e5be8",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 34
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a69a03ca_c3bc283d",
         "filename": "test/cctest/test-debug.cc",
         "patchSetId": 32
@@ -367,6 +727,30 @@
       "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56151546_4d120ebf",
+        "filename": "test/cctest/test-debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 6681,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-03T21:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a69a03ca_c3bc283d",
+      "range": {
+        "startLine": 6681,
+        "startChar": 4,
+        "endLine": 6681,
+        "endChar": 5
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
