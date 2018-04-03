@@ -419,6 +419,7 @@ class GCIdleTimeAction;
 class GCIdleTimeHandler;
 class GCIdleTimeHeapState;
 class GCTracer;
+class HeapObjectAllocationTracker;
 class HeapObjectsFilter;
 class HeapStats;
 class HistogramTimer;
@@ -1611,6 +1612,15 @@ class Heap {
   }
 
   // ===========================================================================
+  // Heap object allocation tracking. ==========================================
+  // ===========================================================================
+
+  void AddHeapObjectAllocationTracker(HeapObjectAllocationTracker* tracker);
+  void RemoveHeapObjectAllocationTracker(HeapObjectAllocationTracker* tracker);
+  bool has_heap_object_allocation_tracker() const {
+    return !allocation_trackers_.empty();
+  }
+
   // Retaining path tracking. ==================================================
   // ===========================================================================
 
@@ -2662,6 +2672,8 @@ class Heap {
   // stores the option of the corresponding target.
   std::map<int, RetainingPathOption> retaining_path_target_option_;
 
+  std::vector<HeapObjectAllocationTracker*> allocation_trackers_;
+
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
   friend class ConcurrentMarking;
@@ -2933,6 +2945,16 @@ class AllocationObserver {
 };
 
 V8_EXPORT_PRIVATE const char* AllocationSpaceName(AllocationSpace space);
+
+// -----------------------------------------------------------------------------
+// Allows observation of heap object allocations.
+class HeapObjectAllocationTracker {
+ public:
+  virtual void AllocationEvent(Address addr, int size) = 0;
+  virtual void MoveEvent(Address from, Address to, int size) {}
+  virtual void UpdateObjectSizeEvent(Address addr, int size) {}
+  virtual ~HeapObjectAllocationTracker() = default;
+};
 
 }  // namespace internal
 }  // namespace v8
