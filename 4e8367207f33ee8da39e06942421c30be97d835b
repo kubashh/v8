@@ -22,6 +22,30 @@
       "revId": "4e8367207f33ee8da39e06942421c30be97d835b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ae8fd6_31f8cadf",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1238767
+      },
+      "writtenOn": "2018-04-03T19:17:16Z",
+      "side": 1,
+      "message": "It was not! Just a bad copy \u0026 paste, thanks for catching that.",
+      "parentUuid": "33e14a33_51a0d3b9",
+      "range": {
+        "startLine": 566,
+        "startChar": 53,
+        "endLine": 566,
+        "endChar": 58
+      },
+      "revId": "4e8367207f33ee8da39e06942421c30be97d835b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
