@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "7add3a43_dfc27857",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5368,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-04-03T07:01:42Z",
+      "side": 1,
+      "message": "specifiy -\u003e specify\n\nI am a bit confused about this comment - does it say that we cannot ever lazy deopt through this? So it is only used for stack trace and possibly exception? This seems suspicious - if we can throw an exception through here, then we can lazy deopt there. Could you clarify?",
+      "range": {
+        "startLine": 5368,
+        "startChar": 18,
+        "endLine": 5368,
+        "endChar": 26
+      },
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c009debb_d300ec56",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 3
@@ -30,6 +53,70 @@
       "writtenOn": "2018-03-28T14:48:01Z",
       "side": 1,
       "message": "The cool thing about how things working right now is that we can use a builtin continuation without catching by supplying the exception argument ourselves (hole) and passing  ContinuationFrameStateMode::LAZY.",
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "889df34e_ef9d4440",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-04-03T07:01:42Z",
+      "side": 1,
+      "message": "Could you add comments for each of the elements here? I am guessing the last one is the (lack of) exception, not sure about the other ones.",
+      "parentUuid": "c009debb_d300ec56",
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec13d1f4_124a6b1f",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-04-03T07:01:42Z",
+      "side": 1,
+      "message": "Nit: I think it would make more sense to have an enum  instead of the last two bools (maybe even for all three bools).",
+      "range": {
+        "startLine": 1414,
+        "startChar": 30,
+        "endLine": 1414,
+        "endChar": 68
+      },
+      "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc1c2fff_f3fdad8f",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-04-03T07:01:42Z",
+      "side": 1,
+      "message": "Perhaps it would be better to say here that the accumulator contains the exceeption.",
+      "range": {
+        "startLine": 1553,
+        "startChar": 60,
+        "endLine": 1553,
+        "endChar": 71
+      },
       "revId": "70b2e0095395d1d6d57db2a3567555004774a50b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
