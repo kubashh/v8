@@ -3160,6 +3160,94 @@ WASM_EXEC_TEST(IfInsideUnreachable) {
   CHECK_EQ(17, r.Call());
 }
 
+// This test targets binops in Liftoff.
+// Initialize a number of local variables to force them into different
+// registers, then perform a binary operation on two of the locals.
+template <typename ctype>
+void BinOpOnDifferentRegisters(
+    WasmExecutionMode execution_mode, ValueType type,
+    Vector<const ctype> inputs,
+    std::initializer_list<
+        std::pair<WasmOpcode, std::function<ctype(ctype, ctype)>>>
+        operations) {
+  static constexpr int kMaxNumLocals = 8;
+  for (int num_locals = 1; num_locals < kMaxNumLocals; ++num_locals) {
+    // {init_locals_code} is shared by all code generated in the loop below.
+    std::vector<byte> init_locals_code;
+    // Load from memory into the locals.
+    for (int i = 0; i < num_locals; ++i) {
+      ADD_CODE(
+          init_locals_code,
+          WASM_SET_LOCAL(i, WASM_LOAD_MEM(WasmOpcodes::MachineTypeFor(type),
+                                          WASM_I32V_2(sizeof(ctype) * i))));
+    }
+    for (const auto& operation : operations) {
+      for (int lhs = 0; lhs < num_locals; ++lhs) {
+        for (int rhs = 0; rhs < num_locals; ++rhs) {
+          WasmRunner<int32_t> r(execution_mode);
+          ctype* memory = r.builder().AddMemoryElems<ctype>(num_locals);
+          for (int i = 0; i < num_locals; ++i) {
+            r.AllocateLocal(type);
+          }
+          std::vector<byte> code(init_locals_code);
+          ADD_CODE(
+              code,
+              // Store the result of the binary operation at memory 0.
+              WASM_STORE_MEM(WasmOpcodes::MachineTypeFor(type), WASM_ZERO,
+                             WASM_BINOP(operation.first, WASM_GET_LOCAL(lhs),
+                                        WASM_GET_LOCAL(rhs))),
+              // Return 0.
+              WASM_ZERO);
+          r.Build(code.data(), code.data() + code.size());
+          for (ctype lhs_value : inputs) {
+            for (ctype rhs_value : inputs) {
+              if (lhs == rhs) lhs_value = rhs_value;
+              memory[lhs] = lhs_value;
+              memory[rhs] = rhs_value;
+              int64_t expect = operation.second(lhs_value, rhs_value);
+              CHECK_EQ(0, r.Call());
+              CHECK_EQ(expect, memory[0]);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+WASM_EXEC_TEST(I32BinOpOnDifferentRegisters) {
+  static constexpr int32_t inputs[] = {0, 1, 31, 0xff112233};
+  BinOpOnDifferentRegisters<int32_t>(
+      execution_mode, kWasmI32, ArrayVector(inputs),
+      {{kExprI32Add, [](int32_t lhs, int32_t rhs) { return lhs + rhs; }},
+       {kExprI32Sub, [](int32_t lhs, int32_t rhs) { return lhs - rhs; }},
+       {kExprI32Mul, [](int32_t lhs, int32_t rhs) { return lhs * rhs; }},
+       {kExprI32Shl,
+        [](int32_t lhs, int32_t rhs) { return lhs << (rhs & 31); }},
+       {kExprI32ShrS,
+        [](int32_t lhs, int32_t rhs) { return lhs >> (rhs & 31); }},
+       {kExprI32ShrU, [](int32_t lhs, int32_t rhs) {
+          return static_cast<uint32_t>(lhs) >> (rhs & 31);
+        }}});
+}
+
+WASM_EXEC_TEST(I64BinOpOnDifferentRegisters) {
+  static constexpr int64_t inputs[] = {0,  1,           31,
+                                       63, 0x100000000, 0xff11223344556677};
+  BinOpOnDifferentRegisters<int64_t>(
+      execution_mode, kWasmI64, ArrayVector(inputs),
+      {{kExprI64Add, [](int64_t lhs, int64_t rhs) { return lhs + rhs; }},
+       {kExprI64Sub, [](int64_t lhs, int64_t rhs) { return lhs - rhs; }},
+       {kExprI64Mul, [](int64_t lhs, int64_t rhs) { return lhs * rhs; }},
+       {kExprI64Shl,
+        [](int64_t lhs, int64_t rhs) { return lhs << (rhs & 63); }},
+       {kExprI64ShrS,
+        [](int64_t lhs, int64_t rhs) { return lhs >> (rhs & 63); }},
+       {kExprI64ShrU, [](int64_t lhs, int64_t rhs) {
+          return static_cast<uint64_t>(lhs) >> (rhs & 63);
+        }}});
+}
+
 #undef B1
 #undef B2
 #undef RET
