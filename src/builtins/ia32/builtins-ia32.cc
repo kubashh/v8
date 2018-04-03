@@ -974,15 +974,37 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // SharedFunctionInfo::kFunctionDataOffset.
   __ bind(&maybe_load_debug_bytecode_array);
   __ push(ebx);  // feedback_vector == ebx, so save it.
+  __ mov(eax, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
   __ mov(ecx, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
   __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
   __ SmiUntag(ebx);
-  __ test(ebx, Immediate(DebugInfo::kHasBreakInfo));
+  __ test(ebx, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ pop(ebx);
   __ j(zero, &bytecode_array_loaded);
+
+  __ push(ebx);
+  __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
+  __ SmiUntag(ebx);
+  __ and_(eax, Immediate(DebugInfo::kDebugExecutionMode));
+
+  __ mov(ebx, Immediate(ExternalReference::debug_execution_mode_address(
+                  masm->isolate())));
+  __ cmp(eax, ebx);
+
+  Label patch_bytecode;
+  __ pop(ebx);
+  __ j(not_equal, &patch_bytecode);
   __ mov(kInterpreterBytecodeArrayRegister,
          FieldOperand(ecx, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  __ bind(&patch_bytecode);
+  __ push(ebx);
+  __ push(edi);
+  __ CallRuntime(Runtime::kDebugApplyInstrumentation);
+  __ pop(edi);
+  __ pop(ebx);
+  __ jmp(&maybe_load_debug_bytecode_array);
 }
 
 
