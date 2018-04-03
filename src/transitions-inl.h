@@ -179,10 +179,10 @@ int TransitionArray::CompareNames(Name* key1, uint32_t hash1, Name* key2,
   return 0;
 }
 
-int TransitionArray::CompareDetails(PropertyKind kind1,
-                                    PropertyAttributes attributes1,
-                                    PropertyKind kind2,
-                                    PropertyAttributes attributes2) {
+constexpr int TransitionArray::CompareDetails(PropertyKind kind1,
+                                              PropertyAttributes attributes1,
+                                              PropertyKind kind2,
+                                              PropertyAttributes attributes2) {
   if (kind1 != kind2) {
     return static_cast<int>(kind1) < static_cast<int>(kind2) ? -1 : 1;
   }
@@ -202,7 +202,7 @@ void TransitionArray::Set(int transition_number, Name* key, Object* target) {
 
 int TransitionArray::Capacity() {
   if (length() <= kFirstIndex) return 0;
-  return (length() - kFirstIndex) / kTransitionSize;
+  return (length() - kFirstIndex) / kEntrySize;
 }
 
 void TransitionArray::SetNumberOfTransitions(int number_of_transitions) {

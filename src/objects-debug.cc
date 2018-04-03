@@ -591,15 +591,25 @@ void FeedbackMetadata::FeedbackMetadataVerify() {
 
 void DescriptorArray::DescriptorArrayVerify() {
   FixedArrayVerify();
+  int descriptors_number = number_of_descriptors();
   if (number_of_descriptors_storage() == 0) {
     Heap* heap = GetHeap();
     CHECK_EQ(heap->empty_descriptor_array(), this);
     CHECK_EQ(2, length());
-    CHECK_EQ(0, number_of_descriptors());
+    CHECK_EQ(0, descriptors_number);
     CHECK_EQ(heap->empty_enum_cache(), GetEnumCache());
   } else {
     CHECK_LT(2, length());
-    CHECK_LE(LengthFor(number_of_descriptors()), length());
+    CHECK_LE(LengthFor(descriptors_number), length());
+
+    // Check that properties with private symbols names are non-enumerable.
+    for (int descriptor = 0; descriptor < descriptors_number; descriptor++) {
+      Name* key = GetKey(descriptor);
+      if (key->IsPrivate()) {
+        PropertyDetails details = GetDetails(descriptor);
+        CHECK_NE(0, details.attributes() & DONT_ENUM);
+      }
+    }
   }
 }
 
