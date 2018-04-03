@@ -1363,9 +1363,7 @@ bool Deoptimizer::BuiltinContinuationModeIsJavaScript(
     case BuiltinContinuationMode::STUB:
       return false;
     case BuiltinContinuationMode::JAVASCRIPT:
-      return true;
     case BuiltinContinuationMode::JAVASCRIPT_WITH_CATCH:
-      return true;
     case BuiltinContinuationMode::JAVASCRIPT_HANDLE_EXCEPTION:
       return true;
   }
@@ -1376,11 +1374,9 @@ bool Deoptimizer::BuiltinContinuationModeIsWithCatch(
     BuiltinContinuationMode mode) {
   switch (mode) {
     case BuiltinContinuationMode::STUB:
-      return false;
     case BuiltinContinuationMode::JAVASCRIPT:
       return false;
     case BuiltinContinuationMode::JAVASCRIPT_WITH_CATCH:
-      return true;
     case BuiltinContinuationMode::JAVASCRIPT_HANDLE_EXCEPTION:
       return true;
   }
@@ -1409,9 +1405,7 @@ Builtins::Name Deoptimizer::TrampolineForBuiltinContinuation(
       return must_handle_result ? Builtins::kContinueToCodeStubBuiltinWithResult
                                 : Builtins::kContinueToCodeStubBuiltin;
     case BuiltinContinuationMode::JAVASCRIPT:
-      V8_FALLTHROUGH;
     case BuiltinContinuationMode::JAVASCRIPT_WITH_CATCH:
-      V8_FALLTHROUGH;
     case BuiltinContinuationMode::JAVASCRIPT_HANDLE_EXCEPTION:
       return must_handle_result
                  ? Builtins::kContinueToJavaScriptBuiltinWithResult
