@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e04f974a_640b9283",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T13:09:42Z",
+      "side": 1,
+      "message": "suggestion: Is there some sort of predicate that we could DCHECK here to ensure that guard pages are enabled (on 64-bit platforms)? Basically something that would require someone changing that invariant in \"wasm-memory.cc\" to stumble over this piece of code here. I couldn\u0027t find any such predicate, but maybe there is one I am not aware of.",
+      "range": {
+        "startLine": 3782,
+        "startChar": 0,
+        "endLine": 3783,
+        "endChar": 16
+      },
+      "revId": "2e3d9a59a2b4be0ef1ce2ecf80f0b277e2149712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
