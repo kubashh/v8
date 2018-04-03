@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "a1dffa12_4475fc6b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2663,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Could we just use a shift here instead?",
+      "range": {
+        "startLine": 2663,
+        "startChar": 47,
+        "endLine": 2663,
+        "endChar": 55
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c8b600f_9f59ff83",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Even if it does not look great I would still prefer to stick to the default formatting here.",
+      "range": {
+        "startLine": 2681,
+        "startChar": 59,
+        "endLine": 2681,
+        "endChar": 64
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c8cc6fa_9d446ab3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2689,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "here too, I think we could use a shift here.",
+      "range": {
+        "startLine": 2689,
+        "startChar": 32,
+        "endLine": 2689,
+        "endChar": 40
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88836727_30565744",
         "filename": "src/elements.h",
         "patchSetId": 13
@@ -34,6 +103,178 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5ba18e4_114ffb50",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "In wasm-compiler.cc you call this value {imported_targets}. Could you use the same name here?",
+      "range": {
+        "startLine": 1286,
+        "startChar": 26,
+        "endLine": 1286,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bdfa2e0_ff5f2f36",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "You could just introduce a new variable with a proper name and assign {tmp} to it.",
+      "range": {
+        "startLine": 1290,
+        "startChar": 26,
+        "endLine": 1290,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3875e94f_a9d63663",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Same here, could we use a shift?",
+      "range": {
+        "startLine": 1375,
+        "startChar": 7,
+        "endLine": 1375,
+        "endChar": 19
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8c2c58c_581f158c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Same here, could we use a shift?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 9,
+        "endLine": 1390,
+        "endChar": 21
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce81e4c_a4dc523b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Why don\u0027t you use !indirectly_called here?",
+      "range": {
+        "startLine": 485,
+        "startChar": 8,
+        "endLine": 485,
+        "endChar": 29
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6bac13d_3e40936d",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Is there a way to avoid using the isolate here in the NativeModule?",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2fe8b94_ed93d487",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "nit: wasm context is mentioned here.",
+      "range": {
+        "startLine": 2395,
+        "startChar": 43,
+        "endLine": 2395,
+        "endChar": 55
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f33ca882_5d3c9104",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 2619,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "Do we need this finalizer here? Can we not just create a global handle without finalizer, see https://cs.chromium.org/chromium/src/v8/src/wasm/wasm-code-manager.cc?sq\u003dpackage:chromium\u0026dr\u0026l\u003d534?",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

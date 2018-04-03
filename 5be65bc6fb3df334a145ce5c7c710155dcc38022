@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "54bda618_5ff7edde",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-03T11:15:25Z",
+      "side": 1,
+      "message": "In that case, why don\u0027t you use start() as the effect input? This would give the scheduler even more options.",
+      "parentUuid": "900375c8_91f0d946",
+      "revId": "5be65bc6fb3df334a145ce5c7c710155dcc38022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe40b59e_9a5123b3",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
