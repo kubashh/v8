@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ade11d8b_45cb8c69",
+        "filename": "src/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T08:53:40Z",
+      "side": 1,
+      "message": "As discussed offline: This will also require handling in {Isolate::PredictExceptionCatcher}.",
+      "range": {
+        "startLine": 1455,
+        "startChar": 11,
+        "endLine": 1455,
+        "endChar": 66
+      },
+      "revId": "e587a990b993d3a7666a2a103c2148b5f288532b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
