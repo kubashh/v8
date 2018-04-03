@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84e61bae_c19dab8e",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-03T13:45:53Z",
+      "side": 1,
+      "message": "What about splitting this test into a number of different tests, one for each opcode?",
+      "revId": "277cf2e7bd2468f45674b1ec93453ee832536d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
