@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33e14a33_51a0d3b9",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-03T07:51:06Z",
+      "side": 1,
+      "message": "This changed from true to false. Was that change intended?",
+      "range": {
+        "startLine": 566,
+        "startChar": 53,
+        "endLine": 566,
+        "endChar": 58
+      },
+      "revId": "4e8367207f33ee8da39e06942421c30be97d835b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
