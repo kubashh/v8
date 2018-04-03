@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "870546d3_5ba340de",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "Why is this necessary? Isn\u0027t the SharedFunctionInfo already in eax?",
+      "range": {
+        "startLine": 978,
+        "startChar": 2,
+        "endLine": 978,
+        "endChar": 71
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7aab6b0b_19d8ec90",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "This compare relies on the fact that kSideEffects \u003d\u003d kDebugExecutionMode. We should either assert this here with a STATIC_ASSERT.",
+      "range": {
+        "startLine": 994,
+        "startChar": 32,
+        "endLine": 994,
+        "endChar": 60
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b8dd0f3_fde6f1b0",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "pop(ebx) before jumping to bytecode_array_loaded is a pattern that we should unify. It gets confusing otherwise.\n\nHow about we structure it this way?\n\n__ bind(\u0026maybe_load_debug_bytecode_array)\n__ push(ebx)\n\n__ bind(\u0026load_from_debug_info)\n\u003cload DebugInfo flags\u003e\n\u003cjump to pop_ebx_and_continue_execution if there is no debug bytecode array\u003e\n\u003cjump to apply_instrumentation if debug execution mode does not match\u003e\n\n\u003cload debug bytecode array from DebugInfo\u003e\n__ jmp(\u0026pop_ebx_and_continue_execution)\n\n__ bind(\u0026apply_instrumentation)\n__ push(edi)  // preserve function\n__ push(edi)  // pass function as argument\n__ CallRuntime(Runtime::kDebugApplyInstrumentation);\n__ pop(edi);\n__ jmp(\u0026load_from_debug_info)\n\n__ bind(\u0026pop_ebx_and_continue_execution)\n__ pop(ebx)\n__ jmp(\u0026bytecode_array_loaded)\n\nSeems like we would avoid a lot of push and pop, and reloading of the DebugInfo. It\u0027s also easier to reason about when we can use ebx, and in which state the stack is.",
+      "range": {
+        "startLine": 997,
+        "startChar": 5,
+        "endLine": 997,
+        "endChar": 8
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f3abc6a_1a9a30dd",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "Let\u0027s Push(closure) a second time to pass it as argument to the runtime function.",
+      "range": {
+        "startLine": 1074,
+        "startChar": 5,
+        "endLine": 1074,
+        "endChar": 16
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ba193e_15f709e7",
+        "filename": "src/compiler.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "This is not necessary.\n\nWhat I meant in the chat is that we only disable optimization for functions that have breakpoints, by checking HasBreakInfo. This is working as intended. Functions that need side effect checks do not need to be prevented from optimization. We deopt them on function call anyways.\n\nAll following changes in src/compiler/* are not necessary either.",
+      "range": {
+        "startLine": 658,
+        "startChar": 39,
+        "endLine": 658,
+        "endChar": 66
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1525135_793b4e89",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "We can save some duplicate code if we do this:\n\nif (throw_on_side_effect) isolate-\u003edebug()-\u003eStartSideEffectCheckMode();\n...\nif (throw_on_side_effect) isolate-\u003edebug()-\u003eStopSideEffectCheckMode();",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "898faaf7_55dae041",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "We should do this check after BytecodeHasNoSideEffect, and set a flag that we return, so that the caller can know whether the function needs runtime checks.",
+      "range": {
+        "startLine": 904,
+        "startChar": 10,
+        "endLine": 904,
+        "endChar": 38
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b30eb3_fc686a22",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "DCHECK_NE",
+      "range": {
+        "startLine": 728,
+        "startChar": 2,
+        "endLine": 728,
+        "endChar": 8
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eb17d1b_3d542461",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "Can we move all occurences of copying the original bytecode array into PrepareFunctionForDebugExecution?",
+      "range": {
+        "startLine": 1502,
+        "startChar": 4,
+        "endLine": 1502,
+        "endChar": 70
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c85a742_7051222b",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "This unnecessarily adds stress on the GC. Can we simply memcpy the content of the original BytecodeArray?",
+      "range": {
+        "startLine": 2350,
+        "startChar": 27,
+        "endLine": 2350,
+        "endChar": 44
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60c9f50e_cd13f561",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2372,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "How about SharedFunctionInfo::HasNoSideEffect also returns whether we actually need runtime checks, and only then call PrepareFunctionForDebugExecution and instrument it?",
+      "range": {
+        "startLine": 2371,
+        "startChar": 2,
+        "endLine": 2372,
+        "endChar": 43
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aceb1e2a_e5836f22",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "Can this ever happen? I think shared-\u003eHasBytecodeArray() contradicts shared-\u003eis_compiled().",
+      "range": {
+        "startLine": 2375,
+        "startChar": 4,
+        "endLine": 2385,
+        "endChar": 5
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bf54e89_76278d43",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this flag. We could just check what the kDebugBytecodeArrayOffset field contains. That\u0027s less redundant and more robust.",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5feb8159_e87e5be8",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this either. We are prepared for debug execution iff we have a debug bytecode array.",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 34
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a69a03ca_c3bc283d",
+        "filename": "test/cctest/test-debug.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 6681,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-03T09:05:50Z",
+      "side": 1,
+      "message": "No more need for this block scope.",
+      "range": {
+        "startLine": 6681,
+        "startChar": 4,
+        "endLine": 6681,
+        "endChar": 5
+      },
+      "revId": "07898cc6b3ea8685f67814b8efb6b78619a8033b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
