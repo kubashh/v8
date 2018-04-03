@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "20cf9c0c_cc9e9894",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: Comment outdated, I think we can drop this part.",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 76
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88836727_30565744",
         "filename": "src/elements.h",
         "patchSetId": 13
@@ -103,6 +126,47 @@
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3288afa9_e088b322",
+        "filename": "src/elements.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "f0a0d130_9fdead2e",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39d09720_479ef067",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: I guess eventually we want to rename this function as well as {liftoff::GetContextOperand} and friends as well I guess. Should we leave a TODO in that regard somewhere?",
+      "range": {
+        "startLine": 39,
+        "startChar": 5,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -198,6 +262,29 @@
     },
     {
       "key": {
+        "uuid": "571aee52_e8d089f5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: Stray change, please undo.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 33
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ce81e4c_a4dc523b",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 13
@@ -221,6 +308,52 @@
     },
     {
       "key": {
+        "uuid": "f04bf062_c18ce0c7",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: s/specialization/specializing/",
+      "range": {
+        "startLine": 856,
+        "startChar": 13,
+        "endLine": 856,
+        "endChar": 27
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82336b5b_0323b039",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: Lets add an explicit DCHECK_LT(index, FunctionCount()) here, not all stdlib implementations have reliable checks for this.",
+      "range": {
+        "startLine": 456,
+        "startChar": 2,
+        "endLine": 456,
+        "endChar": 13
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6bac13d_3e40936d",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 13
@@ -232,6 +365,70 @@
       "writtenOn": "2018-04-03T11:15:25Z",
       "side": 1,
       "message": "Is there a way to avoid using the isolate here in the NativeModule?",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3458f8a7_44c9d129",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "This is on my plate, feel free to leave a TODO(mstarzinger) in that regard here.",
+      "parentUuid": "c6bac13d_3e40936d",
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1da0d90_c2d0a5dc",
+        "filename": "src/wasm/wasm-code-specialization.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: The local {changed} variable will be set to true below even if no change happened.",
+      "range": {
+        "startLine": 138,
+        "startChar": 14,
+        "endLine": 138,
+        "endChar": 40
+      },
+      "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0227a4d5_cbc7cd49",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-03T12:01:24Z",
+      "side": 1,
+      "message": "nit: It is dangerous for this constructor to take a raw pointer and then internally rely in handles. A transition from unhandlified to handlified code is not allowed. Please leave a TODO here that {debug_info} should be handlified.",
+      "range": {
+        "startLine": 143,
+        "startChar": 38,
+        "endLine": 143,
+        "endChar": 63
+      },
       "revId": "0e731ee382ebfc3e5dcdb5ea9c741ef587287951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
