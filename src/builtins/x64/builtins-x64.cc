@@ -1041,14 +1041,42 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // kInterpreterBytecodeArrayRegister is already loaded with
   // SharedFunctionInfo::kFunctionDataOffset.
   __ bind(&maybe_load_debug_bytecode_array);
+  __ movp(rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
   __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
   __ SmiToInteger32(kScratchRegister,
                     FieldOperand(rcx, DebugInfo::kFlagsOffset));
-  __ testl(kScratchRegister, Immediate(DebugInfo::kHasBreakInfo));
+  __ testl(kScratchRegister, Immediate(DebugInfo::kHasDebugBytecodeArray));
   __ j(zero, &bytecode_array_loaded);
+
+  Label patch_bytecode;
+  __ movp(rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
+  __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
+  __ SmiToInteger32(rax, FieldOperand(rcx, DebugInfo::kFlagsOffset));
+  __ andb(rax, Immediate(DebugInfo::kDebugExecutionMode));
+
+  ExternalReference debug_execution_mode_address =
+      ExternalReference::debug_execution_mode_address(masm->isolate());
+  Operand debug_execution_mode =
+      masm->ExternalOperand(debug_execution_mode_address);
+
+  STATIC_ASSERT(static_cast<int>(DebugInfo::kDebugExecutionMode) ==
+                static_cast<int>(DebugInfo::kSideEffects));
+  __ cmpb(rax, debug_execution_mode);
+  __ j(not_equal, &patch_bytecode);
+  __ movp(rax, FieldOperand(closure, JSFunction::kSharedFunctionInfoOffset));
+  __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
   __ movp(kInterpreterBytecodeArrayRegister,
           FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  __ bind(&patch_bytecode);
+  __ Push(closure);
+  __ Push(feedback_vector);
+  __ Push(closure);
+  __ CallRuntime(Runtime::kDebugApplyInstrumentation);
+  __ Pop(feedback_vector);
+  __ Pop(closure);
+  __ jmp(&maybe_load_debug_bytecode_array);
 }
 
 static void Generate_InterpreterPushArgs(MacroAssembler* masm,

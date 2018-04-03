@@ -6679,8 +6679,9 @@ TEST(DebugEvaluateNoSideEffect) {
   for (i::Handle<i::JSFunction> fun : all_functions) {
     bool failed = false;
     {
-      i::NoSideEffectScope scope(isolate, true);
+      isolate->debug()->StartSideEffectCheckMode();
       failed = !isolate->debug()->PerformSideEffectCheck(fun);
+      isolate->debug()->StopSideEffectCheckMode();
     }
     if (failed) isolate->clear_pending_exception();
   }
