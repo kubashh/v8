@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8738201d_9f9a0a5d",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-04T12:41:23Z",
+      "side": 1,
+      "message": "Please note that I had to change this back to an i32_mul because shl clobbers ecx. Added a TODO.",
+      "revId": "e4681dfcc744c2f52ba9ae3e7e418c5f40859569",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
