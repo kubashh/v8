@@ -22,6 +22,30 @@
       "revId": "3d034acb6a505792c9d52300e82199ea1b302ee7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ab444d2_eaac9585",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-04T12:38:45Z",
+      "side": 1,
+      "message": "{asm} is a keyword in C++, and {assm} is already being used in other places, so I will stick to that for now.",
+      "parentUuid": "2f1027bf_1790e13a",
+      "range": {
+        "startLine": 553,
+        "startChar": 42,
+        "endLine": 553,
+        "endChar": 46
+      },
+      "revId": "3d034acb6a505792c9d52300e82199ea1b302ee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
