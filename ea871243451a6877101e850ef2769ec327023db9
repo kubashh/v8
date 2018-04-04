@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "af383dc1_4b620b32",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T18:21:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9e771018_b57b57a5",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 161,
+        "endChar": 69
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb8165b7_5daedba5",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 41
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "This implementation is most non-trival because kInterpreterBytecodeArrayRegister \u003d\u003d\u003d edi (oh how much time I spent to figure it out..) and after line 860 JSFunction value is lost.\nWe can fetch it back from stack iff we need to apply proper instrumentation.",
       "parentUuid": "bb8165b7_5daedba5",
+      "range": {
+        "startLine": 858,
+        "startChar": 9,
+        "endLine": 858,
+        "endChar": 12
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e994e70b_cd72941a",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T18:21:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bbc31cb1_352a8237",
       "range": {
         "startLine": 858,
         "startChar": 9,
