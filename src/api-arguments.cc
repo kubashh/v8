@@ -14,10 +14,8 @@ namespace v8 {
 namespace internal {
 
 // static
-bool CustomArgumentsBase ::PerformSideEffectCheck(Isolate* isolate,
-                                                  Object* callback_info) {
-  // TODO(7515): always pass a valid callback info object.
-  if (callback_info == nullptr) return false;
+bool CustomArgumentsBase::PerformSideEffectCheck(Isolate* isolate,
+                                                 Object* callback_info) {
   return isolate->debug()->PerformSideEffectCheckForCallback(callback_info);
 }
 
