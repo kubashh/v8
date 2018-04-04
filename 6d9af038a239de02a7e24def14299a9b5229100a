@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "769d994e_be16dfb7",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "descriptors_number \u003d\u003e descriptor_count or nof_descriptors ?",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "532f1f82_1b2fe98c",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "too many negations overflow :P (it\u0027s fine...)",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3812d241_bfde8cb2",
+        "filename": "src/transitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "Would it make sense to used the *Index suffix here as well?",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ecbf324_8e4cd3b4",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "nit: SmiConstant(kFound)",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96fddcc9_0fe98c11",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "nit: SmiConstant(kNotFound)",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a400d28d_4641411a",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "Not sure you need this here. Given that entries will be alpha-sorted and you have more than 10 you should be fine.",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14b0394a_3435e616",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "if (i % 30 \u003d\u003d 0) {\n  ... -\u003eNewPrivateSymbol();\n} else if (i % 10 \u003d\u003d 0) { \n  ... -\u003eNewSymbol();\n} else { \n  .. name \u003d MakeName(\u0027p\u0027, i);\n}",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2bb6bc8_bbea89e7",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-04T09:39:57Z",
+      "side": 1,
+      "message": "Maybe add a check for nof_transitions which you increment in the cases you add a transition.",
+      "revId": "6d9af038a239de02a7e24def14299a9b5229100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
