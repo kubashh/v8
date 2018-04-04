@@ -186,20 +186,14 @@ Node* GraphAssembler::DeoptimizeIf(DeoptimizeReason reason,
              condition, frame_state, current_effect_, current_control_);
 }
 
-Node* GraphAssembler::DeoptimizeIfNot(DeoptimizeKind kind,
-                                      DeoptimizeReason reason,
-                                      VectorSlotPair const& feedback,
-                                      Node* condition, Node* frame_state) {
-  return current_control_ = current_effect_ = graph()->NewNode(
-             common()->DeoptimizeUnless(kind, reason, feedback), condition,
-             frame_state, current_effect_, current_control_);
-}
-
 Node* GraphAssembler::DeoptimizeIfNot(DeoptimizeReason reason,
                                       VectorSlotPair const& feedback,
-                                      Node* condition, Node* frame_state) {
-  return DeoptimizeIfNot(DeoptimizeKind::kEager, reason, feedback, condition,
-                         frame_state);
+                                      Node* condition, Node* frame_state,
+                                      IsSafetyCheck is_safety_check) {
+  return current_control_ = current_effect_ = graph()->NewNode(
+             common()->DeoptimizeUnless(DeoptimizeKind::kEager, reason,
+                                        feedback, is_safety_check),
+             condition, frame_state, current_effect_, current_control_);
 }
 
 void GraphAssembler::Branch(Node* condition, GraphAssemblerLabel<0u>* if_true,

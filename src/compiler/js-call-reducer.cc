@@ -2215,12 +2215,10 @@ Node* JSCallReducer::SafeLoadElement(ElementsKind kind, Node* receiver,
       simplified()->LoadField(AccessBuilder::ForJSObjectElements()), receiver,
       *effect, control);
 
-  Node* masked_index =
-      graph()->NewNode(simplified()->MaskIndexWithBound(), *k, length);
-
   Node* element = *effect = graph()->NewNode(
-      simplified()->LoadElement(AccessBuilder::ForFixedArrayElement(kind)),
-      elements, masked_index, *effect, control);
+      simplified()->LoadElement(AccessBuilder::ForFixedArrayElement(
+          kind, LoadSensitivity::kCritical)),
+      elements, *k, *effect, control);
   return element;
 }
 
