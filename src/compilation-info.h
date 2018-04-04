@@ -160,6 +160,13 @@ class V8_EXPORT_PRIVATE CompilationInfo final {
   void MarkAsPoisonLoads() { SetFlag(kPoisonLoads); }
   bool is_poison_loads() const { return GetFlag(kPoisonLoads); }
 
+  void SetPoisoningMitigationLevel(PoisoningMitigationLevel poisoning_level) {
+    poisoning_level_ = poisoning_level;
+  }
+  PoisoningMitigationLevel GetPoisoningMitigationLevel() const {
+    return poisoning_level_;
+  }
+
   void MarkAsSplittingEnabled() { SetFlag(kSplittingEnabled); }
   bool is_splitting_enabled() const { return GetFlag(kSplittingEnabled); }
 
@@ -329,6 +336,8 @@ class V8_EXPORT_PRIVATE CompilationInfo final {
   SourceRangeMap* source_range_map_;  // Used when block coverage is enabled.
 
   unsigned flags_;
+  PoisoningMitigationLevel poisoning_level_ =
+      PoisoningMitigationLevel::kDontPoison;
 
   AbstractCode::Kind code_kind_;
   uint32_t stub_key_;

@@ -26,7 +26,6 @@ EffectControlLinearizer::EffectControlLinearizer(
     : js_graph_(js_graph),
       schedule_(schedule),
       temp_zone_(temp_zone),
-      mask_array_index_(mask_array_index),
       source_positions_(source_positions),
       graph_assembler_(js_graph, nullptr, nullptr, temp_zone),
       frame_state_zapper_(nullptr) {}
@@ -1310,7 +1309,7 @@ Node* EffectControlLinearizer::LowerCheckBounds(Node* node, Node* frame_state) {
 
   Node* check = __ Uint32LessThan(index, limit);
   __ DeoptimizeIfNot(DeoptimizeReason::kOutOfBounds, params.feedback(), check,
-                     frame_state);
+                     frame_state, IsSafetyCheck::kCriticalSafetyCheck);
   return index;
 }
 
@@ -1526,8 +1525,8 @@ Node* EffectControlLinearizer::LowerCheckInternalizedString(Node* node,
 
 void EffectControlLinearizer::LowerCheckIf(Node* node, Node* frame_state) {
   Node* value = node->InputAt(0);
-  __ DeoptimizeIfNot(DeoptimizeKind::kEager, DeoptimizeReasonOf(node->op()),
-                     VectorSlotPair(), value, frame_state);
+  __ DeoptimizeIfNot(DeoptimizeReasonOf(node->op()), VectorSlotPair(), value,
+                     frame_state);
 }
 
 Node* EffectControlLinearizer::LowerCheckedInt32Add(Node* node,
@@ -3735,7 +3734,8 @@ Node* EffectControlLinearizer::LowerLoadTypedElement(Node* node) {
                       : __ UnsafePointerAdd(base, external);
 
   // Perform the actual typed element access.
-  return __ LoadElement(AccessBuilder::ForTypedArrayElement(array_type, true),
+  return __ LoadElement(AccessBuilder::ForTypedArrayElement(
+                            array_type, true, LoadSensitivity::kCritical),
                         storage, index);
 }
 

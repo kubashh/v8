@@ -236,7 +236,7 @@ Node* InterpreterAssembler::RegisterFrameOffset(Node* index) {
 
 Node* InterpreterAssembler::LoadRegister(Node* reg_index) {
   return Load(MachineType::AnyTagged(), GetInterpretedFramePointer(),
-              RegisterFrameOffset(reg_index), LoadSensitivity::kNeedsPoisoning);
+              RegisterFrameOffset(reg_index), LoadSensitivity::kCritical);
 }
 
 Node* InterpreterAssembler::LoadRegister(Register reg) {
@@ -648,7 +648,7 @@ Node* InterpreterAssembler::LoadConstantPoolEntry(Node* index) {
   Node* constant_pool = LoadObjectField(BytecodeArrayTaggedPointer(),
                                         BytecodeArray::kConstantPoolOffset);
   return LoadFixedArrayElement(constant_pool, index,
-                               LoadSensitivity::kNeedsPoisoning);
+                               LoadSensitivity::kCritical);
 }
 
 Node* InterpreterAssembler::LoadAndUntagConstantPoolEntry(Node* index) {
