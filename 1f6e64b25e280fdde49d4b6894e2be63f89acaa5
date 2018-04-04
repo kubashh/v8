@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b4a1954_aa5922b1",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-04T17:21:17Z",
+      "side": 1,
+      "message": "nit: Since this can only be called for wasm, maybe rename it to \"wasm_runtime_exception_support\"?",
+      "revId": "1f6e64b25e280fdde49d4b6894e2be63f89acaa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
