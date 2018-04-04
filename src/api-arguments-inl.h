@@ -24,8 +24,9 @@ namespace internal {
 
 #define PREPARE_CALLBACK_INFO(ISOLATE, F, RETURN_VALUE, API_RETURN_TYPE, \
                               CALLBACK_INFO)                             \
-  if (ISOLATE->needs_side_effect_check() &&                              \
-      !PerformSideEffectCheck(ISOLATE, *CALLBACK_INFO)) {                \
+  if (ISOLATE->debug_execution_mode() == DebugInfo::kSideEffects &&      \
+      !ISOLATE->debug()->PerformSideEffectCheckForCallback(              \
+          CALLBACK_INFO.is_null() ? nullptr : *CALLBACK_INFO)) {         \
     return RETURN_VALUE();                                               \
   }                                                                      \
   VMState<EXTERNAL> state(ISOLATE);                                      \
@@ -83,8 +84,8 @@ Handle<Object> FunctionCallbackArguments::Call(CallHandlerInfo* handler) {
   RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kFunctionCallback);
   v8::FunctionCallback f =
       v8::ToCData<v8::FunctionCallback>(handler->callback());
-  if (isolate->needs_side_effect_check() &&
-      !PerformSideEffectCheck(isolate, handler)) {
+  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects &&
+      !isolate->debug()->PerformSideEffectCheckForCallback(handler)) {
     return Handle<Object>();
   }
   VMState<EXTERNAL> state(isolate);
@@ -158,7 +159,6 @@ Handle<Object> PropertyCallbackArguments::CallNamedSetter(
   Isolate* isolate = this->isolate();
   RuntimeCallTimerScope timer(isolate,
                               RuntimeCallCounterId::kNamedSetterCallback);
-  DCHECK(!isolate->needs_side_effect_check());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -177,8 +177,6 @@ Handle<Object> PropertyCallbackArguments::CallNamedDefiner(
                               RuntimeCallCounterId::kNamedDefinerCallback);
   GenericNamedPropertyDefinerCallback f =
       ToCData<GenericNamedPropertyDefinerCallback>(interceptor->definer());
-  // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -196,8 +194,6 @@ Handle<Object> PropertyCallbackArguments::CallIndexedSetter(
                               RuntimeCallCounterId::kIndexedSetterCallback);
   IndexedPropertySetterCallback f =
       ToCData<IndexedPropertySetterCallback>(interceptor->setter());
-  // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -216,8 +212,6 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDefiner(
                               RuntimeCallCounterId::kIndexedDefinerCallback);
   IndexedPropertyDefinerCallback f =
       ToCData<IndexedPropertyDefinerCallback>(interceptor->definer());
-  // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, v8::Value,
                         side_effect_check_not_supported);
@@ -295,8 +289,6 @@ Handle<Object> PropertyCallbackArguments::CallAccessorSetter(
                               RuntimeCallCounterId::kAccessorSetterCallback);
   AccessorNameSetterCallback f =
       ToCData<AccessorNameSetterCallback>(accessor_info->setter());
-  // We should not have come this far when side effect checks are enabled.
-  DCHECK(!isolate->needs_side_effect_check());
   Handle<Object> side_effect_check_not_supported;
   PREPARE_CALLBACK_INFO(isolate, f, Handle<Object>, void,
                         side_effect_check_not_supported);
