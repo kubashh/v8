@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9df60a6f_9bcb82bf",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-04-04T18:06:37Z",
+      "side": 1,
+      "message": "nit: GetSpillSlot (slots don\u0027t spill, they hold register values that spill.)",
+      "range": {
+        "startLine": 1005,
+        "startChar": 2,
+        "endLine": 1005,
+        "endChar": 16
+      },
+      "revId": "ef4390d248c8dead0c81468f5ba59bb4d268c3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71df559f_e8599881",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-04-04T18:06:37Z",
+      "side": 1,
+      "message": "nit: // List of operands to be changed from stack parameters to spill slots.",
+      "range": {
+        "startLine": 1146,
+        "startChar": 13,
+        "endLine": 1146,
+        "endChar": 18
+      },
+      "revId": "ef4390d248c8dead0c81468f5ba59bb4d268c3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d70c214d_d0eab72d",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-04-04T18:06:37Z",
+      "side": 1,
+      "message": "nit: spill_slots_",
+      "range": {
+        "startLine": 1147,
+        "startChar": 59,
+        "endLine": 1147,
+        "endChar": 73
+      },
+      "revId": "ef4390d248c8dead0c81468f5ba59bb4d268c3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
