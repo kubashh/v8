@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27f3d747_2da39f55",
+        "filename": "test/debugger/debug/es6/debug-promises/reject-in-constructor-opt.js",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T11:33:22Z",
+      "side": 1,
+      "message": "Can we assert at the end of this test that this has been decremented to 0?",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "9e7787e1026c50b016a25fb6d9a616b86d259aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
