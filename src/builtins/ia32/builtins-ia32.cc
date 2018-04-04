@@ -853,7 +853,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
 
   // Get the bytecode array from the function object (or from the DebugInfo if
   // it is present) and load it into kInterpreterBytecodeArrayRegister.
-  Label maybe_load_debug_bytecode_array, bytecode_array_loaded;
+  Label maybe_load_debug_bytecode_array, bytecode_array_loaded,
+      apply_instrumentation;
+  __ mov(ecx, edi);  // Store the JS function object.
   __ mov(eax, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
   __ mov(kInterpreterBytecodeArrayRegister,
          FieldOperand(eax, SharedFunctionInfo::kFunctionDataOffset));
@@ -972,17 +974,41 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // Load debug copy of the bytecode array if it exists.
   // kInterpreterBytecodeArrayRegister is already loaded with
   // SharedFunctionInfo::kFunctionDataOffset.
+  Label load_from_debug_info;
+
   __ bind(&maybe_load_debug_bytecode_array);
-  __ push(ebx);  // feedback_vector == ebx, so save it.
-  __ mov(ecx, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
-  __ mov(ebx, FieldOperand(ecx, DebugInfo::kFlagsOffset));
-  __ SmiUntag(ebx);
-  __ test(ebx, Immediate(DebugInfo::kHasBreakInfo));
-  __ pop(ebx);
-  __ j(zero, &bytecode_array_loaded);
+  __ mov(eax, FieldOperand(eax, SharedFunctionInfo::kDebugInfoOffset));
+  __ mov(eax, FieldOperand(eax, DebugInfo::kDebugBytecodeArrayOffset));
+  __ JumpIfRoot(eax, Heap::kUndefinedValueRootIndex, &bytecode_array_loaded);
+
+  __ mov(edi, FieldOperand(ecx, JSFunction::kSharedFunctionInfoOffset));
+  __ mov(edi, FieldOperand(edi, SharedFunctionInfo::kDebugInfoOffset));
+
+  __ bind(&load_from_debug_info);
+  __ mov(eax, FieldOperand(edi, DebugInfo::kFlagsOffset));
+  __ SmiUntag(eax);
+  __ and_(eax, Immediate(DebugInfo::kDebugExecutionMode));
+  STATIC_ASSERT(static_cast<int>(DebugInfo::kDebugExecutionMode) ==
+                static_cast<int>(DebugInfo::kSideEffects));
+  __ cmp(eax,
+         Operand::StaticVariable(
+             ExternalReference::debug_execution_mode_address(masm->isolate())));
+  __ j(not_equal, &apply_instrumentation);
+
   __ mov(kInterpreterBytecodeArrayRegister,
-         FieldOperand(ecx, DebugInfo::kDebugBytecodeArrayOffset));
+         FieldOperand(edi, DebugInfo::kDebugBytecodeArrayOffset));
   __ jmp(&bytecode_array_loaded);
+
+  __ bind(&apply_instrumentation);
+  __ push(ecx);  // preserve function
+  __ push(ebx);  // preserve feedback_vector
+  __ push(edi);  // preserve debug_info
+  __ push(ecx);  // pass function as argument
+  __ CallRuntime(Runtime::kDebugApplyInstrumentation);
+  __ pop(edi);
+  __ pop(ebx);
+  __ pop(ecx);
+  __ jmp(&load_from_debug_info);
 }
 
 
