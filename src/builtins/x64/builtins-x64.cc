@@ -1042,12 +1042,29 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   // SharedFunctionInfo::kFunctionDataOffset.
   __ bind(&maybe_load_debug_bytecode_array);
   __ movp(rcx, FieldOperand(rax, SharedFunctionInfo::kDebugInfoOffset));
-  __ SmiToInteger32(kScratchRegister,
-                    FieldOperand(rcx, DebugInfo::kFlagsOffset));
-  __ testl(kScratchRegister, Immediate(DebugInfo::kHasBreakInfo));
-  __ j(zero, &bytecode_array_loaded);
-  __ movp(kInterpreterBytecodeArrayRegister,
-          FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));
+  __ movp(r14, FieldOperand(rcx, DebugInfo::kDebugBytecodeArrayOffset));
+  __ JumpIfRoot(r14, Heap::kUndefinedValueRootIndex, &bytecode_array_loaded);
+
+  __ movp(kInterpreterBytecodeArrayRegister, r14);
+  __ SmiToInteger32(rax, FieldOperand(rcx, DebugInfo::kFlagsOffset));
+  __ andb(rax, Immediate(DebugInfo::kDebugExecutionMode));
+  STATIC_ASSERT(static_cast<int>(DebugInfo::kDebugExecutionMode) ==
+                static_cast<int>(DebugInfo::kSideEffects));
+  ExternalReference debug_execution_mode_address =
+      ExternalReference::debug_execution_mode_address(masm->isolate());
+  Operand debug_execution_mode =
+      masm->ExternalOperand(debug_execution_mode_address);
+  __ cmpb(rax, debug_execution_mode);
+  __ j(equal, &bytecode_array_loaded);
+
+  __ Push(closure);
+  __ Push(feedback_vector);
+  __ Push(kInterpreterBytecodeArrayRegister);
+  __ Push(closure);
+  __ CallRuntime(Runtime::kDebugApplyInstrumentation);
+  __ Pop(kInterpreterBytecodeArrayRegister);
+  __ Pop(feedback_vector);
+  __ Pop(closure);
   __ jmp(&bytecode_array_loaded);
 }
 
