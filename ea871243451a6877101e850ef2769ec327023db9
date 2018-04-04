@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2d614aa_848df0a6",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "Please note that this assertion is no longer valid. So far, every store was considered to cause side-effects. Now we could end up here if the runtime check passes.\n\nThis could happen if you create a new Array object with an array literal, then assign a new __proto__ to it, which has an accessor or interceptor property. We would then be able to end up here by storing to that Array object.\n\nWe could initially consider all setter and definer callbacks to have side effects, and only fix the code here to correctly handle an empty argument for callback_info in CustomArgumentsBase::PerformSideEffectCheck.",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 161,
+        "endChar": 69
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb8165b7_5daedba5",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "Could we get away without changing edi? I would prefer that if possible.\n\nWe could, after jumping to maybe_load_debug_bytecode_array, copy eax into ecx...",
+      "range": {
+        "startLine": 858,
+        "startChar": 9,
+        "endLine": 858,
+        "endChar": 12
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8d6926_542d411e",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "... and instead of edi we could just use ecx.",
+      "range": {
+        "startLine": 984,
+        "startChar": 9,
+        "endLine": 984,
+        "endChar": 12
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "396c3008_bc667faf",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "Can we have the STATIC_ASSERT here as well?",
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69e50c09_48ef6acb",
+        "filename": "src/debug/debug-evaluate.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "Let\u0027s call this kHasNoSideEffect",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 19
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdf0f4c5_80044387",
+        "filename": "src/debug/debug-evaluate.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "Let\u0027s rename this GetSideEffectState",
+      "range": {
+        "startLine": 45,
+        "startChar": 25,
+        "endLine": 45,
+        "endChar": 48
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5b59b5a_30512587",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "I think we can drop this comparison with 0.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 66,
+        "endLine": 1226,
+        "endChar": 72
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3f55038_12a03a9d",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-04T10:38:19Z",
+      "side": 1,
+      "message": "We need to do the same in DebugInfo::ClearCoverageInfo?",
+      "range": {
+        "startLine": 33,
+        "startChar": 16,
+        "endLine": 33,
+        "endChar": 35
+      },
+      "revId": "ea871243451a6877101e850ef2769ec327023db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
