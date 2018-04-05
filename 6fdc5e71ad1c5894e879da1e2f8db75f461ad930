@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "c0ed2983_931e2fba",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "Please move these new labels inside lookup_transition block to line 663 and rename the second one to found_handler_candidate.",
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d82795_cb75574e",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "Please move it to line 662 and call it var_transition_map.",
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71a04fea_86ced453",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "This var is not necessary anymore.",
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69239483_958d522f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "TVARIABLE(Object, var_transition)",
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd41339a_4980eb0d",
         "filename": "src/ic/keyed-store-generic.cc",
         "patchSetId": 6
@@ -19,6 +87,109 @@
         "endLine": 673,
         "endChar": 60
       },
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7adf4b2c_40c4a43f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "found_handler_candidate",
+      "range": {
+        "startLine": 678,
+        "startChar": 14,
+        "endLine": 678,
+        "endChar": 62
+      },
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50e1642d_a4d28559",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "TNode\u003cWeakCell\u003e weak_cell \u003d",
+      "range": {
+        "startLine": 709,
+        "startChar": 10,
+        "endLine": 709,
+        "endChar": 41
+      },
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61796c62_4848ceff",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "Please assign directly to var_transition_map",
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd2ac7a8_2132204f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "found_handler_candidate",
+      "range": {
+        "startLine": 714,
+        "startChar": 16,
+        "endLine": 714,
+        "endChar": 64
+      },
+      "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72e74da4_d9e004a7",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-04-05T14:57:51Z",
+      "side": 1,
+      "message": "found_handler_candidate\nAnd please move this block to the end of lookup_transition block.",
       "revId": "6fdc5e71ad1c5894e879da1e2f8db75f461ad930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
