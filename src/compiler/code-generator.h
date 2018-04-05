@@ -87,7 +87,7 @@ class CodeGenerator final : public GapResolver::Assembler {
                          JumpOptimizationInfo* jump_opt,
                          std::vector<trap_handler::ProtectedInstructionData>*
                              protected_instructions,
-                         PoisoningMitigationLevel poisoning_enabled);
+                         PoisoningMitigationLevel poisoning_level);
 
   // Generate native code. After calling AssembleCode, call FinalizeCode to
   // produce the actual code object. If an error occurs during either phase,
@@ -416,7 +416,7 @@ class CodeGenerator final : public GapResolver::Assembler {
   SourcePositionTableBuilder source_position_table_builder_;
   std::vector<trap_handler::ProtectedInstructionData>* protected_instructions_;
   CodeGenResult result_;
-  PoisoningMitigationLevel poisoning_enabled_;
+  PoisoningMitigationLevel poisoning_level_;
 };
 
 }  // namespace compiler

@@ -1148,7 +1148,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
               Operand(offset.offset()));
       break;
     }
-    case kArchPoisonOnSpeculationWord:
+    case kArchWordPoisonOnSpeculation:
       __ and_(i.OutputRegister(), i.InputRegister(0),
               kSpeculationPoisonRegister);
       break;

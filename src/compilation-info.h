@@ -45,17 +45,16 @@ class V8_EXPORT_PRIVATE CompilationInfo final {
     kAccessorInliningEnabled = 1 << 3,
     kFunctionContextSpecializing = 1 << 4,
     kInliningEnabled = 1 << 5,
-    kPoisonLoads = 1 << 6,
-    kDisableFutureOptimization = 1 << 7,
-    kSplittingEnabled = 1 << 8,
-    kSourcePositionsEnabled = 1 << 9,
-    kBailoutOnUninitialized = 1 << 10,
-    kLoopPeelingEnabled = 1 << 11,
-    kUntrustedCodeMitigations = 1 << 12,
-    kSwitchJumpTableEnabled = 1 << 13,
-    kCalledWithCodeStartRegister = 1 << 14,
-    kPoisonRegisterArguments = 1 << 15,
-    kAllocationFoldingEnabled = 1 << 16
+    kDisableFutureOptimization = 1 << 6,
+    kSplittingEnabled = 1 << 7,
+    kSourcePositionsEnabled = 1 << 8,
+    kBailoutOnUninitialized = 1 << 9,
+    kLoopPeelingEnabled = 1 << 10,
+    kUntrustedCodeMitigations = 1 << 11,
+    kSwitchJumpTableEnabled = 1 << 12,
+    kCalledWithCodeStartRegister = 1 << 13,
+    kPoisonRegisterArguments = 1 << 14,
+    kAllocationFoldingEnabled = 1 << 15
   };
 
   // TODO(mtrofin): investigate if this might be generalized outside wasm, with
@@ -157,8 +156,12 @@ class V8_EXPORT_PRIVATE CompilationInfo final {
   void MarkAsInliningEnabled() { SetFlag(kInliningEnabled); }
   bool is_inlining_enabled() const { return GetFlag(kInliningEnabled); }
 
-  void MarkAsPoisonLoads() { SetFlag(kPoisonLoads); }
-  bool is_poison_loads() const { return GetFlag(kPoisonLoads); }
+  void SetPoisoningMitigationLevel(PoisoningMitigationLevel poisoning_level) {
+    poisoning_level_ = poisoning_level;
+  }
+  PoisoningMitigationLevel GetPoisoningMitigationLevel() const {
+    return poisoning_level_;
+  }
 
   void MarkAsSplittingEnabled() { SetFlag(kSplittingEnabled); }
   bool is_splitting_enabled() const { return GetFlag(kSplittingEnabled); }
@@ -329,6 +332,8 @@ class V8_EXPORT_PRIVATE CompilationInfo final {
   SourceRangeMap* source_range_map_;  // Used when block coverage is enabled.
 
   unsigned flags_;
+  PoisoningMitigationLevel poisoning_level_ =
+      PoisoningMitigationLevel::kDontPoison;
 
   AbstractCode::Kind code_kind_;
   uint32_t stub_key_;

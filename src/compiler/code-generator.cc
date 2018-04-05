@@ -43,7 +43,7 @@ CodeGenerator::CodeGenerator(
     base::Optional<OsrHelper> osr_helper, int start_source_position,
     JumpOptimizationInfo* jump_opt,
     std::vector<trap_handler::ProtectedInstructionData>* protected_instructions,
-    PoisoningMitigationLevel poisoning_enabled)
+    PoisoningMitigationLevel poisoning_level)
     : zone_(codegen_zone),
       isolate_(isolate),
       frame_access_state_(nullptr),
@@ -75,7 +75,7 @@ CodeGenerator::CodeGenerator(
       source_position_table_builder_(info->SourcePositionRecordingMode()),
       protected_instructions_(protected_instructions),
       result_(kSuccess),
-      poisoning_enabled_(poisoning_enabled) {
+      poisoning_level_(poisoning_level) {
   for (int i = 0; i < code->InstructionBlockCount(); ++i) {
     new (&labels_[i]) Label;
   }
@@ -1180,7 +1180,7 @@ DeoptimizationExit* CodeGenerator::AddDeoptimizationExit(
 }
 
 void CodeGenerator::InitializeSpeculationPoison() {
-  if (poisoning_enabled_ == PoisoningMitigationLevel::kOff) return;
+  if (poisoning_level_ == PoisoningMitigationLevel::kDontPoison) return;
 
   // Initialize {kSpeculationPoisonRegister} either by comparing the expected
   // with the actual call target, or by unconditionally using {-1} initially.
@@ -1197,7 +1197,7 @@ void CodeGenerator::InitializeSpeculationPoison() {
 }
 
 void CodeGenerator::ResetSpeculationPoison() {
-  if (poisoning_enabled_ != PoisoningMitigationLevel::kOff) {
+  if (poisoning_level_ != PoisoningMitigationLevel::kDontPoison) {
     tasm()->ResetSpeculationPoisonRegister();
   }
 }

@@ -23,7 +23,7 @@ class CodeAssemblerTester {
       : zone_(isolate->allocator(), ZONE_NAME),
         scope_(isolate),
         state_(isolate, &zone_, VoidDescriptor(isolate), Code::STUB, "test",
-               PoisoningMitigationLevel::kOff) {}
+               PoisoningMitigationLevel::kDontPoison) {}
 
   // Test generating code for a JS function (e.g. builtins).
   CodeAssemblerTester(Isolate* isolate, int parameter_count,
@@ -31,20 +31,20 @@ class CodeAssemblerTester {
       : zone_(isolate->allocator(), ZONE_NAME),
         scope_(isolate),
         state_(isolate, &zone_, parameter_count, kind, "test",
-               PoisoningMitigationLevel::kOff) {}
+               PoisoningMitigationLevel::kDontPoison) {}
 
   CodeAssemblerTester(Isolate* isolate, Code::Kind kind)
       : zone_(isolate->allocator(), ZONE_NAME),
         scope_(isolate),
         state_(isolate, &zone_, 0, kind, "test",
-               PoisoningMitigationLevel::kOff) {}
+               PoisoningMitigationLevel::kDontPoison) {}
 
   CodeAssemblerTester(Isolate* isolate, CallDescriptor* call_descriptor,
                       const char* name = "test")
       : zone_(isolate->allocator(), ZONE_NAME),
         scope_(isolate),
         state_(isolate, &zone_, call_descriptor, Code::STUB, name,
-               PoisoningMitigationLevel::kOff, 0, -1) {}
+               PoisoningMitigationLevel::kDontPoison, 0, -1) {}
 
   CodeAssemblerState* state() { return &state_; }
 
