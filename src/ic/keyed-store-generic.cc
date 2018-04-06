@@ -16,7 +16,9 @@
 namespace v8 {
 namespace internal {
 
-using compiler::Node;
+using Node = compiler::Node;
+template <class T>
+using TNode = compiler::TNode<T>;
 
 class KeyedStoreGenericAssembler : public AccessorAssembler {
  public:
@@ -26,6 +28,11 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
   void KeyedStoreGeneric();
 
   void StoreIC_Uninitialized();
+
+  // Building block for fast case of Object.assign.
+  void EmitAssignNamedProperty(TNode<Context> context,
+                               TNode<JSReceiver> receiver, TNode<Name> name,
+                               TNode<Object> value);
 
  private:
   enum UpdateLength {
@@ -95,6 +102,13 @@ void StoreICUninitializedGenerator::Generate(
     compiler::CodeAssemblerState* state) {
   KeyedStoreGenericAssembler assembler(state);
   assembler.StoreIC_Uninitialized();
+}
+
+void KeyedStoreGenericGenerator::EmitAssignNamedProperty(
+    compiler::CodeAssemblerState* state, TNode<Context> context,
+    TNode<JSReceiver> receiver, TNode<Name> name, TNode<Object> value) {
+  KeyedStoreGenericAssembler assembler(state);
+  assembler.EmitAssignNamedProperty(context, receiver, name, value);
 }
 
 void KeyedStoreGenericAssembler::BranchIfPrototypesHaveNonFastElements(
@@ -947,6 +961,27 @@ void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
     TailCallRuntime(Runtime::kStoreIC_Miss, context, value, slot, vector,
                     receiver, name);
   }
+}
+
+void KeyedStoreGenericAssembler::EmitAssignNamedProperty(
+    TNode<Context> context, TNode<JSReceiver> receiver, TNode<Name> name,
+    TNode<Object> value) {
+  StoreICParameters p(context, receiver, name, value, nullptr, nullptr);
+
+  Label done(this), slow(this, Label::kDeferred);
+  ExitPoint exit_point(this, [&](Node* result) { Goto(&done); });
+
+  EmitGenericPropertyStore(receiver, LoadMap(receiver), &p, &exit_point, &slow,
+                           true);
+
+  BIND(&slow);
+  {
+    CallRuntime(Runtime::kSetProperty, context, receiver, name, value,
+                SmiConstant(Smi::FromEnum(LanguageMode::kStrict)));
+    Goto(&done);
+  }
+
+  BIND(&done);
 }
 
 }  // namespace internal
