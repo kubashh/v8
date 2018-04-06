@@ -273,13 +273,15 @@ void TestBuildingGraph(
     compiler::RuntimeExceptionSupport runtime_exception_support) {
   if (module) {
     compiler::WasmGraphBuilder builder(
-        module, zone, jsgraph, CEntryStub(jsgraph->isolate(), 1).GetCode(), sig,
-        source_position_table, runtime_exception_support);
+        module, zone, jsgraph, CEntryStub(jsgraph->isolate(), 1).GetCode(),
+        jsgraph->isolate()->factory()->null_value(), sig, source_position_table,
+        runtime_exception_support);
     TestBuildingGraphWithBuilder(&builder, zone, sig, start, end);
   } else {
     compiler::WasmGraphBuilder builder(
         nullptr, zone, jsgraph, CEntryStub(jsgraph->isolate(), 1).GetCode(),
-        sig, source_position_table, runtime_exception_support);
+        jsgraph->isolate()->factory()->null_value(), sig, source_position_table,
+        runtime_exception_support);
     TestBuildingGraphWithBuilder(&builder, zone, sig, start, end);
   }
 }
@@ -444,9 +446,9 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
           : compiler::WasmCompilationUnit::CompilationMode::kTurbofan;
   compiler::WasmCompilationUnit unit(
       isolate(), &module_env, native_module, func_body, func_name,
-      function_->func_index, CEntryStub(isolate(), 1).GetCode(), comp_mode,
-      isolate()->counters(), builder_->runtime_exception_support(),
-      builder_->lower_simd());
+      function_->func_index, CEntryStub(isolate(), 1).GetCode(),
+      isolate()->factory()->null_value(), comp_mode, isolate()->counters(),
+      builder_->runtime_exception_support(), builder_->lower_simd());
   unit.ExecuteCompilation();
   wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
   if (wasm::WasmCode::ShouldBeLogged(isolate())) {

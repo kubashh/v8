@@ -540,10 +540,10 @@ const wasm::WasmCode* LazyCompilationOrchestrator::CompileFunction(
                     module_start + func->code.end_offset()};
 
   ErrorThrower thrower(isolate, "WasmLazyCompile");
-  compiler::WasmCompilationUnit unit(isolate, &module_env,
-                                     compiled_module->GetNativeModule(), body,
-                                     CStrVector(func_name.c_str()), func_index,
-                                     CEntryStub(isolate, 1).GetCode());
+  compiler::WasmCompilationUnit unit(
+      isolate, &module_env, compiled_module->GetNativeModule(), body,
+      CStrVector(func_name.c_str()), func_index,
+      CEntryStub(isolate, 1).GetCode(), isolate->factory()->null_value());
   unit.ExecuteCompilation();
   wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
 
@@ -894,6 +894,7 @@ class CompilationUnitBuilder {
         wasm::FunctionBody{function->sig, buffer_offset, bytes.begin(),
                            bytes.end()},
         name, function->func_index, centry_stub_,
+        compilation_state_->isolate()->factory()->null_value(),
         compiler::WasmCompilationUnit::GetDefaultCompilationMode(),
         compilation_state_->isolate()->async_counters().get()));
   }
