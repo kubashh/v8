@@ -4359,23 +4359,19 @@ TNode<BoolT> CodeStubAssembler::IsDictionaryMap(SloppyTNode<Map> map) {
   return IsSetWord32<Map::IsDictionaryMapBit>(bit_field3);
 }
 
-Node* CodeStubAssembler::IsExtensibleMap(Node* map) {
-  CSA_ASSERT(this, IsMap(map));
+TNode<BoolT> CodeStubAssembler::IsExtensibleMap(SloppyTNode<Map> map) {
   return IsSetWord32<Map::IsExtensibleBit>(LoadMapBitField2(map));
 }
 
-Node* CodeStubAssembler::IsCallableMap(Node* map) {
-  CSA_ASSERT(this, IsMap(map));
+TNode<BoolT> CodeStubAssembler::IsCallableMap(SloppyTNode<Map> map) {
   return IsSetWord32<Map::IsCallableBit>(LoadMapBitField(map));
 }
 
-Node* CodeStubAssembler::IsDeprecatedMap(Node* map) {
-  CSA_ASSERT(this, IsMap(map));
+TNode<BoolT> CodeStubAssembler::IsDeprecatedMap(SloppyTNode<Map> map) {
   return IsSetWord32<Map::IsDeprecatedBit>(LoadMapBitField3(map));
 }
 
-Node* CodeStubAssembler::IsUndetectableMap(Node* map) {
-  CSA_ASSERT(this, IsMap(map));
+TNode<BoolT> CodeStubAssembler::IsUndetectableMap(SloppyTNode<Map> map) {
   return IsSetWord32<Map::IsUndetectableBit>(LoadMapBitField(map));
 }
 
@@ -4428,15 +4424,15 @@ TNode<BoolT> CodeStubAssembler::IsPrototypeTypedArrayPrototype(
   return WordEqual(proto_of_proto, typed_array_prototype);
 }
 
-Node* CodeStubAssembler::IsCallable(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsCallable(SloppyTNode<HeapObject> object) {
   return IsCallableMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsCell(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsCell(SloppyTNode<HeapObject> object) {
   return WordEqual(LoadMap(object), LoadRoot(Heap::kCellMapRootIndex));
 }
 
-Node* CodeStubAssembler::IsCode(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsCode(SloppyTNode<HeapObject> object) {
   return HasInstanceType(object, CODE_TYPE);
 }
 
@@ -4666,7 +4662,7 @@ Node* CodeStubAssembler::IsWeakCell(Node* object) {
   return IsWeakCellMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsBoolean(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsBoolean(SloppyTNode<HeapObject> object) {
   return IsBooleanMap(LoadMap(object));
 }
 
@@ -4674,15 +4670,16 @@ Node* CodeStubAssembler::IsPropertyCell(Node* object) {
   return IsPropertyCellMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsAccessorInfo(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsAccessorInfo(SloppyTNode<HeapObject> object) {
   return IsAccessorInfoMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsAccessorPair(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsAccessorPair(SloppyTNode<HeapObject> object) {
   return IsAccessorPairMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsAllocationSite(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsAllocationSite(
+    SloppyTNode<HeapObject> object) {
   return IsAllocationSiteMap(LoadMap(object));
 }
 
@@ -4694,7 +4691,8 @@ TNode<BoolT> CodeStubAssembler::IsHeapNumber(Node* object) {
   return IsHeapNumberMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsMutableHeapNumber(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsMutableHeapNumber(
+    SloppyTNode<HeapObject> object) {
   return IsMutableHeapNumberMap(LoadMap(object));
 }
 
@@ -4723,11 +4721,12 @@ Node* CodeStubAssembler::IsSymbol(Node* object) {
   return IsSymbolMap(LoadMap(object));
 }
 
-Node* CodeStubAssembler::IsBigIntInstanceType(Node* instance_type) {
+TNode<BoolT> CodeStubAssembler::IsBigIntInstanceType(
+    SloppyTNode<Int32T> instance_type) {
   return InstanceTypeEqual(instance_type, BIGINT_TYPE);
 }
 
-Node* CodeStubAssembler::IsBigInt(Node* object) {
+TNode<BoolT> CodeStubAssembler::IsBigInt(SloppyTNode<HeapObject> object) {
   return IsBigIntInstanceType(LoadInstanceType(object));
 }
 
@@ -4814,8 +4813,9 @@ TNode<BoolT> CodeStubAssembler::IsNumber(SloppyTNode<Object> object) {
 TNode<BoolT> CodeStubAssembler::IsNumeric(SloppyTNode<Object> object) {
   return Select<BoolT>(TaggedIsSmi(object), [=] { return Int32TrueConstant(); },
                        [=] {
-                         return UncheckedCast<BoolT>(
-                             Word32Or(IsHeapNumber(object), IsBigInt(object)));
+                         TNode<HeapObject> heap_object = CAST(object);
+                         return UncheckedCast<BoolT>(Word32Or(
+                             IsHeapNumber(heap_object), IsBigInt(heap_object)));
                        });
 }
 
@@ -5896,7 +5896,7 @@ TNode<BigInt> CodeStubAssembler::ToBigInt(SloppyTNode<Context> context,
   Label if_bigint(this), done(this), if_throw(this);
 
   GotoIf(TaggedIsSmi(input), &if_throw);
-  GotoIf(IsBigInt(input), &if_bigint);
+  GotoIf(IsBigInt(CAST(input)), &if_bigint);
   var_result = CAST(CallRuntime(Runtime::kToBigInt, context, input));
   Goto(&done);
 

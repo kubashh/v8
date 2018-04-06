@@ -618,7 +618,7 @@ void TypedArrayBuiltinsAssembler::ConstructByArrayLike(
 
 void TypedArrayBuiltinsAssembler::ConstructByIterable(
     TNode<Context> context, TNode<JSTypedArray> holder,
-    TNode<JSReceiver> iterable, TNode<Object> iterator_fn,
+    TNode<JSReceiver> iterable, TNode<HeapObject> iterator_fn,
     TNode<Smi> element_size) {
   CSA_ASSERT(this, IsCallable(iterator_fn));
   Label fast_path(this), slow_path(this), done(this);
@@ -683,9 +683,10 @@ TF_BUILTIN(CreateTypedArray, TypedArrayBuiltinsAssembler) {
         CAST(GetMethod(context, arg1, isolate()->factory()->iterator_symbol(),
                        &if_iteratorundefined));
     GotoIf(TaggedIsSmi(iteratorFn), &if_iteratornotcallable);
-    GotoIfNot(IsCallable(iteratorFn), &if_iteratornotcallable);
+    GotoIfNot(IsCallable(CAST(iteratorFn)), &if_iteratornotcallable);
 
-    ConstructByIterable(context, result, CAST(arg1), iteratorFn, element_size);
+    ConstructByIterable(context, result, CAST(arg1), CAST(iteratorFn),
+                        element_size);
     Goto(&return_result);
 
     BIND(&if_iteratorundefined);
@@ -1715,7 +1716,7 @@ TF_BUILTIN(TypedArrayFrom, TypedArrayBuiltinsAssembler) {
   //  b. Let mapping be true.
   // 4. Else, let mapping be false.
   GotoIf(TaggedIsSmi(map_fn), &if_map_fn_not_callable);
-  GotoIfNot(IsCallable(map_fn), &if_map_fn_not_callable);
+  GotoIfNot(IsCallable(CAST(map_fn)), &if_map_fn_not_callable);
   mapping = Int32TrueConstant();
   Goto(&check_iterator);
 
@@ -1738,7 +1739,7 @@ TF_BUILTIN(TypedArrayFrom, TypedArrayBuiltinsAssembler) {
         CAST(GetMethod(context, source, isolate()->factory()->iterator_symbol(),
                        &from_array_like));
     GotoIf(TaggedIsSmi(iterator_fn), &if_iterator_fn_not_callable);
-    GotoIfNot(IsCallable(iterator_fn), &if_iterator_fn_not_callable);
+    GotoIfNot(IsCallable(CAST(iterator_fn)), &if_iterator_fn_not_callable);
 
     // We are using the iterator.
     Label if_length_not_smi(this, Label::kDeferred);
@@ -1885,7 +1886,7 @@ TF_BUILTIN(TypedArrayPrototypeFilter, TypedArrayBuiltinsAssembler) {
   // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
   TNode<Object> callbackfn = args.GetOptionalArgumentValue(0);
   GotoIf(TaggedIsSmi(callbackfn), &if_callback_not_callable);
-  GotoIfNot(IsCallable(callbackfn), &if_callback_not_callable);
+  GotoIfNot(IsCallable(CAST(callbackfn)), &if_callback_not_callable);
 
   // 5. If thisArg is present, let T be thisArg; else let T be undefined.
   TNode<Object> this_arg = args.GetOptionalArgumentValue(1);

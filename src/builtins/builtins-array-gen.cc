@@ -1999,7 +1999,7 @@ TF_BUILTIN(ArrayFrom, ArrayPopulatorAssembler) {
     Label no_error(this), error(this);
     GotoIf(IsUndefined(map_function), &no_error);
     GotoIf(TaggedIsSmi(map_function), &error);
-    Branch(IsCallable(map_function), &no_error, &error);
+    Branch(IsCallable(CAST(map_function)), &no_error, &error);
 
     BIND(&error);
     ThrowTypeError(context, MessageTemplate::kCalledNonCallable, map_function);
@@ -2076,7 +2076,7 @@ TF_BUILTIN(ArrayFrom, ArrayPopulatorAssembler) {
         Label next(this);
         GotoIf(IsUndefined(map_function), &next);
 
-        CSA_ASSERT(this, IsCallable(map_function));
+        CSA_ASSERT(this, IsCallable(CAST(map_function)));
         Node* v = CallJS(CodeFactory::Call(isolate()), context, map_function,
                          this_arg, value.value(), index.value());
         GotoIfException(v, &on_exception, &var_exception);
@@ -2152,7 +2152,7 @@ TF_BUILTIN(ArrayFrom, ArrayPopulatorAssembler) {
         Label next(this);
         GotoIf(IsUndefined(map_function), &next);
 
-        CSA_ASSERT(this, IsCallable(map_function));
+        CSA_ASSERT(this, IsCallable(CAST(map_function)));
         value = CAST(CallJS(CodeFactory::Call(isolate()), context, map_function,
                             this_arg, value.value(), index.value()));
         Goto(&next);

@@ -385,7 +385,7 @@ TNode<Object> BaseCollectionsAssembler::GetAddFunction(
 
   Label exit(this), if_notcallable(this, Label::kDeferred);
   GotoIf(TaggedIsSmi(add_func), &if_notcallable);
-  GotoIfNot(IsCallable(add_func), &if_notcallable);
+  GotoIfNot(IsCallable(CAST(add_func)), &if_notcallable);
   Goto(&exit);
 
   BIND(&if_notcallable);

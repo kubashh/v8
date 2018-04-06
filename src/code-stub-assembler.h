@@ -1127,28 +1127,29 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void ThrowTypeError(Node* context, MessageTemplate::Template message,
                       Node* arg0, Node* arg1 = nullptr, Node* arg2 = nullptr);
 
+  Node* IsNoElementsProtectorCellInvalid();
+
   // Type checks.
   // Check whether the map is for an object with special properties, such as a
   // JSProxy or an object with interceptors.
   TNode<BoolT> InstanceTypeEqual(SloppyTNode<Int32T> instance_type, int type);
-  Node* IsAccessorInfo(Node* object);
-  Node* IsAccessorPair(Node* object);
-  Node* IsAllocationSite(Node* object);
+  TNode<BoolT> IsAccessorInfo(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsAccessorPair(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsAllocationSite(SloppyTNode<HeapObject> object);
   Node* IsAnyHeapNumber(Node* object);
-  Node* IsNoElementsProtectorCellInvalid();
-  Node* IsBigIntInstanceType(Node* instance_type);
-  Node* IsBigInt(Node* object);
-  Node* IsBoolean(Node* object);
-  Node* IsCallableMap(Node* map);
-  Node* IsCallable(Node* object);
-  Node* IsCell(Node* object);
-  Node* IsCode(Node* object);
+  TNode<BoolT> IsBigIntInstanceType(SloppyTNode<Int32T> instance_type);
+  TNode<BoolT> IsBigInt(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsBoolean(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsCallableMap(SloppyTNode<Map> map);
+  TNode<BoolT> IsCallable(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsCell(SloppyTNode<HeapObject> object);
+  TNode<BoolT> IsCode(SloppyTNode<HeapObject> object);
   Node* IsConsStringInstanceType(Node* instance_type);
   Node* IsConstructorMap(Node* map);
   Node* IsConstructor(Node* object);
-  Node* IsDeprecatedMap(Node* map);
+  TNode<BoolT> IsDeprecatedMap(SloppyTNode<Map> map);
   Node* IsDictionary(Node* object);
-  Node* IsExtensibleMap(Node* map);
+  TNode<BoolT> IsExtensibleMap(SloppyTNode<Map> map);
   Node* IsExternalStringInstanceType(Node* instance_type);
   TNode<BoolT> IsFastJSArray(SloppyTNode<Object> object,
                              SloppyTNode<Context> context);
@@ -1195,7 +1196,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsJSValueMap(Node* map);
   Node* IsJSValue(Node* object);
   Node* IsMap(Node* object);
-  Node* IsMutableHeapNumber(Node* object);
+  TNode<BoolT> IsMutableHeapNumber(SloppyTNode<HeapObject> object);
   Node* IsName(Node* object);
   Node* IsNativeContext(Node* object);
   Node* IsNullOrJSReceiver(Node* object);
@@ -1218,7 +1219,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   Node* IsString(Node* object);
   Node* IsSymbolInstanceType(Node* instance_type);
   Node* IsSymbol(Node* object);
-  Node* IsUndetectableMap(Node* map);
+  TNode<BoolT> IsUndetectableMap(SloppyTNode<Map> map);
   Node* IsWeakCell(Node* object);
   Node* IsZeroOrContext(Node* object);
 
