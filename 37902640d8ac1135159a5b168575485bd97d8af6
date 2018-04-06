@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d812b76f_a7bd4e20",
+        "filename": "src/code-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-06T11:56:51Z",
+      "side": 1,
+      "message": "nit: We allow \"foo-inl.h\" to fulfill the dependency on \"foo.h\" as well. So we can drop the \"objects.h\" include.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "37902640d8ac1135159a5b168575485bd97d8af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6af77da_3ce7b7a6",
+        "filename": "src/code-reference.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-06T11:56:51Z",
+      "side": 1,
+      "message": "nit: Includes need to be done outside the namespace, otherwise you would end up with the definitions in the included header living in {v8::internal::v8::internal} in this case.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 39
+      },
+      "revId": "37902640d8ac1135159a5b168575485bd97d8af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbb7147c_1f27d405",
+        "filename": "src/code-reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-06T11:56:51Z",
+      "side": 1,
+      "message": "nit: Since this constructor just handlifies the pointer anyways, I would vote for just dropping it, let all callers do the handlification and use the other constructor above. Otherwise the fact that this essentially represents a transition from non-handlified to handlified code is hidden and it is not clear that callers do need a handle-scope.",
+      "range": {
+        "startLine": 24,
+        "startChar": 25,
+        "endLine": 24,
+        "endChar": 38
+      },
+      "revId": "37902640d8ac1135159a5b168575485bd97d8af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e03f6173_294b6ff4",
+        "filename": "src/code-reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-06T11:56:51Z",
+      "side": 1,
+      "message": "nit: Not a huge fan of this operator, looks like a major foot-gun. Can we just use a named {is_null} method here?",
+      "range": {
+        "startLine": 33,
+        "startChar": 11,
+        "endLine": 33,
+        "endChar": 17
+      },
+      "revId": "37902640d8ac1135159a5b168575485bd97d8af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e56989aa_976841e4",
+        "filename": "src/code-reference.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-06T11:56:51Z",
+      "side": 1,
+      "message": "nit: Please move this into the private section.",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 25
+      },
+      "revId": "37902640d8ac1135159a5b168575485bd97d8af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
