@@ -82,12 +82,13 @@ bool ContainsSimd(wasm::FunctionSig* sig) {
 
 WasmGraphBuilder::WasmGraphBuilder(
     ModuleEnv* env, Zone* zone, JSGraph* jsgraph, Handle<Code> centry_stub,
-    wasm::FunctionSig* sig,
+    Handle<Oddball> anyref_null, wasm::FunctionSig* sig,
     compiler::SourcePositionTable* source_position_table,
     RuntimeExceptionSupport exception_support)
     : zone_(zone),
       jsgraph_(jsgraph),
       centry_stub_node_(jsgraph_->HeapConstant(centry_stub)),
+      anyref_null_node_(jsgraph_->HeapConstant(anyref_null)),
       env_(env),
       function_tables_(zone),
       cur_buffer_(def_buffer_),
@@ -4699,7 +4700,8 @@ Handle<Code> CompileJSToWasmWrapper(Isolate* isolate, wasm::WasmModule* module,
   ModuleEnv env(module, use_trap_handler);
 
   WasmGraphBuilder builder(&env, &zone, &jsgraph,
-                           CEntryStub(isolate, 1).GetCode(), func->sig);
+                           CEntryStub(isolate, 1).GetCode(),
+                           isolate->factory()->null_value(), func->sig);
   builder.set_control_ptr(&control);
   builder.set_effect_ptr(&effect);
   builder.BuildJSToWasmWrapper(wasm_code, wasm_context_address);
@@ -4811,9 +4813,9 @@ Handle<Code> CompileWasmToJSWrapper(
                                    : nullptr;
 
   ModuleEnv env(nullptr, use_trap_handler);
-  WasmGraphBuilder builder(&env, &zone, &jsgraph,
-                           CEntryStub(isolate, 1).GetCode(), sig,
-                           source_position_table);
+  WasmGraphBuilder builder(
+      &env, &zone, &jsgraph, CEntryStub(isolate, 1).GetCode(),
+      isolate->factory()->null_value(), sig, source_position_table);
   builder.set_control_ptr(&control);
   builder.set_effect_ptr(&effect);
   if (builder.BuildWasmToJSWrapper(target, global_js_imports_table, index)) {
@@ -4896,7 +4898,8 @@ Handle<Code> CompileWasmToWasmWrapper(Isolate* isolate, wasm::WasmCode* target,
   Node* effect = nullptr;
 
   ModuleEnv env(nullptr, target->HasTrapHandlerIndex());
-  WasmGraphBuilder builder(&env, &zone, &jsgraph, Handle<Code>(), sig);
+  WasmGraphBuilder builder(&env, &zone, &jsgraph, Handle<Code>(),
+                           Handle<Oddball>(), sig);
   builder.set_control_ptr(&control);
   builder.set_effect_ptr(&effect);
   builder.BuildWasmToWasmWrapper(target, new_wasm_context_address);
@@ -4968,7 +4971,8 @@ Handle<Code> CompileWasmInterpreterEntry(Isolate* isolate, uint32_t func_index,
   Node* effect = nullptr;
 
   WasmGraphBuilder builder(nullptr, &zone, &jsgraph,
-                           CEntryStub(isolate, 1).GetCode(), sig);
+                           CEntryStub(isolate, 1).GetCode(),
+                           isolate->factory()->null_value(), sig);
   builder.set_control_ptr(&control);
   builder.set_effect_ptr(&effect);
   builder.BuildWasmInterpreterEntry(func_index);
@@ -5029,7 +5033,8 @@ Handle<Code> CompileCWasmEntry(Isolate* isolate, wasm::FunctionSig* sig) {
   Node* effect = nullptr;
 
   WasmGraphBuilder builder(nullptr, &zone, &jsgraph,
-                           CEntryStub(isolate, 1).GetCode(), sig);
+                           CEntryStub(isolate, 1).GetCode(),
+                           isolate->factory()->null_value(), sig);
   builder.set_control_ptr(&control);
   builder.set_effect_ptr(&effect);
   builder.BuildCWasmEntry();
@@ -5099,7 +5104,8 @@ SourcePositionTable* WasmCompilationUnit::BuildGraphForWasmFunction(
   SourcePositionTable* source_position_table =
       new (tf_.jsgraph_->zone()) SourcePositionTable(tf_.jsgraph_->graph());
   WasmGraphBuilder builder(env_, tf_.jsgraph_->zone(), tf_.jsgraph_,
-                           centry_stub_, func_body_.sig, source_position_table,
+                           centry_stub_, anyref_null_, func_body_.sig,
+                           source_position_table,
                            wasm_compilation_data_.runtime_exception_support());
   tf_.graph_construction_result_ =
       wasm::BuildTFGraph(isolate_->allocator(), &builder, func_body_);
@@ -5162,14 +5168,16 @@ WasmCompilationUnit::GetDefaultCompilationMode() {
 WasmCompilationUnit::WasmCompilationUnit(
     Isolate* isolate, ModuleEnv* env, wasm::NativeModule* native_module,
     wasm::FunctionBody body, wasm::WasmName name, int index,
-    Handle<Code> centry_stub, CompilationMode mode, Counters* counters,
-    RuntimeExceptionSupport exception_support, bool lower_simd)
+    Handle<Code> centry_stub, Handle<Oddball> anyref_null, CompilationMode mode,
+    Counters* counters, RuntimeExceptionSupport exception_support,
+    bool lower_simd)
     : isolate_(isolate),
       env_(env),
       func_body_(body),
       func_name_(name),
       counters_(counters ? counters : isolate->counters()),
       centry_stub_(centry_stub),
+      anyref_null_(anyref_null),
       func_index_(index),
       native_module_(native_module),
       lower_simd_(lower_simd),
@@ -5391,10 +5399,10 @@ wasm::WasmCode* WasmCompilationUnit::CompileWasmFunction(
       wire_bytes.start() + function->code.offset(),
       wire_bytes.start() + function->code.end_offset()};
 
-  WasmCompilationUnit unit(isolate, env, native_module, function_body,
-                           wire_bytes.GetNameOrNull(function, env->module),
-                           function->func_index,
-                           CEntryStub(isolate, 1).GetCode(), mode);
+  WasmCompilationUnit unit(
+      isolate, env, native_module, function_body,
+      wire_bytes.GetNameOrNull(function, env->module), function->func_index,
+      CEntryStub(isolate, 1).GetCode(), isolate->factory()->null_value(), mode);
   unit.ExecuteCompilation();
   return unit.FinishCompilation(thrower);
 }
