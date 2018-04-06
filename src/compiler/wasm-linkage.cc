@@ -32,6 +32,8 @@ MachineType MachineTypeFor(ValueType type) {
       return MachineType::Float32();
     case wasm::kWasmS128:
       return MachineType::Simd128();
+    case wasm::kWasmAnyRef:
+      return MachineType::AnyTagged();
     default:
       UNREACHABLE();
   }
