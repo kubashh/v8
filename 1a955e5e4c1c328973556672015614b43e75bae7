@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aa6d7f4_99cf9270",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-06T13:36:17Z",
+      "side": 1,
+      "message": "I think it\u0027d be better to have the wasm compiler just get this off the isolate. Since it\u0027s an immortable immovable, it is possible to get a handle to it at any time. Making explicit just makes the callers more complicated and invites mistakes, IMO.",
+      "revId": "1a955e5e4c1c328973556672015614b43e75bae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
