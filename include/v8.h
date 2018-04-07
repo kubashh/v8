@@ -2378,6 +2378,8 @@ class V8_EXPORT Value : public Data {
 
   bool IsWebAssemblyCompiledModule() const;
 
+  bool IsModuleNamespaceObject() const;
+
   V8_WARN_UNUSED_RESULT MaybeLocal<BigInt> ToBigInt(
       Local<Context> context) const;
   V8_WARN_UNUSED_RESULT MaybeLocal<Boolean> ToBoolean(
