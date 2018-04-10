@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6841a5fa_3e0aa77c",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-10T18:32:30Z",
+      "side": 1,
+      "message": "lol... I totally forgot that I had to solve this problem already XD\n\nIt\u0027s just that a refactoring moved the code away that I did not found it at once.\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/842784/20/test/mkgrokdump/testcfg.py",
+      "range": {
+        "startLine": 32,
+        "startChar": 29,
+        "endLine": 32,
+        "endChar": 37
+      },
+      "revId": "88cd8c3b389f4ab39567a07c14fbff1fe95cf21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
