@@ -29,7 +29,8 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
 
   TNode<Object> MatchAllIterator(TNode<Context> context,
                                  TNode<Context> native_context,
-                                 TNode<Object> regexp, TNode<Object> string,
+                                 TNode<Object> regexp, TNode<String> string,
+                                 TNode<BoolT> is_fast_regexp,
                                  char const* method_name);
 
  protected:
@@ -104,6 +105,35 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
                   int counter, const char* method_name);
 
   Node* IsRegExp(Node* const context, Node* const maybe_receiver);
+
+  TNode<String> LoadRegExpResultFirstMatch(SloppyTNode<Context> context,
+                                           SloppyTNode<JSObject> maybe_array) {
+    TVARIABLE(String, var_result);
+
+    Label exit(this), if_fast(this), if_slow(this, Label::kDeferred);
+
+    BranchIfFastRegExpResult(context, maybe_array, &if_fast, &if_slow);
+    BIND(&if_fast);
+    {
+      TNode<FixedArrayBase> result_fixed_array = LoadElements(maybe_array);
+      TNode<Object> first_match = LoadFixedArrayElement(result_fixed_array, 0);
+
+      // The match is guaranteed to be a string on the fast path.
+      CSA_ASSERT(this, IsString(first_match));
+      var_result = CAST(first_match);
+      Goto(&exit);
+    }
+    BIND(&if_slow);
+    {
+      TNode<Object> first_match = GetProperty(
+          context, maybe_array, isolate()->factory()->zero_string());
+      var_result = ToString_Inline(context, first_match);
+      Goto(&exit);
+    }
+    BIND(&exit);
+    return var_result.value();
+  }
+
   Node* RegExpInitialize(Node* const context, Node* const regexp,
                          Node* const maybe_pattern, Node* const maybe_flags);
 
