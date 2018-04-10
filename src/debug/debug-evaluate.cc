@@ -762,6 +762,12 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kNumberPrototypeToPrecision:
     case Builtins::kNumberPrototypeToString:
     case Builtins::kNumberPrototypeValueOf:
+    // BigInt builtins.
+    case Builtins::kBigIntConstructor:
+    case Builtins::kBigIntAsIntN:
+    case Builtins::kBigIntAsUintN:
+    case Builtins::kBigIntPrototypeToString:
+    case Builtins::kBigIntPrototypeValueOf:
     // Set builtins.
     case Builtins::kSetConstructor:
     case Builtins::kSetPrototypeEntries:
@@ -796,6 +802,7 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kStringPrototypePadEnd:
     case Builtins::kStringPrototypePadStart:
     case Builtins::kStringPrototypeRepeat:
+    case Builtins::kStringPrototypeSearch:
     case Builtins::kStringPrototypeSlice:
     case Builtins::kStringPrototypeSmall:
     case Builtins::kStringPrototypeStartsWith:
@@ -833,6 +840,12 @@ bool BuiltinHasNoSideEffect(Builtins::Name id) {
     case Builtins::kGlobalUnescape:
     case Builtins::kGlobalIsFinite:
     case Builtins::kGlobalIsNaN:
+    // Function builtins.
+    case Builtins::kFunctionPrototypeToString:
+    case Builtins::kFunctionPrototypeBind:
+    case Builtins::kFastFunctionPrototypeBind:
+    case Builtins::kFunctionPrototypeCall:
+    case Builtins::kFunctionPrototypeApply:
     // Error builtins.
     case Builtins::kErrorConstructor:
     case Builtins::kMakeError:
