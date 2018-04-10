@@ -189,16 +189,6 @@ DISABLE_ASAN Address ReadMemoryAt(Address address) {
   return Memory::Address_at(address);
 }
 
-WasmInstanceObject* LookupWasmInstanceObjectFromStandardFrame(
-    const StandardFrame* frame) {
-  // TODO(titzer): WASM instances cannot be found from the code in the future.
-  WasmInstanceObject* ret = WasmInstanceObject::GetOwningInstance(
-      frame->isolate()->wasm_engine()->code_manager()->LookupCode(frame->pc()));
-  // This is a live stack frame, there must be a live wasm instance available.
-  DCHECK_NOT_NULL(ret);
-  return ret;
-}
-
 }  // namespace
 
 SafeStackFrameIterator::SafeStackFrameIterator(
@@ -1790,17 +1780,17 @@ wasm::WasmCode* WasmCompiledFrame::wasm_code() const {
 }
 
 WasmInstanceObject* WasmCompiledFrame::wasm_instance() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this);
+  const int offset = WasmCompiledFrameConstants::kWasmInstanceOffset;
+  Object* instance = Memory::Object_at(fp() + offset);
+  return WasmInstanceObject::cast(instance);
 }
 
 WasmSharedModuleData* WasmCompiledFrame::shared() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this)
-      ->compiled_module()
-      ->shared();
+  return wasm_instance()->compiled_module()->shared();
 }
 
 WasmCompiledModule* WasmCompiledFrame::compiled_module() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this)->compiled_module();
+  return wasm_instance()->compiled_module();
 }
 
 uint32_t WasmCompiledFrame::function_index() const {
@@ -1817,8 +1807,7 @@ void WasmCompiledFrame::Summarize(std::vector<FrameSummary>* functions) const {
   DCHECK(functions->empty());
   wasm::WasmCode* code = wasm_code();
   int offset = static_cast<int>(pc() - code->instructions().start());
-  Handle<WasmInstanceObject> instance(
-      LookupWasmInstanceObjectFromStandardFrame(this), isolate());
+  Handle<WasmInstanceObject> instance(wasm_instance(), isolate());
   FrameSummary::WasmCompiledFrameSummary summary(
       isolate(), instance, code, offset, at_to_number_conversion());
   functions->push_back(summary);
@@ -1871,8 +1860,7 @@ void WasmInterpreterEntryFrame::Print(StringStream* accumulator, PrintMode mode,
 
 void WasmInterpreterEntryFrame::Summarize(
     std::vector<FrameSummary>* functions) const {
-  Handle<WasmInstanceObject> instance(
-      LookupWasmInstanceObjectFromStandardFrame(this), isolate());
+  Handle<WasmInstanceObject> instance(wasm_instance(), isolate());
   std::vector<std::pair<uint32_t, int>> interpreted_stack =
       instance->debug_info()->GetInterpretedStack(fp());
 
@@ -1885,23 +1873,22 @@ void WasmInterpreterEntryFrame::Summarize(
 
 Code* WasmInterpreterEntryFrame::unchecked_code() const { UNREACHABLE(); }
 
-// TODO(titzer): deprecate this method.
 WasmInstanceObject* WasmInterpreterEntryFrame::wasm_instance() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this);
+  const int offset = WasmCompiledFrameConstants::kWasmInstanceOffset;
+  Object* instance = Memory::Object_at(fp() + offset);
+  return WasmInstanceObject::cast(instance);
 }
 
 WasmDebugInfo* WasmInterpreterEntryFrame::debug_info() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this)->debug_info();
+  return wasm_instance()->debug_info();
 }
 
 WasmSharedModuleData* WasmInterpreterEntryFrame::shared() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this)
-      ->compiled_module()
-      ->shared();
+  return wasm_instance()->compiled_module()->shared();
 }
 
 WasmCompiledModule* WasmInterpreterEntryFrame::compiled_module() const {
-  return LookupWasmInstanceObjectFromStandardFrame(this)->compiled_module();
+  return wasm_instance()->compiled_module();
 }
 
 Script* WasmInterpreterEntryFrame::script() const { return shared()->script(); }
