@@ -133,6 +133,7 @@ class V8_EXPORT_PRIVATE BigInt : public BigIntBase {
     return is_zero() ? 0 : ComputeIntegerHash(static_cast<uint32_t>(digit(0)));
   }
 
+  static ComparisonResult CompareToString(Handle<BigInt> x, Handle<String> y);
   static bool EqualToString(Handle<BigInt> x, Handle<String> y);
   static bool EqualToNumber(Handle<BigInt> x, Handle<Object> y);
   static ComparisonResult CompareToNumber(Handle<BigInt> x, Handle<Object> y);
