@@ -12,6 +12,8 @@ var typed_array = new Uint8Array([1, 2, 3]);
 var array_buffer = new ArrayBuffer(3);
 var data_view = new DataView(new ArrayBuffer(8), 0, 8);
 var array = [1,2,3];
+var regex_a = /a/;
+var regex_global_a = /a/g;
 
 function listener(event, exec_state, event_data, data) {
   if (event != Debug.DebugEvent.Break) return;
@@ -199,8 +201,12 @@ function listener(event, exec_state, event_data, data) {
     }
     fail("'abcd'.match(/a/)");
     fail("'abcd'.replace(/a/)");
-    fail("'abcd'.search(/a/)");
     fail("'abcd'.split(/a/)");
+    success(1, "'_abcd'.search(regex_a)");
+    success(1, "'_abcda'.search(regex_global_a)");
+    // Check that lastIndex is still zero.
+    success(0, "regex_a.lastIndex");
+    success(0, "regex_global_a.lastIndex");
 
     // Test RegExp functions.
     fail(`/a/.compile()`);

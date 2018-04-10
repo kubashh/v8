@@ -11,6 +11,7 @@ var set = new Set([1, 2]);
 var weak_key = [];
 var weak_map = new WeakMap().set(weak_key, "a").set({}, "b");
 var weak_set = new WeakSet([weak_key, {}]);
+var add = function (a, b) { return a + b; };
 
 function listener(event, exec_state, event_data, data) {
   if (event != Debug.DebugEvent.Break) return;
@@ -23,6 +24,12 @@ function listener(event, exec_state, event_data, data) {
       assertThrows(() => exec_state.frame(0).evaluate(source, true),
                    EvalError);
     }
+
+    // Test Function-related functions.
+    success("func", `(function func(){}).prototype.constructor.name`);
+    success("[object Object]", `(function func(){}).prototype.toString()`);
+    success(3, `add.call(null, 1, 2)`);
+    success(3, `add.apply(null, [1, 2])`);
 
     // Test Date.prototype functions.
     success(undefined, `Date()`);
@@ -108,6 +115,10 @@ function listener(event, exec_state, event_data, data) {
     fail(`weak_set.add([])`);
     fail(`weak_set.delete("a")`);
 
+    // Test BigInt functions.
+    success(10n, `BigInt('10')`);
+    success(10n, `BigInt.asIntN(10, 10n)`);
+    success(10n, `BigInt.asUintN(10, 10n)`);
   } catch (e) {
     exception = e;
     print(e, e.stack);
