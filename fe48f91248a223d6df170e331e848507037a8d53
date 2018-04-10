@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "462d24e2_af137430",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 9135,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-04-10T09:16:06Z",
+      "side": 1,
+      "message": "This is now \"neither numeric nor string\", so maybe call it if_other and add a comment or call it if_right_neither_numeric_nor_string.",
+      "range": {
+        "startLine": 9135,
+        "startChar": 37,
+        "endLine": 9135,
+        "endChar": 57
+      },
+      "revId": "fe48f91248a223d6df170e331e848507037a8d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d36e4ee2_5a02dcd3",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-04-10T09:16:06Z",
+      "side": 1,
+      "message": "Nit: move down a few lines.",
+      "revId": "fe48f91248a223d6df170e331e848507037a8d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
