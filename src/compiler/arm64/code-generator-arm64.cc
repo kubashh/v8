@@ -2482,14 +2482,23 @@ void CodeGenerator::AssembleConstructFrame() {
           __ Claim(shrink_slots);
         }
         break;
-      case CallDescriptor::kCallCodeObject:
-      case CallDescriptor::kCallWasmFunction: {
+      case CallDescriptor::kCallCodeObject: {
         UseScratchRegisterScope temps(tasm());
         __ Claim(shrink_slots + 1);  // Claim extra slot for frame type marker.
         Register scratch = temps.AcquireX();
         __ Mov(scratch,
                StackFrame::TypeToMarker(info()->GetOutputStackFrameType()));
         __ Str(scratch, MemOperand(fp, TypedFrameConstants::kFrameTypeOffset));
+      } break;
+      case CallDescriptor::kCallWasmFunction: {
+        UseScratchRegisterScope temps(tasm());
+        __ Claim(shrink_slots + 2);  // Claim extra slots for marker + instance.
+        Register scratch = temps.AcquireX();
+        __ Mov(scratch,
+               StackFrame::TypeToMarker(info()->GetOutputStackFrameType()));
+        __ Str(scratch, MemOperand(fp, TypedFrameConstants::kFrameTypeOffset));
+        __ Str(kWasmInstanceRegister,
+               MemOperand(fp, WasmCompiledFrameConstants::kWasmInstanceOffset));
       } break;
       case CallDescriptor::kCallAddress:
         __ Claim(shrink_slots);
