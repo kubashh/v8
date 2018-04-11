@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d4fc66b8_10f12061",
+        "filename": "src/frames.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-11T12:58:23Z",
+      "side": 1,
+      "message": "Hm. Let me throw in the word \"constexpr\" then. But I don\u0027t insist on that :)",
+      "parentUuid": "6441fdf1_c7034971",
+      "revId": "88bb6f6531fd12a1a35b224982daf90d095f22b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1b0d289_2d8c7f27",
         "filename": "src/frames.cc",
         "patchSetId": 5
