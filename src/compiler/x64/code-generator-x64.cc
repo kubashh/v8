@@ -3118,6 +3118,9 @@ void CodeGenerator::AssembleConstructFrame() {
       }
     } else {
       __ StubPrologue(info()->GetOutputStackFrameType());
+      if (call_descriptor->IsWasmFunctionCall()) {
+        __ pushq(kWasmInstanceRegister);
+      }
     }
 
     unwinding_info_writer_.MarkFrameConstructed(pc_base);
