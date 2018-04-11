@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6b5eeb9_8a85b4b8",
+        "filename": "src/frames.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-11T12:43:18Z",
+      "side": 1,
+      "message": "nit: Why assigning to a local variable first?",
+      "revId": "88bb6f6531fd12a1a35b224982daf90d095f22b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1b0d289_2d8c7f27",
+        "filename": "src/frames.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-11T12:43:18Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "88bb6f6531fd12a1a35b224982daf90d095f22b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf5a5101_ad841b1a",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-11T12:43:18Z",
+      "side": 1,
+      "message": "The style guide recommends against else after return.",
+      "revId": "88bb6f6531fd12a1a35b224982daf90d095f22b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
