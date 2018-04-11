@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2f081e23_6c10d3e1",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-11T07:09:22Z",
+      "side": 1,
+      "message": "Nit: A comment for embedded builtins, and please TODO(jgruber,v8:6666): Toggle condition when shipping embedded builtins.",
+      "revId": "88cd8c3b389f4ab39567a07c14fbff1fe95cf21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6841a5fa_3e0aa77c",
         "filename": "test/mkgrokdump/mkgrokdump.cc",
         "patchSetId": 1
