@@ -24,7 +24,7 @@ class V8InjectedScriptHost {
   // We expect that debugger outlives any JS context and thus
   // V8InjectedScriptHost (owned by JS)
   // is destroyed before inspector.
-  static v8::Local<v8::Object> create(v8::Local<v8::Context>, V8InspectorImpl*);
+  static v8::Local<v8::Object> create(v8::Local<v8::Context>);
 
  private:
   static void nullifyPrototypeCallback(
