@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "627f72d6_6c0eb174",
+        "filename": "src/frames.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-11T13:48:01Z",
+      "side": 0,
+      "message": "Yep, I guess we can\u0027t deprecate that now :)",
+      "revId": "8d3d738c419e2e2ef7346da18155fafa8f3343df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
