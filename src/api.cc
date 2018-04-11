@@ -9891,6 +9891,15 @@ bool debug::SetFunctionBreakpoint(v8::Local<v8::Function> function,
                                                     condition_string, id);
 }
 
+debug::NoSideEffectScope::NoSideEffectScope(v8::Isolate* isolate)
+    : isolate_(isolate) {
+  reinterpret_cast<i::Isolate*>(isolate_)->debug()->StartSideEffectCheckMode();
+}
+
+debug::NoSideEffectScope::~NoSideEffectScope() {
+  reinterpret_cast<i::Isolate*>(isolate_)->debug()->StopSideEffectCheckMode();
+}
+
 Local<String> CpuProfileNode::GetFunctionName() const {
   const i::ProfileNode* node = reinterpret_cast<const i::ProfileNode*>(this);
   i::Isolate* isolate = node->isolate();

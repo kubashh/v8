@@ -19,29 +19,10 @@ namespace v8_inspector {
 
 namespace {
 
-void setFunctionProperty(v8::Local<v8::Context> context,
-                         v8::Local<v8::Object> obj, const char* name,
-                         v8::FunctionCallback callback,
-                         v8::Local<v8::External> external) {
-  v8::Local<v8::String> funcName =
-      toV8StringInternalized(context->GetIsolate(), name);
-  v8::Local<v8::Function> func;
-  if (!v8::Function::New(context, callback, external, 0,
-                         v8::ConstructorBehavior::kThrow)
-           .ToLocal(&func))
-    return;
-  func->SetName(funcName);
-  createDataProperty(context, obj, funcName, func);
-}
-
 V8InspectorImpl* unwrapInspector(
     const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DCHECK(!info.Data().IsEmpty());
-  DCHECK(info.Data()->IsExternal());
-  V8InspectorImpl* inspector =
-      static_cast<V8InspectorImpl*>(info.Data().As<v8::External>()->Value());
-  DCHECK(inspector);
-  return inspector;
+  return static_cast<V8InspectorImpl*>(
+      v8::debug::GetInspector(info.GetIsolate()));
 }
 
 template <typename TypedArray>
@@ -56,46 +37,85 @@ void addTypedArrayProperty(std::vector<v8::Local<v8::Value>>* props,
 }  // namespace
 
 v8::Local<v8::Object> V8InjectedScriptHost::create(
-    v8::Local<v8::Context> context, V8InspectorImpl* inspector) {
-  v8::Isolate* isolate = inspector->isolate();
-  v8::Local<v8::Object> injectedScriptHost = v8::Object::New(isolate);
-  bool success = injectedScriptHost->SetPrototype(context, v8::Null(isolate))
-                     .FromMaybe(false);
+    v8::Local<v8::Context> context) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::ObjectTemplate> host = v8::ObjectTemplate::New(isolate);
+  host->Set(toV8StringInternalized(isolate, "nullifyPrototype"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::nullifyPrototypeCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "getProperty"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::getPropertyCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "internalConstructorName"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::internalConstructorNameCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "formatAccessorsAsProperties"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::formatAccessorsAsProperties,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "subtype"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::subtypeCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "getInternalProperties"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::getInternalPropertiesCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "objectHasOwnProperty"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::objectHasOwnPropertyCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(
+      toV8StringInternalized(isolate, "bind"),
+      v8::FunctionTemplate::New(
+          isolate, &V8InjectedScriptHost::bindCallback, v8::Local<v8::Value>(),
+          v8::Local<v8::Signature>(), 0, v8::ConstructorBehavior::kAllow,
+          v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "proxyTargetValue"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::proxyTargetValueCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  host->Set(
+      toV8StringInternalized(isolate, "nativeAccessorDescriptor"),
+      v8::FunctionTemplate::New(
+          isolate, &V8InjectedScriptHost::nativeAccessorDescriptorCallback,
+          v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+          v8::ConstructorBehavior::kAllow,
+          v8::SideEffectType::kHasNoSideEffect));
+  host->Set(toV8StringInternalized(isolate, "typedArrayProperties"),
+            v8::FunctionTemplate::New(
+                isolate, &V8InjectedScriptHost::typedArrayPropertiesCallback,
+                v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                v8::ConstructorBehavior::kAllow,
+                v8::SideEffectType::kHasNoSideEffect));
+  v8::Local<v8::Object> injectedScriptHost;
+  bool success = host->NewInstance(isolate->GetCurrentContext())
+                     .ToLocal(&injectedScriptHost);
   DCHECK(success);
   USE(success);
-  v8::Local<v8::External> debuggerExternal =
-      v8::External::New(isolate, inspector);
-  setFunctionProperty(context, injectedScriptHost, "nullifyPrototype",
-                      V8InjectedScriptHost::nullifyPrototypeCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "getProperty",
-                      V8InjectedScriptHost::getPropertyCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "internalConstructorName",
-                      V8InjectedScriptHost::internalConstructorNameCallback,
-                      debuggerExternal);
-  setFunctionProperty(
-      context, injectedScriptHost, "formatAccessorsAsProperties",
-      V8InjectedScriptHost::formatAccessorsAsProperties, debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "subtype",
-                      V8InjectedScriptHost::subtypeCallback, debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "getInternalProperties",
-                      V8InjectedScriptHost::getInternalPropertiesCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "objectHasOwnProperty",
-                      V8InjectedScriptHost::objectHasOwnPropertyCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "bind",
-                      V8InjectedScriptHost::bindCallback, debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "proxyTargetValue",
-                      V8InjectedScriptHost::proxyTargetValueCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "nativeAccessorDescriptor",
-                      V8InjectedScriptHost::nativeAccessorDescriptorCallback,
-                      debuggerExternal);
-  setFunctionProperty(context, injectedScriptHost, "typedArrayProperties",
-                      V8InjectedScriptHost::typedArrayPropertiesCallback,
-                      debuggerExternal);
+  success = injectedScriptHost->SetPrototype(context, v8::Null(isolate))
+                .FromMaybe(false);
+  DCHECK(success);
+  USE(success);
   createDataProperty(context, injectedScriptHost,
                      toV8StringInternalized(isolate, "keys"),
                      v8::debug::GetBuiltin(isolate, v8::debug::kObjectKeys));

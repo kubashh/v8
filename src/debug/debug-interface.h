@@ -514,6 +514,16 @@ int GetDebuggingId(v8::Local<v8::Function> function);
 bool SetFunctionBreakpoint(v8::Local<v8::Function> function,
                            v8::Local<v8::String> condition, BreakpointId* id);
 
+class NoSideEffectScope {
+ public:
+  explicit NoSideEffectScope(v8::Isolate* isolate);
+  ~NoSideEffectScope();
+
+ private:
+  v8::Isolate* isolate_;
+  DISALLOW_COPY_AND_ASSIGN(NoSideEffectScope);
+};
+
 }  // namespace debug
 }  // namespace v8
 
