@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "de570453_8262aad0",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-11T14:51:28Z",
+      "side": 1,
+      "message": "Can we still rely on this after potentially calling ToString / GetProperty in LoadRegExpResultFirstMatch?",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd0ab005_11c32e43",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 7
@@ -13,6 +30,41 @@
       "writtenOn": "2018-04-11T05:48:29Z",
       "side": 1,
       "message": "I\u0027m not sure if this `CSA_ASSERT` is overkill or not, as I check `IsFastRegExp` inside the subsequently called `MatchAllIterator`.\nLet me know if you think so, this is the only reason I made `IsFastRegExp` a public method.",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d4cdc75_ab179e84",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-11T14:51:28Z",
+      "side": 1,
+      "message": "I\u0027m tending towards overkill since \u0027IsFastRegExp\u0027 is the condition that decides whether to call this lambda at all. No strong opinion though.",
+      "parentUuid": "cd0ab005_11c32e43",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8e70821_d732d35c",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-11T14:51:28Z",
+      "side": 1,
+      "message": "What checks were you thinking of?",
       "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
