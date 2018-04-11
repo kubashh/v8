@@ -22,6 +22,30 @@
       "revId": "638c9507435f3eb5aa6cc81cf2757e4d32b7d5d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66bc1c6b_93ddc303",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-11T14:39:58Z",
+      "side": 0,
+      "message": "Serves me right for uploading CLs without compiling locally first, but a local build is like ~20min in these backwaters...",
+      "parentUuid": "c4d8e531_ac00013f",
+      "range": {
+        "startLine": 914,
+        "startChar": 2,
+        "endLine": 914,
+        "endChar": 50
+      },
+      "revId": "638c9507435f3eb5aa6cc81cf2757e4d32b7d5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
