@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cc0398e_d4e69615",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-04-11T13:18:11Z",
+      "side": 1,
+      "message": "What about using LAST_CUSTOM_ELEMENTS_RECEIVER instead?",
+      "revId": "0ef814b0bf2d4e9c5467533d612230e5e8162804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2889a40_dc7faddc",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-04-11T13:18:11Z",
+      "side": 1,
+      "message": "Odd that for the slow case we load details and value in 1 go, but for fast above we don\u0027t.",
+      "revId": "0ef814b0bf2d4e9c5467533d612230e5e8162804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10366bf5_24814376",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-04-11T13:18:11Z",
+      "side": 1,
+      "message": "Pass in language mode? Kinda weird to have this \"generic\" method that\u0027s specifically built for Object.assign.",
+      "revId": "0ef814b0bf2d4e9c5467533d612230e5e8162804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
