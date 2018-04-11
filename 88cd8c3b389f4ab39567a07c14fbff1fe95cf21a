@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5bfc91e1_06ad6719",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-04-11T08:16:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f081e23_6c10d3e1",
+      "revId": "88cd8c3b389f4ab39567a07c14fbff1fe95cf21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6841a5fa_3e0aa77c",
         "filename": "test/mkgrokdump/mkgrokdump.cc",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "88cd8c3b389f4ab39567a07c14fbff1fe95cf21a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae22acbe_95ec44b4",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-04-11T08:16:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6841a5fa_3e0aa77c",
+      "range": {
+        "startLine": 32,
+        "startChar": 29,
+        "endLine": 32,
+        "endChar": 37
+      },
+      "revId": "88cd8c3b389f4ab39567a07c14fbff1fe95cf21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
