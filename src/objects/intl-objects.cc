@@ -123,8 +123,16 @@ icu::SimpleDateFormat* CreateICUDateFormat(Isolate* isolate,
   icu::SimpleDateFormat* date_format = nullptr;
   icu::UnicodeString skeleton;
   if (ExtractStringSetting(isolate, options, "skeleton", &skeleton)) {
+    // See https://github.com/tc39/ecma402/issues/225 . The best pattern
+    // generation needs to be done in the base locale according to the
+    // current spec however odd it may be. See also crbug.com/826549 .
+    // This is a temporary work-around to get v8's external behavior to match
+    // the current spec, but does not follow the spec provisions mentioned
+    // in the above Ecma 402 issue.
+    icu::Locale no_extension_locale(icu_locale.getBaseName());
     std::unique_ptr<icu::DateTimePatternGenerator> generator(
-        icu::DateTimePatternGenerator::createInstance(icu_locale, status));
+        icu::DateTimePatternGenerator::createInstance(no_extension_locale,
+                                                      status));
     icu::UnicodeString pattern;
     if (U_SUCCESS(status))
       pattern = generator->getBestPattern(skeleton, status);
