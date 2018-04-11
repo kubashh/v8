@@ -171,7 +171,7 @@ void createBoundFunctionProperty(v8::Local<v8::Context> context,
       toV8StringInternalized(context->GetIsolate(), name);
   v8::Local<v8::Function> func;
   if (!v8::Function::New(context, callback, data, 0,
-                         v8::ConstructorBehavior::kThrow)
+                         v8::ConstructorBehavior::kThrow, v8::SideEffectType::kHasNoSideEffect)
            .ToLocal(&func))
     return;
   func->SetName(funcName);
@@ -180,7 +180,7 @@ void createBoundFunctionProperty(v8::Local<v8::Context> context,
         toV8String(context->GetIsolate(), description);
     v8::Local<v8::Function> toStringFunction;
     if (v8::Function::New(context, returnDataCallback, returnValue, 0,
-                          v8::ConstructorBehavior::kThrow)
+                          v8::ConstructorBehavior::kThrow, v8::SideEffectType::kHasNoSideEffect)
             .ToLocal(&toStringFunction))
       createDataProperty(context, func, toV8StringInternalized(
                                             context->GetIsolate(), "toString"),
@@ -653,7 +653,7 @@ void V8Console::installMemoryGetter(v8::Local<v8::Context> context,
       toV8StringInternalized(isolate, "memory"),
       v8::Function::New(context,
                         &V8Console::call<&V8Console::memoryGetterCallback>,
-                        data, 0, v8::ConstructorBehavior::kThrow)
+                        data, 0, v8::ConstructorBehavior::kThrow, v8::SideEffectType::kHasNoSideEffect)
           .ToLocalChecked(),
       v8::Function::New(context,
                         &V8Console::call<&V8Console::memorySetterCallback>,

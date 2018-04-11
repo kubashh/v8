@@ -289,7 +289,7 @@ std::unique_ptr<InjectedScript> InjectedScript::create(
   }
   DCHECK(value->IsFunction());
   v8::Local<v8::Object> scriptHostWrapper =
-      V8InjectedScriptHost::create(context, inspectedContext->inspector());
+      V8InjectedScriptHost::create(context);
   v8::Local<v8::Function> function = v8::Local<v8::Function>::Cast(value);
   v8::Local<v8::Object> windowGlobal = context->Global();
   v8::Local<v8::Value> info[] = {
@@ -382,6 +382,7 @@ Response InjectedScript::wrapObject(
   v8::HandleScope handles(m_context->isolate());
   v8::Local<v8::Value> wrappedObject;
   v8::Local<v8::Context> context = m_context->context();
+  v8::debug::NoSideEffectScope noSideEffect(m_context->isolate());
   Response response = wrapValue(value, groupName, forceValueType,
                                 generatePreview, &wrappedObject);
   if (!response.isSuccess()) return response;

@@ -395,6 +395,7 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(ObjectHasOwnProperty)                \
   V(ObjectValues)                        \
   V(ObjectValuesSkipFastPath)            \
+  V(ObjectKeys)                          \
   V(RegExpInitializeAndCompile)          \
   V(StackGuard)                          \
   V(StringAdd)                           \
@@ -599,6 +600,7 @@ SharedFunctionInfo::SideEffectState BuiltinGetSideEffectState(
     case Builtins::kObjectIsSealed:
     case Builtins::kObjectPrototypeValueOf:
     case Builtins::kObjectValues:
+    case Builtins::kObjectKeys:
     case Builtins::kObjectPrototypeHasOwnProperty:
     case Builtins::kObjectPrototypeIsPrototypeOf:
     case Builtins::kObjectPrototypePropertyIsEnumerable:
@@ -651,6 +653,7 @@ SharedFunctionInfo::SideEffectState BuiltinGetSideEffectState(
     case Builtins::kArrayBufferIsView:
     case Builtins::kArrayBufferPrototypeSlice:
     case Builtins::kReturnReceiver:
+    case Builtins::kSharedArrayBufferPrototypeGetByteLength:
     // DataView builtins.
     case Builtins::kDataViewConstructor:
     case Builtins::kDataViewPrototypeGetBuffer:
@@ -875,6 +878,7 @@ bool BytecodeRequiresRuntimeCheck(interpreter::Bytecode bytecode) {
     case Bytecode::kStaInArrayLiteral:
     case Bytecode::kStaDataPropertyInLiteral:
     case Bytecode::kStaCurrentContextSlot:
+    case Bytecode::kDeletePropertyStrict:
       return true;
     default:
       return false;
@@ -1001,6 +1005,8 @@ bool DebugEvaluate::CallbackHasNoSideEffect(Object* callback_info) {
     CallHandlerInfo* info = CallHandlerInfo::cast(callback_info);
     if (info->IsSideEffectFreeCallHandlerInfo()) return true;
     if (FLAG_trace_side_effect_free_debug_evaluate) {
+      info->Print();
+      info->GetIsolate()->PrintStack(stdout);
       PrintF("[debug-evaluate] API CallHandlerInfo may cause side effect.\n");
     }
   }
