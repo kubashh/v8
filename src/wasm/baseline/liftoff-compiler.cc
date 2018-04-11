@@ -342,6 +342,7 @@ class LiftoffCompiler {
     DCHECK(instance_loc.IsRegister());
     DCHECK(!instance_loc.IsAnyRegister());
     Register instance_reg = Register::from_code(instance_loc.AsRegister());
+    DCHECK_EQ(kWasmInstanceRegister, instance_reg);
     __ SpillInstance(instance_reg);
     // Input 0 is the code target, 1 is the instance. First parameter at 2.
     uint32_t input_idx = kInstanceParameterIndex + 1;
