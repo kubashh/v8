@@ -562,6 +562,8 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   {
     FrameAndConstantPoolScope scope(masm, StackFrame::INTERNAL);
     __ Push(r1, r4);
+    __ ldr(scratch, FieldMemOperand(r1, JSGeneratorObject::kReceiverOffset));
+    __ Push(scratch);
     __ CallRuntime(Runtime::kDebugOnFunctionCall);
     __ Pop(r1);
     __ ldr(r4, FieldMemOperand(r1, JSGeneratorObject::kFunctionOffset));

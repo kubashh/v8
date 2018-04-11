@@ -345,7 +345,8 @@ class Debug {
   void ApplySideEffectChecks(Handle<DebugInfo> debug_info);
   void ClearSideEffectChecks(Handle<DebugInfo> debug_info);
 
-  bool PerformSideEffectCheck(Handle<JSFunction> function);
+  bool PerformSideEffectCheck(Handle<JSFunction> function,
+                              Handle<Object> maybe_receiver);
   bool PerformSideEffectCheckForCallback(Handle<Object> callback_info);
   bool PerformSideEffectCheckAtBytecode(InterpretedFrame* frame);
 

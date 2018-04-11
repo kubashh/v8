@@ -2367,36 +2367,60 @@ void Debug::ClearSideEffectChecks(Handle<DebugInfo> debug_info) {
   }
 }
 
-bool Debug::PerformSideEffectCheck(Handle<JSFunction> function) {
+bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
+                                   Handle<Object> maybe_receiver) {
   DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
   DisallowJavascriptExecution no_js(isolate_);
   if (!function->is_compiled() &&
       !Compiler::Compile(function, Compiler::KEEP_EXCEPTION)) {
     return false;
   }
-  if (!SharedFunctionInfo::HasNoSideEffect(handle(function->shared()))) {
-    if (FLAG_trace_side_effect_free_debug_evaluate) {
-      PrintF("[debug-evaluate] Function %s failed side effect check.\n",
-             function->shared()->DebugName()->ToCString().get());
+  SharedFunctionInfo::SideEffectState side_effect_state =
+      SharedFunctionInfo::GetSideEffectState(handle(function->shared()));
+  switch (side_effect_state) {
+    case SharedFunctionInfo::kHasSideEffects:
+      if (FLAG_trace_side_effect_free_debug_evaluate) {
+        PrintF("[debug-evaluate] Function %s failed side effect check.\n",
+               function->shared()->DebugName()->ToCString().get());
+      }
+      side_effect_check_failed_ = true;
+      // Throw an uncatchable termination exception.
+      isolate_->TerminateExecution();
+      return false;
+    case SharedFunctionInfo::kRequiresRuntimeChecks: {
+      // If function has bytecode array then prepare function for debug
+      // execution to perform runtime side effect checks.
+      Handle<SharedFunctionInfo> shared(function->shared());
+      DCHECK(shared->is_compiled());
+      if (shared->GetCode() ==
+          isolate_->builtins()->builtin(Builtins::kDeserializeLazy)) {
+        Snapshot::EnsureBuiltinIsDeserialized(isolate_, shared);
+      }
+      GetOrCreateDebugInfo(shared);
+      PrepareFunctionForDebugExecution(shared);
+      return true;
     }
-    side_effect_check_failed_ = true;
-    // Throw an uncatchable termination exception.
-    isolate_->TerminateExecution();
-    return false;
-  }
-  // If function has bytecode array then prepare function for debug execution
-  // to perform runtime side effect checks.
-  if (function->shared()->requires_runtime_side_effect_checks()) {
-    Handle<SharedFunctionInfo> shared(function->shared());
-    DCHECK(shared->is_compiled());
-    if (shared->GetCode() ==
-        isolate_->builtins()->builtin(Builtins::kDeserializeLazy)) {
-      Snapshot::EnsureBuiltinIsDeserialized(isolate_, shared);
+    case SharedFunctionInfo::kHasNoSideEffectOnTemporaryObjects: {
+      if (!maybe_receiver->IsHeapObject()) return true;
+      Address address = Handle<HeapObject>::cast(maybe_receiver)->address();
+      if (temporary_objects_->HasObject(address)) return true;
+      if (FLAG_trace_side_effect_free_debug_evaluate) {
+        PrintF("[debug-evaluate] Failed runtime side effect check.\n");
+        maybe_receiver->Print();
+      }
+      side_effect_check_failed_ = true;
+      // Throw an uncatchable termination exception.
+      isolate_->TerminateExecution();
+      return false;
     }
-    GetOrCreateDebugInfo(shared);
-    PrepareFunctionForDebugExecution(shared);
+    case SharedFunctionInfo::kHasNoSideEffect:
+      return true;
+    case SharedFunctionInfo::kNotComputed:
+      UNREACHABLE();
+      return false;
   }
-  return true;
+  UNREACHABLE();
+  return false;
 }
 
 bool Debug::PerformSideEffectCheckForCallback(Handle<Object> callback_info) {
