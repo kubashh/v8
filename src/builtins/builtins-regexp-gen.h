@@ -29,8 +29,13 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
 
   TNode<Object> MatchAllIterator(TNode<Context> context,
                                  TNode<Context> native_context,
-                                 TNode<Object> regexp, TNode<Object> string,
+                                 TNode<Object> regexp, TNode<String> string,
+                                 TNode<BoolT> is_fast_regexp,
                                  char const* method_name);
+
+  // Analogous to BranchIfFastRegExp, for use in asserts.
+  TNode<BoolT> IsFastRegExp(SloppyTNode<Context> context,
+                            SloppyTNode<Object> object);
 
  protected:
   // Allocate a RegExpResult with the given length (the number of captures,
@@ -81,9 +86,6 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
                           Label* const if_isunmodified,
                           Label* const if_ismodified);
 
-  // Analogous to BranchIfFastRegExp, for use in asserts.
-  Node* IsFastRegExp(Node* const context, Node* const object);
-
   // Performs fast path checks on the given object itself, but omits prototype
   // checks.
   Node* IsFastRegExpNoPrototype(Node* const context, Node* const object);
@@ -104,6 +106,10 @@ class RegExpBuiltinsAssembler : public CodeStubAssembler {
                   int counter, const char* method_name);
 
   Node* IsRegExp(Node* const context, Node* const maybe_receiver);
+
+  TNode<String> LoadRegExpResultFirstMatch(SloppyTNode<Context> context,
+                                           SloppyTNode<JSObject> maybe_array);
+
   Node* RegExpInitialize(Node* const context, Node* const regexp,
                          Node* const maybe_pattern, Node* const maybe_flags);
 
