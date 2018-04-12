@@ -5,6 +5,7 @@
 #ifndef V8_INSPECTOR_V8_DEBUGGER_H_
 #define V8_INSPECTOR_V8_DEBUGGER_H_
 
+#include <set>
 #include <list>
 #include <unordered_map>
 #include <vector>
@@ -108,6 +109,12 @@ class V8Debugger : public v8::debug::DebugDelegate {
   V8StackTraceId storeCurrentStackTrace(const StringView& description);
   void externalAsyncTaskStarted(const V8StackTraceId& parent);
   void externalAsyncTaskFinished(const V8StackTraceId& parent);
+
+  void startAllocationTracker();
+  void stopAllocationTracker();
+
+  void objectAllocated(void* address);
+  void objectExposed(void* address, v8::Local<v8::Object> wrapper);
 
   uintptr_t storeStackTrace(std::shared_ptr<AsyncStackTrace> stack);
 
@@ -240,6 +247,9 @@ class V8Debugger : public v8::debug::DebugDelegate {
       m_serializedDebuggerIdToDebuggerId;
 
   std::unique_ptr<TerminateExecutionCallback> m_terminateExecutionCallback;
+
+  bool m_trackingAllocations = false;
+  std::set<void*> m_allocatedObjects;
 
   WasmTranslation m_wasmTranslation;
 

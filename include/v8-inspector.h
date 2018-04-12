@@ -214,6 +214,23 @@ class V8_EXPORT V8InspectorClient {
   virtual bool canExecuteScripts(int contextGroupId) { return true; }
 
   virtual void maxAsyncCallStackDepthChanged(int depth) {}
+
+  // Allocation tracker is used by side effect free evaluate and required to
+  // detemine temporary state of objects in case when embedder exposes
+  // native object lazily.
+  // When allocation tracker is running, inspector expects to get two kind of
+  // events:
+  // - objectAllocated(void*) when native object is allocated;
+  // - objectExposed(void*, v8::Local<v8::Object>) when native object is
+  //   exposed to JavaScript.
+  // For side effect free evaluation inspector by default considers any
+  // JavaScript object created during evaluate as temporary and marks
+  // object as non-temporary if objectExposed was called but objectAllocated
+  // was not (which means that native object was allocated before evaluate).
+  // Inspector ignores objectAllocated and objectExposed calls when tracker
+  // is not running.
+  virtual void startAllocationTracker() {}
+  virtual void stopAllocationTracker() {}
 };
 
 // These stack trace ids are intended to be passed between debuggers and be
@@ -282,6 +299,10 @@ class V8_EXPORT V8Inspector {
   virtual std::unique_ptr<V8StackTrace> createStackTrace(
       v8::Local<v8::StackTrace>) = 0;
   virtual std::unique_ptr<V8StackTrace> captureStackTrace(bool fullStack) = 0;
+
+  // See more details above startAllocationTracker method.
+  virtual void objectAllocated(void* address) = 0;
+  virtual void objectExposed(void* address, v8::Local<v8::Object> wrapper) = 0;
 };
 
 }  // namespace v8_inspector

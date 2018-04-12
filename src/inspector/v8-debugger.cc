@@ -992,6 +992,32 @@ void V8Debugger::allAsyncTasksCanceled() {
   m_asyncStacksCount = 0;
 }
 
+void V8Debugger::startAllocationTracker() {
+  DCHECK(!m_trackingAllocations);
+
+  m_trackingAllocations = true;
+  m_inspector->client()->startAllocationTracker();
+}
+
+void V8Debugger::stopAllocationTracker() {
+  DCHECK(m_trackingAllocations);
+
+  m_inspector->client()->stopAllocationTracker();
+  m_trackingAllocations = false;
+  m_allocatedObjects.clear();
+}
+
+void V8Debugger::objectAllocated(void* address) {
+  if (!m_trackingAllocations) return;
+  m_allocatedObjects.insert(address);
+}
+
+void V8Debugger::objectExposed(void* address, v8::Local<v8::Object> wrapper) {
+  if (!m_trackingAllocations) return;
+  if (m_allocatedObjects.find(address) == m_allocatedObjects.end()) return;
+  v8::debug::MarkObjectAsNonTemporary(m_isolate, wrapper);
+}
+
 void V8Debugger::muteScriptParsedEvents() {
   ++m_ignoreScriptParsedEventsCounter;
 }
