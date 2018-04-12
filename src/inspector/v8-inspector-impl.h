@@ -102,6 +102,9 @@ class V8InspectorImpl : public V8Inspector {
   void externalAsyncTaskStarted(const V8StackTraceId& parent) override;
   void externalAsyncTaskFinished(const V8StackTraceId& parent) override;
 
+  void objectAllocated(void* address) override;
+  void objectExposed(void* address, v8::Local<v8::Object> wrapper) override;
+
   unsigned nextExceptionId() { return ++m_lastExceptionId; }
   void enableStackCapturingIfNeeded();
   void disableStackCapturingIfNeeded();

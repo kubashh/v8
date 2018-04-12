@@ -1092,8 +1092,12 @@ Response V8DebuggerAgentImpl::evaluateOnCallFrame(
   if (it->Done()) {
     return Response::Error("Could not find call frame with given id");
   }
+  V8Debugger* debugger = m_inspector->debugger();
+  if (throwOnSideEffect.fromMaybe(false)) debugger->startAllocationTracker();
   v8::MaybeLocal<v8::Value> maybeResultValue = it->Evaluate(
       toV8String(m_isolate, expression), throwOnSideEffect.fromMaybe(false));
+  if (throwOnSideEffect.fromMaybe(false)) debugger->stopAllocationTracker();
+
   // Re-initialize after running client's code, as it could have destroyed
   // context or session.
   response = scope.initialize();

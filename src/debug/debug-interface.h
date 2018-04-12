@@ -514,6 +514,9 @@ int GetDebuggingId(v8::Local<v8::Function> function);
 bool SetFunctionBreakpoint(v8::Local<v8::Function> function,
                            v8::Local<v8::String> condition, BreakpointId* id);
 
+void MarkObjectAsNonTemporary(v8::Isolate* isolate,
+                              v8::Local<v8::Object> wrapper);
+
 }  // namespace debug
 }  // namespace v8
 
