@@ -317,7 +317,9 @@ class NativeModule::CloneCodeHelper {
   explicit CloneCodeHelper(NativeModule* source_native_module,
                            NativeModule* cloning_native_module);
 
-  void SelectForCloning(int32_t code_index);
+  void SelectForCloning(uint32_t code_index);
+
+  void SelectForCloning(std::vector<uint32_t> code_indices);
 
   void CloneAndPatchCode(bool patch_stub_to_stub_calls);
 
@@ -333,6 +335,14 @@ class NativeModule::CloneCodeHelper {
   std::vector<uint32_t> selection_;
   std::unordered_map<Address, Address, AddressHasher> reverse_lookup_;
 };
+
+void NativeModule::CloneCodeFrom(NativeModule* source_native_module,
+                                 std::vector<uint32_t>& function_indices,
+                                 bool patch_stub_to_stub_calls) {
+  NativeModule::CloneCodeHelper helper(source_native_module, this);
+  helper.SelectForCloning(function_indices);
+  helper.CloneAndPatchCode(patch_stub_to_stub_calls);
+}
 
 NativeModule::CloneCodeHelper::CloneCodeHelper(
     NativeModule* source_native_module, NativeModule* cloning_native_module)
@@ -355,8 +365,13 @@ NativeModule::CloneCodeHelper::CloneCodeHelper(
   }
 }
 
-void NativeModule::CloneCodeHelper::SelectForCloning(int32_t code_index) {
+void NativeModule::CloneCodeHelper::SelectForCloning(uint32_t code_index) {
   selection_.emplace_back(code_index);
+}
+
+void NativeModule::CloneCodeHelper::SelectForCloning(
+    std::vector<uint32_t> code_indices) {
+  selection_.insert(selection_.end(), code_indices.begin(), code_indices.end());
 }
 
 void NativeModule::CloneCodeHelper::CloneAndPatchCode(

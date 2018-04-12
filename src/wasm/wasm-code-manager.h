@@ -239,6 +239,12 @@ class V8_EXPORT_PRIVATE NativeModule final {
   WasmCode* GetCode(uint32_t index) const;
   void SetCode(uint32_t index, WasmCode* wasm_code);
 
+  // Helper method to clone code for the functions in {function_indices}
+  // from a {source_native_module} to this native module.
+  void CloneCodeFrom(NativeModule* source_native_module,
+                     std::vector<uint32_t>& function_indices,
+                     bool patch_stub_to_stub_calls);
+
   // Register/release the protected instructions in all code objects with the
   // global trap handler for this process.
   void UnpackAndRegisterProtectedInstructions();
