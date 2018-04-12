@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3ffe9ca8_d6d1a250",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-04-12T06:09:18Z",
+      "side": 1,
+      "message": "So I tried to figure out a test case to expose this, but I couldn\u0027t.\nAs far as I can see, if `iterating_regexp` is fast, then the regexp result will be fast, then I won\u0027t make any side effect calls like ToString/GetProperty, so `iterating_regexp` will stay fast.\n\nLet me know if you figured a way to break this assumption.",
+      "parentUuid": "de570453_8262aad0",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd0ab005_11c32e43",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 7
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9f90aabc_12437828",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-04-12T06:09:18Z",
+      "side": 1,
+      "message": "Done, check removed.",
+      "parentUuid": "2d4cdc75_ab179e84",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8e70821_d732d35c",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 7
@@ -68,6 +104,24 @@
       "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02e1f586_80743822",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-04-12T06:09:18Z",
+      "side": 1,
+      "message": "Removed, this was an old todo I had for myself.",
+      "parentUuid": "e8e70821_d732d35c",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
