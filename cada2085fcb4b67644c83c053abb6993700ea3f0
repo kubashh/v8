@@ -22,6 +22,76 @@
       "revId": "cada2085fcb4b67644c83c053abb6993700ea3f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5d95c1a_833f0eea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-04-12T13:05:09Z",
+      "side": 1,
+      "message": "Yeah, that would make sense I guess, pretty ugly but at least well specified.",
+      "parentUuid": "57d3f62e_fc915844",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 31
+      },
+      "revId": "cada2085fcb4b67644c83c053abb6993700ea3f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e46cd20_1defa9b6",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-04-12T13:05:09Z",
+      "side": 1,
+      "message": "nit: add a note that static_cast can\u0027t cast across private bases, but c-style casts are explicitly stated to be able to.",
+      "range": {
+        "startLine": 895,
+        "startChar": 31,
+        "endLine": 895,
+        "endChar": 32
+      },
+      "revId": "cada2085fcb4b67644c83c053abb6993700ea3f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b90826a_8864ec6e",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-04-12T13:05:09Z",
+      "side": 1,
+      "message": "have you looked at build time changes?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 29
+      },
+      "revId": "cada2085fcb4b67644c83c053abb6993700ea3f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
