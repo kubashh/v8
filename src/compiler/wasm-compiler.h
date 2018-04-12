@@ -93,6 +93,7 @@ class WasmCompilationData {
 class WasmCompilationUnit final {
  public:
   enum class CompilationMode : uint8_t { kLiftoff, kTurbofan };
+  static const char* GetCompilationModeAsString(CompilationMode mode);
   static CompilationMode GetDefaultCompilationMode();
 
   // If constructing from a background thread, pass in a Counters*, and ensure
@@ -121,6 +122,7 @@ class WasmCompilationUnit final {
 
   size_t memory_cost() const { return memory_cost_; }
   wasm::NativeModule* native_module() const { return native_module_; }
+  CompilationMode mode() { return mode_; }
 
  private:
   struct LiftoffData {
