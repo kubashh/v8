@@ -59,6 +59,11 @@ class Debug::TemporaryObjectsTracker : public HeapObjectAllocationTracker {
     objects_.insert(to);
   }
 
+  void MarkObjectAsNonTemporary(Address addr) {
+    base::LockGuard<base::Mutex> guard(&mutex_);
+    objects_.erase(addr);
+  }
+
   bool HasObject(Address addr) const {
     return objects_.find(addr) != objects_.end();
   }
@@ -2347,6 +2352,11 @@ void Debug::StopSideEffectCheckMode() {
   DCHECK(temporary_objects_);
   isolate_->heap()->RemoveHeapObjectAllocationTracker(temporary_objects_.get());
   temporary_objects_.reset();
+}
+
+void Debug::MarkObjectAsNonTemporary(Handle<JSReceiver> receiver) {
+  if (!temporary_objects_) return;
+  temporary_objects_->MarkObjectAsNonTemporary(receiver->address());
 }
 
 void Debug::ApplySideEffectChecks(Handle<DebugInfo> debug_info) {
