@@ -341,6 +341,7 @@ class Debug {
 
   void StartSideEffectCheckMode();
   void StopSideEffectCheckMode();
+  void MarkObjectAsNonTemporary(Handle<JSReceiver> receiver);
 
   void ApplySideEffectChecks(Handle<DebugInfo> debug_info);
   void ClearSideEffectChecks(Handle<DebugInfo> debug_info);

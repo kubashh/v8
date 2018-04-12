@@ -316,6 +316,15 @@ void V8InspectorImpl::allAsyncTasksCanceled() {
   m_debugger->allAsyncTasksCanceled();
 }
 
+void V8InspectorImpl::objectAllocated(void* address) {
+  m_debugger->objectAllocated(address);
+}
+
+void V8InspectorImpl::objectExposed(void* address,
+                                    v8::Local<v8::Object> wrapper) {
+  m_debugger->objectExposed(address, wrapper);
+}
+
 v8::Local<v8::Context> V8InspectorImpl::regexContext() {
   if (m_regexContext.IsEmpty())
     m_regexContext.Reset(m_isolate, v8::Context::New(m_isolate));

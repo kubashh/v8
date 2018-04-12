@@ -9891,6 +9891,12 @@ bool debug::SetFunctionBreakpoint(v8::Local<v8::Function> function,
                                                     condition_string, id);
 }
 
+void debug::MarkObjectAsNonTemporary(v8::Isolate* v8_isolate,
+                                     v8::Local<v8::Object> wrapper) {
+  auto isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  isolate->debug()->MarkObjectAsNonTemporary(Utils::OpenHandle(*wrapper));
+}
+
 Local<String> CpuProfileNode::GetFunctionName() const {
   const i::ProfileNode* node = reinterpret_cast<const i::ProfileNode*>(this);
   i::Isolate* isolate = node->isolate();

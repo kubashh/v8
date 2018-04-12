@@ -259,6 +259,9 @@ void V8RuntimeAgentImpl::evaluate(
   // Temporarily enable allow evals for inspector.
   scope.allowCodeGenerationFromStrings();
 
+  V8Debugger* debugger = m_inspector->debugger();
+  if (throwOnSideEffect.fromMaybe(false)) debugger->startAllocationTracker();
+
   v8::MaybeLocal<v8::Value> maybeResultValue;
   {
     v8::MicrotasksScope microtasksScope(m_inspector->isolate(),
@@ -267,6 +270,8 @@ void V8RuntimeAgentImpl::evaluate(
         m_inspector->isolate(), toV8String(m_inspector->isolate(), expression),
         throwOnSideEffect.fromMaybe(false));
   }  // Run microtasks before returning result.
+
+  if (throwOnSideEffect.fromMaybe(false)) debugger->stopAllocationTracker();
 
   // Re-initialize after running client's code, as it could have destroyed
   // context or session.
