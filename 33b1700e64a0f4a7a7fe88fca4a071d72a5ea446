@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d0ba780_ca97b811",
+        "filename": "test/js-perf-test/ArraySort/sort-base.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-12T08:57:31Z",
+      "side": 1,
+      "message": "Nit: kArraySize",
+      "revId": "33b1700e64a0f4a7a7fe88fca4a071d72a5ea446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fd975ea_06022cb2",
+        "filename": "test/js-perf-test/ArraySort/sort-cmpfn.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-12T08:57:31Z",
+      "side": 1,
+      "message": "Please add a short comment explaining why we do this.",
+      "revId": "33b1700e64a0f4a7a7fe88fca4a071d72a5ea446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
