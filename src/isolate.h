@@ -23,6 +23,7 @@
 #include "src/futex-emulation.h"
 #include "src/globals.h"
 #include "src/handles.h"
+#include "src/heap/factory.h"
 #include "src/heap/heap.h"
 #include "src/messages.h"
 #include "src/objects/code.h"
@@ -72,7 +73,6 @@ class DescriptorLookupCache;
 class EmptyStatement;
 class EternalHandles;
 class ExternalCallbackScope;
-class Factory;
 class HandleScopeImplementer;
 class HeapObjectToIndexHashMap;
 class HeapProfiler;
@@ -453,8 +453,7 @@ typedef std::vector<HeapObject*> DebugObjectCache;
 #define THREAD_LOCAL_TOP_ADDRESS(type, name) \
   type* name##_address() { return &thread_local_top_.name##_; }
 
-
-class Isolate {
+class Isolate : private Factory {
   // These forward declarations are required to make the friend declarations in
   // PerIsolateThreadData work on some older versions of gcc.
   class ThreadDataTable;
@@ -982,7 +981,11 @@ class Isolate {
   }
 #endif
 
-  Factory* factory() { return reinterpret_cast<Factory*>(this); }
+  Factory* factory() {
+    // Upcast to the privately inherited base-class using c-style casts to avoid
+    // undefined behavior.
+    return (Factory*)this;  // NOLINT(readability/casting)
+  }
 
   static const int kJSRegexpStaticOffsetsVectorSize = 128;
 
