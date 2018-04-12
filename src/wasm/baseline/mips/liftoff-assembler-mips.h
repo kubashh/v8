@@ -581,16 +581,17 @@ I32_SHIFTOP(shr, srlv)
 
 #undef I32_SHIFTOP
 
-#define UNIMPLEMENTED_I64_BINOP(name)                                  \
-  void LiftoffAssembler::emit_i64_##name(                              \
-      LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-    BAILOUT("i64 binop: " #name);                                      \
-  }
+void LiftoffAssembler::emit_i64_add(LiftoffRegister dst, LiftoffRegister lhs,
+                                    LiftoffRegister rhs) {
+  TurboAssembler::AddPair(dst.low_gp(), dst.high_gp(), lhs.low_gp(),
+                          lhs.high_gp(), rhs.low_gp(), rhs.high_gp());
+}
 
-UNIMPLEMENTED_I64_BINOP(add)
-UNIMPLEMENTED_I64_BINOP(sub)
-
-#undef UNIMPLEMENTED_I64_BINOP
+void LiftoffAssembler::emit_i64_sub(LiftoffRegister dst, LiftoffRegister lhs,
+                                    LiftoffRegister rhs) {
+  TurboAssembler::SubPair(dst.low_gp(), dst.high_gp(), lhs.low_gp(),
+                          lhs.high_gp(), rhs.low_gp(), rhs.high_gp());
+}
 
 namespace liftoff {
 
