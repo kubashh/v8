@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f4a033e4_27d67c93",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-12T08:43:22Z",
+      "side": 1,
+      "message": "Isn\u0027t this the same as https://crrev.com/c/1009325?",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de570453_8262aad0",
         "filename": "src/builtins/builtins-regexp-gen.cc",
         "patchSetId": 7
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "So I tried to figure out a test case to expose this, but I couldn\u0027t.\nAs far as I can see, if `iterating_regexp` is fast, then the regexp result will be fast, then I won\u0027t make any side effect calls like ToString/GetProperty, so `iterating_regexp` will stay fast.\n\nLet me know if you figured a way to break this assumption.",
       "parentUuid": "de570453_8262aad0",
+      "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "075d1891_57cb97c0",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-12T08:43:22Z",
+      "side": 1,
+      "message": "Right.. Fast regexps will return a fully initialized holey elements array. We *could* muck with its prototype, but I can\u0027t think of a way that might mess with access to the first element.\n\nLet\u0027s assert IsFastRegExp on the if_fast branch though?",
+      "parentUuid": "3ffe9ca8_d6d1a250",
       "revId": "946abc4ddfba86a558595a5edbec18145771bffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
