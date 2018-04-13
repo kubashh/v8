@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47fe7a3e_fc561a09",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-13T06:00:40Z",
+      "side": 1,
+      "message": "Can we rephrase this a bit to be easier to understand? Something like\n\"We consider a wrapper object to be temporary if both the native object and the wrapper are created while tracking temporary objects with the allocation tracker. A wrapper object is only considered to be temporary if the allocation tracker is active, and we have observed both objectAllocated and objectExposed events.\"",
+      "range": {
+        "startLine": 226,
+        "startChar": 5,
+        "endLine": 231,
+        "endChar": 20
+      },
+      "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c03943d_4cb940e2",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-13T06:00:40Z",
+      "side": 1,
+      "message": "If I understand correctly, objectExposed event happens after the object has already been allocated, and between the allocation and this event, there is a small window of time where the object is considered temporary.\n\nI wonder whether that small window is sufficient to lead to false negatives in the side effect check. I would feel a lot better if we did not have that small window. Otherwise we have to rely on the embedder getting this right.\n\nHow about this: we add two new std::unordered_set in Debug::TemporaryObjectsTracker: native_objects_ and wrappers_.\n\nOn objectAllocated event, we add the native object to native_objects_.\n\nOn objectExposed event, only add the wrapper to wrappers_ if the native object already exists in native_objects_.\n\nWe change Debug::TemporaryObjectsTracker::HasObject (and rename it to ObjectIsTemporary) to take a HeapObject* argument. If it is not a JSReceiver, we return true since primitives are immutable. If it is a JSReceiver, and a wrapper (instance type is JS_API_OBJECT_TYPE), then we check wrappers_, otherwise we check objects_.\n\nWDYT?",
+      "range": {
+        "startLine": 1015,
+        "startChar": 17,
+        "endLine": 1015,
+        "endChar": 30
+      },
+      "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
