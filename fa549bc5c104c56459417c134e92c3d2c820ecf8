@@ -22,6 +22,30 @@
       "revId": "fa549bc5c104c56459417c134e92c3d2c820ecf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c7a14a_a9830fe5",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1205294
+      },
+      "writtenOn": "2018-04-13T17:40:07Z",
+      "side": 0,
+      "message": "Thanks for mentioning this! I didn\u0027t realize the V8 internal usage of android_tools, which is reasonable to require a safer transitional process. I will add it back in next patch.",
+      "parentUuid": "41d3e030_677ecba3",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 36
+      },
+      "revId": "fa549bc5c104c56459417c134e92c3d2c820ecf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
