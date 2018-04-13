@@ -22,6 +22,30 @@
       "revId": "656632b9ebd58259193678117adcc8af46b74be6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c9cb60c_b89a4343",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1205294
+      },
+      "writtenOn": "2018-04-13T18:46:58Z",
+      "side": 1,
+      "message": "These packages (including the \u0027sources\u0027 below) are replacing all dependencies packages that \u0027android_tools\u0027 repo contains. If v8 only uses one or several packages of them instead of all, there is no issue to only hook on the needed ones.\n\nI am not familiar the v8 repo, it looks like only using deps \u0027platform-tools\u0027 (in tools/adb-d8.py and http://shortn/_Uj32BiFpdL), but not sure about this. Can you please confirm all the other packages that V8 needed from Android SDK if there is any?",
+      "parentUuid": "2deb749b_65925565",
+      "range": {
+        "startLine": 66,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 12
+      },
+      "revId": "656632b9ebd58259193678117adcc8af46b74be6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
