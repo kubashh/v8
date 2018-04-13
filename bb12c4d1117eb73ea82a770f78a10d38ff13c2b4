@@ -278,6 +278,24 @@
     },
     {
       "key": {
+        "uuid": "5cc127c3_f0fd2cfb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-13T08:27:36Z",
+      "side": 1,
+      "message": "Why is this different to async compilation? Once baseline compilation finished, and the synchronous compile call finished, we would just continue background compilation, occasionally spawn a finisher (foreground) task, and eventually spawn a foreground task to do the patching.\nThis should be very similar to the async case.",
+      "parentUuid": "18276ad3_76368d7b",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f2c111e_25f92535",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
