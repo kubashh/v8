@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83242c10_bc736813",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Just call Clear() here.",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c9486c5_8860340c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Fix the formating please.",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a118d98a_ea36e819",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "I think this flag should say what it really stands for, namely for running the optimizing compiler. This coincides with baseline compilation being finished, but the actual thing here is that we run the optimizing compiler here.",
+      "range": {
+        "startLine": 1397,
+        "startChar": 30,
+        "endLine": 1397,
+        "endChar": 59
+      },
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83aa5710_e2c915b4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Could you add a comment here whether this callback is called on the main thread or on a worker thread?",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2cc74af_4b91bff5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "How convinced are you that this will happen in all possible cases?",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb5eb666_5db56a36",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Don\u0027t you patch the first compiled module twice here?",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b48698_dee705cc",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3348,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Could you add a TODO somewhere that for streaming compilation we may want to start turbofan compilation even before all functions have been compiled with liftoff, e.g. in the case where all received function have already been compiled with liftoff and we are waiting for new functions to compile.",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "372dc9bf_506f02c1",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "I think this function is not implemented anywhere. Can you delete the declaration?",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c64ac056_68413e64",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-13T13:41:31Z",
+      "side": 1,
+      "message": "Is this vector testing code? I don\u0027t see where you use it ...",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
