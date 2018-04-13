@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "59dd1d26_bbc6264c",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-04-13T18:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "261f72dc_e1ca6df9",
+      "range": {
+        "startLine": 551,
+        "startChar": 15,
+        "endLine": 551,
+        "endChar": 31
+      },
+      "revId": "a496534037662a706ab7e779eea47cd97ab6db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9181d357_1933b7d4",
         "filename": "luci-milo.cfg",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "a496534037662a706ab7e779eea47cd97ab6db4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6108ee_1b151ce1",
+        "filename": "luci-milo.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-04-13T18:39:01Z",
+      "side": 1,
+      "message": "Good point. I\u0027ll implement renaming once I\u0027ll get to clusterfuzz (it\u0027s also special since it uses builders.pyl). This should also be caught by the LUCI Validation presubmit hook.",
+      "parentUuid": "9181d357_1933b7d4",
+      "range": {
+        "startLine": 640,
+        "startChar": 11,
+        "endLine": 640,
+        "endChar": 50
+      },
+      "revId": "a496534037662a706ab7e779eea47cd97ab6db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
