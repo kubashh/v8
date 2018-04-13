@@ -98,6 +98,7 @@ class AsyncCompileJob {
   class CompileWrappers;
   class FinishModule;
   class AbortCompilation;
+  class UpdateToTopTierCompiledCode;
 
   const std::shared_ptr<Counters>& async_counters() const {
     return async_counters_;
@@ -171,6 +172,8 @@ class AsyncCompileJob {
   // compilation. The AsyncCompileJob does not actively use the
   // StreamingDecoder.
   std::shared_ptr<StreamingDecoder> stream_;
+
+  bool tiering_completed_ = false;
 };
 }  // namespace wasm
 }  // namespace internal

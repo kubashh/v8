@@ -5085,6 +5085,17 @@ WasmCompilationUnit::~WasmCompilationUnit() {
   }
 }
 
+const char* WasmCompilationUnit::GetCompilationModeAsString(
+    CompilationMode mode) {
+  switch (mode) {
+    case CompilationMode::kLiftoff:
+      return "liftoff";
+    case CompilationMode::kTurbofan:
+      return "turbofan";
+  }
+  UNREACHABLE();
+}
+
 void WasmCompilationUnit::ExecuteCompilation() {
   auto size_histogram = env_->module->is_wasm()
                             ? counters()->wasm_wasm_function_size_bytes()
@@ -5097,13 +5108,18 @@ void WasmCompilationUnit::ExecuteCompilation() {
   TimedHistogramScope wasm_compile_function_time_scope(timed_histogram);
 
   if (FLAG_trace_wasm_compiler) {
-    PrintF("Compiling wasm function %d\n\n", func_index_);
+    PrintF("Compiling wasm function %d with %s.\n\n", func_index_,
+           GetCompilationModeAsString(mode_));
   }
 
   switch (mode_) {
     case WasmCompilationUnit::CompilationMode::kLiftoff:
       if (ExecuteLiftoffCompilation()) break;
       // Otherwise, fall back to turbofan.
+      if (FLAG_trace_wasm_compiler) {
+        PrintF("Falling back to turbofan compilation for function %d.\n",
+               func_index_);
+      }
       liftoff_.~LiftoffData();
       mode_ = WasmCompilationUnit::CompilationMode::kTurbofan;
       new (&tf_) TurbofanData();
