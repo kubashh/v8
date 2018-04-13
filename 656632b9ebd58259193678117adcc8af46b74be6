@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2deb749b_65925565",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-13T18:38:26Z",
+      "side": 1,
+      "message": "Do we need all those I wonder? Are they all replacing android_tools? Or would now only one of these packages be enough?",
+      "range": {
+        "startLine": 66,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 12
+      },
+      "revId": "656632b9ebd58259193678117adcc8af46b74be6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
