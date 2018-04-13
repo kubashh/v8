@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "261f72dc_e1ca6df9",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-13T16:50:48Z",
+      "side": 1,
+      "message": "guess you\u0027ll need a new mixin, otherwise those bots will get the wrong mastername property and the recipe won\u0027t find it in BUILDERS.py",
+      "range": {
+        "startLine": 551,
+        "startChar": 15,
+        "endLine": 551,
+        "endChar": 31
+      },
+      "revId": "a496534037662a706ab7e779eea47cd97ab6db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9181d357_1933b7d4",
+        "filename": "luci-milo.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-13T16:50:48Z",
+      "side": 1,
+      "message": "Hmm... soon we might need to rename some builders. So far no name clash... but on the clusterfuzz waterfall are a few builders that have the same name as on main waterfall. And maybe also on the official waterfall.\n\nThe ci bucket links will be the same as they don\u0027t resolve by master name anymore...",
+      "range": {
+        "startLine": 640,
+        "startChar": 11,
+        "endLine": 640,
+        "endChar": 50
+      },
+      "revId": "a496534037662a706ab7e779eea47cd97ab6db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
