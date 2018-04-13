@@ -317,7 +317,9 @@ class NativeModule::CloneCodeHelper {
   explicit CloneCodeHelper(NativeModule* source_native_module,
                            NativeModule* cloning_native_module);
 
-  void SelectForCloning(int32_t code_index);
+  void SelectForCloning(uint32_t code_index);
+
+  void SelectForCloning(std::vector<uint32_t> code_indices);
 
   void CloneAndPatchCode(bool patch_stub_to_stub_calls);
 
@@ -333,6 +335,25 @@ class NativeModule::CloneCodeHelper {
   std::vector<uint32_t> selection_;
   std::unordered_map<Address, Address, AddressHasher> reverse_lookup_;
 };
+
+void NativeModule::CloneHigherTierCodeFrom(NativeModule* source_native_module) {
+  NativeModule::CloneCodeHelper helper(source_native_module, this);
+
+  std::vector<uint32_t> code_indices;
+  for (uint32_t i = num_imported_functions_, e = FunctionCount(); i < e; ++i) {
+    WasmCode* wasm_code = GetCode(i);
+    if (!wasm_code->is_liftoff()) continue;
+    code_indices.emplace_back(i);
+  }
+
+  helper.CloneAndPatchCode(false);
+
+  // Sanity check: after cloning the code, every function in the
+  // code table should not be Liftoff-compiled code anymore.
+  for (uint32_t i = num_imported_functions(), e = FunctionCount(); i < e; ++i) {
+    DCHECK(!GetCode(i)->is_liftoff());
+  }
+}
 
 NativeModule::CloneCodeHelper::CloneCodeHelper(
     NativeModule* source_native_module, NativeModule* cloning_native_module)
@@ -355,7 +376,7 @@ NativeModule::CloneCodeHelper::CloneCodeHelper(
   }
 }
 
-void NativeModule::CloneCodeHelper::SelectForCloning(int32_t code_index) {
+void NativeModule::CloneCodeHelper::SelectForCloning(uint32_t code_index) {
   selection_.emplace_back(code_index);
 }
 

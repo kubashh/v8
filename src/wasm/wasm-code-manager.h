@@ -239,6 +239,10 @@ class V8_EXPORT_PRIVATE NativeModule final {
   WasmCode* GetCode(uint32_t index) const;
   void SetCode(uint32_t index, WasmCode* wasm_code);
 
+  // Helper method to clone higher tier code from a {source_native_module} to
+  // this native module.
+  void CloneHigherTierCodeFrom(NativeModule* source_native_module);
+
   // Register/release the protected instructions in all code objects with the
   // global trap handler for this process.
   void UnpackAndRegisterProtectedInstructions();
