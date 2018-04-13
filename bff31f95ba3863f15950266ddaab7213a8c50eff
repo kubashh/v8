@@ -69,6 +69,30 @@
       "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af53ffeb_8849de5a",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-13T06:31:53Z",
+      "side": 1,
+      "message": "Wrapper objects (ones created from ObjectTemplate) should have that instance type. v8::Map::New would give you a Map object just like the one you get by running \"new Map\" in JavaScript.",
+      "parentUuid": "a9948d1b_843d2d97",
+      "range": {
+        "startLine": 1015,
+        "startChar": 17,
+        "endLine": 1015,
+        "endChar": 30
+      },
+      "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
