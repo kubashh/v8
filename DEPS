@@ -4,10 +4,41 @@
 
 vars = {
   'checkout_instrumented_libraries': False,
+  # By default, do not check out android sdk sources. This can be overridden
+  # e.g. with custom_vars.
+  'checkout_android_sdk_sources': False,
   'chromium_url': 'https://chromium.googlesource.com',
   'download_gcmole': False,
   'download_jsfunfuzz': False,
   'download_mips_toolchain': False,
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_build-tools_version
+  # and whatever else without interference from each other.
+  'android_sdk_build-tools_version': 'version:27.0.3-cr0',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_emulator_version
+  # and whatever else without interference from each other.
+  'android_sdk_emulator_version': 'version:27.1.12-cr0',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_extras_version
+  # and whatever else without interference from each other.
+  'android_sdk_extras_version': 'version:47.0.0-cr0',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_platform-tools_version
+  # and whatever else without interference from each other.
+  'android_sdk_platform-tools_version': 'version:27.0.1-cr0',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_platforms_version
+  # and whatever else without interference from each other.
+  'android_sdk_platforms_version': 'version:android-27-cr0',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_sources_version
+  # and whatever else without interference from each other.
+  'android_sdk_sources_version': 'version:android-27-cr1',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling android_sdk_tools_version
+  # and whatever else without interference from each other.
+  'android_sdk_tools_version': 'version:26.1.1-cr0',
 }
 
 deps = {
@@ -30,6 +61,46 @@ deps = {
   'v8/third_party/android_tools': {
     'url': Var('chromium_url') + '/android_tools.git' + '@' + 'c22a664c39af72dd8f89200220713dcad811300a',
     'condition': 'checkout_android',
+  },
+  'v8/third_party/android_sdk/public': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_sdk/public/build-tools',
+              'version': Var('android_sdk_build-tools_version'),
+          },
+          {
+              'package': 'chromium/third_party/android_sdk/public/emulator',
+              'version': Var('android_sdk_emulator_version'),
+          },
+          {
+              'package': 'chromium/third_party/android_sdk/public/extras',
+              'version': Var('android_sdk_extras_version'),
+          },
+          {
+              'package': 'chromium/third_party/android_sdk/public/platform-tools',
+              'version': Var('android_sdk_platform-tools_version'),
+          },
+          {
+              'package': 'chromium/third_party/android_sdk/public/platforms',
+              'version': Var('android_sdk_platforms_version'),
+          },
+          {
+              'package': 'chromium/third_party/android_sdk/public/tools',
+              'version': Var('android_sdk_tools_version'),
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+  'v8/third_party/android_sdk/sources': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_sdk/sources',
+              'version': Var('android_sdk_sources_version'),
+          },
+      ],
+      'condition': 'checkout_android_sdk_sources',
+      'dep_type': 'cipd',
   },
   'v8/third_party/catapult': {
     'url': Var('chromium_url') + '/catapult.git' + '@' + '67d01a21077fd59a0a64698c559b6b7491d69f47',
