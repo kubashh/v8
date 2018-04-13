@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41d3e030_677ecba3",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-13T06:54:53Z",
+      "side": 0,
+      "message": "I see two problems:\n1) We have internal dependencies to this location:\nhttp://shortn/_Uj32BiFpdL\n2) We need to teach our Chromium-V8 deps roller how to include this:\nhttps://chromium.googlesource.com/chromium/tools/build/+/master/scripts/slave/recipes/v8/auto_roll_v8_deps.py#202\n\nCan we have both versions side by side like src/DEPS does right now? Then we can rewire those dependencies and have a smooth transition...",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 36
+      },
+      "revId": "fa549bc5c104c56459417c134e92c3d2c820ecf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
