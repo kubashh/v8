@@ -45,6 +45,30 @@
       "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9948d1b_843d2d97",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-13T06:18:14Z",
+      "side": 1,
+      "message": "I will try your idea tomorrow, I tried instance_type checking for object created using ObjectTemplate and I am not sure that it was JS_API_OBJECT_TYPE. Is it some kind of contract that any object created using API has JS_API_OBJECT_TYPE? What is about v8::Map::New for example?",
+      "parentUuid": "0c03943d_4cb940e2",
+      "range": {
+        "startLine": 1015,
+        "startChar": 17,
+        "endLine": 1015,
+        "endChar": 30
+      },
+      "revId": "bff31f95ba3863f15950266ddaab7213a8c50eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
