@@ -189,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "151dab3a_ce20c330",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef63a943_26a980b5",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d35d2d52_25ae1e47",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -236,6 +254,24 @@
       "side": 1,
       "message": "Now that you mention it: Why not making CompileInParallel also use tiering compilation if the flag is set?\nIf this creates more work, and we can exclude it easily for now, then that would also be fine of course.",
       "parentUuid": "dbe8e781_3bb3619c",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18276ad3_76368d7b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T08:15:59Z",
+      "side": 1,
+      "message": "I will need to think about how to do it first. We can definitely let turbofan compile code in background, however, we also need to decide at which point in time we want to finish the units and patch the native module, since we need to do that in the foreground thread. If you have a good point in time where we could do that, please let me know :). Otherwise I will have a look today where it would make sense to do so.",
+      "parentUuid": "a0fa0285_78d897a8",
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -301,6 +337,30 @@
       "side": 1,
       "message": "Oh sorry, my fault. All fine, nothing to do here :)",
       "parentUuid": "abcb4833_d35edd03",
+      "range": {
+        "startLine": 122,
+        "startChar": 42,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50a9ee7b_84640e63",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T08:15:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "792363ac_00201ecb",
       "range": {
         "startLine": 122,
         "startChar": 42,
@@ -538,6 +598,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85711684_e485beb0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T08:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f480e41_f89a5837",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
