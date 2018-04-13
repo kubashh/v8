@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bb2b6e12_28577414",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5091,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33a7b176_a1443e79",
+      "range": {
+        "startLine": 5091,
+        "startChar": 9,
+        "endLine": 5091,
+        "endChar": 30
+      },
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c10dea7_fd1fc6bb",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7eef58a_8a38bba4",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5111,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c10dea7_fd1fc6bb",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "6f0dabde_4228b4bc",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "943714e6_4fa3f096",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a8d6ef3_6b5c58e9",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -73,6 +133,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1ef0787_c529f28a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a8d6ef3_6b5c58e9",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "ef63a943_26a980b5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Will change this in the next patch :)!",
+      "parentUuid": "a2deb772_89bd223a",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d35d2d52_25ae1e47",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -104,6 +200,24 @@
       "writtenOn": "2018-04-12T17:15:31Z",
       "side": 1,
       "message": "Do we need to set this via a method? Can\u0027t we make mode_ a const field and set it in the constructor based on the FLAG_wasm_tier_up flag?",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbe8e781_3bb3619c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "It would be nicer to add it as a const field, I agree with that. Originally I was concerned that CompileInParallel will automatically also kick-off tiering, as soon as the flag is turned on. But looking at the flags now, we could set the const field depending on FLAG_wasm_tier_up and FLAG_wasm_async_compilation. This should cover it, I think?",
+      "parentUuid": "d35d2d52_25ae1e47",
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -133,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "abcb4833_d35edd03",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Do you mean using a different word? Because it should be conjugated according to the third person, no? Maybe I\u0027m missing something obvious :).",
+      "parentUuid": "3f2c111e_25f92535",
+      "range": {
+        "startLine": 122,
+        "startChar": 42,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6b35038_370c2739",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -147,6 +285,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61bccafc_4929c0de",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6b35038_370c2739",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -167,6 +323,24 @@
     },
     {
       "key": {
+        "uuid": "6c0c937c_c248af7e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a9fe1da_206b2990",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "635c5b00_5afaf20d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -181,6 +355,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab5cb39_1bdd1136",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "635c5b00_5afaf20d",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -201,6 +393,24 @@
     },
     {
       "key": {
+        "uuid": "d173cefd_ee0e0daa",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "535692fc_c6d198f0",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "786fbc0e_b9bba866",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -218,6 +428,24 @@
     },
     {
       "key": {
+        "uuid": "96bc6012_022f85d3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "786fbc0e_b9bba866",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b2813d6_43a8d5df",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -229,6 +457,24 @@
       "writtenOn": "2018-04-12T17:15:31Z",
       "side": 1,
       "message": "I am not sure what this comment should tell me.",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9457a12_f7aaf3d6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Maybe instead of \"This can be taken care of later..\" -\u003e\n\"This can be removed later as soon as Liftoff can compile any function. Then, we can directly access unit-\u003emode() within ScheduleUnitForFinishing().\".\n\nOne might want to directly access unit-\u003emode() within the ScheduleUnitForFinishing() method, however that might be wrong. It might be a Turbofan-compiled function even though it was scheduled to be a Liftoff-compiled one (fallback case), and in that case we would schedule it in the wrong list (baseline vs tiering).",
+      "parentUuid": "9b2813d6_43a8d5df",
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -252,6 +498,24 @@
     },
     {
       "key": {
+        "uuid": "02c02d8c_a9ced0f5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "996310b6_74debf4d",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4afb7163_6efff736",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -266,6 +530,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "187d570a_1e31eda3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2854,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4afb7163_6efff736",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -286,6 +568,24 @@
     },
     {
       "key": {
+        "uuid": "8b062e29_56d46460",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd20bae0_ff25b478",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5049404_248edf0d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -300,6 +600,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22c44b66_e354e84f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2984,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5049404_248edf0d",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -320,6 +638,24 @@
     },
     {
       "key": {
+        "uuid": "03756b9d_6cf0b61b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3006,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8caf8af2_889b8d09",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6fb2c4e_e7ca2387",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -337,6 +673,24 @@
     },
     {
       "key": {
+        "uuid": "2164f58c_a2abc6a3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3036,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6fb2c4e_e7ca2387",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c99d50b2_56c5af92",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -351,6 +705,24 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49efd192_ee2c2800",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3037,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c99d50b2_56c5af92",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -388,6 +760,24 @@
     },
     {
       "key": {
+        "uuid": "f0f2bdd3_e8f7ce61",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d70dab2_82a7cb95",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39a30a67_e4e82fbb",
         "filename": "src/wasm/module-compiler.h",
         "patchSetId": 2
@@ -405,6 +795,24 @@
     },
     {
       "key": {
+        "uuid": "c3ee5c5c_4450e4b7",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39a30a67_e4e82fbb",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63a4078e_0e1a1064",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 2
@@ -416,6 +824,24 @@
       "writtenOn": "2018-04-12T17:15:31Z",
       "side": 1,
       "message": "Please pass the vector as const reference.",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6b4de4_72bf0b68",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-13T07:29:52Z",
+      "side": 1,
+      "message": "Won\u0027t be necessary anymore (method is gone after adding {CloneHigherTierCodeFrom}).",
+      "parentUuid": "63a4078e_0e1a1064",
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
