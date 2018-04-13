@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "a0fa0285_78d897a8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-13T07:44:47Z",
+      "side": 1,
+      "message": "Now that you mention it: Why not making CompileInParallel also use tiering compilation if the flag is set?\nIf this creates more work, and we can exclude it easily for now, then that would also be fine of course.",
+      "parentUuid": "dbe8e781_3bb3619c",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f2c111e_25f92535",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -268,6 +286,30 @@
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792363ac_00201ecb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-13T07:44:47Z",
+      "side": 1,
+      "message": "Oh sorry, my fault. All fine, nothing to do here :)",
+      "parentUuid": "abcb4833_d35edd03",
+      "range": {
+        "startLine": 122,
+        "startChar": 42,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -475,6 +517,24 @@
       "side": 1,
       "message": "Maybe instead of \"This can be taken care of later..\" -\u003e\n\"This can be removed later as soon as Liftoff can compile any function. Then, we can directly access unit-\u003emode() within ScheduleUnitForFinishing().\".\n\nOne might want to directly access unit-\u003emode() within the ScheduleUnitForFinishing() method, however that might be wrong. It might be a Turbofan-compiled function even though it was scheduled to be a Liftoff-compiled one (fallback case), and in that case we would schedule it in the wrong list (baseline vs tiering).",
       "parentUuid": "9b2813d6_43a8d5df",
+      "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f480e41_f89a5837",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-13T07:44:47Z",
+      "side": 1,
+      "message": "Oh, now I get it. Yes, please change the comment as proposed.",
+      "parentUuid": "a9457a12_f7aaf3d6",
       "revId": "bb12c4d1117eb73ea82a770f78a10d38ff13c2b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
