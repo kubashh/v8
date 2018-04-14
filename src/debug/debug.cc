@@ -63,6 +63,8 @@ class Debug::TemporaryObjectsTracker : public HeapObjectAllocationTracker {
     return objects_.find(addr) != objects_.end();
   }
 
+  void MarkAsNonTemporary(Address addr) { objects_.erase(addr); }
+
  private:
   std::unordered_set<Address> objects_;
   base::Mutex mutex_;
@@ -2455,11 +2457,10 @@ bool Debug::PerformSideEffectCheckAtBytecode(InterpretedFrame* frame) {
 bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
   DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
 
-  if (object->IsHeapObject()) {
-    Address address = Handle<HeapObject>::cast(object)->address();
-    if (temporary_objects_->HasObject(address)) {
-      return true;
-    }
+  if (object->IsHeapObject() &&
+      temporary_objects_->HasObject(
+          Handle<HeapObject>::cast(object)->address())) {
+    return true;
   }
   if (FLAG_trace_side_effect_free_debug_evaluate) {
     PrintF("[debug-evaluate] failed runtime side effect check.\n");
@@ -2468,6 +2469,11 @@ bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
   // Throw an uncatchable termination exception.
   isolate_->TerminateExecution();
   return false;
+}
+
+void Debug::MarkAsNonTemporary(Handle<HeapObject> object) {
+  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  temporary_objects_->MarkAsNonTemporary(object->address());
 }
 
 void LegacyDebugDelegate::PromiseEventOccurred(

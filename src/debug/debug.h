@@ -350,6 +350,8 @@ class Debug {
   bool PerformSideEffectCheckForCallback(Handle<Object> callback_info);
   bool PerformSideEffectCheckAtBytecode(InterpretedFrame* frame);
 
+  void MarkAsNonTemporary(Handle<HeapObject> object);
+
   // Flags and states.
   DebugScope* debugger_entry() {
     return reinterpret_cast<DebugScope*>(
