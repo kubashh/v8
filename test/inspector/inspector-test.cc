@@ -711,6 +711,12 @@ class InspectorExtension : public IsolateData::SetupGlobalTask {
         ToV8String(isolate, "setAllowCodeGenerationFromStrings"),
         v8::FunctionTemplate::New(
             isolate, &InspectorExtension::SetAllowCodeGenerationFromStrings));
+    inspector->Set(ToV8String(isolate, "createObjectUsingTemplate"),
+                   v8::FunctionTemplate::New(
+                       isolate, &InspectorExtension::CreateObjectUsingTemplate,
+                       v8::Local<v8::Value>(), v8::Local<v8::Signature>(), 0,
+                       v8::ConstructorBehavior::kAllow,
+                       v8::SideEffectType::kHasNoSideEffect));
     global->Set(ToV8String(isolate, "inspector"), inspector);
   }
 
@@ -971,6 +977,17 @@ class InspectorExtension : public IsolateData::SetupGlobalTask {
     }
     args.GetIsolate()->GetCurrentContext()->AllowCodeGenerationFromStrings(
         args[0].As<v8::Boolean>()->Value());
+  }
+
+  static void CreateObjectUsingTemplate(
+      const v8::FunctionCallbackInfo<v8::Value>& args) {
+    v8::Isolate* isolate = args.GetIsolate();
+    v8::Local<v8::ObjectTemplate> templ = v8::ObjectTemplate::New(isolate);
+    templ->Set(ToV8String(isolate, "foo"),
+               v8::FunctionTemplate::New(
+                   isolate, &InspectorExtension::CreateObjectUsingTemplate));
+    args.GetReturnValue().Set(
+        templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked());
   }
 };
 
