@@ -225,6 +225,13 @@ class V8_EXPORT CpuProfileNode {
   static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
 
+class V8_EXPORT CpuProfileSample {
+ public:
+  int GetFrameCount() const;
+
+  const char* GetFrameName(int index) const;
+  int GetFrameLineNumber(int index) const;
+};
 
 /**
  * CpuProfile contains a CPU profile in a form of top-down call tree
@@ -249,6 +256,10 @@ class V8_EXPORT CpuProfile {
    * the given index.
    */
   const CpuProfileNode* GetSample(int index) const;
+
+  int GetRawSamplesCount() const;
+
+  const CpuProfileSample* GetRawSample(int index) const;
 
   /**
    * Returns the timestamp of the sample. The timestamp is the number of
