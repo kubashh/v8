@@ -169,6 +169,23 @@ class CodeEntry {
   DISALLOW_COPY_AND_ASSIGN(CodeEntry);
 };
 
+struct ProfileFrame {
+  ProfileFrame(const char* in_name, int in_line_number)
+      : name(in_name), line_number(in_line_number) {}
+
+  const char* name;
+  int line_number;
+};
+
+class ProfileSample {
+ public:
+  void push_caller(ProfileFrame frame) { frames_.push_back(frame); }
+
+  const std::vector<ProfileFrame>* frames() const { return &frames_; }
+
+ private:
+  std::vector<ProfileFrame> frames_;
+};
 
 class ProfileTree;
 
@@ -272,6 +289,7 @@ class CpuProfile {
  public:
   CpuProfile(CpuProfiler* profiler, const char* title, bool record_samples);
 
+  void AddRawSample(ProfileSample* sample);
   // Add pc -> ... -> main() call path to the profile.
   void AddPath(base::TimeTicks timestamp, const std::vector<CodeEntry*>& path,
                int src_line, bool update_stats);
@@ -285,6 +303,11 @@ class CpuProfile {
   base::TimeTicks sample_timestamp(int index) const {
     return timestamps_.at(index);
   }
+
+  int raw_samples_count() const {
+    return static_cast<int>(raw_samples_.size());
+  }
+  ProfileSample* raw_sample(int index) const { return raw_samples_.at(index); }
 
   base::TimeTicks start_time() const { return start_time_; }
   base::TimeTicks end_time() const { return end_time_; }
@@ -302,6 +325,7 @@ class CpuProfile {
   base::TimeTicks start_time_;
   base::TimeTicks end_time_;
   std::vector<ProfileNode*> samples_;
+  std::vector<ProfileSample*> raw_samples_;
   std::vector<base::TimeTicks> timestamps_;
   ProfileTree top_down_;
   CpuProfiler* const profiler_;
@@ -348,6 +372,7 @@ class CpuProfilesCollection {
   bool IsLastProfile(const char* title);
   void RemoveProfile(CpuProfile* profile);
 
+  void AddRawSample(ProfileSample* sample);
   // Called from profile generator thread.
   void AddPathToCurrentProfiles(base::TimeTicks timestamp,
                                 const std::vector<CodeEntry*>& path,
