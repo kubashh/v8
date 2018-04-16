@@ -1320,44 +1320,6 @@ void Shell::Read(const v8::FunctionCallbackInfo<v8::Value>& args) {
   args.GetReturnValue().Set(source);
 }
 
-
-Local<String> Shell::ReadFromStdin(Isolate* isolate) {
-  static const int kBufferSize = 256;
-  char buffer[kBufferSize];
-  Local<String> accumulator =
-      String::NewFromUtf8(isolate, "", NewStringType::kNormal).ToLocalChecked();
-  int length;
-  while (true) {
-    // Continue reading if the line ends with an escape '\\' or the line has
-    // not been fully read into the buffer yet (does not end with '\n').
-    // If fgets gets an error, just give up.
-    char* input = nullptr;
-    input = fgets(buffer, kBufferSize, stdin);
-    if (input == nullptr) return Local<String>();
-    length = static_cast<int>(strlen(buffer));
-    if (length == 0) {
-      return accumulator;
-    } else if (buffer[length-1] != '\n') {
-      accumulator = String::Concat(
-          accumulator,
-          String::NewFromUtf8(isolate, buffer, NewStringType::kNormal, length)
-              .ToLocalChecked());
-    } else if (length > 1 && buffer[length-2] == '\\') {
-      buffer[length-2] = '\n';
-      accumulator = String::Concat(
-          accumulator,
-          String::NewFromUtf8(isolate, buffer, NewStringType::kNormal,
-                              length - 1).ToLocalChecked());
-    } else {
-      return String::Concat(
-          accumulator,
-          String::NewFromUtf8(isolate, buffer, NewStringType::kNormal,
-                              length - 1).ToLocalChecked());
-    }
-  }
-}
-
-
 void Shell::Load(const v8::FunctionCallbackInfo<v8::Value>& args) {
   for (int i = 0; i < args.Length(); i++) {
     HandleScope handle_scope(args.GetIsolate());
@@ -2267,7 +2229,6 @@ void Shell::RunShell(Isolate* isolate) {
   printf("V8 version %s\n", V8::GetVersion());
   while (true) {
     HandleScope inner_scope(isolate);
-    printf("d8> ");
     Local<String> input = Shell::ReadFromStdin(isolate);
     if (input.IsEmpty()) break;
     ExecuteString(isolate, input, name, kPrintResult, kReportExceptions,

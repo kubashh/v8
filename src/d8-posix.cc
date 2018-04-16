@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <netinet/ip.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
@@ -872,6 +874,31 @@ void Shell::AddOSMethods(Isolate* isolate, Local<ObjectTemplate> os_templ) {
   os_templ->Set(String::NewFromUtf8(isolate, "rmdir", NewStringType::kNormal)
                     .ToLocalChecked(),
                 FunctionTemplate::New(isolate, RemoveDirectory));
+}
+
+Local<String> Shell::ReadFromStdin(Isolate* isolate) {
+  std::string accumulator = "";
+  using_history();
+  bool cont = false;
+  while (true) {
+    // Continue reading if the line ends with an escape '\\' or the line has
+    // not been fully read into the buffer yet (does not end with '\n').
+    char* buffer = readline(cont ? "... " : "d8> ");
+    if (buffer == nullptr) return Local<String>();
+    int length = static_cast<int>(strlen(buffer));
+    if (length > 0 && buffer[length - 1] == '\\') {
+      buffer[length - 1] = '\n';
+      accumulator += buffer;
+      cont = true;
+    } else {
+      accumulator += buffer;
+      add_history(accumulator.c_str());
+      return String::NewFromUtf8(isolate, accumulator.c_str(),
+                                 NewStringType::kNormal,
+                                 static_cast<int>(accumulator.size()))
+          .ToLocalChecked();
+    }
+  }
 }
 
 }  // namespace v8
