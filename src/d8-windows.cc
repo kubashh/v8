@@ -15,4 +15,41 @@ char* Shell::ReadCharsFromTcpPort(const char* name, int* size_out) {
   return nullptr;
 }
 
+Local<String> Shell::ReadFromStdin(Isolate* isolate) {
+  printf("d8> ");
+  static const int kBufferSize = 256;
+  char buffer[kBufferSize];
+  Local<String> accumulator =
+      String::NewFromUtf8(isolate, "", NewStringType::kNormal).ToLocalChecked();
+  int length;
+  while (true) {
+    // Continue reading if the line ends with an escape '\\' or the line has
+    // not been fully read into the buffer yet (does not end with '\n').
+    // If fgets gets an error, just give up.
+    char* input = nullptr;
+    input = fgets(buffer, kBufferSize, stdin);
+    if (input == nullptr) return Local<String>();
+    length = static_cast<int>(strlen(buffer));
+    if (length == 0) {
+      return accumulator;
+    } else if (buffer[length - 1] != '\n') {
+      accumulator = String::Concat(
+          accumulator,
+          String::NewFromUtf8(isolate, buffer, NewStringType::kNormal, length)
+              .ToLocalChecked());
+    } else if (length > 1 && buffer[length - 2] == '\\') {
+      buffer[length - 2] = '\n';
+      accumulator = String::Concat(
+          accumulator, String::NewFromUtf8(isolate, buffer,
+                                           NewStringType::kNormal, length - 1)
+                           .ToLocalChecked());
+    } else {
+      return String::Concat(
+          accumulator, String::NewFromUtf8(isolate, buffer,
+                                           NewStringType::kNormal, length - 1)
+                           .ToLocalChecked());
+    }
+  }
+}
+
 }  // namespace v8
