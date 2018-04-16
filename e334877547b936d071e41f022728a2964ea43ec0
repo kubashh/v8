@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9c777f5b_154a2ba6",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-16T17:31:04Z",
+      "side": 1,
+      "message": "Thanks, will add that.",
+      "parentUuid": "64e0b1fe_c4ffa1ce",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52fd127a_8043056f",
         "filename": "src/compiler/wasm-linkage.h",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2018-04-16T17:07:32Z",
       "side": 1,
       "message": "Is it possible to keep these in the .cc file?",
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4007338a_ab865a16",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-16T17:31:04Z",
+      "side": 1,
+      "message": "The idea was to expose this through this header, such that we can use it e.g. in Builtins::Generate_WasmCompileLazy or for defining the kNoParamRegister in liftoff-assembler-defs.h.",
+      "parentUuid": "52fd127a_8043056f",
       "revId": "e334877547b936d071e41f022728a2964ea43ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
