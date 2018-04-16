@@ -54,38 +54,37 @@ namespace internal {
 // -----------------------------------------------------------------------------
 // Common double constants.
 
-struct DoubleConstant BASE_EMBEDDED {
-  double min_int;
-  double one_half;
-  double minus_one_half;
-  double negative_infinity;
-  uint64_t the_hole_nan;
-  double uint32_bias;
-};
+static constexpr struct DoubleConstant {
+  double min_int = kMinInt;
+  double one_half = 0.5;
+  double minus_one_half = -0.5;
+  double negative_infinity = -V8_INFINITY;
+  uint64_t the_hole_nan = kHoleNanInt64;
+  double uint32_bias = static_cast<double>(kMaxUInt32) + 1;
+  constexpr DoubleConstant() = default;  // needed by older clang (e.g. gcmole).
+} double_constants;
 
-static DoubleConstant double_constants;
-
-static struct V8_ALIGNED(16) {
+static constexpr struct V8_ALIGNED(16) {
   uint32_t a;
   uint32_t b;
   uint32_t c;
   uint32_t d;
 } float_absolute_constant = {0x7FFFFFFF, 0x7FFFFFFF, 0x7FFFFFFF, 0x7FFFFFFF};
 
-static struct V8_ALIGNED(16) {
+static constexpr struct V8_ALIGNED(16) {
   uint32_t a;
   uint32_t b;
   uint32_t c;
   uint32_t d;
 } float_negate_constant = {0x80000000, 0x80000000, 0x80000000, 0x80000000};
 
-static struct V8_ALIGNED(16) {
+static constexpr struct V8_ALIGNED(16) {
   uint64_t a;
   uint64_t b;
 } double_absolute_constant = {uint64_t{0x7FFFFFFFFFFFFFFF},
                               uint64_t{0x7FFFFFFFFFFFFFFF}};
 
-static struct V8_ALIGNED(16) {
+static constexpr struct V8_ALIGNED(16) {
   uint64_t a;
   uint64_t b;
 } double_negate_constant = {uint64_t{0x8000000000000000},
@@ -101,16 +100,6 @@ static ExternalReference::Type BuiltinCallTypeForResultSize(int result_size) {
       return ExternalReference::BUILTIN_CALL_PAIR;
   }
   UNREACHABLE();
-}
-
-void ExternalReference::SetUp() {
-  double_constants.min_int = kMinInt;
-  double_constants.one_half = 0.5;
-  double_constants.minus_one_half = -0.5;
-  double_constants.the_hole_nan = kHoleNanInt64;
-  double_constants.negative_infinity = -V8_INFINITY;
-  double_constants.uint32_bias =
-      static_cast<double>(static_cast<uint32_t>(0xFFFFFFFF)) + 1;
 }
 
 ExternalReference::ExternalReference(Address address, Isolate* isolate)
@@ -505,53 +494,56 @@ ExternalReference ExternalReference::address_of_pending_message_obj(
 }
 
 ExternalReference ExternalReference::address_of_min_int(Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&double_constants.min_int));
+  return ExternalReference(
+      reinterpret_cast<Address>(&double_constants.min_int));
 }
 
 ExternalReference ExternalReference::address_of_one_half(Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&double_constants.one_half));
+  return ExternalReference(
+      reinterpret_cast<Address>(&double_constants.one_half));
 }
 
 ExternalReference ExternalReference::address_of_minus_one_half(
     Isolate* isolate) {
   return ExternalReference(
-      reinterpret_cast<void*>(&double_constants.minus_one_half));
+      reinterpret_cast<Address>(&double_constants.minus_one_half));
 }
 
 ExternalReference ExternalReference::address_of_negative_infinity(
     Isolate* isolate) {
   return ExternalReference(
-      reinterpret_cast<void*>(&double_constants.negative_infinity));
+      reinterpret_cast<Address>(&double_constants.negative_infinity));
 }
 
 ExternalReference ExternalReference::address_of_the_hole_nan(Isolate* isolate) {
   return ExternalReference(
-      reinterpret_cast<void*>(&double_constants.the_hole_nan));
+      reinterpret_cast<Address>(&double_constants.the_hole_nan));
 }
 
 ExternalReference ExternalReference::address_of_uint32_bias(Isolate* isolate) {
   return ExternalReference(
-      reinterpret_cast<void*>(&double_constants.uint32_bias));
+      reinterpret_cast<Address>(&double_constants.uint32_bias));
 }
 
 ExternalReference ExternalReference::address_of_float_abs_constant(
     Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&float_absolute_constant));
+  return ExternalReference(reinterpret_cast<Address>(&float_absolute_constant));
 }
 
 ExternalReference ExternalReference::address_of_float_neg_constant(
     Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&float_negate_constant));
+  return ExternalReference(reinterpret_cast<Address>(&float_negate_constant));
 }
 
 ExternalReference ExternalReference::address_of_double_abs_constant(
     Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&double_absolute_constant));
+  return ExternalReference(
+      reinterpret_cast<Address>(&double_absolute_constant));
 }
 
 ExternalReference ExternalReference::address_of_double_neg_constant(
     Isolate* isolate) {
-  return ExternalReference(reinterpret_cast<void*>(&double_negate_constant));
+  return ExternalReference(reinterpret_cast<Address>(&double_negate_constant));
 }
 
 ExternalReference ExternalReference::is_profiling_address(Isolate* isolate) {
