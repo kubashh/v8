@@ -99,6 +99,24 @@
       "revId": "e334877547b936d071e41f022728a2964ea43ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2bfb4a7_13b56c25",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-16T17:44:44Z",
+      "side": 1,
+      "message": "+1 to moving it outside the \"compiler\" directory if it used outside the compiler. I am already only borderline comfortable by Liftoff being allowed to include the \"linkage.h\" file.",
+      "parentUuid": "7343c5e7_46c93a2a",
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
