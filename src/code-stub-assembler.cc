@@ -1486,8 +1486,8 @@ TNode<PrototypeInfo> CodeStubAssembler::LoadMapPrototypeInfo(
     SloppyTNode<Map> map, Label* if_no_proto_info) {
   Label if_strong_heap_object(this);
   CSA_ASSERT(this, IsMap(map));
-  Node* maybe_prototype_info =
-      LoadObjectField(map, Map::kTransitionsOrPrototypeInfoOffset);
+  TNode<MaybeObject> maybe_prototype_info =
+      LoadMaybeWeakObjectField(map, Map::kTransitionsOrPrototypeInfoOffset);
   VARIABLE(prototype_info, MachineRepresentation::kTagged);
   DispatchMaybeObject(maybe_prototype_info, if_no_proto_info, if_no_proto_info,
                       if_no_proto_info, &if_strong_heap_object,
@@ -1675,34 +1675,35 @@ TNode<Object> CodeStubAssembler::LoadWeakCellValue(
   return value;
 }
 
-void CodeStubAssembler::DispatchMaybeObject(Node* maybe_object, Label* if_smi,
-                                            Label* if_cleared, Label* if_weak,
-                                            Label* if_strong,
+void CodeStubAssembler::DispatchMaybeObject(TNode<MaybeObject> maybe_object,
+                                            Label* if_smi, Label* if_cleared,
+                                            Label* if_weak, Label* if_strong,
                                             Variable* extracted) {
   Label inner_if_smi(this), inner_if_strong(this);
 
-  GotoIf(TaggedIsSmi(maybe_object), &inner_if_smi);
+  TNode<Object> hack_object =
+      BitcastWordToTagged(BitcastTaggedToWord(CAST(maybe_object)));
+  GotoIf(TaggedIsSmi(hack_object), &inner_if_smi);
 
-  GotoIf(WordEqual(maybe_object, IntPtrConstant(reinterpret_cast<intptr_t>(
-                                     HeapObjectReference::ClearedValue()))),
+  GotoIf(WordEqual(hack_object, IntPtrConstant(reinterpret_cast<intptr_t>(
+                                    HeapObjectReference::ClearedValue()))),
          if_cleared);
 
-  GotoIf(WordEqual(WordAnd(BitcastTaggedToWord(maybe_object),
+  GotoIf(WordEqual(WordAnd(BitcastTaggedToWord(hack_object),
                            IntPtrConstant(kWeakHeapObjectMask)),
                    IntPtrConstant(0)),
          &inner_if_strong);
 
-  extracted->Bind(
-      BitcastWordToTagged(WordAnd(BitcastTaggedToWord(maybe_object),
-                                  IntPtrConstant(~kWeakHeapObjectMask))));
+  extracted->Bind(BitcastWordToTagged(WordAnd(
+      BitcastTaggedToWord(hack_object), IntPtrConstant(~kWeakHeapObjectMask))));
   Goto(if_weak);
 
   BIND(&inner_if_smi);
-  extracted->Bind(maybe_object);
+  extracted->Bind(hack_object);
   Goto(if_smi);
 
   BIND(&inner_if_strong);
-  extracted->Bind(maybe_object);
+  extracted->Bind(hack_object);
   Goto(if_strong);
 }
 

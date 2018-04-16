@@ -537,6 +537,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Load a SMI root, untag it, and convert to Word32.
   Node* LoadAndUntagToWord32Root(Heap::RootListIndex root_index);
 
+  TNode<MaybeObject> LoadMaybeWeakObjectField(SloppyTNode<HeapObject> object,
+                                              int offset) {
+    return UncheckedCast<MaybeObject>(
+        LoadObjectField(object, offset, MachineType::AnyTagged()));
+  }
+
   // Tag a smi and store it.
   Node* StoreAndTagSmi(Node* base, int offset, Node* value);
 
@@ -644,8 +650,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // pointed to)
   // - a strong reference (jump to "if_strong", "extracted" will be the object
   // pointed to)
-  void DispatchMaybeObject(Node* maybe_object, Label* if_smi, Label* if_cleared,
-                           Label* if_weak, Label* if_strong,
+  void DispatchMaybeObject(TNode<MaybeObject> maybe_object, Label* if_smi,
+                           Label* if_cleared, Label* if_weak, Label* if_strong,
                            Variable* extracted);
 
   // Load an array element from a FixedArray.

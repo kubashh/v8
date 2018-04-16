@@ -19,6 +19,7 @@
 #include "src/machine-type.h"
 #include "src/objects/data-handler.h"
 #include "src/objects/map.h"
+#include "src/objects/maybe-object.h"
 #include "src/runtime/runtime.h"
 #include "src/zone/zone-containers.h"
 
@@ -156,8 +157,10 @@ template <class T>
 struct is_valid_type_tag {
   static const bool value = std::is_base_of<Object, T>::value ||
                             std::is_base_of<UntaggedT, T>::value ||
+                            std::is_base_of<MaybeObject, T>::value ||
                             std::is_same<ExternalReference, T>::value;
-  static const bool is_tagged = std::is_base_of<Object, T>::value;
+  static const bool is_tagged = std::is_base_of<Object, T>::value ||
+                                std::is_base_of<MaybeObject, T>::value;
 };
 
 template <class T1, class T2>
@@ -341,6 +344,18 @@ struct types_have_common_values<UnionT<T1, T2>, UnionT<U1, U2>> {
                             types_have_common_values<T1, U2>::value ||
                             types_have_common_values<T2, U1>::value ||
                             types_have_common_values<T2, U2>::value;
+};
+
+// Enable casting between Object and MaybeObject even though they're separate in
+// the hierarchy.
+template <>
+struct types_have_common_values<Object, MaybeObject> {
+  static const bool value = true;
+};
+
+template <>
+struct types_have_common_values<MaybeObject, Object> {
+  static const bool value = true;
 };
 
 // TNode<T> is an SSA value with the static type tag T, which is one of the
