@@ -9,7 +9,7 @@
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
-#include "src/compiler/wasm-compiler.h"
+#include "src/compiler/wasm-linkage.h"
 
 namespace v8 {
 namespace internal {
