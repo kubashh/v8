@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <memory>
 #include <queue>
+#include <unordered_map>
 #include <vector>
 
 #include "include/v8-inspector.h"
@@ -249,6 +250,8 @@ class ThreadId {
     return *this;
   }
 
+  bool operator==(const ThreadId& other) const { return Equals(other); }
+
   // Returns ThreadId for current thread.
   static ThreadId Current() { return ThreadId(GetCurrentThreadId()); }
 
@@ -288,7 +291,6 @@ class ThreadId {
 
   friend class Isolate;
 };
-
 
 #define FIELD_ACCESSOR(type, name)                 \
   inline void set_##name(type v) { name##_ = v; }  \
@@ -1415,7 +1417,16 @@ class Isolate : private HiddenFactory {
     void RemoveAllThreads(Isolate* isolate);
 
    private:
-    PerIsolateThreadData* list_;
+    typedef std::pair<Isolate*, ThreadId> IsolateThreadPair;
+    struct Hasher {
+      std::size_t operator()(IsolateThreadPair const& t) const {
+        // passthrough to std::hash on the thread id int
+        return (std::hash<int>()(t.second.ToInteger()) * 31) ^
+               reinterpret_cast<uintptr_t>(t.first);
+      }
+    };
+
+    std::unordered_map<IsolateThreadPair, PerIsolateThreadData*, Hasher> table_;
   };
 
   // These items form a stack synchronously with threads Enter'ing and Exit'ing
