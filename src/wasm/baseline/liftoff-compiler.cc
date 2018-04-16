@@ -8,6 +8,7 @@
 #include "src/base/optional.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/wasm-compiler.h"
+#include "src/compiler/wasm-linkage.h"
 #include "src/counters.h"
 #include "src/macro-assembler-inl.h"
 #include "src/wasm/function-body-decoder-impl.h"

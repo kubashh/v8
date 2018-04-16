@@ -7,6 +7,7 @@ include_rules = [
   "+src/compiler/pipeline.h",
   "+src/compiler/code-assembler.h",
   "+src/compiler/wasm-compiler.h",
+  "+src/compiler/wasm-linkage.h",
   "-src/heap",
   "+src/heap/factory.h",
   "+src/heap/factory-inl.h",

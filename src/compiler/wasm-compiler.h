@@ -9,7 +9,6 @@
 
 // Clients of this interface shouldn't depend on lots of compiler internals.
 // Do not include anything from src/compiler here!
-#include "src/compiler.h"
 #include "src/optimized-compilation-info.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/wasm/baseline/liftoff-assembler.h"
@@ -21,6 +20,8 @@
 
 namespace v8 {
 namespace internal {
+
+class OptimizedCompilationJob;
 
 namespace compiler {
 // Forward declarations for some compiler data structures.
@@ -587,17 +588,6 @@ class WasmGraphBuilder {
   Node* BuildModifyThreadInWasmFlag(bool new_value);
   Builtins::Name GetBuiltinIdForTrap(wasm::TrapReason reason);
 };
-
-// The parameter index where the instance parameter should be placed in wasm
-// call descriptors. This is used by the Int64Lowering::LowerNode method.
-constexpr int kWasmInstanceParameterIndex = 0;
-
-V8_EXPORT_PRIVATE CallDescriptor* GetWasmCallDescriptor(
-    Zone* zone, wasm::FunctionSig* signature, bool use_retpoline = false);
-V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptor(
-    Zone* zone, CallDescriptor* call_descriptor);
-V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptorForSimd(
-    Zone* zone, CallDescriptor* call_descriptor);
 
 }  // namespace compiler
 }  // namespace internal

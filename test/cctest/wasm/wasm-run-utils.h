@@ -21,6 +21,7 @@
 #include "src/compiler/node.h"
 #include "src/compiler/pipeline.h"
 #include "src/compiler/wasm-compiler.h"
+#include "src/compiler/wasm-linkage.h"
 #include "src/compiler/zone-stats.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/wasm/function-body-decoder.h"

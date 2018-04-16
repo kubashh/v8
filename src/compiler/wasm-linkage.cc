@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/compiler/wasm-linkage.h"
+
 #include "src/assembler-inl.h"
 #include "src/base/lazy-instance.h"
+#include "src/compiler/linkage.h"
 #include "src/macro-assembler.h"
 #include "src/register-configuration.h"
-
-#include "src/compiler/linkage.h"
-#include "src/compiler/wasm-compiler.h"
-
 #include "src/zone/zone.h"
 
 namespace v8 {
@@ -42,101 +41,6 @@ MachineType MachineTypeFor(ValueType type) {
 LinkageLocation stackloc(int i, MachineType type) {
   return LinkageLocation::ForCallerFrameSlot(i, type);
 }
-
-
-#if V8_TARGET_ARCH_IA32
-// ===========================================================================
-// == ia32 ===================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS esi, eax, edx, ecx, ebx
-#define GP_RETURN_REGISTERS eax, edx
-#define FP_PARAM_REGISTERS xmm1, xmm2, xmm3, xmm4, xmm5, xmm6
-#define FP_RETURN_REGISTERS xmm1, xmm2
-
-#elif V8_TARGET_ARCH_X64
-// ===========================================================================
-// == x64 ====================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS rsi, rax, rdx, rcx, rbx, rdi
-#define GP_RETURN_REGISTERS rax, rdx
-#define FP_PARAM_REGISTERS xmm1, xmm2, xmm3, xmm4, xmm5, xmm6
-#define FP_RETURN_REGISTERS xmm1, xmm2
-
-#elif V8_TARGET_ARCH_ARM
-// ===========================================================================
-// == arm ====================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS r3, r0, r1, r2
-#define GP_RETURN_REGISTERS r0, r1
-#define FP_PARAM_REGISTERS d0, d1, d2, d3, d4, d5, d6, d7
-#define FP_RETURN_REGISTERS d0, d1
-
-#elif V8_TARGET_ARCH_ARM64
-// ===========================================================================
-// == arm64 ====================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS x7, x0, x1, x2, x3, x4, x5, x6
-#define GP_RETURN_REGISTERS x0, x1
-#define FP_PARAM_REGISTERS d0, d1, d2, d3, d4, d5, d6, d7
-#define FP_RETURN_REGISTERS d0, d1
-
-#elif V8_TARGET_ARCH_MIPS
-// ===========================================================================
-// == mips ===================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS a0, a1, a2, a3
-#define GP_RETURN_REGISTERS v0, v1
-#define FP_PARAM_REGISTERS f2, f4, f6, f8, f10, f12, f14
-#define FP_RETURN_REGISTERS f2, f4
-
-#elif V8_TARGET_ARCH_MIPS64
-// ===========================================================================
-// == mips64 =================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS a0, a1, a2, a3, a4, a5, a6, a7
-#define GP_RETURN_REGISTERS v0, v1
-#define FP_PARAM_REGISTERS f2, f4, f6, f8, f10, f12, f14
-#define FP_RETURN_REGISTERS f2, f4
-
-#elif V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_PPC64
-// ===========================================================================
-// == ppc & ppc64 ============================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS r10, r3, r4, r5, r6, r7, r8, r9
-#define GP_RETURN_REGISTERS r3, r4
-#define FP_PARAM_REGISTERS d1, d2, d3, d4, d5, d6, d7, d8
-#define FP_RETURN_REGISTERS d1, d2
-
-#elif V8_TARGET_ARCH_S390X
-// ===========================================================================
-// == s390x ==================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS r6, r2, r3, r4, r5
-#define GP_RETURN_REGISTERS r2, r3
-#define FP_PARAM_REGISTERS d0, d2, d4, d6
-#define FP_RETURN_REGISTERS d0, d2, d4, d6
-
-#elif V8_TARGET_ARCH_S390
-// ===========================================================================
-// == s390 ===================================================================
-// ===========================================================================
-#define GP_PARAM_REGISTERS r6, r2, r3, r4, r5
-#define GP_RETURN_REGISTERS r2, r3
-#define FP_PARAM_REGISTERS d0, d2
-#define FP_RETURN_REGISTERS d0, d2
-
-#else
-// ===========================================================================
-// == unknown ================================================================
-// ===========================================================================
-// Do not use any registers, we will just always use the stack.
-#define GP_PARAM_REGISTERS
-#define GP_RETURN_REGISTERS
-#define FP_PARAM_REGISTERS
-#define FP_RETURN_REGISTERS
-
-#endif
-
 
 // Helper for allocating either an GP or FP reg, or the next stack slot.
 struct Allocator {
@@ -209,18 +113,14 @@ struct Allocator {
   }
 };
 
-static constexpr Register kGPReturnRegisters[] = {GP_RETURN_REGISTERS};
-static constexpr DoubleRegister kFPReturnRegisters[] = {FP_RETURN_REGISTERS};
-static constexpr Register kGPParamRegisters[] = {GP_PARAM_REGISTERS};
-static constexpr DoubleRegister kFPParamRegisters[] = {FP_PARAM_REGISTERS};
-static constexpr Allocator return_registers(kGPReturnRegisters,
-                                            arraysize(kGPReturnRegisters),
-                                            kFPReturnRegisters,
-                                            arraysize(kFPReturnRegisters));
-static constexpr Allocator parameter_registers(kGPParamRegisters,
-                                               arraysize(kGPParamRegisters),
-                                               kFPParamRegisters,
-                                               arraysize(kFPParamRegisters));
+constexpr Allocator return_registers(kGpReturnRegisters,
+                                     arraysize(kGpReturnRegisters),
+                                     kFpReturnRegisters,
+                                     arraysize(kFpReturnRegisters));
+constexpr Allocator parameter_registers(kGpParamRegisters,
+                                        arraysize(kGpParamRegisters),
+                                        kFpParamRegisters,
+                                        arraysize(kFpParamRegisters));
 
 }  // namespace
 
@@ -355,11 +255,6 @@ CallDescriptor* GetI32WasmCallDescriptorForSimd(
                                          MachineType::Simd128(),
                                          MachineRepresentation::kWord32);
 }
-
-#undef GP_PARAM_REGISTERS
-#undef GP_RETURN_REGISTERS
-#undef FP_PARAM_REGISTERS
-#undef FP_RETURN_REGISTERS
 
 }  // namespace compiler
 }  // namespace internal

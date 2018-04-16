@@ -13,6 +13,7 @@
 #include "src/compiler/pipeline.h"
 #include "src/compiler/raw-machine-assembler.h"
 #include "src/compiler/wasm-compiler.h"
+#include "src/compiler/wasm-linkage.h"
 #include "src/machine-type.h"
 #include "src/objects-inl.h"
 #include "src/objects.h"

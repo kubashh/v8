@@ -13,6 +13,7 @@
 #include "src/compiler.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/wasm-compiler.h"
+#include "src/compiler/wasm-linkage.h"
 #include "src/machine-type.h"
 #include "src/macro-assembler.h"
 #include "src/objects-inl.h"
