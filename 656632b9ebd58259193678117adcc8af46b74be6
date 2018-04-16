@@ -46,6 +46,30 @@
       "revId": "656632b9ebd58259193678117adcc8af46b74be6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0841f8d9_115df57e",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-16T06:46:26Z",
+      "side": 1,
+      "message": "We need:\n- android_tools/sdk/platform-tools/adb see http://shortn/_Ubg9AyYOyS\n- Anything the chromium_android recipe module might need here for spawn_device_monitor, spawn_logcat_monitor, device_recovery, provision_devices, device_status, test_runner, see http://shortn/_ksGQFUOAHW\n- The we depend on src/build/android, see http://shortn/_0qSkGpGL17, not sure what that depends on. I.e. we use it for https://cs.chromium.org/chromium/src/v8/tools/run_perf.py?q\u003drun_perf\u0026sq\u003dpackage:chromium\u0026l\u003d130 - but I assume all that lives in catapult.",
+      "parentUuid": "9c9cb60c_b89a4343",
+      "range": {
+        "startLine": 66,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 12
+      },
+      "revId": "656632b9ebd58259193678117adcc8af46b74be6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
