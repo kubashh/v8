@@ -22,6 +22,30 @@
       "revId": "2063eb73662bb4ccf09bbaf05f96ed4fd3110da9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd0c371a_f87999dc",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-04-16T08:46:23Z",
+      "side": 1,
+      "message": "Good point. Thanks for highlighting it. It shouldn\u0027t block this CL though since we are not triggering that bot in luci-scheduler yet. I\u0027ll prep a CL to hide side-effects behind experimental\u003dFalse flag right away though to not forget this later.\n\nRe push access: that\u0027s one of those things that I want to see fail and fix as needed. Although I trust your assessment is correct here, I\u0027d rather not deploy any credentials to the bot just because they were deployed to Buildbot. Also where possible, I\u0027d like to migrate to task accounts instead of puppet-deployed credentials such as .netrc, .gitcookies etc. IMHO that allows us to have all needed permissions only granted to the bots that really need them (PoLP) and makes us somewhat less vulnerable in case credentials are leaked in the logs. Unlike puppet-deployed service account files, task service account credentials are short-lived and likely to be expired by the time an attacker will discover them.",
+      "parentUuid": "0c5cbb07_cd1c31cf",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 23
+      },
+      "revId": "2063eb73662bb4ccf09bbaf05f96ed4fd3110da9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
