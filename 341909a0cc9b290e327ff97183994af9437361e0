@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db5f64c9_a9f07538",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-16T22:55:35Z",
+      "side": 1,
+      "message": "How about this? \n\nconst std::pair\u003cconst char*, const char*\u003e options_and_tags[] \u003d {\n    {\"calendar\", \"ca\"}, .....\n};",
+      "range": {
+        "startLine": 820,
+        "startChar": 1,
+        "endLine": 820,
+        "endChar": 66
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d58aa77_e77f24b2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-16T22:55:35Z",
+      "side": 1,
+      "message": "Doesn\u0027t matter much. JFYI, you can also use ByteSink instead. An example taken from intl.cc : \n\n    icu::CheckedArrayByteSink byte_sink(name, kMaxTimezoneChars);\n    result.toUTF8(byte_sink);\n    CHECK(!byte_sink.Overflowed());",
+      "range": {
+        "startLine": 833,
+        "startChar": 3,
+        "endLine": 834,
+        "endChar": 79
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "540e0e3c_d03f7362",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-16T22:55:35Z",
+      "side": 1,
+      "message": "check |status| ?",
+      "range": {
+        "startLine": 845,
+        "startChar": 26,
+        "endLine": 845,
+        "endChar": 35
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94a04eba_937529fd",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-16T22:55:35Z",
+      "side": 1,
+      "message": "You need to check |status| here (unfortunately). See my TODO comment at\n\nhttps://cs.chromium.org/chromium/src/v8/src/runtime/runtime-intl.cc?rcl\u003d38262cca208019a45ad4fbd2b09c6e20ad8e55dd\u0026l\u003d69 . \n\nSee also https://chromium-review.googlesource.com/710816 (4th parameter is misused in line 1029).",
+      "range": {
+        "startLine": 1028,
+        "startChar": 1,
+        "endLine": 1029,
+        "endChar": 44
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1b2775_0b8d682f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-16T22:55:35Z",
+      "side": 1,
+      "message": "See the above CL.",
+      "range": {
+        "startLine": 1036,
+        "startChar": 27,
+        "endLine": 1036,
+        "endChar": 44
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
