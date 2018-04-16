@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64e0b1fe_c4ffa1ce",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-16T16:48:00Z",
+      "side": 1,
+      "message": "Since you are allowing this file to be included even outside of the \"compiler\" directory, please add the following comment above the includes ...\n\n// Clients of this interface shouldn\u0027t depend on lots of compiler internals.\n// Do not include anything from src/compiler here!",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
