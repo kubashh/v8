@@ -620,6 +620,32 @@ TEST(CollectCpuProfile) {
   profile->Delete();
 }
 
+TEST(NewApi) {
+  i::FLAG_allow_natives_syntax = true;
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+
+  CompileRun(cpu_profiler_test_source);
+  v8::Local<v8::Function> function = GetFunction(env.local(), "start");
+
+  int32_t profiling_interval_ms = 200;
+  v8::Local<v8::Value> args[] = {
+      v8::Integer::New(env->GetIsolate(), profiling_interval_ms)};
+  ProfilerHelper helper(env.local());
+  v8::CpuProfile* profile =
+      helper.Run(function, args, arraysize(args), 1000, 0, true);
+
+  int samples = profile->GetRawSamplesCount();
+  printf("Profile collected. #samples = %d\n", samples);
+  for (int i = 0; i < samples; i++) {
+    const v8::CpuProfileSample* sample = profile->GetRawSample(i);
+    for (int j = 0; j < sample->GetFrameCount(); j++) {
+      for (int k = 0; k < j * 2; k++) printf(" ");
+      printf("%d %s\n", sample->GetFrameLineNumber(j), sample->GetFrameName(j));
+    }
+  }
+}
+
 static const char* hot_deopt_no_frame_entry_test_source =
     "%NeverOptimizeFunction(foo);\n"
     "%NeverOptimizeFunction(start);\n"
@@ -692,6 +718,7 @@ TEST(CollectCpuProfileSamples) {
   CHECK_LE(current_time, end_time);
   for (int i = 0; i < profile->GetSamplesCount(); i++) {
     CHECK(profile->GetSample(i));
+
     uint64_t timestamp = profile->GetSampleTimestamp(i);
     CHECK_LE(current_time, timestamp);
     CHECK_LE(timestamp, end_time);

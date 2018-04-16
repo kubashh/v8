@@ -10126,6 +10126,23 @@ const std::vector<CpuProfileDeoptInfo>& CpuProfileNode::GetDeoptInfos() const {
   return node->deopt_infos();
 }
 
+int CpuProfileSample::GetFrameCount() const {
+  const i::ProfileSample* sample =
+      reinterpret_cast<const i::ProfileSample*>(this);
+  return static_cast<int>(sample->frames()->size());
+}
+
+const char* CpuProfileSample::GetFrameName(int index) const {
+  const i::ProfileSample* sample =
+      reinterpret_cast<const i::ProfileSample*>(this);
+  return sample->frames()->at(index).name;
+}
+
+int CpuProfileSample::GetFrameLineNumber(int index) const {
+  const i::ProfileSample* sample =
+      reinterpret_cast<const i::ProfileSample*>(this);
+  return sample->frames()->at(index).line_number;
+}
 
 void CpuProfile::Delete() {
   i::CpuProfile* profile = reinterpret_cast<i::CpuProfile*>(this);
@@ -10154,6 +10171,14 @@ const CpuProfileNode* CpuProfile::GetSample(int index) const {
   return reinterpret_cast<const CpuProfileNode*>(profile->sample(index));
 }
 
+int CpuProfile::GetRawSamplesCount() const {
+  return reinterpret_cast<const i::CpuProfile*>(this)->raw_samples_count();
+}
+
+const CpuProfileSample* CpuProfile::GetRawSample(int index) const {
+  const i::CpuProfile* profile = reinterpret_cast<const i::CpuProfile*>(this);
+  return reinterpret_cast<const CpuProfileSample*>(profile->raw_sample(index));
+}
 
 int64_t CpuProfile::GetSampleTimestamp(int index) const {
   const i::CpuProfile* profile = reinterpret_cast<const i::CpuProfile*>(this);

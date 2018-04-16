@@ -375,6 +375,10 @@ CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
                               "Profile", this, "data", std::move(value));
 }
 
+void CpuProfile::AddRawSample(ProfileSample* sample) {
+  raw_samples_.push_back(sample);
+}
+
 void CpuProfile::AddPath(base::TimeTicks timestamp,
                          const std::vector<CodeEntry*>& path, int src_line,
                          bool update_stats) {
@@ -590,6 +594,14 @@ void CpuProfilesCollection::RemoveProfile(CpuProfile* profile) {
   finished_profiles_.erase(pos);
 }
 
+void CpuProfilesCollection::AddRawSample(ProfileSample* sample) {
+  current_profiles_semaphore_.Wait();
+  for (const std::unique_ptr<CpuProfile>& profile : current_profiles_) {
+    profile->AddRawSample(sample);
+  }
+  current_profiles_semaphore_.Signal();
+}
+
 void CpuProfilesCollection::AddPathToCurrentProfiles(
     base::TimeTicks timestamp, const std::vector<CodeEntry*>& path,
     int src_line, bool update_stats) {
@@ -664,6 +676,8 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
       }
     }
 
+    ProfileSample* profile_sample = new ProfileSample();
+
     for (unsigned i = 0; i < sample.frames_count; ++i) {
       Address stack_pos = reinterpret_cast<Address>(sample.stack[i]);
       CodeEntry* entry = FindEntry(stack_pos);
@@ -679,6 +693,10 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
               std::back_inserter(entries),
               [](const std::unique_ptr<CodeEntry>& ptr) { return ptr.get(); });
         }
+
+        ProfileFrame frame(entry->name(), entry->GetSourceLine(pc_offset));
+        profile_sample->push_caller(frame);
+
         // Skip unresolved frames (e.g. internal frame) and get source line of
         // the first JS caller.
         if (src_line_not_found) {
@@ -691,6 +709,7 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
       }
       entries.push_back(entry);
     }
+    profiles_->AddRawSample(profile_sample);
   }
 
   if (FLAG_prof_browser_mode) {
