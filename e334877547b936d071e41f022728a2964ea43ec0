@@ -81,6 +81,24 @@
       "revId": "e334877547b936d071e41f022728a2964ea43ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7343c5e7_46c93a2a",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-16T17:33:17Z",
+      "side": 1,
+      "message": "In that case, then I think it qualifies as system-wide (i.e. not TurboFan-specific), so maybe it should live outside the compiler. wdyt?",
+      "parentUuid": "4007338a_ab865a16",
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
