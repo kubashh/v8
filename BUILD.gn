@@ -3519,6 +3519,7 @@ v8_executable("d8") {
 
   if (is_posix || is_fuchsia) {
     sources += [ "src/d8-posix.cc" ]
+    ldflags = [ "-lreadline" ]
   } else if (is_win) {
     sources += [ "src/d8-windows.cc" ]
   }
