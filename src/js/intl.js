@@ -24,6 +24,7 @@ var GlobalIntl = global.Intl;
 var GlobalIntlDateTimeFormat = GlobalIntl.DateTimeFormat;
 var GlobalIntlNumberFormat = GlobalIntl.NumberFormat;
 var GlobalIntlCollator = GlobalIntl.Collator;
+var GlobalIntlLocale = GlobalIntl.Locale;
 var GlobalIntlPluralRules = utils.ImportNow("PluralRules");
 var GlobalIntlv8BreakIterator = GlobalIntl.v8BreakIterator;
 var GlobalNumber = global.Number;
@@ -145,6 +146,7 @@ var AVAILABLE_LOCALES = {
   'dateformat': UNDEFINED,
   'breakiterator': UNDEFINED,
   'pluralrules': UNDEFINED,
+  'locale': UNDEFINED,
 };
 
 /**
@@ -820,7 +822,7 @@ function initializeLocaleList(locales) {
  * Check the structural Validity of the language tag per ECMA 402 6.2.2:
  *   - Well-formed per RFC 5646 2.1
  *   - There are no duplicate variant subtags
- *   - There are no duplicate singletion (extension) subtags
+ *   - There are no duplicate singleton (extension) subtags
  *
  * One extra-check is done (from RFC 5646 2.2.9): the tag is compared
  * against the list of grandfathered tags. However, subtags for
@@ -926,6 +928,80 @@ DEFINE_METHOD(
     return makeArray(canonicalizeLocaleList(locales));
   }
 );
+
+/**
+ * Initializes the given object so it's a valid Locale instance.
+ * Useful for subclassing.
+ */
+function CreateLocale(locale, options) {
+  if (isStructuallyValidLanguageTag(locale) === false) {
+    throw %make_range_error(kInvalidLanguageTag, locale);
+  }
+
+  if (IS_UNDEFINED(options)) {
+    options = {__proto__: null};
+  }
+
+  var resolved = %object_define_properties({__proto__: null}, {
+    canonicalized: {writable: true},
+    language: {writable: true},
+    script: {writable: true},
+    region: {writable: true},
+    baseName: {writable: true},
+    calendar: {writable: true},
+    collation: {writable: true},
+    currency: {writable: true},
+    hourCycle: {writable: true},
+    caseFirst: {writable: true},
+    numeric: {writable: true},
+    numberingSystem: {writable: true},
+    timeZone: {writable: true},
+  });
+
+  var localeObject = %CreateLocale(locale, options, resolved);
+
+  %MarkAsInitializedIntlObjectOfType(localeObject, 'locale');
+
+  localeObject[resolvedSymbol] = resolved;
+  localeObject.language = resolved.language;
+  localeObject.script = resolved.script;
+  localeObject.region = resolved.region;
+  localeObject.baseName = resolved.baseName;
+  localeObject.calendar = resolved.calendar;
+  localeObject.collation = resolved.collation;
+  localeObject.currency = resolved.currency;
+  localeObject.hourCycle = resolved.hourCycle;
+  localeObject.caseFirst = resolved.caseFirst;
+  localeObject.numeric = resolved.numeric;
+  localeObject.numberingSystem = resolved.numberingSystem;
+  localeObject.timeZone = resolved.timeZone;
+
+  return localeObject;
+}
+
+/**
+ * Constructs Intl.Locale object given required locale and optional options
+ * parameters.
+ *
+ * @constructor
+ */
+function LocaleConstructor() {
+  if (IS_UNDEFINED(new.target)) {
+    throw %make_type_error(kConstructorNotFunction, "Locale");
+  }
+
+  return IntlConstruct(this, GlobalIntlLocale, CreateLocale, new.target,
+                       arguments);
+}
+%SetCode(GlobalIntlLocale, LocaleConstructor);
+
+// Returns fully canonicalized locale string, including the tags added through
+// options.
+function toString(locale) {
+  return locale[resolvedSymbol].canonicalized;
+}
+
+AddBoundMethod(GlobalIntlLocale, 'toString', toString, 0, 'locale', false);
 
 /**
  * Initializes the given object so it's a valid Collator instance.
@@ -2014,6 +2090,7 @@ AddBoundMethod(GlobalIntlv8BreakIterator, 'breakType', breakType, 0,
 // Save references to Intl objects and methods we use, for added security.
 var savedObjects = {
   'collator': GlobalIntlCollator,
+  'locale' : GlobalIntlLocale,
   'numberformat': GlobalIntlNumberFormat,
   'dateformatall': GlobalIntlDateTimeFormat,
   'dateformatdate': GlobalIntlDateTimeFormat,

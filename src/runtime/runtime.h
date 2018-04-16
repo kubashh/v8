@@ -31,7 +31,6 @@ namespace internal {
 // * Each compiler has an explicit list of intrisics it supports, falling back
 //   to a simple runtime call if necessary.
 
-
 // Entries have the form F(name, number of arguments, number of values):
 // A variable number of arguments is specified by a -1, additional restrictions
 // are specified by inline comments
@@ -250,6 +249,7 @@ namespace internal {
   F(BreakIteratorNext, 1, 1)                 \
   F(CanonicalizeLanguageTag, 1, 1)           \
   F(CreateBreakIterator, 3, 1)               \
+  F(CreateLocale, 3, 1)                      \
   F(CreateCollator, 3, 1)                    \
   F(CreateDateTimeFormat, 3, 1)              \
   F(CreateNumberFormat, 3, 1)                \
@@ -683,10 +683,9 @@ namespace internal {
 
 // FOR_EACH_INTRINSIC defines the list of all intrinsics, coming in 2 flavors,
 // either returning an object or a pair.
-#define FOR_EACH_INTRINSIC(F)         \
-  FOR_EACH_INTRINSIC_RETURN_PAIR(F)   \
+#define FOR_EACH_INTRINSIC(F)       \
+  FOR_EACH_INTRINSIC_RETURN_PAIR(F) \
   FOR_EACH_INTRINSIC_RETURN_OBJECT(F)
-
 
 #define F(name, nargs, ressize)                                 \
   Object* Runtime_##name(int args_length, Object** args_object, \
@@ -766,7 +765,6 @@ class Runtime : public AllStatic {
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> ThrowIteratorError(
       Isolate* isolate, Handle<Object> object);
 };
-
 
 class RuntimeState {
  public:
