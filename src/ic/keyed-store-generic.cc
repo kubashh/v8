@@ -684,8 +684,8 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
       TVARIABLE(Map, var_transition_map);
       Label simple_transition(this), transition_array(this),
           found_handler_candidate(this);
-      TNode<Object> maybe_handler =
-          LoadObjectField(receiver_map, Map::kTransitionsOrPrototypeInfoOffset);
+      TNode<MaybeObject> maybe_handler = LoadMaybeWeakObjectField(
+          receiver_map, Map::kTransitionsOrPrototypeInfoOffset);
 
       // SMI -> slow
       // cleared weak reference -> slow
