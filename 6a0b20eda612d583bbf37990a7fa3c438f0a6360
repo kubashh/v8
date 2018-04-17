@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8cd1154f_e1351d79",
+        "filename": "src/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2387,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2018-04-17T17:00:32Z",
+      "side": 1,
+      "message": "Probably a better answer here is that the table for an Isolate should be stored as a member of the Isolate object, rather than have a separate hash map that maps isolate pointers to tables. Maybe it could even be protected by the Isolate lock rather than have a separate mutex on the ThreadDataTable.\n\nHowever, I\u0027m not sure I feel comfortable enough with the V8 codebase to make such a change, at least not right now.",
+      "parentUuid": "1bc55a7d_d233ff4c",
+      "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92400d52_83ee0ba0",
         "filename": "src/isolate.h",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2018-04-17T09:34:10Z",
       "side": 1,
       "message": "This looks like potential UB (integer overflow.)",
+      "range": {
+        "startLine": 1424,
+        "startChar": 8,
+        "endLine": 1424,
+        "endChar": 14
+      },
+      "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf48492c_17eeb76b",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2018-04-17T17:00:32Z",
+      "side": 1,
+      "message": "The left side of the multiplication is a size_t, which is unsigned, which I think makes the multiplication not UB. I could also make the constant `31u` if it makes people feel better.\n\nBut maybe there\u0027s a better hash mixer function somewhere in V8 that I should call here?",
+      "parentUuid": "92400d52_83ee0ba0",
       "range": {
         "startLine": 1424,
         "startChar": 8,
