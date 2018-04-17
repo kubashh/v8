@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9c267c3_a71f81eb",
+        "filename": "src/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1947,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-17T16:13:20Z",
+      "side": 1,
+      "message": "Maybe we should rename this to GetProfilerListener, since this does more than just retrieving a field.",
+      "range": {
+        "startLine": 1947,
+        "startChar": 26,
+        "endLine": 1947,
+        "endChar": 43
+      },
+      "revId": "29a63e4a28417a7f9608b63d4bcb636b454911d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
