@@ -117,6 +117,24 @@
       "revId": "e334877547b936d071e41f022728a2964ea43ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992b86b5_62d9f954",
+        "filename": "src/compiler/wasm-linkage.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-17T07:14:11Z",
+      "side": 1,
+      "message": "Sounds good, will do that. Since CallDescriptor is TF-specific, I will leave that in wasm-compiler.h then.\n\nThe next steps after this would be\n1) make Liftoff independent of linkage.h; directly use wasm-linkage.h.\n2) split wasm-compiler.h and function-body-decoder.h better (the first for TF stuff, the latter for independent stuff like decoding locals, analysing loop assignment, verifying a function body).",
+      "parentUuid": "d2bfb4a7_13b56c25",
+      "revId": "e334877547b936d071e41f022728a2964ea43ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
