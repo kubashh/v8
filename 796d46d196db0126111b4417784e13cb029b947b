@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d9b8faf_79a53ff1",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-04-17T12:06:51Z",
+      "side": 1,
+      "message": "This is obviously incorrect and can easily be observed. I will file a separate bug for it.",
+      "revId": "796d46d196db0126111b4417784e13cb029b947b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
