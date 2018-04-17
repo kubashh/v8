@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1819689e_95fa7f28",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-04-17T08:48:56Z",
+      "side": 1,
+      "message": "Do you need to expose this as a helper? Not sure if it would be better to just inline it into DispatchMaybeObject. That way every caller trying to dispatch on the MaybeObject type has to go through that one function as a funnel point.",
+      "range": {
+        "startLine": 439,
+        "startChar": 15,
+        "endLine": 439,
+        "endChar": 26
+      },
+      "revId": "ab80b3b66dd06a0fa86ca696a28d2698ef20bf5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
