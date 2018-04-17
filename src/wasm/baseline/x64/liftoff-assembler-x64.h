@@ -796,13 +796,82 @@ void LiftoffAssembler::emit_f64_sqrt(DoubleRegister dst, DoubleRegister src) {
   Sqrtsd(dst, src);
 }
 
+namespace liftoff {
+template <bool is_double, bool is_signed>
+inline void ConvertFloatToIntAndBack(LiftoffAssembler* assm, Register dst,
+                                     DoubleRegister src,
+                                     DoubleRegister converted_back) {
+  if (is_double && is_signed) {
+    assm->Cvttsd2si(dst, src);
+    assm->Cvtlsi2sd(converted_back, dst);
+  } else if (is_double && !is_signed) {
+    assm->Cvttsd2siq(dst, src);
+    assm->movl(dst, dst);
+    assm->Cvtqsi2sd(converted_back, dst);
+  } else if (!is_double && is_signed) {
+    assm->Cvttss2si(dst, src);
+    assm->Cvtlsi2ss(converted_back, dst);
+  } else if (!is_double && !is_signed) {
+    assm->Cvttss2siq(dst, src);
+    assm->movl(dst, dst);
+    assm->Cvtqsi2ss(converted_back, dst);
+  }
+}
+
+template <bool is_double, bool is_signed>
+inline bool EmitFloatToIntConversion(LiftoffAssembler* assm, Register dst,
+                                     DoubleRegister src, Label* trap) {
+  if (!CpuFeatures::IsSupported(SSE4_1)) {
+    assm->bailout("no SSE4.1");
+    return true;
+  }
+  CpuFeatureScope feature(assm, SSE4_1);
+
+  LiftoffRegList pinned = LiftoffRegList::ForRegs(src, dst);
+  DoubleRegister rounded =
+      pinned.set(assm->GetUnusedRegister(kFpReg, pinned)).fp();
+  DoubleRegister converted_back = assm->GetUnusedRegister(kFpReg, pinned).fp();
+
+  if (is_double) {
+    assm->Roundsd(rounded, src, kRoundToZero);
+  } else {
+    assm->Roundss(rounded, src, kRoundToZero);
+  }
+  ConvertFloatToIntAndBack<is_double, is_signed>(assm, dst, rounded,
+                                                 converted_back);
+  if (is_double) {
+    assm->Ucomisd(converted_back, rounded);
+  } else {
+    assm->Ucomiss(converted_back, rounded);
+  }
+
+  // Jump to trap if PF is 0 (one of the operands was NaN) or they are not
+  // equal.
+  assm->j(parity_even, trap);
+  assm->j(not_equal, trap);
+  return true;
+}
+}  // namespace liftoff
+
 bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
                                             LiftoffRegister dst,
-                                            LiftoffRegister src) {
+                                            LiftoffRegister src, Label* trap) {
   switch (opcode) {
     case kExprI32ConvertI64:
       movl(dst.gp(), src.gp());
       return true;
+    case kExprI32SConvertF32:
+      return liftoff::EmitFloatToIntConversion<false, true>(this, dst.gp(),
+                                                            src.fp(), trap);
+    case kExprI32UConvertF32:
+      return liftoff::EmitFloatToIntConversion<false, false>(this, dst.gp(),
+                                                             src.fp(), trap);
+    case kExprI32SConvertF64:
+      return liftoff::EmitFloatToIntConversion<true, true>(this, dst.gp(),
+                                                           src.fp(), trap);
+    case kExprI32UConvertF64:
+      return liftoff::EmitFloatToIntConversion<true, false>(this, dst.gp(),
+                                                            src.fp(), trap);
     case kExprI32ReinterpretF32:
       Movd(dst.gp(), src.fp());
       return true;
@@ -920,7 +989,7 @@ void EmitFloatSetCond(LiftoffAssembler* assm, Condition cond, Register dst,
   Label not_nan;
 
   (assm->*cmp_op)(lhs, rhs);
-  // IF PF is one, one of the operands was Nan. This needs special handling.
+  // If PF is one, one of the operands was NaN. This needs special handling.
   assm->j(parity_odd, &not_nan, Label::kNear);
   // Return 1 for f32.ne, 0 for all other cases.
   if (cond == not_equal) {
