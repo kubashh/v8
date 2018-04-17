@@ -14,8 +14,11 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-#define REQUIRE_CPU_FEATURE(name)                                   \
-  if (!CpuFeatures::IsSupported(name)) return bailout("no " #name); \
+#define REQUIRE_CPU_FEATURE(name, ...)   \
+  if (!CpuFeatures::IsSupported(name)) { \
+    bailout("no " #name);                \
+    return __VA_ARGS__;                  \
+  }                                      \
   CpuFeatureScope feature(this, name);
 
 namespace liftoff {
@@ -797,28 +800,36 @@ void LiftoffAssembler::emit_f64_sqrt(DoubleRegister dst, DoubleRegister src) {
 }
 
 namespace liftoff {
-template <bool is_double, bool is_signed>
+template <bool is_double, bool is_i64, bool is_signed>
 inline void ConvertFloatToIntAndBack(LiftoffAssembler* assm, Register dst,
                                      DoubleRegister src,
                                      DoubleRegister converted_back) {
-  if (is_double && is_signed) {
-    assm->Cvttsd2si(dst, src);
-    assm->Cvtlsi2sd(converted_back, dst);
-  } else if (is_double && !is_signed) {
-    assm->Cvttsd2siq(dst, src);
-    assm->movl(dst, dst);
-    assm->Cvtqsi2sd(converted_back, dst);
-  } else if (!is_double && is_signed) {
-    assm->Cvttss2si(dst, src);
-    assm->Cvtlsi2ss(converted_back, dst);
-  } else if (!is_double && !is_signed) {
+  if (!is_double && !is_i64 && !is_signed) {  // f32 -> u32
     assm->Cvttss2siq(dst, src);
     assm->movl(dst, dst);
     assm->Cvtqsi2ss(converted_back, dst);
+  } else if (!is_double && !is_i64 && is_signed) {  // f32 -> i32
+    assm->Cvttss2si(dst, src);
+    assm->Cvtlsi2ss(converted_back, dst);
+  } else if (!is_double && is_i64 && is_signed) {  // f32 -> i64
+    assm->Cvttss2siq(dst, src);
+    assm->Cvtqsi2ss(converted_back, dst);
+  } else if (is_double && !is_i64 && !is_signed) {  // f64 -> u32
+    assm->Cvttsd2siq(dst, src);
+    assm->movl(dst, dst);
+    assm->Cvtqsi2sd(converted_back, dst);
+  } else if (is_double && !is_i64 && is_signed) {  // f64 -> i32
+    assm->Cvttsd2si(dst, src);
+    assm->Cvtlsi2sd(converted_back, dst);
+  } else if (is_double && is_i64 && is_signed) {  // f64 -> i64
+    assm->Cvttsd2siq(dst, src);
+    assm->Cvtqsi2sd(converted_back, dst);
+  } else {
+    UNREACHABLE();
   }
 }
 
-template <bool is_double, bool is_signed>
+template <bool is_double, bool is_i64, bool is_signed>
 inline bool EmitFloatToIntConversion(LiftoffAssembler* assm, Register dst,
                                      DoubleRegister src, Label* trap) {
   if (!CpuFeatures::IsSupported(SSE4_1)) {
@@ -837,8 +848,8 @@ inline bool EmitFloatToIntConversion(LiftoffAssembler* assm, Register dst,
   } else {
     assm->Roundss(rounded, src, kRoundToZero);
   }
-  ConvertFloatToIntAndBack<is_double, is_signed>(assm, dst, rounded,
-                                                 converted_back);
+  ConvertFloatToIntAndBack<is_double, is_i64, is_signed>(assm, dst, rounded,
+                                                         converted_back);
   if (is_double) {
     assm->Ucomisd(converted_back, rounded);
   } else {
@@ -861,23 +872,39 @@ bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
       movl(dst.gp(), src.gp());
       return true;
     case kExprI32SConvertF32:
-      return liftoff::EmitFloatToIntConversion<false, true>(this, dst.gp(),
-                                                            src.fp(), trap);
+      return liftoff::EmitFloatToIntConversion<false, false, true>(
+          this, dst.gp(), src.fp(), trap);
     case kExprI32UConvertF32:
-      return liftoff::EmitFloatToIntConversion<false, false>(this, dst.gp(),
-                                                             src.fp(), trap);
+      return liftoff::EmitFloatToIntConversion<false, false, false>(
+          this, dst.gp(), src.fp(), trap);
     case kExprI32SConvertF64:
-      return liftoff::EmitFloatToIntConversion<true, true>(this, dst.gp(),
-                                                           src.fp(), trap);
+      return liftoff::EmitFloatToIntConversion<true, false, true>(
+          this, dst.gp(), src.fp(), trap);
     case kExprI32UConvertF64:
-      return liftoff::EmitFloatToIntConversion<true, false>(this, dst.gp(),
-                                                            src.fp(), trap);
+      return liftoff::EmitFloatToIntConversion<true, false, false>(
+          this, dst.gp(), src.fp(), trap);
     case kExprI32ReinterpretF32:
       Movd(dst.gp(), src.fp());
       return true;
     case kExprI64SConvertI32:
       movsxlq(dst.gp(), src.gp());
       return true;
+    case kExprI64SConvertF32:
+      return liftoff::EmitFloatToIntConversion<false, true, true>(
+          this, dst.gp(), src.fp(), trap);
+    case kExprI64UConvertF32: {
+      REQUIRE_CPU_FEATURE(SSE4_1, true);
+      Cvttss2uiq(dst.gp(), src.fp(), trap);
+      return true;
+    }
+    case kExprI64SConvertF64:
+      return liftoff::EmitFloatToIntConversion<true, true, true>(
+          this, dst.gp(), src.fp(), trap);
+    case kExprI64UConvertF64: {
+      REQUIRE_CPU_FEATURE(SSE4_1, true);
+      Cvttsd2uiq(dst.gp(), src.fp(), trap);
+      return true;
+    }
     case kExprI64UConvertI32:
       AssertZeroExtended(src.gp());
       if (dst.gp() != src.gp()) movl(dst.gp(), src.gp());

@@ -684,28 +684,33 @@ class LiftoffCompiler {
     EmitUnOp<kWasmI32, kWasmI32>(emit_with_c_fallback);
   }
 
-  template <ValueType dst_type, ValueType src_type>
+  template <ValueType dst_type, ValueType src_type, bool has_trap>
   void EmitTypeConversion(WasmOpcode opcode,
                           ExternalReference (*fallback_fn)(Isolate*),
-                          wasm::WasmCodePosition trap_position = 0) {
+                          wasm::WasmCodePosition trap_position) {
     static constexpr RegClass src_rc = reg_class_for(src_type);
     static constexpr RegClass dst_rc = reg_class_for(dst_type);
     LiftoffRegList pinned;
     LiftoffRegister src = pinned.set(__ PopToRegister());
-    LiftoffRegister dst = src_rc == dst_rc
-                              ? __ GetUnusedRegister(dst_rc, {src}, pinned)
-                              : __ GetUnusedRegister(dst_rc, pinned);
-    Label* trap =
-        trap_position
-            ? AddOutOfLineTrap(trap_position,
-                               Builtins::kThrowWasmTrapFloatUnrepresentable)
-            : nullptr;
+    LiftoffRegister dst = pinned.set(
+        src_rc == dst_rc ? __ GetUnusedRegister(dst_rc, {src}, pinned)
+                         : __ GetUnusedRegister(dst_rc, pinned));
+    DCHECK_EQ(has_trap, trap_position > 0);
+    Label* trap = has_trap ? AddOutOfLineTrap(
+                                 trap_position,
+                                 Builtins::kThrowWasmTrapFloatUnrepresentable)
+                           : nullptr;
     if (!__ emit_type_conversion(opcode, dst, src, trap)) {
       DCHECK_NOT_NULL(fallback_fn);
       ExternalReference ext_ref = fallback_fn(asm_->isolate());
-      ValueType sig_reps[] = {src_type};
-      FunctionSig sig(0, 1, sig_reps);
-      GenerateCCall(&dst, &sig, dst_type, &src, ext_ref);
+      // External references for potentially trapping conversions return int.
+      ValueType sig_reps[] = {kWasmI32, src_type};
+      FunctionSig sig(has_trap ? 1 : 0, 1, sig_reps + !has_trap);
+      LiftoffRegister trap_dst_regs[] = {
+          has_trap ? __ GetUnusedRegister(kGpReg, pinned) : dst, dst};
+      LiftoffRegister* dst_regs = has_trap ? trap_dst_regs : &dst;
+      GenerateCCall(dst_regs, &sig, dst_type, &src, ext_ref);
+      if (has_trap) __ emit_cond_jump(kEqual, trap, kWasmI32, dst_regs[0].gp());
     }
     __ PushRegister(dst_type, dst);
   }
@@ -728,7 +733,7 @@ class LiftoffCompiler {
     break;
 #define CASE_TYPE_CONVERSION(opcode, dst_type, src_type, ext_ref, may_trap) \
   case WasmOpcode::kExpr##opcode:                                           \
-    EmitTypeConversion<kWasm##dst_type, kWasm##src_type>(                   \
+    EmitTypeConversion<kWasm##dst_type, kWasm##src_type, may_trap>(         \
         kExpr##opcode, ext_ref, may_trap ? decoder->position() : 0);        \
     break;
     switch (opcode) {
@@ -757,6 +762,14 @@ class LiftoffCompiler {
       CASE_TYPE_CONVERSION(I32ReinterpretF32, I32, F32, nullptr, false)
       CASE_TYPE_CONVERSION(I64SConvertI32, I64, I32, nullptr, false)
       CASE_TYPE_CONVERSION(I64UConvertI32, I64, I32, nullptr, false)
+      CASE_TYPE_CONVERSION(I64SConvertF32, I64, F32,
+                           &ExternalReference::wasm_float32_to_int64, true)
+      CASE_TYPE_CONVERSION(I64UConvertF32, I64, F32,
+                           &ExternalReference::wasm_float32_to_uint64, true)
+      CASE_TYPE_CONVERSION(I64SConvertF64, I64, F64,
+                           &ExternalReference::wasm_float64_to_int64, true)
+      CASE_TYPE_CONVERSION(I64UConvertF64, I64, F64,
+                           &ExternalReference::wasm_float64_to_uint64, true)
       CASE_TYPE_CONVERSION(I64ReinterpretF64, I64, F64, nullptr, false)
       CASE_TYPE_CONVERSION(F32SConvertI32, F32, I32, nullptr, false)
       CASE_TYPE_CONVERSION(F32UConvertI32, F32, I32, nullptr, false)
