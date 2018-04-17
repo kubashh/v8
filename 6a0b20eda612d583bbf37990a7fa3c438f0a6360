@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bc55a7d_d233ff4c",
+        "filename": "src/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2387,
+      "author": {
+        "id": 1223559
+      },
+      "writtenOn": "2018-04-17T09:34:10Z",
+      "side": 1,
+      "message": "It would be nice to have this perform in \u003c O(n).  Have you looked into using a 2D approach, i.e., `table_[isolate][thread_id]`?\n\nI recognize that pessimizes lookups and therefore might not be worth it.  I suppose it depends on how often isolates are entered/exited vs. terminated.",
+      "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92400d52_83ee0ba0",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1223559
+      },
+      "writtenOn": "2018-04-17T09:34:10Z",
+      "side": 1,
+      "message": "This looks like potential UB (integer overflow.)",
+      "range": {
+        "startLine": 1424,
+        "startChar": 8,
+        "endLine": 1424,
+        "endChar": 14
+      },
+      "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
