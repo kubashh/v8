@@ -3499,6 +3499,14 @@ v8_executable("d8") {
     "src/d8-console.h",
     "src/d8.cc",
     "src/d8.h",
+    "src/third_party/linenoise-ng/src/ConvertUTF.cpp",
+    "src/third_party/linenoise-ng/src/linenoise.cpp",
+    "src/third_party/linenoise-ng/src/wcwidth.cpp",
+  ]
+
+  include_dirs = [
+    "src/third_party/linenoise-ng/include",
+    "src/third_party/linenoise-ng/src",
   ]
 
   configs = [

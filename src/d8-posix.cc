@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <netinet/ip.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
