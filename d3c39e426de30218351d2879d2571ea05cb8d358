@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2efadd2_17fb6e44",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-04-17T15:15:18Z",
+      "side": 1,
+      "message": "nit: remove extra empty line",
+      "revId": "d3c39e426de30218351d2879d2571ea05cb8d358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
