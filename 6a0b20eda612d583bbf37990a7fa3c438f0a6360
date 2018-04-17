@@ -81,6 +81,30 @@
       "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eb1f803_48aaba2e",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-17T18:01:36Z",
+      "side": 1,
+      "message": "I think an ad-hoc hash function here is fine. And also, let\u0027s make \"people feel better\" :).",
+      "parentUuid": "cf48492c_17eeb76b",
+      "range": {
+        "startLine": 1424,
+        "startChar": 8,
+        "endLine": 1424,
+        "endChar": 14
+      },
+      "revId": "6a0b20eda612d583bbf37990a7fa3c438f0a6360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
