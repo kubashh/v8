@@ -88,13 +88,22 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
                  IsDictionaryElementsKind(elements_kind) ||
                      IsTerminalElementsKind(elements_kind));
   HeapObject* result = nullptr;
-  AllocationResult allocation = AllocateRaw(Map::kSize, MAP_SPACE);
+  AllocationResult allocation = AllocateRaw(Map::kSize, RO_SPACE);
   if (!allocation.To(&result)) return allocation;
 
   result->set_map_after_allocation(meta_map(), SKIP_WRITE_BARRIER);
-  return isolate()->factory()->InitializeMap(Map::cast(result), instance_type,
-                                             instance_size, elements_kind,
-                                             inobject_properties);
+  Map* map = isolate()->factory()->InitializeMap(
+      Map::cast(result), instance_type, instance_size, elements_kind,
+      inobject_properties);
+
+  // Eagerly initialize the WeakCell cache for the map as it will not be
+  // writable in RO_SPACE.
+  HandleScope handle_scope(isolate());
+  Handle<WeakCell> weak_cell =
+      isolate()->factory()->NewWeakCell(Handle<Map>(map), TENURED_READ_ONLY);
+  map->set_weak_cell_cache(*weak_cell);
+
+  return map;
 }
 
 AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
@@ -412,7 +421,7 @@ bool Heap::CreateInitialMaps() {
     {
       // The invalid_prototype_validity_cell is needed for JSObject maps.
       Smi* value = Smi::FromInt(Map::kPrototypeChainInvalid);
-      AllocationResult alloc = AllocateRaw(Cell::kSize, OLD_SPACE);
+      AllocationResult alloc = AllocateRaw(Cell::kSize, RO_SPACE);
       if (!alloc.To(&obj)) return false;
       obj->set_map_after_allocation(cell_map(), SKIP_WRITE_BARRIER);
       Cell::cast(obj)->set_value(value);
