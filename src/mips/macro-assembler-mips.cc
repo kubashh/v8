@@ -2406,6 +2406,26 @@ void TurboAssembler::LoadZeroIfConditionZero(Register dest,
   }
 }
 
+void TurboAssembler::LoadZeroIfFPUCondition(Register dest) {
+  if (IsMipsArchVariant(kMips32r6)) {
+    mtc1(dest, kScratchDoubleReg);
+    sel_s(kDoubleCompareReg, kScratchDoubleReg, kDoubleRegZero);
+    mfc1(dest, kDoubleCompareReg);
+  } else {
+    Movt(dest, zero_reg);
+  }
+}
+
+void TurboAssembler::LoadZeroIfNotFPUCondition(Register dest) {
+  if (IsMipsArchVariant(kMips32r6)) {
+    mtc1(dest, kScratchDoubleReg);
+    sel_s(kDoubleCompareReg, kDoubleRegZero, kScratchDoubleReg);
+    mfc1(dest, kDoubleCompareReg);
+  } else {
+    Movf(dest, zero_reg);
+  }
+}
+
 void TurboAssembler::Movz(Register rd, Register rs, Register rt) {
   if (IsMipsArchVariant(kLoongson) || IsMipsArchVariant(kMips32r6)) {
     Label done;

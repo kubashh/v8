@@ -2942,6 +2942,26 @@ void TurboAssembler::LoadZeroIfConditionZero(Register dest,
   }
 }
 
+void TurboAssembler::LoadZeroIfFPUCondition(Register dest) {
+  if (kArchVariant == kMips64r6) {
+    mtc1(dest, kScratchDoubleReg);
+    sel_d(kDoubleCompareReg, kScratchDoubleReg, kDoubleRegZero);
+    mfc1(dest, kDoubleCompareReg);
+  } else {
+    Movt(dest, zero_reg);
+  }
+}
+
+void TurboAssembler::LoadZeroIfNotFPUCondition(Register dest) {
+  if (kArchVariant == kMips64r6) {
+    dmtc1(dest, kScratchDoubleReg);
+    sel_d(kDoubleCompareReg, kDoubleRegZero, kScratchDoubleReg);
+    dmfc1(dest, kDoubleCompareReg);
+  } else {
+    Movf(dest, zero_reg);
+  }
+}
+
 void TurboAssembler::Movt(Register rd, Register rs, uint16_t cc) {
   movt(rd, rs, cc);
 }
