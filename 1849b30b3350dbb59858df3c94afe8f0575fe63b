@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "728e4f1d_28b01712",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2411,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-04-18T14:19:09Z",
+      "side": 1,
+      "message": "you can save one instruction if you take a different approach\nmfc1(temp, kDoubleCompareReg)\nLoadZeroIfFpuConditionZero(dest, temp)",
+      "revId": "1849b30b3350dbb59858df3c94afe8f0575fe63b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc2f1e4f_bd5c95fa",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2423,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-04-18T14:19:09Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "1849b30b3350dbb59858df3c94afe8f0575fe63b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f845a01d_5041405b",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2947,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-04-18T14:19:09Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "1849b30b3350dbb59858df3c94afe8f0575fe63b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
