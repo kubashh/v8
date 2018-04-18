@@ -1356,9 +1356,17 @@ void LiftoffAssembler::SetCCallStackParamAddr(int stack_param_idx,
 void LiftoffAssembler::LoadCCallOutArgument(LiftoffRegister dst, ValueType type,
                                             int param_byte_offset) {
   // Check that we don't accidentally override kCCallLastArgAddrReg.
-  DCHECK_NE(LiftoffRegister(liftoff::kCCallLastArgAddrReg), dst);
+  DCHECK(dst.is_pair()
+             ? !liftoff::PairContains(dst, liftoff::kCCallLastArgAddrReg)
+             : dst != LiftoffRegister(liftoff::kCCallLastArgAddrReg));
   Operand src(liftoff::kCCallLastArgAddrReg, -param_byte_offset);
-  liftoff::Load(this, dst, src, type);
+  if (type == kWasmI64) {
+    liftoff::Load(this, dst.low(), src, kWasmI32);
+    Operand src_high(liftoff::kCCallLastArgAddrReg, -param_byte_offset + 4);
+    liftoff::Load(this, dst.high(), src_high, kWasmI32);
+  } else {
+    liftoff::Load(this, dst, src, type);
+  }
 }
 
 void LiftoffAssembler::CallC(ExternalReference ext_ref, uint32_t num_params) {
