@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c150675b_b88c8c26",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-04-18T19:37:30Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better if we also eagerly processed regular-sized chunks here?",
+      "range": {
+        "startLine": 1240,
+        "startChar": 34,
+        "endLine": 1240,
+        "endChar": 58
+      },
+      "revId": "8e5ff0941a0b533047a9cc212c6314808be7f346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d741f286_62ef172e",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-04-18T19:37:30Z",
+      "side": 1,
+      "message": "nit: Maybe add a comment explaining that regular-sized chunks might still be left unmapped but they are stealable (and thus it\u0027s fine).",
+      "range": {
+        "startLine": 1213,
+        "startChar": 9,
+        "endLine": 1213,
+        "endChar": 33
+      },
+      "revId": "8e5ff0941a0b533047a9cc212c6314808be7f346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
