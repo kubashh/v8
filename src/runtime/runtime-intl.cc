@@ -49,7 +49,6 @@
 #include "unicode/unum.h"
 #include "unicode/uversion.h"
 
-
 namespace v8 {
 namespace internal {
 
@@ -489,6 +488,27 @@ RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
   return Smi::FromInt(fraction_digits);
 }
 
+RUNTIME_FUNCTION(Runtime_CreateLocale) {
+  HandleScope scope(isolate);
+
+  DCHECK_EQ(2, args.length());
+
+  CONVERT_ARG_HANDLE_CHECKED(String, locale, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, options, 1);
+
+  Handle<JSFunction> constructor(
+      isolate->native_context()->intl_locale_function());
+
+  Handle<JSObject> locale_holder;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, locale_holder,
+                                     JSObject::New(constructor, constructor));
+  if (!Locale::InitializeLocale(isolate, locale_holder, locale, options)) {
+    return isolate->ThrowIllegalOperation();
+  }
+
+  return *locale_holder;
+}
+
 RUNTIME_FUNCTION(Runtime_CreateCollator) {
   HandleScope scope(isolate);
 
@@ -524,7 +544,6 @@ RUNTIME_FUNCTION(Runtime_InternalCompare) {
 
   icu::Collator* collator = Collator::UnpackCollator(isolate, collator_holder);
   CHECK_NOT_NULL(collator);
-
   string1 = String::Flatten(string1);
   string2 = String::Flatten(string2);
 
