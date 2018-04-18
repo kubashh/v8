@@ -1903,7 +1903,7 @@ class KnownMap(HeapObject):
 
 COMMENT_RE = re.compile(r"^C (0x[0-9a-fA-F]+) (.*)$")
 PAGEADDRESS_RE = re.compile(
-    r"^P (mappage|oldpage) (0x[0-9a-fA-F]+)$")
+    r"^P (readonlypage|oldpage) (0x[0-9a-fA-F]+)$")
 
 
 class InspectionInfo(object):
@@ -1981,7 +1981,7 @@ class InspectionPadawan(object):
   def __init__(self, reader, heap):
     self.reader = reader
     self.heap = heap
-    self.known_first_map_page = 0
+    self.known_first_read_only_page = 0
     self.known_first_old_page = 0
     self.context = None
 
@@ -1993,9 +1993,9 @@ class InspectionPadawan(object):
   def GetPageOffset(self, tagged_address):
     return tagged_address & self.heap.PageAlignmentMask()
 
-  def IsInKnownMapSpace(self, tagged_address):
+  def IsInKnownReadOnlySpace(self, tagged_address):
     page_address = tagged_address & ~self.heap.PageAlignmentMask()
-    return page_address == self.known_first_map_page
+    return page_address == self.known_first_read_only_page
 
   def IsInKnownOldSpace(self, tagged_address):
     page_address = tagged_address & ~self.heap.PageAlignmentMask()
@@ -2063,7 +2063,7 @@ class InspectionPadawan(object):
   def SenseMap(self, tagged_address):
     if self.IsInKnownMapSpace(tagged_address):
       offset = self.GetPageOffset(tagged_address)
-      lookup_key = ("MAP_SPACE", offset)
+      lookup_key = ("RO_SPACE", offset)
       known_map_info = KNOWN_MAPS.get(lookup_key)
       if known_map_info:
         known_map_type, known_map_name = known_map_info
@@ -2090,9 +2090,9 @@ class InspectionPadawan(object):
     raise NotImplementedError
 
   def PrintKnowledge(self):
-    print "  known_first_map_page = %s\n"\
+    print "  known_first_read_only_page = %s\n"\
           "  known_first_old_page = %s" % (
-          self.reader.FormatIntPtr(self.known_first_map_page),
+          self.reader.FormatIntPtr(self.known_first_read_only_page),
           self.reader.FormatIntPtr(self.known_first_old_page))
 
   def FindFirstAsciiString(self, start, end=None, min_length=32):
@@ -2714,8 +2714,8 @@ class InspectionWebFormatter(object):
     self.comments = InspectionInfo(minidump_name, self.reader)
     self.padawan.known_first_old_page = (
         self.comments.get_page_address("oldpage"))
-    self.padawan.known_first_map_page = (
-        self.comments.get_page_address("mappage"))
+    self.padawan.known_first_read_only_page = (
+        self.comments.get_page_address("readonlypage"))
 
   def set_comment(self, straddress, comment):
     try:
@@ -2729,8 +2729,8 @@ class InspectionWebFormatter(object):
       address = int(straddress, 0)
       if kind == "oldpage":
         self.padawan.known_first_old_page = address
-      elif kind == "mappage":
-        self.padawan.known_first_map_page = address
+      elif kind == "readonlypage":
+        self.padawan.known_first_read_only_page = address
       self.comments.save_page_address(kind, address)
     except ValueError:
       print "Invalid address"
@@ -3213,9 +3213,10 @@ class InspectionWebFormatter(object):
       page_address = address & ~self.heap.PageAlignmentMask()
 
       f.write("Page info: ")
-      self.output_page_info(f, "old", self.padawan.known_first_old_page, \
+      self.output_page_info(f, "old", self.padawan.known_first_old_page,
                             page_address)
-      self.output_page_info(f, "map", self.padawan.known_first_map_page, \
+      self.output_page_info(f, "readonly",
+                            self.padawan.known_first_read_only_page,
                             page_address)
 
       if not self.reader.IsValidAddress(address):
@@ -3658,11 +3659,11 @@ class InspectionShell(cmd.Cmd):
     """
      Teach V8 heap layout information to the inspector.
 
-     Set the first map-space page by passing any pointer into that page.
+     Set the first read-only-space page by passing any pointer into that page.
     """
     address = self.ParseAddressExpr(address)
     page_address = address & ~self.heap.PageAlignmentMask()
-    self.padawan.known_first_map_page = page_address
+    self.padawan.known_first_read_only_page = page_address
 
   def do_list(self, smth):
     """
