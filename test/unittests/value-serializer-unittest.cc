@@ -410,43 +410,95 @@ TEST_F(ValueSerializerTest, RoundTripBigInt) {
 
 TEST_F(ValueSerializerTest, DecodeBigInt) {
   Local<Value> value = DecodeTest({
-      0xFF, 0x0D,              // Version 13
-      0x5A,                    // BigInt
-      0x08,                    // Bitfield: sign = false, bytelength = 4
-      0x2A, 0x00, 0x00, 0x00,  // Digit: 42
+    0xFF, 0x0D,  // Version 13
+        0x5A,    // BigInt
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+        0x08,                    // Bitfield: sign = false, bytelength = 4
+        0x2A, 0x00, 0x00, 0x00,  // Digit: 42
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+        0x08,                    // Bitfield: sign = false, bytelength = 4
+        0x00, 0x00, 0x00, 0x2A,  // Digit: 42
+#elif defined(V8_TARGET_ARCH_64_BIT)
+        0x10,  // Bitfield: sign = false, bytelength = 4
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2A,  // Digit: 42
+#endif  // V8_TARGET_ARCH_64_BIT
+#endif  // V8_TARGET_BIG_ENDIAN
   });
   ASSERT_TRUE(value->IsBigInt());
   ExpectScriptTrue("result === 42n");
 
   value = DecodeTest({
-      0xFF, 0x0D,  // Version 13
-      0x7A,        // BigIntObject
-      0x11,        // Bitfield: sign = true, bytelength = 8
-      0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  // Digit: 42
+    0xFF, 0x0D,  // Version 13
+        0x7A,    // BigIntObject
+        0x11,    // Bitfield: sign = true, bytelength = 8
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+        0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  // Digit: 42
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+        0x00, 0x00, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x00  // Digit: 42
+#elif defined(V8_TARGET_ARCH_64_BIT)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2A   // Digit: 42
+#endif  // V8_TARGET_ARCH_64_BIT
+#endif  // V8_TARGET_BIG_ENDIAN
   });
   ASSERT_TRUE(value->IsBigIntObject());
   ExpectScriptTrue("result == -42n");
 
   value = DecodeTest({
-      0xFF, 0x0D,  // Version 13
-      0x5A,        // BigInt
-      0x10,        // Bitfield: sign = false, bytelength = 8
-      0xEF, 0xCD, 0xAB, 0x90, 0x78, 0x56, 0x34, 0x12  // Digit(s).
+    0xFF, 0x0D,  // Version 13
+        0x5A,    // BigInt
+        0x10,    // Bitfield: sign = false, bytelength = 8
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+        0xEF, 0xCD, 0xAB, 0x90, 0x78, 0x56, 0x34, 0x12  // Digit(s).
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+        0x90, 0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78  // Digit(s).
+#elif defined(V8_TARGET_ARCH_64_BIT)
+        0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF   // Digit(s).
+#endif  // V8_TARGET_ARCH_64_BIT
+#endif  // V8_TARGET_BIG_ENDIAN
   });
   ExpectScriptTrue("result === 0x1234567890abcdefn");
 
-  value = DecodeTest({0xFF, 0x0D,  // Version 13
-                      0x5A,        // BigInt
-                      0x17,        // Bitfield: sign = true, bytelength = 11
-                      0xEF, 0xCD, 0xAB, 0x90,  // Digits.
-                      0x78, 0x56, 0x34, 0x12, 0x33, 0x44, 0x55});
+  value = DecodeTest({
+    0xFF, 0x0D,  // Version 13
+        0x5A,    // BigInt
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+        0x17,                    // Bitfield: sign = true, bytelength = 11
+        0xEF, 0xCD, 0xAB, 0x90,  // Digits.
+        0x78, 0x56, 0x34, 0x12, 0x33, 0x44, 0x55
+  });
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+        0x19,                    // Bitfield: sign = true, bytelength = 11
+        0x90, 0xAB, 0xCD, 0xEF,  // Digits.
+        0x12, 0x34, 0x56, 0x78, 0x00, 0x55, 0x44, 0x33
+  });
+#elif defined(V8_TARGET_ARCH_64_BIT)
+        0x21,  // Bitfield: sign = true, bytelength = 11
+        0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF,  // Digits.
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0x44, 0x33
+  });
+#endif  // V8_TARGET_ARCH_64_BIT
+#endif  // V8_TARGET_BIG_ENDIAN
   ExpectScriptTrue("result === -0x5544331234567890abcdefn");
 
   value = DecodeTest({
-      0xFF, 0x0D,  // Version 13
-      0x5A,        // BigInt
-      0x02,        // Bitfield: sign = false, bytelength = 1
-      0x2A,        // Digit: 42
+    0xFF, 0x0D,  // Version 13
+        0x5A,    // BigInt
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+        0x02,  // Bitfield: sign = false, bytelength = 1
+        0x2A,  // Digit: 42
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+        0x08,                    // Bitfield: sign = false, bytelength = 1
+        0x00, 0x00, 0x00, 0x2A,  // Digit: 42
+#elif defined(V8_TARGET_ARCH_64_BIT)
+        0x10,  // Bitfield: sign = false, bytelength = 1
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2A,  // Digit: 42
+#endif  // V8_TARGET_ARCH_64_BIT
+#endif  // V8_TARGET_BIG_ENDIAN
   });
   ExpectScriptTrue("result === 42n");
 }
