@@ -366,5 +366,67 @@ BUILTIN(NumberFormatPrototypeFormatToParts) {
   return result;
 }
 
+// Intl.Locale implementation
+BUILTIN(LocaleConstructor) {
+  HandleScope scope(isolate);
+  if (args.new_target()->IsUndefined(isolate)) {  // [[Call]]
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kConstructorNotFunction,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  "Intl.Locale")));
+  } else {  // [[Construct]]
+    Handle<JSFunction> target = args.target();
+    Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
+    Handle<Object> locale = args.atOrUndefined(isolate, 1);
+    Handle<Object> options = args.atOrUndefined(isolate, 2);
+
+    // First parameter is a locale, as a string. Can't be empty.
+    if (locale->IsNullOrUndefined(isolate)) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kLocaleNotEmpty));
+    }
+
+    Handle<String> locale_string;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, locale_string,
+                                       Object::ToString(isolate, locale));
+
+    Handle<JSObject> options_object;
+    if (options->IsUndefined(isolate)) {
+      // Make empty options bag.
+      options_object =
+          isolate->factory()->NewJSObject(isolate->object_function());
+    } else if (!options->IsJSObject()) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kLocaleNotJSObject));
+    }
+    options_object = Handle<JSObject>::cast(options);
+
+    Handle<JSObject> result;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, result,
+                                       JSObject::New(target, new_target));
+
+    if (!Locale::InitializeLocale(isolate, result, locale_string,
+                                  options_object)) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kLocaleBadParameters));
+    }
+
+    return *result;
+  }
+}
+
+BUILTIN(LocalePrototypeToString) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSObject, locale_holder, "Intl.Locale.prototype.toString");
+
+  Handle<String> canonicalized_string =
+      isolate->factory()->InternalizeUtf8String("canonicalized");
+  Handle<String> canonicalized = Handle<String>::cast(
+      JSObject::GetProperty(locale_holder, canonicalized_string)
+          .ToHandleChecked());
+
+  return *canonicalized;
+}
+
 }  // namespace internal
 }  // namespace v8
