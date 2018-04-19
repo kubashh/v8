@@ -16,6 +16,24 @@
       "revId": "936853355bf0685708d0333acfd76c668c119428",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a46d555_a348597d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-04-19T13:06:46Z",
+      "side": 1,
+      "message": "To prevent overwriting the value to the right. Shifting right is easier done right to left.\n\nIf this was performance critical, we should probably keep a high-watermark also to make the search more efficient. I thought it was not, so I went for the simpler implementation without a temp.",
+      "parentUuid": "8bfabe60_d6a06b7d",
+      "revId": "936853355bf0685708d0333acfd76c668c119428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
