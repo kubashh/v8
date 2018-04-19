@@ -2,6 +2,131 @@
   "comments": [
     {
       "key": {
+        "uuid": "07ec4964_df243eca",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "Can this be renamed to `tag` to match the spec?",
+      "range": {
+        "startLine": 380,
+        "startChar": 19,
+        "endLine": 380,
+        "endChar": 25
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b20fd6a0_127fa5e4",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "The spec says `If Type(tag) is not String or Object, throw a TypeError exception.`, the check for this should be `!locale-\u003eIsName() || locale-\u003eIsJSReceiver()`",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8606f9f0_402fe273",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "The spec says we should check for an InitializedLocale internal slot before doing a ToString. Is this check not required?",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb00fbc2_8bcc8a35",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "This should be a null check as well right? I think it\u0027s a spec bug",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59d4777b_f1a23295",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "factory()-\u003eNewJSObjectWithNullProto(), according to the spec",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7748195_2752702e",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "The spec says we should do a `Object::ToObject` conversation here instead of an explicit check for JSObject",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91271d35_9d6b90e4",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "This needs to happen before all the argument handling as per the spec. It\u0027s observable to userland javascript that we create this object after the argument handling.",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27ba4f87_30c99b3d",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 5
@@ -19,6 +144,23 @@
         "endLine": 822,
         "endChar": 53
       },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f6505fd_2acb523a",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-19T19:24:05Z",
+      "side": 1,
+      "message": "I don\u0027t see this being used in this CL. Can this be removed?",
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
