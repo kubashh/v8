@@ -672,9 +672,11 @@ MaybeHandle<WasmCompiledModule> DeserializeNativeModule(
   Handle<FixedArray> export_wrappers = isolate->factory()->NewFixedArray(
       static_cast<int>(export_wrappers_size), TENURED);
 
-  Handle<WasmCompiledModule> compiled_module =
-      WasmCompiledModule::New(isolate, shared->module(), export_wrappers,
-                              trap_handler::IsTrapHandlerEnabled());
+  std::unique_ptr<compiler::ModuleEnv> module_env =
+      base::make_unique<compiler::ModuleEnv>(
+          module_wrapper->get(), trap_handler::IsTrapHandlerEnabled());
+  Handle<WasmCompiledModule> compiled_module = WasmCompiledModule::New(
+      isolate, shared->module(), export_wrappers, std::move(module_env));
   compiled_module->set_shared(*shared);
   script->set_wasm_compiled_module(*compiled_module);
   NativeModuleDeserializer deserializer(isolate,

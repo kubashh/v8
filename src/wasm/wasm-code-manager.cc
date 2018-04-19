@@ -316,7 +316,7 @@ class NativeModule::CloneCodeHelper {
   explicit CloneCodeHelper(NativeModule* source_native_module,
                            NativeModule* cloning_native_module);
 
-  void SelectForCloning(int32_t code_index);
+  void SelectForCloning(uint32_t code_index);
 
   void CloneAndPatchCode();
 
@@ -331,6 +331,24 @@ class NativeModule::CloneCodeHelper {
   std::unordered_map<Address, Address, AddressHasher> reverse_lookup_;
 };
 
+void NativeModule::CloneHigherTierCodeFrom(NativeModule* source_native_module) {
+  NativeModule::CloneCodeHelper helper(source_native_module, this);
+
+  for (uint32_t i = num_imported_functions_, e = FunctionCount(); i < e; ++i) {
+    WasmCode* wasm_code = GetCode(i);
+    if (!wasm_code->is_liftoff()) continue;
+    helper.SelectForCloning(i);
+  }
+
+  helper.CloneAndPatchCode();
+
+  // Sanity check: after cloning the code, every function in the
+  // code table should not be Liftoff-compiled code anymore.
+  for (uint32_t i = num_imported_functions(), e = FunctionCount(); i < e; ++i) {
+    DCHECK(!GetCode(i)->is_liftoff());
+  }
+}
+
 NativeModule::CloneCodeHelper::CloneCodeHelper(
     NativeModule* source_native_module, NativeModule* cloning_native_module)
     : source_native_module_(source_native_module),
@@ -344,7 +362,7 @@ NativeModule::CloneCodeHelper::CloneCodeHelper(
   }
 }
 
-void NativeModule::CloneCodeHelper::SelectForCloning(int32_t code_index) {
+void NativeModule::CloneCodeHelper::SelectForCloning(uint32_t code_index) {
   selection_.emplace_back(code_index);
 }
 
@@ -421,12 +439,13 @@ base::AtomicNumber<size_t> NativeModule::next_id_;
 
 NativeModule::NativeModule(uint32_t num_functions, uint32_t num_imports,
                            bool can_request_more, VirtualMemory* mem,
-                           WasmCodeManager* code_manager)
+                           WasmCodeManager* code_manager,
+                           std::unique_ptr<compiler::ModuleEnv> env)
     : instance_id(next_id_.Increment(1)),
       code_table_(num_functions),
       num_imported_functions_(num_imports),
       compilation_state_(NewCompilationState(
-          reinterpret_cast<Isolate*>(code_manager->isolate_))),
+          reinterpret_cast<Isolate*>(code_manager->isolate_), std::move(env))),
       free_memory_(mem->address(), mem->end()),
       wasm_code_manager_(code_manager),
       can_request_more_memory_(can_request_more) {
@@ -1017,24 +1036,28 @@ size_t WasmCodeManager::GetAllocationChunk(const WasmModule& module) {
 }
 
 std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
-    const WasmModule& module) {
-  size_t code_size = GetAllocationChunk(module);
-  return NewNativeModule(
-      code_size, static_cast<uint32_t>(module.functions.size()),
-      module.num_imported_functions, kModuleCanAllocateMoreMemory);
+    std::unique_ptr<compiler::ModuleEnv> env) {
+  const WasmModule* module = env->module;
+  size_t code_size = GetAllocationChunk(*module);
+  return NewNativeModule(code_size,
+                         static_cast<uint32_t>(module->functions.size()),
+                         module->num_imported_functions,
+                         kModuleCanAllocateMoreMemory, std::move(env));
 }
 
 std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     size_t size_estimate, uint32_t num_functions,
-    uint32_t num_imported_functions, bool can_request_more) {
+    uint32_t num_imported_functions, bool can_request_more,
+    std::unique_ptr<compiler::ModuleEnv> env) {
   VirtualMemory mem;
   TryAllocate(size_estimate, &mem);
   if (mem.IsReserved()) {
     Address start = mem.address();
     size_t size = mem.size();
     Address end = mem.end();
-    std::unique_ptr<NativeModule> ret(new NativeModule(
-        num_functions, num_imported_functions, can_request_more, &mem, this));
+    std::unique_ptr<NativeModule> ret(
+        new NativeModule(num_functions, num_imported_functions,
+                         can_request_more, &mem, this, std::move(env)));
     TRACE_HEAP("New Module: ID:%zu. Mem: %p,+%zu\n", ret->instance_id,
                reinterpret_cast<void*>(start), size);
     AssignRanges(start, end, ret.get());
@@ -1094,9 +1117,14 @@ bool NativeModule::SetExecutable(bool executable) {
 }
 
 std::unique_ptr<NativeModule> NativeModule::Clone() {
+  std::unique_ptr<compiler::ModuleEnv> module_env =
+      base::make_unique<compiler::ModuleEnv>(
+          compiled_module()->shared()->module(),
+          trap_handler::IsTrapHandlerEnabled());
+
   std::unique_ptr<NativeModule> ret = wasm_code_manager_->NewNativeModule(
       owned_memory_.front().size(), FunctionCount(), num_imported_functions(),
-      can_request_more_memory_);
+      can_request_more_memory_, std::move(module_env));
   TRACE_HEAP("%zu cloned from %zu\n", ret->instance_id, instance_id);
   if (!ret) return ret;
 

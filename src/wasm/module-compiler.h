@@ -31,7 +31,7 @@ struct CompilationStateDeleter {
 // Wrapper to create a CompilationState exists in order to avoid having
 // the the CompilationState in the header file.
 std::unique_ptr<CompilationState, CompilationStateDeleter> NewCompilationState(
-    Isolate* isolate);
+    Isolate* isolate, std::unique_ptr<compiler::ModuleEnv> env);
 
 MaybeHandle<WasmModuleObject> CompileToModuleObject(
     Isolate* isolate, ErrorThrower* thrower, std::unique_ptr<WasmModule> module,
@@ -98,6 +98,7 @@ class AsyncCompileJob {
   class CompileWrappers;
   class FinishModule;
   class AbortCompilation;
+  class UpdateToTopTierCompiledCode;
 
   const std::shared_ptr<Counters>& async_counters() const {
     return async_counters_;
@@ -137,7 +138,6 @@ class AsyncCompileJob {
   ModuleWireBytes wire_bytes_;
   Handle<Context> context_;
   Handle<JSPromise> module_promise_;
-  std::unique_ptr<compiler::ModuleEnv> module_env_;
   std::unique_ptr<WasmModule> module_;
 
   std::vector<DeferredHandles*> deferred_handles_;
@@ -171,6 +171,8 @@ class AsyncCompileJob {
   // compilation. The AsyncCompileJob does not actively use the
   // StreamingDecoder.
   std::shared_ptr<StreamingDecoder> stream_;
+
+  bool tiering_completed_ = false;
 };
 }  // namespace wasm
 }  // namespace internal
