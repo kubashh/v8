@@ -161,11 +161,17 @@ class WasmCodeManagerTest : public TestWithContext,
   // We pretend all our modules have 10 functions and no imports, just so
   // we can size up the code_table.
   NativeModulePtr AllocFixedModule(WasmCodeManager* manager, size_t size) {
-    return manager->NewNativeModule(size, 10, 0, false);
+    std::unique_ptr<compiler::ModuleEnv> module_env =
+        base::make_unique<compiler::ModuleEnv>(
+            nullptr, trap_handler::IsTrapHandlerEnabled());
+    return manager->NewNativeModule(size, 10, 0, false, std::move(module_env));
   }
 
   NativeModulePtr AllocGrowableModule(WasmCodeManager* manager, size_t size) {
-    return manager->NewNativeModule(size, 10, 0, true);
+    std::unique_ptr<compiler::ModuleEnv> module_env =
+        base::make_unique<compiler::ModuleEnv>(
+            nullptr, trap_handler::IsTrapHandlerEnabled());
+    return manager->NewNativeModule(size, 10, 0, true, std::move(module_env));
   }
 
   NativeModulePtr AllocModule(WasmCodeManager* manager, size_t size,

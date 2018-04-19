@@ -6,6 +6,7 @@
 #define V8_WASM_WASM_OBJECTS_H_
 
 #include "src/base/bits.h"
+#include "src/compiler/wasm-compiler.h"
 #include "src/debug/debug.h"
 #include "src/debug/interface-types.h"
 #include "src/managed.h"
@@ -548,7 +549,7 @@ class WasmCompiledModule : public Struct {
   static Handle<WasmCompiledModule> New(
       Isolate* isolate, wasm::WasmModule* module,
       Handle<FixedArray> export_wrappers,
-      bool use_trap_hander);
+      std::unique_ptr<compiler::ModuleEnv> env);
 
   static Handle<WasmCompiledModule> Clone(Isolate* isolate,
                                           Handle<WasmCompiledModule> module);
