@@ -34,6 +34,8 @@ MachineType MachineTypeFor(ValueType type) {
     case wasm::kWasmS128:
       return MachineType::Simd128();
     case wasm::kWasmAnyRef:
+      // This case also handles kWasmAnyFunc and kWasmEqRef, because they
+      // have actually the same value as kWasmAnyRef.
       return MachineType::TaggedPointer();
     default:
       UNREACHABLE();
