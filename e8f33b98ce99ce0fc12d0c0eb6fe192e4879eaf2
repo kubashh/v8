@@ -150,6 +150,52 @@
     },
     {
       "key": {
+        "uuid": "c73c2330_a5fbf15e",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T20:16:44Z",
+      "side": 1,
+      "message": "It\u0027s not a good idea to depend on the behvior of the default \u0027legacy code page\u0027. Chrome/v8\u0027s copy of ICU is built with the default code page set to UTF-8, but v8 built elsewhere relies on the system ICU which does not have the default code page set to UTF-8. Nonetheless, the ASCII-range characters (likely in all cases) would be preserved.\n\nStill, I don\u0027t like to depend on that assumption. Either use this overload\n(http://icu-project.org/apiref/icu4c/classicu_1_1UnicodeString.html#a54597d41f79f762d95114dcda2010914 )\nor use ByteSink as I mentioned in my comment to the first CL.",
+      "range": {
+        "startLine": 833,
+        "startChar": 18,
+        "endLine": 833,
+        "endChar": 79
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c133cb0_4f41b4d0",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T20:16:44Z",
+      "side": 1,
+      "message": "4th parameter is not for the length of the icu_result. It\u0027s the length of the parsed input (bcp47_locale). See http://icu-project.org/apiref/icu4c/uloc_8h.html#aa45d6457f72867880f079e27a63c6fcb .\n\nThe above should be:\n\nicu_length \u003d uloc_forLanguage(*bcp47_locale, icu_results, ULCO_..., nullptr, \u0026status);",
+      "range": {
+        "startLine": 1031,
+        "startChar": 2,
+        "endLine": 1032,
+        "endChar": 44
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f6505fd_2acb523a",
         "filename": "src/runtime/runtime-intl.cc",
         "patchSetId": 5
@@ -161,6 +207,24 @@
       "writtenOn": "2018-04-19T19:24:05Z",
       "side": 1,
       "message": "I don\u0027t see this being used in this CL. Can this be removed?",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6eac15c_f17b3036",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T20:16:44Z",
+      "side": 1,
+      "message": "I guess it\u0027s a left-over from the first version that used JS.",
+      "parentUuid": "2f6505fd_2acb523a",
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -183,6 +247,29 @@
         "startChar": 0,
         "endLine": 30,
         "endChar": 24
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71aed999_cd9cc926",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T20:16:44Z",
+      "side": 1,
+      "message": "Please, add a reference to \n\nhttp://bugs.icu-project.org/trac/ticket/13417 .",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 42
       },
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
