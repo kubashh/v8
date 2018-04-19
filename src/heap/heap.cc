@@ -264,15 +264,25 @@ size_t Heap::Capacity() {
 
 size_t Heap::OldGenerationCapacity() {
   if (!HasBeenSetUp()) return 0;
-  return old_space_->Capacity() + code_space_->Capacity() +
-         map_space_->Capacity() + lo_space_->SizeOfObjects();
+  PagedSpaces spaces(this, PagedSpaces::SpacesSpecifier::kAllPagedSpaces);
+  size_t total = 0;
+  for (PagedSpace* space = spaces.next(); space != nullptr;
+       space = spaces.next()) {
+    total += space->Capacity();
+  }
+  return total + lo_space_->SizeOfObjects();
 }
 
 size_t Heap::CommittedOldGenerationMemory() {
   if (!HasBeenSetUp()) return 0;
 
-  return old_space_->CommittedMemory() + code_space_->CommittedMemory() +
-         map_space_->CommittedMemory() + lo_space_->Size();
+  PagedSpaces spaces(this, PagedSpaces::SpacesSpecifier::kAllPagedSpaces);
+  size_t total = 0;
+  for (PagedSpace* space = spaces.next(); space != nullptr;
+       space = spaces.next()) {
+    total += space->CommittedMemory();
+  }
+  return total + lo_space_->Size();
 }
 
 size_t Heap::CommittedMemory() {
@@ -285,11 +295,12 @@ size_t Heap::CommittedMemory() {
 size_t Heap::CommittedPhysicalMemory() {
   if (!HasBeenSetUp()) return 0;
 
-  return new_space_->CommittedPhysicalMemory() +
-         old_space_->CommittedPhysicalMemory() +
-         code_space_->CommittedPhysicalMemory() +
-         map_space_->CommittedPhysicalMemory() +
-         lo_space_->CommittedPhysicalMemory();
+  size_t total = 0;
+  for (SpaceIterator it(this); it.has_next();) {
+    total += it.next()->CommittedPhysicalMemory();
+  }
+
+  return total;
 }
 
 size_t Heap::CommittedMemoryExecutable() {
