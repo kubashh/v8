@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd79c365_03593995",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83242c10_bc736813",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c9486c5_8860340c",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "e8792308_ee972c7f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c9486c5_8860340c",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a118d98a_ea36e819",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -47,6 +83,30 @@
       "writtenOn": "2018-04-13T13:41:31Z",
       "side": 1,
       "message": "I think this flag should say what it really stands for, namely for running the optimizing compiler. This coincides with baseline compilation being finished, but the actual thing here is that we run the optimizing compiler here.",
+      "range": {
+        "startLine": 1397,
+        "startChar": 30,
+        "endLine": 1397,
+        "endChar": 59
+      },
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b502456_202956f6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Maybe: compiling_top_tier_code_ ? This flag, however, does not only affect only this part, but also other parts of the code, see updates to CompileInParallel(), where it finishes units until the baseline compilation is finished. Maybe I can add a comment here why we need to patch as soon as the baseline compilation is finished?",
+      "parentUuid": "a118d98a_ea36e819",
       "range": {
         "startLine": 1397,
         "startChar": 30,
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "a155523a_aea9f3d7",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83aa5710_e2c915b4",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2cc74af_4b91bff5",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -87,6 +165,24 @@
       "writtenOn": "2018-04-13T13:41:31Z",
       "side": 1,
       "message": "How convinced are you that this will happen in all possible cases?",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb03e76_b5b49d49",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "It *can* happen. It\u0027s not likely to happen in real cases though. I have a small test where it happens, because the functions are so small such that both Turbofan and Liftoff are done at the same time, leading to this edge case. Even though it\u0027s not very likely in real cases, the code would just cash if we wouldn\u0027t consider this. Wdyt?",
+      "parentUuid": "f2cc74af_4b91bff5",
       "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "4f2f865d_c5c7148a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb5eb666_5db56a36",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6b48698_dee705cc",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -124,6 +238,24 @@
       "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa0e7c61_7c72354f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3348,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6b48698_dee705cc",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "b592fd6d_e6892413",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Oh, leftover. Thanks for spotting this!",
+      "parentUuid": "372dc9bf_506f02c1",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c64ac056_68413e64",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 4
@@ -158,6 +308,24 @@
       "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4994d0f1_e8d493c8",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-19T07:26:20Z",
+      "side": 1,
+      "message": "Leftover -\u003e old patch to new patch, thanks for spotting -\u003e fixed it now!",
+      "parentUuid": "c64ac056_68413e64",
+      "revId": "335d7cd6f404810d21d0cc43172c1a2d7ea80da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
