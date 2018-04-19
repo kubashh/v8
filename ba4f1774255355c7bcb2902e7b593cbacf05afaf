@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "780af7b7_045b801a",
+        "filename": "test/js-perf-test/TypedArrays/sort.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-19T10:51:49Z",
+      "side": 1,
+      "message": "Nit: please terminate comments with a \u0027.\u0027",
+      "revId": "ba4f1774255355c7bcb2902e7b593cbacf05afaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
