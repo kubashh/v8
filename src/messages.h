@@ -343,6 +343,12 @@ class ErrorUtils : public AllStatic {
   T(IteratorSymbolNonCallable, "Found non-callable @@iterator")                \
   T(IteratorValueNotAnObject, "Iterator value % is not an entry object")       \
   T(LanguageID, "Language ID should be string or object.")                     \
+  T(LocaleNotEmpty,                                                            \
+    "First argument to Intl.Locale constructor can't be empty or missing")     \
+  T(LocaleNotJSObject,                                                         \
+    "Second argument to Intl.Locale constructor must be either undefined"      \
+    " or an Object")                                                           \
+  T(LocaleBadParameters, "Incorrect locale information provided")              \
   T(MapperFunctionNonCallable, "flatMap mapper function is not callable")      \
   T(MethodCalledOnWrongObject,                                                 \
     "Method % called on a non-object or on a wrong type of object.")           \

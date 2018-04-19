@@ -76,7 +76,7 @@ class TestCase(testcase.TestCase):
     return self._source_flags
 
   def _get_suite_flags(self):
-    return ['--allow-natives-syntax']
+    return ['--allow-natives-syntax', '--harmony-locale']
 
   def _get_source_path(self):
     return os.path.join(self.suite.root, self.path + self._get_suffix())

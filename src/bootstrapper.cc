@@ -4386,6 +4386,35 @@ void Genesis::InitializeGlobal_harmony_bigint() {
 
 #ifdef V8_INTL_SUPPORT
 
+void Genesis::InitializeGlobal_harmony_locale() {
+  if (!FLAG_harmony_locale) return;
+
+  Handle<JSObject> intl = Handle<JSObject>::cast(
+      JSReceiver::GetProperty(
+          Handle<JSReceiver>(native_context()->global_object()),
+          factory()->InternalizeUtf8String("Intl"))
+          .ToHandleChecked());
+
+  Handle<JSFunction> locale_fun = InstallFunction(
+      intl, "Locale", JS_OBJECT_TYPE, Locale::kSize, 0,
+      factory()->the_hole_value(), Builtins::kLocaleConstructor);
+  InstallWithIntrinsicDefaultProto(isolate(), locale_fun,
+                                   Context::INTL_LOCALE_FUNCTION_INDEX);
+  locale_fun->shared()->set_length(2);
+  locale_fun->shared()->DontAdaptArguments();
+
+  // Setup %LocalePrototype%.
+  Handle<JSObject> prototype(JSObject::cast(locale_fun->instance_prototype()));
+
+  // Install the @@toStringTag property on the {prototype}.
+  JSObject::AddProperty(prototype, factory()->to_string_tag_symbol(),
+                        factory()->NewStringFromAsciiChecked("Locale"),
+                        static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
+
+  SimpleInstallFunction(prototype, "toString",
+                        Builtins::kLocalePrototypeToString, 0, false);
+}
+
 void Genesis::InitializeGlobal_harmony_number_format_to_parts() {
   if (!FLAG_harmony_number_format_to_parts) return;
   Handle<JSObject> number_format_prototype(JSObject::cast(
