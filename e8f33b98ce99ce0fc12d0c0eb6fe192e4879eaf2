@@ -282,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "2e1b12f2_71dce77a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T23:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27ba4f87_30c99b3d",
+      "range": {
+        "startLine": 819,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 53
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c73c2330_a5fbf15e",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 5
@@ -302,6 +326,30 @@
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8425d5f_e5523194",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T23:57:33Z",
+      "side": 1,
+      "message": "Made an explicit converter to utf8.",
+      "parentUuid": "c73c2330_a5fbf15e",
+      "range": {
+        "startLine": 833,
+        "startChar": 18,
+        "endLine": 833,
+        "endChar": 79
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
