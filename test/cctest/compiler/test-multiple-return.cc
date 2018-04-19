@@ -123,12 +123,16 @@ Node* ToInt32(RawMachineAssembler& m, MachineType type, Node* a) {
 
 std::unique_ptr<wasm::NativeModule> AllocateNativeModule(Isolate* isolate,
                                                          size_t code_size) {
+  std::unique_ptr<compiler::ModuleEnv> module_env =
+      base::make_unique<compiler::ModuleEnv>(
+          nullptr, trap_handler::IsTrapHandlerEnabled());
+
   // We have to add the code object to a NativeModule, because the
   // WasmCallDescriptor assumes that code is on the native heap and not
   // within a code object.
   std::unique_ptr<wasm::NativeModule> module =
-      isolate->wasm_engine()->code_manager()->NewNativeModule(code_size, 1, 0,
-                                                              false);
+      isolate->wasm_engine()->code_manager()->NewNativeModule(
+          code_size, 1, 0, false, std::move(module_env));
   return module;
 }
 
