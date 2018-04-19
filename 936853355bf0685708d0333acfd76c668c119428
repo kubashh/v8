@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bfabe60_d6a06b7d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-19T12:51:33Z",
+      "side": 1,
+      "message": "Why did you reverse the order? This makes us traverse all undefined values for no reason, right?\nWouldn\u0027t it suffice to change \"insert_pos + 1\" to \"insert_pos\"?",
+      "revId": "936853355bf0685708d0333acfd76c668c119428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
