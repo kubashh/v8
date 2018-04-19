@@ -1271,7 +1271,10 @@ namespace internal {
   /* ES #sec-string.prototype.normalize */                     \
   CPP(StringPrototypeNormalizeIntl)                            \
   /* ecma402 #sec-intl.numberformat.prototype.formattoparts */ \
-  CPP(NumberFormatPrototypeFormatToParts)
+  CPP(NumberFormatPrototypeFormatToParts)                      \
+  /* ecma402 #new proposal */                                  \
+  CPP(LocaleConstructor)                                       \
+  CPP(LocalePrototypeToString)
 #else
 #define BUILTIN_LIST(CPP, API, TFJ, TFC, TFS, TFH, ASM)    \
   BUILTIN_LIST_BASE(CPP, API, TFJ, TFC, TFS, TFH, ASM)     \
