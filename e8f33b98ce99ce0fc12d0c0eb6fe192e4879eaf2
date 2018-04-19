@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27ba4f87_30c99b3d",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T18:07:44Z",
+      "side": 1,
+      "message": "You don\u0027t need map here, do you?  Just a struct with two fields of \u0027char*\u0027 would do for this function. You can also avoid \u0027c_str()\u0027 that way (well, it does not matter, but nonetheless. BTW, you can just use data(), too). \n\nFor PopulateLocaleWithUnicodeTags, map is a bit more convenient than an array of struct, but not much.  If you use an array of struct, you can share it between two functions by making it static.",
+      "range": {
+        "startLine": 819,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 53
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c8aeadd_90214670",
+        "filename": "test/intl/locale/locale-canonicalization.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-19T18:07:44Z",
+      "side": 1,
+      "message": "You don\u0027t need this lengthy pre-amble any more.\n\nSee date-format-to-parts.js for a shorter \"modern\" version.\n\nDo the same in other test files you\u0027re adding.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
