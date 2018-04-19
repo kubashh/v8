@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ac32ae76_dda552f5",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07ec4964_df243eca",
+      "range": {
+        "startLine": 380,
+        "startChar": 19,
+        "endLine": 380,
+        "endChar": 25
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b20fd6a0_127fa5e4",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 5
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "2e05ea11_4ae88e43",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done - but I couldn\u0027t find any docs on what exactly IsName, IsJSReceiver checks do. Do you have any pointers?",
+      "parentUuid": "b20fd6a0_127fa5e4",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8606f9f0_402fe273",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 5
@@ -53,6 +95,24 @@
       "writtenOn": "2018-04-19T19:24:05Z",
       "side": 1,
       "message": "The spec says we should check for an InitializedLocale internal slot before doing a ToString. Is this check not required?",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c77c5c04_f6a9feda",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "I think that part of the spec refers to toString method. We are in the process of initializing the Locale here.\n\nI am just converting input parameter to String, so I can parse it later on, and initialize the locale object.\n\nAm I missing something?",
+      "parentUuid": "8606f9f0_402fe273",
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "815c155f_fc652f2a",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb00fbc2_8bcc8a35",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59d4777b_f1a23295",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 5
@@ -90,6 +168,24 @@
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8ef79df_5c238ef9",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59d4777b_f1a23295",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "6b4fa3b0_3ffbe423",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Could you spell out actual incantation - Object::ToObject returns JSReceiver not JSObject that I need?\n\nIf I just cast:\noptions_object \u003d Handle\u003cJSObject\u003e::cast(options);\n\nlater in the code, this fails (SIG 11):\n Handle\u003cObject\u003e object \u003d\n      JSReceiver::GetProperty(options_object, str).ToHandleChecked();\n\nfor new Intl.Locale(\u0027sr\u0027, 5) invocation.",
+      "parentUuid": "b7748195_2752702e",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91271d35_9d6b90e4",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 5
@@ -124,6 +238,24 @@
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a04fcb1_18f2c9b0",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91271d35_9d6b90e4",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -196,6 +328,30 @@
     },
     {
       "key": {
+        "uuid": "d52376c0_9ca467f4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "This is very very bad API - who needs parsed length of input?!",
+      "parentUuid": "2c133cb0_4f41b4d0",
+      "range": {
+        "startLine": 1031,
+        "startChar": 2,
+        "endLine": 1032,
+        "endChar": 44
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f6505fd_2acb523a",
         "filename": "src/runtime/runtime-intl.cc",
         "patchSetId": 5
@@ -231,6 +387,24 @@
     },
     {
       "key": {
+        "uuid": "80492521_e164d62d",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6eac15c_f17b3036",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c8aeadd_90214670",
         "filename": "test/intl/locale/locale-canonicalization.js",
         "patchSetId": 5
@@ -254,6 +428,30 @@
     },
     {
       "key": {
+        "uuid": "36111a67_9a7a658d",
+        "filename": "test/intl/locale/locale-canonicalization.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c8aeadd_90214670",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71aed999_cd9cc926",
         "filename": "test/intl/locale/locale-constructor.js",
         "patchSetId": 5
@@ -274,6 +472,30 @@
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5dcdac_0f2d69e5",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-19T21:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71aed999_cd9cc926",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 42
+      },
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
