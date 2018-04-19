@@ -1355,10 +1355,22 @@ void LiftoffAssembler::SetCCallStackParamAddr(int stack_param_idx,
 
 void LiftoffAssembler::LoadCCallOutArgument(LiftoffRegister dst, ValueType type,
                                             int param_byte_offset) {
-  // Check that we don't accidentally override kCCallLastArgAddrReg.
-  DCHECK_NE(LiftoffRegister(liftoff::kCCallLastArgAddrReg), dst);
-  Operand src(liftoff::kCCallLastArgAddrReg, -param_byte_offset);
-  liftoff::Load(this, dst, src, type);
+  // Note: this is the last action after a C call, so it's ok if this overwrites
+  // {kCCallLastArgAddrReg}.
+  if (type == kWasmI64) {
+    Operand src_low(liftoff::kCCallLastArgAddrReg, -param_byte_offset);
+    Operand src_high(liftoff::kCCallLastArgAddrReg, -param_byte_offset + 4);
+    if (dst.low() == LiftoffRegister(liftoff::kCCallLastArgAddrReg)) {
+      liftoff::Load(this, dst.high(), src_high, kWasmI32);
+      liftoff::Load(this, dst.low(), src_low, kWasmI32);
+    } else {
+      liftoff::Load(this, dst.low(), src_low, kWasmI32);
+      liftoff::Load(this, dst.high(), src_high, kWasmI32);
+    }
+  } else {
+    Operand src(liftoff::kCCallLastArgAddrReg, -param_byte_offset);
+    liftoff::Load(this, dst, src, type);
+  }
 }
 
 void LiftoffAssembler::CallC(ExternalReference ext_ref, uint32_t num_params) {
