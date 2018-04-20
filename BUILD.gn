@@ -585,6 +585,7 @@ config("toolchain") {
       # signed overflow does not occur. Generates false positives (see
       # http://crbug.com/v8/6341).
       "-Wno-strict-overflow",
+      "-Wno-return-type",
     ]
   }
 }
