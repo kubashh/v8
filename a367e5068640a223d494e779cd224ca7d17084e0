@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b14ac93_86b5ea3a",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1276134
+      },
+      "writtenOn": "2018-04-20T23:39:31Z",
+      "side": 1,
+      "message": "Will we need to distinguish these types in the validation algorithm? I think yes. If so, then we\u0027ll need to transition ValueType to be something different than MachineRepresentation. The end of an era.",
+      "revId": "a367e5068640a223d494e779cd224ca7d17084e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
