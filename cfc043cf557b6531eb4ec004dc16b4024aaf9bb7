@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "884b8154_4ec3e0f8",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-04-20T12:33:33Z",
+      "side": 1,
+      "message": "Can you add a comment above this explaining why? Something like \"gcc assumes that control can get past an exhaustive switch and then warns if there\u0027s no return there.\"\n\nDon\u0027t you need something like this for msvc too?",
+      "revId": "cfc043cf557b6531eb4ec004dc16b4024aaf9bb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
