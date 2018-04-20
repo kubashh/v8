@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9ba2d12c_d0c9b0d5",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-20T00:19:21Z",
+      "side": 1,
+      "message": "BTW, if you use ByteSink, you have to add \u0027\\0\u0027 to value_unicode before extraction to null-terminate |value_char|.\n\nWait,  value_char needs not be an char-array.\n\nJust do this, instead:\n\nstd::string value_str;\nvalue_unicode.toUTF8String(value_str);",
+      "parentUuid": "db2c3806_7f414b08",
+      "range": {
+        "startLine": 833,
+        "startChar": 3,
+        "endLine": 834,
+        "endChar": 79
+      },
+      "revId": "341909a0cc9b290e327ff97183994af9437361e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "540e0e3c_d03f7362",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 2

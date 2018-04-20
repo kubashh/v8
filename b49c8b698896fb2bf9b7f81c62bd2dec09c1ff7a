@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce633cc4_54a83fe7",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-20T00:19:21Z",
+      "side": 1,
+      "message": "nit: It\u0027s 2018 now :-)\nDitto in other two new files.",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "b49c8b698896fb2bf9b7f81c62bd2dec09c1ff7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
