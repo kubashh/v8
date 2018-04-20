@@ -316,6 +316,19 @@ static constexpr LiftoffRegList GetCacheRegList(RegClass rc) {
   return rc == kGpReg ? kGpCacheRegList : kFpCacheRegList;
 }
 
+inline std::ostream& operator<<(std::ostream& os, LiftoffRegList reglist) {
+  if (reglist.is_empty()) return os << "{}";
+  os << "{";
+  while (true) {
+    LiftoffRegister reg = reglist.GetFirstRegSet();
+    os << reg;
+    reglist.clear(reg);
+    if (reglist.is_empty()) break;
+    os << ", ";
+  }
+  return os << "}";
+}
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8
