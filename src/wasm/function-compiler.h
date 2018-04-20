@@ -5,6 +5,7 @@
 #ifndef V8_WASM_FUNCTION_COMPILER_H_
 #define V8_WASM_FUNCTION_COMPILER_H_
 
+#include "src/trap-handler/trap-handler.h"
 #include "src/wasm/function-body-decoder.h"
 
 namespace v8 {
@@ -51,6 +52,13 @@ struct ModuleEnv {
         runtime_exception_support(runtime_exception_support) {}
 };
 
+inline ModuleEnv CreateDefaultModuleEnv(WasmModule* module) {
+  // TODO(kschimpf): Add module-specific policy handling here (see v8:7143)?
+  UseTrapHandler use_trap_handler =
+      trap_handler::IsTrapHandlerEnabled() ? kUseTrapHandler : kNoTrapHandler;
+  return ModuleEnv(module, use_trap_handler, kRuntimeExceptionSupport);
+}
+
 class WasmCompilationUnit final {
  public:
   enum class CompilationMode : uint8_t { kLiftoff, kTurbofan };
@@ -80,6 +88,7 @@ class WasmCompilationUnit final {
 
   size_t memory_cost() const { return memory_cost_; }
   wasm::NativeModule* native_module() const { return native_module_; }
+  CompilationMode mode() const { return mode_; }
 
  private:
   friend class LiftoffCompilationUnit;
