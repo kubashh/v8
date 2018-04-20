@@ -374,7 +374,11 @@ MaybeHandle<JSObject> InstantiateObject(Isolate* isolate,
   if (serial_number) {
     if (ProbeInstantiationsCache(isolate, serial_number, CachingMode::kLimited)
             .ToHandle(&result)) {
-      return isolate->factory()->CopyJSObject(result);
+      result = isolate->factory()->CopyJSObject(result);
+      if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+        isolate->debug()->MarkAsNonTemporary(result);
+      }
+      return result;
     }
   }
 
@@ -420,7 +424,9 @@ MaybeHandle<JSObject> InstantiateObject(Isolate* isolate,
       result = isolate->factory()->CopyJSObject(result);
     }
   }
-
+  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+    isolate->debug()->MarkAsNonTemporary(result);
+  }
   return result;
 }
 
@@ -456,6 +462,9 @@ MaybeHandle<JSFunction> InstantiateFunction(Isolate* isolate,
     if (ProbeInstantiationsCache(isolate, serial_number,
                                  CachingMode::kUnlimited)
             .ToHandle(&result)) {
+      if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+        isolate->debug()->MarkAsNonTemporary(result);
+      }
       return Handle<JSFunction>::cast(result);
     }
   }
@@ -506,6 +515,9 @@ MaybeHandle<JSFunction> InstantiateFunction(Isolate* isolate,
                                    CachingMode::kUnlimited);
     }
     return MaybeHandle<JSFunction>();
+  }
+  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+    isolate->debug()->MarkAsNonTemporary(function);
   }
   return function;
 }
