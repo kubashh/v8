@@ -576,6 +576,10 @@ config("toolchain") {
       "/wd4714",  # Function marked forceinline not inlined.
       "/wd4718",  # Recursive call has no side-effect.
       "/wd4800",  # Forcing value to bool.
+
+      # MSVC assumes that control can get past an exhaustive switch and then
+      # warns if there's no return there.
+      "/wd4715",  # Not all control paths return a value.
     ]
   }
 
@@ -585,6 +589,10 @@ config("toolchain") {
       # signed overflow does not occur. Generates false positives (see
       # http://crbug.com/v8/6341).
       "-Wno-strict-overflow",
+
+      # GCC assumes that control can get past an exhaustive switch and then
+      # warns if there's no return there.
+      "-Wno-return-type",
     ]
   }
 }
