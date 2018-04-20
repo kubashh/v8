@@ -580,12 +580,21 @@ config("toolchain") {
   }
 
   if (!is_clang && !is_win) {
-    cflags += [
-      # Disable gcc warnings for optimizations based on the assumption that
-      # signed overflow does not occur. Generates false positives (see
-      # http://crbug.com/v8/6341).
-      "-Wno-strict-overflow",
-    ]
+    if (!is_win) {
+      cflags += [
+        # Disable gcc warnings for optimizations based on the assumption that
+        # signed overflow does not occur. Generates false positives (see
+        # http://crbug.com/v8/6341).
+        "-Wno-strict-overflow",
+        # GCC assumes that control can get past an exhaustive switch and then
+        # warns if there's no return there.
+        "-Wno-return-type",
+      ]
+    } else {
+        # MSVC assumes that control can get past an exhaustive switch and then
+        # warns if there's no return there.
+        "/wd4715",
+    }
   }
 }
 
