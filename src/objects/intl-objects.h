@@ -16,9 +16,10 @@ namespace U_ICU_NAMESPACE {
 class BreakIterator;
 class Collator;
 class DecimalFormat;
+class Locale;
 class PluralRules;
 class SimpleDateFormat;
-}
+}  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
 namespace internal {
@@ -73,6 +74,21 @@ class NumberFormat {
 
  private:
   NumberFormat();
+};
+
+class Locale {
+ public:
+  // Initializes locale object with properties derived from input locale string
+  // and options.
+  static bool InitializeLocale(Isolate* isolate, Handle<JSObject> locale_holder,
+                               Handle<String> locale, Handle<JSObject> options);
+
+  // Layout description.
+  static const int kLocale = JSObject::kHeaderSize;
+  static const int kSize = kLocale + kPointerSize;
+
+ private:
+  Locale();
 };
 
 class Collator {
