@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "af896fbe_b67c0e27",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-20T19:20:47Z",
+      "side": 1,
+      "message": "You\u0027ll have to store the locale in the kLocale slot, that\u0027s been reserved and then look that up here. In this example:\n\n  const tag \u003d new Intl.Locale(\u0027sr\u0027);\n  tag.toString \u003d function() { console.log(\"called\"); }\n  new Intl.Locale(tag);\n\nshould reuse the locale from the `tag` directly, and not call the `toString` method.",
+      "parentUuid": "c77c5c04_f6a9feda",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb00fbc2_8bcc8a35",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 5
@@ -218,6 +236,24 @@
       "side": 1,
       "message": "Could you spell out actual incantation - Object::ToObject returns JSReceiver not JSObject that I need?\n\nIf I just cast:\noptions_object \u003d Handle\u003cJSObject\u003e::cast(options);\n\nlater in the code, this fails (SIG 11):\n Handle\u003cObject\u003e object \u003d\n      JSReceiver::GetProperty(options_object, str).ToHandleChecked();\n\nfor new Intl.Locale(\u0027sr\u0027, 5) invocation.",
       "parentUuid": "b7748195_2752702e",
+      "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e864e4be_ee7501d5",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-04-20T19:20:47Z",
+      "side": 1,
+      "message": "Yeah, you can\u0027t cast `options` to JSObject. `options` can be a proxy too (which is a JSProxy in V8), so we represent `options` as a superset of JSObject and JSProxy as JSReceiver. You\u0027ll have to work with JSReceiver type for `options` in `Locale::InitializeLocale`.",
+      "parentUuid": "6b4fa3b0_3ffbe423",
       "revId": "e8f33b98ce99ce0fc12d0c0eb6fe192e4879eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
