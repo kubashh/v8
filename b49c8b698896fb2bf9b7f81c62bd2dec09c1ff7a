@@ -22,6 +22,30 @@
       "revId": "b49c8b698896fb2bf9b7f81c62bd2dec09c1ff7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a99c4f5_c3580a8d",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-04-20T16:49:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce633cc4_54a83fe7",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "b49c8b698896fb2bf9b7f81c62bd2dec09c1ff7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
