@@ -4996,6 +4996,9 @@ Local<v8::Object> v8::Object::Clone() {
   auto isolate = self->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
   auto result = isolate->factory()->CopyJSObject(self);
+  if (isolate->debug_execution_mode() == internal::DebugInfo::kSideEffects) {
+    isolate->debug()->MarkAsNonTemporary(result);
+  }
   CHECK(!result.is_null());
   return Utils::ToLocal(result);
 }

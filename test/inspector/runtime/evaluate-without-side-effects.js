@@ -49,5 +49,23 @@ Protocol.Debugger.onPaused(message => {
     throwOnSideEffect: true
   }));
 
+  InspectorTest.log("Test that we can mark some function templates as side effect free");
+  InspectorTest.logMessage(await Protocol.Runtime.evaluate({
+    expression: "inspector.createObjectUsingTemplate()",
+    throwOnSideEffect: true
+  }));
+
+  InspectorTest.log("Test that we can not change API object");
+  InspectorTest.logMessage(await Protocol.Runtime.evaluate({
+    expression: "inspector.createObjectUsingTemplate().a = 2",
+    throwOnSideEffect: true
+  }));
+
+  InspectorTest.log("Test that we can not change API function");
+  InspectorTest.logMessage(await Protocol.Runtime.evaluate({
+    expression: "inspector.createObjectUsingTemplate().foo.a = 2",
+    throwOnSideEffect: true
+  }));
+
   InspectorTest.completeTest();
 })();

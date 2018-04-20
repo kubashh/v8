@@ -71,3 +71,69 @@ Test that debug break does not trigger with throwOnSideEffect
         }
     }
 }
+Test that we can mark some function templates as side effect free
+{
+    id : <messageId>
+    result : {
+        result : {
+            className : Object
+            description : Object
+            objectId : <objectId>
+            type : object
+        }
+    }
+}
+Test that we can not change API object
+{
+    id : <messageId>
+    result : {
+        exceptionDetails : {
+            columnNumber : -1
+            exception : {
+                className : EvalError
+                description : EvalError: Possible side-effect in debug-evaluate
+                objectId : <objectId>
+                subtype : error
+                type : object
+            }
+            exceptionId : <exceptionId>
+            lineNumber : -1
+            scriptId : <scriptId>
+            text : Uncaught
+        }
+        result : {
+            className : EvalError
+            description : EvalError: Possible side-effect in debug-evaluate
+            objectId : <objectId>
+            subtype : error
+            type : object
+        }
+    }
+}
+Test that we can not change API function
+{
+    id : <messageId>
+    result : {
+        exceptionDetails : {
+            columnNumber : -1
+            exception : {
+                className : EvalError
+                description : EvalError: Possible side-effect in debug-evaluate
+                objectId : <objectId>
+                subtype : error
+                type : object
+            }
+            exceptionId : <exceptionId>
+            lineNumber : -1
+            scriptId : <scriptId>
+            text : Uncaught
+        }
+        result : {
+            className : EvalError
+            description : EvalError: Possible side-effect in debug-evaluate
+            objectId : <objectId>
+            subtype : error
+            type : object
+        }
+    }
+}
