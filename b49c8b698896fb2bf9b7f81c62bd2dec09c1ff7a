@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7f9b7ac7_be470764",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-04-20T16:52:47Z",
+      "side": 1,
+      "message": "This will return either a well-formed Unicode extension type (two letters long; recognized or not) or nullptr (if value cannot be mapped to a unicode extension type). So, I think you can use strncmp with length \u00272\u0027 instead of map.find().",
+      "range": {
+        "startLine": 894,
+        "startChar": 32,
+        "endLine": 894,
+        "endChar": 75
+      },
+      "revId": "b49c8b698896fb2bf9b7f81c62bd2dec09c1ff7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce633cc4_54a83fe7",
         "filename": "test/intl/locale/locale-constructor.js",
         "patchSetId": 6
