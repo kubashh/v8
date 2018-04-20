@@ -16,6 +16,24 @@
       "revId": "cfc043cf557b6531eb4ec004dc16b4024aaf9bb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "031209a2_1599bda3",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-04-20T12:44:06Z",
+      "side": 1,
+      "message": "Indeed, Marja\u0027s CL also failed with msvc:\nhttps://logs.chromium.org/v/?s\u003dv8%2Fbuildbucket%2Fcr-buildbucket.appspot.com%2F8948993232620348544%2F%2B%2Fsteps%2Fcompile%2F0%2Fstdout\n\nThe warning type seems to be C4715 according to the logs, so IIUC we need to add:\nif (!is_clang \u0026\u0026 is_win) {\n  cflags +\u003d [\n    \"/wd4715\",\n  ]\n}",
+      "parentUuid": "884b8154_4ec3e0f8",
+      "revId": "cfc043cf557b6531eb4ec004dc16b4024aaf9bb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
