@@ -1825,10 +1825,25 @@ int BigInt::DigitsByteLengthForBitfield(uint32_t bitfield) {
 // The serialization format MUST NOT CHANGE without updating the format
 // version in value-serializer.cc!
 void BigInt::SerializeDigits(uint8_t* storage) {
-  int bytelength = length() * kDigitSize;
   void* digits = reinterpret_cast<void*>(reinterpret_cast<Address>(this) +
                                          kDigitsOffset - kHeapObjectTag);
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+  int bytelength = length() * kDigitSize;
   memcpy(storage, digits, bytelength);
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+  uint32_t* digit_storage = reinterpret_cast<uint32_t*>(storage);
+  uint32_t* digit = reinterpret_cast<uint32_t*>(digits);
+#elif defined(V8_TARGET_ARCH_64_BIT)
+  uint64_t* digit_storage = reinterpret_cast<uint64_t*>(storage);
+  uint64_t* digit = reinterpret_cast<uint64_t*>(digits);
+#endif  // V8_TARGET_ARCH_64_BIT
+  for (int i = 0; i < length(); i++) {
+    *digit_storage = ByteReverse(*digit);
+    digit_storage++;
+    digit++;
+  }
+#endif  // V8_TARGET_BIG_ENDIAN
 }
 
 // The serialization format MUST NOT CHANGE without updating the format
@@ -1845,10 +1860,31 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
   result->initialize_bitfield(sign, length);
   void* digits = reinterpret_cast<void*>(reinterpret_cast<Address>(*result) +
                                          kDigitsOffset - kHeapObjectTag);
+#if defined(V8_TARGET_LITTLE_ENDIAN)
   memcpy(digits, digits_storage.start(), bytelength);
   void* padding_start =
       reinterpret_cast<void*>(reinterpret_cast<Address>(digits) + bytelength);
   memset(padding_start, 0, length * kDigitSize - bytelength);
+#elif defined(V8_TARGET_BIG_ENDIAN)
+#if defined(V8_TARGET_ARCH_32_BIT)
+  uint32_t* digit = reinterpret_cast<uint32_t*>(digits);
+  uint32_t* digit_storage = const_cast<uint32_t*>(
+      reinterpret_cast<const uint32_t*>(digits_storage.start()));
+#elif defined(V8_TARGET_ARCH_64_BIT)
+  uint64_t* digit = reinterpret_cast<uint64_t*>(digits);
+  uint64_t* digit_storage = const_cast<uint64_t*>(
+      reinterpret_cast<const uint64_t*>(digits_storage.start()));
+#endif  // V8_TARGET_ARCH_64_BIT
+  for (int i = 0; i < length; i++) {
+    *digit = ByteReverse(*digit_storage);
+    digit_storage++;
+    digit++;
+  }
+  if (bytelength % kDigitSize) {
+    digit--;
+    memset(digit, 0, kDigitSize - bytelength % kDigitSize);
+  }
+#endif  // V8_TARGET_BIG_ENDIAN
   return MutableBigInt::MakeImmutable(result);
 }
 
