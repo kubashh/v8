@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c94c849e_f398a978",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "Please drop this #if/#else and use \"digit_t* digit_storage\" and \"digit_t* digit\" below.",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1834,
+        "endChar": 34
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59808108_d56101e1",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "Same here. Whenever possible, please avoid baking in assumptions about the digit type; use digit_t and kDigitSize instead.",
+      "range": {
+        "startLine": 1869,
+        "startChar": 1,
+        "endLine": 1870,
+        "endChar": 17
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "523426ac_5fb5d5c6",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "For a 64-bit platform deserializing a 4-byte BigInt (like the first test case in the DecodeBigInt test in value-serializer-unittest.cc) this reads out of bounds, unless I\u0027m missing something.",
+      "range": {
+        "startLine": 1879,
+        "startChar": 25,
+        "endLine": 1879,
+        "endChar": 39
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0730ee_119605ef",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "Oh I see, this overwrites any random garbage that was read OOB above...\n\nPlease don\u0027t rely on OOB reads. Please change the logic to read at most {byte_length} bytes -- in large chunks where possible, byte-by-byte otherwise.",
+      "range": {
+        "startLine": 1884,
+        "startChar": 4,
+        "endLine": 1885,
+        "endChar": 10
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f764157_ed82ba07",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "nit: the style guide prefers applying the \"sizeof\" operator to variables rather than types, i.e.: sizeof(value).",
+      "range": {
+        "startLine": 1672,
+        "startChar": 21,
+        "endLine": 1672,
+        "endChar": 31
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ea945f6_a25c8448",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "simplification suggestion: drop \"reversed_value\" and \"break\" keywords, return directly:\n\n  return __builtin_swap16(value);\n#else\n  return value \u003c\u003c 8 | (value \u003e\u003e 8 \u0026 0x00FF);",
+      "range": {
+        "startLine": 1676,
+        "startChar": 6,
+        "endLine": 1676,
+        "endChar": 22
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23eae804_dfb195df",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "simplification suggestion: since you statically know that bits_of_v \u003d\u003d 32 here (see \"bswap32\" call above), you can drop bits_of_v and just inline the result of these subtractions, i.e.:\n\n  return (value \u003c\u003c 24) |\n         (value \u003c\u003c 8 \u0026 0x00FF0000) |\n         (value \u003e\u003e 8 \u0026 0x0000FF00) |\n         (value \u003e\u003e 24 \u0026 0x000000FF);\n\nSame below in the 8-byte case.\n\nThat said, if you prefer what you have, you can keep that too.",
+      "range": {
+        "startLine": 1687,
+        "startChar": 33,
+        "endLine": 1687,
+        "endChar": 46
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "206fc341_34534826",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-04-23T19:22:29Z",
+      "side": 1,
+      "message": "nit: duplicate line.",
+      "range": {
+        "startLine": 1701,
+        "startChar": 6,
+        "endLine": 1701,
+        "endChar": 48
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
