@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f0eb986_8f457bfa",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-23T12:21:19Z",
+      "side": 1,
+      "message": "Can we DCHECK here that this does not overwrite an existing entry?",
+      "range": {
+        "startLine": 2351,
+        "startChar": 2,
+        "endLine": 2351,
+        "endChar": 8
+      },
+      "revId": "1ce52a8da3951a6c393ca3ef0691a065d95203d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6abcbc3_11a81d53",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2614,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-23T12:21:19Z",
+      "side": 1,
+      "message": "Let\u0027s remove this and its call site.",
+      "range": {
+        "startLine": 2614,
+        "startChar": 14,
+        "endLine": 2614,
+        "endChar": 28
+      },
+      "revId": "1ce52a8da3951a6c393ca3ef0691a065d95203d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
