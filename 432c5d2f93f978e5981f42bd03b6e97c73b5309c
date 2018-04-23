@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32cd7bbd_10217795",
+        "filename": "tools/codemap.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-04-23T09:44:19Z",
+      "side": 1,
+      "message": "Not super-happy with this solution, but I\u0027m not sure we can easily make it more robust. Do you have any ideas?",
+      "revId": "432c5d2f93f978e5981f42bd03b6e97c73b5309c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
