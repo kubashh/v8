@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a462cf4_ed2e8104",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-23T12:06:12Z",
+      "side": 1,
+      "message": "Did you mean to write \"non-temporary\"?",
+      "range": {
+        "startLine": 7,
+        "startChar": 50,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "e3b24c2c1d8bc1e6ff0dcd86fb4954b8933f59f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ad386d2_2f7f2563",
+        "filename": "src/api-natives.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-04-23T12:06:12Z",
+      "side": 1,
+      "message": "Is this prototype supposed to be non-temporary too?",
+      "range": {
+        "startLine": 471,
+        "startChar": 17,
+        "endLine": 471,
+        "endChar": 26
+      },
+      "revId": "e3b24c2c1d8bc1e6ff0dcd86fb4954b8933f59f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
