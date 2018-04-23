@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c1400f3_01a46770",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T14:52:41Z",
+      "side": 1,
+      "message": "Now that I look at this: As the next step, we could actually make ValueType a real class, similar to LoadType and StoreType.\nFor switches, you need to switch over their {value()} then...\nWDYT?",
+      "revId": "29fcbd4588475d665fc1e5d7da3e16e02555b960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cd5250b_c35c3762",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T14:52:41Z",
+      "side": 1,
+      "message": "Do you want to introduce a STATIC_ONLY definition (in base/macros.h)? It would probably be a combination of DISALLOW_IMPLICIT_CONSTRUCTORS and DISALLOW_NEW_AND_DELETE.",
+      "revId": "29fcbd4588475d665fc1e5d7da3e16e02555b960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

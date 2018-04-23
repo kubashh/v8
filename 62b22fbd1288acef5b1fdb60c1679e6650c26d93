@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c385e75_300b459e",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T14:52:41Z",
+      "side": 0,
+      "message": "I like this empty line before closing a namespace (at least if the content of the namespace is more than a few lines). Can you add it back?",
+      "revId": "62b22fbd1288acef5b1fdb60c1679e6650c26d93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
