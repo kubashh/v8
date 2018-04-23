@@ -76,7 +76,6 @@ class TurbofanWasmCompilationUnit {
   explicit TurbofanWasmCompilationUnit(wasm::WasmCompilationUnit* wasm_unit)
       : wasm_unit_(wasm_unit),
         wasm_compilation_data_(wasm_unit->env_->runtime_exception_support) {}
-
   SourcePositionTable* BuildGraphForWasmFunction(double* decode_ms);
 
   void ExecuteCompilation();
