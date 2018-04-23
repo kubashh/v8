@@ -1,0 +1,419 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17f4d135_531d1e81",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Please try to avoid this include. Can\u0027t we move back the definition of CreateDefaultModuleEnv to module-compiler.cc? It seems to only be used there.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc381ff7_00d8522d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Without looking at the uses, I could not really tell what \"kFinalize\" should mean. What do you think about \"kDestroyed\"? Or do you have a better idea?",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ed1218_cb214731",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "This \"explicit\" is now not needed any more.",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 10
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94af1f1d_217862ca",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Please add a newline before this method. Also, this method is simple enough to be called \"compilation_units\".",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "badc19d2_5030e87b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Same here: \"finish_units\". You might want to write the body as \"return x ? a : b;\".",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d227fb0e_276153ea",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Can you please add a TODO(wasm) to eventually get rid of this (additional) copy?",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e257618_8dc87b6e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "I don\u0027t see why this has to be a unique_ptr.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f114604_baae3bb4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Please swap these fields to match the order above.",
+      "range": {
+        "startLine": 171,
+        "startChar": 1,
+        "endLine": 173,
+        "endChar": 0
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f44e118f_b8d7db10",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Nit: Most methods put the \"destination\" first, and \"source\" later. Can you change the order of arguments here to match that?",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f27351b5_53f5edef",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Can you please add a \"DisallowHeapAllocation no_gc;\" here? If we accidentally heap allocate here, the GC might mess with the chain of compiled modules while we are iterating it. Maybe also add a comment to say that.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2af4f05_720f0623",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "It looks like this scope could be removed.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8179444_5a539f54",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Can you please add a comment to the declaration of this method in CompilationState that it will only be called on the foreground thread?",
+      "range": {
+        "startLine": 1183,
+        "startChar": 23,
+        "endLine": 1183,
+        "endChar": 34
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f18f1062_5c920d28",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "missing closing parenthesis.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713c0b76_6b9ace2e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "This will have no effect if you pass it in via copy. I think we should pass it via reference (\"\u0026deferred_handles\") and check somewhere later that it was indeed cleared.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f9a313d_988d343c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "We don\u0027t pass ownership, right? We just pass a reference, but our copy stays valid afterwards.\nI think these two lines can just be removed.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47f69b8e_6b6fa2b1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Why is this change needed? Note that this takes a lock, so it\u0027s not for free. And it\u0027s very rare that compilation actually fails.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9efc24b7_1e766753",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Please add a comment explaining that this is needed because the code will immediately be picked up by the running Liftoff code, so we need to make sure that it can correctly be executed.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d433ec9_6ba1e3a3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2886,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Same as above: I think there is no transfer of ownership here.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e211e23_6d6c9802",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Oh, here it is :)\nPlease keep this, but additionally add the comment as requested above. I think it\u0027s important to document this.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "416d1ffc_075c13a0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Is it still wanted to check for async compilation here?",
+      "range": {
+        "startLine": 3300,
+        "startChar": 41,
+        "endLine": 3300,
+        "endChar": 68
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2f38521_ec04779d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Doesn\u0027t this mean that we don\u0027t compile any Turbofan units until all Liftoff units are done? I thought we want to start compiling them right away?\nIf you don\u0027t want to change this now, please drop a TODO.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9feadf97_651ac36d",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "\"Helper method to\" can be removed.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8b938f4_5f1206f5",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-23T16:55:50Z",
+      "side": 1,
+      "message": "Can we make the parameter a \"const NativeModule*\"?",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
