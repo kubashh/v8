@@ -81,6 +81,7 @@ struct AstNode {
   };
 
   AstNode(Kind k, SourcePosition p) : kind(k), pos(p) {}
+  virtual ~AstNode() {}
 
   const Kind kind;
   SourcePosition pos;
@@ -130,9 +131,8 @@ struct Statement : AstNode {
 class Module;
 
 struct ModuleDeclaration : Declaration {
-  ModuleDeclaration(AstNode::Kind kind, SourcePosition p,
-                    std::vector<Declaration*> d)
-      : Declaration(kind, p), module(nullptr), declarations(std::move(d)) {}
+  ModuleDeclaration(AstNode::Kind kind, SourcePosition p)
+      : Declaration(kind, p), module(nullptr), declarations() {}
   virtual bool IsDefault() const = 0;
   //  virtual std::string GetName() const = 0;
   void SetModule(Module* m) { module = m; }
@@ -143,23 +143,22 @@ struct ModuleDeclaration : Declaration {
 
 struct DefaultModuleDeclaration : ModuleDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(DefaultModuleDeclaration)
-  DefaultModuleDeclaration(SourcePosition p, std::vector<Declaration*> d)
-      : ModuleDeclaration(kKind, p, d) {}
+  explicit DefaultModuleDeclaration(SourcePosition p)
+      : ModuleDeclaration(kKind, p) {}
   bool IsDefault() const override { return true; }
 };
 
 struct ExplicitModuleDeclaration : ModuleDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(ExplicitModuleDeclaration)
-  ExplicitModuleDeclaration(SourcePosition p, std::string n,
-                            std::vector<Declaration*> d)
-      : ModuleDeclaration(kKind, p, d), name(std::move(n)) {}
+  ExplicitModuleDeclaration(SourcePosition p, std::string n)
+      : ModuleDeclaration(kKind, p), name(std::move(n)) {}
   bool IsDefault() const override { return false; }
   std::string name;
 };
 
 class Ast {
  public:
-  Ast() : default_module_{SourcePosition(), {}} {}
+  Ast() : default_module_{SourcePosition()} {}
 
   std::vector<Declaration*>& declarations() {
     return default_module_.declarations;
@@ -167,6 +166,11 @@ class Ast {
   const std::vector<Declaration*>& declarations() const {
     return default_module_.declarations;
   }
+
+  void AddNode(std::unique_ptr<AstNode> node) {
+    nodes_.emplace_back(std::move(node));
+  }
+
   SourceId AddSource(std::string path) {
     sources_.push_back(std::move(path));
     return static_cast<SourceId>(sources_.size() - 1);
@@ -183,17 +187,18 @@ class Ast {
  private:
   DefaultModuleDeclaration default_module_;
   std::vector<std::string> sources_;
+  std::vector<std::unique_ptr<AstNode>> nodes_;
 };
 
 struct CallExpression : Expression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(CallExpression)
   CallExpression(SourcePosition p, std::string c, bool o,
-                 std::vector<Expression*> a, std::vector<std::string> l)
+                 std::vector<Expression*> a = {})
       : Expression(kKind, p),
         callee(std::move(c)),
         is_operator(o),
         arguments(std::move(a)),
-        labels(l) {}
+        labels() {}
   std::string callee;
   bool is_operator;
   std::vector<Expression*> arguments;
@@ -366,9 +371,8 @@ struct ContinueStatement : Statement {
 
 struct GotoStatement : Statement {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(GotoStatement)
-  GotoStatement(SourcePosition p, std::string l,
-                const std::vector<Expression*>& a)
-      : Statement(kKind, p), label(std::move(l)), arguments(std::move(a)) {}
+  GotoStatement(SourcePosition p, std::string l)
+      : Statement(kKind, p), label(std::move(l)), arguments() {}
   std::string label;
   std::vector<Expression*> arguments;
 };
@@ -436,8 +440,8 @@ struct LabelBlock : AstNode {
 
 struct TryCatchStatement : Statement {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(TryCatchStatement)
-  TryCatchStatement(SourcePosition p, Statement* t, std::vector<CatchBlock*> c)
-      : Statement(kKind, p), try_block(std::move(t)), catch_blocks(c) {}
+  TryCatchStatement(SourcePosition p, Statement* t)
+      : Statement(kKind, p), try_block(std::move(t)), catch_blocks() {}
   Statement* try_block;
   std::vector<CatchBlock*> catch_blocks;
   std::vector<LabelBlock*> label_blocks;
@@ -445,8 +449,8 @@ struct TryCatchStatement : Statement {
 
 struct BlockStatement : Statement {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(BlockStatement)
-  BlockStatement(SourcePosition p, bool d, std::vector<Statement*> s)
-      : Statement(kKind, p), deferred(d), statements(std::move(s)) {}
+  BlockStatement(SourcePosition p, bool d)
+      : Statement(kKind, p), deferred(d), statements() {}
   bool deferred;
   std::vector<Statement*> statements;
 };
