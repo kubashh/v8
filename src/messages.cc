@@ -12,6 +12,7 @@
 #include "src/keys.h"
 #include "src/objects/frame-array-inl.h"
 #include "src/string-builder.h"
+#include "src/vm-state-inl.h"
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-objects.h"
 
@@ -160,6 +161,8 @@ void MessageHandler::ReportMessageNoExceptions(
       Handle<Object> callback_data(listener->get(1), isolate);
       {
         // Do not allow exceptions to propagate.
+        ExternalCallbackScope external_callback(
+            isolate, reinterpret_cast<Address>(callback));
         v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
         callback(api_message_obj, callback_data->IsUndefined(isolate)
                                       ? api_exception_obj

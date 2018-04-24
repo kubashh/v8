@@ -34,6 +34,8 @@
 
 namespace v8 {
 
+class CallDepthScopeBase;
+
 namespace base {
 class RandomNumberGenerator;
 }
@@ -370,6 +372,9 @@ class ThreadLocalTop BASE_EMBEDDED {
   Address js_entry_sp_;  // the stack pointer of the bottom JS entry frame
   // the external callback we're currently in
   ExternalCallbackScope* external_callback_scope_;
+#ifdef DEBUG
+  v8::CallDepthScopeBase* call_depth_scope_;
+#endif  // DEBUG
   StateTag current_vm_state_;
 
   // Call back function to report unsafe JS accesses.
@@ -988,6 +993,9 @@ class Isolate : private HiddenFactory {
   static const int kJSRegexpStaticOffsetsVectorSize = 128;
 
   THREAD_LOCAL_TOP_ACCESSOR(ExternalCallbackScope*, external_callback_scope)
+#ifdef DEBUG
+  THREAD_LOCAL_TOP_ACCESSOR(v8::CallDepthScopeBase*, call_depth_scope)
+#endif  // DEBUG
 
   THREAD_LOCAL_TOP_ACCESSOR(StateTag, current_vm_state)
 
