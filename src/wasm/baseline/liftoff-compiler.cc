@@ -754,72 +754,59 @@ class LiftoffCompiler {
 
   void BinOp(Decoder* decoder, WasmOpcode opcode, FunctionSig*,
              const Value& lhs, const Value& rhs, Value* result) {
-#define CASE_I32_BINOP(opcode, fn)                                           \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI32, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_##fn(dst.gp(), lhs.gp(), rhs.gp());                        \
-        });
-#define CASE_I64_BINOP(opcode, fn)                                           \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI64, kWasmI64>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_##fn(dst, lhs, rhs);                                       \
-        });
-#define CASE_FLOAT_BINOP(opcode, type, fn)                                   \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasm##type, kWasm##type>(                              \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_##fn(dst.fp(), lhs.fp(), rhs.fp());                        \
-        });
-#define CASE_I32_CMPOP(opcode, cond)                                         \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI32, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_i32_set_cond(cond, dst.gp(), lhs.gp(), rhs.gp());          \
-        });
-#define CASE_I64_CMPOP(opcode, cond)                                         \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI64, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_i64_set_cond(cond, dst.gp(), lhs, rhs);                    \
-        });
-#define CASE_F32_CMPOP(opcode, cond)                                         \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmF32, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_f32_set_cond(cond, dst.gp(), lhs.fp(), rhs.fp());          \
-        });
-#define CASE_F64_CMPOP(opcode, cond)                                         \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmF64, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_f64_set_cond(cond, dst.gp(), lhs.fp(), rhs.fp());          \
-        });
-#define CASE_I32_SHIFTOP(opcode, fn)                                         \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI32, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          __ emit_##fn(dst.gp(), lhs.gp(), rhs.gp(), {});                    \
-        });
-#define CASE_I64_SHIFTOP(opcode, fn)                                           \
-  case WasmOpcode::kExpr##opcode:                                              \
-    return EmitBinOp<kWasmI64, kWasmI64>([=](LiftoffRegister dst,              \
-                                             LiftoffRegister src,              \
-                                             LiftoffRegister amount) {         \
-      __ emit_##fn(dst, src, amount.is_pair() ? amount.low_gp() : amount.gp(), \
-                   {});                                                        \
+#define BINOP_EMIT_FN(...) \
+  [__VA_ARGS__](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs)
+#define CASE_I32_BINOP(opcode, fn)        \
+  case WasmOpcode::kExpr##opcode:         \
+    return EmitBinOp<kWasmI32, kWasmI32>( \
+        BINOP_EMIT_FN(this) { __ emit_##fn(dst.gp(), lhs.gp(), rhs.gp()); });
+#define CASE_I64_BINOP(opcode, fn)        \
+  case WasmOpcode::kExpr##opcode:         \
+    return EmitBinOp<kWasmI64, kWasmI64>( \
+        BINOP_EMIT_FN(this) { __ emit_##fn(dst, lhs, rhs); });
+#define CASE_FLOAT_BINOP(opcode, type, fn)      \
+  case WasmOpcode::kExpr##opcode:               \
+    return EmitBinOp<kWasm##type, kWasm##type>( \
+        BINOP_EMIT_FN(this) { __ emit_##fn(dst.fp(), lhs.fp(), rhs.fp()); });
+#define CASE_I32_CMPOP(opcode, cond)                            \
+  case WasmOpcode::kExpr##opcode:                               \
+    return EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this) {  \
+      __ emit_i32_set_cond(cond, dst.gp(), lhs.gp(), rhs.gp()); \
     });
-#define CASE_CCALL_BINOP(opcode, type, ext_ref_fn)                           \
-  case WasmOpcode::kExpr##opcode:                                            \
-    return EmitBinOp<kWasmI32, kWasmI32>(                                    \
-        [=](LiftoffRegister dst, LiftoffRegister lhs, LiftoffRegister rhs) { \
-          LiftoffRegister args[] = {lhs, rhs};                               \
-          auto ext_ref = ExternalReference::ext_ref_fn(__ isolate());        \
-          ValueType sig_i_ii_reps[] = {kWasmI32, kWasmI32, kWasmI32};        \
-          FunctionSig sig_i_ii(1, 2, sig_i_ii_reps);                         \
-          GenerateCCall(&dst, &sig_i_ii, kWasmStmt, args, ext_ref);          \
-        });
+#define CASE_I64_CMPOP(opcode, cond)                           \
+  case WasmOpcode::kExpr##opcode:                              \
+    return EmitBinOp<kWasmI64, kWasmI32>(BINOP_EMIT_FN(this) { \
+      __ emit_i64_set_cond(cond, dst.gp(), lhs, rhs);          \
+    });
+#define CASE_F32_CMPOP(opcode, cond)                            \
+  case WasmOpcode::kExpr##opcode:                               \
+    return EmitBinOp<kWasmF32, kWasmI32>(BINOP_EMIT_FN(this) {  \
+      __ emit_f32_set_cond(cond, dst.gp(), lhs.fp(), rhs.fp()); \
+    });
+#define CASE_F64_CMPOP(opcode, cond)                            \
+  case WasmOpcode::kExpr##opcode:                               \
+    return EmitBinOp<kWasmF64, kWasmI32>(BINOP_EMIT_FN(this) {  \
+      __ emit_f64_set_cond(cond, dst.gp(), lhs.fp(), rhs.fp()); \
+    });
+#define CASE_I32_SHIFTOP(opcode, fn)                           \
+  case WasmOpcode::kExpr##opcode:                              \
+    return EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this) { \
+      __ emit_##fn(dst.gp(), lhs.gp(), rhs.gp(), {});          \
+    });
+#define CASE_I64_SHIFTOP(opcode, fn)                                       \
+  case WasmOpcode::kExpr##opcode:                                          \
+    return EmitBinOp<kWasmI64, kWasmI64>(BINOP_EMIT_FN(this) {             \
+      __ emit_##fn(dst, lhs, rhs.is_pair() ? rhs.low_gp() : rhs.gp(), {}); \
+    });
+#define CASE_CCALL_BINOP(opcode, type, ext_ref_fn)                \
+  case WasmOpcode::kExpr##opcode:                                 \
+    return EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this) {    \
+      LiftoffRegister args[] = {lhs, rhs};                        \
+      auto ext_ref = ExternalReference::ext_ref_fn(__ isolate()); \
+      ValueType sig_i_ii_reps[] = {kWasmI32, kWasmI32, kWasmI32}; \
+      FunctionSig sig_i_ii(1, 2, sig_i_ii_reps);                  \
+      GenerateCCall(&dst, &sig_i_ii, kWasmStmt, args, ext_ref);   \
+    });
     switch (opcode) {
       CASE_I32_BINOP(I32Add, i32_add)
       CASE_I32_BINOP(I32Sub, i32_sub)
@@ -882,9 +869,7 @@ class LiftoffCompiler {
       CASE_FLOAT_BINOP(F64Mul, F64, f64_mul)
       CASE_FLOAT_BINOP(F64Div, F64, f64_div)
       case WasmOpcode::kExprI32DivS:
-        EmitBinOp<kWasmI32, kWasmI32>([this, decoder](LiftoffRegister dst,
-                                                      LiftoffRegister lhs,
-                                                      LiftoffRegister rhs) {
+        EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this, decoder) {
           WasmCodePosition position = decoder->position();
           AddOutOfLineTrap(position, Builtins::kThrowWasmTrapDivByZero);
           // Adding the second trap might invalidate the pointer returned for
@@ -898,27 +883,21 @@ class LiftoffCompiler {
         });
         break;
       case WasmOpcode::kExprI32DivU:
-        EmitBinOp<kWasmI32, kWasmI32>([this, decoder](LiftoffRegister dst,
-                                                      LiftoffRegister lhs,
-                                                      LiftoffRegister rhs) {
+        EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this, decoder) {
           Label* div_by_zero = AddOutOfLineTrap(
               decoder->position(), Builtins::kThrowWasmTrapDivByZero);
           __ emit_i32_divu(dst.gp(), lhs.gp(), rhs.gp(), div_by_zero);
         });
         break;
       case WasmOpcode::kExprI32RemS:
-        EmitBinOp<kWasmI32, kWasmI32>([this, decoder](LiftoffRegister dst,
-                                                      LiftoffRegister lhs,
-                                                      LiftoffRegister rhs) {
+        EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this, decoder) {
           Label* rem_by_zero = AddOutOfLineTrap(
               decoder->position(), Builtins::kThrowWasmTrapRemByZero);
           __ emit_i32_rems(dst.gp(), lhs.gp(), rhs.gp(), rem_by_zero);
         });
         break;
       case WasmOpcode::kExprI32RemU:
-        EmitBinOp<kWasmI32, kWasmI32>([this, decoder](LiftoffRegister dst,
-                                                      LiftoffRegister lhs,
-                                                      LiftoffRegister rhs) {
+        EmitBinOp<kWasmI32, kWasmI32>(BINOP_EMIT_FN(this, decoder) {
           Label* rem_by_zero = AddOutOfLineTrap(
               decoder->position(), Builtins::kThrowWasmTrapRemByZero);
           __ emit_i32_remu(dst.gp(), lhs.gp(), rhs.gp(), rem_by_zero);
@@ -927,6 +906,7 @@ class LiftoffCompiler {
       default:
         return unsupported(decoder, WasmOpcodes::OpcodeName(opcode));
     }
+#undef BINOP_EMIT_FN
 #undef CASE_I32_BINOP
 #undef CASE_I64_BINOP
 #undef CASE_FLOAT_BINOP
