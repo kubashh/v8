@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9eef4060_b007792b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-24T15:13:29Z",
+      "side": 0,
+      "message": "Dropping this looks worrisome. Why is it OK not to initialize this field?",
+      "range": {
+        "startLine": 29,
+        "startChar": 6,
+        "endLine": 29,
+        "endChar": 42
+      },
+      "revId": "3d222e13be3ffdb084251bff381e06bfb97ae5a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
