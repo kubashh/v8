@@ -152,7 +152,8 @@ class V8_EXPORT_PRIVATE Factory {
       int size, PretenureFlag pretenure = NOT_TENURED);
 
   // Allocates a FeedbackMedata object and zeroes the data section.
-  Handle<FeedbackMetadata> NewFeedbackMetadata(int slot_count);
+  Handle<FeedbackMetadata> NewFeedbackMetadata(int slot_count,
+                                               PretenureFlag tenure = TENURED);
 
   Handle<FrameArray> NewFrameArray(int number_of_frames,
                                    PretenureFlag pretenure = NOT_TENURED);
@@ -344,9 +345,9 @@ class V8_EXPORT_PRIVATE Factory {
   Handle<ExternalOneByteString> NewNativeSourceString(
       const ExternalOneByteString::Resource* resource);
 
-  // Create a symbol in old space.
-  Handle<Symbol> NewSymbol();
-  Handle<Symbol> NewPrivateSymbol();
+  // Create a symbol in old or read-only space.
+  Handle<Symbol> NewSymbol(PretenureFlag pretenure = TENURED);
+  Handle<Symbol> NewPrivateSymbol(PretenureFlag pretenure = TENURED);
   Handle<Symbol> NewPrivateFieldSymbol();
 
   // Create a global (but otherwise uninitialized) context.
@@ -400,7 +401,8 @@ class V8_EXPORT_PRIVATE Factory {
 
   Handle<AccessorInfo> NewAccessorInfo();
 
-  Handle<Script> NewScript(Handle<String> source);
+  Handle<Script> NewScript(Handle<String> source,
+                           PretenureFlag tenure = TENURED);
 
   Handle<BreakPointInfo> NewBreakPointInfo(int source_position);
   Handle<BreakPoint> NewBreakPoint(int id, Handle<String> condition);
@@ -440,7 +442,8 @@ class V8_EXPORT_PRIVATE Factory {
 
   Handle<Cell> NewCell(Handle<Object> value);
 
-  Handle<PropertyCell> NewPropertyCell(Handle<Name> name);
+  Handle<PropertyCell> NewPropertyCell(Handle<Name> name,
+                                       PretenureFlag pretenure = TENURED);
 
   Handle<WeakCell> NewWeakCell(Handle<HeapObject> value,
                                PretenureFlag pretenure = TENURED);

@@ -3668,6 +3668,10 @@ class VerifyReadOnlyPointersVisitor : public VerifyPointersVisitor {
  protected:
   void VerifyPointers(HeapObject* host, MaybeObject** start,
                       MaybeObject** end) override {
+    if (host != nullptr) {
+      CHECK(
+          host->GetIsolate()->heap()->read_only_space()->Contains(host->map()));
+    }
     VerifyPointersVisitor::VerifyPointers(host, start, end);
 
     for (MaybeObject** current = start; current < end; current++) {
