@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "870a9452_cca10456",
+        "filename": "src/disassembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-24T11:49:15Z",
+      "side": 1,
+      "message": "nit: Forward declaration no longer needed, lets drop it.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "709bf54732fa322cfbcedc898557c8ad0a5e04d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d5e585d_280fcb11",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14634,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-24T11:49:15Z",
+      "side": 1,
+      "message": "nit: Having this handlified blob in unhandlified code is super dangerous. Please add a TODO here that this should be fixed and also add a {DisallowHeapAllocation no_gc} scope to make sure nothing bad happens. I know that you didn\u0027t introduce this and it was well hidden in the disassembler before, but lets make it explicit now. You can assign the TODO to me if you don\u0027t want to own it.",
+      "range": {
+        "startLine": 14633,
+        "startChar": 0,
+        "endLine": 14634,
+        "endChar": 40
+      },
+      "revId": "709bf54732fa322cfbcedc898557c8ad0a5e04d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
