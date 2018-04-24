@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "35a02418_a11c33d1",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "The additional usage is currently in the wasm-serialization.cc (see below), which creates a module environment on deserialization of a NativeModule. One could argue that we want to properly serialze and deserialize it -- on the other hand -- as far as I understand, it depends on the current environment, and therefore it should be created as a new one. So if we agree that we need it in wasm-serialization.cc, I will move the implementation into its own *.cc file.",
+      "parentUuid": "17f4d135_531d1e81",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cc381ff7_00d8522d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -33,6 +51,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54782209_5920e786",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "I thought of \"finalize\" as in \"try-catch\" blocks. But maybe that\u0027s not very intuitive. kDestroyed reflects that the CompilationState is destroyed, which is the actual event that happens, so I think this will be fine.",
+      "parentUuid": "cc381ff7_00d8522d",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "54658a88_86765b38",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5ed1218_cb214731",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 10
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94af1f1d_217862ca",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -73,6 +133,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "011f6d28_d723c658",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94af1f1d_217862ca",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "555b9a3f_bf52b51e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "badc19d2_5030e87b",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d227fb0e_276153ea",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "3ce1dd8c_3be8071e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d227fb0e_276153ea",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e257618_8dc87b6e",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -121,6 +235,24 @@
       "writtenOn": "2018-04-23T16:55:50Z",
       "side": 1,
       "message": "I don\u0027t see why this has to be a unique_ptr.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8df3b40_26e35ef1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "ModuleWireBytes needs to be initialized on creation if it\u0027s not a pointer. We can use ModuleWireBytes(nullptr, nullptr) for creation, but I thought having a pointer is nicer than initializing it explicitly with nullptr. Wdyt? OR: we pass it through towards the constructor, but this will again change the chain WasmCompiledModule-\u003eNativeModule.",
+      "parentUuid": "1e257618_8dc87b6e",
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -150,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "7c7b2cbf_12ea4f9f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f114604_baae3bb4",
+      "range": {
+        "startLine": 171,
+        "startChar": 1,
+        "endLine": 173,
+        "endChar": 0
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f44e118f_b8d7db10",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -164,6 +320,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea876285_6b3ef19c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44e118f_b8d7db10",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -184,6 +358,24 @@
     },
     {
       "key": {
+        "uuid": "59cfc0f5_a79175a2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f27351b5_53f5edef",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2af4f05_720f0623",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -198,6 +390,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c0067fb_8d373e08",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2af4f05_720f0623",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -224,6 +434,30 @@
     },
     {
       "key": {
+        "uuid": "ca959a2b_bb5f514a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8179444_5a539f54",
+      "range": {
+        "startLine": 1183,
+        "startChar": 23,
+        "endLine": 1183,
+        "endChar": 34
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f18f1062_5c920d28",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -241,6 +475,24 @@
     },
     {
       "key": {
+        "uuid": "a1de5fac_9017c5d0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f18f1062_5c920d28",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "713c0b76_6b9ace2e",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -252,6 +504,24 @@
       "writtenOn": "2018-04-23T16:55:50Z",
       "side": 1,
       "message": "This will have no effect if you pass it in via copy. I think we should pass it via reference (\"\u0026deferred_handles\") and check somewhere later that it was indeed cleared.",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b097d54_5c5d35cc",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "The lambda has a \"mutable\" keyword, therefore we can copy and store its state, and thus set it to nullptr. The problem with passing it via reference is that the deferred_handles will be out-of-scope as soon as the function ends, and will not reference anything anymore.",
+      "parentUuid": "713c0b76_6b9ace2e",
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -275,6 +545,24 @@
     },
     {
       "key": {
+        "uuid": "2364a1ab_75ac1194",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f9a313d_988d343c",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47f69b8e_6b6fa2b1",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -289,6 +577,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95fff641_e92d8f25",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "True, compilation fails very rarely and it\u0027s expensive: I was thinking about the Abort() case, but the case is not strong enough given that it\u0027s expensive.",
+      "parentUuid": "47f69b8e_6b6fa2b1",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -309,6 +615,24 @@
     },
     {
       "key": {
+        "uuid": "9f2d9891_5fab7f9d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9efc24b7_1e766753",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d433ec9_6ba1e3a3",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -323,6 +647,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b12df46_d178bd5a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2886,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d433ec9_6ba1e3a3",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -343,6 +685,24 @@
     },
     {
       "key": {
+        "uuid": "26e429f0_a2357ba0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e211e23_6d6c9802",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "416d1ffc_075c13a0",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -354,6 +714,30 @@
       "writtenOn": "2018-04-23T16:55:50Z",
       "side": 1,
       "message": "Is it still wanted to check for async compilation here?",
+      "range": {
+        "startLine": 3300,
+        "startChar": 41,
+        "endLine": 3300,
+        "endChar": 68
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f89fb550_f614c89e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "No, this will be changed to FLAG_wasm_tier_up \u0026\u0026 !FLAG_liftoff as soon as we land this CL. For now, I can just remove the second part.",
+      "parentUuid": "416d1ffc_075c13a0",
       "range": {
         "startLine": 3300,
         "startChar": 41,
@@ -383,6 +767,24 @@
     },
     {
       "key": {
+        "uuid": "1078d790_5ee0ec81",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Thanks for noticing! I changed it now, see GetNextCompilationUnit(), removed compilation_units() and GetNumScheduledCompilationUnits().",
+      "parentUuid": "f2f38521_ec04779d",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9feadf97_651ac36d",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 15
@@ -400,6 +802,24 @@
     },
     {
       "key": {
+        "uuid": "980dcb7d_420f72ad",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9feadf97_651ac36d",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8b938f4_5f1206f5",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 15
@@ -414,6 +834,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b683c04f_d5cba244",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8b938f4_5f1206f5",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
