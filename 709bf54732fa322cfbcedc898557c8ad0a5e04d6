@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a5e7df6d_a4fbbde4",
+        "filename": "src/disassembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T13:16:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "870a9452_cca10456",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "709bf54732fa322cfbcedc898557c8ad0a5e04d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d5e585d_280fcb11",
         "filename": "src/objects.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "709bf54732fa322cfbcedc898557c8ad0a5e04d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e5ba61_14023f2e",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14634,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T13:16:30Z",
+      "side": 1,
+      "message": "Yeah we had this issue before, that we sometimes need to store a handle and sometimes a raw pointer. So far I did not find a good solution for this.\nI once started introducing a \"template\u003cbool is_handle\u003e class HandleOrRawPointer\", where the raw pointer variant would include a DisallowHeapAllocation scope, but it ended up in a big mess. Everything that holds such a HandleOrRawPointer would need to be templatized itself.\nAlternatively, we could have a class which can hold both, and have an explicit transition from unhandlified to handlified. But maybe we should think about this design more and have a design doc before starting something like this.\n\nAdded a TODO, and assigned it to you for now. If we come up with a reasonable solution, I am happy to fix this myself.",
+      "parentUuid": "1d5e585d_280fcb11",
+      "range": {
+        "startLine": 14633,
+        "startChar": 0,
+        "endLine": 14634,
+        "endChar": 40
+      },
+      "revId": "709bf54732fa322cfbcedc898557c8ad0a5e04d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
