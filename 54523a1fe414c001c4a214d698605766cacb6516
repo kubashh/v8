@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "00708efc_d72ae91f",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T09:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0a7eb5e_d48c28af",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc381ff7_00d8522d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -292,6 +310,24 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd986955_78822261",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T09:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0675f43d_439def8d",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -825,6 +861,30 @@
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91502678_4319d6c4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-24T09:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1579961b_72afed24",
+      "range": {
+        "startLine": 3300,
+        "startChar": 41,
+        "endLine": 3300,
+        "endChar": 68
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
