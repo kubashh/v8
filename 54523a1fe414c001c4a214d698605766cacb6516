@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f0a7eb5e_d48c28af",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T08:46:17Z",
+      "side": 1,
+      "message": "No, deserialization should not need this. Deserialized code always has runtime exception support, and the flag whether trap handlers were used or not needs to be serialized correctly.\nFor now, you can just use {trap_handler::IsTrapHandlerEnabled()} as before, but please add a TODO that we need to preserve this flag correctly. Assign to eholk or kschimpf.",
+      "parentUuid": "35a02418_a11c33d1",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cc381ff7_00d8522d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -253,6 +271,24 @@
       "side": 1,
       "message": "ModuleWireBytes needs to be initialized on creation if it\u0027s not a pointer. We can use ModuleWireBytes(nullptr, nullptr) for creation, but I thought having a pointer is nicer than initializing it explicitly with nullptr. Wdyt? OR: we pass it through towards the constructor, but this will again change the chain WasmCompiledModule-\u003eNativeModule.",
       "parentUuid": "1e257618_8dc87b6e",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0675f43d_439def8d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T08:46:17Z",
+      "side": 1,
+      "message": "Yeah, then just initialize it as {nullptr, nullptr}, and assign it on SetWireBytes. We should not heap-allocate without a need to.",
+      "parentUuid": "e8df3b40_26e35ef1",
       "revId": "54523a1fe414c001c4a214d698605766cacb6516",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -528,6 +564,24 @@
     },
     {
       "key": {
+        "uuid": "5d7058c5_25c6b930",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T08:46:17Z",
+      "side": 1,
+      "message": "Oh, I see. It\u0027s fine then.",
+      "parentUuid": "0b097d54_5c5d35cc",
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f9a313d_988d343c",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 15
@@ -738,6 +792,30 @@
       "side": 1,
       "message": "No, this will be changed to FLAG_wasm_tier_up \u0026\u0026 !FLAG_liftoff as soon as we land this CL. For now, I can just remove the second part.",
       "parentUuid": "416d1ffc_075c13a0",
+      "range": {
+        "startLine": 3300,
+        "startChar": 41,
+        "endLine": 3300,
+        "endChar": 68
+      },
+      "revId": "54523a1fe414c001c4a214d698605766cacb6516",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1579961b_72afed24",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3300,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T08:46:17Z",
+      "side": 1,
+      "message": "{FLAG_wasm_tier_up \u0026\u0026 !FLAG_liftoff} is problematic since {FLAG_wasm_tier_up} implies {FLAG_liftoff}. Why not just {FLAG_wasm_tier_up}?",
+      "parentUuid": "f89fb550_f614c89e",
       "range": {
         "startLine": 3300,
         "startChar": 41,

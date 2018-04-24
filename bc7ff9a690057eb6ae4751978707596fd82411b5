@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecfc4bf3_52c701e9",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-24T08:46:17Z",
+      "side": 1,
+      "message": "Can we make the {src_module} a const pointer?",
+      "revId": "bc7ff9a690057eb6ae4751978707596fd82411b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
