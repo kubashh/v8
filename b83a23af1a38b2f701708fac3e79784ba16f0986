@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "722d03b3_e27650fa",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-24T11:44:33Z",
+      "side": 1,
+      "message": "Could you adjust this comment as well?",
+      "range": {
+        "startLine": 1846,
+        "startChar": 5,
+        "endLine": 1851,
+        "endChar": 20
+      },
+      "revId": "b83a23af1a38b2f701708fac3e79784ba16f0986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
