@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9e5f1852_aa5d2727",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-24T13:25:13Z",
+      "side": 1,
+      "message": "Sounds like a good idea.",
+      "parentUuid": "3c1400f3_01a46770",
+      "revId": "29fcbd4588475d665fc1e5d7da3e16e02555b960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8cd5250b_c35c3762",
         "filename": "src/wasm/value-type.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "29fcbd4588475d665fc1e5d7da3e16e02555b960",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37822ea3_bc788f04",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-24T13:25:13Z",
+      "side": 1,
+      "message": "As discussed, I added DISALLOW_IMPLICIT_CONSTRUCTORS",
+      "parentUuid": "8cd5250b_c35c3762",
+      "revId": "29fcbd4588475d665fc1e5d7da3e16e02555b960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
