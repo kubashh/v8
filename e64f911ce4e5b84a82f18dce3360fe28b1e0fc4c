@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2f5ca41d_1e6ae20a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-04-24T17:40:37Z",
+      "side": 1,
+      "message": "Since the original WriteGlobalValue always extracted a double, I switched the signature to take a double instead, but kept the overloading. What do you think, is it better to rename still?",
+      "parentUuid": "84584776_0978dc5d",
+      "range": {
+        "startLine": 282,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 76
+      },
+      "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4109fa7_4e5fa6f3",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0427dac4_3e2bd760",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-04-24T17:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4109fa7_4e5fa6f3",
+      "range": {
+        "startLine": 1869,
+        "startChar": 11,
+        "endLine": 1869,
+        "endChar": 20
+      },
+      "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d022919a_8d36cd4a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-04-24T17:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "059d935a_d591ef1b",
+      "range": {
+        "startLine": 2133,
+        "startChar": 10,
+        "endLine": 2133,
+        "endChar": 62
+      },
+      "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be0605bc_1c935402",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88c12610_06397578",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-04-24T17:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be0605bc_1c935402",
+      "range": {
+        "startLine": 2360,
+        "startChar": 12,
+        "endLine": 2360,
+        "endChar": 62
+      },
+      "revId": "e64f911ce4e5b84a82f18dce3360fe28b1e0fc4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
