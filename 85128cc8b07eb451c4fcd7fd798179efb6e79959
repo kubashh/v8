@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b880c9ed_745d3bfe",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c94c849e_f398a978",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1834,
+        "endChar": 34
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59808108_d56101e1",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1ccc2f_ca901b7b",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59808108_d56101e1",
+      "range": {
+        "startLine": 1869,
+        "startChar": 1,
+        "endLine": 1870,
+        "endChar": 17
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "65a87aae_b3e31877",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "523426ac_5fb5d5c6",
+      "range": {
+        "startLine": 1879,
+        "startChar": 25,
+        "endLine": 1879,
+        "endChar": 39
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae0730ee_119605ef",
         "filename": "src/objects/bigint.cc",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da47331_f4283bdc",
+        "filename": "src/objects/bigint.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae0730ee_119605ef",
+      "range": {
+        "startLine": 1884,
+        "startChar": 4,
+        "endLine": 1885,
+        "endChar": 10
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bbb102ca_09da7b20",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f764157_ed82ba07",
+      "range": {
+        "startLine": 1672,
+        "startChar": 21,
+        "endLine": 1672,
+        "endChar": 31
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ea945f6_a25c8448",
         "filename": "src/utils.h",
         "patchSetId": 2
@@ -137,6 +257,30 @@
       "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56dc4f7c_441c6126",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ea945f6_a25c8448",
+      "range": {
+        "startLine": 1676,
+        "startChar": 6,
+        "endLine": 1676,
+        "endChar": 22
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "d05125c9_ce8a749d",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "I prefer what I have, because our gcc compiler reports warning when it calls ByteReverse\u003cuint32_t\u003e. Warning is about excessive shifting in case sizeof(V) \u003d\u003d 8, and that is the case when V is int64_t.",
+      "parentUuid": "23eae804_dfb195df",
+      "range": {
+        "startLine": 1687,
+        "startChar": 33,
+        "endLine": 1687,
+        "endChar": 46
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "206fc341_34534826",
         "filename": "src/utils.h",
         "patchSetId": 2
@@ -183,6 +351,30 @@
       "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33be2ffa_d7aab158",
+        "filename": "src/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-04-24T12:31:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "206fc341_34534826",
+      "range": {
+        "startLine": 1701,
+        "startChar": 6,
+        "endLine": 1701,
+        "endChar": 48
+      },
+      "revId": "85128cc8b07eb451c4fcd7fd798179efb6e79959",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
