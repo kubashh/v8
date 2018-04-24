@@ -203,6 +203,35 @@ namespace v8 {
 
 #define RETURN_ESCAPED(value) return handle_scope.Escape(value);
 
+class CallDepthScopeBase {
+ public:
+  CallDepthScopeBase(i::Isolate* isolate) : isolate_(isolate) {
+#ifndef DEBUG
+  }
+#else
+    previous_ = isolate_->call_depth_scope();
+    isolate_->set_call_depth_scope(this);
+    uintptr_t last_exit =
+        reinterpret_cast<uintptr_t>(isolate_->external_callback_scope());
+    uintptr_t last_entry = reinterpret_cast<uintptr_t>(previous_);
+    if (last_entry != 0 && (last_exit == 0 || last_exit < last_entry)) {
+      disallow_js_execution_ = new i::DisallowJavascriptExecution(isolate_);
+    }
+  }
+
+  ~CallDepthScopeBase() {
+    isolate_->set_call_depth_scope(previous_);
+    delete disallow_js_execution_;
+    disallow_js_execution_ = nullptr;
+  }
+
+ private:
+  CallDepthScopeBase* previous_;
+  i::DisallowJavascriptExecution* disallow_js_execution_ = nullptr;
+#endif  // DEBUG
+ protected:
+  i::Isolate* const isolate_;
+};
 
 namespace {
 
@@ -230,10 +259,10 @@ void CheckMicrotasksScopesConsistency(i::Isolate* isolate) {
 #endif
 
 template <bool do_callback>
-class CallDepthScope {
+class CallDepthScope : public CallDepthScopeBase {
  public:
   explicit CallDepthScope(i::Isolate* isolate, Local<Context> context)
-      : isolate_(isolate), context_(context), escaped_(false) {
+      : CallDepthScopeBase(isolate), context_(context), escaped_(false) {
     // TODO(dcarney): remove this when blink stops crashing.
     DCHECK(!isolate_->external_caught_exception());
     isolate_->handle_scope_implementer()->IncrementCallDepth();
@@ -273,7 +302,6 @@ class CallDepthScope {
   }
 
  private:
-  i::Isolate* const isolate_;
   Local<Context> context_;
   bool escaped_;
   bool do_callback_;

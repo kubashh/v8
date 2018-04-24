@@ -44,6 +44,11 @@ class ExternalCallbackScope BASE_EMBEDDED {
   ExternalCallbackScope* previous() { return previous_scope_; }
   inline Address scope_address();
 
+#ifdef DEBUG
+  // Signal to the next CallDepthScope that we are allowed to re-enter JS.
+  bool allow_js_execution = true;
+#endif
+
  private:
   Isolate* isolate_;
   Address callback_;

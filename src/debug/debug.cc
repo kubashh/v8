@@ -32,6 +32,7 @@
 #include "src/objects/debug-objects-inl.h"
 #include "src/snapshot/natives.h"
 #include "src/snapshot/snapshot.h"
+#include "src/vm-state-inl.h"
 #include "src/wasm/wasm-objects-inl.h"
 
 namespace v8 {
@@ -1836,6 +1837,7 @@ void Debug::OnException(Handle<Object> exception, Handle<Object> promise) {
   // Bail out and don't call debugger if exception.
   if (!MakeExecutionState().ToHandle(&exec_state)) return;
 
+  ExternalCallbackScope external_callback(isolate_, kNullAddress);
   debug_delegate_->ExceptionThrown(
       GetDebugEventContext(isolate_),
       v8::Utils::ToLocal(Handle<JSObject>::cast(exec_state)),
@@ -1872,6 +1874,7 @@ void Debug::OnDebugBreak(Handle<FixedArray> break_points_hit) {
     ++inspector_break_points_count;
   }
 
+  ExternalCallbackScope external_callback(isolate_, kNullAddress);
   debug_delegate_->BreakProgramRequested(
       GetDebugEventContext(isolate_),
       v8::Utils::ToLocal(Handle<JSObject>::cast(exec_state)),
@@ -1931,8 +1934,10 @@ void Debug::RunPromiseHook(PromiseHookType hook_type, Handle<JSPromise> promise,
 
   int id = GetReferenceAsyncTaskId(isolate_, promise);
   if (hook_type == PromiseHookType::kBefore) {
+    ExternalCallbackScope external_callback(isolate_, kNullAddress);
     debug_delegate_->PromiseEventOccurred(debug::kDebugWillHandle, id, false);
   } else if (hook_type == PromiseHookType::kAfter) {
+    ExternalCallbackScope external_callback(isolate_, kNullAddress);
     debug_delegate_->PromiseEventOccurred(debug::kDebugDidHandle, id, false);
   } else {
     DCHECK(hook_type == PromiseHookType::kInit);
@@ -1949,6 +1954,7 @@ void Debug::RunPromiseHook(PromiseHookType hook_type, Handle<JSPromise> promise,
           // indirectly, e.g. Promise.all calls Promise.then internally.
           if (type == debug::kDebugAsyncFunctionPromiseCreated ||
               last_frame_was_promise_builtin) {
+            ExternalCallbackScope external_callback(isolate_, kNullAddress);
             debug_delegate_->PromiseEventOccurred(type, id, IsBlackboxed(info));
           }
           return;
@@ -2019,6 +2025,7 @@ bool Debug::IsBlackboxed(Handle<SharedFunctionInfo> shared) {
       DCHECK(script->IsUserJavaScript());
       debug::Location start = GetDebugLocation(script, shared->StartPosition());
       debug::Location end = GetDebugLocation(script, shared->EndPosition());
+      ExternalCallbackScope external_callback(isolate_, kNullAddress);
       is_blackboxed = debug_delegate_->IsFunctionBlackboxed(
           ToApiHandle<debug::Script>(script), start, end);
     }
@@ -2086,6 +2093,7 @@ void Debug::ProcessCompileEvent(v8::DebugEvent event, Handle<Script> script) {
   PostponeInterruptsScope postpone(isolate_);
   DisableBreak no_recursive_break(this);
   AllowJavascriptExecution allow_script(isolate_);
+  ExternalCallbackScope external_callback(isolate_, kNullAddress);
   debug_delegate_->ScriptCompiled(ToApiHandle<debug::Script>(script),
                                   live_edit_enabled(),
                                   event != v8::AfterCompile);

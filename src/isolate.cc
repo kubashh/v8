@@ -151,6 +151,7 @@ void ThreadLocalTop::InitializeInternal() {
 #endif
   js_entry_sp_ = kNullAddress;
   external_callback_scope_ = nullptr;
+  call_depth_scope_ = nullptr;
   current_vm_state_ = EXTERNAL;
   try_catch_handler_ = nullptr;
   context_ = nullptr;
@@ -1083,7 +1084,9 @@ void Isolate::InvokeApiInterruptCallbacks() {
       api_interrupts_queue_.pop();
     }
     VMState<EXTERNAL> state(this);
+    Address callback_address = reinterpret_cast<Address>(entry.first);
     HandleScope handle_scope(this);
+    ExternalCallbackScope call_scope(this, callback_address);
     entry.first(reinterpret_cast<v8::Isolate*>(this), entry.second);
   }
 }
@@ -3776,6 +3779,7 @@ void Isolate::FireCallCompletedCallback() {
   v8::Isolate::SuppressMicrotaskExecutionScope suppress(isolate);
   std::vector<CallCompletedCallback> callbacks(call_completed_callbacks_);
   for (auto& callback : callbacks) {
+    ExternalCallbackScope external_callback(this, FUNCTION_ADDR(callback));
     callback(reinterpret_cast<v8::Isolate*>(this));
   }
 }
@@ -3890,6 +3894,8 @@ void Isolate::ReportPromiseReject(Handle<JSPromise> promise,
   if (event == v8::kPromiseRejectWithNoHandler && value->IsJSObject()) {
     stack_trace = GetDetailedStackTrace(Handle<JSObject>::cast(value));
   }
+  ExternalCallbackScope external_callback(
+      this, reinterpret_cast<Address>(promise_reject_callback_));
   promise_reject_callback_(v8::PromiseRejectMessage(
       v8::Utils::PromiseToLocal(promise), event, v8::Utils::ToLocal(value),
       v8::Utils::StackTraceToLocal(stack_trace)));

@@ -8,6 +8,7 @@
 #include "src/api.h"
 #include "src/debug/interface-types.h"
 #include "src/objects-inl.h"
+#include "src/vm-state-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -56,6 +57,7 @@ void ConsoleCall(
   Handle<String> context_name = context_name_obj->IsString()
                                     ? Handle<String>::cast(context_name_obj)
                                     : isolate->factory()->anonymous_string();
+  ExternalCallbackScope external_callback(isolate, kNullAddress);
   (isolate->console_delegate()->*func)(
       wrapper,
       v8::debug::ConsoleContext(context_id, Utils::ToLocal(context_name)));

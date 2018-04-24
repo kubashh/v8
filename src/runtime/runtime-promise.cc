@@ -10,6 +10,7 @@
 #include "src/debug/debug.h"
 #include "src/elements.h"
 #include "src/objects-inl.h"
+#include "src/vm-state-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -73,7 +74,11 @@ RUNTIME_FUNCTION(Runtime_RunMicrotaskCallback) {
   CONVERT_ARG_CHECKED(Object, microtask_data, 1);
   MicrotaskCallback callback = ToCData<MicrotaskCallback>(microtask_callback);
   void* data = ToCData<void*>(microtask_data);
-  callback(data);
+  {
+    ExternalCallbackScope external_callback(isolate,
+                                            reinterpret_cast<Address>(data));
+    callback(data);
+  }
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
   return isolate->heap()->undefined_value();
 }
