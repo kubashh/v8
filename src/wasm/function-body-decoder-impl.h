@@ -2114,7 +2114,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
   unsigned SimdExtractLane(WasmOpcode opcode, ValueType type) {
     SimdLaneOperand<validate> operand(this, this->pc_);
     if (this->Validate(this->pc_, opcode, operand)) {
-      Value inputs[] = {Pop(0, ValueType::kSimd128)};
+      Value inputs[] = {Pop(0, wasm::kWasmS128)};
       auto* result = Push(type);
       CALL_INTERFACE_IF_REACHABLE(SimdLaneOp, opcode, operand,
                                   ArrayVector(inputs), result);
@@ -2127,8 +2127,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     if (this->Validate(this->pc_, opcode, operand)) {
       Value inputs[2];
       inputs[1] = Pop(1, type);
-      inputs[0] = Pop(0, ValueType::kSimd128);
-      auto* result = Push(ValueType::kSimd128);
+      inputs[0] = Pop(0, wasm::kWasmS128);
+      auto* result = Push(wasm::kWasmS128);
       CALL_INTERFACE_IF_REACHABLE(SimdLaneOp, opcode, operand,
                                   ArrayVector(inputs), result);
     }
@@ -2138,8 +2138,8 @@ class WasmFullDecoder : public WasmDecoder<validate> {
   unsigned SimdShiftOp(WasmOpcode opcode) {
     SimdShiftOperand<validate> operand(this, this->pc_);
     if (this->Validate(this->pc_, opcode, operand)) {
-      auto input = Pop(0, ValueType::kSimd128);
-      auto* result = Push(ValueType::kSimd128);
+      auto input = Pop(0, wasm::kWasmS128);
+      auto* result = Push(wasm::kWasmS128);
       CALL_INTERFACE_IF_REACHABLE(SimdShiftOp, opcode, operand, input, result);
     }
     return operand.length;
@@ -2148,9 +2148,9 @@ class WasmFullDecoder : public WasmDecoder<validate> {
   unsigned Simd8x16ShuffleOp() {
     Simd8x16ShuffleOperand<validate> operand(this, this->pc_);
     if (this->Validate(this->pc_, operand)) {
-      auto input1 = Pop(1, ValueType::kSimd128);
-      auto input0 = Pop(0, ValueType::kSimd128);
-      auto* result = Push(ValueType::kSimd128);
+      auto input1 = Pop(1, wasm::kWasmS128);
+      auto input0 = Pop(0, wasm::kWasmS128);
+      auto* result = Push(wasm::kWasmS128);
       CALL_INTERFACE_IF_REACHABLE(Simd8x16ShuffleOp, operand, input0, input1,
                                   result);
     }
@@ -2161,23 +2161,23 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     unsigned len = 0;
     switch (opcode) {
       case kExprF32x4ExtractLane: {
-        len = SimdExtractLane(opcode, ValueType::kFloat32);
+        len = SimdExtractLane(opcode, wasm::kWasmF32);
         break;
       }
       case kExprI32x4ExtractLane:
       case kExprI16x8ExtractLane:
       case kExprI8x16ExtractLane: {
-        len = SimdExtractLane(opcode, ValueType::kWord32);
+        len = SimdExtractLane(opcode, wasm::kWasmI32);
         break;
       }
       case kExprF32x4ReplaceLane: {
-        len = SimdReplaceLane(opcode, ValueType::kFloat32);
+        len = SimdReplaceLane(opcode, ValueType::kWasmF32);
         break;
       }
       case kExprI32x4ReplaceLane:
       case kExprI16x8ReplaceLane:
       case kExprI8x16ReplaceLane: {
-        len = SimdReplaceLane(opcode, ValueType::kWord32);
+        len = SimdReplaceLane(opcode, wasm::kWasmI32);
         break;
       }
       case kExprI32x4Shl:
@@ -2224,11 +2224,11 @@ class WasmFullDecoder : public WasmDecoder<validate> {
     if (sig != nullptr) {
       MachineType memtype;
       switch (opcode) {
-#define CASE_ATOMIC_STORE_OP(Name, Type)     \
-  case kExpr##Name: {                        \
-    memtype = MachineType::Type();           \
-    ret_type = MachineRepresentation::kNone; \
-    break;                                   \
+#define CASE_ATOMIC_STORE_OP(Name, Type) \
+  case kExpr##Name: {                    \
+    memtype = MachineType::Type();       \
+    ret_type = wasm::kWasmStmt;          \
+    break;                               \
   }
         ATOMIC_STORE_OP_LIST(CASE_ATOMIC_STORE_OP)
 #undef CASE_ATOMIC_OP
@@ -2248,9 +2248,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           this, this->pc_ + 1, ElementSizeLog2Of(memtype.representation()));
       len += operand.length;
       PopArgs(sig);
-      auto result = ret_type == MachineRepresentation::kNone
-                        ? nullptr
-                        : Push(GetReturnType(sig));
+      auto result = ret_type == kWasmStmt ? nullptr : Push(GetReturnType(sig));
       CALL_INTERFACE_IF_REACHABLE(AtomicOp, opcode, vec2vec(args_), operand,
                                   result);
     } else {

@@ -12,17 +12,16 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-// We reuse the internal machine type to represent WebAssembly types.
-// A typedef improves readability without adding a whole new type system.
-using ValueType = MachineRepresentation;
-constexpr ValueType kWasmStmt = MachineRepresentation::kNone;
-constexpr ValueType kWasmI32 = MachineRepresentation::kWord32;
-constexpr ValueType kWasmI64 = MachineRepresentation::kWord64;
-constexpr ValueType kWasmF32 = MachineRepresentation::kFloat32;
-constexpr ValueType kWasmF64 = MachineRepresentation::kFloat64;
-constexpr ValueType kWasmS128 = MachineRepresentation::kSimd128;
-constexpr ValueType kWasmAnyRef = MachineRepresentation::kTaggedPointer;
-constexpr ValueType kWasmVar = MachineRepresentation::kTagged;
+enum ValueType : uint8_t {
+  kWasmStmt,
+  kWasmI32,
+  kWasmI64,
+  kWasmF32,
+  kWasmF64,
+  kWasmS128,
+  kWasmAnyRef,
+  kWasmVar,
+};
 
 // TODO(clemensh): Compute memtype and size from ValueType once we have c++14
 // constexpr support.
@@ -126,7 +125,7 @@ class StoreType {
   constexpr unsigned size_log_2() const { return kStoreSizeLog2[val_]; }
   constexpr unsigned size() const { return 1 << size_log_2(); }
   constexpr ValueType value_type() const { return kValueType[val_]; }
-  constexpr ValueType mem_rep() const { return kMemRep[val_]; }
+  constexpr MachineRepresentation mem_rep() const { return kMemRep[val_]; }
 
   static StoreType ForValueType(ValueType type) {
     switch (type) {
@@ -169,12 +168,27 @@ class StoreType {
 class V8_EXPORT_PRIVATE ValueTypes {
  public:
   static byte MemSize(MachineType type) {
-    return MemSize(type.representation());
+    return 1 << i::ElementSizeLog2Of(type.representation());
+  }
+
+  static int ElementSizeLog2Of(const ValueType type) {
+    switch (type) {
+      case kWasmI32:
+      case kWasmF32:
+        return 2;
+      case kWasmI64:
+      case kWasmF64:
+        return 3;
+      case kWasmS128:
+        return 4;
+      default:
+        UNREACHABLE();
+    }
   }
 
   static byte MemSize(ValueType type) { return 1 << ElementSizeLog2Of(type); }
 
-  static ValueTypeCode ValueTypeCodeFor(ValueType type) {
+  static ValueTypeCode ValueTypeCodeFor(const ValueType type) {
     switch (type) {
       case kWasmI32:
         return kLocalI32;
@@ -195,7 +209,7 @@ class V8_EXPORT_PRIVATE ValueTypes {
     }
   }
 
-  static MachineType MachineTypeFor(ValueType type) {
+  static MachineType MachineTypeFor(const ValueType type) {
     switch (type) {
       case kWasmI32:
         return MachineType::Int32();
@@ -216,7 +230,28 @@ class V8_EXPORT_PRIVATE ValueTypes {
     }
   }
 
-  static ValueType ValueTypeFor(MachineType type) {
+  static MachineRepresentation MachineRepresentationFor(const ValueType type) {
+    switch (type) {
+      case kWasmI32:
+        return MachineRepresentation::kWord32;
+      case kWasmI64:
+        return MachineRepresentation::kWord64;
+      case kWasmF32:
+        return MachineRepresentation::kFloat32;
+      case kWasmF64:
+        return MachineRepresentation::kFloat64;
+      case kWasmAnyRef:
+        return MachineRepresentation::kTaggedPointer;
+      case kWasmS128:
+        return MachineRepresentation::kSimd128;
+      case kWasmStmt:
+        return MachineRepresentation::kNone;
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  static ValueType ValueTypeFor(const MachineType type) {
     switch (type.representation()) {
       case MachineRepresentation::kWord8:
       case MachineRepresentation::kWord16:
@@ -237,7 +272,7 @@ class V8_EXPORT_PRIVATE ValueTypes {
     }
   }
 
-  static char ShortNameOf(ValueType type) {
+  static char ShortNameOf(const ValueType type) {
     switch (type) {
       case kWasmI32:
         return 'i';
@@ -260,7 +295,7 @@ class V8_EXPORT_PRIVATE ValueTypes {
     }
   }
 
-  static const char* TypeName(ValueType type) {
+  static const char* TypeName(const ValueType type) {
     switch (type) {
       case kWasmI32:
         return "i32";

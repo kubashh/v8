@@ -12,6 +12,7 @@
 #include "src/objects.h"
 #include "src/objects/script.h"
 #include "src/wasm/decoder.h"
+#include "src/wasm/value-type.h"
 #include "src/wasm/wasm-interpreter.h"
 #include "src/wasm/wasm-limits.h"
 #include "src/wasm/wasm-module.h"
@@ -30,7 +31,6 @@ struct ModuleEnv;
 class WasmCode;
 struct WasmModule;
 class SignatureMap;
-using ValueType = MachineRepresentation;
 using FunctionSig = Signature<ValueType>;
 }  // namespace wasm
 

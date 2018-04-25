@@ -180,7 +180,8 @@ struct Allocator {
               MachineTypeFor(type));
         }
 #endif
-        return LinkageLocation::ForRegister(reg.code(), MachineTypeFor(type));
+        return LinkageLocation::ForRegister(
+            reg.code(), wasm::ValueTypes::MachineTypeFor(type));
       } else {
         int offset = -1 - stack_offset;
         stack_offset += Words(type);
@@ -189,17 +190,18 @@ struct Allocator {
     } else {
       // Allocate a general purpose register/stack location.
       if (gp_offset < gp_count) {
-        return LinkageLocation::ForRegister(gp_regs[gp_offset++].code(),
-                                            MachineTypeFor(type));
+        return LinkageLocation::ForRegister(
+            gp_regs[gp_offset++].code(),
+            wasm::ValueTypes::MachineTypeFor(type));
       } else {
         int offset = -1 - stack_offset;
         stack_offset += Words(type);
-        return stackloc(offset, MachineTypeFor(type));
+        return stackloc(offset, wasm::ValueTypes::MachineTypeFor(type));
       }
     }
   }
-  bool IsFloatingPoint(ValueType type) {
-    return type == wasm::kWasmF32 || type == wasm::kWasmF64;
+  bool IsFloatingPoint(ValueType rep) {
+    return rep == wasm::kWasmF32 || rep == wasm::kWasmF64;
   }
   int Words(ValueType type) {
     if (kPointerSize < 8 &&
@@ -236,7 +238,7 @@ CallDescriptor* GetWasmCallDescriptor(Zone* zone, wasm::FunctionSig* fsig,
   Allocator params = parameter_registers;
 
   // The instance object.
-  locations.AddParam(params.Next(MachineRepresentation::kTaggedPointer));
+  locations.AddParam(params.Next(wasm::kWasmAnyRef));
 
   const int parameter_count = static_cast<int>(fsig->parameter_count());
   for (int i = 0; i < parameter_count; i++) {
@@ -281,9 +283,11 @@ CallDescriptor* GetWasmCallDescriptor(Zone* zone, wasm::FunctionSig* fsig,
       rets.stack_offset - params.stack_offset);  // stack_return_count
 }
 
-CallDescriptor* ReplaceTypeInCallDescriptorWith(
-    Zone* zone, CallDescriptor* call_descriptor, size_t num_replacements,
-    MachineType input_type, MachineRepresentation output_type) {
+CallDescriptor* ReplaceTypeInCallDescriptorWith(Zone* zone,
+                                                CallDescriptor* call_descriptor,
+                                                size_t num_replacements,
+                                                MachineType input_type,
+                                                ValueType output_type) {
   size_t parameter_count = call_descriptor->ParameterCount();
   size_t return_count = call_descriptor->ReturnCount();
   for (size_t i = 0; i < call_descriptor->ParameterCount(); i++) {
@@ -310,8 +314,8 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
         locations.AddParam(params.Next(output_type));
       }
     } else {
-      locations.AddParam(
-          params.Next(call_descriptor->GetParameterType(i).representation()));
+      locations.AddParam(params.Next(wasm::ValueTypes::ValueTypeFor(
+          call_descriptor->GetParameterType(i))));
     }
   }
 
@@ -323,8 +327,8 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
         locations.AddReturn(rets.Next(output_type));
       }
     } else {
-      locations.AddReturn(
-          rets.Next(call_descriptor->GetReturnType(i).representation()));
+      locations.AddReturn(rets.Next(
+          wasm::ValueTypes::ValueTypeFor(call_descriptor->GetReturnType(i))));
     }
   }
 
@@ -346,15 +350,13 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
 CallDescriptor* GetI32WasmCallDescriptor(Zone* zone,
                                          CallDescriptor* call_descriptor) {
   return ReplaceTypeInCallDescriptorWith(zone, call_descriptor, 2,
-                                         MachineType::Int64(),
-                                         MachineRepresentation::kWord32);
+                                         MachineType::Int64(), wasm::kWasmI32);
 }
 
 CallDescriptor* GetI32WasmCallDescriptorForSimd(
     Zone* zone, CallDescriptor* call_descriptor) {
-  return ReplaceTypeInCallDescriptorWith(zone, call_descriptor, 4,
-                                         MachineType::Simd128(),
-                                         MachineRepresentation::kWord32);
+  return ReplaceTypeInCallDescriptorWith(
+      zone, call_descriptor, 4, MachineType::Simd128(), wasm::kWasmI32);
 }
 
 #undef GP_PARAM_REGISTERS

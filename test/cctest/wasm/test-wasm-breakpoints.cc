@@ -321,7 +321,7 @@ WASM_COMPILED_EXEC_TEST(WasmSimpleStepping) {
 WASM_COMPILED_EXEC_TEST(WasmStepInAndOut) {
   WasmRunner<int, int> runner(execution_mode);
   WasmFunctionCompiler& f2 = runner.NewFunction<void>();
-  f2.AllocateLocal(ValueType::kWord32);
+  f2.AllocateLocal(wasm::kWasmI32);
 
   // Call f2 via indirect call, because a direct call requires f2 to exist when
   // we compile main, but we need to compile main first so that the order of
@@ -360,9 +360,9 @@ WASM_COMPILED_EXEC_TEST(WasmStepInAndOut) {
 
 WASM_COMPILED_EXEC_TEST(WasmGetLocalsAndStack) {
   WasmRunner<void, int> runner(execution_mode);
-  runner.AllocateLocal(ValueType::kWord64);
-  runner.AllocateLocal(ValueType::kFloat32);
-  runner.AllocateLocal(ValueType::kFloat64);
+  runner.AllocateLocal(wasm::kWasmI64);
+  runner.AllocateLocal(wasm::kWasmF32);
+  runner.AllocateLocal(wasm::kWasmF64);
 
   BUILD(runner,
         // set [1] to 17

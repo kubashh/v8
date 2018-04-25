@@ -69,7 +69,7 @@ BIT_FIELD_ACCESSORS(WasmGlobalObject, flags, is_mutable,
 
 // static
 uint32_t WasmGlobalObject::TypeSize(wasm::ValueType type) {
-  return 1U << ElementSizeLog2Of(type);
+  return 1U << wasm::ValueTypes::ElementSizeLog2Of(type);
 }
 
 uint32_t WasmGlobalObject::type_size() const { return TypeSize(type()); }
