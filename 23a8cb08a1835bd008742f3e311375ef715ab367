@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30faebb_fe428c9f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-25T10:39:09Z",
+      "side": 1,
+      "message": "nit: Lets add a brief comment (either here or as part of the comment right after the \"case kExternalGlobal\" above) explaining that it is safe to store the raw pointer since the underlying backing store of the JSArrayBuffer will not be relocated in this case.",
+      "range": {
+        "startLine": 2361,
+        "startChar": 22,
+        "endLine": 2361,
+        "endChar": 36
+      },
+      "revId": "23a8cb08a1835bd008742f3e311375ef715ab367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "876c2d7b_9767d5be",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-25T10:39:09Z",
+      "side": 1,
+      "message": "suggestion: How about using an early continue here, would that be easier to read? I was thinking along the lines of ...\n\nif (global.mutability \u0026\u0026 global.imported) {\n  DCHECK(FLAG_experimental_wasm_mut_global);\n  continue;\n}",
+      "range": {
+        "startLine": 2409,
+        "startChar": 4,
+        "endLine": 2409,
+        "endChar": 50
+      },
+      "revId": "23a8cb08a1835bd008742f3e311375ef715ab367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
