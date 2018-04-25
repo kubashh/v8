@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9c1d3980_c24ec8f1",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-25T12:33:54Z",
+      "side": 1,
+      "message": "With regards to spilling, it does not matter when exactly we allocate this. Note that this register can overlap with lhs or rhs, just not with dst and ret. And dst, ret, and tmp have to be alive at the same time anyway.\n\nWe will eventually get rid of this tmp register anyway, once we can directly compare against constants.",
+      "parentUuid": "bde3da3f_a83cfa2c",
+      "range": {
+        "startLine": 762,
+        "startChar": 4,
+        "endLine": 762,
+        "endChar": 23
+      },
+      "revId": "d729769a069b5cdc3dd8d2e91d34ef89c4528de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "929a71a6_b4b11c9e",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-04-25T11:59:58Z",
       "side": 1,
       "message": "what does iop stand for?",
+      "range": {
+        "startLine": 458,
+        "startChar": 8,
+        "endLine": 458,
+        "endChar": 11
+      },
+      "revId": "d729769a069b5cdc3dd8d2e91d34ef89c4528de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e27f3d3_80a161e1",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-25T12:33:54Z",
+      "side": 1,
+      "message": "\"integer operation\". Should I document this somewhere?",
+      "parentUuid": "929a71a6_b4b11c9e",
       "range": {
         "startLine": 458,
         "startChar": 8,
