@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4699c945_f4860173",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2989,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-04-25T11:26:35Z",
+      "side": 1,
+      "message": "Is saving the context necessary here? We are already in a foreground task, so the context should already have been saved before this function was executed.",
+      "revId": "c5f9c2f031e079ada84a1cadb488cd4f4dfcd523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
