@@ -20,6 +20,8 @@ enum ValueType : uint8_t {
   kWasmF64,
   kWasmS128,
   kWasmAnyRef,
+  kWasmAnyFunc,
+  kWasmEqRef,
   kWasmVar,
 };
 
