@@ -16,6 +16,24 @@
       "revId": "c5f9c2f031e079ada84a1cadb488cd4f4dfcd523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8714792_475e3927",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2989,
+      "author": {
+        "id": 1263834
+      },
+      "writtenOn": "2018-04-25T11:33:13Z",
+      "side": 1,
+      "message": "Yes, it is necessary. We are not saving the context in general (it is set to null, since we don\u0027t have a reference to the native module; previous phantom handle issue was solved by Michi doing this), but only if we need it -\u003e when we process the error, the context is set. Therefore, the context isn\u0027t set in this case. However, we need to set it to progress with finishing. Since it\u0027s the AsyncCompileJob\u0027s \"decision\" to call FinishCompile(), I thought it would be good to save it here, and not in the FinishCompileTask().",
+      "parentUuid": "4699c945_f4860173",
+      "revId": "c5f9c2f031e079ada84a1cadb488cd4f4dfcd523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
