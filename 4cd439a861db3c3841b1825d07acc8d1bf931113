@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59547e0b_c1df8601",
+        "filename": "src/mips64/code-stubs-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-04-25T16:32:33Z",
+      "side": 1,
+      "message": "Why is here used kScratchReg2 instead of kScratchReg? Also, there is same function in code-stubs-mips.cc that is using at register as well. Try to locate usages of this function and it\u0027s context and use scratch registers accordingly to those informations in both mips and mips64.",
+      "range": {
+        "startLine": 407,
+        "startChar": 8,
+        "endLine": 407,
+        "endChar": 20
+      },
+      "revId": "4cd439a861db3c3841b1825d07acc8d1bf931113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
