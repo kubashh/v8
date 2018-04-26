@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0128fedf_ebddd1c2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-04-26T16:37:53Z",
+      "side": 1,
+      "message": "Repeating what I said on the bug, SharedArrayBuffers being on a transfer list should be a data clone error, and should not transferred. See - https://bugs.chromium.org/p/chromium/issues/detail?id\u003d836800#c5. \n\nCould you add a test/repro, or details of the bug you are trying to address? I want to make sure we fix the bug and not it\u0027s symptom. Let me know if I\u0027m missing something. :)",
+      "revId": "0380b69af5ddfb13a2dec574be2b232175d3288a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
