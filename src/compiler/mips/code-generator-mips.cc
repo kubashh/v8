@@ -543,9 +543,9 @@ void CodeGenerator::AssembleTailCallAfterGap(Instruction* instr,
 
 // Check that {kJavaScriptCallCodeStartRegister} is correct.
 void CodeGenerator::AssembleCodeStartRegisterCheck() {
-  __ ComputeCodeStartAddress(at);
+  __ ComputeCodeStartAddress(kScratchReg);
   __ Assert(eq, AbortReason::kWrongFunctionCodeStart,
-            kJavaScriptCallCodeStartRegister, Operand(at));
+            kJavaScriptCallCodeStartRegister, Operand(kScratchReg));
 }
 
 // Check if the code object is marked for deoptimization. If it is, then it
@@ -557,12 +557,15 @@ void CodeGenerator::AssembleCodeStartRegisterCheck() {
 //    3. if it is not zero then it jumps to the builtin.
 void CodeGenerator::BailoutIfDeoptimized() {
   int offset = Code::kCodeDataContainerOffset - Code::kHeaderSize;
-  __ lw(at, MemOperand(kJavaScriptCallCodeStartRegister, offset));
-  __ lw(at, FieldMemOperand(at, CodeDataContainer::kKindSpecificFlagsOffset));
-  __ And(at, at, Operand(1 << Code::kMarkedForDeoptimizationBit));
+  __ lw(kScratchReg, MemOperand(kJavaScriptCallCodeStartRegister, offset));
+  __ lw(kScratchReg,
+        FieldMemOperand(kScratchReg,
+                        CodeDataContainer::kKindSpecificFlagsOffset));
+  __ And(kScratchReg, kScratchReg,
+         Operand(1 << Code::kMarkedForDeoptimizationBit));
   Handle<Code> code = isolate()->builtins()->builtin_handle(
       Builtins::kCompileLazyDeoptimizedCode);
-  __ Jump(code, RelocInfo::CODE_TARGET, ne, at, Operand(zero_reg));
+  __ Jump(code, RelocInfo::CODE_TARGET, ne, kScratchReg, Operand(zero_reg));
 }
 
 void CodeGenerator::GenerateSpeculationPoisonFromCodeStartRegister() {
@@ -570,12 +573,12 @@ void CodeGenerator::GenerateSpeculationPoisonFromCodeStartRegister() {
   // bits cleared if we are speculatively executing the wrong PC.
   //    difference = (current - expected) | (expected - current)
   //    poison = ~(difference >> (kBitsPerPointer - 1))
-  __ ComputeCodeStartAddress(at);
-  __ Move(kSpeculationPoisonRegister, at);
+  __ ComputeCodeStartAddress(kScratchReg);
+  __ Move(kSpeculationPoisonRegister, kScratchReg);
   __ subu(kSpeculationPoisonRegister, kSpeculationPoisonRegister,
           kJavaScriptCallCodeStartRegister);
   __ subu(kJavaScriptCallCodeStartRegister, kJavaScriptCallCodeStartRegister,
-          at);
+          kScratchReg);
   __ or_(kSpeculationPoisonRegister, kSpeculationPoisonRegister,
          kJavaScriptCallCodeStartRegister);
   __ sra(kSpeculationPoisonRegister, kSpeculationPoisonRegister,
@@ -601,7 +604,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (instr->InputAt(0)->IsImmediate()) {
         __ Call(i.InputCode(0), RelocInfo::CODE_TARGET);
       } else {
-        __ Call(at, i.InputRegister(0), Code::kHeaderSize - kHeapObjectTag);
+        __ Call(kScratchReg, i.InputRegister(0),
+                Code::kHeaderSize - kHeapObjectTag);
       }
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
@@ -630,7 +634,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (instr->InputAt(0)->IsImmediate()) {
         __ Jump(i.InputCode(0), RelocInfo::CODE_TARGET);
       } else {
-        __ Jump(at, i.InputRegister(0), Code::kHeaderSize - kHeapObjectTag);
+        __ Jump(kScratchReg, i.InputRegister(0),
+                Code::kHeaderSize - kHeapObjectTag);
       }
       frame_access_state()->ClearSPDelta();
       frame_access_state()->SetFrameAccessToDefault();
@@ -812,8 +817,8 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       Register scratch1 = i.TempRegister(1);
       auto ool = new (zone()) OutOfLineRecordWrite(this, object, index, value,
                                                    scratch0, scratch1, mode);
-      __ Addu(at, object, index);
-      __ sw(value, MemOperand(at));
+      __ Addu(kScratchReg, object, index);
+      __ sw(value, MemOperand(kScratchReg));
       __ CheckPageFlag(object, scratch0,
                        MemoryChunk::kPointersFromHereAreInterestingMask, ne,
                        ool->entry());
@@ -3145,8 +3150,8 @@ void CodeGenerator::AssembleArchLookupSwitch(Instruction* instr) {
   MipsOperandConverter i(this, instr);
   Register input = i.InputRegister(0);
   for (size_t index = 2; index < instr->InputCount(); index += 2) {
-    __ li(at, Operand(i.InputInt32(index + 0)));
-    __ Branch(GetLabel(i.InputRpo(index + 1)), eq, input, Operand(at));
+    __ li(kScratchReg, Operand(i.InputInt32(index + 0)));
+    __ Branch(GetLabel(i.InputRpo(index + 1)), eq, input, Operand(kScratchReg));
   }
   AssembleArchJump(i.InputRpo(1));
 }
