@@ -11,8 +11,66 @@
   # },
 
   'v8_linux64_fyi_rel_ng_triggered': {
+    'swarming_task_attrs': {
+      'priority': 100,
+      'hard_timeout': 6342,
+      'io_timeout': 1234,
+    },
+    'swarming_dimensions': {
+      'cores': '8',
+      'os': 'Ubuntu',
+    },
     'tests': [
-      {'name': 'v8testing', 'variant': 'infra_staging', 'shards': 2},
+      {
+        'name': 'v8testing',
+        'variant': 'infra_staging',
+        'suffix': 'new name',
+        'shards': 2,
+        'swarming_task_attrs': {
+          'priority': 25,
+          'hard_timeout': 5123,
+        },
+        'swarming_dimensions': {'os': 'Ubuntu-14.04'},
+      },
+      {
+        'name': 'v8testing',
+        'variant': 'default',
+        'suffix': 't1',
+        'shards': 1,
+        'test_args': ['--extra-flags', '--no-enable-sse3 --no-enable-sse4'],
+        'swarming_task_attrs': {
+          'priority': 100,
+          'hard_timeout': 1234,
+          'io_timeout': 1234,
+        },
+        'swarming_dimensions': {'os': 'Ubuntu-14.04', 'cores': '8'},
+      },
+      {
+        'name': 'v8testing',
+        'variant': 'default',
+        'suffix': 't2',
+        'shards': 1,
+        'test_args': ['--extra-flags', '--no-enable-sse3 --no-enable-sse4'],
+        'swarming_task_attrs': {
+          'priority': 100,
+          'hard_timeout': 1234,
+          'io_timeout': 1234,
+        },
+        'swarming_dimensions': {'os': 'Ubuntu-14.04', 'cores': '8'},
+      },
+      {
+        'name': 'v8testing',
+        'variant': 'default',
+        'suffix': 't3',
+        'shards': 1,
+        'test_args': ['--extra-flags', '--no-enable-sse3 --no-enable-sse4'],
+        'swarming_task_attrs': {
+          'priority': 100,
+          'hard_timeout': 1234,
+          'io_timeout': 1234,
+        },
+        'swarming_dimensions': {'os': 'Ubuntu-14.04', 'cores': '8'},
+      },
       {'name': 'test262_variants', 'variant': 'infra_staging', 'shards': 2},
       {'name': 'mjsunit', 'variant': 'stress_sampling', 'shards': 1},
       {'name': 'webkit', 'variant': 'stress_sampling', 'shards': 1},
