@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eddfa789_2165a3a4",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4129,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-04-26T14:15:10Z",
+      "side": 1,
+      "message": "Before we intercept flag with outermost postpone scope, but we should do it with outermost scope before RunInterrupts. I added test for this case.",
+      "revId": "351a3345b417808500f3858c6f18ce9b90fe0ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
