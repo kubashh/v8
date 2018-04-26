@@ -4125,8 +4125,8 @@ bool InterruptsScope::Intercept(StackGuard::InterruptFlag flag) {
     if (!(current->intercept_mask_ & flag)) continue;
     if (current->mode_ == kRunInterrupts) {
       // If innermost scope is kRunInterrupts scope, prevent interrupt from
-      // beeing prevented.
-      if (!last_postpone_scope) return false;
+      // beeing intercepted.
+      break;
     } else {
       DCHECK_EQ(current->mode_, kPostponeInterrupts);
       last_postpone_scope = current;
