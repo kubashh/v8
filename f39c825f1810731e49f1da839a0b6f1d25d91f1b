@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e067eb60_3f44194d",
+        "filename": "src/elements.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2659,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-04-26T08:21:19Z",
+      "side": 1,
+      "message": "Maybe add a comment why you\u0027re doing this here, I see a future self deduplicating this code again :P",
+      "revId": "f39c825f1810731e49f1da839a0b6f1d25d91f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
