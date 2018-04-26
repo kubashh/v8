@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f95f5d5_a3b1a7f8",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-04-26T07:29:29Z",
+      "side": 1,
+      "message": "Let\u0027s add MemoryChunk::FromHeapObject() for readability.",
+      "range": {
+        "startLine": 330,
+        "startChar": 12,
+        "endLine": 330,
+        "endChar": 63
+      },
+      "revId": "d56a65dc8673e4a4c96a14d9b97589a8c26ff880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
