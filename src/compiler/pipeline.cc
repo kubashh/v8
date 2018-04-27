@@ -729,7 +729,9 @@ PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
   if (FLAG_trace_turbo) {
     TurboJsonFile json_of(info, std::ios_base::trunc);
     std::unique_ptr<char[]> function_name = info->GetDebugName();
-    int pos = info->IsStub() ? 0 : info->shared_info()->StartPosition();
+    int pos = info->IsStub() || !info->has_shared_info()
+                  ? 0
+                  : info->shared_info()->StartPosition();
     json_of << "{\"function\":\"" << function_name.get()
             << "\", \"sourcePosition\":" << pos << ", \"source\":\"";
     if (!script.is_null() && !script->source()->IsUndefined(isolate)) {
