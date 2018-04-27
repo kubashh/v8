@@ -34,6 +34,24 @@
       "revId": "39a13758fc6812abe18c0d5a551c033b423db7c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d533d6bc_49cba18f",
+        "filename": "src/wasm/wasm-linkage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-27T11:28:43Z",
+      "side": 1,
+      "message": "I agree with the CL\u0027s architecture overall, but I think the contract will be clearer/cleaner if this header includes only immutable definitions. Ultimately the LinkageAllocator is an iterator over two different immutable vectors, and as such it could as well be inlined into its (one) use.",
+      "parentUuid": "2fe52c6e_0e9521f9",
+      "revId": "39a13758fc6812abe18c0d5a551c033b423db7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
