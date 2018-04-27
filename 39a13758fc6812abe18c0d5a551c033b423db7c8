@@ -16,6 +16,24 @@
       "revId": "39a13758fc6812abe18c0d5a551c033b423db7c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fe52c6e_0e9521f9",
+        "filename": "src/wasm/wasm-linkage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-04-27T10:54:20Z",
+      "side": 1,
+      "message": "These are (constexpr) constants, so you need to copy them anyway before doing anything useful with them. It just allows to create the copies easier, without having to refer to the array of registers.\n\nWe had the same design before in wasm-linkage.cc ({return_registers} and {parameter_registers}).",
+      "parentUuid": "650bc650_9a540740",
+      "revId": "39a13758fc6812abe18c0d5a551c033b423db7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
