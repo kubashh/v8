@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "650bc650_9a540740",
+        "filename": "src/wasm/wasm-linkage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-04-27T10:35:26Z",
+      "side": 1,
+      "message": "This seems somewhat dangerous, since the LinkageAllocator has mutable state and one could end up accidentally sharing one of these instances across threads, leading to race conditions.\n\nLooking at the bigger picture, I think it\u0027s simply enough to have wasm-linkage.h define constant arrays of parameter and return registers and keep the statefulness in the use (in wasm-compiler.cc). That way everything defined here is immutable.",
+      "revId": "39a13758fc6812abe18c0d5a551c033b423db7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
