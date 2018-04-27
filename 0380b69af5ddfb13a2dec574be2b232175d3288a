@@ -16,6 +16,24 @@
       "revId": "0380b69af5ddfb13a2dec574be2b232175d3288a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ed9f7d6_ef423884",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-04-27T01:46:06Z",
+      "side": 1,
+      "message": "Or did you just mean postMessage the ArrayBuffer and not transfer?",
+      "parentUuid": "0128fedf_ebddd1c2",
+      "revId": "0380b69af5ddfb13a2dec574be2b232175d3288a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
