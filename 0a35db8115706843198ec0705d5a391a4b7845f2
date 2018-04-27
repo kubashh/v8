@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39434ef5_d1d16480",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-04-27T12:48:09Z",
+      "side": 1,
+      "message": "nit: I think it should be sufficient to only check \"info-\u003ehas_shared_info()\" and drop the \"info-\u003eIsStub()\" here.",
+      "range": {
+        "startLine": 732,
+        "startChar": 32,
+        "endLine": 732,
+        "endChar": 56
+      },
+      "revId": "0a35db8115706843198ec0705d5a391a4b7845f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
