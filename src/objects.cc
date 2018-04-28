@@ -6341,8 +6341,10 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
 
   // Allocate new map.
   Handle<Map> new_map = Map::CopyDropDescriptors(old_map);
-  new_map->set_may_have_interesting_symbols(new_map->has_named_interceptor() ||
-                                            new_map->is_access_check_needed());
+  if (new_map->has_named_interceptor() || new_map->is_access_check_needed()) {
+    // Force slow path in some builtins if an accessor or access check is needed
+    new_map->set_may_have_interesting_symbols(true);
+  }
   new_map->set_is_dictionary_map(false);
 
   NotifyMapChange(old_map, new_map, isolate);
