@@ -342,6 +342,9 @@ class Debug {
   void StartSideEffectCheckMode();
   void StopSideEffectCheckMode();
 
+  void SkipNextSideEffectFromApi();
+  void CancelSkipNextSideEffectFromApi();
+
   void ApplySideEffectChecks(Handle<DebugInfo> debug_info);
   void ClearSideEffectChecks(Handle<DebugInfo> debug_info);
 
@@ -529,6 +532,8 @@ class Debug {
   bool break_on_uncaught_exception_;
   // Termination exception because side effect check has failed.
   bool side_effect_check_failed_;
+  // Treat the next side effect check as if it had no side effect.
+  bool skip_next_side_effect_check_;
 
   // List of active debug info objects.
   DebugInfoListNode* debug_info_list_;
