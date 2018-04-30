@@ -7,7 +7,10 @@
 class Test extends Number {}
 Test.prototype[Symbol.toStringTag] = "Test";
 
-assertEquals("[object Test]", Object.prototype.toString.call(new Test));
+function test(o, expected, desc) {
+  %ToFastProperties(o.__proto__);
+  assertEquals(expected, Object.prototype.toString.call(o), desc);
+}
 
-%ToFastProperties(Test.prototype);
-assertEquals("[object Test]", Object.prototype.toString.call(new Test));
+test(new Test, "[object Test]", "Try #1");
+test(new Test, "[object Test]", "Try #2");
