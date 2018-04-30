@@ -656,7 +656,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
 #ifdef V8_EMBEDDED_BUILTINS
   TNode<HeapObject> LookupConstant(Handle<HeapObject> object);
-  TNode<ExternalReference> LookupExternalReference(ExternalReference reference);
+  TNode<RawPtrT> LookupExternalReference(ExternalReference reference);
 #endif
 
   // Constants.
@@ -679,7 +679,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   }
   TNode<String> StringConstant(const char* str);
   TNode<Oddball> BooleanConstant(bool value);
-  TNode<ExternalReference> ExternalConstant(ExternalReference address);
+  TNode<RawPtrT> ExternalConstant(ExternalReference address);
   TNode<Float64T> Float64Constant(double value);
   TNode<HeapNumber> NaNConstant();
   TNode<BoolT> Int32TrueConstant() {
