@@ -3898,11 +3898,13 @@ class V8_EXPORT Function : public Object {
                           Local<Value> data = Local<Value>(), int length = 0));
 
   V8_WARN_UNUSED_RESULT MaybeLocal<Object> NewInstance(
-      Local<Context> context, int argc, Local<Value> argv[]) const;
+      Local<Context> context, int argc, Local<Value> argv[],
+      SideEffectType side_effect_type = SideEffectType::kHasSideEffect) const;
 
   V8_WARN_UNUSED_RESULT MaybeLocal<Object> NewInstance(
-      Local<Context> context) const {
-    return NewInstance(context, 0, nullptr);
+      Local<Context> context,
+      SideEffectType side_effect_type = SideEffectType::kHasSideEffect) const {
+    return NewInstance(context, 0, nullptr, side_effect_type);
   }
 
   V8_DEPRECATE_SOON("Use maybe version",

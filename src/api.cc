@@ -5106,9 +5106,9 @@ Local<Function> Function::New(Isolate* v8_isolate, FunctionCallback callback,
       .FromMaybe(Local<Function>());
 }
 
-
-MaybeLocal<Object> Function::NewInstance(Local<Context> context, int argc,
-                                         v8::Local<v8::Value> argv[]) const {
+MaybeLocal<Object> Function::NewInstance(
+    Local<Context> context, int argc, v8::Local<v8::Value> argv[],
+    v8::SideEffectType side_effect_type) const {
   auto isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.Execute");
   ENTER_V8(isolate, context, Function, NewInstance, MaybeLocal<Object>(),
@@ -5118,6 +5118,10 @@ MaybeLocal<Object> Function::NewInstance(Local<Context> context, int argc,
   STATIC_ASSERT(sizeof(v8::Local<v8::Value>) == sizeof(i::Object**));
   i::Handle<i::Object>* args = reinterpret_cast<i::Handle<i::Object>*>(argv);
   Local<Object> result;
+  if (side_effect_type == v8::SideEffectType::kHasNoSideEffect &&
+      isolate->debug_execution_mode() == i::DebugInfo::kSideEffects) {
+    isolate->debug()->SkipNextSideEffectFromApi();
+  }
   has_pending_exception = !ToLocal<Object>(
       i::Execution::New(isolate, self, self, argc, args), &result);
   RETURN_ON_FAILED_EXECUTION(Object);

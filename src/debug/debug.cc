@@ -88,6 +88,7 @@ Debug::Debug(Isolate* isolate)
       break_on_exception_(false),
       break_on_uncaught_exception_(false),
       side_effect_check_failed_(false),
+      skip_next_side_effect_check_(false),
       debug_info_list_(nullptr),
       feature_tracker_(isolate),
       isolate_(isolate) {
@@ -2331,6 +2332,7 @@ void Debug::StartSideEffectCheckMode() {
   isolate_->set_debug_execution_mode(DebugInfo::kSideEffects);
   UpdateHookOnFunctionCall();
   side_effect_check_failed_ = false;
+  skip_next_side_effect_check_ = false;
 
   DCHECK(!temporary_objects_);
   temporary_objects_.reset(new TemporaryObjectsTracker());
@@ -2355,12 +2357,19 @@ void Debug::StopSideEffectCheckMode() {
   isolate_->set_debug_execution_mode(DebugInfo::kBreakpoints);
   UpdateHookOnFunctionCall();
   side_effect_check_failed_ = false;
+  skip_next_side_effect_check_ = false;
 
   DCHECK(temporary_objects_);
   isolate_->heap()->RemoveHeapObjectAllocationTracker(temporary_objects_.get());
   temporary_objects_.reset();
   isolate_->native_context()->set_regexp_last_match_info(*regexp_match_info_);
   regexp_match_info_ = Handle<RegExpMatchInfo>::null();
+}
+
+void Debug::SkipNextSideEffectFromApi() {
+  DCHECK(isolate_->debug_execution_mode() == DebugInfo::kSideEffects);
+  DCHECK(!skip_next_side_effect_check_);
+  skip_next_side_effect_check_ = true;
 }
 
 void Debug::ApplySideEffectChecks(Handle<DebugInfo> debug_info) {
@@ -2429,6 +2438,10 @@ bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
 
 bool Debug::PerformSideEffectCheckForCallback(Handle<Object> callback_info) {
   DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  if (skip_next_side_effect_check_) {
+    skip_next_side_effect_check_ = false;
+    return true;
+  }
   // TODO(7515): always pass a valid callback info object.
   if (!callback_info.is_null() &&
       DebugEvaluate::CallbackHasNoSideEffect(*callback_info)) {
