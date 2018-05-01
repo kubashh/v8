@@ -2052,9 +2052,9 @@ TNode<Object> WeakCollectionsBuiltinsAssembler::AllocateTable(
 
 TNode<Smi> WeakCollectionsBuiltinsAssembler::CreateIdentityHash(
     TNode<Object> key) {
-  TNode<ExternalReference> function_addr = ExternalConstant(
+  TNode<RawPtrT> function_addr = ExternalConstant(
       ExternalReference::jsreceiver_create_identity_hash(isolate()));
-  TNode<ExternalReference> isolate_ptr =
+  TNode<RawPtrT> isolate_ptr =
       ExternalConstant(ExternalReference::isolate_address(isolate()));
 
   MachineType type_ptr = MachineType::Pointer();

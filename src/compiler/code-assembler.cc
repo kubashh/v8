@@ -270,7 +270,7 @@ TNode<HeapObject> CodeAssembler::LookupConstant(Handle<HeapObject> object) {
 }
 
 // External references are stored in the external reference table.
-TNode<ExternalReference> CodeAssembler::LookupExternalReference(
+TNode<RawPtrT> CodeAssembler::LookupExternalReference(
     ExternalReference reference) {
   DCHECK(isolate()->ShouldLoadConstantsFromRootList());
 
@@ -290,7 +290,7 @@ TNode<ExternalReference> CodeAssembler::LookupExternalReference(
 #endif
       + ExternalReferenceTable::OffsetOfEntry(index);
 
-  return UncheckedCast<ExternalReference>(
+  return UncheckedCast<RawPtrT>(
       Load(MachineType::Pointer(), LoadRootsPointer(),
            IntPtrConstant(roots_to_external_reference_offset)));
 }
@@ -356,15 +356,13 @@ TNode<Oddball> CodeAssembler::BooleanConstant(bool value) {
   return UncheckedCast<Oddball>(raw_assembler()->BooleanConstant(value));
 }
 
-TNode<ExternalReference> CodeAssembler::ExternalConstant(
-    ExternalReference address) {
+TNode<RawPtrT> CodeAssembler::ExternalConstant(ExternalReference address) {
 #ifdef V8_EMBEDDED_BUILTINS
   if (isolate()->ShouldLoadConstantsFromRootList()) {
     return LookupExternalReference(address);
   }
 #endif  // V8_EMBEDDED_BUILTINS
-  return UncheckedCast<ExternalReference>(
-      raw_assembler()->ExternalConstant(address));
+  return UncheckedCast<RawPtrT>(raw_assembler()->ExternalConstant(address));
 }
 
 TNode<Float64T> CodeAssembler::Float64Constant(double value) {

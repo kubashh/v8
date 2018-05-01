@@ -1112,7 +1112,7 @@ void TypedArrayBuiltinsAssembler::SetJSArraySource(
 void TypedArrayBuiltinsAssembler::CallCMemmove(TNode<IntPtrT> dest_ptr,
                                                TNode<IntPtrT> src_ptr,
                                                TNode<IntPtrT> byte_length) {
-  TNode<ExternalReference> memmove =
+  TNode<RawPtrT> memmove =
       ExternalConstant(ExternalReference::libc_memmove_function());
   CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
                  MachineType::Pointer(), MachineType::UintPtr(), memmove,
@@ -1126,7 +1126,7 @@ void TypedArrayBuiltinsAssembler::
                                                    TNode<IntPtrT> source_length,
                                                    TNode<IntPtrT> offset) {
   CSA_ASSERT(this, Word32Not(IsBigInt64ElementsKind(LoadElementsKind(dest))));
-  TNode<ExternalReference> f = ExternalConstant(
+  TNode<RawPtrT> f = ExternalConstant(
       ExternalReference::copy_fast_number_jsarray_elements_to_typed_array());
   CallCFunction5(MachineType::AnyTagged(), MachineType::AnyTagged(),
                  MachineType::AnyTagged(), MachineType::AnyTagged(),
@@ -1137,7 +1137,7 @@ void TypedArrayBuiltinsAssembler::
 void TypedArrayBuiltinsAssembler::CallCCopyTypedArrayElementsToTypedArray(
     TNode<JSTypedArray> source, TNode<JSTypedArray> dest,
     TNode<IntPtrT> source_length, TNode<IntPtrT> offset) {
-  TNode<ExternalReference> f = ExternalConstant(
+  TNode<RawPtrT> f = ExternalConstant(
       ExternalReference::copy_typed_array_elements_to_typed_array());
   CallCFunction4(MachineType::AnyTagged(), MachineType::AnyTagged(),
                  MachineType::AnyTagged(), MachineType::UintPtr(),
@@ -1148,7 +1148,7 @@ void TypedArrayBuiltinsAssembler::CallCCopyTypedArrayElementsToTypedArray(
 void TypedArrayBuiltinsAssembler::CallCCopyTypedArrayElementsSlice(
     TNode<JSTypedArray> source, TNode<JSTypedArray> dest, TNode<IntPtrT> start,
     TNode<IntPtrT> end) {
-  TNode<ExternalReference> f =
+  TNode<RawPtrT> f =
       ExternalConstant(ExternalReference::copy_typed_array_elements_slice());
   CallCFunction4(MachineType::AnyTagged(), MachineType::AnyTagged(),
                  MachineType::AnyTagged(), MachineType::UintPtr(),
