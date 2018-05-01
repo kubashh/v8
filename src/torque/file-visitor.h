@@ -22,22 +22,22 @@ class FileVisitor {
  public:
   explicit FileVisitor(GlobalContext& global_context)
       : global_context_(global_context),
-        module_(global_context.GetDefaultModule()) {
-    global_context_.PushScope(module_->scope());
-  }
+        declarations_(global_context.declarations()),
+        module_(global_context.GetDefaultModule()) {}
 
-  Type GetType(const std::string& s) { return GetTypeOracle().GetType(s); }
-  TypeVector GetTypeVector(const std::vector<std::string>& v) {
+  Type LookupType(SourcePosition pos, const std::string& name);
+
+  TypeVector GetTypeVector(SourcePosition pos,
+                           const std::vector<std::string>& v) {
     TypeVector result;
     for (const std::string& s : v) {
-      result.push_back(GetType(s));
+      result.push_back(LookupType(pos, s));
     }
     return result;
   }
 
-  Scope* TopScope() { return global_context_.TopScope(); }
-
   Ast* ast() { return global_context_.ast(); }
+  Declarations* declarations() { return global_context_.declarations(); }
 
  protected:
   static constexpr const char* kTrueLabelName = "True";
@@ -51,12 +51,12 @@ class FileVisitor {
 
   TypeOracle& GetTypeOracle() { return global_context_.GetTypeOracle(); }
 
-  bool IsValueDeclared(const std::string& id) {
-    return global_context_.Lookup(id) != nullptr;
+  bool IsValueDeclared(const std::string& name) {
+    return declarations()->Lookup(name) != nullptr;
   }
 
   Value* LookupValue(SourcePosition pos, const std::string& id) {
-    Declarable* declarable = global_context_.Lookup(id);
+    Declarable* declarable = declarations()->Lookup(id);
     if (declarable != nullptr) {
       if (declarable->IsValue()) {
         return Value::cast(declarable);
@@ -72,7 +72,7 @@ class FileVisitor {
   Callable* LookupCall(SourcePosition pos, const std::string& name,
                        const TypeVector& parameter_types) {
     Callable* result = nullptr;
-    Declarable* declarable = global_context_.Lookup(name);
+    Declarable* declarable = declarations()->Lookup(name);
     if (declarable != nullptr) {
       if (declarable->IsBuiltin()) {
         result = Builtin::cast(declarable);
@@ -82,7 +82,7 @@ class FileVisitor {
         for (auto& m : MacroList::cast(declarable)->list()) {
           if (GetTypeOracle().IsCompatibleSignature(
                   m->signature().parameter_types, parameter_types)) {
-            result = m.get();
+            result = m;
             break;
           }
         }
@@ -110,13 +110,13 @@ class FileVisitor {
 
   Macro* LookupMacro(SourcePosition pos, const std::string& name,
                      const TypeVector& types) {
-    Declarable* declarable = global_context_.Lookup(name);
+    Declarable* declarable = declarations()->Lookup(name);
     if (declarable != nullptr) {
       if (declarable->IsMacroList()) {
         for (auto& m : MacroList::cast(declarable)->list()) {
           if (m->signature().parameter_types.types == types &&
               !m->signature().parameter_types.var_args) {
-            return m.get();
+            return m;
           }
         }
       }
@@ -129,7 +129,7 @@ class FileVisitor {
   }
 
   Builtin* LookupBuiltin(const SourcePosition& pos, const std::string& name) {
-    Declarable* declarable = global_context_.Lookup(name);
+    Declarable* declarable = declarations()->Lookup(name);
     if (declarable != nullptr) {
       if (declarable->IsBuiltin()) {
         return Builtin::cast(declarable);
@@ -147,14 +147,18 @@ class FileVisitor {
   }
 
   std::string PositionAsString(SourcePosition pos) {
-    return global_context_.PositionAsString(pos);
+    return global_context_.ast()->source_file_map()->PositionAsString(pos);
   }
 
-  Signature MakeSignature(const ParameterList& parameters,
+  Signature MakeSignature(SourcePosition pos, const ParameterList& parameters,
                           const std::string& return_type,
                           const LabelAndTypesVector& labels);
 
+  void CheckAlreadyDeclared(SourcePosition pos, const std::string& name,
+                            const char* new_type);
+
   GlobalContext& global_context_;
+  Declarations* declarations_;
   Callable* current_callable_;
   Module* module_;
 };
