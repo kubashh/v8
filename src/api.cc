@@ -629,13 +629,13 @@ size_t SnapshotCreator::AddTemplate(Local<Template> template_obj) {
   return AddData(template_obj);
 }
 
-size_t SnapshotCreator::AddData(i::Object* object) {
-  DCHECK_NOT_NULL(object);
+size_t SnapshotCreator::AddData(i::Address object) {
+  DCHECK_NE(object, i::kNullAddress);
   SnapshotCreatorData* data = SnapshotCreatorData::cast(data_);
   DCHECK(!data->created_);
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(data->isolate_);
   i::HandleScope scope(isolate);
-  i::Handle<i::Object> obj(object, isolate);
+  i::Handle<i::Object> obj(reinterpret_cast<i::Object*>(object), isolate);
   i::Handle<i::ArrayList> list;
   if (!isolate->heap()->serialized_objects()->IsArrayList()) {
     list = i::ArrayList::New(isolate, 1);
@@ -649,13 +649,13 @@ size_t SnapshotCreator::AddData(i::Object* object) {
   return index;
 }
 
-size_t SnapshotCreator::AddData(Local<Context> context, i::Object* object) {
-  DCHECK_NOT_NULL(object);
+size_t SnapshotCreator::AddData(Local<Context> context, i::Address object) {
+  DCHECK_NE(object, i::kNullAddress);
   DCHECK(!SnapshotCreatorData::cast(data_)->created_);
   i::Handle<i::Context> ctx = Utils::OpenHandle(*context);
   i::Isolate* isolate = ctx->GetIsolate();
   i::HandleScope scope(isolate);
-  i::Handle<i::Object> obj(object, isolate);
+  i::Handle<i::Object> obj(reinterpret_cast<i::Object*>(object), isolate);
   i::Handle<i::ArrayList> list;
   if (!ctx->serialized_objects()->IsArrayList()) {
     list = i::ArrayList::New(isolate, 1);
@@ -1000,71 +1000,51 @@ void SetResourceConstraints(i::Isolate* isolate,
   }
 }
 
-
-i::Object** V8::GlobalizeReference(i::Isolate* isolate, i::Object** obj) {
+i::Address* V8::GlobalizeReference(i::Isolate* isolate, i::Address* obj) {
   LOG_API(isolate, Persistent, New);
   i::Handle<i::Object> result = isolate->global_handles()->Create(*obj);
 #ifdef VERIFY_HEAP
   if (i::FLAG_verify_heap) {
-    (*obj)->ObjectVerify();
+    reinterpret_cast<i::Object*>(*obj)->ObjectVerify();
   }
 #endif  // VERIFY_HEAP
-  return result.location();
+  return result.location_as_address_ptr();
 }
 
-
-i::Object** V8::CopyPersistent(i::Object** obj) {
+i::Address* V8::CopyPersistent(i::Address* obj) {
   i::Handle<i::Object> result = i::GlobalHandles::CopyGlobal(obj);
 #ifdef VERIFY_HEAP
   if (i::FLAG_verify_heap) {
-    (*obj)->ObjectVerify();
+    reinterpret_cast<i::Object*>(*obj)->ObjectVerify();
   }
 #endif  // VERIFY_HEAP
-  return result.location();
+  return result.location_as_address_ptr();
 }
 
-void V8::RegisterExternallyReferencedObject(i::Object** object,
+void V8::RegisterExternallyReferencedObject(i::Address* location,
                                             i::Isolate* isolate) {
-  isolate->heap()->RegisterExternallyReferencedObject(object);
+  isolate->heap()->RegisterExternallyReferencedObject(location);
 }
 
-void V8::MakeWeak(i::Object** location, void* parameter,
-                  int embedder_field_index1, int embedder_field_index2,
-                  WeakCallbackInfo<void>::Callback weak_callback) {
-  WeakCallbackType type = WeakCallbackType::kParameter;
-  if (embedder_field_index1 == 0) {
-    if (embedder_field_index2 == 1) {
-      type = WeakCallbackType::kInternalFields;
-    } else {
-      DCHECK_EQ(embedder_field_index2, -1);
-      type = WeakCallbackType::kInternalFields;
-    }
-  } else {
-    DCHECK_EQ(embedder_field_index1, -1);
-    DCHECK_EQ(embedder_field_index2, -1);
-  }
-  i::GlobalHandles::MakeWeak(location, parameter, weak_callback, type);
-}
-
-void V8::MakeWeak(i::Object** location, void* parameter,
+void V8::MakeWeak(i::Address* location, void* parameter,
                   WeakCallbackInfo<void>::Callback weak_callback,
                   WeakCallbackType type) {
   i::GlobalHandles::MakeWeak(location, parameter, weak_callback, type);
 }
 
-void V8::MakeWeak(i::Object*** location_addr) {
+void V8::MakeWeak(i::Address** location_addr) {
   i::GlobalHandles::MakeWeak(location_addr);
 }
 
-void* V8::ClearWeak(i::Object** location) {
+void* V8::ClearWeak(i::Address* location) {
   return i::GlobalHandles::ClearWeakness(location);
 }
 
-void V8::AnnotateStrongRetainer(i::Object** location, const char* label) {
+void V8::AnnotateStrongRetainer(i::Address* location, const char* label) {
   i::GlobalHandles::AnnotateStrongRetainer(location, label);
 }
 
-void V8::DisposeGlobal(i::Object** location) {
+void V8::DisposeGlobal(i::Address* location) {
   i::GlobalHandles::Destroy(location);
 }
 
@@ -1117,14 +1097,16 @@ void HandleScope::Initialize(Isolate* isolate) {
       "Entering the V8 API without proper locking in place");
   i::HandleScopeData* current = internal_isolate->handle_scope_data();
   isolate_ = internal_isolate;
-  prev_next_ = current->next;
-  prev_limit_ = current->limit;
+  prev_next_ = reinterpret_cast<i::Address*>(current->next);
+  prev_limit_ = reinterpret_cast<i::Address*>(current->limit);
   current->level++;
 }
 
 
 HandleScope::~HandleScope() {
-  i::HandleScope::CloseScope(isolate_, prev_next_, prev_limit_);
+  i::HandleScope::CloseScope(isolate_,
+                             reinterpret_cast<i::Object**>(prev_next_),
+                             reinterpret_cast<i::Object**>(prev_limit_));
 }
 
 void* HandleScope::operator new(size_t) { base::OS::Abort(); }
@@ -1137,32 +1119,32 @@ int HandleScope::NumberOfHandles(Isolate* isolate) {
       reinterpret_cast<i::Isolate*>(isolate));
 }
 
-
-i::Object** HandleScope::CreateHandle(i::Isolate* isolate, i::Object* value) {
-  return i::HandleScope::CreateHandle(isolate, value);
+i::Address* HandleScope::CreateHandle(i::Isolate* isolate,
+                                      i::Address value_address) {
+  return i::HandleScope::CreateHandle(isolate, value_address);
 }
 
-
-i::Object** HandleScope::CreateHandle(i::HeapObject* heap_object,
-                                      i::Object* value) {
+i::Address* HandleScope::CreateHandle(i::HeapObject* heap_object,
+                                      i::Address value_address) {
   DCHECK(heap_object->IsHeapObject());
-  return i::HandleScope::CreateHandle(heap_object->GetIsolate(), value);
+  return i::HandleScope::CreateHandle(heap_object->GetIsolate(), value_address);
 }
 
 
 EscapableHandleScope::EscapableHandleScope(Isolate* v8_isolate) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  escape_slot_ = CreateHandle(isolate, isolate->heap()->the_hole_value());
+  escape_slot_ = CreateHandle(
+      isolate, reinterpret_cast<i::Address>(isolate->heap()->the_hole_value()));
   Initialize(v8_isolate);
 }
 
-
-i::Object** EscapableHandleScope::Escape(i::Object** escape_value) {
+i::Address* EscapableHandleScope::Escape(i::Address* escape_value) {
   i::Heap* heap = reinterpret_cast<i::Isolate*>(GetIsolate())->heap();
-  Utils::ApiCheck((*escape_slot_)->IsTheHole(heap->isolate()),
-                  "EscapableHandleScope::Escape", "Escape value set twice");
+  Utils::ApiCheck(
+      reinterpret_cast<i::Object*>(*escape_slot_)->IsTheHole(heap->isolate()),
+      "EscapableHandleScope::Escape", "Escape value set twice");
   if (escape_value == nullptr) {
-    *escape_slot_ = heap->undefined_value();
+    *escape_slot_ = reinterpret_cast<i::Address>(heap->undefined_value());
     return nullptr;
   }
   *escape_slot_ = *escape_value;
@@ -1179,7 +1161,7 @@ void EscapableHandleScope::operator delete[](void*, size_t) {
 SealHandleScope::SealHandleScope(Isolate* isolate)
     : isolate_(reinterpret_cast<i::Isolate*>(isolate)) {
   i::HandleScopeData* current = isolate_->handle_scope_data();
-  prev_limit_ = current->limit;
+  prev_limit_ = reinterpret_cast<i::Address*>(current->limit);
   current->limit = current->next;
   prev_sealed_level_ = current->sealed_level;
   current->sealed_level = current->level;
@@ -1189,7 +1171,7 @@ SealHandleScope::SealHandleScope(Isolate* isolate)
 SealHandleScope::~SealHandleScope() {
   i::HandleScopeData* current = isolate_->handle_scope_data();
   DCHECK_EQ(current->next, current->limit);
-  current->limit = prev_limit_;
+  current->limit = reinterpret_cast<i::Object**>(prev_limit_);
   DCHECK_EQ(current->level, current->sealed_level);
   current->sealed_level = prev_sealed_level_;
 }
@@ -6336,7 +6318,7 @@ void Context::SetErrorMessageForCodeGenerationFromStrings(Local<String> error) {
 }
 
 namespace {
-i::Object** GetSerializedDataFromFixedArray(i::Isolate* isolate,
+i::Address* GetSerializedDataFromFixedArray(i::Isolate* isolate,
                                             i::FixedArray* list, size_t index) {
   if (index < static_cast<size_t>(list->length())) {
     int int_index = static_cast<int>(index);
@@ -6347,14 +6329,14 @@ i::Object** GetSerializedDataFromFixedArray(i::Isolate* isolate,
       int last = list->length() - 1;
       while (last >= 0 && list->is_the_hole(isolate, last)) last--;
       list->Shrink(last + 1);
-      return i::Handle<i::Object>(object, isolate).location();
+      return i::Handle<i::Object>(object, isolate).location_as_address_ptr();
     }
   }
   return nullptr;
 }
 }  // anonymous namespace
 
-i::Object** Context::GetDataFromSnapshotOnce(size_t index) {
+i::Address* Context::GetDataFromSnapshotOnce(size_t index) {
   auto context = Utils::OpenHandle(this);
   i::Isolate* i_isolate = context->GetIsolate();
   i::FixedArray* list = i::FixedArray::cast(context->serialized_objects());
@@ -8364,7 +8346,7 @@ Isolate::SafeForTerminationScope::~SafeForTerminationScope() {
   isolate_->set_next_v8_call_is_safe_for_termination(prev_value_);
 }
 
-i::Object** Isolate::GetDataFromSnapshotOnce(size_t index) {
+i::Address* Isolate::GetDataFromSnapshotOnce(size_t index) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
   i::FixedArray* list = i_isolate->heap()->serialized_objects();
   return GetSerializedDataFromFixedArray(i_isolate, list, index);
@@ -9601,8 +9583,9 @@ debug::ConsoleCallArguments::ConsoleCallArguments(
 
 debug::ConsoleCallArguments::ConsoleCallArguments(
     internal::BuiltinArguments& args)
-    : v8::FunctionCallbackInfo<v8::Value>(nullptr, &args[0] - 1,
-                                          args.length() - 1) {}
+    : v8::FunctionCallbackInfo<v8::Value>(
+          nullptr, reinterpret_cast<i::Address*>(&args[0] - 1),
+          args.length() - 1) {}
 
 int debug::GetStackFrameId(v8::Local<v8::StackFrame> frame) {
   return Utils::OpenHandle(*frame)->id();

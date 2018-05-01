@@ -4818,11 +4818,12 @@ void Heap::TracePossibleWrapper(JSObject* js_object) {
   }
 }
 
-void Heap::RegisterExternallyReferencedObject(Object** object) {
+void Heap::RegisterExternallyReferencedObject(Address* location) {
   // The embedder is not aware of whether numbers are materialized as heap
   // objects are just passed around as Smis.
-  if (!(*object)->IsHeapObject()) return;
-  HeapObject* heap_object = HeapObject::cast(*object);
+  Object* object = *reinterpret_cast<Object**>(location);
+  if (!object->IsHeapObject()) return;
+  HeapObject* heap_object = HeapObject::cast(object);
   DCHECK(Contains(heap_object));
   if (FLAG_incremental_marking_wrappers && incremental_marking()->IsMarking()) {
     incremental_marking()->WhiteToGreyAndPush(heap_object);

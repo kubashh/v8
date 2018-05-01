@@ -1574,7 +1574,8 @@ class Object {
 // In objects.h to be usable without objects-inl.h inclusion.
 bool Object::IsSmi() const { return HAS_SMI_TAG(this); }
 bool Object::IsHeapObject() const {
-  DCHECK_EQ(!IsSmi(), Internals::HasHeapObjectTag(this));
+  DCHECK_EQ(!IsSmi(),
+            Internals::HasHeapObjectTag(reinterpret_cast<Address>(this)));
   return !IsSmi();
 }
 
@@ -1601,7 +1602,9 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
 class Smi: public Object {
  public:
   // Returns the integer value.
-  inline int value() const { return Internals::SmiValue(this); }
+  inline int value() const {
+    return Internals::SmiValue(reinterpret_cast<Address>(this));
+  }
   inline Smi* ToUint32Smi() {
     if (value() <= 0) return Smi::kZero;
     return Smi::FromInt(static_cast<uint32_t>(value()));
