@@ -138,7 +138,7 @@ Handle<Code> Builtins::OrdinaryToPrimitive(OrdinaryToPrimitiveHint hint) {
 
 void Builtins::set_builtin(int index, HeapObject* builtin) {
   DCHECK(Builtins::IsBuiltinId(index));
-  DCHECK(Internals::HasHeapObjectTag(builtin));
+  DCHECK(Internals::HasHeapObjectTag(reinterpret_cast<Address>(builtin)));
   // The given builtin may be completely uninitialized thus we cannot check its
   // type here.
   builtins_[index] = builtin;
