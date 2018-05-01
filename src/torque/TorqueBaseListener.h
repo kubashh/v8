@@ -24,6 +24,19 @@ class TorqueBaseListener : public TorqueListener {
   void enterTypeList(TorqueParser::TypeListContext* /*ctx*/) override {}
   void exitTypeList(TorqueParser::TypeListContext* /*ctx*/) override {}
 
+  void enterGenericType(TorqueParser::GenericTypeContext* /*ctx*/) override {}
+  void exitGenericType(TorqueParser::GenericTypeContext* /*ctx*/) override {}
+
+  void enterGenericTypeList(
+      TorqueParser::GenericTypeListContext* /*ctx*/) override {}
+  void exitGenericTypeList(
+      TorqueParser::GenericTypeListContext* /*ctx*/) override {}
+
+  void enterOptionalGenericTypeList(
+      TorqueParser::OptionalGenericTypeListContext* /*ctx*/) override {}
+  void exitOptionalGenericTypeList(
+      TorqueParser::OptionalGenericTypeListContext* /*ctx*/) override {}
+
   void enterTypeListMaybeVarArgs(
       TorqueParser::TypeListMaybeVarArgsContext* /*ctx*/) override {}
   void exitTypeListMaybeVarArgs(

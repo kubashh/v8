@@ -115,6 +115,10 @@ DECIMAL_LITERAL
 type : IDENTIFIER;
 typeList : '(' type? (',' type)* ')';
 
+genericType: IDENTIFIER;
+genericTypeList: '<' genericType (',' genericType)* '>';
+optionalGenericTypeList: genericTypeList?;
+
 typeListMaybeVarArgs: '(' type? (',' type)* (',' VARARGS)? ')'
                     | '(' VARARGS ')';
 
@@ -261,7 +265,7 @@ externalBuiltin : 'extern' JAVASCRIPT? BUILTIN IDENTIFIER typeList optionalType 
 externalMacro : 'extern' (IMPLICIT? 'operator' STRING_LITERAL)? MACRO IDENTIFIER typeListMaybeVarArgs optionalType optionalLabelList ';';
 externalRuntime : 'extern' RUNTIME IDENTIFIER typeListMaybeVarArgs optionalType ';';
 builtinDeclaration : JAVASCRIPT? BUILTIN IDENTIFIER parameterList optionalType helperBody;
-macroDeclaration : MACRO IDENTIFIER parameterList optionalType optionalLabelList helperBody;
+macroDeclaration : MACRO IDENTIFIER (optionalGenericTypeList parameterList optionalType optionalLabelList helperBody) | (genericTypeList ';' );
 constDeclaration : 'const' IDENTIFIER ':' type '=' STRING_LITERAL ';';
 
 declaration
