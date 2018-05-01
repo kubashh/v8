@@ -3,6 +3,12 @@
 // found in the LICENSE file.
 
 module array {
+
+//  macro Test<T>(p1: T, p2: T) {
+//  }
+
+//  macro Test<Object>;
+
   macro FastArraySplice(
       context: Context, args: Arguments, o: Object,
       originalLengthNumber: Number, actualStartNumber: Number, insertCount: Smi,

@@ -30,7 +30,7 @@ class ImplementationVisitor : public FileVisitor {
   explicit ImplementationVisitor(GlobalContext& global_context)
       : FileVisitor(global_context), indent_(0), next_temp_(0) {}
 
-  void Visit(Ast* ast) { Visit(ast->GetDefaultModule()); }
+  void Visit(Ast* ast) { Visit(ast->default_module()); }
 
   VisitResult Visit(Expression* expr);
   Type Visit(Statement* stmt);
