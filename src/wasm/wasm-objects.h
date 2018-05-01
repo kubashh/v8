@@ -287,6 +287,7 @@ class WasmInstanceObject : public JSObject {
   V(kExportsObjectOffset, kPointerSize)                                 \
   V(kMemoryObjectOffset, kPointerSize)                                  \
   V(kGlobalsBufferOffset, kPointerSize)                                 \
+  V(ImportedMutableGlobalsBuffersOffset, kPointerSize)                  \
   V(kDebugInfoOffset, kPointerSize)                                     \
   V(kTableObjectOffset, kPointerSize)                                   \
   V(kFunctionTablesOffset, kPointerSize)                                \
