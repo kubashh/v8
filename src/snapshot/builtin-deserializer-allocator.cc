@@ -41,7 +41,7 @@ Address BuiltinDeserializerAllocator::Allocate(AllocationSpace space,
 
   if (BSU::IsBuiltinIndex(code_object_id)) {
     Object* obj = isolate()->builtins()->builtin(code_object_id);
-    DCHECK(Internals::HasHeapObjectTag(obj));
+    DCHECK(Internals::HasHeapObjectTag(reinterpret_cast<Address>(obj)));
     return HeapObject::cast(obj)->address();
   } else if (BSU::IsHandlerIndex(code_object_id)) {
     if (handler_allocation_ != kNullAddress) {

@@ -146,12 +146,14 @@ class DeferredHandles;
 class Heap;
 class HeapObject;
 class Isolate;
-class Object;
 struct ScriptStreamingData;
 template<typename T> class CustomArguments;
 class PropertyCallbackArguments;
 class FunctionCallbackArguments;
 class GlobalHandles;
+
+typedef uintptr_t Address;
+static const Address kNullAddress = 0;
 
 namespace wasm {
 class StreamingDecoder;
@@ -237,19 +239,19 @@ class Local {
    */
   template <class S>
   V8_INLINE bool operator==(const Local<S>& that) const {
-    internal::Object** a = reinterpret_cast<internal::Object**>(this->val_);
-    internal::Object** b = reinterpret_cast<internal::Object**>(that.val_);
-    if (a == 0) return b == 0;
-    if (b == 0) return false;
+    internal::Address* a = reinterpret_cast<internal::Address*>(this->val_);
+    internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
+    if (a == nullptr) return b == nullptr;
+    if (b == nullptr) return false;
     return *a == *b;
   }
 
   template <class S> V8_INLINE bool operator==(
       const PersistentBase<S>& that) const {
-    internal::Object** a = reinterpret_cast<internal::Object**>(this->val_);
-    internal::Object** b = reinterpret_cast<internal::Object**>(that.val_);
-    if (a == 0) return b == 0;
-    if (b == 0) return false;
+    internal::Address* a = reinterpret_cast<internal::Address*>(this->val_);
+    internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
+    if (a == nullptr) return b == nullptr;
+    if (b == nullptr) return false;
     return *a == *b;
   }
 
@@ -502,19 +504,19 @@ template <class T> class PersistentBase {
 
   template <class S>
   V8_INLINE bool operator==(const PersistentBase<S>& that) const {
-    internal::Object** a = reinterpret_cast<internal::Object**>(this->val_);
-    internal::Object** b = reinterpret_cast<internal::Object**>(that.val_);
-    if (a == NULL) return b == NULL;
-    if (b == NULL) return false;
+    internal::Address* a = reinterpret_cast<internal::Address*>(this->val_);
+    internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
+    if (a == nullptr) return b == nullptr;
+    if (b == nullptr) return false;
     return *a == *b;
   }
 
   template <class S>
   V8_INLINE bool operator==(const Local<S>& that) const {
-    internal::Object** a = reinterpret_cast<internal::Object**>(this->val_);
-    internal::Object** b = reinterpret_cast<internal::Object**>(that.val_);
-    if (a == NULL) return b == NULL;
-    if (b == NULL) return false;
+    internal::Address* a = reinterpret_cast<internal::Address*>(this->val_);
+    internal::Address* b = reinterpret_cast<internal::Address*>(that.val_);
+    if (a == nullptr) return b == nullptr;
+    if (b == nullptr) return false;
     return *a == *b;
   }
 
@@ -884,8 +886,8 @@ class V8_EXPORT HandleScope {
 
   void Initialize(Isolate* isolate);
 
-  static internal::Object** CreateHandle(internal::Isolate* isolate,
-                                         internal::Object* value);
+  static internal::Address* CreateHandle(internal::Isolate* isolate,
+                                         internal::Address value_address);
 
  private:
   // Declaring operator new and delete as deleted is not spec compliant.
@@ -896,12 +898,12 @@ class V8_EXPORT HandleScope {
   void operator delete[](void*, size_t);
 
   // Uses heap_object to obtain the current Isolate.
-  static internal::Object** CreateHandle(internal::HeapObject* heap_object,
-                                         internal::Object* value);
+  static internal::Address* CreateHandle(internal::HeapObject* heap_object,
+                                         internal::Address value_address);
 
   internal::Isolate* isolate_;
-  internal::Object** prev_next_;
-  internal::Object** prev_limit_;
+  internal::Address* prev_next_;
+  internal::Address* prev_limit_;
 
   // Local::New uses CreateHandle with an Isolate* parameter.
   template<class F> friend class Local;
@@ -928,8 +930,8 @@ class V8_EXPORT EscapableHandleScope : public HandleScope {
    */
   template <class T>
   V8_INLINE Local<T> Escape(Local<T> value) {
-    internal::Object** slot =
-        Escape(reinterpret_cast<internal::Object**>(*value));
+    internal::Address* slot =
+        Escape(reinterpret_cast<internal::Address*>(*value));
     return Local<T>(reinterpret_cast<T*>(slot));
   }
 
@@ -944,8 +946,8 @@ class V8_EXPORT EscapableHandleScope : public HandleScope {
   void operator delete(void*, size_t);
   void operator delete[](void*, size_t);
 
-  internal::Object** Escape(internal::Object** escape_value);
-  internal::Object** escape_slot_;
+  internal::Address* Escape(internal::Address* escape_value);
+  internal::Address* escape_slot_;
 };
 
 /**
@@ -970,7 +972,7 @@ class V8_EXPORT SealHandleScope {
   void operator delete[](void*, size_t);
 
   internal::Isolate* const isolate_;
-  internal::Object** prev_limit_;
+  internal::Address* prev_limit_;
   int prev_sealed_level_;
 };
 
@@ -3697,10 +3699,10 @@ class ReturnValue {
   template<class F> friend class PropertyCallbackInfo;
   template <class F, class G, class H>
   friend class PersistentValueMapBase;
-  V8_INLINE void SetInternal(internal::Object* value) { *value_ = value; }
-  V8_INLINE internal::Object* GetDefaultValue();
-  V8_INLINE explicit ReturnValue(internal::Object** slot);
-  internal::Object** value_;
+  V8_INLINE void SetInternal(internal::Address value) { *value_ = value; }
+  V8_INLINE internal::Address GetDefaultValue();
+  V8_INLINE explicit ReturnValue(internal::Address* slot);
+  internal::Address* value_;
 };
 
 
@@ -3754,10 +3756,10 @@ class FunctionCallbackInfo {
   static const int kDataIndex = 4;
   static const int kNewTargetIndex = 5;
 
-  V8_INLINE FunctionCallbackInfo(internal::Object** implicit_args,
-                                 internal::Object** values, int length);
-  internal::Object** implicit_args_;
-  internal::Object** values_;
+  V8_INLINE FunctionCallbackInfo(internal::Address* implicit_args,
+                                 internal::Address* values, int length);
+  internal::Address* implicit_args_;
+  internal::Address* values_;
   int length_;
 };
 
@@ -3869,8 +3871,8 @@ class PropertyCallbackInfo {
   static const int kDataIndex = 5;
   static const int kThisIndex = 6;
 
-  V8_INLINE PropertyCallbackInfo(internal::Object** args) : args_(args) {}
-  internal::Object** args_;
+  V8_INLINE PropertyCallbackInfo(internal::Address* args) : args_(args) {}
+  internal::Address* args_;
 };
 
 
@@ -7950,7 +7952,7 @@ class V8_EXPORT Isolate {
   template <class K, class V, class Traits>
   friend class PersistentValueMapBase;
 
-  internal::Object** GetDataFromSnapshotOnce(size_t index);
+  internal::Address* GetDataFromSnapshotOnce(size_t index);
   void ReportExternalAllocationLimitReached();
   void CheckMemoryPressure();
 };
@@ -8175,26 +8177,20 @@ class V8_EXPORT V8 {
  private:
   V8();
 
-  static internal::Object** GlobalizeReference(internal::Isolate* isolate,
-                                               internal::Object** handle);
-  static internal::Object** CopyPersistent(internal::Object** handle);
-  static void DisposeGlobal(internal::Object** global_handle);
-  static void MakeWeak(internal::Object** location, void* data,
+  static internal::Address* GlobalizeReference(internal::Isolate* isolate,
+                                               internal::Address* handle);
+  static internal::Address* CopyPersistent(internal::Address* handle);
+  static void DisposeGlobal(internal::Address* global_handle);
+  static void MakeWeak(internal::Address* location, void* data,
                        WeakCallbackInfo<void>::Callback weak_callback,
                        WeakCallbackType type);
-  static void MakeWeak(internal::Object** location, void* data,
-                       // Must be 0 or -1.
-                       int internal_field_index1,
-                       // Must be 1 or -1.
-                       int internal_field_index2,
-                       WeakCallbackInfo<void>::Callback weak_callback);
-  static void MakeWeak(internal::Object*** location_addr);
-  static void* ClearWeak(internal::Object** location);
-  static void AnnotateStrongRetainer(internal::Object** location,
+  static void MakeWeak(internal::Address** location_addr);
+  static void* ClearWeak(internal::Address* location);
+  static void AnnotateStrongRetainer(internal::Address* location,
                                      const char* label);
   static Value* Eternalize(Isolate* isolate, Value* handle);
 
-  static void RegisterExternallyReferencedObject(internal::Object** object,
+  static void RegisterExternallyReferencedObject(internal::Address* location,
                                                  internal::Isolate* isolate);
 
   template <class K, class V, class T>
@@ -8315,8 +8311,8 @@ class V8_EXPORT SnapshotCreator {
   void operator=(const SnapshotCreator&) = delete;
 
  private:
-  size_t AddData(Local<Context> context, internal::Object* object);
-  size_t AddData(internal::Object* object);
+  size_t AddData(Local<Context> context, internal::Address object);
+  size_t AddData(internal::Address object);
 
   void* data_;
 };
@@ -8860,7 +8856,7 @@ class V8_EXPORT Context {
   friend class Object;
   friend class Function;
 
-  internal::Object** GetDataFromSnapshotOnce(size_t index);
+  internal::Address* GetDataFromSnapshotOnce(size_t index);
   Local<Value> SlowGetEmbedderData(int index);
   void* SlowGetAlignedPointerFromEmbedderData(int index);
 };
@@ -9012,12 +9008,12 @@ const intptr_t kSmiTagMask = (1 << kSmiTagSize) - 1;
 
 template <size_t ptr_size> struct SmiTagging;
 
-template<int kSmiShiftSize>
-V8_INLINE internal::Object* IntToSmi(int value) {
+template <int kSmiShiftSize>
+V8_INLINE internal::Address IntToSmi(int value) {
   int smi_shift_bits = kSmiTagSize + kSmiShiftSize;
   uintptr_t tagged_value =
       (static_cast<uintptr_t>(value) << smi_shift_bits) | kSmiTag;
-  return reinterpret_cast<internal::Object*>(tagged_value);
+  return static_cast<internal::Address>(tagged_value);
 }
 
 // Smi constants for 32-bit systems.
@@ -9025,12 +9021,12 @@ template <> struct SmiTagging<4> {
   enum { kSmiShiftSize = 0, kSmiValueSize = 31 };
   static int SmiShiftSize() { return kSmiShiftSize; }
   static int SmiValueSize() { return kSmiValueSize; }
-  V8_INLINE static int SmiToInt(const internal::Object* value) {
+  V8_INLINE static int SmiToInt(internal::Address value) {
     int shift_bits = kSmiTagSize + kSmiShiftSize;
-    // Throw away top 32 bits and shift down (requires >> to be sign extending).
-    return static_cast<int>(reinterpret_cast<intptr_t>(value)) >> shift_bits;
+    // Shift down (requires >> to be sign extending).
+    return static_cast<int>(static_cast<intptr_t>(value)) >> shift_bits;
   }
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Address IntToSmi(int value) {
     return internal::IntToSmi<kSmiShiftSize>(value);
   }
   V8_INLINE static bool IsValidSmi(intptr_t value) {
@@ -9054,12 +9050,12 @@ template <> struct SmiTagging<8> {
   enum { kSmiShiftSize = 31, kSmiValueSize = 32 };
   static int SmiShiftSize() { return kSmiShiftSize; }
   static int SmiValueSize() { return kSmiValueSize; }
-  V8_INLINE static int SmiToInt(const internal::Object* value) {
+  V8_INLINE static int SmiToInt(const internal::Address value) {
     int shift_bits = kSmiTagSize + kSmiShiftSize;
     // Shift down and throw away top 32 bits.
-    return static_cast<int>(reinterpret_cast<intptr_t>(value) >> shift_bits);
+    return static_cast<int>(static_cast<intptr_t>(value) >> shift_bits);
   }
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Address IntToSmi(int value) {
     return internal::IntToSmi<kSmiShiftSize>(value);
   }
   V8_INLINE static bool IsValidSmi(intptr_t value) {
@@ -9141,16 +9137,15 @@ class Internals {
 #endif
   }
 
-  V8_INLINE static bool HasHeapObjectTag(const internal::Object* value) {
-    return ((reinterpret_cast<intptr_t>(value) & kHeapObjectTagMask) ==
-            kHeapObjectTag);
+  V8_INLINE static bool HasHeapObjectTag(const internal::Address value) {
+    return (value & kHeapObjectTagMask) == static_cast<Address>(kHeapObjectTag);
   }
 
-  V8_INLINE static int SmiValue(const internal::Object* value) {
+  V8_INLINE static int SmiValue(const internal::Address value) {
     return PlatformSmiTagging::SmiToInt(value);
   }
 
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Address IntToSmi(int value) {
     return PlatformSmiTagging::IntToSmi(value);
   }
 
@@ -9158,15 +9153,14 @@ class Internals {
     return PlatformSmiTagging::IsValidSmi(value);
   }
 
-  V8_INLINE static int GetInstanceType(const internal::Object* obj) {
-    typedef internal::Object O;
-    O* map = ReadField<O*>(obj, kHeapObjectMapOffset);
+  V8_INLINE static int GetInstanceType(const internal::Address obj) {
+    typedef internal::Address O;
+    O map = ReadField<O>(obj, kHeapObjectMapOffset);
     return ReadField<uint16_t>(map, kMapInstanceTypeOffset);
   }
 
-  V8_INLINE static int GetOddballKind(const internal::Object* obj) {
-    typedef internal::Object O;
-    return SmiValue(ReadField<O*>(obj, kOddballKindOffset));
+  V8_INLINE static int GetOddballKind(const internal::Address obj) {
+    return SmiValue(ReadField<internal::Address>(obj, kOddballKindOffset));
   }
 
   V8_INLINE static bool IsExternalTwoByteString(int instance_type) {
@@ -9174,25 +9168,24 @@ class Internals {
     return representation == kExternalTwoByteRepresentationTag;
   }
 
-  V8_INLINE static uint8_t GetNodeFlag(internal::Object** obj, int shift) {
-      uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
-      return *addr & static_cast<uint8_t>(1U << shift);
+  V8_INLINE static uint8_t GetNodeFlag(internal::Address* obj, int shift) {
+    uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
+    return *addr & static_cast<uint8_t>(1U << shift);
   }
 
-  V8_INLINE static void UpdateNodeFlag(internal::Object** obj,
-                                       bool value, int shift) {
-      uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
-      uint8_t mask = static_cast<uint8_t>(1U << shift);
-      *addr = static_cast<uint8_t>((*addr & ~mask) | (value << shift));
+  V8_INLINE static void UpdateNodeFlag(internal::Address* obj, bool value,
+                                       int shift) {
+    uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
+    uint8_t mask = static_cast<uint8_t>(1U << shift);
+    *addr = static_cast<uint8_t>((*addr & ~mask) | (value << shift));
   }
 
-  V8_INLINE static uint8_t GetNodeState(internal::Object** obj) {
+  V8_INLINE static uint8_t GetNodeState(internal::Address* obj) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     return *addr & kNodeStateMask;
   }
 
-  V8_INLINE static void UpdateNodeState(internal::Object** obj,
-                                        uint8_t value) {
+  V8_INLINE static void UpdateNodeState(internal::Address* obj, uint8_t value) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     *addr = static_cast<uint8_t>((*addr & ~kNodeStateMask) | value);
   }
@@ -9200,39 +9193,41 @@ class Internals {
   V8_INLINE static void SetEmbedderData(v8::Isolate* isolate,
                                         uint32_t slot,
                                         void* data) {
-    uint8_t* addr = reinterpret_cast<uint8_t*>(isolate) +
-                    kIsolateEmbedderDataOffset + slot * kApiPointerSize;
+    internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
+                             kIsolateEmbedderDataOffset +
+                             slot * kApiPointerSize;
     *reinterpret_cast<void**>(addr) = data;
   }
 
   V8_INLINE static void* GetEmbedderData(const v8::Isolate* isolate,
                                          uint32_t slot) {
-    const uint8_t* addr = reinterpret_cast<const uint8_t*>(isolate) +
-        kIsolateEmbedderDataOffset + slot * kApiPointerSize;
+    internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
+                             kIsolateEmbedderDataOffset +
+                             slot * kApiPointerSize;
     return *reinterpret_cast<void* const*>(addr);
   }
 
-  V8_INLINE static internal::Object** GetRoot(v8::Isolate* isolate,
-                                              int index) {
-    uint8_t* addr = reinterpret_cast<uint8_t*>(isolate) + kIsolateRootsOffset;
-    return reinterpret_cast<internal::Object**>(addr + index * kApiPointerSize);
+  V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
+    internal::Address addr =
+        reinterpret_cast<internal::Address>(isolate) + kIsolateRootsOffset;
+    return reinterpret_cast<internal::Address*>(addr + index * kApiPointerSize);
   }
 
   template <typename T>
-  V8_INLINE static T ReadField(const internal::Object* ptr, int offset) {
-    const uint8_t* addr =
-        reinterpret_cast<const uint8_t*>(ptr) + offset - kHeapObjectTag;
+  V8_INLINE static T ReadField(const internal::Address heap_object_ptr,
+                               int offset) {
+    internal::Address addr = heap_object_ptr + offset - kHeapObjectTag;
     return *reinterpret_cast<const T*>(addr);
   }
 
   template <typename T>
   V8_INLINE static T ReadEmbedderData(const v8::Context* context, int index) {
-    typedef internal::Object O;
+    typedef internal::Address A;
     typedef internal::Internals I;
-    O* ctx = *reinterpret_cast<O* const*>(context);
+    A ctx = *reinterpret_cast<const A*>(context);
     int embedder_data_offset = I::kContextHeaderSize +
         (internal::kApiPointerSize * I::kContextEmbedderDataIndex);
-    O* embedder_data = I::ReadField<O*>(ctx, embedder_data_offset);
+    A embedder_data = I::ReadField<A>(ctx, embedder_data_offset);
     int value_offset =
         I::kFixedArrayHeaderSize + (internal::kApiPointerSize * index);
     return I::ReadField<T>(embedder_data, value_offset);
@@ -9280,7 +9275,7 @@ template <class T>
 Local<T> Local<T>::New(Isolate* isolate, T* that) {
   if (that == NULL) return Local<T>();
   T* that_ptr = that;
-  internal::Object** p = reinterpret_cast<internal::Object**>(that_ptr);
+  internal::Address* p = reinterpret_cast<internal::Address*>(that_ptr);
   return Local<T>(reinterpret_cast<T*>(HandleScope::CreateHandle(
       reinterpret_cast<internal::Isolate*>(isolate), *p)));
 }
@@ -9323,7 +9318,7 @@ void* WeakCallbackInfo<T>::GetInternalField(int index) const {
 template <class T>
 T* PersistentBase<T>::New(Isolate* isolate, T* that) {
   if (that == NULL) return NULL;
-  internal::Object** p = reinterpret_cast<internal::Object**>(that);
+  internal::Address* p = reinterpret_cast<internal::Address*>(that);
   return reinterpret_cast<T*>(
       V8::GlobalizeReference(reinterpret_cast<internal::Isolate*>(isolate),
                              p));
@@ -9336,7 +9331,7 @@ void Persistent<T, M>::Copy(const Persistent<S, M2>& that) {
   TYPE_CHECK(T, S);
   this->Reset();
   if (that.IsEmpty()) return;
-  internal::Object** p = reinterpret_cast<internal::Object**>(that.val_);
+  internal::Address* p = reinterpret_cast<internal::Address*>(that.val_);
   this->val_ = reinterpret_cast<T*>(V8::CopyPersistent(p));
   M::Copy(that, this);
 }
@@ -9351,7 +9346,7 @@ bool PersistentBase<T>::IsNearDeath() const {
   typedef internal::Internals I;
   if (this->IsEmpty()) return false;
   uint8_t node_state =
-      I::GetNodeState(reinterpret_cast<internal::Object**>(this->val_));
+      I::GetNodeState(reinterpret_cast<internal::Address*>(this->val_));
   return node_state == I::kNodeStateIsNearDeathValue ||
       node_state == I::kNodeStateIsPendingValue;
 }
@@ -9361,15 +9356,15 @@ template <class T>
 bool PersistentBase<T>::IsWeak() const {
   typedef internal::Internals I;
   if (this->IsEmpty()) return false;
-  return I::GetNodeState(reinterpret_cast<internal::Object**>(this->val_)) ==
-      I::kNodeStateIsWeakValue;
+  return I::GetNodeState(reinterpret_cast<internal::Address*>(this->val_)) ==
+         I::kNodeStateIsWeakValue;
 }
 
 
 template <class T>
 void PersistentBase<T>::Reset() {
   if (this->IsEmpty()) return;
-  V8::DisposeGlobal(reinterpret_cast<internal::Object**>(this->val_));
+  V8::DisposeGlobal(reinterpret_cast<internal::Address*>(this->val_));
   val_ = 0;
 }
 
@@ -9401,25 +9396,25 @@ V8_INLINE void PersistentBase<T>::SetWeak(
     P* parameter, typename WeakCallbackInfo<P>::Callback callback,
     WeakCallbackType type) {
   typedef typename WeakCallbackInfo<void>::Callback Callback;
-  V8::MakeWeak(reinterpret_cast<internal::Object**>(this->val_), parameter,
+  V8::MakeWeak(reinterpret_cast<internal::Address*>(this->val_), parameter,
                reinterpret_cast<Callback>(callback), type);
 }
 
 template <class T>
 void PersistentBase<T>::SetWeak() {
-  V8::MakeWeak(reinterpret_cast<internal::Object***>(&this->val_));
+  V8::MakeWeak(reinterpret_cast<internal::Address**>(&this->val_));
 }
 
 template <class T>
 template <typename P>
 P* PersistentBase<T>::ClearWeak() {
   return reinterpret_cast<P*>(
-    V8::ClearWeak(reinterpret_cast<internal::Object**>(this->val_)));
+      V8::ClearWeak(reinterpret_cast<internal::Address*>(this->val_)));
 }
 
 template <class T>
 void PersistentBase<T>::AnnotateStrongRetainer(const char* label) {
-  V8::AnnotateStrongRetainer(reinterpret_cast<internal::Object**>(this->val_),
+  V8::AnnotateStrongRetainer(reinterpret_cast<internal::Address*>(this->val_),
                              label);
 }
 
@@ -9427,7 +9422,7 @@ template <class T>
 void PersistentBase<T>::RegisterExternalReference(Isolate* isolate) const {
   if (IsEmpty()) return;
   V8::RegisterExternallyReferencedObject(
-      reinterpret_cast<internal::Object**>(this->val_),
+      reinterpret_cast<internal::Address*>(this->val_),
       reinterpret_cast<internal::Isolate*>(isolate));
 }
 
@@ -9438,7 +9433,7 @@ template <class T>
 void PersistentBase<T>::MarkActive() {
   typedef internal::Internals I;
   if (this->IsEmpty()) return;
-  I::UpdateNodeFlag(reinterpret_cast<internal::Object**>(this->val_), true,
+  I::UpdateNodeFlag(reinterpret_cast<internal::Address*>(this->val_), true,
                     I::kNodeIsActiveShift);
 }
 
@@ -9447,7 +9442,7 @@ template <class T>
 void PersistentBase<T>::SetWrapperClassId(uint16_t class_id) {
   typedef internal::Internals I;
   if (this->IsEmpty()) return;
-  internal::Object** obj = reinterpret_cast<internal::Object**>(this->val_);
+  internal::Address* obj = reinterpret_cast<internal::Address*>(this->val_);
   uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + I::kNodeClassIdOffset;
   *reinterpret_cast<uint16_t*>(addr) = class_id;
 }
@@ -9457,14 +9452,13 @@ template <class T>
 uint16_t PersistentBase<T>::WrapperClassId() const {
   typedef internal::Internals I;
   if (this->IsEmpty()) return 0;
-  internal::Object** obj = reinterpret_cast<internal::Object**>(this->val_);
+  internal::Address* obj = reinterpret_cast<internal::Address*>(this->val_);
   uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + I::kNodeClassIdOffset;
   return *reinterpret_cast<uint16_t*>(addr);
 }
 
-
-template<typename T>
-ReturnValue<T>::ReturnValue(internal::Object** slot) : value_(slot) {}
+template <typename T>
+ReturnValue<T>::ReturnValue(internal::Address* slot) : value_(slot) {}
 
 template<typename T>
 template<typename S>
@@ -9473,7 +9467,7 @@ void ReturnValue<T>::Set(const Persistent<S>& handle) {
   if (V8_UNLIKELY(handle.IsEmpty())) {
     *value_ = GetDefaultValue();
   } else {
-    *value_ = *reinterpret_cast<internal::Object**>(*handle);
+    *value_ = *reinterpret_cast<internal::Address*>(*handle);
   }
 }
 
@@ -9484,7 +9478,7 @@ void ReturnValue<T>::Set(const Global<S>& handle) {
   if (V8_UNLIKELY(handle.IsEmpty())) {
     *value_ = GetDefaultValue();
   } else {
-    *value_ = *reinterpret_cast<internal::Object**>(*handle);
+    *value_ = *reinterpret_cast<internal::Address*>(*handle);
   }
 }
 
@@ -9495,7 +9489,7 @@ void ReturnValue<T>::Set(const Local<S> handle) {
   if (V8_UNLIKELY(handle.IsEmpty())) {
     *value_ = GetDefaultValue();
   } else {
-    *value_ = *reinterpret_cast<internal::Object**>(*handle);
+    *value_ = *reinterpret_cast<internal::Address*>(*handle);
   }
 }
 
@@ -9583,15 +9577,15 @@ void ReturnValue<T>::Set(S* whatever) {
   TYPE_CHECK(S*, Primitive);
 }
 
-template<typename T>
-internal::Object* ReturnValue<T>::GetDefaultValue() {
+template <typename T>
+internal::Address ReturnValue<T>::GetDefaultValue() {
   // Default value is always the pointer below value_ on the stack.
   return value_[-1];
 }
 
 template <typename T>
-FunctionCallbackInfo<T>::FunctionCallbackInfo(internal::Object** implicit_args,
-                                              internal::Object** values,
+FunctionCallbackInfo<T>::FunctionCallbackInfo(internal::Address* implicit_args,
+                                              internal::Address* values,
                                               int length)
     : implicit_args_(implicit_args), values_(values), length_(length) {}
 
@@ -9761,10 +9755,10 @@ AccessorSignature* AccessorSignature::Cast(Data* data) {
 
 Local<Value> Object::GetInternalField(int index) {
 #ifndef V8_ENABLE_CHECKS
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::HeapObject HO;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O**>(this);
+  A obj = *reinterpret_cast<A*>(this);
   // Fast path: If the object is a plain JSObject, which is the common case, we
   // know where to find the internal fields and can return the value directly.
   auto instance_type = I::GetInstanceType(obj);
@@ -9772,8 +9766,8 @@ Local<Value> Object::GetInternalField(int index) {
       instance_type == I::kJSApiObjectType ||
       instance_type == I::kJSSpecialApiObjectType) {
     int offset = I::kJSObjectHeaderSize + (internal::kApiPointerSize * index);
-    O* value = I::ReadField<O*>(obj, offset);
-    O** result = HandleScope::CreateHandle(reinterpret_cast<HO*>(obj), value);
+    A value = I::ReadField<A>(obj, offset);
+    A* result = HandleScope::CreateHandle(reinterpret_cast<HO*>(obj), value);
     return Local<Value>(reinterpret_cast<Value*>(result));
   }
 #endif
@@ -9783,9 +9777,9 @@ Local<Value> Object::GetInternalField(int index) {
 
 void* Object::GetAlignedPointerFromInternalField(int index) {
 #ifndef V8_ENABLE_CHECKS
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O**>(this);
+  A obj = *reinterpret_cast<A*>(this);
   // Fast path: If the object is a plain JSObject, which is the common case, we
   // know where to find the internal fields and can return the value directly.
   auto instance_type = I::GetInstanceType(obj);
@@ -9808,7 +9802,7 @@ String* String::Cast(v8::Value* value) {
 
 
 Local<String> String::Empty(Isolate* isolate) {
-  typedef internal::Object* S;
+  typedef internal::Address S;
   typedef internal::Internals I;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kEmptyStringRootIndex);
@@ -9817,9 +9811,9 @@ Local<String> String::Empty(Isolate* isolate) {
 
 
 String::ExternalStringResource* String::GetExternalStringResource() const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   String::ExternalStringResource* result;
   if (I::IsExternalTwoByteString(I::GetInstanceType(obj))) {
     void* value = I::ReadField<void*>(obj, I::kStringResourceOffset);
@@ -9836,9 +9830,9 @@ String::ExternalStringResource* String::GetExternalStringResource() const {
 
 String::ExternalStringResourceBase* String::GetExternalStringResourceBase(
     String::Encoding* encoding_out) const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   int type = I::GetInstanceType(obj) & I::kFullStringRepresentationMask;
   *encoding_out = static_cast<Encoding>(type & I::kStringEncodingMask);
   ExternalStringResourceBase* resource = NULL;
@@ -9863,9 +9857,9 @@ bool Value::IsUndefined() const {
 }
 
 bool Value::QuickIsUndefined() const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kUndefinedOddballKind);
@@ -9881,9 +9875,9 @@ bool Value::IsNull() const {
 }
 
 bool Value::QuickIsNull() const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kNullOddballKind);
@@ -9898,9 +9892,9 @@ bool Value::IsNullOrUndefined() const {
 }
 
 bool Value::QuickIsNullOrUndefined() const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   int kind = I::GetOddballKind(obj);
@@ -9916,9 +9910,9 @@ bool Value::IsString() const {
 }
 
 bool Value::QuickIsString() const {
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::Internals I;
-  O* obj = *reinterpret_cast<O* const*>(this);
+  A obj = *reinterpret_cast<const A*>(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   return (I::GetInstanceType(obj) < I::kFirstNonstringType);
 }
@@ -10317,7 +10311,7 @@ bool PropertyCallbackInfo<T>::ShouldThrowOnError() const {
 
 
 Local<Primitive> Undefined(Isolate* isolate) {
-  typedef internal::Object* S;
+  typedef internal::Address S;
   typedef internal::Internals I;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kUndefinedValueRootIndex);
@@ -10326,7 +10320,7 @@ Local<Primitive> Undefined(Isolate* isolate) {
 
 
 Local<Primitive> Null(Isolate* isolate) {
-  typedef internal::Object* S;
+  typedef internal::Address S;
   typedef internal::Internals I;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kNullValueRootIndex);
@@ -10335,7 +10329,7 @@ Local<Primitive> Null(Isolate* isolate) {
 
 
 Local<Boolean> True(Isolate* isolate) {
-  typedef internal::Object* S;
+  typedef internal::Address S;
   typedef internal::Internals I;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kTrueValueRootIndex);
@@ -10344,7 +10338,7 @@ Local<Boolean> True(Isolate* isolate) {
 
 
 Local<Boolean> False(Isolate* isolate) {
-  typedef internal::Object* S;
+  typedef internal::Address S;
   typedef internal::Internals I;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kFalseValueRootIndex);
@@ -10412,12 +10406,12 @@ int64_t Isolate::AdjustAmountOfExternalAllocatedMemory(
 
 Local<Value> Context::GetEmbedderData(int index) {
 #ifndef V8_ENABLE_CHECKS
-  typedef internal::Object O;
+  typedef internal::Address A;
   typedef internal::HeapObject HO;
   typedef internal::Internals I;
   HO* context = *reinterpret_cast<HO**>(this);
-  O** result =
-      HandleScope::CreateHandle(context, I::ReadEmbedderData<O*>(this, index));
+  A* result =
+      HandleScope::CreateHandle(context, I::ReadEmbedderData<A>(this, index));
   return Local<Value>(reinterpret_cast<Value*>(result));
 #else
   return SlowGetEmbedderData(index);
@@ -10444,14 +10438,14 @@ MaybeLocal<T> Context::GetDataFromSnapshotOnce(size_t index) {
 template <class T>
 size_t SnapshotCreator::AddData(Local<Context> context, Local<T> object) {
   T* object_ptr = *object;
-  internal::Object** p = reinterpret_cast<internal::Object**>(object_ptr);
+  internal::Address* p = reinterpret_cast<internal::Address*>(object_ptr);
   return AddData(context, *p);
 }
 
 template <class T>
 size_t SnapshotCreator::AddData(Local<T> object) {
   T* object_ptr = *object;
-  internal::Object** p = reinterpret_cast<internal::Object**>(object_ptr);
+  internal::Address* p = reinterpret_cast<internal::Address*>(object_ptr);
   return AddData(*p);
 }
 

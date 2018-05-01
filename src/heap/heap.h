@@ -1335,7 +1335,7 @@ class Heap {
   }
   void SetEmbedderHeapTracer(EmbedderHeapTracer* tracer);
   void TracePossibleWrapper(JSObject* js_object);
-  void RegisterExternallyReferencedObject(Object** object);
+  void RegisterExternallyReferencedObject(Address* location);
 
   // ===========================================================================
   // External string table API. ================================================
