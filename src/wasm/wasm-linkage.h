@@ -138,16 +138,11 @@ class LinkageAllocator {
   }
 
   // Stackslots are counted upwards starting from 0 (or the offset set by
-  // {SetStackOffset}.
-  int NumStackSlots(ValueType type) {
-    return 1 << std::max(0, ElementSizeLog2Of(type) - kPointerSizeLog2);
-  }
-
-  // Stackslots are counted upwards starting from 0 (or the offset set by
   // {SetStackOffset}. If {type} needs more than
   // one stack slot, the lowest used stack slot is returned.
   int NextStackSlot(ValueType type) {
-    int num_stack_slots = NumStackSlots(type);
+    int num_stack_slots =
+        1 << std::max(0, ElementSizeLog2Of(type) - kPointerSizeLog2);
     int offset = stack_offset_;
     stack_offset_ += num_stack_slots;
     return offset;

@@ -446,7 +446,7 @@ void LiftoffAssembler::ChangeEndiannessStore(LiftoffRegister src,
 void LiftoffAssembler::LoadCallerFrameSlot(LiftoffRegister dst,
                                            uint32_t caller_slot_idx,
                                            ValueType type) {
-  int32_t offset = kPointerSize * (caller_slot_idx + 1);
+  int32_t offset = kPointerSize * (caller_slot_idx + 2);
   liftoff::Load(this, dst, fp, offset, type);
 }
 
@@ -1285,9 +1285,10 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
   addiu(sp, sp, gp_offset);
 }
 
-void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
+void LiftoffAssembler::DropStackSlotsAndRet(int num_stack_slots) {
+  DCHECK_LE(0, num_stack_slots);
   DCHECK_LT(num_stack_slots, (1 << 16) / kPointerSize);  // 16 bit immediate
-  TurboAssembler::DropAndRet(static_cast<int>(num_stack_slots));
+  TurboAssembler::DropAndRet(num_stack_slots);
 }
 
 void LiftoffAssembler::CallC(wasm::FunctionSig* sig,
