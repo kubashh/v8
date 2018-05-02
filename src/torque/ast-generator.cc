@@ -13,10 +13,16 @@ namespace torque {
 
 namespace {
 
+std::string GetType(TorqueParser::TypeContext* context) {
+  if (!context) return "void";
+  std::string result(context->CONSTEXPR() == nullptr ? "" : "constexpr ");
+  result += context->IDENTIFIER()->getSymbol()->getText();
+  return result;
+}
+
 std::string GetOptionalType(TorqueParser::OptionalTypeContext* context) {
   if (!context) return "";
-  if (!context->type()) return "void";
-  return context->type()->IDENTIFIER()->getSymbol()->getText();
+  return GetType(context->type());
 }
 
 LabelAndTypesVector GetOptionalLabelAndTypeList(
@@ -28,8 +34,7 @@ LabelAndTypesVector GetOptionalLabelAndTypeList(
       new_label.name = label->IDENTIFIER()->getSymbol()->getText();
       if (label->typeList() != nullptr) {
         for (auto& type : label->typeList()->type()) {
-          new_label.types.emplace_back(
-              type->IDENTIFIER()->getSymbol()->getText());
+          new_label.types.emplace_back(GetType(type));
         }
       }
       labels.emplace_back(new_label);
@@ -95,8 +100,7 @@ antlrcpp::Any AstGenerator::visitParameterList(
   for (auto* parameter : context->parameter()) {
     parameter->accept(this);
     result.names.push_back(parameter->IDENTIFIER()->getSymbol()->getText());
-    result.types.push_back(
-        parameter->type()->IDENTIFIER()->getSymbol()->getText());
+    result.types.push_back(GetType(parameter->type()));
   }
   return std::move(result);
 }
@@ -106,7 +110,7 @@ antlrcpp::Any AstGenerator::visitTypeList(
   ParameterList result{{}, {}, false, {}};
   result.types.reserve(context->type().size());
   for (auto* type : context->type()) {
-    result.types.push_back(type->IDENTIFIER()->getSymbol()->getText());
+    result.types.push_back(GetType(type));
   }
   return std::move(result);
 }
@@ -116,7 +120,7 @@ antlrcpp::Any AstGenerator::visitTypeListMaybeVarArgs(
   ParameterList result{{}, {}, context->VARARGS(), {}};
   result.types.reserve(context->type().size());
   for (auto* type : context->type()) {
-    result.types.push_back(type->IDENTIFIER()->getSymbol()->getText());
+    result.types.push_back(GetType(type));
   }
   return std::move(result);
 }
@@ -193,7 +197,7 @@ antlrcpp::Any AstGenerator::visitConstDeclaration(
     TorqueParser::ConstDeclarationContext* context) {
   return base::implicit_cast<Declaration*>(RegisterNode(new ConstDeclaration{
       Pos(context), context->IDENTIFIER()->getSymbol()->getText(),
-      context->type()->IDENTIFIER()->getSymbol()->getText(),
+      GetType(context->type()),
       StringLiteralUnquote(
           context->STRING_LITERAL()->getSymbol()->getText())}));
 }
@@ -211,16 +215,23 @@ antlrcpp::Any AstGenerator::visitTypeDeclaration(
                                                  ->getSymbol()
                                                  ->getText());
   }
+  if (context->constexprDeclaration()) {
+    result->constexpr_generates =
+        StringLiteralUnquote(context->constexprDeclaration()
+                                 ->STRING_LITERAL()
+                                 ->getSymbol()
+                                 ->getText());
+  }
   return base::implicit_cast<Declaration*>(result);
 }
 
 antlrcpp::Any AstGenerator::visitVariableDeclaration(
     TorqueParser::VariableDeclarationContext* context) {
-  return RegisterNode(new VarDeclarationStatement{
-      Pos(context),
-      context->IDENTIFIER()->getSymbol()->getText(),
-      context->type()->IDENTIFIER()->getSymbol()->getText(),
-      {}});
+  return RegisterNode(
+      new VarDeclarationStatement{Pos(context),
+                                  context->IDENTIFIER()->getSymbol()->getText(),
+                                  GetType(context->type()),
+                                  {}});
 }
 
 antlrcpp::Any AstGenerator::visitVariableDeclarationWithInitialization(
@@ -420,11 +431,11 @@ antlrcpp::Any AstGenerator::visitPrimaryExpression(
         new StringLiteralExpression{Pos(context), e->getSymbol()->getText()}));
   if (context->CONVERT_KEYWORD())
     return base::implicit_cast<Expression*>(RegisterNode(new ConvertExpression{
-        Pos(context), context->type()->IDENTIFIER()->getSymbol()->getText(),
+        Pos(context), GetType(context->type()),
         context->expression()->accept(this).as<Expression*>()}));
   if (context->CAST_KEYWORD())
     return base::implicit_cast<Expression*>(RegisterNode(new CastExpression{
-        Pos(context), context->type()->IDENTIFIER()->getSymbol()->getText(),
+        Pos(context), GetType(context->type()),
         context->IDENTIFIER()->getSymbol()->getText(),
         context->expression()->accept(this).as<Expression*>()}));
   return context->expression()->accept(this);

@@ -25,9 +25,9 @@ static const char* const EXCEPTION_TYPE_STRING = "Exception";
 static const char* const OBJECT_TYPE_STRING = "Object";
 static const char* const STRING_TYPE_STRING = "String";
 static const char* const INTPTR_TYPE_STRING = "intptr";
-static const char* const CONST_INT31_TYPE_STRING = "const_int31";
-static const char* const CONST_INT32_TYPE_STRING = "const_int32";
-static const char* const CONST_FLOAT64_TYPE_STRING = "const_float64";
+static const char* const CONST_INT31_TYPE_STRING = "constexpr int31";
+static const char* const CONST_INT32_TYPE_STRING = "constexpr int32";
+static const char* const CONST_FLOAT64_TYPE_STRING = "constexpr float64";
 
 class Label;
 

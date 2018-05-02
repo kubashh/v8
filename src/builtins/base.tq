@@ -7,12 +7,12 @@ type void generates 'void';
 type never generates 'void';
 
 type Object generates 'TNode<Object>';
-type int32 generates 'TNode<Int32T>';
-type intptr generates 'TNode<IntPtrT>';
-type float64 generates 'TNode<Float64T>';
+type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
+type intptr generates 'TNode<IntPtrT>' constexpr 'intptr_t';
+type float64 generates 'TNode<Float64T>' constexpr 'double';
 type bit generates 'TNode<BoolT>';
 
-type int31 extends int32 generates 'TNode<Int32T>';
+type int31 extends int32 generates 'TNode<Int32T>' constexpr 'int32_t';
 type Number extends Object generates 'TNode<Number>';
 type Smi extends Number generates 'TNode<Smi>';
 type HeapObject extends Object generates 'TNode<HeapObject>';
@@ -28,10 +28,6 @@ type FixedArrayBase extends Object generates 'TNode<FixedArrayBase>';
 type FixedArray extends FixedArrayBase generates 'TNode<FixedArray>';
 type FixedDoubleArray extends FixedArrayBase generates
 'TNode<FixedDoubleArray>';
-
-type const_int32 generates 'int32_t';
-type const_int31 extends const_int32 generates 'int32_t';
-type const_float64 generates 'double';
 
 type InstanceType extends int32 generates 'TNode<Int32T>';
 type ElementsKind generates 'ElementsKind';
@@ -67,7 +63,7 @@ const kInvalidArrayLengthMessage: MessageTemplate =
 
 const kHasProperty: HasPropertyFlag = 'kHasProperty';
 
-const kMaxSafeInteger: const_float64 = 'kMaxSafeInteger';
+const kMaxSafeInteger: constexpr float64 = 'kMaxSafeInteger';
 
 const hole: Object = 'TheHoleConstant()';
 const null: Oddball = 'NullConstant()';
@@ -180,14 +176,14 @@ extern operator 'cast<>' macro ConvertFixedArrayBaseToFixedDoubleArray(
     FixedArrayBase): FixedDoubleArray labels CastError;
 
 extern implicit operator
-'convert<>' macro AllocateHeapNumberWithValue(const_float64): Number;
-extern implicit operator 'convert<>' macro IntPtrConstant(const_int31): intptr;
-extern implicit operator 'convert<>' macro IntPtrConstant(const_int32): intptr;
-extern implicit operator 'convert<>' macro Int32Constant(const_int31): int32;
-extern implicit operator 'convert<>' macro Int32Constant(const_int32): int32;
-extern implicit operator 'convert<>' macro SmiConstant(const_int31): Smi;
-extern implicit operator 'convert<>' macro NumberConstant(const_int31): Number;
-extern implicit operator 'convert<>' macro NumberConstant(const_int32): Number;
+'convert<>' macro AllocateHeapNumberWithValue(constexpr float64): Number;
+extern implicit operator 'convert<>' macro IntPtrConstant(constexpr int31): intptr;
+extern implicit operator 'convert<>' macro IntPtrConstant(constexpr int32): intptr;
+extern implicit operator 'convert<>' macro Int32Constant(constexpr int31): int32;
+extern implicit operator 'convert<>' macro Int32Constant(constexpr int32): int32;
+extern implicit operator 'convert<>' macro SmiConstant(constexpr int31): Smi;
+extern implicit operator 'convert<>' macro NumberConstant(constexpr int31): Number;
+extern implicit operator 'convert<>' macro NumberConstant(constexpr int32): Number;
 
 extern operator 'convert<>' macro ChangeInt32ToTagged(int32): Number;
 extern operator 'convert<>' macro TruncateWordToWord32(intptr): int32;

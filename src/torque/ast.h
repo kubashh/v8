@@ -181,7 +181,9 @@ class SourceFileMap {
 
 class Ast {
  public:
-  Ast() : default_module_{SourcePosition(), {}} {}
+  Ast()
+      : default_module_{SourcePosition(), {}},
+        source_file_map_(new SourceFileMap()) {}
 
   std::vector<Declaration*>& declarations() {
     return default_module_.declarations;
@@ -193,14 +195,14 @@ class Ast {
     nodes_.emplace_back(std::move(node));
   }
   SourceId AddSource(std::string path) {
-    return source_file_map_.AddSource(path);
+    return source_file_map_->AddSource(path);
   }
   DefaultModuleDeclaration* default_module() { return &default_module_; }
-  SourceFileMap* source_file_map() { return &source_file_map_; }
+  SourceFileMap* source_file_map() { return &*source_file_map_; }
 
  private:
   DefaultModuleDeclaration default_module_;
-  SourceFileMap source_file_map_;
+  std::shared_ptr<SourceFileMap> source_file_map_;
   std::vector<std::unique_ptr<AstNode>> nodes_;
 };
 
@@ -481,6 +483,7 @@ struct TypeDeclaration : Declaration {
   std::string name;
   base::Optional<std::string> extends;
   base::Optional<std::string> generates;
+  base::Optional<std::string> constexpr_generates;
 };
 
 struct LabelAndTypes {

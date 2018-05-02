@@ -71,10 +71,20 @@ class DeclarationVisitor : public FileVisitor {
   void Visit(TailCallStatement* stmt) { Visit(stmt->call); }
 
   void Visit(TypeDeclaration* decl) {
-    std::string generates_class_name =
-        decl->generates ? *decl->generates : decl->name;
-    declarations()->DeclareType(decl->pos, decl->name, generates_class_name,
-                                decl->extends ? &*decl->extends : nullptr);
+    std::string extends = decl->extends ? *decl->extends : std::string("");
+    std::string* extends_ptr = decl->extends ? &extends : nullptr;
+
+    if (decl->constexpr_generates) {
+      std::string constexpr_name = std::string("constexpr ") + decl->name;
+      declarations()->DeclareType(decl->pos, constexpr_name,
+                                  *decl->constexpr_generates, extends_ptr);
+      extends = constexpr_name;
+      extends_ptr = &extends;
+    }
+
+    std::string generates =
+        decl->generates ? *decl->generates : std::string("");
+    declarations()->DeclareType(decl->pos, decl->name, generates, extends_ptr);
   }
 
   void Visit(ExternalBuiltinDeclaration* decl) {
