@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42f43fc0_435afc73",
+        "filename": "src/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5123,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-02T05:28:20Z",
+      "side": 1,
+      "message": "This seems brittle to me. What the requires is that the calls and side effect checks happen in the order we expect.\n\nThis also requires this function to be an API function. If we call NewInstance on a regular function defined in JavaScript, this doesn\u0027t do what it advertises.\n\nCan we add the following?\n- Assert that we only have kHasNoSideEffect if the function is an API function (SharedFunctionInfo::IsApiFunction).\n- Move this flag to the CallHandlerInfo of this function, named next_call_has_no_side_effect_.\n- Set that flag to true here.\n- Set that flag to false in PerformSideEffectCheckForCallback.\n\nI think that way we could reduce the risk of interfering with other calls a lot.",
+      "range": {
+        "startLine": 5123,
+        "startChar": 22,
+        "endLine": 5123,
+        "endChar": 47
+      },
+      "revId": "698ecde87eb7436494e9497ff89413b95ea0c587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "896f69c4_d660b277",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 13098,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-02T05:28:20Z",
+      "side": 1,
+      "message": "You can use \"USE(instance)\" here.",
+      "range": {
+        "startLine": 13098,
+        "startChar": 8,
+        "endLine": 13098,
+        "endChar": 16
+      },
+      "revId": "698ecde87eb7436494e9497ff89413b95ea0c587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
