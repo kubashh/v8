@@ -86,6 +86,7 @@ int WrappedMain(int argc, const char** argv) {
   if (output_directory.length() != 0) {
     {
       DeclarationVisitor visitor(global_context);
+
       visitor.Visit(global_context.ast());
 
       std::string output_header_path = output_directory;
@@ -108,5 +109,9 @@ int WrappedMain(int argc, const char** argv) {
 }  // namespace v8
 
 int main(int argc, const char** argv) {
-  return v8::internal::torque::WrappedMain(argc, argv);
+  try {
+    return v8::internal::torque::WrappedMain(argc, argv);
+  } catch (...) {
+    return -1;
+  }
 }
