@@ -320,7 +320,7 @@ void LiftoffAssembler::PopRegisters(LiftoffRegList regs) {
   BAILOUT("PopRegisters");
 }
 
-void LiftoffAssembler::DropStackSlotsAndRet(uint32_t num_stack_slots) {
+void LiftoffAssembler::DropStackSlotsAndRet(int num_stack_slots) {
   BAILOUT("DropStackSlotsAndRet");
 }
 

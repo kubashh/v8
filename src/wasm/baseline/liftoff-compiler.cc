@@ -75,6 +75,34 @@ compiler::CallDescriptor* GetLoweredCallDescriptor(
                            : call_desc;
 }
 
+int GetNumberOfParamStackSlots(FunctionSig* sig) {
+  LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+  auto add_reg = [&linkage](ValueType type) {
+    RegClass rc = reg_class_for(type);
+    if (kNeedI64RegPair && rc == kGpRegPair && linkage.has_more_gp_regs()) {
+      linkage.NextGpReg();
+      type = kWasmI32;
+      rc = kGpReg;
+    }
+    if (rc == kGpReg && linkage.has_more_gp_regs()) {
+      linkage.NextGpReg();
+      return;
+    }
+    if (rc == kFpReg && linkage.has_more_fp_regs()) {
+      linkage.NextFpReg();
+      return;
+    }
+    linkage.NextStackSlot(type);
+  };
+  // Add instance parameter.
+  add_reg(LiftoffAssembler::kWasmIntPtr);
+  // Add actual parameters.
+  for (wasm::ValueType type : sig->parameters()) {
+    add_reg(type);
+  }
+  return linkage.NumStackSlots();
+}
+
 constexpr ValueType kTypesArr_ilfd[] = {kWasmI32, kWasmI64, kWasmF32, kWasmF64};
 constexpr Vector<const ValueType> kTypes_ilfd = ArrayVector(kTypesArr_ilfd);
 
@@ -122,17 +150,16 @@ class LiftoffCompiler {
     }
   };
 
-  LiftoffCompiler(LiftoffAssembler* liftoff_asm,
-                  compiler::CallDescriptor* call_descriptor, ModuleEnv* env,
+  LiftoffCompiler(LiftoffAssembler* liftoff_asm, FunctionSig* sig,
+                  ModuleEnv* env,
                   SourcePositionTableBuilder* source_position_table_builder,
                   std::vector<trap_handler::ProtectedInstructionData>*
                       protected_instructions,
                   Zone* compilation_zone, std::unique_ptr<Zone>* codegen_zone,
                   WasmCode* const* code_table_entry)
       : asm_(liftoff_asm),
-        descriptor_(
-            GetLoweredCallDescriptor(compilation_zone, call_descriptor)),
         env_(env),
+        num_stack_params_(GetNumberOfParamStackSlots(sig)),
         min_size_(uint64_t{env_->module->initial_pages} * wasm::kWasmPageSize),
         max_size_(uint64_t{env_->module->has_maximum_pages
                                ? env_->module->maximum_pages
@@ -207,76 +234,75 @@ class LiftoffCompiler {
     }
   }
 
-  void CollectReservedRegsForParameters(uint32_t input_idx_start,
-                                        uint32_t num_params,
-                                        LiftoffRegList& param_regs) {
-    uint32_t input_idx = input_idx_start;
-    for (uint32_t param_idx = 0; param_idx < num_params; ++param_idx) {
-      ValueType type = __ local_type(param_idx);
-      const int num_lowered_params = 1 + needs_reg_pair(type);
-      RegClass rc = num_lowered_params == 1 ? reg_class_for(type) : kGpReg;
+  LiftoffRegList CollectReservedRegsForParameters(FunctionSig* sig) {
+    LiftoffRegList param_regs;
+    LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+    auto add_gp_reg = [&param_regs, &linkage] {
+      if (!linkage.has_more_gp_regs()) return;
+      Register reg = linkage.NextGpReg();
+      if (kLiftoffAssemblerGpCacheRegs & reg.bit()) param_regs.set(reg);
+    };
 
-      for (int pair_idx = 0; pair_idx < num_lowered_params; ++pair_idx) {
-        compiler::LinkageLocation param_loc =
-            descriptor_->GetInputLocation(input_idx + pair_idx);
-        if (param_loc.IsRegister()) {
-          DCHECK(!param_loc.IsAnyRegister());
-          int reg_code = param_loc.AsRegister();
-          RegList cache_regs = rc == kGpReg ? kLiftoffAssemblerGpCacheRegs
-                                            : kLiftoffAssemblerFpCacheRegs;
-          if (cache_regs & (1 << reg_code)) {
-            LiftoffRegister in_reg = LiftoffRegister::from_code(rc, reg_code);
-            param_regs.set(in_reg);
-          }
-        }
+    // Add parameter of the instance object.
+    add_gp_reg();
+
+    for (ValueType type : sig->parameters()) {
+      RegClass rc = reg_class_for(type);
+      if (kNeedI64RegPair && rc == kGpRegPair) {
+        add_gp_reg();
+        add_gp_reg();
+      } else if (rc == kGpReg) {
+        add_gp_reg();
+      } else {
+        if (!linkage.has_more_gp_regs()) continue;
+        DoubleRegister reg = linkage.NextFpReg();
+        if (kLiftoffAssemblerGpCacheRegs & reg.bit()) param_regs.set(reg);
       }
-      input_idx += num_lowered_params;
     }
+    return param_regs;
   }
 
   // Returns the number of inputs processed (1 or 2).
-  uint32_t ProcessParameter(ValueType type, uint32_t input_idx) {
+  void ProcessParameter(ValueType type, LinkageAllocator& linkage) {
     const int num_lowered_params = 1 + needs_reg_pair(type);
     // Initialize to anything, will be set in the loop and used afterwards.
     LiftoffRegister reg = LiftoffRegister::from_code(kGpReg, 0);
-    RegClass rc = num_lowered_params == 1 ? reg_class_for(type) : kGpReg;
     LiftoffRegList pinned;
     for (int pair_idx = 0; pair_idx < num_lowered_params; ++pair_idx) {
-      compiler::LinkageLocation param_loc =
-          descriptor_->GetInputLocation(input_idx + pair_idx);
+      RegClass rc = num_lowered_params == 1 ? reg_class_for(type) : kGpReg;
       // Initialize to anything, will be set in both arms of the if.
-      LiftoffRegister in_reg = LiftoffRegister::from_code(kGpReg, 0);
-      if (param_loc.IsRegister()) {
-        DCHECK(!param_loc.IsAnyRegister());
-        int reg_code = param_loc.AsRegister();
-        RegList cache_regs = rc == kGpReg ? kLiftoffAssemblerGpCacheRegs
-                                          : kLiftoffAssemblerFpCacheRegs;
-        if (cache_regs & (1 << reg_code)) {
+      LiftoffRegister param_reg = LiftoffRegister::from_code(kGpReg, 0);
+      if (rc == kGpReg && linkage.has_more_gp_regs()) {
+        Register in_reg = linkage.NextGpReg();
+        if (kLiftoffAssemblerGpCacheRegs & in_reg.bit()) {
           // This is a cache register, just use it.
-          in_reg = LiftoffRegister::from_code(rc, reg_code);
+          param_reg = LiftoffRegister(in_reg);
         } else {
           // Move to a cache register (spill one if necessary).
-          // Note that we cannot create a {LiftoffRegister} for reg_code, since
-          // {LiftoffRegister} can only store cache regs.
-          LiftoffRegister in_reg = __ GetUnusedRegister(rc, pinned);
-          if (rc == kGpReg) {
-            __ Move(in_reg.gp(), Register::from_code(reg_code), type);
-          } else {
-            __ Move(in_reg.fp(), DoubleRegister::from_code(reg_code), type);
-          }
+          param_reg = __ GetUnusedRegister(kGpReg, pinned);
+          __ Move(param_reg.gp(), in_reg, type);
         }
-      } else if (param_loc.IsCallerFrameSlot()) {
-        in_reg = __ GetUnusedRegister(rc, pinned);
+      } else if (rc == kFpReg && linkage.has_more_fp_regs()) {
+        DoubleRegister in_reg = linkage.NextFpReg();
+        if (kLiftoffAssemblerFpCacheRegs & in_reg.bit()) {
+          // This is a cache register, just use it.
+          param_reg = LiftoffRegister(in_reg);
+        } else {
+          // Move to a cache register (spill one if necessary).
+          param_reg = __ GetUnusedRegister(kFpReg, pinned);
+          __ Move(param_reg.fp(), in_reg, type);
+        }
+      } else {
         ValueType lowered_type = num_lowered_params == 1 ? type : kWasmI32;
-        __ LoadCallerFrameSlot(in_reg, -param_loc.AsCallerFrameSlot(),
-                               lowered_type);
+        int stack_slot = linkage.NextStackSlot(lowered_type);
+        param_reg = __ GetUnusedRegister(rc, pinned);
+        __ LoadCallerFrameSlot(param_reg, stack_slot, lowered_type);
       }
-      reg = pair_idx == 0 ? in_reg
-                          : LiftoffRegister::ForPair(reg.gp(), in_reg.gp());
+      reg = pair_idx == 0 ? param_reg
+                          : LiftoffRegister::ForPair(reg.gp(), param_reg.gp());
       pinned.set(reg);
     }
     __ PushRegister(type, reg);
-    return num_lowered_params;
   }
 
   void StackCheck(WasmCodePosition position) {
@@ -349,19 +375,11 @@ class LiftoffCompiler {
         return;
     }
 
-    // Input 0 is the call target, the instance is at 1.
-    constexpr int kInstanceParameterIndex = 1;
     // Store the instance parameter to a special stack slot.
-    compiler::LinkageLocation instance_loc =
-        descriptor_->GetInputLocation(kInstanceParameterIndex);
-    DCHECK(instance_loc.IsRegister());
-    DCHECK(!instance_loc.IsAnyRegister());
-    Register instance_reg = Register::from_code(instance_loc.AsRegister());
-    DCHECK_EQ(kWasmInstanceRegister, instance_reg);
-
-    // Parameter 0 is the instance parameter.
-    uint32_t num_params =
-        static_cast<uint32_t>(decoder->sig_->parameter_count());
+    static_assert(arraysize(kGpParamRegisters) >= 1, ">= 1 gp param reg");
+    constexpr Register kInstanceReg = kGpParamRegisters[0];
+    static_assert(kWasmInstanceRegister == kInstanceReg,
+                  "inconsistent kWasmInstanceRegister");
 
     if (FLAG_wasm_tier_up) {
       if (!kNoParamRegister.is_valid()) {
@@ -370,11 +388,8 @@ class LiftoffCompiler {
       }
 
       // Collect all registers that are allocated on function entry.
-      LiftoffRegList param_regs;
-      param_regs.set(instance_reg);
-
-      CollectReservedRegsForParameters(kInstanceParameterIndex + 1, num_params,
-                                       param_regs);
+      LiftoffRegList param_regs =
+          CollectReservedRegsForParameters(decoder->sig_);
       JumpToOptimizedCodeIfExisting(param_regs);
     }
 
@@ -389,18 +404,23 @@ class LiftoffCompiler {
     // LiftoffAssembler methods.
     if (DidAssemblerBailout(decoder)) return;
 
-    __ SpillInstance(instance_reg);
-    // Input 0 is the code target, 1 is the instance. First parameter at 2.
-    uint32_t input_idx = kInstanceParameterIndex + 1;
-    for (uint32_t param_idx = 0; param_idx < num_params; ++param_idx) {
-      input_idx += ProcessParameter(__ local_type(param_idx), input_idx);
+    __ SpillInstance(kInstanceReg);
+    LinkageAllocator linkage(kGpParamRegisters, kFpParamRegisters);
+    // Skip instance parameter.
+    if (linkage.has_more_gp_regs()) {
+      linkage.NextGpReg();
+    } else {
+      linkage.NextStackSlot(LiftoffAssembler::kWasmIntPtr);
     }
-    DCHECK_EQ(input_idx, descriptor_->InputCount());
+    for (ValueType type : decoder->sig_->parameters()) {
+      ProcessParameter(type, linkage);
+    }
     // Set to a gp register, to mark this uninitialized.
     LiftoffRegister zero_double_reg(Register::from_code<0>());
     DCHECK(zero_double_reg.is_gp());
-    for (uint32_t param_idx = num_params; param_idx < __ num_locals();
-         ++param_idx) {
+    for (uint32_t param_idx =
+             static_cast<uint32_t>(decoder->sig_->parameter_count());
+         param_idx < __ num_locals(); ++param_idx) {
       ValueType type = decoder->GetLocalType(param_idx);
       switch (type) {
         case kWasmI32:
@@ -453,8 +473,7 @@ class LiftoffCompiler {
       DCHECK(!is_stack_check);
       __ CallTrapCallbackForTesting();
       __ LeaveFrame(StackFrame::WASM_COMPILED);
-      __ DropStackSlotsAndRet(
-          static_cast<uint32_t>(descriptor_->StackParameterCount()));
+      __ DropStackSlotsAndRet(num_stack_params_);
       return;
     }
 
@@ -1077,8 +1096,7 @@ class LiftoffCompiler {
       __ MoveToReturnRegister(reg, values[0].type);
     }
     __ LeaveFrame(StackFrame::WASM_COMPILED);
-    __ DropStackSlotsAndRet(
-        static_cast<uint32_t>(descriptor_->StackParameterCount()));
+    __ DropStackSlotsAndRet(num_stack_params_);
   }
 
   void GetLocal(Decoder* decoder, Value* result,
@@ -1734,8 +1752,8 @@ class LiftoffCompiler {
 
  private:
   LiftoffAssembler* const asm_;
-  compiler::CallDescriptor* const descriptor_;
   ModuleEnv* const env_;
+  const int num_stack_params_;
   // {min_size_} and {max_size_} are cached values computed from the ModuleEnv.
   const uint64_t min_size_;
   const uint64_t max_size_;
@@ -1792,8 +1810,6 @@ bool LiftoffCompilationUnit::ExecuteCompilation() {
   Zone zone(wasm_unit_->isolate_->allocator(), "LiftoffCompilationZone");
   const wasm::WasmModule* module =
       wasm_unit_->env_ ? wasm_unit_->env_->module : nullptr;
-  auto call_descriptor =
-      compiler::GetWasmCallDescriptor(&zone, wasm_unit_->func_body_.sig);
   base::Optional<TimedHistogramScope> liftoff_compile_time_scope(
       base::in_place, wasm_unit_->counters_->liftoff_compile_time());
   wasm::WasmCode* const* code_table_entry =
@@ -1802,10 +1818,10 @@ bool LiftoffCompilationUnit::ExecuteCompilation() {
   protected_instructions_.reset(
       new std::vector<trap_handler::ProtectedInstructionData>());
   wasm::WasmFullDecoder<wasm::Decoder::kValidate, wasm::LiftoffCompiler>
-      decoder(&zone, module, wasm_unit_->func_body_, &asm_, call_descriptor,
-              wasm_unit_->env_, &source_position_table_builder_,
-              protected_instructions_.get(), &zone, &codegen_zone_,
-              code_table_entry);
+      decoder(&zone, module, wasm_unit_->func_body_, &asm_,
+              wasm_unit_->func_body_.sig, wasm_unit_->env_,
+              &source_position_table_builder_, protected_instructions_.get(),
+              &zone, &codegen_zone_, code_table_entry);
   decoder.Decode();
   liftoff_compile_time_scope.reset();
   if (!decoder.interface().ok()) {
