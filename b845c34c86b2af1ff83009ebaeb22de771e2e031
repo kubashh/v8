@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e87c1036_005f04bb",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2018-05-03T20:26:31Z",
+      "side": 1,
+      "message": "(follow-up): This calculation looks wrong; it effectively means that we only include new external-memory registrations made since the last GC wherever we used PromotedTotalSize() (e.g. available-space calculations).",
+      "range": {
+        "startLine": 1521,
+        "startChar": 42,
+        "endLine": 1521,
+        "endChar": 70
+      },
+      "revId": "b845c34c86b2af1ff83009ebaeb22de771e2e031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
