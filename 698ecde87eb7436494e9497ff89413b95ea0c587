@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2eef9a37_15d7069a",
+        "filename": "src/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5123,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-05-03T19:06:31Z",
+      "side": 1,
+      "message": "Asserts: Done.\n\nI see, that makes sense.  The last time we considered adding fields to CallHandlerInfo\u0027s, we opted to introduce new maps instead of bloating the size of all CHIs and upgrading to Struct.  WDYT about adding a new next_call_side_effect_free_call_handler_info_ map?",
+      "parentUuid": "42f43fc0_435afc73",
+      "range": {
+        "startLine": 5123,
+        "startChar": 22,
+        "endLine": 5123,
+        "endChar": 47
+      },
+      "revId": "698ecde87eb7436494e9497ff89413b95ea0c587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "896f69c4_d660b277",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "698ecde87eb7436494e9497ff89413b95ea0c587",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ce1ea99_4f2070aa",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 13098,
+      "author": {
+        "id": 1230559
+      },
+      "writtenOn": "2018-05-03T19:06:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "896f69c4_d660b277",
+      "range": {
+        "startLine": 13098,
+        "startChar": 8,
+        "endLine": 13098,
+        "endChar": 16
+      },
+      "revId": "698ecde87eb7436494e9497ff89413b95ea0c587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
