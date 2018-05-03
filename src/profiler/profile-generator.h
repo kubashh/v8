@@ -94,7 +94,7 @@ class CodeEntry {
   const std::vector<std::unique_ptr<CodeEntry>>* GetInlineStack(
       int pc_offset) const;
 
-  void AddDeoptInlinedFrames(int deopt_id, std::vector<CpuProfileDeoptFrame>);
+  void AddDeoptInlinedFrames(int deopt_id, std::vector<CpuProfileDeoptFrame>*);
   bool HasDeoptInlinedFramesFor(int deopt_id) const;
 
   Address instruction_start() const { return instruction_start_; }
@@ -164,7 +164,7 @@ class CodeEntry {
   Address instruction_start_;
   // Should be an unordered_map, but it doesn't currently work on Win & MacOS.
   std::map<int, std::vector<std::unique_ptr<CodeEntry>>> inline_locations_;
-  std::map<int, std::vector<CpuProfileDeoptFrame>> deopt_inlined_frames_;
+  std::map<int, std::vector<CpuProfileDeoptFrame>*> deopt_inlined_frames_;
 
   DISALLOW_COPY_AND_ASSIGN(CodeEntry);
 };

@@ -5,6 +5,7 @@
 #ifndef V8_PROFILER_PROFILER_LISTENER_H_
 #define V8_PROFILER_PROFILER_LISTENER_H_
 
+#include <forward_list>
 #include <vector>
 
 #include "src/code-events.h"
@@ -82,6 +83,9 @@ class ProfilerListener : public CodeEventListener {
  private:
   void RecordInliningInfo(CodeEntry* entry, AbstractCode* abstract_code);
   void RecordDeoptInlinedFrames(CodeEntry* entry, AbstractCode* abstract_code);
+  std::vector<CpuProfileDeoptFrame>* StoreDedupedFrames(
+      std::vector<CpuProfileDeoptFrame> frames);
+
   Name* InferScriptName(Name* name, SharedFunctionInfo* info);
   V8_INLINE void DispatchCodeEvent(const CodeEventsContainer& evt_rec) {
     for (auto observer : observers_) {
@@ -92,6 +96,7 @@ class ProfilerListener : public CodeEventListener {
   Isolate* isolate_;
   StringsStorage function_and_resource_names_;
   std::vector<std::unique_ptr<CodeEntry>> code_entries_;
+  std::forward_list<std::vector<CpuProfileDeoptFrame>> deduped_deopt_frames_;
   std::vector<CodeEventObserver*> observers_;
 
   DISALLOW_COPY_AND_ASSIGN(ProfilerListener);
