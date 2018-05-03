@@ -850,6 +850,7 @@ void MarkCompactCollector::Prepare() {
     space->PrepareForMarkCompact();
   }
   heap()->account_external_memory_concurrently_freed();
+  heap()->account_backing_store_bytes_concurrently_freed();
 
 #ifdef VERIFY_HEAP
   if (!was_marked_incrementally_ && FLAG_verify_heap) {
