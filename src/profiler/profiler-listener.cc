@@ -284,10 +284,22 @@ void ProfilerListener::RecordDeoptInlinedFrames(CodeEntry* entry,
       }
       if (!inlined_frames.empty() &&
           !entry->HasDeoptInlinedFramesFor(deopt_id)) {
-        entry->AddDeoptInlinedFrames(deopt_id, std::move(inlined_frames));
+        std::vector<CpuProfileDeoptFrame>* deduped_frames =
+            StoreDedupedFrames(std::move(inlined_frames));
+        entry->AddDeoptInlinedFrames(deopt_id, deduped_frames);
       }
     }
   }
+}
+
+std::vector<CpuProfileDeoptFrame>* ProfilerListener::StoreDedupedFrames(
+    std::vector<CpuProfileDeoptFrame> frames) {
+  for (auto it = deduped_deopt_frames_.begin();
+       it != deduped_deopt_frames_.end(); ++it) {
+    if (*it == frames) return &(*it);
+  }
+  deduped_deopt_frames_.push_front(std::move(frames));
+  return &deduped_deopt_frames_.front();
 }
 
 CodeEntry* ProfilerListener::NewCodeEntry(
@@ -310,6 +322,7 @@ void ProfilerListener::AddObserver(CodeEventObserver* observer) {
   }
   if (observers_.empty()) {
     code_entries_.clear();
+    deduped_deopt_frames_.clear();
     isolate_->logger()->AddCodeEventListener(this);
   }
   observers_.push_back(observer);
