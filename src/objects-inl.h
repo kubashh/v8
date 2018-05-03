@@ -2399,8 +2399,22 @@ ACCESSORS(CallHandlerInfo, data, Object, kDataOffset)
 
 bool CallHandlerInfo::IsSideEffectFreeCallHandlerInfo() const {
   DCHECK(map() == GetHeap()->side_effect_call_handler_info_map() ||
-         map() == GetHeap()->side_effect_free_call_handler_info_map());
+         map() == GetHeap()->side_effect_free_call_handler_info_map() ||
+         map() ==
+             GetHeap()->next_call_side_effect_free_call_handler_info_map());
   return map() == GetHeap()->side_effect_free_call_handler_info_map();
+}
+
+void CallHandlerInfo::SetNextCallHasNoSideEffect() {
+  set_map(GetHeap()->next_call_side_effect_free_call_handler_info_map());
+}
+
+bool CallHandlerInfo::OnCallAsSideEffectFree() {
+  if (map() == GetHeap()->next_call_side_effect_free_call_handler_info_map()) {
+    set_map(GetHeap()->side_effect_call_handler_info_map());
+    return true;
+  }
+  return false;
 }
 
 ACCESSORS(AllocationSite, transition_info_or_boilerplate, Object,

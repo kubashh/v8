@@ -3905,6 +3905,17 @@ class V8_EXPORT Function : public Object {
     return NewInstance(context, 0, nullptr);
   }
 
+  /**
+   * When side effect checks are enabled, passing kHasNoSideEffect allows the
+   * constructor to be invoked without throwing. Calls made within the
+   * constructor are still checked.
+   */
+  V8_DEPRECATE_SOON("Use version without side_effect_type",
+                    MaybeLocal<Object> NewInstanceWithSideEffectType(
+                        Local<Context> context, int argc, Local<Value> argv[],
+                        SideEffectType side_effect_type =
+                            SideEffectType::kHasSideEffect) const);
+
   V8_DEPRECATE_SOON("Use maybe version",
                     Local<Value> Call(Local<Value> recv, int argc,
                                       Local<Value> argv[]));
