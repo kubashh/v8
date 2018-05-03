@@ -132,9 +132,8 @@ const std::vector<std::unique_ptr<CodeEntry>>* CodeEntry::GetInlineStack(
 }
 
 void CodeEntry::AddDeoptInlinedFrames(
-    int deopt_id, std::vector<CpuProfileDeoptFrame> inlined_frames) {
-  deopt_inlined_frames_.insert(
-      std::make_pair(deopt_id, std::move(inlined_frames)));
+    int deopt_id, std::vector<CpuProfileDeoptFrame>* inlined_frames) {
+  deopt_inlined_frames_.emplace(deopt_id, inlined_frames);
 }
 
 bool CodeEntry::HasDeoptInlinedFramesFor(int deopt_id) const {
@@ -159,7 +158,7 @@ CpuProfileDeoptInfo CodeEntry::GetDeoptInfo() {
     info.stack.push_back(CpuProfileDeoptFrame(
         {script_id_, static_cast<size_t>(std::max(0, position()))}));
   } else {
-    info.stack = deopt_inlined_frames_[deopt_id_];
+    info.stack = *(deopt_inlined_frames_[deopt_id_]);
   }
   return info;
 }
