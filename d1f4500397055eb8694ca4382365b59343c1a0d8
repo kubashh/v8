@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44c7d1c3_864ede5b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-05-04T08:39:01Z",
+      "side": 1,
+      "message": "Let\u0027s try to come up with a better name for this one. It actually is:\nOldGenerationSizeAndExternalDelta or something like that. I would like to revisit the delta and the V8+external heap growing strategy in general.",
+      "range": {
+        "startLine": 1520,
+        "startChar": 18,
+        "endLine": 1520,
+        "endChar": 40
+      },
+      "revId": "d1f4500397055eb8694ca4382365b59343c1a0d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
