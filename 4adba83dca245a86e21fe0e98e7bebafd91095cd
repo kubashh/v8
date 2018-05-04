@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0811d6f8_7f9470f5",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3913,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-04T05:55:35Z",
+      "side": 1,
+      "message": "This doesn\u0027t make any sense. Why would you introduce a new API and mark it as deprecate soon?",
+      "range": {
+        "startLine": 3913,
+        "startChar": 2,
+        "endLine": 3913,
+        "endChar": 19
+      },
+      "revId": "4adba83dca245a86e21fe0e98e7bebafd91095cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a57fc2d_d3505292",
+        "filename": "src/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-04T05:55:35Z",
+      "side": 1,
+      "message": "Can we, after execution assert that the map has been restored, or, maybe in case of exceptions (e.g. stack overflowing before we get to execution), restore the map?",
+      "range": {
+        "startLine": 5145,
+        "startChar": 20,
+        "endLine": 5145,
+        "endChar": 23
+      },
+      "revId": "4adba83dca245a86e21fe0e98e7bebafd91095cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca5696b9_e4a89402",
+        "filename": "src/objects/api-callbacks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-04T05:55:35Z",
+      "side": 1,
+      "message": "Name is a bit weird. Can we rename this to \"NextCallHasNoSideEffect\"? Also add to the comment that this call changes the state.",
+      "range": {
+        "startLine": 192,
+        "startChar": 14,
+        "endLine": 192,
+        "endChar": 36
+      },
+      "revId": "4adba83dca245a86e21fe0e98e7bebafd91095cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
