@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7adab76_7a41b227",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-05-04T09:28:13Z",
+      "side": 1,
+      "message": "nit: could this be moved into StoreFixedTypedArrayElementFromTagged?",
+      "range": {
+        "startLine": 887,
+        "startChar": 32,
+        "endLine": 887,
+        "endChar": 73
+      },
+      "revId": "8d39a6cda2d8e7e0a4faf448ad93ea9c79e5a13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
