@@ -46,6 +46,30 @@
       "revId": "d1f4500397055eb8694ca4382365b59343c1a0d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a3bde7_56243704",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-05-04T09:50:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2607ef65_a49dfcd4",
+      "range": {
+        "startLine": 1520,
+        "startChar": 18,
+        "endLine": 1520,
+        "endChar": 40
+      },
+      "revId": "d1f4500397055eb8694ca4382365b59343c1a0d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
