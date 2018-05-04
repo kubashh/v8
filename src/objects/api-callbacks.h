@@ -187,6 +187,9 @@ class CallHandlerInfo : public Tuple3 {
   DECL_CAST(CallHandlerInfo)
 
   inline bool IsSideEffectFreeCallHandlerInfo() const;
+  inline void SetNextCallHasNoSideEffect();
+  // Will return whether or not the next call can be side effect free.
+  inline bool OnCallAsSideEffectFree();
 
   // Dispatched behavior.
   DECL_PRINTER(CallHandlerInfo)
