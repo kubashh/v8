@@ -22,6 +22,7 @@
 #include "src/objects/frame-array-inl.h"
 #include "src/objects/microtask-inl.h"
 #include "src/objects/module.h"
+#include "src/objects/ordered-hash-table.h"
 #include "src/objects/promise-inl.h"
 #include "src/objects/scope-info.h"
 #include "src/unicode-cache.h"
