@@ -295,6 +295,8 @@ class WasmInstanceObject : public JSObject {
   V(kIndirectFunctionTableInstancesOffset, kPointerSize)                \
   V(kManagedNativeAllocationsOffset, kPointerSize)                      \
   V(kManagedIndirectPatcherOffset, kPointerSize)                        \
+  V(ImportedMutableGlobalsBuffersOffset, kPointerSize)                  \
+  V(CacheLinePaddingOffset, PROCESSOR_CACHE_LINE_SIZE - kPointerSize)   \
   V(kFirstUntaggedOffset, 0)                             /* marker */   \
   V(kMemoryStartOffset, kPointerSize)                    /* untagged */ \
   V(kMemorySizeOffset, kUInt32Size)                      /* untagged */ \
