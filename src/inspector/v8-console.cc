@@ -307,6 +307,33 @@ void V8Console::Count(const v8::debug::ConsoleCallArguments& info,
       title.isEmpty() ? countString : (title + ": " + countString));
 }
 
+void V8Console::CountReset(const v8::debug::ConsoleCallArguments& info,
+                           const v8::debug::ConsoleContext& consoleContext) {
+  ConsoleHelper helper(info, consoleContext, m_inspector);
+  String16 title = helper.firstArgToString(String16("default"), false);
+  String16 identifier;
+  if (title.isEmpty()) {
+    std::unique_ptr<V8StackTraceImpl> stackTrace =
+        V8StackTraceImpl::capture(m_inspector->debugger(), helper.groupId(), 1);
+    if (stackTrace && !stackTrace->isEmpty()) {
+      identifier = toString16(stackTrace->topSourceURL()) + ":" +
+                   String16::fromInteger(stackTrace->topLineNumber());
+    }
+  } else {
+    identifier = title + "@";
+  }
+  identifier = consoleContextToString(consoleContext) + "@" + identifier;
+
+  if (!helper.consoleMessageStorage()->hasCount(helper.contextId(),
+                                                identifier)) {
+    helper.reportCallWithArgument(
+        ConsoleAPIType::kWarning,
+        "Count for '" + identifier + "' does not exist");
+  } else {
+    helper.consoleMessageStorage()->countReset(helper.contextId(), identifier);
+  }
+}
+
 void V8Console::Assert(const v8::debug::ConsoleCallArguments& info,
                        const v8::debug::ConsoleContext& consoleContext) {
   ConsoleHelper helper(info, consoleContext, m_inspector);
