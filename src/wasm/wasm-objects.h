@@ -283,6 +283,7 @@ class WasmInstanceObject : public JSObject {
 
 // Layout description.
 #define WASM_INSTANCE_OBJECT_FIELDS(V)                                  \
+  V(ImportedMutableGlobalsBuffersOffset, kPointerSize)                  \
   V(kCompiledModuleOffset, kPointerSize)                                \
   V(kExportsObjectOffset, kPointerSize)                                 \
   V(kMemoryObjectOffset, kPointerSize)                                  \
