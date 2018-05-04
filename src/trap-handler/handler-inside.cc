@@ -136,7 +136,9 @@ bool TryFindLandingPad(uintptr_t fault_addr, uintptr_t* landing_pad) {
 
     if (fault_addr >= base && fault_addr < base + data->size) {
       // Hurray, we found the code object. Check for protected addresses.
-      const ptrdiff_t offset = fault_addr - base;
+      // This won't underflow because the if check above makes sure that
+      // fault_addr >= base.
+      const uintptr_t offset = fault_addr - base;
 
       for (unsigned i = 0; i < data->num_protected_instructions; ++i) {
         if (data->instructions[i].instr_offset == offset) {
