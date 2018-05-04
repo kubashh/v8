@@ -2,6 +2,125 @@
   "comments": [
     {
       "key": {
+        "uuid": "fcf36258_281cbb56",
+        "filename": "src/js/array.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Hmm, an additional runtime transition will be slow. But I suppose it should be fine since it only happens for non-JSArrays..",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3e471b1_056f55b0",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Let\u0027s pass the isolate in as an argument :)",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6adff2b3_0878843c",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "We probably have to handle the IsNothing case as well.",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11087636_076a81ce",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "I think this could be kStrict (array.js is in strict mode).",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "527ce4ed_e4eaae03",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Nit: obj-\u003eobject.",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccb65e5d_8361e6a9",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Please DCHECK(!object-\u003eIsJSArray());",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20eeef70_6de66845",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Suggestion: We could pass \u0026max to ConditionalCopy, and ConditionalCopy could simply return Object*. No strong preference.",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "354eec49_8bbf7599",
         "filename": "src/runtime/runtime-array.cc",
         "patchSetId": 2
@@ -13,6 +132,41 @@
       "writtenOn": "2018-05-04T13:07:00Z",
       "side": 1,
       "message": "CollectOwnElementIndices takes a JSReceiver and an JSObject. Is this the correct way to invoke it?",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9b9f844_dabd2d40",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "Looks like it, judging by %GetArrayKeys.\n\n%GetArrayKeys is more involved than what we do here though.. Should the complete logic be ported? Same for other callsites (I think there was one in the other CL?).",
+      "parentUuid": "354eec49_8bbf7599",
+      "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eea5e36b_c2e5534a",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-04T14:50:06Z",
+      "side": 1,
+      "message": "\u0027.\u0027 (please also for all future comments).",
       "revId": "96f25d4d29fd076a867160abfc6226381c5a1181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
