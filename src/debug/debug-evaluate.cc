@@ -351,7 +351,6 @@ bool IntrinsicHasNoSideEffect(Runtime::FunctionId id) {
   V(HasFastPackedElements)               \
   V(NewArray)                            \
   V(NormalizeElements)                   \
-  V(RemoveArrayHoles)                    \
   V(TrySliceSimpleNonFastElements)       \
   V(TypedArrayGetBuffer)                 \
   /* Errors */                           \

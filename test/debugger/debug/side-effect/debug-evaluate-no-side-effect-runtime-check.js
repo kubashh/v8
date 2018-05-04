@@ -107,9 +107,6 @@ fail(`array.pop()`);
 success([3,2,1], `[1,2,3].reverse()`);
 fail(`array.reverse()`);
 
-success([1,2,3], `[2,1,3].sort()`);
-fail(`array.sort()`);
-
 success([2,3], `[1,2,3].splice(1,2)`);
 fail(`array.splice(1,2)`);
 
