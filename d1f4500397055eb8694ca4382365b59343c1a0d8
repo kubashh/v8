@@ -22,6 +22,30 @@
       "revId": "d1f4500397055eb8694ca4382365b59343c1a0d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2607ef65_a49dfcd4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2018-05-04T09:41:16Z",
+      "side": 1,
+      "message": "I went with OldGenerationObjectsAndPromotedExternalMemorySize to match the use of \"Promoted\" to mean \"added to the old generation\" elsewhere (though originally it clearly meant moved-from-new-to-old, I assume :).\n\nI like the idea of replacing \"Promoted*\" with \"OldGenerationDelta*\" or similar, since in general these are calculation the change-in-size of the old generation (and/or external) rather than strictly accounting for actual promotions.",
+      "parentUuid": "44c7d1c3_864ede5b",
+      "range": {
+        "startLine": 1520,
+        "startChar": 18,
+        "endLine": 1520,
+        "endChar": 40
+      },
+      "revId": "d1f4500397055eb8694ca4382365b59343c1a0d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
