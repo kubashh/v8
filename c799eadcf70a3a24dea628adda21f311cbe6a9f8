@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c59ef8e0_640b04c9",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-06T18:40:13Z",
+      "side": 1,
+      "message": "Removed it from factory.cc. I need it in factory.h for all the return type decls, not just for the default value.",
+      "parentUuid": "bc96aee9_f75a09d3",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 43
+      },
+      "revId": "c799eadcf70a3a24dea628adda21f311cbe6a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef46ba98_7192379f",
         "filename": "src/objects/ordered-hash-table-inl.h",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "64b07dbd_c6a43273",
+        "filename": "src/objects/ordered-hash-table-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-06T18:40:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef46ba98_7192379f",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "c799eadcf70a3a24dea628adda21f311cbe6a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b87366b_d523c0de",
         "filename": "src/objects/ordered-hash-table.h",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "c799eadcf70a3a24dea628adda21f311cbe6a9f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "247d1e13_d28f3269",
+        "filename": "src/objects/ordered-hash-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-06T18:40:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b87366b_d523c0de",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "c799eadcf70a3a24dea628adda21f311cbe6a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
