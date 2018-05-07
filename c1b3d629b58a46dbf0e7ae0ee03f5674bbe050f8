@@ -22,6 +22,30 @@
       "revId": "c1b3d629b58a46dbf0e7ae0ee03f5674bbe050f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb52654_8e76339c",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-07T14:24:27Z",
+      "side": 1,
+      "message": "Right, I\u0027m aware that there\u0027s still parts within the (de)serializer missing.  I wanted to land this first to unblock hiroshige@, since AFAIK serializer changes are only for safety.\n\nGood point, will add tests.",
+      "parentUuid": "e0f4bb44_655e84f0",
+      "range": {
+        "startLine": 2682,
+        "startChar": 44,
+        "endLine": 2682,
+        "endChar": 59
+      },
+      "revId": "c1b3d629b58a46dbf0e7ae0ee03f5674bbe050f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
