@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0f4bb44_655e84f0",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-07T14:18:43Z",
+      "side": 1,
+      "message": "Do we have tests for this? There is a bit more to this too. We discussed in https://docs.google.com/document/d/1Nwv3ccss0GrtqYgTBWInS8h9vr3QfY_9lwvw4FtKM-Q/edit that the serialized code data should have a bit in the header to indicate whether the serialized code is for a regular script or a module to avoid confusion (reject if wrong), since the same resource could be used as either, but the produced code differs.",
+      "range": {
+        "startLine": 2682,
+        "startChar": 44,
+        "endLine": 2682,
+        "endChar": 59
+      },
+      "revId": "c1b3d629b58a46dbf0e7ae0ee03f5674bbe050f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
