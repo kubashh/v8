@@ -17135,6 +17135,7 @@ void MakeStringThin(String* string, String* internalized, Isolate* isolate) {
 
 }  // namespace
 
+// static
 Handle<String> StringTable::LookupString(Isolate* isolate,
                                          Handle<String> string) {
   string = String::Flatten(string);
@@ -17168,6 +17169,7 @@ Handle<String> StringTable::LookupString(Isolate* isolate,
   return result;
 }
 
+// static
 Handle<String> StringTable::LookupKey(Isolate* isolate, StringTableKey* key) {
   Handle<StringTable> table = isolate->factory()->string_table();
   int entry = table->FindEntry(key);
