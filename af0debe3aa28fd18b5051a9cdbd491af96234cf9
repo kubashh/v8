@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5496d500_771d8d89",
+        "filename": ".gitattributes",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-05-07T17:33:35Z",
+      "side": 1,
+      "message": "This encantation looks kind of magical. Let’s add a comment?\n\n    # Automatically normalize line endings for all text-based files.\n    * text\u003dauto",
+      "revId": "af0debe3aa28fd18b5051a9cdbd491af96234cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
