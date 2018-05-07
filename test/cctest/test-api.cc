@@ -27440,7 +27440,7 @@ TEST(GetModuleNamespace) {
             ->StrictEquals(v8::Number::New(isolate, 10)));
 }
 
-TEST(ModuleGetUnboundScript) {
+TEST(ModuleGetUnboundModuleScript) {
   LocalContext context;
   v8::Isolate* isolate = context->GetIsolate();
   v8::HandleScope scope(isolate);
@@ -27454,11 +27454,12 @@ TEST(ModuleGetUnboundScript) {
   v8::ScriptCompiler::Source source(source_text, origin);
   Local<Module> module =
       v8::ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
-  Local<v8::UnboundScript> sfi_before_instantiation =
-      module->GetUnboundScript();
+  Local<v8::UnboundModuleScript> sfi_before_instantiation =
+      module->GetUnboundModuleScript();
   module->InstantiateModule(context.local(), UnexpectedModuleResolveCallback)
       .ToChecked();
-  Local<v8::UnboundScript> sfi_after_instantiation = module->GetUnboundScript();
+  Local<v8::UnboundModuleScript> sfi_after_instantiation =
+      module->GetUnboundModuleScript();
 
   // Check object identity.
   {
@@ -27466,11 +27467,6 @@ TEST(ModuleGetUnboundScript) {
     i::Handle<i::Object> s2 = v8::Utils::OpenHandle(*sfi_after_instantiation);
     CHECK_EQ(*s1, *s2);
   }
-
-  // Check unbound script values.
-  Local<v8::UnboundScript> sfi = sfi_after_instantiation;
-  CHECK(ValueEqualsString(isolate, sfi->GetScriptName(), "www.google.com"));
-  CHECK_EQ(0, sfi->GetLineNumber(0));
 }
 
 TEST(GlobalTemplateWithDoubleProperty) {
