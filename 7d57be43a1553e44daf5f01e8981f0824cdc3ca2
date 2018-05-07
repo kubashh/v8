@@ -94,6 +94,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75c67378_c3ac3de0",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-05-07T21:12:58Z",
+      "side": 0,
+      "message": "I see. Looks like there is no way to deprecate the function properly.\n\nDoes it make sense to keep the default implementations for GetForegroundTaskRunner() and idle task related functions? I guess most of the embedders will provide the same trivial implementation for these functions. If we don\u0027t get any value from making them pure, then we should reduce the breakage.",
+      "parentUuid": "44c3708d_101767f4",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
