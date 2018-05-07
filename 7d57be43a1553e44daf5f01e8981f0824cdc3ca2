@@ -22,6 +22,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22395f52_b8026740",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-05-07T16:12:42Z",
+      "side": 0,
+      "message": "The reason I used V8_DEPRECATE_SOON is that v8 wouldn\u0027t compile when the new APIs redirected to the old APIs by default if those were marked V8_DEPRECATED.\n\ni.e.\n\n  virtual int NumberOfWorkerThreads() {\n    return static_cast\u003cint\u003e(NumberOfAvailableBackgroundThreads());\n  }\n\nwould complain if NumberOfAvailableBackgroundThreads() is marked V8_DEPRECATED.\n\nHence, the minimum this CL can do is make the new ones pure-virtual and mark the old ones V8_DEPRECATED for realz.\n\nBut then embedders will fail to compile if they have yet to switch anyways (because of the pure-virtual calls).\nAnd I can\u0027t imagine it makes any sense for any embedder to fix their compilation per new pure-virtuals but not stop overriding old APIs.\n\nAs such I don\u0027t think going to V8_DEPRECATED has any value here.",
+      "parentUuid": "0a29b74f_4305702c",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
