@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7c0aca1_51919143",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T15:17:47Z",
+      "side": 1,
+      "message": "Not important at this point I think (maybe a future CL), but using ElementsAccessor::PrependElementsIndices should be way faster as it does not try to handle shadowing keys with an internal hash table.",
+      "revId": "7b92c214aa3c4a6ca67faab5081878c9647d8b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a0a0e9_4642b0de",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T15:17:47Z",
+      "side": 1,
+      "message": "Maybe copy over the sorted check from the \"remove holes\" CL. Or even better, add FixedArray::ContainsSortedNumbers() and reuse it.",
+      "revId": "7b92c214aa3c4a6ca67faab5081878c9647d8b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
