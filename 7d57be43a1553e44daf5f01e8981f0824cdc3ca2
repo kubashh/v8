@@ -70,6 +70,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44c3708d_101767f4",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-05-07T17:11:11Z",
+      "side": 0,
+      "message": "But then we still need to make NumberOfWorkerThreads() pure-virtual and they\u0027ll get a compile error regardless.\n\n(well NumberOfWorkerThreads() is a bad example because there\u0027s an easy default but there isn\u0027t for other APIs affected here, basically the problem is they already provide an impl and we want them to point it at the new API, not silently drop their impl)\n\nFWIW, making long-standing \"new\" methods like GetForegroundTaskRunner() pure-virtual has the same problem. It will not compile the minute they sync even though no macro warned them that they had to implement it.",
+      "parentUuid": "e1705223_dfb2f797",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
