@@ -35,10 +35,15 @@ class MaybeObject {
   inline bool ToStrongHeapObject(HeapObject** result);
   inline HeapObject* ToStrongHeapObject();
   inline bool IsWeakHeapObject();
+  inline bool IsWeakOrClearedHeapObject();
   inline bool ToWeakHeapObject(HeapObject** result);
   inline HeapObject* ToWeakHeapObject();
 
+  // Returns the HeapObject pointed to (either strongly or weakly).
   inline HeapObject* GetHeapObject();
+  inline Object* GetHeapObjectOrSmi();
+
+  inline Object* ToObject();
 
   static MaybeObject* FromSmi(Smi* smi) {
     DCHECK(HAS_SMI_TAG(smi));
@@ -64,13 +69,15 @@ class MaybeObject {
 // reference to a HeapObject, or a cleared weak reference.
 class HeapObjectReference : public MaybeObject {
  public:
-  static HeapObjectReference* Strong(HeapObject* object) {
-    DCHECK(!HasWeakHeapObjectTag(object));
+  static HeapObjectReference* Strong(Object* object) {
+    SLOW_DCHECK(!object->IsSmi());
+    SLOW_DCHECK(!HasWeakHeapObjectTag(object));
     return reinterpret_cast<HeapObjectReference*>(object);
   }
 
-  static HeapObjectReference* Weak(HeapObject* object) {
-    DCHECK(!HasWeakHeapObjectTag(object));
+  static HeapObjectReference* Weak(Object* object) {
+    SLOW_DCHECK(!object->IsSmi());
+    SLOW_DCHECK(!HasWeakHeapObjectTag(object));
     return AddWeakHeapObjectMask(object);
   }
 
