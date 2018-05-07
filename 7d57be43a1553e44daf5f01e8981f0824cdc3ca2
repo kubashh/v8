@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a29b74f_4305702c",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-05-07T06:50:01Z",
+      "side": 0,
+      "message": "V8_DEPRECATE_SOON is not sufficient for removing.\n\nIt should be V8_DEPRECATED for one release before we can remove it:\nhttps://github.com/v8/v8/wiki/How-to-change-V8-public-API",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
