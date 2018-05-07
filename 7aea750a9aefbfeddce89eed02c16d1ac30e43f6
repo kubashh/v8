@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "994be01c_f16f0e50",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T08:51:25Z",
+      "side": 1,
+      "message": "Not sure that performance reaaally matter here ;) but you might want to do early returns:\n\n Maybe\u003cbool\u003e source_has_prop \u003d JSReceiver::HasOwnProperty(source, index);\n MAYBE_RETURN(source_has_prop, Nothing\u003cbool\u003e());\n if (source_has_prop.FromJust()) return Just(false);",
+      "revId": "7aea750a9aefbfeddce89eed02c16d1ac30e43f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a506735_1a34e966",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T08:51:25Z",
+      "side": 1,
+      "message": "See comment below.",
+      "revId": "7aea750a9aefbfeddce89eed02c16d1ac30e43f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c52d31a8_ed1ebc3d",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T08:51:25Z",
+      "side": 1,
+      "message": "You might want to add a helper for this on JSReceiver if you need it somewhere else in the future.",
+      "revId": "7aea750a9aefbfeddce89eed02c16d1ac30e43f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb9e5ed1_1381b0bf",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-05-07T08:51:25Z",
+      "side": 1,
+      "message": "You can rewrite this to be a bit more consistent with the rest of the code:\n\n  Bool* did_copy;\n  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, did_copy, \n    ConditionalCopy(...));\n  if (...)",
+      "revId": "7aea750a9aefbfeddce89eed02c16d1ac30e43f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
