@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50456061_2949e44e",
+        "filename": "test/mjsunit/regress/regress-crbug-779344.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-07T18:27:54Z",
+      "side": 1,
+      "message": "Tangentially related simplification. This is sufficient to trigger the stack overflow.",
+      "revId": "b0deac745ca6b4bb55a858c0cb1b68b1c6731951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
