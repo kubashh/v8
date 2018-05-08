@@ -22,6 +22,30 @@
       "revId": "e008ee73633eb473380bc67e666ec021ea4d17d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89affa7e_8e32e03d",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-05-08T10:51:37Z",
+      "side": 1,
+      "message": "Ah yes, I could have changed the helper. Indeed, working on a followup CL now.",
+      "parentUuid": "63d72b73_e0e62454",
+      "range": {
+        "startLine": 889,
+        "startChar": 11,
+        "endLine": 889,
+        "endChar": 37
+      },
+      "revId": "e008ee73633eb473380bc67e666ec021ea4d17d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
