@@ -166,6 +166,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d1717c_1454f40e",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-05-08T19:16:23Z",
+      "side": 0,
+      "message": "Ok, I brought back default impls for idle tasks. I think we should keep GetForegroundTaskRunner() pure virtual though because the code assumes it exists (uses it without checking for null). CallIdleOnForegroundThread() is gated on IdleTasksEnabled() so it\u0027s different (and having it default to disabled is fine).",
+      "parentUuid": "80e178dd_ea20820d",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
