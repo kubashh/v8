@@ -118,6 +118,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a439419_c2f72a02",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2018-05-08T00:49:40Z",
+      "side": 0,
+      "message": "I don\u0027t feel strongly here, I\u0027ll let you decide among platform owners. My 2 cents is that if you have a sane default and don\u0027t rely on an override, maybe it\u0027s fine. But right now the default is null and maybe that\u0027s a bit weird (though I guess we have to support that and if we will we might as well have it by default so it\u0027s tested..).",
+      "parentUuid": "75c67378_c3ac3de0",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
