@@ -16,9 +16,10 @@ namespace U_ICU_NAMESPACE {
 class BreakIterator;
 class Collator;
 class DecimalFormat;
+class Locale;
 class PluralRules;
 class SimpleDateFormat;
-}
+}  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
 namespace internal {
@@ -28,7 +29,7 @@ class Handle;
 
 class DateFormat {
  public:
-  // Create a formatter for the specificied locale and options. Returns the
+  // Create a formatter for the specified locale and options. Returns the
   // resolved settings for the locale / options.
   static icu::SimpleDateFormat* InitializeDateTimeFormat(
       Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
@@ -52,7 +53,7 @@ class DateFormat {
 
 class NumberFormat {
  public:
-  // Create a formatter for the specificied locale and options. Returns the
+  // Create a formatter for the specified locale and options. Returns the
   // resolved settings for the locale / options.
   static icu::DecimalFormat* InitializeNumberFormat(Isolate* isolate,
                                                     Handle<String> locale,

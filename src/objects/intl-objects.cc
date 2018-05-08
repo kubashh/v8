@@ -8,7 +8,9 @@
 
 #include "src/objects/intl-objects.h"
 
+#include <map>
 #include <memory>
+#include <string>
 
 #include "src/api.h"
 #include "src/global-handles.h"
@@ -808,6 +810,7 @@ void SetResolvedBreakIteratorSettings(Isolate* isolate,
         .Assert();
   }
 }
+
 }  // namespace
 
 // static
