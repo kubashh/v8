@@ -142,6 +142,30 @@
       "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80e178dd_ea20820d",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-05-08T10:34:26Z",
+      "side": 0,
+      "message": "I would vote for keeping the default implementations then.",
+      "parentUuid": "8a439419_c2f72a02",
+      "range": {
+        "startLine": 307,
+        "startChar": 2,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "7d57be43a1553e44daf5f01e8981f0824cdc3ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
