@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63d72b73_e0e62454",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-08T10:48:58Z",
+      "side": 1,
+      "message": "suggestion: We should be able to also change {Pipeline::NewWasmCompilationJob} now. Happy if that happens in in a follow-up CL eventually.",
+      "range": {
+        "startLine": 889,
+        "startChar": 11,
+        "endLine": 889,
+        "endChar": 37
+      },
+      "revId": "e008ee73633eb473380bc67e666ec021ea4d17d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
