@@ -2799,6 +2799,8 @@ v8_component("v8_libbase") {
   configs = [ ":internal_config_base" ]
 
   public_configs = [ ":libbase_config" ]
+  
+  public_deps = []
 
   data = []
 
@@ -2871,6 +2873,7 @@ v8_component("v8_libbase") {
       "src/base/debug/stack_trace_fuchsia.cc",
       "src/base/platform/platform-fuchsia.cc",
     ]
+    public_deps += [ "//third_party/fuchsia-sdk:launchpad" ]
   } else if (is_mac) {
     sources += [
       "src/base/debug/stack_trace_posix.cc",
