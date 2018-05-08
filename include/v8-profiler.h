@@ -23,6 +23,10 @@ typedef uint32_t SnapshotObjectId;
 struct CpuProfileDeoptFrame {
   int script_id;
   size_t position;
+
+  inline bool operator==(const CpuProfileDeoptFrame& rhs) const {
+    return script_id == rhs.script_id && position == rhs.position;
+  }
 };
 
 }  // namespace v8
