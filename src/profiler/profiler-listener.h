@@ -79,6 +79,9 @@ class ProfilerListener : public CodeEventListener {
  private:
   void RecordInliningInfo(CodeEntry* entry, AbstractCode* abstract_code);
   void RecordDeoptInlinedFrames(CodeEntry* entry, AbstractCode* abstract_code);
+  std::vector<CpuProfileDeoptFrame>* StoreDedupedFrames(
+      std::vector<CpuProfileDeoptFrame> frames);
+
   Name* InferScriptName(Name* name, SharedFunctionInfo* info);
   V8_INLINE void DispatchCodeEvent(const CodeEventsContainer& evt_rec) {
     observer_->CodeEventHandler(evt_rec);
@@ -87,6 +90,8 @@ class ProfilerListener : public CodeEventListener {
   CodeEventObserver* observer_;
   StringsStorage function_and_resource_names_;
   std::deque<std::unique_ptr<CodeEntry>> code_entries_;
+  std::vector<std::unique_ptr<std::vector<CpuProfileDeoptFrame>>>
+      deduped_deopt_frames_;
 
   DISALLOW_COPY_AND_ASSIGN(ProfilerListener);
 };
