@@ -153,9 +153,10 @@ class AccessorAssembler : public CodeStubAssembler {
   // IC dispatcher behavior.
 
   // Checks monomorphic case. Returns {feedback} entry of the vector.
-  Node* TryMonomorphicCase(Node* slot, Node* vector, Node* receiver_map,
-                           Label* if_handler,
-                           TVariable<MaybeObject>* var_handler, Label* if_miss);
+  TNode<MaybeObject> TryMonomorphicCase(Node* slot, Node* vector,
+                                        Node* receiver_map, Label* if_handler,
+                                        TVariable<MaybeObject>* var_handler,
+                                        Label* if_miss);
   void HandlePolymorphicCase(Node* receiver_map, TNode<WeakFixedArray> feedback,
                              Label* if_handler,
                              TVariable<MaybeObject>* var_handler,

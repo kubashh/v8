@@ -60,11 +60,9 @@ TNode<Object> AccessorAssembler::LoadHandlerDataField(
   return LoadObjectField(handler, offset);
 }
 
-Node* AccessorAssembler::TryMonomorphicCase(Node* slot, Node* vector,
-                                            Node* receiver_map,
-                                            Label* if_handler,
-                                            TVariable<MaybeObject>* var_handler,
-                                            Label* if_miss) {
+TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
+    Node* slot, Node* vector, Node* receiver_map, Label* if_handler,
+    TVariable<MaybeObject>* var_handler, Label* if_miss) {
   Comment("TryMonomorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -76,15 +74,13 @@ Node* AccessorAssembler::TryMonomorphicCase(Node* slot, Node* vector,
   // into ElementOffsetFromIndex() allows it to be folded into a single
   // [base, index, offset] indirect memory access on x64.
   Node* offset = ElementOffsetFromIndex(slot, HOLEY_ELEMENTS, SMI_PARAMETERS);
-  TNode<Object> feedback =
-      CAST(Load(MachineType::AnyTagged(), vector,
-                IntPtrAdd(offset, IntPtrConstant(header_size))));
+  TNode<MaybeObject> feedback = ReinterpretCast<MaybeObject>(
+      Load(MachineType::AnyTagged(), vector,
+           IntPtrAdd(offset, IntPtrConstant(header_size))));
 
   // Try to quickly handle the monomorphic case without knowing for sure
-  // if we have a weak cell in feedback. We do know it's safe to look
-  // at WeakCell::kValueOffset.
-  GotoIf(WordNotEqual(receiver_map, LoadWeakCellValueUnchecked(CAST(feedback))),
-         if_miss);
+  // if we have a weak reference in feedback.
+  GotoIf(WordNotEqual(receiver_map, RemoveWeakBit(feedback)), if_miss);
 
   TNode<MaybeObject> handler = UncheckedCast<MaybeObject>(
       Load(MachineType::AnyTagged(), vector,
@@ -128,8 +124,8 @@ void AccessorAssembler::HandlePolymorphicCase(
     }
 
     Label next_entry(this);
-    Node* cached_map = LoadWeakCellValue(CAST(
-        ToStrongHeapObject(LoadWeakFixedArrayElement(feedback, map_index))));
+    Node* cached_map =
+        ToWeakHeapObject(LoadWeakFixedArrayElement(feedback, map_index));
     GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
 
     // Found, now call handler.
@@ -149,8 +145,8 @@ void AccessorAssembler::HandlePolymorphicCase(
   BuildFastLoop(
       start_index, end_index,
       [this, receiver_map, feedback, if_handler, var_handler](Node* index) {
-        Node* cached_map = LoadWeakCellValue(CAST(
-            ToStrongHeapObject(LoadWeakFixedArrayElement(feedback, index))));
+        Node* cached_map =
+            ToWeakHeapObject(LoadWeakFixedArrayElement(feedback, index));
 
         Label next_entry(this);
         GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
@@ -892,9 +888,8 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 
   BIND(&store_global);
   {
-    // Load value or miss if the {handler} weak cell is cleared.
-    TNode<PropertyCell> property_cell =
-        CAST(LoadWeakCellValue(CAST(ToStrongHeapObject(handler)), miss));
+    // Load value or miss if the {handler} weak reference is cleared.
+    TNode<PropertyCell> property_cell = CAST(ToWeakHeapObject(handler, miss));
     ExitPoint direct_exit(this);
     StoreGlobalIC_PropertyCellCase(property_cell, p->value, &direct_exit, miss);
   }
@@ -2330,7 +2325,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LoadICParameters* p,
     TVARIABLE(MaybeObject, var_handler);
     Label try_polymorphic(this), if_handler(this, &var_handler);
 
-    Node* feedback =
+    TNode<MaybeObject> feedback =
         TryMonomorphicCase(p->slot, p->vector, recv_map, &if_handler,
                            &var_handler, &try_polymorphic);
 
@@ -2340,9 +2335,12 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LoadICParameters* p,
 
     BIND(&try_polymorphic);
     {
-      GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &stub_call);
-      HandlePolymorphicCase(recv_map, CAST(feedback), &if_handler, &var_handler,
-                            &miss, 2);
+      GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+      CSA_ASSERT(this, IsStrongHeapObject(feedback));
+      TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
+      GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &stub_call);
+      HandlePolymorphicCase(recv_map, CAST(strong_feedback), &if_handler,
+                            &var_handler, &miss, 2);
     }
   }
 
@@ -2380,7 +2378,7 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
   // Check monomorphic case.
-  Node* feedback =
+  TNode<MaybeObject> feedback =
       TryMonomorphicCase(p->slot, p->vector, receiver_map, &if_handler,
                          &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -2388,17 +2386,22 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
                           &direct_exit);
 
   BIND(&try_polymorphic);
+  GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+  CSA_ASSERT(this, IsStrongHeapObject(feedback));
+  TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
   {
     // Check polymorphic case.
     Comment("LoadIC_try_polymorphic");
-    GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &non_inlined);
-    HandlePolymorphicCase(receiver_map, CAST(feedback), &if_handler,
+    GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &non_inlined);
+    HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
                           &var_handler, &miss, 2);
   }
 
   BIND(&non_inlined);
-  LoadIC_Noninlined(p, receiver_map, feedback, &var_handler, &if_handler, &miss,
-                    &direct_exit);
+  {
+    LoadIC_Noninlined(p, receiver_map, strong_feedback, &var_handler,
+                      &if_handler, &miss, &direct_exit);
+  }
 
   BIND(&miss);
   direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context, p->receiver,
@@ -2596,7 +2599,7 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
   // Check monomorphic case.
-  Node* feedback =
+  TNode<MaybeObject> feedback =
       TryMonomorphicCase(p->slot, p->vector, receiver_map, &if_handler,
                          &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -2607,11 +2610,14 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
   }
 
   BIND(&try_polymorphic);
+  GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+  CSA_ASSERT(this, IsStrongHeapObject(feedback));
+  TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
   {
     // Check polymorphic case.
     Comment("KeyedLoadIC_try_polymorphic");
-    GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &try_megamorphic);
-    HandlePolymorphicCase(receiver_map, CAST(feedback), &if_handler,
+    GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &try_megamorphic);
+    HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
                           &var_handler, &miss, 2);
   }
 
@@ -2619,7 +2625,8 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
   {
     // Check megamorphic case.
     Comment("KeyedLoadIC_try_megamorphic");
-    GotoIfNot(WordEqual(feedback, LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
+    GotoIfNot(WordEqual(strong_feedback,
+                        LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
               &try_polymorphic_name);
     // TODO(jkummerow): Inline this? Or some of it?
     TailCallBuiltin(Builtins::kKeyedLoadIC_Megamorphic, p->context, p->receiver,
@@ -2637,7 +2644,7 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
         if_notinternalized(this, Label::kDeferred);
 
     // Fast-case: The recorded {feedback} matches the {name}.
-    GotoIf(WordEqual(feedback, name), &if_polymorphic_name);
+    GotoIf(WordEqual(strong_feedback, name), &if_polymorphic_name);
 
     // Try to internalize the {name} if it isn't already.
     TryToName(name, &miss, &var_index, &if_internalized, &var_name, &miss,
@@ -2646,7 +2653,7 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
     BIND(&if_internalized);
     {
       // The {var_name} now contains a unique name.
-      Branch(WordEqual(feedback, var_name.value()), &if_polymorphic_name,
+      Branch(WordEqual(strong_feedback, var_name.value()), &if_polymorphic_name,
              &miss);
     }
 
@@ -2798,7 +2805,7 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
   // Check monomorphic case.
-  Node* feedback =
+  TNode<MaybeObject> feedback =
       TryMonomorphicCase(p->slot, p->vector, receiver_map, &if_handler,
                          &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -2809,18 +2816,21 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   }
 
   BIND(&try_polymorphic);
+  GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+  TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
   {
     // Check polymorphic case.
     Comment("StoreIC_try_polymorphic");
-    GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &try_megamorphic);
-    HandlePolymorphicCase(receiver_map, CAST(feedback), &if_handler,
+    GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &try_megamorphic);
+    HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
                           &var_handler, &miss, 2);
   }
 
   BIND(&try_megamorphic);
   {
     // Check megamorphic case.
-    GotoIfNot(WordEqual(feedback, LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
+    GotoIfNot(WordEqual(strong_feedback,
+                        LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
               &try_uninitialized);
 
     TryProbeStubCache(isolate()->store_stub_cache(), p->receiver, p->name,
@@ -2846,9 +2856,9 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   BIND(&try_uninitialized);
   {
     // Check uninitialized case.
-    GotoIfNot(
-        WordEqual(feedback, LoadRoot(Heap::kuninitialized_symbolRootIndex)),
-        &miss);
+    GotoIfNot(WordEqual(strong_feedback,
+                        LoadRoot(Heap::kuninitialized_symbolRootIndex)),
+              &miss);
     TailCallBuiltin(Builtins::kStoreIC_Uninitialized, p->context, p->receiver,
                     p->name, p->value, p->slot, p->vector);
   }
@@ -2993,7 +3003,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
     // Check monomorphic case.
-    Node* feedback =
+    TNode<MaybeObject> feedback =
         TryMonomorphicCase(p->slot, p->vector, receiver_map, &if_handler,
                            &var_handler, &try_polymorphic);
     BIND(&if_handler);
@@ -3004,11 +3014,16 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     }
 
     BIND(&try_polymorphic);
+    GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+    CSA_ASSERT(this, IsStrongHeapObject(feedback));
+    // FIXME: add miss param to ToStrongHeapObject
+    TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
     {
       // CheckPolymorphic case.
       Comment("KeyedStoreIC_try_polymorphic");
-      GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &try_megamorphic);
-      HandlePolymorphicCase(receiver_map, CAST(feedback), &if_handler,
+      GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)),
+                &try_megamorphic);
+      HandlePolymorphicCase(receiver_map, CAST(strong_feedback), &if_handler,
                             &var_handler, &miss, 2);
     }
 
@@ -3016,9 +3031,9 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     {
       // Check megamorphic case.
       Comment("KeyedStoreIC_try_megamorphic");
-      GotoIfNot(
-          WordEqual(feedback, LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
-          &try_polymorphic_name);
+      GotoIfNot(WordEqual(strong_feedback,
+                          LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
+                &try_polymorphic_name);
       TailCallBuiltin(Builtins::kKeyedStoreIC_Megamorphic, p->context,
                       p->receiver, p->name, p->value, p->slot, p->vector);
     }
@@ -3027,7 +3042,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     {
       // We might have a name in feedback, and a fixed array in the next slot.
       Comment("KeyedStoreIC_try_polymorphic_name");
-      GotoIfNot(WordEqual(feedback, p->name), &miss);
+      GotoIfNot(WordEqual(strong_feedback, p->name), &miss);
       // If the name comparison succeeded, we know we have a feedback vector
       // with at least one map/handler pair.
       TNode<WeakFixedArray> array = CAST(ToObject(LoadFeedbackVectorSlot(
@@ -3055,7 +3070,7 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
 
     Node* array_map = LoadReceiverMap(p->receiver);
     GotoIf(IsDeprecatedMap(array_map), &miss);
-    Node* feedback =
+    TNode<MaybeObject> feedback =
         TryMonomorphicCase(p->slot, p->vector, array_map, &if_handler,
                            &var_handler, &try_polymorphic);
 
@@ -3086,28 +3101,33 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
     }
 
     BIND(&try_polymorphic);
+    GotoIf(IsWeakOrClearedHeapObject(feedback), &miss);
+    CSA_ASSERT(this, IsStrongHeapObject(feedback));
+    TNode<HeapObject> strong_feedback = ToStrongHeapObject(feedback);
     {
       Comment("StoreInArrayLiteralIC_try_polymorphic");
-      GotoIfNot(IsWeakFixedArrayMap(LoadMap(feedback)), &try_megamorphic);
-      HandlePolymorphicCase(array_map, CAST(feedback), &if_handler,
+      GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)),
+                &try_megamorphic);
+      HandlePolymorphicCase(array_map, CAST(strong_feedback), &if_handler,
                             &var_handler, &miss, 2);
     }
 
     BIND(&try_megamorphic);
     {
       Comment("StoreInArrayLiteralIC_try_megamorphic");
-      CSA_ASSERT(
-          this,
-          Word32Or(
-              Word32Or(
-                  IsWeakCellMap(LoadMap(feedback)),
-                  WordEqual(feedback,
-                            LoadRoot(Heap::kuninitialized_symbolRootIndex))),
-              WordEqual(feedback,
-                        LoadRoot(Heap::kmegamorphic_symbolRootIndex))));
-      GotoIfNot(
-          WordEqual(feedback, LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
-          &miss);
+      // Wat???
+      // CSA_ASSERT(
+      //     this,
+      //     Word32Or(
+      //         Word32Or(
+      //             IsWeakCellMap(LoadMap(strong_feedback)),
+      //             WordEqual(strong_feedback,
+      //                       LoadRoot(Heap::kuninitialized_symbolRootIndex))),
+      //         WordEqual(strong_feedback,
+      //                   LoadRoot(Heap::kmegamorphic_symbolRootIndex))));
+      GotoIfNot(WordEqual(strong_feedback,
+                          LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
+                &miss);
       TailCallRuntime(Runtime::kStoreInArrayLiteralIC_Slow, p->context,
                       p->value, p->receiver, p->name);
     }
