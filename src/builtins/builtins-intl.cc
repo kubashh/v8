@@ -13,6 +13,7 @@
 #include "src/intl.h"
 #include "src/objects-inl.h"
 #include "src/objects/intl-objects.h"
+#include "src/objects/js-locale-inl.h"
 
 #include "unicode/datefmt.h"
 #include "unicode/decimfmt.h"
@@ -503,6 +504,147 @@ BUILTIN(DateTimeFormatPrototypeFormatToParts) {
   CHECK_NOT_NULL(date_format);
 
   return FormatDateToParts(isolate, date_format, date_value);
+}
+
+// Intl.Locale implementation
+BUILTIN(LocaleConstructor) {
+  HandleScope scope(isolate);
+  if (args.new_target()->IsUndefined(isolate)) {  // [[Call]]
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kConstructorNotFunction,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  "Intl.Locale")));
+  } else {  // [[Construct]]
+    Handle<JSFunction> target = args.target();
+    Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
+    Handle<JSObject> result;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, result,
+                                       JSObject::New(target, new_target));
+
+    Handle<Object> tag = args.atOrUndefined(isolate, 1);
+    Handle<Object> options = args.atOrUndefined(isolate, 2);
+
+    // First parameter is a locale, as a string/object. Can't be empty.
+    if (!tag->IsName() && !tag->IsJSReceiver()) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kLocaleNotEmpty));
+    }
+
+    // The ToString by spec returns [[Locale]], so it's ok to just do this.
+    Handle<String> locale_string;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, locale_string,
+                                       Object::ToString(isolate, tag));
+
+    Handle<JSReceiver> options_object;
+    if (options->IsNullOrUndefined(isolate)) {
+      // Make empty options bag.
+      options_object = isolate->factory()->NewJSObjectWithNullProto();
+    } else {
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, options_object,
+                                         Object::ToObject(isolate, options));
+    }
+
+    if (!JSLocale::InitializeLocale(isolate, result, locale_string,
+                                    options_object)) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kLocaleBadParameters));
+    }
+
+    return *result;
+  }
+}
+
+// Locale getters.
+BUILTIN(LocalePrototypeLanguage) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.language");
+
+  return Handle<JSLocale>::cast(locale_holder)->language();
+}
+
+BUILTIN(LocalePrototypeScript) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.script");
+
+  return Handle<JSLocale>::cast(locale_holder)->script();
+}
+
+BUILTIN(LocalePrototypeRegion) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.region");
+
+  return Handle<JSLocale>::cast(locale_holder)->region();
+}
+
+BUILTIN(LocalePrototypeBaseName) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.baseName");
+
+  return Handle<JSLocale>::cast(locale_holder)->base_name();
+}
+
+BUILTIN(LocalePrototypeCalendar) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.calendar");
+
+  return Handle<JSLocale>::cast(locale_holder)->calendar();
+}
+
+BUILTIN(LocalePrototypeCaseFirst) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.caseFirst");
+
+  return Handle<JSLocale>::cast(locale_holder)->case_first();
+}
+
+BUILTIN(LocalePrototypeCollation) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.collation");
+
+  return Handle<JSLocale>::cast(locale_holder)->collation();
+}
+
+BUILTIN(LocalePrototypeCurrency) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.currency");
+
+  return Handle<JSLocale>::cast(locale_holder)->currency();
+}
+
+BUILTIN(LocalePrototypeHourCycle) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.hourCycle");
+
+  return Handle<JSLocale>::cast(locale_holder)->hour_cycle();
+}
+
+BUILTIN(LocalePrototypeNumeric) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.numeric");
+
+  return Handle<JSLocale>::cast(locale_holder)->numeric();
+}
+
+BUILTIN(LocalePrototypeNumberingSystem) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder,
+                 "Intl.Locale.prototype.numberingSystem");
+
+  return Handle<JSLocale>::cast(locale_holder)->numbering_system();
+}
+
+BUILTIN(LocalePrototypeTimeZone) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.timeZone");
+
+  return Handle<JSLocale>::cast(locale_holder)->time_zone();
+}
+
+BUILTIN(LocalePrototypeToString) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.toString");
+
+  return Handle<JSLocale>::cast(locale_holder)->locale();
 }
 
 }  // namespace internal
