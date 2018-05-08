@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef6f1fad_caeb7de3",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-05-08T18:45:03Z",
+      "side": 1,
+      "message": "You don\u0027t need to change this file any more, do you?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "2140ec533ef7bec726e559d6aefb5b37294bb42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cb1d259_3039bff2",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-05-08T18:45:03Z",
+      "side": 1,
+      "message": "Do you still need this?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "2140ec533ef7bec726e559d6aefb5b37294bb42b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
