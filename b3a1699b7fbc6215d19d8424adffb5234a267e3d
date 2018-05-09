@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4bb484a_5d42044c",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-09T21:17:52Z",
+      "side": 1,
+      "message": "You can use DCHECK_NE here.",
+      "revId": "b3a1699b7fbc6215d19d8424adffb5234a267e3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68764f2f_d0f21a96",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-09T21:17:52Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "b3a1699b7fbc6215d19d8424adffb5234a267e3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
