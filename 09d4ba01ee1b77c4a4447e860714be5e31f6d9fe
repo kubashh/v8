@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d95985c_3891b5ac",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6914,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-09T15:13:02Z",
+      "side": 0,
+      "message": "I moved these definitions to the header.",
+      "revId": "09d4ba01ee1b77c4a4447e860714be5e31f6d9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "557cee8d_857a4d61",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-09T15:13:02Z",
+      "side": 0,
+      "message": "I discussed with folks around, we should allow reassignment to TNodes because we have quite some code like this:\n  value \u003d SomeOp1(value, ...);\n  value \u003d SomeOp2(value, ...);\n  // and even like this:\n  for (...) {\n    value \u003d SomeOp3(value, ...); \n  }",
+      "revId": "09d4ba01ee1b77c4a4447e860714be5e31f6d9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
