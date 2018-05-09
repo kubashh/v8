@@ -39,11 +39,10 @@ Address IC::raw_constant_pool() const {
   }
 }
 
-
-bool IC::IsHandler(Object* object) {
+bool IC::IsHandler(Object* object, bool from_stub_cache) {
   return (object->IsSmi() && (object != nullptr)) || object->IsDataHandler() ||
-         object->IsMap() ||
-         (object->IsWeakCell() &&
+         object->IsMap() || object->IsPropertyCell() ||
+         (from_stub_cache && object->IsWeakCell() &&
           (WeakCell::cast(object)->cleared() ||
            WeakCell::cast(object)->value()->IsMap() ||
            WeakCell::cast(object)->value()->IsPropertyCell())) ||

@@ -865,8 +865,10 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 
   BIND(&if_nonsmi_handler);
   {
+    Print(handler);
     GotoIf(IsClearedWeakHeapObject(handler), miss);
     GotoIf(IsWeakOrClearedHeapObject(handler), &store_transition);
+    // Prob here we get the propertycell
     Node* handler_map = LoadMap(ToStrongHeapObject(handler));
     GotoIf(IsWeakCellMap(handler_map), &store_global);
     Branch(IsCodeMap(handler_map), &call_handler, &if_proto_handler);
@@ -886,6 +888,7 @@ void AccessorAssembler::HandleStoreICHandlerCase(
   BIND(&store_transition);
   {
     TNode<Map> map = CAST(ToWeakHeapObject(handler));
+    // This cast should fail
     HandleStoreICTransitionMapHandlerCase(p, map, miss, false);
     Return(p->value);
   }
@@ -1191,6 +1194,7 @@ void AccessorAssembler::HandleStoreAccessor(const StoreICParameters* p,
 void AccessorAssembler::HandleStoreICProtoHandler(
     const StoreICParameters* p, Node* handler, Label* miss, ICMode ic_mode,
     ElementSupport support_elements) {
+  // Print("HandleStoreICProtoHandler");
   Comment("HandleStoreICProtoHandler");
 
   OnCodeHandler on_code_handler;
@@ -2834,9 +2838,11 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
     Comment("StoreIC_if_handler_from_stub_cache");
     GotoIf(TaggedIsSmi(var_handler.value()), &if_handler);
 
+    // CSA_ASSERT(this, TaggedIsSmi(var_handler.value())); // assert false
     TNode<HeapObject> handler = ToStrongHeapObject(var_handler.value());
     GotoIfNot(IsWeakCell(handler), &if_handler);
 
+    // Do I need to change PropertyCell stuff here too...????
     TNode<HeapObject> value = CAST(LoadWeakCellValue(CAST(handler), &miss));
     GotoIfNot(IsMap(value), &if_handler);
 

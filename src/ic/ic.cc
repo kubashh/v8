@@ -722,10 +722,13 @@ StubCache* IC::stub_cache() {
 
 void IC::UpdateMegamorphicCache(Handle<Map> map, Handle<Name> name,
                                 Handle<Object> handler) {
+  // TODO(marja): remove these conversions once megamorphic stub cache supports
+  // weak handlers.
   if (handler->IsMap()) {
-    // TODO(marja): remove this conversion once megamorphic stub cache supports
-    // weak handlers.
     handler = Map::WeakCellForMap(Handle<Map>::cast(handler));
+  } else if (handler->IsPropertyCell()) {
+    handler =
+        isolate_->factory()->NewWeakCell(Handle<PropertyCell>::cast(handler));
   }
   stub_cache()->Set(*name, *map, *handler);
 }
@@ -1483,8 +1486,7 @@ Handle<Object> StoreIC::ComputeHandler(LookupIterator* lookup) {
           DCHECK_EQ(*lookup->GetReceiver(), *holder);
           DCHECK_EQ(*store_target, *holder);
 #endif
-          return StoreHandler::StoreGlobal(isolate(),
-                                           lookup->transition_cell());
+          return lookup->transition_cell();
         }
 
         Handle<Smi> smi_handler = StoreHandler::StoreGlobalProxy(isolate());
@@ -1626,8 +1628,7 @@ Handle<Object> StoreIC::ComputeHandler(LookupIterator* lookup) {
       if (lookup->is_dictionary_holder()) {
         if (holder->IsJSGlobalObject()) {
           TRACE_HANDLER_STATS(isolate(), StoreIC_StoreGlobalDH);
-          return StoreHandler::StoreGlobal(isolate(),
-                                           lookup->GetPropertyCell());
+          return lookup->GetPropertyCell();
         }
         TRACE_HANDLER_STATS(isolate(), StoreIC_StoreNormalDH);
         DCHECK(holder.is_identical_to(receiver));
