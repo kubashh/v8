@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "122f1b76_22cf6bfd",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 7176,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-05-09T09:20:39Z",
+      "side": 1,
+      "message": "I guess GetData() is also allowed.",
+      "range": {
+        "startLine": 7176,
+        "startChar": 5,
+        "endLine": 7176,
+        "endChar": 28
+      },
+      "revId": "0a05e89c2352ced1c8ba21bf8f264f2e4114613a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
