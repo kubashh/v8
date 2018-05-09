@@ -1553,7 +1553,6 @@ void Tuple3::Tuple3Verify() {
 
 void WasmCompiledModule::WasmCompiledModuleVerify() {
   CHECK(IsWasmCompiledModule());
-  VerifyObjectField(kSharedOffset);
   VerifyObjectField(kNextInstanceOffset);
   VerifyObjectField(kPrevInstanceOffset);
   VerifyObjectField(kOwningInstanceOffset);
