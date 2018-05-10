@@ -766,11 +766,7 @@ class CaptureStackTraceHelper {
       if (entry != NumberDictionary::kNotFound) {
         Handle<StackFrameInfo> frame(
             StackFrameInfo::cast(cache->ValueAt(entry)));
-        DCHECK(frame->function_name()->IsString());
-        Handle<String> function_name = summ.FunctionName();
-        if (function_name->Equals(String::cast(frame->function_name()))) {
-          return frame;
-        }
+        return frame;
       }
     }
 
