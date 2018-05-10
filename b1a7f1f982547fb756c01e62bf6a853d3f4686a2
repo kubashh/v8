@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78f45617_084b735f",
+        "filename": "src/DEPS",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Why do we need this?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45a92777_c4c1ed47",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4403,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "This should be 1 as per the spec because optional args aren\u0027t counted.",
+      "range": {
+        "startLine": 4403,
+        "startChar": 35,
+        "endLine": 4403,
+        "endChar": 36
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e1bf30_4d0129fb",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Looks like this isn\u0027t exposed in the spec?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbd03103_ad3e1b28",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4442,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem like it\u0027s part of the spec?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88d81b4a_37a9faee",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be !tag-\u003eIsString() || !tag-\u003eIsJSReceiver() as per the spec?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "211c3133_d3d2450c",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "The CHECK_RECEIVER macro also does the casting to JSLocale. So this can be simplified as\n  return locale_holder-\u003elanguage();\n\nSame for the builtins below.",
+      "range": {
+        "startLine": 562,
+        "startChar": 9,
+        "endLine": 562,
+        "endChar": 32
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "174117a4_4cf7298f",
+        "filename": "src/objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3129,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Missing typedef for INTL_SUPPORT",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9d6ef33_48b2b8b4",
+        "filename": "src/objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Missing typedef for INTL_SUPPORT. Here and below.",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f8860c2_1ec6f41a",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Previously with the javascript implementation, we sanitized the options object in our intl.js code which handled all the errors.\n\nBut now, this can potentially throw, so we can\u0027t use ToHandleChecked here. JSReceiver::GetProperty could throw an exception and return an empty MaybeHandle\u003cObject\u003e(). You\u0027ll have to check for an error like this:\n\n  Handle\u003cObject\u003e object;\n  ASSIGN_RETURN_ON_EXCEPTION_VALUE(\n      isolate, object, JSReceiver::GetProperty(options,str), Nothing\u003cbool\u003e());\n\nHere, we get a MaybeHandle\u003cObject\u003e and try to cast to a Handle\u003cObject\u003e and if that fails, we return Nothing\u003cbool\u003e(). \n\nWe use Nothing\u003cbool\u003e() to denote an exception, Just(true)/Just(false) for regular return values. You can return `Just(true)` or `Just(false)` just like you return true or false currently.\n\nThis also means that we\u0027ll have to refactor the ExtractStringSetting function to return a Maybe\u003cbool\u003e. Then you\u0027ll have to change the call to check if this Maybe\u003cbool\u003e is nothing like this:\n\n   Maybe\u003cbool\u003e found \u003d ExtractStringSetting(isolate, options, option_to_bcp47.first,\n                                            \u0026value_unicode);\n   MAYBE_RETURN(found, Nothing\u003cbool\u003e());\n   if (!found.FromJust()) {\n      // Skip this key, user didn\u0027t specify it in options.\n      continue;\n   }\n   DCHECK(found.FromJust());\n\nYou\u0027ll have to make similar changes to InsertOptionsIntoLocale to return a Maybe\u003cbool\u003e.",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b020b105_878e6fad",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "Should we be checking the status for an error? Both here and elsewhere in this function.",
+      "range": {
+        "startLine": 121,
+        "startChar": 3,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "072468c5_79e5d231",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-10T18:42:08Z",
+      "side": 1,
+      "message": "This can be more strictly typed as Handle\u003cJSLocale\u003e and then you can remove all the casts in here and PopulateLocaleWithUnicodeTags.",
+      "range": {
+        "startLine": 177,
+        "startChar": 32,
+        "endLine": 177,
+        "endChar": 62
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
