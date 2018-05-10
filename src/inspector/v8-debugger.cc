@@ -306,6 +306,7 @@ void V8Debugger::stepIntoStatement(int targetContextGroupId,
                                    bool breakOnAsyncCall) {
   DCHECK(isPaused());
   DCHECK(targetContextGroupId);
+  if (asyncStepOutOfFunction(targetContextGroupId, true)) return;
   m_targetContextGroupId = targetContextGroupId;
   m_pauseOnAsyncCall = breakOnAsyncCall;
   v8::debug::PrepareStep(m_isolate, v8::debug::StepIn);
@@ -315,6 +316,7 @@ void V8Debugger::stepIntoStatement(int targetContextGroupId,
 void V8Debugger::stepOverStatement(int targetContextGroupId) {
   DCHECK(isPaused());
   DCHECK(targetContextGroupId);
+  if (asyncStepOutOfFunction(targetContextGroupId, true)) return;
   m_targetContextGroupId = targetContextGroupId;
   v8::debug::PrepareStep(m_isolate, v8::debug::StepNext);
   continueProgram(targetContextGroupId);
@@ -323,9 +325,31 @@ void V8Debugger::stepOverStatement(int targetContextGroupId) {
 void V8Debugger::stepOutOfFunction(int targetContextGroupId) {
   DCHECK(isPaused());
   DCHECK(targetContextGroupId);
+  if (asyncStepOutOfFunction(targetContextGroupId, false)) return;
   m_targetContextGroupId = targetContextGroupId;
   v8::debug::PrepareStep(m_isolate, v8::debug::StepOut);
   continueProgram(targetContextGroupId);
+}
+
+bool V8Debugger::asyncStepOutOfFunction(int targetContextGroupId,
+                                        bool onlyAtReturn) {
+  auto iterator = v8::debug::StackTraceIterator::Create(m_isolate);
+  DCHECK(!iterator->Done());
+  bool atReturn = !iterator->GetReturnValue().IsEmpty();
+  iterator->Advance();
+  if (!iterator->Done()) return false;
+  if (onlyAtReturn && !atReturn) return false;
+  auto parent = currentAsyncParent();
+  if (!parent) return false;
+  auto parentParent = parent->parent();
+  if (parentParent.expired()) return false;
+  void* parentTask =
+      std::shared_ptr<AsyncStackTrace>(parentParent)->suspendedTaskId();
+  if (!parentTask) return false;
+  pauseOnAsyncCall(targetContextGroupId,
+                   reinterpret_cast<uintptr_t>(parentTask), String16());
+  continueProgram(targetContextGroupId);
+  return true;
 }
 
 void V8Debugger::scheduleStepIntoAsync(
@@ -615,11 +639,17 @@ void V8Debugger::AsyncEventOccurred(v8::debug::DebugAsyncActionType type,
       asyncTaskFinishedForStack(task);
       asyncTaskFinishedForStepping(task);
       break;
-    case v8::debug::kAsyncFunctionSuspended:
+    case v8::debug::kAsyncFunctionSuspended: {
       if (m_asyncTaskStacks.find(task) == m_asyncTaskStacks.end()) {
         asyncTaskScheduledForStack("async function", task, true);
       }
+      auto stackIt = m_asyncTaskStacks.find(task);
+      if (stackIt != m_asyncTaskStacks.end() && !stackIt->second.expired()) {
+        std::shared_ptr<AsyncStackTrace> stack(stackIt->second);
+        stack->setSuspendedTaskId(task);
+      }
       break;
+    }
     case v8::debug::kAsyncFunctionFinished:
       asyncTaskCanceledForStack(task);
       break;
@@ -931,8 +961,10 @@ void V8Debugger::asyncTaskStartedForStack(void* task) {
   // - asyncTaskFinished
   m_currentTasks.push_back(task);
   AsyncTaskToStackTrace::iterator stackIt = m_asyncTaskStacks.find(task);
-  if (stackIt != m_asyncTaskStacks.end()) {
-    m_currentAsyncParent.push_back(stackIt->second.lock());
+  if (stackIt != m_asyncTaskStacks.end() && !stackIt->second.expired()) {
+    std::shared_ptr<AsyncStackTrace> stack(stackIt->second);
+    stack->setSuspendedTaskId(nullptr);
+    m_currentAsyncParent.push_back(stack);
   } else {
     m_currentAsyncParent.emplace_back();
   }

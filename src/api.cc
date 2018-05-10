@@ -9072,12 +9072,11 @@ void debug::SetLiveEditEnabled(Isolate* isolate, bool enable) {
 }
 
 void debug::DebugBreak(Isolate* isolate) {
-  reinterpret_cast<i::Isolate*>(isolate)->stack_guard()->RequestDebugBreak();
+  reinterpret_cast<i::Isolate*>(isolate)->debug()->DebugBreak();
 }
 
 void debug::CancelDebugBreak(Isolate* isolate) {
-  i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  internal_isolate->stack_guard()->ClearDebugBreak();
+  reinterpret_cast<i::Isolate*>(isolate)->debug()->CancelDebugBreak();
 }
 
 MaybeLocal<Array> debug::GetInternalProperties(Isolate* v8_isolate,
