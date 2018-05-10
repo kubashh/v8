@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2140dc6d_f8b947a3",
+        "filename": "src/DEPS",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "It starts with style guide saying - stop using -inl.h and put implementation for inline methods/templates into .h file.\nOnce you do that, you can\u0027t include e.g. objects-inl.h into js-locale.h, because presubmit check throws an error.\nIf I just pick necessary header, src/heap/incremental-marking.h (needed for ACCESSORS()), and add it to js-locale.h, presubmit fails again, but this time saying DEPS file has -src/heap.\n\nThis line actually cancels that -src/heap and allows me to include the file directly. I don\u0027t think this is a big problem, since all other code includes that file indirectly by including objects-inl.h.",
+      "parentUuid": "78f45617_084b735f",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45a92777_c4c1ed47",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "6308dc1a_99d44a4c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4403,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45a92777_c4c1ed47",
+      "range": {
+        "startLine": 4403,
+        "startChar": 35,
+        "endLine": 4403,
+        "endChar": 36
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4e1bf30_4d0129fb",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
@@ -53,6 +95,24 @@
       "writtenOn": "2018-05-10T18:42:08Z",
       "side": 1,
       "message": "Looks like this isn\u0027t exposed in the spec?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f38640b_65e08140",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "It should be (for both of them). I took them from Zibi\u0027s polyfill implementation - https://github.com/zbraniecki/Intl.js/commit/ac8f37dc7c32df9fe90242abf46005a2e2f79479\n\nShould we file a spec bug, or remove from code (I prefer 1)?",
+      "parentUuid": "c4e1bf30_4d0129fb",
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "a5b1d829_a6b5d500",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4442,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "cbd03103_ad3e1b28",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88d81b4a_37a9faee",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 12
@@ -87,6 +165,24 @@
       "writtenOn": "2018-05-10T18:42:08Z",
       "side": 1,
       "message": "Shouldn\u0027t this be !tag-\u003eIsString() || !tag-\u003eIsJSReceiver() as per the spec?",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca598c88_e090d1ff",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "If Type(tag) is not String or Object...\n\nI read this as !(String or Object) which is equivalent to !String and !Object.\n\nAs you write it, something can be not a Name and be a JSReceiver, (!false || !true), which will trigger the if, and throw. I don\u0027t think we want that. Am I missing something?",
+      "parentUuid": "88d81b4a_37a9faee",
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "676ab4ae_b68fbaf3",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "211c3133_d3d2450c",
+      "range": {
+        "startLine": 562,
+        "startChar": 9,
+        "endLine": 562,
+        "endChar": 32
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "174117a4_4cf7298f",
         "filename": "src/objects.cc",
         "patchSetId": 12
@@ -130,6 +250,24 @@
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80db1fba_77552cd4",
+        "filename": "src/objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3129,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "174117a4_4cf7298f",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +288,24 @@
     },
     {
       "key": {
+        "uuid": "8e83b952_9526d80a",
+        "filename": "src/objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9d6ef33_48b2b8b4",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f8860c2_1ec6f41a",
         "filename": "src/objects/js-locale.cc",
         "patchSetId": 12
@@ -164,6 +320,24 @@
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e9da67e_66e0e811",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f8860c2_1ec6f41a",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "670de802_e7a5e83f",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b020b105_878e6fad",
+      "range": {
+        "startLine": 121,
+        "startChar": 3,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "072468c5_79e5d231",
         "filename": "src/objects/js-locale.cc",
         "patchSetId": 12
@@ -210,6 +408,30 @@
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8b03eb_68e08f48",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-10T23:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "072468c5_79e5d231",
+      "range": {
+        "startLine": 177,
+        "startChar": 32,
+        "endLine": 177,
+        "endChar": 62
+      },
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
