@@ -233,6 +233,9 @@ class Debug {
   Handle<Context> GetDebugContext();
   void HandleDebugBreak(IgnoreBreakMode ignore_break_mode);
 
+  void DebugBreak();
+  void CancelDebugBreak();
+
   // Internal logic
   bool Load();
   // The break target may not be the top-most frame, since we may be
