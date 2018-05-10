@@ -2201,6 +2201,16 @@ void Debug::HandleDebugBreak(IgnoreBreakMode ignore_break_mode) {
   OnDebugBreak(isolate_->factory()->empty_fixed_array());
 }
 
+void Debug::DebugBreak() {
+  thread_local_.last_step_action_ = StepIn;
+  UpdateHookOnFunctionCall();
+}
+
+void Debug::CancelDebugBreak() {
+  thread_local_.last_step_action_ = StepNone;
+  UpdateHookOnFunctionCall();
+}
+
 #ifdef DEBUG
 void Debug::PrintBreakLocation() {
   if (!FLAG_print_break_location) return;
