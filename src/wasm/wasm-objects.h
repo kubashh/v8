@@ -305,6 +305,7 @@ class WasmInstanceObject : public JSObject {
   V(kIndirectFunctionTableTargetsOffset, kPointerSize)   /* untagged */ \
   V(kIndirectFunctionTableSizeOffset, kUInt32Size)       /* untagged */ \
   V(k64BitArchPaddingOffset, kPointerSize - kUInt32Size) /* padding */  \
+  V(ImportedMutableGlobalsBuffersOffset, kPointerSize)   /* untagged */ \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
