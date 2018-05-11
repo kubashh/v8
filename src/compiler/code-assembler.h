@@ -380,8 +380,8 @@ class TNode {
   TNode() : node_(nullptr) {}
 
   TNode operator=(TNode other) {
-    DCHECK_NULL(node_);
-    node_ = other.node_;
+    DCHECK_NOT_NULL(other.node_);
+    node_ = other;
     return *this;
   }
 
