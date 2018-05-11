@@ -81,6 +81,11 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
   CSA_SLOW_ASSERT(this, IsJSGeneratorObject(generator));
   CSA_SLOW_ASSERT(this, IsJSPromise(outer_promise));
 
+  Label after_debug_hook(this), call_debug_hook(this, Label::kDeferred);
+  GotoIf(IsDebugActive(), &call_debug_hook);
+  Goto(&after_debug_hook);
+  BIND(&after_debug_hook);
+
   Await(context, generator, awaited, outer_promise,
         Builtins::kAsyncFunctionAwaitFulfill,
         Builtins::kAsyncFunctionAwaitReject, is_predicted_as_caught);
@@ -88,6 +93,10 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
   // Return outer promise to avoid adding an load of the outer promise before
   // suspending in BytecodeGenerator.
   Return(outer_promise);
+
+  BIND(&call_debug_hook);
+  CallRuntime(Runtime::kDebugAsyncFunctionSuspended, context, outer_promise);
+  Goto(&after_debug_hook);
 }
 
 // Called by the parser from the desugaring of 'await' when catch
@@ -135,15 +144,13 @@ TF_BUILTIN(AsyncFunctionPromiseCreate, AsyncFunctionBuiltinsAssembler) {
     // Push the Promise under construction in an async function on
     // the catch prediction stack to handle exceptions thrown before
     // the first await.
-    // Assign ID and create a recurring task to save stack for future
-    // resumptions from await.
-    CallRuntime(Runtime::kDebugAsyncFunctionPromiseCreated, context, promise);
+    CallRuntime(Runtime::kDebugPushPromise, context, promise);
     Return(promise);
   }
 }
 
 TF_BUILTIN(AsyncFunctionPromiseRelease, AsyncFunctionBuiltinsAssembler) {
-  CSA_ASSERT_JS_ARGC_EQ(this, 1);
+  CSA_ASSERT_JS_ARGC_EQ(this, 2);
   Node* const promise = Parameter(Descriptor::kPromise);
   Node* const context = Parameter(Descriptor::kContext);
 
@@ -157,7 +164,8 @@ TF_BUILTIN(AsyncFunctionPromiseRelease, AsyncFunctionBuiltinsAssembler) {
   {
     // Pop the Promise under construction in an async function on
     // from catch prediction stack.
-    CallRuntime(Runtime::kDebugPopPromise, context);
+    CallRuntime(Runtime::kDebugAsyncFunctionFinished, context,
+                Parameter(Descriptor::kHasSuspend), promise);
     Return(promise);
   }
 }

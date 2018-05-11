@@ -380,7 +380,7 @@ namespace internal {
   TFS(AsyncFunctionAwaitCaught, kGenerator, kValue, kOuterPromise)             \
   TFS(AsyncFunctionAwaitUncaught, kGenerator, kValue, kOuterPromise)           \
   TFJ(AsyncFunctionPromiseCreate, 0)                                           \
-  TFJ(AsyncFunctionPromiseRelease, 1, kPromise)                                \
+  TFJ(AsyncFunctionPromiseRelease, 2, kPromise, kHasSuspend)                   \
                                                                                \
   /* BigInt */                                                                 \
   CPP(BigIntConstructor)                                                       \
