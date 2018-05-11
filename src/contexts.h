@@ -22,7 +22,6 @@ enum ContextLookupFlags {
   FOLLOW_CHAINS = FOLLOW_CONTEXT_CHAIN | FOLLOW_PROTOTYPE_CHAIN,
 };
 
-
 // Heap-allocated activation contexts.
 //
 // Contexts are implemented as FixedArray objects; the Context
@@ -178,6 +177,7 @@ enum ContextLookupFlags {
     intl_date_time_format_function)                                            \
   V(INTL_NUMBER_FORMAT_FUNCTION_INDEX, JSFunction,                             \
     intl_number_format_function)                                               \
+  V(INTL_LOCALE_FUNCTION_INDEX, JSFunction, intl_locale_function)              \
   V(INTL_COLLATOR_FUNCTION_INDEX, JSFunction, intl_collator_function)          \
   V(INTL_PLURAL_RULES_FUNCTION_INDEX, JSFunction, intl_plural_rules_function)  \
   V(INTL_V8_BREAK_ITERATOR_FUNCTION_INDEX, JSFunction,                         \
@@ -409,7 +409,7 @@ class ScriptContextTable : public FixedArray {
 // Script contexts from all top-level scripts are gathered in
 // ScriptContextTable.
 
-class Context: public FixedArray {
+class Context : public FixedArray {
  public:
   // Conversions.
   static inline Context* cast(Object* context);
@@ -426,7 +426,7 @@ class Context: public FixedArray {
     EXTENSION_INDEX,
     NATIVE_CONTEXT_INDEX,
 
-    // These slots are only in native contexts.
+// These slots are only in native contexts.
 #define NATIVE_CONTEXT_SLOT(index, type, name) index,
     NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_SLOT)
 #undef NATIVE_CONTEXT_SLOT
