@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "a53e6f2f_41636453",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1129576
+      },
+      "writtenOn": "2018-05-11T22:50:09Z",
+      "side": 1,
+      "message": "Things like timeZone are specifically omitted because they were deemed to be something that makes sense as part of the options bag and not the locale. See https://github.com/tc39/ecma402/issues/105#issuecomment-253768712",
+      "parentUuid": "e94c49aa_5ee12105",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbd03103_ad3e1b28",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
