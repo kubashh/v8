@@ -1,25 +1,191 @@
 stepOut async function
-bar (test.js:22:2)
+
+Running test: testTrivial
+Check that we have proper async stack at return
+bar (testTrivial.js:28:8)
 -- async function --
-bar (test.js:21:16)
-foo (test.js:17:8)
+bar (testTrivial.js:27:22)
+foo (testTrivial.js:23:14)
 -- async function --
-foo (test.js:16:16)
-test (test.js:12:8)
+foo (testTrivial.js:22:22)
+test (testTrivial.js:18:14)
 -- async function --
-test (test.js:11:16)
+test (testTrivial.js:17:22)
 (anonymous) (:0:0)
 
-foo (test.js:18:0)
+foo (testTrivial.js:24:6)
 -- async function --
-foo (test.js:16:16)
-test (test.js:12:8)
+foo (testTrivial.js:22:22)
+test (testTrivial.js:18:14)
 -- async function --
-test (test.js:11:16)
+test (testTrivial.js:17:22)
 (anonymous) (:0:0)
 
-test (test.js:13:0)
+test (testTrivial.js:19:6)
 -- async function --
-test (test.js:11:16)
+test (testTrivial.js:17:22)
 (anonymous) (:0:0)
+
+
+Running test: testStepOutPrecision
+Check that stepOut go to resumed outer generator
+bar (testStepOutPrecision.js:58:8)
+-- async function --
+bar (testStepOutPrecision.js:57:22)
+foo (testStepOutPrecision.js:52:14)
+-- async function --
+foo (testStepOutPrecision.js:51:22)
+test (testStepOutPrecision.js:46:14)
+-- async function --
+test (testStepOutPrecision.js:45:14)
+(anonymous) (:0:0)
+
+foo (testStepOutPrecision.js:53:8)
+-- async function --
+foo (testStepOutPrecision.js:51:22)
+test (testStepOutPrecision.js:46:14)
+-- async function --
+test (testStepOutPrecision.js:45:14)
+(anonymous) (:0:0)
+
+test (testStepOutPrecision.js:47:8)
+-- async function --
+test (testStepOutPrecision.js:45:14)
+(anonymous) (:0:0)
+
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+
+test (testStepOutPrecision.js:48:6)
+-- async function --
+test (testStepOutPrecision.js:45:14)
+(anonymous) (:0:0)
+
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+
+
+Running test: testStepIntoAtReturn
+Check that stepInto at return go to resumed outer generator
+bar (testStepIntoAtReturn.js:87:8)
+-- async function --
+bar (testStepIntoAtReturn.js:86:22)
+foo (testStepIntoAtReturn.js:82:14)
+-- async function --
+foo (testStepIntoAtReturn.js:81:22)
+test (testStepIntoAtReturn.js:77:14)
+-- async function --
+test (testStepIntoAtReturn.js:76:14)
+(anonymous) (:0:0)
+
+bar (testStepIntoAtReturn.js:88:6)
+-- async function --
+bar (testStepIntoAtReturn.js:86:22)
+foo (testStepIntoAtReturn.js:82:14)
+-- async function --
+foo (testStepIntoAtReturn.js:81:22)
+test (testStepIntoAtReturn.js:77:14)
+-- async function --
+test (testStepIntoAtReturn.js:76:14)
+(anonymous) (:0:0)
+
+foo (testStepIntoAtReturn.js:83:6)
+-- async function --
+foo (testStepIntoAtReturn.js:81:22)
+test (testStepIntoAtReturn.js:77:14)
+-- async function --
+test (testStepIntoAtReturn.js:76:14)
+(anonymous) (:0:0)
+
+test (testStepIntoAtReturn.js:78:6)
+-- async function --
+test (testStepIntoAtReturn.js:76:14)
+(anonymous) (:0:0)
+
+floodWithTimeouts (testStepIntoAtReturn.js:71:8)
+-- setTimeout --
+floodWithTimeouts (testStepOutPrecision.js:40:8)
+
+
+Running test: testStepOverAtReturn
+Check that stepOver at return go to resumed outer generator
+bar (testStepIntoAtReturn.js:115:8)
+-- async function --
+bar (testStepIntoAtReturn.js:114:22)
+foo (testStepIntoAtReturn.js:110:14)
+-- async function --
+foo (testStepIntoAtReturn.js:109:22)
+test (testStepIntoAtReturn.js:105:14)
+-- async function --
+test (testStepIntoAtReturn.js:104:14)
+(anonymous) (:0:0)
+
+bar (testStepIntoAtReturn.js:116:6)
+-- async function --
+bar (testStepIntoAtReturn.js:114:22)
+foo (testStepIntoAtReturn.js:110:14)
+-- async function --
+foo (testStepIntoAtReturn.js:109:22)
+test (testStepIntoAtReturn.js:105:14)
+-- async function --
+test (testStepIntoAtReturn.js:104:14)
+(anonymous) (:0:0)
+
+foo (testStepIntoAtReturn.js:111:6)
+-- async function --
+foo (testStepIntoAtReturn.js:109:22)
+test (testStepIntoAtReturn.js:105:14)
+-- async function --
+test (testStepIntoAtReturn.js:104:14)
+(anonymous) (:0:0)
+
+test (testStepIntoAtReturn.js:106:6)
+-- async function --
+test (testStepIntoAtReturn.js:104:14)
+(anonymous) (:0:0)
+
+floodWithTimeouts (testStepIntoAtReturn.js:99:8)
+-- setTimeout --
+floodWithTimeouts (testStepIntoAtReturn.js:99:8)
+
+
+Running test: testStepOutBeforeFirstAwait
+Check that stepOut before first await works as sync one
+bar (testStepIntoAtReturn.js:142:8)
+foo (testStepIntoAtReturn.js:138:14)
+-- async function --
+foo (testStepIntoAtReturn.js:137:22)
+test (testStepIntoAtReturn.js:133:14)
+-- async function --
+test (testStepIntoAtReturn.js:132:14)
+(anonymous) (:0:0)
+
+foo (testStepIntoAtReturn.js:139:6)
+-- async function --
+foo (testStepIntoAtReturn.js:137:22)
+test (testStepIntoAtReturn.js:133:14)
+-- async function --
+test (testStepIntoAtReturn.js:132:14)
+(anonymous) (:0:0)
+
+test (testStepIntoAtReturn.js:134:6)
+-- async function --
+test (testStepIntoAtReturn.js:132:14)
+(anonymous) (:0:0)
+
+floodWithTimeouts (testStepIntoAtReturn.js:127:8)
+-- setTimeout --
+floodWithTimeouts (testStepIntoAtReturn.js:127:8)
 
