@@ -117,6 +117,9 @@ class AsyncStackTrace {
   std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObject(
       V8Debugger* debugger, int maxAsyncDepth) const;
 
+  void setSuspendedTaskId(void* task);
+  void* suspendedTaskId() const;
+
   int contextGroupId() const;
   const String16& description() const;
   std::weak_ptr<AsyncStackTrace> parent() const;
@@ -135,6 +138,7 @@ class AsyncStackTrace {
 
   int m_contextGroupId;
   uintptr_t m_id;
+  void* m_suspendedTaskId;
   String16 m_description;
 
   std::vector<std::shared_ptr<StackFrame>> m_frames;
