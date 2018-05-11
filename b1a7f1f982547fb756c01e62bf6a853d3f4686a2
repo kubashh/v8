@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "74624af1_61ac3940",
+        "filename": "src/DEPS",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "Unfortunately, we don\u0027t follow that style rule at all. We just create -inl.h files for the ACCESSORS. I\u0027d say just follow the existing conventions in V8 and create js-locale-inl.h",
+      "parentUuid": "2140dc6d_f8b947a3",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45a92777_c4c1ed47",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
@@ -119,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "e94c49aa_5ee12105",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "We can\u0027t ship these methods unless they\u0027re spec\u0027d, but it\u0027s also pretty late in the proposal staging process so I\u0027m not sure if we can add these at this point.\n\nLet\u0027s remove them for now, we can always add it back later if it does make it to the spec.",
+      "parentUuid": "2f38640b_65e08140",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbd03103_ad3e1b28",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
@@ -154,6 +190,24 @@
     },
     {
       "key": {
+        "uuid": "13a9fd2b_6a5b89e0",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4442,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a5b1d829_a6b5d500",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88d81b4a_37a9faee",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 12
@@ -183,6 +237,41 @@
       "side": 1,
       "message": "If Type(tag) is not String or Object...\n\nI read this as !(String or Object) which is equivalent to !String and !Object.\n\nAs you write it, something can be not a Name and be a JSReceiver, (!false || !true), which will trigger the if, and throw. I don\u0027t think we want that. Am I missing something?",
       "parentUuid": "88d81b4a_37a9faee",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b78dba4_bba08f14",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "Yeah, re-reading the spec I think what you say makes sense. We should totally reword the spec to be clearer. I\u0027ll file a spec bug.",
+      "parentUuid": "ca598c88_e090d1ff",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61ecdb6c_a1fbf55b",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "The ToString is observable behavior, so we can\u0027t do this. This needs a IsJSLocale check:\n\n  if (tag-\u003eIsJSLocale()) { \n     locale_string \u003d Handle\u003cJSLocale\u003e::cast(tag)-\u003elocale()) \n  } else {\n    .. to string call ..\n  }",
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

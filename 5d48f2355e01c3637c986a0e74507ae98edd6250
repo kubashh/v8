@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3881345a_e2fef3de",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "The ToString is observable behavior, so we can\u0027t do this. This needs a IsJSLocale check:\n\n  if (tag-\u003eIsJSLocale()) { \n     locale_string \u003d Handle\u003cJSLocale\u003e::cast(tag)-\u003elocale()) \n  } else {\n    .. to string call ..\n  }",
+      "revId": "5d48f2355e01c3637c986a0e74507ae98edd6250",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e4d63a_8798198d",
+        "filename": "test/intl/testcfg.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T21:13:51Z",
+      "side": 1,
+      "message": "Instead of adding it here, we generally add a comment to the top of the mjsunit tests with the flag, like this:\n\n// Flags: --harmony-locale\n\nFor example:\nhttps://cs.chromium.org/chromium/src/v8/test/mjsunit/harmony/private-fields.js",
+      "range": {
+        "startLine": 79,
+        "startChar": 38,
+        "endLine": 79,
+        "endChar": 56
+      },
+      "revId": "5d48f2355e01c3637c986a0e74507ae98edd6250",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
