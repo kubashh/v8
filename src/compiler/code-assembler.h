@@ -379,9 +379,11 @@ class TNode {
   TNode(const TNode<U>& other) : node_(other) {}
   TNode() : node_(nullptr) {}
 
-  TNode operator=(TNode other) {
-    DCHECK_NULL(node_);
-    node_ = other.node_;
+  template <class U,
+            typename std::enable_if<is_subtype<U, T>::value, int>::type = 0>
+  TNode operator=(const TNode<U>& other) {
+    node_ = other;
+    DCHECK_NOT_NULL(node_);
     return *this;
   }
 
