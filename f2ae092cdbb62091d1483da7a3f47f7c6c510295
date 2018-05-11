@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ece543a4_cf5112ad",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-11T16:55:13Z",
+      "side": 1,
+      "message": "Why is this implemented in inspector vs. in debug? We should align with step-over probably. What\u0027s your vision on the responsibilities of them?",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf70d5b8_b432c6b5",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-11T16:55:13Z",
+      "side": 1,
+      "message": "Why parent\u0027s parent? This needs a comment. I\u0027d think it\u0027s just a parent.",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0eb06c_0a05ca44",
+        "filename": "src/inspector/v8-stack-trace-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-11T16:55:13Z",
+      "side": 1,
+      "message": "What is this? Needs some explanation. Is it only there while something is \"suspended\"? What does \"suspended\" mean?",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e4731e_51d7010a",
+        "filename": "test/inspector/debugger/async-function-step-out.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-11T16:55:13Z",
+      "side": 1,
+      "message": "nit: I don\u0027t like this pattern which leads to unreadable indentation :)",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "906d6898_2b117878",
+        "filename": "test/inspector/debugger/async-function-step-out.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-11T16:55:13Z",
+      "side": 1,
+      "message": "How does this work if I call bar() without awaiting, with debugger on first line vs. last line of bar? Let\u0027s have a test case for both.",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
