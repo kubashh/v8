@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1026c06_3d7a28f8",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-11T23:22:34Z",
+      "side": 1,
+      "message": "Can this ever be undefined? I thought all Locale objects should have this set. If so, we can change the locale type in JSLocale to be String, instead of Object: \n  DECL_ACCESSORS(locale, String) \n\nand then you wouldn\u0027t have to cast it below.",
+      "range": {
+        "startLine": 536,
+        "startChar": 1,
+        "endLine": 536,
+        "endChar": 57
+      },
+      "revId": "9a53c8445bd67ec4b2b5706bf4c645974265e8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
