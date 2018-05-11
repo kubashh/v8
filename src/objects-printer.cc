@@ -13,6 +13,9 @@
 #include "src/interpreter/bytecodes.h"
 #include "src/objects-inl.h"
 #include "src/objects/debug-objects-inl.h"
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/js-locale.h"
+#endif  // V8_INTL_SUPPORT
 #include "src/objects/microtask-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/ostreams.h"
@@ -255,6 +258,11 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case JS_DATA_VIEW_TYPE:
       JSDataView::cast(this)->JSDataViewPrint(os);
       break;
+#ifdef V8_INTL_SUPPORT
+    case JS_INTL_LOCALE_TYPE:
+      JSLocale::cast(this)->JSLocalePrint(os);
+      break;
+#endif  // V8_INTL_SUPPORT
 #define MAKE_STRUCT_CASE(NAME, Name, name) \
   case NAME##_TYPE:                        \
     Name::cast(this)->Name##Print(os);     \
@@ -1788,6 +1796,26 @@ void Script::ScriptPrint(std::ostream& os) {  // NOLINT
   os << "\n - shared function infos: " << Brief(shared_function_infos());
   os << "\n";
 }
+
+#ifdef V8_INTL_SUPPORT
+void JSLocale::JSLocalePrint(std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "JSLocale");
+  os << "\n - language: " << Brief(language());
+  os << "\n - script: " << Brief(script());
+  os << "\n - region: " << Brief(region());
+  os << "\n - baseName: " << Brief(base_name());
+  os << "\n - locale: " << Brief(locale());
+  os << "\n - calendar: " << Brief(calendar());
+  os << "\n - caseFirst: " << Brief(case_first());
+  os << "\n - collation: " << Brief(collation());
+  os << "\n - currency: " << Brief(currency());
+  os << "\n - hourCycle: " << Brief(hour_cycle());
+  os << "\n - numeric: " << Brief(numeric());
+  os << "\n - numberingSystem: " << Brief(numbering_system());
+  os << "\n - timeZone: " << Brief(time_zone());
+  os << "\n";
+}
+#endif  // V8_INTL_SUPPORT
 
 namespace {
 void PrintScopeInfoList(ScopeInfo* scope_info, std::ostream& os,
