@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "15a59d3f_70a8efe0",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-05-11T21:58:38Z",
+      "side": 1,
+      "message": "My vision:\n- debug provides synchronous stepping since knows everything about synchronous stacks,\n- when we do step-out from last synchronous frame on stack or do any step action at return position of last synchronous fame on stack - inspector helps debug to restart synchronous stepping at right moment based on own knowledge about asynchronous stack.\n\nIn this world, we should move async-step-next from V8 to inspector as well and I believe it would require less code and will be simpler then current implementation inside V8. Yang, would you mind if I try to do it?\n\nIt is most likely that instead of current checks on inspector side before making step action, we should always first ask debug about making synchronous step and in case when debug does not know good location where to go it can ask inspector about help. I can do this cleanup later.\n\nDisadvantages:\n- async stepping will work only when async stacks are enabled, it is actually may be considered as feature and not as a bug :)\n- blackboxing support may require additional work on inspector side.\n\nAdvantages:\n- debug knows everything about synchronous stack and do synchronous stepping, inspector knows everything about asynchronous stack and do asynchronous stepping - sounds like nice responsibilities split,\n- it feels like it may be implemented easier without assembly code that we now have to implement StepInSuspendedGenerator.\n\nGlorious future: we merge async and sync world somewhere inside debug and make it fast enough to enable all the time by default (most likely it never happens).",
+      "parentUuid": "ece543a4_cf5112ad",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf70d5b8_b432c6b5",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-05-11T16:55:13Z",
       "side": 1,
       "message": "Why parent\u0027s parent? This needs a comment. I\u0027d think it\u0027s just a parent.",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b592e47_ebaaccbe",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-05-11T21:58:38Z",
+      "side": 1,
+      "message": "I added a little comment.",
+      "parentUuid": "cf70d5b8_b432c6b5",
       "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "b24fad44_de536146",
+        "filename": "src/inspector/v8-stack-trace-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-05-11T21:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d0eb06c_0a05ca44",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5e4731e_51d7010a",
         "filename": "test/inspector/debugger/async-function-step-out.js",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "a9f8d829_33e4bec6",
+        "filename": "test/inspector/debugger/async-function-step-out.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-05-11T21:58:38Z",
+      "side": 1,
+      "message": "I aligned it. Please check it out :)",
+      "parentUuid": "c5e4731e_51d7010a",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "906d6898_2b117878",
         "filename": "test/inspector/debugger/async-function-step-out.js",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99bdd0f5_cc7625f8",
+        "filename": "test/inspector/debugger/async-function-step-out.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-05-11T21:58:38Z",
+      "side": 1,
+      "message": "In case when we have more then one synchronous stack - we always use regular synchronous stepping. I added a test.",
+      "parentUuid": "906d6898_2b117878",
+      "revId": "f2ae092cdbb62091d1483da7a3f47f7c6c510295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
