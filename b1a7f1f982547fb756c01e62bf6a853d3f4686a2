@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "8544a179_be4b7997",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-11T23:08:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e94c49aa_5ee12105",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbd03103_ad3e1b28",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 12
@@ -220,6 +238,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "a5b1d829_a6b5d500",
+      "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0ad8ee8_11aabe0c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4442,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-11T23:08:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a9fd2b_6a5b89e0",
       "revId": "b1a7f1f982547fb756c01e62bf6a853d3f4686a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
