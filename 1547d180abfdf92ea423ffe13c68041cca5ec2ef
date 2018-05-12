@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8ffa144_c551004c",
+        "filename": "test/inspector/debugger/async-function-step-out.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-05-12T01:09:31Z",
+      "side": 1,
+      "message": "Drop await from here.",
+      "revId": "1547d180abfdf92ea423ffe13c68041cca5ec2ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
