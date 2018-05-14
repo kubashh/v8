@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16013451_de9d983a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-14T14:54:56Z",
+      "side": 1,
+      "message": "I guess it\u0027s just return ToWeakHeapObject(value); and we can probably remove the CSA_ASSERT above.",
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b67ec009_5b34fac8",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-14T14:54:56Z",
+      "side": 1,
+      "message": "FYI: Word32BinaryNot is the proper operation for such a case.\nHowever, I\u0027d rather suggest to add \n  CSA_ASSERT(this, HasInstanceType(handler, STORE_HANDLER_TYPE);\nto HandleStoreICProtoHandler() or even better to make handler argument TNode\u003cStoreHandler\u003e.",
+      "range": {
+        "startLine": 871,
+        "startChar": 21,
+        "endLine": 871,
+        "endChar": 30
+      },
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c953107a_91d46087",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2850,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-14T14:54:56Z",
+      "side": 1,
+      "message": "I\u0027d suggest to load value\u0027s map only once.",
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
