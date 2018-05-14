@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f04ec96c_4a4bfe9e",
+        "filename": "src/objects.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-14T17:29:15Z",
+      "side": 1,
+      "message": "We use the ordering of the instance types to do quick checks to on an object, so we can\u0027t have JS_INTL_LOCALE_TYPE be the last type. That\u0027s the test failure.",
+      "revId": "41ed746bb9ad8eaf6b84a6e8d4cf8132cc327cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c10d755_0826b163",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-14T17:29:15Z",
+      "side": 1,
+      "message": "On another thing is that we can\u0027t throw an exception when there\u0027s one thrown already. In case the `ExtractStringSetting` throws, we end up returning false to LocaleConstructor which then throws again. For ex:\n\n➜  v8 (2201de362d) ✔ ./out.gn/x64.optdebug/d8 --harmony-locale                                                                                                \nV8 version 6.8.0 (candidate)                                                                                                                                  \nd8\u003e new Intl.Locale(\u0027en-US\u0027, { get calendar() { throw new Error(\u0027foo\u0027); } });                                                                                 \n                                                                                                                                                              \n#\n# Fatal error in ../../src/isolate.cc, line 1157\n# Debug check failed: !has_pending_exception().\n#\n#\n#\n#FailureMessage Object: 0x7ffc06498e00\n\u003d\u003d\u003d\u003d C stack trace \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8_libbase.so(v8::base::debug::StackTrace::StackTrace()+0x13) [0x7f8b41ccb433]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8_libplatform.so(+0x1166b) [0x7f8b41ca366b]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8_libbase.so(V8_Fatal(char const*, int, char const*, ...)+0x148) [0x7f8b41cc4938]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8_libbase.so(+0x176a5) [0x7f8b41cc46a5]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8.so(v8::internal::Isolate::Throw(v8::internal::Object*, v8::internal::MessageLocation*)+0x199) [0x7f8b41236e69]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8.so(+0x7f8f0b) [0x7f8b40cc5f0b]\n    /usr/local/google/home/gunasekaran/code/v8/out.gn/x64.optdebug/./libv8.so(v8::internal::Builtin_LocaleConstructor(int, v8::internal::Object**, v8::internal::Isolate*)+0x65) [0x7f8b40cc5545]\n    [0x31da09a33c84]\nReceived signal 4 ILL_ILLOPN 7f8b41cc9972\n[1]    191078 illegal hardware instruction  ./out.gn/x64.optdebug/d8 --harmony-locale\n\n\n\nWe should change InitializeLocale to return a Maybe\u003cbool\u003e similar to ExtractStringSetting to differentiate between the already error thrown condition and the false condition. This would change this above code to something like:\n    MAYBE_RETURN(error, Nothing\u003cbool\u003e());\n    if (!error.FromJust()) {\n      return false;\n    }\n    DCHECK(error.FromJust());\n\nAnd in Locale constructor, we need to check if empty or false.\n\nThis doesn\u0027t have to happen in this CL, we can fix this in a follow up CL.",
+      "revId": "41ed746bb9ad8eaf6b84a6e8d4cf8132cc327cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
