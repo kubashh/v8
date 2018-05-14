@@ -16,6 +16,24 @@
       "revId": "cc7e0bd09b2e3f9585ccd2659709972a4b2d2897",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2993b399_230c89d6",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-14T13:57:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91ef3b15_54617e95",
+      "revId": "cc7e0bd09b2e3f9585ccd2659709972a4b2d2897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
