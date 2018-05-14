@@ -791,7 +791,7 @@ void AccessorAssembler::HandleStoreICHandlerCase(
     ICMode ic_mode, ElementSupport support_elements) {
   Label if_smi_handler(this), if_nonsmi_handler(this);
   Label if_proto_handler(this), if_element_handler(this), call_handler(this),
-      store_transition(this), store_global(this);
+      store_transition_or_global(this);
 
   Branch(TaggedIsSmi(handler), &if_smi_handler, &if_nonsmi_handler);
 
@@ -865,10 +865,8 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 
   BIND(&if_nonsmi_handler);
   {
-    GotoIf(IsClearedWeakHeapObject(handler), miss);
-    GotoIf(IsWeakOrClearedHeapObject(handler), &store_transition);
+    GotoIf(IsWeakOrClearedHeapObject(handler), &store_transition_or_global);
     Node* handler_map = LoadMap(ToStrongHeapObject(handler));
-    GotoIf(IsWeakCellMap(handler_map), &store_global);
     Branch(IsCodeMap(handler_map), &call_handler, &if_proto_handler);
   }
 
@@ -883,20 +881,27 @@ void AccessorAssembler::HandleStoreICHandlerCase(
                  p->value, p->slot, p->vector);
   }
 
-  BIND(&store_transition);
-  {
-    TNode<Map> map = CAST(ToWeakHeapObject(handler));
-    HandleStoreICTransitionMapHandlerCase(p, map, miss, false);
-    Return(p->value);
-  }
-
-  BIND(&store_global);
+  BIND(&store_transition_or_global);
   {
     // Load value or miss if the {handler} weak cell is cleared.
-    TNode<PropertyCell> property_cell =
-        CAST(LoadWeakCellValue(CAST(ToStrongHeapObject(handler)), miss));
-    ExitPoint direct_exit(this);
-    StoreGlobalIC_PropertyCellCase(property_cell, p->value, &direct_exit, miss);
+    TNode<HeapObject> map_or_property_cell = ToWeakHeapObject(handler, miss);
+
+    Label store_global(this), store_transition(this);
+    Branch(IsMap(map_or_property_cell), &store_transition, &store_global);
+
+    BIND(&store_global);
+    {
+      TNode<PropertyCell> property_cell = CAST(map_or_property_cell);
+      ExitPoint direct_exit(this);
+      StoreGlobalIC_PropertyCellCase(property_cell, p->value, &direct_exit,
+                                     miss);
+    }
+    BIND(&store_transition);
+    {
+      TNode<Map> map = CAST(map_or_property_cell);
+      HandleStoreICTransitionMapHandlerCase(p, map, miss, false);
+      Return(p->value);
+    }
   }
 }
 
@@ -1191,6 +1196,7 @@ void AccessorAssembler::HandleStoreAccessor(const StoreICParameters* p,
 void AccessorAssembler::HandleStoreICProtoHandler(
     const StoreICParameters* p, Node* handler, Label* miss, ICMode ic_mode,
     ElementSupport support_elements) {
+  // Print("HandleStoreICProtoHandler");
   Comment("HandleStoreICProtoHandler");
 
   OnCodeHandler on_code_handler;
@@ -2834,9 +2840,11 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
     Comment("StoreIC_if_handler_from_stub_cache");
     GotoIf(TaggedIsSmi(var_handler.value()), &if_handler);
 
+    // CSA_ASSERT(this, TaggedIsSmi(var_handler.value())); // assert false
     TNode<HeapObject> handler = ToStrongHeapObject(var_handler.value());
     GotoIfNot(IsWeakCell(handler), &if_handler);
 
+    // Do I need to change PropertyCell stuff here too...????
     TNode<HeapObject> value = CAST(LoadWeakCellValue(CAST(handler), &miss));
     GotoIfNot(IsMap(value), &if_handler);
 

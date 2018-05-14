@@ -672,7 +672,7 @@ void FeedbackNexus::ConfigureHandlerMode(Handle<Object> handler) {
   DCHECK(IsGlobalICKind(kind()));
   DCHECK(IC::IsHandler(*handler));
   SetFeedback(GetIsolate()->heap()->empty_weak_cell());
-  if (handler->IsMap()) {
+  if (handler->IsMap() || handler->IsPropertyCell()) {
     SetFeedbackExtra(HeapObjectReference::Weak(HeapObject::cast(*handler)));
   } else {
     SetFeedbackExtra(*handler);
@@ -731,7 +731,7 @@ void FeedbackNexus::ConfigureMonomorphic(Handle<Name> name,
   } else {
     if (name.is_null()) {
       SetFeedback(*cell);
-      if (handler->IsMap()) {
+      if (handler->IsMap() || handler->IsPropertyCell()) {
         SetFeedbackExtra(HeapObjectReference::Weak(*handler));
       } else {
         SetFeedbackExtra(*handler);
@@ -740,7 +740,7 @@ void FeedbackNexus::ConfigureMonomorphic(Handle<Name> name,
       Handle<WeakFixedArray> array = EnsureExtraArrayOfSize(2);
       SetFeedback(*name);
       array->Set(0, HeapObjectReference::Strong(*cell));
-      if (handler->IsMap()) {
+      if (handler->IsMap() || handler->IsPropertyCell()) {
         array->Set(1, HeapObjectReference::Weak(*handler));
       } else {
         array->Set(1, MaybeObject::FromObject(*handler));
@@ -770,7 +770,8 @@ void FeedbackNexus::ConfigurePolymorphic(Handle<Name> name,
     Handle<WeakCell> cell = Map::WeakCellForMap(map);
     array->Set(current * 2, HeapObjectReference::Strong(*cell));
     DCHECK(IC::IsHandler(*handlers->at(current)));
-    if (handlers->at(current)->IsMap()) {
+    if (handlers->at(current)->IsMap() ||
+        handlers->at(current)->IsPropertyCell()) {
       array->Set(current * 2 + 1,
                  HeapObjectReference::Weak(*handlers->at(current)));
     } else {
