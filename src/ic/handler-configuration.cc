@@ -269,12 +269,6 @@ Handle<Object> StoreHandler::StoreThroughPrototype(
 }
 
 // static
-Handle<Object> StoreHandler::StoreGlobal(Isolate* isolate,
-                                         Handle<PropertyCell> cell) {
-  return isolate->factory()->NewWeakCell(cell);
-}
-
-// static
 Handle<Object> StoreHandler::StoreProxy(Isolate* isolate,
                                         Handle<Map> receiver_map,
                                         Handle<JSProxy> proxy,

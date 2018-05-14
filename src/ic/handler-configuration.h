@@ -278,11 +278,6 @@ class StoreHandler final : public DataHandler {
                                    Handle<JSProxy> proxy,
                                    Handle<JSReceiver> receiver);
 
-  // Creates a handler for storing a property to the property cell of a global
-  // object.
-  static Handle<Object> StoreGlobal(Isolate* isolate,
-                                    Handle<PropertyCell> cell);
-
   // Creates a Smi-handler for storing a property to a global proxy object.
   static inline Handle<Smi> StoreGlobalProxy(Isolate* isolate);
 
