@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91ef3b15_54617e95",
+        "filename": "src/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-05-14T13:47:58Z",
+      "side": 1,
+      "message": "Now there\u0027s one use of this, you could consider inlining this local.",
+      "revId": "cc7e0bd09b2e3f9585ccd2659709972a4b2d2897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
