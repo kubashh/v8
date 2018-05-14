@@ -17,13 +17,13 @@ namespace base {
 template <typename T>
 class ReversedAdapter {
  public:
-  typedef decltype(static_cast<T*>(nullptr)->rbegin()) Iterator;
+  using Iterator = decltype(std::rbegin(std::declval<T&>()));
 
   explicit ReversedAdapter(T& t) : t_(t) {}
-  ReversedAdapter(const ReversedAdapter& ra) : t_(ra.t_) {}
+  ReversedAdapter(const ReversedAdapter& ra) = default;
 
-  Iterator begin() const { return t_.rbegin(); }
-  Iterator end() const { return t_.rend(); }
+  Iterator begin() const { return std::rbegin(t_); }
+  Iterator end() const { return std::rend(t_); }
 
  private:
   T& t_;
