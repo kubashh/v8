@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dd9aa37_d57470ed",
+        "filename": "src/assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-15T11:36:19Z",
+      "side": 1,
+      "message": "suggestion: Could we add a DCHECK that pos \u003e\u003d end and preserve the comment about the relocation info being read backwards? I am thinking along the lines of ...\n\n  // Relocation info is read backwards.\n  DCHECK_GE(pos_, end_);",
+      "range": {
+        "startLine": 481,
+        "startChar": 50,
+        "endLine": 481,
+        "endChar": 51
+      },
+      "revId": "1a0b1e1a44375a3b2e6b02155e4a30dc9991e174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
