@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a49912d_b10fd0cd",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-15T00:02:22Z",
+      "side": 1,
+      "message": "gcmole is complaining because the c++ compiler could deref the receiver (locale_holder) before the allocation of the string, and then after allocation we could have a GC leading to the deref\u0027d receiver pointer pointing to garbage, as the GC could move the receiver. We need to move the allocation to a separate line to prevent this from happening.",
+      "revId": "3fd0f5551fee1ee1f195648306b2baeeda1c612f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
