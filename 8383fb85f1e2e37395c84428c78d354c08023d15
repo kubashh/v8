@@ -16,6 +16,24 @@
       "revId": "8383fb85f1e2e37395c84428c78d354c08023d15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eafd6d6_9ba73ff8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-15T14:58:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9caad09e_1cbc30c0",
+      "revId": "8383fb85f1e2e37395c84428c78d354c08023d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
