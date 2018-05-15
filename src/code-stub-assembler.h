@@ -677,6 +677,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return IsStrongHeapObject(ReinterpretCast<MaybeObject>(value));
   }
   TNode<HeapObject> ToStrongHeapObject(TNode<MaybeObject> value);
+  TNode<HeapObject> ToStrongHeapObject(TNode<MaybeObject> value,
+                                       Label* if_not_strong);
 
   TNode<BoolT> IsWeakOrClearedHeapObject(TNode<MaybeObject> value);
   TNode<BoolT> IsClearedWeakHeapObject(TNode<MaybeObject> value);
@@ -687,6 +689,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   TNode<HeapObject> ToWeakHeapObject(TNode<MaybeObject> value,
                                      Label* if_cleared);
+
+  // Removes the weak bit (if present)
+  TNode<Object> RemoveWeakBit(TNode<MaybeObject> value);
 
   // IsObject == true when the MaybeObject is a strong HeapObject or a smi.
   TNode<BoolT> IsObject(TNode<MaybeObject> value);
@@ -2137,10 +2142,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   Node* PageFromAddress(Node* address);
 
-  // Create a new weak cell with a specified value and install it into a
-  // feedback vector.
-  Node* CreateWeakCellInFeedbackVector(Node* feedback_vector, Node* slot,
-                                       Node* value);
+  // Store a weak in-place reference into the FeedbackVector.
+  TNode<MaybeObject> StoreWeakReferenceInFeedbackVector(Node* feedback_vector,
+                                                        Node* slot,
+                                                        Node* value);
 
   // Create a new AllocationSite and install it into a feedback vector.
   TNode<AllocationSite> CreateAllocationSiteInFeedbackVector(
