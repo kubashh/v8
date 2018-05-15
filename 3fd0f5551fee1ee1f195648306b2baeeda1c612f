@@ -16,6 +16,24 @@
       "revId": "3fd0f5551fee1ee1f195648306b2baeeda1c612f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ff1a46d_7d31df55",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-05-15T20:52:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a49912d_b10fd0cd",
+      "revId": "3fd0f5551fee1ee1f195648306b2baeeda1c612f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
