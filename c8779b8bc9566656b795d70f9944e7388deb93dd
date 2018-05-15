@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40c9b4c0_08e497bd",
+        "filename": "src/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-15T11:00:54Z",
+      "side": 1,
+      "message": "Can you add a one-liner to explain why 128MB on arm64?",
+      "revId": "c8779b8bc9566656b795d70f9944e7388deb93dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eac2d9d_ea1eedc4",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-15T11:00:54Z",
+      "side": 1,
+      "message": "Thanks for introducing this!",
+      "revId": "c8779b8bc9566656b795d70f9944e7388deb93dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3079652d_6d956c78",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-15T11:00:54Z",
+      "side": 1,
+      "message": "Please use \"static_assert\" directly, with a short message that arm only supports 26 bits.",
+      "revId": "c8779b8bc9566656b795d70f9944e7388deb93dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
