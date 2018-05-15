@@ -2177,6 +2177,30 @@ void JSObject::PrintTransitions(std::ostream& os) {  // NOLINT
   os << "\n - transitions";
   ta.PrintTransitions(os);
 }
+
+void MaybeObject::Print() {
+  OFStream os(stdout);
+  this->Print(os);
+  os << std::flush;
+}
+
+void MaybeObject::Print(std::ostream& os) {
+  Smi* smi;
+  HeapObject* heap_object;
+  if (ToSmi(&smi)) {
+    smi->SmiPrint(os);
+  } else if (IsClearedWeakHeapObject()) {
+    os << "[cleared]";
+  } else if (ToWeakHeapObject(&heap_object)) {
+    os << "[weak] ";
+    heap_object->HeapObjectPrint(os);
+  } else if (ToStrongHeapObject(&heap_object)) {
+    heap_object->HeapObjectPrint(os);
+  } else {
+    UNREACHABLE();
+  }
+}
+
 #endif  // defined(DEBUG) || defined(OBJECT_PRINT)
 }  // namespace internal
 }  // namespace v8
