@@ -128,8 +128,9 @@ void AccessorAssembler::HandlePolymorphicCase(
     }
 
     Label next_entry(this);
-    Node* cached_map = LoadWeakCellValue(CAST(
-        ToStrongHeapObject(LoadWeakFixedArrayElement(feedback, map_index))));
+    TNode<MaybeObject> element = LoadWeakFixedArrayElement(feedback, map_index);
+    CSA_ASSERT(this, IsStrongHeapObject(element));
+    Node* cached_map = LoadWeakCellValue(CAST(ToStrongHeapObject(element)));
     GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
 
     // Found, now call handler.
@@ -149,8 +150,9 @@ void AccessorAssembler::HandlePolymorphicCase(
   BuildFastLoop(
       start_index, end_index,
       [this, receiver_map, feedback, if_handler, var_handler](Node* index) {
-        Node* cached_map = LoadWeakCellValue(CAST(
-            ToStrongHeapObject(LoadWeakFixedArrayElement(feedback, index))));
+        TNode<MaybeObject> element = LoadWeakFixedArrayElement(feedback, index);
+        CSA_ASSERT(this, IsStrongHeapObject(element));
+        Node* cached_map = LoadWeakCellValue(CAST(ToStrongHeapObject(element)));
 
         Label next_entry(this);
         GotoIf(WordNotEqual(receiver_map, cached_map), &next_entry);
@@ -867,6 +869,7 @@ void AccessorAssembler::HandleStoreICHandlerCase(
   BIND(&if_nonsmi_handler);
   {
     GotoIf(IsWeakOrClearedHeapObject(handler), &store_transition_or_global);
+    CSA_ASSERT(this, IsStrongHeapObject(handler));
     TNode<HeapObject> strong_handler = ToStrongHeapObject(handler);
     TNode<Map> handler_map = LoadMap(strong_handler);
     Branch(IsCodeMap(handler_map), &call_handler, &if_proto_handler);
@@ -2772,6 +2775,8 @@ void AccessorAssembler::KeyedLoadICPolymorphicName(const LoadICParameters* p) {
   // LoadIC handler logic below.
   CSA_ASSERT(this, IsName(name));
   CSA_ASSERT(this, Word32BinaryNot(IsDeprecatedMap(receiver_map)));
+  CSA_ASSERT(this, IsStrongHeapObject(LoadFeedbackVectorSlot(vector, slot, 0,
+                                                             SMI_PARAMETERS)));
   CSA_ASSERT(this, WordEqual(name, ToStrongHeapObject(LoadFeedbackVectorSlot(
                                        vector, slot, 0, SMI_PARAMETERS))));
 
@@ -2847,6 +2852,7 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
     Comment("StoreIC_if_handler_from_stub_cache");
     GotoIf(TaggedIsSmi(var_handler.value()), &if_handler);
 
+    CSA_ASSERT(this, IsStrongHeapObject(var_handler.value()));
     TNode<HeapObject> handler = ToStrongHeapObject(var_handler.value());
     GotoIfNot(IsWeakCell(handler), &if_handler);
 
@@ -3079,6 +3085,7 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
       Comment("StoreInArrayLiteralIC_if_handler");
       // This is a stripped-down version of HandleStoreICHandlerCase.
 
+      CSA_ASSERT(this, IsStrongHeapObject(var_handler.value()));
       TNode<HeapObject> handler = ToStrongHeapObject(var_handler.value());
       Label if_transitioning_element_store(this);
       GotoIfNot(IsCode(handler), &if_transitioning_element_store);

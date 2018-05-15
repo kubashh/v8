@@ -7240,8 +7240,11 @@ void CodeStubAssembler::LookupLinear(TNode<Name> unique_name,
 
   BuildFastLoop(last_exclusive, first_inclusive,
                 [=](SloppyTNode<IntPtrT> name_index) {
-                  TNode<Name> candidate_name = CAST(ToStrongHeapObject(
-                      LoadArrayElement(array, Array::kHeaderSize, name_index)));
+                  TNode<MaybeObject> element =
+                      LoadArrayElement(array, Array::kHeaderSize, name_index);
+                  CSA_ASSERT(this, IsStrongHeapObject(element));
+                  TNode<Name> candidate_name =
+                      CAST(ToStrongHeapObject(element));
                   *var_name_index = name_index;
                   GotoIf(WordEqual(candidate_name, unique_name), if_found);
                 },
@@ -7310,10 +7313,11 @@ TNode<Name> CodeStubAssembler::GetKey(TNode<Array> array,
                     std::is_base_of<TransitionArray, Array>::value,
                 "T must be a descendant of FixedArray or a TransitionArray");
   const int key_offset = Array::ToKeyIndex(0) * kPointerSize;
-  TNode<Name> key = CAST(ToStrongHeapObject(
+  TNode<MaybeObject> element =
       LoadArrayElement(array, Array::kHeaderSize,
-                       EntryIndexToIndex<Array>(entry_index), key_offset)));
-  return key;
+                       EntryIndexToIndex<Array>(entry_index), key_offset);
+  CSA_ASSERT(this, IsStrongHeapObject(element));
+  return CAST(ToStrongHeapObject(element));
 }
 
 template TNode<Name> CodeStubAssembler::GetKey<DescriptorArray>(
