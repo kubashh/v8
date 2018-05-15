@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "43a38d83_d6da2a9c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-15T07:33:26Z",
+      "side": 1,
+      "message": "Done; removed the assert and moved it to the caller.",
+      "parentUuid": "16013451_de9d983a",
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b67ec009_5b34fac8",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 5
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "4d59a23f_ca71a2e4",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-15T07:33:26Z",
+      "side": 1,
+      "message": "Done; had to reorg the code a bit to do the ToStrongHeapObject transition only once.",
+      "parentUuid": "b67ec009_5b34fac8",
+      "range": {
+        "startLine": 871,
+        "startChar": 21,
+        "endLine": 871,
+        "endChar": 30
+      },
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c953107a_91d46087",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 5
@@ -56,6 +98,24 @@
       "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f77a9547_4633f348",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2850,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-15T07:33:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c953107a_91d46087",
+      "revId": "9a32ac287c8b83e22300a05968f2f48e304312db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
