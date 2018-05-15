@@ -179,7 +179,11 @@ constexpr int kElidedFrameSlots = 0;
 #endif
 
 constexpr int kDoubleSizeLog2 = 3;
+#if V8_TARGET_ARCH_ARM64
+constexpr size_t kMaxWasmCodeMemory = 128 * MB;
+#else
 constexpr size_t kMaxWasmCodeMemory = 256 * MB;
+#endif
 
 #if V8_HOST_ARCH_64_BIT
 constexpr int kPointerSizeLog2 = 3;
