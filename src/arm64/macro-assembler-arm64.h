@@ -220,10 +220,11 @@ class TurboAssembler : public Assembler {
   bool allow_macro_instructions() const { return allow_macro_instructions_; }
 #endif
 
-  // We should avoid using near calls or jumps when generating WebAssembly code
-  // or calls to WebAssembly from JavaScript.
+  // We should avoid using near calls or jumps for calls to WebAssembly from
+  // JavaScript, nor for external references.
   bool CanUseNearCallOrJump(RelocInfo::Mode rmode) {
-    return near_branches_allowed() && rmode != RelocInfo::JS_TO_WASM_CALL;
+    return rmode != RelocInfo::JS_TO_WASM_CALL &&
+           rmode != RelocInfo::EXTERNAL_REFERENCE;
   }
 
   // Activation support.
