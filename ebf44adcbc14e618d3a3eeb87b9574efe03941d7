@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00c8314d_3fc8659f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 9211,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Offline discussion -\u003e this is the default, leaving it out, and making slot a SloppyTNode\u003cIntPtrT\u003e.",
+      "parentUuid": "2d4b5936_d7a7ac2e",
+      "range": {
+        "startLine": 9211,
+        "startChar": 26,
+        "endLine": 9211,
+        "endChar": 62
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ab551a0_6e9765ef",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "370d2ca0_897c890f",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ab551a0_6e9765ef",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "2327f532_0a28b8f5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "216f8df8_5b896b26",
+      "range": {
+        "startLine": 3265,
+        "startChar": 11,
+        "endLine": 3265,
+        "endChar": 17
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b99ccd27_0148e1a8",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 6
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "726de274_b7fc5f87",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3639,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b99ccd27_0148e1a8",
+      "range": {
+        "startLine": 3639,
+        "startChar": 16,
+        "endLine": 3639,
+        "endChar": 27
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d931ae30_1c6fd1cb",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 6
@@ -102,6 +192,24 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb6c91f6_88da1efd",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3646,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d931ae30_1c6fd1cb",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "59f90428_9c45bb18",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3671,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8aa566_b942269c",
+      "range": {
+        "startLine": 3671,
+        "startChar": 13,
+        "endLine": 3671,
+        "endChar": 19
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53c6caa8_d0905ed4",
         "filename": "src/feedback-vector.cc",
         "patchSetId": 6
@@ -148,6 +280,30 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acd7a8ce_01dc1fec",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53c6caa8_d0905ed4",
+      "range": {
+        "startLine": 1095,
+        "startChar": 38,
+        "endLine": 1095,
+        "endChar": 72
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "19cde277_e8c4845b",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e74dfb8d_a311ec88",
+      "range": {
+        "startLine": 1122,
+        "startChar": 38,
+        "endLine": 1122,
+        "endChar": 72
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "453ed70b_764ca8ce",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 6
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "5025d2c4_94e8a883",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Offline discussion -\u003e this doesn\u0027t fly.",
+      "parentUuid": "453ed70b_764ca8ce",
+      "range": {
+        "startLine": 77,
+        "startChar": 32,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5b612fc_26a9cb67",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 6
@@ -211,6 +415,24 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3481cf11_182504fe",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5b612fc_26a9cb67",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -231,6 +453,24 @@
     },
     {
       "key": {
+        "uuid": "b15aa6a7_e2a4e770",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cede8e5_585a735b",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a208ef9_65fef0c4",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 6
@@ -245,6 +485,24 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "673585c9_cebe917c",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Offline discussion -\u003e that check is conceptually not correct; it\u0027s ok if it\u0027s a SMI here. Then the \"is it a weak reference to target\" condition below will just be false and we go on.",
+      "parentUuid": "2a208ef9_65fef0c4",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -265,6 +523,24 @@
     },
     {
       "key": {
+        "uuid": "54f97454_767791ea",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Added these:\n\nTNode\u003cBoolT\u003e IsWeakReferenceTo(TNode\u003cMaybeObject\u003e object, TNode\u003cObject\u003e value);\nTNode\u003cBoolT\u003e IsNotWeakReferenceTo(TNode\u003cMaybeObject\u003e object, TNode\u003cObject\u003e value);\n\n(Note: Object, not HeapObject.  This is because here, curiously, \"target\" is sometimes a SMI. Confirmed that it happens without this CL too.)\n\nRemoved RemoveWeakBit.",
+      "parentUuid": "e7302f61_81d7b07d",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40490c1e_67d221e2",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 6
@@ -282,6 +558,24 @@
     },
     {
       "key": {
+        "uuid": "63fcdb88_675b6673",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40490c1e_67d221e2",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2048ca72_20946e77",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 6
@@ -296,6 +590,24 @@
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e1f0e3_aac56d4b",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-16T13:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2048ca72_20946e77",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
