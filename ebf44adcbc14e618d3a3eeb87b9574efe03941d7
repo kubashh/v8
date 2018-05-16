@@ -42,6 +42,161 @@
     },
     {
       "key": {
+        "uuid": "216f8df8_5b896b26",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "HeapObject",
+      "range": {
+        "startLine": 3265,
+        "startChar": 11,
+        "endLine": 3265,
+        "endChar": 17
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b99ccd27_0148e1a8",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3639,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Maybe feedback_object?",
+      "range": {
+        "startLine": 3639,
+        "startChar": 16,
+        "endLine": 3639,
+        "endChar": 27
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d931ae30_1c6fd1cb",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3646,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Handle\u003cAllocationSite\u003e site(AllocationSite::cast(heap_object), isolate());",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8aa566_b942269c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3671,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "HeapObject",
+      "range": {
+        "startLine": 3671,
+        "startChar": 13,
+        "endLine": 3671,
+        "endChar": 19
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c6caa8_d0905ed4",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Just (",
+      "range": {
+        "startLine": 1095,
+        "startChar": 38,
+        "endLine": 1095,
+        "endChar": 72
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e74dfb8d_a311ec88",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Just (",
+      "range": {
+        "startLine": 1122,
+        "startChar": 38,
+        "endLine": 1122,
+        "endChar": 72
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "453ed70b_764ca8ce",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Just Load\u003cMaybeObject\u003e(",
+      "range": {
+        "startLine": 77,
+        "startChar": 32,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5b612fc_26a9cb67",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 6
@@ -70,6 +225,74 @@
       "writtenOn": "2018-05-16T08:29:45Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a208ef9_65fef0c4",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "CSA_ASSERT(this, !IsSmi(feedback_element));",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7302f61_81d7b07d",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Or maybe instead of CSA_ASSERT above it would be safer to do \n  WordEqual(MakeWeak(target), feedback_element)\nit would be also better in terms of code size - because oring with small constant is shorter than anding with full word-size constant.\n\nYou may even introduce a Weak[Not]Equal(TNode\u003cHeapObject\u003e, TNode\u003cMaybeObject\u003e) or something.\nAnd then s/feedback_element/feedback/",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40490c1e_67d221e2",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2048ca72_20946e77",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T12:17:44Z",
+      "side": 1,
+      "message": "Same here",
       "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
