@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c82d1a0_b9abe1ba",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-16T10:55:22Z",
+      "side": 1,
+      "message": "This assert should be superfluous now.",
+      "range": {
+        "startLine": 1840,
+        "startChar": 2,
+        "endLine": 1840,
+        "endChar": 38
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9b55b03_b0e03106",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7347,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-16T10:55:22Z",
+      "side": 1,
+      "message": "This assert should be superfluous now.",
+      "range": {
+        "startLine": 7347,
+        "startChar": 2,
+        "endLine": 7347,
+        "endChar": 48
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b192312_9a24b4e0",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-16T10:55:22Z",
+      "side": 1,
+      "message": "GenerateCheckMaybeObjectIsObject\nor something like this?",
+      "range": {
+        "startLine": 248,
+        "startChar": 20,
+        "endLine": 248,
+        "endChar": 44
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d2715cb_e18a6387",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-16T10:55:22Z",
+      "side": 1,
+      "message": "Should we also make this conditional on FLAG_debug_code?",
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d6abe7_364e0470",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-16T10:55:22Z",
+      "side": 1,
+      "message": "This returns too early, we should still emit the type check for A.",
+      "range": {
+        "startLine": 605,
+        "startChar": 8,
+        "endLine": 605,
+        "endChar": 46
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
