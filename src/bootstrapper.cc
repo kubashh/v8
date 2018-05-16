@@ -3046,37 +3046,45 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                         kDataViewByteOffset);
 
     SimpleInstallFunction(prototype, "getInt8",
-                          Builtins::kDataViewPrototypeGetInt8, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetInt8, 1, false);
     SimpleInstallFunction(prototype, "setInt8",
-                          Builtins::kDataViewPrototypeSetInt8, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetInt8, 2, false);
     SimpleInstallFunction(prototype, "getUint8",
-                          Builtins::kDataViewPrototypeGetUint8, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetUint8, 1, false);
     SimpleInstallFunction(prototype, "setUint8",
-                          Builtins::kDataViewPrototypeSetUint8, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetUint8, 2, false);
     SimpleInstallFunction(prototype, "getInt16",
-                          Builtins::kDataViewPrototypeGetInt16, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetInt16, 1, false);
     SimpleInstallFunction(prototype, "setInt16",
-                          Builtins::kDataViewPrototypeSetInt16, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetInt16, 2, false);
     SimpleInstallFunction(prototype, "getUint16",
-                          Builtins::kDataViewPrototypeGetUint16, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetUint16, 1,
+                          false);
     SimpleInstallFunction(prototype, "setUint16",
-                          Builtins::kDataViewPrototypeSetUint16, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetUint16, 2,
+                          false);
     SimpleInstallFunction(prototype, "getInt32",
-                          Builtins::kDataViewPrototypeGetInt32, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetInt32, 1, false);
     SimpleInstallFunction(prototype, "setInt32",
-                          Builtins::kDataViewPrototypeSetInt32, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetInt32, 2, false);
     SimpleInstallFunction(prototype, "getUint32",
-                          Builtins::kDataViewPrototypeGetUint32, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetUint32, 1,
+                          false);
     SimpleInstallFunction(prototype, "setUint32",
-                          Builtins::kDataViewPrototypeSetUint32, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetUint32, 2,
+                          false);
     SimpleInstallFunction(prototype, "getFloat32",
-                          Builtins::kDataViewPrototypeGetFloat32, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetFloat32, 1,
+                          false);
     SimpleInstallFunction(prototype, "setFloat32",
-                          Builtins::kDataViewPrototypeSetFloat32, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetFloat32, 2,
+                          false);
     SimpleInstallFunction(prototype, "getFloat64",
-                          Builtins::kDataViewPrototypeGetFloat64, 1, false);
+                          Builtins::kTorqueDataViewPrototypeGetFloat64, 1,
+                          false);
     SimpleInstallFunction(prototype, "setFloat64",
-                          Builtins::kDataViewPrototypeSetFloat64, 2, false);
+                          Builtins::kTorqueDataViewPrototypeSetFloat64, 2,
+                          false);
   }
 
   {  // -- M a p
@@ -4446,13 +4454,17 @@ void Genesis::InitializeGlobal_harmony_bigint() {
   Handle<JSObject> dataview_prototype(
       JSObject::cast(native_context()->data_view_fun()->instance_prototype()));
   SimpleInstallFunction(dataview_prototype, "getBigInt64",
-                        Builtins::kDataViewPrototypeGetBigInt64, 1, false);
+                        Builtins::kTorqueDataViewPrototypeGetBigInt64, 1,
+                        false);
   SimpleInstallFunction(dataview_prototype, "setBigInt64",
-                        Builtins::kDataViewPrototypeSetBigInt64, 2, false);
+                        Builtins::kTorqueDataViewPrototypeSetBigInt64, 2,
+                        false);
   SimpleInstallFunction(dataview_prototype, "getBigUint64",
-                        Builtins::kDataViewPrototypeGetBigUint64, 1, false);
+                        Builtins::kTorqueDataViewPrototypeGetBigUint64, 1,
+                        false);
   SimpleInstallFunction(dataview_prototype, "setBigUint64",
-                        Builtins::kDataViewPrototypeSetBigUint64, 2, false);
+                        Builtins::kTorqueDataViewPrototypeSetBigUint64, 2,
+                        false);
 }
 
 Handle<JSFunction> Genesis::CreateArrayBuffer(

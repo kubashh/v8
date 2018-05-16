@@ -1,0 +1,179 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+module data_view {
+
+// Context, receiver, byteOffset, littleEndian
+extern runtime DataViewGetInt8(Context, Object, Object, Object): Object;
+extern runtime DataViewGetUint8(Context, Object, Object, Object): Object;
+extern runtime DataViewGetInt16(Context, Object, Object, Object): Object;
+extern runtime DataViewGetUint16(Context, Object, Object, Object): Object;
+extern runtime DataViewGetInt32(Context, Object, Object, Object): Object;
+extern runtime DataViewGetUint32(Context, Object, Object, Object): Object;
+extern runtime DataViewGetFloat32(Context, Object, Object, Object): Object;
+extern runtime DataViewGetFloat64(Context, Object, Object, Object): Object;
+extern runtime DataViewGetBigInt64(Context, Object, Object, Object): Object;
+extern runtime DataViewGetBigUint64(Context, Object, Object, Object): Object;
+
+
+  javascript builtin TorqueDataViewPrototypeGetInt8(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      return DataViewGetInt8(context, receiver, offset, Undefined);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetUint8(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      return DataViewGetUint8(context, receiver, offset, Undefined);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetInt16(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetInt16(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetUint16(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetUint16(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetInt32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetInt32(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetUint32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetUint32(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetFloat32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetFloat32(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetFloat64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetFloat64(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetBigInt64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetBigInt64(context, receiver, offset, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeGetBigUint64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let is_little_endian: Object = arguments[1];
+      return DataViewGetBigUint64(context, receiver, offset, is_little_endian);
+    }
+
+
+// Context, receiver, byteOffset, value, littleEndian
+extern runtime DataViewSetInt8(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetUint8(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetInt16(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetUint16(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetInt32(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetUint32(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetFloat32(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetFloat64(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetBigInt64(Context, Object, Object, Object, Object): Object;
+extern runtime DataViewSetBigUint64(Context, Object, Object, Object, Object): Object;
+
+  javascript builtin TorqueDataViewPrototypeSetInt8(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      return DataViewSetInt8(context, receiver, offset, value, Undefined);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetUint8(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      return DataViewSetUint8(context, receiver, offset, value, Undefined);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetInt16(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetInt16(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetUint16(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetUint16(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetInt32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetInt32(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetUint32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetUint32(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetFloat32(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetFloat32(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetFloat64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetFloat64(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetBigInt64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetBigInt64(context, receiver, offset, value, is_little_endian);
+    }
+
+  javascript builtin TorqueDataViewPrototypeSetBigUint64(
+    context: Context, receiver: Object, ...arguments): Object {
+      let offset: Object = arguments[0];
+      let value: Object = arguments[1];
+      let is_little_endian: Object = arguments[2];
+      return DataViewSetBigUint64(context, receiver, offset, value, is_little_endian);
+    }
+
+}
