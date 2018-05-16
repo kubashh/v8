@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d4b5936_d7a7ac2e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 9211,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T08:29:45Z",
+      "side": 1,
+      "message": "I think the slot contains a Smi value.",
+      "range": {
+        "startLine": 9211,
+        "startChar": 26,
+        "endLine": 9211,
+        "endChar": 62
+      },
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab551a0_6e9765ef",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T08:29:45Z",
+      "side": 1,
+      "message": ". Use with care, it may corrupt Smi values.",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5b612fc_26a9cb67",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T08:29:45Z",
+      "side": 1,
+      "message": "I guess we can just do\n  GotoIf(WordNotEqual(receiver_map, RemoveWeakBit(maybe_cached_map)), \u0026next_entry);",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cede8e5_585a735b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-16T08:29:45Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ebf44adcbc14e618d3a3eeb87b9574efe03941d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
