@@ -2013,7 +2013,7 @@ Reduction JSTypedLowering::ReduceJSGeneratorStore(Node* node) {
   Node* context = NodeProperties::GetContextInput(node);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
-  int register_count = GeneratorStoreRegisterCountOf(node->op());
+  int value_count = GeneratorStoreValueCountOf(node->op());
 
   FieldAccess array_field = AccessBuilder::ForJSGeneratorObjectRegisterFile();
   FieldAccess context_field = AccessBuilder::ForJSGeneratorObjectContext();
@@ -2025,7 +2025,7 @@ Reduction JSTypedLowering::ReduceJSGeneratorStore(Node* node) {
   Node* array = effect = graph()->NewNode(simplified()->LoadField(array_field),
                                           generator, effect, control);
 
-  for (int i = 0; i < register_count; ++i) {
+  for (int i = 0; i < value_count; ++i) {
     Node* value = NodeProperties::GetValueInput(node, 3 + i);
     if (value != jsgraph()->OptimizedOutConstant()) {
       effect = graph()->NewNode(
