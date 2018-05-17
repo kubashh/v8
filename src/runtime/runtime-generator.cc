@@ -26,7 +26,8 @@ RUNTIME_FUNCTION(Runtime_CreateJSGeneratorObject) {
 
   // Underlying function needs to have bytecode available.
   DCHECK(function->shared()->HasBytecodeArray());
-  int size = function->shared()->GetBytecodeArray()->register_count();
+  int size = function->shared()->GetBytecodeArray()->register_count() +
+             function->shared()->internal_formal_parameter_count();
   Handle<FixedArray> register_file = isolate->factory()->NewFixedArray(size);
 
   Handle<JSGeneratorObject> generator =
