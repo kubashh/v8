@@ -621,6 +621,10 @@ class GraphView extends View {
           eventHandled = false;
         }
         break;
+      case 83:
+        // 's'
+        graph.selectCreators();
+        break;
       case 191:
         // '/'
         document.getElementById("search-input").focus();
@@ -644,6 +648,22 @@ class GraphView extends View {
 
   layoutGraph() {
     layoutNodeGraph(this);
+  }
+
+  selectCreators() {
+    const state = this.state;
+    const creators = [];
+    for (const n of state.selection) {
+      if (n.creation) {
+        const node = this.nodeMap[n.creation.node];
+        creators.push(node);
+      }
+    }
+    if (creators.length) {
+      state.selection.clear();
+      state.selection.select(creators, true);
+      this.updateGraphVisibility();
+    }
   }
 
   // call to propagate changes to graph

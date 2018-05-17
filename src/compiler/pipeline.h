@@ -30,6 +30,7 @@ class CallDescriptor;
 class Graph;
 class InstructionSequence;
 class MachineGraph;
+class NodeCreationTable;
 class Schedule;
 class SourcePositionTable;
 class WasmCompilationData;
@@ -44,6 +45,7 @@ class Pipeline : public AllStatic {
   static OptimizedCompilationJob* NewWasmCompilationJob(
       OptimizedCompilationInfo* info, Isolate* isolate, MachineGraph* mcgraph,
       CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
+      NodeCreationTable* node_creations,
       WasmCompilationData* wasm_compilation_data,
       wasm::ModuleOrigin wasm_origin);
 

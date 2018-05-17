@@ -12,6 +12,7 @@
 #include "src/compiler/all-nodes.h"
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/graph.h"
+#include "src/compiler/node-creation-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
 #include "src/compiler/opcodes.h"
@@ -41,6 +42,11 @@ TurboJsonFile::TurboJsonFile(OptimizedCompilationInfo* info,
 std::ostream& operator<<(std::ostream& out,
                          const SourcePositionAsJSON& asJSON) {
   asJSON.sp.PrintJson(out);
+  return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const NodeCreationAsJSON& asJSON) {
+  asJSON.nc.PrintJson(out);
   return out;
 }
 
@@ -245,11 +251,13 @@ class JSONEscaped {
 class JSONGraphNodeWriter {
  public:
   JSONGraphNodeWriter(std::ostream& os, Zone* zone, const Graph* graph,
-                      const SourcePositionTable* positions)
+                      const SourcePositionTable* positions,
+                      const NodeCreationTable* node_creations)
       : os_(os),
         all_(zone, graph, false),
         live_(zone, graph, true),
         positions_(positions),
+        node_creations_(node_creations),
         first_node_(true) {}
 
   void Print() {
@@ -290,6 +298,10 @@ class JSONGraphNodeWriter {
     if (position.IsKnown()) {
       os_ << ", \"sourcePosition\" : " << AsJSON(position);
     }
+    NodeCreation creation = node_creations_->GetNodeCreation(node);
+    if (creation.IsKnown()) {
+      os_ << ", \"creation\" : " << AsJSON(creation);
+    }
     os_ << ",\"opcode\":\"" << IrOpcode::Mnemonic(node->opcode()) << "\"";
     os_ << ",\"control\":" << (NodeProperties::IsControl(node) ? "true"
                                                                : "false");
@@ -313,6 +325,7 @@ class JSONGraphNodeWriter {
   AllNodes all_;
   AllNodes live_;
   const SourcePositionTable* positions_;
+  const NodeCreationTable* node_creations_;
   bool first_node_;
 
   DISALLOW_COPY_AND_ASSIGN(JSONGraphNodeWriter);
@@ -373,7 +386,8 @@ std::ostream& operator<<(std::ostream& os, const GraphAsJSON& ad) {
   AccountingAllocator allocator;
   Zone tmp_zone(&allocator, ZONE_NAME);
   os << "{\n\"nodes\":[";
-  JSONGraphNodeWriter(os, &tmp_zone, &ad.graph, ad.positions).Print();
+  JSONGraphNodeWriter(os, &tmp_zone, &ad.graph, ad.positions, ad.creations)
+      .Print();
   os << "],\n\"edges\":[";
   JSONGraphEdgeWriter(os, &tmp_zone, &ad.graph).Print();
   os << "]}";

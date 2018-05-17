@@ -5,6 +5,7 @@
 #include "src/compiler/pipeline.h"
 
 #include <fstream>  // NOLINT(readability/streams)
+#include <iostream>
 #include <memory>
 #include <sstream>
 
@@ -50,6 +51,7 @@
 #include "src/compiler/machine-operator-reducer.h"
 #include "src/compiler/memory-optimizer.h"
 #include "src/compiler/move-optimizer.h"
+#include "src/compiler/node-creation-table.h"
 #include "src/compiler/osr.h"
 #include "src/compiler/pipeline-statistics.h"
 #include "src/compiler/redundancy-elimination.h"
@@ -113,6 +115,7 @@ class PipelineData {
     PhaseScope scope(pipeline_statistics, "init pipeline data");
     graph_ = new (graph_zone_) Graph(graph_zone_);
     source_positions_ = new (graph_zone_) SourcePositionTable(graph_);
+    node_creations_ = new (graph_zone_) NodeCreationTable(graph_);
     simplified_ = new (graph_zone_) SimplifiedOperatorBuilder(graph_zone_);
     machine_ = new (graph_zone_) MachineOperatorBuilder(
         graph_zone_, MachineType::PointerRepresentation(),
@@ -129,6 +132,7 @@ class PipelineData {
                OptimizedCompilationInfo* info, MachineGraph* mcgraph,
                PipelineStatistics* pipeline_statistics,
                SourcePositionTable* source_positions,
+               NodeCreationTable* node_creations,
                WasmCompilationData* wasm_compilation_data)
       : isolate_(isolate),
         info_(info),
@@ -138,6 +142,7 @@ class PipelineData {
         graph_zone_scope_(zone_stats_, ZONE_NAME),
         graph_(mcgraph->graph()),
         source_positions_(source_positions),
+        node_creations_(node_creations),
         machine_(mcgraph->machine()),
         common_(mcgraph->common()),
         mcgraph_(mcgraph),
@@ -153,6 +158,7 @@ class PipelineData {
   PipelineData(ZoneStats* zone_stats, OptimizedCompilationInfo* info,
                Isolate* isolate, Graph* graph, Schedule* schedule,
                SourcePositionTable* source_positions,
+               NodeCreationTable* node_creations,
                JumpOptimizationInfo* jump_opt)
       : isolate_(isolate),
         info_(info),
@@ -161,6 +167,7 @@ class PipelineData {
         graph_zone_scope_(zone_stats_, ZONE_NAME),
         graph_(graph),
         source_positions_(source_positions),
+        node_creations_(node_creations),
         schedule_(schedule),
         instruction_zone_scope_(zone_stats_, ZONE_NAME),
         instruction_zone_(instruction_zone_scope_.zone()),
@@ -220,6 +227,7 @@ class PipelineData {
   Zone* graph_zone() const { return graph_zone_; }
   Graph* graph() const { return graph_; }
   SourcePositionTable* source_positions() const { return source_positions_; }
+  NodeCreationTable* node_creations() const { return node_creations_; }
   MachineOperatorBuilder* machine() const { return machine_; }
   CommonOperatorBuilder* common() const { return common_; }
   JSOperatorBuilder* javascript() const { return javascript_; }
@@ -271,6 +279,7 @@ class PipelineData {
     graph_zone_ = nullptr;
     graph_ = nullptr;
     source_positions_ = nullptr;
+    node_creations_ = nullptr;
     simplified_ = nullptr;
     machine_ = nullptr;
     common_ = nullptr;
@@ -386,6 +395,7 @@ class PipelineData {
   Zone* graph_zone_ = nullptr;
   Graph* graph_ = nullptr;
   SourcePositionTable* source_positions_ = nullptr;
+  NodeCreationTable* node_creations_ = nullptr;
   SimplifiedOperatorBuilder* simplified_ = nullptr;
   MachineOperatorBuilder* machine_ = nullptr;
   CommonOperatorBuilder* common_ = nullptr;
@@ -648,16 +658,44 @@ class SourcePositionWrapper final : public Reducer {
   DISALLOW_COPY_AND_ASSIGN(SourcePositionWrapper);
 };
 
+class NodeCreationsWrapper final : public Reducer {
+ public:
+  NodeCreationsWrapper(Reducer* reducer, NodeCreationTable* table)
+      : reducer_(reducer), table_(table) {}
+  ~NodeCreationsWrapper() final {}
+
+  const char* reducer_name() const override { return reducer_->reducer_name(); }
+
+  Reduction Reduce(Node* node) final {
+    NodeCreationTable::Scope position(table_, reducer_name(), node);
+    return reducer_->Reduce(node);
+  }
+
+  void Finalize() final { reducer_->Finalize(); }
+
+ private:
+  Reducer* const reducer_;
+  NodeCreationTable* const table_;
+
+  DISALLOW_COPY_AND_ASSIGN(NodeCreationsWrapper);
+};
+
 void AddReducer(PipelineData* data, GraphReducer* graph_reducer,
                 Reducer* reducer) {
   if (data->info()->is_source_positions_enabled()) {
     void* const buffer = data->graph_zone()->New(sizeof(SourcePositionWrapper));
     SourcePositionWrapper* const wrapper =
         new (buffer) SourcePositionWrapper(reducer, data->source_positions());
-    graph_reducer->AddReducer(wrapper);
-  } else {
-    graph_reducer->AddReducer(reducer);
+    reducer = wrapper;
   }
+  if (data->info()->trace_turbo_json_enabled()) {
+    void* const buffer = data->graph_zone()->New(sizeof(NodeCreationsWrapper));
+    NodeCreationsWrapper* const wrapper =
+        new (buffer) NodeCreationsWrapper(reducer, data->node_creations());
+    reducer = wrapper;
+  }
+
+  graph_reducer->AddReducer(reducer);
 }
 
 class PipelineRunScope {
@@ -854,6 +892,7 @@ class PipelineWasmCompilationJob final : public OptimizedCompilationJob {
   explicit PipelineWasmCompilationJob(
       OptimizedCompilationInfo* info, Isolate* isolate, MachineGraph* mcgraph,
       CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
+      NodeCreationTable* node_creations,
       WasmCompilationData* wasm_compilation_data, bool asmjs_origin)
       : OptimizedCompilationJob(isolate->stack_guard()->real_climit(), info,
                                 "TurboFan", State::kReadyToExecute),
@@ -861,7 +900,7 @@ class PipelineWasmCompilationJob final : public OptimizedCompilationJob {
         pipeline_statistics_(CreatePipelineStatistics(
             Handle<Script>::null(), info, isolate, &zone_stats_)),
         data_(&zone_stats_, isolate, info, mcgraph, pipeline_statistics_.get(),
-              source_positions, wasm_compilation_data),
+              source_positions, node_creations, wasm_compilation_data),
         pipeline_(&data_),
         linkage_(call_descriptor),
         asmjs_origin_(asmjs_origin) {}
@@ -1720,7 +1759,9 @@ struct PrintGraphPhase {
 
       TurboJsonFile json_of(info, std::ios_base::app);
       json_of << "{\"name\":\"" << phase << "\",\"type\":\"graph\",\"data\":"
-              << AsJSON(*graph, data->source_positions()) << "},\n";
+              << AsJSON(*graph, data->source_positions(),
+                        data->node_creations())
+              << "},\n";
     }
 
     if (info->trace_turbo_scheduled_enabled()) {
@@ -1799,6 +1840,9 @@ bool PipelineImpl::CreateGraph() {
   }
 
   data->source_positions()->AddDecorator();
+  if (data->info()->trace_turbo_json_enabled()) {
+    data->node_creations()->AddDecorator();
+  }
 
   Run<GraphBuilderPhase>();
   RunPrintAndVerify("Initial untyped", true);
@@ -1928,6 +1972,9 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   RunPrintAndVerify("Late optimized", true);
 
   data->source_positions()->RemoveDecorator();
+  if (data->info()->trace_turbo_json_enabled()) {
+    data->node_creations()->RemoveDecorator();
+  }
 
   ComputeScheduledGraph();
 
@@ -1950,8 +1997,9 @@ Handle<Code> Pipeline::GenerateCodeForCodeStub(
   // Construct a pipeline for scheduling and code generation.
   ZoneStats zone_stats(isolate->allocator());
   SourcePositionTable source_positions(graph);
+  NodeCreationTable node_creations(graph);
   PipelineData data(&zone_stats, &info, isolate, graph, schedule,
-                    &source_positions, jump_opt);
+                    &source_positions, &node_creations, jump_opt);
   data.set_verify_graph(FLAG_verify_csa);
   std::unique_ptr<PipelineStatistics> pipeline_statistics;
   if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
@@ -2024,8 +2072,10 @@ Handle<Code> Pipeline::GenerateCodeForTesting(
   // table, then remove this conditional allocation.
   if (!source_positions)
     source_positions = new (info->zone()) SourcePositionTable(graph);
+  NodeCreationTable* node_positions =
+      new (info->zone()) NodeCreationTable(graph);
   PipelineData data(&zone_stats, info, isolate, graph, schedule,
-                    source_positions, nullptr);
+                    source_positions, node_positions, nullptr);
   std::unique_ptr<PipelineStatistics> pipeline_statistics;
   if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
     pipeline_statistics.reset(
@@ -2062,11 +2112,12 @@ OptimizedCompilationJob* Pipeline::NewCompilationJob(
 OptimizedCompilationJob* Pipeline::NewWasmCompilationJob(
     OptimizedCompilationInfo* info, Isolate* isolate, MachineGraph* mcgraph,
     CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
+    NodeCreationTable* node_creations,
     WasmCompilationData* wasm_compilation_data,
     wasm::ModuleOrigin asmjs_origin) {
   return new PipelineWasmCompilationJob(info, isolate, mcgraph, call_descriptor,
-                                        source_positions, wasm_compilation_data,
-                                        asmjs_origin);
+                                        source_positions, node_creations,
+                                        wasm_compilation_data, asmjs_origin);
 }
 
 bool Pipeline::AllocateRegistersForTesting(const RegisterConfiguration* config,
@@ -2161,6 +2212,8 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
     std::ostringstream source_position_output;
     // Output source position information before the graph is deleted.
     data_->source_positions()->PrintJson(source_position_output);
+    source_position_output << ",\n\"nodeCreations\" : ";
+    data_->node_creations()->PrintJson(source_position_output);
     data_->set_source_position_output(source_position_output.str());
   }
 

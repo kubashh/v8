@@ -57,7 +57,11 @@ var Node = {
     } else {
       propsString = "[" + this.properties + "]";
     }
-    return this.title + "\n" + propsString + "\n" + this.opinfo;
+    let title = this.title + "\n" + propsString + "\n" + this.opinfo;
+    if (this.creation) {
+      title += `\nCreated by ${this.creation.reducer} from #${this.creation.node}`;
+    }
+    return title;
   },
   getDisplayLabel: function() {
     var result = this.id + ":" + this.label;
