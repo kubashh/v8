@@ -160,8 +160,8 @@ void DeclarationVisitor::Visit(TorqueBuiltinDeclaration* decl,
                                const Signature& signature, Statement* body) {
   Builtin* builtin = BuiltinDeclarationCommon(decl, false, signature);
   CurrentCallableActivator activator(global_context_, builtin, decl);
-  DeclareSignature(builtin->signature());
-  if (builtin->signature().parameter_types.var_args) {
+  DeclareSignature(signature);
+  if (signature.parameter_types.var_args) {
     declarations()->DeclareConstant(
         decl->signature->parameters.arguments_variable,
         GetTypeOracle().GetArgumentsType(), "arguments");
@@ -345,7 +345,21 @@ void DeclarationVisitor::Specialize(const SpecializationKey& key,
     }
   }
 
-  Visit(callable, MakeSignature(callable, signature), body);
+  // Ensure that specialized signature matches generic signature
+  Signature signature_with_types = MakeSignature(callable, signature);
+  if (callable->signature.get() != signature) {
+    Signature generic_signature_with_types =
+        MakeSignature(callable, callable->signature.get());
+    if (!signature_with_types.HasSameTypesAs(generic_signature_with_types)) {
+      std::stringstream stream;
+      stream << "specialization of " << callable->name
+             << " has incompatible parameter list or label list with generic "
+                "definition";
+      ReportError(stream.str());
+    }
+  }
+
+  Visit(callable, signature_with_types, body);
 }
 
 }  // namespace torque
