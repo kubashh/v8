@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d68c5828_c9c941f3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3264,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-17T12:27:43Z",
+      "side": 1,
+      "message": "Drive-by comments, not in scope for this CL:\n- Perhaps ToWeakHeapObject should have an overload that takes a Handle\u003c\u003e*, to avoid using explicit temporary raw pointers in handlified code.\n- I consider the naming a bit confusing. If I understand correctly, ToWeakHeapObject turns a weak reference to a HeapObject into a normal reference to a HeapObject. I would expect it to be called \"FromWeakHeapObject\" or \"WeakToHeapObject\".",
+      "range": {
+        "startLine": 3264,
+        "startChar": 27,
+        "endLine": 3264,
+        "endChar": 43
+      },
+      "revId": "baa241a27889a5c99acf50bef014c6a72cd871c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e73c4a13_1f2c704d",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 8
