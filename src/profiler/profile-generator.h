@@ -104,6 +104,7 @@ class CodeEntry {
     return TagField::decode(bit_field_);
   }
 
+  static const char* const kWasmResourceNamePrefix;
   static const char* const kEmptyResourceName;
   static const char* const kEmptyBailoutReason;
   static const char* const kNoDeoptReason;
