@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "579e9f92_060972ea",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-05-17T07:13:42Z",
+      "side": 1,
+      "message": "Are there more verify flags that we could disable? e.g. --turbo-verify?",
+      "range": {
+        "startLine": 171,
+        "startChar": 35,
+        "endLine": 171,
+        "endChar": 65
+      },
+      "revId": "33bccbdd1ad46219c77f1df9bf87ba630f68ee22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
