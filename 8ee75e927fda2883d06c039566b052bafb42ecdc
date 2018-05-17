@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13adda32_41e82e7a",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-17T12:08:06Z",
+      "side": 1,
+      "message": "Should we remove this then? It should be subsumed by the new check.",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 3
+      },
+      "revId": "8ee75e927fda2883d06c039566b052bafb42ecdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11f60ad1_ee9b7a66",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-17T12:08:06Z",
+      "side": 1,
+      "message": "MakeSignature(callable, signature) interprets signature in the scope of callable, which is wrong in the case of an explicit specialization.",
+      "revId": "8ee75e927fda2883d06c039566b052bafb42ecdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
