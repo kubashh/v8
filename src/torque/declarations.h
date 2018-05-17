@@ -107,6 +107,7 @@ class Declarations {
   class NodeScopeActivator;
   class GenericScopeActivator;
   class ScopedGenericInstantiation;
+  class ScopedGenericNamespace;
 
  private:
   Scope* GetNodeScope(const AstNode* node);
@@ -160,8 +161,7 @@ class Declarations::ScopedGenericInstantiation {
  public:
   ScopedGenericInstantiation(Declarations* declarations,
                              const SpecializationKey& key)
-      : declarations_(declarations),
-        restorer_(declarations->generic_declaration_scopes_[key.first]) {
+      : declarations_(declarations) {
     declarations->current_generic_specialization_ = &key;
   }
   ~ScopedGenericInstantiation() {
@@ -170,6 +170,16 @@ class Declarations::ScopedGenericInstantiation {
 
  private:
   Declarations* declarations_;
+};  // namespace torque
+
+class Declarations::ScopedGenericNamespace {
+ public:
+  ScopedGenericNamespace(Declarations* declarations,
+                         const SpecializationKey& key)
+      : restorer_(declarations->generic_declaration_scopes_[key.first]) {}
+  ~ScopedGenericNamespace() {}
+
+ private:
   ScopeChain::ScopedSnapshotRestorer restorer_;
 };
 
