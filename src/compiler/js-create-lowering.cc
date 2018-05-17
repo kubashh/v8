@@ -498,7 +498,10 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
 
     // Allocate a register file.
     DCHECK(js_function->shared()->HasBytecodeArray());
-    int size = js_function->shared()->GetBytecodeArray()->register_count();
+    Handle<BytecodeArray> bytecode_array(
+        js_function->shared()->GetBytecodeArray());
+    int parameter_count_no_receiver = bytecode_array->parameter_count() - 1;
+    int size = parameter_count_no_receiver + bytecode_array->register_count();
     AllocationBuilder ab(jsgraph(), effect, control);
     ab.AllocateArray(size, factory()->fixed_array_map());
     for (int i = 0; i < size; ++i) {
