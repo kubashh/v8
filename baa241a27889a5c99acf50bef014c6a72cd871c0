@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e73c4a13_1f2c704d",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-05-17T12:10:32Z",
+      "side": 1,
+      "message": "Pretty easy to do:\n\nvar f \u003d 1;\nf();",
+      "range": {
+        "startLine": 727,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 15
+      },
+      "revId": "baa241a27889a5c99acf50bef014c6a72cd871c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
