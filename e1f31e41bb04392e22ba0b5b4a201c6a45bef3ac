@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c07a5fb_62e01f3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cd144e5_65cc4756",
+      "range": {
+        "startLine": 9,
+        "startChar": 67,
+        "endLine": 9,
+        "endChar": 68
+      },
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b46c5d41_4f8c2284",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -39,6 +63,24 @@
       "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ea943b0_3411005b",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "I eliminated the comments and renamed \u0027wasm_function_count\u0027 to \u0027total_function_count\u0027.",
+      "parentUuid": "b46c5d41_4f8c2284",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "0cbc2139_4b6cbfc0",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e26a38c0_03c043b5",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf179d6c_084ba215",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -70,6 +130,24 @@
       "writtenOn": "2018-05-17T18:45:58Z",
       "side": 1,
       "message": "I wonder if we should just use uint32_t for all these fields. We currently have a total code space limit (for a whole module) or 256MB. WDYT?",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a36be359_ed557f40",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "I like this idea. Do you mean \u0027tier\u0027 as well?",
+      "parentUuid": "cf179d6c_084ba215",
       "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "95ba65bd_c9041e26",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaa4bd7c_7604ff2e",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2fd6d4d_969024c3",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "0714dbaf_7df706f1",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "Right, it is unnecessary as well.",
+      "parentUuid": "a2fd6d4d_969024c3",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9301c727_9b859c53",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
@@ -121,6 +235,24 @@
       "writtenOn": "2018-05-17T18:45:58Z",
       "side": 1,
       "message": "nit: for consistency, reader should be the first argument.",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca07abbd_2a2ecbdb",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-05-17T21:28:37Z",
+      "side": 1,
+      "message": "OK, making \u0027reader\u0027 the first parameter (and \u0027writer\u0027 for NativeSerializer above to be consistent with reader).",
+      "parentUuid": "9301c727_9b859c53",
       "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
