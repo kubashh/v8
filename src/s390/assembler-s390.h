@@ -840,6 +840,39 @@ class Assembler : public AssemblerBase {
   }
 #undef DECLARE_S390_RXY_INSTRUCTIONS
 
+inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
+  DCHECK(is_int20(f4));
+  DCHECK(is_uint16(op));
+  uint64_t code = (getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                   getfield<uint64_t, 6, 8, 12>(f1) |
+                   getfield<uint64_t, 6, 12, 16>(f2) |
+                   getfield<uint64_t, 6, 16, 20>(f3) |
+                   getfield<uint64_t, 6, 20, 32>(f4 & 0x0fff) |
+                   getfield<uint64_t, 6, 32, 40>(f4 >> 12) |
+                   getfield<uint64_t, 6, 40, 48>(op & 0xff));
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RSY_A_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Register r3, Register b2, Disp d2) {              \
+    rsy_form(op_name, r1.code(), r3.code(), b2.code(), d2);                \
+  }                                                                        \
+  void name(Register r1, Register r3, const MemOperand& opnd) {            \
+    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());          \
+  }
+  S390_RSY_A_OPCODE_LIST(DECLARE_S390_RSY_A_INSTRUCTIONS);
+#undef DECLARE_S390_RSY_A_INSTRUCTIONS
+
+#define DECLARE_S390_RSY_B_INSTRUCTIONS(name, op_name, op_value)            \
+  void name(Register r1, Condition m3, Register b2, Disp d2) {              \
+    rsy_form(op_name, r1.code(), m3, b2.code(), d2);                        \
+  }                                                                         \
+  void name(Register r1, Condition m3, const MemOperand& opnd) {            \
+    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
+  }
+  S390_RSY_B_OPCODE_LIST(DECLARE_S390_RSY_B_INSTRUCTIONS);
+#undef DECLARE_S390_RSY_B_INSTRUCTIONS
+
   // Helper for unconditional branch to Label with update to save register
   void b(Register r, Label* l) {
     int32_t halfwords = branch_offset(l) / 2;
@@ -1120,8 +1153,6 @@ class Assembler : public AssemblerBase {
 
   // Load Multiple Instructions
   void lm(Register r1, Register r2, const MemOperand& src);
-  void lmy(Register r1, Register r2, const MemOperand& src);
-  void lmg(Register r1, Register r2, const MemOperand& src);
 
   // Load On Condition Instructions
   void locr(Condition m3, Register r1, Register r2);
@@ -1133,8 +1164,6 @@ class Assembler : public AssemblerBase {
 
   // Store Multiple Instructions
   void stm(Register r1, Register r2, const MemOperand& src);
-  void stmy(Register r1, Register r2, const MemOperand& src);
-  void stmg(Register r1, Register r2, const MemOperand& src);
 
   // Compare Instructions
   void chi(Register r, const Operand& opnd);
@@ -1147,8 +1176,6 @@ class Assembler : public AssemblerBase {
 
   // Compare and Swap Instructions
   void cs(Register r1, Register r2, const MemOperand& src);
-  void csy(Register r1, Register r2, const MemOperand& src);
-  void csg(Register r1, Register r2, const MemOperand& src);
 
   // Test Under Mask Instructions
   void tm(const MemOperand& mem, const Operand& imm);
@@ -1541,12 +1568,6 @@ class Assembler : public AssemblerBase {
 
   inline void rsi_form(Opcode op, Register r1, Register r3, const Operand& i2);
   inline void rsl_form(Opcode op, Length l1, Register b2, Disp d2);
-
-  inline void rsy_form(Opcode op, Register r1, Register r3, Register b2,
-                       const Disp d2);
-  inline void rsy_form(Opcode op, Register r1, Condition m3, Register b2,
-                       const Disp d2);
-
   inline void rxe_form(Opcode op, Register r1, Register x2, Register b2,
                        Disp d2);
 

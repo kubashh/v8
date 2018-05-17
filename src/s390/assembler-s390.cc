@@ -610,16 +610,6 @@ void Assembler::stm(Register r1, Register r2, const MemOperand& src) {
   rs_form(STM, r1, r2, src.rb(), src.offset());
 }
 
-// 32-bit Store Multiple - long displacement (20-bits signed)
-void Assembler::stmy(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(STMY, r1, r2, src.rb(), src.offset());
-}
-
-// 64-bit Store Multiple - long displacement (20-bits signed)
-void Assembler::stmg(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(STMG, r1, r2, src.rb(), src.offset());
-}
-
 // Exception-generating instructions and debugging support.
 // Stops with a non-negative code less than kNumOfWatchedStops support
 // enabling/disabling and a counter feature. See simulator-s390.h .
@@ -805,60 +795,6 @@ void Assembler::rsl_form(Opcode op, Length l1, Register b2, Disp d2) {
                   (static_cast<uint64_t>(l1)) * B36 |
                   (static_cast<uint64_t>(b2.code())) * B28 |
                   (static_cast<uint64_t>(d2)) * B16 |
-                  (static_cast<uint64_t>(op & 0x00FF));
-  emit6bytes(code);
-}
-
-// RSY1 format: <insn> R1,R3,D2(B2)
-//    +--------+----+----+----+-------------+--------+--------+
-//    | OpCode | R1 | R3 | B2 |    DL2      |  DH2   | OpCode |
-//    +--------+----+----+----+-------------+--------+--------+
-//    0        8    12   16   20            32       40      47
-#define RSY1_FORM_EMIT(name, op)                                           \
-  void Assembler::name(Register r1, Register r3, Register b2, Disp d2) {   \
-    rsy_form(op, r1, r3, b2, d2);                                          \
-  }                                                                        \
-  void Assembler::name(Register r1, Register r3, const MemOperand& opnd) { \
-    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());          \
-  }
-
-void Assembler::rsy_form(Opcode op, Register r1, Register r3, Register b2,
-                         const Disp d2) {
-  DCHECK(is_int20(d2));
-  DCHECK(is_uint16(op));
-  uint64_t code = (static_cast<uint64_t>(op & 0xFF00)) * B32 |
-                  (static_cast<uint64_t>(r1.code())) * B36 |
-                  (static_cast<uint64_t>(r3.code())) * B32 |
-                  (static_cast<uint64_t>(b2.code())) * B28 |
-                  (static_cast<uint64_t>(d2 & 0x0FFF)) * B16 |
-                  (static_cast<uint64_t>(d2 & 0x0FF000)) >> 4 |
-                  (static_cast<uint64_t>(op & 0x00FF));
-  emit6bytes(code);
-}
-
-// RSY2 format: <insn> R1,M3,D2(B2)
-//    +--------+----+----+----+-------------+--------+--------+
-//    | OpCode | R1 | M3 | B2 |    DL2      |  DH2   | OpCode |
-//    +--------+----+----+----+-------------+--------+--------+
-//    0        8    12   16   20            32       40      47
-#define RSY2_FORM_EMIT(name, op)                                            \
-  void Assembler::name(Register r1, Condition m3, Register b2, Disp d2) {   \
-    rsy_form(op, r1, m3, b2, d2);                                           \
-  }                                                                         \
-  void Assembler::name(Register r1, Condition m3, const MemOperand& opnd) { \
-    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
-  }
-
-void Assembler::rsy_form(Opcode op, Register r1, Condition m3, Register b2,
-                         const Disp d2) {
-  DCHECK(is_int20(d2));
-  DCHECK(is_uint16(op));
-  uint64_t code = (static_cast<uint64_t>(op & 0xFF00)) * B32 |
-                  (static_cast<uint64_t>(r1.code())) * B36 |
-                  (static_cast<uint64_t>(m3)) * B32 |
-                  (static_cast<uint64_t>(b2.code())) * B28 |
-                  (static_cast<uint64_t>(d2 & 0x0FFF)) * B16 |
-                  (static_cast<uint64_t>(d2 & 0x0FF000)) >> 4 |
                   (static_cast<uint64_t>(op & 0x00FF));
   emit6bytes(code);
 }
@@ -1352,12 +1288,12 @@ void Assembler::locgr(Condition m3, Register r1, Register r2) {
 
 // Load On Condition R-M (32)
 void Assembler::loc(Condition m3, Register r1, const MemOperand& src) {
-  rsy_form(LOC, r1, m3, src.rb(), src.offset());
+  rsy_form(LOC, r1.code(), m3, src.rb().code(), src.offset());
 }
 
 // Load On Condition R-M (64)
 void Assembler::locg(Condition m3, Register r1, const MemOperand& src) {
-  rsy_form(LOCG, r1, m3, src.rb(), src.offset());
+  rsy_form(LOCG, r1.code(), m3, src.rb().code(), src.offset());
 }
 
 // -------------------
@@ -1642,35 +1578,35 @@ void Assembler::EnsureSpaceFor(int space_needed) {
 // Rotate Left Single Logical (32)
 void Assembler::rll(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(RLL, r1, r3, opnd, 0);
+  rsy_form(RLL, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Rotate Left Single Logical (32)
 void Assembler::rll(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(RLL, r1, r3, r0, opnd.immediate());
+  rsy_form(RLL, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Rotate Left Single Logical (32)
 void Assembler::rll(Register r1, Register r3, Register r2,
                     const Operand& opnd) {
-  rsy_form(RLL, r1, r3, r2, opnd.immediate());
+  rsy_form(RLL, r1.code(), r3.code(), r2.code(), opnd.immediate());
 }
 
 // Rotate Left Single Logical (64)
 void Assembler::rllg(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(RLLG, r1, r3, opnd, 0);
+  rsy_form(RLLG, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Rotate Left Single Logical (64)
 void Assembler::rllg(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(RLLG, r1, r3, r0, opnd.immediate());
+  rsy_form(RLLG, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Rotate Left Single Logical (64)
 void Assembler::rllg(Register r1, Register r3, Register r2,
                      const Operand& opnd) {
-  rsy_form(RLLG, r1, r3, r2, opnd.immediate());
+  rsy_form(RLLG, r1.code(), r3.code(), r2.code(), opnd.immediate());
 }
 
 // Shift Left Single Logical (32)
@@ -1687,23 +1623,23 @@ void Assembler::sll(Register r1, const Operand& opnd) {
 // Shift Left Single Logical (32)
 void Assembler::sllk(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SLLK, r1, r3, opnd, 0);
+  rsy_form(SLLK, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Left Single Logical (32)
 void Assembler::sllk(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SLLK, r1, r3, r0, opnd.immediate());
+  rsy_form(SLLK, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Left Single Logical (64)
 void Assembler::sllg(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SLLG, r1, r3, opnd, 0);
+  rsy_form(SLLG, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Left Single Logical (64)
 void Assembler::sllg(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SLLG, r1, r3, r0, opnd.immediate());
+  rsy_form(SLLG, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Left Double Logical (64)
@@ -1738,23 +1674,23 @@ void Assembler::srl(Register r1, const Operand& opnd) {
 // Shift Right Single Logical (32)
 void Assembler::srlk(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SRLK, r1, r3, opnd, 0);
+  rsy_form(SRLK, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Right Single Logical (32)
 void Assembler::srlk(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SRLK, r1, r3, r0, opnd.immediate());
+  rsy_form(SRLK, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Right Single Logical (64)
 void Assembler::srlg(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SRLG, r1, r3, opnd, 0);
+  rsy_form(SRLG, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Right Single Logical (64)
 void Assembler::srlg(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SRLG, r1, r3, r0, opnd.immediate());
+  rsy_form(SRLG, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Left Single (32)
@@ -1771,23 +1707,23 @@ void Assembler::sla(Register r1, const Operand& opnd) {
 // Shift Left Single (32)
 void Assembler::slak(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SLAK, r1, r3, opnd, 0);
+  rsy_form(SLAK, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Left Single (32)
 void Assembler::slak(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SLAK, r1, r3, r0, opnd.immediate());
+  rsy_form(SLAK, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Left Single (64)
 void Assembler::slag(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SLAG, r1, r3, opnd, 0);
+  rsy_form(SLAG, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Left Single (64)
 void Assembler::slag(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SLAG, r1, r3, r0, opnd.immediate());
+  rsy_form(SLAG, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Right Single (32)
@@ -1804,22 +1740,22 @@ void Assembler::sra(Register r1, const Operand& opnd) {
 // Shift Right Single (32)
 void Assembler::srak(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SRAK, r1, r3, opnd, 0);
+  rsy_form(SRAK, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 // Shift Right Single (32)
 void Assembler::srak(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SRAK, r1, r3, r0, opnd.immediate());
+  rsy_form(SRAK, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Right Single (64)
 void Assembler::srag(Register r1, Register r3, Register opnd) {
   DCHECK(opnd != r0);
-  rsy_form(SRAG, r1, r3, opnd, 0);
+  rsy_form(SRAG, r1.code(), r3.code(), opnd.code(), 0);
 }
 
 void Assembler::srag(Register r1, Register r3, const Operand& opnd) {
-  rsy_form(SRAG, r1, r3, r0, opnd.immediate());
+  rsy_form(SRAG, r1.code(), r3.code(), r0.code(), opnd.immediate());
 }
 
 // Shift Right Double
@@ -1862,29 +1798,9 @@ void Assembler::lm(Register r1, Register r2, const MemOperand& src) {
   rs_form(LM, r1, r2, src.rb(), src.offset());
 }
 
-// 32-bit Load Multiple - long displacement (20-bits signed)
-void Assembler::lmy(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(LMY, r1, r2, src.rb(), src.offset());
-}
-
-// 64-bit Load Multiple - long displacement (20-bits signed)
-void Assembler::lmg(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(LMG, r1, r2, src.rb(), src.offset());
-}
-
 // 32-bit Compare and Swap
 void Assembler::cs(Register r1, Register r2, const MemOperand& src) {
   rs_form(CS, r1, r2, src.rb(), src.offset());
-}
-
-// 32-bit Compare and Swap
-void Assembler::csy(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(CSY, r1, r2, src.rb(), src.offset());
-}
-
-// 64-bit Compare and Swap
-void Assembler::csg(Register r1, Register r2, const MemOperand& src) {
-  rsy_form(CSG, r1, r2, src.rb(), src.offset());
 }
 
 // Move integer (32)
