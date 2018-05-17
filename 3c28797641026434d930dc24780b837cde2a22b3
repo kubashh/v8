@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5b34811_bd1e8c2e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-17T09:37:59Z",
+      "side": 1,
+      "message": "This new Orin approach will work only for HeapObject |value|s. Otherwise we may confuse |object| with smi |value|.",
+      "range": {
+        "startLine": 1784,
+        "startChar": 56,
+        "endLine": 1784,
+        "endChar": 62
+      },
+      "revId": "3c28797641026434d930dc24780b837cde2a22b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da486fe0_fb9e5f82",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-05-17T09:37:59Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1791,
+        "startChar": 59,
+        "endLine": 1791,
+        "endChar": 65
+      },
+      "revId": "3c28797641026434d930dc24780b837cde2a22b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
