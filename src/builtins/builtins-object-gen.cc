@@ -1366,9 +1366,13 @@ TF_BUILTIN(CreateGeneratorObject, ObjectBuiltinsAssembler) {
       LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
   Node* bytecode_array = LoadSharedFunctionInfoBytecodeArray(shared);
 
+  Node* formal_parameter_count = ChangeInt32ToIntPtr(
+      LoadObjectField(shared, SharedFunctionInfo::kFormalParameterCountOffset,
+                      MachineType::Int32()));
   Node* frame_size = ChangeInt32ToIntPtr(LoadObjectField(
       bytecode_array, BytecodeArray::kFrameSizeOffset, MachineType::Int32()));
-  Node* size = WordSar(frame_size, IntPtrConstant(kPointerSizeLog2));
+  Node* size = IntPtrAdd(WordSar(frame_size, IntPtrConstant(kPointerSizeLog2)),
+                         formal_parameter_count);
   Node* register_file = AllocateFixedArray(HOLEY_ELEMENTS, size);
   FillFixedArrayWithValue(HOLEY_ELEMENTS, register_file, IntPtrConstant(0),
                           size, Heap::kUndefinedValueRootIndex);

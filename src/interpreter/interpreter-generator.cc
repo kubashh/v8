@@ -3004,11 +3004,18 @@ IGNITION_HANDLER(SuspendGenerator, InterpreterAssembler) {
   Node* generator = LoadRegisterAtOperandIndex(0);
   Node* array =
       LoadObjectField(generator, JSGeneratorObject::kRegisterFileOffset);
+  Node* closure = LoadRegister(Register::function_closure());
   Node* context = GetContext();
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
   Node* suspend_id = BytecodeOperandUImmSmi(3);
 
-  ExportRegisterFile(array, registers);
+  Node* shared =
+      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+  Node* formal_parameter_count =
+      LoadObjectField(shared, SharedFunctionInfo::kFormalParameterCountOffset,
+                      MachineType::Int32());
+
+  ExportParametersAndRegisterFile(array, registers, formal_parameter_count);
   StoreObjectField(generator, JSGeneratorObject::kContextOffset, context);
   StoreObjectField(generator, JSGeneratorObject::kContinuationOffset,
                    suspend_id);
@@ -3073,11 +3080,18 @@ IGNITION_HANDLER(SwitchOnGeneratorState, InterpreterAssembler) {
 // state as executing.
 IGNITION_HANDLER(ResumeGenerator, InterpreterAssembler) {
   Node* generator = LoadRegisterAtOperandIndex(0);
+  Node* closure = LoadRegister(Register::function_closure());
   RegListNodePair registers = GetRegisterListAtOperandIndex(1);
+
+  Node* shared =
+      LoadObjectField(closure, JSFunction::kSharedFunctionInfoOffset);
+  Node* formal_parameter_count =
+      LoadObjectField(shared, SharedFunctionInfo::kFormalParameterCountOffset,
+                      MachineType::Int32());
 
   ImportRegisterFile(
       LoadObjectField(generator, JSGeneratorObject::kRegisterFileOffset),
-      registers);
+      registers, formal_parameter_count);
 
   // Return the generator's input_or_debug_pos in the accumulator.
   SetAccumulator(

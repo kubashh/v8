@@ -1596,8 +1596,10 @@ void InterpreterAssembler::AbortIfRegisterCountInvalid(Node* register_file,
   BIND(&ok);
 }
 
-Node* InterpreterAssembler::ExportRegisterFile(
-    Node* array, const RegListNodePair& registers) {
+Node* InterpreterAssembler::ExportParametersAndRegisterFile(
+    Node* array, const RegListNodePair& registers,
+    Node* formal_parameter_count) {
+  formal_parameter_count = ChangeInt32ToIntPtr(formal_parameter_count);
   Node* register_count = ChangeUint32ToWord(registers.reg_count());
   if (FLAG_debug_code) {
     CSA_ASSERT(this, IntPtrEqual(registers.base_reg_location(),
@@ -1605,34 +1607,67 @@ Node* InterpreterAssembler::ExportRegisterFile(
     AbortIfRegisterCountInvalid(array, register_count);
   }
 
-  Variable var_index(this, MachineType::PointerRepresentation());
-  var_index.Bind(IntPtrConstant(0));
-
-  // Iterate over register file and write values into array.
-  // The mapping of register to array index must match that used in
-  // BytecodeGraphBuilder::VisitResumeGenerator.
-  Label loop(this, &var_index), done_loop(this);
-  Goto(&loop);
-  BIND(&loop);
   {
-    Node* index = var_index.value();
-    GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
+    Variable var_index(this, MachineType::PointerRepresentation());
+    var_index.Bind(IntPtrConstant(0));
 
-    Node* reg_index = IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
-    Node* value = LoadRegister(reg_index);
+    // Iterate over parameters and write them into the array.
+    Label loop(this, &var_index), done_loop(this);
 
-    StoreFixedArrayElement(array, index, value);
+    Node* reg_base = IntPtrAdd(
+        IntPtrConstant(Register::FromParameterIndex(0, 1).ToOperand() - 1),
+        formal_parameter_count);
 
-    var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));
     Goto(&loop);
+    BIND(&loop);
+    {
+      Node* index = var_index.value();
+      GotoIfNot(UintPtrLessThan(index, formal_parameter_count), &done_loop);
+
+      Node* reg_index = IntPtrSub(reg_base, index);
+      Node* value = LoadRegister(reg_index);
+
+      StoreFixedArrayElement(array, index, value);
+
+      var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));
+      Goto(&loop);
+    }
+    BIND(&done_loop);
   }
-  BIND(&done_loop);
+
+  {
+    // Iterate over register file and write values into array.
+    // The mapping of register to array index must match that used in
+    // BytecodeGraphBuilder::VisitResumeGenerator.
+    Variable var_index(this, MachineType::PointerRepresentation());
+    var_index.Bind(IntPtrConstant(0));
+
+    Label loop(this, &var_index), done_loop(this);
+    Goto(&loop);
+    BIND(&loop);
+    {
+      Node* index = var_index.value();
+      GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
+
+      Node* reg_index =
+          IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
+      Node* value = LoadRegister(reg_index);
+
+      Node* reg_file_index = IntPtrAdd(index, formal_parameter_count);
+      StoreFixedArrayElement(array, reg_file_index, value);
+
+      var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));
+      Goto(&loop);
+    }
+    BIND(&done_loop);
+  }
 
   return array;
 }
 
-Node* InterpreterAssembler::ImportRegisterFile(
-    Node* array, const RegListNodePair& registers) {
+Node* InterpreterAssembler::ImportRegisterFile(Node* array,
+                                               const RegListNodePair& registers,
+                                               Node* formal_parameter_count) {
   Node* register_count = ChangeUint32ToWord(registers.reg_count());
   if (FLAG_debug_code) {
     CSA_ASSERT(this, IntPtrEqual(registers.base_reg_location(),
@@ -1652,12 +1687,13 @@ Node* InterpreterAssembler::ImportRegisterFile(
     Node* index = var_index.value();
     GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
 
-    Node* value = LoadFixedArrayElement(array, index);
+    Node* reg_file_index = IntPtrAdd(index, formal_parameter_count);
+    Node* value = LoadFixedArrayElement(array, reg_file_index);
 
     Node* reg_index = IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
     StoreRegister(value, reg_index);
 
-    StoreFixedArrayElement(array, index,
+    StoreFixedArrayElement(array, reg_file_index,
                            LoadRoot(Heap::kStaleRegisterRootIndex));
 
     var_index.Bind(IntPtrAdd(index, IntPtrConstant(1)));

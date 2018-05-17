@@ -527,13 +527,43 @@ void ScopeIterator::MaterializeStackLocals(Handle<JSObject> local_scope,
   }
 
   DCHECK(!generator_.is_null());
-  // Fill all stack locals.
+  // Fill all stack locals from generator's captured register file.
   Handle<FixedArray> register_file(generator_->register_file());
+  int parameter_count = scope_info->ParameterCount();
+  for (int i = 0; i < parameter_count; ++i) {
+    // Do not materialize the parameter if it is shadowed by a context local.
+    // TODO(yangguo): check whether this is necessary, now that we materialize
+    //                context locals as well.
+    Handle<String> name(scope_info->ParameterName(i));
+    if (ScopeInfo::VariableIsSynthetic(*name)) continue;
+
+    // Skip the parameter if it is context-allocated.
+    VariableMode mode;
+    InitializationFlag init_flag;
+    MaybeAssignedFlag maybe_assigned_flag;
+    if (ScopeInfo::ContextSlotIndex(scope_info, name, &mode, &init_flag,
+                                    &maybe_assigned_flag) != -1)
+      continue;
+
+    Handle<Object> value(register_file->get(i), isolate_);
+
+    // TODO(yangguo): We convert optimized out values to {undefined} when they
+    // are passed to the debugger. Eventually we should handle them somehow.
+    if (value->IsTheHole(isolate_) || value->IsOptimizedOut(isolate_)) {
+      DCHECK(!value.is_identical_to(isolate_->factory()->stale_register()));
+      value = isolate_->factory()->undefined_value();
+    }
+
+    JSObject::SetOwnPropertyIgnoreAttributes(local_scope, name, value, NONE)
+        .Check();
+  }
+
   for (int i = 0; i < scope_info->StackLocalCount(); ++i) {
     Handle<String> name = handle(scope_info->StackLocalName(i));
     if (ScopeInfo::VariableIsSynthetic(*name)) continue;
-    Handle<Object> value(register_file->get(scope_info->StackLocalIndex(i)),
-                         isolate_);
+    Handle<Object> value(
+        register_file->get(scope_info->StackLocalIndex(i) + parameter_count),
+        isolate_);
     // TODO(yangguo): We convert optimized out values to {undefined} when they
     // are passed to the debugger. Eventually we should handle them somehow.
     if (value->IsTheHole(isolate_) || value->IsOptimizedOut(isolate_)) {

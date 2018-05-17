@@ -98,10 +98,12 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   };
 
   // Backup/restore register file to/from a fixed array of the correct length.
-  compiler::Node* ExportRegisterFile(compiler::Node* array,
-                                     const RegListNodePair& registers);
+  compiler::Node* ExportParametersAndRegisterFile(
+      compiler::Node* array, const RegListNodePair& registers,
+      compiler::Node* formal_parameter_count);
   compiler::Node* ImportRegisterFile(compiler::Node* array,
-                                     const RegListNodePair& registers);
+                                     const RegListNodePair& registers,
+                                     compiler::Node* formal_parameter_count);
 
   // Loads from and stores to the interpreter register file.
   compiler::Node* LoadRegister(Register reg);
