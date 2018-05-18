@@ -5,7 +5,6 @@
 #include "src/wasm/wasm-serialization.h"
 
 #include "src/assembler-inl.h"
-#include "src/code-stubs.h"
 #include "src/external-reference-table.h"
 #include "src/objects-inl.h"
 #include "src/objects.h"
@@ -120,9 +119,6 @@ class Reader {
 
 constexpr size_t kVersionSize = 4 * sizeof(uint32_t);
 
-// Start from 1 so an encoded stub id is not confused with an encoded builtin.
-constexpr int kFirstStubId = 1;
-
 void WriteVersion(Isolate* isolate, Writer* writer) {
   writer->Write(SerializedData::ComputeMagicNumber(
       isolate->heap()->external_reference_table()));
@@ -194,24 +190,21 @@ class V8_EXPORT_PRIVATE NativeModuleSerializer {
   bool Write(Writer* writer);
 
  private:
-  size_t MeasureCopiedStubs() const;
   size_t MeasureCode(const WasmCode*) const;
 
   void WriteHeader(Writer* writer);
-  void WriteCopiedStubs(Writer* writer);
   void WriteCode(const WasmCode*, Writer* writer);
 
-  uint32_t EncodeBuiltinOrStub(Address);
+  uint32_t EncodeBuiltin(Address);
 
   Isolate* const isolate_;
   const NativeModule* const native_module_;
   bool write_called_;
 
-  // wasm and copied stubs reverse lookup
+  // wasm code targets reverse lookup
   std::map<Address, uint32_t> wasm_targets_lookup_;
   // immovable builtins and runtime entries lookup
   std::map<Address, uint32_t> reference_table_lookup_;
-  std::map<Address, uint32_t> stub_lookup_;
   std::map<Address, uint32_t> builtin_lookup_;
 
   DISALLOW_COPY_AND_ASSIGN(NativeModuleSerializer);
@@ -233,21 +226,10 @@ NativeModuleSerializer::NativeModuleSerializer(Isolate* isolate,
   for (auto pair : native_module_->trampolines_) {
     v8::internal::Code* code = Code::GetCodeFromTargetAddress(pair.first);
     int builtin_index = code->builtin_index();
-    if (builtin_index >= 0) {
-      uint32_t tag = static_cast<uint32_t>(builtin_index);
-      builtin_lookup_.insert(std::make_pair(pair.second, tag));
-    }
+    DCHECK_GE(builtin_index, 0);
+    uint32_t tag = static_cast<uint32_t>(builtin_index);
+    builtin_lookup_.insert(std::make_pair(pair.second, tag));
   }
-}
-
-size_t NativeModuleSerializer::MeasureCopiedStubs() const {
-  size_t size = sizeof(uint32_t);  // number of stubs
-  for (auto pair : native_module_->trampolines_) {
-    v8::internal::Code* code = Code::GetCodeFromTargetAddress(pair.first);
-    int builtin_index = code->builtin_index();
-    if (builtin_index < 0) size += sizeof(uint32_t);  // stub key
-  }
-  return size;
 }
 
 size_t NativeModuleSerializer::MeasureCode(const WasmCode* code) const {
@@ -258,7 +240,7 @@ size_t NativeModuleSerializer::MeasureCode(const WasmCode* code) const {
 }
 
 size_t NativeModuleSerializer::Measure() const {
-  size_t size = kHeaderSize + MeasureCopiedStubs();
+  size_t size = kHeaderSize;
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   uint32_t total_fns = native_module_->function_count();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
@@ -271,26 +253,6 @@ size_t NativeModuleSerializer::Measure() const {
 void NativeModuleSerializer::WriteHeader(Writer* writer) {
   writer->Write(native_module_->function_count());
   writer->Write(native_module_->num_imported_functions());
-}
-
-void NativeModuleSerializer::WriteCopiedStubs(Writer* writer) {
-  // Write the number of stubs and their keys.
-  // TODO(all) Serialize the stubs as WasmCode.
-  size_t stubs_size = MeasureCopiedStubs();
-  // Get the stub count from the number of keys.
-  size_t num_stubs = (stubs_size - sizeof(uint32_t)) / sizeof(uint32_t);
-  writer->Write(static_cast<uint32_t>(num_stubs));
-  uint32_t stub_id = kFirstStubId;
-
-  for (auto pair : native_module_->trampolines_) {
-    v8::internal::Code* code = Code::GetCodeFromTargetAddress(pair.first);
-    int builtin_index = code->builtin_index();
-    if (builtin_index < 0) {
-      stub_lookup_.insert(std::make_pair(pair.second, stub_id));
-      writer->Write(code->stub_key());
-      ++stub_id;
-    }
-  }
 }
 
 void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
@@ -345,7 +307,7 @@ void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
     switch (mode) {
       case RelocInfo::CODE_TARGET: {
         Address orig_target = orig_iter.rinfo()->target_address();
-        uint32_t tag = EncodeBuiltinOrStub(orig_target);
+        uint32_t tag = EncodeBuiltin(orig_target);
         SetWasmCalleeTag(iter.rinfo(), tag);
       } break;
       case RelocInfo::WASM_CALL: {
@@ -377,21 +339,9 @@ void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
   }
 }
 
-uint32_t NativeModuleSerializer::EncodeBuiltinOrStub(Address address) {
-  auto builtin_iter = builtin_lookup_.find(address);
-  uint32_t tag = 0;
-  if (builtin_iter != builtin_lookup_.end()) {
-    uint32_t id = builtin_iter->second;
-    DCHECK_LT(id, std::numeric_limits<uint16_t>::max());
-    tag = id << 16;
-  } else {
-    auto stub_iter = stub_lookup_.find(address);
-    DCHECK(stub_iter != stub_lookup_.end());
-    uint32_t id = stub_iter->second;
-    DCHECK_LT(id, std::numeric_limits<uint16_t>::max());
-    tag = id & 0x0000FFFF;
-  }
-  return tag;
+uint32_t NativeModuleSerializer::EncodeBuiltin(Address address) {
+  DCHECK_EQ(1, builtin_lookup_.count(address));
+  return builtin_lookup_.find(address)->second;
 }
 
 bool NativeModuleSerializer::Write(Writer* writer) {
@@ -399,7 +349,6 @@ bool NativeModuleSerializer::Write(Writer* writer) {
   write_called_ = true;
 
   WriteHeader(writer);
-  WriteCopiedStubs(writer);
 
   uint32_t total_fns = native_module_->function_count();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
@@ -441,13 +390,10 @@ class V8_EXPORT_PRIVATE NativeModuleDeserializer {
  private:
   bool ReadHeader(Reader* reader);
   bool ReadCode(uint32_t fn_index, Reader* reader);
-  bool ReadStubs(Reader* reader);
-  Address GetTrampolineOrStubFromTag(uint32_t);
+  Address GetBuiltinTrampolineFromTag(uint32_t);
 
   Isolate* const isolate_;
   NativeModule* const native_module_;
-
-  std::vector<Address> stubs_;
   bool read_called_;
 
   DISALLOW_COPY_AND_ASSIGN(NativeModuleDeserializer);
@@ -462,7 +408,6 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
   read_called_ = true;
 
   if (!ReadHeader(reader)) return false;
-  if (!ReadStubs(reader)) return false;
   uint32_t total_fns = native_module_->function_count();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
@@ -476,18 +421,6 @@ bool NativeModuleDeserializer::ReadHeader(Reader* reader) {
   size_t imports = reader->Read<uint32_t>();
   return functions == native_module_->function_count() &&
          imports == native_module_->num_imported_functions();
-}
-
-bool NativeModuleDeserializer::ReadStubs(Reader* reader) {
-  size_t num_stubs = reader->Read<uint32_t>();
-  stubs_.reserve(num_stubs);
-  for (size_t i = 0; i < num_stubs; ++i) {
-    uint32_t key = reader->Read<uint32_t>();
-    v8::internal::Code* stub =
-        *(v8::internal::CodeStub::GetCode(isolate_, key).ToHandleChecked());
-    stubs_.push_back(native_module_->GetLocalAddressFor(handle(stub)));
-  }
-  return true;
 }
 
 bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
@@ -552,7 +485,7 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
       }
       case RelocInfo::CODE_TARGET: {
         uint32_t tag = GetWasmCalleeTag(iter.rinfo());
-        Address target = GetTrampolineOrStubFromTag(tag);
+        Address target = GetBuiltinTrampolineFromTag(tag);
         iter.rinfo()->set_target_address(target, SKIP_WRITE_BARRIER,
                                          SKIP_ICACHE_FLUSH);
         break;
@@ -593,15 +526,10 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
   return true;
 }
 
-Address NativeModuleDeserializer::GetTrampolineOrStubFromTag(uint32_t tag) {
-  if ((tag & 0x0000FFFF) == 0) {
-    int builtin_id = static_cast<int>(tag >> 16);
-    v8::internal::Code* builtin = isolate_->builtins()->builtin(builtin_id);
-    return native_module_->GetLocalAddressFor(handle(builtin));
-  } else {
-    DCHECK_EQ(tag & 0xFFFF0000, 0);
-    return stubs_[tag - kFirstStubId];
-  }
+Address NativeModuleDeserializer::GetBuiltinTrampolineFromTag(uint32_t tag) {
+  int builtin_id = static_cast<int>(tag);
+  v8::internal::Code* builtin = isolate_->builtins()->builtin(builtin_id);
+  return native_module_->GetLocalAddressFor(handle(builtin));
 }
 
 MaybeHandle<WasmModuleObject> DeserializeNativeModule(
