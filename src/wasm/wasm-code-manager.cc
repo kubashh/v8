@@ -331,7 +331,7 @@ NativeModule::NativeModule(uint32_t num_functions, uint32_t num_imports,
                            bool can_request_more, VirtualMemory* code_space,
                            WasmCodeManager* code_manager, ModuleEnv& env)
     : instance_id(next_id_.Increment(1)),
-      code_table_(num_functions),
+      num_functions_(num_functions),
       num_imported_functions_(num_imports),
       compilation_state_(NewCompilationState(
           reinterpret_cast<Isolate*>(code_manager->isolate_), env)),
@@ -339,31 +339,31 @@ NativeModule::NativeModule(uint32_t num_functions, uint32_t num_imports,
       wasm_code_manager_(code_manager),
       can_request_more_memory_(can_request_more),
       use_trap_handler_(env.use_trap_handler) {
+  if (num_functions > 0) {
+    code_table_.reset(new WasmCode*[num_functions]);
+    memset(code_table_.get(), 0, num_functions * sizeof(WasmCode*));
+  }
   VirtualMemory my_mem;
   owned_code_space_.push_back(my_mem);
   owned_code_space_.back().TakeControl(code_space);
   owned_code_.reserve(num_functions);
 }
 
-void NativeModule::ResizeCodeTableForTesting(size_t num_functions,
-                                             size_t max_functions) {
-  DCHECK_LE(num_functions, max_functions);
-  if (num_imported_functions_ == num_functions) {
-    // For some tests, the code table might have been initialized to store
-    // a number of imported functions on creation. If that is the case,
-    // we need to retroactively reserve the space.
-    DCHECK_EQ(code_table_.capacity(), num_imported_functions_);
-    DCHECK_EQ(code_table_.size(), num_imported_functions_);
-    DCHECK_EQ(num_functions, 1);
-    code_table_.reserve(max_functions);
-  } else {
-    DCHECK_GT(num_functions, function_count());
-    if (code_table_.capacity() == 0) {
-      code_table_.reserve(max_functions);
-    }
-    DCHECK_EQ(code_table_.capacity(), max_functions);
-    code_table_.resize(num_functions);
-  }
+void NativeModule::ReserveCodeTableForTesting(uint32_t max_functions) {
+  DCHECK_EQ(0, num_functions_);
+  WasmCode** new_table = new WasmCode*[max_functions];
+  memset(new_table, 0, max_functions * sizeof(*new_table));
+  code_table_.reset(new_table);
+}
+
+void NativeModule::SetNumFunctionsForTesting(uint32_t num_functions) {
+  num_functions_ = num_functions;
+}
+
+void NativeModule::SetCodeForTesting(uint32_t index, WasmCode* code) {
+  DCHECK_LT(index, num_functions_);
+  DCHECK_LT(num_imported_functions_, index);
+  code_table_[index] = code;
 }
 
 WasmCode* NativeModule::AddOwnedCode(
@@ -423,8 +423,7 @@ WasmCode* NativeModule::AddInterpreterEntry(Handle<Code> code, uint32_t index) {
 
 void NativeModule::SetLazyBuiltin(Handle<Code> code) {
   WasmCode* lazy_builtin = AddAnonymousCode(code, WasmCode::kLazyStub);
-  for (uint32_t i = num_imported_functions(), e = function_count(); i < e;
-       ++i) {
+  for (uint32_t i = num_imported_functions_, e = num_functions_; i < e; ++i) {
     code_table_[i] = lazy_builtin;
   }
 }
@@ -711,22 +710,17 @@ Address NativeModule::GetCallTargetForFunction(uint32_t func_index) {
     return wasm_code->instruction_start();
   }
 
-#if DEBUG
-  auto num_imported_functions =
-      shared_module_data()->module()->num_imported_functions;
-  if (func_index < num_imported_functions) {
-    DCHECK(!wasm_code->IsAnonymous());
-  }
-#endif
+  DCHECK_IMPLIES(func_index < num_imported_functions_,
+                 !wasm_code->IsAnonymous());
   if (!wasm_code->IsAnonymous()) {
     // If the function wasn't imported, its index should match.
-    DCHECK_IMPLIES(func_index >= num_imported_functions,
+    DCHECK_IMPLIES(func_index >= num_imported_functions_,
                    func_index == wasm_code->index());
     return wasm_code->instruction_start();
   }
   if (!lazy_compile_stubs_.get()) {
     lazy_compile_stubs_ =
-        base::make_unique<std::vector<WasmCode*>>(function_count());
+        base::make_unique<std::vector<WasmCode*>>(num_functions_);
   }
   WasmCode* cloned_code = lazy_compile_stubs_.get()->at(func_index);
   if (cloned_code == nullptr) {
@@ -771,8 +765,7 @@ WasmCode* NativeModule::CloneCode(const WasmCode* original_code,
 }
 
 void NativeModule::UnpackAndRegisterProtectedInstructions() {
-  for (uint32_t i = num_imported_functions(), e = function_count(); i < e;
-       ++i) {
+  for (uint32_t i = num_imported_functions_, e = num_functions_; i < e; ++i) {
     WasmCode* wasm_code = code(i);
     if (wasm_code == nullptr) continue;
     wasm_code->RegisterTrapHandlerData();
@@ -780,8 +773,7 @@ void NativeModule::UnpackAndRegisterProtectedInstructions() {
 }
 
 void NativeModule::ReleaseProtectedInstructions() {
-  for (uint32_t i = num_imported_functions(), e = function_count(); i < e;
-       ++i) {
+  for (uint32_t i = num_imported_functions_, e = num_functions_; i < e; ++i) {
     WasmCode* wasm_code = code(i);
     if (wasm_code->HasTrapHandlerIndex()) {
       CHECK_LT(wasm_code->trap_handler_index(),
