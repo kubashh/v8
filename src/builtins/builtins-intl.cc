@@ -549,11 +549,13 @@ BUILTIN(LocaleConstructor) {
                                          Object::ToObject(isolate, options));
     }
 
-    if (!JSLocale::InitializeLocale(isolate, Handle<JSLocale>::cast(result),
-                                    locale_string, options_object)) {
+    Maybe<bool> error = JSLocale::InitializeLocale(
+        isolate, Handle<JSLocale>::cast(result), locale_string, options_object);
+    if (!error.FromJust()) {
       THROW_NEW_ERROR_RETURN_FAILURE(
           isolate, NewTypeError(MessageTemplate::kLocaleBadParameters));
     }
+    // DCHECK(error.FromJust());
 
     return *result;
   }
