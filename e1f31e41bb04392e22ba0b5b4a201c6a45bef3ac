@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "f0e67b92_210c4e4b",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-18T07:20:01Z",
+      "side": 1,
+      "message": "No, tier should stay correctly typed. Just the size_t are not necessary.",
+      "parentUuid": "a36be359_ed557f40",
+      "revId": "e1f31e41bb04392e22ba0b5b4a201c6a45bef3ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aaa4bd7c_7604ff2e",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 8
