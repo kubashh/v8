@@ -5,6 +5,7 @@
 #include "src/wasm/wasm-serialization.h"
 
 #include "src/assembler-inl.h"
+#include "src/base/safe_conversions.h"
 #include "src/code-stubs.h"
 #include "src/external-reference-table.h"
 #include "src/objects-inl.h"
@@ -167,21 +168,67 @@ uint32_t GetWasmCalleeTag(RelocInfo* rinfo) {
 #endif
 }
 
-constexpr size_t kHeaderSize =
-    sizeof(uint32_t) +  // total wasm function count
-    sizeof(uint32_t);  // imported functions - i.e. index of first wasm function
+struct Header {
+  uint32_t total_function_count;
+  uint32_t imported_function_count;
 
-constexpr size_t kCodeHeaderSize =
-    sizeof(size_t) +         // size of code section
-    sizeof(size_t) +         // offset of constant pool
-    sizeof(size_t) +         // offset of safepoint table
-    sizeof(size_t) +         // offset of handler table
-    sizeof(uint32_t) +       // stack slots
-    sizeof(size_t) +         // code size
-    sizeof(size_t) +         // reloc size
-    sizeof(size_t) +         // source positions size
-    sizeof(size_t) +         // protected instructions size
-    sizeof(WasmCode::Tier);  // tier
+  static constexpr size_t kSerializedSize =
+      sizeof(total_function_count) + sizeof(imported_function_count);
+
+  void Write(Writer* writer) {
+    writer->Write(total_function_count);
+    writer->Write(imported_function_count);
+  }
+  void Read(Reader* reader) {
+    total_function_count = reader->Read<uint32_t>();
+    imported_function_count = reader->Read<uint32_t>();
+  }
+};
+
+struct CodeHeader {
+  uint32_t code_section_size;
+  uint32_t constant_pool_offset;
+  uint32_t safepoint_table_offset;
+  uint32_t handler_table_offset;
+  uint32_t code_size;
+  uint32_t reloc_size;
+  uint32_t source_positions_size;
+  uint32_t protected_instructions_size;
+  uint32_t stack_slots;
+  WasmCode::Tier tier;
+
+  static constexpr size_t kSerializedSize =
+      sizeof(code_section_size) + sizeof(constant_pool_offset) +
+      sizeof(safepoint_table_offset) + sizeof(handler_table_offset) +
+      sizeof(code_size) + sizeof(reloc_size) + sizeof(source_positions_size) +
+      sizeof(protected_instructions_size) + sizeof(stack_slots) + sizeof(tier);
+
+  void Write(Writer* writer) {
+    writer->Write(code_section_size);
+    writer->Write(constant_pool_offset);
+    writer->Write(safepoint_table_offset);
+    writer->Write(handler_table_offset);
+    writer->Write(code_size);
+    writer->Write(reloc_size);
+    writer->Write(source_positions_size);
+    writer->Write(protected_instructions_size);
+    writer->Write(stack_slots);
+    writer->Write(tier);
+  }
+
+  void Read(Reader* reader) {
+    code_section_size = reader->Read<uint32_t>();
+    constant_pool_offset = reader->Read<uint32_t>();
+    safepoint_table_offset = reader->Read<uint32_t>();
+    handler_table_offset = reader->Read<uint32_t>();
+    code_size = reader->Read<uint32_t>();
+    reloc_size = reader->Read<uint32_t>();
+    source_positions_size = reader->Read<uint32_t>();
+    protected_instructions_size = reader->Read<uint32_t>();
+    stack_slots = reader->Read<uint32_t>();
+    tier = reader->Read<WasmCode::Tier>();
+  }
+};
 
 }  // namespace
 
@@ -199,7 +246,8 @@ class V8_EXPORT_PRIVATE NativeModuleSerializer {
 
   void WriteHeader(Writer* writer);
   void WriteCopiedStubs(Writer* writer);
-  void WriteCode(const WasmCode*, Writer* writer);
+  void WriteCodeHeader(Writer* writer, const WasmCode* code);
+  void WriteCode(Writer* writer, const WasmCode* code);
 
   uint32_t EncodeBuiltinOrStub(Address);
 
@@ -258,19 +306,23 @@ size_t NativeModuleSerializer::MeasureCode(const WasmCode* code) const {
 }
 
 size_t NativeModuleSerializer::Measure() const {
-  size_t size = kHeaderSize + MeasureCopiedStubs();
+  size_t size = Header::kSerializedSize + MeasureCopiedStubs();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   uint32_t total_fns = native_module_->function_count();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
-    size += kCodeHeaderSize;
+    size += CodeHeader::kSerializedSize;
+  }
+  for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
     size += MeasureCode(native_module_->code(i));
   }
   return size;
 }
 
 void NativeModuleSerializer::WriteHeader(Writer* writer) {
-  writer->Write(native_module_->function_count());
-  writer->Write(native_module_->num_imported_functions());
+  Header header;
+  header.total_function_count = native_module_->function_count();
+  header.imported_function_count = native_module_->num_imported_functions();
+  header.Write(writer);
 }
 
 void NativeModuleSerializer::WriteCopiedStubs(Writer* writer) {
@@ -279,7 +331,7 @@ void NativeModuleSerializer::WriteCopiedStubs(Writer* writer) {
   size_t stubs_size = MeasureCopiedStubs();
   // Get the stub count from the number of keys.
   size_t num_stubs = (stubs_size - sizeof(uint32_t)) / sizeof(uint32_t);
-  writer->Write(static_cast<uint32_t>(num_stubs));
+  writer->Write(base::checked_cast<uint32_t>(num_stubs));
   uint32_t stub_id = kFirstStubId;
 
   for (auto pair : native_module_->trampolines_) {
@@ -293,23 +345,32 @@ void NativeModuleSerializer::WriteCopiedStubs(Writer* writer) {
   }
 }
 
-void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
-  // Write the size of the entire code section, followed by the code header.
-  writer->Write(MeasureCode(code));
-  writer->Write(code->constant_pool_offset());
-  writer->Write(code->safepoint_table_offset());
-  writer->Write(code->handler_table_offset());
-  writer->Write(code->stack_slots());
-  writer->Write(code->instructions().size());
-  writer->Write(code->reloc_info().size());
-  writer->Write(code->source_positions().size());
-  writer->Write(code->protected_instructions().size());
-  writer->Write(code->tier());
+void NativeModuleSerializer::WriteCodeHeader(Writer* writer,
+                                             const WasmCode* code) {
+  CodeHeader header;
+  header.code_section_size = base::checked_cast<uint32_t>(MeasureCode(code));
+  header.constant_pool_offset =
+      base::checked_cast<uint32_t>(code->constant_pool_offset());
+  header.safepoint_table_offset =
+      base::checked_cast<uint32_t>(code->safepoint_table_offset());
+  header.handler_table_offset =
+      base::checked_cast<uint32_t>(code->handler_table_offset());
+  header.code_size = base::checked_cast<uint32_t>(code->instructions().size());
+  header.reloc_size = base::checked_cast<uint32_t>(code->reloc_info().size());
+  header.source_positions_size =
+      base::checked_cast<uint32_t>(code->source_positions().size());
+  header.protected_instructions_size =
+      base::checked_cast<uint32_t>(code->protected_instructions().size());
+  header.stack_slots = code->stack_slots();
+  header.tier = code->tier();
+  header.Write(writer);
+}
 
+void NativeModuleSerializer::WriteCode(Writer* writer, const WasmCode* code) {
+  size_t code_size = code->instructions().size();
   // Get a pointer to the destination buffer, to hold relocated code.
   byte* serialized_code_start = writer->current_buffer().start();
   byte* code_start = serialized_code_start;
-  size_t code_size = code->instructions().size();
   writer->Skip(code_size);
   // Write the reloc info, source positions, and protected code.
   writer->WriteVector(code->reloc_info());
@@ -404,8 +465,10 @@ bool NativeModuleSerializer::Write(Writer* writer) {
   uint32_t total_fns = native_module_->function_count();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
-    const WasmCode* code = native_module_->code(i);
-    WriteCode(code, writer);
+    WriteCodeHeader(writer, native_module_->code(i));
+  }
+  for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
+    WriteCode(writer, native_module_->code(i));
   }
   return true;
 }
@@ -440,7 +503,8 @@ class V8_EXPORT_PRIVATE NativeModuleDeserializer {
 
  private:
   bool ReadHeader(Reader* reader);
-  bool ReadCode(uint32_t fn_index, Reader* reader);
+  CodeHeader ReadCodeHeader(Reader* reader);
+  bool ReadCode(Reader* reader, const CodeHeader& header, uint32_t fn_index);
   bool ReadStubs(Reader* reader);
   Address GetTrampolineOrStubFromTag(uint32_t);
 
@@ -457,25 +521,13 @@ NativeModuleDeserializer::NativeModuleDeserializer(Isolate* isolate,
                                                    NativeModule* native_module)
     : isolate_(isolate), native_module_(native_module), read_called_(false) {}
 
-bool NativeModuleDeserializer::Read(Reader* reader) {
-  DCHECK(!read_called_);
-  read_called_ = true;
-
-  if (!ReadHeader(reader)) return false;
-  if (!ReadStubs(reader)) return false;
-  uint32_t total_fns = native_module_->function_count();
-  uint32_t first_wasm_fn = native_module_->num_imported_functions();
-  for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
-    if (!ReadCode(i, reader)) return false;
-  }
-  return reader->current_size() == 0;
-}
-
 bool NativeModuleDeserializer::ReadHeader(Reader* reader) {
-  size_t functions = reader->Read<uint32_t>();
-  size_t imports = reader->Read<uint32_t>();
-  return functions == native_module_->function_count() &&
-         imports == native_module_->num_imported_functions();
+  Header header;
+  header.Read(reader);
+
+  return header.total_function_count == native_module_->function_count() &&
+         header.imported_function_count ==
+             native_module_->num_imported_functions();
 }
 
 bool NativeModuleDeserializer::ReadStubs(Reader* reader) {
@@ -490,35 +542,32 @@ bool NativeModuleDeserializer::ReadStubs(Reader* reader) {
   return true;
 }
 
-bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
-  size_t code_section_size = reader->Read<size_t>();
-  USE(code_section_size);
-  size_t constant_pool_offset = reader->Read<size_t>();
-  size_t safepoint_table_offset = reader->Read<size_t>();
-  size_t handler_table_offset = reader->Read<size_t>();
-  uint32_t stack_slot_count = reader->Read<uint32_t>();
-  size_t code_size = reader->Read<size_t>();
-  size_t reloc_size = reader->Read<size_t>();
-  size_t source_position_size = reader->Read<size_t>();
-  size_t protected_instructions_size = reader->Read<size_t>();
-  WasmCode::Tier tier = reader->Read<WasmCode::Tier>();
+CodeHeader NativeModuleDeserializer::ReadCodeHeader(Reader* reader) {
+  CodeHeader header;
+  header.Read(reader);
+  return header;
+}
 
-  Vector<const byte> code_buffer = {reader->current_location(), code_size};
-  reader->Skip(code_size);
+bool NativeModuleDeserializer::ReadCode(Reader* reader,
+                                        const CodeHeader& header,
+                                        uint32_t fn_index) {
+  Vector<const byte> code_buffer = {reader->current_location(),
+                                    header.code_size};
+  reader->Skip(header.code_size);
 
   std::unique_ptr<byte[]> reloc_info;
-  if (reloc_size > 0) {
-    reloc_info.reset(new byte[reloc_size]);
-    reader->ReadVector({reloc_info.get(), reloc_size});
+  if (header.reloc_size > 0) {
+    reloc_info.reset(new byte[header.reloc_size]);
+    reader->ReadVector({reloc_info.get(), header.reloc_size});
   }
   std::unique_ptr<byte[]> source_pos;
-  if (source_position_size > 0) {
-    source_pos.reset(new byte[source_position_size]);
-    reader->ReadVector({source_pos.get(), source_position_size});
+  if (header.source_positions_size > 0) {
+    source_pos.reset(new byte[header.source_positions_size]);
+    reader->ReadVector({source_pos.get(), header.source_positions_size});
   }
   std::unique_ptr<ProtectedInstructions> protected_instructions(
-      new ProtectedInstructions(protected_instructions_size));
-  if (protected_instructions_size > 0) {
+      new ProtectedInstructions(header.protected_instructions_size));
+  if (header.protected_instructions_size > 0) {
     size_t size = sizeof(trap_handler::ProtectedInstructionData) *
                   protected_instructions->size();
     Vector<byte> data(reinterpret_cast<byte*>(protected_instructions->data()),
@@ -526,11 +575,11 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
     reader->ReadVector(data);
   }
   WasmCode* ret = native_module_->AddOwnedCode(
-      code_buffer, std::move(reloc_info), reloc_size, std::move(source_pos),
-      source_position_size, Just(fn_index), WasmCode::kFunction,
-      constant_pool_offset, stack_slot_count, safepoint_table_offset,
-      handler_table_offset, std::move(protected_instructions), tier,
-      WasmCode::kNoFlushICache);
+      code_buffer, std::move(reloc_info), header.reloc_size,
+      std::move(source_pos), header.source_positions_size, Just(fn_index),
+      WasmCode::kFunction, header.constant_pool_offset, header.stack_slots,
+      header.safepoint_table_offset, header.handler_table_offset,
+      std::move(protected_instructions), header.tier, WasmCode::kNoFlushICache);
   native_module_->code_table_[fn_index] = ret;
 
   // now relocate the code
@@ -602,6 +651,24 @@ Address NativeModuleDeserializer::GetTrampolineOrStubFromTag(uint32_t tag) {
     DCHECK_EQ(tag & 0xFFFF0000, 0);
     return stubs_[tag - kFirstStubId];
   }
+}
+
+bool NativeModuleDeserializer::Read(Reader* reader) {
+  DCHECK(!read_called_);
+  read_called_ = true;
+
+  if (!ReadHeader(reader)) return false;
+  if (!ReadStubs(reader)) return false;
+  uint32_t total_fns = native_module_->function_count();
+  uint32_t first_wasm_fn = native_module_->num_imported_functions();
+  std::vector<CodeHeader> headers(total_fns - first_wasm_fn);
+  for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
+    headers[i - first_wasm_fn] = ReadCodeHeader(reader);
+  }
+  for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
+    if (!ReadCode(reader, headers[i - first_wasm_fn], i)) return false;
+  }
+  return reader->current_size() == 0;
 }
 
 MaybeHandle<WasmModuleObject> DeserializeNativeModule(
