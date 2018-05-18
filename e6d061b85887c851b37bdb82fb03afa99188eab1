@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2758b805_c30b403d",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-05-18T10:56:37Z",
+      "side": 1,
+      "message": "What about factoring out this offset calculation into a local helper?",
+      "revId": "e6d061b85887c851b37bdb82fb03afa99188eab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5a2d5e0_30a6886d",
+        "filename": "src/arm64/macro-assembler-arm64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-05-18T10:56:37Z",
+      "side": 1,
+      "message": "Comment might read better:\n\n\"We should not use near calls or jumps for JS-\u003eWASM calls and calls to external references, since the code spaces are not guaranteed to be close to each other.\"",
+      "revId": "e6d061b85887c851b37bdb82fb03afa99188eab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
