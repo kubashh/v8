@@ -1552,8 +1552,8 @@ void WasmCompiledModule::LogWasmCodes(Isolate* isolate) {
 
   wasm::NativeModule* native_module = GetNativeModule();
   if (native_module == nullptr) return;
-  const uint32_t number_of_codes = native_module->function_count();
-  for (uint32_t i = 0; i < number_of_codes; i++) {
+  const uint32_t num_functions = native_module->num_functions();
+  for (uint32_t i = 0; i < num_functions; i++) {
     wasm::WasmCode* code = native_module->code(i);
     if (code == nullptr) continue;
     code->LogCode(isolate);
