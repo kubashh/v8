@@ -16,6 +16,24 @@
       "revId": "ac807a7fc5925c2958b99708e18123e8cd4ba4ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5de7c70_739c4ef8",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2562,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-18T11:05:35Z",
+      "side": 1,
+      "message": "It can only be kNoCodePosition (which is -1), or it must be \u003e0.\nBut I think it\u0027s not really needed to check this here.\nWould you prefer a simple\nif (position !\u003d wasm::kNoCodePosition) {\n  SetSourcePosition(call, position);\n}\nwithout any DCHECK?",
+      "parentUuid": "a6f7b7e1_2c63c06a",
+      "revId": "ac807a7fc5925c2958b99708e18123e8cd4ba4ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
