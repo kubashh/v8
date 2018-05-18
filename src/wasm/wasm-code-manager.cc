@@ -10,7 +10,6 @@
 #include "src/base/atomic-utils.h"
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
-#include "src/code-stubs.h"
 #include "src/codegen.h"
 #include "src/disassembler.h"
 #include "src/globals.h"
