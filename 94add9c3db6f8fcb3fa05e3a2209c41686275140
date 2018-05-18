@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12c7e34d_6eb396d5",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-18T12:44:56Z",
+      "side": 1,
+      "message": "Megamorphic here \u0026 everywhere",
+      "revId": "94add9c3db6f8fcb3fa05e3a2209c41686275140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
