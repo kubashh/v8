@@ -450,26 +450,26 @@ namespace internal {
   CPP(DataViewPrototypeGetBuffer)                                              \
   CPP(DataViewPrototypeGetByteLength)                                          \
   CPP(DataViewPrototypeGetByteOffset)                                          \
-  CPP(DataViewPrototypeGetInt8)                                                \
-  CPP(DataViewPrototypeSetInt8)                                                \
-  CPP(DataViewPrototypeGetUint8)                                               \
-  CPP(DataViewPrototypeSetUint8)                                               \
-  CPP(DataViewPrototypeGetInt16)                                               \
-  CPP(DataViewPrototypeSetInt16)                                               \
-  CPP(DataViewPrototypeGetUint16)                                              \
-  CPP(DataViewPrototypeSetUint16)                                              \
-  CPP(DataViewPrototypeGetInt32)                                               \
-  CPP(DataViewPrototypeSetInt32)                                               \
-  CPP(DataViewPrototypeGetUint32)                                              \
-  CPP(DataViewPrototypeSetUint32)                                              \
-  CPP(DataViewPrototypeGetFloat32)                                             \
-  CPP(DataViewPrototypeSetFloat32)                                             \
-  CPP(DataViewPrototypeGetFloat64)                                             \
-  CPP(DataViewPrototypeSetFloat64)                                             \
-  CPP(DataViewPrototypeGetBigInt64)                                            \
-  CPP(DataViewPrototypeSetBigInt64)                                            \
-  CPP(DataViewPrototypeGetBigUint64)                                           \
-  CPP(DataViewPrototypeSetBigUint64)                                           \
+  CPP(CppDataViewPrototypeGetInt8)                                             \
+  CPP(CppDataViewPrototypeSetInt8)                                             \
+  CPP(CppDataViewPrototypeGetUint8)                                            \
+  CPP(CppDataViewPrototypeSetUint8)                                            \
+  CPP(CppDataViewPrototypeGetInt16)                                            \
+  CPP(CppDataViewPrototypeSetInt16)                                            \
+  CPP(CppDataViewPrototypeGetUint16)                                           \
+  CPP(CppDataViewPrototypeSetUint16)                                           \
+  CPP(CppDataViewPrototypeGetInt32)                                            \
+  CPP(CppDataViewPrototypeSetInt32)                                            \
+  CPP(CppDataViewPrototypeGetUint32)                                           \
+  CPP(CppDataViewPrototypeSetUint32)                                           \
+  CPP(CppDataViewPrototypeGetFloat32)                                          \
+  CPP(CppDataViewPrototypeSetFloat32)                                          \
+  CPP(CppDataViewPrototypeGetFloat64)                                          \
+  CPP(CppDataViewPrototypeSetFloat64)                                          \
+  CPP(CppDataViewPrototypeGetBigInt64)                                         \
+  CPP(CppDataViewPrototypeSetBigInt64)                                         \
+  CPP(CppDataViewPrototypeGetBigUint64)                                        \
+  CPP(CppDataViewPrototypeSetBigUint64)                                        \
                                                                                \
   /* Date */                                                                   \
   /* ES #sec-date-constructor */                                               \
