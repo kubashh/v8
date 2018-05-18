@@ -129,7 +129,7 @@ BUILTIN(DataViewPrototypeGetByteOffset) {
   return data_view->byte_offset();
 }
 
-namespace {
+// namespace {
 
 bool NeedToFlipBytes(bool is_little_endian) {
 #ifdef V8_TARGET_LITTLE_ENDIAN
@@ -343,10 +343,10 @@ MaybeHandle<Object> SetViewValue(Isolate* isolate, Handle<JSDataView> data_view,
   return isolate->factory()->undefined_value();
 }
 
-}  // namespace
+//}  // namespace
 
 #define DATA_VIEW_PROTOTYPE_GET(Type, type)                                \
-  BUILTIN(DataViewPrototypeGet##Type) {                                    \
+  BUILTIN(CppDataViewPrototypeGet##Type) {                                 \
     HandleScope scope(isolate);                                            \
     CHECK_RECEIVER(JSDataView, data_view, "DataView.prototype.get" #Type); \
     Handle<Object> byte_offset = args.atOrUndefined(isolate, 1);           \
@@ -372,7 +372,7 @@ DATA_VIEW_PROTOTYPE_GET(BigUint64, uint64_t)
 #undef DATA_VIEW_PROTOTYPE_GET
 
 #define DATA_VIEW_PROTOTYPE_SET(Type, type)                                \
-  BUILTIN(DataViewPrototypeSet##Type) {                                    \
+  BUILTIN(CppDataViewPrototypeSet##Type) {                                 \
     HandleScope scope(isolate);                                            \
     CHECK_RECEIVER(JSDataView, data_view, "DataView.prototype.set" #Type); \
     Handle<Object> byte_offset = args.atOrUndefined(isolate, 1);           \
