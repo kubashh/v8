@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3d5ea3a_1500acef",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-18T12:50:05Z",
+      "side": 1,
+      "message": "I think \"DCHECK(code-\u003eis_builtin())\" would read nicer.",
+      "revId": "3a68a31921a11ccb591c62abdba66125aa6956c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fb7ee91_3bdb1188",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-05-18T12:50:05Z",
+      "side": 1,
+      "message": "I think writing this whole method in two lines reads simpler:\n  DCHECK_EQ(1, builtin_lookup_.count(address));\n  return builtin_lookup_.find(address)-\u003esecond;",
+      "revId": "3a68a31921a11ccb591c62abdba66125aa6956c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
