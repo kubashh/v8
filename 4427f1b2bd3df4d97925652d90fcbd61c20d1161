@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c666f5ac_8f50bad3",
+        "filename": "src/compiler/s390/code-generator-s390.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-05-19T14:24:35Z",
+      "side": 1,
+      "message": "We can use lcr(result, value);",
+      "range": {
+        "startLine": 2736,
+        "startChar": 0,
+        "endLine": 2736,
+        "endChar": 30
+      },
+      "revId": "4427f1b2bd3df4d97925652d90fcbd61c20d1161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
