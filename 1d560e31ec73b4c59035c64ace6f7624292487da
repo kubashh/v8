@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59ed59e7_c3d11552",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-21T16:02:49Z",
+      "side": 1,
+      "message": "We generally prefer commit messages having a short subject followed by the summary:\n\nhttp://dev.chromium.org/developers/contributing-code#TOC-Writing-commit-descriptions",
+      "revId": "1d560e31ec73b4c59035c64ace6f7624292487da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
