@@ -1818,20 +1818,25 @@ TNode<JSArray> StringBuiltinsAssembler::StringToArray(
                     [=] { return subject_length; });
     TNode<IntPtrT> length = SmiToIntPtr(length_smi);
 
+    TNode<FixedArray> elements =
+        AllocateFixedArray(PACKED_ELEMENTS, length_smi,
+                           AllocationFlag::kAllowLargeObjectAllocation);
     ToDirectStringAssembler to_direct(state(), subject_string);
     to_direct.TryToDirect(&call_runtime);
+    // Don't allocate anything while {string_data} is live!
     TNode<RawPtrT> string_data =
         UncheckedCast<RawPtrT>(to_direct.PointerToData(&call_runtime));
     TNode<IntPtrT> string_data_offset = to_direct.offset();
     TNode<Object> cache = LoadRoot(Heap::kSingleCharacterStringCacheRootIndex);
 
     Label fill_thehole_and_call_runtime(this, Label::kDeferred);
-    TNode<FixedArray> elements =
-        AllocateFixedArray(PACKED_ELEMENTS, length_smi,
-                           AllocationFlag::kAllowLargeObjectAllocation);
     BuildFastLoop(
         IntPtrConstant(0), length,
         [&](Node* index) {
+          // TODO(jkummerow): Implement a CSA version of DisallowHeapAllocation
+          // and use that to guard ToDirectStringAssembler.PointerToData().
+          CSA_ASSERT(this, WordEqual(to_direct.PointerToData(&call_runtime),
+                                     string_data));
           TNode<Int32T> char_code =
               UncheckedCast<Int32T>(Load(MachineType::Uint8(), string_data,
                                          IntPtrAdd(index, string_data_offset)));
