@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0190fc57_706a6680",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-22T14:45:49Z",
+      "side": 1,
+      "message": "No particular reason, I\u0027ve followed the way it was done in function below, LowerPack. Done",
+      "parentUuid": "8876ab06_a19b8e39",
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66ca8b2c_ff7f99cd",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c357116d_a9db7594",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-22T14:45:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66ca8b2c_ff7f99cd",
+      "range": {
+        "startLine": 691,
+        "startChar": 2,
+        "endLine": 691,
+        "endChar": 44
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "925cf257_2c5e42c5",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-22T14:45:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe0d424f_581bd26c",
+      "range": {
+        "startLine": 692,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 10
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3542ed7_fdddb3ba",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 2
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "8532f73e_8f12686a",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-22T14:45:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3542ed7_fdddb3ba",
+      "range": {
+        "startLine": 695,
+        "startChar": 48,
+        "endLine": 695,
+        "endChar": 50
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a058858_51d28550",
         "filename": "src/compiler/simd-scalar-lowering.h",
         "patchSetId": 2
@@ -102,6 +192,24 @@
       "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "564719b4_2d5e770e",
+        "filename": "src/compiler/simd-scalar-lowering.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-22T14:45:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a058858_51d28550",
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
