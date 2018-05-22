@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8876ab06_a19b8e39",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-05-22T13:26:11Z",
+      "side": 1,
+      "message": "Is there a reason why you don\u0027t just allocate this array on the stack?\nNode* rep_node[num_lanes]?",
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ca8b2c_ff7f99cd",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-05-22T13:26:11Z",
+      "side": 1,
+      "message": "The shift depends on the input type, not on the output type, does it not? I think it would be better therefore to use `input_rep_type` in the condition here instead of `output_rep_type`.",
+      "range": {
+        "startLine": 691,
+        "startChar": 2,
+        "endLine": 691,
+        "endChar": 44
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe0d424f_581bd26c",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-05-22T13:26:11Z",
+      "side": 1,
+      "message": "I think it would be better to use DCHECK_EQ here, because it produces better error messages.",
+      "range": {
+        "startLine": 692,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 10
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3542ed7_fdddb3ba",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-05-22T13:26:11Z",
+      "side": 1,
+      "message": "just make 2 DCHECKs here instead of one. It\u0027s easier to read, and the error message is better in case it goes wrong. Also, please use DCHECK_EQ",
+      "range": {
+        "startLine": 695,
+        "startChar": 48,
+        "endLine": 695,
+        "endChar": 50
+      },
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a058858_51d28550",
+        "filename": "src/compiler/simd-scalar-lowering.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-05-22T13:26:11Z",
+      "side": 1,
+      "message": "hmm, since the function above is called LowerConvertFromFloat, maybe this one should be called LowerConvertFromInt?",
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
