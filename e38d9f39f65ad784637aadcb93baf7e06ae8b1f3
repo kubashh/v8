@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b78c3ab_be8bcd5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Please put this comment also into the code (e.g. next to the declaration of ImportRegisterFile or a similar location).",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "add8d32d_0af7808e",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Maybe we should rename this field to ParametersAndRegisterFile now?",
+      "range": {
+        "startLine": 525,
+        "startChar": 52,
+        "endLine": 525,
+        "endChar": 71
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ed9472d_bbf12574",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Nit: please swap operands.",
+      "range": {
+        "startLine": 2943,
+        "startChar": 32,
+        "endLine": 2943,
+        "endChar": 68
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96e51976_980e29db",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Does this equal formal_parameter_count on SFI?",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbd1b775_0568c4ff",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "This code is copied from below, but I don\u0027t understand why the DCHECK is inside the conditional rather than outside (preceding the if).",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e520528_b273bd4f",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Nit: Please swap the operands.",
+      "range": {
+        "startLine": 566,
+        "startChar": 57,
+        "endLine": 566,
+        "endChar": 75
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32b41910_0997c1ea",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "I find this naming a little confusing. I think that what is called reg_file_index should be called index, and what is called index should be called reg_file_index.",
+      "range": {
+        "startLine": 1658,
+        "startChar": 12,
+        "endLine": 1658,
+        "endChar": 26
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf4aa9a5_12602cdb",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Nit: Could you swap the order here? Feels more natural the other way around.",
+      "range": {
+        "startLine": 1658,
+        "startChar": 39,
+        "endLine": 1658,
+        "endChar": 68
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5a26ab_f5333047",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "Nit: Swap here too.",
+      "range": {
+        "startLine": 1693,
+        "startChar": 37,
+        "endLine": 1693,
+        "endChar": 66
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcdbd422_0f57585c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-22T19:54:40Z",
+      "side": 1,
+      "message": "file",
+      "range": {
+        "startLine": 3000,
+        "startChar": 42,
+        "endLine": 3000,
+        "endChar": 47
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
