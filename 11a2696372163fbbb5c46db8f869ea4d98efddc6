@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68fd8f04_1ed55c3f",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-05-23T10:02:44Z",
+      "side": 1,
+      "message": "To keep this symmetric, I think we should also add a case for types_have_common_values\u003cMaybeObject, U\u003e. Is there a reason why the arguments get flipped in the recursion?",
+      "range": {
+        "startLine": 365,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 2
+      },
+      "revId": "11a2696372163fbbb5c46db8f869ea4d98efddc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
