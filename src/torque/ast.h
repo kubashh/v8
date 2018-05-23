@@ -427,8 +427,9 @@ struct DebugStatement : Statement {
 
 struct AssertStatement : Statement {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(AssertStatement)
-  AssertStatement(SourcePosition p, Expression* e, const std::string& s)
-      : Statement(kKind, p), expression(e), source(s) {}
+  AssertStatement(SourcePosition p, bool c, Expression* e, const std::string& s)
+      : Statement(kKind, p), is_check(c), expression(e), source(s) {}
+  bool is_check;
   Expression* expression;
   std::string source;
 };

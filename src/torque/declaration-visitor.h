@@ -115,9 +115,11 @@ class DeclarationVisitor : public FileVisitor {
 
   void Visit(DebugStatement* stmt) {}
   void Visit(AssertStatement* stmt) {
+    bool do_check = stmt->is_check;
 #if defined(DEBUG)
-    DeclareExpressionForBranch(stmt->expression);
+    do_check = true;
 #endif
+    if (do_check) DeclareExpressionForBranch(stmt->expression);
   }
 
   void Visit(VarDeclarationStatement* stmt) {

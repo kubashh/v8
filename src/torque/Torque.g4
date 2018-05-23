@@ -37,6 +37,7 @@ IS: 'is';
 LET: 'let';
 EXTERN: 'extern';
 ASSERT: 'assert';
+CHECK_TOKEN: 'check';
 UNREACHABLE_TOKEN: 'unreachable';
 DEBUG_TOKEN: 'debug';
 
@@ -241,7 +242,7 @@ gotoStatement: GOTO labelReference argumentList?;
 handlerWithStatement: (CATCH IDENTIFIER | LABEL labelDeclaration) statementBlock;
 tryCatch: TRY statementBlock handlerWithStatement+;
 
-diagnosticStatement: (ASSERT '(' expression ')') | UNREACHABLE_TOKEN | DEBUG_TOKEN;
+diagnosticStatement: ((ASSERT | CHECK_TOKEN) '(' expression ')') | UNREACHABLE_TOKEN | DEBUG_TOKEN;
 
 statement : variableDeclarationWithInitialization ';'
           | helperCallStatement ';'
