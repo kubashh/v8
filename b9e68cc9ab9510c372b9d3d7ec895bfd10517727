@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8979f4ad_7b445e84",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-05-23T11:40:33Z",
+      "side": 1,
+      "message": "Had to turn it back, because of problem on msvc trybot",
+      "parentUuid": "0190fc57_706a6680",
+      "revId": "b9e68cc9ab9510c372b9d3d7ec895bfd10517727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66ca8b2c_ff7f99cd",
         "filename": "src/compiler/simd-scalar-lowering.cc",
         "patchSetId": 2
