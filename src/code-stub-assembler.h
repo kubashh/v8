@@ -678,7 +678,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<BoolT> IsStrongHeapObject(TNode<Object> value) {
     return IsStrongHeapObject(ReinterpretCast<MaybeObject>(value));
   }
-  TNode<HeapObject> ToStrongHeapObject(TNode<MaybeObject> value);
   TNode<HeapObject> ToStrongHeapObject(TNode<MaybeObject> value,
                                        Label* if_not_strong);
 
@@ -703,7 +702,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<BoolT> IsObject(TNode<Object> value) {
     return IsObject(ReinterpretCast<MaybeObject>(value));
   }
-  TNode<Object> ToObject(TNode<MaybeObject> value);
 
   TNode<MaybeObject> MakeWeak(TNode<HeapObject> value);
 
