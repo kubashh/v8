@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5470b6b3_79157e46",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e9189c6_c5418fb1",
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c82d1a0_b9abe1ba",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9990dd8_4c215d24",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c82d1a0_b9abe1ba",
+      "range": {
+        "startLine": 1840,
+        "startChar": 2,
+        "endLine": 1840,
+        "endChar": 38
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "4f7a1ab9_2ca68109",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7347,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9b55b03_b0e03106",
+      "range": {
+        "startLine": 7347,
+        "startChar": 2,
+        "endLine": 7347,
+        "endChar": 48
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b192312_9a24b4e0",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 1
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "2c084584_123623f5",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b192312_9a24b4e0",
+      "range": {
+        "startLine": 248,
+        "startChar": 20,
+        "endLine": 248,
+        "endChar": 44
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d2715cb_e18a6387",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 1
@@ -102,6 +192,24 @@
       "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1ce670_181e9b37",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "I don\u0027t have an opinion so added it here :)",
+      "parentUuid": "5d2715cb_e18a6387",
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -125,6 +233,30 @@
       "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d2f0c9_4f8302a2",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-05-23T07:52:20Z",
+      "side": 1,
+      "message": "Oops, right.\n\nHow about this version:\n\n   template \u003cclass A\u003e\n    operator TNode\u003cA\u003e() {\n      static_assert(\n          !std::is_same\u003cA, MaybeObject\u003e::value,\n          \"Can\u0027t cast to MaybeObject, use explicit conversion functions. \");\n\n      static_assert(types_have_common_values\u003cA, PreviousType\u003e::value,\n                    \"Incompatible types: this cast can never succeed.\");\n      static_assert(std::is_convertible\u003cTNode\u003cA\u003e, TNode\u003cObject\u003e\u003e::value,\n                    \"Coercion to untagged values cannot be \"\n                    \"checked.\");\n      static_assert(\n          !FromTyped ||\n              !std::is_convertible\u003cTNode\u003cPreviousType\u003e, TNode\u003cA\u003e\u003e::value,\n          \"Unnecessary CAST: types are convertible.\");\n#ifdef DEBUG\n      if (FLAG_debug_code) {\n        if (std::is_same\u003cPreviousType, MaybeObject\u003e::value) {\n          code_assembler_-\u003eGenerateMaybeObjectCheck(node_, location_);\n        }\n        Node* function \u003d code_assembler_-\u003eExternalConstant(\n            ExternalReference::check_object_type());\n        code_assembler_-\u003eCallCFunction3(\n            MachineType::AnyTagged(), MachineType::AnyTagged(),\n            MachineType::TaggedSigned(), MachineType::AnyTagged(), function,\n            node_,\n            code_assembler_-\u003eSmiConstant(\n                static_cast\u003cint\u003e(ObjectTypeOf\u003cA\u003e::value)),\n            code_assembler_-\u003eStringConstant(location_));\n      }\n#endif\n      return TNode\u003cA\u003e::UncheckedCast(node_);\n    }",
+      "parentUuid": "26d6abe7_364e0470",
+      "range": {
+        "startLine": 605,
+        "startChar": 8,
+        "endLine": 605,
+        "endChar": 46
+      },
+      "revId": "cf50254a9c495605949baf8f554b5f30cef50f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
