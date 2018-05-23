@@ -605,11 +605,6 @@ void Assembler::branchOnCond(Condition c, int branch_offset, bool is_bound) {
   }
 }
 
-// 32-bit Store Multiple - short displacement (12-bits unsigned)
-void Assembler::stm(Register r1, Register r2, const MemOperand& src) {
-  rs_form(STM, r1, r2, src.rb(), src.offset());
-}
-
 // Exception-generating instructions and debugging support.
 // Stops with a non-negative code less than kNumOfWatchedStops support
 // enabling/disabling and a counter feature. See simulator-s390.h .
@@ -720,45 +715,6 @@ void Assembler::rie_form(Opcode op, Register r1, Register r3,
                   (static_cast<uint64_t>(i2.immediate() & 0xFFFF)) * B16 |
                   (static_cast<uint64_t>(op & 0x00FF));
   emit6bytes(code);
-}
-
-// RS1 format: <insn> R1,R3,D2(B2)
-//    +--------+----+----+----+-------------+
-//    | OpCode | R1 | R3 | B2 |     D2      |
-//    +--------+----+----+----+-------------+
-//    0        8    12   16   20           31
-#define RS1_FORM_EMIT(name, op)                                            \
-  void Assembler::name(Register r1, Register r3, Register b2, Disp d2) {   \
-    rs_form(op, r1, r3, b2, d2);                                           \
-  }                                                                        \
-  void Assembler::name(Register r1, Register r3, const MemOperand& opnd) { \
-    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());          \
-  }
-
-void Assembler::rs_form(Opcode op, Register r1, Register r3, Register b2,
-                        const Disp d2) {
-  DCHECK(is_uint12(d2));
-  emit4bytes(op * B24 | r1.code() * B20 | r3.code() * B16 | b2.code() * B12 |
-             d2);
-}
-
-// RS2 format: <insn> R1,M3,D2(B2)
-//    +--------+----+----+----+-------------+
-//    | OpCode | R1 | M3 | B2 |     D2      |
-//    +--------+----+----+----+-------------+
-//    0        8    12   16   20           31
-#define RS2_FORM_EMIT(name, op)                                             \
-  void Assembler::name(Register r1, Condition m3, Register b2, Disp d2) {   \
-    rs_form(op, r1, m3, b2, d2);                                            \
-  }                                                                         \
-  void Assembler::name(Register r1, Condition m3, const MemOperand& opnd) { \
-    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
-  }
-
-void Assembler::rs_form(Opcode op, Register r1, Condition m3, Register b2,
-                        const Disp d2) {
-  DCHECK(is_uint12(d2));
-  emit4bytes(op * B24 | r1.code() * B20 | m3 * B16 | b2.code() * B12 | d2);
 }
 
 // RSI format: <insn> R1,R3,I2
@@ -1565,80 +1521,6 @@ void Assembler::EnsureSpaceFor(int space_needed) {
   }
 }
 
-// Shift Left Single Logical (32)
-void Assembler::sll(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SLL, r1, r0, opnd, 0);
-}
-
-// Shift Left Single Logical (32)
-void Assembler::sll(Register r1, const Operand& opnd) {
-  rs_form(SLL, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Left Double Logical (64)
-void Assembler::sldl(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SLDL, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Single Logical (32)
-void Assembler::srl(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SRL, r1, r0, opnd, 0);
-}
-
-// Shift Right Double Arith (64)
-void Assembler::srda(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDA, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Double Logical (64)
-void Assembler::srdl(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDL, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Single Logical (32)
-void Assembler::srl(Register r1, const Operand& opnd) {
-  rs_form(SRL, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Left Single (32)
-void Assembler::sla(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SLA, r1, r0, opnd, 0);
-}
-
-// Shift Left Single (32)
-void Assembler::sla(Register r1, const Operand& opnd) {
-  rs_form(SLA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Single (32)
-void Assembler::sra(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SRA, r1, r0, opnd, 0);
-}
-
-// Shift Right Single (32)
-void Assembler::sra(Register r1, const Operand& opnd) {
-  rs_form(SRA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Double
-void Assembler::srda(Register r1, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Double Logical
-void Assembler::srdl(Register r1, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDL, r1, r0, r0, opnd.immediate());
-}
-
 void Assembler::call(Handle<Code> target, RelocInfo::Mode rmode) {
   EnsureSpace ensure_space(this);
 
@@ -1660,16 +1542,6 @@ void Assembler::jump(Handle<Code> target, RelocInfo::Mode rmode,
 
   int32_t target_index = emit_code_target(target, rmode);
   brcl(cond, Operand(target_index));
-}
-
-// 32-bit Load Multiple - short displacement (12-bits unsigned)
-void Assembler::lm(Register r1, Register r2, const MemOperand& src) {
-  rs_form(LM, r1, r2, src.rb(), src.offset());
-}
-
-// 32-bit Compare and Swap
-void Assembler::cs(Register r1, Register r2, const MemOperand& src) {
-  rs_form(CS, r1, r2, src.rb(), src.offset());
 }
 
 // Move integer (32)
