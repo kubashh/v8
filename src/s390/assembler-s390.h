@@ -836,7 +836,7 @@ class Assembler : public AssemblerBase {
   }
 #undef DECLARE_S390_RXY_INSTRUCTIONS
 
-inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
+inline void rsy_format(Opcode op, int f1, int f2, int f3, const int f4) {
   DCHECK(is_int20(f4));
   DCHECK(is_uint16(op));
   uint64_t code = (getfield<uint64_t, 6, 0, 8>(op >> 8) |
@@ -851,7 +851,7 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
 #define DECLARE_S390_RSY_A_INSTRUCTIONS(name, op_name, op_value)           \
   void name(Register r1, Register r3, Register b2, Disp d2 = 0) {          \
-    rsy_form(op_name, r1.code(), r3.code(), b2.code(), d2);                \
+    rsy_format(op_name, r1.code(), r3.code(), b2.code(), d2);              \
   }                                                                        \
   void name(Register r1, Register r3, Operand d2) {                        \
     DCHECK_NE(d2.immediate(), 0);                                          \
@@ -865,13 +865,92 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
 #define DECLARE_S390_RSY_B_INSTRUCTIONS(name, op_name, op_value)            \
   void name(Register r1, Condition m3, Register b2, Disp d2) {              \
-    rsy_form(op_name, r1.code(), m3, b2.code(), d2);                        \
+    rsy_format(op_name, r1.code(), m3, b2.code(), d2);                      \
   }                                                                         \
   void name(Register r1, Condition m3, const MemOperand& opnd) {            \
     name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
   }
   S390_RSY_B_OPCODE_LIST(DECLARE_S390_RSY_B_INSTRUCTIONS);
 #undef DECLARE_S390_RSY_B_INSTRUCTIONS
+
+
+inline void rs_format(Opcode op, int f1, int f2, int f3, const int f4) {
+  DCHECK(is_uint12(d2));
+  uint32_t code = getfield<uint32_t, 4, 0, 8>(op) |
+                  getfield<uint32_t, 4, 8, 12>(f1) |
+                  getfield<uint32_t, 4, 12, 16>(f2) |
+                  getfield<uint32_t, 4, 16, 20>(f3) |
+                  getfield<uint32_t, 4, 20, 32>(f4);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_RS_A_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register r1, Register r3, Register b2, Disp d2) {               \
+    rs_format(op_name, r1.code(), r3.code(), b2.code(), d2);                \
+  }                                                                         \
+  void name(Register r1, Register r3, const MemOperand& opnd) {             \
+    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());           \
+  }
+  S390_RS_A_OPCODE_LIST(DECLARE_S390_RS_A_INSTRUCTIONS);
+#undef DECLARE_S390_RS_A_INSTRUCTIONS
+
+#define DECLARE_S390_RS_B_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register r1, Condition m3, Register b2, Disp d2) {              \
+    rs_format(op_name, r1.code(), m3, b2.code(), d2);                       \
+  }                                                                         \
+  void name(Register r1, Condition m3, const MemOperand& opnd) {            \
+    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
+  }
+  S390_RS_B_OPCODE_LIST(DECLARE_S390_RS_B_INSTRUCTIONS);
+#undef DECLARE_S390_RS_B_INSTRUCTIONS
+
+void sll(Register r1, Register opnd) {
+  DCHECK(opnd != r0);
+  rs_format(SLL, r1.code(), r0.code(), opnd.code(), 0);
+}
+void srl(Register r1, Register opnd) {
+  DCHECK(opnd != r0);
+  rs_format(SRL, r1.code(), r0.code(), opnd.code(), 0);
+}
+void sla(Register r1, Register opnd) {
+  DCHECK(opnd != r0);
+  rs_format(SLA, r1.code(), r0.code(), opnd.code(), 0);
+}
+void sra(Register r1, Register opnd) {
+  DCHECK(opnd != r0);
+  rs_format(SRA, r1.code(), r0.code(), opnd.code(), 0);
+}
+
+void sll(Register r1, const Operand& opnd) {
+  rs_format(SLL, r1.code(), r0.code(), r0.code(), opnd.immediate());
+}
+void srl(Register r1, const Operand& opnd) {
+  rs_format(SRL, r1.code(), r0.code(), r0.code(), opnd.immediate());
+}
+void sla(Register r1, const Operand& opnd) {
+  rs_format(SLA, r1.code(), r0.code(), r0.code(), opnd.immediate());
+}
+void sra(Register r1, const Operand& opnd) {
+  rs_format(SRA, r1.code(), r0.code(), r0.code(), opnd.immediate());
+}
+void srdl(Register r1, const Operand& opnd) {
+  DCHECK_EQ(r1.code() % 2, 0);
+  rs_format(SRDL, r1.code(), r0.code(), r0.code(), opnd.immediate());
+}
+
+void sldl(Register r1, Register b2, const Operand& opnd) {
+  DCHECK_EQ(r1.code() % 2, 0);
+  rs_format(SLDL, r1.code(), r0.code(), b2.code(), opnd.immediate());
+}
+void srda(Register r1, Register b2, const Operand& opnd) {
+  DCHECK_EQ(r1.code() % 2, 0);
+  rs_format(SRDA, r1.code(), r0.code(), b2.code(), opnd.immediate());
+}
+void srdl(Register r1, Register b2, const Operand& opnd) {
+  DCHECK_EQ(r1.code() % 2, 0);
+  rs_format(SRDL, r1.code(), r0.code(), b2.code(), opnd.immediate());
+}
+
 
   // Helper for unconditional branch to Label with update to save register
   void b(Register r, Label* l) {
@@ -1002,14 +1081,6 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 #define RRF3_FORM(name) \
   void name(Register r3, Condition m4, Register r1, Register r2)
 
-#define RS1_FORM(name)                                         \
-  void name(Register r1, Register r3, const MemOperand& opnd); \
-  void name(Register r1, Register r3, Register b2, Disp d2)
-
-#define RS2_FORM(name)                                          \
-  void name(Register r1, Condition m3, const MemOperand& opnd); \
-  void name(Register r1, Condition m3, Register b2, Disp d2)
-
 #define RSE_FORM(name)                                         \
   void name(Register r1, Register r3, const MemOperand& opnd); \
   void name(Register r1, Register r3, Register b2, Disp d2)
@@ -1017,14 +1088,6 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 #define RSL_FORM(name)                       \
   void name(Length l, Register b2, Disp d2); \
   void name(const MemOperand& opnd)
-
-#define RSY1_FORM(name)                                      \
-  void name(Register r1, Register r3, Register b2, Disp d2); \
-  void name(Register r1, Register r3, const MemOperand& opnd)
-
-#define RSY2_FORM(name)                                       \
-  void name(Register r1, Condition m3, Register b2, Disp d2); \
-  void name(Register r1, Condition m3, const MemOperand& opnd)
 
 #define RRS_FORM(name)                                                     \
   void name(Register r1, Register r2, Register b4, Disp d4, Condition m3); \
@@ -1127,7 +1190,6 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   RI1_FORM(iihl);
   RI1_FORM(iilh);
   RI1_FORM(iill);
-  RSY1_FORM(loc);
   RXE_FORM(mdb);
   SS4_FORM(mvck);
   SSF_FORM(mvcos);
@@ -1139,7 +1201,6 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   RI1_FORM(nill);
   RI1_FORM(oill);
   RXE_FORM(sdb);
-  RS1_FORM(srdl);
   RI1_FORM(tmll);
   SS1_FORM(tr);
   S_FORM(ts);
@@ -1151,17 +1212,9 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   void lhi(Register r, const Operand& imm);
   void lghi(Register r, const Operand& imm);
 
-  // Load Multiple Instructions
-  void lm(Register r1, Register r2, const MemOperand& src);
-
   // Load On Condition Instructions
   void locr(Condition m3, Register r1, Register r2);
   void locgr(Condition m3, Register r1, Register r2);
-
-  // Store Instructions
-
-  // Store Multiple Instructions
-  void stm(Register r1, Register r2, const MemOperand& src);
 
   // Compare Instructions
   void chi(Register r, const Operand& opnd);
@@ -1172,29 +1225,9 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   void cliy(const MemOperand& mem, const Operand& imm);
   void clc(const MemOperand& opnd1, const MemOperand& opnd2, Length length);
 
-  // Compare and Swap Instructions
-  void cs(Register r1, Register r2, const MemOperand& src);
-
   // Test Under Mask Instructions
   void tm(const MemOperand& mem, const Operand& imm);
   void tmy(const MemOperand& mem, const Operand& imm);
-
-  // Shift Instructions (32)
-  void sll(Register r1, Register opnd);
-  void sll(Register r1, const Operand& opnd);
-  void srl(Register r1, Register opnd);
-  void srl(Register r1, const Operand& opnd);
-  void sra(Register r1, Register opnd);
-  void sra(Register r1, const Operand& opnd);
-  void sla(Register r1, Register opnd);
-  void sla(Register r1, const Operand& opnd);
-
-  // Shift Instructions (64)
-  void srda(Register r1, const Operand& opnd);
-  void srdl(Register r1, const Operand& opnd);
-  void sldl(Register r1, Register b2, const Operand& opnd);
-  void srdl(Register r1, Register b2, const Operand& opnd);
-  void srda(Register r1, Register b2, const Operand& opnd);
 
   // Rotate and Insert Selected Bits
   void risbg(Register dst, Register src, const Operand& startBit,
@@ -1534,11 +1567,6 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
   inline void rrs_form(Opcode op, Register r1, Register r2, Register b4,
                        Disp d4, Condition m3);
-
-  inline void rs_form(Opcode op, Register r1, Condition m3, Register b2,
-                      const Disp d2);
-  inline void rs_form(Opcode op, Register r1, Register r3, Register b2,
-                      const Disp d2);
 
   inline void rsi_form(Opcode op, Register r1, Register r3, const Operand& i2);
   inline void rsl_form(Opcode op, Length l1, Register b2, Disp d2);
