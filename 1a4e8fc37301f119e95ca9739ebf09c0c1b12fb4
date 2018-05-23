@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f27fbb9_46b252d0",
+        "filename": "src/torque/Torque.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-05-23T14:47:56Z",
+      "side": 1,
+      "message": "nit: Maybe we should rename ASSERT to ASSERT_TOKEN to stay consistent within the diagnosticStatement rule or remove the \"_TOKEN\" from the others, since its not used anywhere else?",
+      "revId": "1a4e8fc37301f119e95ca9739ebf09c0c1b12fb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
