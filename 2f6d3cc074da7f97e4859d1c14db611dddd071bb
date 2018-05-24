@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "834993e0_9c6902b7",
+        "filename": "src/builtins/s390/builtins-s390.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1183895
+      },
+      "writtenOn": "2018-05-24T22:04:17Z",
+      "side": 1,
+      "message": "The SUBP/BGE should be able to be replaced by a more efficient: BRXH/BRXHG.",
+      "revId": "2f6d3cc074da7f97e4859d1c14db611dddd071bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
