@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e8f83a0_528b82f2",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-05-24T09:09:35Z",
+      "side": 1,
+      "message": "I moved 3 builders here, since they don\u0027t trigger others. See comment in line 1638. But I didn\u0027t do better sorting now.",
+      "range": {
+        "startLine": 1561,
+        "startChar": 4,
+        "endLine": 1561,
+        "endChar": 14
+      },
+      "revId": "f438b0e39d04dfc882509f78543022d64593b08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
