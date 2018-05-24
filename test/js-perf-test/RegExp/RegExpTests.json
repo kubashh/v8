@@ -36,7 +36,8 @@
         "slow_replace.js",
         "slow_search.js",
         "slow_split.js",
-        "slow_test.js"
+        "slow_test.js",
+        "inline_test.js"
       ],
       "results_regexp": "^%s\\-RegExp\\(Score\\): (.+)$",
       "tests": [
