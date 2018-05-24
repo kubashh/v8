@@ -52,6 +52,47 @@
       "revId": "1a4e8fc37301f119e95ca9739ebf09c0c1b12fb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e005e3a1_2564e216",
+        "filename": "src/torque/Torque.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-05-24T13:14:18Z",
+      "side": 1,
+      "message": "I am kind of leaning towards ASSERT_TOKEN :)",
+      "parentUuid": "5e4503f9_0d952a16",
+      "revId": "1a4e8fc37301f119e95ca9739ebf09c0c1b12fb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82f30344_ffa14410",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-05-24T13:14:18Z",
+      "side": 1,
+      "message": "Can we have something more descriptive here? Also, I don\u0027t like booleans, but enums! (If there is really only one flag yet, I\u0027m ok with the boolean).",
+      "range": {
+        "startLine": 430,
+        "startChar": 41,
+        "endLine": 430,
+        "endChar": 42
+      },
+      "revId": "1a4e8fc37301f119e95ca9739ebf09c0c1b12fb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
