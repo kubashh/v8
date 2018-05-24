@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6e7da57_57d63356",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "I think this should be index_in_parameters_and_registers now, but such a DCHECK is done by the set in the next line anyways, so maybe just remove it.",
+      "range": {
+        "startLine": 723,
+        "startChar": 18,
+        "endLine": 723,
+        "endChar": 35
+      },
+      "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c1e299d_14e01d1d",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "Ah, this was wrong in the previous CL?\n\nMaybe rename InvalidRegisterFileInGenerator to InvalidParametersOrRegistersInGenerator.",
+      "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd1bc9e_92ed9a68",
+        "filename": "src/objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3276,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "... parameters and ...",
+      "range": {
+        "startLine": 3276,
+        "startChar": 38,
+        "endLine": 3276,
+        "endChar": 39
+      },
+      "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

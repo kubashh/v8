@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "888befad_bad168b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "Could you do that?",
+      "parentUuid": "1b78c3ab_be8bcd5f",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "add8d32d_0af7808e",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 6
@@ -113,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "dd3d4efe_9d03fda9",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "This one is unchanged.",
+      "parentUuid": "0cd90a62_72c1945d",
+      "range": {
+        "startLine": 2943,
+        "startChar": 32,
+        "endLine": 2943,
+        "endChar": 68
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96e51976_980e29db",
         "filename": "src/compiler/js-create-lowering.cc",
         "patchSetId": 6
@@ -180,6 +222,24 @@
       "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b185be22_5ac04988",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-05-24T08:20:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5811d894_3ddc356f",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
