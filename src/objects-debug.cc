@@ -764,7 +764,7 @@ void JSGeneratorObject::JSGeneratorObjectVerify() {
   VerifyObjectField(kFunctionOffset);
   VerifyObjectField(kContextOffset);
   VerifyObjectField(kReceiverOffset);
-  VerifyObjectField(kRegisterFileOffset);
+  VerifyObjectField(kParametersAndRegistersOffset);
   VerifyObjectField(kContinuationOffset);
 }
 
