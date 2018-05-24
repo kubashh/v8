@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc2b57ce_7194b9f8",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-24T18:11:40Z",
+      "side": 1,
+      "message": "nit: I realize there are several \"i::\" prefixes in the rest of the file (inconsistently) already, but there shouldn\u0027t be a reason for having them, sine the whole type system lives in the internal namespace itself. I\u0027d vote to at least drop the prefix on the new code (i.e. the Isolate parameter). Comment applies throughout this file and the the types.cc file.",
+      "range": {
+        "startLine": 253,
+        "startChar": 20,
+        "endLine": 253,
+        "endChar": 30
+      },
+      "revId": "ef4295cee16497173a8f172f40d8518a80daad08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
