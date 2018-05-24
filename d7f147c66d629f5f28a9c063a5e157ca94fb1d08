@@ -101,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "65357970_865e448e",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-05-24T11:31:48Z",
+      "side": 1,
+      "message": "As far as I understand from reading the \"async_hooks-based Tracing\" document from the GCP team, this may not be the case actually.\nMy initial thought was that promiseResolve can act as an event to signal cleaning of the async resource. But promiseResolve can be called more than once for some promises, so might not be the best choice and we still may need a separate \"destroy\" hook. \n@Ali Can you share your thoughts on this?",
+      "parentUuid": "84c75829_a1d6379f",
+      "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d8dbee00_35dc5f4f",
         "filename": "src/async-hooks-wrapper.h",
         "patchSetId": 3
