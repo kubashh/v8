@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "5b47a7e3_e9d3575c",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-05-24T08:28:36Z",
+      "side": 1,
+      "message": "Good point, thank you. Renamed to \u0027AsyncHooksWrap\u0027.",
+      "parentUuid": "f8cd3aab_ab00df7a",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 15
+      },
+      "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9a5dcb6_23ff13a9",
         "filename": "src/async-hooks-wrapper.h",
         "patchSetId": 3
@@ -53,6 +77,24 @@
       "writtenOn": "2018-05-23T16:44:14Z",
       "side": 1,
       "message": "I take it that it is intentional that we aren\u0027t modeling the destroy hook at the moment?",
+      "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84c75829_a1d6379f",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-05-24T08:28:36Z",
+      "side": 1,
+      "message": "Yes, because it is supposed to be dropped from the API, as far as I understood.",
+      "parentUuid": "e9a5dcb6_23ff13a9",
       "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "0ce4f44d_bac70eca",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-05-24T08:28:36Z",
+      "side": 1,
+      "message": "Removed, thanks.",
+      "parentUuid": "d8dbee00_35dc5f4f",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 14
+      },
+      "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dee8cc0_29fbb6a9",
         "filename": "src/async-hooks-wrapper.h",
         "patchSetId": 3
@@ -96,6 +162,24 @@
       "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "949e51f9_63973f30",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-05-24T08:28:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9dee8cc0_29fbb6a9",
+      "revId": "d7f147c66d629f5f28a9c063a5e157ca94fb1d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
