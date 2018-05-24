@@ -24,7 +24,7 @@ class Operator;
 class V8_EXPORT_PRIVATE CommonOperatorReducer final
     : public NON_EXPORTED_BASE(AdvancedReducer) {
  public:
-  CommonOperatorReducer(Editor* editor, Graph* graph,
+  CommonOperatorReducer(Isolate* isolate, Editor* editor, Graph* graph,
                         CommonOperatorBuilder* common,
                         MachineOperatorBuilder* machine, Zone* temp_zone);
   ~CommonOperatorReducer() final {}
@@ -51,6 +51,7 @@ class V8_EXPORT_PRIVATE CommonOperatorReducer final
   MachineOperatorBuilder* machine() const { return machine_; }
   Node* dead() const { return dead_; }
 
+  Isolate* isolate_;
   Graph* const graph_;
   CommonOperatorBuilder* const common_;
   MachineOperatorBuilder* const machine_;
