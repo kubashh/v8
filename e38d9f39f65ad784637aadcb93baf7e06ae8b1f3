@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2ea934ef_cd3df6f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-05-24T09:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "888befad_bad168b6",
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "add8d32d_0af7808e",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 6
@@ -143,6 +161,30 @@
       "side": 1,
       "message": "This one is unchanged.",
       "parentUuid": "0cd90a62_72c1945d",
+      "range": {
+        "startLine": 2943,
+        "startChar": 32,
+        "endLine": 2943,
+        "endChar": 68
+      },
+      "revId": "e38d9f39f65ad784637aadcb93baf7e06ae8b1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d3e4b51_e6d5c7a6",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-05-24T09:30:11Z",
+      "side": 1,
+      "message": "Now for realz.",
+      "parentUuid": "dd3d4efe_9d03fda9",
       "range": {
         "startLine": 2943,
         "startChar": 32,

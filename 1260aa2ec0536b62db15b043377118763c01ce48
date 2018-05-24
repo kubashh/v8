@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c8b19dde_102ca7f3",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-05-24T09:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6e7da57_57d63356",
+      "range": {
+        "startLine": 723,
+        "startChar": 18,
+        "endLine": 723,
+        "endChar": 35
+      },
+      "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c1e299d_14e01d1d",
         "filename": "src/interpreter/interpreter-assembler.cc",
         "patchSetId": 7
@@ -39,6 +63,24 @@
       "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9652fe3_e7e0f664",
+        "filename": "src/interpreter/interpreter-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-05-24T09:30:11Z",
+      "side": 1,
+      "message": "Indeed, this check was too weak.\n\nDone",
+      "parentUuid": "0c1e299d_14e01d1d",
+      "revId": "1260aa2ec0536b62db15b043377118763c01ce48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
