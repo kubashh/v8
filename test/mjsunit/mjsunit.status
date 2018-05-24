@@ -784,7 +784,6 @@
 ##############################################################################
 ['variant == nooptimization and (arch == arm or arch == arm64) and simulator_run', {
   # Slow tests: https://crbug.com/v8/7783
-  'compiler/alloc-number': [SKIP],
   'compiler/osr-nested': [SKIP],
   'compiler/osr-one': [SKIP],
   'compiler/osr-two': [SKIP],
@@ -792,6 +791,8 @@
   'regress/regress-2185': [SKIP],
   'regress/regress-deep-proto': [SKIP],
   'wasm/grow-memory': [SKIP],
+  # This test only makes sense in release mode.
+  'compiler/alloc-number': [SKIP],
 }],  # variant == nooptimization and (arch == arm or arch == arm64) and simulator_run
 
 ##############################################################################
