@@ -4025,7 +4025,7 @@ Maybe<bool> Value::BooleanValue(Local<Context> context) const {
 
 bool Value::BooleanValue() const {
   auto obj = Utils::OpenHandle(this);
-  if (obj->IsSmi()) return *obj == i::Smi::kZero;
+  if (obj->IsSmi()) return *obj != i::Smi::kZero;
   DCHECK(obj->IsHeapObject());
   i::Isolate* isolate = i::Handle<i::HeapObject>::cast(obj)->GetIsolate();
   return obj->BooleanValue(isolate);
