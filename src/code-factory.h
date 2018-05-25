@@ -85,15 +85,12 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable InterpreterCEntry(Isolate* isolate, int result_size = 1);
   static Callable InterpreterOnStackReplacement(Isolate* isolate);
 
-  static Callable ArrayConstructor(Isolate* isolate);
   static Callable ArrayPop(Isolate* isolate);
   static Callable ArrayPush(Isolate* isolate);
   static Callable ArrayShift(Isolate* isolate);
   static Callable ExtractFastJSArray(Isolate* isolate);
   static Callable CloneFastJSArray(Isolate* isolate);
   static Callable FunctionPrototypeBind(Isolate* isolate);
-  static Callable TransitionElementsKind(Isolate* isolate, ElementsKind from,
-                                         ElementsKind to, bool is_jsarray);
 };
 
 }  // namespace internal

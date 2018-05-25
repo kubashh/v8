@@ -5,33 +5,23 @@
 #ifndef V8_CODE_STUBS_H_
 #define V8_CODE_STUBS_H_
 
-#include "src/allocation.h"
-#include "src/assembler.h"
-#include "src/globals.h"
-#include "src/heap/factory.h"
 #include "src/interface-descriptors.h"
-#include "src/macro-assembler.h"
-#include "src/ostreams.h"
 #include "src/type-hints.h"
 
 namespace v8 {
 namespace internal {
 
 // Forward declarations.
-class CodeStubAssembler;
+class Isolate;
 namespace compiler {
-class CodeAssemblerLabel;
 class CodeAssemblerState;
-class Node;
 }
 
 // List of code stubs used on all platforms.
 #define CODE_STUB_LIST_ALL_PLATFORMS(V)     \
   /* --- PlatformCodeStubs --- */           \
-  V(ArrayConstructor)                       \
   V(CallApiCallback)                        \
   V(CallApiGetter)                          \
-  V(InternalArrayConstructor)               \
   V(JSEntry)                                \
   V(ProfileEntryHook)                       \
   /* --- TurboFanCodeStubs --- */           \
@@ -39,7 +29,6 @@ class Node;
   V(StoreInArrayLiteralSlow)                \
   V(ArrayNoArgumentConstructor)             \
   V(ArraySingleArgumentConstructor)         \
-  V(ArrayNArgumentsConstructor)             \
   V(InternalArrayNoArgumentConstructor)     \
   V(InternalArraySingleArgumentConstructor) \
   V(ElementsTransitionAndStore)             \
@@ -47,7 +36,6 @@ class Node;
   V(KeyedStoreSloppyArguments)              \
   V(StoreFastElement)                       \
   V(StoreInterceptor)                       \
-  V(TransitionElementsKind)                 \
   V(LoadIndexedInterceptor)
 
 // List of code stubs only used on ARM 32 bits platforms.
@@ -439,37 +427,6 @@ class StoreInterceptorStub : public TurboFanCodeStub {
   DEFINE_TURBOFAN_CODE_STUB(StoreInterceptor, TurboFanCodeStub);
 };
 
-class TransitionElementsKindStub : public TurboFanCodeStub {
- public:
-  TransitionElementsKindStub(Isolate* isolate, ElementsKind from_kind,
-                             ElementsKind to_kind, bool is_jsarray)
-      : TurboFanCodeStub(isolate) {
-    set_sub_minor_key(FromKindBits::encode(from_kind) |
-                      ToKindBits::encode(to_kind) |
-                      IsJSArrayBits::encode(is_jsarray));
-  }
-
-  void set_sub_minor_key(uint32_t key) { minor_key_ = key; }
-
-  uint32_t sub_minor_key() const { return minor_key_; }
-
-  ElementsKind from_kind() const {
-    return FromKindBits::decode(sub_minor_key());
-  }
-
-  ElementsKind to_kind() const { return ToKindBits::decode(sub_minor_key()); }
-
-  bool is_jsarray() const { return IsJSArrayBits::decode(sub_minor_key()); }
-
- private:
-  class ToKindBits : public BitField<ElementsKind, 0, 8> {};
-  class FromKindBits : public BitField<ElementsKind, ToKindBits::kNext, 8> {};
-  class IsJSArrayBits : public BitField<bool, FromKindBits::kNext, 1> {};
-
-  DEFINE_CALL_INTERFACE_DESCRIPTOR(TransitionElementsKind);
-  DEFINE_TURBOFAN_CODE_STUB(TransitionElementsKind, TurboFanCodeStub);
-};
-
 // TODO(jgruber): Convert this stub into a builtin.
 class LoadIndexedInterceptorStub : public TurboFanCodeStub {
  public:
@@ -484,31 +441,6 @@ enum AllocationSiteOverrideMode {
   DONT_OVERRIDE,
   DISABLE_ALLOCATION_SITES,
   LAST_ALLOCATION_SITE_OVERRIDE_MODE = DISABLE_ALLOCATION_SITES
-};
-
-// TODO(jgruber): Convert this stub into a builtin.
-class ArrayConstructorStub: public PlatformCodeStub {
- public:
-  explicit ArrayConstructorStub(Isolate* isolate);
-
- private:
-  void GenerateDispatchToArrayStub(MacroAssembler* masm,
-                                   AllocationSiteOverrideMode mode);
-
-  DEFINE_CALL_INTERFACE_DESCRIPTOR(ArrayConstructor);
-  DEFINE_PLATFORM_CODE_STUB(ArrayConstructor, PlatformCodeStub);
-};
-
-// TODO(jgruber): Convert this stub into a builtin.
-class InternalArrayConstructorStub: public PlatformCodeStub {
- public:
-  explicit InternalArrayConstructorStub(Isolate* isolate);
-
- private:
-  void GenerateCase(MacroAssembler* masm, ElementsKind kind);
-
-  DEFINE_CALL_INTERFACE_DESCRIPTOR(ArrayNArgumentsConstructor);
-  DEFINE_PLATFORM_CODE_STUB(InternalArrayConstructor, PlatformCodeStub);
 };
 
 // TODO(jgruber): Convert this stub into a builtin.
@@ -545,7 +477,7 @@ class CallApiCallbackStub : public PlatformCodeStub {
 
   CallApiCallbackStub(Isolate* isolate, int argc)
       : PlatformCodeStub(isolate) {
-    CHECK_LE(0, argc);
+    CHECK_LE(0, argc);  // The argc in {0, 1} cases are covered by builtins.
     CHECK_LE(argc, kArgMax);
     minor_key_ = ArgumentBits::encode(argc);
   }
@@ -555,14 +487,20 @@ class CallApiCallbackStub : public PlatformCodeStub {
 
   class ArgumentBits : public BitField<int, 0, kArgBits> {};
 
+  friend class Builtins;  // For generating the related builtin.
+
   DEFINE_CALL_INTERFACE_DESCRIPTOR(ApiCallback);
   DEFINE_PLATFORM_CODE_STUB(CallApiCallback, PlatformCodeStub);
 };
 
-// TODO(jgruber): Convert this stub into a builtin.
+// TODO(jgruber): This stub only exists to avoid code duplication between
+// code-stubs-<arch>.cc and builtins-<arch>.cc. If CallApiCallbackStub is ever
+// completely removed, CallApiGetterStub can also be deleted.
 class CallApiGetterStub : public PlatformCodeStub {
- public:
+ private:
+  // For generating the related builtin.
   explicit CallApiGetterStub(Isolate* isolate) : PlatformCodeStub(isolate) {}
+  friend class Builtins;
 
   DEFINE_CALL_INTERFACE_DESCRIPTOR(ApiGetter);
   DEFINE_PLATFORM_CODE_STUB(CallApiGetter, PlatformCodeStub);
@@ -752,20 +690,6 @@ class InternalArraySingleArgumentConstructorStub
   DEFINE_CALL_INTERFACE_DESCRIPTOR(ArraySingleArgumentConstructor);
   DEFINE_TURBOFAN_CODE_STUB(InternalArraySingleArgumentConstructor,
                             CommonArrayConstructorStub);
-};
-
-// TODO(jgruber): Convert this stub into a builtin.
-class ArrayNArgumentsConstructorStub : public PlatformCodeStub {
- public:
-  explicit ArrayNArgumentsConstructorStub(Isolate* isolate)
-      : PlatformCodeStub(isolate) {}
-
-  CallInterfaceDescriptor GetCallInterfaceDescriptor() const override {
-    return ArrayNArgumentsConstructorDescriptor(isolate());
-  }
-
- private:
-  DEFINE_PLATFORM_CODE_STUB(ArrayNArgumentsConstructor, PlatformCodeStub);
 };
 
 class StoreSlowElementStub : public TurboFanCodeStub {

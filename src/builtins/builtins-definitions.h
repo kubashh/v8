@@ -236,7 +236,10 @@ namespace internal {
                                                                                \
   /* Array */                                                                  \
   ASM(ArrayConstructor)                                                        \
+  ASM(ArrayConstructorImpl)                                                    \
+  ASM(ArrayNArgumentsConstructor)                                              \
   ASM(InternalArrayConstructor)                                                \
+  ASM(InternalArrayConstructorImpl)                                            \
   CPP(ArrayConcat)                                                             \
   /* ES6 #sec-array.isarray */                                                 \
   TFJ(ArrayIsArray, 1, kArg)                                                   \
@@ -446,9 +449,6 @@ namespace internal {
   /* DataView */                                                               \
   /* ES #sec-dataview-constructor */                                           \
   CPP(DataViewConstructor)                                                     \
-  CPP(DataViewPrototypeGetBuffer)                                              \
-  CPP(DataViewPrototypeGetByteLength)                                          \
-  CPP(DataViewPrototypeGetByteOffset)                                          \
                                                                                \
   /* Date */                                                                   \
   /* ES #sec-date-constructor */                                               \
@@ -1147,8 +1147,6 @@ namespace internal {
   TFJ(TypedArrayOf, SharedFunctionInfo::kDontAdaptArgumentsSentinel)           \
   /* ES6 %TypedArray%.from */                                                  \
   TFJ(TypedArrayFrom, SharedFunctionInfo::kDontAdaptArgumentsSentinel)         \
-  TFS(TypedArrayLoadElementAsTagged, kArray, kKind, kIndex)                    \
-  TFS(TypedArrayStoreElementFromTagged, kArray, kKind, kIndex, kValue)         \
                                                                                \
   /* Wasm */                                                                   \
   ASM(WasmCompileLazy)                                                         \
@@ -1247,6 +1245,9 @@ namespace internal {
   TFS(StringAdd_ConvertRight_NotTenured, kLeft, kRight)                        \
                                                                                \
   /* Miscellaneous */                                                          \
+  ASM(CallApiCallback_Argc0)                                                   \
+  ASM(CallApiCallback_Argc1)                                                   \
+  ASM(CallApiGetter)                                                           \
   ASM(DoubleToI)                                                               \
   TFC(GetProperty, GetProperty, 1)                                             \
   ASM(MathPowInternal)
