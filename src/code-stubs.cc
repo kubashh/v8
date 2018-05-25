@@ -305,23 +305,6 @@ TF_STUB(ElementsTransitionAndStoreStub, CodeStubAssembler) {
   }
 }
 
-TF_STUB(TransitionElementsKindStub, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* object = Parameter(Descriptor::kObject);
-  Node* new_map = Parameter(Descriptor::kMap);
-
-  Label bailout(this);
-  TransitionElementsKind(object, new_map, stub->from_kind(), stub->to_kind(),
-                         stub->is_jsarray(), &bailout);
-  Return(object);
-
-  BIND(&bailout);
-  {
-    Comment("Call runtime");
-    TailCallRuntime(Runtime::kTransitionElementsKind, context, object, new_map);
-  }
-}
-
 // TODO(ishell): move to builtins-handler-gen.
 TF_STUB(KeyedLoadSloppyArgumentsStub, CodeStubAssembler) {
   Node* receiver = Parameter(Descriptor::kReceiver);
@@ -475,6 +458,46 @@ void ProfileEntryHookStub::EntryHookTrampoline(intptr_t function,
   entry_hook(function, stack_pointer);
 }
 
+void CodeStub::GenerateStubsAheadOfTime(Isolate* isolate) {
+  CommonArrayConstructorStub::GenerateStubsAheadOfTime(isolate);
+  StoreFastElementStub::GenerateAheadOfTime(isolate);
+}
+
+namespace {
+
+template <class T>
+void ArrayConstructorStubAheadOfTimeHelper(Isolate* isolate) {
+  int to_index =
+      GetSequenceIndexFromFastElementsKind(TERMINAL_FAST_ELEMENTS_KIND);
+  for (int i = 0; i <= to_index; ++i) {
+    ElementsKind kind = GetFastElementsKindFromSequenceIndex(i);
+    T stub(isolate, kind);
+    stub.GetCode();
+    if (AllocationSite::ShouldTrack(kind)) {
+      T stub1(isolate, kind, DISABLE_ALLOCATION_SITES);
+      stub1.GetCode();
+    }
+  }
+}
+
+}  // namespace
+
+void CommonArrayConstructorStub::GenerateStubsAheadOfTime(Isolate* isolate) {
+  ArrayConstructorStubAheadOfTimeHelper<ArrayNoArgumentConstructorStub>(
+      isolate);
+  ArrayConstructorStubAheadOfTimeHelper<ArraySingleArgumentConstructorStub>(
+      isolate);
+
+  ElementsKind kinds[2] = {PACKED_ELEMENTS, HOLEY_ELEMENTS};
+  for (int i = 0; i < 2; i++) {
+    // For internal arrays we only need a few things
+    InternalArrayNoArgumentConstructorStub stubh1(isolate, kinds[i]);
+    stubh1.GetCode();
+    InternalArraySingleArgumentConstructorStub stubh2(isolate, kinds[i]);
+    stubh2.GetCode();
+  }
+}
+
 TF_STUB(ArrayNoArgumentConstructorStub, CodeStubAssembler) {
   ElementsKind elements_kind = stub->elements_kind();
   Node* native_context = LoadObjectField(Parameter(Descriptor::kFunction),
@@ -591,12 +614,6 @@ TF_STUB(InternalArraySingleArgumentConstructorStub, ArrayConstructorAssembler) {
   GenerateConstructor(context, function, array_map, array_size, allocation_site,
                       stub->elements_kind(), DONT_TRACK_ALLOCATION_SITE);
 }
-
-ArrayConstructorStub::ArrayConstructorStub(Isolate* isolate)
-    : PlatformCodeStub(isolate) {}
-
-InternalArrayConstructorStub::InternalArrayConstructorStub(Isolate* isolate)
-    : PlatformCodeStub(isolate) {}
 
 CommonArrayConstructorStub::CommonArrayConstructorStub(
     Isolate* isolate, ElementsKind kind,

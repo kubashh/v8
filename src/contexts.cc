@@ -8,6 +8,7 @@
 #include "src/bootstrapper.h"
 #include "src/debug/debug.h"
 #include "src/isolate-inl.h"
+#include "src/objects/module-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -163,7 +164,7 @@ static Maybe<bool> UnscopableLookup(LookupIterator* it) {
       JSReceiver::GetProperty(Handle<JSReceiver>::cast(unscopables),
                               it->name()),
       Nothing<bool>());
-  return Just(!blacklist->BooleanValue());
+  return Just(!blacklist->BooleanValue(isolate));
 }
 
 static PropertyAttributes GetAttributesForMode(VariableMode mode) {

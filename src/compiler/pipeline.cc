@@ -70,6 +70,7 @@
 #include "src/compiler/value-numbering-reducer.h"
 #include "src/compiler/verifier.h"
 #include "src/compiler/zone-stats.h"
+#include "src/disassembler.h"
 #include "src/isolate-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/optimized-compilation-info.h"
@@ -77,6 +78,7 @@
 #include "src/parsing/parse-info.h"
 #include "src/register-configuration.h"
 #include "src/utils.h"
+#include "src/wasm/function-body-decoder.h"
 
 namespace v8 {
 namespace internal {
@@ -739,6 +741,35 @@ PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
   return pipeline_statistics;
 }
 
+PipelineStatistics* CreatePipelineStatistics(wasm::FunctionBody function_body,
+                                             wasm::WasmModule* wasm_module,
+                                             OptimizedCompilationInfo* info,
+                                             Isolate* isolate,
+                                             ZoneStats* zone_stats) {
+  PipelineStatistics* pipeline_statistics = nullptr;
+
+  if (FLAG_turbo_stats || FLAG_turbo_stats_nvp) {
+    pipeline_statistics = new PipelineStatistics(info, isolate, zone_stats);
+    pipeline_statistics->BeginPhaseKind("initializing");
+  }
+
+  if (info->trace_turbo_json_enabled()) {
+    TurboJsonFile json_of(info, std::ios_base::trunc);
+    std::unique_ptr<char[]> function_name = info->GetDebugName();
+    json_of << "{\"function\":\"" << function_name.get() << "\", \"source\":\"";
+    AccountingAllocator allocator;
+    std::ostringstream disassembly;
+    wasm::PrintRawWasmCode(&allocator, function_body, wasm_module,
+                           wasm::kPrintLocals, disassembly);
+    for (const auto& c : disassembly.str()) {
+      json_of << AsEscapedUC16ForJSON(c);
+    }
+    json_of << "\",\n\"phases\":[";
+  }
+
+  return pipeline_statistics;
+}
+
 }  // namespace
 
 class PipelineCompilationJob final : public OptimizedCompilationJob {
@@ -897,12 +928,13 @@ class PipelineWasmCompilationJob final : public OptimizedCompilationJob {
       OptimizedCompilationInfo* info, Isolate* isolate, MachineGraph* mcgraph,
       CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
       NodeOriginTable* node_origins, WasmCompilationData* wasm_compilation_data,
+      wasm::FunctionBody function_body, wasm::WasmModule* wasm_module,
       bool asmjs_origin)
       : OptimizedCompilationJob(isolate->stack_guard()->real_climit(), info,
                                 "TurboFan", State::kReadyToExecute),
         zone_stats_(isolate->allocator()),
         pipeline_statistics_(CreatePipelineStatistics(
-            Handle<Script>::null(), info, isolate, &zone_stats_)),
+            function_body, wasm_module, info, isolate, &zone_stats_)),
         data_(&zone_stats_, isolate, info, mcgraph, pipeline_statistics_.get(),
               source_positions, node_origins, wasm_compilation_data),
         pipeline_(&data_),
@@ -939,14 +971,10 @@ PipelineWasmCompilationJob::Status PipelineWasmCompilationJob::PrepareJobImpl(
 
 PipelineWasmCompilationJob::Status
 PipelineWasmCompilationJob::ExecuteJobImpl() {
-  if (compilation_info()->trace_turbo_json_enabled()) {
-    TurboJsonFile json_of(compilation_info(), std::ios_base::trunc);
-    json_of << "{\"function\":\"" << compilation_info()->GetDebugName().get()
-            << "\", \"source\":\"\",\n\"phases\":[";
-  }
-
-  pipeline_.RunPrintAndVerify("machine", true);
+  pipeline_.RunPrintAndVerify("Machine", true);
   if (FLAG_wasm_opt || asmjs_origin_) {
+    // WASM compilations must *always* be independent of the isolate.
+    Isolate* isolate = nullptr;
     PipelineData* data = &data_;
     PipelineRunScope scope(data, "wasm optimization");
     GraphReducer graph_reducer(scope.zone(), data->graph(),
@@ -955,7 +983,7 @@ PipelineWasmCompilationJob::ExecuteJobImpl() {
                                               data->common(), scope.zone());
     ValueNumberingReducer value_numbering(scope.zone(), data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->mcgraph(), asmjs_origin_);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
+    CommonOperatorReducer common_reducer(isolate, &graph_reducer, data->graph(),
                                          data->common(), data->machine(),
                                          scope.zone());
     AddReducer(data, &graph_reducer, &dead_code_elimination);
@@ -990,6 +1018,24 @@ PipelineWasmCompilationJob::Status PipelineWasmCompilationJob::FinalizeJobImpl(
       code_generator->frame()->GetTotalFrameSlotCount();
   wasm_code_desc->source_positions_table =
       code_generator->GetSourcePositionTable();
+
+  if (data_.info()->trace_turbo_json_enabled()) {
+    TurboJsonFile json_of(data_.info(), std::ios_base::app);
+    json_of << "{\"name\":\"disassembly\",\"type\":\"disassembly\",\"data\":\"";
+#ifdef ENABLE_DISASSEMBLER
+    std::stringstream disassembler_stream;
+    CodeDesc& code_desc = wasm_code_desc->code_desc;
+    Disassembler::Decode(
+        isolate, &disassembler_stream, code_desc.buffer,
+        code_desc.buffer + wasm_code_desc->safepoint_table_offset);
+    for (auto const c : disassembler_stream.str()) {
+      json_of << AsEscapedUC16ForJSON(c);
+    }
+#endif  // ENABLE_DISASSEMBLER
+    json_of << "\"}\n]";
+    json_of << "\n}";
+  }
+
   return SUCCEEDED;
 }
 
@@ -1105,9 +1151,9 @@ struct InliningPhase {
     DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                               data->common(), temp_zone);
     CheckpointElimination checkpoint_elimination(&graph_reducer);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->common(), data->machine(),
-                                         temp_zone);
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
+                                         data->machine(), temp_zone);
     JSCallReducer call_reducer(&graph_reducer, data->jsgraph(),
                                data->info()->is_bailout_on_uninitialized()
                                    ? JSCallReducer::kBailoutOnUninitialized
@@ -1211,9 +1257,9 @@ struct TypedLoweringPhase {
         &graph_reducer, data->info()->dependencies(), data->jsgraph());
     SimplifiedOperatorReducer simple_reducer(&graph_reducer, data->jsgraph());
     CheckpointElimination checkpoint_elimination(&graph_reducer);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->common(), data->machine(),
-                                         temp_zone);
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
+                                         data->machine(), temp_zone);
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &create_lowering);
     AddReducer(data, &graph_reducer, &constant_folding_reducer);
@@ -1295,11 +1341,13 @@ struct ConcurrentOptimizationPrepPhase {
     // This is needed for escape analysis.
     NodeProperties::SetType(
         data->jsgraph()->FalseConstant(),
-        Type::HeapConstant(data->isolate()->factory()->false_value(),
+        Type::HeapConstant(data->isolate(),
+                           data->isolate()->factory()->false_value(),
                            data->jsgraph()->zone()));
     NodeProperties::SetType(
         data->jsgraph()->TrueConstant(),
-        Type::HeapConstant(data->isolate()->factory()->true_value(),
+        Type::HeapConstant(data->isolate(),
+                           data->isolate()->factory()->true_value(),
                            data->jsgraph()->zone()));
   }
 };
@@ -1328,9 +1376,9 @@ struct EarlyOptimizationPhase {
     RedundancyElimination redundancy_elimination(&graph_reducer, temp_zone);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->jsgraph());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->common(), data->machine(),
-                                         temp_zone);
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
+                                         data->machine(), temp_zone);
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &simple_reducer);
     AddReducer(data, &graph_reducer, &redundancy_elimination);
@@ -1399,9 +1447,9 @@ struct EffectControlLinearizationPhase {
                                  data->jsgraph()->Dead());
       DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                                 data->common(), temp_zone);
-      CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                           data->common(), data->machine(),
-                                           temp_zone);
+      CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                           data->graph(), data->common(),
+                                           data->machine(), temp_zone);
       AddReducer(data, &graph_reducer, &dead_code_elimination);
       AddReducer(data, &graph_reducer, &common_reducer);
       graph_reducer.ReduceGraph();
@@ -1437,9 +1485,9 @@ struct LoadEliminationPhase {
                                      temp_zone);
     CheckpointElimination checkpoint_elimination(&graph_reducer);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->common(), data->machine(),
-                                         temp_zone);
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
+                                         data->machine(), temp_zone);
     ConstantFoldingReducer constant_folding_reducer(&graph_reducer,
                                                     data->jsgraph());
     TypeNarrowingReducer type_narrowing_reducer(&graph_reducer,
@@ -1489,9 +1537,9 @@ struct LateOptimizationPhase {
                                               data->common(), temp_zone);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->jsgraph());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->common(), data->machine(),
-                                         temp_zone);
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
+                                         data->machine(), temp_zone);
     SelectLowering select_lowering(data->jsgraph()->graph(),
                                    data->jsgraph()->common());
     AddReducer(data, &graph_reducer, &branch_condition_elimination);
@@ -2116,10 +2164,11 @@ OptimizedCompilationJob* Pipeline::NewWasmCompilationJob(
     OptimizedCompilationInfo* info, Isolate* isolate, MachineGraph* mcgraph,
     CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
     NodeOriginTable* node_origins, WasmCompilationData* wasm_compilation_data,
+    wasm::FunctionBody function_body, wasm::WasmModule* wasm_module,
     wasm::ModuleOrigin asmjs_origin) {
-  return new PipelineWasmCompilationJob(info, isolate, mcgraph, call_descriptor,
-                                        source_positions, node_origins,
-                                        wasm_compilation_data, asmjs_origin);
+  return new PipelineWasmCompilationJob(
+      info, isolate, mcgraph, call_descriptor, source_positions, node_origins,
+      wasm_compilation_data, function_body, wasm_module, asmjs_origin);
 }
 
 bool Pipeline::AllocateRegistersForTesting(const RegisterConfiguration* config,
@@ -2278,11 +2327,11 @@ Handle<Code> PipelineImpl::FinalizeCode() {
   if (code.is_null()) return code;
 
   if (data->profiler_data()) {
-#if ENABLE_DISASSEMBLER
+#ifdef ENABLE_DISASSEMBLER
     std::ostringstream os;
     code->Disassemble(nullptr, os);
     data->profiler_data()->SetCode(&os);
-#endif
+#endif  // ENABLE_DISASSEMBLER
   }
 
   info()->SetCode(code);
@@ -2291,7 +2340,7 @@ Handle<Code> PipelineImpl::FinalizeCode() {
   if (info()->trace_turbo_json_enabled()) {
     TurboJsonFile json_of(info(), std::ios_base::app);
     json_of << "{\"name\":\"disassembly\",\"type\":\"disassembly\",\"data\":\"";
-#if ENABLE_DISASSEMBLER
+#ifdef ENABLE_DISASSEMBLER
     std::stringstream disassembly_stream;
     code->Disassemble(nullptr, disassembly_stream);
     std::string disassembly_string(disassembly_stream.str());
