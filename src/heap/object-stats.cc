@@ -16,6 +16,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/isolate.h"
 #include "src/objects/compilation-cache-inl.h"
+#include "src/objects/js-collection-inl.h"
 #include "src/objects/templates.h"
 #include "src/utils.h"
 
@@ -534,6 +535,8 @@ void ObjectStatsCollectorImpl::RecordVirtualJSObjectDetails(JSObject* object) {
 
 static ObjectStats::VirtualInstanceType GetFeedbackSlotType(
     MaybeObject* maybe_obj, FeedbackSlotKind kind, Isolate* isolate) {
+  if (maybe_obj->IsClearedWeakHeapObject())
+    return ObjectStats::FEEDBACK_VECTOR_SLOT_OTHER_TYPE;
   Object* obj = maybe_obj->GetHeapObjectOrSmi();
   switch (kind) {
     case FeedbackSlotKind::kCall:

@@ -805,6 +805,7 @@ Handle<WasmInstanceObject> WasmInstanceObject::New(
   instance->set_compiled_module(*compiled_module);
   instance->set_native_context(*isolate->native_context());
   instance->set_module_object(*module_object);
+  instance->set_null_value(isolate->heap()->null_value());
 
   return instance;
 }
@@ -987,7 +988,7 @@ Handle<WasmSharedModuleData> WasmSharedModuleData::New(
 }
 
 bool WasmSharedModuleData::is_asm_js() {
-  bool asm_js = module()->is_asm_js();
+  bool asm_js = module()->origin == wasm::kAsmJsOrigin;
   DCHECK_EQ(asm_js, script()->IsUserJavaScript());
   DCHECK_EQ(asm_js, has_asm_js_offset_table());
   return asm_js;
@@ -1194,7 +1195,7 @@ int WasmSharedModuleData::GetSourcePosition(Handle<WasmSharedModuleData> shared,
   Isolate* isolate = shared->GetIsolate();
   const WasmModule* module = shared->module();
 
-  if (!module->is_asm_js()) {
+  if (module->origin != wasm::kAsmJsOrigin) {
     // for non-asm.js modules, we just add the function's start offset
     // to make a module-relative position.
     return byte_offset + shared->GetFunctionOffset(func_index);

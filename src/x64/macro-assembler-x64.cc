@@ -21,6 +21,7 @@
 #include "src/objects-inl.h"
 #include "src/register-configuration.h"
 #include "src/snapshot/serializer-common.h"
+#include "src/snapshot/snapshot.h"
 #include "src/x64/assembler-x64.h"
 
 #include "src/x64/macro-assembler-x64.h"  // Cannot be the first include.
@@ -1527,13 +1528,12 @@ void MacroAssembler::PopQuad(Operand dst) {
   }
 }
 
-
-void MacroAssembler::Jump(ExternalReference ext) {
+void TurboAssembler::Jump(ExternalReference ext) {
   LoadAddress(kScratchRegister, ext);
   jmp(kScratchRegister);
 }
 
-void MacroAssembler::Jump(Operand op) {
+void TurboAssembler::Jump(Operand op) {
   if (kPointerSize == kInt64Size) {
     jmp(op);
   } else {
@@ -1542,17 +1542,22 @@ void MacroAssembler::Jump(Operand op) {
   }
 }
 
-
-void MacroAssembler::Jump(Address destination, RelocInfo::Mode rmode) {
+void TurboAssembler::Jump(Address destination, RelocInfo::Mode rmode) {
   Move(kScratchRegister, destination, rmode);
   jmp(kScratchRegister);
 }
 
-void MacroAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
+void TurboAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
                           Condition cc) {
 // TODO(X64): Inline this
 #ifdef V8_EMBEDDED_BUILTINS
-  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList()) {
+  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList() &&
+      !Builtins::IsEmbeddedBuiltin(*code_object)) {
+    // Calls to embedded targets are initially generated as standard
+    // pc-relative calls below. When creating the embedded blob, call offsets
+    // are patched up to point directly to the off-heap instruction start.
+    // Note: It is safe to dereference code_object above since code generation
+    // for builtins and code stubs happens on the main thread.
     Label skip;
     if (cc != always) {
       if (cc == never) return;
@@ -1563,6 +1568,18 @@ void MacroAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode,
     jmp(kScratchRegister);
     bind(&skip);
     return;
+  } else if (!isolate()->serializer_enabled()) {
+    int builtin_index = Builtins::kNoBuiltinId;
+    if (isolate()->builtins()->IsBuiltinHandle(code_object, &builtin_index) &&
+        Builtins::IsIsolateIndependent(builtin_index)) {
+      // Inline the trampoline.
+      CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
+      Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+      jmp(kScratchRegister);
+      return;
+    }
   }
 #endif  // V8_EMBEDDED_BUILTINS
   j(cc, code_object, rmode);
@@ -1608,11 +1625,29 @@ void TurboAssembler::Call(Address destination, RelocInfo::Mode rmode) {
 
 void TurboAssembler::Call(Handle<Code> code_object, RelocInfo::Mode rmode) {
 #ifdef V8_EMBEDDED_BUILTINS
-  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList()) {
+  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList() &&
+      !Builtins::IsEmbeddedBuiltin(*code_object)) {
+    // Calls to embedded targets are initially generated as standard
+    // pc-relative calls below. When creating the embedded blob, call offsets
+    // are patched up to point directly to the off-heap instruction start.
+    // Note: It is safe to dereference code_object above since code generation
+    // for builtins and code stubs happens on the main thread.
     LookupConstant(kScratchRegister, code_object);
     leap(kScratchRegister, FieldOperand(kScratchRegister, Code::kHeaderSize));
     call(kScratchRegister);
     return;
+  } else if (!isolate()->serializer_enabled()) {
+    int builtin_index = Builtins::kNoBuiltinId;
+    if (isolate()->builtins()->IsBuiltinHandle(code_object, &builtin_index) &&
+        Builtins::IsIsolateIndependent(builtin_index)) {
+      // Inline the trampoline.
+      CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
+      Move(kScratchRegister, entry, RelocInfo::OFF_HEAP_TARGET);
+      call(kScratchRegister);
+      return;
+    }
   }
 #endif  // V8_EMBEDDED_BUILTINS
 #ifdef DEBUG

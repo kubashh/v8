@@ -42,6 +42,7 @@
 #include "src/messages.h"
 #include "src/objects/frame-array-inl.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/module-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/profiler/cpu-profiler.h"
 #include "src/profiler/tracing-cpu-profiler.h"
@@ -866,8 +867,7 @@ Handle<FixedArray> Isolate::CaptureCurrentStackTrace(
       frames_seen++;
     }
   }
-  stack_trace_elems->Shrink(frames_seen);
-  return stack_trace_elems;
+  return FixedArray::ShrinkOrEmpty(stack_trace_elems, frames_seen);
 }
 
 
@@ -2524,6 +2524,7 @@ Isolate::Isolate()
       initialized_from_snapshot_(false),
       is_tail_call_elimination_enabled_(true),
       is_isolate_in_background_(false),
+      memory_savings_mode_active_(false),
       cpu_profiler_(nullptr),
       heap_profiler_(nullptr),
       code_event_dispatcher_(new CodeEventDispatcher()),
