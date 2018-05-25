@@ -273,7 +273,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // Register/release the protected instructions in all code objects with the
   // global trap handler for this process.
   void UnpackAndRegisterProtectedInstructions();
-  void ReleaseProtectedInstructions();
+  void ReleaseProtectedInstructions() const;
 
   // Returns the instruction start of code suitable for indirect or import calls
   // for the given function index. If the code at the given index is the lazy
